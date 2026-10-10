@@ -1,0 +1,7 @@
+# 258 已实际执行的验收工具
+
+当前私有原生checker、取消canonical只读检查器、完整历史复制与启动工具快照。原Task/NativeService普通成功要求EOF；新增NativeServiceCancellation必须实际原生关闭、原用户取消和后续完成完整绑定。路径是原执行机器上的非秘密身份，不是新的生产配置或公共实现。
+
+初次完整取消原前台8746实际0，末尾stdout的ConvertTo-Json默认depth2仅摘要截断，原qualified-surface-completion.json深度12及canonical-user-cancellation.json完整；随后仅将摘要输出也设depth12，未重写原观察。
+
+真实UI由root通过CUA操作并逐张人工复核；这些脚本只有CLI、物理生命周期、只读canonical和保管检查，不驱动页面，也不是UI自动化测试。全量历史90表同内容复制资格，core12表及完整输入生命周期用于关闭后保管复核。

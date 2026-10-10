@@ -1,0 +1,108 @@
+Browser tab: 102, Title: "OpenCorvus", URL: "http://localhost:18195/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18195/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请实际读取 https://www.w3.org/WAI/fundamentals/accessibility-intro/ 与 https://deve...
+										105 image Running
+										91 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 47101b, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									106 container
+										107 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										108 button 请实际读取 https://www.w3.org/WAI/fundamentals/accessibility-intro/ 与 https://deve...
+										109 image Running
+										110 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-435-trigger, Secondary Actions: Expand
+									111 container
+										112 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										113 button Reply with OK.
+										114 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-441-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18195, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					77 container
+						78 text 请实际读取 https://www.w3.org/WAI/fundamentals/accessibility-intro/ 与 https://deve...
+						101 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-212-trigger, Secondary Actions: Expand
+						102 container Description: Running, ID: taskStatus
+							103 text Running
+						79 button Side chat
+						80 container solidChatHeaderRuntimeActions
+							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							82 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							104 container
+								115 container
+									116 text User
+									117 text 基于刚才实际读取的两个来源，写一份详细的中文网页可访问性改进手册，按20个编号章节展开，每章至少200字，包含实际检查方式与修复建议；直接开始正文并引用已有来源，在当前普通对话回答。
+								118 container
+									119 text work
+									120 text 11s
+									121 heading 1. 明确可访问性的目标与改进范围, Value: 2
+										122 text 1. 明确可访问性的目标与改进范围
+									123 container
+										124 text 网页可访问性改进的目标，不是让检测报告“没有红色警告”，而是让不同能力、不同设备和不同使用情境中的人，能够获取信息、理解内容并完成操作。
+										125 link Description: W3C WAI《网页可访问性简介》, Value: w3.org/WAI/fundamentals/accessibility-intro/
+										126 text 明确指出，可访问性涉及视觉、听觉、肢体、言语、认知及神经方面的障碍，也能帮助老年人、暂时受伤的人和处于特殊环境中的用户。因此，改进范围应覆盖内容、交互、视觉设计、代码语义和第三方组件，而不只是首页或几个表单。
+									127 container
+										128 text 实际检查方式 ：先列出网站最重要的用户任务，例如查找信息、注册登录、提交申请、购买商品和联系支持，再记录完成这些任务需要经过的页面与控件。分别考虑不能使用鼠标、不能看见图片、不能听见声音，以及需要更长时间理解说明的情况，检查任务是否仍能完成。
+									129 container
+										130 text 修复建议 ：优先处理阻断核心任务的问题，例如无法关闭的弹窗、没有名称的提交按钮或只能拖动的操作。为每个问题记录影响、复现步骤、修复负责人和验收方式，避免仅按工具警告数量决定优先级。
+									131 heading 2. 建立基, Value: 2
+										132 text 2. 建立基
+						43 container chatHomeComposition
+							46 container chatForm
+								47 splitter Description: Drag to resize the message input, Value: 42
+								48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								49 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								83 text Work
+								84 text Chat
+								85 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+								55 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+									57 text openai/gpt-6.1-sol
+								58 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+
+The focused UI element is 58 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt

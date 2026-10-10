@@ -1,0 +1,49 @@
+{
+  "observedAtUtc": "2026-10-10T01:15:47.013Z",
+  "occurrence": "stream-stop-258-live-01-c77e470b-00bf-478e-88e4-91b4522277d1",
+  "pid": 61712,
+  "cancelled": [
+    {
+      "activityID": "act_g0VXbWmHo00UYRHDQf3Q",
+      "sessionID": "ses_-zUSOTN0DzzooDdf3UnJ",
+      "assistantMessageID": "msg_g0VXbWm7900Oi40mLzEi",
+      "inputMessageID": "msg_b3936f01-6cbd-4b7d-9be5-7e3a28b6da21",
+      "readerTerminal": {
+        "kind": "aborted",
+        "at": 1791594239307
+      },
+      "byteCount": 505320,
+      "outcome": {
+        "outcome": "aborted",
+        "attempt_count": 1,
+        "error_class": "external_abort",
+        "error": {
+          "name": "ExecutionCancellationError",
+          "message": "session aborted"
+        }
+      },
+      "cancellation": {
+        "actor": "user",
+        "source": "session.abort",
+        "surface": "session",
+        "requestID": "e820fe4c-3c36-4981-b5db-411afbcb36f1",
+        "reason": "session aborted",
+        "targetSessionID": "ses_-zUSOTN0DzzooDdf3UnJ"
+      },
+      "inputTerminal": {
+        "at": 1791594239354,
+        "inputMessageID": "msg_b3936f01-6cbd-4b7d-9be5-7e3a28b6da21",
+        "status": {
+          "type": "terminal",
+          "reason": "aborted",
+          "error": "session aborted"
+        }
+      },
+      "retainedTextChars": 835,
+      "subsequentAssistantMessageID": "msg_g0VXbWwU300uTXKzbTo4",
+      "subsequentInputMessageID": "msg_240d5a87-da24-4968-9f0f-8c0897f48022",
+      "subsequentTextChars": 683
+    }
+  ],
+  "access": "Physically closed original canonical SQLite readonly BEGIN/ROLLBACK; exact actual Response binding and immutable request/outcome plus input lifecycle"
+}

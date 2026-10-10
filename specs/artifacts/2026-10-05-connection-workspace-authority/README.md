@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [真实停止258 Recall](stream-stop-plan-258.md) / [完整实际证据](stream-stop-258/README.md)：精确实际取消/后续自然完成与原来源可读，修复已停止标签。
+
 - [待命退出257 Recall](occurrence-shutdown-plan-257.md) / [实现与完整证据](occurrence-shutdown-257/README.md)：原idle→aborted真实根因修复，Sol退出/新进程历史三个idle、32数据通过，历史工具原失败保留，两次Native0。
 
 - [逐输入状态256 Recall](occurrence-status-plan-256.md) / [实际实现与证据](occurrence-status-256/README.md)：hydrate/history/SSE共享生命周期，真实三轮与重开收敛，旧500保留、27数据通过/真实Sources/11EOF/Native0；宽矩阵待验。

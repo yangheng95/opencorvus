@@ -281,7 +281,7 @@ function AgentRailRow(props: {
         <Tooltip.Portal>
           <Tooltip.Content class="conversation-agent-rail-tooltip" data-ui="conversation-agent-rail-tooltip">
             <div class="conversation-agent-rail-tooltip__header oc-section-heading">
-              <strong>{record().agentID}</strong>
+              <strong>{record().agentID} · {agentRailStatusLabel(record().status)}</strong>
             </div>
             <Show when={input()}>
               <section class="conversation-agent-rail-tooltip__section" data-kind="input">

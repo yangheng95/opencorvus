@@ -1,0 +1,193 @@
+Browser tab: 103, Title: "OpenCorvus", URL: "http://localhost:18196/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18196/ui/
+	2 container
+		3 container overlayAppHost
+			4 container titlebar
+				5 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				6 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					7 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-370-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-372-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-374-trigger, Secondary Actions: Expand
+					10 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-376-trigger, Secondary Actions: Expand
+			11 container panelBody
+				12 container Description: 对话快捷入口, ID: workspaceNavigation
+					13 container 对话快捷入口
+						14 button 对话
+						15 button Mission 看板
+						16 button 定时
+						17 button 专家团
+						18 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						19 button 设置
+					20 button 关于
+					21 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				22 container workspacePageStack
+					23 container leftActivityShell
+						24 container workspaceContextbar
+							25 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							26 button 搜索任务或运行命令
+							27 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						28 container sidebar
+							29 container workLedgerPanel
+								30 container 对话导航
+									31 button 新对话
+								32 container workLedgerProjectsScroll
+									33 text 项目
+									34 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									35 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									36 container
+										37 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+										38 container
+											39 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											40 button 请实际读取 https://www.w3.org/WAI/fundamentals/accessibility-intro/ 与 https://deve...
+											41 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+										42 button (expanded) Description: 收起 匿名项目 47101b, Secondary Actions: Collapse
+										43 container
+											44 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											45 button Reply with OK.
+											46 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+									47 container 最近
+										48 text 最近
+										49 container
+											50 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											51 button 请实际读取 https://www.w3.org/WAI/fundamentals/accessibility-intro/ 与 https://deve...
+											52 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+										53 container
+											54 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											55 button Reply with OK.
+											56 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+							57 container 连接诊断
+								58 container Description: 连接诊断 · 在线 · 端口 18196, ID: connBadge
+									59 text 在线
+					60 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					61 container centerWorkbenchConversation
+						62 container Agent 活动
+							63 content list
+								64 container
+									65 button work · 空闲 · 请实际读取 https://www.w3.org/WAI/fundamentals/accessibility-intro/ 与 https://developer.mozilla.org/en-US/docs/Web/Accessibility ，用中文写两段网页可访问性简介，并在正文中引用这两个来源。只在当前普通对话回答。
+									66 button work · 已停止 · 基于刚才实际读取的两个来源，写一份详细的中文网页可访问性改进手册，按20个编号章节展开，每章至少200字，包含实际检查方式与修复建议；直接开始正文并引用已有来源，在当前普通对话回答。
+									67 button work · 空闲 · 已停止长文。请在同一个普通对话中用五条简短清单总结刚才内容，继续引用已经读取的W3C WAI与MDN来源，直接回答。
+						68 container chatSection
+							69 container Description: 正在加载 Task, ID: taskSwitchProgress
+							70 container
+								71 text 请实际读取 https://www.w3.org/WAI/fundamentals/accessibility-intro/ 与 https://deve...
+								72 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
+								73 container Description: 非进行中, ID: taskStatus
+									74 text 非进行中
+								75 button 侧聊
+								76 container solidChatHeaderRuntimeActions
+									77 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+									78 checkbox Description: 打开右侧面板, Value: 0
+							79 container
+								80 container Description: 对话, ID: chatScroll
+									81 container
+										82 container
+											83 text 用户
+											84 container
+												85 text 请实际读取
+												86 link Description: https://www.w3.org/WAI/fundamentals/accessibility-intro/, Value: w3.org/WAI/fundamentals/accessibility-intro/
+												87 text  与
+												88 link Description: https://developer.mozilla.org/en-US/docs/Web/Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+												89 text  ，用中文写两段网页可访问性简介，并在正文中引用这两个来源。只在当前普通对话回答。
+										90 container
+											91 text work
+											92 text 21 秒
+											93 button (collapsed) Description: webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8), Secondary Actions: Expand
+												94 text webfetch
+												95 text https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)
+												96 image
+											97 container 来源
+												98 link Description: 打开网页来源: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C, Value: w3.org/WAI/fundamentals/accessibility-intro/
+											99 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html), Secondary Actions: Expand
+												100 text webfetch
+												101 text https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)
+												102 image
+											103 container 来源
+												104 link Description: 打开网页来源: Accessibility | MDN, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+											105 container
+												106 text 网页可访问性是指通过合理的设计与开发，让不同能力的人都能感知、理解、浏览和操作网页，并参与内容交流。
+												107 link Description: W3C WAI《网页可访问性简介》, Value: w3.org/WAI/fundamentals/accessibility-intro/
+												108 text 指出，可访问性涵盖视觉、听觉、肢体、言语、认知及神经方面的障碍；它不仅对残障人士至关重要，也能帮助老年人、暂时受伤的人，以及处于强光、无法听取音频或网络缓慢等情境中的用户。因此，可访问性不是面向少数人的附加功能，而是让更多人平等获取信息与服务的基本要求。
+											109 container
+												110 text 实现网页可访问性，应从项目开始就融入内容编写、界面设计和代码开发。
+												111 link Description: MDN《Accessibility》, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+												112 text 强调，按用途正确使用 HTML 元素，是构建可访问网页的重要基础；同时，应谨慎使用 CSS 和 JavaScript，并在复杂交互需要时通过 WAI-ARIA 提供辅助技术能够识别的语义。具体实践包括为有信息意义的图片提供替代文本、为音视频提供适当的文字替代，以及确保功能能够通过键盘操作。验证也应贯穿开发过程：W3C WAI 提醒，自动化工具可以辅助发现问题，但不能单独判定网站是否满足可访问性要求，还需要有经验的人工评估。
+										113 container
+											114 text 用户
+											115 text 基于刚才实际读取的两个来源，写一份详细的中文网页可访问性改进手册，按20个编号章节展开，每章至少200字，包含实际检查方式与修复建议；直接开始正文并引用已有来源，在当前普通对话回答。
+										116 container
+											117 text work
+											118 text 16 秒
+											119 heading 1. 明确可访问性的目标与改进范围, Value: 2
+												120 text 1. 明确可访问性的目标与改进范围
+											121 container
+												122 text 网页可访问性改进的目标，不是让检测报告“没有红色警告”，而是让不同能力、不同设备和不同使用情境中的人，能够获取信息、理解内容并完成操作。
+												123 link Description: W3C WAI《网页可访问性简介》, Value: w3.org/WAI/fundamentals/accessibility-intro/
+												124 text 明确指出，可访问性涉及视觉、听觉、肢体、言语、认知及神经方面的障碍，也能帮助老年人、暂时受伤的人和处于特殊环境中的用户。因此，改进范围应覆盖内容、交互、视觉设计、代码语义和第三方组件，而不只是首页或几个表单。
+											125 container
+												126 text 实际检查方式 ：先列出网站最重要的用户任务，例如查找信息、注册登录、提交申请、购买商品和联系支持，再记录完成这些任务需要经过的页面与控件。分别考虑不能使用鼠标、不能看见图片、不能听见声音，以及需要更长时间理解说明的情况，检查任务是否仍能完成。
+											127 container
+												128 text 修复建议 ：优先处理阻断核心任务的问题，例如无法关闭的弹窗、没有名称的提交按钮或只能拖动的操作。为每个问题记录影响、复现步骤、修复负责人和验收方式，避免仅按工具警告数量决定优先级。
+											129 heading 2. 建立基线，组合自动检测与人工评估, Value: 2
+												130 text 2. 建立基线，组合自动检测与人工评估
+											131 container
+												132 text 可访问性评估需要多种方法相互补充。
+												133 link Description: W3C WAI, Value: w3.org/WAI/fundamentals/accessibility-intro/
+												134 text 指出，评估工具能够提供帮助，但没有任何工具可以独立确定网站是否满足可访问性指南，仍需要有经验的人工评估。自动检测比较适合发现缺失属性、部分语义错误和可计算的视觉问题，却不能可靠判断替代文本是否准确、阅读顺序是否合理，或者整个业务流程是否容易理解。
+											135 container
+												136 text 实际检查方式 ：选择具有代表性的页面，包括首页、内容详情、搜索结果、表单、错误页面和复杂交互页面。运行自动检测后，再进行纯键盘操作、页面缩放和屏幕阅读器检查。记录测试使用的浏览器、辅助技术、页面状态与具体步骤；
+										137 container
+											138 text 用户
+											139 text 已停止长文。请在同一个普通对话中用五条简短清单总结刚才内容，继续引用已经读取的W3C WAI与MDN来源，直接回答。
+										140 container
+											141 text work
+											142 text 9 秒
+											143 content list
+												144 container
+													145 AXListMarker •
+													146 text 明确目标 ：让不同能力与使用情境中的用户都能获取信息、理解内容并完成操作，而不只是消除检测警告。
+													147 link Description: W3C WAI, Value: w3.org/WAI/fundamentals/accessibility-intro/
+												148 container
+													149 AXListMarker •
+													150 text 覆盖完整流程 ：检查注册、搜索、购买等核心任务，同时关注内容、视觉设计、交互和第三方组件。
+													151 link Description: W3C WAI, Value: w3.org/WAI/fundamentals/accessibility-intro/
+												152 container
+													153 AXListMarker •
+													154 text 优先修复阻断问题 ：先解决键盘无法操作、控件缺少名称、弹窗无法关闭等障碍；正确使用 HTML，并按需补充 ARIA 语义。
+													155 link Description: MDN, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+												156 container
+													157 AXListMarker •
+													158 text 结合多种检查方法 ：自动检测之外，还应进行纯键盘、页面缩放与屏幕阅读器检查；工具不能替代人工评估。
+													159 link Description: W3C WAI, Value: w3.org/WAI/fundamentals/accessibility-intro/
+												160 container
+													161 AXListMarker •
+													162 text 贯穿开发与验收 ：从项目开始就考虑可访问性，记录问题的影响、复现步骤、负责人和验收方法，并持续复测。
+													163 link Description: W3C WAI, Value: w3.org/WAI/fundamentals/accessibility-intro/
+													164 text  ·
+													165 link Description: MDN, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+								166 container chatHomeComposition
+									167 container solidChatComposer
+										168 container
+											169 text 模型配置暂不可用
+											170 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+											171 button (collapsed) 详细信息, Secondary Actions: Expand
+												172 text 详细信息
+											173 button 重试
+											174 container chatForm
+												175 splitter Description: 拖拽调整消息输入框大小, Value: 42
+												176 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+												177 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+												178 text Work
+												179 text Chat
+												180 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+												181 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+												182 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+													183 text 选择模型
+												184 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+										185 button 滚动到底部
+		186 container ID: tooltip-cl-223-content, work · 已停止 用户输入 基于刚才实际读取的两个来源，写一份详细的中文网页可访问性改进手册，按20个编号章节展开，每章至少200字，包含实际检查方式与修复建议；直接开始正文并引用已有来源，在当前普通对话回答。
+			187 container
+				188 text work  ·  已停止
+			189 container
+				190 text 用户输入 基于刚才实际读取的两个来源，写一份详细的中文网页可访问性改进手册，按20个编号章节展开，每章至少200字，包含实际检查方式与修复建议；直接开始正文并引用已有来源，在当前普通对话回答。
+
+The focused UI element is 66 button work · 已停止 · 基于刚才实际读取的两个来源，写一份详细的中文网页可访问性改进手册，按20个编号章节展开，每章至少200字，包含实际检查方式与修复建议；直接开始正文并引用已有来源，在当前普通对话回答。

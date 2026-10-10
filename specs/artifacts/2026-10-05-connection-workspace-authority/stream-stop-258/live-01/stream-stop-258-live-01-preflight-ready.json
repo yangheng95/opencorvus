@@ -1,0 +1,22 @@
+{
+  "pid": 61712,
+  "owner": {
+    "pid": 61712,
+    "processInstanceID": "win32:639271909613403397",
+    "occurrenceID": "31d1f610-bcb8-4b0f-bfc6-e42fe3071877"
+  },
+  "occurrence": "stream-stop-258-live-01-c77e470b-00bf-478e-88e4-91b4522277d1",
+  "port": 18195,
+  "preflight": {
+    "sessionID": "ses_hg3pY3SPRs7mcgJWPmwu",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 12,
+  "qualificationKind": "NativeServiceCancellation",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-manual-conversation",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

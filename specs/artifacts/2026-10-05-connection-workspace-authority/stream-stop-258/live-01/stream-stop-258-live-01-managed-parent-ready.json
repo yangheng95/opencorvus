@@ -1,0 +1,15 @@
+{
+  "pid": 61712,
+  "occurrence": "stream-stop-258-live-01-c77e470b-00bf-478e-88e4-91b4522277d1",
+  "owner": {
+    "pid": 61712,
+    "processInstanceID": "win32:639271909613403397",
+    "occurrenceID": "31d1f610-bcb8-4b0f-bfc6-e42fe3071877"
+  },
+  "parent": {
+    "pid": 69676,
+    "processInstanceID": "win32:639271909612945860",
+    "occurrenceID": "f499fb8a-d08e-4007-91f5-e1e304851cc7"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

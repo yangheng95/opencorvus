@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [真实停止258](records/2026-10/2026-10-10-stream-stop-258.md)：主动Stop保留835字/后续683字与Sources，9EOF加1真实取消/Native0；Stopped文案与历史视觉复核。
+
 - [待命退出257](records/2026-10/2026-10-10-occurrence-shutdown-257.md)：精确取消对象保留已结束输入，真实Sol退出与新进程历史仍三个idle，来源/导航完整；32数据检查、两次Native0。
 
 - [逐输入状态256](records/2026-10/2026-10-10-occurrence-status-256.md)：普通会话载入/历史/重连按原生命周期收敛，真实三轮旧idle/新running/结束重开三个idle；Sources复核、11EOF/Native0，宽矩阵仍待。

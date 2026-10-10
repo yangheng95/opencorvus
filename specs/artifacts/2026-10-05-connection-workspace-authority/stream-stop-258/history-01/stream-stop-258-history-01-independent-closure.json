@@ -1,0 +1,27 @@
+{
+  "occurrence": "stream-stop-258-history-01-427210e7-fba2-4476-a4e5-22a8d36f50f7",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 60132,
+        "processInstanceID": "win32:639271912979411346",
+        "occurrenceID": "45d98053-d88a-4d9c-b9e5-34932b671af3"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 71208,
+        "processInstanceID": "win32:639271912987051631",
+        "occurrenceID": "4c76f9e3-b361-4823-9796-04579fe60daf"
+      }
+    }
+  ],
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "listeners": [],
+  "observedAtUtc": "2026-10-10T01:13:47.8516531Z"
+}

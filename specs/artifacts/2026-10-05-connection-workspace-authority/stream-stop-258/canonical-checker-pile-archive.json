@@ -1,0 +1,19 @@
+{
+  "correction": "Current checker uses explicit owned RunRoot cwd; unchanged closed canonical qualification rerun actual0",
+  "files": [
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "birthUtc": "2026-10-10T01:05:24.9547506Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\stream-stop-258\\generated-canonical-checker\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "birthUtc": "2026-10-10T01:05:24.9631546Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\stream-stop-258\\generated-canonical-checker\\cf86f20c120ce818.debug.pile"
+    }
+  ],
+  "observedAtUtc": "2026-10-10T01:15:47.0885702Z",
+  "authority": "Initially clean repository; sole root checker invoked in repository cwd between actual closed native/pair receipt and canonical qualification receipt; exact two generated debug pile births in this interval; preserved bounded single-file moves after all observers terminal"
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [真实停止258](2026-10-10-stream-stop-258.md)：实际生成停止、下一轮与原来源保留，完整取消checker/原Native0，修复已跳过文案。
+
 - [待命退出257](2026-10-10-occurrence-shutdown-257.md)：物理待命释放保留原idle，修复同步callback取消来源，真实Sol及新历史进程均三个idle、来源完整。
 
 - [逐输入状态256](2026-10-10-occurrence-status-256.md)：移除重复会话占位与迟到正文伪Running，真实三轮/重开三个idle，来源标题域名可读，11EOF/Native0。
