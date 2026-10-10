@@ -1,6 +1,6 @@
 # Specs Storage Index
 
-- [正文文件引用266](records/2026-10/2026-10-10-source-link-266.md)：原闭库文本与renderer核对，纠正/#模型归因，真实打开目标待验。
+- [正文文件引用266](records/2026-10/2026-10-10-source-link-266.md)：实际basename链接404与正常Source对照，修正过度自动动作，普通code/范围和整文件真实复核。
 
 - [整文件来源265](records/2026-10/2026-10-10-source-whole-265.md)：真实Sol范围→整文件旧band修复，单一effect与阅读保持/反向切换，6EOF/Native0。
 

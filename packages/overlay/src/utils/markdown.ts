@@ -339,9 +339,10 @@ function extractFileReference(text: string): { display: string; reference: FileR
   if (!/^[\w./\\@~-]+$/.test(pathPart)) return null
   const hasSlash = /[\/\\]/.test(pathPart)
   const hasFileExt = FILE_EXT_RE.test(pathPart)
-  // Require either a path separator OR a recognisable file extension —
-  // this filters out bare identifiers like `foo` or `useState`.
-  if (!hasSlash && !hasFileExt) return null
+  // A bare filename can simply be code prose, and does not identify a file
+  // in the current workspace. Paths and located filenames express a target;
+  // explicit Markdown links use their own authored destinations.
+  if (!hasSlash && !(hasFileExt && reference.line !== undefined)) return null
   // Reject isolated extensions like ".ts".
   if (/^\.\w+$/.test(pathPart)) return null
   return { display: s, reference }

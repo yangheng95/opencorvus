@@ -17,3 +17,31 @@
 ## 当前交付边界
 
 当前仅正文证据归因纠正，无生产代码修改，不启动Provider或新Task。纠正现目录索引/月记录同步、当前docs/architecture检查、范围提交、fetch/merge上游/完整待推送集合检查与普通push。266真实目标体验尚未完成，不能把分析或源码判断当视觉验收，持续goal active。
+
+## 当前真实历史体验方案
+
+归因纠正6e8e21c2a3bcd07bb74ca12f08403cf652e685af已push/干净。当前源码workspace表明Web无workspace.openProjectEditor时直接进入openProjectPathInWorkbench；basename按activeDirectory解析，绝对路径才走只读Source editor。现原265 project/read.ts真实不存在，原文件在仓库绝对路径；只能作为实际UI错误候选，不能只靠代码结论交付。
+
+完整源R=source-whole-265-live-01/当前canonical Session ses_-zUSNlWWuzzuGg1K9BbU/project prj_hln9w2B7mnt2gsZHByHX，原occurrence及所有来源保留。新scope source-link-266-history-01，/ui18204/自己IAB（In-App Browser，应用内浏览器）页，无凭据或Provider/新Task。启动前实际schema/config/全部恢复frontier、memory真实pendingCount/status/organizerLease、权限/租约容量、原Native出生/端口/pair、90表全存储行相等复制；原引用源码全文/元数据和两Source保管。
+
+当前原生固定900000毫秒，启动前sole shutdown/原前台join/独立物理输出请求/出生端口pair、完整归档与自己5产物退休准备。目标在启动10分钟内完成UI并立即关闭，保留5分钟缓冲；不延长旧预算或因观测超时重启。用户23/18107不动。真实页面先核对Web transport/native IDE能力，再查看当前正文代码span的实际attribute与Source按钮；仅确认不打开用户外部应用后实际点击，截图看目标/正文或错误。
+
+对照同一真实结构化Source成功读取原文件，实际错误要分析renderer为何授予basename按钮/工作区资源含义/上下文契约和全部相关调用，避免按Source标题猜路径。必要修改前补方案，当前无已知补丁；实际UI修复要本人重建并重新截图，非UI契约则聚焦正向检查。关闭后完整12核心表/生命周期/原项目及原引用源码保管，所有checker/观察器实际结束才精确归档自己产物。规格索引/docs/architecture/范围commit和普通push，剩余范围明确保留。
+
+## 当前实际错误与实施前分析
+
+Native66068/出生win32:639272029733671660、Host46956，前台28840，固定deadline04:37:52.467。自己113实际window.__TAURI__=undefined，按现HostTransport runtime是browser，workspace.openProjectEditor=false，不触发用户IDE。02实际两个data-file-path=read.ts/href=#。点击第一个后04实际Could not load this file，05展开真实HTTP GET404 file/content?path=read.ts&directory=原265/project，错误契约FileNotFoundError；06同一结构化Source正确打开仓库tool/read.ts并定位27。
+
+根因是codespan的extractFileReference仅凭已知扩展名就把普通basename变成可执行项目文件动作。模型只有代码格式，未表达Markdown链接或具体项目路径；当前renderer隐式加了相对路径/IDE含义，因此Project内不存在的read.ts被承诺成链接。错误反馈本身按当前契约正确，不修正常FileNotFoundError，也不按Source标题猜另一个绝对路径。Source数据/主会话/权限/文件API均正确；没有共享调度或生命周期异常。
+
+全仓搜索该函数与main委托/workspace入口、file-reference位置解析/属性、显式Markdown deliverable链接和相关架构。现test/file-reference.test.ts只含纯数据parse/range正向契约，没有DOM（Document Object Model，文档对象模型）/组件/HTML生成或文案测试，当前不改/运行它；不存在本范围UI自动化新增。[CommonMark code span说明](https://spec.commonmark.org/0.31.2/#code-spans)区分代码内容与链接，实际Source按钮已有真实引用目标，代码格式本身不应新造未知项目路径。
+
+唯一extractFileReference保留现路径/扩展/位置解析，自动动作要求已有路径分隔符，或已知文件扩展并明确line位置。裸read.ts/package.json等单个文件名按原代码内容显示；带src/read.ts、./package.json、read.ts:27等现明确引用仍沿原属性/委托。显式Markdown链接不变。不是关键词黑名单、不是屏蔽错误/事后失败fallback、没有另一路renderer/Source路径推断/新配置或LLM Host gate。
+
+影响所有inlineMarkdown/renderMarkdown/worker共享codespan，未知basename的蓝色动作会变普通code，这是明确产品语义修正。正常root文件如需动作可用显式Markdown链接或./路径/行号引用，不保留两个自动策略。风险为用户此前仅靠basename自动打开；当前Sources仍完整真实，显式路径与loc处理保留。纯UI：types/build只编译，本人当前113重建刷新后复核两个普通code文本、真实Sources打开/范围与整文件；其他明确路径/平台/主题场景如未实际验证保留未验，不用字符串测试冒充UI。
+
+## 最终实际事实
+
+当前main-Cv4bz-7u.js，07两个正文read.ts正常code语义；08结构化Source仍真实原27范围，09原整文件与正常背景。types0/build58.43s/renderer surface0，其他明确路径/located basename/Markdown链接和Native/platform宽矩阵未验，继续保留。无UI自动化，也没有运行纯数据parser测试来冒充UI。
+
+自己113关闭后立即sole shutdown，原前台28840 actual0、约04:29 Native0早于固定04:37:52.467，预算/occurrence不变，约8分钟关闭缓冲。独立物理输出请求/出生/18204/pair和原12核心表/12生命周期、原项目及原代码全文属性equal。原UI错误与自然文本都保留，checker与观察器实际结束后再精确保管自己的5产物，持续goal active。

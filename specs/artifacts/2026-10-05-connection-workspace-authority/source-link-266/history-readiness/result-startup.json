@@ -1,0 +1,4224 @@
+{
+  "observedAtUtc": "2026-10-10T04:22:21.999Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-10/source-whole-265-live-01",
+  "access": "Original full canonical readonly BEGIN/ROLLBACK and explicit drizzle client; current schema/lease/config and recovery frontiers; lstat inventory only",
+  "schemaDrift": null,
+  "projects": [
+    {
+      "id": "prj_hln9w2B7mnt2gsZHByHX",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project",
+      "sandboxes": "[]",
+      "config": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "full_access",
+        "$schema": "https://opencorvus.ai/config.json",
+        "model": "openai/gpt-6.1-sol",
+        "small_model": "openai/gpt-6.1-sol",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "terminal": {
+          "default_profile_id": "powershell",
+          "profiles": {
+            "powershell": {
+              "label": "Windows PowerShell",
+              "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "pwsh": {
+              "label": "PowerShell",
+              "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "cmd": {
+              "label": "Command Prompt",
+              "command": "C:\\WINDOWS\\system32\\cmd.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "command-prompt"
+            },
+            "git-bash": {
+              "label": "Git Bash",
+              "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "bash"
+            }
+          }
+        },
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        }
+      },
+      "inventory": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project",
+          "type": "directory",
+          "mtimeMs": 1791604499746.3555
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git",
+          "type": "directory",
+          "mtimeMs": 1791604978979.333
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\COMMIT_EDITMSG",
+          "type": "file",
+          "bytes": 40,
+          "mtimeMs": 1791604499298.3308
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\HEAD",
+          "type": "file",
+          "bytes": 21,
+          "mtimeMs": 1791604499028.958
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\config",
+          "type": "file",
+          "bytes": 206,
+          "mtimeMs": 1791604499168.1465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791604499008.176
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791604499016.9583
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791604499009.2183
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791604499009.74
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791604499010.777
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791604499011.2915
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791604499011.8086
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791604499012.3308
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791604499013.3872
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791604499013.913
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791604499014.434
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791604499014.9524
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791604499014.9524
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791604499015.9583
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791604499016.9583
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791604499016.9583
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\index",
+          "type": "file",
+          "bytes": 297,
+          "mtimeMs": 1791604602839.1765
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791604499017.9575
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791604499017.9575
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\logs",
+          "type": "directory",
+          "mtimeMs": 1791604499307.3325
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\logs\\HEAD",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791604499307.3325
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\logs\\refs",
+          "type": "directory",
+          "mtimeMs": 1791604499307.3325
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\logs\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791604499307.3325
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\logs\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791604499307.3325
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791604499332.0347
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\0b",
+          "type": "directory",
+          "mtimeMs": 1791604499303.3308
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\0b\\3b9a90a0ab218236cf07826576d21b77ea3b06",
+          "type": "file",
+          "bytes": 163,
+          "mtimeMs": 1791604499299.331
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\34",
+          "type": "directory",
+          "mtimeMs": 1791604499238.3838
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\34\\fb713629ac11020fd44a4449d7b5e1799ae646",
+          "type": "file",
+          "bytes": 62,
+          "mtimeMs": 1791604499234.3826
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\35",
+          "type": "directory",
+          "mtimeMs": 1791604499295.3308
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\35\\39e7d5e7cdfb5254fc9114dd5f59cf92c760fa",
+          "type": "file",
+          "bytes": 124,
+          "mtimeMs": 1791604499290.3289
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\42",
+          "type": "directory",
+          "mtimeMs": 1791604499227.3823
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\42\\fdeb2f52db9d1845188ac151e4991bd66f5d92",
+          "type": "file",
+          "bytes": 67,
+          "mtimeMs": 1791604499222.0242
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\d6",
+          "type": "directory",
+          "mtimeMs": 1791604499233.3818
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\d6\\e3f6bd7bf1c1af01941aedb4babbdd0a87eafd",
+          "type": "file",
+          "bytes": 32,
+          "mtimeMs": 1791604499228.3828
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791604499030.958
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791604499029.9578
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791604501951.1155
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791604499027.9575
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791604499308.8372
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 41,
+          "mtimeMs": 1791604499305.3323
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791604499027.9575
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791604499184.3416
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791604499183.3433
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791604638477.6235
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791604638477.6235
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791605097708.9429
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791604638478.6284
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec",
+          "type": "directory",
+          "mtimeMs": 1791604648067.9866
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec\\8e87eb03b78445f7f84f7ec3bdddb9f182e6b59ccca26b2dbb0806630833aab8.json",
+          "type": "file",
+          "bytes": 90292,
+          "mtimeMs": 1791604638486.6238
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec\\8e87eb03b78445f7f84f7ec3bdddb9f182e6b59ccca26b2dbb0806630833aab8.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791604638487.6235
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791604638737.0513
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791604638737.0513
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hln9w2B7mnt2gsZHByHX",
+          "type": "directory",
+          "mtimeMs": 1791604654193.8562
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hln9w2B7mnt2gsZHByHX\\ip5qjeAg.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791604654182.909
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791605097734.2964
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1404,
+          "mtimeMs": 1791604603398.7905
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project\\README.md",
+          "type": "file",
+          "bytes": 46,
+          "mtimeMs": 1791604499178.343
+        }
+      ]
+    },
+    {
+      "id": "prj_hqBdqH0rWjoQP0lznK4n",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011",
+      "sandboxes": "[]",
+      "config": {
+        "prompt_profile": {
+          "active": "dynamic"
+        },
+        "permission_mode": "full_access",
+        "$schema": "https://opencorvus.ai/config.json",
+        "model": "openai/gpt-6.1-sol",
+        "small_model": "openai/gpt-6.1-sol",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "terminal": {
+          "default_profile_id": "powershell",
+          "profiles": {
+            "powershell": {
+              "label": "Windows PowerShell",
+              "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "pwsh": {
+              "label": "PowerShell",
+              "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "cmd": {
+              "label": "Command Prompt",
+              "command": "C:\\WINDOWS\\system32\\cmd.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "command-prompt"
+            },
+            "git-bash": {
+              "label": "Git Bash",
+              "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "bash"
+            }
+          }
+        },
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        }
+      },
+      "inventory": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011",
+          "type": "directory",
+          "mtimeMs": 1791604508400.6794
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git",
+          "type": "directory",
+          "mtimeMs": 1791604506953.5862
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\HEAD",
+          "type": "file",
+          "bytes": 23,
+          "mtimeMs": 1791604506519.626
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\config",
+          "type": "file",
+          "bytes": 130,
+          "mtimeMs": 1791604506516.6282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791604506490.6416
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791604506500.6792
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791604506492.6484
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791604506492.6484
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791604506494.6587
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791604506494.6587
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791604506496.6663
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791604506496.6663
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791604506496.6663
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791604506496.6663
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791604506498.6724
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791604506498.6724
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791604506498.6724
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791604506500.6792
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791604506500.6792
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791604506500.6792
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791604506502.6863
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791604506502.6863
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791604506522.6265
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791604506522.6265
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791604506522.6265
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791604506953.5862
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791604506518.6262
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791604506518.6262
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791604506518.6262
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791604508000.045
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791604507999.04
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791604510306.911
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791604510306.911
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791605097698.468
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791604510307.9104
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec",
+          "type": "directory",
+          "mtimeMs": 1791604510457.634
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec\\f7feb70ee46a7bed74d39d091a796696b39c7a63375425571d7596b6abe612bd.json",
+          "type": "file",
+          "bytes": 88883,
+          "mtimeMs": 1791604510314.4219
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec\\f7feb70ee46a7bed74d39d091a796696b39c7a63375425571d7596b6abe612bd.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791604510314.4219
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791604510614.0735
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791604510614.0735
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hqBdqH0rWjoQP0lznK4n",
+          "type": "directory",
+          "mtimeMs": 1791604513695.186
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hqBdqH0rWjoQP0lznK4n\\9Koa8HnV.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791604513692.1865
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791605097734.2964
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1355,
+          "mtimeMs": 1791604508550.598
+        }
+      ]
+    }
+  ],
+  "tasks": [],
+  "leases": [
+    {
+      "id": "cal_g0VXcETTS00Wp77f2yhx",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:06ba24dc-d2e6-4ad9-94f2-4646fdf8fcea\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637222,
+      "expires_at": 1791604637224
+    },
+    {
+      "id": "cal_g0VXcETTV003TGjb7vKj",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:06ba24dc-d2e6-4ad9-94f2-4646fdf8fcea\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637225,
+      "expires_at": 1791604637228
+    },
+    {
+      "id": "cal_g0VXcETTZ004Eb3askkA",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:06ba24dc-d2e6-4ad9-94f2-4646fdf8fcea\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637229,
+      "expires_at": 1791604637230
+    },
+    {
+      "id": "cal_g0VXcETTb00WGaLzRMVy",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:06ba24dc-d2e6-4ad9-94f2-4646fdf8fcea\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637231,
+      "expires_at": 1791604637232
+    },
+    {
+      "id": "cal_g0VXcETTG00QaZrHyo9Y",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:06ba24dc-d2e6-4ad9-94f2-4646fdf8fcea\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637210,
+      "expires_at": 1791604637212
+    },
+    {
+      "id": "cal_g0VXcETTL01lVSZC3QTh",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:06ba24dc-d2e6-4ad9-94f2-4646fdf8fcea\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637215,
+      "expires_at": 1791604637217
+    },
+    {
+      "id": "cal_g0VXcETTJ00phUowmfCL",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:06ba24dc-d2e6-4ad9-94f2-4646fdf8fcea\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637213,
+      "expires_at": 1791604637215
+    },
+    {
+      "id": "cal_g0VXcDw1z00cEaIDnb21",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:0ffd73fd-07fd-4f19-8d7c-6d154a7af7c1\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508667,
+      "expires_at": 1791604508669
+    },
+    {
+      "id": "cal_g0VXcDw2200qkgzpWBjA",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:0ffd73fd-07fd-4f19-8d7c-6d154a7af7c1\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508670,
+      "expires_at": 1791604508672
+    },
+    {
+      "id": "cal_g0VXcDw1k007dV3xTwnN",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:0ffd73fd-07fd-4f19-8d7c-6d154a7af7c1\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508652,
+      "expires_at": 1791604508656
+    },
+    {
+      "id": "cal_g0VXcDw1u00RZo4JYicJ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:0ffd73fd-07fd-4f19-8d7c-6d154a7af7c1\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508662,
+      "expires_at": 1791604508664
+    },
+    {
+      "id": "cal_g0VXcDw1p00ZmOlu1ixn",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:0ffd73fd-07fd-4f19-8d7c-6d154a7af7c1\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508657,
+      "expires_at": 1791604508661
+    },
+    {
+      "id": "cal_g0VXcDw2z00oLnKbGW97",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:146da10e-49ae-4629-b182-6f0adc9871ff\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:6",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508728,
+      "expires_at": 1791604508747
+    },
+    {
+      "id": "cal_g0VXcDw4200lwhb7R34c",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:146da10e-49ae-4629-b182-6f0adc9871ff\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508794,
+      "expires_at": 1791604508798
+    },
+    {
+      "id": "cal_g0VXcDw4700u71l622dP",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:146da10e-49ae-4629-b182-6f0adc9871ff\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508799,
+      "expires_at": 1791604508802
+    },
+    {
+      "id": "cal_g0VXcDw3100CzPgsoVtx",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:146da10e-49ae-4629-b182-6f0adc9871ff\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508731,
+      "expires_at": 1791604508741
+    },
+    {
+      "id": "cal_g0VXcDw3P010FCzlGLyj",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:146da10e-49ae-4629-b182-6f0adc9871ff\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508755,
+      "expires_at": 1791604508785
+    },
+    {
+      "id": "cal_g0VXcDw3C00YtdDcbhFT",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:146da10e-49ae-4629-b182-6f0adc9871ff\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508742,
+      "expires_at": 1791604508754
+    },
+    {
+      "id": "cal_g0VXcETpD00qK2N1cQWx",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:19fd4521-8ff4-47d6-85de-bf29604c9153\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638571,
+      "expires_at": 1791604638574
+    },
+    {
+      "id": "cal_g0VXcETpH01wlvsGv2Lf",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:19fd4521-8ff4-47d6-85de-bf29604c9153\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638575,
+      "expires_at": 1791604638578
+    },
+    {
+      "id": "cal_g0VXcETpK01WOfXAuVXB",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:19fd4521-8ff4-47d6-85de-bf29604c9153\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638578,
+      "expires_at": 1791604638581
+    },
+    {
+      "id": "cal_g0VXcETpO00JmiJ5bQan",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:19fd4521-8ff4-47d6-85de-bf29604c9153\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638582,
+      "expires_at": 1791604638584
+    },
+    {
+      "id": "cal_g0VXcETob00S51KoX57J",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:19fd4521-8ff4-47d6-85de-bf29604c9153\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638533,
+      "expires_at": 1791604638538
+    },
+    {
+      "id": "cal_g0VXcETp401KXnyhgYGD",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:19fd4521-8ff4-47d6-85de-bf29604c9153\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638562,
+      "expires_at": 1791604638564
+    },
+    {
+      "id": "cal_g0VXcEToh006EmJHghoL",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:19fd4521-8ff4-47d6-85de-bf29604c9153\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638539,
+      "expires_at": 1791604638562
+    },
+    {
+      "id": "cal_g0VXcDxLF00HAPoebCSi",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:240be3ca-f44a-4de8-ae6a-a9f237d22f49\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:5",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513705,
+      "expires_at": 1791604513709
+    },
+    {
+      "id": "cal_g0VXcDxLO00k0LcVRogw",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:240be3ca-f44a-4de8-ae6a-a9f237d22f49\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513714,
+      "expires_at": 1791604513714
+    },
+    {
+      "id": "cal_g0VXcDxLP007hAjANyuC",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:240be3ca-f44a-4de8-ae6a-a9f237d22f49\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513715,
+      "expires_at": 1791604513716
+    },
+    {
+      "id": "cal_g0VXcDxLH00qNFAxH16W",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:240be3ca-f44a-4de8-ae6a-a9f237d22f49\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513707,
+      "expires_at": 1791604513707
+    },
+    {
+      "id": "cal_g0VXcDxLL00bZXQdS9TL",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:240be3ca-f44a-4de8-ae6a-a9f237d22f49\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513710,
+      "expires_at": 1791604513712
+    },
+    {
+      "id": "cal_g0VXcDxLI00mQAEP99XI",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:240be3ca-f44a-4de8-ae6a-a9f237d22f49\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513708,
+      "expires_at": 1791604513710
+    },
+    {
+      "id": "cal_g0VXcEVGc00pjAgTQKEi",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:2c983a40-f6a1-40c1-976e-270415fd3d5a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644114,
+      "expires_at": 1791604644115
+    },
+    {
+      "id": "cal_g0VXcEVGe00egUGac4kt",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:2c983a40-f6a1-40c1-976e-270415fd3d5a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644116,
+      "expires_at": 1791604644117
+    },
+    {
+      "id": "cal_g0VXcEVGg01mceBBXg2P",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:2c983a40-f6a1-40c1-976e-270415fd3d5a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644118,
+      "expires_at": 1791604644120
+    },
+    {
+      "id": "cal_g0VXcEVGi01bmuET2ix0",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:2c983a40-f6a1-40c1-976e-270415fd3d5a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644120,
+      "expires_at": 1791604644122
+    },
+    {
+      "id": "cal_g0VXcEVGO00f9Y6Sn8g5",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:2c983a40-f6a1-40c1-976e-270415fd3d5a\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644100,
+      "expires_at": 1791604644104
+    },
+    {
+      "id": "cal_g0VXcEVGY00FQr2sc4qt",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:2c983a40-f6a1-40c1-976e-270415fd3d5a\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644110,
+      "expires_at": 1791604644111
+    },
+    {
+      "id": "cal_g0VXcEVGT00QjCmMKX1e",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:2c983a40-f6a1-40c1-976e-270415fd3d5a\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644105,
+      "expires_at": 1791604644109
+    },
+    {
+      "id": "cal_g0VXcETjR00r9aJasbyk",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:30f81f6f-62f0-4fa4-9dfb-30f9c8d2bc2c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638213,
+      "expires_at": 1791604638215
+    },
+    {
+      "id": "cal_g0VXcETjU00uHos2Z24R",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:30f81f6f-62f0-4fa4-9dfb-30f9c8d2bc2c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638216,
+      "expires_at": 1791604638217
+    },
+    {
+      "id": "cal_g0VXcETjW00a1t3D928q",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:30f81f6f-62f0-4fa4-9dfb-30f9c8d2bc2c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638218,
+      "expires_at": 1791604638219
+    },
+    {
+      "id": "cal_g0VXcETjY00qZgsnl3Ky",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:30f81f6f-62f0-4fa4-9dfb-30f9c8d2bc2c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638220,
+      "expires_at": 1791604638222
+    },
+    {
+      "id": "cal_g0VXcETjC00rDmnURQMl",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:30f81f6f-62f0-4fa4-9dfb-30f9c8d2bc2c\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638197,
+      "expires_at": 1791604638198
+    },
+    {
+      "id": "cal_g0VXcETjI00Q8g6lslX5",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:30f81f6f-62f0-4fa4-9dfb-30f9c8d2bc2c\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638203,
+      "expires_at": 1791604638205
+    },
+    {
+      "id": "cal_g0VXcETjD00Rntz3Y3ub",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:30f81f6f-62f0-4fa4-9dfb-30f9c8d2bc2c\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638199,
+      "expires_at": 1791604638203
+    },
+    {
+      "id": "cal_g0VXcEWF2005jbe79cA0",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647860,
+      "expires_at": 1791604647864
+    },
+    {
+      "id": "cal_g0VXcEWFD00o1ZZkctvD",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647871,
+      "expires_at": 1791604647872
+    },
+    {
+      "id": "cal_g0VXcEWFh00d3mzP7BK4",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647901,
+      "expires_at": 1791604647904
+    },
+    {
+      "id": "cal_g0VXcEWFl007RGWD2d9W",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647905,
+      "expires_at": 1791604647905
+    },
+    {
+      "id": "cal_g0VXcEWFm00O4F9ipC6a",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647906,
+      "expires_at": 1791604647906
+    },
+    {
+      "id": "cal_g0VXcEWF400PiJbpgpAy",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647862,
+      "expires_at": 1791604647863
+    },
+    {
+      "id": "cal_g0VXcEWF800DUvIvZ9Ya",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647866,
+      "expires_at": 1791604647868
+    },
+    {
+      "id": "cal_g0VXcEWF5016Aktescg6",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32db74b2-351a-4a9f-9518-b22458a2b626\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647863,
+      "expires_at": 1791604647865
+    },
+    {
+      "id": "cal_g0VXcETjN00MY220aXU5",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32e0734c-a959-4e95-866e-9734328bb111\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638209,
+      "expires_at": 1791604638211
+    },
+    {
+      "id": "cal_g0VXcETjP01TQzdyubL0",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32e0734c-a959-4e95-866e-9734328bb111\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638211,
+      "expires_at": 1791604638214
+    },
+    {
+      "id": "cal_g0VXcETjT00t7eVS0mrE",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32e0734c-a959-4e95-866e-9734328bb111\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638214,
+      "expires_at": 1791604638216
+    },
+    {
+      "id": "cal_g0VXcETjV0040ey5t9YL",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32e0734c-a959-4e95-866e-9734328bb111\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638217,
+      "expires_at": 1791604638218
+    },
+    {
+      "id": "cal_g0VXcETj600mCbk27ToH",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32e0734c-a959-4e95-866e-9734328bb111\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638192,
+      "expires_at": 1791604638193
+    },
+    {
+      "id": "cal_g0VXcETjE0190z0dgzp2",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32e0734c-a959-4e95-866e-9734328bb111\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638200,
+      "expires_at": 1791604638202
+    },
+    {
+      "id": "cal_g0VXcETj8000cc4tLtI2",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:32e0734c-a959-4e95-866e-9734328bb111\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638194,
+      "expires_at": 1791604638199
+    },
+    {
+      "id": "cal_g0VXcDwXP00O3T51GzyR",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:360c35d2-874a-4c97-8d3d-309fe70b578b\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510615,
+      "expires_at": 1791604510616
+    },
+    {
+      "id": "cal_g0VXcDwXQ01IRPhwcKvq",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:360c35d2-874a-4c97-8d3d-309fe70b578b\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510616,
+      "expires_at": 1791604510617
+    },
+    {
+      "id": "cal_g0VXcDwXK00f3L89NNDW",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:360c35d2-874a-4c97-8d3d-309fe70b578b\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510610,
+      "expires_at": 1791604510611
+    },
+    {
+      "id": "cal_g0VXcDwXN01qCy4NwCP9",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:360c35d2-874a-4c97-8d3d-309fe70b578b\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510613,
+      "expires_at": 1791604510614
+    },
+    {
+      "id": "cal_g0VXcDwXM0094clybvu6",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:360c35d2-874a-4c97-8d3d-309fe70b578b\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510611,
+      "expires_at": 1791604510613
+    },
+    {
+      "id": "cal_g0VXcEWEK00TyWxYRc2l",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647816,
+      "expires_at": 1791604647823
+    },
+    {
+      "id": "cal_g0VXcEWEV00GrR9DiXKb",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647827,
+      "expires_at": 1791604647827
+    },
+    {
+      "id": "cal_g0VXcEWEW00nu9vtIbTZ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647828,
+      "expires_at": 1791604647828
+    },
+    {
+      "id": "cal_g0VXcEWEX00Zd6bZVMua",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647829,
+      "expires_at": 1791604647829
+    },
+    {
+      "id": "cal_g0VXcEWEY00jTdmQe57Y",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647830,
+      "expires_at": 1791604647834
+    },
+    {
+      "id": "cal_g0VXcEWEM00tiCpHz3ut",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647818,
+      "expires_at": 1791604647819
+    },
+    {
+      "id": "cal_g0VXcEWES015eIkov0tJ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647824,
+      "expires_at": 1791604647825
+    },
+    {
+      "id": "cal_g0VXcEWEO00mdyUoJYpQ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:36c49a02-6220-4079-bea1-2994f2333a18\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647820,
+      "expires_at": 1791604647824
+    },
+    {
+      "id": "cal_g0VXcEToc00x6k1I9cdV",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638534,
+      "expires_at": 1791604638556
+    },
+    {
+      "id": "cal_g0VXcETpF00tzN7gRT23",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638573,
+      "expires_at": 1791604638575
+    },
+    {
+      "id": "cal_g0VXcETpI01XLMfGAGBW",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638576,
+      "expires_at": 1791604638578
+    },
+    {
+      "id": "cal_g0VXcETpL014E61Plqhn",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638579,
+      "expires_at": 1791604638582
+    },
+    {
+      "id": "cal_g0VXcETpP00kZNOOzwGM",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638583,
+      "expires_at": 1791604638584
+    },
+    {
+      "id": "cal_g0VXcEToe00i83hZJo0c",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638536,
+      "expires_at": 1791604638540
+    },
+    {
+      "id": "cal_g0VXcETp5000di4cJlkd",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638563,
+      "expires_at": 1791604638565
+    },
+    {
+      "id": "cal_g0VXcEToi01IMDa4ZO8I",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:43339ad3-a4ae-40e8-bff7-2cab2fc31986\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638540,
+      "expires_at": 1791604638562
+    },
+    {
+      "id": "cal_g0VXcDw4c00YBKhyh1zX",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:46609336-f2ce-4c4e-aad5-c1c27c9f7bae\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508830,
+      "expires_at": 1791604508831
+    },
+    {
+      "id": "cal_g0VXcDw4e003YumPGYNv",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:46609336-f2ce-4c4e-aad5-c1c27c9f7bae\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508831,
+      "expires_at": 1791604508834
+    },
+    {
+      "id": "cal_g0VXcDw4M00LUwt0kv9L",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:46609336-f2ce-4c4e-aad5-c1c27c9f7bae\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508814,
+      "expires_at": 1791604508816
+    },
+    {
+      "id": "cal_g0VXcDw4V00Kh7q5g0QJ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:46609336-f2ce-4c4e-aad5-c1c27c9f7bae\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508823,
+      "expires_at": 1791604508824
+    },
+    {
+      "id": "cal_g0VXcDw4O01GggvZ2zi7",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:46609336-f2ce-4c4e-aad5-c1c27c9f7bae\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508816,
+      "expires_at": 1791604508822
+    },
+    {
+      "id": "cal_g0VXcEWGZ00pnv4JZ9u3",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4b550957-a869-4614-af21-bebd821117d6\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647955,
+      "expires_at": 1791604647957
+    },
+    {
+      "id": "cal_g0VXcEWGc00IuG8f5B7H",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4b550957-a869-4614-af21-bebd821117d6\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647958,
+      "expires_at": 1791604647960
+    },
+    {
+      "id": "cal_g0VXcEWGe01XsyCPW2h2",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4b550957-a869-4614-af21-bebd821117d6\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647960,
+      "expires_at": 1791604647962
+    },
+    {
+      "id": "cal_g0VXcEWGh008R2Uq2KO7",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4b550957-a869-4614-af21-bebd821117d6\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647963,
+      "expires_at": 1791604647964
+    },
+    {
+      "id": "cal_g0VXcEWGL00pH6JUanNW",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4b550957-a869-4614-af21-bebd821117d6\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647941,
+      "expires_at": 1791604647945
+    },
+    {
+      "id": "cal_g0VXcEWGU00nice3Y2TD",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4b550957-a869-4614-af21-bebd821117d6\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647950,
+      "expires_at": 1791604647951
+    },
+    {
+      "id": "cal_g0VXcEWGP01gQPoOgj74",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4b550957-a869-4614-af21-bebd821117d6\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647945,
+      "expires_at": 1791604647949
+    },
+    {
+      "id": "cal_g0VXcEVEp000O3Q1ZSxi",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4e60f5c8-6ccd-4c11-a3b7-11d94232a743\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644003,
+      "expires_at": 1791604644004
+    },
+    {
+      "id": "cal_g0VXcEVEq01fP6KKBpx8",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4e60f5c8-6ccd-4c11-a3b7-11d94232a743\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644004,
+      "expires_at": 1791604644005
+    },
+    {
+      "id": "cal_g0VXcEVEr01IfOFEiB2Q",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4e60f5c8-6ccd-4c11-a3b7-11d94232a743\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644005,
+      "expires_at": 1791604644006
+    },
+    {
+      "id": "cal_g0VXcEVEt00vLH4Vw7Pe",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4e60f5c8-6ccd-4c11-a3b7-11d94232a743\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644007,
+      "expires_at": 1791604644007
+    },
+    {
+      "id": "cal_g0VXcEVEh00ER1NQJrGC",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4e60f5c8-6ccd-4c11-a3b7-11d94232a743\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643995,
+      "expires_at": 1791604643996
+    },
+    {
+      "id": "cal_g0VXcEVEm00KxqKkP1PC",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4e60f5c8-6ccd-4c11-a3b7-11d94232a743\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644000,
+      "expires_at": 1791604644001
+    },
+    {
+      "id": "cal_g0VXcEVEj00fsQ2SLKIP",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4e60f5c8-6ccd-4c11-a3b7-11d94232a743\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643997,
+      "expires_at": 1791604643999
+    },
+    {
+      "id": "cal_g0VXcDxKV00ro6EkHJk6",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4f29815a-bbb5-419d-9136-11aa2ebacb76\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:5",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513659,
+      "expires_at": 1791604513675
+    },
+    {
+      "id": "cal_g0VXcDxKp00uPDmaLfL4",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4f29815a-bbb5-419d-9136-11aa2ebacb76\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513679,
+      "expires_at": 1791604513679
+    },
+    {
+      "id": "cal_g0VXcDxKq00913hl29Gd",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4f29815a-bbb5-419d-9136-11aa2ebacb76\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513680,
+      "expires_at": 1791604513683
+    },
+    {
+      "id": "cal_g0VXcDxKX00rI8h1uzWx",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4f29815a-bbb5-419d-9136-11aa2ebacb76\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513661,
+      "expires_at": 1791604513670
+    },
+    {
+      "id": "cal_g0VXcDxKn00dlwX6OuRD",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4f29815a-bbb5-419d-9136-11aa2ebacb76\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513676,
+      "expires_at": 1791604513677
+    },
+    {
+      "id": "cal_g0VXcDxKj003oOW3frE5",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:4f29815a-bbb5-419d-9136-11aa2ebacb76\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513673,
+      "expires_at": 1791604513676
+    },
+    {
+      "id": "cal_g0VXcEThe00L1PT7c2qN",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638102,
+      "expires_at": 1791604638121
+    },
+    {
+      "id": "cal_g0VXcETic00c5DpDtJWB",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638162,
+      "expires_at": 1791604638165
+    },
+    {
+      "id": "cal_g0VXcETig01AjR1r6tAV",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638166,
+      "expires_at": 1791604638170
+    },
+    {
+      "id": "cal_g0VXcETil00786KexdQt",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638171,
+      "expires_at": 1791604638174
+    },
+    {
+      "id": "cal_g0VXcETip00AzbhG5qVd",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638175,
+      "expires_at": 1791604638182
+    },
+    {
+      "id": "cal_g0VXcEThh009X1SQFsEG",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638105,
+      "expires_at": 1791604638115
+    },
+    {
+      "id": "cal_g0VXcETi201BeKo0WBMY",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638126,
+      "expires_at": 1791604638154
+    },
+    {
+      "id": "cal_g0VXcEThr01SInU02GC4",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:650c6ef9-1202-4c76-a8bb-74c0f724f840\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638115,
+      "expires_at": 1791604638125
+    },
+    {
+      "id": "cal_g0VXcETrr006txG1lNJo",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:66707897-4cbf-4b7e-a06f-0afa0b8d4078\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638735,
+      "expires_at": 1791604638736
+    },
+    {
+      "id": "cal_g0VXcETrt00KXV9DPoE1",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:66707897-4cbf-4b7e-a06f-0afa0b8d4078\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638737,
+      "expires_at": 1791604638737
+    },
+    {
+      "id": "cal_g0VXcETru0044LYTd3cA",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:66707897-4cbf-4b7e-a06f-0afa0b8d4078\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638738,
+      "expires_at": 1791604638738
+    },
+    {
+      "id": "cal_g0VXcETrv00fgDYubLjK",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:66707897-4cbf-4b7e-a06f-0afa0b8d4078\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638739,
+      "expires_at": 1791604638739
+    },
+    {
+      "id": "cal_g0VXcETrm00jq3dvaCrg",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:66707897-4cbf-4b7e-a06f-0afa0b8d4078\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638730,
+      "expires_at": 1791604638731
+    },
+    {
+      "id": "cal_g0VXcETrp00PwdD8D1oy",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:66707897-4cbf-4b7e-a06f-0afa0b8d4078\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638733,
+      "expires_at": 1791604638733
+    },
+    {
+      "id": "cal_g0VXcETrn014xiImUpzq",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:66707897-4cbf-4b7e-a06f-0afa0b8d4078\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638731,
+      "expires_at": 1791604638732
+    },
+    {
+      "id": "cal_g0VXcEVFD00hTWnzcvhR",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644027,
+      "expires_at": 1791604644031
+    },
+    {
+      "id": "cal_g0VXcEVFn00000wqHx81",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644063,
+      "expires_at": 1791604644063
+    },
+    {
+      "id": "cal_g0VXcEVFo0062N7xO4IE",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644064,
+      "expires_at": 1791604644064
+    },
+    {
+      "id": "cal_g0VXcEVFp00FnfS50KkO",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644065,
+      "expires_at": 1791604644066
+    },
+    {
+      "id": "cal_g0VXcEVFq01XAxpIC4gr",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644066,
+      "expires_at": 1791604644067
+    },
+    {
+      "id": "cal_g0VXcEVFF00qMCrC0nFo",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644029,
+      "expires_at": 1791604644029
+    },
+    {
+      "id": "cal_g0VXcEVFI000259d2pWr",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644032,
+      "expires_at": 1791604644058
+    },
+    {
+      "id": "cal_g0VXcEVFG006oV5FIVHL",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:74ccd445-1e59-4ee3-b083-cb036a152c9a\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644030,
+      "expires_at": 1791604644031
+    },
+    {
+      "id": "cal_g0VXcETia00XVvpSUBGA",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:756dfa26-3dda-46e5-b806-737db5ae8f91\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638160,
+      "expires_at": 1791604638165
+    },
+    {
+      "id": "cal_g0VXcETif01SXAgD1p7v",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:756dfa26-3dda-46e5-b806-737db5ae8f91\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638165,
+      "expires_at": 1791604638169
+    },
+    {
+      "id": "cal_g0VXcETik00R7ZxP6Jk3",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:756dfa26-3dda-46e5-b806-737db5ae8f91\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638170,
+      "expires_at": 1791604638173
+    },
+    {
+      "id": "cal_g0VXcETio00tCTHAcAAC",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:756dfa26-3dda-46e5-b806-737db5ae8f91\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638174,
+      "expires_at": 1791604638181
+    },
+    {
+      "id": "cal_g0VXcEThc0034Wf6jfEF",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:756dfa26-3dda-46e5-b806-737db5ae8f91\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638100,
+      "expires_at": 1791604638112
+    },
+    {
+      "id": "cal_g0VXcETi101b6DgVD4ll",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:756dfa26-3dda-46e5-b806-737db5ae8f91\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638125,
+      "expires_at": 1791604638153
+    },
+    {
+      "id": "cal_g0VXcEThp00vcQBCfEg3",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:756dfa26-3dda-46e5-b806-737db5ae8f91\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638113,
+      "expires_at": 1791604638124
+    },
+    {
+      "id": "cal_g0VXcEVGP00uVdFN14ut",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644101,
+      "expires_at": 1791604644108
+    },
+    {
+      "id": "cal_g0VXcEVGd00RLfEL7sqG",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644115,
+      "expires_at": 1791604644116
+    },
+    {
+      "id": "cal_g0VXcEVGf011gpjVo418",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644117,
+      "expires_at": 1791604644119
+    },
+    {
+      "id": "cal_g0VXcEVGh0141KVHYr1q",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644119,
+      "expires_at": 1791604644121
+    },
+    {
+      "id": "cal_g0VXcEVGj01arY2oFKk1",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644121,
+      "expires_at": 1791604644123
+    },
+    {
+      "id": "cal_g0VXcEVGS00afPMPMD4h",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644104,
+      "expires_at": 1791604644106
+    },
+    {
+      "id": "cal_g0VXcEVGZ00M9ScW1dHf",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644111,
+      "expires_at": 1791604644112
+    },
+    {
+      "id": "cal_g0VXcEVGV00VKg5FENh3",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:7a2ba98a-9945-48bf-b92b-e0e5dd8de741\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604644107,
+      "expires_at": 1791604644110
+    },
+    {
+      "id": "cal_g0VXcEToX000x481gwRj",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:20",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638529,
+      "expires_at": 1791604638541
+    },
+    {
+      "id": "cal_g0VXcETpC00U6OTwBIRG",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638569,
+      "expires_at": 1791604638573
+    },
+    {
+      "id": "cal_g0VXcETpG006E9MRKHdg",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638574,
+      "expires_at": 1791604638577
+    },
+    {
+      "id": "cal_g0VXcETpJ01ARcYIK1QQ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638577,
+      "expires_at": 1791604638580
+    },
+    {
+      "id": "cal_g0VXcETpN007JevY4wb3",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638581,
+      "expires_at": 1791604638583
+    },
+    {
+      "id": "cal_g0VXcEToZ00SbcU2ogj8",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638531,
+      "expires_at": 1791604638537
+    },
+    {
+      "id": "cal_g0VXcETp301jOrCfTy3T",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638561,
+      "expires_at": 1791604638563
+    },
+    {
+      "id": "cal_g0VXcETog00QXtA53gtN",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:80a5bd70-a238-433f-b371-aee0dfd5b4e3\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638538,
+      "expires_at": 1791604638560
+    },
+    {
+      "id": "cal_g0VXcDw3300qvhvsB50T",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8899d25d-3d97-4732-b552-c61f9b5718bc\u0000exact\u0000project-memory.organizer",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508733,
+      "expires_at": 1791604508743
+    },
+    {
+      "id": "cal_g0VXcDw3w00tv6FOHhPw",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8899d25d-3d97-4732-b552-c61f9b5718bc\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508788,
+      "expires_at": 1791604508795
+    },
+    {
+      "id": "cal_g0VXcDw4301Dke0UN0om",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8899d25d-3d97-4732-b552-c61f9b5718bc\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508795,
+      "expires_at": 1791604508799
+    },
+    {
+      "id": "cal_g0VXcDw3500zjZWlCQaZ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8899d25d-3d97-4732-b552-c61f9b5718bc\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508735,
+      "expires_at": 1791604508744
+    },
+    {
+      "id": "cal_g0VXcDw3R008VmoJbzg6",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8899d25d-3d97-4732-b552-c61f9b5718bc\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508757,
+      "expires_at": 1791604508757
+    },
+    {
+      "id": "cal_g0VXcDw3F00yUri6qYR2",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8899d25d-3d97-4732-b552-c61f9b5718bc\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508745,
+      "expires_at": 1791604508756
+    },
+    {
+      "id": "cal_g0VXcEXsr00CEoVdzSEj",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8935e81e-06eb-400b-bf26-dfbaa93c00db\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654172,
+      "expires_at": 1791604654173
+    },
+    {
+      "id": "cal_g0VXcEXss007EmZsKUI0",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8935e81e-06eb-400b-bf26-dfbaa93c00db\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654174,
+      "expires_at": 1791604654175
+    },
+    {
+      "id": "cal_g0VXcEXsu00KIupW4myb",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8935e81e-06eb-400b-bf26-dfbaa93c00db\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654175,
+      "expires_at": 1791604654176
+    },
+    {
+      "id": "cal_g0VXcEXsv00BeGbHuFoO",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8935e81e-06eb-400b-bf26-dfbaa93c00db\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654177,
+      "expires_at": 1791604654177
+    },
+    {
+      "id": "cal_g0VXcEXsg00D5FpwU5zj",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8935e81e-06eb-400b-bf26-dfbaa93c00db\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654162,
+      "expires_at": 1791604654162
+    },
+    {
+      "id": "cal_g0VXcEXsl006GrLOuruG",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8935e81e-06eb-400b-bf26-dfbaa93c00db\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654166,
+      "expires_at": 1791604654167
+    },
+    {
+      "id": "cal_g0VXcEXsh00uNuSNhK6P",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8935e81e-06eb-400b-bf26-dfbaa93c00db\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654163,
+      "expires_at": 1791604654165
+    },
+    {
+      "id": "cal_g0VXcDwU300O5H6p3Wix",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8ad49d6a-95e7-4eb1-9f94-1fede762700e\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:5",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510406,
+      "expires_at": 1791604510419
+    },
+    {
+      "id": "cal_g0VXcDwUZ00vfy0FWz6p",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8ad49d6a-95e7-4eb1-9f94-1fede762700e\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510439,
+      "expires_at": 1791604510442
+    },
+    {
+      "id": "cal_g0VXcDwUd00Gaxqgtor7",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8ad49d6a-95e7-4eb1-9f94-1fede762700e\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510442,
+      "expires_at": 1791604510445
+    },
+    {
+      "id": "cal_g0VXcDwU600i2sjOACup",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8ad49d6a-95e7-4eb1-9f94-1fede762700e\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510410,
+      "expires_at": 1791604510415
+    },
+    {
+      "id": "cal_g0VXcDwUQ00s1osJRo4i",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8ad49d6a-95e7-4eb1-9f94-1fede762700e\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510430,
+      "expires_at": 1791604510433
+    },
+    {
+      "id": "cal_g0VXcDwUC01p6Hfhslln",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:8ad49d6a-95e7-4eb1-9f94-1fede762700e\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510416,
+      "expires_at": 1791604510429
+    },
+    {
+      "id": "cal_g0VXcDw4W00h3DBiKKQD",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:93f7bffd-5322-43f3-b917-ae97e8f3b2ac\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508824,
+      "expires_at": 1791604508826
+    },
+    {
+      "id": "cal_g0VXcDw4Z00mawYdct3C",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:93f7bffd-5322-43f3-b917-ae97e8f3b2ac\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508827,
+      "expires_at": 1791604508828
+    },
+    {
+      "id": "cal_g0VXcDw4G00RqqQQRM7i",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:93f7bffd-5322-43f3-b917-ae97e8f3b2ac\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508808,
+      "expires_at": 1791604508809
+    },
+    {
+      "id": "cal_g0VXcDw4J00TOhEqtgUe",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:93f7bffd-5322-43f3-b917-ae97e8f3b2ac\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508811,
+      "expires_at": 1791604508815
+    },
+    {
+      "id": "cal_g0VXcDw4H01SXp4S0sYI",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:93f7bffd-5322-43f3-b917-ae97e8f3b2ac\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508809,
+      "expires_at": 1791604508810
+    },
+    {
+      "id": "cal_g0VXcEXtI00ansOcBGFO",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654200,
+      "expires_at": 1791604654205
+    },
+    {
+      "id": "cal_g0VXcEXtV00int8p2Qwm",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654213,
+      "expires_at": 1791604654213
+    },
+    {
+      "id": "cal_g0VXcEXtW002vn8281TN",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654214,
+      "expires_at": 1791604654215
+    },
+    {
+      "id": "cal_g0VXcEXtX01YJPsNKvuX",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654215,
+      "expires_at": 1791604654216
+    },
+    {
+      "id": "cal_g0VXcEXtY010cYS07GeK",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654216,
+      "expires_at": 1791604654248
+    },
+    {
+      "id": "cal_g0VXcEXtK00nsGqblCev",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654202,
+      "expires_at": 1791604654203
+    },
+    {
+      "id": "cal_g0VXcEXtP00QArIsuJSe",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654206,
+      "expires_at": 1791604654210
+    },
+    {
+      "id": "cal_g0VXcEXtM00MB27jee9W",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:965b8f0c-b701-483f-8b46-8ceae15909b8\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654204,
+      "expires_at": 1791604654206
+    },
+    {
+      "id": "cal_g0VXcDwUY00bAIFp2JIC",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:97c875d3-921a-4175-b688-52eb007c9862\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510438,
+      "expires_at": 1791604510441
+    },
+    {
+      "id": "cal_g0VXcDwUc005kpw75D5l",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:97c875d3-921a-4175-b688-52eb007c9862\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510441,
+      "expires_at": 1791604510444
+    },
+    {
+      "id": "cal_g0VXcDwU000yoeUQmCft",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:97c875d3-921a-4175-b688-52eb007c9862\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510404,
+      "expires_at": 1791604510413
+    },
+    {
+      "id": "cal_g0VXcDwUP00EdtCIZ6ay",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:97c875d3-921a-4175-b688-52eb007c9862\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510429,
+      "expires_at": 1791604510432
+    },
+    {
+      "id": "cal_g0VXcDwUA00VIcZkTQK2",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:97c875d3-921a-4175-b688-52eb007c9862\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510414,
+      "expires_at": 1791604510428
+    },
+    {
+      "id": "cal_g0VXcDwTp005NsEyvg76",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:a2f42332-d3b2-4c9d-b13e-ae53ca7e1387\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:6",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510393,
+      "expires_at": 1791604510418
+    },
+    {
+      "id": "cal_g0VXcDwUX00VHlmxkjUY",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:a2f42332-d3b2-4c9d-b13e-ae53ca7e1387\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510437,
+      "expires_at": 1791604510440
+    },
+    {
+      "id": "cal_g0VXcDwUa01sI4R1havk",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:a2f42332-d3b2-4c9d-b13e-ae53ca7e1387\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510440,
+      "expires_at": 1791604510443
+    },
+    {
+      "id": "cal_g0VXcDwTv00Bznu2sDJh",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:a2f42332-d3b2-4c9d-b13e-ae53ca7e1387\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510399,
+      "expires_at": 1791604510411
+    },
+    {
+      "id": "cal_g0VXcDwUO00cGeT3dZwi",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:a2f42332-d3b2-4c9d-b13e-ae53ca7e1387\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510428,
+      "expires_at": 1791604510431
+    },
+    {
+      "id": "cal_g0VXcDwU800KS04OfWI7",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:a2f42332-d3b2-4c9d-b13e-ae53ca7e1387\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604510412,
+      "expires_at": 1791604510427
+    },
+    {
+      "id": "cal_g0VXcDw21005Le26eWSH",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:afcb4298-b4ab-461f-8ff3-0f9272dfca1a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508668,
+      "expires_at": 1791604508671
+    },
+    {
+      "id": "cal_g0VXcDw2400Gg5xKSPJd",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:afcb4298-b4ab-461f-8ff3-0f9272dfca1a\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508672,
+      "expires_at": 1791604508674
+    },
+    {
+      "id": "cal_g0VXcDw1n00n1C1P1HQ7",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:afcb4298-b4ab-461f-8ff3-0f9272dfca1a\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508655,
+      "expires_at": 1791604508659
+    },
+    {
+      "id": "cal_g0VXcDw1v004bKpBtFh5",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:afcb4298-b4ab-461f-8ff3-0f9272dfca1a\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508663,
+      "expires_at": 1791604508665
+    },
+    {
+      "id": "cal_g0VXcDw1s00pLyOlqZaM",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:afcb4298-b4ab-461f-8ff3-0f9272dfca1a\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508660,
+      "expires_at": 1791604508662
+    },
+    {
+      "id": "cal_g0VXcEWEi00dG6gWJBj9",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b06e1c8d-bb22-4ce8-a0af-9e22af14e9cd\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647840,
+      "expires_at": 1791604647841
+    },
+    {
+      "id": "cal_g0VXcEWEj01X7J3l81mL",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b06e1c8d-bb22-4ce8-a0af-9e22af14e9cd\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647841,
+      "expires_at": 1791604647841
+    },
+    {
+      "id": "cal_g0VXcEWEk012Gm7G1Ad1",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b06e1c8d-bb22-4ce8-a0af-9e22af14e9cd\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647842,
+      "expires_at": 1791604647843
+    },
+    {
+      "id": "cal_g0VXcEWEl01xmfbh7tkl",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b06e1c8d-bb22-4ce8-a0af-9e22af14e9cd\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647843,
+      "expires_at": 1791604647844
+    },
+    {
+      "id": "cal_g0VXcEWEb00ASQXMEddc",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b06e1c8d-bb22-4ce8-a0af-9e22af14e9cd\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647833,
+      "expires_at": 1791604647834
+    },
+    {
+      "id": "cal_g0VXcEWEg00eSyeRqweB",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b06e1c8d-bb22-4ce8-a0af-9e22af14e9cd\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647838,
+      "expires_at": 1791604647838
+    },
+    {
+      "id": "cal_g0VXcEWEd00hUVxRe66c",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b06e1c8d-bb22-4ce8-a0af-9e22af14e9cd\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647835,
+      "expires_at": 1791604647837
+    },
+    {
+      "id": "cal_g0VXcDw2r00ZGriCtlEg",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b6958f9e-2d61-4c0b-9ed2-ca0757000a9b\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:5",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508721,
+      "expires_at": 1791604508746
+    },
+    {
+      "id": "cal_g0VXcDw4100rwb4tpdnH",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b6958f9e-2d61-4c0b-9ed2-ca0757000a9b\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508793,
+      "expires_at": 1791604508797
+    },
+    {
+      "id": "cal_g0VXcDw4501AQwdSDeI2",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b6958f9e-2d61-4c0b-9ed2-ca0757000a9b\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508797,
+      "expires_at": 1791604508801
+    },
+    {
+      "id": "cal_g0VXcDw2x0030xUTmh3J",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b6958f9e-2d61-4c0b-9ed2-ca0757000a9b\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508727,
+      "expires_at": 1791604508739
+    },
+    {
+      "id": "cal_g0VXcDw3O00aJ9nfhuqN",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b6958f9e-2d61-4c0b-9ed2-ca0757000a9b\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508754,
+      "expires_at": 1791604508782
+    },
+    {
+      "id": "cal_g0VXcDw3A00smjhkk0ET",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b6958f9e-2d61-4c0b-9ed2-ca0757000a9b\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508740,
+      "expires_at": 1791604508753
+    },
+    {
+      "id": "cal_g0VXcEXsL00ZEj24i0lA",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654141,
+      "expires_at": 1791604654148
+    },
+    {
+      "id": "cal_g0VXcEXsX00nEvpqH3rX",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654153,
+      "expires_at": 1791604654153
+    },
+    {
+      "id": "cal_g0VXcEXsY01nyXLkw4In",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654154,
+      "expires_at": 1791604654155
+    },
+    {
+      "id": "cal_g0VXcEXsa007w4bhQCdM",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654155,
+      "expires_at": 1791604654156
+    },
+    {
+      "id": "cal_g0VXcEXsa02S0a0Y1REd",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654156,
+      "expires_at": 1791604654157
+    },
+    {
+      "id": "cal_g0VXcEXsN00z1ZJfSzko",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654143,
+      "expires_at": 1791604654144
+    },
+    {
+      "id": "cal_g0VXcEXsU00x6dBud71d",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654150,
+      "expires_at": 1791604654150
+    },
+    {
+      "id": "cal_g0VXcEXsP00jI7z2R97x",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:b9051db5-fea5-4dc0-a6bc-bc9c7fce006c\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604654145,
+      "expires_at": 1791604654149
+    },
+    {
+      "id": "cal_g0VXcEThi00kQ0RlI662",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:20",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638106,
+      "expires_at": 1791604638122
+    },
+    {
+      "id": "cal_g0VXcETid001myxFgafq",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638163,
+      "expires_at": 1791604638167
+    },
+    {
+      "id": "cal_g0VXcETii00l1KNvSuvN",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638168,
+      "expires_at": 1791604638171
+    },
+    {
+      "id": "cal_g0VXcETim00AuREH2GrJ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638172,
+      "expires_at": 1791604638175
+    },
+    {
+      "id": "cal_g0VXcETiq01UU49Pm11e",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638176,
+      "expires_at": 1791604638183
+    },
+    {
+      "id": "cal_g0VXcEThl00wPxdTAxZc",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638109,
+      "expires_at": 1791604638116
+    },
+    {
+      "id": "cal_g0VXcETi300mc0rX4h1W",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638127,
+      "expires_at": 1791604638155
+    },
+    {
+      "id": "cal_g0VXcETht00tocNJ4Kxr",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:bb0cd64f-5563-48b8-a1e1-2a1aa2c52737\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638117,
+      "expires_at": 1791604638126
+    },
+    {
+      "id": "cal_g0VXcDw3z00yD5GYV2ew",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:c88b145e-8742-4e12-a9a0-0ffc931256e9\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508791,
+      "expires_at": 1791604508796
+    },
+    {
+      "id": "cal_g0VXcDw4401vtWKEYniy",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:c88b145e-8742-4e12-a9a0-0ffc931256e9\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508796,
+      "expires_at": 1791604508800
+    },
+    {
+      "id": "cal_g0VXcDw2q00kX7z4V9RE",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:c88b145e-8742-4e12-a9a0-0ffc931256e9\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508720,
+      "expires_at": 1791604508737
+    },
+    {
+      "id": "cal_g0VXcDw3N003iXgT0WKA",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:c88b145e-8742-4e12-a9a0-0ffc931256e9\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508753,
+      "expires_at": 1791604508759
+    },
+    {
+      "id": "cal_g0VXcDw3800fJZBUsBeW",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:c88b145e-8742-4e12-a9a0-0ffc931256e9\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508738,
+      "expires_at": 1791604508752
+    },
+    {
+      "id": "cal_g0VXcETTP00bhNeXlfrZ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:cc8ed4c2-aef9-4507-b07b-a51ee6be3f17\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637219,
+      "expires_at": 1791604637222
+    },
+    {
+      "id": "cal_g0VXcETTU00HGzbFX04T",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:cc8ed4c2-aef9-4507-b07b-a51ee6be3f17\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637224,
+      "expires_at": 1791604637226
+    },
+    {
+      "id": "cal_g0VXcETTX00DDleLOws1",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:cc8ed4c2-aef9-4507-b07b-a51ee6be3f17\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637227,
+      "expires_at": 1791604637229
+    },
+    {
+      "id": "cal_g0VXcETTa014vs5xlwdl",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:cc8ed4c2-aef9-4507-b07b-a51ee6be3f17\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637230,
+      "expires_at": 1791604637231
+    },
+    {
+      "id": "cal_g0VXcETTD00rOMf13yep",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:cc8ed4c2-aef9-4507-b07b-a51ee6be3f17\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637207,
+      "expires_at": 1791604637210
+    },
+    {
+      "id": "cal_g0VXcETTK01PhX6td6BZ",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:cc8ed4c2-aef9-4507-b07b-a51ee6be3f17\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637214,
+      "expires_at": 1791604637216
+    },
+    {
+      "id": "cal_g0VXcETTH00wXrXouzZk",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:cc8ed4c2-aef9-4507-b07b-a51ee6be3f17\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604637211,
+      "expires_at": 1791604637214
+    },
+    {
+      "id": "cal_g0VXcDxKz0048EtrM8PT",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d2e7dfe5-8523-4a2c-8279-7408818c895b\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513689,
+      "expires_at": 1791604513689
+    },
+    {
+      "id": "cal_g0VXcDxL000HmjQg4o6Z",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d2e7dfe5-8523-4a2c-8279-7408818c895b\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513690,
+      "expires_at": 1791604513690
+    },
+    {
+      "id": "cal_g0VXcDxKt00VasqyrRzF",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d2e7dfe5-8523-4a2c-8279-7408818c895b\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513683,
+      "expires_at": 1791604513684
+    },
+    {
+      "id": "cal_g0VXcDxKx0032Dsm6Eox",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d2e7dfe5-8523-4a2c-8279-7408818c895b\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513687,
+      "expires_at": 1791604513687
+    },
+    {
+      "id": "cal_g0VXcDxKv00irbFGu5rr",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d2e7dfe5-8523-4a2c-8279-7408818c895b\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604513685,
+      "expires_at": 1791604513686
+    },
+    {
+      "id": "cal_g0VXcEVES00m79A7k6R8",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643980,
+      "expires_at": 1791604643986
+    },
+    {
+      "id": "cal_g0VXcEVEc001ZYZoVPVh",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643990,
+      "expires_at": 1791604643991
+    },
+    {
+      "id": "cal_g0VXcEVEd01Mh1Tqig77",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643991,
+      "expires_at": 1791604643995
+    },
+    {
+      "id": "cal_g0VXcEVEi00wiGi31h5T",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643996,
+      "expires_at": 1791604643998
+    },
+    {
+      "id": "cal_g0VXcEVEk01KdigJM6FG",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643998,
+      "expires_at": 1791604643999
+    },
+    {
+      "id": "cal_g0VXcEVEU00InSFcZ9VU",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643982,
+      "expires_at": 1791604643983
+    },
+    {
+      "id": "cal_g0VXcEVEa00VHkt90NT0",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643988,
+      "expires_at": 1791604643988
+    },
+    {
+      "id": "cal_g0VXcEVEW00dffCktVzb",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:d893ed1c-b770-4073-9d18-40d17bdcfef5\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604643984,
+      "expires_at": 1791604643987
+    },
+    {
+      "id": "cal_g0VXcEWGM00IcMKn6TfO",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000exact\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:19",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647942,
+      "expires_at": 1791604647949
+    },
+    {
+      "id": "cal_g0VXcEWGb00hE0DYYgCb",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647957,
+      "expires_at": 1791604647958
+    },
+    {
+      "id": "cal_g0VXcEWGd00nY9dXpd1j",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647959,
+      "expires_at": 1791604647961
+    },
+    {
+      "id": "cal_g0VXcEWGg00RA22v99zs",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647962,
+      "expires_at": 1791604647963
+    },
+    {
+      "id": "cal_g0VXcEWGi01oaWw2Z8G9",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647964,
+      "expires_at": 1791604647965
+    },
+    {
+      "id": "cal_g0VXcEWGO00xU8pl2m9i",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647944,
+      "expires_at": 1791604647946
+    },
+    {
+      "id": "cal_g0VXcEWGV000g4AimFWw",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647951,
+      "expires_at": 1791604647953
+    },
+    {
+      "id": "cal_g0VXcEWGR01EZQHlA3xY",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:dda10c54-a188-48d8-90c4-b6a525d7f398\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604647947,
+      "expires_at": 1791604647950
+    },
+    {
+      "id": "cal_g0VXcEThm00O6PYce6QK",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000exact\u0000project-memory.organizer",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638110,
+      "expires_at": 1791604638118
+    },
+    {
+      "id": "cal_g0VXcETiY00nH6l0R20D",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638158,
+      "expires_at": 1791604638164
+    },
+    {
+      "id": "cal_g0VXcETie01vjTOTl9R4",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638164,
+      "expires_at": 1791604638168
+    },
+    {
+      "id": "cal_g0VXcETij00HDVIqI8TN",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638169,
+      "expires_at": 1791604638172
+    },
+    {
+      "id": "cal_g0VXcETin00DK1v0XccY",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638173,
+      "expires_at": 1791604638177
+    },
+    {
+      "id": "cal_g0VXcEThn00pmeHDWGfL",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638111,
+      "expires_at": 1791604638118
+    },
+    {
+      "id": "cal_g0VXcETi400niRNyEW7o",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638128,
+      "expires_at": 1791604638128
+    },
+    {
+      "id": "cal_g0VXcEThw00MABThdK8R",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:df50ac77-b5de-49e3-95ef-5c156cbefe6e\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638119,
+      "expires_at": 1791604638127
+    },
+    {
+      "id": "cal_g0VXcDw4f00dKfMQtrF6",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:e45509bf-03e4-447b-b020-44a359b9cd65\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508833,
+      "expires_at": 1791604508834
+    },
+    {
+      "id": "cal_g0VXcDw4h018dAiQwrIj",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:e45509bf-03e4-447b-b020-44a359b9cd65\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508835,
+      "expires_at": 1791604508836
+    },
+    {
+      "id": "cal_g0VXcDw4S00M1rasm0js",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:e45509bf-03e4-447b-b020-44a359b9cd65\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508820,
+      "expires_at": 1791604508821
+    },
+    {
+      "id": "cal_g0VXcDw4Y00F4KVEPPTF",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:e45509bf-03e4-447b-b020-44a359b9cd65\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:13",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508826,
+      "expires_at": 1791604508827
+    },
+    {
+      "id": "cal_g0VXcDw4T01NfNFe5XGu",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:e45509bf-03e4-447b-b020-44a359b9cd65\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604508821,
+      "expires_at": 1791604508825
+    },
+    {
+      "id": "cal_g0VXcETjG00z1YSuta3S",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:f8aab637-b5ec-4385-a712-b15a5eb6c190\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:1",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638202,
+      "expires_at": 1791604638204
+    },
+    {
+      "id": "cal_g0VXcETjJ00tb1MRm4cO",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:f8aab637-b5ec-4385-a712-b15a5eb6c190\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:2",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638205,
+      "expires_at": 1791604638206
+    },
+    {
+      "id": "cal_g0VXcETjL008483sszqE",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:f8aab637-b5ec-4385-a712-b15a5eb6c190\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:3",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638207,
+      "expires_at": 1791604638207
+    },
+    {
+      "id": "cal_g0VXcETjM00PbTPV72bV",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:f8aab637-b5ec-4385-a712-b15a5eb6c190\u0000global\u0000runtime-global:f77af2dd-7eb4-4d73-a11d-e3cc88cbad7f:4",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638208,
+      "expires_at": 1791604638210
+    },
+    {
+      "id": "cal_g0VXcETiv00gWjlyUhyY",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:f8aab637-b5ec-4385-a712-b15a5eb6c190\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:27",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638181,
+      "expires_at": 1791604638184
+    },
+    {
+      "id": "cal_g0VXcETj200AnQZTmRwh",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:f8aab637-b5ec-4385-a712-b15a5eb6c190\u0000wildcard\u0000runtime:87206b80-fe9b-4f6c-a4e6-d43d195cb20d:31",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638188,
+      "expires_at": 1791604638192
+    },
+    {
+      "id": "cal_g0VXcETiy01E1X3VSXTB",
+      "target": "bus_delivery",
+      "target_id": "bus-occurrence:f8aab637-b5ec-4385-a712-b15a5eb6c190\u0000wildcard\u0000scheduler.event-service",
+      "owner_occurrence_id": "bus:87206b80-fe9b-4f6c-a4e6-d43d195cb20d",
+      "time_activated": 1791604638184,
+      "expires_at": 1791604638187
+    },
+    {
+      "id": "cal_g0VXcEVDW01eOTAAkDRv",
+      "target": "effect",
+      "target_id": "per_h6EjMG69gnnoOooQkkr5",
+      "owner_occurrence_id": "cal_g0VXcEVDW00zoW9mR0OL",
+      "time_activated": 1791604643922,
+      "expires_at": 1791604643937
+    },
+    {
+      "id": "cal_g0VXcEWA201r0fHmiDIw",
+      "target": "effect",
+      "target_id": "per_hWBvn3qnPwtnk6dPHNi7",
+      "owner_occurrence_id": "cal_g0VXcEWA200tU1qXeMzb",
+      "time_activated": 1791604647550,
+      "expires_at": 1791604647556
+    },
+    {
+      "id": "act_g0VXcDvwK00Mc2xwppmo",
+      "target": "runtime_process",
+      "target_id": "12973d10-ebf3-4f24-9db8-c3e7e3eae66e",
+      "owner_occurrence_id": "{\"pid\":77968,\"processInstanceID\":\"win32:639272012987920575\",\"occurrenceID\":\"12973d10-ebf3-4f24-9db8-c3e7e3eae66e\"}",
+      "time_activated": 1791604508315,
+      "expires_at": 9007199254740991
+    }
+  ],
+  "capacity": [
+    {
+      "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+      "slot": 0,
+      "lease_id": "7480fd96-ae6a-4b4e-8033-52aa047fb0c7",
+      "owner_id": "runtime:77968:3b9d950a-b035-4874-acbd-97d2c586e9a3",
+      "time_acquired": 1791604648247,
+      "expires_at": 1791604654130
+    },
+    {
+      "resource_key": "e5c0856e66558e0da2874346a5f9bc1df93d08c0dd60a9085f180b31c575f42a",
+      "slot": 1,
+      "lease_id": "99d7ca85-0ebf-4dc4-9944-9fe88ef726a2",
+      "owner_id": "runtime:77968:2f764a62-fdc5-40ed-af76-b9bac6128450",
+      "time_acquired": 1791604644393,
+      "expires_at": 1791604647807
+    }
+  ],
+  "controls": [
+    {
+      "id": "sctl_hklGeTEjXpmZNPTbbsW",
+      "session_id": "ses_hvjyRg5YBSxlCnAcViN9",
+      "kind": "wake_reason",
+      "event_id": "sctl_hseDSr6OJ9o81DP7ABu",
+      "event_kind": "consumed"
+    }
+  ],
+  "permissions": [
+    {
+      "id": "per_g0VXcEVDW00nYWvh4RIr",
+      "attempt_id": "per_h6EjMG69gnnoOooQkkr5",
+      "project_id": null,
+      "session_id": null,
+      "outcome_id": "per_g0VXcEVDl004Xurs3gSE",
+      "outcome": "execution_succeeded",
+      "result_at": 1791604643937
+    },
+    {
+      "id": "per_g0VXcEWA100gzh7zjLqx",
+      "attempt_id": "per_hWBvn3qnPwtnk6dPHNi7",
+      "project_id": null,
+      "session_id": null,
+      "outcome_id": "per_g0VXcEWA800sgLxqRuGp",
+      "outcome": "execution_succeeded",
+      "result_at": 1791604647556
+    }
+  ],
+  "permissionRequests": [
+    {
+      "id": "per_g0VXcEVDU00ck9FZmdYl",
+      "request_id": "per_hJGlP8MJcigN4PRRw2Gb",
+      "event_type": "requested",
+      "attempt_id": null,
+      "outcome_slot": null
+    },
+    {
+      "id": "per_g0VXcEVDV00q5j1zHVrd",
+      "request_id": "per_hJGlP8MJcigN4PRRw2Gb",
+      "event_type": "allowed_once",
+      "attempt_id": null,
+      "outcome_slot": null
+    },
+    {
+      "id": "per_g0VXcEVDW00nYWvh4RIr",
+      "request_id": "per_hJGlP8MJcigN4PRRw2Gb",
+      "event_type": "execution_started",
+      "attempt_id": "per_h6EjMG69gnnoOooQkkr5",
+      "outcome_slot": null
+    },
+    {
+      "id": "per_g0VXcEVDl004Xurs3gSE",
+      "request_id": "per_hJGlP8MJcigN4PRRw2Gb",
+      "event_type": "execution_succeeded",
+      "attempt_id": "per_h6EjMG69gnnoOooQkkr5",
+      "outcome_slot": "per_h6EjMG69gnnoOooQkkr5"
+    },
+    {
+      "id": "per_g0VXcEVDm00jumAPzPUO",
+      "request_id": "per_hJGlP8MJcigN4PRRw2Gb",
+      "event_type": "stale",
+      "attempt_id": null,
+      "outcome_slot": null
+    },
+    {
+      "id": "per_g0VXcEW9z00ktsUvmAOI",
+      "request_id": "per_hGpk31XyNIGAIlYl1732",
+      "event_type": "requested",
+      "attempt_id": null,
+      "outcome_slot": null
+    },
+    {
+      "id": "per_g0VXcEWA000VXuftG0Sx",
+      "request_id": "per_hGpk31XyNIGAIlYl1732",
+      "event_type": "allowed_once",
+      "attempt_id": null,
+      "outcome_slot": null
+    },
+    {
+      "id": "per_g0VXcEWA100gzh7zjLqx",
+      "request_id": "per_hGpk31XyNIGAIlYl1732",
+      "event_type": "execution_started",
+      "attempt_id": "per_hWBvn3qnPwtnk6dPHNi7",
+      "outcome_slot": null
+    },
+    {
+      "id": "per_g0VXcEWA800sgLxqRuGp",
+      "request_id": "per_hGpk31XyNIGAIlYl1732",
+      "event_type": "execution_succeeded",
+      "attempt_id": "per_hWBvn3qnPwtnk6dPHNi7",
+      "outcome_slot": "per_hWBvn3qnPwtnk6dPHNi7"
+    },
+    {
+      "id": "per_g0VXcEWA900QSfJZp9NU",
+      "request_id": "per_hGpk31XyNIGAIlYl1732",
+      "event_type": "stale",
+      "attempt_id": null,
+      "outcome_slot": null
+    }
+  ],
+  "checkpoints": [],
+  "messages": [
+    {
+      "id": "msg_fe476a5e-b2db-4b5f-91bd-e910d7630bd8",
+      "session_id": "ses_-zUSNlWWuzzuGg1K9BbU",
+      "role": "user",
+      "completed_at": null,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXcETkp006IA2Ns6S0",
+      "session_id": "ses_-zUSNlWWuzzuGg1K9BbU",
+      "role": "assistant",
+      "completed_at": 1791604644025,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXcEVG900SBc3IsnTf",
+      "session_id": "ses_-zUSNlWWuzzuGg1K9BbU",
+      "role": "assistant",
+      "completed_at": 1791604647858,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXcEWG500IqZjvSCNt",
+      "session_id": "ses_-zUSNlWWuzzuGg1K9BbU",
+      "role": "assistant",
+      "completed_at": 1791604654198,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_h3HyAUNumkGWzahD43gk",
+      "session_id": "ses_hvjyRg5YBSxlCnAcViN9",
+      "role": "user",
+      "completed_at": null,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXcDw8H00X7QKOjgXQ",
+      "session_id": "ses_hvjyRg5YBSxlCnAcViN9",
+      "role": "assistant",
+      "completed_at": 1791604513703,
+      "pending_delivery": null
+    }
+  ],
+  "memory": [
+    {
+      "id": "mem_h9KnyyJKjhNfJVBmIW0s",
+      "project_id": "prj_hln9w2B7mnt2gsZHByHX",
+      "kind": "project_context",
+      "source": "reflection",
+      "key": "project-memory-document",
+      "chunk_id": "mck_hk0v3WfpIrY4XraiJiVP",
+      "content_chars": 899
+    },
+    {
+      "id": "mem_hcXMiqN9b2Qz7DllJ8Hx",
+      "project_id": "prj_hqBdqH0rWjoQP0lznK4n",
+      "kind": "project_context",
+      "source": "reflection",
+      "key": "project-memory-document",
+      "chunk_id": "mck_hkN205Ur1xJ2eAdRqqYV",
+      "content_chars": 411
+    }
+  ],
+  "memoryDocuments": [
+    {
+      "projectID": "prj_hln9w2B7mnt2gsZHByHX",
+      "fileID": "mem_h9KnyyJKjhNfJVBmIW0s",
+      "chunkID": "mck_hk0v3WfpIrY4XraiJiVP",
+      "snapshot": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "# Project Memory\n\n## Active request\nRead `D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts` using exactly two sequential `read` tool calls:\n1. `offset=27`, `limit=11`.\n2. `offset=1`, `limit=1000`, intended to read the entire file.\n\nThen respond directly in the current ordinary conversation with one Chinese sentence summarizing each read, preserving two genuine clickable file-source references.\n\n## Constraints\n- Do not create a task or delegate work.\n- Do not modify files.\n- Do not read any other files, auth, or models.\n\n## Work state\nThe request is recorded; no reads, results, or completion are evidenced.\n",
+        "revision": 1,
+        "tokenCount": 157,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1791604602885,
+        "timeUpdated": 1791604647589
+      }
+    },
+    {
+      "projectID": "prj_hqBdqH0rWjoQP0lznK4n",
+      "fileID": "mem_hcXMiqN9b2Qz7DllJ8Hx",
+      "chunkID": "mck_hkN205Ur1xJ2eAdRqqYV",
+      "snapshot": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "# Project Context\n\nThe only recorded user request was to reply with `OK`. No substantive project goals, decisions, work state, or unresolved issues have been established.\n",
+        "revision": 1,
+        "tokenCount": 43,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1791604508621,
+        "timeUpdated": 1791604517318
+      }
+    }
+  ],
+  "recoveryTableCounts": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "providerPending": [],
+  "toolPending": [],
+  "unsettledPublications": [],
+  "unsettledDeliveries": [],
+  "tableCounts": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_definition_tombstone",
+      "rows": 0
+    },
+    {
+      "name": "automation_delay_settlement",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_attempt",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_attempt_receipt",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "automation_project_target",
+      "rows": 0
+    },
+    {
+      "name": "automation_run",
+      "rows": 0
+    },
+    {
+      "name": "automation_run_receipt",
+      "rows": 0
+    },
+    {
+      "name": "bus_publication_attempt_receipt",
+      "rows": 0
+    },
+    {
+      "name": "bus_publication_delivery",
+      "rows": 282
+    },
+    {
+      "name": "bus_publication_delivery_receipt",
+      "rows": 282
+    },
+    {
+      "name": "bus_publication_outbox",
+      "rows": 42
+    },
+    {
+      "name": "bus_publication_phase_receipt",
+      "rows": 126
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_outcome",
+      "rows": 0
+    },
+    {
+      "name": "control_account",
+      "rows": 0
+    },
+    {
+      "name": "database_authority",
+      "rows": 1
+    },
+    {
+      "name": "decision_log",
+      "rows": 0
+    },
+    {
+      "name": "engine_artifact",
+      "rows": 0
+    },
+    {
+      "name": "engine_artifact_catalog_revision",
+      "rows": 0
+    },
+    {
+      "name": "engine_artifact_version",
+      "rows": 0
+    },
+    {
+      "name": "engine_browser_preview_target_identity",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup_receipt",
+      "rows": 0
+    },
+    {
+      "name": "engine_channel_binding",
+      "rows": 0
+    },
+    {
+      "name": "engine_control_activation_lease",
+      "rows": 285
+    },
+    {
+      "name": "engine_control_activation_lease_grant",
+      "rows": 285
+    },
+    {
+      "name": "engine_git_checkpoint_outcome",
+      "rows": 0
+    },
+    {
+      "name": "engine_git_checkpoint_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_goal",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_outcome",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_metric_result",
+      "rows": 0
+    },
+    {
+      "name": "engine_metric_spec",
+      "rows": 0
+    },
+    {
+      "name": "engine_progress_snapshot",
+      "rows": 0
+    },
+    {
+      "name": "engine_task",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_creation_contract",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_root_ingress",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_root_ingress_policy",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_settlement",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_definition_tombstone",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire_receipt",
+      "rows": 0
+    },
+    {
+      "name": "event_occurrence",
+      "rows": 0
+    },
+    {
+      "name": "global_creation_allocation",
+      "rows": 1
+    },
+    {
+      "name": "interactive_artifact",
+      "rows": 0
+    },
+    {
+      "name": "memory_chunk",
+      "rows": 2
+    },
+    {
+      "name": "memory_embedding",
+      "rows": 0
+    },
+    {
+      "name": "memory_file",
+      "rows": 2
+    },
+    {
+      "name": "memory_fts",
+      "rows": 0
+    },
+    {
+      "name": "memory_fts_config",
+      "rows": 1
+    },
+    {
+      "name": "memory_fts_content",
+      "rows": 0
+    },
+    {
+      "name": "memory_fts_data",
+      "rows": 2
+    },
+    {
+      "name": "memory_fts_docsize",
+      "rows": 0
+    },
+    {
+      "name": "memory_fts_idx",
+      "rows": 0
+    },
+    {
+      "name": "message",
+      "rows": 6
+    },
+    {
+      "name": "part",
+      "rows": 14
+    },
+    {
+      "name": "permission_execution_result",
+      "rows": 2
+    },
+    {
+      "name": "permission_ledger",
+      "rows": 10
+    },
+    {
+      "name": "permission_policy",
+      "rows": 1
+    },
+    {
+      "name": "project",
+      "rows": 2
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "protocol_delivery_receipt",
+      "rows": 0
+    },
+    {
+      "name": "protocol_event",
+      "rows": 12
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "provider_activity_outcome",
+      "rows": 4
+    },
+    {
+      "name": "provider_activity_request",
+      "rows": 4
+    },
+    {
+      "name": "provider_usage_event",
+      "rows": 6
+    },
+    {
+      "name": "quick_note",
+      "rows": 0
+    },
+    {
+      "name": "runtime_execution_capacity_lease",
+      "rows": 2
+    },
+    {
+      "name": "session",
+      "rows": 2
+    },
+    {
+      "name": "session_control_event",
+      "rows": 1
+    },
+    {
+      "name": "session_control_record",
+      "rows": 1
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "session_share",
+      "rows": 0
+    },
+    {
+      "name": "task_plan",
+      "rows": 0
+    },
+    {
+      "name": "todo",
+      "rows": 0
+    },
+    {
+      "name": "todo_snapshot",
+      "rows": 0
+    },
+    {
+      "name": "tool_part_outcome",
+      "rows": 2
+    },
+    {
+      "name": "tool_part_progress",
+      "rows": 0
+    },
+    {
+      "name": "tool_part_request",
+      "rows": 2
+    },
+    {
+      "name": "workbench_brief_snapshot",
+      "rows": 0
+    },
+    {
+      "name": "worker_turn_descriptor",
+      "rows": 0
+    },
+    {
+      "name": "workspace",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "runtimeInventory": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime",
+      "type": "directory",
+      "mtimeMs": 1791604498127.715
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\bin",
+      "type": "directory",
+      "mtimeMs": 1791604498127.715
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\cache",
+      "type": "directory",
+      "mtimeMs": 1791604498130.7146
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\cache\\version",
+      "type": "file",
+      "bytes": 2,
+      "mtimeMs": 1791604498130.7146
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\config",
+      "type": "directory",
+      "mtimeMs": 1791604502551.1904
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\config\\opencorvus.jsonc",
+      "type": "file",
+      "bytes": 173,
+      "mtimeMs": 1791604502545.6611
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data",
+      "type": "directory",
+      "mtimeMs": 1791605100281.8284
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\durable-publications",
+      "type": "directory",
+      "mtimeMs": 1791604506314.3267
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\durable-publications\\.locks",
+      "type": "directory",
+      "mtimeMs": 1791604990302.0337
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\durable-publications\\.locks\\7992c935a75def38c9034c3415291add640841a8ce091e39d1a692d2ce34b583",
+      "type": "file",
+      "bytes": 0,
+      "mtimeMs": 1791604506311.3247
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\durable-publications\\.locks\\9eda566f951ad1658185fafcd9a84406368dea99361c7b8bd4be62c13952d1d1",
+      "type": "file",
+      "bytes": 0,
+      "mtimeMs": 1791604502646.993
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\durable-publications\\.staging",
+      "type": "directory",
+      "mtimeMs": 1791604506314.3267
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\durable-publications\\.staging\\implicit-project-creation",
+      "type": "directory",
+      "mtimeMs": 1791604506330.164
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\durable-publications\\implicit-project-creation",
+      "type": "directory",
+      "mtimeMs": 1791604507334.8
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions",
+      "type": "directory",
+      "mtimeMs": 1791604502634.2368
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1",
+      "type": "directory",
+      "mtimeMs": 1791604502677.996
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445",
+      "type": "directory",
+      "mtimeMs": 1791604502672.997
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\README.md",
+      "type": "file",
+      "bytes": 2402,
+      "mtimeMs": 1791604502669.9976
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents",
+      "type": "directory",
+      "mtimeMs": 1791604502665.9944
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-developer",
+      "type": "directory",
+      "mtimeMs": 1791604502643.9946
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-developer\\system.md",
+      "type": "file",
+      "bytes": 17975,
+      "mtimeMs": 1791604502643.9946
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-planner",
+      "type": "directory",
+      "mtimeMs": 1791604502647.995
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-planner\\system.md",
+      "type": "file",
+      "bytes": 11582,
+      "mtimeMs": 1791604502648.997
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-researcher",
+      "type": "directory",
+      "mtimeMs": 1791604502650.995
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-researcher\\system.md",
+      "type": "file",
+      "bytes": 2175,
+      "mtimeMs": 1791604502650.995
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-tester",
+      "type": "directory",
+      "mtimeMs": 1791604502661.9956
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\base-tester\\system.md",
+      "type": "file",
+      "bytes": 15971,
+      "mtimeMs": 1791604502661.9956
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\orchestrator",
+      "type": "directory",
+      "mtimeMs": 1791604502666.996
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\agents\\orchestrator\\system.md",
+      "type": "file",
+      "bytes": 4997,
+      "mtimeMs": 1791604502666.996
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\expert-squad.jsonc",
+      "type": "file",
+      "bytes": 10710,
+      "mtimeMs": 1791604502668.9954
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\selector.md",
+      "type": "file",
+      "bytes": 1063,
+      "mtimeMs": 1791604502671.9963
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\skills",
+      "type": "directory",
+      "mtimeMs": 1791604502673.996
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\skills\\method",
+      "type": "directory",
+      "mtimeMs": 1791604502674.9963
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\expert-squad-package-revisions\\v1\\7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\\skills\\method\\SKILL.md",
+      "type": "file",
+      "bytes": 3485,
+      "mtimeMs": 1791604502674.9963
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\opencorvus.db",
+      "type": "file",
+      "bytes": 2543616,
+      "mtimeMs": 1791604654236.1086
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\opencorvus.db-shm",
+      "type": "file",
+      "bytes": 32768,
+      "mtimeMs": 1791606141520.5598
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\opencorvus.db-wal",
+      "type": "file",
+      "bytes": 4157112,
+      "mtimeMs": 1791605097737.5195
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\project-directory-admission.json",
+      "type": "file",
+      "bytes": 2,
+      "mtimeMs": 1791604501954.623
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects",
+      "type": "directory",
+      "mtimeMs": 1791604506301.3206
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026",
+      "type": "directory",
+      "mtimeMs": 1791604506301.3206
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10",
+      "type": "directory",
+      "mtimeMs": 1791604506301.3206
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10",
+      "type": "directory",
+      "mtimeMs": 1791604507334.8
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011",
+      "type": "directory",
+      "mtimeMs": 1791604508400.6794
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git",
+      "type": "directory",
+      "mtimeMs": 1791604506953.5862
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\HEAD",
+      "type": "file",
+      "bytes": 23,
+      "mtimeMs": 1791604506519.626
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\config",
+      "type": "file",
+      "bytes": 130,
+      "mtimeMs": 1791604506516.6282
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\description",
+      "type": "file",
+      "bytes": 73,
+      "mtimeMs": 1791604506490.6416
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks",
+      "type": "directory",
+      "mtimeMs": 1791604506500.6792
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\applypatch-msg.sample",
+      "type": "file",
+      "bytes": 478,
+      "mtimeMs": 1791604506492.6484
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\commit-msg.sample",
+      "type": "file",
+      "bytes": 896,
+      "mtimeMs": 1791604506492.6484
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\fsmonitor-watchman.sample",
+      "type": "file",
+      "bytes": 4726,
+      "mtimeMs": 1791604506494.6587
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\post-update.sample",
+      "type": "file",
+      "bytes": 189,
+      "mtimeMs": 1791604506494.6587
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-applypatch.sample",
+      "type": "file",
+      "bytes": 424,
+      "mtimeMs": 1791604506496.6663
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-commit.sample",
+      "type": "file",
+      "bytes": 1649,
+      "mtimeMs": 1791604506496.6663
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-merge-commit.sample",
+      "type": "file",
+      "bytes": 416,
+      "mtimeMs": 1791604506496.6663
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-push.sample",
+      "type": "file",
+      "bytes": 1374,
+      "mtimeMs": 1791604506496.6663
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-rebase.sample",
+      "type": "file",
+      "bytes": 4898,
+      "mtimeMs": 1791604506498.6724
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\pre-receive.sample",
+      "type": "file",
+      "bytes": 544,
+      "mtimeMs": 1791604506498.6724
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\prepare-commit-msg.sample",
+      "type": "file",
+      "bytes": 1492,
+      "mtimeMs": 1791604506498.6724
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\push-to-checkout.sample",
+      "type": "file",
+      "bytes": 2783,
+      "mtimeMs": 1791604506500.6792
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\sendemail-validate.sample",
+      "type": "file",
+      "bytes": 2308,
+      "mtimeMs": 1791604506500.6792
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\hooks\\update.sample",
+      "type": "file",
+      "bytes": 3650,
+      "mtimeMs": 1791604506500.6792
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\info",
+      "type": "directory",
+      "mtimeMs": 1791604506502.6863
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\info\\exclude",
+      "type": "file",
+      "bytes": 240,
+      "mtimeMs": 1791604506502.6863
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\objects",
+      "type": "directory",
+      "mtimeMs": 1791604506522.6265
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\objects\\info",
+      "type": "directory",
+      "mtimeMs": 1791604506522.6265
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\objects\\pack",
+      "type": "directory",
+      "mtimeMs": 1791604506522.6265
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\opencorvus",
+      "type": "file",
+      "bytes": 24,
+      "mtimeMs": 1791604506953.5862
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\refs",
+      "type": "directory",
+      "mtimeMs": 1791604506518.6262
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\refs\\heads",
+      "type": "directory",
+      "mtimeMs": 1791604506518.6262
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.git\\refs\\tags",
+      "type": "directory",
+      "mtimeMs": 1791604506518.6262
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.gitattributes",
+      "type": "file",
+      "bytes": 150,
+      "mtimeMs": 1791604508000.045
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.gitignore",
+      "type": "file",
+      "bytes": 16,
+      "mtimeMs": 1791604507999.04
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus",
+      "type": "directory",
+      "mtimeMs": 1791604510306.911
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r",
+      "type": "directory",
+      "mtimeMs": 1791604510306.911
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project",
+      "type": "directory",
+      "mtimeMs": 1791605097698.468
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments",
+      "type": "directory",
+      "mtimeMs": 1791604510307.9104
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec",
+      "type": "directory",
+      "mtimeMs": 1791604510457.634
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec\\f7feb70ee46a7bed74d39d091a796696b39c7a63375425571d7596b6abe612bd.json",
+      "type": "file",
+      "bytes": 88883,
+      "mtimeMs": 1791604510314.4219
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\attachments\\aa74a7ce1433aed95f710767feb1666beedbdfe217066f2008c2ea906db6afec\\f7feb70ee46a7bed74d39d091a796696b39c7a63375425571d7596b6abe612bd.json.metadata.json",
+      "type": "file",
+      "bytes": 286,
+      "mtimeMs": 1791604510314.4219
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache",
+      "type": "directory",
+      "mtimeMs": 1791604510614.0735
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache\\session-diffs",
+      "type": "directory",
+      "mtimeMs": 1791604510614.0735
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hqBdqH0rWjoQP0lznK4n",
+      "type": "directory",
+      "mtimeMs": 1791604513695.186
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hqBdqH0rWjoQP0lznK4n\\9Koa8HnV.json",
+      "type": "file",
+      "bytes": 2,
+      "mtimeMs": 1791604513692.1865
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\.r\\project\\locks",
+      "type": "directory",
+      "mtimeMs": 1791605097734.2964
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\data\\projects\\2026\\10\\10\\34eed1c8-e234-47d1-be53-755a1f229011\\.opencorvus\\opencorvus.jsonc",
+      "type": "file",
+      "bytes": 1355,
+      "mtimeMs": 1791604508550.598
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\log",
+      "type": "directory",
+      "mtimeMs": 1791604505336.889
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\log\\dev.log",
+      "type": "file",
+      "bytes": 4754817,
+      "mtimeMs": 1791605097750.97
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\overlay",
+      "type": "directory",
+      "mtimeMs": 1791604498128.7183
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\overlay\\embedded",
+      "type": "directory",
+      "mtimeMs": 1791604498128.7183
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\overlay\\webview",
+      "type": "directory",
+      "mtimeMs": 1791604498128.7183
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\state",
+      "type": "directory",
+      "mtimeMs": 1791604498127.715
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\runtime\\tmp",
+      "type": "directory",
+      "mtimeMs": 1791605097862.628
+    }
+  ],
+  "boundary": "Fresh original pre-start observations; exact closure/ports/pair and complete copied row custody remain required before history start"
+}

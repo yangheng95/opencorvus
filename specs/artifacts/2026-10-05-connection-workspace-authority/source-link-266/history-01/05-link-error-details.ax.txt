@@ -1,0 +1,48 @@
+Browser tab: 113, Title: "OpenCorvus", URL: "http://localhost:18204/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 77-109
++									151 container
++										152 text work
++										153 text 15s
++										154 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
++											155 text read
++											156 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
++											157 image
++										158 container Sources
++											159 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++												160 text read.ts:27-37
++												161 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++										162 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
++											163 text read
++											164 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
++											165 image
++										166 container Sources
++											167 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
++												168 text read.ts
++												169 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
++										170 container
++											171 text 第一次读取了
++											172 link Description: read.ts, Value: localhost:18204/ui/#
++											173 text  第 27–37 行，其中  citedReadRange  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。
++										174 container
++											175 text 第二次读取了
++											176 link Description: read.ts, Value: localhost:18204/ui/#
++											177 text  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
+~										148 button (expanded) Details, Secondary Actions: Collapse
++										178 text HTTP GET 404 file/content?path=read.ts&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-10%5Csource-whole-265-live-01%5Cproject
+
+Request ID: 0fa893a3-a809-499c-9b28-a0160421c3a5
+
+ApiError: API 404 file/content?path=read.ts&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-10%5Csource-whole-265-live-01%5Cproject: File entry not found: read.ts
+    at Pe (http://localhost:18204/ui/assets/main-CmdIWcOX.js:67:140446)
+    at async SO (http://localhost:18204/ui/assets/main-CmdIWcOX.js:226:3291)
+
+response body:
+{
+  "name": "FileNotFoundError",
+  "data": {
+    "path": "read.ts",
+    "message": "File entry not found: read.ts"
+  }
+}
+The focused UI element is 148 button (expanded) Details, Secondary Actions: Collapse

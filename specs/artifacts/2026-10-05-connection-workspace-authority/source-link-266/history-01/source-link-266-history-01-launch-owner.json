@@ -1,0 +1,35 @@
+{
+  "observedProcessChain": [
+    {
+      "pid": 66068,
+      "processInstanceID": "win32:639272029733671660",
+      "occurrenceID": "b69839e0-52ae-4613-8300-17535d51427e"
+    }
+  ],
+  "nativeDeadlineAt": 1791607072467,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project",
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-link-266\\history-01",
+  "host": {
+    "pid": 46956,
+    "processInstanceID": "win32:639272029725714790",
+    "occurrenceID": "105fe684-bcf0-4aa6-bb4f-7dd9d131f496"
+  },
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-link-266-history-01\\evidence",
+  "evidencePrefix": "source-link-266-history-01",
+  "nativeTarget": {
+    "pid": 66068,
+    "processInstanceID": "win32:639272029733671660",
+    "occurrenceID": "b69839e0-52ae-4613-8300-17535d51427e"
+  },
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-link-266-history-01",
+  "targetBirthAtMs": 1791606173367,
+  "authorityStaging": "None; no model Task requested",
+  "occurrence": "source-link-266-history-01-1c80b861-9c20-4f28-942b-d4e3f021da1d",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-link-266-history-01\\runtime",
+  "port": 18204,
+  "owner": {
+    "ProcessId": 66068,
+    "processInstanceID": "win32:639272029733671660"
+  }
+}
