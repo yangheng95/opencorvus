@@ -1,0 +1,12 @@
+Browser tab: 114, Title: "OpenCorvus", URL: "http://localhost:18205/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~										194 button Reload from disk
+~										195 button Close workspace
+~									196 container
++										197 text entry area (settable) Description: Editor, Value: # Isolated formal Task resource qualification
+
+
++											198 container
++												199 text #  Isolated formal Task resource qualification
++									200 text Markdown
+The focused UI element is 197 text entry area (settable) Description: Editor, Value: # Isolated formal Task resource qualification

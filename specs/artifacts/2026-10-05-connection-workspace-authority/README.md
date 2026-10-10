@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [明确文件引用267 Recall](source-link-plan-267.md) / [当前真实证据](source-link-267/README.md)：三种明确引用/位置1和整文件Source人工通过，原自然文本与工具完整归档，5EOF/Native0。
+
 - [正文文件引用266 Recall](source-link-plan-266.md) / [真实目标与修复](source-link-266/README.md)：basename代码链接实际Project404，普通code语义和正确Source复核，原文本/事实保管。
 
 - [整文件265 Recall](source-whole-plan-265.md) / [旧band与真实修复](source-whole-265/README.md)：Sol自然有/无range来源，唯一effect清空与原阅读保持，6EOF/Native0。

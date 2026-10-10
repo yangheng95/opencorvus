@@ -1,0 +1,8 @@
+{
+  "providerEOFRequests": 5,
+  "cancellation": null,
+  "providerUserCancelledRequests": 0,
+  "physicalCompletion": true,
+  "qualification": "NativeService",
+  "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned"
+}

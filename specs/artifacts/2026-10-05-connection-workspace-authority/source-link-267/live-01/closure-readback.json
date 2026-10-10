@@ -1,0 +1,62 @@
+{
+  "observedAtUtc": "2026-10-10T04:41:50.8678066Z",
+  "boundary": "Independent actual NativeService physical/output/request birth-port-pair readback; original live-sol foreground already joined. Real service emits owner/startup/preflight receipts, not full-history copy launcher receipts.",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 62900,
+        "processInstanceID": "win32:639272039923853529",
+        "occurrenceID": "545eb0d8-912f-4cb4-a6b1-6e547b1a90b2"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 78564,
+        "processInstanceID": "win32:639272039931809860",
+        "occurrenceID": "d3de3ec6-de51-4a9b-a6fe-5f11a9661a89"
+      }
+    }
+  ],
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "native": {
+    "occurrence": "source-link-267-live-01-ceddb11a-2825-4d6e-8888-a6a4dcc4a5c2",
+    "outcome": "settled",
+    "host": {
+      "pid": 62900,
+      "processInstanceID": "win32:639272039923853529",
+      "occurrenceID": "545eb0d8-912f-4cb4-a6b1-6e547b1a90b2"
+    },
+    "target": {
+      "pid": 78564,
+      "processInstanceID": "win32:639272039931809860",
+      "occurrenceID": "d3de3ec6-de51-4a9b-a6fe-5f11a9661a89"
+    },
+    "observedAtUtc": "2026-10-10T04:41:36.778Z",
+    "deadlineAt": 1791607792370,
+    "terminal": {
+      "occurrenceID": "source-link-267-live-01-ceddb11a-2825-4d6e-8888-a6a4dcc4a5c2",
+      "pid": 78564,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "qualificationKind": "NativeService",
+  "listeners": [],
+  "occurrence": "source-link-267-live-01-ceddb11a-2825-4d6e-8888-a6a4dcc4a5c2"
+}

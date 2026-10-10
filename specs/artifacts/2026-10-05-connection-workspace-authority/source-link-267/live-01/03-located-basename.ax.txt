@@ -1,0 +1,82 @@
+Browser tab: 114, Title: "OpenCorvus", URL: "http://localhost:18205/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 39-43, 46-49, 55-58, 77-85, 101-110, 119-144
++				119 container workspaceMain
++					120 container chatSection
++						121 container Description: Loading task, ID: taskSwitchProgress
++						122 container
++							123 text 请用 read 读取当前项目 README.md，offset=1、limit=100，简短解释真实标题。正文请分别给出代码格式的 ./README.md...
++							124 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
++							125 container Description: Not running, ID: taskStatus
++								126 text Not running
++							127 button Side chat
++							128 container solidChatHeaderRuntimeActions
++								129 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++								130 checkbox Description: Close right dock, Value: 1
++						131 container
++							132 container Description: Conversation, ID: chatScroll
++								133 container
++									134 container
++										135 text User
++										136 container
++											137 text 请用 read 读取当前项目 README.md，offset=1、limit=100，简短解释真实标题。正文请分别给出代码格式的 ./README.md、代码格式的 README.md:1、Markdown 链接
++											138 link Description: 项目说明, Value: localhost:18205/ui/#
++											139 text ，并以普通代码格式提到 README.md 文件名。这些引用都指向刚读的真实项目文件。只读、最多约200字，不修改文件，不创建任务或委托，不读取其他文件。
++									140 container
++										141 text work
++										142 text 10s
++										143 container
++											144 button (collapsed) Description: read · ./README.md @1+100 (1 lines), Secondary Actions: Expand
++												145 text read
++												146 text ./README.md @1+100 (1 lines)
++												147 image
++											148 container Sources
++												149 button Open source file: README.md
++										150 container
++											151 text 已按 offset=1、limit=100 读取
++											152 link Description: ./README.md, Value: localhost:18205/ui/#
++											153 text ，文件仅有一行。 真实标题是
++											154 text Isolated formal Task resource qualification
++											155 text ，意为“隔离环境中的正式任务资源资格验证”，表达对正式任务资源进行隔离验证的主题。 标题位置：
++											156 link Description: README.md:1, Value: localhost:18205/ui/#
++											157 text ；链接：
++											158 link Description: 项目说明, Value: localhost:18205/ui/#
++											159 text 。上述引用均指向刚读取的真实项目文件
++											160 text README.md
++											161 text ，未修改任何文件。
++										162 button Copy message
++										163 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++										164 pop up button (collapsed) Description: View model usage for this turn: 64K Token, Secondary Actions: Expand
++										165 text Oct 10, 12:40 PM
++							166 container chatHomeComposition
++								167 container solidChatComposer
++									168 container chatForm
++										169 splitter Description: Drag to resize the message input, Value: 42
++										170 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++										171 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++										172 text Work
++										173 text Chat
++										174 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++										175 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++										176 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++											177 text openai/gpt-6.1-sol
++										178 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
++									179 button Scroll to bottom
++					180 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
++					181 container Description: Tools panel, ID: rightDock
++						182 container tabs-cl-64
++							183 tab group Open tools
++								184 container
++									185 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
++									186 button Description: Close tab, Help: Close tab (Delete)
++							187 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
++							188 button Close panel
++							189 container Description: File, ID: centerWorkbenchFile
++								190 container Editor
++									191 container
++										192 text README.md
++										193 button (disabled) Save, Help: Save (Ctrl/Cmd+S)
++										194 button (disabled) Reload from disk
++										195 button (disabled) Close workspace
++									196 text Loading…
+The focused UI element is 156 link Description: README.md:1, URL: localhost:18205/ui/#

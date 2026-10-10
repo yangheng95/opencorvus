@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [明确文件引用267](records/2026-10/2026-10-10-source-link-267.md)：新真实Sol三种引用打开/位置1与整文件实际通过，裸code保留，5EOF/原Native0，无生产改动。
+
 - [正文文件引用266](records/2026-10/2026-10-10-source-link-266.md)：实际basename链接404与正常Source对照，修正过度自动动作，普通code/范围和整文件真实复核。
 
 - [整文件来源265](records/2026-10/2026-10-10-source-whole-265.md)：真实Sol范围→整文件旧band修复，单一effect与阅读保持/反向切换，6EOF/Native0。
