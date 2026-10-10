@@ -1,0 +1,57 @@
+Browser tab: 123, Title: "OpenCorvus", URL: "http://localhost:18214/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 46-49, 55-58, 95-107, 112-126
++									112 container
++										113 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										114 button 请分别调用一次网页搜索和一次外部代码搜索：网页主题为官方 HTML details/summary 键盘行为，最多三个结果；代码主题为原生 details...
++										115 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-349-trigger, Secondary Actions: Expand
++									116 container
++										117 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										118 button Reply with OK.
++										119 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-355-trigger, Secondary Actions: Expand
+~						89 container Description: Not running, ID: taskStatus
+~							90 text Not running
++								120 container
++									121 text work
++									122 text 21s
++									123 container
++										124 button (collapsed) Description: websearch · Web search: official HTML details summary keyboard behavior Enter Space MDN WHATWG, Secondary Actions: Expand
++											125 text websearch
++											126 text Web search: official HTML details summary keyboard behavior Enter Space MDN WHATWG
++											127 image
++										128 container Sources
++											129 button (collapsed) Description: Sources: HTML Standard (3), Help: HTML Standard 3, Secondary Actions: Expand
++												130 text HTML Standard
++												131 text 3
++										132 button (expanded) Description: external_code_search · native HTML details summary keyboard example Tab Enter Space, Secondary Actions: Collapse
++											133 text external_code_search
++											134 text native HTML details summary keyboard example Tab Enter Space
++											135 text 1 failed
++										136 container
++											137 text Input
++											138 checkbox Raw, Value: 0
++											139 button (collapsed) Expand
++											140 button Copy
++										141 text tool-execution/ExaMcpFailure at session.processor.tool-error: ExaMcpFailure: Code search: MCP error -32602: Tool get_code_context_exa not found; data={"toolCallId":"call_93e9fbfc9296496baf5554b9309a29a7","toolName":"external_code_search"}
++									142 container
++										143 text 网页搜索返回 WHATWG 标准及两篇 MDN 文档：标准规定激活  summary  时切换父级  details  的  open  属性；
++										144 link Description: MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++										145 text 明确聚焦后按空格可展开。返回内容未明确 Enter 行为。外部代码搜索失败：MCP 错误  -32602 ，找不到  get_code_context_exa ，因此未获得键盘代码示例。两类搜索各调用一次，未重试或抓取其他网页。
++									146 button Copy message
++									147 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++									148 pop up button (collapsed) Description: View model usage for this turn: 100K Token, Secondary Actions: Expand
++									149 text Oct 10, 03:39 PM
++							150 container solidChatComposer
++								151 container chatForm
++									152 splitter Description: Drag to resize the message input, Value: 42
++									153 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++									154 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									155 text Work
++									156 text Chat
++									157 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++									158 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++									159 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++										160 text openai/gpt-6.1-sol
++									161 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
++								162 button Scroll to bottom
+The focused UI element is 132 button (expanded) Description: external_code_search · native HTML details summary keyboard example Tab Enter Space, Secondary Actions: Collapse

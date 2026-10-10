@@ -4,34 +4,96 @@ import { Config } from "../config/config"
 import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
+import { NamedError } from "@opencorvus-ai/util/error"
+import z from "zod"
+import { createParser } from "eventsource-parser"
+import {
+  CallToolResultSchema,
+  JSONRPCMessageSchema,
+  JSONRPCErrorResponseSchema,
+  JSONRPCResultResponseSchema,
+  type CallToolResult,
+} from "@modelcontextprotocol/sdk/types.js"
 
-const EXA_MCP_URL = "https://mcp.exa.ai/mcp"
-
-interface ExaMcpResponse {
-  jsonrpc: string
-  result?: {
-    content?: Array<{ type: string; text?: string; [key: string]: unknown }>
-    structuredContent?: unknown
-  }
-}
+export const EXA_MCP_TOOLS = { webSearch: "web_search_exa", codeSearch: "get_code_context_exa" } as const
+const endpoint = new URL("https://mcp.exa.ai/mcp")
+endpoint.searchParams.set("tools", Object.values(EXA_MCP_TOOLS).join(","))
+const EXA_MCP_URL = endpoint.toString()
 
 export interface ExaMcpResult {
-  content: Array<{ type: string; text?: string; [key: string]: unknown }>
-  structuredContent?: unknown
+  result: CallToolResult
   text: string
+}
+
+export const ExaMcpFailure = NamedError.create(
+  "ExaMcpFailure",
+  z.object({
+    code: z.enum(["rate_limited", "tool_error", "protocol_error", "invalid_response"]),
+    toolName: z.string(),
+    message: z.string(),
+    result: CallToolResultSchema.optional(),
+    rpcError: JSONRPCErrorResponseSchema.shape.error.optional(),
+  }),
+)
+
+export function decodeExaMcpResponse(
+  responseText: string,
+  contentType: string,
+  toolName: string,
+  label: string,
+): ExaMcpResult | null {
+  const messages: unknown[] = []
+  const mediaType = contentType.split(";", 1)[0].trim().toLowerCase()
+  if (mediaType === "application/json") messages.push(JSON.parse(responseText))
+  else if (mediaType === "text/event-stream") {
+    const parser = createParser({ onEvent: (event) => messages.push(JSON.parse(event.data)) })
+    parser.feed(responseText)
+  } else {
+    throw new ExaMcpFailure({
+      code: "invalid_response",
+      toolName,
+      message: `${label}: unsupported MCP content type ${contentType}`,
+    })
+  }
+  for (const input of messages) {
+    const message = JSONRPCMessageSchema.parse(input)
+    const failure = JSONRPCErrorResponseSchema.safeParse(message)
+    if (failure.success)
+      throw new ExaMcpFailure({
+        code: "protocol_error",
+        toolName,
+        message: `${label}: ${failure.data.error.message}`,
+        rpcError: failure.data.error,
+      })
+    const response = JSONRPCResultResponseSchema.safeParse(message)
+    if (!response.success) continue
+    const result = CallToolResultSchema.parse(response.data.result)
+    const text = result.content.flatMap((item) => (item.type === "text" ? [item.text] : [])).join("\n\n")
+    const rateLimited = result._meta?.["ai.exa/rateLimited"] === true
+    if (rateLimited || result.isError === true)
+      throw new ExaMcpFailure({
+        code: rateLimited ? "rate_limited" : "tool_error",
+        toolName,
+        message: `${label}: ${text || JSON.stringify(result)}`,
+        result,
+      })
+    return { result, text }
+  }
+  return null
 }
 
 /**
  * Single source for the Exa MCP transport.
  *
  * POSTs a JSON-RPC `tools/call` to mcp.exa.ai, parses the Server-Sent Events
- * (SSE) `data:` stream, and preserves its complete result content. Shared by `websearch`
- * (`web_search_exa`), `external_code_search` (`get_code_context_exa`), and the
- * stage-agent context tools — CLAUDE.md rule 8/9: one implementation of the
- * Hypertext Transfer Protocol (HTTP) plumbing; callers differ only by method name, arguments, and
+ * (SSE) or standard JSON response and preserves the complete current MCP result.
+ * Shared by `websearch` (`web_search_exa`) and `external_code_search`
+ * (`get_code_context_exa`). Hypertext Transfer Protocol (HTTP) plumbing remains
+ * one implementation; callers differ only by method name, arguments, and
  * timeout. EXA_API_KEY (when set) is sent as `x-api-key`.
  *
- * @returns complete content plus joined text blocks, or `null` when the response carried no result content.
+ * @returns complete result plus joined text blocks, or `null` when the stream carried no result.
+ * @throws ExaMcpFailure for protocol, tool, or explicit provider rate-limit responses.
  * @throws Error on non-2xx HTTP, or `"<label> request timed out"` on abort
  *   (internal deadline or caller signal).
  */
@@ -90,19 +152,7 @@ export async function exaMcpCall(opts: {
     }
 
     const responseText = new TextDecoder().decode(await readHttpResponseBody(owner))
-    for (const line of responseText.replaceAll("\r\n", "\n").split("\n")) {
-      if (!line.startsWith("data: ")) continue
-      const data: ExaMcpResponse = JSON.parse(line.substring(6))
-      const content = data.result?.content ?? []
-      if (content.length > 0 || data.result?.structuredContent !== undefined) {
-        return {
-          content,
-          structuredContent: data.result?.structuredContent,
-          text: content.flatMap((item) => (item.type === "text" && item.text ? [item.text] : [])).join("\n\n"),
-        }
-      }
-    }
-    return null
+    return decodeExaMcpResponse(responseText, response.headers.get("content-type") ?? "", opts.name, opts.label)
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
       throw new Error(`${opts.label} request timed out`)

@@ -1,0 +1,15 @@
+{
+  "pid": 65104,
+  "occurrence": "search-diagnostic-275-live-02-cc6b1642-f901-464b-932e-b4a7518fa90e",
+  "owner": {
+    "pid": 65104,
+    "processInstanceID": "win32:639272151755513708",
+    "occurrenceID": "4372d6af-036d-4cc3-af9e-f2f2eab7add7"
+  },
+  "parent": {
+    "pid": 72580,
+    "processInstanceID": "win32:639272151755126522",
+    "occurrenceID": "22d876f0-c5db-49b2-8e9a-8d8c8b02b6d3"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

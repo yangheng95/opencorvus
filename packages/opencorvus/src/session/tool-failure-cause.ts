@@ -2,6 +2,7 @@ import z from "zod"
 import { redactInlinePayloads } from "@/util/inline-base64"
 import { redactToolDiagnosticValue } from "@/tool/diagnostic-value"
 import type { Message } from "./message"
+import { NamedError } from "@opencorvus-ai/util/error"
 import {
   ToolFailureCause as SharedToolFailureCause,
   ToolFailureClassification as SharedToolFailureClassification,
@@ -110,13 +111,19 @@ export function toolFailureCauseFromUnknown(input: {
   data?: Record<string, unknown>
 }): ToolFailureCause {
   if (input.error instanceof Error) {
+    const { message: _message, ...canonicalMetadata } =
+      (input.error instanceof NamedError ? input.error.toObject().data : {}) ?? {}
+    const data = {
+      ...(input.data ?? {}),
+      ...(Object.keys(canonicalMetadata).length > 0 ? { canonical_error_metadata: canonicalMetadata } : {}),
+    }
     return {
       kind: input.kind ?? input.classification,
       name: input.error.name || input.classification,
       message: redactInlinePayloads(input.error.message),
       originSite: input.originSite,
       classification: input.classification,
-      ...(input.data ? { data: redactToolDiagnosticValue(input.data) } : {}),
+      ...(input.data || Object.keys(canonicalMetadata).length > 0 ? { data: redactToolDiagnosticValue(data) } : {}),
     }
   }
   if (typeof input.error === "string" && input.error.length > 0) {

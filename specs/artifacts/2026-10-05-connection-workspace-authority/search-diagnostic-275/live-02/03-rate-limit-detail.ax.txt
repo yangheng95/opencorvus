@@ -1,0 +1,30 @@
+Browser tab: 124, Title: "OpenCorvus", URL: "http://localhost:18215/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 46-49, 55-58, 95-97
+~										122 button (expanded) Description: external_code_search · native HTML details summary keyboard example Space Enter Tab, Secondary Actions: Collapse
++										136 container
++											137 text Input
++											138 checkbox Raw, Value: 0
++											139 button (collapsed) Expand
++											140 button Copy
++										141 text tool-execution/ExaMcpFailure at session.processor.tool-error: ExaMcpFailure: Code search: You've hit Exa's free MCP rate limit. To continue using without limits, create your own Exa API key.
++										142 container
++											143 text Fix: Create API key at
++											144 link Description: https://dashboard.exa.ai/api-keys, Value: dashboard.exa.ai/api-keys
++											145 text  , and then update Exa MCP URL to this
++											146 link Description: https://mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY, Value: mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY
++											147 text ; data={"toolCallId":"call_A1p5Li7F43tMrsJKSj03Qp5g","toolName":"external_code_search"}
++							148 container solidChatComposer
++								149 container chatForm
++									150 splitter Description: Drag to resize the message input, Value: 42
++									151 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++									152 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									153 text Work
++									154 text Chat
++									155 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++									156 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++									157 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++										158 text openai/gpt-6.1-sol
++									159 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
++								160 button Scroll to bottom
+The focused UI element is 122 button (expanded) Description: external_code_search · native HTML details summary keyboard example Space Enter Tab, Secondary Actions: Collapse

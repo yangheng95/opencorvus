@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [搜索诊断275 Recall](search-diagnostic-plan-275.md) / [修复证据](search-diagnostic-275/README.md)：当前MCP原始诊断与Exa单一结果路径、标准JSON/SSE、协议测试及真实GUI。
+
 - [当前流式274 Recall](source-stream-plan-274.md) / [实际证据](source-stream-274/README.md)：当前工具运行/五来源与摘录，真实侧聊尾部重开及搜索诊断信息丢失调查。
 
 - [工具身份273 Recall](tool-identity-plan-273.md) / [当前修复证据](tool-identity-273/README.md)：来源旁webfetch名称空间分配修复，原历史与当前页面复核。

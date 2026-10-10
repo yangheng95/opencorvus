@@ -1,0 +1,21 @@
+bun test v1.3.14 (0d9b296a)
+
+test\session\tool-failure-metadata.test.ts:
+(pass) ordinary errors retain the explicit caller diagnostic record [0.96ms]
+(pass) named provider diagnostics and caller provenance persist in the actual Tool outcome [2332.07ms]
+
+test\tool\exa-mcp-response.test.ts:
+(pass) owned HTTP JSON and multiline SSE preserve complete current MCP results [18.97ms]
+(pass) explicit rate-limit and tool errors retain original protocol results [0.68ms]
+(pass) JSON-RPC failures preserve their exact error contract [0.52ms]
+
+test\tool\websearch-service.test.ts:
+(pass) current Exa search result contracts > decodes Exa records into the shared result and source contracts [0.58ms]
+(pass) current Exa search result contracts > current Text and metadata-only records preserve source identities [0.22ms]
+(pass) current Exa search result contracts > a declared empty search maps to the current empty result contract [0.05ms]
+(pass) current Exa search result contracts > an unknown search record returns its typed original-text error [0.22ms]
+
+ 9 pass
+ 0 fail
+ 15 expect() calls
+Ran 9 tests across 3 files. [3.91s]

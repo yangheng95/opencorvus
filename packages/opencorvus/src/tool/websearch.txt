@@ -1,5 +1,5 @@
-- Search current public web sources through the shared Exa-first search service
-- When Exa cannot return usable results, the same tool uses the built-in Host search provider; do not call another search tool
+- Search current public web sources through the shared Exa search service
+- Provider limits and tool failures are returned with their original diagnostics.
 - Retrieve external evidence for current events and recent data; check source timestamps before treating a result as current
 - Supports configurable result counts and returns the content from the most relevant websites
 - Use this tool for accessing information beyond knowledge cutoff

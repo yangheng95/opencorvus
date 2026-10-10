@@ -1,7 +1,7 @@
 import z from "zod"
 import { Tool } from "./tool"
 import DESCRIPTION from "./codesearch.txt"
-import { exaMcpCall } from "./exa-mcp"
+import { exaMcpCall, EXA_MCP_TOOLS } from "./exa-mcp"
 
 export const ExternalCodeSearchTool = Tool.define("external_code_search", {
   description: DESCRIPTION,
@@ -24,7 +24,7 @@ export const ExternalCodeSearchTool = Tool.define("external_code_search", {
 
     const result = await exaMcpCall({
       executionAuthority: Tool.requireExecutionAuthority(ctx),
-      name: "get_code_context_exa",
+      name: EXA_MCP_TOOLS.codeSearch,
       arguments: {
         query: params.query,
         tokensNum: params.tokensNum || 5000,
@@ -39,7 +39,7 @@ export const ExternalCodeSearchTool = Tool.define("external_code_search", {
         result?.text ??
         "No code snippets or documentation found. Please try a different query, be more specific about the library or programming concept, or check the spelling of framework names.",
       title: `External code search: ${params.query}`,
-      metadata: {},
+      metadata: { provider: "exa", mcpResult: result?.result },
     }
   },
 })

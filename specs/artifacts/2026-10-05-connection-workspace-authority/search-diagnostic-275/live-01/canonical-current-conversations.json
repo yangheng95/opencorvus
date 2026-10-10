@@ -1,0 +1,279 @@
+{
+  "observedAtUtc": "2026-10-10T07:42:23.966Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hwHMMcOHUAbqzdpShfUC",
+      "project_id": "prj_hef6UPCSyS0gNKJorhTQ",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\search-diagnostic-275-live-01\\runtime\\data\\projects\\2026\\10\\10\\8eaebe0e-2f5f-46fa-a06f-9511abbcf580",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"6d596859-4abb-45a8-818e-65ea8bcb3a7c\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hhcsdCg31KP1knVKKfPp\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSMrVspzzAVfo44tih",
+      "project_id": "prj_hWmozVxK6hjXtvMa0RUS",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\search-diagnostic-275-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请分别调用一次网页搜索和一次外部代码搜索：网页主题为官方 HTML details/summary 键盘行为，最多三个结果；代码主题为原生 details...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hhcsdCg31KP1knVKKfPp",
+      "sessionID": "ses_hwHMMcOHUAbqzdpShfUC",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791617957916
+      }
+    },
+    {
+      "id": "msg_g0VXd8Mtq003IHO0VeuH",
+      "sessionID": "ses_hwHMMcOHUAbqzdpShfUC",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791617958318,
+        "completed": 1791617962758
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_f2d7f82f-9ce1-4498-96a0-aba5dd6c7bb5",
+      "sessionID": "ses_-zUSMrVspzzAVfo44tih",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791617987018
+      }
+    },
+    {
+      "id": "msg_g0VXd8UQO00nJzYWBEYt",
+      "sessionID": "ses_-zUSMrVspzzAVfo44tih",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791617987244,
+        "completed": 1791617994980
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXd8WRq00p9km19eTL",
+      "sessionID": "ses_-zUSMrVspzzAVfo44tih",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791617995022,
+        "completed": 1791618001182
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXd8Y4e00VpX8A32cq",
+      "sessionID": "ses_-zUSMrVspzzAVfo44tih",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791618001272,
+        "completed": 1791618008267
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hJy4dAipFAQDBFHxRpx8",
+      "messageID": "msg_hhcsdCg31KP1knVKKfPp",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXd8N4j00fVB7HKX6q",
+      "messageID": "msg_g0VXd8Mtq003IHO0VeuH",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXd8Nrw00kvwMppKd3",
+      "messageID": "msg_g0VXd8Mtq003IHO0VeuH",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791617962044,
+        "end": 1791617962337
+      }
+    },
+    {
+      "id": "prt_g0VXd8O2T00pnnUvcN3U",
+      "messageID": "msg_g0VXd8Mtq003IHO0VeuH",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXd8UMk00wPYFFNwyX",
+      "messageID": "msg_f2d7f82f-9ce1-4498-96a0-aba5dd6c7bb5",
+      "type": "text",
+      "text": "请分别调用一次网页搜索和一次外部代码搜索：网页主题为官方 HTML details/summary 键盘行为，最多三个结果；代码主题为原生 details/summary 的键盘示例。按这两次真实返回，用约150字中文说明得到的内容或具体失败原因。不要更换服务、重复查询、抓取其他网页、写文件、创建Task或委托成员；不要创建或配置凭据。",
+      "textChars": 169
+    },
+    {
+      "id": "prt_g0VXd8UYy00EjhXZX9e0",
+      "messageID": "msg_g0VXd8UQO00nJzYWBEYt",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXd8WPN00sr1XAd7IW",
+      "messageID": "msg_g0VXd8UQO00nJzYWBEYt",
+      "type": "source-url",
+      "sourceId": "11c4ae1f6c99ede3d9d214151f0aa3d674c5b135c724abc5ac18a2cc3fcb6953",
+      "url": "https://html.spec.whatwg.org/multipage/interactive-elements.html",
+      "title": "HTML Standard",
+      "snippet": "#### 4.11.1 The `details` element\n...\nThe `details` element represents a disclosure widget from which the user can obtain additional information or controls.\n...\nThe first `summary` element child of the element, if any, represents the summary or legend of the details. If there is no child `summary` element, the user agent should provide its own legend (e.g. \"Details\").\n...\nThe `open` content attribute is a boolean attribute. If present, it indicates that both the summary and the additional information is to be shown to the user. If the attribute is absent, only the summary is to be shown.\n...\nThe user agent should allow the user to request that the additional information be shown or hidden. To honor a request for the details to be shown, the user agent must set the `open` attribute on the element to the empty string. To honor a request for the information to be hidden, the user agent must remove the `open` attribute from the element.\n...\n#### 4.11.2 The `summary` element\n...\nThe `summary` element represents a summary, caption, or legend for the rest of the contents of the `summary` element's parent `details` element, if any.\n...\nsummary for its ... details if the following algorithm returns true:\n...\nThe activation behavior of `summary` elements is to run the following steps:\n\n1. If this `summary` element is not the summary for its parent details, then return.\n2. Let parent be this `summary` element's parent.\n3. If the `open` attribute is present on parent, then remove it. Otherwise, set parent's `open` attribute to the empty string.",
+      "publishedAt": "2018-10-04T00:00:00.000Z",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXd8WPV00Okdu64M4X",
+      "messageID": "msg_g0VXd8UQO00nJzYWBEYt",
+      "type": "source-url",
+      "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+      "title": "<details> HTML details disclosure element - HTML | MDN",
+      "snippet": "HTML details disclosure element - HTML | MDN\n...\nThe ` ` HTML element creates a disclosure widget in which information is visible only when the widget is toggled into an open state. A summary or label must be provided using the ` ` element.\n\nA disclosure widget is typically presented onscreen using a small triangle that rotates (or twists) to indicate open/closed state, with a label next to the triangle. The contents of the ` ` element are used as the label for the disclosure widget. The contents of the ` ` provide the accessible description for the ` `.\n...\n`open`\n: This Boolean attribute indicates whether the details — that is, the contents of the ` ` element — are currently visible. The details are shown when this attribute exists, or hidden when this attribute is absent. By default this attribute is absent which means the details are not visible.\n...\nA ` ` widget can be in one of two states. The default closed state displays only the triangle and the label inside ` ` (or a user agent-defined default string if no ` `).\n\nWhen the user clicks on the widget or focuses it then presses the space bar, it \"twists\" open, revealing its contents. The common use of a triangle which rotates or twists around to represent opening or closing the widget is why these are sometimes called \"twisty\".\n\nYou can use CSS to style ... , and you can programmatically open and close ... by setting/removing its `open` attribute. Unfortunately ... at this time, there ... s no built-in way to animate the transition between open and closed.\n\nBy default when closed, the widget ... only tall enough to display the ... and summary. When open, it expands to display the details\n...\nIn addition to the usual events supported by HTML elements, the ` ` element supports the `toggle` event, which is dispatched to the ` ` element whenever its state changes between open and closed. It is sent after the state is changed, although if the state changes multiple times before the browser can dispatch the event, the events are coalesced so that only one is sent.\n...\nNote: In browsers that don't support the `:open` pseudo-class, you can use the attribute selector `details[open]` to style the ` ` element when it is in the open state.\n...\n| Content categories | Flow content, sectioning root, interactive content, palpable content. |\n| --- | --- |\n| Permitted content | One ` ` element followed by flow content. |\n| Tag omission | None, both the starting and ending tag are mandatory. |\n| Permitted parents | Any element that accepts flow content. |\n| Implicit ARIA role | `group` |\n...\nNo `role`\n...\ninterface | `HTMLDetails",
+      "publishedAt": "2026-10-01T00:00:00.000Z",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXd8WPZ00FHePg7YUu",
+      "messageID": "msg_g0VXd8UQO00nJzYWBEYt",
+      "type": "source-url",
+      "sourceId": "ff4c319d3058ede764d2b6ea04be1500d3f7446a18b8fe0c4c9ea6738c240393",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+      "title": "<summary> HTML disclosure summary element - HTML | MDN",
+      "snippet": "HTML disclosure summary element - HTML | MDN\n...\nThe ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n\n```\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n...\nPer the HTML specification, the default style for ` ` elements includes `display: list-item`. This makes it possible to change or remove the icon displayed as the disclosure widget next to the label from the default, which is typically a triangle.\n...\nFor WebKit-based browsers ... as Safari, it is possible to control the icon display through the non-standard ... -element `::-webkit- ... -marker`. To ... the disclosure triangle, use `summary::-webkit-details-marker { display: none }`.\n...\nWarning: The role assigned to the ` ` element varies across browsers. Some still assign it a default `button` role, which removes all roles from its children. This inconsistency can cause issues for users of assistive technologies such as screen readers (` ` in the previous example will have its role removed and will not be treated as a heading for these users). You should test your ` ` implementation on multiple platforms to ensure there's consistent accessibility support.\n...\n## Technical summary\n\n| Content categories | none |\n| --- | --- |\n| Permitted content | Phrasing content, optionally intermixed with Heading content |\n| Tag omission | None; both the start tag and the end tag are mandatory. |\n| Permitted parents | The ` ` element. |\n| Implicit ARIA role | No corresponding role |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLElement` |",
+      "publishedAt": "2026-04-24T00:00:00.000Z",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXd8WPe00cXqYiy37R",
+      "messageID": "msg_g0VXd8UQO00nJzYWBEYt",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXd8WXS004xc26C7LG",
+      "messageID": "msg_g0VXd8WRq00p9km19eTL",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXd8Y2F00mppk5jfNX",
+      "messageID": "msg_g0VXd8WRq00p9km19eTL",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXd8YAj00tQvid7ZfD",
+      "messageID": "msg_g0VXd8Y4e00VpX8A32cq",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXd8Ynq00eSdjJ6cpP",
+      "messageID": "msg_g0VXd8Y4e00VpX8A32cq",
+      "type": "text",
+      "text": "网页搜索返回 WHATWG 标准及两篇 MDN 文档：标准规定激活 `summary` 时切换父级 `details` 的 `open` 属性；[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)明确聚焦后按空格可展开。返回内容未明确 Enter 行为。外部代码搜索失败：MCP 错误 `-32602`，找不到 `get_code_context_exa`，因此未获得键盘代码示例。两类搜索各调用一次，未重试或抓取其他网页。",
+      "textChars": 269,
+      "time": {
+        "start": 1791618004074,
+        "end": 1791618007557
+      }
+    },
+    {
+      "id": "prt_g0VXd8Zsh00rfKbs1g2O",
+      "messageID": "msg_g0VXd8Y4e00VpX8A32cq",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXd8Vlb00sXYdRhiRe",
+      "message_id": "msg_g0VXd8UQO00nJzYWBEYt",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_Z6UIffCWV5OZUO5YS0KiBW9C\",\"tool\":\"websearch\",\"input\":{\"query\":\"official HTML details summary keyboard behavior Enter Space MDN WHATWG\",\"numResults\":3},\"time\":{\"start\":1791617992403}}"
+    },
+    {
+      "id": "prt_g0VXd8Xkv00cZTsHjJve",
+      "message_id": "msg_g0VXd8WRq00p9km19eTL",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_93e9fbfc9296496baf5554b9309a29a7\",\"tool\":\"external_code_search\",\"input\":{\"query\":\"native HTML details summary keyboard example Tab Enter Space\",\"tokensNum\":1000},\"time\":{\"start\":1791618000049}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXd8Vlb00sXYdRhiRe",
+      "outcome": "completed",
+      "resultAttemptID": "per_hn92PVnQu9ETYXCeW0IP",
+      "outputChars": 6737,
+      "output": "1. HTML Standard\n   URL: https://html.spec.whatwg.org/multipage/interactive-elements.html\n   Published: 2018-10-04T00:00:00.000Z\n   #### 4.11.1 The `details` element\n...\nThe `details` element represents a disclosure widget from which the user can obtain additional information or controls.\n...\nThe first `summary` element child of the element, if any, represents the summary or legend of the details. If there is no child `summary` element, the user agent should provide its own legend (e.g. \"Details\").\n...\nThe `open` content attribute is a boolean attribute. If present, it indicates that both the summary and the additional information is to be shown to the user. If the attribute is absent, only the summary is to be shown.\n...\nThe user agent should allow the user to request that the additional information be shown or hidden. To honor a request for the details to be shown, the user agent must set the `open` attribute on the element to the empty string. To honor a request for the information to be hidden, the user agent must remove the `open` attribute from the element.\n...\n#### 4.11.2 The `summary` element\n...\nThe `summary` element represents a summary, caption, or legend for the rest of the contents of the `summary` element's parent `details` element, if any.\n...\nsummary for its ... details if the following algorithm returns true:\n...\nThe activation behavior of `summary` elements is to run the following steps:\n\n1. If this `summary` element is not the summary for its parent details, then return.\n2. Let parent be this `summary` element's parent.\n3. If the `open` attribute is present on parent, then remove it. Otherwise, set parent's `open` attribute to the empty string.\n\n2. <details> HTML details disclosure element - HTML | MDN\n   URL: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details\n   Published: 2026-10-01T00:00:00.000Z\n   HTML details disclosure element - HTML | MDN\n...\nThe ` ` HTML element creates a disclosure widget in which information is visible only when the widget is toggled into an open state. A summary or label must be provided using the ` ` element.\n\nA disclosure widget is typically presented onscreen using a small triangle that rotates (or twists) to indicate open/closed state, with a label next to the triangle. The contents of the ` ` element are used as the label for the disclosure widget. The contents of the ` ` provide the accessible description for the ` `.\n...\n`open`\n: This Boolean attribute indicates whether the details — that is, the contents of the ` ` element — are currently visible. The details are shown when this attribute exists, or hidden when this attribute is absent. By default this attribute is absent which means the details are not visible.\n...\nA ` ` widget can be in one of two states. The default closed state displays only the triangle and the label inside ` ` (or a user agent-defined default string if no ` `).\n\nWhen the user clicks on the widget or focuses it then presses the space bar, it \"twists\" open, revealing its contents. The common use of a triangle which rotates or twists around to represent opening or closing the widget is why these are sometimes called \"twisty\".\n\nYou can use CSS to style ... , and you can programmatically open and close ... by setting/removing its `open` attribute. Unfortunately ... at this time, there ... s no built-in way to animate the transition between open and closed.\n\nBy default when closed, the widget ... only tall enough to display the ... and summary. When open, it expands to display the details\n...\nIn addition to the usual events supported by HTML elements, the ` ` element supports the `toggle` event, which is dispatched to the ` ` element whenever its state changes between open and closed. It is sent after the state is changed, although if the state changes multiple times before the browser can dispatch the event, the events are coalesced so that only one is sent.\n...\nNote: In browsers that don't support the `:open` pseudo-class, you can use the attribute selector `details[open]` to style the ` ` element when it is in the open state.\n...\n| Content categories | Flow content, sectioning root, interactive content, palpable content. |\n| --- | --- |\n| Permitted content | One ` ` element followed by flow content. |\n| Tag omission | None, both the starting and ending tag are mandatory. |\n| Permitted parents | Any element that accepts flow content. |\n| Implicit ARIA role | `group` |\n...\nNo `role`\n...\ninterface | `HTMLDetails\n\n3. <summary> HTML disclosure summary element - HTML | MDN\n   URL: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary\n   Published: 2026-04-24T00:00:00.000Z\n   HTML disclosure summary element - HTML | MDN\n...\nThe ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n\n```\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n...\nPer the HTML specification, the default style for ` ` elements includes `display: list-item`. This makes it possible to change or remove the icon displayed as the disclosure widget next to the label from the default, which is typically a triangle.\n...\nFor WebKit-based browsers ... as Safari, it is possible to control the icon display through the non-standard ... -element `::-webkit- ... -marker`. To ... the disclosure triangle, use `summary::-webkit-details-marker { display: none }`.\n...\nWarning: The role assigned to the ` ` element varies across browsers. Some still assign it a default `button` role, which removes all roles from its children. This inconsistency can cause issues for users of assistive technologies such as screen readers (` ` in the previous example will have its role removed and will not be treated as a heading for these users). You should test your ` ` implementation on multiple platforms to ensure there's consistent accessibility support.\n...\n## Technical summary\n\n| Content categories | none |\n| --- | --- |\n| Permitted content | Phrasing content, optionally intermixed with Heading content |\n| Tag omission | None; both the start tag and the end tag are mandatory. |\n| Permitted parents | The ` ` element. |\n| Implicit ARIA role | No corresponding role |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLElement` |",
+      "metadata": {
+        "provider": "exa",
+        "mcpResult": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Title: HTML Standard\nURL: https://html.spec.whatwg.org/multipage/interactive-elements.html\nPublished: 2018-10-04T00:00:00.000Z\nAuthor: N/A\nHighlights:\n#### 4.11.1 The `details` element\n...\nThe `details` element represents a disclosure widget from which the user can obtain additional information or controls.\n...\nThe first `summary` element child of the element, if any, represents the summary or legend of the details. If there is no child `summary` element, the user agent should provide its own legend (e.g. \"Details\").\n...\nThe `open` content attribute is a boolean attribute. If present, it indicates that both the summary and the additional information is to be shown to the user. If the attribute is absent, only the summary is to be shown.\n...\nThe user agent should allow the user to request that the additional information be shown or hidden. To honor a request for the details to be shown, the user agent must set the `open` attribute on the element to the empty string. To honor a request for the information to be hidden, the user agent must remove the `open` attribute from the element.\n...\n#### 4.11.2 The `summary` element\n...\nThe `summary` element represents a summary, caption, or legend for the rest of the contents of the `summary` element's parent `details` element, if any.\n...\nsummary for its ... details if the following algorithm returns true:\n...\nThe activation behavior of `summary` elements is to run the following steps:\n\n1. If this `summary` element is not the summary for its parent details, then return.\n2. Let parent be this `summary` element's parent.\n3. If the `open` attribute is present on parent, then remove it. Otherwise, set parent's `open` attribute to the empty string.\n\n---\n\nTitle: <details> HTML details disclosure element - HTML | MDN\nURL: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details\nPublished: 2026-10-01T00:00:00.000Z\nAuthor: N/A\nHighlights:\nHTML details disclosure element - HTML | MDN\n...\nThe ` ` HTML element creates a disclosure widget in which information is visible only when the widget is toggled into an open state. A summary or label must be provided using the ` ` element.\n\nA disclosure widget is typically presented onscreen using a small triangle that rotates (or twists) to indicate open/closed state, with a label next to the triangle. The contents of the ` ` element are used as the label for the disclosure widget. The contents of the ` ` provide the accessible description for the ` `.\n...\n`open`\n: This Boolean attribute indicates whether the details — that is, the contents of the ` ` element — are currently visible. The details are shown when this attribute exists, or hidden when this attribute is absent. By default this attribute is absent which means the details are not visible.\n...\nA ` ` widget can be in one of two states. The default closed state displays only the triangle and the label inside ` ` (or a user agent-defined default string if no ` `).\n\nWhen the user clicks on the widget or focuses it then presses the space bar, it \"twists\" open, revealing its contents. The common use of a triangle which rotates or twists around to represent opening or closing the widget is why these are sometimes called \"twisty\".\n\nYou can use CSS to style ... , and you can programmatically open and close ... by setting/removing its `open` attribute. Unfortunately ... at this time, there ... s no built-in way to animate the transition between open and closed.\n\nBy default when closed, the widget ... only tall enough to display the ... and summary. When open, it expands to display the details\n...\nIn addition to the usual events supported by HTML elements, the ` ` element supports the `toggle` event, which is dispatched to the ` ` element whenever its state changes between open and closed. It is sent after the state is changed, although if the state changes multiple times before the browser can dispatch the event, the events are coalesced so that only one is sent.\n...\nNote: In browsers that don't support the `:open` pseudo-class, you can use the attribute selector `details[open]` to style the ` ` element when it is in the open state.\n...\n| Content categories | Flow content, sectioning root, interactive content, palpable content. |\n| --- | --- |\n| Permitted content | One ` ` element followed by flow content. |\n| Tag omission | None, both the starting and ending tag are mandatory. |\n| Permitted parents | Any element that accepts flow content. |\n| Implicit ARIA role | `group` |\n...\nNo `role`\n...\ninterface | `HTMLDetails\n\n---\n\nTitle: <summary> HTML disclosure summary element - HTML | MDN\nURL: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary\nPublished: 2026-04-24T00:00:00.000Z\nAuthor: N/A\nHighlights:\nHTML disclosure summary element - HTML | MDN\n...\nThe ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n\n```\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n...\nPer the HTML specification, the default style for ` ` elements includes `display: list-item`. This makes it possible to change or remove the icon displayed as the disclosure widget next to the label from the default, which is typically a triangle.\n...\nFor WebKit-based browsers ... as Safari, it is possible to control the icon display through the non-standard ... -element `::-webkit- ... -marker`. To ... the disclosure triangle, use `summary::-webkit-details-marker { display: none }`.\n...\nWarning: The role assigned to the ` ` element varies across browsers. Some still assign it a default `button` role, which removes all roles from its children. This inconsistency can cause issues for users of assistive technologies such as screen readers (` ` in the previous example will have its role removed and will not be treated as a heading for these users). You should test your ` ` implementation on multiple platforms to ensure there's consistent accessibility support.\n...\n## Technical summary\n\n| Content categories | none |\n| --- | --- |\n| Permitted content | Phrasing content, optionally intermixed with Heading content |\n| Tag omission | None; both the start tag and the end tag are mandatory. |\n| Permitted parents | The ` ` element. |\n| Implicit ARIA role | No corresponding role |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLElement` |",
+              "_meta": {
+                "searchTime": 1095.4
+              }
+            }
+          ]
+        },
+        "resultCount": 3,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791617994861
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXd8Xkv00cZTsHjJve",
+      "outcome": "failed",
+      "time": {
+        "end": 1791618001115
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "ExaMcpFailure",
+        "message": "ExaMcpFailure: Code search: MCP error -32602: Tool get_code_context_exa not found",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_93e9fbfc9296496baf5554b9309a29a7",
+          "toolName": "external_code_search"
+        }
+      }
+    }
+  ]
+}

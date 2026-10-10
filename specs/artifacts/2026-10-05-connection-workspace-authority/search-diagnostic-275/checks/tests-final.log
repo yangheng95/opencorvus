@@ -1,0 +1,17 @@
+bun test v1.3.14 (0d9b296a)
+
+test\tool\exa-mcp-response.test.ts:
+(pass) owned HTTP JSON and multiline SSE preserve complete current MCP results [20.38ms]
+(pass) explicit rate-limit and tool errors retain original protocol results [1.82ms]
+(pass) JSON-RPC failures preserve their exact error contract [0.75ms]
+
+test\tool\websearch-service.test.ts:
+(pass) current Exa search result contracts > decodes Exa records into the shared result and source contracts [0.53ms]
+(pass) current Exa search result contracts > current Text and metadata-only records preserve source identities [0.16ms]
+(pass) current Exa search result contracts > a declared empty search maps to the current empty result contract [0.03ms]
+(pass) current Exa search result contracts > an unknown search record returns its typed original-text error [0.14ms]
+
+ 7 pass
+ 0 fail
+ 12 expect() calls
+Ran 7 tests across 2 files. [1.71s]

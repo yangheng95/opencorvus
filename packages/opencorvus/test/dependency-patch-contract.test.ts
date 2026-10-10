@@ -6,7 +6,6 @@ import { execFile } from "node:child_process"
 import { promisify } from "node:util"
 import { fileURLToPath } from "node:url"
 import { expect, test } from "bun:test"
-import { Hono } from "hono"
 import { Glob } from "../src/util/glob"
 
 const require = createRequire(import.meta.url)
@@ -45,25 +44,6 @@ test("the real Node proxy owner delivers exact streamed HTTP data and disposes i
     disposed: true,
   })
 }, 20_000)
-
-test("the installed search-engine Axios dependency preserves exact HTTP response data", async () => {
-  const axios = createRequire(require.resolve("open-websearch/build/engines/bing/bing.js"))("axios")
-  const app = new Hono().get("/result", (c) => c.json({ path: c.req.path, result: "actual transport" }))
-  const server = Bun.serve({
-    hostname: "127.0.0.1",
-    port: 0,
-    fetch: app.fetch,
-  })
-  try {
-    const response = await axios.get(`http://127.0.0.1:${server.port}/result`, { proxy: false })
-    expect({ status: response.status, data: response.data }).toEqual({
-      status: 200,
-      data: { path: "/result", result: "actual transport" },
-    })
-  } finally {
-    await server.stop(true)
-  }
-})
 
 test("AJV's installed URI implementation serializes valid authorities and rejects malformed ports", () => {
   const uri = createRequire(require.resolve("ajv"))("fast-uri")
@@ -191,10 +171,9 @@ test("current source map parents preserve indexed coordinates and explicit inval
   }
 })
 
-test("both Express proxy owners return exact ordinary and mapped client identities", () => {
-  const search = createRequire(require.resolve("open-websearch/build/engines/bing/bing.js"))
+test("the SDK Express proxy owner returns exact ordinary and mapped client identities", () => {
   const sdk = createRequire(require.resolve("@modelcontextprotocol/sdk/server/streamableHttp.js"))
-  for (const expressPath of [sdk.resolve("express"), search.resolve("express")]) {
+  for (const expressPath of [sdk.resolve("express")]) {
     const proxyaddr = createRequire(expressPath)("proxy-addr")
     const req = (address: string) => ({ socket: { remoteAddress: address }, headers: { "x-forwarded-for": "9.9.9.9" } })
     expect([

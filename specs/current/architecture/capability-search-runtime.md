@@ -64,8 +64,24 @@ and normal conversion, and is cleared once in the outer finally. Each physical
 fetch has its own abort authority combined with that whole-operation signal;
 failure or discard aborts only that request before joining its body cancellation.
 Webfetch's existing 5 MiB limit counts actual chunks before retaining them; Exa
-remains uncapped and preserves its complete current Server-Sent Events (SSE) content/structuredContent
-parsing. A discarded response whose cancellation rejects the identical primary
+remains uncapped. Its single current decoder uses MCP SDK schemas and the shared
+EventSource parser for standard JSON and Server-Sent Events (SSE) responses.
+The complete CallToolResult, including metadata and structured content, remains
+the protocol owner; joined text is derived from that result. JSON-RPC errors,
+tool isError results and Exa's explicit rate-limit metadata produce ExaMcpFailure
+with the original result or protocol error. Web and external code search share
+that error path. The shared Tool-failure converter preserves declared NamedError
+data under the existing `canonical_error_metadata` diagnostic field beside caller
+provenance, using the same diagnostic redactor as the Message-error path. This
+retains the protocol code and original result through durable Tool outcomes.
+Their current remote method names and endpoint tool selection
+derive from one Exa provider definition, so remote default changes cannot drop
+an already declared routine code-search method. Web search has one Exa execution path: provider limits or errors
+remain failures, rather than triggering a Host service substitution. Its current
+Title/URL/Published/Author records accept Highlights, Text or an absent preview;
+the declared empty result stays empty, while unknown record formats retain a
+typed original-text error. Historical Source records retain their provenance.
+A discarded response whose cancellation rejects the identical primary
 cause is settled; a read failure still rejects its original cause, and distinct
 cleanup failures retain both causes in AggregateError. A challenged response is
 settled before the existing retry without resetting the whole deadline. Successful

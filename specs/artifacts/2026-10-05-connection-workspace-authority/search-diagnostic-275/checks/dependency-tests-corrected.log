@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\dependency-patch-contract.test.ts:
+(pass) the SDK Express proxy owner returns exact ordinary and mapped client identities [13.48ms]
+
+ 1 pass
+ 6 filtered out
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [1255.00ms]

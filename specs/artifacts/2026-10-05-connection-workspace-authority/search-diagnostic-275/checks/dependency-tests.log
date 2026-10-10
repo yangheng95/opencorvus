@@ -1,0 +1,12 @@
+bun test v1.3.14 (0d9b296a)
+
+test\dependency-patch-contract.test.ts:
+error: Cannot find package 'axios' from 'D:\myhexin-local\opencorvus\package.json'
+(fail) the installed root Axios dependency preserves exact HTTP response data [0.96ms]
+(pass) the SDK Express proxy owner returns exact ordinary and mapped client identities [150.41ms]
+
+ 1 pass
+ 6 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 2 tests across 1 file. [1.80s]

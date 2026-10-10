@@ -1,28 +1,12 @@
 import { describe, expect, test } from "bun:test"
 import {
-  createWebSearchService,
   parseExaWebSearchText,
   renderWebSearchResults,
   webSearchSources,
-  type WebSearchProvider,
+  ExaSearchResultFormatError,
 } from "../../src/tool/websearch-service"
 
-const request = {
-  query: "OpenCorvus citations",
-  numResults: 2,
-  executionAuthority: {
-    kind: "conversation" as const,
-    sessionID: "session_search_contract",
-    projectID: "project_search_contract",
-    directory: "C:/project",
-  },
-}
-
-function provider(id: WebSearchProvider["id"], search: WebSearchProvider["search"]): WebSearchProvider {
-  return { id, search }
-}
-
-describe("web search provider composition", () => {
+describe("current Exa search result contracts", () => {
   test("decodes Exa records into the shared result and source contracts", () => {
     const results = parseExaWebSearchText(
       [
@@ -85,70 +69,43 @@ describe("web search provider composition", () => {
     })
   })
 
-  test("returns Exa results through the shared response", async () => {
-    const exa = provider("exa", async () => [
-      { title: "Exa result", url: "https://exa.example/result", provider: "exa" },
-    ])
-    const host = provider("open-websearch", async () => [
-      { title: "Host result", url: "https://host.example/result", provider: "open-websearch" },
-    ])
-    const result = await createWebSearchService({ exa, host }).search(request)
-    expect({ result, rendered: renderWebSearchResults(result) }).toEqual({
-      result: {
-        query: request.query,
-        provider: "exa",
-        results: [{ title: "Exa result", url: "https://exa.example/result", provider: "exa" }],
-        attempts: [{ provider: "exa", resultCount: 1 }],
-      },
-      rendered: "1. Exa result\n   URL: https://exa.example/result",
-    })
-  })
-
-  test("returns Host results after an Exa transport failure", async () => {
-    const exa = provider("exa", async () => {
-      throw new Error("Exa transport unavailable")
-    })
-    const host = provider("open-websearch", async () => [
+  test("current Text and metadata-only records preserve source identities", () => {
+    const base = "Title: Current document\nURL: https://example.com/current\nPublished: N/A\nAuthor: N/A"
+    expect(parseExaWebSearchText(base)).toEqual([
       {
-        title: "Host citation",
-        url: "https://host.example/citation",
-        snippet: "Structured Host result",
-        provider: "open-websearch",
+        title: "Current document",
+        url: "https://example.com/current",
+        publishedAt: undefined,
+        author: undefined,
+        snippet: undefined,
+        provider: "exa",
       },
     ])
-    const result = await createWebSearchService({ exa, host }).search(request)
-    expect(result).toEqual({
-      query: request.query,
-      provider: "open-websearch",
+    const results = parseExaWebSearchText(base + "\nText: Current complete text")
+    expect({ results, rendered: renderWebSearchResults({ query: "current", provider: "exa", results }) }).toEqual({
       results: [
         {
-          title: "Host citation",
-          url: "https://host.example/citation",
-          snippet: "Structured Host result",
-          provider: "open-websearch",
+          title: "Current document",
+          url: "https://example.com/current",
+          publishedAt: undefined,
+          author: undefined,
+          snippet: "Current complete text",
+          provider: "exa",
         },
       ],
-      attempts: [
-        { provider: "exa", resultCount: 0, error: "Exa transport unavailable" },
-        { provider: "open-websearch", resultCount: 1 },
-      ],
+      rendered: "1. Current document\n   URL: https://example.com/current\n   Current complete text",
     })
   })
 
-  test("returns Host results after an empty Exa result set", async () => {
-    const exa = provider("exa", async () => [])
-    const host = provider("open-websearch", async () => [
-      { title: "Host result", url: "https://host.example/result", provider: "open-websearch" },
-    ])
-    const result = await createWebSearchService({ exa, host }).search(request)
-    expect(result).toEqual({
-      query: request.query,
-      provider: "open-websearch",
-      results: [{ title: "Host result", url: "https://host.example/result", provider: "open-websearch" }],
-      attempts: [
-        { provider: "exa", resultCount: 0 },
-        { provider: "open-websearch", resultCount: 1 },
-      ],
+  test("a declared empty search maps to the current empty result contract", () => {
+    const results = parseExaWebSearchText("No search results found. Please try a different query.")
+    expect({ results, output: renderWebSearchResults({ query: "current", provider: "exa", results }) }).toEqual({
+      results: [],
+      output: "No search results found. Please try a different query.",
     })
+  })
+  test("an unknown search record returns its typed original-text error", () => {
+    const text = "Current provider diagnostic without a search record"
+    expect(() => parseExaWebSearchText(text)).toThrow(new ExaSearchResultFormatError({ text }))
   })
 })

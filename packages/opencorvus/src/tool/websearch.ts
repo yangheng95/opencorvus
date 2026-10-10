@@ -31,7 +31,7 @@ export const WebSearchTool = Tool.define("websearch", async () => {
         title: `Web search: ${params.query}`,
         metadata: {
           provider: response.provider,
-          attempts: response.attempts,
+          mcpResult: response.mcpResult,
           resultCount: response.results.length,
         },
         sources: webSearchSources(response.results),

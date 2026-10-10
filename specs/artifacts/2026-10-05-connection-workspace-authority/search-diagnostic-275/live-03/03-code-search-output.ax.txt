@@ -1,0 +1,627 @@
+Browser tab: 125, Title: "OpenCorvus", URL: "http://localhost:18216/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18216/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请仅调用一次外部代码搜索，查询原生 HTML details/summary 键盘示例，随后依据这一次真实返回，用约80字中文说明实际得到的内容或具体失败...
+										90 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous c95714, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									91 container
+										92 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										93 button 请仅调用一次外部代码搜索，查询原生 HTML details/summary 键盘示例，随后依据这一次真实返回，用约80字中文说明实际得到的内容或具体失败...
+										94 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-318-trigger, Secondary Actions: Expand
+									95 container
+										96 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										97 button Reply with OK.
+										98 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-324-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18216, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					77 container
+						78 text 请仅调用一次外部代码搜索，查询原生 HTML details/summary 键盘示例，随后依据这一次真实返回，用约80字中文说明实际得到的内容或具体失败...
+						99 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						100 container Description: Not running, ID: taskStatus
+							101 text Not running
+						79 button Side chat
+						80 container solidChatHeaderRuntimeActions
+							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							82 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							102 container
+								103 container
+									104 text User
+									105 text 请仅调用一次外部代码搜索，查询原生 HTML details/summary 键盘示例，随后依据这一次真实返回，用约80字中文说明实际得到的内容或具体失败原因。不要重复查询、改用其他服务、写文件、创建Task或委托成员；不要创建或配置凭据。
+								106 container
+									107 text work
+									108 text 16s
+									121 container
+										122 button (expanded) Secondary Actions: Collapse, Description: external_code_search · External code search: native HTML details summary keyboard accessibility example Enter Space
+											123 text external_code_search
+											124 text External code search: native HTML details summary keyboard accessibility example Enter Space
+											125 image
+										126 text Input
+										127 checkbox Raw, Value: 0
+										128 button (collapsed) Expand
+										129 button Copy
+										130 text Output
+										131 button (collapsed) Expand
+										132 button Copy
+										133 text Title: Details and summary  |  web.dev
+URL: https://web.dev/learn/html/details
+Code/Highlights:
+The ` ` and ` ` elements are all you need: they are a built-in way to handle expanding and collapsing content. When a user clicks or taps a ` `, or releases the Enter key when the ` ` has focus, the contents of the parent ` ` toggle to visible.
+...
+The ` ` element is the disclosure widget container. The ` ` is the summary or legend for its parent ` `. The summary is always displayed, acting as a button that toggles the display of the rest of the parent's contents. Interacting with the ` ` toggles the display of the self-labeled summary siblings by toggling the ` `' element's `open` attribute.
+
+The `open` attribute is a boolean attribute. If present, ... matter the value or lack thereof, it indicates that all the ` ` contents are shown to the user. If the `open` attribute is not present, only the contents of the ` ` are shown.
+...
+You can create an accordion with a list of multiple ` ` elements, each with a ` ` child. Omitting the `open` attribute in your HTML means the ` ` will all be collapsed, or closed, with just the summary headings visible when the page loads; each heading being the opener for the rest of the contents in the parent ` `. If you include the `open` attribute in your HTML, ` ` renders expanded, with the contents visible, when the page loads.
+...
+The ` ` must be the first child of a ` ` element, representing a summary, caption, or legend for the rest of the contents of the parent ` ` element in which it is nested. The ` ` element's contents can be any heading content, plain text, or HTML that can be used within a paragraph.
+...
+To apply other styles, use a selector similar to `details summary::marker`. The `::marker` pseudo-element only accepts a limited number of styles. Removing the `::marker` and replacing it with the easier-to-style `::before` is common practice, with CSS styles changing the style of the generated content slightly based on the presence (or absence) of the open attribute. You can remove the disclosure widget icon by setting `list-style: none` or set the content of the marker to `none`, but you should always include visual indicators to inform sighted users that the summary content toggles to show and hide content.
+...
+If you want the details block open by default, include the `open` attribute on the opening ` ` tag. You can also add space between each dialog and transition the rotation of the marker created with generated content to improve the appearance:
+...
+If you don't include a ` `, the browser creates one for you, with a marker and the word "details". This summary is part of a shadow root, and therefore doesn't have author CSS summary styles applied.
+
+Note: Unfortunately, Safari does not include the details in the keyboard focus order.
+
+If you do include a ` `, but it's not the first element in the ` `, the browser still displays the summary as it should. It won't fail if you include a link, label, or other interactive element within the summary but browsers handle interactive content within interactive content differently.
+
+For example, if you include a link in a summary, some browsers add both the summary and the link to the default tabbing order, but other browsers don't focus on the link by default. If you click a ` ` nested in a ` `, some browsers give focus to the associated form control. Other browsers give focus to the form control and toggle the ` ` open or closed.
+...
+Like all HTML elements, the `HTMLDetailsElement` inherits all properties, methods, and events from `HTMLElement`, and adds the `open` instance property and a `toggle` event. The `HTMLDetailsElement.open` property is a boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) are to be shown to the user. The toggle event is fired when the ` ` element is toggled open or closed. You can listen to this event using `addEventListener()`.
+...
+Remember, ` ` and ` ` can be heavily styled and can even be used to create tooltips. But, if you're going to use these semantic elements for use cases in which the native semantics are a mismatch, always maintain accessibility. HTML for the most part is by default accessible. Our job as developers is to make sure our content stays accessible.
+
+---
+
+Title: <summary> HTML disclosure summary element - HTML | MDN
+URL: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
+Code/Highlights:
+The ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.
+...
+```
+<details>
+  <summary>
+    I have keys but no doors. I have space but no room. You can enter but can't
+    leave. What am I?
+  </summary>
+  A keyboard.
+</details>
+
+```
+...
+A ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.
+...
+Warning: The role assigned to the ` ` element varies across browsers. Some still assign it a default `button` role, which removes all roles from its children. This inconsistency can cause issues for users of assistive technologies such as screen readers (` ` in the previous example will have its role removed and will not be treated as a heading for these users). You should test your ` ` implementation on multiple platforms to ensure there's consistent accessibility support.
+...
+| Content categories | none
+...
+| None; ... mandatory. |
+| Permitted
+...
+| `HTMLElement` |
+
+---
+
+Title: WebAIM: Disclosures and Accordions
+URL: https://webaim.org/techniques/disclosures/
+Code/Highlights:
+A disclosure widget can be made using buttons, JavaScript, and ARIA, ... simply by using HTML ` ` and ` ` elements.
+...
+And here are the details of the disclosure!
+
+ This is the summary of the disclosure ... here are the details of the disclosure
+...
+The ` ` element can be given an `open` attribute to cause the summary to be visible by default.
+...
+Disclosures and accordions created using ` ` and ` ` have built-in accessibility. The ` ` element properly functions like a button, and the expanded state (open or closed) is presented to assistive technologies. The problems below only occur when other elements or scripting are used.
+
+Disclosures and accordions created using buttons, JavaScript, and ARIA can be implemented incorrectly and create accessibility issues. Below are some common issues and how to address them.
+
+### Triggers cannot receive keyboard focus
+
+Sometimes, elements that are not meant to be interactive (e.g., ` `, ` `, or ` ` without the `href` attribute) are made interactive through JavaScript event handlers like `onclick`. If one of these is made into the trigger element for a content area, keyboard and screen reader users are unable to directly navigate to it. The best way to solve this problem is to use a standard ` ` element as the trigger element.
+
+### Triggers are not buttons
+
+The trigger element that expands and collapses the content area should be coded as a standard ` `. Sometimes the trigger element is incorrectly coded as a link. Using links as trigger elements can make navigation confusing for keyboard and screen reader users. Links are about navigation, for example navigating to a new page or to a particular place in a page. Buttons are about function, for example expanding and collapsing a content area.
+
+Links also have different keyboard interactions than buttons. Buttons can be activated with Enter or Spacebar, but links are only activated by Enter.
+...
+Screen reader users need to be informed of the trigger's function and whether the content area is expanded or collapsed. Disclosures made with the HTML ` `/` ` elements have this functionality built in. Disclosures and accordions made with ARIA must have the `aria‑expanded="true|false"` attribute applied to the trigger button.
+...
+must be used to dynamically update the `aria‑expanded="true|false"` attribute value each time the trigger button is activated, ... it can become inaccurate. The attribute value must always align with the state of the content visibility.
+...
+When the trigger button of an expanded content area receives keyboard focus, a screen reader should announce "expanded" or "collapsed", in addition to the text of the trigger button. This not only indicates the current state, but indicates to the user that activating the button will change the state to the opposite value.
+...
+receive keyboard focus
+
+Content areas may contain elements that can receive keyboard focus, most commonly links or buttons. Incorrectly implemented disclosures and accordions can have elements in their content areas that receive keyboard focus while the content area containing them is collapsed and the contents visually hidden. This results in the visual focus indicators being lost. This can confuse users and cause them to lose their place.
+
+When the content area is collapsed, the contents should not be accessible, including elements that otherwise could receive keyboard focus. Using CSS `display:none` or the `hidden` attribute will visually and programmatically hide the contents.
+
+---
+
+Title: Accessible Accordion & Disclosure Pattern Guide
+URL: https://accessibility.build/guides/accessible-accordion
+Code/Highlights:
+animate the transition ... precisely control the markup ... ` ` and ` ` give ... genuinely cannot do
+...
+| Criterion | Level | What the accordion must do |
+| --- | --- | --- |
+| 1.3.1 Info & Relationships | A | Headers are real headings; each button is linked to the region it controls. |
+| 2.1.1 Keyboard | A | Every header is reachable and toggles with Enter and Space. |
+| 2.4.3 Focus Order | A | Focus moves through headers in a logical order; opening a panel keeps focus on its header. |
+| 2.4.7 Focus Visible | AA | The focused header shows a clear, visible focus indicator. |
+| 4.1.2 Name, Role, Value | A | The button exposes its name, the button role, and the live aria-expanded state. |
+...
+Before writing a single line of ARIA, ask whether ` ` and ` ` can do the job. They ship a complete, accessible disclosure: the ` ` is the toggle, the browser tracks the open state and exposes it to assistive technology, and keyboard support works out of the box. No `aria-expanded`, no click handler, no state to keep in sync.
+
+```
+<!-- A complete, accessible disclosure — zero JavaScript -->
+<details>
+  <summary>Shipping & returns</summary>
+  <p>
+    Orders ship within two business days. Returns are free
+    within 30 days of delivery.
+  </p>
+</details>
+
+<!-- Add the "open" attribute to render it expanded by default -->
+<details open>
+  <summary>What sizes are available?</summary>
+  <p>We stock XS through 3XL in every colourway.</p>
+</details>
+...
+When you build your own, the disclosure is just two elements: a real ` ` and the region it controls. The button carries `aria-expanded` to announce the state and `aria-controls` to point at the region. Collapse the region with the `hidden` attribute so it leaves the accessibility tree entirely.
+
+```
+<button aria-expanded="false" aria-controls="more-details">
+  More product details
+</button>
+<div id="more-details" hidden>
+  <p>Full specifications, materials, and care instructions…</p>
+</div>
+...
+details, collapsed,
+...
+| Element | Markup | Key attributes |
+| --- | --- | --- |
+| Each header | wrapping a | The heading level fits the page outline; the button holds aria-expanded and aria-controls. |
+| Each toggle button | native | aria-expanded="true|false" (current state); aria-controls=" " (the region it shows/hides). |
+| Each panel | role="region" (optional) | id matching the button's aria-controls; aria-labelledby=" "; hidden when collapsed. |
+...
+" aria-
+...
+id="panel
+...
+aria- ... >
+...
+The good news: an accordion built from real buttons needs almost no keyboard code. Because each header is a native ` `, `Tab` reaches it and `Enter` / `Space` toggle it for free — there is no roving tabindex here, unlike the tabs pattern. Arrow-key navigation between headers is an optional convenience.
+...
+| Key | Action |
+| --- | --- |
+| Tab | Moves focus to the next header button, and out of the accordion when past the last one. Every header is in the normal Tab order — no roving tabindex. |
+| Enter or Space | Toggles the focused header: expands its panel if collapsed, collapses it if open. Free when the header is a real. |
+| Down Arrow / Up Arrow | Optional (APG): moves focus to the next / previous header button without leaving the accordion. A convenience for accordions with many sections, never the only way in. |
+| Home / End | Optional (APG): moves focus to the first / last header button in the accordion. |
+...
+aria-expanded` and the ... s `hidden ... visibility in sync
+...
+function toggle(button) {
+  const expanded = ... .getAttribute("aria-expanded") === "
+...
+.setAttribute("aria-expanded", String ... expanded))
+  const panel = ... .getElementById( ... .getAttribute("aria
+...
+panel.hidden = ... -> now hidden, and vice-versa
+}
+
+headers.forEach((button) => {
+  // Enter/Space come free with a real <button>; just handle the toggle
+  button.addEventListener("click", () => toggle(button))
+})
+...
+1. Tab to each header. Every toggle receives focus with a visible indicator, in reading order — no header is skipped or trapped.
+2. Press Enter, then Space. Both expand and collapse the panel. Focus stays on the header after toggling — it does not jump into the panel.
+3. Listen with a screen reader. You should hear the header's name, “button,” and “collapsed” or ... ” that flips as you toggle. Verify with the screen reader testing guide.
+...
+| Anti- ... | Why it fails | The fix |
+| --- | --- | --- |
+| A with an onClick handler as the toggle. | It is not focusable or keyboard-operable, and a screen reader announces nothing (2.1.1, 4.1 ... 2). | Use a real. It is focusable, Enter/Space work, and it is announced as a control. |
+...
+1. Right pattern. Sections can expand independently — not one-at-a-time peer panels (use tabs). Consider native ` ` first.
+2. Real buttons. Every toggle is a ` `, so it is focusable and Enter/Space work with no extra code.
+3. State is live.`aria-expanded` sits on the button and flips `true`/`false` on every toggle.
+4. Headings wrap toggles. Each header is ` … ` at a level that fits the page outline.
+5. Linked regions.`aria-controls` points at each panel id; panels use `aria-labelledby` back to their button.
+6. Collapsed = hidden. Closed panels use the `hidden` attribute so they leave the accessibility tree.
+7. Focus visible. The focused header shows a clear indicator (2.4.7).
+...
+and it announces ... it will reveal content
+...
+Reach for the native details and summary elements first. They give you a fully keyboard-operable, screen-reader-announced disclosure with zero JavaScript: the summary is the toggle, the browser manages the open state and exposes it to assistive technology, and Enter and Space work automatically. Build a custom ARIA disclosure only when details cannot do what you need — for example, when you need to animate the open and close transition (details snaps open), style the disclosure triangle beyond what the marker allows, control the exact markup of the heading, or coordinate an accordion where opening one section closes another with shared state and framework rendering. When you do build your own, you are re-implementing what details gives you for free, so match its behavior exactly: a button, aria-expanded, and a controlled region.
+...
+The only required keys are Enter and Space to toggle the focused header — and if each header is a real button, you get both for free. Tab moves between the header buttons in document order, exactly like any other set of buttons, so an accordion needs no roving tabindex. The ARIA Authoring Practices Guide lists optional enhancements for accordions with many sections: Up and Down arrows to move focus between headers, Home and End to jump to the first and last header, and sometimes Ctrl+Page Up/Down. These are nice-to-have, not required, and unlike the tabs pattern they must not be the only way to reach a header — Tab always has to work. Keep it simple: real buttons plus correct aria-expanded is a conformant accordion.
+
+---
+
+Title: Accessible FAQ with the details HTML element
+URL: https://htmldog.com/access/details/
+Code/Highlights:
+Simple, semantic, accessible “accordions”, such as those sometimes used for FAQ lists, are best served by the `details` and `summary` HTML elements.
+...
+`details` is an HTML element. It defines a “ disclosure widget”, allowing extra content, or controls, to be hidden and revealed.
+
+It works hand-in-hand with the `summary` HTML element. `summary` defines a summary, caption, or legend for the rest of the content in its parent `details` element.
+
+In its initial default state, the `details` element will be closed and the content that follows the `summary` will not be perceptible.
+
+When the `summary` is clicked, or otherwise selected, the `details` is opened, revealing the content after the `summary`.
+...
+A `details` element can contain a `summary` element, followed by any content you want to be hidden or revealed:
+
+```
+<details>
+  <summary>The caption goes here</summary>
+  <p>The content to be disclosed goes here.</p>
+</details>
+...
+If a `summary` element is omitted, the `details` element will contain a stand-in summary with the text “Details” by default.
+
+The initial state of the `details` element ... , using the ` ... the opening tag:
+...
+The behaviour of summary anchors is inconsistent between browsers, however. At the time of writing, at least, Chrome will open the details element associated with the target summary; Safari will assign focus to the target summary and leave the corresponding details element in its initial state; Firefox will assign focus or live-focus, depending on previous interaction.
+...
+Well, yeah. Mostly.
+
+It carries bona fide semantic meaning.
+
+It plays nice with keyboard navigation. Summaries gain focus by default. WCAG guideline 2.1? Sorted.
+
+Screen reader support is strong.
+...
+Whichever you choose, or someone else chooses for you, remember to maintain fundamental accessibility considerations. Is it clear what it is? Is the language used easy to understand? Are all interactive targets (such as the questions) large enough and their focus indicators clear enough?
+...
+`summary` elements are styled with a visual marker cue to the left by default - a right-pointing arrow when the detail is closed (default) and a down-pointing arrow when the detail is open (when the summary is clicked or otherwise selected).
+...
+Meanwhile, returning to accessibility considerations, you can improve the keyboard focus indicator for summaries with the `:focus-visible` pseudo-class:
+
+```
+summary:focus-visible {
+  outline: .5rem solid #06c7;
+}
+```
+
+While you could use `:focus`, this will also apply styles to the summary when it is clicked on. `:focus-visible` will only boogie on down when the summary is tabbed to.
+
+---
+
+Title: Accessible Disclosure Pattern: HTML details/summary — A11yPath
+URL: https://a11ypath.com/patterns/disclosure/
+Code/Highlights:
+A single show/hide widget built on the native ` ` and ` ` elements. Zero JavaScript, full keyboard support, and screen reader state announcements for free.
+...
+Click the trigger or press Enter/ Space when focused to reveal the hidden content.
+
+ Show shipping details
+
+Orders ship within 2 business days via standard mail. Tracking information is emailed as soon as the label is printed. International shipping is available to most countries — see the full list at checkout.
+
+### Inline "read more" variant:
+
+ A disclosure widget reveals supplemental content in place. It is the native HTML show/hide pattern and the simplest accessible expand/collapse you can build.
+...
+This trigger can't be reached with the Tab key, doesn't announce an expanded/collapsed state to screen readers, and doesn't respond to Enter or Space.
+...
+```
+<!-- Block disclosure (closed by default) -->
+<details class="disclosure">
+  <summary>
+    Show shipping details
+    <svg class="disclosure-icon" aria-hidden="true">
+      <!-- Chevron icon that rotates when open -->
+    </svg>
+  </summary>
+  <div class="disclosure-content">
+    <p>Hidden content revealed on expand.</p>
+  </div>
+</details>
+
+<!-- Open by default: add the open attribute -->
+<details class="disclosure" open>
+  <summary>Open by default</summary>
+  <div class="disclosure-content">
+    <p>Visible when the page loads.</p>
+  </div>
+</details>
+
+<!-- Inline "read more" inside a paragraph -->
+<p>
+  A short summary sentence.
+  <details class="inline-disclosure">
+    <summary>Read more</summary>
+    <span> The rest of the text continues here
+      with more detail.</span>
+  </details>
+</p>
+...
+```
+
+ No JavaScript file needed The entire disclosure works with HTML and CSS only. The ` ` element handles toggling, keyboard activation, and state announcements natively.
+...
+A ` ` plus a hidden ` ` is the manual equivalent — and it requires JavaScript to toggle, ARIA to communicate state, and CSS to hide content. The native ` ` does all of this automatically: the ` ` is focusable, Enter/ Space toggles it, and the expanded/collapsed state is exposed to assistive tech via the `open` attribute.
+...
+| Key | Action |
+| --- | --- |
+| Tab | Moves focus to the ` ` element. |
+| Shift + Tab | Moves focus to the previous focusable element. |
+| Enter | Toggles the ` ` open or closed. |
+| Space | Toggles the ` ` open or closed. |
+
+ Focus stays on the summary after toggle Activating the ` ` does not move focus. This is the correct behavior: the user is still interacting with the trigger and may want to collapse it again. If you need focus to move into the revealed content (for example, a newly visible form field), use JavaScript to do that on the `toggle` event.
+...
+- 1.3.1 Info and Relationships Level A — The ` ` element is programmatically associated with the revealed content inside its parent ` `.
+- 2.1.1 Keyboard Level A — Enter and Space toggle the disclosure. Tab moves focus to and away from it.
+- 2.4.3 Focus Order Level A — The summary appears in the natural document tab order. Revealed content follows the summary, so Tab continues naturally into any focusable children.
+- 2.4.4 Link Purpose (In Context) Level A — Descriptive summary text (rather than generic "Read more") tells the user what will be revealed.
+- 2.4.13 Focus Appearance Level AAA — The summary has a 2px outline with 3:1 contrast against adjacent colors.
+- 2.5.8 Target Size (Minimum) Level AA — The ` ` meets the minimum 24×24px target size via padding and min-height.
+- 4.1.2 Name, Role, Value Level A — The browser exposes the expanded/collapsed state to assistive technology via the `open` attribute. No ARIA is needed.
+...
+- NVDA: "Show shipping details, collapsed, summary" — announces the label, the state, and the role.
+- JAWS: "Show shipping details, collapsed" — announces the label and state.
+- VoiceOver: "Show shipping details, summary, collapsed, group" — announces label, role, state, and containing group.
+...
+- NVDA / JAWS / VoiceOver: "expanded" — the state change is announced immediately after Enter or Space.
+
+After expansion the ... of the reading ... . Tab moves to ... focusable element inside, ... read through it line by line.
+...
+## Common Mistakes
+
+ Using a ` ` or ` ` with a click handler A non-interactive element with a click listener is invisible to keyboard users and screen readers. You would then have to add `role="button"`, `tabindex="0"`, `aria-expanded`, `aria-controls`, plus keyboard handlers for Enter and Space. Native ` `/` ` gives you all of this automatically.
+
+ Nesting interactive elements inside ` ` Putting a ` `, ` `, or form control inside a summary creates a nested focusable element. Click targets become ambiguous and focus order becomes confusing. Keep the summary to plain text and decorative icons.
+...
+| Feature | ` `/` ` | Button + hidden div + ARIA |
+| --- | --- | --- |
+| Expand/collapse | Automatic | Manual JavaScript |
+| Keyboard activation | Automatic — Enter/ Space | ` ` handles this if used |
+| Focusable trigger | Automatic | Requires ` ` or `tabindex` |
+| Expanded/collapsed state | Automatic via `open` attribute | Manual `aria-expanded` |
+| Content association | Automatic (nested inside ` `) | Manual `aria-controls` + matching `id` |
+| Default-open state | ` ` | Set initial `aria-expanded="true"` and show content |
+| JavaScript required | None | Yes — toggle logic and state sync |
+
+ The verdict Unless you have a specific reason to use ARIA (for example, you're retrofitting a codebase where ` ` isn't an option), the native element wins on every dimension.
+
+---
+
+Title: The details and summary elements | scottohara.me
+URL: https://www.scottohara.me/blog/2018/09/03/details-and-summary.html
+Code/Highlights:
+The `details` and `summary` elements are two of HTML’s interactive elements and together are the elements that create a native disclosure widget. A “disclosure widget” being a UI component that allows for the showing / hiding (toggling the display) of content associated with the disclosure trigger (button).
+...
+The expected markup pattern for `details` and `summary` is as following:
+
+```
+<details>
+  <summary>
+    <!-- Label for the disclosure widget -->
+  </summary>
+  <div> <!-- optional wrapper (for styling) -->
+    <!-- collapsible content goes here -->
+  </div>
+</details>
+
+```
+...
+It’s worth noting that a `summary` element does not necessarily mean it must contain a “summary” of the other children of the `details` element. The HTML specification defines the element as representing “a summary, caption, or legend”, but you should treat the `summary` like you would any disclosure widget trigger or toggle button. Provide it an appropriate accessible name to indicate the content it will reveal, and you’ll be good to go!
+...
+Depending on how you’re using the disclosure widget, at a high level it should be discoverable by form control or button screen reader quick keys. The `summary` should be focusable by the tab key. If headings are used, they should be discoverable by screen readers.
+...
+JAWS with Firefox and Chrome will announce a native `summary` as its accessible name (the text of the `summary`), and the state of the disclosure widget when focused by virtual cursor or via the Tab key. The `summary` elements can also be navigated to by use of the B and F keys, like standard button elements.
+
+When activated, JAWS + Firefox will announce the key used to toggle the disclosure widget (Space or Enter), the accessible name, role and updated state. JAWS + Chrome will announce the key pressed, and the updated state, but will not re-announce the accessible name and role.
+...
+When using the Tab key, or virtual cursor to focus the `summary` element, NVDA will announce the accessible name (text of the `summary`), the current state of the widget (expanded or collapsed), and NVDA will announce the `summary` as a “button”.
+
+Hitting Enter or Space will toggle the state of the widget, but no state change will be announced by NVDA with Firefox.
+
+If “report role when mouse enters object” is turned on, NVDA will announce “button” and then the accessible name of the `summary`, when mouse hovering over the element. If a heading is within the `summary`, NVDA will announce “heading” instead, and will only announce “button” on the edges of the `summary` element (for example, if padding was set to the `summary` to push in the heading from its edges).
+
+---
+
+Title: Disclosure Navigation Menu | Web Accessibility Concepts
+URL: https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-navigation.html
+Code/Highlights:
+The following example demonstrates the keyboard support for the
+[APG disclosure design pattern](https://w3c.github.io/aria-practices#disclosure)
+to show and hide dropdown lists of links in a navigation bar for a mythical university web site.
+Each disclosure button opens and closes a menu of links. The example includes options to experience several keyboard focus styling techniques and their impact on perceivability of which element has keyboard focus.
+## Keyboard Support
+|Key|Optional|Function|
+|Tab||Move to next disclosure button or menu link.|
+|Shift+Tab||Move to previous disclosure button or menu link.|
+|Space and
+Enter||Open or close a menu.|
+|Esc||Closes an open menu.|
+|Up Arrow|Yes|Opens menu or moves to previous link in an open menu.|
+|Down Arrow|Yes|Opens menu or moves to next link in an open menu.|
+|Left Arrow|Yes|Moves to previous disclosure button, closes menu if open.|
+|Right Arrow|Yes|Moves to next disclosure button, closes menu if open.|
+|Home|Yes|Moves to first disclosure button or first link in an open menu.|
+|End|Yes|Moves to last disclosure button or last link in an open menu.|
+## Example Options
+Keyboard Support and Focus Styling Options for Disclosure Navigation Menu
+...
+No keyboard support
+...
+Disabled focus styling
+...
+Default focus styling
+...
+Include keyboard enhancements for using the cursor keys in addition to the tab key to navigate the menu of links.
+...
+### Mythical University
+Sample content section. Activating a link above will update and navigate to this region.
+
+---
+
+Title: The state of <details> in 2024
+URL: https://hellogreg.org/posts/the-state-of-details/
+Code/Highlights:
+- ` ` works without issue via mouse, keyboard, and touch in all browsers.
+- ` ` announces role and expanded state in all major browser/reader pairings upon focus. (This was bugged in iOS Safari/VoiceOver until the release of iOS 16.7 last fall.)
+...
+- ` ` is not strictly a button. Its announced role varies based on browser/reader (can be “summary,” “button,” “pushbutton,” or “disclosure triangle”).
+- Nor should you apply `role="button"` to a ` ` to make it a button. In fact, doing so may break it with Safari/VoiceOver.
+- According to the spec ... include headings in addition to phrasing content. ... when navigating via ... in all major ... announced just fine. However ... or may not be announced as
+...
+- Unlike most custom expand/collapse elements, ` ` elements do not collapse when the user has focus on the ` ` and presses the `esc` key.
+...
+The non-` ` content within a ` ` doesn’t need to be in a single container for grouping. But for the sake of styling this section separately from the summary, I do recommend putting it in a ` ` (which can then be targeted via `details[open] > section` in CSS).
+
+```
+<details>
+  <summary>The summary</summary>
+  <section>
+    <p>Some content.</p>
+    <p>More content</p>
+  </section>
+</details>
+
+```
+
+I also like adding a `cursor: default` property to my ` ` elements, so the mouse pointer will be an arrow on hover. This is in line with button behavior. By default, the mouse pointer is a text selection icon when hovering over a ` `. This just feels off to me, even if the text is selectable.
+...
+- Barebones, unstyled ` `
+- Minimally-styled ` `
+- ` ` with headings
+- Auto-closing multiple ` ` with a common `name`
+- Auto-expanding ` ` with in-page search
+- Nested ` ` elements
+
+---
+
+Title: Accessible Disclosure: Code Examples and WCAG Guidance
+URL: https://a11y-examples.com/examples/disclosure/
+Code/Highlights:
+Show/hide content with proper expand/collapse semantics, including the native details/summary element.
+...
+Disclosure widgets reveal and hide supplementary content. The simplest and most robust approach is the native ` `/` ` element, which provides keyboard support and screen reader announcements with zero JavaScript. When a custom design requires more control, a ` ` with `aria-expanded` and a toggled panel is the correct fallback — never a link or a plain ` `.
+...
+- ` `/` ` is the preferred approach — built-in keyboard and screen reader support with no JavaScript
+- Always use a ` ` for custom disclosure triggers, never a link or div
+- Use `aria-expanded` to communicate the open/closed state
+- Use `aria-controls` to associate the trigger with the panel (`aria-controls` has limited screen reader support but is recommended for code clarity)
+- Toggle the `hidden` attribute on the panel so it is fully removed from the accessibility tree when closed
+
+### Native Details/Summary
+...
+`
+ More Information
+
+ Our product is made from 100% recycled materials...
+
+ Show more `
+...
+- A link (` `) is semantically a navigation element, not a toggle — screen readers announce it as “link” rather than a button or disclosure
+- No `aria-expanded` state — screen readers cannot tell whether the content is currently visible or hidden
+- The link text changes between “Show more” and “Show less,” which can confuse speech recognition users who need a stable name
+- Using `onclick` with `return false` on a link is a hack — keyboard users who press Enter may trigger unexpected scroll-to-top behavior
+- The content is hidden with `display:none` via inline style rather than the `hidden` attribute, which works but bypasses the native disclosure pattern entirely
+...
+| Version | Announcement |
+| --- | --- |
+| Inaccessible (` ` toggle) | “Show more, link” (no expanded/collapsed state) |
+| Accessible (` `) | “More Information, collapsed, summary” / “More Information, expanded, summary” |
+...
+What’s wrong with the div trigger?
+
+- A ` ` has no button role — screen readers do not identify it as interactive
+- It cannot receive keyboard focus with Tab
+- It cannot be activated with Enter or Space
+- No `aria-expanded` means the open/closed state is invisible to assistive technology
+- `onclick` on a div only works with a mouse
+...
+| Pattern | Element | JS required | Use when |
+| --- | --- | --- | --- |
+| Native disclosure | ` ` + ` ` | No | Simple show/hide content — FAQ answers, supplementary info, expandable sections |
+| Custom disclosure | ` ` + `aria-expanded` | Yes | You need custom animation, styling, or behavior that ` ` cannot support |
+...
+- ` `/` ` provides keyboard support, focus management, and expanded/collapsed state announcements automatically with zero JavaScript
+- Custom disclosure requires manually managing `aria-expanded`, the `hidden` attribute, and keyboard interaction — use only when you need control that native elements cannot provide
+- `aria-controls` associates the button with its panel; while screen reader support for `aria-controls` is limited, it is recommended for developer clarity and future compatibility
+- Never use a link (` `) or plain ` ` as a disclosure trigger — links are for navigation, divs are not interactive
+									113 container
+										114 text 本次搜索成功返回原生 details/summary 示例及键盘说明：
+										115 link Description: A11yPath, Value: a11ypath.com/patterns/disclosure/
+										116 text  展示无需 JavaScript 的实现，Tab 聚焦摘要，Enter 或空格切换展开状态，切换后焦点保留在摘要上。
+									117 button Copy message
+									118 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+									119 pop up button (collapsed) Description: View model usage for this turn: 72K Token, Secondary Actions: Expand
+									120 text Oct 10, 04:04 PM
+						43 container chatHomeComposition
+							134 container solidChatComposer
+								135 container chatForm
+									136 splitter Description: Drag to resize the message input, Value: 42
+									137 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									138 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									139 text Work
+									140 text Chat
+									141 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									142 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									143 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										144 text openai/gpt-6.1-sol
+									145 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+								146 button Scroll to bottom
+
+The focused UI element is 122 button (expanded) Secondary Actions: Collapse, Description: external_code_search · External code search: native HTML details summary keyboard accessibility example Enter Space

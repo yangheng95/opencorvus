@@ -1,0 +1,13 @@
+Browser tab: 123, Title: "OpenCorvus", URL: "http://localhost:18214/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~											129 button (expanded) Description: Sources: HTML Standard (3), Help: HTML Standard 3, Secondary Actions: Collapse
++											163 link Description: Open web source: HTML Standard, Value: html.spec.whatwg.org/multipage/interactive-elements.html
++											164 button (collapsed) Description: Source excerpt: HTML Standard, Help: Source excerpt, Secondary Actions: Expand
++												165 text Source excerpt
++											166 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++											167 button (collapsed) Description: Source excerpt: <details> HTML details disclosure element - HTML | MDN, Help: Source excerpt, Secondary Actions: Expand
++												168 text Source excerpt
++											169 link Description: Open web source: <summary> HTML disclosure summary element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++											170 button (collapsed) Description: Source excerpt: <summary> HTML disclosure summary element - HTML | MDN, Help: Source excerpt, Secondary Actions: Expand
++												171 text Source excerpt
+The focused UI element is 129 button (expanded) Description: Sources: HTML Standard (3), Help: HTML Standard 3, Secondary Actions: Collapse
