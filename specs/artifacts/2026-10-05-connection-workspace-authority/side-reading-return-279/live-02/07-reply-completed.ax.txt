@@ -1,0 +1,46 @@
+Browser tab: 131, Title: "OpenCorvus", URL: "http://localhost:18222/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 288
+~											210 text 1m 32s
+~														415 text 摘录明确提到 Enter
++													416 cell
++														417 text 示例明确列出 Enter、Space
++												418 row
++													419 cell
++														420 text 隐藏内容
++													421 cell
++														422 text 仍需验证实际焦点路径
++													423 cell
++														424 text 作者负责正确隐藏
++												425 row
++													426 cell
++														427 text 主要风险
++													428 cell
++														429 text 平台差异、摘要内嵌交互
++													430 cell
++														431 text 按键、状态、可见性不同步
++											432 container
++												433 text 事实 ：四份资料共同支持的核心不是“能点击就可访问”，而是触发控件应有正确语义，键盘用户应能操作，状态应准确，隐藏内容不应造成不可见焦点。[1][2][3][4]
++											434 container
++												435 text 建议 ：优先选择足以满足需求的原生实现；需要自定义时，明确承担按钮、按键、状态和隐藏行为的实现责任，并用真实阅读任务验证。
++											436 container
++												437 text 未实测 ：本文不能充当任何产品的合格证明，尤其不能证明所有浏览器、辅助技术和长内容场景表现一致。
++											438 container
++												439 text 已有真实来源 ：
++											440 content list
++												441 container
++													442 AXListMarker 1.
++													443 link Description: Details and summary | web.dev, Value: web.dev/learn/html/details
++												444 container
++													445 AXListMarker 2.
++													446 link Description: <summary> HTML disclosure summary element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++												447 container
++													448 AXListMarker 3.
++													449 link Description: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
++												450 container
++													451 AXListMarker 4.
++													452 link Description: WebAIM: Disclosures and Accordions, Value: webaim.org/techniques/disclosures/
++										453 text entry area (settable) Ask a side question…
+~										287 text Main conversation stays on track
++										454 button (disabled) Send side question
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18222/ui/

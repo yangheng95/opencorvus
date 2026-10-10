@@ -1,0 +1,37 @@
+Browser tab: 131, Title: "OpenCorvus", URL: "http://localhost:18222/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 105-148, 150-152, 160, 162-193, 196, 199-258
+~				103 container chatSection
+~					104 container Description: Loading task, ID: taskSwitchProgress
++					105 container
++						106 text 请只回复：准备就绪。不要调用工具。
++						107 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-212-trigger, Secondary Actions: Expand
++						108 container Description: Not running, ID: taskStatus
++							109 text Not running
++						110 button Side chat
++						111 container solidChatHeaderRuntimeActions
++							112 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							113 checkbox Description: Open right dock, Value: 0
++					114 container
++						115 container Description: Conversation, ID: chatScroll
++							116 container
++								117 container
++									118 text User
++									119 text 请只回复：准备就绪。不要调用工具。
++								120 container
++									121 text work
++									122 text 4s
++									123 text 准备就绪。
++						124 container chatHomeComposition
++							125 container chatForm
++								126 splitter Description: Drag to resize the message input, Value: 42
++								127 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++								128 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								129 text Work
++								130 text Chat
++								131 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++								132 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++								133 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++									134 text openai/gpt-6.1-sol
++								135 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+The focused UI element is 113 checkbox Description: Open right dock, Value: 0

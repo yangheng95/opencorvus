@@ -1,0 +1,42 @@
+Browser tab: 131, Title: "OpenCorvus", URL: "http://localhost:18222/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 194
++										221 container
++											222 text User
++											223 text 仅基于刚才已有的四份资料，写一份约4000中文字、12个编号小节的键盘可访问性说明，包含原生details/summary、自定义披露、焦点、按键、长内容阅读、来源辨识、渐进展开、用户验证、错误处理和简短对照表。明确事实、建议和未实测事项，附已有真实来源。不要再调用工具、搜索、写文件、创建任务或委托。
++										224 container
++											225 text chat
++											226 text 17s
++											227 heading 1. 范围与证据边界, Value: 2
++												228 text 1. 范围与证据边界
++											229 text 本文仅依据刚才检索返回的四份资料及其可见摘录，说明披露组件的键盘可访问性；没有再次打开网页，没有运行示例，也没有对浏览器或辅助技术进行实测。“披露”指用户通过一个触发控件显示或隐藏相关内容，常见于常见问题、补充说明和可折叠章节。
++											230 text 为避免把设计意见写成既成事实，以下使用三种标记：
++											231 content list
++												232 container
++													233 AXListMarker •
++													234 text 事实 ：已有资料明确支持的行为或要求。
++												235 container
++													236 AXListMarker •
++													237 text 建议 ：由资料推导出的设计、实现或验证方案，不代表来源逐字提出。
++												238 container
++													239 AXListMarker •
++													240 text 未实测 ：当前没有实际运行证据，不能保证某个浏览器、操作系统或屏幕阅读器组合的具体表现。
++											241 text 资料中既有原生 HTML，也有自定义按钮实现，两者不能混为一谈：原生元素具有内建语义和交互；自定义实现则需要作者维护状态、可见性和按键行为。代码看起来相似，不等于辅助技术获得的信息相同。
++											242 heading 2. 原生 details / summary 的基本模型, Value: 2
++												243 text 2. 原生
++												244 text details
++												245 text  /
++												246 text summary
++												247 text  的基本模型
++											248 container
++												249 text 事实 ： details  是披露容器， summary  是摘要或标签，也是切换内容显示状态的触发部分；点击摘要会打开或关闭父级  details 。MDN 明确规定，作者提供的  summary  应作为  details  的第一个子元素。[1][2]
++											250 container
++												251 text open  是布尔属性：存在时内容展开，不存在时通常只显示摘要；它不是用字符串值表示真假的普通配置。因此， open="false"  仍然属于属性存在，不能用来表达关闭状态。[1]
++											252 container
++												253 text 事实 ：WebAIM 指出，原生  details  /  summary  具有内建可访问性，摘要像按钮一样工作，展开或折叠状态能够呈现给辅助技术。[4]
++											254 container
++												255 text 建议 ：能够满足产品需求时，优先使用原生结构，避免为简单披露重新实现整套键盘逻辑。摘要应直接表达隐藏内容是什么，例如“配送费用说明”，而非只有“展开”。
++											256 container
++												257 text 未实测 ：内建可访问性不意味着所有平台表现完全一致；具体焦点顺序、状态朗读措辞和视觉
++										258 button Quote in main conversation
+The focused UI element is 211 container Source excerpt: Details and summary  |  web.dev

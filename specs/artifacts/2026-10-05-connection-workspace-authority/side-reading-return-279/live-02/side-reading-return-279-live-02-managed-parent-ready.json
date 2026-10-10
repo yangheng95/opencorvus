@@ -1,0 +1,15 @@
+{
+  "pid": 63012,
+  "occurrence": "side-reading-return-279-live-02-dbac66d1-99f0-4339-8007-4a3d1ca693a5",
+  "owner": {
+    "pid": 63012,
+    "processInstanceID": "win32:639272249033075038",
+    "occurrenceID": "389571eb-36ee-45b6-9c15-673878bdaffb"
+  },
+  "parent": {
+    "pid": 49240,
+    "processInstanceID": "win32:639272249032676816",
+    "occurrenceID": "f2ba6007-c736-4f1e-9acc-016543ea5a7b"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

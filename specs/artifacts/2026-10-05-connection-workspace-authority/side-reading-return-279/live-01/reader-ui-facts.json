@@ -1,0 +1,119 @@
+{
+  "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+  "assistantMessageID": "msg_g0VXdn2ja00jgo1HwLxM",
+  "textPartID": "prt_g0VXdn4FT0053iG77lrh",
+  "completedTextChars": 5146,
+  "model": "gpt-6.1-sol",
+  "streaming": true,
+  "readerFirstAtMs": 1791627657015,
+  "readerEOFAtMs": 1791627742639,
+  "messageCompletedAt": 1791627742725,
+  "uiTimes": {
+    "before": 1791627733279,
+    "closed": 1791627763250,
+    "reopened": 1791627763773
+  },
+  "timesInsideActualReader": {
+    "before": true,
+    "closed": false,
+    "reopened": false
+  },
+  "beforeGeometry": {
+    "at": "2026-10-10T10:22:13.279Z",
+    "excerpts": [
+      {
+        "content": 2574,
+        "height": 286,
+        "textChars": 4788,
+        "top": 250.3999938964844
+      }
+    ],
+    "scrolls": [
+      {
+        "content": 6599,
+        "height": 466,
+        "top": 641.5999755859375
+      }
+    ],
+    "turnTextChars": [
+      166,
+      5264,
+      277,
+      172,
+      4030
+    ]
+  },
+  "afterGeometry": {
+    "at": "2026-10-10T10:22:43.773Z",
+    "excerpts": [
+      {
+        "content": 2574,
+        "height": 286,
+        "textChars": 4788,
+        "top": 250.3999938964844
+      }
+    ],
+    "scrolls": [
+      {
+        "content": 7112,
+        "height": 388,
+        "top": 641.5999755859375
+      }
+    ],
+    "turnTextChars": [
+      166,
+      5264,
+      277,
+      172,
+      4561
+    ]
+  },
+  "sources": [
+    {
+      "sourceId": "b47567faaba523f0a356096e4525de2ee5b63959218f282c32d00bff83afe91d",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "title": "Details and summary  |  web.dev",
+      "url": "https://web.dev/learn/html/details",
+      "snippetChars": 4788
+    },
+    {
+      "sourceId": "ff4c319d3058ede764d2b6ea04be1500d3f7446a18b8fe0c4c9ea6738c240393",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "title": "<summary> HTML disclosure summary element - HTML | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+      "snippetChars": 3020
+    },
+    {
+      "sourceId": "3545df63eec16e43f324a846e225605294f3bb1af67615c5f20f396406a79f59",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "title": "Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts",
+      "url": "https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html",
+      "snippetChars": 1919
+    },
+    {
+      "sourceId": "a9b4e87aa59a031ebe0a0e8aefc71a4192d500d0ba0eb28da833a363db7cf5e8",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "title": "WebAIM: Disclosures and Accordions",
+      "url": "https://webaim.org/techniques/disclosures/",
+      "snippetChars": 4135
+    }
+  ],
+  "originalForegroundSession": 47530,
+  "originalForegroundActualExit": 0,
+  "native": {
+    "pid": 77340,
+    "processInstanceID": "win32:639272242672637797",
+    "occurrenceID": "474f90b2-c584-48ed-b4a7-c1e7aecb2663"
+  },
+  "host": {
+    "pid": 44724,
+    "processInstanceID": "win32:639272242664440229",
+    "occurrenceID": "53e6c20f-fd4d-4772-9357-0d4a08b73749"
+  },
+  "nativeActualExit": 0,
+  "physicalSettledAt": "2026-10-10T10:24:16.435Z",
+  "deadlineAtMs": 1791628066428,
+  "bufferMs": 209993,
+  "minimumPlannedBufferMs": 240000,
+  "boundary": "Original live UI time records linked to exactly one actual Provider chat reader and completed canonical message. Geometry is observation only; no DOM/browser/screenshot assertions or automation tests. Root reviews screenshots manually."
+}

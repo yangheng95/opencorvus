@@ -2971,3 +2971,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [原Research Studio来源277](artifacts/2026-10-05-connection-workspace-authority/research-source-277/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/research-source-plan-277.md) / [月记录](records/2026-10/2026-10-10-research-source-277.md)。
 
 - [Side来源/术语误动作278](artifacts/2026-10-05-connection-workspace-authority/side-source-live-278/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/side-source-live-plan-278.md) / [月记录](records/2026-10/2026-10-10-side-source-live-278.md)。
+
+- [Side实时固定阅读279](artifacts/2026-10-05-connection-workspace-authority/side-reading-return-279/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/side-reading-return-plan-279.md) / [月记录](records/2026-10/2026-10-10-side-reading-return-279.md)。

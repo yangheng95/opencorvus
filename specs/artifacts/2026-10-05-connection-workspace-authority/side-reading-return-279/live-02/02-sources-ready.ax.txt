@@ -1,0 +1,38 @@
+Browser tab: 131, Title: "OpenCorvus", URL: "http://localhost:18222/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 165
+~									163 container
+~										164 button (collapsed) Reference history · 2 messages, Secondary Actions: Expand
++											165 text Reference history · 2 messages
++										166 container
++											167 text User
++											168 text 请只调用一次 external_code_search：query 为 HTML details summary keyboard interaction examples，numResults 为4。然后用一句话说明检索是否成功并列出返回资料的标题。不要额外搜索、写文件、创建任务或委托。
++										169 container
++											170 text chat
++											171 text 4s
++											172 button (collapsed) Description: external_code_search · External code search: HTML details summary keyboard interaction examples, Secondary Actions: Expand
++												173 text external_code_search
++												174 text External code search: HTML details summary keyboard interaction examples
++												175 image
++											176 container Sources
++												177 button (collapsed) Description: Sources: Details and summary  |  web.dev (4), Help: Details and summary  |  web.dev 4, Secondary Actions: Expand
++													178 text Details and summary  |  web.dev
++													179 text 4
++										180 container
++											181 text chat
++											182 text 6s
++											183 container
++												184 text 检索成功，返回资料的标题为：
++												185 link Description: Details and summary | web.dev, Value: web.dev/learn/html/details
++												186 text 、
++												187 link Description: <summary> HTML disclosure summary element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++												188 text 、
++												189 link Description: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
++												190 text 、
++												191 link Description: WebAIM: Disclosures and Accordions, Value: webaim.org/techniques/disclosures/
++												192 text 。
++										193 button Quote in main conversation
++										194 text entry area (settable) Ask a side question…
+~										162 text Main conversation stays on track
++										195 button (disabled) Send side question
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18222/ui/

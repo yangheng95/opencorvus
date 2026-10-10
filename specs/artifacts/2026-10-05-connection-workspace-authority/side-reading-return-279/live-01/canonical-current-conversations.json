@@ -1,0 +1,415 @@
+{
+  "observedAtUtc": "2026-10-10T10:24:37.828Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hHXwDat2EJ2Tg8v1z2j6",
+      "project_id": "prj_hNoxMCSyffJHMh0C9vNM",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\side-reading-return-279-live-01\\runtime\\data\\projects\\2026\\10\\10\\62537a18-456c-41cf-a08e-5fcd591d175c",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"2c73f556-7d88-4f74-a6cb-dc627dbf6292\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hawEirEv78mrTb7m9CjU\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSMDbMBzzqfX5bfuy3",
+      "project_id": "prj_hyHXVVV3oYU9JAufBMnJ",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\side-reading-return-279-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请只回复：准备就绪。不要调用工具。",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    },
+    {
+      "id": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "project_id": "prj_hyHXVVV3oYU9JAufBMnJ",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\side-reading-return-279-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Side chat · 请只回复：准备就绪。不要调用工具。",
+      "metadata": "{\"configOverlay\":{},\"sideChat\":{\"sourceSessionID\":\"ses_-zUSMDbMBzzqfX5bfuy3\",\"inheritedMessageIDs\":[\"msg_g0VXdmTxD00pU9yM2BBO\",\"msg_g0VXdmTxE00EavCiGDKK\"]}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hawEirEv78mrTb7m9CjU",
+      "sessionID": "ses_hHXwDat2EJ2Tg8v1z2j6",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791627475583
+      }
+    },
+    {
+      "id": "msg_g0VXdmIsR00INjvIK90Q",
+      "sessionID": "ses_hHXwDat2EJ2Tg8v1z2j6",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791627475975,
+        "completed": 1791627479548
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_fadf62b5-5b48-4e31-b84d-ba414b7cc668",
+      "sessionID": "ses_-zUSMDbMBzzqfX5bfuy3",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791627499020
+      }
+    },
+    {
+      "id": "msg_g0VXdmTxD00pU9yM2BBO",
+      "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791627499020
+      }
+    },
+    {
+      "id": "msg_g0VXdmOvV00smdkAdUBU",
+      "sessionID": "ses_-zUSMDbMBzzqfX5bfuy3",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791627499229,
+        "completed": 1791627504466
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_g0VXdmTxE00EavCiGDKK",
+      "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791627499229,
+        "completed": 1791627504466
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_71f3fc53-5f9d-4825-a1ef-5635d3842188",
+      "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791627536348
+      }
+    },
+    {
+      "id": "msg_g0VXdmYcd00fOovstCrB",
+      "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791627536499,
+        "completed": 1791627541130
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXdmZpx0042QxcpIag",
+      "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791627541169,
+        "completed": 1791627546633
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_cc236dbb-90d4-43c5-befe-4bd12328a67b",
+      "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791627652082
+      }
+    },
+    {
+      "id": "msg_g0VXdn2ja00jgo1HwLxM",
+      "sessionID": "ses_-zUSMDW2nzzfUu3rmH2P",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791627652250,
+        "completed": 1791627742725
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hlVl3qabJqfRNHeSqLpF",
+      "messageID": "msg_hawEirEv78mrTb7m9CjU",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXdmJ3900Qe85WjYX2",
+      "messageID": "msg_g0VXdmIsR00INjvIK90Q",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXdmJgR00PhhuZBDQc",
+      "messageID": "msg_g0VXdmIsR00INjvIK90Q",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791627479075,
+        "end": 1791627479295
+      }
+    },
+    {
+      "id": "prt_g0VXdmJn9002tvRRqYCG",
+      "messageID": "msg_g0VXdmIsR00INjvIK90Q",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXdmOs8003t2NyDH54",
+      "messageID": "msg_fadf62b5-5b48-4e31-b84d-ba414b7cc668",
+      "type": "text",
+      "text": "请只回复：准备就绪。不要调用工具。",
+      "textChars": 17
+    },
+    {
+      "id": "prt_g0VXdmP4A00d35HeFjHn",
+      "messageID": "msg_g0VXdmOvV00smdkAdUBU",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXdmQ4A006xLBpxDXr",
+      "messageID": "msg_g0VXdmOvV00smdkAdUBU",
+      "type": "text",
+      "text": "准备就绪。",
+      "textChars": 5,
+      "time": {
+        "start": 1791627503610,
+        "end": 1791627504008
+      }
+    },
+    {
+      "id": "prt_g0VXdmQH7009ugjnP54O",
+      "messageID": "msg_g0VXdmOvV00smdkAdUBU",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXdmTxE00LrLxX5dyz",
+      "messageID": "msg_g0VXdmTxD00pU9yM2BBO",
+      "type": "text",
+      "text": "请只回复：准备就绪。不要调用工具。",
+      "textChars": 17
+    },
+    {
+      "id": "prt_g0VXdmTxE01JnXMzgVoe",
+      "messageID": "msg_g0VXdmTxE00EavCiGDKK",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXdmTxE02lSQdV5uHP",
+      "messageID": "msg_g0VXdmTxE00EavCiGDKK",
+      "type": "text",
+      "text": "准备就绪。",
+      "textChars": 5,
+      "time": {
+        "start": 1791627503610,
+        "end": 1791627504008
+      }
+    },
+    {
+      "id": "prt_g0VXdmTxE03qCz8L12bG",
+      "messageID": "msg_g0VXdmTxE00EavCiGDKK",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXdmYaC00Rsez1ToyI",
+      "messageID": "msg_71f3fc53-5f9d-4825-a1ef-5635d3842188",
+      "type": "text",
+      "text": "请只调用一次 external_code_search：query 为 HTML details summary keyboard interaction examples，numResults 为4。然后用一句话说明检索是否成功并列出返回资料的标题。不要额外搜索、写文件、创建任务或委托。",
+      "textChars": 145
+    },
+    {
+      "id": "prt_g0VXdmYmA00B3mj1qcLn",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXdmZnI00F2Az6WpJ6",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "type": "source-url",
+      "sourceId": "b47567faaba523f0a356096e4525de2ee5b63959218f282c32d00bff83afe91d",
+      "url": "https://web.dev/learn/html/details",
+      "title": "Details and summary  |  web.dev",
+      "snippet": "The ` ` and ` ` elements are all you need: they are a built-in way to handle expanding and collapsing content. When a user clicks or taps a ` `, or releases the Enter key when the ` ` has focus, the contents of the parent ` ` toggle to visible.\n...\nThe ` ` element is the disclosure widget container. The ` ` is the summary or legend for its parent ` `. The summary is always displayed, acting as a button that toggles the display of the rest of the parent's contents. Interacting with the ` ` toggles the display of the self-labeled summary siblings by toggling the ` `' element's `open` attribute.\n\nThe `open` attribute is a boolean attribute. If present, no matter the value or lack thereof, it indicates that all the ` ` contents are shown to the user. If the `open` attribute is not present, only the contents of the ` ` are shown.\n...\nYou can create an accordion with a list of multiple ` ` elements, each with a ` ` child. Omitting the `open` attribute in your HTML means the ` ` will all be collapsed, or closed, with just the summary headings visible when the page loads; each heading being the opener for the rest of the contents in the parent ` `. If you include the `open` attribute in your HTML, ` ` renders expanded, with the contents visible, when the page loads.\n...\nIn the two earlier Codepens, there's an arrow to the inline-start side of the summary. An expander arrow is typically presented on-screen, a small triangle that rotates (or twists) to indicate open or closed status and a label next to the triangle. The contents of the ` ` element label the disclosure widget.\n\nThe rotating arrow at the top of each section is a `::marker` set on the ` ` element. Like list items, the ` ` element supports the `list-style` shorthand property and its longhand properties, including `list-style-type`. You can style the disclosure triangle with CSS, including changing the marker used from a triangle to any other bullet type, including an image with `list-style-image`.\n\nTo apply other styles, use a selector similar to `details summary::marker`. The `::marker` pseudo-element only accepts a limited number of styles. Removing the `::marker` and replacing it with the easier-to-style `::before` is common practice, with CSS styles changing the style of the generated content slightly based on the presence (or absence) of the open attribute. You can remove the disclosure widget icon by setting `list-style: none` or set the content of the marker to `none`, but you should always include visual indicators to inform sighted users that the summary content toggles to show and hide content.\n\n```\ndetails summary::before {\n  /* all the styles */\n}\ndetails[open] summary::before {\n  /* changes applied when open only */\n}\n...\nThis example removes the default marker, and adds generated content to create a `+` when the details are closed and a `-` when the details are open.\n\nIf you want the details block open by default, include the `open` attribute on the opening ` ` tag. You can also add space between each dialog and transition the rotation of the marker created with generated content to improve the appearance:\n...\nIf you don't include a ` `, the browser creates one for you, with a marker and the word \"details\". This summary is part of a shadow root, and therefore doesn't have author CSS summary styles applied.\n\nNote: Unfortunately, Safari does not include the details in the keyboard focus order.\n\nIf you do include a ` `, but it's not the first element in the ` `, the browser still displays the summary as it should. It won't fail if you include a link, label, or other interactive element within the summary but browsers handle interactive content within interactive content differently.\n\nFor example, if you include a link in a summary, some browsers add both the summary and the link to the default tabbing order, but other browsers don't focus on the link by default. If you click a ` ` nested in a ` `, some browsers give focus to the associated form control. Other browsers give focus to the form control and toggle the ` ` open or closed.\n...\nLike all HTML elements, the `HTMLDetailsElement` inherits all properties, methods, and events from `HTMLElement`, and adds the `open` instance property and a `toggle` event. The `HTMLDetailsElement.open` property is a boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) are to be shown to the user. The toggle event is fired when the ` ` element is toggled open or closed. You can listen to this event using `addEventListener()`.\n\nIf you want to write a script to close the opened details when the user opens any other details, remove the open attribute using `removeAttribute(\"open\")`:\n...\nThe ` ` must be the first child of which element?",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXdmZnO002LDJwbRSF",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "type": "source-url",
+      "sourceId": "ff4c319d3058ede764d2b6ea04be1500d3f7446a18b8fe0c4c9ea6738c240393",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+      "title": "<summary> HTML disclosure summary element - HTML | MDN",
+      "snippet": "The ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n\n```\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n...\nBelow are some examples showing ` ` in use. You can find more examples in the documentation for the ` ` element.\n...\n```\n<details open>\n  <summary>Overview</summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\n```\n<details open>\n  <summary><h4>Overview</h4></summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\n### HTML in summaries\n\nThis example adds some semantics to the ` ` element to indicate the label as important:\n\n```\n<details open>\n  <summary><strong>Overview</strong></summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\nThe ` ` element's marker, the disclosure triangle, can be customized with CSS. The marker can be targeted using the `::marker` pseudo-element. which accepts the `list-style` shorthand property and its longhand component properties, such as `list-style-type`. This enables changing the triangle to an image (usually with `list-style-image`) or a string (including emojis). In this example, we replace the content of one disclosure widget and remove the icon from another by setting `list-style: none` before adding a custom disclosure icon via generated content.\n...\nstyle the `::marker`, changing ... ` ` element ... styled generated content with ... `::after ... element. We also include ... `::-webkit-details-marker` to target Safari ... browser-specific pseudo ... `:is()` pseudo-class so it doesn\n...\n```\n<h1>Quotes from Helen Keller</h1>\n\n<details>\n  <summary>On women's rights</summary>\n  <p>\n    <q>We have prayed, we have coaxed, we have begged, for the vote, with the\n      hope that men, out of chivalry, would bestow equal rights upon women and\n      take them into partnership in the affairs of the state. We hoped that\n      their common sense would triumph over prejudices and stupidity. We thought\n      their boasted sense of justice would overcome the errors that so often\n      fetter the human spirit; but we have always gone away empty-handed. We\n      shall beg no more.</q>\n  </p>\n</details>\n\n<details>\n  <summary>On optimism</summary>\n  <p>\n    <q>Optimism is the faith that leads to achievement; nothing can be done\n      without hope.</q>\n  </p>\n</details>",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXdmZnS00dEkUzRA14",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "type": "source-url",
+      "sourceId": "3545df63eec16e43f324a846e225605294f3bb1af67615c5f20f396406a79f59",
+      "url": "https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html",
+      "title": "Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts",
+      "snippet": "The following example demonstrates the keyboard support for the [APG disclosure button](https://w3c.github.io/aria-practices/#disclosure) design pattern to create a set of frequently asked questions where the answers may be independently shown or hidden. The example includes options to experience several keyboard focus styling techniques and their impact on perceivability of which element has keyboard focus.\n## Keyboard Support\n|Key|Optional|Function|\n|Tab||Move to next disclosure button.|\n|Shift+Tab||Move to previous disclosure button.|\n|Space and\nEnter||Open or close an FAQ discription.|\n## Example Options\nKeyboard Support and Focus Styling Options for Parking FAQ disclosure buttons\n*\nNo keyboard support\n*\nDisabled focus styling\n*\nDefault focus styling\n*\nAuthor focus styling\n...\nWhat do I do if I have a permit for an assigned lot, but can't find a space there?\nPark at the nearest available parking meter without paying the meter\nand call 999-999-9999 to report the problem. We will note and approve your alternate\nlocation and will investigate the cause of the shortage in your assigned facility.\nWhat do I do if I lose my permit or if my permit is stolen?\nYou should come to the Parking office and report the\nloss. There is a fee to replace your lost permit. However, if your permit was stolen, a\ncopy of a police report needs to be submitted along with a stolen parking permit form for a fee replacement exemption.\nIs there free parking on holidays?\nAll facilities are restricted from 2:00 am - 6:00 am on all days. No\nexceptions are made for any holiday or recess except those officially listed as a\n> Holidays\nin the calendar. Please note: 24-hour rental spaces, 24-hour rental lots, and\ndisabled parking is enforced at all times.\nDo all parking facilities have the same enforcement rules?\nSome parking facility restrictions differ from others. Be sure to\ntake note of the signs at each lot entrance.",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXdmZnW001Bzp0a517",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "type": "source-url",
+      "sourceId": "a9b4e87aa59a031ebe0a0e8aefc71a4192d500d0ba0eb28da833a363db7cf5e8",
+      "url": "https://webaim.org/techniques/disclosures/",
+      "title": "WebAIM: Disclosures and Accordions",
+      "snippet": "button that togg ... the visibility of\n...\nA disclosure widget can be made using buttons, JavaScript, and ARIA, or simply by using HTML ` ` and ` ` elements.\n\nThis is the summary of the disclosure\n\nAnd here are the details of the disclosure!\n\n This is the summary of the disclosure And here are the details of the disclosure! \n\nThe ` ` element can be given an `open` attribute to cause the summary to be visible by default.\n...\nDisclosures and accordions created using ` ` and ` ` have built-in accessibility. The ` ` element properly functions like a button, and the expanded state (open or closed) is presented to assistive technologies. The problems below only occur when other elements or scripting are used.\n\nDisclosures and accordions created using buttons, JavaScript, and ARIA can be implemented incorrectly and create accessibility issues. Below are some common issues and how to address them.\n\n### Triggers cannot receive keyboard focus\n\nSometimes, elements that are not meant to be interactive (e.g., ` `, ` `, or ` ` without the `href` attribute) are made interactive through JavaScript event handlers like `onclick`. If one of these is made into the trigger element for a content area, keyboard and screen reader users are unable to directly navigate to it. The best way to solve this problem is to use a standard ` ` element as the trigger element.\n\n### Triggers are not buttons\n\nThe trigger element that expands and collapses the content area should be coded as a standard ` `. Sometimes the trigger element is incorrectly coded as a link. Using links as trigger elements can make navigation confusing for keyboard and screen reader users. Links are about navigation, for example navigating to a new page or to a particular place in a page. Buttons are about function, for example expanding and collapsing a content area.\n\nLinks also have different keyboard interactions than buttons. Buttons can be activated with Enter or Spacebar, but links are only activated by Enter.\n...\nScreen reader users need to be informed of the trigger's function and whether the content area is expanded or collapsed. Disclosures made with the HTML ` `/` ` elements have this functionality built in. Disclosures and accordions made with ARIA must have the `aria‑expanded=\"true|false\"` attribute applied to the trigger button.\n\nScripting must be used to dynamically update the `aria‑expanded=\"true|false\"` attribute value each time the trigger button is activated, or it can become inaccurate. The attribute value must always align with the state of the content visibility.\n\nHere's an example of a dynamically updating disclosure. You can use a screen reader to test if the trigger button correctly indicates the state of a content area. You can also monitor the attribute value in browser Developer Tools.\n\nWhen the trigger button of an expanded content area receives keyboard focus, a screen reader should announce \"expanded\" or \"collapsed\", in addition to the text of the trigger button. This not only indicates the current state, but indicates to the user that activating the button will change the state to the opposite value.\n\nWhen the user activates the trigger button and changes the state of the content area, a screen reader should announce the new state. So if the user activates the trigger button of a collapsed content area, expanding the content area, a screen reader should announce \"expanded\".\n\n### Elements in collapsed content areas receive keyboard focus\n\nContent areas may contain elements that can receive keyboard focus, most commonly links or buttons. Incorrectly implemented disclosures and accordions can have elements in their content areas that receive keyboard focus while the content area containing them is collapsed and the contents visually hidden. This results in the visual focus indicators being lost. This can confuse users and cause them to lose their place.\n\nWhen the content area is collapsed, the contents should not be accessible, including elements that otherwise could receive keyboard focus. Using CSS `display:none` or the `hidden` attribute will visually and programmatically hide the contents.",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXdmZnZ00ukyuI8dan",
+      "messageID": "msg_g0VXdmYcd00fOovstCrB",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXdmZud00902wbRP9U",
+      "messageID": "msg_g0VXdmZpx0042QxcpIag",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXdmaUn00BhDGIsMey",
+      "messageID": "msg_g0VXdmZpx0042QxcpIag",
+      "type": "text",
+      "text": "检索成功，返回资料的标题为：[Details and summary | web.dev](https://web.dev/learn/html/details)、[\\<summary> HTML disclosure summary element - HTML | MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary)、[Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts](https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html)、[WebAIM: Disclosures and Accordions](https://webaim.org/techniques/disclosures/)。",
+      "textChars": 506,
+      "time": {
+        "start": 1791627543701,
+        "end": 1791627546129
+      }
+    },
+    {
+      "id": "prt_g0VXdmbEj008G4mEEck6",
+      "messageID": "msg_g0VXdmZpx0042QxcpIag",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXdn2gs00kyI4Hu9fC",
+      "messageID": "msg_cc236dbb-90d4-43c5-befe-4bd12328a67b",
+      "type": "text",
+      "text": "仅基于刚才已有的四份资料，写一份约4000中文字、12个编号小节的键盘可访问性说明，包含原生details/summary、自定义披露、焦点、按键、长内容阅读、来源辨识、渐进展开、用户验证、错误处理和简短对照表。明确事实、建议和未实测事项，附已有真实来源。不要再调用工具、搜索、写文件、创建任务或委托。",
+      "textChars": 151
+    },
+    {
+      "id": "prt_g0VXdn2sg00SZPcIDLD5",
+      "messageID": "msg_g0VXdn2ja00jgo1HwLxM",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXdn4FT0053iG77lrh",
+      "messageID": "msg_g0VXdn2ja00jgo1HwLxM",
+      "type": "text",
+      "text": "# 披露组件的键盘可访问性说明\n\n## 1. 适用范围与证据边界\n\n本文讨论网页中的“披露组件”：用户通过一个触发器显示或隐藏相关内容，包括原生 HTML `details`/`summary`、自定义披露按钮，以及由多个披露项目组成的折叠内容区域。重点是键盘操作与阅读连续性，而不是动画效果或完整组件库实现。\n\n**事实**：已有四份资料涵盖原生元素、自定义披露模式、焦点与常见错误；伊利诺伊大学的示例还明确列出了 Tab、Shift+Tab、Space 和 Enter 的操作规则。\n\n**建议**：设计时分别检查“能否到达触发器”“能否操作”“能否知道状态”“展开后能否顺畅阅读”，不要把鼠标点击成功等同于键盘可访问。\n\n**未实测**：本文只依据刚才检索返回的资料内容整理，没有运行示例、检查实际 DOM，也没有验证任何浏览器、操作系统或屏幕阅读器组合；来源描述的行为不能直接视为你的产品已经具备的行为。\n\n## 2. 原生 `details`/`summary` 的基本机制\n\n**事实**：web.dev 与 MDN 都将 `details` 描述为披露内容的容器，`summary` 则提供摘要、标题或说明，并作为展开与收起的触发器。MDN 指出，`summary` 应当是 `details` 的第一个子元素。\n\n`open` 是布尔属性：存在时表示内容展开，不存在时表示收起。web.dev 特别说明，其存在与否才是关键，因此写成 `open=\"false\"` 仍然表示展开，而不是关闭。用户切换状态时，`details` 会产生 `toggle` 事件；脚本也可以通过相关属性调整状态。\n\n**建议**：对简单的补充说明、常见问题或附加细节，优先评估原生结构，减少自行实现状态、键盘和辅助技术语义的负担；让 `summary` 的文字直接说明内容主题，例如“查看配送限制”，而不是只写“更多”。\n\n**未实测**：上述语义来自资料，具体项目中是否存在样式覆盖、脚本拦截或浏览器差异，仍需验证。\n\n## 3. 原生控件的键盘行为与兼容性限制\n\n**事实**：web.dev 描述了 `summary` 获得焦点后通过 Enter 切换内容的行为；WebAIM 将原生 `details`/`summary` 描述为具有内建可访问性，触发器具有类似按钮的功能，并向辅助技术呈现展开状态。\n\n但资料同时提醒存在差异：web.dev 提到 Safari 的键盘焦点顺序问题，也指出 `summary` 内嵌链接或其他交互元素时，不同浏览器可能采用不同的焦点及激活行为。\n\n**建议**：将这些提示作为测试线索，而不是推断所有版本必然如此；优先保持 `summary` 内容简单，避免把多个不同操作混在同一个披露触发器里。\n\n**未实测**：本文没有验证当前 Safari 的表现，也不能仅凭自定义披露示例中的 Space 规则，就断言原生元素在所有环境中具有完全相同的按键行为。\n\n## 4. 自定义披露的语义与状态责任\n\n**事实**：WebAIM 说明，披露组件可以用按钮、JavaScript 与 ARIA 实现。此时，展开与收起内容的触发器应采用标准按钮，并在按钮上设置 `aria-expanded=\"true\"` 或 `\"false\"`；脚本必须在每次状态变化时同步更新该值。\n\n链接主要表示导航，按钮主要执行操作。WebAIM 指出，两者键盘激活方式也有区别：按钮可用 Enter 或 Space，链接通常仅用 Enter。因此，用链接冒充展开按钮可能让操作含义和按键预期不一致。\n\n**建议**：只有原生结构不能满足实际需求时，再承担自定义实现的维护成本；让内容可见性与 `aria-expanded` 来自同一状态，避免两套逻辑分别更新。\n\n**未实测**：仅看到 ARIA 属性不证明实现正确，还需要检查状态变化、隐藏方式、焦点顺序，以及辅助技术的实际反馈。\n\n## 5. 焦点可达、可见与顺序\n\n**事实**：伊利诺伊大学示例将 Tab 定义为移动到下一个披露按钮，Shift+Tab 移动到前一个按钮，并提供不同焦点样式的体验选项。WebAIM 则警告：给普通文本容器添加点击处理，不会自动让它成为可以直接用键盘访问的控件。\n\n**建议**：触发器应进入自然的键盘导航顺序，焦点样式应足以辨认当前位置，不要移除默认轮廓后又没有提供替代样式。多个披露项的顺序宜与阅读顺序一致。\n\n焦点、展开状态和悬停状态是三个不同概念：一个已展开项目不一定拥有焦点，鼠标悬停样式也不能代替键盘焦点提示。\n\n**未实测**：现有资料没有证明某一种具体颜色、边框宽度或设计方案满足你的页面需求；必须在实际背景、缩放和内容密度下检查焦点是否清楚。\n\n## 6. 按键约定与重复激活风险\n\n**事实**：伊利诺伊大学的自定义披露示例明确列出：Tab、Shift+Tab 用于移动焦点，Space 和 Enter 用于打开或关闭内容。WebAIM 也支持按钮与链接的上述按键区别。\n\n**建议**：披露操作应遵循按钮已有的键盘行为，不要为了“增强支持”而无条件再绑定一套按键切换逻辑。若浏览器原有激活行为与额外处理同时触发，可能出现一次按键切换两次、最终看似没有变化的问题；这是需要排查的实现风险，不是资料已证明某个产品存在的缺陷。\n\n不要随意拦截 Tab，也不要默认把方向键、Escape 或 Home/End 变成披露组件的必需操作。\n\n**未实测**：四份资料没有为本文建立完整的方向键导航契约；是否需要这些按键，应由组件类型与需求决定，并单独验证。\n\n## 7. 状态提示与展开后的焦点处理\n\n**事实**：WebAIM 强调，屏幕阅读器用户需要知道触发器的功能及内容是展开还是收起；自定义组件的 `aria-expanded` 必须与实际可见性一致，并且资料描述了状态变化应被辅助技术告知的预期。\n\nweb.dev 与 MDN 还说明原生触发器通常带有可定制的标记。web.dev 建议即使移除默认标记，也应保留视觉线索，帮助用户理解内容能够切换。\n\n**建议**：不要只靠箭头方向传达含义，应同时提供明确标题与可靠状态语义；展开普通说明后，通常可让焦点留在触发器，由用户决定继续阅读或进入内容。\n\n**未实测**：自动把焦点移到展开内容并非这些资料建立的通用要求，具体朗读措辞也可能不同；焦点保留建议仍需结合任务流程验证。\n\n## 8. 长内容阅读与收起时的连续性\n\n**事实**：WebAIM 指出，收起区域中的链接、按钮等不应继续获得键盘焦点；否则用户可能进入不可见内容，丢失视觉焦点并难以判断当前位置。资料说明，`display:none` 或 `hidden` 可以同时在视觉与程序层面隐藏内容。\n\n**建议**：长内容不仅要能展开，还应有便于阅读的标题、段落与内部链接组织；不要把所有信息压成一个巨大、缺少层次的区域。展开后，用户应能按合理顺序进入其中的交互控件。\n\n若脚本在焦点位于内容内部时收起该区域，应明确处理焦点去向；通常可以考虑把焦点交还触发器，而不是留在已隐藏节点。\n\n**未实测**：四份资料没有直接验证上述焦点恢复策略；它属于针对隐藏焦点风险的设计建议，也不保证阅读位置或滚动位置在所有环境中保持不变。\n\n## 9. 渐进展开与多个披露项的关系\n\n**事实**：web.dev 给出了多个 `details` 构成折叠内容区域的方式，也展示了用户打开一个项目时通过脚本关闭其他项目的思路。默认省略 `open` 可以使内容初始收起，设置该属性则可以初始展开。\n\n**建议**：渐进展开适合减少次要信息的初始密度，但不宜隐藏完成核心任务必需的条件或重要限制。默认状态应依据用户任务决定，而不是一律收起。\n\n独立展开和单项展开各有用途：独立展开更方便同时比较多个答案；单项展开更紧凑，却可能让用户刚阅读的信息消失。应明确选择，并检查自动关闭是否影响焦点和阅读连续性。\n\n**未实测**：资料展示了实现可能性，但没有证明某种默认状态或互斥策略对所有用户更好，也没有提供支持嵌套披露层级数量的结论。\n\n## 10. 来源辨识与简短对照表\n\n**事实**：四份资料的关注点不同，不能相互替代。web.dev 偏重原生机制与浏览器注意事项；MDN 偏重元素定义与用法；伊利诺伊大学页面是自定义披露及焦点体验示例；WebAIM 着重解释常见可访问性问题。\n\n**建议**：引用时区分“元素文档”“示例操作规则”和“风险指导”，特别不要把自定义示例的所有行为直接套到原生控件上。\n\n| 对照项 | 原生 `details`/`summary` | 自定义披露 |\n|---|---|---|\n| 触发器 | `summary` | 优先标准按钮 |\n| 状态表达 | 原生机制提供 | 同步更新 `aria-expanded` |\n| 键盘责任 | 保留原生行为并验证差异 | 保留按钮行为并验证脚本 |\n| 内容隐藏 | 由原生展开状态控制 | 实现者保证隐藏与焦点一致 |\n| 主要风险 | 内嵌交互、样式与兼容性 | 状态失配、重复事件、隐藏焦点 |\n\n**未实测**：此表用于划分责任，不是兼容性测试报告；“原生”也不代表整个页面自动可访问。\n\n## 11. 用户验证与实际检查步骤\n\n**建议**：先进行纯键盘检查：从组件之前开始按 Tab，确认每个触发器可达且焦点可见；用 Shift+Tab 反向检查；对自定义按钮分别验证 Enter 与 Space；重复展开、收起，检查一次操作是否只产生一次预期状态变化。\n\n随后检查内容：收起时内部控件不进入焦点顺序，展开后能够到达；长内容可连续阅读，多个项目相互切换不会意外丢失上下文。再用实际目标环境中的屏幕阅读器检查名称、功能与状态反馈。\n\n邀请依赖键盘或辅助技术的用户完成真实任务，观察是否能发现内容、理解状态、找到需要的信息并返回原位置，而不只是询问“能不能点击”。\n\n**事实**：这些检查对应资料中的风险点，但具体步骤是本文建议。**未实测**：没有执行记录时，结果应标为“待验证”，不能填写“通过”。\n\n## 12. 错误处理、结论与已有来源\n\n**建议**：出现问题时，应先区分故障类型：无法聚焦、焦点不可见、按键无响应、重复切换、状态反馈错误、隐藏内容仍可聚焦，或自动收起导致上下文丢失。修复应针对实际原因，而不是简单叠加更多事件处理器。\n\n对于自定义披露，若脚本失败，正文不应因此永久不可获取；应设计可检查的渐进增强路径。这是工程建议，四份资料没有直接证明任何具体异常恢复实现。验证记录应写清环境、操作、预期、实际结果与修复状态，并保持未解决的问题可见。\n\n**结论**：原生结构可以减少实现责任，自定义结构则必须自行保证语义、状态、按键与隐藏逻辑一致；两者都需要在实际交付页面验证，文档描述不能替代测试。\n\n**已有真实来源**：\n\n1. [Details and summary | web.dev](https://web.dev/learn/html/details)：原生机制、布尔属性、标记与浏览器差异提示。\n2. [\\<summary> HTML disclosure summary element - HTML | MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary)：元素角色、位置要求及示例。\n3. [Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts](https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html)：自定义披露按键与焦点样式体验。\n4. [WebAIM: Disclosures and Accordions](https://webaim.org/techniques/disclosures/)：按钮语义、展开状态与隐藏焦点等常见问题。\n\n以上仅使用已有检索返回内容，没有重新读取页面；来源中未覆盖或本文未执行的事项均不构成已验证结论。",
+      "textChars": 5146,
+      "time": {
+        "start": 1791627658071,
+        "end": 1791627742241
+      }
+    },
+    {
+      "id": "prt_g0VXdnQFW003qIatIFm8",
+      "messageID": "msg_g0VXdn2ja00jgo1HwLxM",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXdmZSQ00g7KDuwaZ8",
+      "message_id": "msg_g0VXdmYcd00fOovstCrB",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_d3b061ee41bd4110a7bfe35ff8efcfc6\",\"tool\":\"external_code_search\",\"input\":{\"query\":\"HTML details summary keyboard interaction examples\",\"numResults\":4},\"time\":{\"start\":1791627539710}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXdmZSQ00g7KDuwaZ8",
+      "outcome": "completed",
+      "resultAttemptID": "per_hCygqlKMxw7IycU5nab3",
+      "outputChars": 14480,
+      "output": "Title: Details and summary  |  web.dev\nURL: https://web.dev/learn/html/details\nCode/Highlights:\nThe ` ` and ` ` elements are all you need: they are a built-in way to handle expanding and collapsing content. When a user clicks or taps a ` `, or releases the Enter key when the ` ` has focus, the contents of the parent ` ` toggle to visible.\n...\nThe ` ` element is the disclosure widget container. The ` ` is the summary or legend for its parent ` `. The summary is always displayed, acting as a button that toggles the display of the rest of the parent's contents. Interacting with the ` ` toggles the display of the self-labeled summary siblings by toggling the ` `' element's `open` attribute.\n\nThe `open` attribute is a boolean attribute. If present, no matter the value or lack thereof, it indicates that all the ` ` contents are shown to the user. If the `open` attribute is not present, only the contents of the ` ` are shown.\n...\nYou can create an accordion with a list of multiple ` ` elements, each with a ` ` child. Omitting the `open` attribute in your HTML means the ` ` will all be collapsed, or closed, with just the summary headings visible when the page loads; each heading being the opener for the rest of the contents in the parent ` `. If you include the `open` attribute in your HTML, ` ` renders expanded, with the contents visible, when the page loads.\n...\nIn the two earlier Codepens, there's an arrow to the inline-start side of the summary. An expander arrow is typically presented on-screen, a small triangle that rotates (or twists) to indicate open or closed status and a label next to the triangle. The contents of the ` ` element label the disclosure widget.\n\nThe rotating arrow at the top of each section is a `::marker` set on the ` ` element. Like list items, the ` ` element supports the `list-style` shorthand property and its longhand properties, including `list-style-type`. You can style the disclosure triangle with CSS, including changing the marker used from a triangle to any other bullet type, including an image with `list-style-image`.\n\nTo apply other styles, use a selector similar to `details summary::marker`. The `::marker` pseudo-element only accepts a limited number of styles. Removing the `::marker` and replacing it with the easier-to-style `::before` is common practice, with CSS styles changing the style of the generated content slightly based on the presence (or absence) of the open attribute. You can remove the disclosure widget icon by setting `list-style: none` or set the content of the marker to `none`, but you should always include visual indicators to inform sighted users that the summary content toggles to show and hide content.\n\n```\ndetails summary::before {\n  /* all the styles */\n}\ndetails[open] summary::before {\n  /* changes applied when open only */\n}\n...\nThis example removes the default marker, and adds generated content to create a `+` when the details are closed and a `-` when the details are open.\n\nIf you want the details block open by default, include the `open` attribute on the opening ` ` tag. You can also add space between each dialog and transition the rotation of the marker created with generated content to improve the appearance:\n...\nIf you don't include a ` `, the browser creates one for you, with a marker and the word \"details\". This summary is part of a shadow root, and therefore doesn't have author CSS summary styles applied.\n\nNote: Unfortunately, Safari does not include the details in the keyboard focus order.\n\nIf you do include a ` `, but it's not the first element in the ` `, the browser still displays the summary as it should. It won't fail if you include a link, label, or other interactive element within the summary but browsers handle interactive content within interactive content differently.\n\nFor example, if you include a link in a summary, some browsers add both the summary and the link to the default tabbing order, but other browsers don't focus on the link by default. If you click a ` ` nested in a ` `, some browsers give focus to the associated form control. Other browsers give focus to the form control and toggle the ` ` open or closed.\n...\nLike all HTML elements, the `HTMLDetailsElement` inherits all properties, methods, and events from `HTMLElement`, and adds the `open` instance property and a `toggle` event. The `HTMLDetailsElement.open` property is a boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) are to be shown to the user. The toggle event is fired when the ` ` element is toggled open or closed. You can listen to this event using `addEventListener()`.\n\nIf you want to write a script to close the opened details when the user opens any other details, remove the open attribute using `removeAttribute(\"open\")`:\n...\nThe ` ` must be the first child of which element?\n\n---\n\nTitle: <summary> HTML disclosure summary element - HTML | MDN\nURL: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary\nCode/Highlights:\nThe ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n\n```\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n...\nBelow are some examples showing ` ` in use. You can find more examples in the documentation for the ` ` element.\n...\n```\n<details open>\n  <summary>Overview</summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\n```\n<details open>\n  <summary><h4>Overview</h4></summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\n### HTML in summaries\n\nThis example adds some semantics to the ` ` element to indicate the label as important:\n\n```\n<details open>\n  <summary><strong>Overview</strong></summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\nThe ` ` element's marker, the disclosure triangle, can be customized with CSS. The marker can be targeted using the `::marker` pseudo-element. which accepts the `list-style` shorthand property and its longhand component properties, such as `list-style-type`. This enables changing the triangle to an image (usually with `list-style-image`) or a string (including emojis). In this example, we replace the content of one disclosure widget and remove the icon from another by setting `list-style: none` before adding a custom disclosure icon via generated content.\n...\nstyle the `::marker`, changing ... ` ` element ... styled generated content with ... `::after ... element. We also include ... `::-webkit-details-marker` to target Safari ... browser-specific pseudo ... `:is()` pseudo-class so it doesn\n...\n```\n<h1>Quotes from Helen Keller</h1>\n\n<details>\n  <summary>On women's rights</summary>\n  <p>\n    <q>We have prayed, we have coaxed, we have begged, for the vote, with the\n      hope that men, out of chivalry, would bestow equal rights upon women and\n      take them into partnership in the affairs of the state. We hoped that\n      their common sense would triumph over prejudices and stupidity. We thought\n      their boasted sense of justice would overcome the errors that so often\n      fetter the human spirit; but we have always gone away empty-handed. We\n      shall beg no more.</q>\n  </p>\n</details>\n\n<details>\n  <summary>On optimism</summary>\n  <p>\n    <q>Optimism is the faith that leads to achievement; nothing can be done\n      without hope.</q>\n  </p>\n</details>\n\n---\n\nTitle: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts\nURL: https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html\nCode/Highlights:\nThe following example demonstrates the keyboard support for the [APG disclosure button](https://w3c.github.io/aria-practices/#disclosure) design pattern to create a set of frequently asked questions where the answers may be independently shown or hidden. The example includes options to experience several keyboard focus styling techniques and their impact on perceivability of which element has keyboard focus.\n## Keyboard Support\n|Key|Optional|Function|\n|Tab||Move to next disclosure button.|\n|Shift+Tab||Move to previous disclosure button.|\n|Space and\nEnter||Open or close an FAQ discription.|\n## Example Options\nKeyboard Support and Focus Styling Options for Parking FAQ disclosure buttons\n*\nNo keyboard support\n*\nDisabled focus styling\n*\nDefault focus styling\n*\nAuthor focus styling\n...\nWhat do I do if I have a permit for an assigned lot, but can't find a space there?\nPark at the nearest available parking meter without paying the meter\nand call 999-999-9999 to report the problem. We will note and approve your alternate\nlocation and will investigate the cause of the shortage in your assigned facility.\nWhat do I do if I lose my permit or if my permit is stolen?\nYou should come to the Parking office and report the\nloss. There is a fee to replace your lost permit. However, if your permit was stolen, a\ncopy of a police report needs to be submitted along with a stolen parking permit form for a fee replacement exemption.\nIs there free parking on holidays?\nAll facilities are restricted from 2:00 am - 6:00 am on all days. No\nexceptions are made for any holiday or recess except those officially listed as a\n> Holidays\nin the calendar. Please note: 24-hour rental spaces, 24-hour rental lots, and\ndisabled parking is enforced at all times.\nDo all parking facilities have the same enforcement rules?\nSome parking facility restrictions differ from others. Be sure to\ntake note of the signs at each lot entrance.\n\n---\n\nTitle: WebAIM: Disclosures and Accordions\nURL: https://webaim.org/techniques/disclosures/\nCode/Highlights:\nbutton that togg ... the visibility of\n...\nA disclosure widget can be made using buttons, JavaScript, and ARIA, or simply by using HTML ` ` and ` ` elements.\n\nThis is the summary of the disclosure\n\nAnd here are the details of the disclosure!\n\n This is the summary of the disclosure And here are the details of the disclosure! \n\nThe ` ` element can be given an `open` attribute to cause the summary to be visible by default.\n...\nDisclosures and accordions created using ` ` and ` ` have built-in accessibility. The ` ` element properly functions like a button, and the expanded state (open or closed) is presented to assistive technologies. The problems below only occur when other elements or scripting are used.\n\nDisclosures and accordions created using buttons, JavaScript, and ARIA can be implemented incorrectly and create accessibility issues. Below are some common issues and how to address them.\n\n### Triggers cannot receive keyboard focus\n\nSometimes, elements that are not meant to be interactive (e.g., ` `, ` `, or ` ` without the `href` attribute) are made interactive through JavaScript event handlers like `onclick`. If one of these is made into the trigger element for a content area, keyboard and screen reader users are unable to directly navigate to it. The best way to solve this problem is to use a standard ` ` element as the trigger element.\n\n### Triggers are not buttons\n\nThe trigger element that expands and collapses the content area should be coded as a standard ` `. Sometimes the trigger element is incorrectly coded as a link. Using links as trigger elements can make navigation confusing for keyboard and screen reader users. Links are about navigation, for example navigating to a new page or to a particular place in a page. Buttons are about function, for example expanding and collapsing a content area.\n\nLinks also have different keyboard interactions than buttons. Buttons can be activated with Enter or Spacebar, but links are only activated by Enter.\n...\nScreen reader users need to be informed of the trigger's function and whether the content area is expanded or collapsed. Disclosures made with the HTML ` `/` ` elements have this functionality built in. Disclosures and accordions made with ARIA must have the `aria‑expanded=\"true|false\"` attribute applied to the trigger button.\n\nScripting must be used to dynamically update the `aria‑expanded=\"true|false\"` attribute value each time the trigger button is activated, or it can become inaccurate. The attribute value must always align with the state of the content visibility.\n\nHere's an example of a dynamically updating disclosure. You can use a screen reader to test if the trigger button correctly indicates the state of a content area. You can also monitor the attribute value in browser Developer Tools.\n\nWhen the trigger button of an expanded content area receives keyboard focus, a screen reader should announce \"expanded\" or \"collapsed\", in addition to the text of the trigger button. This not only indicates the current state, but indicates to the user that activating the button will change the state to the opposite value.\n\nWhen the user activates the trigger button and changes the state of the content area, a screen reader should announce the new state. So if the user activates the trigger button of a collapsed content area, expanding the content area, a screen reader should announce \"expanded\".\n\n### Elements in collapsed content areas receive keyboard focus\n\nContent areas may contain elements that can receive keyboard focus, most commonly links or buttons. Incorrectly implemented disclosures and accordions can have elements in their content areas that receive keyboard focus while the content area containing them is collapsed and the contents visually hidden. This results in the visual focus indicators being lost. This can confuse users and cause them to lose their place.\n\nWhen the content area is collapsed, the contents should not be accessible, including elements that otherwise could receive keyboard focus. Using CSS `display:none` or the `hidden` attribute will visually and programmatically hide the contents.",
+      "metadata": {
+        "provider": "exa",
+        "mcpResult": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Title: Details and summary  |  web.dev\nURL: https://web.dev/learn/html/details\nCode/Highlights:\nThe ` ` and ` ` elements are all you need: they are a built-in way to handle expanding and collapsing content. When a user clicks or taps a ` `, or releases the Enter key when the ` ` has focus, the contents of the parent ` ` toggle to visible.\n...\nThe ` ` element is the disclosure widget container. The ` ` is the summary or legend for its parent ` `. The summary is always displayed, acting as a button that toggles the display of the rest of the parent's contents. Interacting with the ` ` toggles the display of the self-labeled summary siblings by toggling the ` `' element's `open` attribute.\n\nThe `open` attribute is a boolean attribute. If present, no matter the value or lack thereof, it indicates that all the ` ` contents are shown to the user. If the `open` attribute is not present, only the contents of the ` ` are shown.\n...\nYou can create an accordion with a list of multiple ` ` elements, each with a ` ` child. Omitting the `open` attribute in your HTML means the ` ` will all be collapsed, or closed, with just the summary headings visible when the page loads; each heading being the opener for the rest of the contents in the parent ` `. If you include the `open` attribute in your HTML, ` ` renders expanded, with the contents visible, when the page loads.\n...\nIn the two earlier Codepens, there's an arrow to the inline-start side of the summary. An expander arrow is typically presented on-screen, a small triangle that rotates (or twists) to indicate open or closed status and a label next to the triangle. The contents of the ` ` element label the disclosure widget.\n\nThe rotating arrow at the top of each section is a `::marker` set on the ` ` element. Like list items, the ` ` element supports the `list-style` shorthand property and its longhand properties, including `list-style-type`. You can style the disclosure triangle with CSS, including changing the marker used from a triangle to any other bullet type, including an image with `list-style-image`.\n\nTo apply other styles, use a selector similar to `details summary::marker`. The `::marker` pseudo-element only accepts a limited number of styles. Removing the `::marker` and replacing it with the easier-to-style `::before` is common practice, with CSS styles changing the style of the generated content slightly based on the presence (or absence) of the open attribute. You can remove the disclosure widget icon by setting `list-style: none` or set the content of the marker to `none`, but you should always include visual indicators to inform sighted users that the summary content toggles to show and hide content.\n\n```\ndetails summary::before {\n  /* all the styles */\n}\ndetails[open] summary::before {\n  /* changes applied when open only */\n}\n...\nThis example removes the default marker, and adds generated content to create a `+` when the details are closed and a `-` when the details are open.\n\nIf you want the details block open by default, include the `open` attribute on the opening ` ` tag. You can also add space between each dialog and transition the rotation of the marker created with generated content to improve the appearance:\n...\nIf you don't include a ` `, the browser creates one for you, with a marker and the word \"details\". This summary is part of a shadow root, and therefore doesn't have author CSS summary styles applied.\n\nNote: Unfortunately, Safari does not include the details in the keyboard focus order.\n\nIf you do include a ` `, but it's not the first element in the ` `, the browser still displays the summary as it should. It won't fail if you include a link, label, or other interactive element within the summary but browsers handle interactive content within interactive content differently.\n\nFor example, if you include a link in a summary, some browsers add both the summary and the link to the default tabbing order, but other browsers don't focus on the link by default. If you click a ` ` nested in a ` `, some browsers give focus to the associated form control. Other browsers give focus to the form control and toggle the ` ` open or closed.\n...\nLike all HTML elements, the `HTMLDetailsElement` inherits all properties, methods, and events from `HTMLElement`, and adds the `open` instance property and a `toggle` event. The `HTMLDetailsElement.open` property is a boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) are to be shown to the user. The toggle event is fired when the ` ` element is toggled open or closed. You can listen to this event using `addEventListener()`.\n\nIf you want to write a script to close the opened details when the user opens any other details, remove the open attribute using `removeAttribute(\"open\")`:\n...\nThe ` ` must be the first child of which element?\n\n---\n\nTitle: <summary> HTML disclosure summary element - HTML | MDN\nURL: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary\nCode/Highlights:\nThe ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n\n```\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n...\nBelow are some examples showing ` ` in use. You can find more examples in the documentation for the ` ` element.\n...\n```\n<details open>\n  <summary>Overview</summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\n```\n<details open>\n  <summary><h4>Overview</h4></summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\n### HTML in summaries\n\nThis example adds some semantics to the ` ` element to indicate the label as important:\n\n```\n<details open>\n  <summary><strong>Overview</strong></summary>\n  <ol>\n    <li>Cash on hand: $500.00</li>\n    <li>Current invoice: $75.30</li>\n    <li>Due date: 5/6/19</li>\n  </ol>\n</details>\n...\nThe ` ` element's marker, the disclosure triangle, can be customized with CSS. The marker can be targeted using the `::marker` pseudo-element. which accepts the `list-style` shorthand property and its longhand component properties, such as `list-style-type`. This enables changing the triangle to an image (usually with `list-style-image`) or a string (including emojis). In this example, we replace the content of one disclosure widget and remove the icon from another by setting `list-style: none` before adding a custom disclosure icon via generated content.\n...\nstyle the `::marker`, changing ... ` ` element ... styled generated content with ... `::after ... element. We also include ... `::-webkit-details-marker` to target Safari ... browser-specific pseudo ... `:is()` pseudo-class so it doesn\n...\n```\n<h1>Quotes from Helen Keller</h1>\n\n<details>\n  <summary>On women's rights</summary>\n  <p>\n    <q>We have prayed, we have coaxed, we have begged, for the vote, with the\n      hope that men, out of chivalry, would bestow equal rights upon women and\n      take them into partnership in the affairs of the state. We hoped that\n      their common sense would triumph over prejudices and stupidity. We thought\n      their boasted sense of justice would overcome the errors that so often\n      fetter the human spirit; but we have always gone away empty-handed. We\n      shall beg no more.</q>\n  </p>\n</details>\n\n<details>\n  <summary>On optimism</summary>\n  <p>\n    <q>Optimism is the faith that leads to achievement; nothing can be done\n      without hope.</q>\n  </p>\n</details>\n\n---\n\nTitle: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts\nURL: https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html\nCode/Highlights:\nThe following example demonstrates the keyboard support for the [APG disclosure button](https://w3c.github.io/aria-practices/#disclosure) design pattern to create a set of frequently asked questions where the answers may be independently shown or hidden. The example includes options to experience several keyboard focus styling techniques and their impact on perceivability of which element has keyboard focus.\n## Keyboard Support\n|Key|Optional|Function|\n|Tab||Move to next disclosure button.|\n|Shift+Tab||Move to previous disclosure button.|\n|Space and\nEnter||Open or close an FAQ discription.|\n## Example Options\nKeyboard Support and Focus Styling Options for Parking FAQ disclosure buttons\n*\nNo keyboard support\n*\nDisabled focus styling\n*\nDefault focus styling\n*\nAuthor focus styling\n...\nWhat do I do if I have a permit for an assigned lot, but can't find a space there?\nPark at the nearest available parking meter without paying the meter\nand call 999-999-9999 to report the problem. We will note and approve your alternate\nlocation and will investigate the cause of the shortage in your assigned facility.\nWhat do I do if I lose my permit or if my permit is stolen?\nYou should come to the Parking office and report the\nloss. There is a fee to replace your lost permit. However, if your permit was stolen, a\ncopy of a police report needs to be submitted along with a stolen parking permit form for a fee replacement exemption.\nIs there free parking on holidays?\nAll facilities are restricted from 2:00 am - 6:00 am on all days. No\nexceptions are made for any holiday or recess except those officially listed as a\n> Holidays\nin the calendar. Please note: 24-hour rental spaces, 24-hour rental lots, and\ndisabled parking is enforced at all times.\nDo all parking facilities have the same enforcement rules?\nSome parking facility restrictions differ from others. Be sure to\ntake note of the signs at each lot entrance.\n\n---\n\nTitle: WebAIM: Disclosures and Accordions\nURL: https://webaim.org/techniques/disclosures/\nCode/Highlights:\nbutton that togg ... the visibility of\n...\nA disclosure widget can be made using buttons, JavaScript, and ARIA, or simply by using HTML ` ` and ` ` elements.\n\nThis is the summary of the disclosure\n\nAnd here are the details of the disclosure!\n\n This is the summary of the disclosure And here are the details of the disclosure! \n\nThe ` ` element can be given an `open` attribute to cause the summary to be visible by default.\n...\nDisclosures and accordions created using ` ` and ` ` have built-in accessibility. The ` ` element properly functions like a button, and the expanded state (open or closed) is presented to assistive technologies. The problems below only occur when other elements or scripting are used.\n\nDisclosures and accordions created using buttons, JavaScript, and ARIA can be implemented incorrectly and create accessibility issues. Below are some common issues and how to address them.\n\n### Triggers cannot receive keyboard focus\n\nSometimes, elements that are not meant to be interactive (e.g., ` `, ` `, or ` ` without the `href` attribute) are made interactive through JavaScript event handlers like `onclick`. If one of these is made into the trigger element for a content area, keyboard and screen reader users are unable to directly navigate to it. The best way to solve this problem is to use a standard ` ` element as the trigger element.\n\n### Triggers are not buttons\n\nThe trigger element that expands and collapses the content area should be coded as a standard ` `. Sometimes the trigger element is incorrectly coded as a link. Using links as trigger elements can make navigation confusing for keyboard and screen reader users. Links are about navigation, for example navigating to a new page or to a particular place in a page. Buttons are about function, for example expanding and collapsing a content area.\n\nLinks also have different keyboard interactions than buttons. Buttons can be activated with Enter or Spacebar, but links are only activated by Enter.\n...\nScreen reader users need to be informed of the trigger's function and whether the content area is expanded or collapsed. Disclosures made with the HTML ` `/` ` elements have this functionality built in. Disclosures and accordions made with ARIA must have the `aria‑expanded=\"true|false\"` attribute applied to the trigger button.\n\nScripting must be used to dynamically update the `aria‑expanded=\"true|false\"` attribute value each time the trigger button is activated, or it can become inaccurate. The attribute value must always align with the state of the content visibility.\n\nHere's an example of a dynamically updating disclosure. You can use a screen reader to test if the trigger button correctly indicates the state of a content area. You can also monitor the attribute value in browser Developer Tools.\n\nWhen the trigger button of an expanded content area receives keyboard focus, a screen reader should announce \"expanded\" or \"collapsed\", in addition to the text of the trigger button. This not only indicates the current state, but indicates to the user that activating the button will change the state to the opposite value.\n\nWhen the user activates the trigger button and changes the state of the content area, a screen reader should announce the new state. So if the user activates the trigger button of a collapsed content area, expanding the content area, a screen reader should announce \"expanded\".\n\n### Elements in collapsed content areas receive keyboard focus\n\nContent areas may contain elements that can receive keyboard focus, most commonly links or buttons. Incorrectly implemented disclosures and accordions can have elements in their content areas that receive keyboard focus while the content area containing them is collapsed and the contents visually hidden. This results in the visual focus indicators being lost. This can confuse users and cause them to lose their place.\n\nWhen the content area is collapsed, the contents should not be accessible, including elements that otherwise could receive keyboard focus. Using CSS `display:none` or the `hidden` attribute will visually and programmatically hide the contents.",
+              "_meta": {
+                "searchTime": 260.7
+              }
+            }
+          ]
+        },
+        "truncated": false
+      },
+      "time": {
+        "end": 1791627540997
+      }
+    }
+  ]
+}

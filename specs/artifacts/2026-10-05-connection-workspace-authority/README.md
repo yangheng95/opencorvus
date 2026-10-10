@@ -629,3 +629,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [原Research Studio来源277](research-source-277/README.md) / [Recall](research-source-plan-277.md)：精确原Task/209URL事实、当前闭合与旧schema障碍；既有压缩修复13项后端复核，原UI未验。
 
 - [Side来源/术语误动作278](side-source-live-278/README.md) / [Recall](side-source-live-plan-278.md)：真实404修共享文件引用识别，普通代码与明确文件目标after人工通过；实时返回及原子侧栏未验。
+
+- [同一Side实时固定阅读279](side-reading-return-279/README.md) / [Recall](side-reading-return-plan-279.md)：恰好同reader内close/reopen、source/内外阅读保持与后续增长人工复核，01未捕到保留，原子侧栏全帧未验。
