@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-10T04:04:57.5556743Z",
+  "occurrence": "source-whole-265-live-01-a66deacb-ad90-42d4-a172-665b307f7d59",
+  "owner": {
+    "pid": 77968,
+    "processInstanceID": "win32:639272012987920575",
+    "occurrenceID": "cb49e9d9-b77a-47a0-90e5-9539260a2ac7"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXcGPEr006jQcMETJs"
+  }
+}

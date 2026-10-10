@@ -1,0 +1,205 @@
+Browser tab: 112, Title: "OpenCorvus", URL: "http://localhost:18203/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18203/ui/
+	2 container overlayAppHost
+		3 container titlebar
+			4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		10 container panelBody
+			11 container Description: Chat shortcuts, ID: workspaceNavigation
+				12 container Chat shortcuts
+					13 button Chats
+					14 button Mission Board
+					15 button Scheduled
+					16 button Expert Squads
+					17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					18 button Settings
+				19 button About
+				20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			21 container workspacePageStack
+				22 container leftActivityShell
+					23 container workspaceContextbar
+						24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						25 button Search chats or run a command
+						26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					27 container sidebar
+						28 container workLedgerPanel
+							29 container Chat navigation
+								30 button New chat
+							31 container workLedgerProjectsScroll
+								32 text Projects
+								33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								65 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									67 container
+										68 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										69 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										70 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+									71 button (expanded) Description: Collapse Anonymous 229011, Secondary Actions: Collapse
+									72 container
+										73 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										74 button Reply with OK.
+										75 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+								76 container Recents
+									77 text Recents
+									78 container
+										79 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										80 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										81 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+									82 container
+										83 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										84 button Reply with OK.
+										85 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+						36 container Connection Diagnostics
+							37 container Description: Connection Diagnostics · Online · Port 18203, ID: connBadge
+								38 text Online
+				39 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				87 container workspaceMain
+					88 container chatSection
+						89 container Description: Loading task, ID: taskSwitchProgress
+						90 container
+							91 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+							92 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
+							93 container Description: Not running, ID: taskStatus
+								94 text Not running
+							95 button Side chat
+							96 container solidChatHeaderRuntimeActions
+								97 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								98 checkbox Description: Close right dock, Value: 1
+						99 container
+							100 container Description: Conversation, ID: chatScroll
+								101 container
+									102 container
+										103 text User
+										104 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts：第一次 offset=27、limit=11；第二次 offset=1、limit=1000，读取整文件。然后用中文各用一句话概述，并保留两个真实文件来源供点击。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+									105 container
+										106 text work
+										107 text 15s
+										108 container
+											109 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+												110 text read
+												111 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+												112 image
+											113 container Sources
+												114 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+													115 text read.ts:27-37
+													116 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+										117 container
+											118 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
+												119 text read
+												120 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
+												121 image
+											122 container Sources
+												123 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+													124 text read.ts
+													125 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+										126 container
+											127 text 第一次读取了
+											128 link Description: read.ts, Value: localhost:18203/ui/#
+											129 text  第 27–37 行，其中
+											130 text citedReadRange
+											131 text  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。 第二次读取了
+											132 link Description: read.ts, Value: localhost:18203/ui/#
+											133 text  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
+										134 button Copy message
+										135 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+										136 pop up button (collapsed) Description: View model usage for this turn: 100K Token, Secondary Actions: Expand
+										137 text Oct 10, 11:57 AM
+							138 container chatHomeComposition
+								139 container solidChatComposer
+									140 container chatForm
+										141 splitter Description: Drag to resize the message input, Value: 42
+										142 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+										143 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+										144 text Work
+										145 text Chat
+										146 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+										147 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+										148 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+											149 text openai/gpt-6.1-sol
+										150 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+									151 button Scroll to bottom
+					152 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					153 container Description: Tools panel, ID: rightDock
+						154 container tabs-cl-64
+							155 tab group Open tools
+								156 container
+									157 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
+									158 button Description: Close tab, Help: Close tab (Delete)
+							159 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							160 button Close panel
+							161 container Description: File, ID: centerWorkbenchFile
+								162 container Editor
+									163 container
+										164 text tool/read.ts
+										165 button (disabled) Save, Help: Save (Ctrl/Cmd+S)
+										166 button Reload from disk
+										167 button Close workspace
+									168 container
+										169 text entry area Description: Editor, Value: import z from "zod"
+import * as path from "path"
+import { Tool } from "./tool"
+import { FileTime } from "../file/time"
+import DESCRIPTION from "./read.txt"
+import { Instance } from "../project/instance"
+import { assertExternalDirectory } from "./external-directory"
+import { InstructionPrompt } from "../session/instruction"
+import { Filesystem } from "../util/filesystem"
+import { AttachmentStore } from "../storage/attachment-store"
+import { redactInlinePayloads } from "../util/inline-base64"
+import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+											170 container
+												171 text import z from "zod"
+											172 container
+												173 text import * as path from "path"
+											174 container
+												175 text import  {  Tool  }  from "./tool"
+											176 container
+												177 text import  {  FileTime  }  from "../file/time"
+											178 container
+												179 text import DESCRIPTION from "./read.txt"
+											180 container
+												181 text import  {  Instance  }  from "../project/instance"
+											182 container
+												183 text import  {  assertExternalDirectory  }  from "./external-directory"
+											184 container
+												185 text import  {  InstructionPrompt  }  from "../session/instruction"
+											186 container
+												187 text import  {  Filesystem  }  from "../util/filesystem"
+											188 container
+												189 text import  {  AttachmentStore  }  from "../storage/attachment-store"
+											190 container
+												191 text import  {  redactInlinePayloads  }  from "../util/inline-base64"
+											192 container
+												193 text import  {  DEFAULT_TEXT_FILE_LIMIT ,  isBinaryBytes ,  readTextFilePageContent ,  renderTextFilePage  }  from "./text-file"
+											194 container
+												195 text import  {  executionFiles  }  from "./execution-files"
+											196 container
+												197 text import  {  fileSource  }  from "./source"
+											198 container
+												199 text const DEFAULT_READ_LIMIT  =  DEFAULT_TEXT_FILE_LIMIT
+											200 text /**
+									201 text TypeScript
+
+The focused UI element is 114 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37

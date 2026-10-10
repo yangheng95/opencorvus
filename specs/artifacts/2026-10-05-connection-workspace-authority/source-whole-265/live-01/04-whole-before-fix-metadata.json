@@ -1,0 +1,26 @@
+{
+  "active": {
+    "label": "Open source file: D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\tool\\read.ts",
+    "tag": "BUTTON"
+  },
+  "bands": [
+    "export function citedReadRange(page: {",
+    "  offset: number",
+    "  lines: number",
+    "  lastReadLine: number",
+    "  truncated: boolean",
+    "}): { range: { startLine: number; endLine: number } } | undefined {",
+    "  if (page.lines <= 0) return undefined",
+    "  if (page.offset === 1 && !page.truncated) return undefined",
+    "  return { range: { startLine: page.offset, endLine: page.lastReadLine } }",
+    "}",
+    ""
+  ],
+  "editor": [
+    {
+      "editable": "false",
+      "readonly": "true"
+    }
+  ],
+  "observedAtUtc": "2026-10-10T03:58:56.003Z"
+}

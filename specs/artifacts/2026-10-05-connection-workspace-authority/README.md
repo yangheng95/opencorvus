@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [整文件265 Recall](source-whole-plan-265.md) / [旧band与真实修复](source-whole-265/README.md)：Sol自然有/无range来源，唯一effect清空与原阅读保持，6EOF/Native0。
+
 - [隐藏定位264 Recall](source-range-plan-264.md) / [原失败与最终修复](source-range-264/README.md)：唯一测量/reveal管线，真实同Source重开206及阅读resize保持，原预算闭合。
 
 - [只读来源263 Recall](source-range-plan-263.md) / [修复与原失败](source-range-263/README.md)：共享只读焦点入口及实际键盘/范围验收，整Dock重开仍失败且继续。

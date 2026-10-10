@@ -230,6 +230,10 @@ same range after layout becomes visible. CodeMirror's measure phase confirms
 usable layout and finished finite host motion before scheduling the reveal
 outside the library's update phase. Completed request identity prevents
 ordinary resizing from replacing the user's subsequent reading position.
+An explicit whole-file source has no line range. Switching the retained view
+to that source clears the prior citation band through the same decoration
+effect while preserving its cursor and reading position; its current request
+identity still includes the existing reveal revision.
 The file pane uses the existing forced tab mount so hiding the Dock or selecting
 another tool retains that single draft owner and its navigation guard. Closing
 the file still clears the canonical target after the guard resolves.

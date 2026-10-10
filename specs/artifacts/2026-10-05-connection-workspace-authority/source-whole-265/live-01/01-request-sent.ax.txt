@@ -1,0 +1,19 @@
+Browser tab: 112, Title: "OpenCorvus", URL: "http://localhost:18203/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 44-45, 50-54, 59-63
++					77 container
++						78 text Work
++						79 button Side chat
++						80 container solidChatHeaderRuntimeActions
++							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							82 checkbox Description: Open right dock, Value: 0
+~								48 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~								49 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								83 text Work
++								84 text Chat
++								85 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
+~								55 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+~									57 text Choose model
+~								58 button (disabled) Description: Send, Help: Your message is being processed., ID: chatSend
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18203/ui/

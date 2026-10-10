@@ -56,7 +56,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
 
   const revealIdentity = () => {
     const range = local.lineRange
-    return range ? [local.path, range.startLine, range.endLine, local.lineRangeRevealRevision ?? 0].join("\0") : ""
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
   }
 
   /**
@@ -76,14 +76,15 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   const revealLineRange = () => {
     const editor = view
     if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
     const range = local.lineRange
     const target = resolveRevealTarget(editor.state.doc.lines, range)
     if (!range || !target) {
-      revealedIdentity = ""
+      editor.dispatch({ effects: revealLinesEffect(null) })
+      revealedIdentity = range ? "" : identity
       return
     }
-    const identity = revealIdentity()
-    if (identity === revealedIdentity) return
     // A retained file view can receive a new citation before its Dock is
     // visible. Keep that request unsettled until real layout can scroll and
     // focus it; the host observer retries this same current request.
