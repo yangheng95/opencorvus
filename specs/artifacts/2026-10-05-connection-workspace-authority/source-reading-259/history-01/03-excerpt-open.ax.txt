@@ -1,0 +1,275 @@
+Browser tab: 104, Title: "OpenCorvus", URL: "http://localhost:18197/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18197/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									36 container
+										37 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										38 button 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+										39 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+									40 button (expanded) Description: Collapse Anonymous ae6aad, Secondary Actions: Collapse
+									41 container
+										42 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										43 button Reply with OK.
+										44 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+								45 container Recents
+									46 text Recents
+									47 container
+										48 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										49 button 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+										50 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+									51 container
+										52 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										53 button Reply with OK.
+										54 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						55 container Connection Diagnostics
+							56 container Description: Connection Diagnostics · Online · Port 18197, ID: connBadge
+								57 text Online
+				58 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				59 container chatSection
+					60 container Description: Loading task, ID: taskSwitchProgress
+					61 container
+						62 text 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+						63 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-216-trigger, Secondary Actions: Expand
+						64 container Description: Not running, ID: taskStatus
+							65 text Not running
+						66 button Side chat
+						67 container solidChatHeaderRuntimeActions
+							68 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							69 checkbox Description: Open right dock, Value: 0
+					70 container
+						71 container Description: Conversation, ID: chatScroll
+							72 container
+								73 container
+									74 text User
+									75 text 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释键盘焦点与 Sources 阅读体验的具体建议。区分文档事实与产品评审建议，不把建议说成已经实现的功能。请在当前普通对话中完成，不创建任务、不委托agent、不生成或修改本地文件。
+								76 container
+									77 text work
+									78 text 1m 1s
+									79 container
+										80 text 我会只读检索并核对 MDN 官方资料，先给出简短结论和真实来源，再用八段说明键盘焦点与 Sources 阅读体验的具体建议，明确区分文档事实和产品评审建议。
+										81 button (collapsed) Description: websearch · Web search: site:developer.mozilla.org CSS :focus-visible, Secondary Actions: Expand
+											82 text websearch
+											83 text Web search: site:developer.mozilla.org CSS :focus-visible
+											84 image
+										85 container Sources
+											86 button (expanded) Description: Sources: focus-visible CSS pseudo-class - MDN Web Docs (5), Help: focus-visible CSS pseudo-class - MDN Web Docs 5, Secondary Actions: Collapse
+												87 text focus-visible CSS pseudo-class - MDN Web Docs
+												88 text 5
+											89 link Description: Open web source: focus-visible CSS pseudo-class - MDN Web Docs, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible
+											176 container
+												177 button (expanded) Description: Source excerpt: focus-visible CSS pseudo-class - MDN Web Docs, Help: Source excerpt, Secondary Actions: Collapse
+													178 text Source excerpt
+												179 container Source excerpt: focus-visible CSS pseudo-class - MDN Web Docs
+													180 text :focus-visible CSS pseudo-class - CSS | MDN
+
+# `:focus-visible` CSS pseudo-class
+
+ Baseline Widely available
+
+This feature is well established and works ... many devices and browser versions ... It’s been available across browsers since ... 20
+...
+The `:focus-visible` pseudo-class applies while an element matches the `:focus` pseudo-class and the UA (User Agent) determines via heuristics that the focus should be made evident on the element. (Many browsers show a "focus ring" by default in this case.)
+
+This selector is useful to provide a different focus indicator based on the user's input modality (mouse vs. keyboard).
+...
+margin-top
+...
+input:focus-visible {
+  outline: 2px solid crimson;
+  border-radius: 3px;
+}
+
+select:focus-visible {
+  border: 2px dashed crimson;
+  border-radius: 3px;
+  outline: none;
+}
+...
+```
+:focus-visible {
+  /* ... */
+}
+...
+## :focus vs :focus-visible
+
+Originally, user-agent CSS set focus styles based only on the `:focus` pseudo-class, styling most focused elements with a focus ring outline. This meant all elements, including all links and buttons, had a focus ring applied when focused, which many found ugly. Because of the appearance, some authors removed the user-agent outline focus styles. Changing focus style can decrease usability, while removing focus styles makes keyboard navigation inaccessible for sighted users.
+
+Browsers no longer visibly indicate focus (such as by drawing a "focus ring"), around each element when it has focus. Instead, they use a variety of heuristics to provide focus indicators only when it would be most helpful to the user. For instance, when a button is clicked using a pointing device, the focus is generally not visually indicated, but when a text box needing user input has focus, focus is indicated. While focus styles are always required when users are navigating the page with the keyboard or when focus is managed via scripts, focus styles are not required when the user knows where they are putting focus, such as when they use a pointing device such as a mouse or finger to physically set focus on an element, unless that element continues to need user attention.
+
+The `:focus` pseudo-class always matches the currently-focused element. The `:focus-visible` pseudo-class also matches the focused element, but only if the user needs to be informed where the focus currently is. Because the `:focus-visible` pseudo-class matches the focused element when needed, using the `:focus-visible` (instead of the `:focus` pseudo-class) allows authors to change the appearance of the focus indicator without changing when the focus indicator appears.
+
+When the `:focus` pseudo-class is used, it always targets the currently focused element. This means that when a user employs a pointing device, a visible focus ring appears around the focused element, which some consider obtrusive. The `:focus-visible` pseudo-class respects user agents' selective focus indication behavior while still allowing focus indicator customization.
+...
+### Comparing :focus and :focus-visible
+...
+presents three pairs ... `text` input and a button.
+
+- The first pair does not add any custom styles for focus states, and shows the default case.
+- The second pair adds styles using the `:focus` pseudo-class.
+- The third pair adds styles using the `:focus-visible` pseudo-class.
+...
+<input class="focus-only" type="text" value=":focus" /><br />
+<button class="focus-only">:focus</button><br />
+
+<input class="focus-visible-only" type="text" value=":focus-visible" /><br />
+<button class="focus-visible-only">:focus-visible</button>
+...
+.focus-only:focus {
+  outline: 2px solid black;
+}
+
+.focus-visible-only:focus-visible {
+  outline: 4px dashed darkorange;
+}
+...
+If you click each element in turn, you will see that when `:focus` is used to style the focus ring, the UA draws the focus ring when the user clicks the button. However, when `:focus-visible` is used to style the focus ring, the UA does not draw the focus ring when the user clicks the button, just like in the default case.
+
+If you then tab through each element, you will see that in all three cases — default, `:focus`, and `:focus-visible` — the UA draws the focus ring around the button when the user navigates to it with the keyboard.
+
+This shows how `:focus-visible` enables a designer to follow the browser's logic in determining when a focus ring should be shown.
+
+### Providing a :focus fallback
+
+If your code has to work in old browser versions that do not support `:focus-visible`, check supports of `:focus-visible` with `@supports` and repeat the same focus styling in it, but inside a `:focus` rule. Note that even if you do not specify anything at all for `:focus`, old browsers will simply display the native outline, which can be enough.
+...
+```
+.button {
+  margin: 10px;
+  border: 2px solid darkgray;
+  border-radius: 4px;
+}
+
+.button:focus-visible {
+  /* Draw the focus when :focus-visible is supported */
+  outline: 3px solid deepskyblue;
+  outline-offset: 3px;
+}
+
+@supports not selector(:focus-visible) {
+  .button.with-fallback:focus {
+    /* Fallback for browsers without :focus-visible support */
+    outline: 3px solid deepskyblue;
+    outline-offset: 3px;
+  }
+}
+
+```
+											92 link Description: Open web source: Pseudo-classes - CSS | MDN, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Pseudo-classes
+											93 button (collapsed) Description: Source excerpt: Pseudo-classes - CSS | MDN, Help: Source excerpt, Secondary Actions: Expand
+												94 text Source excerpt
+											95 link Description: Open web source: :focus-visible - CSS：层叠样式表 | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+											96 button (collapsed) Description: Source excerpt: :focus-visible - CSS：层叠样式表 | MDN, Help: Source excerpt, Secondary Actions: Expand
+												97 text Source excerpt
+											98 link Description: Open web source: CSS-Pseudoklasse :focus-visible - MDN Web Docs, Value: developer.mozilla.org/de/docs/Web/CSS/Reference/Selectors/:focus-visible
+											99 button (collapsed) Description: Source excerpt: CSS-Pseudoklasse :focus-visible - MDN Web Docs, Help: Source excerpt, Secondary Actions: Expand
+												100 text Source excerpt
+											101 link Description: Open web source: focus CSS pseudo-class - MDN Web Docs - Mozilla, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus
+											102 button (collapsed) Description: Source excerpt: focus CSS pseudo-class - MDN Web Docs - Mozilla, Help: Source excerpt, Secondary Actions: Expand
+												103 text Source excerpt
+									104 container
+										105 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible (text/html)
+											106 text webfetch
+											107 text https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible (text/html)
+											108 image
+										109 container Sources
+											110 link Description: Open web source: :focus-visible - CSS：层叠样式表 | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+									111 container
+										112 text 简短结论
+										113 text ：
+										114 text :focus-visible
+										115 text  适合用于 Sources 中交互控件的焦点样式：保留键盘操作所需的明确位置提示，同时尊重浏览器对鼠标等输入方式的判断。它不是“只在按键时显示”的开关，也不能单独解决焦点顺序、跳转和返回定位问题。以下产品建议均为评审建议，不代表已经实现。
+										116 text 真实来源
+										117 text ：已只读检索并打开核对
+										118 link Description: MDN 中文官方文档：:focus-visible, Value: developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+										119 text 。重点依据该页的“
+										120 text :focus
+										121 text  与
+										122 text :focus-visible
+										123 text ”“无障碍”“示例”章节；页面标示最后更新于 2025 年 11 月 4 日。
+										124 heading 详细说明, Value: 3
+											125 text 详细说明
+										126 text 一、文档事实：焦点与焦点可见性不同。
+										127 text  MDN 说明，
+										128 text :focus-visible
+										129 text  匹配的前提是元素已经符合
+										130 text :focus
+										131 text ，且浏览器通过启发式判断认为应显示焦点提示。因此，“获得焦点”与“显示焦点环”不是同一件事。它只负责匹配状态、允许作者设置外观，不会让普通文本自动可聚焦，也不会改变键盘导航顺序。评审 Sources 时，应分别检查控件能否到达、到达后能否看清位置，而不能只检查有没有这条 CSS。
+										132 text 二、文档事实：不能把它理解成纯键盘检测。
+										133 text  MDN 举例指出，鼠标点击按钮时通常不显示焦点环，但需要输入的文本框获得焦点时仍会显示；使用键盘导航到按钮时则会显示。这说明判断还涉及元素用途，而不只是最近使用了鼠标还是键盘。产品评审建议：若 Sources 有搜索框、筛选按钮和来源链接，应允许浏览器保留这种差异，不要制定“鼠标点击后一律隐藏焦点”的规则，以免输入位置也失去提示。
+										134 text 三、产品评审建议：先保证完整的键盘路径。
+										135 text  若 Sources 包含来源列表与阅读区域，建议按内容和操作逻辑组织焦点顺序，让用户通过 Tab、Shift+Tab 能到达来源链接及实际存在的阅读操作。导航使用链接，执行操作使用按钮，避免只有鼠标点击才能使用的文本或图标。不要为了强调阅读内容而把每段正文都加入 Tab 顺序；否则长文会产生大量无意义停靠点。以上是交互设计建议，并非 MDN 对 Sources 结构的描述。
+										136 text 四、产品评审建议：区分焦点、选中与悬停。
+										137 text  Sources 中“正在阅读哪篇来源”与“下一次键盘操作作用于哪个控件”是不同状态。建议选中来源使用持续的背景、标记或文字提示，键盘焦点使用清楚的轮廓，悬停采用较轻的反馈。如果三者共用同一种高亮，用户可能误把焦点移动当成来源切换。MDN 提醒，混合输入方式下焦点指示出现和消失可能令人困惑；上述状态区分是针对这一风险提出的产品建议。
+										138 text 五、文档事实与建议：可见性优先于装饰。
+										139 text  MDN 要求关注低视力用户，并在无障碍章节引用视觉焦点指示器至少 3:1 的对比度要求；它也说明移除焦点样式会妨碍有视力的键盘用户导航。建议 Sources 使用明显轮廓并留出适当间距，而不是仅作细微文字变色。评审时还应检查浅色、深色背景，以及列表边缘和滚动容器中的轮廓是否被裁切。具体颜色、粗细和间距应以实际界面验证为准。
+										140 text 六、产品评审建议：保护阅读位置与焦点连续性。
+										141 text  若打开来源会更新阅读区域，建议明确决定焦点是保留在来源入口，还是移到新内容的合理起点，不要在每次内容刷新时无条件抢走焦点。如果存在预览弹层，关闭后建议回到原触发入口；加载更多或更新列表时，也应避免让当前控件消失后焦点无处可寻。这些需要交互逻辑处理，不能由
+										142 text :focus-visible
+										143 text  自动完成。目标是让用户始终知道自己在哪里、接下来能做什么。
+										144 text 七、文档事实与建议：兼容处理不等于清空默认轮廓。
+										145 text  MDN 标示该特性自 2022 年 3 月起在主流浏览器中广泛可用，并给出用
+										146 text @supports not selector(:focus-visible)
+										147 text  提供
+										148 text :focus
+										149 text  样式的示例；同时说明旧浏览器的原生轮廓也可能足够。建议 Sources 按实际目标环境确定兼容策略，优先保留可用的原生指示，再做定制。不要先全局移除 outline，再假设所有环境都会成功应用新样式。
+										150 text 八、产品评审建议：以真实操作验收，而非样式存在验收。
+										151 text  建议完成“进入 Sources—定位来源—打开阅读—返回继续选择”的纯键盘流程，再检查鼠标点击后转用键盘的混合流程。每一步都应确认焦点可辨认、顺序合理、不被遮挡，并按控件语义验证激活方式；如有弹层，再检查关闭与返回位置。此次只核对了 MDN 资料，没有检查 Sources 的实际界面，因此这些是待验证的评审标准，不能据此宣称产品已经实现或通过无障碍验收。
+									152 button Copy message
+									153 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+									154 pop up button (collapsed) Description: View model usage for this turn: 123K Token, Secondary Actions: Expand
+									155 text Oct 9, 09:08 PM
+						156 container chatHomeComposition
+							157 container solidChatComposer
+								158 container
+									159 text Model configuration unavailable
+									160 text You can still read this conversation. Review the details or choose a model before sending a message.
+									161 button (collapsed) Details, Secondary Actions: Expand
+										162 text Details
+									163 button Retry
+									164 container chatForm
+										165 splitter Description: Drag to resize the message input, Value: 42
+										166 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+										167 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+										168 text Work
+										169 text Chat
+										170 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+										171 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+										172 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+											173 text Choose model
+										174 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+								175 button Scroll to bottom
+
+The focused UI element is 177 button (expanded) Description: Source excerpt: focus-visible CSS pseudo-class - MDN Web Docs, Help: Source excerpt, Secondary Actions: Collapse

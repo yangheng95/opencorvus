@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [主Sources阅读259](2026-10-10-source-reading-259.md)：真实长摘录键盘/折叠与外部网页返回，完整19生命周期保管与原Native0，无伪修复。
+
 - [真实停止258](2026-10-10-stream-stop-258.md)：实际生成停止、下一轮与原来源保留，完整取消checker/原Native0，修复已跳过文案。
 
 - [待命退出257](2026-10-10-occurrence-shutdown-257.md)：物理待命释放保留原idle，修复同步callback取消来源，真实Sol及新历史进程均三个idle、来源完整。

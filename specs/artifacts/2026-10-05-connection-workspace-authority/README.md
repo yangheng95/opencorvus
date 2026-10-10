@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [主Sources阅读259 Recall](source-reading-plan-259.md) / [完整实际证据](source-reading-259/README.md)：真实五Sources/摘录/独立网页往返，完整保管/Native0，原生预览未覆盖。
+
 - [真实停止258 Recall](stream-stop-plan-258.md) / [完整实际证据](stream-stop-258/README.md)：精确实际取消/后续自然完成与原来源可读，修复已停止标签。
 
 - [待命退出257 Recall](occurrence-shutdown-plan-257.md) / [实现与完整证据](occurrence-shutdown-257/README.md)：原idle→aborted真实根因修复，Sol退出/新进程历史三个idle、32数据通过，历史工具原失败保留，两次Native0。
