@@ -1,0 +1,36 @@
+Browser tab: 118, Title: "OpenCorvus", URL: "http://localhost:18209/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 226-227
+~											200 text 46s
++											229 container
++												230 text 产品建议 ：当规范化改变了用户输入，引用详情应提供简短、按需展开的转换记录。例如，“依据项目目录展开相对路径”“折叠父目录段”“移除末尾空格”。日常引用不必不断弹窗，但可能改变目标身份的处理应醒目提示，并同时保留处理前后的文本。尤其不要把规范化统一描述为“已修复”：输入被系统接受，与它符合用户意图是两回事。复制操作也应区分“复制原始输入”和“复制解析路径”，避免传播一个未经说明的变体。
++											231 heading 4. 为网络路径与设备路径提供专门的阅读线索, Value: 3
++												232 text 4. 为网络路径与设备路径提供专门的阅读线索
++											233 container
++												234 text 原文事实 ：UNC 路径通过服务器和共享名标识网络资源，例如
++												235 link Description: \\Server\Share\Test\Foo.txt, Value: localhost:18209/ui/#
++												236 text ；它必须是完全限定路径。DOS 设备路径使用
++												237 link Description: \\.\, Value: localhost:18209/ui/#
++												238 text  或  \\?\  等前缀，也可以通过卷 GUID 标识卷。文档指出，严格以  \\?\  开头的路径通常跳过规范化；但显式传入  GetFullPathName  时仍会规范化，因此不能把这个前缀理解为任何操作下都保持原样。
++												239 link Description: 来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#dos-device-paths
++												240 text 、
++												241 link Description: 来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#skip-normalization
++											242 container
++												243 text 产品建议 ：引用卡片应标明“网络共享”或“设备路径”，并在详情中保留服务器、共享名及完整前缀。长路径可以视觉折叠，但复制内容不能被截断。设备前缀不应被当作装饰删除，UNC 地址也不应被误转换为网页链接。打开失败时，应区分目标不存在、网络不可达和访问被拒绝；这些是产品需要诊断的不同状态，而不是文档已经规定的界面行为。
++											244 heading 5. 用清晰的身份与定位信息支持点击、预览和复制, Value: 3
++												245 text 5. 用清晰的身份与定位信息支持点击、预览和复制
++											246 container
++												247 text 原文事实 ：文档通过示例展示，同一个文件可以经由盘符路径、本机 UNC 路径和设备路径访问。它还说明，Windows 文件系统通常保留创建或重命名时使用的大小写，但文件名比较不区分大小写。因此，路径字符串不同，不必然意味着引用对象不同。
++												248 link Description: 来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#example-ways-to-refer-to-the-same-file
++												249 text 、
++												250 link Description: 来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#case-and-the-windows-file-system
++											251 container
++												252 text 产品建议 ：引用体验应区分“展示名称”“访问路径”和“阅读位置”。文件名用于识别，完整路径用于核查，行号或段落锚点用于定位；后两项中的定位能力属于产品设计，不是原文要求。点击前可预览少量上下文，点击后应突出引用位置。如果内容已经变化，应说明无法精确定位，而非假装仍命中原文。工具也不应只凭大小写或字符串相等来断言两个引用相同；去重需要适合目标环境的对象识别依据。
++											253 heading 6. 将网页来源阅读与本地文件解析分成两套契约, Value: 3
++												254 text 6. 将网页来源阅读与本地文件解析分成两套契约
++											255 container
++												256 text 原文事实 ：这篇文档讨论的是 Windows 文件路径格式及其在 .NET、Windows API 中的处理，并未规定网页来源卡片、抓取记录或引用界面的设计。不能将文件路径规范化规则直接套用于网页 URL，也不能据此声称网页引用已经获得内容真实性验证。
++												257 link Description: 文档来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++											258 container
++												259 text 产品建议 ：
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18209/ui/

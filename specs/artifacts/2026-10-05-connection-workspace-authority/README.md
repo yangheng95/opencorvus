@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [生成侧聊271 Recall](side-live-plan-271.md) / [当前实际证据](side-live-271/README.md)：当前chat reader结束前关闭重开，前缀/top/参考保持，8EOF/Native0，无全帧扩大。
+
 - [来源标题270 Recall](source-title-plan-270.md) / [当前真实修复](source-title-270/README.md)：修native Markdown发布者title，真实UI/Tooltip与原全文equal，20断言/5EOF/Native0。
 
 - [侧聊Sources269 Recall](side-source-plan-269.md) / [当前真实证据](side-source-269/README.md)：三Source/完成态阅读保持，Markdown标题真实遗漏；10EOF/Native0及原未验/收尾偏差。

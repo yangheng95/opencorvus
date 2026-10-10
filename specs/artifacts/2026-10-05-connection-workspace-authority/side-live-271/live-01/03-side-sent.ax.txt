@@ -1,0 +1,9 @@
+Browser tab: 118, Title: "OpenCorvus", URL: "http://localhost:18209/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 164-167, 169, 171
++										194 container
++											195 text User
++											196 text 基于刚才真实读取的Microsoft文档，为开发工具里的文件引用与来源阅读写一份详细中文体验建议，约2000–2500字，按8个编号段落展开，末尾附简短比较表。清楚区分原文事实与产品建议，并引用已有真实来源。请直接完整写出正文，不再抓取或使用其他工具，不修改文件，不创建任务或委托。
+~										170 text Working…
++										197 button Stop side chat
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18209/ui/

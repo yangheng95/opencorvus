@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [生成侧聊271](records/2026-10/2026-10-10-side-live-271.md)：实际stream结束前partial关闭重开，前缀/阅读2178.4与来源保持，8EOF/Native0及原边界保留。
+
 - [来源标题270](records/2026-10/2026-10-10-source-title-270.md)：native Markdown发布者标题修复，新Sol真实标题/Tooltip与原全文保管，20断言/5EOF/Native0。
 
 - [侧聊Sources269](records/2026-10/2026-10-10-side-source-269.md)：真实三来源/完成态阅读686.4保持，发现Markdown标题缺失，10EOF/Native0与实时阶段/收尾偏差保留。

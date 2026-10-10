@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [生成侧聊271](2026-10-10-side-live-271.md)：实际partial前缀/同top返回与末byte资格核对，原terminal snapshot/收尾边界保留。
+
 - [来源标题270](2026-10-10-source-title-270.md)：唯一格式提取/共享YAML解析与真实Source页面通过，原失败留存与全文相等，5EOF/Native0。
 
 - [侧聊Sources269](2026-10-10-side-source-269.md)：真实来源到达/终态阅读往返，定位Markdown标题遗漏；原未验阶段与收尾目标偏差保留。

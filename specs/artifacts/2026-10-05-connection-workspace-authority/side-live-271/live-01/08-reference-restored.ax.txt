@@ -1,0 +1,13 @@
+Browser tab: 118, Title: "OpenCorvus", URL: "http://localhost:18209/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 163-168
++										323 container
++											324 text User
++											325 container
++												326 text 请用 webfetch 读取
++												327 link Description: https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++												328 text  ，默认markdown格式，只简短说明真实文档主题并提供来源，约60字。只读，不修改文件，不创建任务或委托。
++											329 button Copy message
++											330 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++											331 text Oct 10, 01:51 PM
+The focused UI element is 110 checkbox Description: Close right dock, Value: 1

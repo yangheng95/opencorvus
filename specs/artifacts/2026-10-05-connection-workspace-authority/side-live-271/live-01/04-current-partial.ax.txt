@@ -1,0 +1,34 @@
+Browser tab: 118, Title: "OpenCorvus", URL: "http://localhost:18209/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++										198 container
++											199 text chat
++											200 text 23s
++											201 heading 开发工具中文件引用与来源阅读的体验建议, Value: 2
++												202 text 开发工具中文件引用与来源阅读的体验建议
++											203 heading 1. 将“用户输入的路径”与“实际引用的对象”分开呈现, Value: 3
++												204 text 1. 将“用户输入的路径”与“实际引用的对象”分开呈现
++											205 container
++												206 text 原文事实 ：Microsoft 文档说明，Windows 文件路径包括传统 DOS 路径、UNC 路径和 DOS 设备路径。路径是否带有盘符，并不足以判断它是否独立于当前目录；例如，
++												207 link Description: C:\Projects\file.txt, Value: localhost:18209/ui/#
++												208 text  是绝对路径，而  C:Projects\file.txt  依赖 C 盘的当前目录。文档还指出，完全限定路径可以包含  .  和  .. ，判断关键是解析结果是否随当前目录变化。
++												209 link Description: 来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#traditional-dos-paths
++											210 container
++												211 text 产品建议 ：文件引用卡片应分别展示“原始输入”和“解析后的目标”，不要仅显示一个经过处理的路径。默认突出文件名及必要的目录层级，展开后提供原始路径、路径类型和解析依据。这样既方便快速阅读，也能解释“为什么打开了这个文件”。界面应避免把“包含盘符”“看起来完整”当作可靠性标志；真正需要表达的是，该引用是否已经确定到一个不依赖后续环境变化的目标。
++											212 heading 2. 显式固定相对路径的解析基准，减少上下文漂移, Value: 3
++												213 text 2. 显式固定相对路径的解析基准，减少上下文漂移
++											214 container
++												215 text 原文事实 ：文档指出，普通相对路径依赖当前目录；以单个反斜杠开头的路径依赖当前驱动器；带盘符但没有根分隔符的路径，则可能依赖该驱动器此前设置的当前目录。当前目录属于进程级设置，任何线程都可能改变它，因此多线程应用使用相对路径存在风险。文档介绍了通过  Path.GetFullPath(String, String)  指定基准路径的方式。
++												216 link Description: 来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#apply-the-current-directory
++											217 container
++												218 text 产品建议 ：开发工具应在生成引用时固定解析基准，而不是等用户点击时再使用届时的工作目录。消息旁可显示“相对于项目根目录”或具体基准目录；切换项目后，已有引用仍保持原来的指向。遇到  D:sources  这类容易误读的输入，应明确说明其驱动器相对语义，而不是静默解释为
++												219 link Description: D:\sources, Value: localhost:18209/ui/#
++												220 text 。如果必要基准缺失，应让用户选择或补充，不能猜测后打开一个同名文件。
++											221 heading 3. 让路径规范化可解释，但不要将它包装成无条件修复, Value: 3
++												222 text 3. 让路径规范化可解释，但不要将它包装成无条件修复
++											223 container
++												224 text 原文事实 ：Windows 路径规范化通常涉及识别路径类型、应用当前目录、统一分隔符、处理  .  与  .. ，以及删除某些末尾字符。文档说明，正斜杠通常会转换为反斜杠，末尾句点和空格也可能被移除；同时明确提醒，不应创建以空格结尾的文件或目录。
++												225 link Description: 来源, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#path-normalization
++											226 container
++												227 text 产品建议 ：当规范化改变了用户输入，引用详情应提供简短、按需展开的转换
++										228 button Quote in main conversation
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18209/ui/

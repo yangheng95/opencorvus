@@ -1,0 +1,26 @@
+Browser tab: 118, Title: "OpenCorvus", URL: "http://localhost:18209/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~										162 button (expanded) Reference history · 3 messages, Secondary Actions: Collapse
++										172 container
++											173 text User
++											174 container
++												175 text 请用 webfetch 读取
++												176 link Description: https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++												177 text  ，默认markdown格式，只简短说明真实文档主题并提供来源，约60字。只读，不修改文件，不创建任务或委托。
++										178 container
++											179 text work
++											180 text 6s
++											181 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
++												182 text webfetch
++												183 text https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
++												184 image
++											185 container Sources
++												186 link Description: Open web source: File path formats on Windows systems - .NET | Microsoft Learn, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++										187 container
++											188 text work
++											189 text 4s
++											190 container
++												191 text 该文档介绍 Windows 文件路径格式，涵盖 DOS、UNC、设备路径，以及绝对与相对路径、规范化和大小写规则。来源：
++												192 link Description: Microsoft Learn, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++												193 text 。
+The focused UI element is 162 button (expanded) Reference history · 3 messages, Secondary Actions: Collapse

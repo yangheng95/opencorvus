@@ -1,0 +1,59 @@
+Browser tab: 118, Title: "OpenCorvus", URL: "http://localhost:18209/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 261-266, 270
+~											190 text 1m 11s
++											270 container
++												271 text 产品建议 ：验收应覆盖用户能否确认目标、理解解析依据、抵达引用位置，以及返回原来的阅读上下文。测试可分别输入
++												272 link Description: C:\a\b.txt, Value: localhost:18209/ui/#
++												273 text 、 C:a\b.txt 、
++												274 link Description: \a\b.txt, Value: localhost:18209/ui/#
++												275 text 、UNC 和设备路径，观察解释与实际打开目标是否一致；再验证切换工作目录、目标删除、权限拒绝及内容变化后的反馈。网页来源则检查摘要是否忠实、章节链接是否支持论点、未读取内容是否被误标为已验证。最终标准不是“链接能点”，而是用户能判断自己读到了什么、为何读到它，以及哪些结论仍只是建议。
++											276 heading 简短比较表, Value: 3
++												277 text 简短比较表
++											278 table
++												279 row
++													280 cell
++														281 text 维度
++													282 cell
++														283 text 原文事实
++													284 cell
++														285 text 产品建议
++												286 row
++													287 cell
++														288 text 相对路径
++													289 cell
++														290 text 解析依赖当前目录等条件
++													291 cell
++														292 text 固定并展示解析基准
++												293 row
++													294 cell
++														295 text 规范化
++													296 cell
++														297 text 可能改变分隔符及末尾字符
++													298 cell
++														299 text 保留原始输入，解释关键变化
++												300 row
++													301 cell
++														302 text UNC、设备路径
++													303 cell
++														304 text 各有结构与处理语义
++													305 cell
++														306 text 标注类型，保留完整前缀
++												307 row
++													308 cell
++														309 text 来源阅读
++													310 cell
++														311 text 原文不规定引用界面
++													312 cell
++														313 text 区分已读事实、解释与建议
++												314 row
++													315 cell
++														316 text 体验验收
++													317 cell
++														318 text 文档提供路径行为依据
++													319 cell
++														320 text 验证真实目标、定位和失败反馈
++										321 text entry area (settable) Ask a side question…
+~										269 text Main conversation stays on track
++										322 button (disabled) Send side question
+The focused UI element is 110 checkbox Description: Close right dock, Value: 1
