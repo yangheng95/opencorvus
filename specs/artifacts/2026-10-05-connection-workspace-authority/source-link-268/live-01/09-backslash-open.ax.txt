@@ -1,0 +1,104 @@
+Browser tab: 115, Title: "OpenCorvus", URL: "http://localhost:18206/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 155-162
+~										154 text entry area Description: Editor, Value: import DESCRIPTION from "./read.txt"
+import { Instance } from "../project/instance"
+import { assertExternalDirectory } from "./external-directory"
+import { InstructionPrompt } from "../session/instruction"
+import { Filesystem } from "../util/filesystem"
+import { AttachmentStore } from "../storage/attachment-store"
+import { redactInlinePayloads } from "../util/inline-base64"
+import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
+}
+
+
+function isMissingPathError(error: unknown): boolean {
+  return error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
+}
+
+
+export async function taskFileStatOrMissing<T>(read: () => Promise<T>): Promise<T | undefined> {
+  try {
+    return await read()
+  } catch (error) {
+    if (isMissingPathError(error)) return undefined
+    throw error
+  }
+}
+
+
+export const READ_TOOL_DESCRIPTION = DESCRIPTION
++											187 text  * The line range a `read` citation should carry, or undefined when there is no
++											188 text  * narrower place to point at than the file itself.
++											189 text  *
++											190 text  * A citation range is a location, not a receipt for what was loaded. A page
++											191 text  * that covered the whole file would cite lines 1..N, and the overlay would dress
++											192 text  * that up as a jump that always lands on line 1 — indistinguishable from a
++											193 text  * citation that failed to jump at all.
++											194 text  */
++											195 container
++												196 text export function citedReadRange ( page : {
++											197 container
++												198 text offset :  number
++											199 container
++												200 text lines :  number
++											201 container
++												202 text lastReadLine :  number
++											203 container
++												204 text truncated :  boolean
++											205 container
++												206 text }): {  range : {  startLine :  number ;  endLine :  number  } } |  undefined  {
++											207 container
++												208 text if  ( page . lines  <=  0 )  return undefined
++											209 container
++												210 text if  ( page . offset  ===  1  && ! page . truncated )  return undefined
++											211 container
++												212 text return  {  range : {  startLine :  page . offset ,  endLine :  page . lastReadLine  } }
++											213 text }
++											214 container
++												215 text function isMissingPathError ( error :  unknown ):  boolean  {
++											216 container
++												217 text return error instanceof Error  && ( error as NodeJS . ErrnoException ). code  ===  "ENOENT"
++											218 text }
++											219 container
++												220 text export async function taskFileStatOrMissing < T >( read : () =>  Promise < T >):  Promise < T  |  undefined > {
++											221 container
++												222 text try  {
++											223 container
++												224 text return await read ()
++											225 container
++												226 text   }  catch  ( error ) {
++											227 container
++												228 text if  ( isMissingPathError ( error ))  return undefined
++											229 container
++												230 text throw error
++											231 text   }
++											232 text }
++											233 container
++												234 text export const READ_TOOL_DESCRIPTION  =  DESCRIPTION
+The focused UI element is 73 container Description: Conversation, ID: chatScroll

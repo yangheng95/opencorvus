@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Windows文件引用268](2026-10-10-source-link-268.md)：唯一renderer盘符语法修复，实际正文代码路径与原Source打开，locator未触发/2分54秒余量偏差保留。
+
 - [明确文件引用267](2026-10-10-source-link-267.md)：明确路径、行号和Markdown真实正向打开，原加载中保留、目标全文相等与5EOF/Native0。
 
 - [正文文件引用266](2026-10-10-source-link-266.md)：代码格式文件名误链接当前Project，真实404/Source对照、唯一renderer语义修正与人工复核。

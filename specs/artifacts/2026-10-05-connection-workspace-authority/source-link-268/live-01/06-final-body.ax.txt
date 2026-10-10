@@ -1,0 +1,25 @@
+Browser tab: 115, Title: "OpenCorvus", URL: "http://localhost:18206/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 35
++								65 container
++									66 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									67 container
++										68 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										69 button 请实际用 read 读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts...
++										70 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
++									71 button (expanded) Description: Collapse Anonymous 99bb83, Secondary Actions: Collapse
++									72 container
++										73 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										74 button Reply with OK.
++										75 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
++								76 container Recents
++									77 text Recents
++									78 container
++										79 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										80 button 请实际用 read 读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts...
++										81 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
++									82 container
++										83 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										84 button Reply with OK.
++										85 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+The focused UI element is 1 AXWebArea OpenCorvus, URL: localhost:18206/ui/

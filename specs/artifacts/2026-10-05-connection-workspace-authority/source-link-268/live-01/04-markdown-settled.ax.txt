@@ -1,0 +1,182 @@
+Browser tab: 115, Title: "OpenCorvus", URL: "http://localhost:18206/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 190-197
+~										189 text entry area Description: Editor, Value: import DESCRIPTION from "./read.txt"
+import { Instance } from "../project/instance"
+import { assertExternalDirectory } from "./external-directory"
+import { InstructionPrompt } from "../session/instruction"
+import { Filesystem } from "../util/filesystem"
+import { AttachmentStore } from "../storage/attachment-store"
+import { redactInlinePayloads } from "../util/inline-base64"
+import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
+}
+
+
+function isMissingPathError(error: unknown): boolean {
+  return error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
+}
+
+
+export async function taskFileStatOrMissing<T>(read: () => Promise<T>): Promise<T | undefined> {
+  try {
+    return await read()
+  } catch (error) {
+    if (isMissingPathError(error)) return undefined
+    throw error
+  }
+}
+
+
+export const READ_TOOL_DESCRIPTION = DESCRIPTION
+export const ReadToolParameters = z.object({
+  filePath: z
+    .string()
+    .describe(
+      "A path relative to the current Task directory, or an absolute path when the caller already has that exact native path",
+    ),
+  offset: z.coerce.number().describe("The line number to start reading from (1-indexed)").optional(),
++											222 text  * The line range a `read` citation should carry, or undefined when there is no
++											223 text  * narrower place to point at than the file itself.
++											224 text  *
++											225 text  * A citation range is a location, not a receipt for what was loaded. A page
++											226 text  * that covered the whole file would cite lines 1..N, and the overlay would dress
++											227 text  * that up as a jump that always lands on line 1 — indistinguishable from a
++											228 text  * citation that failed to jump at all.
++											229 text  */
++											230 container
++												231 text export function citedReadRange ( page : {
++											232 container
++												233 text offset :  number
++											234 container
++												235 text lines :  number
++											236 container
++												237 text lastReadLine :  number
++											238 container
++												239 text truncated :  boolean
++											240 container
++												241 text }): {  range : {  startLine :  number ;  endLine :  number  } } |  undefined  {
++											242 container
++												243 text if  ( page . lines  <=  0 )  return undefined
++											244 container
++												245 text if  ( page . offset  ===  1  && ! page . truncated )  return undefined
++											246 container
++												247 text return  {  range : {  startLine :  page . offset ,  endLine :  page . lastReadLine  } }
++											248 text }
++											249 container
++												250 text function isMissingPathError ( error :  unknown ):  boolean  {
++											251 container
++												252 text return error instanceof Error  && ( error as NodeJS . ErrnoException ). code  ===  "ENOENT"
++											253 text }
++											254 container
++												255 text export async function taskFileStatOrMissing < T >( read : () =>  Promise < T >):  Promise < T  |  undefined > {
++											256 container
++												257 text try  {
++											258 container
++												259 text return await read ()
++											260 container
++												261 text   }  catch  ( error ) {
++											262 container
++												263 text if  ( isMissingPathError ( error ))  return undefined
++											264 container
++												265 text throw error
++											266 text   }
++											267 text }
++											268 container
++												269 text export const READ_TOOL_DESCRIPTION  =  DESCRIPTION
++											270 container
++												271 text export const ReadToolParameters  =  z . object ({
++											272 container
++												273 text filePath :  z
++											274 container
++												275 text     . string ()
++											276 container
++												277 text     . describe (
++											278 container
++												279 text "A path relative to the current Task directory, or an absolute path when the caller already has that exact native path" ,
++											280 text     ),
++											281 container
++												282 text offset :  z . coerce . number (). describe ( "The line number to start reading from (1-indexed)" ). optional (),
+The focused UI element is 189 text entry area Description: Editor, Value: import DESCRIPTION from "./read.txt"
+import { Instance } from "../project/instance"
+import { assertExternalDirectory } from "./external-directory"
+import { InstructionPrompt } from "../session/instruction"
+import { Filesystem } from "../util/filesystem"
+import { AttachmentStore } from "../storage/attachment-store"
+import { redactInlinePayloads } from "../util/inline-base64"
+import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
+}
+
+
+function isMissingPathError(error: unknown): boolean {
+  return error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
+}
+
+
+export async function taskFileStatOrMissing<T>(read: () => Promise<T>): Promise<T | undefined> {
+  try {
+    return await read()
+  } catch (error) {
+    if (isMissingPathError(error)) return undefined
+    throw error
+  }
+}
+
+
+export const READ_TOOL_DESCRIPTION = DESCRIPTION
+export const ReadToolParameters = z.object({
+  filePath: z
+    .string()
+    .describe(
+      "A path relative to the current Task directory, or an absolute path when the caller already has that exact native path",
+    ),
+  offset: z.coerce.number().describe("The line number to start reading from (1-indexed)").optional(),

@@ -1,0 +1,134 @@
+Browser tab: 115, Title: "OpenCorvus", URL: "http://localhost:18206/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 156-241
+~											155 text entry area Description: Editor, Value: import z from "zod"
+import * as path from "path"
+import { Tool } from "./tool"
+import { FileTime } from "../file/time"
+import DESCRIPTION from "./read.txt"
+import { Instance } from "../project/instance"
+import { assertExternalDirectory } from "./external-directory"
+import { InstructionPrompt } from "../session/instruction"
+import { Filesystem } from "../util/filesystem"
+import { AttachmentStore } from "../storage/attachment-store"
+import { redactInlinePayloads } from "../util/inline-base64"
+import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
++												247 container
++													248 text import z from "zod"
++												249 container
++													250 text import * as path from "path"
++												251 container
++													252 text import  {  Tool  }  from "./tool"
++												253 container
++													254 text import  {  FileTime  }  from "../file/time"
++												255 container
++													256 text import DESCRIPTION from "./read.txt"
++												257 container
++													258 text import  {  Instance  }  from "../project/instance"
++												259 container
++													260 text import  {  assertExternalDirectory  }  from "./external-directory"
++												261 container
++													262 text import  {  InstructionPrompt  }  from "../session/instruction"
++												263 container
++													264 text import  {  Filesystem  }  from "../util/filesystem"
++												265 container
++													266 text import  {  AttachmentStore  }  from "../storage/attachment-store"
++												267 container
++													268 text import  {  redactInlinePayloads  }  from "../util/inline-base64"
++												269 container
++													270 text import  {  DEFAULT_TEXT_FILE_LIMIT ,  isBinaryBytes ,  readTextFilePageContent ,  renderTextFilePage  }  from "./text-file"
++												271 container
++													272 text import  {  executionFiles  }  from "./execution-files"
++												273 container
++													274 text import  {  fileSource  }  from "./source"
++												275 container
++													276 text const DEFAULT_READ_LIMIT  =  DEFAULT_TEXT_FILE_LIMIT
++												277 text /**
++												278 text  * The line range a `read` citation should carry, or undefined when there is no
++												279 text  * narrower place to point at than the file itself.
++												280 text  *
++												281 text  * A citation range is a location, not a receipt for what was loaded. A page
++												282 text  * that covered the whole file would cite lines 1..N, and the overlay would dress
++												283 text  * that up as a jump that always lands on line 1 — indistinguishable from a
++												284 text  * citation that failed to jump at all.
++												285 text  */
++												286 container
++													287 text export function citedReadRange ( page : {
++												288 container
++													289 text offset :  number
++												290 container
++													291 text lines :  number
++												292 container
++													293 text lastReadLine :  number
++												294 container
++													295 text truncated :  boolean
++												296 container
++													297 text }): {  range : {  startLine :  number ;  endLine :  number  } } |  undefined  {
++												298 container
++													299 text if  ( page . lines  <=  0 )  return undefined
++												300 container
++													301 text if  ( page . offset  ===  1  && ! page . truncated )  return undefined
++												302 container
++													303 text return  {  range : {  startLine :  page . offset ,  endLine :  page . lastReadLine  } }
+The focused UI element is 155 text entry area Description: Editor, Value: import z from "zod"
+import * as path from "path"
+import { Tool } from "./tool"
+import { FileTime } from "../file/time"
+import DESCRIPTION from "./read.txt"
+import { Instance } from "../project/instance"
+import { assertExternalDirectory } from "./external-directory"
+import { InstructionPrompt } from "../session/instruction"
+import { Filesystem } from "../util/filesystem"
+import { AttachmentStore } from "../storage/attachment-store"
+import { redactInlinePayloads } from "../util/inline-base64"
+import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }

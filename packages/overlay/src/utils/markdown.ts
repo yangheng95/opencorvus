@@ -334,9 +334,10 @@ function extractFileReference(text: string): { display: string; reference: FileR
   // Split the trailing :line[:col] off; the guards below judge the path half.
   const reference = parseFileReference(s)
   const pathPart = reference.path
-  // Must look like a valid file token (letters/digits/underscore/dot/dash
-  // plus path separators and optional './' or '../' prefix).
-  if (!/^[\w./\\@~-]+$/.test(pathPart)) return null
+  // A rooted Windows drive prefix belongs to the path; its colon is not a
+  // protocol or a cited location. The remaining path uses the same token
+  // grammar as relative and Unix paths.
+  if (!/^(?:[A-Za-z]:[\\/])?[\w./\\@~-]+$/.test(pathPart)) return null
   const hasSlash = /[\/\\]/.test(pathPart)
   const hasFileExt = FILE_EXT_RE.test(pathPart)
   // A bare filename can simply be code prose, and does not identify a file
