@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前子 Dock Sources272](2026-10-10-child-source-272.md)：原成员三来源/详情可读，阅读720往返保持，原错误与完整保管边界留存。
+
 - [生成侧聊271](2026-10-10-side-live-271.md)：实际partial前缀/同top返回与末byte资格核对，原terminal snapshot/收尾边界保留。
 
 - [来源标题270](2026-10-10-source-title-270.md)：唯一格式提取/共享YAML解析与真实Source页面通过，原失败留存与全文相等，5EOF/Native0。

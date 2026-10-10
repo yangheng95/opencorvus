@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前子 Dock Sources272](records/2026-10/2026-10-10-child-source-272.md)：真实三来源详情、成员和整 Dock 阅读720保持，完整历史资格与13核心表保管。
+
 - [生成侧聊271](records/2026-10/2026-10-10-side-live-271.md)：实际stream结束前partial关闭重开，前缀/阅读2178.4与来源保持，8EOF/Native0及原边界保留。
 
 - [来源标题270](records/2026-10/2026-10-10-source-title-270.md)：native Markdown发布者标题修复，新Sol真实标题/Tooltip与原全文保管，20断言/5EOF/Native0。

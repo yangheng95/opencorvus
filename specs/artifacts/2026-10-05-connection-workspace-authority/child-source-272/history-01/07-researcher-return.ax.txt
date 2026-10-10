@@ -1,0 +1,126 @@
+Browser tab: 119, Title: "OpenCorvus", URL: "http://localhost:18210/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 209-212
+~								205 container
+~									206 button All agents (2)
+~									207 pop up button (collapsed) Expert Squad agents base-researcher, ID: select-cl-433-trigger, Secondary Actions: Expand
++									209 container
++										210 text base-researcher
++										211 text 1m 1s
++										212 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										213 container
++											214 text 我会只读取指定三页正文，核对各页的侧重点及可引用的原文锚点，不跟进链接或扩展搜索；随后提供发现和读取限制，供负责人总结。
++											215 button (collapsed) Description: webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8), Secondary Actions: Expand
++												216 text webfetch
++												217 text https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)
++												218 image
++											219 container Sources
++												220 link Description: Open web source: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C, Value: w3.org/WAI/fundamentals/accessibility-intro/
++										221 container
++											222 button (collapsed) Description: webfetch · https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8), Secondary Actions: Expand
++												223 text webfetch
++												224 text https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8)
++												225 image
++											226 container Sources
++												227 link Description: Open web source: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C, Value: w3.org/WAI/fundamentals/accessibility-principles/
++										228 container
++											229 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html), Secondary Actions: Expand
++												230 text webfetch
++												231 text https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)
++												232 image
++											233 container Sources
++												234 link Description: Open web source: Accessibility | MDN, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++											235 button (collapsed) Description: read_agent_message · Task participant evidence, Secondary Actions: Expand
++												236 text read_agent_message
++												237 text Task participant evidence
++												238 image
++										239 container
++											240 text 已通过
++											241 text webfetch
++											242 text  的 Markdown 正文读取方式成功读取指定三页；三次返回均包含正文，未提示截断。以下是供负责人总结的来源发现，不是最终用户报告。
++											243 heading 1. WAI 概念介绍：定义、受益人群与尽早落实, Value: 3
++												244 text 1. WAI 概念介绍：定义、受益人群与尽早落实
++											245 text 来源：
++											246 link Description: https://www.w3.org/WAI/fundamentals/accessibility-intro/, Value: w3.org/WAI/fundamentals/accessibility-intro/
++											247 content list
++												248 container
++													249 AXListMarker •
++													250 text 是什么
++													251 text ：在 “What is Web Accessibility” 节，无障碍指网站、工具和技术经过设计与开发，使残障人士可以使用，包括感知、理解、导航、交互及贡献内容。简短原文锚点：
++													252 container
++														253 text “people with disabilities can use them”
++														254 text “perceive, understand, navigate, and interact with the Web”
++												255 container
++													256 AXListMarker •
++													257 text 基本取向
++													258 text ：重点是消除排斥、提供平等使用机会；也惠及老年人、暂时性障碍者，以及强光、无法听音频等情境下的用户。此页不是四项原则的系统展开。
++												259 container
++													260 AXListMarker •
++													261 text 开始落实
++													262 text ：“Making Your Website Accessible”“Evaluating Accessibility”“Examples” 各节明确建议从项目一开始纳入无障碍、开发过程中持续评估，并给出图片替代文本、键盘操作、音频文字稿的例子。原文锚点：
++													263 container
++														264 text “incorporate accessibility from the very beginning of projects”
++														265 text “no tool alone can determine if a site meets accessibility guidelines”
++													266 text 因此可以据此强调：工具辅助检查不能替代有知识的人进行评估。
++											267 heading 2. WAI 原则：将目标转为四类要求, Value: 3
++												268 text 2. WAI 原则：将目标转为四类要求
++											269 text 来源：
++											270 link Description: https://www.w3.org/WAI/fundamentals/accessibility-principles/, Value: w3.org/WAI/fundamentals/accessibility-principles/
++											271 content list
++												272 container
++													273 AXListMarker •
++													274 text 是什么／范围
++													275 text ：正文介绍网站、应用、浏览器和其他工具的一部分无障碍要求，也说明内容、用户代理和创作工具需要协同。页面明确限制：
++													276 text “This is not a complete list of all accessibility requirements.”
++												277 container
++													278 AXListMarker •
++													279 text 基本原则
++													280 text ：正文四个一级章节分别是：
++													281 content list
++														282 container
++															283 AXListMarker ◦
++															284 text 可感知 ：“Perceivable information and user interface”——文本替代、字幕等媒体替代、正确标记内容结构、足够对比度、不仅靠颜色传递信息。
++														285 container
++															286 AXListMarker ◦
++															287 text 可操作 ：“Operable user interface and navigation”——键盘可访问、无焦点陷阱、足够操作时间、清晰导航及可见焦点，避免危险闪烁。
++														288 container
++															289 AXListMarker ◦
++															290 text 可理解 ：“Understandable information and user interface”——文字易懂、界面行为可预测、帮助用户避免并纠正错误。
++														291 container
++															292 AXListMarker ◦
++															293 text 健壮 ：“Robust content and reliable interpretation”——兼容不同浏览器和辅助技术，让内容与控件可以被可靠解释。
++												294 container
++													295 AXListMarker •
++													296 text 开始落实
++													297 text ：此页提供具体要求示例，例如搜索按钮的文本替代应表达功能而非外形：
++													298 container
++														299 text “‘search’ rather than ‘magnifying lens’”
++														300 text 自定义控件需要：
++														301 text “Providing a name, role, and value for non-standard user interface components”
++													302 text 这些是该页正文中的示例，不是从其链接的技术规范中额外读取的内容。
++											303 heading 3. MDN 开发入门：语义 HTML 与学习路径, Value: 3
++												304 text 3. MDN 开发入门：语义 HTML 与学习路径
++											305 text 来源：
++											306 link Description: https://developer.mozilla.org/en-US/docs/Web/Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++											307 content list
++												308 container
++													309 AXListMarker •
++													310 text 是什么
++													311 text ：正文开头从开发角度定义无障碍为让尽可能多的人使用网站，不因身体、认知能力或访问方式而受限。原文锚点：
++													312 text “enabling as many people as possible to use websites”
++												313 container
++													314 AXListMarker •
++													315 text 基本取向
++													316 text ：此页主要是开发学习与参考入口，不像 WAI 原则页那样系统展开四项原则。正文摘要明确指出键盘无障碍属于最低要求的一部分，也强调辅助技术能识别和使用的语义信息。
++												317 container
++													318 AXListMarker •
++													319 text 开始落实
++													320 text ：“Beginner’s tutorials” 节自身的介绍文字支持优先按用途使用正确 HTML 元素：
++													321 text “the correct HTML elements are always used for the correct purpose”
++													322 text 同节摘要指出 CSS、JavaScript 使用不当会损害无障碍；WAI-ARIA 可以为复杂动态界面补充语义；多媒体需要适当文字替代，并应考虑移动端。该页列出的入门方向还包括开发工作流、检查工具与辅助技术。
++											323 text 读取边界
++											324 text ：未跟进任何链接、播放视频或搜索扩展资料；未修改文件或制作额外报告文件。MDN 的教程与指南详情均未读取，以上仅引用该入口页实际包含的介绍文字，不能据此声称已验证教程中的具体实现步骤。网页证据以 URL、章节名称和原文短句定位，没有仓库文件行号。另已读取指定的委托前证据，其工具索引完整但记录数为零；上述结论均来自本次实际网页读取。
++										325 button Copy message
++										326 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++										327 text Oct 8, 04:55 PM
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18210/ui/

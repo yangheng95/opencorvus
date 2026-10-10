@@ -1,0 +1,16 @@
+ 5 | import { Database as Sqlite } from "bun:sqlite"
+ 6 |
+ 7 | const repo="D:/myhexin-local/opencorvus"
+ 8 | const sourceRun="C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01"
+ 9 | const out=path.join(repo,"specs/artifacts/2026-10-05-connection-workspace-authority/child-source-272/history-readiness")
+10 | const guard=JSON.parse(fs.readFileSync(path.join(out,"guard.json"),"utf8"))
+                               ^
+ENOENT: no such file or directory, open 'D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\child-source-272\history-readiness\guard.json'
+    path: "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-source-272\\history-readiness\\guard.json",
+ syscall: "open",
+   errno: -2,
+    code: "ENOENT"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\child-source-272\frontier.ts:10:27
+
+Bun v1.3.14 (Windows x64)

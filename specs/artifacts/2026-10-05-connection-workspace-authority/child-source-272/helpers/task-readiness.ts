@@ -1,0 +1,89 @@
+import fs from "node:fs"
+import path from "node:path"
+import { createRequire } from "node:module"
+import { pathToFileURL } from "node:url"
+import { Database as Sqlite } from "bun:sqlite"
+
+const repo="D:/myhexin-local/opencorvus"
+const sourceRun="C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01"
+const out=path.join(repo,"specs/artifacts/2026-10-05-connection-workspace-authority/child-source-272/history-readiness")
+const guard=JSON.parse(fs.readFileSync(path.join(out,"guard.json"),"utf8"))
+if(!guard.readQualified || path.resolve(guard.sourceRun)!==path.resolve(sourceRun)) throw Error("Fresh272 original readonly custody required")
+const scratch=path.join(repo,".tmp-product-iteration/child-source-272/history-readiness")
+process.env.OPENCORVUS_HOME=path.join(scratch,"runtime")
+process.env.OPENCORVUS_TEST_HOME=path.join(scratch,"home")
+process.env.OPENCORVUS_TEST_PROCESS_ROOT=scratch
+process.env.OPENCORVUS_DISABLE_AUTOUPDATE="1"
+process.env.OPENCORVUS_DISABLE_EXTERNAL_SKILLS="1"
+for(const key of ["OPENCORVUS_CONFIG","OPENCORVUS_CONFIG_DIR","OPENCORVUS_CONFIG_CONTENT","OPENCORVUS_DISABLE_PROJECT_CONFIG"]) delete process.env[key]
+const require=createRequire(path.join(repo,"packages/opencorvus/package.json"))
+const {parse}=require("jsonc-parser")
+const {drizzle}=await import(pathToFileURL(require.resolve("drizzle-orm/bun-sqlite")).href)
+const {installProcessShims}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/runtime/shims.ts")).href)
+installProcessShims()
+const {Config}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/config/config.ts")).href)
+const {TerminalProfile}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/system-terminal/profile.ts")).href)
+const {which}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/util/which.ts")).href)
+const {ProjectRuntimePaths}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/project/runtime-paths.ts")).href)
+const {taskLifecycleProjectionInTransaction}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/engine/task-lifecycle.ts")).href)
+const {dispatchRecoveryCandidatesInTransaction}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/engine/dispatch-delivery-disposition.ts")).href)
+const {findSchemaDrift}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/storage/schema-contract.ts")).href)
+
+const inventory=(root:string):any[]=>{
+  if(!fs.existsSync(root)) return []
+  const info=fs.lstatSync(root)
+  if(info.isSymbolicLink()) throw Error("Source filesystem link refused")
+  if(!info.isDirectory()) return [{path:root,type:"file",bytes:info.size,mtimeMs:info.mtimeMs}]
+  return [{path:root,type:"directory",mtimeMs:info.mtimeMs},...fs.readdirSync(root).sort().flatMap(name=>inventory(path.join(root,name)))]
+}
+const dirs=(root:string)=>fs.existsSync(root)?fs.readdirSync(root,{withFileTypes:true}).filter(v=>v.isDirectory()).map(v=>v.name).sort():[]
+const globalFile=path.join(sourceRun,"runtime/config/opencorvus.jsonc")
+const parseErrors:any[]=[]
+const globalConfig=Config.Info.parse(parse(fs.readFileSync(globalFile,"utf8"),parseErrors,{allowTrailingComma:true}))
+if(parseErrors.length) throw Error("Original global JSONC syntax invalid")
+const sqlite=new Sqlite(path.join(sourceRun,"runtime/data/opencorvus.db"),{readonly:true})
+sqlite.exec("BEGIN")
+try {
+  const db=drizzle({client:sqlite})
+  if(db.$client!==sqlite) throw Error("Original readonly client identity required")
+  const projects=sqlite.query("SELECT id,worktree,sandboxes FROM project ORDER BY id").all() as any[]
+  const tasks=sqlite.query("SELECT id,project_id,session_id,request_id FROM engine_task ORDER BY id").all() as any[]
+  const lifecycle=tasks.map(t=>{const p=taskLifecycleProjectionInTransaction(db,t.id);return {taskID:p.taskID,status:p.status,epoch:p.epoch,openedEventID:p.openedEventID,terminalEventID:p.terminalEventID}})
+  const descriptorRows=sqlite.query("SELECT task_id,session_id,json_extract(payload,'$.dispatchTurn.current_dispatch_id') AS dispatch_id FROM worker_turn_descriptor ORDER BY id").all() as any[]
+  // Current durable descriptor contains the dispatch's exact persisted identity.
+  const descriptors=descriptorRows.map(r=>({taskID:r.task_id,sessionID:r.session_id,dispatchID:r.dispatch_id}))
+  if(descriptors.some(d=>typeof d.dispatchID!=="string"||!d.dispatchID)) throw Error("Actual dispatch descriptor identity field requires inspection")
+  const dispatchCandidates=dispatchRecoveryCandidatesInTransaction(db,{descriptors}).map((r:any)=>({id:r.id,taskID:r.taskID,sessionID:r.sessionID,dispatchID:r.dispatchID}))
+  const artifacts=sqlite.query("SELECT id,task_id,kind,catalog_resource_count FROM engine_artifact ORDER BY id").all() as any[]
+  const versions=sqlite.query("SELECT artifact_id,task_id,kind,catalog_resource_count FROM engine_artifact_version ORDER BY artifact_id,catalog_revision").all()
+  const projectObservations=[]
+  for(const project of projects){
+    const effective=await Config.snapshotForProject(project.worktree,globalConfig)
+    const terminal=effective.terminal
+    const hostTerminal=TerminalProfile.setupDefaultProfile()
+    const resolveCommand=(command:string)=>path.isAbsolute(command)?(fs.existsSync(command)?command:undefined):(which(command)??undefined)
+    const regenerate=terminal?TerminalProfile.shouldRegenerateGeneratedProfilesForTest(terminal,resolveCommand,process.platform,hostTerminal):false
+    const profiles=terminal?.profiles??{}
+    const previousSingle=Object.keys(profiles).length===1 && Object.hasOwn(profiles,"default")
+    const configRoot=ProjectRuntimePaths.projectConfigRoot(project.worktree)
+    const projectInventory=inventory(project.worktree)
+    const taskDirs=dirs(ProjectRuntimePaths.taskCollectionRoot(project.worktree))
+    const cacheParents=[path.dirname(ProjectRuntimePaths.snapshotCacheRoot(project.worktree,"placeholder")),path.dirname(ProjectRuntimePaths.sessionDiffRoot(project.worktree,"placeholder"))]
+    const cacheDirectories=cacheParents.map(root=>({root,children:dirs(root),orphanChildren:dirs(root).filter(id=>!projects.some(p=>p.id===id))}))
+    const snapshots=projectInventory.filter(v=>v.type==='file'&&v.path.includes(`${path.sep}artifacts${path.sep}`)).map(v=>({path:v.path,bytes:v.bytes}))
+    const mcp=Object.entries(effective.mcp??{}).map(([id,value]:any)=>({id,type:value.type,enabled:value.enabled,command0:value.command?.[0]}))
+    const capability={pluginCount:effective.plugin?.length??0,mcpKeys:Object.keys(effective.mcp??{}),mcp,channelKeys:Object.keys(effective.channels??{}),commandKeys:Object.keys(effective.command??{}),model:effective.model,terminalProfileIDs:Object.keys(profiles),terminalDefaultID:terminal?.default_profile_id,terminalRegenerate:regenerate,terminalPreviousSingle:previousSingle,terminalWouldWrite:Object.keys(profiles).length===0||previousSingle||regenerate}
+    projectObservations.push({id:project.id,worktree:project.worktree,sandboxes:project.sandboxes,capability,configRoot,inventory:projectInventory,taskDirs,orphanTaskDirs:taskDirs.filter(id=>!tasks.some(t=>t.id===id&&t.project_id===project.id)),cacheDirectories,artifactFiles:snapshots})
+  }
+  const globalInventory=inventory(path.join(sourceRun,"runtime/config"))
+  const mission=sqlite.query("SELECT id FROM session WHERE kind='mission' AND json_extract(metadata,'$.mission.id') IS NOT NULL ORDER BY id").all()
+  const tableCounts=(sqlite.query("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all() as any[]).map(r=>({name:r.name,...sqlite.query(`SELECT COUNT(*) AS rows FROM "${r.name.replaceAll('"','""')}"`).get() as any}))
+  const providerPending=sqlite.query("SELECT r.id FROM provider_activity_request r LEFT JOIN provider_activity_outcome o ON o.request_id=r.id WHERE o.id IS NULL ORDER BY r.id").all()
+  const toolPending=sqlite.query("SELECT r.id FROM tool_part_request r LEFT JOIN tool_part_outcome o ON o.request_part_id=r.id WHERE o.id IS NULL ORDER BY r.id").all()
+  const unsettledPublications=sqlite.query("SELECT o.occurrence_id FROM bus_publication_outbox o WHERE (SELECT COUNT(DISTINCT phase) FROM bus_publication_phase_receipt p WHERE p.occurrence_id=o.occurrence_id AND p.phase IN ('exact','wildcard','global'))<>3 ORDER BY o.occurrence_id").all()
+  const unsettledDeliveries=sqlite.query("SELECT d.occurrence_id,d.phase,d.subscriber_id FROM bus_publication_delivery d LEFT JOIN bus_publication_delivery_receipt r ON r.occurrence_id=d.occurrence_id AND r.phase=d.phase AND r.subscriber_id=d.subscriber_id AND r.outcome IN ('succeeded','ignored') WHERE r.id IS NULL ORDER BY d.occurrence_id,d.phase,d.subscriber_id").all()
+  const runtimeInventory=inventory(path.join(sourceRun,"runtime"))
+  const result={observedAtUtc:new Date().toISOString(),sourceRun,occurrence:guard.occurrence,access:"readonly explicit original SQLite BEGIN/ROLLBACK; canonical current Task/dispatch/config snapshots; file lstat/readdir only",schemaDrift:findSchemaDrift(sqlite)??null,lifecycle,descriptorRows,dispatchCandidates,artifacts,versions,mission,projectObservations,globalInventory,tableCounts,providerPending,toolPending,unsettledPublications,unsettledDeliveries,runtimeInventory,boundary:"Fresh remaining pre-start observations; no clone/service/model/UI; file/config and recovery outputs require manual review before startup admission"}
+  fs.writeFileSync(path.join(out,"result-task-startup.json"),JSON.stringify(result,null,2),{flag:"wx"})
+  console.log(JSON.stringify({schemaDrift:result.schemaDrift,lifecycle,descriptors:descriptorRows,dispatchCandidates,artifactResourceCounts:artifacts.map(r=>({id:r.id,kind:r.kind,count:r.catalog_resource_count})),projects:projectObservations.map(p=>({id:p.id,capability:p.capability,files:p.inventory.length,taskDirs:p.taskDirs,orphanTaskDirs:p.orphanTaskDirs,cacheDirectories:p.cacheDirectories,artifactFiles:p.artifactFiles})),globalFiles:globalInventory.length,missionCandidates:mission.length}))
+} finally {sqlite.exec("ROLLBACK");sqlite.close()}

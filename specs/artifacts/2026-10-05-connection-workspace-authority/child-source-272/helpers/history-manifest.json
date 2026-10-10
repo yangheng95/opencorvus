@@ -1,0 +1,25 @@
+{
+  "sourceProject": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01/project",
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-10/child-source-272-history-01",
+  "projectID": "prj_honTzv1SylD1sTwgEqBC",
+  "readinessEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-272/history-readiness",
+  "rootSessionID": "ses_-zUSYFdRdzzk2frR62zX",
+  "requestID": "0f315e79-0af3-438e-b26e-d312f2f3e65e",
+  "caseLabel": "child-source-272-history-01",
+  "startupQualified": true,
+  "observedAtUtc": "2026-10-10T06:17:30.6252947Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "casePort": 18210,
+  "caseEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-272/history-01",
+  "sourceEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/live-01",
+  "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+  "review": "Fresh current original guard, complete readiness, task predicates and frontier all original executions joined exit0. Current schema matches; provider/tool/publication/delivery closed, two ProjectMemory actual snapshots idle pending0 dropped0, lifecycle completed epoch1 and both dispatches settled; permissions8/8 checkpoints2 and assistants15/15 closed; canonical original runtime_process MAX_SAFE physical birth dead. Original retained parent30224 exit0 binds raw8807157 bytes. Guard initial parent-field-source error and failed readiness logs retained; corrected before copy or launch. No Task/member/LLM/auth/model staging.",
+  "sourceOccurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "selectedSubject": {
+    "id": "tsk_g00VXRkMRi00ID2TqzPU",
+    "kind": "task",
+    "projectID": "prj_honTzv1SylD1sTwgEqBC",
+    "requestID": "0f315e79-0af3-438e-b26e-d312f2f3e65e",
+    "sessionID": "ses_-zUSYFdRdzzk2frR62zX"
+  }
+}

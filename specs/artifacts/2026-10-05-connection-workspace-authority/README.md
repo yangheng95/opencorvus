@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [子 Dock Sources272 Recall](child-source-plan-272.md) / [当前实际证据](child-source-272/README.md)：完成态三来源标题/详情与成员/整 Dock 阅读720保持，完整历史资格和原边界保留。
+
 - [生成侧聊271 Recall](side-live-plan-271.md) / [当前实际证据](side-live-271/README.md)：当前chat reader结束前关闭重开，前缀/top/参考保持，8EOF/Native0，无全帧扩大。
 
 - [来源标题270 Recall](source-title-plan-270.md) / [当前真实修复](source-title-270/README.md)：修native Markdown发布者title，真实UI/Tooltip与原全文equal，20断言/5EOF/Native0。
