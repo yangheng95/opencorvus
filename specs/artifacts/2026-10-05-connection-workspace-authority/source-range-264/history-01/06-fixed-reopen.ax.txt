@@ -1,0 +1,352 @@
+Browser tab: 111, Title: "OpenCorvus", URL: "http://localhost:18202/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18202/ui/
+	2 container overlayAppHost
+		3 container titlebar
+			4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		10 container panelBody
+			11 container Description: Chat shortcuts, ID: workspaceNavigation
+				12 container Chat shortcuts
+					13 button Chats
+					14 button Mission Board
+					15 button Scheduled
+					16 button Expert Squads
+					17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					18 button Settings
+				19 button About
+				20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			21 container workspacePageStack
+				22 container leftActivityShell
+					23 container workspaceContextbar
+						24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						25 button Search chats or run a command
+						26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					27 container sidebar
+						28 container workLedgerPanel
+							29 container Chat navigation
+								30 button New chat
+							31 container workLedgerProjectsScroll
+								32 text Projects
+								33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								35 container
+									36 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									37 container
+										38 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										39 button 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.t...
+										40 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+									41 button (expanded) Description: Collapse Anonymous bfe4c4, Secondary Actions: Collapse
+									42 container
+										43 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										44 button Reply with OK.
+										45 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+								46 container Recents
+									47 text Recents
+									48 container
+										49 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										50 button 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.t...
+										51 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+									52 container
+										53 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										54 button Reply with OK.
+										55 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+						56 container Connection Diagnostics
+							57 container Description: Connection Diagnostics · Online · Port 18202, ID: connBadge
+								58 text Online
+				59 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				60 container workspaceMain
+					61 container chatSection
+						62 container Description: Loading task, ID: taskSwitchProgress
+						63 container
+							64 text 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.t...
+							65 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
+							66 container Description: Not running, ID: taskStatus
+								67 text Not running
+							68 button Side chat
+							69 container solidChatHeaderRuntimeActions
+								70 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								71 checkbox Description: Close right dock, Value: 1
+						72 container
+							73 container Description: Conversation, ID: chatScroll
+								74 container
+									75 container
+										76 text User
+										77 text 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts 的两段：offset=27, limit=11；以及 offset=206, limit=19。然后用中文各用一两句话说明两段的作用，并保留两个真实文件来源供点击定位。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+									78 container
+										79 text work
+										80 text 17s
+										81 container
+											82 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+												83 text read
+												84 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+												85 image
+											86 container Sources
+												87 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+													88 text read.ts:27-37
+													89 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+										90 container
+											91 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @206+19 (19/262 lines), Secondary Actions: Expand
+												92 text read
+												93 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @206+19 (19/262 lines)
+												94 image
+											95 container Sources
+												96 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:206-224
+													97 text read.ts:206-224
+													98 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:206-224
+										99 content list
+											100 container
+												101 AXListMarker 1.
+												102 text 第 27–37 行
+												103 text ：
+												104 text citedReadRange
+												105 text  决定文件来源是否需要附带行号范围：没有读到内容，或从首行开始且未截断时不附带范围；其余情况返回本次读取的起止行号。 来源：read.ts:27–37
+											106 container
+												107 AXListMarker 2.
+												108 text 第 206–224 行
+												109 text ：这段组装读取结果，返回标题、正文和预览、截断状态、已加载指令文件路径及行数等元数据。它还通过
+												110 text fileSource
+												111 text  添加真实文件来源，并利用
+												112 text citedReadRange
+												113 text  附带适用的定位范围。 来源：read.ts:206–224
+										114 button Copy message
+										115 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+										116 pop up button (collapsed) Description: View model usage for this turn: 97K Token, Secondary Actions: Expand
+										117 text Oct 10, 10:42 AM
+							118 container chatHomeComposition
+								119 container solidChatComposer
+									120 container
+										121 text Model configuration unavailable
+										122 text You can still read this conversation. Review the details or choose a model before sending a message.
+										123 button (collapsed) Details, Secondary Actions: Expand
+											124 text Details
+										125 button Retry
+										126 container chatForm
+											127 splitter Description: Drag to resize the message input, Value: 42
+											128 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											129 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											130 text Work
+											131 text Chat
+											132 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											133 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											134 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												135 text Choose model
+											136 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									137 button Scroll to bottom
+					138 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					139 container Description: Tools panel, ID: rightDock
+						140 container tabs-cl-64
+							141 tab group Open tools
+								142 container
+									143 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
+									144 button Description: Close tab, Help: Close tab (Delete)
+							145 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							146 button Close panel
+							147 container Description: File, ID: centerWorkbenchFile
+								148 container Editor
+									149 container
+										150 text tool/read.ts
+										151 button (disabled) Save, Help: Save (Ctrl/Cmd+S)
+										152 button Reload from disk
+										153 button Close workspace
+									154 container
+										155 text entry area Description: Editor, Value:     output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+ *     from references without carrying the project ID.
+ *
+ * Returns undefined when the input is a plain file path.
+ */
+function resolveAttachmentPath(raw: string): string | undefined {
+  if (!raw) return undefined
+  const trimmed = raw.trim()
+  const located = AttachmentStore.nameFromUrl(trimmed)
+  if (located) {
+    const abs = AttachmentStore.resolveAbsolute(located.projectID, located.name)
+    if (!abs) throw new Error(`attachment ${trimmed} not found in project ${located.projectID}`)
+    return abs
+  }
+  const schemeMatch = trimmed.match(/^attachment:(?:\/\/)?(.+)$/i)
+  if (schemeMatch) {
+    const name = schemeMatch[1].replace(/^\/+/, "")
+    if (!name || name.includes("/") || name.includes("\\")) {
+      throw new Error(`attachment shorthand must be 'attachment:<sha>.<ext>' without directory parts: ${trimmed}`)
+    }
+    const abs = AttachmentStore.resolveAbsolute(Instance.project.id, name)
+    if (!abs) throw new Error(`attachment ${name} not resolvable in current project`)
+											156 container
+												157 text output  =  redactInlinePayloads ( output )
+											158 container
+												159 text return  {
+											160 container
+												161 text title ,
+											162 container
+												163 text output ,
+											164 container
+												165 text metadata : {
+											166 container
+												167 text preview ,
+											168 container
+												169 text truncated :  page . truncated ,
+											170 container
+												171 text loaded :  instructions . map (( i ) =>  i . filepath ),
+											172 container
+												173 text lines :  page . lines ,
+											174 container
+												175 text totalLines :  page . totalLines ,
+											176 text       },
+											177 container
+												178 text sources : [
+											179 container
+												180 text fileSource ({
+											181 container
+												182 text path :  filepath ,
+											183 container
+												184 text title ,
+											185 container
+												186 text           ...( citedReadRange ( page ) ?? {}),
+											187 container
+												188 text provider :  "opencorvus-read" ,
+											189 text         }),
+											190 text       ],
+											191 text     }
+											192 text   },
+											193 text })
+											194 text /**
+											195 text  * Map an attachment reference to its on-disk filesystem path so the read tool
+											196 text  * can serve files uploaded to the task (images, PDFs, spec documents, …).
+											197 text  *
+											198 text  * Accepted forms:
+											199 text  *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+											200 text  *     AttachmentStore.write (served by AttachmentRoutes).
+											201 text  *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+											202 text  *     resolves inside the current project, useful when agents synthesize URLs
+											203 text  *     from references without carrying the project ID.
+											204 text  *
+											205 text  * Returns undefined when the input is a plain file path.
+											206 text  */
+											207 container
+												208 text function resolveAttachmentPath ( raw :  string ):  string  |  undefined  {
+											209 container
+												210 text if  (! raw )  return undefined
+											211 container
+												212 text const trimmed  =  raw . trim ()
+											213 container
+												214 text const located  =  AttachmentStore . nameFromUrl ( trimmed )
+											215 container
+												216 text if  ( located ) {
+											217 container
+												218 text const abs  =  AttachmentStore . resolveAbsolute ( located . projectID ,  located . name )
+											219 container
+												220 text if  (! abs )  throw new Error ( `attachment  ${ trimmed }  not found in project  ${ located . projectID } ` )
+											221 container
+												222 text return abs
+											223 text   }
+											224 container
+												225 text const schemeMatch  =  trimmed . match ( /^attachment:(?:\/\/)?(.+)$/i )
+											226 container
+												227 text if  ( schemeMatch ) {
+											228 container
+												229 text const name  =  schemeMatch [ 1 ]. replace ( /^\/+/ ,  "" )
+											230 container
+												231 text if  (! name  ||  name . includes ( "/" ) ||  name . includes ( "\\" )) {
+											232 container
+												233 text throw new Error ( `attachment shorthand must be 'attachment:<sha>.<ext>' without directory parts:  ${ trimmed } ` )
+											234 text     }
+											235 container
+												236 text const abs  =  AttachmentStore . resolveAbsolute ( Instance . project . id ,  name )
+											237 container
+												238 text if  (! abs )  throw new Error ( `attachment  ${ name }  not resolvable in current project` )
+									239 text TypeScript
+
+The focused UI element is 155 text entry area Description: Editor, Value:     output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+ *     from references without carrying the project ID.
+ *
+ * Returns undefined when the input is a plain file path.
+ */
+function resolveAttachmentPath(raw: string): string | undefined {
+  if (!raw) return undefined
+  const trimmed = raw.trim()
+  const located = AttachmentStore.nameFromUrl(trimmed)
+  if (located) {
+    const abs = AttachmentStore.resolveAbsolute(located.projectID, located.name)
+    if (!abs) throw new Error(`attachment ${trimmed} not found in project ${located.projectID}`)
+    return abs
+  }
+  const schemeMatch = trimmed.match(/^attachment:(?:\/\/)?(.+)$/i)
+  if (schemeMatch) {
+    const name = schemeMatch[1].replace(/^\/+/, "")
+    if (!name || name.includes("/") || name.includes("\\")) {
+      throw new Error(`attachment shorthand must be 'attachment:<sha>.<ext>' without directory parts: ${trimmed}`)
+    }
+    const abs = AttachmentStore.resolveAbsolute(Instance.project.id, name)
+    if (!abs) throw new Error(`attachment ${name} not resolvable in current project`)

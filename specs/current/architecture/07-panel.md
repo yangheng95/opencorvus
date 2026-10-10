@@ -223,6 +223,13 @@ Read-only CodeEditor content keeps a normal keyboard focus entry through the
 existing read-only compartment's content attributes. It remains non-editable
 at both the state and DOM levels; range reveals can focus the same view, and
 navigation/search commands belong to that editor rather than the page.
+Citation reveal completion also requires a visible editor host with usable
+dimensions. A retained hidden view keeps the current request unsettled;
+the shared animation-frame scheduler and host resize observation apply that
+same range after layout becomes visible. CodeMirror's measure phase confirms
+usable layout and finished finite host motion before scheduling the reveal
+outside the library's update phase. Completed request identity prevents
+ordinary resizing from replacing the user's subsequent reading position.
 The file pane uses the existing forced tab mount so hiding the Dock or selecting
 another tool retains that single draft owner and its navigation guard. Closing
 the file still clears the canonical target after the guard resolves.

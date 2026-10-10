@@ -4,6 +4,7 @@ import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type 
 import { t } from "../../utils/i18n"
 import { Button } from "./Button"
 import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
 import {
   overlayCodeEditorExtensions,
   resolveRevealTarget,
@@ -38,6 +39,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   let view: EditorView | undefined
   let applyingExternalValue = false
   let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
   const languageCompartment = new Compartment()
   const readOnlyCompartment = new Compartment()
   const readOnlyExtensions = (readOnly: boolean) => [
@@ -51,6 +53,11 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   const [languageName, setLanguageName] = createSignal("")
   const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
   const [languageRetry, setLanguageRetry] = createSignal(0)
+
+  const revealIdentity = () => {
+    const range = local.lineRange
+    return range ? [local.path, range.startLine, range.endLine, local.lineRangeRevealRevision ?? 0].join("\0") : ""
+  }
 
   /**
    * Send the cursor to a cited line and band the cited range.
@@ -75,8 +82,12 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
       revealedIdentity = ""
       return
     }
-    const identity = [local.path, range.startLine, range.endLine, local.lineRangeRevealRevision ?? 0].join("\0")
+    const identity = revealIdentity()
     if (identity === revealedIdentity) return
+    // A retained file view can receive a new citation before its Dock is
+    // visible. Keep that request unsettled until real layout can scroll and
+    // focus it; the host observer retries this same current request.
+    if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
     const anchor = editor.state.doc.line(target.anchorLine).from
     editor.dispatch({
       selection: EditorSelection.cursor(anchor),
@@ -91,6 +102,38 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     editor.focus()
     if (target.settled) revealedIdentity = identity
   }
+
+  const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
+  const revealOnLayout = createAnimationFrameScheduler(() => {
+    const editor = view
+    if (!editor) return
+    if (!local.lineRange) {
+      revealLineRange()
+      return
+    }
+    if (revealIdentity() === revealedIdentity) return
+    editor.requestMeasure({
+      key: revealLineRange,
+      read: () => {
+        if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) {
+          return { visible: false, moving: false }
+        }
+        for (let element: HTMLElement | null = host; element; element = element.parentElement) {
+          if (element.getAnimations().some((animation) =>
+            animation.playState === "running" && Number.isFinite(animation.effect?.getComputedTiming().endTime),
+          )) return { visible: true, moving: true }
+        }
+        return { visible: true, moving: false }
+      },
+      write: ({ visible, moving }) => {
+        if (view !== editor || !visible) return
+        // CodeMirror is still updating in this callback. Dispatch the reveal
+        // in the next frame, after measured wrapping and Dock motion settle.
+        if (moving) revealOnLayout.schedule()
+        else revealAfterMeasure.schedule()
+      },
+    })
+  })
 
   onMount(() => {
     if (!host) return
@@ -110,7 +153,9 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
         }),
       ],
     })
-    revealLineRange()
+    revealObserver = new ResizeObserver(revealOnLayout.schedule)
+    revealObserver.observe(host)
+    revealOnLayout.schedule()
   })
 
   createEffect(() => {
@@ -171,10 +216,13 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     void local.lineRange?.startLine
     void local.lineRange?.endLine
     void local.lineRangeRevealRevision
-    revealLineRange()
+    revealOnLayout.schedule()
   })
 
   onCleanup(() => {
+    revealOnLayout.cancel()
+    revealAfterMeasure.cancel()
+    revealObserver?.disconnect()
     view?.destroy()
     view = undefined
   })

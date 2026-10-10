@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [隐藏定位264 Recall](source-range-plan-264.md) / [原失败与最终修复](source-range-264/README.md)：唯一测量/reveal管线，真实同Source重开206及阅读resize保持，原预算闭合。
+
 - [只读来源263 Recall](source-range-plan-263.md) / [修复与原失败](source-range-263/README.md)：共享只读焦点入口及实际键盘/范围验收，整Dock重开仍失败且继续。
 
 - [文件范围262 Recall](source-range-plan-262.md) / [真实Source与定位](source-range-262/README.md)：Sol两次read/目录外只读范围定位、同文件切换，当前预算6EOF/Native0，重复激活待验。

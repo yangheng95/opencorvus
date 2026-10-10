@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [隐藏来源定位264](records/2026-10/2026-10-10-source-range-264.md)：修复共享编辑器提前settle，真实重开/同引用定位206及用户阅读resize保持，原失败保留。
+
 - [只读来源263](records/2026-10/2026-10-10-source-range-263.md)：修复共享键盘焦点入口，真实搜索/Tab/重复定位；整Dock重开仍失败，继续根因修复。
 
 - [文件范围262](records/2026-10/2026-10-10-source-range-262.md)：当前Sol真实两条read范围/目录外只读定位与同文件切换，6EOF/原Native0，反复激活待补。
