@@ -492,6 +492,11 @@ assistant 的 timeline cursor 跳过它。该检查只唤醒现有循环，由�
 终态化废弃 assistant。服务重启只销毁 Runtime，不能使 Session、message、descriptor
 或 durable coordination request 失效。
 
+`SessionStatus.executionOccurrence`绑定当前接管的真实输入与精确Prompt拥有者，
+并从唯一进程内executionStates派生已发布status。真实idle保留在该现状态中；
+尚未有首次发布的输入为undefined，不能把getExecution的展示默认idle当作已结束事实。
+物理取消receipt保存该边界的精确未结束输入，不按最后Message或pending callback猜测。
+
 Compaction history reconstruction preserves the original dispatch authority input across incremental
 continuations. During newest-first traversal, a completed assistant-step tail already encountered before
 the checkpoint's source input satisfies that boundary immediately; reconstruction continues toward the

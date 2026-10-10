@@ -1,0 +1,19 @@
+bun test v1.3.14 (0d9b296a)
+
+test\settled-terminal-publication.test.ts:
+(pass) settled terminal publication > the settled path's terminal reaches Bus subscribers through the same owner as the live path [2380.62ms]
+(pass) settled terminal publication > a historical occurrence's settlement publishes without replacing the session's live occurrence [1892.67ms]
+
+test\session\execution-occurrence-lifecycle.test.ts:
+(pass) one reusable Session publishes independent lifecycle histories for consecutive input messages [902.78ms]
+(pass) one exact generation settlement releases a waiter while its reusable prompt owner remains live [831.48ms]
+(pass) an accepted prompt Turn publishes its exact occurrence idle before the reusable owner returns to standby [881.45ms]
+(pass) a failed terminal publication releases its occurrence latch for the successful publication [822.21ms]
+(pass) an unawaited lifecycle publication retains subscriber authority until the exact global envelope settles [913.29ms]
+(pass) a synchronous activity factory error is an owned rejected Promise and the lease remains usable [834.54ms]
+(pass) a synchronous lifecycle subscriber can re-enter the same publication without a Promise cycle [944.80ms]
+
+ 9 pass
+ 0 fail
+ 20 expect() calls
+Ran 9 tests across 2 files. [12.46s]

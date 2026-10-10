@@ -161,7 +161,13 @@ export namespace SessionStatus {
   }
 
   export function executionOccurrence(sessionID: string) {
-    return executionOccurrences[sessionID]
+    const occurrence = executionOccurrences[sessionID]
+    if (!occurrence) return undefined
+    const execution = executionStates[sessionID]
+    return {
+      ...occurrence,
+      status: execution?.inputMessageID === occurrence.inputMessageID ? execution.status : undefined,
+    }
   }
 
   /** Wait for one exact input-message generation to leave streaming/retry. */
@@ -337,7 +343,7 @@ export namespace SessionStatus {
       }
     }
     if (parsedStatus.type === "idle") {
-      if (isCurrentOccurrence) delete executionStates[sessionID]
+      if (isCurrentOccurrence) executionStates[sessionID] = { inputMessageID, status: parsedStatus }
       if (executionOccurrences[sessionID]?.inputMessageID === inputMessageID) delete activityMonitors[sessionID]
     } else if (isCurrentOccurrence) {
       executionStates[sessionID] = { inputMessageID, status: parsedStatus }

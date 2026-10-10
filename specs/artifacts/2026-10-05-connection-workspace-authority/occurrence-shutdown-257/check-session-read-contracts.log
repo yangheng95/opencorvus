@@ -1,0 +1,26 @@
+bun test v1.3.14 (0d9b296a)
+
+test\server\session-conversation-history.test.ts:
+(pass) session conversation history > cold assistant history advances a bounded real control-only identity window [2773.88ms]
+(pass) session conversation history > cold mission history advances a bounded real control-only identity window [2864.57ms]
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [4035.02ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [3533.41ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1701.85ms]
+
+test\server\session-event-connection-snapshot.test.ts:
+(pass) cold Session stream reads durable history and interactions with an unavailable execution model [1925.39ms]
+(pass) ordinary Session hydrate, history and reconnect retain both idle input occurrences [1904.43ms]
+(pass) Session stream schema classifies connection snapshots and ordinary protocol events by type [1.35ms]
+(pass) Session stream schema reports malformed connection frames as a Zod contract error [3.64ms]
+(pass) Session stream projects a non-message Session diff through Bus and ProtocolStore [1558.60ms]
+(pass) Session stream receives durable lifecycle and error facts for a non-Task Session [1716.48ms]
+(pass) Session reconnect selects the globally newest lifecycle across Session and Task aggregates [2192.19ms]
+(pass) session.connected converges the persisted first Work prompt at the stream cutover [1688.58ms]
+(pass) session.connected publishes a pageable canonical tail after a long disconnect [2799.75ms]
+(pass) session.connected precedes a newer live Part update captured after snapshot read [1854.57ms]
+(pass) two project streams receive their own non-Task child Message and Part events [3258.80ms]
+
+ 16 pass
+ 0 fail
+ 70 expect() calls
+Ran 16 tests across 2 files. [36.18s]

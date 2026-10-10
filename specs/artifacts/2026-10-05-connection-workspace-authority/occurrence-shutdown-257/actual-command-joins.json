@@ -1,0 +1,52 @@
+{
+  "lifecycle": {
+    "actualExitCode": 0,
+    "tests": 9,
+    "assertions": 20,
+    "session": 55735
+  },
+  "overlayTypes": {
+    "actualExitCode": 0,
+    "session": 90648
+  },
+  "backendTypes": {
+    "actualExitCode": 0,
+    "session": 56078
+  },
+  "observedAtUtc": "2026-10-10T00:48:51.6294163Z",
+  "sessionReads": {
+    "actualExitCode": 0,
+    "tests": 16,
+    "assertions": 70,
+    "session": 20434
+  },
+  "archiveActualExitCodes": [
+    0,
+    0
+  ],
+  "boundary": "Original returned command outcomes; actual CUA interaction and personally viewed screenshots separate from data/type checks",
+  "liveForeground": {
+    "nativeExitCode": 0,
+    "providerRequests": 11,
+    "actualExitCode": 0,
+    "session": 15843
+  },
+  "actor": "root single agent",
+  "historyForeground": {
+    "nativeExitCode": 0,
+    "actualExitCode": 0,
+    "providerActivityTables": "Full row content equals original; no new requests/outcomes",
+    "session": 4325
+  },
+  "shutdownActualExitCodes": [
+    0,
+    0
+  ],
+  "dataScope": {
+    "actualExitCode": 0,
+    "tests": 7,
+    "assertions": 17,
+    "session": 70645
+  },
+  "historyCustodyActualExitCode": 0
+}

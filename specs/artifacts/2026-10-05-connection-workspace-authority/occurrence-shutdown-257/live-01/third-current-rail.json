@@ -1,0 +1,24 @@
+{
+  "header": "Running",
+  "observedAtUtc": "2026-10-10T00:18:53.434Z",
+  "rows": [
+    {
+      "label": "work · Idle · 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https://developer.mozilla.org/en-US/docs/Web/Accessibility 。然后用中文写约1500字的产品审查指南，具体解释来源列表、持续生成的正文、每次输入的运行状态、键盘导航、结束后回看与重新打开会话应怎样设计。引用来源，明确区分资料直接支持的事实与你的建议。直接在本会话回答。",
+      "sessionID": "ses_-zUSOfRyyzzJaIjT298A",
+      "status": "idle",
+      "target": "msg_g0VXbKcgT00chGHxTC43"
+    },
+    {
+      "label": "work · Idle · 沿用已经读取的两个来源，不再读取网页。请用中文写约1000字的实际审查案例，描述第一轮结束、第二轮生成、用户回看旧来源、切换会话及重新打开历史时，应分别怎样核对每次输入的身份、运行状态与正文。特别区分回答已结束、物理会话仍待命、后台任务仍有工作这三种事实。直接在本会话回答。",
+      "sessionID": "ses_-zUSOfRyyzzJaIjT298A",
+      "status": "idle",
+      "target": "msg_g0VXbL2uQ00jasTb120y"
+    },
+    {
+      "label": "work · Running · 继续第三轮，请直接回答，不读取网页、不保存记忆或文件。用中文写约1000字的审查案例，描述同一会话三次输入：前两轮已结束、第三轮持续生成；之后三轮全部结束，再释放物理待命会话并重开历史。怎样判断哪次输入真正被取消、哪次只是已结束历史、排队消息如何保留，以及来源标题、域名和定位是否仍属于正确输入？",
+      "sessionID": "ses_-zUSOfRyyzzJaIjT298A",
+      "status": "running",
+      "target": "msg_g0VXbLNTa00QSQqtO6X3"
+    }
+  ]
+}

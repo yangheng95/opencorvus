@@ -1,0 +1,34 @@
+bun test v1.3.14 (0d9b296a)
+
+test\session\prompt-cancellation-occurrence.test.ts:
+(pass) real listener shutdown preserves settled inputs and cancels exact active inputs across two Projects [4295.68ms]
+103 |     await owned.finish()
+104 |     expect({ settled, ownerAborted: owned.owner.aborted, original: inputFact(owned.session.id, owned.input.id) }).toEqual({
+105 |       settled: true, ownerAborted: true,
+106 |       original: { sessionID: owned.session.id, inputMessageID: owned.input.id, status: { type: "idle" } },
+107 |     })
+108 |     expect(await attached).toMatchObject({ name: "ExecutionCancellationError", sessionID: owned.session.id, origin: { source: "process.shutdown" } })
+                                 ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "name": "ExecutionCancellationError",
+-   "origin": {
+-     "source": "process.shutdown",
+-   },
+-   "sessionID": "ses_-zUSOhA6JzzScaHJTvla",
+- }
++ [SessionPromptLoopFinishedError: Session ses_-zUSOhA6JzzScaHJTvla prompt loop finished before delivering an attached result]
+
+- Expected  - 7
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\prompt-cancellation-occurrence.test.ts:108:28)
+(fail) exact owner settlement preserves an idle input and its unconsumed durable queued successor [1644.77ms]
+(pass) session public abort retains settled input history and publishes an active input cancellation [2552.61ms]
+(pass) coding/work/session public abort retains settled input history and publishes an active input cancellation [2201.09ms]
+
+ 3 pass
+ 1 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [13.00s]

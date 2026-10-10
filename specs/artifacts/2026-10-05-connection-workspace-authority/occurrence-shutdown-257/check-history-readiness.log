@@ -1,0 +1,16 @@
+39 |   const targets = sqlite.query("SELECT DISTINCT target,target_id FROM engine_control_activation_lease ORDER BY target,target_id").all() as any[]
+40 |   const leases = [...new Set(targets.map(row => row.target))].flatMap(target => [...currentControlLeasesInTransaction(db, target, targets.filter(row => row.target === target).map(row => row.target_id)).values()])
+41 |   const capacity = sqlite.query("SELECT * FROM runtime_execution_capacity_lease ORDER BY lease_id").all()
+42 |   const controls = sqlite.query("SELECT r.id,r.session_id,r.kind,e.id AS event_id,e.kind AS event_kind FROM session_control_record r LEFT JOIN session_control_event e ON e.control_id=r.id ORDER BY r.id,e.time_created,e.id").all()
+43 |   const permissions = sqlite.query("SELECT s.id,s.attempt_id,s.project_id,s.session_id,o.id AS outcome_id,o.event_type AS outcome,r.time_created AS result_at FROM permission_ledger s LEFT JOIN permission_ledger o ON o.outcome_slot=s.attempt_id LEFT JOIN permission_execution_result r ON r.attempt_id=s.attempt_id WHERE s.event_type='execution_started' ORDER BY s.id").all()
+44 |   const permissionRequests = sqlite.query("SELECT * FROM permission_request_state ORDER BY id").all()
+                                         ^
+SQLiteError: no such table: permission_request_state
+      errno: 1,
+ byteOffset: -1,
+
+      at prepare (bun:sqlite:345:37)
+      at query (bun:sqlite:367:28)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\occurrence-shutdown-257\history-readiness.ts:44:37
+
+Bun v1.3.14 (Windows x64)

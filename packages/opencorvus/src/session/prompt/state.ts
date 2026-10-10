@@ -97,6 +97,7 @@ export namespace SessionPromptState {
   export type CancellationReceipt = {
     directory: string
     owner: AbortSignal
+    readonly inputMessageID?: string
     error: ExecutionCancellationError
     finished: Promise<void>
     outcome: "pending" | "succeeded" | "failed"
@@ -911,14 +912,21 @@ export namespace SessionPromptState {
       message: options.origin.reason,
       origin: options.origin,
     })
+    const occurrence = SessionStatus.executionOccurrence(sessionID)
+    const inputMessageID =
+      occurrence?.owner === match.abort.signal &&
+      occurrence.status?.type !== "idle" &&
+      occurrence.status?.type !== "terminal"
+        ? occurrence.inputMessageID
+        : undefined
     if (options.settlementRequired) match.cancellationSettlementRequired = true
-    SessionStatus.abortActivityMonitor(sessionID, error)
     match.cancellation = error
     const resourceSettlement = createFinishSignal()
     const reuseSettlement = createFinishSignal()
     const receipt: CancellationReceipt = {
       directory: directoryKey(directory),
       owner: match.abort.signal,
+      inputMessageID,
       error,
       finished: resourceSettlement.finished,
       outcome: "pending",
@@ -933,16 +941,21 @@ export namespace SessionPromptState {
       settlementRequired: options.settlementRequired === true,
     }
     cancellationReceipts.set(sessionID, receipt)
-    match.abort.abort(error)
     const now = Date.now()
     match.timeCancelled = now
     match.timeUpdated = now
-    // Reject all pending callbacks before deleting state so that
-    // Exact prompt callers are unblocked after the owner settles.
-    for (const cb of match.callbacks) {
+    // An abort listener can synchronously finish the owner and reject its
+    // callbacks. Deliver the exact cancellation before requesting cleanup.
+    const callbacks = match.callbacks
+    match.callbacks = []
+    for (const cb of callbacks) {
       cb.reject(error)
     }
-    match.callbacks = []
+    try {
+      SessionStatus.abortActivityMonitor(sessionID, error)
+    } finally {
+      match.abort.abort(error)
+    }
     // Keep the busy slot until the owning prompt loop observes the abort and
     // calls finish(sessionID, sameAbortSignal). Deleting here lets a retry
     // start in the same session while the old provider/tool stack is still

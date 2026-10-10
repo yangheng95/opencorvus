@@ -6,7 +6,6 @@ import { validator } from "@/server/validator"
 import z from "zod"
 import { Session } from "../../session"
 import { SessionStatus } from "@/session"
-import { publishSessionStatus } from "@/session/status-publication"
 import { SessionInitializer } from "@/session/initialize"
 import {
   conversationMessageHasDisplay,
@@ -1725,14 +1724,6 @@ export const SessionRoutes = lazy(() =>
         })
         cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
         await awaitSessionPromptFinishedInScope({ session, handle: "session.abort" })
-        const occurrence = SessionStatus.executionOccurrence(sessionID)
-        if (occurrence && SessionStatus.getExecution(sessionID, occurrence.inputMessageID).type !== "terminal") {
-          await publishSessionStatus(
-            session,
-            { type: "terminal", reason: "aborted", error: "session aborted" },
-            { inputMessageID: occurrence.inputMessageID },
-          )
-        }
         return c.json(true)
       },
     )

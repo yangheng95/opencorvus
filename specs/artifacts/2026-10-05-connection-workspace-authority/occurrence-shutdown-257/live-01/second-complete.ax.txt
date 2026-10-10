@@ -1,0 +1,215 @@
+Browser tab: 100, Title: "OpenCorvus", URL: "http://localhost:18193/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18193/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https:/...
+										90 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 2620cb, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									103 container
+										104 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										105 button 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https:/...
+										106 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-1511-trigger, Secondary Actions: Expand
+									107 container
+										108 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										109 button Reply with OK.
+										110 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-1517-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18193, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					77 container
+						78 text 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https:/...
+						99 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						100 container Description: Not running, ID: taskStatus
+							101 text Not running
+						79 button Side chat
+						80 container solidChatHeaderRuntimeActions
+							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							82 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							102 container
+								111 container
+									112 text work
+									113 text 47s
+									114 text 我会先读取这两个来源，确认它们直接支持的无障碍原则，再据此整理产品审查指南，并明确标出针对会话界面的设计建议。
+									115 button (collapsed) Description: webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8), Secondary Actions: Expand
+										116 text webfetch
+										117 text https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)
+										118 image
+									119 container Sources
+										120 link Description: Open web source: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C, Value: w3.org/WAI/fundamentals/accessibility-intro/
+									121 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html), Secondary Actions: Expand
+										122 text webfetch
+										123 text https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)
+										124 image
+									125 container Sources
+										126 link Description: Open web source: Accessibility | MDN, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+									127 button (collapsed) Description: memory · Saved: 会话产品无障碍审查的来源边界, Secondary Actions: Expand
+										128 text memory
+										129 text Saved: 会话产品无障碍审查的来源边界
+										130 image
+									131 heading 会话型产品无障碍审查指南, Value: 1
+										132 text 会话型产品无障碍审查指南
+									133 text 审查目标不是“加上朗读功能”，而是让用户能独立理解来源、阅读生成内容、判断每次输入的结果，并在离开后继续使用。
+									134 container
+										135 text 资料直接支持的事实 ：W3C 将无障碍定义为让残障人士能够感知、理解、导航、交互及贡献内容，并明确要求所有功能可通过键盘使用。[1] MDN 指出，正确使用 HTML 元素能改善无障碍；ARIA 可为复杂控件和动态更新内容补充浏览器、辅助技术能够识别的语义。[2]
+									136 container
+										137 text 以下各节的具体方案均为 基于这些原则的产品建议 ，不是两个页面逐条规定的会话设计标准。
+									138 heading 一、来源列表：能辨认，也能追溯, Value: 2
+										139 text 一、来源列表：能辨认，也能追溯
+									140 container
+										141 text 设计建议 ：用有名称的区域和语义化列表展示来源。每项提供可辨认的标题、发布机构或域名，以及必要的日期；避免所有链接都叫“查看”或仅显示小图标。正文引用应能定位到对应来源，查看后也能返回原来的阅读位置。
+									142 text 区分“发现了链接”“读取成功”“读取失败”和“实际支持结论”：列出一个网址不等于核实了内容。展开详情应使用按钮，跳转网页应使用链接；展开状态应能被辅助技术识别。
+									143 container
+										144 text 审查方法 ：只用键盘和屏幕阅读器寻找某条结论的依据。用户是否知道链接目的地、能打开来源，并返回原文？来源读取失败是否有文字说明，而非只有红色标记？
+									145 heading 二、持续生成的正文：更新不能夺走阅读权, Value: 2
+										146 text 二、持续生成的正文：更新不能夺走阅读权
+									147 container
+										148 text 设计建议 ：将正文阅读与运行通知分开。正文保留标题、段落、列表等结构，不因新增文字反复重建整段内容。用户向上回看后，不应被强制滚回底部；提供“有新内容”和“跳到最新”入口。
+									149 text 不要默认逐字播报生成内容。可通过独立的通知区域报告“开始生成”“新增内容”“生成结束”，具体播报粒度应经辅助技术实测确定，并允许关闭自动播报。MDN 支持用 ARIA 补充动态内容语义，但其总览页没有规定流式正文的播报频率。[2]
+									150 container
+										151 text 审查方法 ：生成期间阅读旧段落、选择文字、打开引用。检查焦点、阅读位置是否稳定，播报是否打断操作；停止生成后，已产生的内容是否仍可阅读。
+									152 heading 三、每次输入的运行状态：明确属于哪一轮, Value: 2
+										153 text 三、每次输入的运行状态：明确属于哪一轮
+									154 container
+										155 text 设计建议 ：每条输入关联自己的状态，例如“排队中、处理中、已完成、已停止、失败”，不要只在页面顶部放一个总旋转图标。状态同时用文字表达，失败时说明影响及可采取的动作。
+									156 text 区分“正在生成正文”和“整轮处理完成”；若正文已出现但来源仍在读取，应如实显示。停止、重试需有清楚名称和作用范围，重试不应悄悄覆盖旧结果。没有可靠进度数据时，不显示虚构百分比。
+									157 container
+										158 text 审查方法 ：连续提交两次输入，再分别停止、触发失败与重试。确认用户能判断每个结果对应哪条输入，屏幕阅读器获得的状态与视觉界面一致。
+									159 heading 四、键盘导航：完整流程无需鼠标, Value: 2
+										160 text 四、键盘导航：完整流程无需鼠标
+									161 container
+										162 text 资料事实 ：W3C 明确指出，无障碍网站不依赖鼠标，应让所有功能通过键盘使用。[1]
+									163 container
+										164 text 设计建议 ：焦点顺序与阅读顺序一致，焦点样式清晰且不被浮层遮挡。提供跳至正文、输入框和来源区域的入口。发送、停止、展开、复制、重试、切换会话均须可操作；静态段落不必全部加入 Tab 顺序，可通过标题和阅读导航访问。
+									165 text 弹窗打开后管理焦点，关闭后返回触发位置。多行输入明确说明发送与换行方式，不在中文输入法确认候选词时误发送，也不要依赖未说明的快捷键。
+									166 container
+										167 text 审查方法 ：仅用键盘走完完整流程，检查是否存在焦点陷阱、不可到达的按钮或意外提交。
+									168 heading 五、结束后回看与重新打开：保存可理解的历史, Value: 2
+										169 text 五、结束后回看与重新打开：保存可理解的历史
+									170 container
+										171 text 设计建议 ：结束后保留输入、正文、引用和最终状态，不能只留下“已完成”。提供按轮次导航和内容搜索，长会话也应能访问较早消息。
+									172 text 重新打开时，清楚说明这是历史记录；不要把旧任务显示成正在运行，也不要自动重播全部正文或重新执行请求。可恢复阅读位置，并提供“从头阅读”“继续提问”等明确入口。如果此前运行被中断，应标明结果未完成，保留已有内容，由用户决定是否重试。
+									173 container
+										174 text 审查方法 ：关闭并重新打开成功、失败和中断的会话，检查历史内容、来源对应关系及状态是否完整一致。
+									175 heading 验收原则, Value: 2
+										176 text 验收原则
+									177 container
+										178 text W3C 强调应尽早、持续评估，并指出任何单一工具都不能判断网站是否满足全部无障碍指南，需要有知识的人工评估。[1] 因此，自动检查之外，还应结合键盘、屏幕阅读器、放大显示和真实用户测试。以上清单是产品审查起点， 不能单凭完成清单就宣称符合 WCAG 。
+									179 heading 来源, Value: 3
+										180 text 来源
+									181 container
+										182 text [1]
+										183 link Description: W3C WAI：Introduction to Web Accessibility, Value: w3.org/WAI/fundamentals/accessibility-intro/
+										184 text ，重点参见 “What is Web Accessibility”“Keyboard Input”“Evaluating Accessibility”。
+									185 container
+										186 text [2]
+										187 link Description: MDN：Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+										188 text ，重点参见 HTML、WAI-ARIA 与键盘导航的介绍。
+								189 container
+									190 text User
+									191 text 沿用已经读取的两个来源，不再读取网页。请用中文写约1000字的实际审查案例，描述第一轮结束、第二轮生成、用户回看旧来源、切换会话及重新打开历史时，应分别怎样核对每次输入的身份、运行状态与正文。特别区分回答已结束、物理会话仍待命、后台任务仍有工作这三种事实。直接在本会话回答。
+								192 container
+									193 text work
+									194 text 24s
+									195 heading 实际审查案例：两轮问答与历史恢复, Value: 1
+										196 text 实际审查案例：两轮问答与历史恢复
+									197 text 设一个研究助手：用户第一轮要求“比较两份报告”，第二轮要求“补充风险分析”。审查者依次观察第一轮结束、第二轮生成、回看旧来源、切换会话和重新打开历史。
+									198 container
+										199 text 来源边界 ：已读取的 W3C 页面支持让用户能够感知、理解、导航和交互，以及全部功能可用键盘操作；MDN 总览支持正确使用 HTML 语义，并通过 ARIA 为动态内容补充可识别的语义。[1][2] 下述输入标识、状态关联和历史恢复方案是 产品建议 ，不是两份资料直接规定的运行模型。
+									200 heading 一、第一轮结束：不要把三个事实合并, Value: 2
+										201 text 一、第一轮结束：不要把三个事实合并
+									202 text 首先分别核对：
+									203 content list
+										204 container
+											205 AXListMarker •
+											206 text 回答已结束 ：第一轮正文不再追加，显示其结束结果。
+										207 container
+											208 AXListMarker •
+											209 text 物理会话仍待命 ：承载交互的会话仍可接收下一次输入；这不表示第一轮仍在生成。
+										210 container
+											211 AXListMarker •
+											212 text 后台任务仍有工作 ：例如来源校验尚未结束；这不表示正文一定还会变化，也不等于会话正在等待用户。
+									213 text 三者可以同时成立。建议显示“第一轮回答已结束；来源校验仍在进行”，输入框保持可用。不能用一个“运行中”概括全部事实。若无法确认底层会话是否待命，应显示已知状态，不推测其存活情况。
+									214 text 审查者记录第一轮的稳定输入标识、输入文字和所属会话，核对正文、来源及后台工作是否都关联该轮。正文停止只证明回答结束，不能证明后台任务全部完成。
+									215 heading 二、第二轮生成：新状态不能覆盖旧状态, Value: 2
+										216 text 二、第二轮生成：新状态不能覆盖旧状态
+									217 text 提交第二轮后，核对它是否有独立标识，并关联自己的正文与运行状态。第一轮仍显示已结束；第二轮显示处理中。第一轮后台校验若此时返回，只能更新第一轮对应来源，不能误写进第二轮正文。
+									218 text 建议为用户提供“第2轮：补充风险分析”等可理解的名称，内部则使用稳定标识，不单靠列表位置或时间区分。审查时分别停止、重试第二轮，确认操作作用于正确输入；重试产生的新执行应与旧执行可区分，不悄悄抹掉旧结果。
+									219 heading 三、回看旧来源：阅读位置不是运行目标, Value: 2
+										220 text 三、回看旧来源：阅读位置不是运行目标
+									221 text 第二轮生成时，用户打开第一轮引用。核对链接是否属于第一轮、支持的是哪段结论，以及来源读取状态。不能因第二轮更新而把来源面板替换成“最新一轮来源”。
+									222 text 正文增长不应抢走焦点或强制滚到底部。建议用独立通知提示“第二轮有新内容”，让用户选择返回。用键盘和屏幕阅读器检查：是否能打开旧来源、辨认目的地，并回到原引用位置。
+									223 heading 四、切换会话：离开不等于停止, Value: 2
+										224 text 四、切换会话：离开不等于停止
+									225 text 用户切换到另一个会话后，核对第二轮究竟继续执行、已停止还是执行失败。切换页面本身不能作为停止证据；原会话仍待命也不能作为后台继续工作的证据。
+									226 text 建议在会话列表标明具体情况，例如“第二轮仍在生成”，但不播报另一会话的整段正文。返回时核对原输入标识、正文累计内容和状态是否连续，是否误把另一会话的输出接入本轮。
+									227 heading 五、重新打开历史：展示记录，不冒充实时运行, Value: 2
+										228 text 五、重新打开历史：展示记录，不冒充实时运行
+									229 text 重新打开后，逐轮核对输入身份、正文、来源和最终状态。已结束回答应保持已结束；旧的“处理中”不能未经核实直接恢复为实时状态。若仍有后台任务，应确认其当前状态及归属；若无法确认，应明确说明。
+									230 text 建议不自动重播全部正文、不自动重试旧输入，并提供继续提问入口。新会话可以接续历史，但不能因此声称原物理会话一直存活。
+									231 container
+										232 text 验收关键 ：每条状态都应回答“属于哪次输入、描述哪个对象、依据是什么”。再以键盘、屏幕阅读器及人工检查验证，而非只看旋转图标是否消失；W3C 明确指出，单一自动工具不能替代人工无障碍评估。[1]
+									233 container
+										234 text [1]
+										235 link Description: W3C WAI：Introduction to Web Accessibility, Value: w3.org/WAI/fundamentals/accessibility-intro/
+										236 text [2]
+										237 link Description: MDN：Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+						43 container chatHomeComposition
+							46 container chatForm
+								47 splitter Description: Drag to resize the message input, Value: 42
+								48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								49 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								83 text Work
+								84 text Chat
+								85 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+								55 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+									57 text openai/gpt-6.1-sol
+								58 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18193/ui/

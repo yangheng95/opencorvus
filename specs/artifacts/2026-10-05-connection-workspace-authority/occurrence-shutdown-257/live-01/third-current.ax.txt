@@ -1,0 +1,131 @@
+Browser tab: 100, Title: "OpenCorvus", URL: "http://localhost:18193/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18193/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https:/...
+										91 image Running
+										90 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 2620cb, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									92 container
+										93 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										94 button 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https:/...
+										95 image Running
+										96 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-1643-trigger, Secondary Actions: Expand
+									97 container
+										98 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										99 button Reply with OK.
+										100 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-1649-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18193, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				101 container centerWorkbenchConversation
+					102 container Agent activity
+						103 content list
+							104 container
+								105 button work · Idle · 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https://developer.mozilla.org/en-US/docs/Web/Accessibility 。然后用中文写约1500字的产品审查指南，具体解释来源列表、持续生成的正文、每次输入的运行状态、键盘导航、结束后回看与重新打开会话应怎样设计。引用来源，明确区分资料直接支持的事实与你的建议。直接在本会话回答。
+								106 button work · Idle · 沿用已经读取的两个来源，不再读取网页。请用中文写约1000字的实际审查案例，描述第一轮结束、第二轮生成、用户回看旧来源、切换会话及重新打开历史时，应分别怎样核对每次输入的身份、运行状态与正文。特别区分回答已结束、物理会话仍待命、后台任务仍有工作这三种事实。直接在本会话回答。
+								107 button work · Running · 继续第三轮，请直接回答，不读取网页、不保存记忆或文件。用中文写约1000字的审查案例，描述同一会话三次输入：前两轮已结束、第三轮持续生成；之后三轮全部结束，再释放物理待命会话并重开历史。怎样判断哪次输入真正被取消、哪次只是已结束历史、排队消息如何保留，以及来源标题、域名和定位是否仍属于正确输入？
+					108 container chatSection
+						109 container Description: Loading task, ID: taskSwitchProgress
+						110 container
+							111 text 请读取这两个公开来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 和 https:/...
+							112 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							113 container Description: Running, ID: taskStatus
+								114 text Running
+							115 button Side chat
+							116 container solidChatHeaderRuntimeActions
+								117 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								118 checkbox Description: Open right dock, Value: 0
+						119 container
+							120 container Description: Conversation, ID: chatScroll
+								121 container
+									122 text work
+									123 text 27s
+									124 heading 审查案例：三轮输入、取消与历史重开, Value: 1
+										125 text 审查案例：三轮输入、取消与历史重开
+									126 text 同一会话中，第一轮要求“比较两份报告”，第二轮要求“补充风险”，两轮回答均已结束；第三轮要求“给出行动方案”，正文仍在生成。审查者随后测试取消、排队、全部结束、释放物理待命会话及重开历史。
+									127 container
+										128 text 沿用已读来源：W3C 支持可理解、可导航、可交互及键盘可用的原则；MDN 支持语义化 HTML 和动态内容的辅助技术语义。[1][2]  以下运行身份、取消判定与历史保存机制均为产品建议，不是两份总览直接规定的规则。
+									129 heading 一、第三轮生成：先确认操作对象, Value: 2
+										130 text 一、第三轮生成：先确认操作对象
+									131 text 给三次输入保留稳定身份，并分别关联输入文字、执行记录、正文和来源。用户界面可显示“第3轮：行动方案”，内部不能仅靠当前选中消息或列表位置识别操作目标。
+									132 text 此时第一、二轮应显示已结束，第三轮显示生成中。即使用户正在阅读第一轮，停止按钮也应明确标为“停止第3轮生成”。审查时从旧消息处执行停止，核对发出的操作是否仍指向第三轮，而非误取消阅读位置对应的输入。
+									133 heading 二、怎样判断真正取消, Value: 2
+										134 text 二、怎样判断真正取消
+									135 container
+										136 text 点击停止、正文暂时不增长，都不能独立证明取消成功。  应核对：取消请求指向哪个输入的哪次执行、执行方是否确认，以及该执行最终以什么结果结束。
+									137 text 若第三轮确认被取消，保留已生成正文，标明“已取消，内容未完成”；第一、二轮仍是已结束历史，不能改成已取消。如果停止请求到达前第三轮已正常完成，应显示“已完成”，可说明未发生取消，不能为了回应按钮点击而伪造取消结果。
+									138 text 还要区分取消范围：停止正文生成不必然停止关联后台任务。若后台工作继续，应单独显示其状态；只有明确覆盖全部相关工作的取消，才能宣称整轮工作已取消。
+									139 heading 三、排队消息：保留输入，不提前制造结果, Value: 2
+										140 text 三、排队消息：保留输入，不提前制造结果
+									141 text 另设一个独立测试分支：第三次输入先处于排队状态。排队记录应保存输入全文、稳定身份、所属会话及顺序，不能显示成已有回答，也不能因为用户切换阅读位置而消失。
+									142 text 取消排队输入时，应核对该记录是否确实退出队列，并标为“排队已取消，未开始执行”。若它已被取出执行，则须核对执行取消结果，不能继续声称“未开始”。普通排队消息不应因释放连接而被静默删除；若产品规定断开会终止队列，应提前说明，并保存明确的终止结果。
+									143 heading 四、三轮全部结束：再释放物理会话, Value: 2
+										144 text 四、三轮全部结束：再释放物理会话
+									145 container
+										146 text 正常完成路径中，三轮正文均结束后，继续检查关联后台任务和队列。 回答结束、后台工作清空、物理会话待命，是三个独立事实。
+									147 text 释放物理待命会话只说明承载交互的运行实例已释放，不应把三条历史输入改成已取消。若后台工作仍未完成或队列仍有消息，就不能宣称“全部工作结束”；应按既定策略继续处理或明确终止，并记录结果。
+									148 heading 五、重开历史：核对正文与来源归属, Value: 2
+										149 text 五、重开历史：核对正文与来源归属
+									150 text 重开后逐轮比对输入文字、执行结果及正文。取消的第三轮保留部分内容和取消标记；正常结束的记录仍显示已完成。打开历史不应自动重试，也不能因为新建了运行实例就声称原物理会话仍存活。
+									151 container
+										152 text 每条来源核对 标题、域名、实际链接和正文定位 ：它属于哪轮、支持哪段文字？相同网址可以被多轮引用，但各轮的引用关系须分别保留。标题应对应所用来源，域名与实际目标一致，定位应返回正确轮次的引用位置。重排消息或折叠正文后，定位不能仅依赖旧列表序号；失效链接应明确提示，不能跳到另一轮“看起来相近”的来源。
+									153 container
+										154 text 验收结论应逐项记录 ：谁被取消、谁正常结束、队列是否保留、实例是否释放、来源是否仍对应正确输入；不能用一个总状态代替这些证据。
+									155 text [1] [W3C WAI：Introduction to
+							156 container chatHomeComposition
+								157 container chatForm
+									158 splitter Description: Drag to resize the message input, Value: 42
+									159 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									160 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									161 text Work
+									162 text Chat
+									163 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									164 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									165 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										166 text openai/gpt-6.1-sol
+									167 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+
+The focused UI element is 167 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt

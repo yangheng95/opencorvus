@@ -1,0 +1,40 @@
+# 257 待命Prompt退出保留已结束输入
+
+## Recall
+
+用户要求持续自主体验UI/UX（User Interface/User Experience，用户界面/体验）、功能与Sources（来源）/Rendering（渲染），最后明确只用单agent。256已推送2b36ba2034479b9f3cc744564ff3e2fe84747c0f，原三轮真实Sol状态/来源复核通过；本轮开始git status干净，上轮属于已验证进展。单root调查、实现与验收，不启动成员/Task，不改原历史事实。
+
+重读256 Recall/实际证据，读取当前03-control/02-data的standby（待命）物理Prompt契约、SessionStatus输入轮次/执行判据、PromptState start/attach/cancel/finish/receipt、Loop接受/idle/待机/取消/终态、Scope普通/精确owner收敛、writer进程退出/重启两阶段、公共Session与右栏停止/归档、Task取消/终态/删除、Mission关闭与恢复、Runner物理回收。全仓查CancellationReceipt、awaitSessionPromptFinishedInScope、cancel/终态调用与相关数据测试；SessionActor只查到定义，作为未消费旧路径排除，未扩大清理。两处错误猜路径已通过rg --files纠正，不当作产品故障。
+
+## 真实问题与影响深度
+
+原256进程实际退出0、全11Sol EOF（End of File，原流结束）及完整凭据副本退休后，原SQLite只读BEGIN/ROLLBACK证明：第三输入msg_e813c36c-0f2d-42b9-a38d-688291e9a762在1791589505452自然idle（空闲），退出又在1791589621621写idle，随后1791589621656写terminal/aborted（终态/取消），原因为原http.shutdown；原预检输入也相同。Task/ingress（入口）/Prompt owner持久计数均0，实际普通两Project并行待命。256 projector忠实把aborted映射skipped，故下一物理进程重开会误把已完成输入标为停止。原标题或末次状态不作根因，以上原事件与生产调用链是证据。
+
+直接触发是关闭服务/重启释放物理待命Prompt。Prompt拥有者贯穿多次输入：Loop.finalizePrompt先settleAcceptedExecutionOccurrence为idle，再flush真实结果并等待新输入；finish只退役物理拥有者，仍保留最后输入身份。Scope在资源finished后无条件向这个最后身份发布aborted，没有记录取消时真正尚未交付的输入。普通与精确owner两条收敛函数重复此错误；Session/right-sidebar停止另有相同“非terminal就abort”的写入。旧修复256只让内容不覆盖生命周期，所以不能根治错误生命周期生产者。
+
+共享横向审计：所有普通/Side/Task Worker/Mission Prompt同Scope；HTTP关闭、managed parent、restart均从writer两阶段取消/等候；失败/重试沿原receipt保留、reusable准入隔离与精确directory/owner校验。Task主动取消仍由已settle后的Task领域publishTaskAgentCancellationStatusesAfterSettlement封闭其未终态assignment，Task关闭/归档保留publishTerminalStatus=false；Mission关闭/abort保留其原持久来源开关。不能以Prompt idle判定整个Task/Mission完成，不改变Task handoff/队列/恢复/终态事实。并行两Project、同Session串行多输入、执行中/重试中/待命/终态尾巴以及真实已接受但尚未开始的callback输入必须区别。
+
+进一步读取prompt/run、Loop.partitionPendingDelivery与原批次接受契约后确认：callback的reply目标可以是仅写入pendingDelivery的排队消息，回调被物理取消不等于其持久投递被取消，不能把所有callback目标作为执行取消对象。真正接管的输入由现executionOccurrence绑定同精确owner；当前getExecution的默认idle又混合了“尚未发布状态”与“真实已发布idle”。需要在现唯一executionStates中保留真实idle，executionOccurrence派生该已发布状态：真实idle/terminal保持，streaming/retry与已由Loop接管但尚未发布状态的新输入可被精确取消；未接管的队列仍沿原pendingDelivery/Task handoff。
+
+## 实施方案
+
+1. 现executionStates保留真实发布的idle，executionOccurrence从同一现状态派生status，无新缓存或持久Schema。唯一CancellationReceipt加入取消边界的readonly inputMessageID：仅同精确owner当前输入且尚未实际idle/terminal时捕获；已结束与未接管队列不成为执行取消对象。它是原取消操作的对象身份，不是新运行缓存/持久状态/配置。
+2. 两个Scope资源收敛函数共用一个发布函数，向receipt精确输入发布原aborted及原取消原因；保留资源finished→原状态发布→clear receipt/reusable次序。执行中、retry及已接管尚未发状态的新输入仍真实取消，待命仅释放资源并保留原idle/terminal，未接管的排队消息保持原持久投递。
+3. Session公共停止移除末次身份补写，右栏停止/归档把现publishTerminalStatus开关交同Scope，删除平行写法；请求布尔结果、权限与领域拥有者不变。Task/Mission高层领域封闭不合并到普通物理取消。
+4. 聚焦正向数据检查真实Scope/Protocol/公共HTTP输出与原监听器收敛；不能新增/保留“不发生/不存在”核心断言或UI自动化。触及测试的过期断言按当前契约修复/删除；完整调用点/契约/错误/重试复核后才交付。
+
+## 真实验收与交付
+
+首轮新数据检查3通过/1失败：原真实state.start/abort→state.finish同步资源清理会在cancelMatch拒绝callback之前，由finish给排队目标注入SessionPromptLoopFinishedError；丢失原ExecutionCancellationError和process.shutdown来源。共享cancelMatch在owner.abort之后才拒绝callback，所以所有普通/精确拥有者入口都有此竞态。修复在原receipt登记后先用原错误拒绝并取走callback，再取消monitor和owner；owner取消放finally保证monitor异常也请求物理退出，不降低原错误检查。测试标题原误称listener，将精确改为production process shutdown，实际检查调用writer公共关闭路径与HTTP数据接口，不称Provider/UI端到端。
+
+已接受真实输入在运行/重试/排队时退出应得其精确aborted；已自然结束的多轮输入在物理退出后应仍保留idle。新真实Sol开发/ui用成熟完整auth/models与实际gpt-6.1-sol流式资格、固定NativeService600000毫秒/12请求预算；启动前具备唯一关闭/原命令join/完整脱敏归档/精确文件退休。自然结束、逐轮导航与Sources截图亲自复核；退出后原SQLite与新隔离历史页面再核对已完成轮次。普通历史源不能绕过旧Task-only复制器，需完整原生关闭、待执行/恢复入口、全部schema/行与自身目标边界资格，不能用fixture历史冒充。
+
+后端/Overlay类型、必要构建、数据与docs/architecture检查为辅助；真实Task/Mission/长分页/跨进程宽矩阵未获得证据不能宣称通过。新增spec同步根/月/相关索引；仅本任务提交，fetch/merge上游后审查完整待推送集合并正常push。无branch/worktree/Release/tag/PR，目标保持进行中。
+
+## 普通真实历史的工具资格
+
+实际结果：新普通/精确Scope与公共HTTP等7项17断言、生命周期9项20断言、载入/历史/SSE16项70断言，合计32项107断言；最终后端/Overlay类型实际0。原Sol服务11流式200/eof/Native0/前台15843 join0，三轮自然idle在物理退出后仍为idle。当前90表全行同内容复制到新隔离历史进程，IAB101/18194真实页面为三个idle并保留来源/定位；新Native0/前台4325 join0，12核心表与20生命周期完整同内容、原项目文件元数据保持。具体证据见[257记录](occurrence-shutdown-257/README.md)。活跃Provider真实停止、Task/Mission恢复等宽矩阵未宣称通过，仍继续。
+
+工具实际错误与修复：权限只有原ledger，普通语义memory content为Markdown、项目reflection document才是JSON，使用当前ProjectMemory读取器验证；永久runtime_process claim的MAX过期时间不是busy，实际精确PID/出生已证实dead_or_reused。原失败均保留、修复后重跑原资格，没有跳过未知源或改写数据。当前已有MCP默认配置和四终端profile、无扩展任务/频道/指令，14恢复表0、全部7assistant完成、3权限执行成功、两个项目记忆idle且pending0。
+
+当前成熟历史copy/launch仅验证Task选中身份，普通257不存在Task，因此不能把伪Task或空TaskID塞入验证。扩展同一个当前私有copy/launch primitive，要求显式selectedSubject（task或session），直接核对该真实表行；全schema/全部行内容等同、原生出生/实际关闭/端口/凭据对/全部恢复与配置资格沿原路径。Native settled读取唯一原sourceOwner.evidence中的实际receipt，而非猜测发布目录的同名文件。旧已归档manifest不作为新启动输入，新Task manifest也必须明确声明subject，不保留旧参数后备路径。实际使用的helper快照随257证据落盘。

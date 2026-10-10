@@ -1,0 +1,17 @@
+bun test v1.3.14 (0d9b296a)
+
+test\process-shutdown-task-lifecycle.test.ts:
+(pass) hands off active occurrences in a mixed lifecycle batch across two Projects [3520.51ms]
+(pass) real listener shutdown settles a terminal Task Prompt tail and retains its completed occurrence [1841.91ms]
+(pass) real listener shutdown publishes pending Question abandonments across two Projects before protocol admission closes [3659.09ms]
+
+test\session\prompt-cancellation-occurrence.test.ts:
+(pass) production process shutdown preserves settled inputs and cancels exact active inputs across two Projects [4286.02ms]
+(pass) exact owner settlement preserves an idle input and its unconsumed durable queued successor [1772.48ms]
+(pass) session public abort retains settled input history and publishes an active input cancellation [2910.09ms]
+(pass) coding/work/session public abort retains settled input history and publishes an active input cancellation [2699.73ms]
+
+ 7 pass
+ 0 fail
+ 17 expect() calls
+Ran 7 tests across 2 files. [22.95s]

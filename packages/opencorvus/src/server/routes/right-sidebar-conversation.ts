@@ -11,8 +11,6 @@ import { NotFoundError } from "@/storage/db"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { requestID as resolveRequestID } from "../error-handler"
-import { SessionStatus } from "@/session/status"
-import { publishSessionStatus } from "@/session/status-publication"
 import {
   RightSidebarConversationSessionResponse,
   createRightSidebarConversationSession,
@@ -105,16 +103,7 @@ async function closeRightSidebarConversationSession(
     targetSessionID: session.id,
   })
   cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
-  await awaitSessionPromptFinishedInScope({ session, handle, publishTerminalStatus: false })
-  if (!publishTerminalStatus) return
-  const occurrence = SessionStatus.executionOccurrence(session.id)
-  if (occurrence && SessionStatus.getExecution(session.id, occurrence.inputMessageID).type !== "terminal") {
-    await publishSessionStatus(
-      session,
-      { type: "terminal", reason: "aborted", error: `${experienceLabel(experience)} stopped` },
-      { inputMessageID: occurrence.inputMessageID },
-    )
-  }
+  await awaitSessionPromptFinishedInScope({ session, handle, publishTerminalStatus })
 }
 
 export function RightSidebarConversationRoutes(experience: ConversationExperience) {

@@ -1,0 +1,27 @@
+{
+  "occurrence": "occurrence-shutdown-257-history-01-b721a83a-bf8e-455e-9698-b8c210b2e963",
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\occurrence-shutdown-257-history-01\\evidence",
+    "occurrence-shutdown-257-history-01-b721a83a-bf8e-455e-9698-b8c210b2e963",
+    "1791593707754",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18194",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\occurrence-shutdown-257-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\occurrence-shutdown-257-history-01\\startup.json",
+    "--startup-occurrence",
+    "occurrence-shutdown-257-history-01-b721a83a-bf8e-455e-9698-b8c210b2e963",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18194
+}

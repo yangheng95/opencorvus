@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [待命退出257 Recall](occurrence-shutdown-plan-257.md) / [实现与完整证据](occurrence-shutdown-257/README.md)：原idle→aborted真实根因修复，Sol退出/新进程历史三个idle、32数据通过，历史工具原失败保留，两次Native0。
+
 - [逐输入状态256 Recall](occurrence-status-plan-256.md) / [实际实现与证据](occurrence-status-256/README.md)：hydrate/history/SSE共享生命周期，真实三轮与重开收敛，旧500保留、27数据通过/真实Sources/11EOF/Native0；宽矩阵待验。
 
 - [真实生成阅读255 Recall](main-live-reading-plan-255.md) / [实际运行与新故障](main-live-reading-255/README.md)：运行中阅读/末尾跟随/暗色Sources实际复核，9EOF/Native0；发现旧输入Running/重复汇总行，继续共性调查。

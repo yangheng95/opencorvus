@@ -106,6 +106,16 @@ error and durable `session.error` event. Downstream layers never reconstruct a
 caller from the reason string.
 
 Graceful shutdown distinguishes physical Prompt ownership from Task execution.
+The exact cancellation receipt captures the current input occurrence before
+requesting physical abort. A genuinely published idle or terminal input retains
+that fact when its reusable standby Prompt is released. A current input without
+its first publication, or with streaming/retry, receives its exact cancellation;
+unconsumed queued Messages retain their existing delivery authority. Pending
+callbacks receive the original typed cancellation before abort listeners can
+synchronously finish the owner. Physical completion, captured-input publication
+and receipt/reuse release keep their existing order. Ordinary Session and right
+sidebar abort share this publication path; Task and Mission domain closure keep
+their independent durable assignment authority and retention policy.
 The handoff transaction reads the canonical lifecycle and writes new recovery
 evidence/ingress only for active Task occurrences. Cancelling and terminal Tasks
 retain their existing cancellation or conversation-input authority. All physically

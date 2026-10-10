@@ -1,0 +1,83 @@
+{
+  "observedAtUtc": "2026-10-10T00:45:15.323Z",
+  "access": "Original and physically closed history clone readonly BEGIN/ROLLBACK; actual complete protected history rows and lifecycle values, original source-project file metadata; no hashes",
+  "comparison": [
+    {
+      "table": "session",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "message",
+      "sourceRows": 11,
+      "historyRows": 11,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "part",
+      "sourceRows": 26,
+      "historyRows": 26,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_request",
+      "sourceRows": 3,
+      "historyRows": 3,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_outcome",
+      "sourceRows": 3,
+      "historyRows": 3,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_request",
+      "sourceRows": 7,
+      "historyRows": 7,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_outcome",
+      "sourceRows": 7,
+      "historyRows": 7,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "memory_file",
+      "sourceRows": 3,
+      "historyRows": 3,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "memory_chunk",
+      "sourceRows": 3,
+      "historyRows": 3,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "session_control_record",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "session_control_event",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "permission_execution_result",
+      "sourceRows": 3,
+      "historyRows": 3,
+      "fullRowContent": "equal"
+    }
+  ],
+  "lifecycleContent": "equal",
+  "originalLifecycleRows": 20,
+  "clonedLifecycleRows": 20,
+  "changedSourceFiles": [],
+  "boundary": "History runtime's new process/Bus/read receipts are runtime-specific; original conversation/tool/provider/memory/permission content remains exact"
+}

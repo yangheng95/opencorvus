@@ -1,0 +1,15 @@
+{
+  "pid": 74584,
+  "occurrence": "occurrence-shutdown-257-live-01-28028233-055d-4028-9264-8d541f7f9006",
+  "owner": {
+    "pid": 74584,
+    "processInstanceID": "win32:639271880687722561",
+    "occurrenceID": "50a056df-6827-49a0-ae92-86a0a38b5271"
+  },
+  "parent": {
+    "pid": 74540,
+    "processInstanceID": "win32:639271880687361066",
+    "occurrenceID": "b74f90e0-b9a7-4952-abad-1710115ff3dc"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

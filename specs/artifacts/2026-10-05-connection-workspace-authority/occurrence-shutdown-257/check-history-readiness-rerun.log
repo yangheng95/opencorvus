@@ -1,0 +1,14 @@
+42 |   const controls = sqlite.query("SELECT r.id,r.session_id,r.kind,e.id AS event_id,e.kind AS event_kind FROM session_control_record r LEFT JOIN session_control_event e ON e.control_id=r.id ORDER BY r.id,e.time_created,e.id").all()
+43 |   const permissions = sqlite.query("SELECT s.id,s.attempt_id,s.project_id,s.session_id,o.id AS outcome_id,o.event_type AS outcome,r.time_created AS result_at FROM permission_ledger s LEFT JOIN permission_ledger o ON o.outcome_slot=s.attempt_id LEFT JOIN permission_execution_result r ON r.attempt_id=s.attempt_id WHERE s.event_type='execution_started' ORDER BY s.id").all()
+44 |   const permissionRequests = sqlite.query("SELECT id,request_id,event_type,attempt_id,outcome_slot FROM permission_ledger ORDER BY time_created,id").all()
+45 |   const checkpoints = sqlite.query("SELECT r.id,r.task_id,r.stage,o.request_id AS outcome_request_id FROM engine_git_checkpoint_request r LEFT JOIN engine_git_checkpoint_outcome o ON o.request_id=r.id ORDER BY r.id").all()
+46 |   const messages = sqlite.query("SELECT id,session_id,json_extract(data,'$.role') AS role,json_extract(data,'$.time.completed') AS completed_at,json_extract(data,'$.pendingDelivery') AS pending_delivery FROM message ORDER BY session_id,time_created,id").all() as any[]
+47 |   const memory = sqlite.query("SELECT f.id,f.project_id,f.kind,f.source,c.id AS chunk_id,json_extract(c.content,'$.status') AS envelope_status,json_extract(c.content,'$.organizerLease.expiresAt') AS organizer_lease_expires_at FROM memory_file f LEFT JOIN memory_chunk c ON c.file_id=f.id ORDER BY f.project_id,f.id").all()
+                                                                                                                                                                                                                                                                                                                                  ^
+SQLiteError: malformed JSON
+      errno: 1,
+ byteOffset: -1,
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\occurrence-shutdown-257\history-readiness.ts:47:318
+
+Bun v1.3.14 (Windows x64)

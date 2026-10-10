@@ -21,6 +21,26 @@ function resolveProjectDeletionAdmission(
 
 const DEFAULT_PROMPT_SETTLE_INACTIVITY_MS = 5_000
 
+async function publishCancelledInputOccurrence(input: {
+  session: PromptSession
+  receipt: SessionPromptState.CancellationReceipt
+  signal?: AbortSignal
+  projectDeletionAdmission?: ProjectDeletionAdmissionSource
+}): Promise<void> {
+  const inputMessageID = input.receipt.inputMessageID
+  if (inputMessageID === undefined) return
+  await publishSessionStatus(
+    input.session,
+    { type: "terminal", reason: "aborted", error: input.receipt.error.message },
+    {
+      inputMessageID,
+      promptGenerationOwner: input.receipt.owner,
+      signal: input.signal,
+      projectDeletionAdmission: resolveProjectDeletionAdmission(input.projectDeletionAdmission),
+    },
+  )
+}
+
 export function cancelSessionPromptInScope(input: {
   session: Pick<SessionInfo, "id" | "directory">
   taskID?: string
@@ -84,15 +104,12 @@ export async function awaitSessionPromptFinishedInScope(input: {
     if (receipt) {
       input.signal?.throwIfAborted()
       if (input.publishTerminalStatus !== false) {
-        await publishSessionStatus(
-          input.session,
-          { type: "terminal", reason: "aborted", error: receipt.error.message },
-          {
-            promptGenerationOwner: receipt.owner,
-            signal: input.signal,
-            projectDeletionAdmission: resolveProjectDeletionAdmission(input.projectDeletionAdmission),
-          },
-        )
+        await publishCancelledInputOccurrence({
+          session: input.session,
+          receipt,
+          signal: input.signal,
+          projectDeletionAdmission: input.projectDeletionAdmission,
+        })
       }
       input.signal?.throwIfAborted()
       SessionPromptState.clearCancellationReceipt(input.session.id, receipt.owner)
@@ -272,11 +289,7 @@ export async function terminateOwnedSessionPromptInScope(input: {
       inactivityTimeoutMs: input.inactivityTimeoutMs ?? DEFAULT_PROMPT_SETTLE_INACTIVITY_MS,
       label: handle,
     })
-    await publishSessionStatus(
-      input.session,
-      { type: "terminal", reason: "aborted", error: receipt.error.message },
-      { promptGenerationOwner: input.owner },
-    )
+    await publishCancelledInputOccurrence({ session: input.session, receipt })
     SessionPromptState.clearCancellationReceipt(input.session.id, input.owner)
     return true
   } catch (cause) {

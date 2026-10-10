@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "birthUtc": "2026-10-10T00:40:08.9224861Z",
+      "name": "091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\occurrence-shutdown-257\\generated-bun-history-01\\091d165574530ade.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-10T00:40:08.8894062Z",
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\occurrence-shutdown-257\\generated-bun-history-01\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-10T00:40:08.8644263Z",
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\occurrence-shutdown-257\\generated-bun-history-01\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-10T00:40:08.8719449Z",
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\occurrence-shutdown-257\\generated-bun-history-01\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-10T00:40:08.9417474Z",
+      "name": "f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\occurrence-shutdown-257\\generated-bun-history-01\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "nativeTerminal": {
+    "occurrenceID": "occurrence-shutdown-257-history-01-b721a83a-bf8e-455e-9698-b8c210b2e963",
+    "pid": 78772,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "observedAtUtc": "2026-10-10T00:49:59.7638694Z",
+  "targetBirthUtc": "2026-10-10T00:40:08.5999098Z",
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0."
+}

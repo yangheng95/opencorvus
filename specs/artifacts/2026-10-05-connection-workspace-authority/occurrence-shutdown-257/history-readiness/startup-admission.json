@@ -1,0 +1,122 @@
+{
+  "activeTasks": 0,
+  "boundary": "Actual current whole source before clone; permanent runtime_process claims are historical ownership identities judged by actual PID/birth, not a timed busy lease; exact source/port/pair and copied full rows verified by sole copy primitive",
+  "projects": 2,
+  "sourceSnapshot": "result-startup.json",
+  "schema": "Current production schema contract read",
+  "config": "Both original effective configs inspected: lawful Base/Sol, existing four terminal profiles, default native MCP only, no plugin/channel/command extensions",
+  "controls": [
+    {
+      "id": "sctl_hp2oe6w2XXikXUt5Ny7",
+      "session_id": "ses_h3uBYrwxdxcNxEZnT4BH",
+      "kind": "wake_reason",
+      "event_id": "sctl_h14DJw5aDK5ecQjvmim",
+      "event_kind": "consumed"
+    }
+  ],
+  "tableCount": 90,
+  "activeCapacity": 0,
+  "observedAtUtc": "2026-10-10T00:39:39.6435096Z",
+  "memory": [
+    {
+      "status": "idle",
+      "projectID": "prj_h3KiY1UCLvrJtJdDXcGH",
+      "pending": 0
+    },
+    {
+      "status": "idle",
+      "projectID": "prj_hR8Zt8bobQLnP1sGy3N0",
+      "pending": 0
+    }
+  ],
+  "permissionOutcomes": [
+    {
+      "attempt_id": "per_hP7QG4jw6cDim5clPyrY",
+      "outcome": "execution_succeeded",
+      "result_at": 1791591314603
+    },
+    {
+      "attempt_id": "per_hAVBQvhRfDggEJ1eqy9C",
+      "outcome": "execution_succeeded",
+      "result_at": 1791591318501
+    },
+    {
+      "attempt_id": "per_hL0TZNvI0EAGSDHJ9aZP",
+      "outcome": "execution_succeeded",
+      "result_at": 1791591325888
+    }
+  ],
+  "activeLeases": 0,
+  "unfinishedOrQueuedMessages": 0,
+  "recoveryTables": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "historicalRuntimeClaims": [
+    {
+      "claim": {
+        "id": "act_g0VXbKPge00jQSo4hepK",
+        "target": "runtime_process",
+        "target_id": "50a056df-6827-49a0-ae92-86a0a38b5271",
+        "owner_occurrence_id": "{\"pid\":74584,\"processInstanceID\":\"win32:639271880687722561\",\"occurrenceID\":\"50a056df-6827-49a0-ae92-86a0a38b5271\"}",
+        "time_activated": 1791591276295,
+        "expires_at": 9007199254740991
+      },
+      "actualProcessState": "dead_or_reused"
+    }
+  ]
+}
