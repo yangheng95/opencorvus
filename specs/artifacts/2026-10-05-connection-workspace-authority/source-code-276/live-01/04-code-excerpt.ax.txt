@@ -1,0 +1,47 @@
+Browser tab: 126, Title: "OpenCorvus", URL: "http://localhost:18217/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 129-130
++											191 container
++												192 button (expanded) Description: Source excerpt: Details and summary  |  web.dev, Help: Source excerpt, Secondary Actions: Collapse
++													193 text Source excerpt
++												194 container Source excerpt: Details and summary  |  web.dev
++													195 text The ` ` and ` ` elements are all you need: they are a built-in way to handle expanding and collapsing content. When a user clicks or taps a ` `, or releases the Enter key when the ` ` has focus, the contents of the parent ` ` toggle to visible.
+...
+The ` ` element is the disclosure widget container. The ` ` is the summary or legend for its parent ` `. The summary is always displayed, acting as a button that toggles the display of the rest of the parent's contents. Interacting with the ` ` toggles the display of the self-labeled summary siblings by toggling the ` `' element's `open` attribute.
+
+The `open` attribute is a boolean attribute. If present, no matter the value or lack thereof, it indicates that all the ` ` contents are shown to the user. If the `open` attribute is not present, only the contents of the ` ` are shown.
+...
+You can create an accordion with a list of multiple ` ` elements, each with a ` ` child. Omitting the `open` attribute in your HTML means the ` ` will all be collapsed, or closed, with just the summary headings visible when the page loads; each heading being the opener for the rest of the contents in the parent ` `. If you include the `open` attribute in your HTML, ` ` renders expanded, with the contents visible, when the page loads.
+...
+In the two earlier Codepens, there's an arrow to the inline-start side of the summary. An expander arrow is typically presented on-screen, a small triangle that rotates (or twists) to indicate open or closed status and a label next to the triangle. The contents of the ` ` element label the disclosure widget.
+
+The rotating arrow at the top of each section is a `::marker` set on the ` ` element. Like list items, the ` ` element supports the `list-style` shorthand property and its longhand properties, including `list-style-type`. You can style the disclosure triangle with CSS, including changing the marker used from a triangle to any other bullet type, including an image with `list-style-image`.
+
+To apply other styles, use a selector similar to `details summary::marker`. The `::marker` pseudo-element only accepts a limited number of styles. Removing the `::marker` and replacing it with the easier-to-style `::before` is common practice, with CSS styles changing the style of the generated content slightly based on the presence (or absence) of the open attribute. You can remove the disclosure widget icon by setting `list-style: none` or set the content of the marker to `none`, but you should always include visual indicators to inform sighted users that the summary content toggles to show and hide content.
+
+```
+details summary::before {
+  /* all the styles */
+}
+details[open] summary::before {
+  /* changes applied when open only */
+}
+...
+This example removes the default marker, and adds generated content to create a `+` when the details are closed and a `-` when the details are open.
+
+If you want the details block open by default, include the `open` attribute on the opening ` ` tag. You can also add space between each dialog and transition the rotation of the marker created with generated content to improve the appearance:
+...
+If you don't include a ` `, the browser creates one for you, with a marker and the word "details". This summary is part of a shadow root, and therefore doesn't have author CSS summary styles applied.
+
+Note: Unfortunately, Safari does not include the details in the keyboard focus order.
+
+If you do include a ` `, but it's not the first element in the ` `, the browser still displays the summary as it should. It won't fail if you include a link, label, or other interactive element within the summary but browsers handle interactive content within interactive content differently.
+
+For example, if you include a link in a summary, some browsers add both the summary and the link to the default tabbing order, but other browsers don't focus on the link by default. If you click a ` ` nested in a ` `, some browsers give focus to the associated form control. Other browsers give focus to the form control and toggle the ` ` open or closed.
+...
+Like all HTML elements, the `HTMLDetailsElement` inherits all properties, methods, and events from `HTMLElement`, and adds the `open` instance property and a `toggle` event. The `HTMLDetailsElement.open` property is a boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) are to be shown to the user. The toggle event is fired when the ` ` element is toggled open or closed. You can listen to this event using `addEventListener()`.
+
+If you want to write a script to close the opened details when the user opens any other details, remove the open attribute using `removeAttribute("open")`:
+...
+The ` ` must be the first child of which element?
+The focused UI element is 192 button (expanded) Description: Source excerpt: Details and summary  |  web.dev, Help: Source excerpt, Secondary Actions: Collapse

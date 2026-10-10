@@ -519,3 +519,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [2026-10-09 子侧栏 Sources 与位置](2026-10-09-child-sources-history-205-206.md)：完整真实历史正常serve与浅/深色Sources人工复核，原生/父工具自然0；发现切换返回阅读位置丢失，206根因已落盘、修复待实施。
 
 - [多来源与摘要234](2026-10-09-sources-multi-review-234.md)：原171实际4/3来源、3536/4600字摘要正文排版复核；关闭重开内滚动1636→0仍待修复。
+
+- [代码搜索来源276](2026-10-10-source-code-276.md)：当前来源事实与结果数量契约，真实验收见记录。

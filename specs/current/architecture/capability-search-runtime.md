@@ -81,6 +81,11 @@ remain failures, rather than triggering a Host service substitution. Its current
 Title/URL/Published/Author records accept Highlights, Text or an absent preview;
 the declared empty result stays empty, while unknown record formats retain a
 typed original-text error. Historical Source records retain their provenance.
+External code search requests the current `numResults` parameter (default 8).
+Its declared Title/URL records, with Code/Highlights, Text or no excerpt, project
+publisher facts through the same `urlSource` and durable assistant-message
+source owner. Complete protocol output remains available; unknown record formats
+produce a typed original-record error rather than guessed source links.
 A discarded response whose cancellation rejects the identical primary
 cause is settled; a read failure still rejects its original cause, and distinct
 cleanup failures retain both causes in AggregateError. A challenged response is

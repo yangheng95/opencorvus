@@ -1,0 +1,76 @@
+$ bun script/run-tests.ts test/tool/codesearch-sources.test.ts test/tool/exa-mcp-response.test.ts test/tool/websearch-service.test.ts
+[1/3] START test/tool/codesearch-sources.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current code-context records preserve complete source facts [0.45ms]
+(pass) declared empty code context yields the empty source contract [0.03ms]
+(pass) an unknown code record returns the typed original-record error [0.22ms]
+(pass) the model-visible code search parameter projects the current result count [0.66ms]
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "root",
+      "orchestrator",
+      "assistant",
+      "mission",
+      "delegated-worker",
+      "intent-analysis",
+      "requirements",
+      "frontend-design",
+      "architect",
+      "goal-workload-analyst",
+      "integrity",
+      "fact-check",
+      "build",
+      "explore",
+      "deep-research",
+      "frontend-research",
+      "visual-qa",
+      "system"
+    ],
+    "path": [
+      "kind"
+    ],
+    "message": "Invalid option: expected one of \"root\"|\"orchestrator\"|\"assistant\"|\"mission\"|\"delegated-worker\"|\"intent-analysis\"|\"requirements\"|\"frontend-design\"|\"architect\"|\"goal-workload-analyst\"|\"integrity\"|\"fact-check\"|\"build\"|\"explore\"|\"deep-research\"|\"frontend-research\"|\"visual-qa\"|\"system\""
+  }
+]
+(fail) real assistant source persistence retains code-search facts and shared URL identity [2683.24ms]
+
+ 4 pass
+ 1 fail
+ 4 expect() calls
+Ran 5 tests across 1 file. [4.38s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\codesearch-sources.test.ts
+[1/3] DONE test/tool/codesearch-sources.test.ts exit=1 duration=5.29s
+[2/3] START test/tool/exa-mcp-response.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) owned HTTP JSON and multiline SSE preserve complete current MCP results [24.23ms]
+(pass) explicit rate-limit and tool errors retain original protocol results [0.98ms]
+(pass) JSON-RPC failures preserve their exact error contract [0.69ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [1401.00ms]
+[2/3] DONE test/tool/exa-mcp-response.test.ts exit=0 duration=1.57s
+[3/3] START test/tool/websearch-service.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current Exa search result contracts > decodes Exa records into the shared result and source contracts [0.81ms]
+(pass) current Exa search result contracts > current Text and metadata-only records preserve source identities [0.30ms]
+(pass) current Exa search result contracts > a declared empty search maps to the current empty result contract [0.05ms]
+(pass) current Exa search result contracts > an unknown search record returns its typed original-text error [0.30ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [1418.00ms]
+OpenCorvus failed test files (1):
+[3/3] DONE test/tool/websearch-service.test.ts exit=0 duration=1.67s
+D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\codesearch-sources.test.ts
+error: script "test" exited with code 1

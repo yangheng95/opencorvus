@@ -1,0 +1,92 @@
+Browser tab: 126, Title: "OpenCorvus", URL: "http://localhost:18217/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 46-49, 55-58, 83-85, 90, 92-100, 105-132
++									105 container
++										106 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										107 button 请只做一次外部代码搜索：调用 external_code_search，query 为 HTML details summary keyboard int...
++										108 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-393-trigger, Secondary Actions: Expand
++									109 container
++										110 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										111 button Reply with OK.
++										112 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-399-trigger, Secondary Actions: Expand
+~						102 container Description: Not running, ID: taskStatus
+~							103 text Not running
++								113 container
++									114 text User
++									115 text 请只做一次外部代码搜索：调用 external_code_search，query 为 HTML details summary keyboard interaction examples，numResults 为 4。基于实际返回简要解释键盘交互，并给出来源。若失败如实说明。不要进行额外搜索、创建任务、委托或修改文件。
++								116 container
++									117 text work
++									118 text 22s
++									119 container
++										120 button (collapsed) Description: external_code_search · External code search: HTML details summary keyboard interaction examples, Secondary Actions: Expand
++											121 text external_code_search
++											122 text External code search: HTML details summary keyboard interaction examples
++											123 image
++										124 container Sources
++											125 button (expanded) Description: Sources: Details and summary  |  web.dev (4), Help: Details and summary  |  web.dev 4, Secondary Actions: Collapse
++												126 text Details and summary  |  web.dev
++												127 text 4
++											128 link Description: Open web source: Details and summary  |  web.dev, Value: web.dev/learn/html/details
++											129 button (collapsed) Description: Source excerpt: Details and summary  |  web.dev, Help: Source excerpt, Secondary Actions: Expand
++												130 text Source excerpt
++											131 link Description: Open web source: <summary> HTML disclosure summary element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++											132 button (collapsed) Description: Source excerpt: <summary> HTML disclosure summary element - HTML | MDN, Help: Source excerpt, Secondary Actions: Expand
++												133 text Source excerpt
++											134 link Description: Open web source: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
++											135 button (collapsed) Help: Source excerpt, Secondary Actions: Expand, Description: Source excerpt: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts
++												136 text Source excerpt
++											137 link Description: Open web source: WebAIM: Disclosures and Accordions, Value: webaim.org/techniques/disclosures/
++											138 button (collapsed) Description: Source excerpt: WebAIM: Disclosures and Accordions, Help: Source excerpt, Secondary Actions: Expand
++												139 text Source excerpt
++									140 container
++										141 text 搜索成功，已按指定参数仅调用一次
++										142 text external_code_search
++										143 text ，返回 4 个来源。
++										144 text 键盘交互简述
++										145 text ：
++										146 content list
++											147 container
++												148 AXListMarker •
++												149 text 焦点移动 ：披露控件通常使用  Tab  /  Shift+Tab  向后／向前移动焦点。伊利诺伊大学的示例明确列出了这两个按键，但该示例是  APG 披露按钮模式 ，不能直接当作所有浏览器中原生  <summary>  的行为保证。
++											150 container
++												151 AXListMarker •
++												152 text 展开／收起 ：web.dev 明确说明，原生  <summary>  获得焦点后，释放  Enter  键会切换父  <details>  的展开状态。披露按钮示例则支持  Enter 和空格键 ；WebAIM 也说明按钮可由这两个按键激活。
++											153 container
++												154 AXListMarker •
++												155 text 原生语义 ：WebAIM 指出， <details>/<summary>  内置按钮式语义，并向辅助技术提供展开／收起状态。MDN 要求  <summary>  作为  <details>  的第一个子元素。
++											156 container
++												157 AXListMarker •
++												158 text 兼容性注意 ：web.dev 返回内容提示 Safari 的键盘焦点顺序存在限制，且  <summary>  内嵌链接等交互元素时，浏览器行为可能不同。这是来源中的提示，并非本次对当前浏览器版本的实测结论。
++										159 text 来源
++										160 text ：
++										161 content list
++											162 container
++												163 AXListMarker 1.
++												164 link Description: web.dev：Details and summary, Value: web.dev/learn/html/details
++											165 container
++												166 AXListMarker 2.
++												167 link Description: MDN：<summary>, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++											168 container
++												169 AXListMarker 3.
++												170 link Description: 伊利诺伊大学：Disclosure FAQ 键盘交互示例, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
++											171 container
++												172 AXListMarker 4.
++												173 link Description: WebAIM：Disclosures and Accordions, Value: webaim.org/techniques/disclosures/
++									174 button Copy message
++									175 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++									176 pop up button (collapsed) Description: View model usage for this turn: 67K Token, Secondary Actions: Expand
++									177 text Oct 10, 04:36 PM
++							178 container solidChatComposer
++								179 container chatForm
++									180 splitter Description: Drag to resize the message input, Value: 42
++									181 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++									182 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									183 text Work
++									184 text Chat
++									185 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++									186 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++									187 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++										188 text openai/gpt-6.1-sol
++									189 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
++								190 button Scroll to bottom
+The focused UI element is 125 button (expanded) Description: Sources: Details and summary  |  web.dev (4), Help: Details and summary  |  web.dev 4, Secondary Actions: Collapse

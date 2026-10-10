@@ -1,0 +1,59 @@
+Browser tab: 126, Title: "OpenCorvus", URL: "http://localhost:18217/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 116-128, 131-177, 191-192
++								196 container
++									197 text work
++									198 text 22s
++									199 button (collapsed) Description: external_code_search · External code search: HTML details summary keyboard interaction examples, Secondary Actions: Expand
++										200 text external_code_search
++										201 text External code search: HTML details summary keyboard interaction examples
++										202 image
++									203 container Sources
++										204 button (expanded) Description: Sources: Details and summary  |  web.dev (4), Help: Details and summary  |  web.dev 4, Secondary Actions: Collapse
++											205 text Details and summary  |  web.dev
++											206 text 4
++										207 link Description: Open web source: Details and summary  |  web.dev, Value: web.dev/learn/html/details
++										208 button (collapsed) Description: Source excerpt: Details and summary  |  web.dev, Help: Source excerpt, Secondary Actions: Expand
++											209 text Source excerpt
++										210 link Description: Open web source: <summary> HTML disclosure summary element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++										211 button (collapsed) Description: Source excerpt: <summary> HTML disclosure summary element - HTML | MDN, Help: Source excerpt, Secondary Actions: Expand
++											212 text Source excerpt
++										213 link Description: Open web source: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
++										214 button (collapsed) Help: Source excerpt, Secondary Actions: Expand, Description: Source excerpt: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts
++											215 text Source excerpt
++										216 link Description: Open web source: WebAIM: Disclosures and Accordions, Value: webaim.org/techniques/disclosures/
++										217 button (collapsed) Description: Source excerpt: WebAIM: Disclosures and Accordions, Help: Source excerpt, Secondary Actions: Expand
++											218 text Source excerpt
++									219 container
++										220 text 搜索成功，已按指定参数仅调用一次  external_code_search ，返回 4 个来源。
++									221 container
++										222 text 键盘交互简述 ：
++									223 content list
++										224 container
++											225 AXListMarker •
++											226 text 焦点移动 ：披露控件通常使用  Tab  /  Shift+Tab  向后／向前移动焦点。伊利诺伊大学的示例明确列出了这两个按键，但该示例是  APG 披露按钮模式 ，不能直接当作所有浏览器中原生  <summary>  的行为保证。
++										227 container
++											228 AXListMarker •
++											229 text 展开／收起 ：web.dev 明确说明，原生  <summary>  获得焦点后，释放  Enter  键会切换父  <details>  的展开状态。披露按钮示例则支持  Enter 和空格键 ；WebAIM 也说明按钮可由这两个按键激活。
++										230 container
++											231 AXListMarker •
++											232 text 原生语义 ：WebAIM 指出， <details>/<summary>  内置按钮式语义，并向辅助技术提供展开／收起状态。MDN 要求  <summary>  作为  <details>  的第一个子元素。
++										233 container
++											234 AXListMarker •
++											235 text 兼容性注意 ：web.dev 返回内容提示 Safari 的键盘焦点顺序存在限制，且  <summary>  内嵌链接等交互元素时，浏览器行为可能不同。这是来源中的提示，并非本次对当前浏览器版本的实测结论。
++									236 container
++										237 text 来源 ：
++									238 content list
++										239 container
++											240 AXListMarker 1.
++											241 link Description: web.dev：Details and summary, Value: web.dev/learn/html/details
++										242 container
++											243 AXListMarker 2.
++											244 link Description: MDN：<summary>, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++										245 container
++											246 AXListMarker 3.
++											247 link Description: 伊利诺伊大学：Disclosure FAQ 键盘交互示例, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
++										248 container
++											249 AXListMarker 4.
++											250 link Description: WebAIM：Disclosures and Accordions, Value: webaim.org/techniques/disclosures/
+The focused UI element is 42 container Description: Conversation, ID: chatScroll

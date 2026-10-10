@@ -1,0 +1,15 @@
+{
+  "source": "Native persisted physical settlement and exact fixed deadline; JSON dates preserved as strings",
+  "observedAtUtc": "2026-10-10T08:39:47.938Z",
+  "deadlineAtMs": 1791621931418,
+  "completionAtMs": 1791621587938,
+  "bufferMs": 343480,
+  "minimumBufferMs": 240000,
+  "originalForegroundSession": 52205,
+  "originalForegroundExitCode": 0,
+  "nativeExitCode": 0,
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "pageClosed": "126"
+}

@@ -1,0 +1,47 @@
+$ bun script/run-tests.ts test/tool/codesearch-sources.test.ts
+[1/1] START test/tool/codesearch-sources.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current code-context records preserve complete source facts [0.53ms]
+(pass) declared empty code context yields the empty source contract [1.42ms]
+(pass) an unknown code record returns the typed original-record error [4.12ms]
+(pass) the model-visible code search parameter projects the current result count [0.77ms]
+75 |       })
+76 |       const sources = parseExaCodeSearchSources(
+77 |         "Title: Current guide\nURL: https://example.com/guide#keyboard\nCode/Highlights:\nComplete current excerpt",
+78 |       )
+79 |       const persisted = await persistMessageSources({ sessionID: session.id, messageID, sources })
+80 |       expect(persisted.map(({ id, sessionID, messageID, ...source }) => source)).toEqual(sources)
+     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
++     "orderKey": "v1:0001791621254584:0000000000000031:0000000000000000:part:prt_g0VXdMCPP00zuHt14sF2",
+      "provider": "exa",
+      "snippet": "Complete current excerpt",
+      "sourceId": "0284840593f1b66cb7433383ce6c2683680f5a41fd09017d330f38ca04a49ee2",
+      "title": "Current guide",
+      "type": "source-url",
+      "url": "https://example.com/guide",
+    },
+  ]
+
+- Expected  - 0
++ Received  + 1
+
+      at toEqual (unknown:1:1)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\codesearch-sources.test.ts:80:82
+      at processTicksAndRejections (unknown:7:39)
+(fail) real assistant source persistence retains code-search facts and shared URL identity [1905.46ms]
+
+ 4 pass
+ 1 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [3.14s]
+[1/1] DONE test/tool/codesearch-sources.test.ts exit=1 duration=3.93s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\codesearch-sources.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\codesearch-sources.test.ts
+error: script "test" exited with code 1

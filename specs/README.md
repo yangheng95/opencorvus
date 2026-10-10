@@ -2965,3 +2965,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [205 完整真实历史](artifacts/2026-10-05-connection-workspace-authority/child-history-readiness-205/README.md) / [205 子侧栏视觉](artifacts/2026-10-05-connection-workspace-authority/child-sources-history-205/README.md) / [206 阅读位置根因](artifacts/2026-10-05-connection-workspace-authority/subagent-reading-position-plan-206.md)：真实90表逐行一致复制与正常serve/自然0，实际浅色/深色Sources和键盘身份复核；正文返回完整但阅读位置/follow丢失，继续修复。
 
 - [多来源与摘要234](records/2026-10/2026-10-09-sources-multi-review-234.md)：真实4/3分组与长摘要改用正文排版；中文深色/键盘末段复核，嵌套阅读位置新失败保留。
+
+- [代码搜索来源276](artifacts/2026-10-05-connection-workspace-authority/source-code-plan-276.md) / [证据](artifacts/2026-10-05-connection-workspace-authority/source-code-276/README.md) / [月记录](records/2026-10/2026-10-10-source-code-276.md)。

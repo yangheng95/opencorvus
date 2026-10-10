@@ -1,0 +1,81 @@
+{
+  "input": {
+    "query": "HTML details summary keyboard interaction examples",
+    "numResults": 4
+  },
+  "toolPartID": "prt_g0VXdMorn00wFVhnehZR",
+  "outcome": "completed",
+  "completeOutputChars": 14480,
+  "completeProtocolTextEqualsOutput": true,
+  "projectedSources": 4,
+  "persistedSources": 4,
+  "sourceFieldsEqual": true,
+  "sources": [
+    {
+      "id": "prt_g0VXdMpGA0025wx5U0ye",
+      "messageID": "msg_g0VXdMnWE001WY0p3XlR",
+      "title": "Details and summary  |  web.dev",
+      "url": "https://web.dev/learn/html/details",
+      "snippetChars": 4788
+    },
+    {
+      "id": "prt_g0VXdMpGM00Jp3szySjY",
+      "messageID": "msg_g0VXdMnWE001WY0p3XlR",
+      "title": "<summary> HTML disclosure summary element - HTML | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+      "snippetChars": 3020
+    },
+    {
+      "id": "prt_g0VXdMpGX00K5E5SExEr",
+      "messageID": "msg_g0VXdMnWE001WY0p3XlR",
+      "title": "Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts",
+      "url": "https://accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html",
+      "snippetChars": 1919
+    },
+    {
+      "id": "prt_g0VXdMpGz00v6kyB060m",
+      "messageID": "msg_g0VXdMnWE001WY0p3XlR",
+      "title": "WebAIM: Disclosures and Accordions",
+      "url": "https://webaim.org/techniques/disclosures/",
+      "snippetChars": 4135
+    }
+  ],
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "agent": "memory",
+      "sessionID": "ses_hA33TvM3NxiVxFwPCMlX",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "agent": "chat",
+      "sessionID": "ses_hA33TvM3NxiVxFwPCMlX",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "agent": "memory",
+      "sessionID": "ses_-zUSMdCnYzzGoJgjNR4G",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "agent": "work",
+      "sessionID": "ses_-zUSMdCnYzzGoJgjNR4G",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "agent": "work",
+      "sessionID": "ses_-zUSMdCnYzzGoJgjNR4G",
+      "terminal": "eof"
+    }
+  ],
+  "boundary": "Current production parser and real canonical SQLite/Provider archive comparison; backend facts only, visual acceptance remains manual screenshots"
+}

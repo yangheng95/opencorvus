@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts test/tool/codesearch-sources.test.ts
+[1/1] START test/tool/codesearch-sources.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current code-context records preserve complete source facts [0.44ms]
+(pass) declared empty code context yields the empty source contract [0.02ms]
+(pass) an unknown code record returns the typed original-record error [0.21ms]
+(pass) the model-visible code search parameter projects the current result count [0.57ms]
+(pass) real assistant source persistence retains code-search facts and shared URL identity [1964.09ms]
+
+ 5 pass
+ 0 fail
+ 6 expect() calls
+Ran 5 tests across 1 file. [3.25s]
+[1/1] DONE test/tool/codesearch-sources.test.ts exit=0 duration=4.03s
