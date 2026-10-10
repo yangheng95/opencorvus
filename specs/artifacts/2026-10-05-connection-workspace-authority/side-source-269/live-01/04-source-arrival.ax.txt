@@ -1,0 +1,43 @@
+Browser tab: 116, Title: "OpenCorvus", URL: "http://localhost:18207/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 156-159, 161
++										164 container
++											165 text User
++											166 container
++												167 text 请实际读取这三个官方页面：
++												168 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details, Value: developer.mozilla.org/en-US/docs/Web/HTML/Element/details
++												169 text  、
++												170 link Description: https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++												171 text  、
++												172 link Description: https://codemirror.net/docs/ref/, Value: codemirror.net/docs/ref/
++												173 text  。可以在同一轮读取。依据原页面，为开发工具中的文件引用、可折叠来源阅读和编辑器定位写一份中文体验建议，约1000–1300字，分5段并附简短比较表；清楚引用真实来源，不编造资料。只读，不修改文件，不创建任务或委托。
++										174 container
++											175 text chat
++											176 text 5s
++											177 text 我会先读取这三个官方页面，再依据原文整理文件引用、可折叠来源阅读和编辑器定位的体验建议；全程只读。
++											178 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details (text/html), Secondary Actions: Expand
++												179 text webfetch
++												180 text https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details (text/html)
++												181 image
++											182 container Sources
++												183 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++										184 button Quote in main conversation
++										185 container
++											186 text chat
++											187 text 10s
++											188 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
++												189 text webfetch
++												190 text https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
++												191 image
++											192 container Sources
++												193 link Description: Open web source: /en-us/dotnet/standard/io/file-path-formats · learn.microsoft.com, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++										194 container
++											195 text chat
++											196 text 5s
++											197 button (collapsed) Description: webfetch · https://codemirror.net/docs/ref/ (text/html; charset=utf-8), Secondary Actions: Expand
++												198 text webfetch
++												199 text https://codemirror.net/docs/ref/ (text/html; charset=utf-8)
++												200 image
++											201 container Sources
++												202 link Description: Open web source: CodeMirror Reference Manual, Value: codemirror.net/docs/ref/
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18207/ui/

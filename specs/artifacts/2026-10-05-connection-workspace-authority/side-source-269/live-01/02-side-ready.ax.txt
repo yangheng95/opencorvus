@@ -1,0 +1,18 @@
+Browser tab: 116, Title: "OpenCorvus", URL: "http://localhost:18207/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 149, 152
+~									148 pop up button (collapsed) Choose a side chat Side chat 1, ID: select-cl-296-trigger, Secondary Actions: Expand
++										152 text Side chat 1
+~									150 button New side chat
+~									153 container
++										154 button (collapsed) Reference history · 2 messages, Secondary Actions: Expand
++											155 text Reference history · 2 messages
++										156 text A little room to explore Ask a question, or quote a passage from the main conversation.
++										157 button Explain the approach
++										158 button Explore the trade-offs
++										159 button What should I verify?
++									160 container
++										161 text entry area (settable) Ask a side question…
++										162 text Main conversation stays on track
++										163 button (disabled) Send side question
+The focused UI element is 161 text entry area (settable) Ask a side question…

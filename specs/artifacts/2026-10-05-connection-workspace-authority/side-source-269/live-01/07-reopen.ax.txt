@@ -1,0 +1,210 @@
+Browser tab: 116, Title: "OpenCorvus", URL: "http://localhost:18207/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18207/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									73 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									74 container
+										94 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										75 button 请只回复“已准备好”，不用工具，不创建任务或委托。
+										76 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 96323a, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									95 container
+										96 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										97 button 请只回复“已准备好”，不用工具，不创建任务或委托。
+										98 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-279-trigger, Secondary Actions: Expand
+									99 container
+										100 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										101 button Reply with OK.
+										102 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-285-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18207, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				103 container workspaceMain
+					104 container chatSection
+						105 container Description: Loading task, ID: taskSwitchProgress
+						106 container
+							107 text 请只回复“已准备好”，不用工具，不创建任务或委托。
+							108 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							109 container Description: Not running, ID: taskStatus
+								110 text Not running
+							111 button Side chat
+							112 container solidChatHeaderRuntimeActions
+								113 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								114 checkbox Description: Close right dock, Value: 1
+						115 container
+							116 container Description: Conversation, ID: chatScroll
+								117 container
+									118 container
+										119 text User
+										120 text 请只回复“已准备好”，不用工具，不创建任务或委托。
+									121 container
+										122 text work
+										123 text 5s
+										124 text 已准备好
+							125 container chatHomeComposition
+								126 container chatForm
+									127 splitter Description: Drag to resize the message input, Value: 42
+									128 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									129 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									130 text Work
+									131 text Chat
+									132 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									133 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									134 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										135 text openai/gpt-6.1-sol
+									136 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+					137 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					138 container Description: Tools panel, ID: rightDock
+						139 container tabs-cl-64
+							140 tab group Open tools
+								141 container
+									142 tab (selected, settable, boolean) Description: Side chat, Value: 1, ID: tabs-cl-64-trigger-side-chat
+									143 button Description: Close tab, Help: Close tab (Delete)
+							144 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							145 button Close panel
+							146 container Description: Side chat, ID: centerWorkbenchSideChat
+								147 container Side chat
+									148 pop up button (collapsed) Choose a side chat Side chat 1, ID: select-cl-1388-trigger, Secondary Actions: Expand
+										149 text Side chat 1
+									150 button New side chat
+									151 text Ask about this conversation while the main task keeps working.
+									152 container
+										153 button (collapsed) Reference history · 2 messages, Secondary Actions: Expand
+											154 text Reference history · 2 messages
+										155 container
+											156 text User
+											157 container
+												158 text 请实际读取这三个官方页面：
+												159 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details, Value: developer.mozilla.org/en-US/docs/Web/HTML/Element/details
+												160 text  、
+												161 link Description: https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+												162 text  、
+												163 link Description: https://codemirror.net/docs/ref/, Value: codemirror.net/docs/ref/
+												164 text  。可以在同一轮读取。依据原页面，为开发工具中的文件引用、可折叠来源阅读和编辑器定位写一份中文体验建议，约1000–1300字，分5段并附简短比较表；清楚引用真实来源，不编造资料。只读，不修改文件，不创建任务或委托。
+										165 container
+											166 text chat
+											167 text 5s
+											168 text 我会先读取这三个官方页面，再依据原文整理文件引用、可折叠来源阅读和编辑器定位的体验建议；全程只读。
+											169 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details (text/html), Secondary Actions: Expand
+												170 text webfetch
+												171 text https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details (text/html)
+												172 image
+											173 container Sources
+												174 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
+										175 button Quote in main conversation
+										176 container
+											177 text chat
+											178 text 10s
+											179 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
+												180 text webfetch
+												181 text https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
+												182 image
+											183 container Sources
+												184 link Description: Open web source: /en-us/dotnet/standard/io/file-path-formats · learn.microsoft.com, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+										185 container
+											186 text chat
+											187 text 5s
+											188 button (collapsed) Description: webfetch · https://codemirror.net/docs/ref/ (text/html; charset=utf-8), Secondary Actions: Expand
+												189 text webfetch
+												190 text https://codemirror.net/docs/ref/ (text/html; charset=utf-8)
+												191 image
+											192 container Sources
+												193 link Description: Open web source: CodeMirror Reference Manual, Value: codemirror.net/docs/ref/
+										194 container
+											195 text chat
+											196 text 26s
+											197 container
+												198 text 一、把文件引用设计成明确的入口。  建议采用“识别文件—阅读来源—进入编辑器”的渐进流程：引用默认显示项目相对路径和行号，同名文件补充目录，完整路径可展开查看并复制；“展开片段”和“打开编辑器”使用独立控件，避免一次点击同时改变阅读布局与编辑焦点。内部应分别保存文件路径、解析基准和定位信息，不把展示用的  文件:行:列  当作文件名直接解析。以下是依据三份已读取原文提出的产品建议，并非文档规定的完整交互方案。
+											199 container
+												200 text 二、路径展示可以简短，解析不能含糊。
+												201 link Description: Microsoft Learn, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+												202 text 明确区分
+												203 link Description: C:\src\a.cs, Value: localhost:18207/ui/#
+												204 text  与  C:src\a.cs ：前者是绝对路径，后者相对于 C 盘当前目录；
+												205 link Description: \src\a.cs, Value: localhost:18207/ui/#
+												206 text  则依赖当前驱动器。建议为项目相对引用绑定显式基准目录，而非随进程当前目录变化，并在详情中展示解析目标；原文指出，.NET 可用双参数  Path.GetFullPath  指定基准。UNC 路径应保留服务器与共享名，设备路径不能随意删去前缀，尤其  \\?\  会影响规范化行为。解析失败应说明原因，不静默打开同名文件；这些规则主要针对 Windows，不能直接推广到所有平台。
+											207 container
+												208 text 三、折叠来源应隐藏篇幅，而不是隐藏身份。
+												209 link Description: MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Element/details
+												210 text 说明， <details>  提供展开／收起容器， <summary>  是标签，聚焦后可按空格切换。建议摘要始终显示文件路径、引用范围及“来源片段”标识，展开后再展示带行号的上下文、复制与打开操作。对照阅读应允许多项同时展开；只有单项浏览才考虑同  name  分组，因为它会在打开一项时关闭另一项。实现时还要注意： open  是布尔属性， open="false"  仍会展开； toggle  在状态改变后触发，连续变化可能合并，不能把每次事件都当作一次独立用户操作。
+											211 container
+												212 text 四、定位必须统一坐标约定。
+												213 link Description: CodeMirror 参考文档, Value: codemirror.net/docs/ref/
+												214 text 规定，行号从 1 开始，文档位置从 0 开始，按 UTF-16 代码单元计数，每个换行计一个位置。因此建议对用户展示从 1 开始的行列，对内部明确记录列的计数口径，不能把字节偏移、可见字符数或视觉列混用。可先用  Text.line(n)  取得行起点；涉及制表符与扩展字符的视觉列转换，可参考  findColumn 。跳转前检查行列边界，失效时明确提示。定位通过事务更新  selection ，再以  scrollIntoView: true  请求将选区滚入视野，而不是只滚动页面却留下旧光标。
+											215 container
+												216 text 五、只读阅读与编辑操作应保持边界。  CodeMirror 原文区分  EditorState.readOnly  与  EditorView.editable ：前者供编辑命令及扩展判断是否执行修改，后者控制编辑器 DOM 的可编辑性。建议来源预览明确标注只读，同时保留选择、复制与键盘阅读；点击“打开编辑器”后再转移操作焦点，并提供返回引用处的入口。验收应覆盖盘符相对路径、UNC、键盘折叠、超出范围的行列，以及含制表符和非 BMP 字符的定位。成功标准不是“文件已打开”，而是目标文件、选区和可见位置一致，用户也能辨认自己正在阅读还是编辑。
+											217 table
+												218 row
+													219 cell
+														220 text 维度
+													221 cell
+														222 text 易混淆的做法
+													223 cell
+														224 text 建议
+												225 row
+													226 cell
+														227 text 文件引用
+													228 cell
+														229 text 仅显示文件名，依赖当前目录
+													230 cell
+														231 text 显示辨识路径，绑定解析基准
+												232 row
+													233 cell
+														234 text 来源阅读
+													235 cell
+														236 text 全部展开，或强制互斥
+													237 cell
+														238 text 摘要保留身份，按场景折叠
+												239 row
+													240 cell
+														241 text 编辑定位
+													242 cell
+														243 text 只滚动，行列口径不明
+													244 cell
+														245 text 校验坐标，更新选区并滚入视野
+										246 button Quote in main conversation
+									247 container
+										248 text entry area (settable) Ask a side question…
+										249 text Main conversation stays on track
+										250 button (disabled) Send side question
+
+The focused UI element is 114 checkbox Description: Close right dock, Value: 1

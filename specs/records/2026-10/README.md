@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [侧聊Sources269](2026-10-10-side-source-269.md)：真实来源到达/终态阅读往返，定位Markdown标题遗漏；原未验阶段与收尾目标偏差保留。
+
 - [Windows文件引用268](2026-10-10-source-link-268.md)：唯一renderer盘符语法修复，实际正文代码路径与原Source打开，locator未触发/2分54秒余量偏差保留。
 
 - [明确文件引用267](2026-10-10-source-link-267.md)：明确路径、行号和Markdown真实正向打开，原加载中保留、目标全文相等与5EOF/Native0。

@@ -1,0 +1,34 @@
+Browser tab: 116, Title: "OpenCorvus", URL: "http://localhost:18207/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 77-82
++										94 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+~										75 button 请只回复“已准备好”，不用工具，不创建任务或委托。
+~										76 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
++									95 container
++										96 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										97 button 请只回复“已准备好”，不用工具，不创建任务或委托。
++										98 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-279-trigger, Secondary Actions: Expand
++									99 container
++										100 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										101 button Reply with OK.
++										102 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-285-trigger, Secondary Actions: Expand
+~						84 text 请只回复“已准备好”，不用工具，不创建任务或委托。
+~						85 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+~						86 container Description: Not running, ID: taskStatus
++							103 text Not running
++							104 container
++								105 container
++									106 text User
++									107 text 请只回复“已准备好”，不用工具，不创建任务或委托。
++								108 container
++									109 text work
++									110 text 5s
++									111 text 已准备好
+~								48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~								49 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+~								93 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+~								55 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+~									57 text openai/gpt-6.1-sol
+~								58 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18207/ui/
