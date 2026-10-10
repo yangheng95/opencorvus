@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources日期260](records/2026-10/2026-10-10-source-date-260.md)：Tooltip显示本地化出版日、保留原日期精度与事实，真实中英文页面复核。
+
 - [主Sources阅读259](records/2026-10/2026-10-10-source-reading-259.md)：五来源/5211字符摘录与原网页往返，阅读2016保持/Native0；原生预览及宽矩阵仍待。
 
 - [真实停止258](records/2026-10/2026-10-10-stream-stop-258.md)：主动Stop保留835字/后续683字与Sources，9EOF加1真实取消/Native0；Stopped文案与历史视觉复核。

@@ -3,7 +3,7 @@ import { Match, Show, Switch, onCleanup, onMount, untrack } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
 import { relativePathFrom, shortRelativePath } from "../utils/tool"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { Icon, type IconName } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
 import { Disclosure } from "./ui/Disclosure"
@@ -111,12 +111,32 @@ async function openSourceFile(source: ConversationSourcePart): Promise<void> {
   }
 }
 
+/** Preserve the publisher's calendar day; authored date text carries its own precision. */
+function sourcePublishedDate(value: string | undefined): string {
+  if (!value) return ""
+  const raw = value.trim()
+  const day = /^(\d{4}-\d{2}-\d{2})(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))?$/.exec(raw)?.[1]
+  if (!day || !Number.isFinite(Date.parse(raw))) return raw
+  const calendarDate = new Date(`${day}T00:00:00.000Z`)
+  if (calendarDate.getUTCFullYear() < 1 || calendarDate.toISOString().slice(0, 10) !== day) return raw
+  return new Intl.DateTimeFormat(localeTag(), { dateStyle: "medium", timeZone: "UTC" }).format(calendarDate)
+}
+
+function sourceProviderLabel(provider: string | undefined): string {
+  if (provider === "opencorvus-webfetch") return t("chat.source_provider.webfetch")
+  if (provider === "opencorvus-read") return t("chat.source_provider.read")
+  if (provider === "exa") return "Exa"
+  return provider || ""
+}
+
 function SourceTooltipContent(props: { source: ConversationSourcePart }) {
   return (
     <Tooltip.Content class="msg-source-tooltip" data-ui="message-source-tooltip">
       <strong>{sourceLabel(props.source)}</strong>
       <span>{sourceDetail(props.source)}</span>
-      <span>{[props.source.author, props.source.publishedAt, props.source.provider].filter(Boolean).join(" · ")}</span>
+      <span title={[props.source.publishedAt, props.source.provider].filter(Boolean).join(" · ") || undefined}>
+        {[props.source.author, sourcePublishedDate(props.source.publishedAt), sourceProviderLabel(props.source.provider)].filter(Boolean).join(" · ")}
+      </span>
     </Tooltip.Content>
   )
 }

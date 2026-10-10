@@ -555,6 +555,14 @@ notification. The nearest transcript pauses follow-to-bottom while
 its operator reads; native pointer and keyboard behavior, source identity and
 the single expansion store remain authoritative. The explicit bottom control
 resumes following through the same existing scroll owner.
+Source tooltips localize explicit ISO calendar dates and valid timezone-qualified
+timestamps as the publisher's original calendar day. They retain the exact source
+value in the metadata title and preserve authored date text with its original
+precision. This presentation does not convert publication days into local event
+times or change the stored citation payload.
+Known built-in read and webfetch provenance uses localized resource-acquisition
+labels; the original provider identifier remains in the metadata title and stored
+payload. Other source-provider names retain their authored value.
 Child conversation message dividers retain the shared transcript margin and use
 the medium spacing token for their inner top inset. This keeps independent
 Source-bearing messages distinct without repeating a large blank band; the

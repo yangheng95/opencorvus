@@ -1,0 +1,183 @@
+Browser tab: 106, Title: "OpenCorvus", URL: "http://localhost:18198/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18198/ui/
+	2 container
+		3 container overlayAppHost
+			4 container titlebar
+				5 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				6 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					7 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-356-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-358-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-360-trigger, Secondary Actions: Expand
+					10 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-362-trigger, Secondary Actions: Expand
+			11 container panelBody
+				12 container Description: 对话快捷入口, ID: workspaceNavigation
+					13 container 对话快捷入口
+						14 button 对话
+						15 button Mission 看板
+						16 button 定时
+						17 button 专家团
+						18 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						19 button 设置
+					20 button 关于
+					21 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				22 container workspacePageStack
+					23 container leftActivityShell
+						24 container workspaceContextbar
+							25 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							26 button 搜索任务或运行命令
+							27 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						28 container sidebar
+							29 container workLedgerPanel
+								30 container 对话导航
+									31 button 新对话
+								32 container workLedgerProjectsScroll
+									33 text 项目
+									34 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									35 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									36 container
+										37 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+										38 container
+											39 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											40 button 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+											41 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+										42 button (expanded) Description: 收起 匿名项目 ae6aad, Secondary Actions: Collapse
+										43 container
+											44 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											45 button Reply with OK.
+											46 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+									47 container 最近
+										48 text 最近
+										49 container
+											50 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											51 button 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+											52 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+										53 container
+											54 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											55 button Reply with OK.
+											56 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+							57 container 连接诊断
+								58 container Description: 连接诊断 · 在线 · 端口 18198, ID: connBadge
+									59 text 在线
+					60 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					61 container chatSection
+						62 container Description: 正在加载 Task, ID: taskSwitchProgress
+						63 container
+							64 text 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+							65 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
+							66 container Description: 非进行中, ID: taskStatus
+								67 text 非进行中
+							68 button 侧聊
+							69 container solidChatHeaderRuntimeActions
+								70 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+								71 checkbox Description: 打开右侧面板, Value: 0
+						72 container
+							73 container Description: 对话, ID: chatScroll
+								74 container
+									75 container
+										76 text 用户
+										77 text 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释键盘焦点与 Sources 阅读体验的具体建议。区分文档事实与产品评审建议，不把建议说成已经实现的功能。请在当前普通对话中完成，不创建任务、不委托agent、不生成或修改本地文件。
+									78 container
+										79 text work
+										80 text 1 分 1 秒
+										81 container
+											82 text 我会只读检索并核对 MDN 官方资料，先给出简短结论和真实来源，再用八段说明键盘焦点与 Sources 阅读体验的具体建议，明确区分文档事实和产品评审建议。
+											83 button (collapsed) Description: websearch · Web search: site:developer.mozilla.org CSS :focus-visible, Secondary Actions: Expand
+												84 text websearch
+												85 text Web search: site:developer.mozilla.org CSS :focus-visible
+												86 image
+											87 container 来源
+												88 button (expanded) Description: 来源: focus-visible CSS pseudo-class - MDN Web Docs (5), Help: focus-visible CSS pseudo-class - MDN Web Docs 5, Secondary Actions: Collapse
+													89 text focus-visible CSS pseudo-class - MDN Web Docs
+													90 text 5
+												91 link Description: 打开网页来源: focus-visible CSS pseudo-class - MDN Web Docs, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible
+												92 button (collapsed) Description: 来源摘要: focus-visible CSS pseudo-class - MDN Web Docs, Help: 来源摘要, Secondary Actions: Expand
+													93 text 来源摘要
+												94 link Description: 打开网页来源: Pseudo-classes - CSS | MDN, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Pseudo-classes
+												95 button (collapsed) Description: 来源摘要: Pseudo-classes - CSS | MDN, Help: 来源摘要, Secondary Actions: Expand
+													96 text 来源摘要
+												97 link Description: 打开网页来源: :focus-visible - CSS：层叠样式表 | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+												98 button (collapsed) Description: 来源摘要: :focus-visible - CSS：层叠样式表 | MDN, Help: 来源摘要, Secondary Actions: Expand
+													99 text 来源摘要
+												100 link Description: 打开网页来源: CSS-Pseudoklasse :focus-visible - MDN Web Docs, Value: developer.mozilla.org/de/docs/Web/CSS/Reference/Selectors/:focus-visible
+												101 button (collapsed) Description: 来源摘要: CSS-Pseudoklasse :focus-visible - MDN Web Docs, Help: 来源摘要, Secondary Actions: Expand
+													102 text 来源摘要
+												103 link Description: 打开网页来源: focus CSS pseudo-class - MDN Web Docs - Mozilla, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus
+												104 button (collapsed) Description: 来源摘要: focus CSS pseudo-class - MDN Web Docs - Mozilla, Help: 来源摘要, Secondary Actions: Expand
+													105 text 来源摘要
+										106 container
+											107 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible (text/html)
+												108 text webfetch
+												109 text https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible (text/html)
+												110 image
+											111 container 来源
+												112 link Description: 打开网页来源: :focus-visible - CSS：层叠样式表 | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+										113 container
+											114 text 简短结论
+											115 text ：
+											116 text :focus-visible
+											117 text  适合用于 Sources 中交互控件的焦点样式：保留键盘操作所需的明确位置提示，同时尊重浏览器对鼠标等输入方式的判断。它不是“只在按键时显示”的开关，也不能单独解决焦点顺序、跳转和返回定位问题。以下产品建议均为评审建议，不代表已经实现。
+											118 text 真实来源
+											119 text ：已只读检索并打开核对
+											120 link Description: MDN 中文官方文档：:focus-visible, Value: developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+											121 text 。重点依据该页的“
+											122 text :focus
+											123 text  与
+											124 text :focus-visible
+											125 text ”“无障碍”“示例”章节；页面标示最后更新于 2025 年 11 月 4 日。
+											126 heading 详细说明, Value: 3
+												127 text 详细说明
+											128 text 一、文档事实：焦点与焦点可见性不同。
+											129 text  MDN 说明，
+											130 text :focus-visible
+											131 text  匹配的前提是元素已经符合
+											132 text :focus
+											133 text ，且浏览器通过启发式判断认为应显示焦点提示。因此，“获得焦点”与“显示焦点环”不是同一件事。它只负责匹配状态、允许作者设置外观，不会让普通文本自动可聚焦，也不会改变键盘导航顺序。评审 Sources 时，应分别检查控件能否到达、到达后能否看清位置，而不能只检查有没有这条 CSS。
+											134 text 二、文档事实：不能把它理解成纯键盘检测。
+											135 text  MDN 举例指出，鼠标点击按钮时通常不显示焦点环，但需要输入的文本框获得焦点时仍会显示；使用键盘导航到按钮时则会显示。这说明判断还涉及元素用途，而不只是最近使用了鼠标还是键盘。产品评审建议：若 Sources 有搜索框、筛选按钮和来源链接，应允许浏览器保留这种差异，不要制定“鼠标点击后一律隐藏焦点”的规则，以免输入位置也失去提示。
+											136 text 三、产品评审建议：先保证完整的键盘路径。
+											137 text  若 Sources 包含来源列表与阅读区域，建议按内容和操作逻辑组织焦点顺序，让用户通过 Tab、Shift+Tab 能到达来源链接及实际存在的阅读操作。导航使用链接，执行操作使用按钮，避免只有鼠标点击才能使用的文本或图标。不要为了强调阅读内容而把每段正文都加入 Tab 顺序；否则长文会产生大量无意义停靠点。以上是交互设计建议，并非 MDN 对 Sources 结构的描述。
+											138 text 四、产品评审建议：区分焦点、选中与悬停。
+											139 text  Sources 中“正在阅读哪篇来源”与“下一次键盘操作作用于哪个控件”是不同状态。建议选中来源使用持续的背景、标记或文字提示，键盘焦点使用清楚的轮廓，悬停采用较轻的反馈。如果三者共用同一种高亮，用户可能误把焦点移动当成来源切换。MDN 提醒，混合输入方式下焦点指示出现和消失可能令人困惑；上述状态区分是针对这一风险提出的产品建议。
+											140 text 五、文档事实与建议：可见性优先于装饰。
+											141 text  MDN 要求关注低视力用户，并在无障碍章节引用视觉焦点指示器至少 3:1 的对比度要求；它也说明移除焦点样式会妨碍有视力的键盘用户导航。建议 Sources 使用明显轮廓并留出适当间距，而不是仅作细微文字变色。评审时还应检查浅色、深色背景，以及列表边缘和滚动容器中的轮廓是否被裁切。具体颜色、粗细和间距应以实际界面验证为准。
+											142 text 六、产品评审建议：保护阅读位置与焦点连续性。
+											143 text  若打开来源会更新阅读区域，建议明确决定焦点是保留在来源入口，还是移到新内容的合理起点，不要在每次内容刷新时无条件抢走焦点。如果存在预览弹层，关闭后建议回到原触发入口；加载更多或更新列表时，也应避免让当前控件消失后焦点无处可寻。这些需要交互逻辑处理，不能由
+											144 text :focus-visible
+											145 text  自动完成。目标是让用户始终知道自己在哪里、接下来能做什么。
+											146 text 七、文档事实与建议：兼容处理不等于清空默认轮廓。
+											147 text  MDN 标示该特性自 2022 年 3 月起在主流浏览器中广泛可用，并给出用
+											148 text @supports not selector(:focus-visible)
+											149 text  提供
+											150 text :focus
+											151 text  样式的示例；同时说明旧浏览器的原生轮廓也可能足够。建议 Sources 按实际目标环境确定兼容策略，优先保留可用的原生指示，再做定制。不要先全局移除 outline，再假设所有环境都会成功应用新样式。
+											152 text 八、产品评审建议：以真实操作验收，而非样式存在验收。
+											153 text  建议完成“进入 Sources—定位来源—打开阅读—返回继续选择”的纯键盘流程，再检查鼠标点击后转用键盘的混合流程。每一步都应确认焦点可辨认、顺序合理、不被遮挡，并按控件语义验证激活方式；如有弹层，再检查关闭与返回位置。此次只核对了 MDN 资料，没有检查 Sources 的实际界面，因此这些是待验证的评审标准，不能据此宣称产品已经实现或通过无障碍验收。
+										154 button 复制消息
+										155 button (collapsed) Description: 添加局部指令, Secondary Actions: Expand
+										156 pop up button (collapsed) Description: 查看本轮模型用量：123K Token, Secondary Actions: Expand
+										157 text Oct 9, 09:08 PM
+							158 container chatHomeComposition
+								159 container solidChatComposer
+									160 container
+										161 text 模型配置暂不可用
+										162 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+										163 button (collapsed) 详细信息, Secondary Actions: Expand
+											164 text 详细信息
+										165 button 重试
+										166 container chatForm
+											167 splitter Description: 拖拽调整消息输入框大小, Value: 42
+											168 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+											169 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											170 text Work
+											171 text Chat
+											172 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											173 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											174 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+												175 text 选择模型
+											176 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+									177 button 滚动到底部
+		178 container ID: tooltip-cl-233-content, :focus-visible - CSS：层叠样式表 | MDN https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible opencorvus-webfetch
+			179 text :focus-visible - CSS：层叠样式表 | MDN
+			180 text https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible opencorvus-webfetch
+
+The focused UI element is 112 link Description: 打开网页来源: :focus-visible - CSS：层叠样式表 | MDN, URL: developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible

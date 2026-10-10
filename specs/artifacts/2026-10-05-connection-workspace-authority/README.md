@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Sources日期260 Recall](source-date-plan-260.md) / [完整实际验收](source-date-260/README.md)：原日期字符串可读呈现、作者精度保留，独立真实历史页面与原事实保管。
+
 - [主Sources阅读259 Recall](source-reading-plan-259.md) / [完整实际证据](source-reading-259/README.md)：真实五Sources/摘录/独立网页往返，完整保管/Native0，原生预览未覆盖。
 
 - [真实停止258 Recall](stream-stop-plan-258.md) / [完整实际证据](stream-stop-258/README.md)：精确实际取消/后续自然完成与原来源可读，修复已停止标签。

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources日期260](2026-10-10-source-date-260.md)：改进原ISO日期阅读表达，单一locale/Calendar呈现与原数据保管，真实UI复核。
+
 - [主Sources阅读259](2026-10-10-source-reading-259.md)：真实长摘录键盘/折叠与外部网页返回，完整19生命周期保管与原Native0，无伪修复。
 
 - [真实停止258](2026-10-10-stream-stop-258.md)：实际生成停止、下一轮与原来源保留，完整取消checker/原Native0，修复已跳过文案。

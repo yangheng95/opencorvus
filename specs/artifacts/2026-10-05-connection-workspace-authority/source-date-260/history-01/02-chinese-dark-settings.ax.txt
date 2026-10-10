@@ -1,0 +1,68 @@
+Browser tab: 106, Title: "OpenCorvus", URL: "http://localhost:18198/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18198/ui/
+	2 container overlayAppHost
+		3 container titlebar
+			4 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+			5 container 设置导航
+				6 button 返回 OpenCorvus
+			7 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				8 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-356-trigger, Secondary Actions: Expand
+				9 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-358-trigger, Secondary Actions: Expand
+				10 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-360-trigger, Secondary Actions: Expand
+				11 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-362-trigger, Secondary Actions: Expand
+		12 container panelBody
+			13 container Description: 对话快捷入口, ID: workspaceNavigation
+				14 container 对话快捷入口
+					15 button 对话
+					16 button Mission 看板
+					17 button 定时
+					18 button 专家团
+					19 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					20 button 设置
+				21 button 关于
+				22 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			23 container Description: 外观, ID: configDialog
+				24 container tabs-cl-264
+					25 container configSidebar
+						26 button 返回应用
+						27 search text field (settable) 搜索设置页面...
+						28 tab group
+							29 text 应用
+							30 tab (selectable, settable, boolean) 通用, Value: 0, ID: config-tab-general
+							31 tab (selected, settable, boolean) 外观, Value: 1, ID: config-tab-appearance
+							32 tab (selectable, settable, boolean) 网络, Value: 0, ID: config-tab-network
+							33 tab (selectable, settable, boolean) 用量统计, Value: 0, ID: config-tab-usage
+							34 text 产品
+							35 tab (selectable, settable, boolean) Chat, Value: 0, ID: config-tab-code
+							36 tab (selectable, settable, boolean) Work, Value: 0, ID: config-tab-work
+							37 text Mission 与自动化
+							38 tab (selectable, settable, boolean) Mission Card, Value: 0, ID: config-tab-mission-skill
+							39 tab (selectable, settable, boolean) 定时任务, Value: 0, ID: config-tab-scheduled
+							40 text 专家团
+							41 tab (selectable, settable, boolean) Squad 市场, Value: 0, ID: config-tab-expert-squad-install
+							42 tab (selectable, settable, boolean) 已安装专家团, Value: 0, ID: config-tab-expert-squad
+							43 text 共享资源
+							44 tab (selectable, settable, boolean) 模型服务商, Value: 0, ID: config-tab-providers
+							45 tab (selectable, settable, boolean) Skill 资源库, Value: 0, ID: config-tab-skill
+							46 tab (selectable, settable, boolean) MCP 连接, Value: 0, ID: config-tab-mcp
+							47 tab (selectable, settable, boolean) 通道, Value: 0, ID: config-tab-channel
+							48 text 上下文
+							49 tab (selectable, settable, boolean) 记忆与上下文, Value: 0, ID: config-tab-memory
+							50 text 数据
+							51 tab (selectable, settable, boolean) 归档, Value: 0, ID: config-tab-archive
+							52 tab (selectable, settable, boolean) 更新日志, Value: 0, ID: config-tab-changelog
+							53 tab (selectable, settable, boolean) 关于, Value: 0, ID: config-tab-about
+					54 splitter Description: 设置, Value: 230, ID: configResizer
+					55 container configContent
+						56 heading 外观, Value: 1
+							57 text 外观
+						58 container Description: 外观, ID: config-panel-appearance
+							59 container
+								60 text 主题 选择 OpenCorvus 在此设备上的外观。
+								61 pop up button (collapsed) 主题 深色, ID: select-cl-304-trigger, Secondary Actions: Expand
+									62 text 深色
+								63 text 语言 选择 OpenCorvus 界面使用的语言。
+								64 pop up button (collapsed) 语言 简体中文, ID: select-cl-310-trigger, Secondary Actions: Expand
+									65 text 简体中文
+
+The focused UI element is 64 pop up button (collapsed) 语言 简体中文, ID: select-cl-310-trigger, Secondary Actions: Expand
