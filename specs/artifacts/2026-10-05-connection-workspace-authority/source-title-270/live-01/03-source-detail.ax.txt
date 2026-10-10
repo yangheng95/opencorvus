@@ -1,0 +1,125 @@
+Browser tab: 117, Title: "OpenCorvus", URL: "http://localhost:18208/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18208/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+										37 container
+											38 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+											39 button 请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-pa...
+											40 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+										41 button (expanded) Description: Collapse Anonymous f8684e, Secondary Actions: Collapse
+										42 container
+											43 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											44 button Reply with OK.
+											45 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+									46 container Recents
+										47 text Recents
+										48 container
+											49 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+											50 button 请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-pa...
+											51 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-321-trigger, Secondary Actions: Expand
+										52 container
+											53 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											54 button Reply with OK.
+											55 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-327-trigger, Secondary Actions: Expand
+							56 container Connection Diagnostics
+								57 container Description: Connection Diagnostics · Online · Port 18208, ID: connBadge
+									58 text Online
+					59 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					60 container chatSection
+						61 container Description: Loading task, ID: taskSwitchProgress
+						62 container
+							63 text 请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-pa...
+							64 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							65 container Description: Not running, ID: taskStatus
+								66 text Not running
+							67 button Side chat
+							68 container solidChatHeaderRuntimeActions
+								69 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								70 checkbox Description: Open right dock, Value: 0
+						71 container
+							72 container Description: Conversation, ID: chatScroll
+								73 container
+									74 container
+										75 text User
+										76 container
+											77 text 请实际用 webfetch 读取
+											78 link Description: https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+											79 text  ，采用默认 markdown 格式。简短说明文档原始标题及盘符绝对路径和相对路径的区别，约100字，提供真实来源。只读，不修改文件，不创建任务或委托，不读取其他页面。
+									80 container
+										81 text work
+										82 text 37s
+										83 container
+											84 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
+												85 text webfetch
+												86 text https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats (text/markdown; charset=utf-8)
+												87 image
+											88 container Sources
+												89 link Description: Open web source: File path formats on Windows systems - .NET | Microsoft Learn, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+										90 container
+											91 text 已用 webfetch 按 Markdown 格式读取。文档原始标题为《File path formats on Windows systems》。盘符绝对路径如
+											92 link Description: C:\docs\a.txt, Value: localhost:18208/ui/#
+											93 text ，从指定盘根目录定位，不依赖当前目录；相对路径如
+											94 link Description: docs\a.txt, Value: localhost:18208/ui/#
+											95 text  依赖当前目录，
+											96 text C:docs\a.txt
+											97 text  则依赖 C 盘当前目录。 来源：
+											98 link Description: Microsoft Learn 原文, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#traditional-dos-paths
+											99 text 。
+										100 button Copy message
+										101 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+										102 pop up button (collapsed) Description: View model usage for this turn: 71K Token, Secondary Actions: Expand
+										103 text Oct 10, 01:38 PM
+							104 container chatHomeComposition
+								105 container solidChatComposer
+									106 container chatForm
+										107 splitter Description: Drag to resize the message input, Value: 42
+										108 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+										109 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+										110 text Work
+										111 text Chat
+										112 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+										113 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+										114 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+											115 text openai/gpt-6.1-sol
+										116 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+									117 button Scroll to bottom
+		118 container ID: tooltip-cl-273-content, File path formats on Windows systems - .NET | Microsoft Learn https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats Fetched webpage
+			119 text File path formats on Windows systems - .NET | Microsoft Learn
+			120 text https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+			121 text Fetched webpage
+
+The focused UI element is 89 link Description: Open web source: File path formats on Windows systems - .NET | Microsoft Learn, URL: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats

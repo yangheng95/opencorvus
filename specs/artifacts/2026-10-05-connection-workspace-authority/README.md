@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [来源标题270 Recall](source-title-plan-270.md) / [当前真实修复](source-title-270/README.md)：修native Markdown发布者title，真实UI/Tooltip与原全文equal，20断言/5EOF/Native0。
+
 - [侧聊Sources269 Recall](side-source-plan-269.md) / [当前真实证据](side-source-269/README.md)：三Source/完成态阅读保持，Markdown标题真实遗漏；10EOF/Native0及原未验/收尾偏差。
 
 - [Windows文件引用268 Recall](source-link-plan-268.md) / [当前真实修复](source-link-268/README.md)：明确rooted drive代码路径真实定位27，原Source范围保留，5EOF/Native0和原验收偏差。

@@ -1,0 +1,41 @@
+Browser tab: 117, Title: "OpenCorvus", URL: "http://localhost:18208/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 70, 73-76
++									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									87 container
++										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										89 button 请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-pa...
++										90 image Running
++										91 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
++									92 container
++										93 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										94 button 请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-pa...
++										95 image Running
++										96 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-255-trigger, Secondary Actions: Expand
++									97 container
++										98 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										99 button Reply with OK.
++										100 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-261-trigger, Secondary Actions: Expand
+~						78 text 请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-pa...
++						101 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
++						102 container Description: Running, ID: taskStatus
++							103 text Running
++							104 container
++								105 container
++									106 text User
++									107 container
++										108 text 请实际用 webfetch 读取
++										109 link Description: https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats, Value: learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
++										110 text  ，采用默认 markdown 格式。简短说明文档原始标题及盘符绝对路径和相对路径的区别，约100字，提供真实来源。只读，不修改文件，不创建任务或委托，不读取其他页面。
++								111 container
++									112 text work
++									113 text 26s
++									114 button (collapsed) Description: webfetch · markdown, Secondary Actions: Expand
++										115 text webfetch
++										116 text markdown
++										117 text 1 running
+~								85 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+~									57 text openai/gpt-6.1-sol
+~								58 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18208/ui/

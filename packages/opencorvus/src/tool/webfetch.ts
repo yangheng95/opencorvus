@@ -9,6 +9,8 @@ import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
 import { urlSource } from "./source"
 import { createDocument } from "@mixmark-io/domino"
+import { YAMLException } from "js-yaml"
+import { parseFrontmatter } from "../util/frontmatter"
 import { readHttpResponseBody, disposeHttpResponseBody, fetchHttpResponseOwner } from "../util/http-response-body"
 
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -140,10 +142,8 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
     }
 
     const content = new TextDecoder().decode(arrayBuffer)
-    if (mime === "text/html") {
-      const documentTitle = createDocument(content).title.trim()
-      if (documentTitle) source.title = documentTitle
-    }
+    const documentTitle = fetchedDocumentTitle(mime, content)
+    if (documentTitle) source.title = documentTitle
 
     // Handle content based on requested format and actual content type
     switch (params.format) {
@@ -197,6 +197,24 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
     }
   } finally {
     clearTimeout()
+  }
+}
+
+function fetchedDocumentTitle(mime: string, content: string): string | undefined {
+  if (mime === "text/html" || mime === "application/xhtml+xml") return createDocument(content).title.trim() || undefined
+  if (mime !== "text/markdown" && mime !== "text/x-markdown") return undefined
+  // Remote metadata is YAML data. A language marker could select a script
+  // engine in the frontmatter library, so only the default delimiter is read.
+  if (!/^---\r?\n/.test(content)) return undefined
+  try {
+    const { data } = parseFrontmatter(content)
+    const title = data && typeof data === "object" ? data.title : undefined
+    return typeof title === "string" ? title.trim() || undefined : undefined
+  } catch (error) {
+    // Publisher metadata is optional; a malformed YAML header does not change
+    // the body and canonical URL of the successful resource read.
+    if (error instanceof YAMLException) return undefined
+    throw error
   }
 }
 

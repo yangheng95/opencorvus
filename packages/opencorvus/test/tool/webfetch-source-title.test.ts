@@ -8,7 +8,14 @@ import { persistMessageSources } from "@/session/source-persistence"
 import { urlSource } from "@/tool/source"
 import { memoryProject } from "../fixture/memory"
 
-test("real fetched HTML titles preserve decoded identity, redirect URL and persisted source", async () => {
+const markdownBodies = {
+  "markdown-quoted": '---\ntitle: "发布者 & 标题"\n---\n# Article heading\nActual Markdown body\n',
+  "markdown-folded": "---\r\ntitle: >-\r\n  发布者\r\n  完整标题\r\n---\r\nActual Markdown body\r\n",
+  "markdown-malformed": "---\ntitle: [unfinished\n---\nActual Markdown body\n",
+  "markdown-script": "---javascript\n({ title: 'Computed script label' })\n---\nLiteral remote resource\n",
+}
+
+test("fetched document metadata preserves published titles, resource content and persisted source", async () => {
   await using project = await memoryProject()
   const server = Bun.serve({
     port: 0,
@@ -35,6 +42,16 @@ test("real fetched HTML titles preserve decoded identity, redirect URL and persi
         return new Response(
           "<html><head><title>Format &amp; 标题</title></head><body><h1>Actual heading</h1><p>Actual body</p></body></html>",
           { headers: { "content-type": "text/html" } },
+        )
+      const markdownBody = markdownBodies[pathname.slice(1) as keyof typeof markdownBodies]
+      if (markdownBody)
+        return new Response(markdownBody, {
+          headers: { "content-type": pathname === "/markdown-folded" ? "text/x-markdown; charset=utf-8" : "text/markdown; charset=utf-8" },
+        })
+      if (pathname === "/xhtml")
+        return new Response(
+          '<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Published XHTML title</title></head><body>Actual XHTML body</body></html>',
+          { headers: { "content-type": "application/xhtml+xml; charset=utf-8" } },
         )
       return new Response(new Uint8Array([137, 80, 78, 71]), { headers: { "content-type": "image/png" } })
     },
@@ -133,6 +150,40 @@ test("real fetched HTML titles preserve decoded identity, redirect URL and persi
           title: "真正 & 标题 页面",
           sessionID: session.id,
           messageID,
+        })
+        const markdownFormats = await Promise.all(
+          (["text", "markdown", "html"] as const).map((format) =>
+            executeWebFetch({ url: `${server.url}markdown-quoted`, format }, ctx),
+          ),
+        )
+        expect(markdownFormats.map(value => value.output)).toEqual(
+          Array(3).fill('---\ntitle: "发布者 & 标题"\n---\n# Article heading\nActual Markdown body'),
+        )
+        for (const value of markdownFormats)
+          expect(value.sources[0]).toMatchObject({
+            type: "source-url", url: `${server.url}markdown-quoted`, title: "发布者 & 标题", provider: "opencorvus-webfetch",
+          })
+        const folded = await executeWebFetch({ url: `${server.url}markdown-folded`, format: "markdown" }, ctx)
+        expect(folded).toMatchObject({
+          output: "---\ntitle: >-\n  发布者\n  完整标题\n---\nActual Markdown body",
+          sources: [{ type: "source-url", url: `${server.url}markdown-folded`, title: "发布者 完整标题", provider: "opencorvus-webfetch" }],
+        })
+        const xhtml = await executeWebFetch({ url: `${server.url}xhtml`, format: "html" }, ctx)
+        expect(xhtml.sources[0]).toMatchObject({
+          type: "source-url", url: `${server.url}xhtml`, title: "Published XHTML title", provider: "opencorvus-webfetch",
+        })
+        const literalResources = {
+          "markdown-malformed": "---\ntitle: [unfinished\n---\nActual Markdown body",
+          "markdown-script": "---javascript\n({ title: 'Computed script label' })\n---\nLiteral remote resource",
+        }
+        for (const route of ["markdown-malformed", "markdown-script"] as const) {
+          const value = await executeWebFetch({ url: `${server.url}${route}`, format: "markdown" }, ctx)
+          expect(value.output).toBe(literalResources[route])
+          expect(value.sources).toEqual([urlSource({ url: `${server.url}${route}`, provider: "opencorvus-webfetch" })])
+        }
+        const markdownPersisted = await persistMessageSources({ sessionID: session.id, messageID, sources: folded.sources })
+        expect(markdownPersisted[0]).toMatchObject({
+          type: "source-url", url: `${server.url}markdown-folded`, title: "发布者 完整标题", sessionID: session.id, messageID,
         })
       },
     })

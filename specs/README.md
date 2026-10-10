@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源标题270](records/2026-10/2026-10-10-source-title-270.md)：native Markdown发布者标题修复，新Sol真实标题/Tooltip与原全文保管，20断言/5EOF/Native0。
+
 - [侧聊Sources269](records/2026-10/2026-10-10-side-source-269.md)：真实三来源/完成态阅读686.4保持，发现Markdown标题缺失，10EOF/Native0与实时阶段/收尾偏差保留。
 
 - [Windows文件引用268](records/2026-10/2026-10-10-source-link-268.md)：修复明确drive代码路径语法，真实两种路径定位27/Source27–37，5EOF/Native0、未触发交互与收尾余量偏差保留。

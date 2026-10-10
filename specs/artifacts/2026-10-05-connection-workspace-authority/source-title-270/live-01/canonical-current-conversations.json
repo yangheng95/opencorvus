@@ -1,0 +1,199 @@
+{
+  "observedAtUtc": "2026-10-10T05:40:11.945Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hzRUYzgwDciwAws6YTKF",
+      "project_id": "prj_hw1PSnkPTgYIPWfFTCrT",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-title-270-live-01\\runtime\\data\\projects\\2026\\10\\10\\329a679d-3252-4d0f-96a6-1acef8f8684e",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"e10ca0ce-7050-4035-8d04-0983d4bd0993\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hTvfJcmOmVLbStxWLcS8\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSNMAghzzyE1njzVIb",
+      "project_id": "prj_hMrUR50T1peYWqbTrObk",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-title-270-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-pa...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hTvfJcmOmVLbStxWLcS8",
+      "sessionID": "ses_hzRUYzgwDciwAws6YTKF",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791610653745
+      }
+    },
+    {
+      "id": "msg_g0VXcdil9004wEFUePFw",
+      "sessionID": "ses_hzRUYzgwDciwAws6YTKF",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791610654179,
+        "completed": 1791610658015
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_d6c68bfa-53de-4294-a5c2-db238f0c01e4",
+      "sessionID": "ses_-zUSNMAghzzyE1njzVIb",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791610680314
+      }
+    },
+    {
+      "id": "msg_g0VXcdpcM00BrRiOm9g1",
+      "sessionID": "ses_-zUSNMAghzzyE1njzVIb",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791610680542,
+        "completed": 1791610711985
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXcdxoa00WQVdkOjZL",
+      "sessionID": "ses_-zUSNMAghzzyE1njzVIb",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791610712052,
+        "completed": 1791610717585
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hrNIReRDqCPl7oWIsruD",
+      "messageID": "msg_hTvfJcmOmVLbStxWLcS8",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXcdiwH00v0ntjGarC",
+      "messageID": "msg_g0VXcdil9004wEFUePFw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXcdjbY00xp8sUX1GX",
+      "messageID": "msg_g0VXcdil9004wEFUePFw",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791610657428,
+        "end": 1791610657666
+      }
+    },
+    {
+      "id": "prt_g0VXcdjk200ZJcdPQ10o",
+      "messageID": "msg_g0VXcdil9004wEFUePFw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXcdpYg00QIeAtdN3j",
+      "messageID": "msg_d6c68bfa-53de-4294-a5c2-db238f0c01e4",
+      "type": "text",
+      "text": "请实际用 webfetch 读取 https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats ，采用默认 markdown 格式。简短说明文档原始标题及盘符绝对路径和相对路径的区别，约100字，提供真实来源。只读，不修改文件，不创建任务或委托，不读取其他页面。",
+      "textChars": 171
+    },
+    {
+      "id": "prt_g0VXcdpkg00HxafrVm5F",
+      "messageID": "msg_g0VXcdpcM00BrRiOm9g1",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXcdxmL004vEBbTu7Z",
+      "messageID": "msg_g0VXcdpcM00BrRiOm9g1",
+      "type": "source-url",
+      "sourceId": "59927586be7d178f44e9f6cc9d54a0fe98eb5bed550573366fc1dc7ebb8e4efd",
+      "url": "https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats",
+      "title": "File path formats on Windows systems - .NET | Microsoft Learn",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXcdxmS00TPvYrWDnA",
+      "messageID": "msg_g0VXcdpcM00BrRiOm9g1",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXcdxu300mhJ2CZ53J",
+      "messageID": "msg_g0VXcdxoa00WQVdkOjZL",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXcdyVh002OvK5KvsU",
+      "messageID": "msg_g0VXcdxoa00WQVdkOjZL",
+      "type": "text",
+      "text": "已用 webfetch 按 Markdown 格式读取。文档原始标题为《File path formats on Windows systems》。盘符绝对路径如 `C:\\docs\\a.txt`，从指定盘根目录定位，不依赖当前目录；相对路径如 `docs\\a.txt` 依赖当前目录，`C:docs\\a.txt` 则依赖 C 盘当前目录。\n\n来源：[Microsoft Learn 原文](https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#traditional-dos-paths)。",
+      "textChars": 289,
+      "time": {
+        "start": 1791610714725,
+        "end": 1791610717044
+      }
+    },
+    {
+      "id": "prt_g0VXcdzF100346T0rOPv",
+      "messageID": "msg_g0VXcdxoa00WQVdkOjZL",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXcdqKI00OORXO5ojh",
+      "message_id": "msg_g0VXcdpcM00BrRiOm9g1",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_64bb74f6110d4d8bbe3fe018ff46d773\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791610683266}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXcdqKI00OORXO5ojh",
+      "outcome": "completed",
+      "resultAttemptID": "per_hml1qqHsBEcYDqq5Vb0X",
+      "outputChars": 27768,
+      "output": "---\nlayout: Conceptual\ntitle: File path formats on Windows systems - .NET | Microsoft Learn\ncanonicalUrl: https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats\napiPlatform: dotnet\nauthor: adegeo\nbreadcrumb_path: /dotnet/breadcrumb/toc.json\nfeedback_system: OpenSource\nfeedback_product_url: https://aka.ms/feedback/report?space=61\nms.author: adegeo\nms.devlang: dotnet\nms.service: dotnet-fundamentals\nms.topic: concept-article\nshow_latex: true\nuhfHeaderId: MSDocsHeader-DotNet\ndescription: In this article, learn about file path formats on Windows systems, such as traditional DOS paths, DOS device paths, and universal naming convention (UNC) paths.\nms.date: 2025-10-22T00:00:00.0000000Z\nai-usage: ai-assisted\nlocale: en-us\ndocument_id: b74b99ff-32f8-c2d1-0a62-5907985f591e\ndocument_version_independent_id: 716a28dc-360e-2964-47f5-0ff18bb00b1c\nupdated_at: 2026-08-04T16:23:00.0000000Z\noriginal_content_git_url: https://github.com/dotnet/docs/blob/live/docs/standard/io/file-path-formats.md\ngitcommit: https://github.com/dotnet/docs/blob/8a189e07f74e50fa0e49551857c3b88d69a7630b/docs/standard/io/file-path-formats.md\ngit_commit_id: 8a189e07f74e50fa0e49551857c3b88d69a7630b\nsite_name: Docs\ndepot_name: VS.core-docs\npage_type: conceptual\ntoc_rel: ../../fundamentals/toc.json\npdf_url_template: https://learn.microsoft.com/pdfstore/en-us/VS.core-docs/{branchName}{pdfName}\nfeedback_help_link_type: ''\nfeedback_help_link_url: ''\nsearch.mshattr.devlang: csharp vb\nword_count: 3115\nasset_id: standard/io/file-path-formats\nmoniker_range_name:\nmonikers: []\nitem_type: Content\nsource_path: docs/standard/io/file-path-formats.md\ncmProducts:\n- https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8\n- https://authoring-docs-microsoft.poolparty.biz/devrel/7696cda6-0510-47f6-8302-71bb5d2e28cf\nspProducts:\n- https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8\n- https://authoring-docs-microsoft.poolparty.biz/devrel/69c76c32-967e-4c65-b89a-74cc527db725\nplatformId: d203e825-4c85-57ee-02d9-2d7146133aad\n---\n\n# File path formats on Windows systems - .NET | Microsoft Learn\n\nMembers of many of the types in the [System.IO](/en-us/dotnet/api/system.io) namespace include a `path` parameter that lets you specify an absolute or relative path to a file system resource. This path is then passed to [Windows file system APIs](/en-us/windows/desktop/fileio/file-systems). This topic discusses the formats for file paths that you can use on Windows systems.\n\n## Traditional DOS paths\n\nA standard DOS path can consist of three components:\n\n- A volume or drive letter followed by the volume separator (`:`).\n- A directory name. The [directory separator character](/en-us/dotnet/api/system.io.path.directoryseparatorchar#system-io-path-directoryseparatorchar) separates subdirectories within the nested directory hierarchy.\n- An optional filename. The [directory separator character](/en-us/dotnet/api/system.io.path.directoryseparatorchar#system-io-path-directoryseparatorchar) separates the file path and the filename.\n\nIf all three components are present, the path is absolute. If no volume or drive letter is specified and the directory name begins with the [directory separator character](/en-us/dotnet/api/system.io.path.directoryseparatorchar#system-io-path-directoryseparatorchar), the path is relative from the root of the current drive. Otherwise, the path is relative to the current directory. The following table shows some possible directory and file paths.\n\n| Path | Description |\n| --- | --- |\n| `C:\\Documents\\Newsletters\\Summer2018.pdf` | An absolute file path from the root of drive `C:`. |\n| `\\Program Files\\Custom Utilities\\StringFinder.exe` | A relative path from the root of the current drive. |\n| `2018\\January.xlsx` | A relative path to a file in a subdirectory of the current directory. |\n| `..\\Publications\\TravelBrochure.pdf` | A relative path to a file in a directory starting from the current directory. |\n| `C:\\Projects\\apilibrary\\apilibrary.sln` | An absolute path to a file from the root of drive `C:`. |\n| `C:Projects\\apilibrary\\apilibrary.sln` | A relative path from the current directory of the `C:` drive. |\n\nImportant\n\nNote the difference between the last two paths. Both specify the optional volume specifier (`C:` in both cases), but the first begins with the root of the specified volume, whereas the second does not. As result, the first is an absolute path from the root directory of drive `C:`, whereas the second is a relative path from the current directory of drive `C:`. Use of the second form when the first is intended is a common source of bugs that involve Windows file paths.\n\nYou can determine whether a file path is fully qualified (that is, if the path is independent of the current directory and doesn't change when the current directory changes) by calling the [Path.IsPathFullyQualified](/en-us/dotnet/api/system.io.path.ispathfullyqualified) method. Note that such a path can include relative directory segments (`.` and `..`) and still be fully qualified if the resolved path always points to the same location.\n\nThe following example illustrates the difference between absolute and relative paths. It assumes that the directory `D:\\FY2018\\` exists, and that you haven't set any current directory for `D:\\` from the command prompt before running the example.\n\n```csharp\nusing System;\nusing System.Diagnostics;\nusing System.IO;\nusing System.Reflection;\n\npublic class Example2\n{\n    public static void Main(string[] args)\n    {\n        Console.WriteLine($\"Current directory is '{Environment.CurrentDirectory}'\");\n        Console.WriteLine(\"Setting current directory to 'C:\\\\'\");\n\n        Directory.SetCurrentDirectory(@\"C:\\\");\n        string path = Path.GetFullPath(@\"D:\\FY2018\");\n        Console.WriteLine($\"'D:\\\\FY2018' resolves to {path}\");\n        path = Path.GetFullPath(@\"D:FY2018\");\n        Console.WriteLine($\"'D:FY2018' resolves to {path}\");\n\n        Console.WriteLine(\"Setting current directory to 'D:\\\\Docs'\");\n        Directory.SetCurrentDirectory(@\"D:\\Docs\");\n\n        path = Path.GetFullPath(@\"D:\\FY2018\");\n        Console.WriteLine($\"'D:\\\\FY2018' resolves to {path}\");\n        path = Path.GetFullPath(@\"D:FY2018\");\n\n        // This will be \"D:\\Docs\\FY2018\" as it happens to match the drive of the current directory\n        Console.WriteLine($\"'D:FY2018' resolves to {path}\");\n\n        Console.WriteLine(\"Setting current directory to 'C:\\\\'\");\n        Directory.SetCurrentDirectory(@\"C:\\\");\n\n        path = Path.GetFullPath(@\"D:\\FY2018\");\n        Console.WriteLine($\"'D:\\\\FY2018' resolves to {path}\");\n\n        // This will be either \"D:\\FY2018\" or \"D:\\FY2018\\FY2018\" in the subprocess. In the sub process,\n        // the command prompt set the current directory before launch of our application, which\n        // sets a hidden environment variable that is considered.\n        path = Path.GetFullPath(@\"D:FY2018\");\n        Console.WriteLine($\"'D:FY2018' resolves to {path}\");\n\n        if (args.Length < 1)\n        {\n            Console.WriteLine(@\"Launching again, after setting current directory to D:\\FY2018\");\n            Uri currentExe = new(Assembly.GetExecutingAssembly().Location, UriKind.Absolute);\n            string commandLine = $\"/C cd D:\\\\FY2018 & \\\"{currentExe.LocalPath}\\\" stop\";\n            ProcessStartInfo psi = new(\"cmd\", commandLine); ;\n            Process.Start(psi).WaitForExit();\n\n            Console.WriteLine(\"Sub process returned:\");\n            path = Path.GetFullPath(@\"D:\\FY2018\");\n            Console.WriteLine($\"'D:\\\\FY2018' resolves to {path}\");\n            path = Path.GetFullPath(@\"D:FY2018\");\n            Console.WriteLine($\"'D:FY2018' resolves to {path}\");\n        }\n        Console.WriteLine(\"Press any key to continue... \");\n        Console.ReadKey();\n    }\n}\n// The example displays the following output:\n//      Current directory is 'C:\\Programs\\file-paths'\n//      Setting current directory to 'C:\\'\n//      'D:\\FY2018' resolves to D:\\FY2018\n//      'D:FY2018' resolves to d:\\FY2018\n//      Setting current directory to 'D:\\Docs'\n//      'D:\\FY2018' resolves to D:\\FY2018\n//      'D:FY2018' resolves to D:\\Docs\\FY2018\n//      Setting current directory to 'C:\\'\n//      'D:\\FY2018' resolves to D:\\FY2018\n//      'D:FY2018' resolves to d:\\FY2018\n//      Launching again, after setting current directory to D:\\FY2018\n//      Sub process returned:\n//      'D:\\FY2018' resolves to D:\\FY2018\n//      'D:FY2018' resolves to d:\\FY2018\n// The subprocess displays the following output:\n//      Current directory is 'C:\\'\n//      Setting current directory to 'C:\\'\n//      'D:\\FY2018' resolves to D:\\FY2018\n//      'D:FY2018' resolves to D:\\FY2018\\FY2018\n//      Setting current directory to 'D:\\Docs'\n//      'D:\\FY2018' resolves to D:\\FY2018\n//      'D:FY2018' resolves to D:\\Docs\\FY2018\n//      Setting current directory to 'C:\\'\n//      'D:\\FY2018' resolves to D:\\FY2018\n//      'D:FY2018' resolves to D:\\FY2018\\FY2018\n```\n\n```vb\nImports System.IO\nImports System.Reflection\n\nPublic Module Example2\n\n    Public Sub Main(args() As String)\n        Console.WriteLine($\"Current directory is '{Environment.CurrentDirectory}'\")\n        Console.WriteLine(\"Setting current directory to 'C:\\'\")\n        Directory.SetCurrentDirectory(\"C:\\\")\n\n        Dim filePath As String = Path.GetFullPath(\"D:\\FY2018\")\n        Console.WriteLine($\"'D:\\\\FY2018' resolves to {filePath}\")\n        filePath = Path.GetFullPath(\"D:FY2018\")\n        Console.WriteLine($\"'D:FY2018' resolves to {filePath}\")\n\n        Console.WriteLine(\"Setting current directory to 'D:\\\\Docs'\")\n        Directory.SetCurrentDirectory(\"D:\\Docs\")\n\n        filePath = Path.GetFullPath(\"D:\\FY2018\")\n        Console.WriteLine($\"'D:\\\\FY2018' resolves to {filePath}\")\n        filePath = Path.GetFullPath(\"D:FY2018\")\n\n        ' This will be \"D:\\Docs\\FY2018\" as it happens to match the drive of the current directory\n        Console.WriteLine($\"'D:FY2018' resolves to {filePath}\")\n\n        Console.WriteLine(\"Setting current directory to 'C:\\\\'\")\n        Directory.SetCurrentDirectory(\"C:\\\")\n\n        filePath = Path.GetFullPath(\"D:\\FY2018\")\n        Console.WriteLine($\"'D:\\\\FY2018' resolves to {filePath}\")\n\n        ' This will be either \"D:\\FY2018\" or \"D:\\FY2018\\FY2018\" in the subprocess. In the sub process,\n        ' the command prompt set the current directory before launch of our application, which\n        ' sets a hidden environment variable that is considered.\n        filePath = Path.GetFullPath(\"D:FY2018\")\n        Console.WriteLine($\"'D:FY2018' resolves to {filePath}\")\n\n        If args.Length < 1 Then\n            Console.WriteLine(\"Launching again, after setting current directory to D:\\FY2018\")\n            Dim currentExe As New Uri(Assembly.GetExecutingAssembly().GetName().CodeBase, UriKind.Absolute)\n            Dim commandLine As String = $\"/C cd D:\\FY2018 & \"\"{currentExe.LocalPath}\"\" stop\"\n            Dim psi As New ProcessStartInfo(\"cmd\", commandLine)\n            Process.Start(psi).WaitForExit()\n\n            Console.WriteLine(\"Sub process returned:\")\n            filePath = Path.GetFullPath(\"D:\\FY2018\")\n            Console.WriteLine($\"'D:\\\\FY2018' resolves to {filePath}\")\n            filePath = Path.GetFullPath(\"D:FY2018\")\n            Console.WriteLine($\"'D:FY2018' resolves to {filePath}\")\n        End If\n        Console.WriteLine(\"Press any key to continue... \")\n        Console.ReadKey()\n    End Sub\nEnd Module\n' The example displays the following output:\n'      Current directory is 'C:\\Programs\\file-paths'\n'      Setting current directory to 'C:\\'\n'      'D:\\FY2018' resolves to D:\\FY2018\n'      'D:FY2018' resolves to d:\\FY2018\n'      Setting current directory to 'D:\\Docs'\n'      'D:\\FY2018' resolves to D:\\FY2018\n'      'D:FY2018' resolves to D:\\Docs\\FY2018\n'      Setting current directory to 'C:\\'\n'      'D:\\FY2018' resolves to D:\\FY2018\n'      'D:FY2018' resolves to d:\\FY2018\n'      Launching again, after setting current directory to D:\\FY2018\n'      Sub process returned:\n'      'D:\\FY2018' resolves to D:\\FY2018\n'      'D:FY2018' resolves to d:\\FY2018\n' The subprocess displays the following output:\n'      Current directory is 'C:\\'\n'      Setting current directory to 'C:\\'\n'      'D:\\FY2018' resolves to D:\\FY2018\n'      'D:FY2018' resolves to D:\\FY2018\\FY2018\n'      Setting current directory to 'D:\\Docs'\n'      'D:\\FY2018' resolves to D:\\FY2018\n'      'D:FY2018' resolves to D:\\Docs\\FY2018\n'      Setting current directory to 'C:\\'\n'      'D:\\FY2018' resolves to D:\\FY2018\n'      'D:FY2018' resolves to D:\\FY2018\\FY2018\n```\n\n## UNC paths\n\nUniversal naming convention (UNC) paths, which are used to access network resources, have the following format:\n\n- A server or host name, which is prefaced by `\\\\`. The server name can be a NetBIOS machine name or an IP/FQDN address (IPv4 as well as v6 are supported).\n- A share name, which is separated from the host name by `\\`. Together, the server and share name make up the volume.\n- A directory name. The [directory separator character](/en-us/dotnet/api/system.io.path.directoryseparatorchar#system-io-path-directoryseparatorchar) separates subdirectories within the nested directory hierarchy.\n- An optional filename. The [directory separator character](/en-us/dotnet/api/system.io.path.directoryseparatorchar#system-io-path-directoryseparatorchar) separates the file path and the filename.\n\nThe following are some examples of UNC paths:\n\n| Path | Description |\n| --- | --- |\n| `\\\\system07\\C$\\` | The root directory of the `C:` drive on `system07`. |\n| `\\\\Server2\\Share\\Test\\Foo.txt` | The `Foo.txt` file in the Test directory of the `\\\\Server2\\Share` volume. |\n\nUNC paths must always be fully qualified. They can include relative directory segments (`.` and `..`), but these must be part of a fully qualified path. You can use relative paths only by mapping a UNC path to a drive letter.\n\n## DOS device paths\n\nThe Windows operating system has a unified object model that points to all resources, including files. These object paths are accessible from the console window and are exposed to the Win32 layer through a special folder of symbolic links that legacy DOS and UNC paths are mapped to. This special folder is accessed via the DOS device path syntax, which is one of:\n\n- `\\\\.\\C:\\Test\\Foo.txt`\n- `\\\\?\\C:\\Test\\Foo.txt`\n\nIn addition to identifying a drive by its drive letter, you can identify a volume by using its volume GUID. This takes the form:\n\n- `\\\\.\\Volume{b75e2c83-0000-0000-0000-602f00000000}\\Test\\Foo.txt`\n- `\\\\?\\Volume{b75e2c83-0000-0000-0000-602f00000000}\\Test\\Foo.txt`\n\nNote\n\nDOS device path syntax is supported on .NET implementations running on Windows starting with .NET Core 1.1 and .NET Framework 4.6.2.\n\nThe DOS device path consists of the following components:\n\n- The device path specifier (`\\\\.\\` or `\\\\?\\`), which identifies the path as a DOS device path.\n\n    Note\n\n    The `\\\\?\\` is supported in all versions of .NET Core and .NET 5+ and in .NET Framework starting with version 4.6.2.\n- A symbolic link to the \"real\" device object (C: in the case of a drive name, or Volume{b75e2c83-0000-0000-0000-602f00000000} in the case of a volume GUID).\n\n    The first segment of the DOS device path after the device path specifier identifies the volume or drive. (For example, `\\\\?\\C:\\` and `\\\\.\\BootPartition\\`.)\n\n    There is a specific link for UNCs that is called, not surprisingly, `UNC`. For example:\n\n    - `\\\\.\\UNC\\Server\\Share\\Test\\Foo.txt`\n    - `\\\\?\\UNC\\Server\\Share\\Test\\Foo.txt`\n\n    For device UNCs, the server/share portion forms the volume. For example, in `\\\\?\\server1\\utilities\\\\filecomparer\\`, the server/share portion is `server1\\utilities`. This is significant when calling a method such as [Path.GetFullPath(String, String)](/en-us/dotnet/api/system.io.path.getfullpath#system-io-path-getfullpath%28system-string-system-string%29) with relative directory segments; it is never possible to navigate past the volume.\n\nDOS device paths are fully qualified by definition and can't begin with a relative directory segment (`.` or `..`). Current directories never enter into their usage.\n\n## Example: Ways to refer to the same file\n\nThe following example illustrates some of the ways in which you can refer to a file when using the APIs in the [System.IO](/en-us/dotnet/api/system.io) namespace. The example instantiates a [FileInfo](/en-us/dotnet/api/system.io.fileinfo) object and uses its [Name](/en-us/dotnet/api/system.io.fileinfo.name#system-io-fileinfo-name) and [Length](/en-us/dotnet/api/system.io.fileinfo.length#system-io-fileinfo-length) properties to display the filename and the length of the file.\n\n```csharp\nusing System;\nusing System.IO;\n\nclass Program\n{\n    static void Main()\n    {\n        string[] filenames = {\n            @\"c:\\temp\\test-file.txt\",\n            @\"\\\\127.0.0.1\\c$\\temp\\test-file.txt\",\n            @\"\\\\LOCALHOST\\c$\\temp\\test-file.txt\",\n            @\"\\\\.\\c:\\temp\\test-file.txt\",\n            @\"\\\\?\\c:\\temp\\test-file.txt\",\n            @\"\\\\.\\UNC\\LOCALHOST\\c$\\temp\\test-file.txt\" };\n\n        foreach (string filename in filenames)\n        {\n            FileInfo fi = new(filename);\n            Console.WriteLine($\"file {fi.Name}: {fi.Length:N0} bytes\");\n        }\n    }\n}\n// The example displays output like the following:\n//      file test-file.txt: 22 bytes\n//      file test-file.txt: 22 bytes\n//      file test-file.txt: 22 bytes\n//      file test-file.txt: 22 bytes\n//      file test-file.txt: 22 bytes\n//      file test-file.txt: 22 bytes\n```\n\n```vb\nImports System.IO\n\nModule Program\n    Sub Main()\n        Dim filenames() As String = {\n                \"c:\\temp\\test-file.txt\",\n                \"\\\\127.0.0.1\\c$\\temp\\test-file.txt\",\n                \"\\\\LOCALHOST\\c$\\temp\\test-file.txt\",\n                \"\\\\.\\c:\\temp\\test-file.txt\",\n                \"\\\\?\\c:\\temp\\test-file.txt\",\n                \"\\\\.\\UNC\\LOCALHOST\\c$\\temp\\test-file.txt\"}\n\n        For Each filename In filenames\n            Dim fi As New FileInfo(filename)\n            Console.WriteLine($\"file {fi.Name}: {fi.Length:N0} bytes\")\n        Next\n    End Sub\nEnd Module\n```\n\n## Path normalization\n\nAlmost all paths passed to Windows APIs are normalized. During normalization, Windows performs the following steps:\n\n- Identifies the path.\n- Applies the current directory to partially qualified (relative) paths.\n- Canonicalizes component and directory separators.\n- Evaluates relative directory components (`.` for the current directory and `..` for the parent directory).\n- Trims certain characters.\n\nThis normalization happens implicitly, but you can do it explicitly by calling the [Path.GetFullPath](/en-us/dotnet/api/system.io.path.getfullpath) method, which wraps a call to the [GetFullPathName() function](/en-us/windows/desktop/api/fileapi/nf-fileapi-getfullpathnamea). You can also call the Windows [GetFullPathName() function](/en-us/windows/desktop/api/fileapi/nf-fileapi-getfullpathnamea) directly using P/Invoke.\n\n### Identify the path\n\nThe first step in path normalization is identifying the type of path. Paths fall into one of a few categories:\n\n- They are device paths; that is, they begin with two separators and a question mark or period (`\\\\?` or `\\\\.`).\n- They are UNC paths; that is, they begin with two separators without a question mark or period.\n- They are fully qualified DOS paths; that is, they begin with a drive letter, a volume separator, and a component separator (`C:\\`).\n- They designate a legacy device (`CON`, `LPT1`).\n- They are relative to the root of the current drive; that is, they begin with a single component separator (`\\`).\n- They are relative to the current directory of a specified drive; that is, they begin with a drive letter, a volume separator, and no component separator (`C:`).\n- They are relative to the current directory; that is, they begin with anything else (`temp\\testfile.txt`).\n\nThe type of the path determines whether or not a current directory is applied in some way. It also determines what the \"root\" of the path is.\n\n### Handle legacy devices\n\nIf the path is a legacy DOS device such as `CON`, `COM1`, or `LPT1`, it is converted into a device path by prepending `\\\\.\\` and returned.\n\nPrior to Windows 11, a path that begins with a legacy device name is always interpreted as a legacy device by the [Path.GetFullPath(String)](/en-us/dotnet/api/system.io.path.getfullpath#system-io-path-getfullpath%28system-string%29) method. For example, the DOS device path for `CON.TXT` is `\\\\.\\CON`, and the DOS device path for `COM1.TXT\\file1.txt` is `\\\\.\\COM1`. Because this no longer applies with Windows 11, specify the full path to the legacy DOS device, such as `\\\\.\\CON`.\n\n### Apply the current directory\n\nIf a path isn't fully qualified, Windows applies the current directory to it. UNCs and device paths don't have the current directory applied. Neither does a full drive with separator `C:\\`.\n\nIf the path starts with a single component separator, the drive from the current directory is applied. For example, if the file path is `\\utilities` and the current directory is `C:\\temp\\`, normalization produces `C:\\utilities`.\n\nIf the path starts with a drive letter, volume separator, and no component separator, the last current directory set from the command shell for the specified drive is applied. If the last current directory wasn't set, the drive alone is applied. For example, if the file path is `D:sources`, the current directory is `C:\\Documents\\`, and the last current directory on drive D: was `D:\\sources\\`, the result is `D:\\sources\\sources`. These \"drive relative\" paths are a common source of program and script logic errors. Assuming that a path beginning with a letter and a colon isn't relative is obviously not correct.\n\nIf the path starts with something other than a separator, the current drive and current directory are applied. For example, if the path is `filecompare` and the current directory is `C:\\utilities\\`, the result is `C:\\utilities\\filecompare\\`.\n\nImportant\n\nRelative paths are dangerous in multithreaded applications (that is, most applications) because the current directory is a per-process setting. Any thread can change the current directory at any time. Starting with .NET Core 2.1, you can call the [Path.GetFullPath(String, String)](/en-us/dotnet/api/system.io.path.getfullpath#system-io-path-getfullpath%28system-string-system-string%29) method to get an absolute path from a relative path and the base path (the current directory) that you want to resolve it against.\n\n### Canonicalize separators\n\nAll forward slashes (`/`) are converted into the standard Windows separator, the back slash (`\\`). If they are present, a series of slashes that follow the first two slashes are collapsed into a single slash.\n\nNote\n\nStarting with .NET 8 on Unix-based operating systems, the runtime no longer converts back slash (`\\`) characters to directory separators (forward slashes `/`). For more information, see [Backslash mapping in Unix file paths](../../core/compatibility/core-libraries/8.0/file-path-backslash).\n\n### Evaluate relative components\n\nAs the path is processed, any components or segments that are composed of a single or a double period (`.` or `..`) are evaluated:\n\n- For a single period, the current segment is removed, since it refers to the current directory.\n- For a double period, the current segment and the parent segment are removed, since the double period refers to the parent directory.\n\n    Parent directories are only removed if they aren't past the root of the path. The root of the path depends on the type of path. It is the drive (`C:\\`) for DOS paths, the server/share for UNCs (`\\\\Server\\Share`), and the device path prefix for device paths (`\\\\?\\` or `\\\\.\\`).\n\n### Trim characters\n\nAlong with the runs of separators and relative segments removed earlier, some additional characters are removed during normalization:\n\n- If a segment ends in a single period, that period is removed. (A segment of a single or double period is normalized in the previous step. A segment of three or more periods isn't normalized and is actually a valid file/directory name.)\n- If the path doesn't end in a separator, all trailing periods and spaces (U+0020) are removed. If the last segment is simply a single or double period, it falls under the relative components rule above.\n\n    This rule means that you can create a directory name with a trailing space by adding a trailing separator after the space.\n\n    Important\n\n    You should **never** create a directory or filename with a trailing space. Trailing spaces can make it difficult or impossible to access a directory, and applications commonly fail when attempting to handle directories or files whose names include trailing spaces.\n\n## Skip normalization\n\nNormally, any path passed to a Windows API is (effectively) passed to the [GetFullPathName function](/en-us/windows/desktop/api/fileapi/nf-fileapi-getfullpathnamea) and normalized. There is one important exception: a device path that begins with a question mark instead of a period. Unless the path starts exactly with `\\\\?\\` (note the use of the canonical backslash), it is normalized.\n\nWhy would you want to skip normalization? There are three major reasons:\n\n1. To get access to paths that are normally unavailable but are legal. A file or directory called `hidden.`, for example, is impossible to access in any other way.\n2. To improve performance by skipping normalization if you've already normalized.\n3. On .NET Framework only, to skip the `MAX_PATH` check for path length to allow for paths that are greater than 259 characters. Most APIs allow this, with some exceptions.\n\nNote\n\n.NET Core and .NET 5+ handles long paths implicitly and doesn't perform a `MAX_PATH` check. The `MAX_PATH` check applies only to .NET Framework.\n\nSkipping normalization and max path checks is the only difference between the two device path syntaxes; they are otherwise identical. Be careful with skipping normalization, since you can easily create paths that are difficult for \"normal\" applications to deal with.\n\nPaths that start with `\\\\?\\` are still normalized if you explicitly pass them to the [GetFullPathName function](/en-us/windows/desktop/api/fileapi/nf-fileapi-getfullpathnamea).\n\nYou can pass paths of more than `MAX_PATH` characters to [GetFullPathName](/en-us/windows/desktop/api/fileapi/nf-fileapi-getfullpathnamea) without `\\\\?\\`. It supports arbitrary length paths up to the maximum string size that Windows can handle.\n\n## Case and the Windows file system\n\nA peculiarity of the Windows file system that non-Windows users and developers find confusing is that path and directory names are case-insensitive. That is, directory and file names reflect the casing of the strings used when they are created. For example, the method call\n\n```csharp\nDirectory.Create(\"TeStDiReCtOrY\");\n```\n\n```vb\nDirectory.Create(\"TeStDiReCtOrY\")\n```\n\ncreates a directory named TeStDiReCtOrY. If you rename a directory or file to change its case, the directory or file name reflects the case of the string used when you rename it. For example, the following code renames a file named test.txt to Test.txt:\n\n```csharp\nusing System.IO;\n\nclass Example3\n{\n    static void Main()\n    {\n        var fi = new FileInfo(@\".\\test.txt\");\n        fi.MoveTo(@\".\\Test.txt\");\n    }\n}\n```\n\n```vb\nImports System.IO\n\nModule Example3\n    Public Sub Main()\n        Dim fi As New FileInfo(\".\\test.txt\")\n        fi.MoveTo(\".\\Test.txt\")\n    End Sub\nEnd Module\n```\n\nHowever, directory and file name comparisons are case-insensitive. If you search for a file named \"test.txt\", .NET file system APIs ignore case in the comparison. \"Test.txt\", \"TEST.TXT\", \"test.TXT\", and any other combination of uppercase and lowercase letters will match \"test.txt\".",
+      "metadata": {
+        "originalBytes": 27768,
+        "shownBytes": 27768,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791610711906
+      }
+    }
+  ]
+}

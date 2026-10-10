@@ -578,6 +578,12 @@ times or change the stored citation payload.
 Known built-in read and webfetch provenance uses localized resource-acquisition
 labels; the original provider identifier remains in the metadata title and stored
 payload. Other source-provider names retain their authored value.
+Webfetch publishes the document's own title from HTML/XHTML metadata or default
+YAML frontmatter in native Markdown responses, using the shared frontmatter
+parser. Remote script-language metadata is literal resource content. Optional
+malformed YAML metadata leaves the successful body and canonical URL intact;
+the Overlay displays the published Source payload without fetching or inventing
+another title.
 Tooltip detail adds location or media information only when it differs from the
 primary source identity; it does not repeat a root-level file's name or range.
 Child conversation message dividers retain the shared transcript margin and use

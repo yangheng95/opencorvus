@@ -1,0 +1,54 @@
+bun test v1.3.14 (0d9b296a)
+
+test\tool\webfetch-source-title.test.ts:
+Owned HTTP title outputs [{"title":"http://127.0.0.1:56999/redirect (text/html; charset=utf-8)","sources":[{"type":"source-url","sourceId":"eb8747b97e15634c230e4423bcf1f334b9c25e19ea86003210225db1b42e8a70","url":"http://127.0.0.1:56999/title","provider":"opencorvus-webfetch","title":"真正 & 标题 页面"}],"output":"<!doctype html><html><head><title>  真正 &amp; 标题\n 页面  </title></head><body><p>Actual content</p><script>document.title='Invented script title'</script></body></html>"},{"title":"http://127.0.0.1:56999/empty (text/html)","sources":[{"type":"source-url","sourceId":"0990e3241a7c2718f5f164dec15f174a4fec935ee346aaa878dc51bc4f65171a","url":"http://127.0.0.1:56999/empty","provider":"opencorvus-webfetch"}],"output":"<html><head><title>\n </title></head><body>No title</body></html>"},{"title":"http://127.0.0.1:56999/plain (text/plain)","sources":[{"type":"source-url","sourceId":"7914b6d838851460386463bc21403f6d8340bd1c3624253b8c8a076445e1089e","url":"http://127.0.0.1:56999/plain","provider":"opencorvus-webfetch"}],"output":"<title>Text is not HTML</title>"},{"title":"http://127.0.0.1:56999/image (image/png)","sources":[{"type":"source-url","sourceId":"3fbe1ac2156713443bda61439fe5b37481d32ef3ce3a4bba23de393cbd56617b","url":"http://127.0.0.1:56999/image","provider":"opencorvus-webfetch"}],"output":"Image fetched successfully","attachments":[{"type":"file","mime":"image/png","url":"data:image/png;base64,iVBORw=="}]}]
+Owned HTTP format outputs {"formats":[{"output":"Format &amp; 标题Actual headingActual body","metadata":{"originalBytes":44,"shownBytes":44,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:56999/formats (text/html)","sources":[{"type":"source-url","sourceId":"766d4bc11cb975497015bb22d51abcec3028f2eb0c701079f6ff7aeb6537b05e","url":"http://127.0.0.1:56999/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]},{"output":"Format & 标题\n\n# Actual heading\n\nActual body","metadata":{"originalBytes":46,"shownBytes":46,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:56999/formats (text/html)","sources":[{"type":"source-url","sourceId":"766d4bc11cb975497015bb22d51abcec3028f2eb0c701079f6ff7aeb6537b05e","url":"http://127.0.0.1:56999/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]},{"output":"<html><head><title>Format &amp; 标题</title></head><body><h1>Actual heading</h1><p>Actual body</p></body></html>","metadata":{"originalBytes":114,"shownBytes":114,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:56999/formats (text/html)","sources":[{"type":"source-url","sourceId":"766d4bc11cb975497015bb22d51abcec3028f2eb0c701079f6ff7aeb6537b05e","url":"http://127.0.0.1:56999/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]}],"untitled":{"output":"<html><body><p>Actual untitled body</p></body></html>","metadata":{"originalBytes":53,"shownBytes":53,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:56999/untitled (text/html)","sources":[{"type":"source-url","sourceId":"4b33fa0ea74a599c0bc72b366ce621c1c9fcdc7e33c6ebd2d5d67b9ebd593d8f","url":"http://127.0.0.1:56999/untitled","provider":"opencorvus-webfetch"}]}}
+154 |         const markdownFormats = await Promise.all(
+155 |           (["text", "markdown", "html"] as const).map((format) =>
+156 |             executeWebFetch({ url: `${server.url}markdown-quoted`, format }, ctx),
+157 |           ),
+158 |         )
+159 |         expect(markdownFormats.map(value => value.output)).toEqual(
+                                                                 ^
+error: expect(received).toEqual(expected)
+
+  [
+
+  "---
+  title: "发布者 & 标题"
+  ---
+  # Article heading
+- Actual Markdown body
+- "
++ Actual Markdown body"
+  ,
+
+  "---
+  title: "发布者 & 标题"
+  ---
+  # Article heading
+- Actual Markdown body
+- "
++ Actual Markdown body"
+  ,
+
+  "---
+  title: "发布者 & 标题"
+  ---
+  # Article heading
+- Actual Markdown body
+- "
++ Actual Markdown body"
+  ,
+  ]
+
+- Expected  - 6
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\webfetch-source-title.test.ts:159:60)
+(fail) real fetched HTML titles preserve decoded identity, redirect URL and persisted source [2072.72ms]
+
+ 0 pass
+ 1 fail
+ 10 expect() calls
+Ran 1 test across 1 file. [3.52s]
