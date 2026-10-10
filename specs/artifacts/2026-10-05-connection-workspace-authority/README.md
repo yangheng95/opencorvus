@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [正文文件引用266 Recall](source-link-plan-266.md)：直接原消息/renderer归因纠正，隔离Web实际打开目标待验，不据AX #推断模型虚构。
+
 - [整文件265 Recall](source-whole-plan-265.md) / [旧band与真实修复](source-whole-265/README.md)：Sol自然有/无range来源，唯一effect清空与原阅读保持，6EOF/Native0。
 
 - [隐藏定位264 Recall](source-range-plan-264.md) / [原失败与最终修复](source-range-264/README.md)：唯一测量/reveal管线，真实同Source重开206及阅读resize保持，原预算闭合。

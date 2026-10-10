@@ -4,7 +4,7 @@
 
 [当前canonical](live-01/canonical-current-conversations.json)的Source分别是prt_g0VXcEVDv00OXqqJpTaZ（27–37）与prt_g0VXcEWAG00895Dyo7v2（文件本身，原payload没有range）；两者同path/provider=opencorvus-read，属于对应成功Tool消息。临时摘要的null是Select-Object对缺字段的输出，不往真实Source补null或1..N。当前credential usable/catalog projected/actualModel gpt-6.1-sol/streaming true和完整pairedModels资格均已验证。
 
-真实问题：[03范围来源](live-01/03-range-open.jpg)高亮27–37；[04整文件旧实现](live-01/04-whole-before-fix.jpg)选中了不带范围的read.ts，仍留下那11行高亮。FilePane保留同资源doc，旧无range分支仅重置identity，没有向唯一StateField发送清除effect；同doc继续保存旧decorations。当前模型文本还有两个read.ts/#锚点，其行为未验，不能把这类自然文本当真实Source按钮或补造来源。
+真实问题：[03范围来源](live-01/03-range-open.jpg)高亮27–37；[04整文件旧实现](live-01/04-whole-before-fix.jpg)选中了不带范围的read.ts，仍留下那11行高亮。FilePane保留同资源doc，旧无range分支仅重置identity，没有向唯一StateField发送清除effect；同doc继续保存旧decorations。266核对原闭库文本后纠正之前的锚点归因：模型写的是代码格式read.ts，AX显示的/#由现文件引用renderer生成，不是模型Markdown href。委托入口的实际打开目标仍未验，不替代结构化Source或补造来源。
 
 唯一CodeEditor请求身份现在让无range仍包含path/现revision；无range沿原revealLinesEffect(null)清除band并记该身份，保留cursor/scroll，不跳1/选全文。普通resize按同一身份跳过，既有layout/range管线不变，没有第二状态/renderer/reload/接口或Host工具流程。当前readonly/API authority/epoch/目录/导航owner均保留。
 

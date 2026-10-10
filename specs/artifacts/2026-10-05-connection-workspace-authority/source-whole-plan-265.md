@@ -30,7 +30,7 @@ file-workbench资源身份为目录/path/sourceAbsolutePath，位置另含range�
 
 当前Native77968/出生win32:639272012987920575、Host33660，原前台20142；固定deadline04:04:57.879Z、600000/12不改。预检credential usable/catalog projected/实际gpt-6.1-sol/streaming true及pairedModels资格通过。现目标9354 bytes、生产分页函数实际262行且truncated=false，未改文件。自然模型15秒完成两次read：27/11成功11/262，1/1000成功262 lines；UI两个实际Source分别带27–37和文件本身。
 
-03范围截图有27–37 band。04点击整文件后仍是这11行band，当前Source chip却read.ts无范围；辅助metadata也实际列出11条，但人工截图才证明视觉错误。FilePane按同资源保留doc，CodeEditor无range仅清空identity，StateField按原内容返回旧decorations；数据/调用/公开契约和旧路径根因已确证。当前response还含模型自然撰写的read.ts/#链接，其行为另待查，不用它替代真实Source按钮或伪造来源。
+03范围截图有27–37 band。04点击整文件后仍是这11行band，当前Source chip却read.ts无范围；辅助metadata也实际列出11条，但人工截图才证明视觉错误。FilePane按同资源保留doc，CodeEditor无range仅清空identity，StateField按原内容返回旧decorations；数据/调用/公开契约和旧路径根因已确证。266直接闭库文本核对纠正早先的AX归因：模型只写代码格式read.ts，现renderer产生/#文件引用委托入口，不是模型撰写href。实际点击行为另待查，不用它替代真实Source按钮或伪造来源。
 
 修改唯一revealIdentity使无range也包含现path/revision（range位置为空），作为当前同一个显式打开请求身份；无range执行已有revealLinesEffect(null)后记录该身份，不移动selection/scroll。这样range→none即清空实际band，即使前一个range未settle也不依赖旧完成标记来推断视觉状态；普通resize不会反复提交清空或抢焦点。range→range仍走原实测布局管线，invalid target清除band但不伪装合法位置完成。
 
@@ -38,6 +38,6 @@ file-workbench资源身份为目录/path/sourceAbsolutePath，位置另含range�
 
 ## 当前完成事实与边界
 
-最终main-CmdIWcOX.js实际范围/无范围/范围返回及无范围隐藏重开通过，正常背景与原阅读上下文保留，readonly仍true，原9354bytes/262行代码全文与属性相等。类型0/build1m2s/renderer surface0，原04错误截图和模型/#文本保留，后者行为另待查。
+最终main-CmdIWcOX.js实际范围/无范围/范围返回及无范围隐藏重开通过，正常背景与原阅读上下文保留，readonly仍true，原9354bytes/262行代码全文与属性相等。类型0/build1m2s/renderer surface0，原04错误截图和原模型代码格式文本保留，renderer的/#委托行为另待查；此前归为模型href的措辞由266纠正。
 
 自己112已关闭，sole settlement owner04:04:55.723、公有shutdown04:04:57.555/200；Native04:04:57.848 exited/0早于固定04:04:57.879，仅约31ms，不能包装充足缓冲。前台20142 actual0，当前6EOF/取消0，独立物理输出请求/出生/18203/pair闭合。全部当前Source和outputs完整归档；所有后续checker实际join之后才精确退休自己的5产物，不复写提前结束声明。宽矩阵未验，goal active。
