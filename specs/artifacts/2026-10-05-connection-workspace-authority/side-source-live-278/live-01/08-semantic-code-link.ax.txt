@@ -1,0 +1,20 @@
+Browser tab: 127, Title: "OpenCorvus", URL: "http://localhost:18218/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 142-363
+~									138 tab (selectable, settable, boolean) Description: Side chat, Value: 0, ID: tabs-cl-64-trigger-side-chat
++								142 container
++									143 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
++									144 button Description: Close tab, Help: Close tab (Delete)
++							145 container Description: File, ID: centerWorkbenchFile
++								146 container Editor
++									147 container
++										148 text details/summary
++										149 button (disabled) Save, Help: Save (Ctrl/Cmd+S)
++										150 button Reload from disk
++										151 button Close workspace
++									152 container
++										153 text Could not load this file Check the file path and access, then retry.
++										154 button (collapsed) Details, Secondary Actions: Expand
++											155 text Details
++										156 button Retry
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18218/ui/

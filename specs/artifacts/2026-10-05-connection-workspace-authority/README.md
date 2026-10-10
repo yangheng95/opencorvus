@@ -627,3 +627,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [代码搜索来源276方案](source-code-plan-276.md) / [真实证据](source-code-276/README.md)：当前正式记录来源投影与numResults契约，单agent实施。
 
 - [原Research Studio来源277](research-source-277/README.md) / [Recall](research-source-plan-277.md)：精确原Task/209URL事实、当前闭合与旧schema障碍；既有压缩修复13项后端复核，原UI未验。
+
+- [Side来源/术语误动作278](side-source-live-278/README.md) / [Recall](side-source-live-plan-278.md)：真实404修共享文件引用识别，普通代码与明确文件目标after人工通过；实时返回及原子侧栏未验。

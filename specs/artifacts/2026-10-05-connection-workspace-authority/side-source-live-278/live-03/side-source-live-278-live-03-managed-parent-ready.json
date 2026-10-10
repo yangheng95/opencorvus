@@ -1,0 +1,15 @@
+{
+  "pid": 45208,
+  "occurrence": "side-source-live-278-live-03-76f45ad5-417b-463e-a9b4-b7cc97770817",
+  "owner": {
+    "pid": 45208,
+    "processInstanceID": "win32:639272233743649109",
+    "occurrenceID": "e9e2dc78-4f80-4141-b1a8-5e9bc14962bb"
+  },
+  "parent": {
+    "pid": 75048,
+    "processInstanceID": "win32:639272233743260679",
+    "occurrenceID": "eaaf6c27-26e3-4735-be11-d290ef8b29f1"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

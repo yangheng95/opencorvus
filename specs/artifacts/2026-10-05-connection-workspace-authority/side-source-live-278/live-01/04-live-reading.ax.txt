@@ -1,0 +1,20 @@
+Browser tab: 127, Title: "OpenCorvus", URL: "http://localhost:18218/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 285-286
++										285 button Copy message
++										286 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++										287 text Oct 10, 05:39 PM
+~											192 text 1m 23s
++											288 container
++												289 text 设计建议 ：渐进展开首先要降低初始信息负担，而不是增加获取信息的步骤。第一层提供结论、任务入口和关键限制；第二层放解释与例子；只有确有需要时才继续展开技术细节。层级过深会让用户反复寻找触发器，也增加状态记忆负担。
++											290 text 需要比较多个答案时，优先允许同时展开，避免用户打开后一项时失去前一项。若采用“一次只开一项”，应明确这一行为，并检查自动关闭是否影响当前焦点。不要在用户阅读过程中因数据刷新自动折叠内容。
++											291 text “展开全部”和“收起全部”适合内容较多的页面，但仍应保留逐项操作。批量状态变化后也要维护每个触发器的状态，并处理焦点落在将被隐藏内容中的情况。
++											292 heading 9. 视觉提示与嵌套交互, Value: 2
++												293 text 9. 视觉提示与嵌套交互
++											294 container
++												295 text 来源事实 ：web.dev 建议即使移除默认三角标记，也保留明确的展开视觉提示。它还提醒，在  summary  内嵌链接、标签或其他交互元素时，不同浏览器可能产生不同的焦点和点击行为。
++												296 link Description: web.dev, Value: web.dev/learn/html/details
++											297 container
++												298 text 设计建议 ：让摘要保持单一职责，把“下载”“编辑”“查看来源”等独立操作放到摘要之外。这样用户不必猜测按 Enter 是展开内容还是打开链接，也减少嵌套互动带来的差异。摘要可使用强调文字，但应谨慎加入复杂语义，并验证辅助技术的实际表达。
++											299 text 箭头、加减号或文字提示应随真实状态变化，不能只在点击后改变图标、却未同步内容。装饰图标不宜重复参与可访问名称；标题文字
+The focused UI element is 275 container Source excerpt: Details and summary  |  web.dev

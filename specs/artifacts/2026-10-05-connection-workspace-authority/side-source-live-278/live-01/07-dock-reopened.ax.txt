@@ -1,0 +1,365 @@
+Browser tab: 127, Title: "OpenCorvus", URL: "http://localhost:18218/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18218/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请只回复：准备就绪。不要调用工具。
+										90 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 2e7324, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									91 container
+										92 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										93 button 请只回复：准备就绪。不要调用工具。
+										94 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-278-trigger, Secondary Actions: Expand
+									95 container
+										96 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										97 button Reply with OK.
+										98 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-284-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18218, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				99 container workspaceMain
+					100 container chatSection
+						101 container Description: Loading task, ID: taskSwitchProgress
+						102 container
+							103 text 请只回复：准备就绪。不要调用工具。
+							104 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							105 container Description: Not running, ID: taskStatus
+								106 text Not running
+							107 button Side chat
+							108 container solidChatHeaderRuntimeActions
+								109 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								110 checkbox Description: Close right dock, Value: 1
+						111 container
+							112 container Description: Conversation, ID: chatScroll
+								113 container
+									114 container
+										115 text User
+										116 text 请只回复：准备就绪。不要调用工具。
+									117 container
+										118 text work
+										119 text 4s
+										120 text 准备就绪。
+							121 container chatHomeComposition
+								122 container chatForm
+									123 splitter Description: Drag to resize the message input, Value: 42
+									124 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									125 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									126 text Work
+									127 text Chat
+									128 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									129 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									130 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										131 text openai/gpt-6.1-sol
+									132 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+					133 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					134 container Description: Tools panel, ID: rightDock
+						135 container tabs-cl-64
+							136 tab group Open tools
+								137 container
+									138 tab (selected, settable, boolean) Description: Side chat, Value: 1, ID: tabs-cl-64-trigger-side-chat
+									139 button Description: Close tab, Help: Close tab (Delete)
+							140 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							141 button Close panel
+							142 container Description: Side chat, ID: centerWorkbenchSideChat
+								143 container Side chat
+									144 pop up button (collapsed) Choose a side chat Side chat 1, ID: select-cl-3767-trigger, Secondary Actions: Expand
+										145 text Side chat 1
+									146 button New side chat
+									147 text Ask about this conversation while the main task keeps working.
+									148 container
+										149 button (collapsed) Reference history · 2 messages, Secondary Actions: Expand
+											150 text Reference history · 2 messages
+										151 container
+											152 text User
+											153 text 先用 read 读取当前项目 README.md，最多30行；再仅调用一次 external_code_search，query 为 HTML details summary keyboard interaction examples，numResults 为4。然后基于实际返回，写一份约4000–4500中文字、12个编号小节的键盘可访问性设计说明，包含原生details/summary与自定义披露按钮的区别、焦点、Enter/Space、长内容阅读、来源辨识、渐进展开、用户测试、错误处理和一个简短对照表。明确事实、设计建议和未实测事项，引用真实来源。搜索失败如实说明并按现有材料写作；不要额外搜索、创建任务、委托或修改文件。
+										154 container
+											155 text chat
+											156 text 5s
+											157 text 我会先读取 README.md 的前30行，再按指定参数检索一次；说明将区分来源事实、设计建议和未实测事项，不追加搜索或修改文件。
+											158 button (collapsed) Description: read · README.md @1+30 (1 lines), Secondary Actions: Expand
+												159 text read
+												160 text README.md @1+30 (1 lines)
+												161 image
+											162 container Sources
+												163 button Open source file: README.md
+										164 button Quote in main conversation
+										165 container
+											166 text chat
+											167 text 4s
+											168 button (collapsed) Description: external_code_search · External code search: HTML details summary keyboard interaction examples, Secondary Actions: Expand
+												169 text external_code_search
+												170 text External code search: HTML details summary keyboard interaction examples
+												171 image
+											172 container Sources
+												173 button (expanded) Description: Sources: Details and summary  |  web.dev (4), Help: Details and summary  |  web.dev 4, Secondary Actions: Collapse
+													174 text Details and summary  |  web.dev
+													175 text 4
+												176 link Description: Open web source: Details and summary  |  web.dev, Value: web.dev/learn/html/details
+												177 container
+													178 button (expanded) Description: Source excerpt: Details and summary  |  web.dev, Help: Source excerpt, Secondary Actions: Collapse
+														179 text Source excerpt
+													180 container Source excerpt: Details and summary  |  web.dev
+														181 text The ` ` and ` ` elements are all you need: they are a built-in way to handle expanding and collapsing content. When a user clicks or taps a ` `, or releases the Enter key when the ` ` has focus, the contents of the parent ` ` toggle to visible.
+...
+The ` ` element is the disclosure widget container. The ` ` is the summary or legend for its parent ` `. The summary is always displayed, acting as a button that toggles the display of the rest of the parent's contents. Interacting with the ` ` toggles the display of the self-labeled summary siblings by toggling the ` `' element's `open` attribute.
+
+The `open` attribute is a boolean attribute. If present, no matter the value or lack thereof, it indicates that all the ` ` contents are shown to the user. If the `open` attribute is not present, only the contents of the ` ` are shown.
+...
+You can create an accordion with a list of multiple ` ` elements, each with a ` ` child. Omitting the `open` attribute in your HTML means the ` ` will all be collapsed, or closed, with just the summary headings visible when the page loads; each heading being the opener for the rest of the contents in the parent ` `. If you include the `open` attribute in your HTML, ` ` renders expanded, with the contents visible, when the page loads.
+...
+In the two earlier Codepens, there's an arrow to the inline-start side of the summary. An expander arrow is typically presented on-screen, a small triangle that rotates (or twists) to indicate open or closed status and a label next to the triangle. The contents of the ` ` element label the disclosure widget.
+
+The rotating arrow at the top of each section is a `::marker` set on the ` ` element. Like list items, the ` ` element supports the `list-style` shorthand property and its longhand properties, including `list-style-type`. You can style the disclosure triangle with CSS, including changing the marker used from a triangle to any other bullet type, including an image with `list-style-image`.
+
+To apply other styles, use a selector similar to `details summary::marker`. The `::marker` pseudo-element only accepts a limited number of styles. Removing the `::marker` and replacing it with the easier-to-style `::before` is common practice, with CSS styles changing the style of the generated content slightly based on the presence (or absence) of the open attribute. You can remove the disclosure widget icon by setting `list-style: none` or set the content of the marker to `none`, but you should always include visual indicators to inform sighted users that the summary content toggles to show and hide content.
+
+```
+details summary::before {
+  /* all the styles */
+}
+details[open] summary::before {
+  /* changes applied when open only */
+}
+...
+This example removes the default marker, and adds generated content to create a `+` when the details are closed and a `-` when the details are open.
+
+If you want the details block open by default, include the `open` attribute on the opening ` ` tag. You can also add space between each dialog and transition the rotation of the marker created with generated content to improve the appearance:
+...
+If you don't include a ` `, the browser creates one for you, with a marker and the word "details". This summary is part of a shadow root, and therefore doesn't have author CSS summary styles applied.
+
+Note: Unfortunately, Safari does not include the details in the keyboard focus order.
+
+If you do include a ` `, but it's not the first element in the ` `, the browser still displays the summary as it should. It won't fail if you include a link, label, or other interactive element within the summary but browsers handle interactive content within interactive content differently.
+
+For example, if you include a link in a summary, some browsers add both the summary and the link to the default tabbing order, but other browsers don't focus on the link by default. If you click a ` ` nested in a ` `, some browsers give focus to the associated form control. Other browsers give focus to the form control and toggle the ` ` open or closed.
+...
+Like all HTML elements, the `HTMLDetailsElement` inherits all properties, methods, and events from `HTMLElement`, and adds the `open` instance property and a `toggle` event. The `HTMLDetailsElement.open` property is a boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) are to be shown to the user. The toggle event is fired when the ` ` element is toggled open or closed. You can listen to this event using `addEventListener()`.
+
+If you want to write a script to close the opened details when the user opens any other details, remove the open attribute using `removeAttribute("open")`:
+...
+The ` ` must be the first child of which element?
+												182 link Description: Open web source: <summary> HTML disclosure summary element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
+												183 button (collapsed) Description: Source excerpt: <summary> HTML disclosure summary element - HTML | MDN, Help: Source excerpt, Secondary Actions: Expand
+													184 text Source excerpt
+												185 link Description: Open web source: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
+												186 button (collapsed) Help: Source excerpt, Secondary Actions: Expand, Description: Source excerpt: Disclosure (Show/Hide) for Answers to Frequently Asked Questions | Web Accessibility Concepts
+													187 text Source excerpt
+												188 link Description: Open web source: WebAIM: Disclosures and Accordions, Value: webaim.org/techniques/disclosures/
+												189 button (collapsed) Description: Source excerpt: WebAIM: Disclosures and Accordions, Help: Source excerpt, Secondary Actions: Expand
+													190 text Source excerpt
+										191 container
+											192 text chat
+											193 text 1m 53s
+											194 heading 1. 说明范围与证据边界, Value: 2
+												195 text 1. 说明范围与证据边界
+											196 container
+												197 text 本说明讨论网页中“显示或隐藏一段内容”的键盘可访问性，包括原生
+												198 link Description: details/summary, Value: localhost:18218/ui/#
+												199 text  与自定义披露按钮，不把菜单、对话框和树形控件的交互规则直接套用到披露组件上。
+											200 container
+												201 text 项目事实 ：已读取当前项目  README.md ，文件只有一行： # Isolated formal Task resource qualification 。它没有说明页面结构、前端框架、现有组件、目标浏览器或可访问性验收要求，因此不能据此判断项目已经采用哪一种实现。
+											202 container
+												203 text 检索事实 ：按指定参数执行了一次检索，返回 web.dev、MDN、伊利诺伊大学可访问性教学示例和 WebAIM 四项材料。下文引用的是本次返回的摘录，没有进一步打开网页。部分摘录的标签名称显示为空，不能当作完整代码复制。本文以“来源事实”“设计建议”“未实测事项”区分证据等级；建议不是已经实现的功能，文档描述也不是本项目的运行结果。
+											204 heading 2. 原生披露组件的语义与边界, Value: 2
+												205 text 2. 原生披露组件的语义与边界
+											206 container
+												207 text 来源事实 ：MDN 将  summary  定义为父级  details  披露框的摘要、说明或标题，并说明它应作为  details  的第一个子元素。激活摘要会切换父级的展开状态，并在  details  上产生  toggle  事件。web.dev 说明， open  是布尔属性：存在即表示展开，缺少才表示折叠；写成  open="false"  仍不是关闭状态。
+												208 link Description: MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
+												209 text  ·
+												210 link Description: web.dev, Value: web.dev/learn/html/details
+											211 container
+												212 text 设计建议 ：普通补充说明、常见问题和可选技术细节优先考虑原生结构。摘要应能独立表达内容主题，例如“查看配送限制”，而非多个重复的“更多”。即使正文关闭，用户也应知道里面是什么、是否值得展开。不要把关键错误、必须阅读的操作条件或唯一的任务入口全部藏在默认折叠区域。
+											213 container
+												214 text 未实测事项 ：尚未验证项目生成的实际 HTML、辅助技术如何朗读摘要，以及样式是否破坏了原生标记和焦点提示。
+											215 heading 3. 自定义披露按钮与原生实现的区别, Value: 2
+												216 text 3. 自定义披露按钮与原生实现的区别
+											217 container
+												218 text 来源事实 ：WebAIM 指出，原生
+												219 link Description: details/summary, Value: localhost:18218/ui/#
+												220 text  内建披露功能和展开状态的辅助技术表达；自定义方案则需要按钮、脚本及 ARIA 正确配合。它建议使用标准  button  作为触发器，并使按钮的  aria-expanded  与内容可见状态始终一致。仅在普通元素上添加点击处理，会造成触发器无法由键盘直接访问的问题。
+												221 link Description: WebAIM, Value: webaim.org/techniques/disclosures/
+											222 container
+												223 text 设计建议 ：只有在原生结构不能满足明确需求时才承担自定义成本，例如触发按钮与内容位置分离，或组件需要协调复杂状态。自定义触发器应使用  button type="button" ，避免在表单内意外提交。可以用  aria-controls  指向具有唯一 ID 的内容容器，但这不替代展开状态，也不意味着所有辅助技术都会提供跳转功能。
+											224 text 两种方案的核心差异是责任归属：原生方案由浏览器承担基本切换和语义；自定义方案由应用维护可见性、属性、事件和焦点。外观做得相同，不代表可访问性成本相同。
+											225 heading 4. 焦点顺序、可见提示与折叠恢复, Value: 2
+												226 text 4. 焦点顺序、可见提示与折叠恢复
+											227 container
+												228 text 来源事实 ：伊利诺伊大学示例列出 Tab 前进、Shift+Tab 后退，并提供默认、作者自定义及关闭焦点样式的对照。WebAIM 特别提醒，折叠区域内的链接或按钮不应继续获得键盘焦点，否则用户会遇到不可见的当前位置。
+												229 link Description: 教学示例, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
+												230 text  ·
+												231 link Description: WebAIM, Value: webaim.org/techniques/disclosures/
+											232 container
+												233 text 设计建议 ：触发器按文档顺序进入焦点序列，不使用正数  tabindex  重排。焦点轮廓应在浅色、深色背景和不同展开状态下清晰可见，不能仅凭颜色微变表示。展开后通常让焦点留在触发器，由用户继续浏览；不要无条件跳到正文或第一个链接。
+											234 text 若其他操作将当前焦点所在区域折叠，应先把焦点移回对应触发器，再隐藏内容。若用户本就在触发器上折叠，则无需额外迁移。不要给每个段落添加 Tab 停靠点：焦点导航和正文阅读不是同一条通道。
+											235 heading 5. Enter、Space 与事件处理, Value: 2
+												236 text 5. Enter、Space 与事件处理
+											237 container
+												238 text 来源事实 ：web.dev 的摘录明确描述了  summary  获得焦点后释放 Enter 时切换内容。伊利诺伊大学的披露按钮示例将 Space 和 Enter 都列为打开或关闭操作；WebAIM 也区分了按钮可由 Enter 或 Space 激活，而链接通常只有 Enter 激活。
+												239 link Description: web.dev, Value: web.dev/learn/html/details
+												240 text  ·
+												241 link Description: 教学示例, Value: accessibleit.disability.illinois.edu/course-web-a11y-concepts/examples/disclosure/disclosure-faq.html
+											242 container
+												243 text 设计建议 ：原生  summary  和标准  button  应优先使用浏览器已有的键盘激活行为，不再叠加一套按键切换。自定义按钮通常处理  click  即可；同时在  keydown 、 keyup  和  click  中翻转状态，可能使一次按键重复切换，表现为“似乎没有展开”。
+											244 container
+												245 text 不要为整个页面拦截 Space，否则正文滚动和输入操作可能受影响。普通披露不必额外定义方向键或 Escape；若确有附加交互，必须说明适用范围。 未实测事项 ：本次未运行浏览器，不能承诺原生摘要在所有平台上的 Space 行为或具体触发时机完全一致。
+											246 heading 6. 长内容阅读与位置保持, Value: 2
+												247 text 6. 长内容阅读与位置保持
+											248 container
+												249 text 来源事实 ：返回材料解释了展开与隐藏机制，但没有提供本项目长文阅读、滚动恢复或深层导航的测试结果。因此，下面属于阅读体验设计，而非由检索直接证明的产品能力。
+											250 container
+												251 text 设计建议 ：长内容展开后应保留正常的标题、段落、列表和链接结构，让用户既能连续阅读，也能通过辅助技术按标题定位。不要因为内容较长，就把整个正文容器强行设为一个可聚焦控件；这会增加停靠点，却不自动改善理解和导航。
+											252 text 摘要可以说明内容长度与类型，例如“查看安装步骤，共六步”，帮助用户预估阅读成本。对明显超过一屏的内容，可提供清楚的“返回本节开头”链接，或放在末尾的“收起本节”按钮。后者应在隐藏正文前恢复到顶部触发器的焦点，避免丢失位置。
+											253 text 默认不宜为展开区域再创建狭小的内部滚动框。若任务确实需要独立滚动，应单独验证键盘能否进入、滚动和离开，而不能把鼠标滚轮可用视为键盘可用。
+											254 heading 7. 来源辨识与内容可信度, Value: 2
+												255 text 7. 来源辨识与内容可信度
+											256 container
+												257 text 来源事实 ：本次四项材料的定位不同：MDN 是元素参考，web.dev 是 HTML 学习资料，WebAIM 讨论常见可访问性问题，大学页面提供教学示例。示例可以说明交互意图，却不能证明某个真实产品已经兼容全部浏览器和屏幕阅读器。
+											258 container
+												259 text 设计建议 ：披露中的外部资料应标明标题、发布方及与正文的关系，例如“MDN：summary 元素参考”，而不是只显示“来源”。引用、团队解释和系统生成内容应有清晰边界；用户展开后应能判断哪部分来自原文，哪部分属于设计者推断。涉及规则或操作限制时，还应标明适用版本或日期，而不是借折叠隐藏条件。
+											260 text 本文使用真实返回的四个 URL，没有把教学示例中的 APG 链接当作已读取证据。web.dev 摘录包含 Safari 焦点顺序的提醒，但未提供对应版本和环境，因此只能视为兼容性风险线索，不能扩写成“当前所有 Safari 都无法使用”的结论。
+											261 heading 8. 渐进展开与信息层级, Value: 2
+												262 text 8. 渐进展开与信息层级
+											263 container
+												264 text 来源事实 ：web.dev 描述了多个  details  组成一组可展开内容的方式，并说明通过是否存在  open  控制初始状态。它也给出了用脚本关闭其他已展开项的思路；这是可选择的行为，不是每组披露都必须互斥。
+												265 link Description: web.dev, Value: web.dev/learn/html/details
+											266 container
+												267 text 设计建议 ：渐进展开首先要降低初始信息负担，而不是增加获取信息的步骤。第一层提供结论、任务入口和关键限制；第二层放解释与例子；只有确有需要时才继续展开技术细节。层级过深会让用户反复寻找触发器，也增加状态记忆负担。
+											268 text 需要比较多个答案时，优先允许同时展开，避免用户打开后一项时失去前一项。若采用“一次只开一项”，应明确这一行为，并检查自动关闭是否影响当前焦点。不要在用户阅读过程中因数据刷新自动折叠内容。
+											269 text “展开全部”和“收起全部”适合内容较多的页面，但仍应保留逐项操作。批量状态变化后也要维护每个触发器的状态，并处理焦点落在将被隐藏内容中的情况。
+											270 heading 9. 视觉提示与嵌套交互, Value: 2
+												271 text 9. 视觉提示与嵌套交互
+											272 container
+												273 text 来源事实 ：web.dev 建议即使移除默认三角标记，也保留明确的展开视觉提示。它还提醒，在  summary  内嵌链接、标签或其他交互元素时，不同浏览器可能产生不同的焦点和点击行为。
+												274 link Description: web.dev, Value: web.dev/learn/html/details
+											275 container
+												276 text 设计建议 ：让摘要保持单一职责，把“下载”“编辑”“查看来源”等独立操作放到摘要之外。这样用户不必猜测按 Enter 是展开内容还是打开链接，也减少嵌套互动带来的差异。摘要可使用强调文字，但应谨慎加入复杂语义，并验证辅助技术的实际表达。
+											277 text 箭头、加减号或文字提示应随真实状态变化，不能只在点击后改变图标、却未同步内容。装饰图标不宜重复参与可访问名称；标题文字负责说明主题，状态语义负责说明展开或折叠。
+											278 text 焦点样式、展开样式和鼠标悬停样式应能区分。动画只是辅助提示，不应成为判断操作成功的唯一依据，也不应使内容长时间处于视觉可见而键盘不可达的中间状态。
+											279 heading 10. 用户测试与可观察验收, Value: 2
+												280 text 10. 用户测试与可观察验收
+											281 container
+												282 text 设计建议 ：测试应覆盖实际交付页面，而不只测试独立组件。先用纯键盘完成一条任务链：找到目标摘要、展开、阅读正文、访问内部链接、返回触发器并折叠。再检查逆向导航、连续操作、默认展开、多项并开、批量收起，以及内容动态变化时的位置保持。
+											283 text 邀请键盘用户和屏幕阅读器用户参与，观察他们能否辨识主题、理解状态和预测下一步。记录具体阻碍，例如焦点不可见、状态朗读不一致、收起后当前位置丢失；不要仅以“能点开”或参与者主观满意作为通过依据。
+											284 text 屏幕阅读器测试应记录操作系统、浏览器、辅助技术版本和使用模式，区分 Tab 焦点导航与阅读命令。文档中的“应朗读展开状态”是预期，不代表每个组合都使用相同措辞。
+											285 container
+												286 text 未实测事项 ：本次没有运行页面、访问实际组件或组织用户测试。上述测试是建议的验收方案，不是已完成记录，也不能据此宣称项目符合某项可访问性标准。
+											287 heading 11. 错误处理与无脚本可用性, Value: 2
+												288 text 11. 错误处理与无脚本可用性
+											289 container
+												290 text 来源事实 ：WebAIM 指出，自定义披露必须动态更新  aria-expanded ，并可用  hidden  或  display:none  将折叠内容同时从视觉和程序访问中隐藏。原生披露的基本切换由 HTML 组件提供，不需要作者编写同等功能的切换脚本。
+												291 link Description: WebAIM, Value: webaim.org/techniques/disclosures/
+												292 text  ·
+												293 link Description: web.dev, Value: web.dev/learn/html/details
+											294 container
+												295 text 设计建议 ：自定义实现应让可见性和展开属性由同一状态更新流程驱动。若内容容器不存在或关联 ID 错误，应在开发与测试中明确暴露，而不是只改变箭头造成成功假象。
+											296 text 对于依赖脚本隐藏的静态内容，可先让正文可读，待增强逻辑成功初始化后再折叠，避免脚本失败时既隐藏内容又没有可用按钮。异步加载则应区分“区域已展开”与“正文已加载”；失败时保留清楚的错误说明和可键盘操作的重试入口，不能静默收起。
+											297 text 重要错误应说明原因及下一步，不要把详细错误放进无法展开的同一组件。无脚本、加载失败和重复激活均需要真实测试；本次没有验证这些路径。
+											298 heading 12. 简短对照与选择结论, Value: 2
+												299 text 12. 简短对照与选择结论
+											300 table
+												301 row
+													302 cell
+														303 text 对照项
+													304 cell
+														305 text 原生
+														306 link Description: details/summary, Value: localhost:18218/ui/#
+													307 cell
+														308 text 自定义披露按钮
+												309 row
+													310 cell
+														311 text 基本状态
+													312 cell
+														313 text open
+														314 text  控制展开
+													315 cell
+														316 text 应用维护可见性与
+														317 text aria-expanded
+												318 row
+													319 cell
+														320 text 键盘责任
+													321 cell
+														322 text 优先保留浏览器行为
+													323 cell
+														324 text 优先使用标准
+														325 text button
+														326 text  的行为
+												327 row
+													328 cell
+														329 text 折叠内容
+													330 cell
+														331 text 由原生机制处理
+													332 cell
+														333 text 必须正确隐藏并移出焦点序列
+												334 row
+													335 cell
+														336 text 焦点设计
+													337 cell
+														338 text 仍需检查样式与位置
+													339 cell
+														340 text 还需处理脚本引发的焦点恢复
+												341 row
+													342 cell
+														343 text 无脚本
+													344 cell
+														345 text 基本披露无需切换脚本
+													346 cell
+														347 text 需设计正文仍可获取的初始状态
+												348 row
+													349 cell
+														350 text 验证重点
+													351 cell
+														352 text 浏览器、辅助技术及样式
+													353 cell
+														354 text 上述项目加事件与状态同步
+											355 container
+												356 text 设计结论 ：普通文档披露优先使用原生实现；明确需要自定义时，使用标准按钮并承担完整状态管理责任。原生不是免测，自定义也不是必然不可访问。
+											357 container
+												358 text 证据结论 ：已确认的只是 README 内容和四项检索摘录。尚未确认项目采用何种组件，也没有浏览器或辅助技术运行证据。后续验收应直接观察焦点、按键、隐藏内容、状态表达及真实阅读任务，不以代码外观或文档描述代替用户实际能否完成操作。
+										359 button Quote in main conversation
+									360 container
+										361 text entry area (settable) Ask a side question…
+										362 text Main conversation stays on track
+										363 button (disabled) Send side question
+
+The focused UI element is 361 text entry area (settable) Ask a side question…

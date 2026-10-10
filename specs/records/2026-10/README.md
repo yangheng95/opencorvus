@@ -523,3 +523,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [代码搜索来源276](2026-10-10-source-code-276.md)：当前来源事实与结果数量契约，真实验收见记录。
 
 - [原Research Studio来源277](2026-10-10-research-source-277.md)：精确原Task和372来源事实、原失败/当前既有修复与旧schema阻碍，实际后端13pass，原UI未验。
+
+- [Side来源/术语误动作278](2026-10-10-side-source-live-278.md)：真实误文件404、唯一UI语义修复、after引用与Source点击复核；原实时/子侧栏未达成。

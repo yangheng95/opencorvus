@@ -1,0 +1,23 @@
+{
+  "phase": "02",
+  "native": {
+    "pid": 66704,
+    "processInstanceID": "win32:639272227251809552",
+    "occurrenceID": "8c8e8df4-a3d0-4747-9eec-fff7429b9b2a"
+  },
+  "host": {
+    "pid": 38172,
+    "processInstanceID": "win32:639272227243393408",
+    "occurrenceID": "f37ce661-0b39-4651-8d59-b28123106258"
+  },
+  "physicalSettledAt": "2026-10-10T09:58:23.459Z",
+  "deadlineAtMs": 1791626524322,
+  "bufferMs": 220863,
+  "minimumPlannedBufferMs": 240000,
+  "originalForegroundSession": 53911,
+  "originalForegroundActualExit": 0,
+  "nativeExitCode": 0,
+  "physical": true,
+  "output": true,
+  "requests": true
+}

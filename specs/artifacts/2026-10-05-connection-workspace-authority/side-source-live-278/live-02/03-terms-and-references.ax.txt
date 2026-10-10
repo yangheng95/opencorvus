@@ -1,0 +1,55 @@
+Browser tab: 128, Title: "OpenCorvus", URL: "http://localhost:18219/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 161-167
+~									159 container
+~										160 button (collapsed) Reference history · 2 messages, Secondary Actions: Expand
++											161 text Reference history · 2 messages
++										162 container
++											163 text User
++											164 container
++												165 text 请先用 read 读取当前 README.md 的前30行。然后用简短的6条说明解释以下内容，保留每个词的行内代码格式，不要改成Markdown链接： details/summary 、 text/html 、 api/v1 、当前文件引用
++												166 link Description: README.md:1, Value: localhost:18219/ui/#
++												167 text 、明确相对引用
++												168 link Description: ./README.md, Value: localhost:18219/ui/#
++												169 text 、本次真实绝对引用
++												170 link Value: localhost:18219/ui/#, Description: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-10/side-source-live-278-live-02/project/README.md:1
++												171 text 。前三项是技术术语，后三项指已读取的同一个README文件。只解释，不搜索、不写文件、不创建任务或委托。
++										172 container
++											173 text chat
++											174 text 5s
++											175 button (collapsed) Description: read · README.md @1+30 (1 lines), Secondary Actions: Expand
++												176 text read
++												177 text README.md @1+30 (1 lines)
++												178 image
++											179 container Sources
++												180 button Open source file: README.md
++										181 container
++											182 text chat
++											183 text 9s
++											184 content list
++												185 container
++													186 AXListMarker 1.
++													187 text details/summary ：HTML 中用于可展开内容的元素组合， details  容纳内容， summary  提供折叠时可见的标题。
++												188 container
++													189 AXListMarker 2.
++													190 text text/html ：表示 HTML 文档的 MIME 类型，常用于 HTTP 的  Content-Type 。
++												191 container
++													192 AXListMarker 3.
++													193 text api/v1 ：常见的 API 路径片段，通常表示第一版接口；它本身不是文件引用。
++												194 container
++													195 AXListMarker 4.
++													196 link Description: README.md:1, Value: localhost:18219/ui/#
++													197 text ：当前目录中已读取的 README 文件第 1 行；文件实际仅有这一行，内容为  # Isolated formal Task resource qualification 。
++												198 container
++													199 AXListMarker 5.
++													200 link Description: ./README.md, Value: localhost:18219/ui/#
++													201 text ：显式相对于当前目录的文件路径，指向刚读取的同一个 README 文件。
++												202 container
++													203 AXListMarker 6.
++													204 link Value: localhost:18219/ui/#, Description: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-10/side-source-live-278-live-02/project/README.md:1
++													205 text ：本次实际读取文件的绝对路径引用，末尾的  :1  表示第 1 行。
++										206 button Quote in main conversation
++										207 text entry area (settable) Ask a side question…
+~										158 text Main conversation stays on track
++										208 button (disabled) Send side question
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18219/ui/

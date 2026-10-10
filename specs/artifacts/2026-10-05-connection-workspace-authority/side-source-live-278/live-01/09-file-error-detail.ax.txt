@@ -1,0 +1,20 @@
+Browser tab: 127, Title: "OpenCorvus", URL: "http://localhost:18218/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~										154 button (expanded) Details, Secondary Actions: Collapse
++										157 text HTTP GET 404 file/content?path=details%2Fsummary&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-10%5Cside-source-live-278-live-01%5Cproject
+
+Request ID: 6fc1470d-1d28-4807-9fc7-39f0982415fe
+
+ApiError: API 404 file/content?path=details%2Fsummary&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-10%5Cside-source-live-278-live-01%5Cproject: File entry not found: details/summary
+    at Pe (http://localhost:18218/ui/assets/main-Dwe-Ur0q.js:67:140446)
+    at async SO (http://localhost:18218/ui/assets/main-Dwe-Ur0q.js:226:3291)
+
+response body:
+{
+  "name": "FileNotFoundError",
+  "data": {
+    "path": "details/summary",
+    "message": "File entry not found: details/summary"
+  }
+}
+The focused UI element is 154 button (expanded) Details, Secondary Actions: Collapse

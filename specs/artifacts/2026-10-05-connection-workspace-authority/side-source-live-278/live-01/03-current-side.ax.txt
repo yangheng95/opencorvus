@@ -1,0 +1,66 @@
+Browser tab: 127, Title: "OpenCorvus", URL: "http://localhost:18218/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 159-160
++									162 container
++										163 button (collapsed) Reference history · 2 messages, Secondary Actions: Expand
++											164 text Reference history · 2 messages
++										165 container
++											166 text User
++											167 text 先用 read 读取当前项目 README.md，最多30行；再仅调用一次 external_code_search，query 为 HTML details summary keyboard interaction examples，numResults 为4。然后基于实际返回，写一份约4000–4500中文字、12个编号小节的键盘可访问性设计说明，包含原生details/summary与自定义披露按钮的区别、焦点、Enter/Space、长内容阅读、来源辨识、渐进展开、用户测试、错误处理和一个简短对照表。明确事实、设计建议和未实测事项，引用真实来源。搜索失败如实说明并按现有材料写作；不要额外搜索、创建任务、委托或修改文件。
++										168 container
++											169 text chat
++											170 text 5s
++											171 text 我会先读取 README.md 的前30行，再按指定参数检索一次；说明将区分来源事实、设计建议和未实测事项，不追加搜索或修改文件。
++											172 button (collapsed) Description: read · README.md @1+30 (1 lines), Secondary Actions: Expand
++												173 text read
++												174 text README.md @1+30 (1 lines)
++												175 image
++											176 container Sources
++												177 button Open source file: README.md
++										178 button Quote in main conversation
++										179 container
++											180 text chat
++											181 text 4s
++											182 button (collapsed) Description: external_code_search · External code search: HTML details summary keyboard interaction examples, Secondary Actions: Expand
++												183 text external_code_search
++												184 text External code search: HTML details summary keyboard interaction examples
++												185 image
++											186 container Sources
++												187 button (collapsed) Description: Sources: Details and summary  |  web.dev (4), Help: Details and summary  |  web.dev 4, Secondary Actions: Expand
++													188 text Details and summary  |  web.dev
++													189 text 4
++										190 container
++											191 text chat
++											192 text 32s
++											193 heading 1. 说明范围与证据边界, Value: 2
++												194 text 1. 说明范围与证据边界
++											195 container
++												196 text 本说明讨论网页中“显示或隐藏一段内容”的键盘可访问性，包括原生
++												197 link Description: details/summary, Value: localhost:18218/ui/#
++												198 text  与自定义披露按钮，不把菜单、对话框和树形控件的交互规则直接套用到披露组件上。
++											199 container
++												200 text 项目事实 ：已读取当前项目  README.md ，文件只有一行： # Isolated formal Task resource qualification 。它没有说明页面结构、前端框架、现有组件、目标浏览器或可访问性验收要求，因此不能据此判断项目已经采用哪一种实现。
++											201 container
++												202 text 检索事实 ：按指定参数执行了一次检索，返回 web.dev、MDN、伊利诺伊大学可访问性教学示例和 WebAIM 四项材料。下文引用的是本次返回的摘录，没有进一步打开网页。部分摘录的标签名称显示为空，不能当作完整代码复制。本文以“来源事实”“设计建议”“未实测事项”区分证据等级；建议不是已经实现的功能，文档描述也不是本项目的运行结果。
++											203 heading 2. 原生披露组件的语义与边界, Value: 2
++												204 text 2. 原生披露组件的语义与边界
++											205 container
++												206 text 来源事实 ：MDN 将  summary  定义为父级  details  披露框的摘要、说明或标题，并说明它应作为  details  的第一个子元素。激活摘要会切换父级的展开状态，并在  details  上产生  toggle  事件。web.dev 说明， open  是布尔属性：存在即表示展开，缺少才表示折叠；写成  open="false"  仍不是关闭状态。
++												207 link Description: MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
++												208 text  ·
++												209 link Description: web.dev, Value: web.dev/learn/html/details
++											210 container
++												211 text 设计建议 ：普通补充说明、常见问题和可选技术细节优先考虑原生结构。摘要应能独立表达内容主题，例如“查看配送限制”，而非多个重复的“更多”。即使正文关闭，用户也应知道里面是什么、是否值得展开。不要把关键错误、必须阅读的操作条件或唯一的任务入口全部藏在默认折叠区域。
++											212 container
++												213 text 未实测事项 ：尚未验证项目生成的实际 HTML、辅助技术如何朗读摘要，以及样式是否破坏了原生标记和焦点提示。
++											214 heading 3. 自定义披露按钮与原生实现的区别, Value: 2
++												215 text 3. 自定义披露按钮与原生实现的区别
++											216 container
++												217 text 来源事实 ：WebAIM 指出，原生
++												218 link Description: details/summary, Value: localhost:18218/ui/#
++												219 text  内建披露功能和展开状态的辅助技术表达；自定义方案则需要按钮、脚本及 ARIA 正确配合。它建议使用标准  button  作为触发器，并使按钮的  aria-expanded  与内容可见状态始终一致。仅在普通元素上添加点击处理，会造成触发器无法由键盘直接访问的问题。
++												220 link Description: WebAIM, Value: webaim.org/techniques/disclosures/
++											221 container
++												222 text 设计建议 ：只有在原生结构不能满足明确需求时才承担自定义成本，例如触发按钮与内容位置分离，或组件需要协调复杂状态。自定义触发器应使用  button type="button" ，避免在表单内意外提交。可以用  aria-controls  指向具有唯一 ID 的内容容器，但这不替代展开状态，也不意味着所有辅助技术都会提供跳转功能
++										223 button Quote in main conversation
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18218/ui/

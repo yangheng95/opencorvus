@@ -1,0 +1,87 @@
+Browser tab: 127, Title: "OpenCorvus", URL: "http://localhost:18218/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 285-287
+~											192 text 1m 52s
+~											299 text 箭头、加减号或文字提示应随真实状态变化，不能只在点击后改变图标、却未同步内容。装饰图标不宜重复参与可访问名称；标题文字负责说明主题，状态语义负责说明展开或折叠。
++											300 text 焦点样式、展开样式和鼠标悬停样式应能区分。动画只是辅助提示，不应成为判断操作成功的唯一依据，也不应使内容长时间处于视觉可见而键盘不可达的中间状态。
++											301 heading 10. 用户测试与可观察验收, Value: 2
++												302 text 10. 用户测试与可观察验收
++											303 container
++												304 text 设计建议 ：测试应覆盖实际交付页面，而不只测试独立组件。先用纯键盘完成一条任务链：找到目标摘要、展开、阅读正文、访问内部链接、返回触发器并折叠。再检查逆向导航、连续操作、默认展开、多项并开、批量收起，以及内容动态变化时的位置保持。
++											305 text 邀请键盘用户和屏幕阅读器用户参与，观察他们能否辨识主题、理解状态和预测下一步。记录具体阻碍，例如焦点不可见、状态朗读不一致、收起后当前位置丢失；不要仅以“能点开”或参与者主观满意作为通过依据。
++											306 text 屏幕阅读器测试应记录操作系统、浏览器、辅助技术版本和使用模式，区分 Tab 焦点导航与阅读命令。文档中的“应朗读展开状态”是预期，不代表每个组合都使用相同措辞。
++											307 container
++												308 text 未实测事项 ：本次没有运行页面、访问实际组件或组织用户测试。上述测试是建议的验收方案，不是已完成记录，也不能据此宣称项目符合某项可访问性标准。
++											309 heading 11. 错误处理与无脚本可用性, Value: 2
++												310 text 11. 错误处理与无脚本可用性
++											311 container
++												312 text 来源事实 ：WebAIM 指出，自定义披露必须动态更新  aria-expanded ，并可用  hidden  或  display:none  将折叠内容同时从视觉和程序访问中隐藏。原生披露的基本切换由 HTML 组件提供，不需要作者编写同等功能的切换脚本。
++												313 link Description: WebAIM, Value: webaim.org/techniques/disclosures/
++												314 text  ·
++												315 link Description: web.dev, Value: web.dev/learn/html/details
++											316 container
++												317 text 设计建议 ：自定义实现应让可见性和展开属性由同一状态更新流程驱动。若内容容器不存在或关联 ID 错误，应在开发与测试中明确暴露，而不是只改变箭头造成成功假象。
++											318 text 对于依赖脚本隐藏的静态内容，可先让正文可读，待增强逻辑成功初始化后再折叠，避免脚本失败时既隐藏内容又没有可用按钮。异步加载则应区分“区域已展开”与“正文已加载”；失败时保留清楚的错误说明和可键盘操作的重试入口，不能静默收起。
++											319 text 重要错误应说明原因及下一步，不要把详细错误放进无法展开的同一组件。无脚本、加载失败和重复激活均需要真实测试；本次没有验证这些路径。
++											320 heading 12. 简短对照与选择结论, Value: 2
++												321 text 12. 简短对照与选择结论
++											322 table
++												323 row
++													324 cell
++														325 text 对照项
++													326 cell
++														327 text 原生
++														328 link Description: details/summary, Value: localhost:18218/ui/#
++													329 cell
++														330 text 自定义披露按钮
++												331 row
++													332 cell
++														333 text 基本状态
++													334 cell
++														335 text open
++														336 text  控制展开
++													337 cell
++														338 text 应用维护可见性与
++														339 text aria-expanded
++												340 row
++													341 cell
++														342 text 键盘责任
++													343 cell
++														344 text 优先保留浏览器行为
++													345 cell
++														346 text 优先使用标准
++														347 text button
++														348 text  的行为
++												349 row
++													350 cell
++														351 text 折叠内容
++													352 cell
++														353 text 由原生机制处理
++													354 cell
++														355 text 必须正确隐藏并移出焦点序列
++												356 row
++													357 cell
++														358 text 焦点设计
++													359 cell
++														360 text 仍需检查样式与位置
++													361 cell
++														362 text 还需处理脚本引发的焦点恢复
++												363 row
++													364 cell
++														365 text 无脚本
++													366 cell
++														367 text 基本披露无需切换脚本
++													368 cell
++														369 text 需设计正文仍可获取的初始状态
++												370 row
++													371 cell
++														372 text 验证重点
++													373 cell
++														374 text 浏览器、辅助技术及样式
++													375 cell
++														376 text 上述项目加事件与状态同步
++											377 container
++												378 text 设计结论 ：普通文档披露优先使用原生实现；明确需要自定义时，使用标准按钮并承担完整状态管理责任。原生不是免测，自定义也不是必然不可访问。
++											379 container
++												380 text 证据结论 ：已确认的只是 README 内容和四项检索摘录。尚未确认项目采用何种组件，也没有浏览器或辅助技术运行证据。后续验收应直接观察焦点、按键、隐藏内容、状态表达及真实阅读任务
+The focused UI element is 275 container Source excerpt: Details and summary  |  web.dev

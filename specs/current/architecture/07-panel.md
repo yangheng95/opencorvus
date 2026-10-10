@@ -646,7 +646,9 @@ accessible status instead of repeating Completed text.
 Transcript prose and document artifacts share one module-worker Markdown
 renderer. The existing Marked lexer/renderer retains reference links, lists,
 tables, fences and copy/file-link attributes. Automatic codespan file actions
-require an explicit path or a located filename. Rooted Windows drive paths
+require a path prefix or a declared file extension with a directory separator
+or cited line. Unprefixed slash-delimited concepts and MIME types remain code
+prose. Rooted Windows drive paths
 retain their drive and either separator through the same reference grammar.
 Bare filenames remain code
 prose; explicit Markdown file links retain their authored destinations.
