@@ -2301,9 +2301,13 @@
 }
 
 .msg-work-details__tool-name {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   max-width: calc(220px * var(--ui-scale));
   color: inherit;
+}
+
+.msg-work-details__tool-name:has(+ .msg-work-details__tool-detail) {
+  max-width: min(calc(220px * var(--ui-scale)), 50%);
 }
 
 .msg-work-details__tool-detail {

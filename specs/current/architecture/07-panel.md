@@ -537,7 +537,12 @@ ordering and content.
 Consecutive Tool/Patch runs have one chronological disclosure, labelled by the
 latest actual Tool name and its summary. One expansion directly exposes all
 results in order; multiple results have static identities rather than nested
-per-Tool toggles. Narrative, sources, files and interactive artifacts retain
+per-Tool toggles. The shared identity row reserves the Tool name's intrinsic
+width, capped at 220 scaled pixels. When a detail is present, the name is also
+capped at half the row and the detail absorbs available-space truncation. Outcome
+and disclosure controls retain their fixed space. This applies to collapsed
+runs and expanded event headers in Main, Side and child conversations.
+Narrative, sources, files and interactive artifacts retain
 their original positions. Each run exposes every real Tool result and its outcome;
 pending argument preparation and running execution have separate status-derived
 counts, independently of the parent stream decoration. Earlier errors stay visible

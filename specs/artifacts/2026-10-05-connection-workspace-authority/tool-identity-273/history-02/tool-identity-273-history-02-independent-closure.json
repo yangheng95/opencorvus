@@ -1,0 +1,27 @@
+{
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 59364,
+        "processInstanceID": "win32:639272111122312418",
+        "occurrenceID": "bc0d3edb-e62b-4f2a-ba94-efeb2627b78c"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67780,
+        "processInstanceID": "win32:639272111130261683",
+        "occurrenceID": "655c4fed-ef1f-44d3-947b-dc4039a7c77b"
+      }
+    }
+  ],
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  },
+  "occurrence": "tool-identity-273-history-02-42f47e80-f2e8-4fba-9d6c-e03b613eddab",
+  "observedAtUtc": "2026-10-10T06:43:11.7184803Z",
+  "listeners": []
+}

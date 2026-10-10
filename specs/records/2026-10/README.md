@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [工具身份273](2026-10-10-tool-identity-273.md)：当前340px工具行压缩根因、唯一CSS修复与真实来源/结果交互复核。
+
 - [当前子 Dock Sources272](2026-10-10-child-source-272.md)：原成员三来源/详情可读，阅读720往返保持，原错误与完整保管边界留存。
 
 - [生成侧聊271](2026-10-10-side-live-271.md)：实际partial前缀/同top返回与末byte资格核对，原terminal snapshot/收尾边界保留。

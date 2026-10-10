@@ -1,0 +1,89 @@
+Browser tab: 121, Title: "OpenCorvus", URL: "http://localhost:18212/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 121-154
++									175 container
++										176 text User
++										177 text 请委托合适的只读研究员阅读以下三份官方网页，并根据实际读取内容给我一份简短中文报告，用三点分别说明网页无障碍是什么、基本原则、开发者如何开始落实，每点附对应来源链接。保留三份资料的差别，不扩大到其他页面；由任务负责人根据实际发现最终给出可读总结。无需修改文件或制作额外报告文件。
++										178 content list
++											179 container
++												180 AXListMarker 1.
++												181 link Description: https://www.w3.org/WAI/fundamentals/accessibility-intro/, Value: w3.org/WAI/fundamentals/accessibility-intro/
++											182 container
++												183 AXListMarker 2.
++												184 link Description: https://www.w3.org/WAI/fundamentals/accessibility-principles/, Value: w3.org/WAI/fundamentals/accessibility-principles/
++											185 container
++												186 AXListMarker 3.
++												187 link Description: https://developer.mozilla.org/en-US/docs/Web/Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++									188 container
++										189 text orchestrator
++										190 text 1m 55s
++										191 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										192 text 我会委托只读研究员仅阅读这三页官方资料，核对各自的重点与差别，再根据实际发现整理成三点中文总结，不修改文件或另做报告文件。
++										193 button (collapsed) Description: dispatch_agent · target=base-researcher, Secondary Actions: Expand
++											194 text dispatch_agent
++											195 text target=base-researcher
++											196 image
++										197 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										198 button (collapsed) Description: read_agent_message, Secondary Actions: Expand
++											199 text read_agent_message
++											200 image
++										201 text 研究员已读到三页正文：WAI 介绍页侧重定义与受益人群，原则页展开四项要求，MDN 则提供开发学习入口。我将据此整理三点总结，并核对摘要是否准确、是否误把链接中的未读内容当作依据。
++										202 button (collapsed) Description: dispatch_agent · target=base-tester, Secondary Actions: Expand
++											203 text dispatch_agent
++											204 text target=base-tester
++											205 image
++									206 container Sub-agent progress
++										207 container
++											208 text base-researcher
++											209 button Open the full base-researcher conversation
++											210 container base-researcher activity
++												211 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++												212 text webfetch https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8) webfetch https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html) read_agent_message Task participant evidence 已通过 `webfetch` 的 Markdown 正文读取方式成功读取指定三页；三次返回均包含正文，未提示截断。以下是供负责人总结的来源发现，不是最终用户报告。 ### 1. WAI 概念介绍：定义、受益人群与尽早落实 来源：https://www.w3.org/WAI/fundamentals/accessibility-intro/ - **是什...
++										213 container
++											214 text base-tester
++											215 button Open the full base-tester conversation
++											216 container base-tester activity
++												217 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++												218 text read_agent_message Task participant evidence read_agent_message Task participant evidence read_agent_message Task participant evidence **核验结论：拟交付的三点摘要可接受，未发现实质性误述或来源混淆。** 已读取研究员最终消息及三次实际 `webfetch` 原始输出，而非仅依据其总结。 1. **“是什么”准确。** [WAI 介绍页](https://www.w3.org/WAI/fundamentals/accessibility-intro/)明确支持感知、理解、导航、交互及...
++									219 container
++										220 text orchestrator
++										221 text 34s
++										222 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										223 button (collapsed) Description: read_agent_message, Secondary Actions: Expand
++											224 text read_agent_message
++											225 image
++										226 text 根据只读研究员对指定三页正文的实际阅读，并经来源核对，简要总结如下：
++										227 content list
++											228 container
++												229 AXListMarker 1.
++												230 text 网页无障碍是什么——WAI 介绍页侧重定义与受益人群。
++												231 text 网页无障碍是让网站、工具和技术经过适当设计与开发，使残障人士能够感知、理解、导航、交互，并贡献网络内容。它也惠及老年人、暂时性障碍者，以及强光、无法听音频等情境下的用户。核心是消除使用障碍，而不只是增加某项功能。
++												232 text 来源：
++												233 link Description: WAI：Introduction to Web Accessibility, Value: w3.org/WAI/fundamentals/accessibility-intro/
++											234 container
++												235 AXListMarker 2.
++												236 text 基本原则——WAI 原则页将目标拆成四类要求。
++												237 text 可感知
++												238 text ：提供图片文本替代、字幕和足够对比度；
++												239 text 可操作
++												240 text ：支持键盘操作，给予足够时间和清晰导航；
++												241 text 可理解
++												242 text ：内容易懂、界面行为可预测，并帮助用户避免和纠正错误；
++												243 text 健壮
++												244 text ：让不同浏览器及辅助技术能够可靠解释内容与控件。这一页是要求概览，并非完整清单。
++												245 text 来源：
++												246 link Description: WAI：Accessibility Principles, Value: w3.org/WAI/fundamentals/accessibility-principles/
++											247 container
++												248 AXListMarker 3.
++												249 text 开发者如何开始——MDN 侧重开发学习入口，WAI 补充实施时机。
++												250 text 从按用途使用正确的语义 HTML 元素开始，保障键盘操作，为多媒体提供适当文字替代，并避免 CSS、JavaScript 破坏无障碍；复杂动态控件可用 WAI-ARIA 补充语义。WAI 介绍页还强调：从项目一开始纳入无障碍，并在开发过程中持续评估。评估工具能辅助检查，但不能单独判断网站是否符合无障碍指南，仍需具备相关知识的人工评估。
++												251 text 来源：
++												252 link Description: MDN：Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++												253 text 、
++												254 link Description: WAI 介绍页, Value: w3.org/WAI/fundamentals/accessibility-intro/
++										255 text 以上仅依据这三页正文；未继续阅读其链接中的教程或规范，也未修改文件或制作额外报告文件。
++										256 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++											257 text manage_task
++											258 text action=complete_task
++											259 image
+The focused UI element is 68 button Store card accessor after 153 Completed

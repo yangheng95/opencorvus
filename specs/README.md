@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具身份273](records/2026-10/2026-10-10-tool-identity-273.md)：修复来源旁短工具名被长URL压缩，共享工具行空间与真实页面复核。
+
 - [当前子 Dock Sources272](records/2026-10/2026-10-10-child-source-272.md)：真实三来源详情、成员和整 Dock 阅读720保持，完整历史资格与13核心表保管。
 
 - [生成侧聊271](records/2026-10/2026-10-10-side-live-271.md)：实际stream结束前partial关闭重开，前缀/阅读2178.4与来源保持，8EOF/Native0及原边界保留。

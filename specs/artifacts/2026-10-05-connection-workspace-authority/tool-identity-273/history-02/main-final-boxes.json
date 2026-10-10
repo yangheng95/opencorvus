@@ -1,0 +1,47 @@
+{
+  "rows": [
+    {
+      "detail": "target=base-researcher",
+      "maxWidth": "min(220px, 50%)",
+      "name": "dispatch_agent",
+      "nameContentWidth": 101,
+      "nameWidth": 100.8000030517578,
+      "rowWidth": 323.20001220703125
+    },
+    {
+      "detail": null,
+      "maxWidth": "220px",
+      "name": "read_agent_message",
+      "nameContentWidth": 130,
+      "nameWidth": 129.60000610351562,
+      "rowWidth": 187.6000061035156
+    },
+    {
+      "detail": "target=base-tester",
+      "maxWidth": "min(220px, 50%)",
+      "name": "dispatch_agent",
+      "nameContentWidth": 101,
+      "nameWidth": 100.8000030517578,
+      "rowWidth": 294.3999938964844
+    },
+    {
+      "detail": null,
+      "maxWidth": "220px",
+      "name": "read_agent_message",
+      "nameContentWidth": 130,
+      "nameWidth": 129.60000610351562,
+      "rowWidth": 187.6000061035156
+    },
+    {
+      "detail": "action=complete_task",
+      "maxWidth": "min(220px, 50%)",
+      "name": "manage_task",
+      "nameContentWidth": 79,
+      "nameWidth": 79.20000457763672,
+      "rowWidth": 287.20001220703125
+    }
+  ],
+  "scripts": [
+    "http://localhost:18212/ui/assets/main-Dwe-Ur0q.js"
+  ]
+}
