@@ -1,0 +1,238 @@
+Browser tab: 107, Title: "OpenCorvus", URL: "http://localhost:18199/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18199/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									62 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									39 container
+										40 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										41 button 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+										42 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+									43 button (expanded) Description: Collapse Anonymous d1d6e8, Secondary Actions: Collapse
+									44 container
+										45 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										46 button Reply with OK.
+										47 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-196-trigger, Secondary Actions: Expand
+								48 container Recents
+									49 text Recents
+									50 container
+										51 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										52 button 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+										53 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-202-trigger, Secondary Actions: Expand
+									54 container
+										55 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										56 button Reply with OK.
+										57 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-208-trigger, Secondary Actions: Expand
+						58 container Connection Diagnostics
+							59 container Description: Connection Diagnostics · Online · Port 18199, ID: connBadge
+								60 text Online
+				61 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				63 container chatSection
+					64 container Description: Loading task, ID: taskSwitchProgress
+					65 container
+						66 text 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+						67 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-214-trigger, Secondary Actions: Expand
+						68 container Description: Not running, ID: taskStatus
+							69 text Not running
+						70 button Side chat
+						71 container solidChatHeaderRuntimeActions
+							72 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							73 checkbox Description: Open right dock, Value: 0
+					74 container
+						75 container Description: Conversation, ID: chatScroll
+							76 container
+								77 container
+									78 text User
+									79 text 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md（offset=1，limit=12），然后以原文件真实标题作为开头，输出一份 Sources 阅读体验评审建议，作为普通会话直接回复。请用中文写 12 个有具体建议的小节，每节 100 到 150 字，涵盖来源辨识、链接打开、键盘操作、阅读位置、加载反馈和错误恢复；包含两张各四行的对比表，以及两段只作说明的短代码块。明确建议是你的评审意见，不要把此 README 当作已包含这些功能的证据。最后引用这份原文件。不要读取其他文件、浏览网页、创建或修改文件，不要调用或委托任何 agent。
+								80 container
+									81 text chat
+									82 text 1m 29s
+									83 button (collapsed) Secondary Actions: Expand, Description: read · C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md @1+12 (1 lines)
+										84 text read
+										85 text C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md @1+12 (1 lines)
+										86 image
+									87 container Sources
+										88 button Open source file: README.md
+									89 heading Isolated formal Task resource qualification, Value: 1
+										90 text Isolated formal Task resource qualification
+									91 container
+										92 text 以下是我对  Sources 阅读体验的评审建议 ，不是对现有功能的确认。按指定范围读取的 README 只有上述标题，未提供界面、交互或实现信息；因此，下面的方案均属于评审意见，不能将该文件作为产品已具备这些功能的证据。
+									93 heading 1. 来源辨识：让用户先判断，再阅读, Value: 2
+										94 text 1. 来源辨识：让用户先判断，再阅读
+									95 text 建议每条来源同时展示文档标题、来源域名或文件路径、内容类型，并将作者与发布日期作为辅助信息。不要只显示编号或图标，否则用户难以判断可信度与相关性。标题缺失时应明确标注“未提供标题”，避免自动生成的名称被误认为原文标题；完整地址可按需展开查看。
+									96 heading 2. 来源层级：区分原文、摘录与评审, Value: 2
+										97 text 2. 来源层级：区分原文、摘录与评审
+									98 text 建议在阅读区域明确区分原始内容、引用摘录和助手评审，分别使用稳定的标签与视觉层级。摘录应保留可定位的页码或行号，评审则明确标注为意见。不要仅依靠颜色表达区别，也不要把摘要放在原文标题下却不说明性质，避免读者将概括或推断误认成来源中的陈述。
+									99 table
+										100 row
+											101 cell
+												102 text 信息类别
+											103 cell
+												104 text 易混淆的呈现方式
+											105 cell
+												106 text 建议方式
+										107 row
+											108 cell
+												109 text 原文
+											110 cell
+												111 text 与摘要连续排列
+											112 cell
+												113 text 标注“原文”，保留出处
+										114 row
+											115 cell
+												116 text 摘录
+											117 cell
+												118 text 只有引号，无定位
+											119 cell
+												120 text 附页码、行号或段落
+										121 row
+											122 cell
+												123 text 摘要
+											124 cell
+												125 text 使用原文同样的样式
+											126 cell
+												127 text 明确标注“摘要”
+										128 row
+											129 cell
+												130 text 评审意见
+											131 cell
+												132 text 混入来源正文
+											133 cell
+												134 text 独立区域标注“评审意见”
+									135 heading 3. 链接打开：明确目的地与打开方式, Value: 2
+										136 text 3. 链接打开：明确目的地与打开方式
+									137 text 建议点击前就能识别链接将打开外部网页、内部阅读面板还是本地文件，并提供完整地址预览。普通点击采用一致的打开方式，另设清晰的“在浏览器打开”入口。打开失败时保留当前阅读界面，不要用空白页面替换内容；也不要把链接可点击等同于来源已成功读取或验证。
+									138 heading 4. 引用跳转：抵达具体内容而非首页, Value: 2
+										139 text 4. 引用跳转：抵达具体内容而非首页
+									140 text 建议引用入口优先跳转至对应段落、页码或行号，而不是只打开来源首页。抵达后短暂突出目标内容，并保留上下文，避免读者只看到孤立句子。若原文更新导致定位失效，应说明“引用位置无法匹配”，允许查看完整来源，但不能悄悄跳到其他段落并表现为定位成功。
+									141 heading 5. 键盘操作：建立完整可达的路径, Value: 2
+										142 text 5. 键盘操作：建立完整可达的路径
+									143 text 建议 Sources 列表、展开按钮、原文链接与关闭入口均可通过键盘访问，焦点顺序与视觉排列保持一致。使用 Enter 激活、Escape 关闭临时面板，并让焦点返回原入口。快捷键应可查询且避免覆盖常见浏览器操作；不要只支持鼠标悬停，导致键盘用户无法获得完整来源信息。
+									144 text 以下代码仅说明建议的语义结构，不代表 README 或产品中的实现：
+									145 container
+										146 text HTML
+										147 button Copy code
+										148 container
+											149 text < button aria-expanded = "false" aria-controls = "source-detail" >
+  查看来源详情
+ </ button >
+									150 heading 6. 焦点反馈：让操作位置始终可见, Value: 2
+										151 text 6. 焦点反馈：让操作位置始终可见
+									152 text 建议为所有交互元素提供清晰的焦点轮廓，避免焦点落在屏幕外或被固定工具栏遮挡。阅读面板打开后，应将焦点移至合适的标题或操作入口，但不要强行改变正文滚动位置。加载结束时也不应自动抢走焦点；屏幕阅读器提示与视觉提示需要一致，减少用户重复寻找当前位置的负担。
+									153 heading 7. 阅读位置：保存位置与阅读上下文, Value: 2
+										154 text 7. 阅读位置：保存位置与阅读上下文
+									155 text 建议切换来源后保留各文档的滚动位置、展开状态和当前引用目标，返回时恢复到离开的位置。长文可显示章节与阅读进度，但不能仅用百分比替代内容定位。若文档发生变化，应提示位置可能偏移，并提供返回最近章节的选择；不要在用户继续阅读时自动滚回顶部或首个引用处。
+									156 heading 8. 多来源切换：减少重复定位成本, Value: 2
+										157 text 8. 多来源切换：减少重复定位成本
+									158 text 建议来源列表保持稳定排序，并明确标识当前正在阅读的条目；筛选或排序变化不应无提示地替换正文。可提供“返回上一来源”操作，帮助用户交叉核对不同材料。重复链接宜合并展示引用次数，但应保留各个引用位置，避免合并后失去上下文，也避免相同内容反复占据列表空间。
+									159 heading 9. 加载反馈：区分请求、读取与定位, Value: 2
+										160 text 9. 加载反馈：区分请求、读取与定位
+									161 text 建议分别说明“正在获取来源”“正在解析内容”和“正在定位引用”，让用户知道等待发生在哪一步。短时加载使用简洁状态提示，长时加载提供取消入口与耗时说明。进度无法测量时不要伪造百分比；只有正文真实可读后才显示完成，不能把网络请求成功当作整个阅读过程已经完成。
+									162 table
+										163 row
+											164 cell
+												165 text 场景
+											166 cell
+												167 text 不充分的反馈
+											168 cell
+												169 text 建议反馈
+										170 row
+											171 cell
+												172 text 获取来源
+											173 cell
+												174 text 页面空白
+											175 cell
+												176 text 显示请求状态与取消入口
+										177 row
+											178 cell
+												179 text 解析内容
+											180 cell
+												181 text 一直显示加载中
+											182 cell
+												183 text 说明正在解析及等待时间
+										184 row
+											185 cell
+												186 text 定位引用
+											187 cell
+												188 text 无提示地滚动
+											189 cell
+												190 text 显示定位状态并突出目标
+										191 row
+											192 cell
+												193 text 读取完成
+											194 cell
+												195 text 仅消失加载图标
+											196 cell
+												197 text 展示正文并确认可阅读状态
+									198 heading 10. 错误恢复：说明原因并保留现场, Value: 2
+										199 text 10. 错误恢复：说明原因并保留现场
+									200 text 建议错误提示区分网络中断、访问受限、文件不存在和内容解析失败，并给出对应的下一步，而不是统一显示“出错了”。重试应保留来源选择与阅读位置，避免用户重新操作。对于权限问题，只提示授权或联系管理员；不要反复自动请求，也不要用未经说明的替代内容冒充原始来源。
+									201 text 以下代码仅说明错误提示的信息组织，不是现有接口或功能证据：
+									202 container
+										203 text CODE
+										204 button Copy code
+										205 text 状态：来源读取失败
+原因：网络连接中断
+操作：重试 / 复制原始地址
+保留：当前来源与阅读位置
+									206 heading 11. 可读性：控制密度并保留原文结构, Value: 2
+										207 text 11. 可读性：控制密度并保留原文结构
+									208 text 建议正文采用舒适的行宽、行距与段落间距，并保留原文标题、列表、表格和代码结构。长地址可以折行，但不应遮挡复制与打开操作。缩放后仍需保持内容可读，避免工具栏挤压正文。对于无法忠实呈现的格式，应说明限制并提供原始文件入口，不要静默删除影响理解的重要内容。
+									209 heading 12. 验收方式：以真实阅读任务检验, Value: 2
+										210 text 12. 验收方式：以真实阅读任务检验
+									211 text 建议用完整任务验证体验：识别来源、打开原文、定位引用、切换材料、返回原位，并在断网后完成恢复。每项记录操作步骤、预期结果与实际表现，分别检查鼠标、键盘和辅助阅读路径。评审结论应区分“建议”“已观察问题”与“已验证能力”；缺少界面或运行证据时，不能宣称问题已经存在或修复。
+									212 container
+										213 text 原文件引用 ：本次仅读取指定 README 的第 1 行，原文为  # Isolated formal Task resource qualification 。出处： C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md:1 。
+						214 container chatHomeComposition
+							215 container solidChatComposer
+								216 container
+									217 text Model configuration unavailable
+									218 text You can still read this conversation. Review the details or choose a model before sending a message.
+									219 button (collapsed) Details, Secondary Actions: Expand
+										220 text Details
+									221 button Retry
+									222 container chatForm
+										223 splitter Description: Drag to resize the message input, Value: 42
+										224 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+										225 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+										226 text Code
+										227 text Chat
+										228 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+										229 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+										230 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+											231 text Choose model
+										232 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+								233 button Scroll to bottom
+
+The focused UI element is 73 checkbox Description: Open right dock, Value: 0

@@ -563,6 +563,8 @@ times or change the stored citation payload.
 Known built-in read and webfetch provenance uses localized resource-acquisition
 labels; the original provider identifier remains in the metadata title and stored
 payload. Other source-provider names retain their authored value.
+Tooltip detail adds location or media information only when it differs from the
+primary source identity; it does not repeat a root-level file's name or range.
 Child conversation message dividers retain the shared transcript margin and use
 the medium spacing token for their inner top inset. This keeps independent
 Source-bearing messages distinct without repeating a large blank band; the

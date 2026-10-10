@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [文件来源261 Recall](source-file-plan-261.md) / [完整实际验收](source-file-261/README.md)：真实Read file与README/返回，Tooltip身份去重及原数据保护。
+
 - [Sources日期260 Recall](source-date-plan-260.md) / [完整实际验收](source-date-260/README.md)：原日期字符串可读呈现、作者精度保留，独立真实历史页面与原事实保管。
 
 - [主Sources阅读259 Recall](source-reading-plan-259.md) / [完整实际证据](source-reading-259/README.md)：真实五Sources/摘录/独立网页往返，完整保管/Native0，原生预览未覆盖。

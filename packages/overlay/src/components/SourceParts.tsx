@@ -133,7 +133,9 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
   return (
     <Tooltip.Content class="msg-source-tooltip" data-ui="message-source-tooltip">
       <strong>{sourceLabel(props.source)}</strong>
-      <span>{sourceDetail(props.source)}</span>
+      <Show when={sourceDetail(props.source) !== sourceLabel(props.source)}>
+        <span>{sourceDetail(props.source)}</span>
+      </Show>
       <span title={[props.source.publishedAt, props.source.provider].filter(Boolean).join(" · ") || undefined}>
         {[props.source.author, sourcePublishedDate(props.source.publishedAt), sourceProviderLabel(props.source.provider)].filter(Boolean).join(" · ")}
       </span>
