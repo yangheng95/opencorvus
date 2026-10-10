@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件范围262](2026-10-10-source-range-262.md)：真实27–37与206–224来源和代码定位，当前目标错误保留、同预算6EOF/Native0。
+
 - [文件来源261](2026-10-10-source-file-261.md)：真实来源键盘/文件正文与返回，修复Tooltip重复filename，原Source数据保管。
 
 - [Sources日期260](2026-10-10-source-date-260.md)：改进原ISO日期阅读表达，单一locale/Calendar呈现与原数据保管，真实UI复核。

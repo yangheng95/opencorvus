@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件范围262](records/2026-10/2026-10-10-source-range-262.md)：当前Sol真实两条read范围/目录外只读定位与同文件切换，6EOF/原Native0，反复激活待补。
+
 - [文件来源261](records/2026-10/2026-10-10-source-file-261.md)：Read file/实际README打开与原位返回，去掉Source Tooltip重复身份，单agent真实验收。
 
 - [Sources日期260](records/2026-10/2026-10-10-source-date-260.md)：Tooltip显示本地化出版日、保留原日期精度与事实，真实中英文页面复核。

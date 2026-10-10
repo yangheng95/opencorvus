@@ -1,0 +1,62 @@
+{
+  "qualificationKind": "NativeService",
+  "observedAtUtc": "2026-10-10T02:48:45.0176608Z",
+  "states": [
+    {
+      "expected": {
+        "pid": 49488,
+        "processInstanceID": "win32:639271966982602379",
+        "occurrenceID": "cdf8380e-827e-4326-b2b8-815d314903eb"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 68440,
+        "processInstanceID": "win32:639271966990336922",
+        "occurrenceID": "0a7bd05a-1220-43ec-8d84-9dc989c323af"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": [],
+  "native": {
+    "occurrence": "source-range-262-live-01-c9c3a1de-e88a-453e-9563-01488a554715",
+    "outcome": "settled",
+    "host": {
+      "pid": 49488,
+      "processInstanceID": "win32:639271966982602379",
+      "occurrenceID": "cdf8380e-827e-4326-b2b8-815d314903eb"
+    },
+    "target": {
+      "pid": 68440,
+      "processInstanceID": "win32:639271966990336922",
+      "occurrenceID": "0a7bd05a-1220-43ec-8d84-9dc989c323af"
+    },
+    "observedAtUtc": "2026-10-10T02:48:16.015Z",
+    "deadlineAt": 1791600498245,
+    "terminal": {
+      "occurrenceID": "source-range-262-live-01-c9c3a1de-e88a-453e-9563-01488a554715",
+      "pid": 68440,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Independent actual NativeService physical/output/request birth-port-pair readback; original live-sol foreground already joined. Real service emits owner/startup/preflight receipts, not full-history copy launcher receipts.",
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "occurrence": "source-range-262-live-01-c9c3a1de-e88a-453e-9563-01488a554715"
+}

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [文件范围262 Recall](source-range-plan-262.md) / [真实Source与定位](source-range-262/README.md)：Sol两次read/目录外只读范围定位、同文件切换，当前预算6EOF/Native0，重复激活待验。
+
 - [文件来源261 Recall](source-file-plan-261.md) / [完整实际验收](source-file-261/README.md)：真实Read file与README/返回，Tooltip身份去重及原数据保护。
 
 - [Sources日期260 Recall](source-date-plan-260.md) / [完整实际验收](source-date-260/README.md)：原日期字符串可读呈现、作者精度保留，独立真实历史页面与原事实保管。

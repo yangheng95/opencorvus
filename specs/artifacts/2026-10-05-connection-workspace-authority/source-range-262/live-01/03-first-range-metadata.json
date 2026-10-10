@@ -1,0 +1,56 @@
+{
+  "editor": [
+    {
+      "readonly": "true",
+      "text": "999910111213141516171819202122232425262728293031323334353637383940414243444546474849›⌄⌄⌄⌄⌄⌄⌄import { Filesystem } from \"../util/filesystem\"import { AttachmentStore } from \"../storage/attachment-store\"import { redactInlinePayloads } from \"../util/inline-base64\"import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from \"./text-file\"import { executionFiles } from \"./execution-files\"import { fileSource } from \"./source\"const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT/** * The line range a `read` citation should carry, or undefined when there is no * narrower place to point at than the file itself. * * A citation range is a location, not a receipt for what was loaded. A page * that covered the whole file would cite lines 1..N, and the overlay would dress * that up as a jump that always lands on line 1 — indistinguishable from a * citation that failed to jump at all. */export function citedReadRange(page: {  offset: number  lines: number  lastReadLine: number  truncated: boolean}): { range: { startLine: number; endLine: number } } | undefined {  if (page.lines <= 0) return undefined  if (page.offset === 1 && !page.truncated) return undefined  return { range: { startLine: page.offset, endLine: page.lastReadLine } }}function isMissingPathError(error: unknown): boolean {  return error instanceof Error && (error as NodeJS.ErrnoException).code === \"ENOENT\"}export async function taskFileStatOrMissing<T>(read: () => Promise<T>): Promise<T | undefined> {  try {    return await read()  } catch (error) {    if (isMissingPathError(error)) return undefined    throw error  }}"
+    }
+  ],
+  "focus": "Open source file: D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\tool\\read.ts:27-37",
+  "highlight": [
+    {
+      "class": "cm-line cm-activeLine cm-oc-reveal-line",
+      "text": "export function citedReadRange(page: {"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  offset: number"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  lines: number"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  lastReadLine: number"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  truncated: boolean"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "}): { range: { startLine: number; endLine: number } } | undefined {"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  if (page.lines <= 0) return undefined"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  if (page.offset === 1 && !page.truncated) return undefined"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  return { range: { startLine: page.offset, endLine: page.lastReadLine } }"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "}"
+    },
+    {
+      "class": "cm-line cm-oc-reveal-line",
+      "text": ""
+    }
+  ],
+  "observedAtUtc": "2026-10-10T02:43:41.243Z"
+}
