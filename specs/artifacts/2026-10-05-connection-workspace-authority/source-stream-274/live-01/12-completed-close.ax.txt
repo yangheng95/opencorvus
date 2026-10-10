@@ -1,0 +1,72 @@
+Browser tab: 122, Title: "OpenCorvus", URL: "http://localhost:18213/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 120-339
+~				118 container chatSection
+~					119 container Description: Loading task, ID: taskSwitchProgress
++					120 container
++						121 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的...
++						122 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
++						123 container Description: Not running, ID: taskStatus
++							124 text Not running
++						125 button Side chat
++						126 container solidChatHeaderRuntimeActions
++							127 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							128 checkbox Description: Open right dock, Value: 0
++					129 container
++						130 container Description: Conversation, ID: chatScroll
++							131 container
++								132 container
++									133 text User
++									134 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的键盘行为并附来源，保留各来源差别。不要扩大查询、写文件、创建Task或委托成员。
++								135 container
++									136 text work
++									137 text 17s
++									138 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
++										139 text websearch
++										140 text Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
++										141 image
++									142 container Sources
++										143 button (expanded) Description: Sources: details - 搜索 词典 (5), Help: details - 搜索 词典 5, Secondary Actions: Collapse
++											144 text details - 搜索 词典
++											145 text 5
++										146 link Description: Open web source: details - 搜索 词典, Value: global.bing.com/dict/search?q=details&FORM=BDVSP6&cc=cn
++										147 container
++											148 button (expanded) Description: Source excerpt: details - 搜索 词典, Help: Source excerpt, Secondary Actions: Collapse
++												149 text Source excerpt
++											150 container Source excerpt: details - 搜索 词典
++												151 text 必应词典为您提供details的释义，美 [ˈdiˌteɪl]，英 [ˈdiːteɪl]，n. 详情；详细；细目；琐事； v. 详述；选派 (for to do)；画详图； 网络释 …
++										152 link Description: Open web source: details是什么意思_ details的翻译_音标_读音_用法_例句_爱 ..., Value: iciba.com/word?w=+details
++										153 button (collapsed) Description: Source excerpt: details是什么意思_ details的翻译_音标_读音_用法_例句_爱 ..., Help: Source excerpt, Secondary Actions: Expand
++											154 text Source excerpt
++										155 link Description: Open web source: DETAILS中文 (简体)翻译：剑桥词典 - Cambridge Dictionary, Value: dictionary.cambridge.org/zhs/%E8%AF%8D%E5%85%B8/%E8%8B%B1%E8%AF%AD-%E6%B1%89%E8%AF%AD-%E7%AE%80%E4%BD%93/details
++										156 button (collapsed) Description: Source excerpt: DETAILS中文 (简体)翻译：剑桥词典 - Cambridge Dictionary, Help: Source excerpt, Secondary Actions: Expand
++											157 text Source excerpt
++										158 link Description: Open web source: Details!：全能伤害统计-178魔兽插件站-大脚插件站, Value: wowui.178.com/ui/853
++										159 button (collapsed) Description: Source excerpt: Details!：全能伤害统计-178魔兽插件站-大脚插件站, Help: Source excerpt, Secondary Actions: Expand
++											160 text Source excerpt
++										161 link Description: Open web source: details是什么意思_details怎么读_details翻译_用法_发音 ..., Value: koolearn.com/dict/wd_41825.html
++										162 button (collapsed) Description: Source excerpt: details是什么意思_details怎么读_details翻译_用法_发音 ..., Help: Source excerpt, Secondary Actions: Expand
++											163 text Source excerpt
++									164 container
++										165 text 本次聚焦查询返回五个结果，均为词典或游戏插件页面，没有官方  details / summary  键盘交互资料。因此，无法依据实际结果确认 Tab 聚焦、Enter／空格切换等行为，也无法比较官方来源的差别。唯一可保留的来源差别是：四项解释英文词义，一项介绍游戏插件，均不支持键盘行为结论。按要求未扩大查询。
++									166 container
++										167 text 实际结果示例：
++										168 link Description: 必应词典, Value: global.bing.com/dict/search?q=details&FORM=BDVSP6&cc=cn
++										169 text 、
++										170 link Description: 游戏插件页, Value: wowui.178.com/ui/853
++										171 text 。
++						172 container chatHomeComposition
++							173 container solidChatComposer
++								174 container chatForm
++									175 splitter Description: Drag to resize the message input, Value: 42
++									176 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++									177 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									178 text Work
++									179 text Chat
++									180 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++									181 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++									182 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++										183 text openai/gpt-6.1-sol
++									184 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
++								185 button Scroll to bottom
+The focused UI element is 128 checkbox Description: Open right dock, Value: 0

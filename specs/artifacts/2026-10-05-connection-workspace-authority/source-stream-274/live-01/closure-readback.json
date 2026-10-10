@@ -1,0 +1,62 @@
+{
+  "occurrence": "source-stream-274-live-01-bef03ae8-36de-410e-9c20-555d960667dc",
+  "observedAtUtc": "2026-10-10T06:58:34.5062598Z",
+  "states": [
+    {
+      "expected": {
+        "pid": 67068,
+        "processInstanceID": "win32:639272118976280500",
+        "occurrenceID": "64240375-d672-4eae-9e75-9f24958fae14"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 68560,
+        "processInstanceID": "win32:639272118984390276",
+        "occurrenceID": "c1444667-69f4-496c-b413-38218b0451be"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "qualificationKind": "NativeService",
+  "native": {
+    "occurrence": "source-stream-274-live-01-bef03ae8-36de-410e-9c20-555d960667dc",
+    "outcome": "settled",
+    "host": {
+      "pid": 67068,
+      "processInstanceID": "win32:639272118976280500",
+      "occurrenceID": "64240375-d672-4eae-9e75-9f24958fae14"
+    },
+    "target": {
+      "pid": 68560,
+      "processInstanceID": "win32:639272118984390276",
+      "occurrenceID": "c1444667-69f4-496c-b413-38218b0451be"
+    },
+    "observedAtUtc": "2026-10-10T06:58:29.27Z",
+    "deadlineAt": 1791615697609,
+    "terminal": {
+      "occurrenceID": "source-stream-274-live-01-bef03ae8-36de-410e-9c20-555d960667dc",
+      "pid": 68560,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "listeners": [],
+  "boundary": "Independent actual NativeService physical/output/request birth-port-pair readback; original live-sol foreground already joined. Real service emits owner/startup/preflight receipts, not full-history copy launcher receipts."
+}

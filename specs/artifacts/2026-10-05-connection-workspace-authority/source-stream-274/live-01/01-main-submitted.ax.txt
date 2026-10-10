@@ -1,0 +1,31 @@
+Browser tab: 122, Title: "OpenCorvus", URL: "http://localhost:18213/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 44-45, 50-54, 59-63, 70, 73-76
++									73 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									74 container
++										75 button
++										76 pop up button (collapsed) Secondary Actions: Expand
++									77 container
++										78 button
++										79 pop up button (collapsed) Secondary Actions: Expand
++									80 container
++										81 button
++										82 pop up button (collapsed) Secondary Actions: Expand
++					83 container
++						84 text Work
++						85 pop up button (collapsed) Description: Project actions, Secondary Actions: Expand
++						86 container Not running
++						87 button Side chat
++						88 container solidChatHeaderRuntimeActions
++							89 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							90 checkbox Description: Open right dock, Value: 0
+~								48 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~								49 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								91 text Work
++								92 text Chat
++								93 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
+~								55 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+~									57 text Choose model
+~								58 button (disabled) Description: Send, Help: Your message is being processed., ID: chatSend
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18213/ui/

@@ -1,0 +1,29 @@
+Browser tab: 122, Title: "OpenCorvus", URL: "http://localhost:18213/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~										204 button (expanded) Reference history · 3 messages, Secondary Actions: Collapse
++										214 container
++											215 text User
++											216 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的键盘行为并附来源，保留各来源差别。不要扩大查询、写文件、创建Task或委托成员。
++										217 container
++											218 text work
++											219 text 8s
++											220 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
++												221 text websearch
++												222 text Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
++												223 image
++											224 container Sources
++												225 button (collapsed) Description: Sources: details - 搜索 词典 (5), Help: details - 搜索 词典 5, Secondary Actions: Expand
++													226 text details - 搜索 词典
++													227 text 5
++										228 container
++											229 text work
++											230 text 9s
++											231 container
++												232 text 本次聚焦查询返回五个结果，均为词典或游戏插件页面，没有官方  details / summary  键盘交互资料。因此，无法依据实际结果确认 Tab 聚焦、Enter／空格切换等行为，也无法比较官方来源的差别。唯一可保留的来源差别是：四项解释英文词义，一项介绍游戏插件，均不支持键盘行为结论。按要求未扩大查询。
++											233 container
++												234 text 实际结果示例：
++												235 link Description: 必应词典, Value: global.bing.com/dict/search?q=details&FORM=BDVSP6&cc=cn
++												236 text 、
++												237 link Description: 游戏插件页, Value: wowui.178.com/ui/853
++												238 text 。
+The focused UI element is 204 button (expanded) Reference history · 3 messages, Secondary Actions: Collapse

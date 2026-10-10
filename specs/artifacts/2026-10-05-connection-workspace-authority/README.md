@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [当前流式274 Recall](source-stream-plan-274.md) / [实际证据](source-stream-274/README.md)：当前工具运行/五来源与摘录，真实侧聊尾部重开及搜索诊断信息丢失调查。
+
 - [工具身份273 Recall](tool-identity-plan-273.md) / [当前修复证据](tool-identity-273/README.md)：来源旁webfetch名称空间分配修复，原历史与当前页面复核。
 
 - [子 Dock Sources272 Recall](child-source-plan-272.md) / [当前实际证据](child-source-272/README.md)：完成态三来源标题/详情与成员/整 Dock 阅读720保持，完整历史资格和原边界保留。

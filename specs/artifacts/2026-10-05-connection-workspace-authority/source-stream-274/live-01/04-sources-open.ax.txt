@@ -1,0 +1,33 @@
+Browser tab: 122, Title: "OpenCorvus", URL: "http://localhost:18213/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 46-49, 55-58, 91-93
+~											127 button (expanded) Description: Sources: details - 搜索 词典 (5), Help: details - 搜索 词典 5, Secondary Actions: Collapse
++											144 link Description: Open web source: details - 搜索 词典, Value: global.bing.com/dict/search?q=details&FORM=BDVSP6&cc=cn
++											145 button (collapsed) Description: Source excerpt: details - 搜索 词典, Help: Source excerpt, Secondary Actions: Expand
++												146 text Source excerpt
++											147 link Description: Open web source: details是什么意思_ details的翻译_音标_读音_用法_例句_爱 ..., Value: iciba.com/word?w=+details
++											148 button (collapsed) Description: Source excerpt: details是什么意思_ details的翻译_音标_读音_用法_例句_爱 ..., Help: Source excerpt, Secondary Actions: Expand
++												149 text Source excerpt
++											150 link Description: Open web source: DETAILS中文 (简体)翻译：剑桥词典 - Cambridge Dictionary, Value: dictionary.cambridge.org/zhs/%E8%AF%8D%E5%85%B8/%E8%8B%B1%E8%AF%AD-%E6%B1%89%E8%AF%AD-%E7%AE%80%E4%BD%93/details
++											151 button (collapsed) Description: Source excerpt: DETAILS中文 (简体)翻译：剑桥词典 - Cambridge Dictionary, Help: Source excerpt, Secondary Actions: Expand
++												152 text Source excerpt
++											153 link Description: Open web source: Details!：全能伤害统计-178魔兽插件站-大脚插件站, Value: wowui.178.com/ui/853
++											154 button (collapsed) Description: Source excerpt: Details!：全能伤害统计-178魔兽插件站-大脚插件站, Help: Source excerpt, Secondary Actions: Expand
++												155 text Source excerpt
++											156 link Description: Open web source: details是什么意思_details怎么读_details翻译_用法_发音 ..., Value: koolearn.com/dict/wd_41825.html
++											157 button (collapsed) Description: Source excerpt: details是什么意思_details怎么读_details翻译_用法_发音 ..., Help: Source excerpt, Secondary Actions: Expand
++												158 text Source excerpt
++							159 container solidChatComposer
++								160 container chatForm
++									161 splitter Description: Drag to resize the message input, Value: 42
++									162 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++									163 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									164 text Work
++									165 text Chat
++									166 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++									167 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++									168 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++										169 text openai/gpt-6.1-sol
++									170 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
++								171 button Scroll to bottom
+The focused UI element is 127 button (expanded) Description: Sources: details - 搜索 词典 (5), Help: details - 搜索 词典 5, Secondary Actions: Collapse

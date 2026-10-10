@@ -1,0 +1,36 @@
+Browser tab: 122, Title: "OpenCorvus", URL: "http://localhost:18213/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 77-82
++										94 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+~										75 button 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的...
++										95 image Running
+~										76 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
++									96 container
++										97 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										98 button 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的...
++										99 image Running
++										100 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-255-trigger, Secondary Actions: Expand
++									101 container
++										102 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										103 button Reply with OK.
++										104 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-261-trigger, Secondary Actions: Expand
+~						84 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的...
+~						85 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+~						86 container Description: Running, ID: taskStatus
++							105 text Running
++							106 container
++								107 container
++									108 text User
++									109 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的键盘行为并附来源，保留各来源差别。不要扩大查询、写文件、创建Task或委托成员。
++								110 container
++									111 text work
++									112 text 6s
++									113 button (collapsed) Secondary Actions: Expand, Description: websearch · site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
++										114 text websearch
++										115 text site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
++										116 text 1 running
+~								93 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+~									57 text openai/gpt-6.1-sol
+~								58 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18213/ui/

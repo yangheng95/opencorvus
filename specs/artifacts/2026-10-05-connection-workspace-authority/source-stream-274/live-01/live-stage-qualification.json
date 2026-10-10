@@ -1,0 +1,46 @@
+{
+  "observedAtUtc": "2026-10-10T07:08:22.8184427Z",
+  "mainSessionID": "ses_-zUSN3DyTzzVifMgN72i",
+  "sideSessionID": "ses_-zUSN2fmEzzIGcbZhnAZ",
+  "userMessageID": "msg_f772a29e-9540-4bbc-8320-e1b47c08a498",
+  "assistantMessageID": "msg_g0VXcxU8P00Ow631uhGK",
+  "partID": "prt_g0VXcxVCI00JzN5Dcvms",
+  "rawMarkdownChars": 3191,
+  "firstByteAt": "2026-10-10T06:56:07.4850000Z",
+  "lastByteAt": "2026-10-10T06:57:26.4350000Z",
+  "reader": {
+    "boundary": "provider-source-reader",
+    "state": "settled",
+    "receivedAt": 1791615367482,
+    "boundAt": 1791615367484,
+    "chunkCount": 1162,
+    "byteCount": 1086955,
+    "firstByteReadAt": 1791615367485,
+    "lastByteReadAt": 1791615446435,
+    "identityState": "observed",
+    "requestContext": {
+      "sessionID": "ses_-zUSN2fmEzzIGcbZhnAZ",
+      "streamRequest": {
+        "requestID": "msg_f772a29e-9540-4bbc-8320-e1b47c08a498",
+        "agentID": "chat",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "activity": {
+        "id": "act_g0VXcxUHO0022gm7uAQ1",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXcxU8P00Ow631uhGK"
+      }
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1791615446985
+    }
+  },
+  "frames": [
+    "08-visible-partial.jpg",
+    "10-live-return.jpg"
+  ],
+  "boundary": "Actual same chat reader/request/assistant, excludes memory helper. Frames early than final lastByte, but live auto-follow-tail changed visible paragraphs; reading-anchor11 was already terminal. Wrong08 DOM selectors returned empty and are not geometry evidence."
+}

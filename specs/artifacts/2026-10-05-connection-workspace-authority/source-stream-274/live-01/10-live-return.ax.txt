@@ -1,0 +1,191 @@
+Browser tab: 122, Title: "OpenCorvus", URL: "http://localhost:18213/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18213/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									73 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									74 container
+										94 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										75 button 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的...
+										76 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous dc6c1e, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									110 container
+										111 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										112 button 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的...
+										113 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-342-trigger, Secondary Actions: Expand
+									114 container
+										115 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										116 button Reply with OK.
+										117 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-348-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18213, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				118 container workspaceMain
+					119 container chatSection
+						120 container Description: Loading task, ID: taskSwitchProgress
+						121 container
+							122 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的...
+							123 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							124 container Description: Not running, ID: taskStatus
+								125 text Not running
+							126 button Side chat
+							127 container solidChatHeaderRuntimeActions
+								128 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								129 checkbox Description: Close right dock, Value: 1
+						130 container
+							131 container Description: Conversation, ID: chatScroll
+								132 container
+									133 container
+										134 text User
+										135 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的键盘行为并附来源，保留各来源差别。不要扩大查询、写文件、创建Task或委托成员。
+									136 container
+										137 text work
+										138 text 17s
+										139 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
+											140 text websearch
+											141 text Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
+											142 image
+										143 container Sources
+											144 button (expanded) Description: Sources: details - 搜索 词典 (5), Help: details - 搜索 词典 5, Secondary Actions: Collapse
+												145 text details - 搜索 词典
+												146 text 5
+											147 link Description: Open web source: details - 搜索 词典, Value: global.bing.com/dict/search?q=details&FORM=BDVSP6&cc=cn
+											148 container
+												149 button (expanded) Description: Source excerpt: details - 搜索 词典, Help: Source excerpt, Secondary Actions: Collapse
+													150 text Source excerpt
+												151 container Source excerpt: details - 搜索 词典
+													152 text 必应词典为您提供details的释义，美 [ˈdiˌteɪl]，英 [ˈdiːteɪl]，n. 详情；详细；细目；琐事； v. 详述；选派 (for to do)；画详图； 网络释 …
+											153 link Description: Open web source: details是什么意思_ details的翻译_音标_读音_用法_例句_爱 ..., Value: iciba.com/word?w=+details
+											154 button (collapsed) Description: Source excerpt: details是什么意思_ details的翻译_音标_读音_用法_例句_爱 ..., Help: Source excerpt, Secondary Actions: Expand
+												155 text Source excerpt
+											156 link Description: Open web source: DETAILS中文 (简体)翻译：剑桥词典 - Cambridge Dictionary, Value: dictionary.cambridge.org/zhs/%E8%AF%8D%E5%85%B8/%E8%8B%B1%E8%AF%AD-%E6%B1%89%E8%AF%AD-%E7%AE%80%E4%BD%93/details
+											157 button (collapsed) Description: Source excerpt: DETAILS中文 (简体)翻译：剑桥词典 - Cambridge Dictionary, Help: Source excerpt, Secondary Actions: Expand
+												158 text Source excerpt
+											159 link Description: Open web source: Details!：全能伤害统计-178魔兽插件站-大脚插件站, Value: wowui.178.com/ui/853
+											160 button (collapsed) Description: Source excerpt: Details!：全能伤害统计-178魔兽插件站-大脚插件站, Help: Source excerpt, Secondary Actions: Expand
+												161 text Source excerpt
+											162 link Description: Open web source: details是什么意思_details怎么读_details翻译_用法_发音 ..., Value: koolearn.com/dict/wd_41825.html
+											163 button (collapsed) Description: Source excerpt: details是什么意思_details怎么读_details翻译_用法_发音 ..., Help: Source excerpt, Secondary Actions: Expand
+												164 text Source excerpt
+										165 container
+											166 text 本次聚焦查询返回五个结果，均为词典或游戏插件页面，没有官方  details / summary  键盘交互资料。因此，无法依据实际结果确认 Tab 聚焦、Enter／空格切换等行为，也无法比较官方来源的差别。唯一可保留的来源差别是：四项解释英文词义，一项介绍游戏插件，均不支持键盘行为结论。按要求未扩大查询。
+										167 container
+											168 text 实际结果示例：
+											169 link Description: 必应词典, Value: global.bing.com/dict/search?q=details&FORM=BDVSP6&cc=cn
+											170 text 、
+											171 link Description: 游戏插件页, Value: wowui.178.com/ui/853
+											172 text 。
+							173 container chatHomeComposition
+								174 container solidChatComposer
+									175 container chatForm
+										176 splitter Description: Drag to resize the message input, Value: 42
+										177 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+										178 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+										179 text Work
+										180 text Chat
+										181 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+										182 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+										183 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+											184 text openai/gpt-6.1-sol
+										185 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+									186 button Scroll to bottom
+					187 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					188 container Description: Tools panel, ID: rightDock
+						189 container tabs-cl-64
+							190 tab group Open tools
+								191 container
+									192 tab (selected, settable, boolean) Description: Side chat, Value: 1, ID: tabs-cl-64-trigger-side-chat
+									193 button Description: Close tab, Help: Close tab (Delete)
+							194 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							195 button Close panel
+							196 container Description: Side chat, ID: centerWorkbenchSideChat
+								197 container Side chat
+									198 pop up button (collapsed) Choose a side chat Side chat 1, ID: select-cl-1587-trigger, Secondary Actions: Expand
+										199 text Side chat 1
+									200 button New side chat
+									201 text Ask about this conversation while the main task keeps working.
+									202 container
+										203 button (expanded) Reference history · 3 messages, Secondary Actions: Collapse
+											204 text Reference history · 3 messages
+										205 container
+											206 text User
+											207 text 请使用现有网页搜索能力，以一个聚焦查询查找官方 details/summary 键盘交互资料，最多五个结果。依据实际结果用约150字中文说明原生折叠控件的键盘行为并附来源，保留各来源差别。不要扩大查询、写文件、创建Task或委托成员。
+										208 container
+											209 text work
+											210 text 8s
+											211 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
+												212 text websearch
+												213 text Web search: site:developer.mozilla.org OR site:html.spec.whatwg.org details summary keyboard interaction Enter Space
+												214 image
+											215 container Sources
+												216 button (collapsed) Description: Sources: details - 搜索 词典 (5), Help: details - 搜索 词典 5, Secondary Actions: Expand
+													217 text details - 搜索 词典
+													218 text 5
+										219 container
+											220 text work
+											221 text 9s
+											222 container
+												223 text 本次聚焦查询返回五个结果，均为词典或游戏插件页面，没有官方  details / summary  键盘交互资料。因此，无法依据实际结果确认 Tab 聚焦、Enter／空格切换等行为，也无法比较官方来源的差别。唯一可保留的来源差别是：四项解释英文词义，一项介绍游戏插件，均不支持键盘行为结论。按要求未扩大查询。
+											224 container
+												225 text 实际结果示例：
+												226 link Description: 必应词典, Value: global.bing.com/dict/search?q=details&FORM=BDVSP6&cc=cn
+												227 text 、
+												228 link Description: 游戏插件页, Value: wowui.178.com/ui/853
+												229 text 。
+										230 container
+											231 text User
+											232 text 请仅根据刚才真实搜索返回了词典/游戏结果、未满足官方资料查询这一过程，写一份来源阅读体验的设计建议，约2000–2500中文字，分八段并附一张简表。讨论如何清楚显示真实来源、摘录、查询意图与结果不匹配、键盘阅读、生成过程、关闭再打开后的上下文、阅读位置和限制说明。区分事实观察与设计建议，不把这些结果当作官方HTML依据。不再搜索或抓取，不写文件，不创建Task或委托成员。
+										233 container
+											234 text chat
+											235 text 59s
+											236 heading 一、先交代证据状态，再让读者进入来源, Value: 3
+											237 heading 二、真实来源应可辨认，但不能被装饰成权威, Value: 3
+											238 heading 三、摘录必须标明层级，避免制造已经阅读全文的印象, Value: 3
+											239 heading 四、把查询意图与结果不匹配具体化，而不是只说失败, Value: 3
+											240 heading 五、键盘阅读的建议属于界面设计，不属于 HTML 行为证据, Value: 3
+											241 heading 六、生成过程应解释证据如何使用，而非展示内部推理, Value: 3
+											242 heading 七、关闭再打开时，应恢复上下文和位置，而不是重新包装结果, Value: 3
+										243 button Quote in main conversation
+									244 container
+										245 text Working…
+										246 button Stop side chat
+
+The focused UI element is 129 checkbox Description: Close right dock, Value: 1

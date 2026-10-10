@@ -1,0 +1,15 @@
+{
+  "observedStart": "2026-10-10T07:03:58.615Z",
+  "observedEnd": "2026-10-10T07:03:59.143Z",
+  "httpStatus": 200,
+  "contentType": "text/event-stream",
+  "resultMeta": {
+    "ai.exa/rateLimited": true
+  },
+  "isError": null,
+  "contentTypes": [
+    "text"
+  ],
+  "bodyChars": 380,
+  "boundary": "Independent unauthenticated public request after original Native ended; explicit rate-limited metadata is current evidence, original Exa response was not retained. Original request cause remains unknown; installed Bing and host adapter retain full query."
+}
