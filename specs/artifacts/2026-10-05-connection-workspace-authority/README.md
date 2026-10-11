@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [实时来源293 Recall](source-live-plan-293.md) / [真实证据](source-live-293/README.md)：原12次流式请求及预算失败、Sources读位保持、限流错误分层显示。
+
 - [Task返回292 Recall](task-return-plan-292.md) / [真实证据](task-return-292/README.md)：工具内部选择与选中变体替换修复，子侧栏成员/跨项目/整Dock阅读保持；原ResearchStudio限制重新核对。
 
 - [来源返回291 Recall](source-return-plan-291.md) / [真实证据](source-return-291/README.md)：按对话持有Sources展开、摘录和侧聊引用读位，跨项目返回实际通过。

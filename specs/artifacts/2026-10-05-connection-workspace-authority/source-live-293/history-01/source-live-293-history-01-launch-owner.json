@@ -1,0 +1,35 @@
+{
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\source-live-293-live-01\\project",
+  "port": 18248,
+  "host": {
+    "pid": 58444,
+    "processInstanceID": "win32:639273086295917100",
+    "occurrenceID": "18a2a19e-65f2-4c82-88ac-8c863856244c"
+  },
+  "evidencePrefix": "source-live-293-history-01",
+  "nativeTarget": {
+    "pid": 70012,
+    "processInstanceID": "win32:639273086303369001",
+    "occurrenceID": "9b83edef-b09b-4ff3-b914-438617302af7"
+  },
+  "observedProcessChain": [
+    {
+      "pid": 70012,
+      "processInstanceID": "win32:639273086303369001",
+      "occurrenceID": "9b83edef-b09b-4ff3-b914-438617302af7"
+    }
+  ],
+  "nativeDeadlineAt": 1791712729514,
+  "authorityStaging": "None; no model Task requested",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-live-293\\history-01",
+  "owner": {
+    "ProcessId": 70012,
+    "processInstanceID": "win32:639273086303369001"
+  },
+  "occurrence": "source-live-293-history-01-5b018a4d-3f03-4284-a91e-f3959b21d363",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\source-live-293-history-01\\runtime",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\source-live-293-history-01\\evidence",
+  "targetBirthAtMs": 1791711830336,
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\source-live-293-history-01",
+  "purpose": "Current credentialless full original history; no Provider or Task rearm"
+}

@@ -133,10 +133,10 @@ function toolPayloadText(value: unknown): string {
   }
 }
 
-function toolFailureMessage(value: unknown): string {
+function toolFailurePresentation(value: unknown): { message: string; diagnostic?: string } {
   const parsed = ToolFailureCause.safeParse(value)
-  if (parsed.success) return renderToolFailureCause(parsed.data)
-  return toolPayloadText(value)
+  if (parsed.success) return { message: parsed.data.message, diagnostic: renderToolFailureCause(parsed.data) }
+  return { message: toolPayloadText(value) }
 }
 
 function hasToolPayloadValue(value: unknown): boolean {
@@ -387,7 +387,8 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     return status() === "completed" ? r : visibleStreamingText(r)
   }
   const output = () => stripAnsi(state().output || "")
-  const error = () => stripAnsi(toolFailureMessage(state().failure) || state().error || "") || output()
+  const failure = createMemo(() => toolFailurePresentation(state().failure))
+  const error = () => stripAnsi(failure().message || state().error || "") || output()
   const key = () => toolNameKey(toolName())
   const readView = createMemo(() => {
     if (status() !== "completed") return null
@@ -641,9 +642,9 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
             <TodoListPart todos={todoItems()!} variant={mode() === "body" ? "card" : "inline"} />
           </Show>
           <Show when={status() === "error" && error()}>
-            <div class="msg-tool-error">
+            <Feedback tone="error" details={failure().diagnostic ? stripAnsi(failure().diagnostic!) : undefined}>
               <StaticTextPart text={error()} />
-            </div>
+            </Feedback>
           </Show>
         </Show>
       </Show>

@@ -1,0 +1,257 @@
+Browser tab: 39, Title: "OpenCorvus", URL: "http://localhost:18248/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18248/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									36 container
+										37 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										38 button 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+										39 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+									40 button (expanded) Description: Collapse Anonymous cd74bf, Secondary Actions: Collapse
+									41 container
+										42 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										43 button Reply with OK.
+										44 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+								45 container Recents
+									46 text Recents
+									47 container
+										48 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										49 button 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+										50 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+									51 container
+										52 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										53 button Reply with OK.
+										54 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						55 container Connection Diagnostics
+							56 container Description: Connection Diagnostics · Online · Port 18248, ID: connBadge
+								57 text Online
+				58 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				59 container chatSection
+					60 container Description: Loading task, ID: taskSwitchProgress
+					61 container
+						62 text 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+						63 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-216-trigger, Secondary Actions: Expand
+						64 container Description: Not running, ID: taskStatus
+							65 text Not running
+						66 button Side chat
+						67 container solidChatHeaderRuntimeActions
+							68 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							69 checkbox Description: Open right dock, Value: 0
+					70 container
+						71 container Description: Conversation, ID: chatScroll
+							72 container
+								198 container
+									199 text User
+									200 text 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使用情境，适当加入短代码例子，清楚区分文档事实与产品设计建议，并保留真实来源。请在当前普通会话直接完成，不修改本地文件，不读取auth/models或任何凭据，不创建Task、成员或委托，也不要发布新项目。
+								76 container
+									77 text work
+									78 button Error details
+									79 text 58s
+									80 container
+										81 text 我会只读查阅 MDN 与 W3C 的公开文档，先核实滚动锚定、焦点管理及引用链接的行为与无障碍要求，再写成六节中文说明，明确区分文档事实和产品设计建议。
+										82 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org scroll anchoring overflow-anchor focus preventScroll
+											83 text websearch
+											84 text Web search: site:developer.mozilla.org scroll anchoring overflow-anchor focus preventScroll
+											85 image
+										86 container Sources
+											87 button (collapsed) Description: Sources: overflow-anchor CSS property - CSS | MDN (5), Help: overflow-anchor CSS property - CSS | MDN 5, Secondary Actions: Expand
+												88 text overflow-anchor CSS property - CSS | MDN
+												89 text 5
+									90 container
+										91 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:w3.org WAI APG dialog modal focus return focus WCAG focus order link purpose focus not obscured
+											92 text websearch
+											93 text Web search: site:w3.org WAI APG dialog modal focus return focus WCAG focus order link purpose focus not obscured
+											94 image
+										95 container Sources
+											96 button (expanded) Description: Sources: Dialog (Modal) Pattern | APG | WAI | W3C (4), Help: Dialog (Modal) Pattern | APG | WAI | W3C 4, Secondary Actions: Collapse
+												97 text Dialog (Modal) Pattern | APG | WAI | W3C
+												98 text 4
+											186 link Description: Open web source: Dialog (Modal) Pattern | APG | WAI | W3C · www.w3.org, Value: w3.org/WAI/ARIA/apg/patterns/dialog-modal/
+											201 container
+												202 button (expanded) Description: Source excerpt: Dialog (Modal) Pattern | APG | WAI | W3C, Help: Source excerpt, Secondary Actions: Collapse
+													203 text Source excerpt
+												204 container Source excerpt: Dialog (Modal) Pattern | APG | WAI | W3C
+													205 text ## About This Pattern
+
+ A dialog is a window overlaid on either the primary window or another dialog window. Windows under a modal dialog are inert. That is, users cannot interact with content outside an active dialog window. Inert content outside an active dialog is typically visually obscured or dimmed so it is difficult to discern, and in some implementations, attempts to interact with the inert content cause the dialog to close.
+
+ Like non-modal dialogs, modal dialogs contain their tab sequence. That is, Tab and Shift + Tab do not move focus outside the dialog. However, unlike most non-modal dialogs, modal dialogs do not provide means for moving keyboard focus outside the dialog window without closing the dialog.
+
+ The alertdialog role is a special-case dialog role designed specifically for dialogs that divert users' attention to a brief, important message. Its usage is described in the Alert Dialog Pattern.
+...
+.
+
+- When a dialog opens, focus moves to an element inside the dialog. See notes below regarding initial focus placement.
+- Tab:
+
+- Moves focus to the next tabbable element inside the dialog.
+- If focus is on the last tabbable element inside the dialog, moves focus to the first tabbable element inside the dialog.
+- Shift + Tab:
+
+- Moves focus to the previous tabbable element inside the dialog.
+- If focus is on the first tabbable element inside the dialog, moves focus to the last tabbable element inside the dialog.
+- Escape: Closes the dialog.
+...
+1. When a dialog opens, focus moves to an element contained in the dialog. Generally, focus is initially set on the first focusable element. However, the most appropriate focus placement will depend on the nature and size of the content. Examples include:
+
+- If the dialog content includes semantic structures, such as ... , tables, or multiple paragraphs, that need to be perceived in ... to easily understand ... content, i ... e., if ... understand when announced ... single unbroken string ... then it is advisable ... add `tabindex="-1"` to a static element at the start of ... content and initially focus that element ... This makes it easier for assistive technology users to read ... content by navigating the semantic structures ... Additionally, it ... omit applying `aria-describedby` to the dialog container
+...
+that focusing the first interactive ... could cause the beginning of content to scroll out of view ... add `tab ... a static element at ... top of the dialog, ... as the dialog title ... first paragraph, and initially focus that element.
+...
+2. When a dialog closes, focus returns to the element that invoked the dialog unless either:
+
+- The invoking element no longer exists. Then, focus is set on another element that provides logical work flow.
+- The work flow design includes the following conditions that can occasionally make focusing a different element a more logical choice:
+
+1. It is very unlikely users need to immediately re-invoke the dialog.
+2. The task completed in the dialog is directly related to a subsequent step in the work flow.
+
+ For example, a grid has an associated toolbar with a button for adding rows. The Add Rows button opens a dialog that prompts for the number of rows. After the dialog closes, focus is placed in the first cell of the first new row.
+3. It is strongly recommended that the tab sequence of all dialogs include a visible element with role `button` that closes the dialog, such as a close icon or cancel button.
+...
+- The element that serves as ... dialog container has a ... of dialog.
+...
+role `dialog`.
+...
+dialog container element has aria-modal set to `true`.
+...
+the aria- ... a visible dialog title
+...
+- A label specified by aria- ... .
+- Optionally, the aria-describedby property is set on the element with the `dialog` role to indicate which element or elements in the dialog contain content that describes the primary purpose or message of the dialog. Specifying descriptive elements enables screen readers to announce the description along with the dialog title and initially focused element when the dialog opens, which is typically helpful only when the descriptive content is simple and can easily be understood without structural information. It is advisable to omit specifying `aria-describedby` if the dialog content includes semantic structures, such as lists, tables, or multiple paragraphs, that need to be perceived in order to easily understand the content, i.e., if the content would be difficult to understand when announced as a single unbroken string.
+...
+- Because marking a dialog modal by setting aria-modal to `true` can prevent users of some assistive technologies from perceiving content outside the dialog, users of those technologies will experience severe negative ramifications if a dialog is marked modal but does not behave as a modal for other users. So, mark a dialog modal only when both:
+
+1. Application code prevents all users from interacting in any way with content outside of it.
+2. Visual styling obscures the content outside of it.
+- The `aria-modal` property introduced by ARIA 1.1 replaces aria-hidden for informing assistive technologies that content outside a dialog is inert. However, in legacy dialog implementations where `aria-hidden` is used to make content outside a dialog inert for assistive technology users, it is important that:
+
+1. `aria-hidden` is set to `true` on each element containing a portion of the inert layer.
+2. The dialog element is not a descendant of any element that has `aria-hidden` set to `true`.
+											189 link Description: Open web source: Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C · www.w3.org, Value: w3.org/WAI/WCAG22/Understanding/focus-order
+											190 button (collapsed) Description: Source excerpt: Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C, Help: Source excerpt, Secondary Actions: Expand
+												191 text Source excerpt
+											192 link Description: Open web source: Modal Dialog Example | APG | WAI | W3C · www.w3.org, Value: w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/dialog/
+											193 button (collapsed) Description: Source excerpt: Modal Dialog Example | APG | WAI | W3C, Help: Source excerpt, Secondary Actions: Expand
+												194 text Source excerpt
+											195 link Value: w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum, Description: Open web source: Understanding Success Criterion 2.4.11: Focus Not Obscured (Minimum) | WAI | W3C · www.w3.org
+											196 button (collapsed) Description: Source excerpt: Understanding Success Criterion 2.4.11: Focus Not Obscured (Minimum) | WAI | W3C, Help: Source excerpt, Secondary Actions: Expand
+												197 text Source excerpt
+										99 button (expanded) Description: websearch · site:developer.mozilla.org HTMLElement focus preventScroll scrollIntoView aria-live, Secondary Actions: Collapse
+											100 text websearch
+											101 text site:developer.mozilla.org HTMLElement focus preventScroll scrollIntoView aria-live
+											102 text 1 failed
+										103 container Input
+											104 text Input
+											105 button Raw Input
+											106 button (collapsed) Description: Expand Input, Secondary Actions: Expand
+											107 button Copy Input
+										108 container
+											109 text ExaMcpFailure: Web search: You've hit Exa's free MCP rate limit. To continue using without limits, create your own Exa API key. Fix: Create API key at
+											110 link Description: https://dashboard.exa.ai/api-keys, Value: dashboard.exa.ai/api-keys
+											111 text  , and then update Exa MCP URL to this
+											112 link Description: https://mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY, Value: mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY
+											113 button (collapsed) Details, Secondary Actions: Expand
+												114 text Details
+									115 container
+										116 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview (text/html)
+											117 text webfetch
+											118 text https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview (text/html)
+											119 image
+										120 container Sources
+											121 link Description: Open web source: Overview of scroll anchoring - CSS | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview
+									122 container
+										123 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus (text/html), Secondary Actions: Expand
+											124 text webfetch
+											125 text https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus (text/html)
+											126 image
+										127 container Sources
+											128 link Description: Open web source: HTMLElement: focus() method - Web APIs | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
+									129 container
+										130 button (collapsed) Description: webfetch · https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ (text/html; charset=utf-8), Secondary Actions: Expand
+											131 text webfetch
+											132 text https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ (text/html; charset=utf-8)
+											133 image
+										134 container Sources
+											135 link Description: Open web source: Dialog (Modal) Pattern | APG | WAI | W3C · www.w3.org, Value: w3.org/WAI/ARIA/apg/patterns/dialog-modal/
+									136 container
+										137 button (collapsed) Description: webfetch · https://www.w3.org/WAI/WCAG22/Understanding/focus-order (text/html; charset=utf-8), Secondary Actions: Expand
+											138 text webfetch
+											139 text https://www.w3.org/WAI/WCAG22/Understanding/focus-order (text/html; charset=utf-8)
+											140 image
+										141 container Sources
+											142 link Description: Open web source: Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C · www.w3.org, Value: w3.org/WAI/WCAG22/Understanding/focus-order
+									143 container
+										144 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum (text/html; charset=utf-8)
+											145 text webfetch
+											146 text https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum (text/html; charset=utf-8)
+											147 image
+										148 container Sources
+											149 link Value: w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum, Description: Open web source: Understanding Success Criterion 2.4.11: Focus Not Obscured (Minimum) | WAI | W3C · www.w3.org
+									150 container
+										151 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context (text/html; charset=utf-8)
+											152 text webfetch
+											153 text https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context (text/html; charset=utf-8)
+											154 image
+										155 container Sources
+											156 link Value: w3.org/WAI/WCAG22/Understanding/link-purpose-in-context, Description: Open web source: Understanding Success Criterion 2.4.4: Link Purpose (In Context) | WAI | W3C · www.w3.org
+									157 container
+										158 text Error details Error: E2E_REQUEST_BUDGET_EXHAUSTED
+									159 button Copy message
+									160 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+									161 pop up button (collapsed) Description: View model usage for this turn: 469K Token, Secondary Actions: Expand
+									162 text Oct 11, 05:36 PM
+						163 container chatHomeComposition
+							164 container solidChatComposer
+								165 container
+									166 text Model configuration unavailable
+									167 text You can still read this conversation. Review the details or choose a model before sending a message.
+									168 button (collapsed) Details, Secondary Actions: Expand
+										169 text Details
+									170 button Retry
+									171 container chatForm
+										172 splitter Description: Drag to resize the message input, Value: 42
+										173 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+										174 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+										175 text Work
+										176 text Chat
+										177 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+										178 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+										179 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+											180 text Choose model
+										181 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+								182 button Scroll to bottom
+
+The focused UI element is 204 container Source excerpt: Dialog (Modal) Pattern | APG | WAI | W3C

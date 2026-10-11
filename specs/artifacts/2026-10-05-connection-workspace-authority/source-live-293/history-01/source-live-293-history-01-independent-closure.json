@@ -1,0 +1,27 @@
+{
+  "occurrence": "source-live-293-history-01-5b018a4d-3f03-4284-a91e-f3959b21d363",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "observedAtUtc": "2026-10-11T09:46:01.9170740Z",
+  "listeners": [],
+  "states": [
+    {
+      "expected": {
+        "pid": 58444,
+        "processInstanceID": "win32:639273086295917100",
+        "occurrenceID": "18a2a19e-65f2-4c82-88ac-8c863856244c"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 70012,
+        "processInstanceID": "win32:639273086303369001",
+        "occurrenceID": "9b83edef-b09b-4ff3-b914-438617302af7"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

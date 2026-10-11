@@ -1,0 +1,105 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18247/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18247/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+										90 image Running
+										91 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous cd74bf, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									92 container
+										93 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										94 button 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+										95 image Running
+										96 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-302-trigger, Secondary Actions: Expand
+									97 container
+										98 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										99 button Reply with OK.
+										100 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-308-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18247, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					77 container
+						78 text 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+						101 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						102 container Description: Running, ID: taskStatus
+							103 text Running
+						79 button Side chat
+						80 container solidChatHeaderRuntimeActions
+							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							82 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							104 container
+								105 container
+									106 text User
+									107 text 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使用情境，适当加入短代码例子，清楚区分文档事实与产品设计建议，并保留真实来源。请在当前普通会话直接完成，不修改本地文件，不读取auth/models或任何凭据，不创建Task、成员或委托，也不要发布新项目。
+								108 container
+									109 text work
+									110 text 11s
+									111 text 我会只读查阅 MDN 与 W3C 的公开文档，先核实滚动锚定、焦点管理及引用链接的行为与无障碍要求，再写成六节中文说明，明确区分文档事实和产品设计建议。
+									112 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org scroll anchoring overflow-anchor focus preventScroll
+										113 text websearch
+										114 text Web search: site:developer.mozilla.org scroll anchoring overflow-anchor focus preventScroll
+										115 image
+									116 container Sources
+										117 button (collapsed) Description: Sources: overflow-anchor CSS property - CSS | MDN (5), Help: overflow-anchor CSS property - CSS | MDN 5, Secondary Actions: Expand
+											118 text overflow-anchor CSS property - CSS | MDN
+											119 text 5
+						43 container chatHomeComposition
+							46 container chatForm
+								47 splitter Description: Drag to resize the message input, Value: 42
+								48 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								49 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								83 text Work
+								84 text Chat
+								85 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+								55 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+									57 text openai/gpt-6.1-sol
+								58 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18247/ui/

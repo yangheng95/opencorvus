@@ -1,0 +1,79 @@
+{
+  "observedAtUtc": "2026-10-11T09:43:31.173Z",
+  "access": "Original readonly BEGIN/ROLLBACK",
+  "rows": [
+    {
+      "attempt_id": "per_h4MJIHOWdQhmDQSerBl4",
+      "request_id": "per_hBiQZ9tOzzJEywcLGwEr",
+      "outcome_id": "per_g0VXjScva00R43x8sxUD",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711444506
+    },
+    {
+      "attempt_id": "per_h565wW2X3JG9TYdVGNhm",
+      "request_id": "per_hewL7jKPiIxSctxpSHdO",
+      "outcome_id": "per_g0VXjSRgp00H0g6cWUos",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711401308
+    },
+    {
+      "attempt_id": "per_h6YJJXTx4DuqWyYtL2Pu",
+      "request_id": "per_hKZq4Jq4ux5iZbPROrcQ",
+      "outcome_id": "per_g0VXjSUD700W9uhkq2X3",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711410997
+    },
+    {
+      "attempt_id": "per_h7YnJv82s3GH5DntSr5s",
+      "request_id": "per_hN6XdURQetfIBKIlH3q1",
+      "outcome_id": "per_g0VXjSVKH00f5KoJZ9ag",
+      "outcome": "execution_failed",
+      "reason": "ExaMcpFailure: ExaMcpFailure: Web search: You've hit Exa's free MCP rate limit. To continue using without limits, create your own Exa API key.\n\nFix: Create API key at https://dashboard.exa.ai/api-keys , and then update Exa MCP URL to this https://mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY",
+      "result_at": null
+    },
+    {
+      "attempt_id": "per_hFGFcoQVAAQJFLQIXAXy",
+      "request_id": "per_hjBWUrp2evae26j8F9C5",
+      "outcome_id": "per_g0VXjSWYo00RgiexR6lk",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711420030
+    },
+    {
+      "attempt_id": "per_hKXlvrOjRLjhiZ7z5wB0",
+      "request_id": "per_hwFWPf0AnOz6HSczTl0M",
+      "outcome_id": "per_g0VXjSeEy004h4kUqc1H",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711449552
+    },
+    {
+      "attempt_id": "per_hQzFamCVXzDsAVLxIdGS",
+      "request_id": "per_h31DOQyNmskWBHc8NQ9k",
+      "outcome_id": "per_g0VXjSZ8800QTCqQCN36",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711429908
+    },
+    {
+      "attempt_id": "per_hScawheA2yQPw1WITstM",
+      "request_id": "per_h42GGeH00f9QWObWEA31",
+      "outcome_id": "per_g0VXjSbXp00wy34JQ4q0",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711439189
+    },
+    {
+      "attempt_id": "per_hr6a9NTt0OdEu4rLVeot",
+      "request_id": "per_hGeBoGsl0iLrljw4uhkh",
+      "outcome_id": "per_g0VXjSaGg00R5k3fvsEh",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791711434283
+    }
+  ],
+  "contract": "permission/authority.ts completeExecution persists successful result; catch appendEffectOutcome persists execution_failed with original reason and retires effect lease. Failed execution is a terminal outcome, not a successful result."
+}

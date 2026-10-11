@@ -1,0 +1,224 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18247/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18247/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+										91 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous cd74bf, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									189 container
+										190 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										191 button 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+										192 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-580-trigger, Secondary Actions: Expand
+									193 container
+										194 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										195 button Reply with OK.
+										196 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-586-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18247, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					77 container
+						78 text 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使...
+						101 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						102 container Description: Not running, ID: taskStatus
+							103 text Not running
+						79 button Side chat
+						80 container solidChatHeaderRuntimeActions
+							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							82 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							104 container
+								290 container
+									291 text User
+									292 text 请只读查询 MDN 和 W3C 的公开资料，解释长对话页面里的滚动锚定、键盘焦点和引用来源阅读如何协作。用中文写六节、约2000–2400字，每节有具体使用情境，适当加入短代码例子，清楚区分文档事实与产品设计建议，并保留真实来源。请在当前普通会话直接完成，不修改本地文件，不读取auth/models或任何凭据，不创建Task、成员或委托，也不要发布新项目。
+								197 container
+									198 text work
+									199 button Error details
+									200 text 58s
+									201 container
+										202 text 我会只读查阅 MDN 与 W3C 的公开文档，先核实滚动锚定、焦点管理及引用链接的行为与无障碍要求，再写成六节中文说明，明确区分文档事实和产品设计建议。
+										203 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org scroll anchoring overflow-anchor focus preventScroll
+											204 text websearch
+											205 text Web search: site:developer.mozilla.org scroll anchoring overflow-anchor focus preventScroll
+											206 image
+										207 container Sources
+											208 button (expanded) Description: Sources: overflow-anchor CSS property - CSS | MDN (5), Help: overflow-anchor CSS property - CSS | MDN 5, Secondary Actions: Collapse
+												209 text overflow-anchor CSS property - CSS | MDN
+												210 text 5
+											211 link Description: Open web source: overflow-anchor CSS property - CSS | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow-anchor
+											212 container
+												213 button (expanded) Description: Source excerpt: overflow-anchor CSS property - CSS | MDN, Help: Source excerpt, Secondary Actions: Collapse
+													214 text Source excerpt
+												215 container Source excerpt: overflow-anchor CSS property - CSS | MDN
+													216 text - See full
+...
+The `overflow-anchor` CSS property provides a way to opt out of the browser's scroll anchoring behavior, which adjusts scroll position to minimize content shifts.
+
+Scroll anchoring behavior is enabled by default in any browser that supports it. Therefore, changing the value of this property is typically only required if you are experiencing problems with scroll anchoring in a document or part of a document and need to turn the behavior off.
+...
+This property is specified as one of the following keyword values:
+
+`auto`
+: The element becomes a potential anchor when adjusting scroll position.
+`none`
+: The element won't be selected as a potential anchor.
+...
+### Prevent scroll anchoring
+
+To prevent scroll anchoring in a document, use the `overflow-anchor` property.
+
+```
+* {
+  overflow-anchor: none;
+}
+
+```
+											217 link Description: Open web source: Overview of scroll anchoring - CSS | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview
+											218 button (collapsed) Description: Source excerpt: Overview of scroll anchoring - CSS | MDN, Help: Source excerpt, Secondary Actions: Expand
+												219 text Source excerpt
+											220 link Description: Open web source: CSS scroll anchoring - CSS | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring
+											221 button (collapsed) Description: Source excerpt: CSS scroll anchoring - CSS | MDN, Help: Source excerpt, Secondary Actions: Expand
+												222 text Source excerpt
+											223 link Description: Open web source: overflow CSS property - MDN Web Docs · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow
+											224 button (collapsed) Description: Source excerpt: overflow CSS property - MDN Web Docs, Help: Source excerpt, Secondary Actions: Expand
+												225 text Source excerpt
+											226 link Description: Open web source: CSS overflow - CSS | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/CSS/Guides/Overflow
+											227 button (collapsed) Description: Source excerpt: CSS overflow - CSS | MDN, Help: Source excerpt, Secondary Actions: Expand
+												228 text Source excerpt
+									229 container
+										230 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:w3.org WAI APG dialog modal focus return focus WCAG focus order link purpose focus not obscured
+											231 text websearch
+											232 text Web search: site:w3.org WAI APG dialog modal focus return focus WCAG focus order link purpose focus not obscured
+											233 image
+										234 container Sources
+											235 button (collapsed) Description: Sources: Dialog (Modal) Pattern | APG | WAI | W3C (4), Help: Dialog (Modal) Pattern | APG | WAI | W3C 4, Secondary Actions: Expand
+												236 text Dialog (Modal) Pattern | APG | WAI | W3C
+												237 text 4
+										238 button (expanded) Description: websearch · site:developer.mozilla.org HTMLElement focus preventScroll scrollIntoView aria-live, Secondary Actions: Collapse
+											239 text websearch
+											240 text site:developer.mozilla.org HTMLElement focus preventScroll scrollIntoView aria-live
+											241 text 1 failed
+										293 container Input
+											294 text Input
+											295 button Raw Input
+											296 button (collapsed) Description: Expand Input, Secondary Actions: Expand
+											297 button Copy Input
+										298 text tool-execution/ExaMcpFailure at session.processor.tool-error: ExaMcpFailure: Web search: You've hit Exa's free MCP rate limit. To continue using without limits, create your own Exa API key.
+										299 container
+											300 text Fix: Create API key at
+											301 link Description: https://dashboard.exa.ai/api-keys, Value: dashboard.exa.ai/api-keys
+											302 text  , and then update Exa MCP URL to this
+											303 link Description: https://mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY, Value: mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY
+											304 text ; data={"toolCallId":"call_dd113058e6f44b42aa87b64eff9108a8","toolName":"websearch","canonical_error_metadata":{"code":"rate_limited","toolName":"web_search_exa","result":{"_meta":{"ai.exa/rateLimited":true},"content":[{"type":"text","text":"You've hit Exa's free MCP rate limit. To continue using without limits, create your own Exa API key.\n\nFix: Create API key at
+											305 link Description: https://dashboard.exa.ai/api-keys, Value: dashboard.exa.ai/api-keys
+											306 text  , and then update Exa MCP URL to this
+											307 link Description: https://mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY, Value: mcp.exa.ai/mcp?exaApiKey=YOUR_EXA_API_KEY
+											308 text "}]}}}
+									242 container
+										243 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview (text/html)
+											244 text webfetch
+											245 text https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview (text/html)
+											246 image
+										247 container Sources
+											248 link Description: Open web source: Overview of scroll anchoring - CSS | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview
+									249 container
+										250 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus (text/html), Secondary Actions: Expand
+											251 text webfetch
+											252 text https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus (text/html)
+											253 image
+										254 container Sources
+											255 link Description: Open web source: HTMLElement: focus() method - Web APIs | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
+									256 container
+										257 button (collapsed) Description: webfetch · https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ (text/html; charset=utf-8), Secondary Actions: Expand
+											258 text webfetch
+											259 text https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/ (text/html; charset=utf-8)
+											260 image
+										261 container Sources
+											262 link Description: Open web source: Dialog (Modal) Pattern | APG | WAI | W3C · www.w3.org, Value: w3.org/WAI/ARIA/apg/patterns/dialog-modal/
+									263 container
+										264 button (collapsed) Description: webfetch · https://www.w3.org/WAI/WCAG22/Understanding/focus-order (text/html; charset=utf-8), Secondary Actions: Expand
+											265 text webfetch
+											266 text https://www.w3.org/WAI/WCAG22/Understanding/focus-order (text/html; charset=utf-8)
+											267 image
+										268 container Sources
+											269 link Description: Open web source: Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C · www.w3.org, Value: w3.org/WAI/WCAG22/Understanding/focus-order
+									270 container
+										271 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum (text/html; charset=utf-8)
+											272 text webfetch
+											273 text https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum (text/html; charset=utf-8)
+											274 image
+										275 container Sources
+											276 link Value: w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum, Description: Open web source: Understanding Success Criterion 2.4.11: Focus Not Obscured (Minimum) | WAI | W3C · www.w3.org
+									277 container
+										278 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context (text/html; charset=utf-8)
+											279 text webfetch
+											280 text https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context (text/html; charset=utf-8)
+											281 image
+										282 container Sources
+											283 link Value: w3.org/WAI/WCAG22/Understanding/link-purpose-in-context, Description: Open web source: Understanding Success Criterion 2.4.4: Link Purpose (In Context) | WAI | W3C · www.w3.org
+									284 container
+										285 text Error details Error: E2E_REQUEST_BUDGET_EXHAUSTED
+									286 button Copy message
+									287 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+									288 pop up button (collapsed) Description: View model usage for this turn: 469K Token, Secondary Actions: Expand
+									289 text Oct 11, 05:36 PM
+						43 container chatHomeComposition
+							139 container solidChatComposer
+								140 container chatForm
+									141 splitter Description: Drag to resize the message input, Value: 42
+									142 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									143 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									144 text Work
+									145 text Chat
+									146 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									147 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									148 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										149 text openai/gpt-6.1-sol
+									150 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+								151 button Scroll to bottom
+
+The focused UI element is 238 button (expanded) Description: websearch · site:developer.mozilla.org HTMLElement focus preventScroll scrollIntoView aria-live, Secondary Actions: Collapse
