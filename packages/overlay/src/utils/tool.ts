@@ -3,6 +3,7 @@
 
 import type { IconName } from "../components/ui/Icon"
 import { t } from "./i18n"
+import { ToolFailureCause, renderToolFailureCause } from "@opencorvus-ai/transport-protocol"
 
 // ── ANSI stripping ──
 
@@ -21,6 +22,24 @@ export function stripAnsi(str: string): string {
 
 function record(value: any): boolean {
   return !!value && typeof value === "object" && !Array.isArray(value)
+}
+
+export function toolPayloadText(value: unknown): string {
+  if (typeof value === "string") return value
+  if (value === undefined) return ""
+  try {
+    return JSON.stringify(value, null, 2) ?? String(value)
+  } catch {
+    return String(value)
+  }
+}
+
+/** The summary and expanded body read the same canonical failure. */
+export function toolFailurePresentation(value: unknown): { message: string; diagnostic?: string } {
+  if (value === undefined) return { message: "" }
+  const parsed = ToolFailureCause.safeParse(value)
+  if (parsed.success) return { message: parsed.data.message, diagnostic: renderToolFailureCause(parsed.data) }
+  return { message: toolPayloadText(value) }
 }
 
 function stableClone(value: unknown): unknown {
@@ -368,6 +387,8 @@ export function normalizeToolStatus(status: unknown): ToolDisplayStatus | undefi
 export function displayToolDetail(name: string, input: any, state: any, base = ""): string {
   const safeInput = record(input) ? input : {}
   const safeState = record(state) ? state : {}
+  const failure = toolFailurePresentation((safeState as any).failure).message || shortValue((safeState as any).error)
+  if (failure) return singleLine(failure)
   const n = toolNameKey(name)
   if (n === "dispatchagent") {
     const dispatch = record((safeInput as any).dispatch) ? (safeInput as any).dispatch : {}
@@ -441,10 +462,8 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
   )
     return (safeState as any).title
   // Generic detail extraction for tools outside the named handlers.
-  // Error text wins over raw output because failures must be visible at a
-  // glance; string input fields are used only when no result text exists.
-  const errorText = shortValue((safeState as any).error)
-  if (errorText) return errorText
+  // Failures have already supplied their canonical message above; successful
+  // result text takes precedence over generic input fields.
   const outputText = shortValue((safeState as any).output)
   if (outputText) return outputText
   for (const value of Object.values(safeInput)) {

@@ -1,0 +1,68 @@
+{
+  "chain": [
+    {
+      "expected": {
+        "pid": 48512,
+        "processInstanceID": "win32:639273185007246268",
+        "occurrenceID": "513ee93a-6ad0-4c75-a142-6cc861d4d2a0"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 59472,
+        "processInstanceID": "win32:639273184999757417",
+        "occurrenceID": "37007d6c-51b3-4a51-b33d-0cf07424454f"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "observedAtUtc": "2026-10-11T12:31:57.9620219Z",
+  "listeners": null,
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\tool-failure-299-history-01\\runtime\\data\\auth.json",
+      "outcome": "already_absent",
+      "presentAfter": false
+    },
+    {
+      "copiedLength": 2001983,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\tool-failure-299-history-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "tool-failure-299-history-01-c4f08b83-64c0-4ed9-9530-146949d83516",
+    "outcome": "settled",
+    "host": {
+      "pid": 59472,
+      "processInstanceID": "win32:639273184999757417",
+      "occurrenceID": "37007d6c-51b3-4a51-b33d-0cf07424454f"
+    },
+    "target": {
+      "pid": 48512,
+      "processInstanceID": "win32:639273185007246268",
+      "occurrenceID": "513ee93a-6ad0-4c75-a142-6cc861d4d2a0"
+    },
+    "observedAtUtc": "2026-10-11T12:31:55.354Z",
+    "deadlineAt": 1791722599901,
+    "terminal": {
+      "occurrenceID": "tool-failure-299-history-01-c4f08b83-64c0-4ed9-9530-146949d83516",
+      "pid": 48512,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "tool-failure-299-history-01-c4f08b83-64c0-4ed9-9530-146949d83516",
+  "pairedCleanupComplete": true
+}

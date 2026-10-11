@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [工具失败摘要299 Recall](tool-failure-plan-299.md) / [真实证据](tool-failure-299/README.md)：修复结构化失败摘要漏读及误显示输入格式，完整原历史复核。
+
 - [子侧栏实时298 Recall](live-child-plan-298.md) / [真实证据](live-child-298/README.md)：真实Task及来源观察完成，诊断全部撤除，无推测性补丁。
 
 - [会话点击297 Recall](activation-plan-297.md) / [真实证据](activation-297/README.md)：滚动时的命中抑制导致点击落背景；恢复交互行原生点击。

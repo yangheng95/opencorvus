@@ -600,7 +600,11 @@ failure message remains visible and keeps its existing Markdown links; the full
 shared diagnostic, including classification, origin and structured data, belongs
 to the native Details disclosure. The Overlay does not rewrite the failure or
 repeat its diagnostic envelope as the primary message. Unstructured errors keep
-their complete existing message. Sources and tool inputs retain their own controls.
+their complete existing message. Collapsed execution rows, expanded Tool headers,
+activity summaries and session chips use the same failure-message projection as
+the body, before selecting input or result descriptions. Arguments and full
+diagnostics remain available in the existing disclosures. Sources and tool inputs
+retain their own controls.
 Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position.
 A single source is a directly available citation with its complete readable

@@ -1,0 +1,221 @@
+{
+  "observedAtUtc": "2026-10-11T12:33:47.996Z",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project",
+  "taskID": "tsk_g00VXk62Kd009TdxRiqF",
+  "head": "f45c87ed241d83e043784f3712c1b8a7f23364f3",
+  "index": [
+    "100644 42fdeb2f52db9d1845188ac151e4991bd66f5d92 0\t.gitattributes",
+    "100644 d6e3f6bd7bf1c1af01941aedb4babbdd0a87eafd 0\t.gitignore",
+    "100644 27c7a06d435760c2187cfa405bee58e2528cebe1 0\t.opencorvus/opencorvus.jsonc",
+    "100644 34fb713629ac11020fd44a4449d7b5e1799ae646 0\tREADME.md"
+  ],
+  "tree": [
+    "100644 blob 42fdeb2f52db9d1845188ac151e4991bd66f5d92\t.gitattributes",
+    "100644 blob d6e3f6bd7bf1c1af01941aedb4babbdd0a87eafd\t.gitignore",
+    "100644 blob 27c7a06d435760c2187cfa405bee58e2528cebe1\t.opencorvus/opencorvus.jsonc",
+    "100644 blob 34fb713629ac11020fd44a4449d7b5e1799ae646\tREADME.md"
+  ],
+  "status": "",
+  "checkpoints": [
+    {
+      "id": "art_hvQ551vO5oUomfNz5krL",
+      "task_id": "tsk_g00VXk62Kd009TdxRiqF",
+      "stage": "baseline",
+      "requested_at": 1791720837880,
+      "result": {
+        "mode": "created_commit",
+        "branch": "main",
+        "commit": "f45c87ed241d83e043784f3712c1b8a7f23364f3",
+        "message": "Checkpoint before 来源与长正文实时体验核验",
+        "head_before": "4ad3e06f8e8e1f117add4c3b2d25ea7525668c70",
+        "repositories": [
+          {
+            "path": ".",
+            "depth": 0,
+            "ref": "refs/heads/main",
+            "mode": "created_commit",
+            "commit": "f45c87ed241d83e043784f3712c1b8a7f23364f3",
+            "tree": "c296dda0f5281f1df3e3b6aafe22b9d21a6d160c",
+            "message": "Checkpoint before 来源与长正文实时体验核验",
+            "head_before": "4ad3e06f8e8e1f117add4c3b2d25ea7525668c70",
+            "dirty": true,
+            "authority": {
+              "workspace": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project",
+              "git_marker_kind": "directory",
+              "git_marker_realpath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git",
+              "git_dir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git",
+              "common_dir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git",
+              "index_path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git\\index",
+              "object_format": "sha1",
+              "ref": "refs/heads/main"
+            },
+            "receipt": {
+              "snapshot_path_count": 4,
+              "index_entry_count": 4,
+              "regular_file_count": 4,
+              "symlink_count": 0,
+              "gitlink_count": 0,
+              "missing_path_count": 0,
+              "directory_path_count": 0,
+              "raw_blob_count": 4,
+              "raw_byte_count": 1616,
+              "blob_import_process_count": 1,
+              "index_import_process_count": 1,
+              "phase_ms": {
+                "enumeration": 494.7545000000391,
+                "inspection": 0.682799999951385,
+                "blob_import": 282.35470000002533,
+                "index_projection": 130.24710000003688,
+                "tree_and_commit": 452.56339999998454,
+                "apply": 1.0133999999961816
+              }
+            }
+          }
+        ],
+        "checkpoint_receipt": {
+          "task_id": "tsk_g00VXk62Kd009TdxRiqF",
+          "checkpoint_stage": "baseline",
+          "repository_count": 1,
+          "snapshot_path_count": 4,
+          "regular_file_count": 4,
+          "symlink_count": 0,
+          "gitlink_count": 0,
+          "missing_path_count": 0,
+          "raw_blob_count": 4,
+          "raw_byte_count": 1616,
+          "blob_import_process_count": 1,
+          "index_import_process_count": 1,
+          "checkpoint_git_process_launch_count": 20,
+          "object_formats": [
+            "sha1"
+          ],
+          "queue_wait_ms": 12.670899999968242,
+          "active_checkpoint_ms": 2450.560600000026,
+          "outcome": "success",
+          "command_counts": {
+            "cat-file": 1,
+            "commit-tree": 1,
+            "fast-import": 1,
+            "ls-files": 5,
+            "read-tree": 1,
+            "rev-parse": 6,
+            "symbolic-ref": 2,
+            "update-index": 1,
+            "update-ref": 1,
+            "write-tree": 1
+          }
+        },
+        "snapshot": "c296dda0f5281f1df3e3b6aafe22b9d21a6d160c",
+        "workspace_tree_sha256": "12498d372bb71ea2ed6b1cb1390727297daf4ee62dd3242f75a6003bc80286a1",
+        "dirty": true,
+        "staged": 0,
+        "modified": 1,
+        "untracked": 0,
+        "conflicts": 0,
+        "ahead": 0,
+        "behind": 0,
+        "time": 1791720840345
+      },
+      "completed_at": 1791720840346
+    },
+    {
+      "id": "art_hPKqy6e0KNwGGp1pvCeZ",
+      "task_id": "tsk_g00VXk62Kd009TdxRiqF",
+      "stage": "result",
+      "requested_at": 1791720974394,
+      "result": {
+        "mode": "recorded_head",
+        "branch": "main",
+        "commit": "f45c87ed241d83e043784f3712c1b8a7f23364f3",
+        "message": "Checkpoint before 来源与长正文实时体验核验",
+        "head_before": "f45c87ed241d83e043784f3712c1b8a7f23364f3",
+        "repositories": [
+          {
+            "path": ".",
+            "depth": 0,
+            "ref": "refs/heads/main",
+            "mode": "recorded_head",
+            "commit": "f45c87ed241d83e043784f3712c1b8a7f23364f3",
+            "tree": "c296dda0f5281f1df3e3b6aafe22b9d21a6d160c",
+            "message": "Checkpoint before 来源与长正文实时体验核验",
+            "head_before": "f45c87ed241d83e043784f3712c1b8a7f23364f3",
+            "dirty": false,
+            "authority": {
+              "workspace": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project",
+              "git_marker_kind": "directory",
+              "git_marker_realpath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git",
+              "git_dir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git",
+              "common_dir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git",
+              "index_path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project\\.git\\index",
+              "object_format": "sha1",
+              "ref": "refs/heads/main"
+            },
+            "receipt": {
+              "snapshot_path_count": 4,
+              "index_entry_count": 4,
+              "regular_file_count": 4,
+              "symlink_count": 0,
+              "gitlink_count": 0,
+              "missing_path_count": 0,
+              "directory_path_count": 0,
+              "raw_blob_count": 4,
+              "raw_byte_count": 1616,
+              "blob_import_process_count": 1,
+              "index_import_process_count": 1,
+              "phase_ms": {
+                "enumeration": 542.8880999999819,
+                "inspection": 0.7553000000189058,
+                "blob_import": 299.6842999999644,
+                "index_projection": 179.93969999998808,
+                "tree_and_commit": 252.6982999999891,
+                "apply": 0
+              }
+            }
+          }
+        ],
+        "checkpoint_receipt": {
+          "task_id": "tsk_g00VXk62Kd009TdxRiqF",
+          "checkpoint_stage": "result",
+          "repository_count": 1,
+          "snapshot_path_count": 4,
+          "regular_file_count": 4,
+          "symlink_count": 0,
+          "gitlink_count": 0,
+          "missing_path_count": 0,
+          "raw_blob_count": 4,
+          "raw_byte_count": 1616,
+          "blob_import_process_count": 1,
+          "index_import_process_count": 1,
+          "checkpoint_git_process_launch_count": 14,
+          "object_formats": [
+            "sha1"
+          ],
+          "queue_wait_ms": 15.62380000000121,
+          "active_checkpoint_ms": 1831.0056999999797,
+          "outcome": "success",
+          "command_counts": {
+            "cat-file": 1,
+            "fast-import": 1,
+            "log": 1,
+            "ls-files": 4,
+            "read-tree": 1,
+            "rev-parse": 2,
+            "symbolic-ref": 2,
+            "update-index": 1,
+            "write-tree": 1
+          }
+        },
+        "dirty": false,
+        "staged": 0,
+        "modified": 0,
+        "untracked": 0,
+        "conflicts": 0,
+        "ahead": 0,
+        "behind": 0,
+        "time": 1791720976244
+      },
+      "completed_at": 1791720976244
+    }
+  ],
+  "boundary": "Current real immutable Git tree/index and original canonical Task checkpoints; no timestamp restoration and no expected source checksum."
+}

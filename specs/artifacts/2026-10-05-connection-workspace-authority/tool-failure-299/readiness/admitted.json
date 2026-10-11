@@ -1,0 +1,32 @@
+{
+  "startupQualified": true,
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-11/live-child-298-live-01",
+  "selectedSubject": {
+    "sessionID": "ses_-zUSFtxYVzzl0HrpVQeK",
+    "projectID": "prj_henwry6SsjtljpGkako9",
+    "requestID": "29c0a3dc-c763-41b8-b12d-f6904883dcc5",
+    "id": "tsk_g00VXk62Kd009TdxRiqF",
+    "kind": "task"
+  },
+  "observedAtUtc": "2026-10-11T12:28:07.0139675Z",
+  "runtimeLeaseStates": [
+    {
+      "expected": {
+        "pid": 49988,
+        "processInstanceID": "win32:639273173159528200",
+        "occurrenceID": "82fc693b-c12c-484f-9827-2794001c98cf"
+      },
+      "lease": {
+        "id": "act_g0VXk4int00aspSGzZWt",
+        "target": "runtime_process",
+        "target_id": "82fc693b-c12c-484f-9827-2794001c98cf",
+        "owner_occurrence_id": "{\"pid\":49988,\"processInstanceID\":\"win32:639273173159528200\",\"occurrenceID\":\"82fc693b-c12c-484f-9827-2794001c98cf\"}",
+        "time_activated": 1791720523556,
+        "expires_at": 9007199254740991
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "review": "Fresh299 original298 completed Task epoch1; exact native/actual original exec98045 completion; complete current schema/dispatch/permission/control/recovery/ingress/ProjectMemory/configuration observations admitted. No credential staging or new Task. Root visual acceptance remains required.",
+  "sourceOccurrence": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171"
+}

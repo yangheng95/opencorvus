@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具失败摘要299](records/2026-10/2026-10-11-tool-failure-299.md)：共享结构化failure展示，修复404行误显示markdown，真实原Task复核。
+
 - [子侧栏实时298](records/2026-10/2026-10-11-live-child-298.md)：真实来源与正文生成观察，Provider/Task闭合；保留采样上限与原闪烁待查边界。
 
 - [会话点击297](records/2026-10/2026-10-11-activation-297.md)：真实事件确定滚动时的命中抑制，修复已呈现行的Open/工具/来源交互。

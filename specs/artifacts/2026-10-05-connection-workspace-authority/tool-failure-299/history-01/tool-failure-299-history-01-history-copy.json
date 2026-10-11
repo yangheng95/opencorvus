@@ -1,0 +1,491 @@
+{
+  "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\tool-failure-299-history-01",
+  "sourceOccurrence": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171",
+  "startupQualified": true,
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 78672,
+        "processInstanceID": "win32:639273173151653004",
+        "occurrenceID": "eea789c5-e980-42aa-a7c9-d826d757154d"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 49988,
+        "processInstanceID": "win32:639273173159528200",
+        "occurrenceID": "0d74da7f-1e5e-49b3-827d-e4264b70cbdb"
+      }
+    }
+  ],
+  "completeRows": {
+    "access": "Both complete readonly transactions; direct all stored row-content equality, no hashes",
+    "tableRows": [
+      {
+        "table": "automation",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_definition_tombstone",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_delay_settlement",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_fire",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_fire_attempt",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_fire_attempt_receipt",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_fire_frontier",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_project_target",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_run",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "automation_run_receipt",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "bus_publication_attempt_receipt",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "bus_publication_delivery",
+        "rows": 660,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "bus_publication_delivery_receipt",
+        "rows": 660,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "bus_publication_outbox",
+        "rows": 90,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "bus_publication_phase_receipt",
+        "rows": 270,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "channel_ingress_accepted",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "channel_ingress_outcome",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "control_account",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "database_authority",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "decision_log",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_artifact",
+        "rows": 7,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_artifact_catalog_revision",
+        "rows": 7,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_artifact_version",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_browser_preview_target_identity",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_build_observation_cleanup",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_build_observation_cleanup_receipt",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_channel_binding",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "rows": 674,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "rows": 675,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_git_checkpoint_outcome",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_git_checkpoint_request",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_goal",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_interaction_outcome",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_interaction_request",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_metric_result",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_metric_spec",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_progress_snapshot",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_task",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_task_creation_contract",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_task_root_ingress",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_task_root_ingress_policy",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_task_wait_registration",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "engine_task_wait_settlement",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "event_job",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "event_job_definition_tombstone",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "event_job_fire",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "event_job_fire_receipt",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "event_occurrence",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "global_creation_allocation",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "interactive_artifact",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_chunk",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_embedding",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_file",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_fts",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_fts_config",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_fts_content",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_fts_data",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_fts_docsize",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "memory_fts_idx",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "message",
+        "rows": 13,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "part",
+        "rows": 40,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "permission_execution_result",
+        "rows": 8,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "permission_ledger",
+        "rows": 44,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "permission_policy",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "project",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "project_directory_admission",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "project_maintenance_fence",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "protocol_delivery_receipt",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "protocol_event",
+        "rows": 40,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "protocol_inbox",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "provider_activity_outcome",
+        "rows": 11,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "provider_activity_request",
+        "rows": 11,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "provider_usage_event",
+        "rows": 13,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "quick_note",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "runtime_execution_capacity_lease",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "session",
+        "rows": 4,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "session_control_event",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "session_control_record",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "session_prompt_owner",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "session_share",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "task_plan",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "todo",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "todo_snapshot",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "tool_part_outcome",
+        "rows": 9,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "tool_part_progress",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "tool_part_request",
+        "rows": 9,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "workbench_brief_snapshot",
+        "rows": 2,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "worker_turn_descriptor",
+        "rows": 1,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "workspace",
+        "rows": 0,
+        "fullRowContent": "equal"
+      },
+      {
+        "table": "workspace_lifecycle_admission",
+        "rows": 0,
+        "fullRowContent": "equal"
+      }
+    ],
+    "subject": {
+      "kind": "task",
+      "id": "tsk_g00VXk62Kd009TdxRiqF",
+      "projectID": "prj_henwry6SsjtljpGkako9",
+      "sessionID": "ses_-zUSFtxYVzzl0HrpVQeK",
+      "requestID": "29c0a3dc-c763-41b8-b12d-f6904883dcc5"
+    }
+  },
+  "port": 18259,
+  "credentialStaging": "None; original source/runtime/project retained",
+  "observedAtUtc": "2026-10-11T12:28:09.2711522Z",
+  "manifest": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\tool-failure-299\\manifest.json",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project"
+}

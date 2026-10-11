@@ -1,0 +1,13 @@
+35 |     const added = after.filter(entry => !prior.has(entry.path))
+36 |     const removed = project.inventory.filter((entry: any) => !current.has(entry.path))
+37 |     const changed = after.filter(entry => prior.has(entry.path) && JSON.stringify(prior.get(entry.path)) !== JSON.stringify(entry)).map(entry => ({ before: prior.get(entry.path) as any, after: entry }))
+38 |     const gitDirectory = path.resolve(project.worktree, ".git")
+39 |     const inspectedGitDirectoryTimeOnly = changed.every(change => path.resolve(change.after.path) === gitDirectory && change.before.type === "directory" && change.after.type === "directory" && JSON.stringify({ ...change.before, mtimeMs: 0 }) === JSON.stringify({ ...change.after, mtimeMs: 0 }))
+40 |     if (added.length || removed.length || !inspectedGitDirectoryTimeOnly) throw Error(`Unreviewed original Project properties changed: ${project.id}`)
+                                                                                     ^
+error: Unreviewed original Project properties changed: prj_henwry6SsjtljpGkako9
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\task-return-292\final-custody.ts:40:81)
+      at map (1:11)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\task-return-292\final-custody.ts:31:36
+
+Bun v1.3.14 (Windows x64)

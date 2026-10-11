@@ -1,7 +1,14 @@
 import { createMemo, createResource, For, Show } from "solid-js"
 import { ChangeLineStats, DiffView, changeStatusLabel } from "./DiffView"
 import { summarizeFileChanges } from "../services/diff"
-import { describeToolCall, displayToolDetail, toolNameKey, stripAnsi } from "../utils/tool"
+import {
+  describeToolCall,
+  displayToolDetail,
+  toolNameKey,
+  stripAnsi,
+  toolFailurePresentation,
+  toolPayloadText,
+} from "../utils/tool"
 import { extToLang, renderCodeBlock } from "../utils/markdown"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { TodoListPart, extractTodos } from "./TodoListPart"
@@ -26,11 +33,7 @@ import { Feedback } from "./ui/Feedback"
 import { t, tc } from "../utils/i18n"
 import { ComputerControlSurface } from "./ComputerControlSurface"
 import { ToolPayload } from "./ToolPayload"
-import {
-  conversationDeferredToolState,
-  ToolFailureCause,
-  renderToolFailureCause,
-} from "@opencorvus-ai/transport-protocol"
+import { conversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
 
 // Same tool-kind sets used to drive code rendering below.
 const FILE_WRITE_TOOLS = new Set(["write", "writefile"])
@@ -121,22 +124,6 @@ function readDeferredToolPart(source: DeferredToolPartSource): Promise<any> {
 
 function isRecord(value: unknown): value is Record<string, any> {
   return !!value && typeof value === "object" && !Array.isArray(value)
-}
-
-function toolPayloadText(value: unknown): string {
-  if (typeof value === "string") return value
-  if (value === undefined) return ""
-  try {
-    return JSON.stringify(value, null, 2) ?? String(value)
-  } catch {
-    return String(value)
-  }
-}
-
-function toolFailurePresentation(value: unknown): { message: string; diagnostic?: string } {
-  const parsed = ToolFailureCause.safeParse(value)
-  if (parsed.success) return { message: parsed.data.message, diagnostic: renderToolFailureCause(parsed.data) }
-  return { message: toolPayloadText(value) }
 }
 
 function hasToolPayloadValue(value: unknown): boolean {
