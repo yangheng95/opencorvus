@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [工具长标题284 Recall](tool-caption-plan-284.md) / [实际证据](tool-caption-284/README.md)：真实长webfetch标题被清空的共享transport修复、后端与页面验收。
+
 - [来源域名283 Recall](source-provenance-plan-283.md) / [真实证据](source-provenance-283/README.md)：修复长章节截断下域名不可见，实际导航/提示及完整服务收尾。
 
 - [搜索诊断275 Recall](search-diagnostic-plan-275.md) / [修复证据](search-diagnostic-275/README.md)：当前MCP原始诊断与Exa单一结果路径、标准JSON/SSE、协议测试及真实GUI。

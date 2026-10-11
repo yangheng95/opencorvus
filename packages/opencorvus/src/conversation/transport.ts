@@ -69,6 +69,22 @@ function boundedToolMetadata(value: unknown): Record<string, unknown> {
   })
 }
 
+function boundedToolTitle(title: string): string {
+  const maxBytes = 256
+  if (jsonBytes(title) <= maxBytes) return title
+  let prefix = ""
+  // Include JSON quotes, escaped characters and the truncation marker in the
+  // same byte budget. String iteration keeps Unicode surrogate pairs intact.
+  let bytes = jsonBytes("…")
+  for (const character of title) {
+    const characterBytes = jsonBytes(character) - 2
+    if (bytes + characterBytes > maxBytes) break
+    prefix += character
+    bytes += characterBytes
+  }
+  return `${prefix}…`
+}
+
 /**
  * Bound one persisted Part for an Overlay conversation response. Reasoning is
  * runtime evidence but not message-card display content. Completed large Tool
@@ -88,7 +104,7 @@ export function projectConversationTransportPart(part: Message.VisiblePart): Mes
       status: "completed",
       input: boundedToolInput(part.state.input),
       output: "",
-      title: jsonBytes(part.state.title) <= 256 ? part.state.title : "",
+      title: boundedToolTitle(part.state.title),
       metadata: {
         ...boundedToolMetadata(part.state.metadata),
         [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: {

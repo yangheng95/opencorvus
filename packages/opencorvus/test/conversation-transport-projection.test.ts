@@ -7,6 +7,7 @@ import {
   conversationTransportEventDisposition,
   projectConversationTransportEventPayload,
   projectConversationTransportMessage,
+  projectConversationTransportPart,
 } from "@/conversation/transport"
 import { Message } from "@/session/message"
 
@@ -281,7 +282,7 @@ test("projects a large completed Tool into one explicitly bounded state shape", 
     status: "completed",
     input: { filePath: "README.md" },
     output: "",
-    title: "",
+    title: `${"large-title".repeat(22)}large-tit…`,
     metadata: {
       source: "test",
       [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: {
@@ -296,4 +297,24 @@ test("projects a large completed Tool into one explicitly bounded state shape", 
   expect(Buffer.byteLength(JSON.stringify(state), "utf8")).toBeLessThanOrEqual(
     CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
   )
+})
+
+test.each([
+  ["exact byte boundary", "a".repeat(254), "a".repeat(254)],
+  ["ASCII prefix", "a".repeat(255), `${"a".repeat(251)}…`],
+  ["Chinese code points", "测".repeat(100), `${"测".repeat(83)}…`],
+  ["emoji code points", "😀".repeat(100), `${"😀".repeat(62)}…`],
+  ["escaped quotes", '"'.repeat(128), `${'"'.repeat(125)}…`],
+  ["escaped newlines", "\n".repeat(128), `${"\n".repeat(125)}…`],
+  ["mixed-width boundary", `${"a".repeat(250)}😀z`, `${"a".repeat(250)}…`],
+])("retains a bounded deferred Tool title with %s", (_case, title, expected) => {
+  const part = completedTool({ id: "prt_title_budget", output: "x".repeat(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES) })
+  part.state.title = title
+
+  const projected = projectConversationTransportPart(part) as Message.ToolPart
+
+  expect(projected.state).toMatchObject({ status: "completed", title: expected })
+  expect(Buffer.byteLength(JSON.stringify(projected.state.title), "utf8")).toBeLessThanOrEqual(256)
+  expect(Buffer.byteLength(JSON.stringify(projected.state), "utf8")).toBeLessThanOrEqual(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES)
+  expect(part.state.title).toBe(title)
 })

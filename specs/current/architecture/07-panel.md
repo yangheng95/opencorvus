@@ -57,7 +57,13 @@ GET reads and event subscriptions use the
 same existing Project identity admission, independently of executable model
 bootstrap. Session lineage and exact Message/Part parent membership remain
 authoritative; historical Tool state reads return the same complete persisted
-state that owns the bounded transport marker. Tree filtering remains authoritative. The event
+state that owns the bounded transport marker. Tree filtering remains authoritative.
+The common projection retains a long completed Tool title as its original Unicode-code-point
+prefix with an ellipsis within the existing 256-byte JSON title budget. Escapes
+and the marker count toward that budget; short titles remain exact. Transcript
+and live projections share this owner, while disclosure reads retain the complete
+canonical title, input and result under the original state-integrity marker.
+The event
 handler captures its existing Question reader before entering streamGlobalSSE;
 the stream runs outside Instance context and reads explicit Session/Project
 identities, canonical message/protocol facts and the real Permission ledger.

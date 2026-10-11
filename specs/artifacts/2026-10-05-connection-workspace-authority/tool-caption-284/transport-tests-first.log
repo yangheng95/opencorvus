@@ -1,0 +1,64 @@
+[1/1] START test/conversation-transport-projection.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) projects one bounded first-paint transcript while retaining exact persisted identity [12.73ms]
+(pass) projects the same bounded Tool Part through the exact live event envelope [0.41ms]
+(pass) defers a large Tool input while preserving its compact display identity [0.54ms]
+(pass) classifies the complete live Reasoning Part sequence as omitted display transport [0.21ms]
+(pass) retains the exact live Text delta classification [0.05ms]
+276 |     }),
+277 |   )
+278 |   const state = (projected.parts[0] as Message.ToolPart).state
+279 |
+280 |   expect(Object.keys(state).sort()).toEqual(["input", "metadata", "output", "status", "time", "title"])
+281 |   expect(state).toMatchObject({
+                      ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "input": {
+      "filePath": "README.md",
+    },
+    "metadata": {
+      "opencorvus_conversation_tool_state": {
+        "kind": "deferred",
+        "outputBytes": 5,
+-       "stateBytes": Any<Number>,
+-       "stateSha256": Any<String>,
++       "stateBytes": 49492,
++       "stateSha256": "9098aa36cd156723c7d47c6cb00afea095d1295be1bfcc01a1262d1d85c350bf",
+      },
+      "source": "test",
+    },
+    "output": "",
+    "status": "completed",
+    "time": {
+      "end": 20,
+      "start": 10,
+    },
+-   "title": "large-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlel…",
++   "title": "large-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-titlelarge-tit…",
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\conversation-transport-projection.test.ts:281:17)
+(fail) projects a large completed Tool into one explicitly bounded state shape [1.70ms]
+(pass) retains a bounded deferred Tool title with exact byte boundary [0.29ms]
+(pass) retains a bounded deferred Tool title with ASCII prefix [0.19ms]
+(pass) retains a bounded deferred Tool title with Chinese code points [0.15ms]
+(pass) retains a bounded deferred Tool title with emoji code points [0.18ms]
+(pass) retains a bounded deferred Tool title with escaped quotes [0.12ms]
+(pass) retains a bounded deferred Tool title with escaped newlines [0.13ms]
+(pass) retains a bounded deferred Tool title with mixed-width boundary [0.14ms]
+
+ 12 pass
+ 1 fail
+ 35 expect() calls
+Ran 13 tests across 1 file. [1410.00ms]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\conversation-transport-projection.test.ts
+[1/1] DONE test/conversation-transport-projection.test.ts exit=1 duration=2.29s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\conversation-transport-projection.test.ts

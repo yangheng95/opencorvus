@@ -1,0 +1,9 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18231/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~											158 button (expanded) Collapse
++											188 text {
+  "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle.",
+  "format": "markdown",
+  "timeout": 120
+}
+The focused UI element is 158 button (expanded) Collapse

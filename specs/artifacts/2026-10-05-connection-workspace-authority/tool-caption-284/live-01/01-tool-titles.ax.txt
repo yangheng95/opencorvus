@@ -1,0 +1,52 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18231/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 92-101, 113-137
++									113 container
++										114 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										115 button 请分别调用 webfetch 读取这三个资料地址：https://developer.mozilla.org/en-US/docs/Web/HTML/Re...
++										116 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-378-trigger, Secondary Actions: Expand
++									117 container
++										118 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										119 button Reply with OK.
++										120 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-384-trigger, Secondary Actions: Expand
+~						83 container Description: Not running, ID: taskStatus
+~							84 text Not running
++								121 container
++									122 text work
++									123 text 23s
++									124 container
++										125 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples (text/html)
++											126 text webfetch
++											127 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples (text/html)
++											128 image
++										129 container Sources
++											130 link Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples, Description: Open web source: <details> HTML details disclosure element - HTML | MDN · developer.mozilla.org · #examples
++									131 container
++										132 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary (text/html)
++											133 text webfetch
++											134 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary (text/html)
++											135 image
++										136 container Sources
++											137 link Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary, Description: Open web source: <details> HTML details disclosure element - HTML | MDN · developer.mozilla.org · #technical_summary
++									138 container
++										139 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%…
++											140 text webfetch
++											141 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%…
++											142 image
++										143 container Sources
++											144 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN · developer.mozilla.org · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle., Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle.
++									145 container
++										146 text MDN 资料说明， <details>  与  <summary>  配合创建默认折叠、展开后显示内容的原生交互组件，可通过  open  属性默认展开、相同  name  实现互斥手风琴并用 CSS 定制外观（
++										147 link Description: 示例, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples
++										148 text ），其内容结构为一个  <summary>  后接流内容，起止标签均不可省略，隐式 ARIA 角色为  group ，DOM 接口为  HTMLDetailsElement （
++										149 link Description: 技术摘要, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary
++										150 text ）。
++									151 button Copy message
++									152 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++									153 pop up button (collapsed) Description: View model usage for this turn: 199K Token, Secondary Actions: Expand
++									154 text Oct 11, 12:43 PM
+~								48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~								49 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+~								55 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+~								58 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18231/ui/

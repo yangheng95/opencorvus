@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具长标题284](records/2026-10/2026-10-11-tool-caption-284.md)：延迟状态的标题字节投影保留真实目标，13项后端与真实UI验收。
+
 - [来源域名283](records/2026-10/2026-10-11-source-provenance-283.md)：长章节截断下保留可见网站身份，单agent真实页面复核。
 
 - [搜索诊断275](records/2026-10/2026-10-10-search-diagnostic-275.md)：共享MCP完整结果/类型错误与Exa单一搜索路径，当前正向协议和真实页面验收。
