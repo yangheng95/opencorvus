@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [313 子会话终态合并](source-settlement-plan-313.md)：持久化终态和实时片段的权威关系。
+
 - [312 来源侧栏渲染调查](source-render-plan-312.md)：当前真实流式正文与来源更新。
 
 - [311 来源文件身份](source-identity-plan-311.md)：文件名空白、分隔符与真实来源打开。

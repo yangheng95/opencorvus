@@ -1,0 +1,45 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\subagent-terminal-projection.test.ts:
+(pass) completed assistant retains canonical final text, metadata and source against retained live drafts [0.69ms]
+(pass) completed MessageAbortedError retains exact failure and accepted partial text [0.10ms]
+(pass) completed ProviderError retains exact failure and accepted partial text [0.03ms]
+(pass) completed hydration retires uncommitted text and tool input drafts [0.10ms]
+(pass) an existing request accepts its actual outcome after assistant completion [0.08ms]
+(pass) canonical completed tool outcome retains its accepted result [0.08ms]
+(pass) canonical error tool outcome retains its accepted result [0.02ms]
+(pass) completed-message checkpoint append and actual Part removal remain visible [0.07ms]
+(pass) an active assistant keeps its live field over a lagging persisted checkpoint [0.05ms]
+(pass) another Session retains its own independent transcript [0.03ms]
+
+test\subagent-conversation-service.test.ts:
+(pass) actual control-only owner accepts pending Part without message replay [3.35ms]
+(pass) historical Work references retain their own actor beside current Chat replies [0.25ms]
+(pass) visible message owner drift produces the precise view identity error [0.11ms]
+(pass) helper participant retains its execution owner in message metadata [0.10ms]
+(pass) canonical child metadata and Part ownership retain precise admission errors [0.18ms]
+(pass) task child transcript uses the exact task/session route and canonical order [1.54ms]
+(pass) a complete live field repairs a stale persisted prefix before later Part snapshots [0.42ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.15ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.10ms]
+(pass) standalone child transcript is rooted at the selected session [0.23ms]
+(pass) transcript identity drift is rejected instead of silently merging sessions [0.12ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.04ms]
+(pass) bursty transcript revisions coalesce into one refresh [25.61ms]
+(pass) a revision received during refresh schedules one trailing refresh [30.65ms]
+(pass) queued revisions refresh once when the immediate target load settles [31.41ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [16.66ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [0.38ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.10ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.07ms]
+(pass) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.63ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.26ms]
+(pass) Side Chat's ordered snapshot parser retains the connection's captured authority [0.73ms]
+(pass) held A read retains its exact response while B returns its own child transcript [0.41ms]
+(pass) same child identifiers under a new authority replace the prior delta base [0.16ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [4.92ms]
+
+ 35 pass
+ 0 fail
+ 74 expect() calls
+Ran 35 tests across 2 files. [196.00ms]

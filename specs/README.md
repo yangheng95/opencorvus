@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [313 子会话终态合并](records/2026-10/2026-10-12-source-settlement-313.md)：持久化终态和实时片段的权威关系。
+
 - [312 来源侧栏渲染调查](records/2026-10/2026-10-12-source-render-312.md)：当前真实流式正文与来源更新。
 
 - [311 来源文件身份](records/2026-10/2026-10-12-source-identity-311.md)：文件名空白、分隔符与真实来源打开。

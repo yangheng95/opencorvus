@@ -255,7 +255,7 @@ export function projectSubagentConversationLive(
     changes.push(change)
     changesByMessageID.set(change.messageID, changes)
   }
-  const projectParts = (messageID: string, persistedParts: any[]) => {
+  const projectParts = (messageID: string, persistedParts: any[], completedAssistant = false) => {
     const changes = changesByMessageID.get(messageID) ?? []
     const parts = [...persistedParts]
     for (const change of changes) {
@@ -267,6 +267,18 @@ export function projectSubagentConversationLive(
       const persisted = index >= 0 ? parts[index] : undefined
       const source = change.snapshot ?? persisted
       if (!source || typeof source !== "object" || Array.isArray(source)) continue
+      // Assistant completion seals ordinary Part content. A retained live
+      // prefix cannot undo the completed canonical value or revive a draft.
+      // Tool outcomes and appended compaction checkpoints have separate facts.
+      const type = persisted?.type ?? source.type
+      if (completedAssistant && type !== "tool") {
+        if (persisted || type !== "compaction") continue
+      }
+      if (
+        persisted?.type === "tool" &&
+        (persisted.state?.status === "completed" || persisted.state?.status === "error")
+      ) continue
+      if (completedAssistant && type === "tool" && !persisted) continue
       const next = { ...(persisted && typeof persisted === "object" ? persisted : {}), ...source }
       for (const [field, value] of Object.entries(change.fields)) {
         next[field] = value
@@ -281,10 +293,12 @@ export function projectSubagentConversationLive(
     .map((message) => {
       const changes = changesByMessageID.get(message.messageID) ?? []
       if (!live.messageInfos[message.messageID] && changes.length === 0) return message
+      const time = message.info.time as { completed?: unknown } | undefined
+      const completedAssistant = message.info.role === "assistant" && typeof time?.completed === "number"
       return {
         ...message,
-        info: live.messageInfos[message.messageID] ?? message.info,
-        parts: projectParts(message.messageID, message.parts),
+        info: completedAssistant ? message.info : live.messageInfos[message.messageID] ?? message.info,
+        parts: projectParts(message.messageID, message.parts, completedAssistant),
       }
     })
   const persistedMessageIDs = new Set(messages.map((message) => message.messageID))

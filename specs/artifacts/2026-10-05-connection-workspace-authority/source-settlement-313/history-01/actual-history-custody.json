@@ -1,0 +1,152 @@
+{
+  "observedAtUtc": "2026-10-11T19:39:37.476Z",
+  "access": "Both readonly BEGIN/ROLLBACK; actual complete protected rows and full project metadata inventory",
+  "comparison": [
+    {
+      "table": "session",
+      "sourceRows": 4,
+      "historyRows": 4,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "message",
+      "sourceRows": 12,
+      "historyRows": 12,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "part",
+      "sourceRows": 36,
+      "historyRows": 36,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_request",
+      "sourceRows": 8,
+      "historyRows": 8,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_progress",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_outcome",
+      "sourceRows": 8,
+      "historyRows": 8,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_request",
+      "sourceRows": 10,
+      "historyRows": 10,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_outcome",
+      "sourceRows": 10,
+      "historyRows": 10,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_usage_event",
+      "sourceRows": 12,
+      "historyRows": 12,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_task",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "worker_turn_descriptor",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact",
+      "sourceRows": 7,
+      "historyRows": 7,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact_version",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "interactive_artifact",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "memory_file",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "memory_chunk",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "session_control_record",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "session_control_event",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "permission_execution_result",
+      "sourceRows": 8,
+      "historyRows": 8,
+      "fullRowContent": "equal"
+    }
+  ],
+  "lifecycleContent": "equal",
+  "sourceLifecycleRows": 28,
+  "historyLifecycleRows": 28,
+  "configContent": "equal",
+  "projects": [
+    {
+      "projectID": "prj_hFND5NLAruqz7d195aO4",
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "before": {
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\sse-compression-305-live-01\\project\\.git",
+            "type": "directory",
+            "mtimeMs": 1791739562240.9702
+          },
+          "after": {
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\sse-compression-305-live-01\\project\\.git",
+            "type": "directory",
+            "mtimeMs": 1791747439870.2573
+          }
+        }
+      ]
+    },
+    {
+      "projectID": "prj_hPIlwX4D8qjMRzvnA2BS",
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  ],
+  "boundary": "Runtime/process/Bus/read receipts belong to this new history occurrence; file inventory is metadata evidence, not a claim of bytewise project identity"
+}

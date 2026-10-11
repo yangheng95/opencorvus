@@ -551,6 +551,14 @@ last accepted partial text before assistant completion. Retry settles the queue
 before retiring the attempt's Parts. No separate text store or per-token
 database writer participates in this contract.
 
+Child transcript reconciliation respects the same completion boundary: canonical
+completed assistant Info and ordinary Parts supersede retained live drafts.
+Existing Tool requests keep their independent outcome lifecycle, and persisted
+terminal Tool outcomes supersede older live running states. Actual removals and
+new post-completion compaction checkpoints retain their existing semantics. A live
+sequence or request-start time does not acknowledge that every streamed character
+has been checkpointed; active text retains its full live value.
+
 ## Verification authority
 
 The following gates define the maintained control-plane proof:

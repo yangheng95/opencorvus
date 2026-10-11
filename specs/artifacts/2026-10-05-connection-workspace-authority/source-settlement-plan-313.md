@@ -1,0 +1,31 @@
+# 313 子会话终态正文与实时片段合并
+
+## Recall
+
+用户持续要求改善 Sources 与子侧栏 Rendering，最新单 agent。312为实际进展：普通Side的两条来源和4938字符正文未复现闪烁，已推送3daa62dea471f3cd510c64dde2abb1452673bfc2，起始干净。不能据此认为Subagent独有的HTTP补全与全局实时投影相同。本轮仍不委托开发子agent，也不创建产品成员；采用已有真实305已完成Task的完整隔离副本进行子侧栏视觉复核。
+
+## 根因与横向审计
+
+已读SubagentConversationPanel、subagent-conversation全量加载/合并/实时事件/刷新控制器、side-chat、events/sse/conversation主会话重连、selected-stream-cursor、conversation-agents，后端Task子会话路由、Session.events/conversation、Message桥、ProtocolStore、Session/MessageStore/processor与当前07-panel/task-control-plane。全仓查projectSubagentConversationLive、observe/create、SourceKind/epoch/sequence、完成和Part写入契约，阅读现存纯service/Tool fact测试。没有运行UI自动化。
+
+直接问题：projectSubagentConversationLive无条件用保留的messageInfos及Part字段覆盖新的持久化补全。它可将已完成助手消息的正文、finish和time.completed恢复成旧流式状态。普通Side的有序session.connected会同时替换base并清空live，因此312正常不能排除Subagent单独refetch的风险。主会话使用tree-writer的snapshot重建，不能把那里的状态复制到此处造另一套缓存。
+
+重要排除：不能把lastLiveSequence或HTTP请求发出时刻当成正文已落盘的确认。Session.updatePartDelta只发布实时完整值，processor按200ms节奏和自然/失败边界落Part；活动正文必须继续接收实时值。后端Session.updateMessage明确拒绝已完成助手消息的修改；updatePartRow/updatePartData拒绝完成后正文改写或新建。现有Tool fact契约明确允许先完成助手消息、后追加已有Tool请求的结果；completed compaction checkpoint也可随后追加。删除仍是实际独立事实，不能为了终态保护屏蔽删除。
+
+影响面包括Task、Mission/Session下的同一子会话数据投影及普通Side共享函数；分别核对正常结束、失败/取消、重试后的新Message/Part、重启后的持久化终态、并行不同Session和不同项目/authority。host调度、队列、恢复和权限规则不改；没有证据指向host调度异常。此处是终态内容投影的共性契约问题，不归因于单个专家团。活动消息的新旧判断仍受实际持久化节奏约束，不声称本轮解决全部重连或Rendering现象。
+
+## 实施方案与资格
+
+先用真实完成子会话的HTTP数据和已有真实流式值做当前纯服务函数观察，记录其终态被覆盖的具体输出；不向网页注入消息。依后端现行不可变契约：完成助手的Info及普通已持久化Part使用已确认值，保留实际删除；已有Tool请求继续接收其后到的结果，已持久化终态Tool不能被旧running覆盖；完成后合法的新compaction事实保留。活动助手依旧接收实时正文和新Part，不加模型流程gate、不改API或增加文字长度/关键字启发式。
+
+新增聚焦正向数据契约：终态正文/错误/finish、旧pending草稿与普通Part、后到Tool结算、持久化终态Tool、实际移除、后到checkpoint、活动正文继续增长和Session隔离。现有backend Tool fact正向资格验证支持不可变边界；触及测试中的过期负向断言按当前契约处理。UI只真实页面、截图人工复核，不做组件/DOM/截图自动化测试。
+
+当前完整305历史原件已自然Completed并清理Provider配对；沿308成熟原身份/全表schema/启动恢复前沿检查，重新核实后完整复制90表和runtime。新副本/ui18282不带凭据或模型目录，不创建Task或新成员。类型/build后用真实SubagentConversationPanel看最终正文、Sources和重新打开；静态历史不能冒充新的Provider流式或原Research Studio全程重现。只操作自己的页/服务；原执行器actual join、独立进程/端口/配对及原件保护回读。更新根/月/目录索引和当前架构，文档检查、范围提交、fetch/merge、待推送集合审查和正常push，goal active。
+
+## 修改前实际观察
+
+原305完整90表复制、当前schema/Task终态/恢复前沿/原进程出生/凭据清理重新核实通过。313隔离history实际HTTP返回的完成正文为84字符，对应305真实wire最终值为85字符（自然text-end裁掉末尾换行）。把这个保留的真实实时值交给当前纯投影函数，结果仍是85字符，覆盖了完成后的84字符正文；before-projection.json保留完整输入输出。此为真实值的数据重放，不伪称在浏览器制造或自然捕获了丢帧。随后才改生产投影；普通活动正文不做序号/请求时间裁剪。
+
+## 本轮实施结果
+
+投影修复后，同一真实值重放输出84字符，完成内容保留；活动全文、独立工具结算、删除/checkpoint的正向数据契约仍通过，共36项。新构建52.86秒、类型检查实际exit0；自己的真实历史子侧栏三来源/文章末尾/重开截图已查看。原history77393实际exit0，独立闭合与受保护数据回读通过。[证据及未覆盖项](source-settlement-313/README.md)。漏接删除导致的旧live消息保留和活动checkpoint精确新旧尚未获得本轮完整验证，继续调查；goal active。

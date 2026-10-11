@@ -652,6 +652,13 @@ name's end; the root directory remains a valid base. Project-relative Windows
 results use forward separators without changing filename case. External locations
 keep their original absolute identity. The server still owns physical realpath
 and access validation; this display/routing relation is not a permission check.
+Completed assistant messages seal their ordinary Part content. The shared child
+and Side transcript projector keeps that canonical Info and content when an older
+live prefix survives hydration. Actual removals still apply; existing Tool
+requests can settle after assistant completion, while an already persisted
+terminal Tool outcome keeps its immutable result. Post-completion compaction
+checkpoints remain appendable. Active text continues to use complete live fields,
+because streamed-Part checkpoints are deliberately less frequent than deltas.
 The same server-path primitive owns separator interpretation for project-file
 keys in the Explorer and workbench. Windows project paths use forward separators;
 POSIX filename backslashes stay literal. Source file labels, direct opens,

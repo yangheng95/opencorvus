@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "occurrence": "source-settlement-313-history-01-9f6f9a07-e9d9-452e-be36-27a81cb16710",
+  "port": 18282,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-settlement-313-history-01\\evidence",
+    "source-settlement-313-history-01-9f6f9a07-e9d9-452e-be36-27a81cb16710",
+    "1791748060684",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18282",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\sse-compression-305-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-settlement-313-history-01\\startup.json",
+    "--startup-occurrence",
+    "source-settlement-313-history-01-9f6f9a07-e9d9-452e-be36-27a81cb16710",
+    "--log-level",
+    "INFO"
+  ]
+}
