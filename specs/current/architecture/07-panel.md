@@ -659,6 +659,14 @@ requests can settle after assistant completion, while an already persisted
 terminal Tool outcome keeps its immutable result. Post-completion compaction
 checkpoints remain appendable. Active text continues to use complete live fields,
 because streamed-Part checkpoints are deliberately less frequent than deltas.
+Within one child transcript target, hydration retains authoritative message
+exclusions in `removedMessageIDs`. Incremental removals survive later reads;
+replacement snapshots, epoch changes and cursor resets also retire known prior
+members outside the new snapshot. Live projection respects those exclusions as
+well as live removal events. A message explicitly returned by a later read
+rejoins the target, and an unseen new live message remains eligible. A different
+target starts with its own membership facts. This repairs retained live content
+after a missed removal or move without treating an unpersisted text tail as lost.
 The same server-path primitive owns separator interpretation for project-file
 keys in the Explorer and workbench. Windows project paths use forward separators;
 POSIX filename backslashes stay literal. Source file labels, direct opens,

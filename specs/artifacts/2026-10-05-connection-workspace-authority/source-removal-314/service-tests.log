@@ -1,0 +1,54 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\subagent-conversation-service.test.ts:
+(pass) actual control-only owner accepts pending Part without message replay [3.46ms]
+(pass) historical Work references retain their own actor beside current Chat replies [0.20ms]
+(pass) visible message owner drift produces the precise view identity error [0.09ms]
+(pass) helper participant retains its execution owner in message metadata [0.09ms]
+(pass) canonical child metadata and Part ownership retain precise admission errors [0.16ms]
+(pass) task child transcript uses the exact task/session route and canonical order [1.59ms]
+(pass) a complete live field repairs a stale persisted prefix before later Part snapshots [0.55ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.18ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.12ms]
+(pass) standalone child transcript is rooted at the selected session [0.28ms]
+(pass) transcript identity drift is rejected instead of silently merging sessions [0.15ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.06ms]
+(pass) bursty transcript revisions coalesce into one refresh [26.30ms]
+(pass) a revision received during refresh schedules one trailing refresh [30.43ms]
+(pass) queued revisions refresh once when the immediate target load settles [31.97ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [15.57ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [0.57ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.15ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.10ms]
+(pass) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.66ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.25ms]
+(pass) Side Chat's ordered snapshot parser retains the connection's captured authority [0.80ms]
+(pass) held A read retains its exact response while B returns its own child transcript [0.42ms]
+(pass) same child identifiers under a new authority replace the prior delta base [0.16ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [5.19ms]
+
+test\subagent-terminal-projection.test.ts:
+(pass) completed assistant retains canonical final text, metadata and source against retained live drafts [0.32ms]
+(pass) completed MessageAbortedError retains exact failure and accepted partial text [0.10ms]
+(pass) completed ProviderError retains exact failure and accepted partial text [0.04ms]
+(pass) completed hydration retires uncommitted text and tool input drafts [0.09ms]
+(pass) an existing request accepts its actual outcome after assistant completion [0.11ms]
+(pass) canonical completed tool outcome retains its accepted result [0.09ms]
+(pass) canonical error tool outcome retains its accepted result [0.02ms]
+(pass) completed-message checkpoint append and actual Part removal remain visible [0.10ms]
+(pass) an active assistant keeps its live field over a lagging persisted checkpoint [0.07ms]
+(pass) another Session retains its own independent transcript [0.05ms]
+
+test\subagent-membership-projection.test.ts:
+(pass) authoritative removal preserves the surviving sources across repeated reads and retained live Info [0.50ms]
+(pass) replacement membership retains its survivor and genuinely new live message: {"transcriptMode":"snapshot","lastLiveSequence":11} [0.22ms]
+(pass) replacement membership retains its survivor and genuinely new live message: {"liveEpoch":2,"lastLiveSequence":11} [0.06ms]
+(pass) replacement membership retains its survivor and genuinely new live message: {"lastLiveSequence":3} [0.07ms]
+(pass) a later authoritative message restores its membership and sources [0.19ms]
+(pass) a target change accepts the new target's membership and exclusion facts [0.06ms]
+(pass) current live removal and canonical exclusion both preserve the current incoming source [0.16ms]
+
+ 42 pass
+ 0 fail
+ 82 expect() calls
+Ran 42 tests across 3 files. [231.00ms]

@@ -248,7 +248,7 @@ export function projectSubagentConversationLive(
   ) {
     return base
   }
-  const removedMessageIDs = new Set(live.removedMessageIDs)
+  const removedMessageIDs = new Set([...base.removedMessageIDs, ...live.removedMessageIDs])
   const changesByMessageID = new Map<string, SubagentConversationLiveProjection["parts"][string][]>()
   for (const change of Object.values(live.parts)) {
     const changes = changesByMessageID.get(change.messageID) ?? []
@@ -651,16 +651,22 @@ export function mergeSubagentConversation(
   delta: SubagentConversationTranscript,
 ): SubagentConversationTranscript {
   if (current.targetKey !== delta.targetKey) return delta
-  if (
+  const removedMessageIDs = new Set([...current.removedMessageIDs, ...delta.removedMessageIDs])
+  const replacesMembership =
     delta.transcriptMode === "snapshot" ||
     current.liveEpoch !== delta.liveEpoch ||
     delta.lastLiveSequence < current.lastLiveSequence
-  ) {
-    return { ...delta, removedMessageIDs: [] }
+  if (replacesMembership) {
+    // A refreshed snapshot owns membership. Retain exclusions for known prior
+    // members so an older live Info cannot reintroduce them after this read.
+    for (const message of current.messages) removedMessageIDs.add(message.messageID)
   }
-  const merged = new Map(current.messages.map((message) => [message.messageID, message]))
-  for (const messageID of delta.removedMessageIDs) merged.delete(messageID)
-  for (const message of delta.messages) merged.set(message.messageID, message)
+  const merged = new Map((replacesMembership ? [] : current.messages).map((message) => [message.messageID, message]))
+  for (const messageID of removedMessageIDs) merged.delete(messageID)
+  for (const message of delta.messages) {
+    merged.set(message.messageID, message)
+    removedMessageIDs.delete(message.messageID)
+  }
   const messages = [...merged.values()].sort((left, right) =>
     compareTimelineOrderKeys(left.orderKey, right.orderKey, `subagent conversation ${current.sessionID}`),
   )
@@ -670,7 +676,7 @@ export function mergeSubagentConversation(
     messages,
     lastLiveSequence: delta.lastLiveSequence,
     liveEpoch: delta.liveEpoch,
-    transcriptMode: "delta",
-    removedMessageIDs: [],
+    transcriptMode: delta.transcriptMode,
+    removedMessageIDs: [...removedMessageIDs],
   }
 }

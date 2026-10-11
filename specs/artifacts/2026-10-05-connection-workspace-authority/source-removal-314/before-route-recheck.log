@@ -1,0 +1,42 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\orchestrator-mission-root-message-read.test.ts:
+309 |         expect({
+310 |           retired: repaired.removedMessageIDs,
+311 |           currentOwners: [...repaired.messages, ...parsedTarget.messages].map((message) => ({
+312 |             id: message.messageID, sessionID: message.sessionID, author: message.info.author,
+313 |           })),
+314 |         }).toEqual({
+                 ^
+error: expect(received).toEqual(expected)
+
+  {
+    "currentOwners": [
+      {
+        "author": "mission",
+        "id": "msg_g0VXly1U300NvVyjI3Qu",
++       "sessionID": "ses_-zUSE1ydHzzeYEcdI8ha",
++     },
++     {
++       "author": "mission",
++       "id": "msg_g0VXly1U300NvVyjI3Qu",
+        "sessionID": "ses_-zUSE1yVazz0VuGusB18",
+      },
+    ],
+-   "retired": [
+-     "msg_g0VXly1U300NvVyjI3Qu",
+-   ],
++   "retired": [],
+  }
+
+- Expected  - 3
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-mission-root-message-read.test.ts:314:12)
+(fail) Mission acceptance wake reads its exact Mission-authored Task-root message [1985.38ms]
+(pass) successor runtime replays one atomic Task-root Message move after registering its durable bridge [2269.56ms]
+
+ 1 pass
+ 1 fail
+ 18 expect() calls
+Ran 2 tests across 1 file. [5.83s]

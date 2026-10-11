@@ -20,7 +20,13 @@ import { Database, eq } from "@/storage/db"
 import { deliverTaskRootMessageToOrchestratorSession } from "@/task-api/task-root-message"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { captureApiAuthority } from "../../overlay/src/services/api"
-import { parseSubagentConversation } from "../../overlay/src/services/subagent-conversation"
+import {
+  createSubagentConversationLiveProjection,
+  mergeSubagentConversation,
+  observeSubagentConversationLiveEvent,
+  parseSubagentConversation,
+  projectSubagentConversationLive,
+} from "../../overlay/src/services/subagent-conversation"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -147,6 +153,23 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
       ensureTaskMessageProtocolBridge()
       const liveSequenceBeforeMove = ProtocolStore.currentTaskLiveSequence(taskID)
       const liveEpochBeforeMove = ProtocolStore.currentTaskLiveEpoch()
+      const route = new Hono().route("/", EngineRoutes())
+      const sourceTarget = {
+        source: { kind: "task" as const, id: taskID }, sessionID: root.id,
+        directory: project.path, authority: captureApiAuthority(),
+      }
+      const beforeResponse = await route.request(`/task/${taskID}/conversation/session/${root.id}`)
+      expect(beforeResponse.status).toBe(200)
+      const before = parseSubagentConversation(sourceTarget, await beforeResponse.json())
+      const sourceMessage = before.messages.find((message) => message.messageID === messageID)!
+      let retainedLive = observeSubagentConversationLiveEvent(createSubagentConversationLiveProjection(root.id), {
+        type: "message.updated", payload: { info: sourceMessage.info },
+      })
+      for (const part of sourceMessage.parts) {
+        retainedLive = observeSubagentConversationLiveEvent(retainedLive, {
+          type: "message.part.updated", payload: { part },
+        })
+      }
       const deliveryEvents: string[] = []
       const unsubscribeMoved = Bus.subscribe(Message.Event.Moved, (event) => {
         if (
@@ -237,7 +260,6 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
           },
         ],
       })
-      const route = new Hono().route("/", EngineRoutes())
       const deltaQuery = `after_live_sequence=${liveSequenceBeforeMove}&after_live_epoch=${liveEpochBeforeMove}`
       const [sourceDeltaResponse, targetDeltaResponse] = await Promise.all([
         route.request(`/task/${taskID}/conversation/session/${root.id}?${deltaQuery}`),
@@ -278,6 +300,22 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
           sessionID: message.sessionID,
         })),
       ).toEqual([{ id: messageID, author: "mission", sessionID: orchestrator.id }])
+      const fullSourceResponse = await route.request(`/task/${taskID}/conversation/session/${root.id}`)
+      expect(fullSourceResponse.status).toBe(200)
+      for (const nextSource of [sourceDelta, await fullSourceResponse.json()]) {
+        const repaired = projectSubagentConversationLive(
+          mergeSubagentConversation(before, parseSubagentConversation(sourceTarget, nextSource)), retainedLive,
+        )
+        expect({
+          retired: repaired.removedMessageIDs,
+          currentOwners: [...repaired.messages, ...parsedTarget.messages].map((message) => ({
+            id: message.messageID, sessionID: message.sessionID, author: message.info.author,
+          })),
+        }).toEqual({
+          retired: [messageID],
+          currentOwners: [{ id: messageID, sessionID: orchestrator.id, author: "mission" }],
+        })
+      }
       const delivered = await MessageStore.get({ sessionID: orchestrator.id, messageID })
       const latestUserMessages: string[] = []
       for await (const current of MessageStore.stream(orchestrator.id)) {

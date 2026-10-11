@@ -1,0 +1,27 @@
+{
+  "occurrence": "source-removal-314-history-01-282e9741-e6de-4147-a094-a3ef95179481",
+  "port": 18283,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-removal-314-history-01\\evidence",
+    "source-removal-314-history-01-282e9741-e6de-4147-a094-a3ef95179481",
+    "1791749513939",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18283",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\sse-compression-305-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-removal-314-history-01\\startup.json",
+    "--startup-occurrence",
+    "source-removal-314-history-01-282e9741-e6de-4147-a094-a3ef95179481",
+    "--log-level",
+    "INFO"
+  ],
+  "credentialStaging": "None"
+}

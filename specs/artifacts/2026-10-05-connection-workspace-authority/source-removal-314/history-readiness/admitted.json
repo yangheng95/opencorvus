@@ -1,0 +1,32 @@
+{
+  "selectedSubject": {
+    "projectID": "prj_hFND5NLAruqz7d195aO4",
+    "id": "tsk_g00VXl5hD700hVMdFR1S",
+    "kind": "task",
+    "requestID": "70ef6cdf-ce61-4468-8cf7-38650c181042",
+    "sessionID": "ses_-zUSEuIfOzzhSTClzD9u"
+  },
+  "review": "Fresh308 current schema; one Task completed epoch1; seven assistants completed; two ingresses resolved/terminal_inapplicable; eight permission outcomes and two checkpoints settled; two idle memory snapshots; fourteen recovery tables empty. Current runtime lease exact birth dead, both projects have no startup configuration mutations. No credentials or new Task/Provider execution staged; full copy and actual child UI still required.",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/sse-compression-305-live-01",
+  "runtimeLeaseStates": [
+    {
+      "lease": {
+        "id": "act_g0VXl4uca00AN6OzOEAR",
+        "target": "runtime_process",
+        "target_id": "0c6e49b5-1967-41f1-bd8e-a1688b4ec3b4",
+        "owner_occurrence_id": "{\"pid\":11300,\"processInstanceID\":\"win32:639273321377038761\",\"occurrenceID\":\"0c6e49b5-1967-41f1-bd8e-a1688b4ec3b4\"}",
+        "time_activated": 1791735345319,
+        "expires_at": 9007199254740991
+      },
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 11300,
+        "processInstanceID": "win32:639273321377038761",
+        "occurrenceID": "0c6e49b5-1967-41f1-bd8e-a1688b4ec3b4"
+      }
+    }
+  ],
+  "sourceOccurrence": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+  "startupQualified": true,
+  "observedAtUtc": "2026-10-11T19:54:43.1357657Z"
+}

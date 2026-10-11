@@ -669,7 +669,7 @@ test("task transcript delta replaces changed messages and removes deleted messag
     lastLiveSequence: 15,
     liveEpoch: 1779000000000,
     transcriptMode: "delta",
-    removedMessageIDs: [],
+    removedMessageIDs: ["message-early"],
     messages: [{ messageID: "message-late", info: { error: "updated" } }],
   })
 })
@@ -708,7 +708,7 @@ test("task transcript snapshot replaces the prior live epoch", () => {
     lastLiveSequence: 0,
     liveEpoch: 1779000001000,
     transcriptMode: "snapshot",
-    removedMessageIDs: [],
+    removedMessageIDs: ["stale-message"],
     messages: [{ messageID: "current-message" }],
   })
 })
