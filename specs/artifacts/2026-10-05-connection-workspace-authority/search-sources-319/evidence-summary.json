@@ -1,0 +1,44 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 1718810,
+    "archiveBytes": 57555,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 8,
+    "sessions": [
+      {
+        "id": "ses_hTX0PXMLCTec11vpswfW",
+        "projectID": "prj_hNiXiUqXoU1b7lhAhPuM",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSDZsfYzz1FASulxsi",
+        "projectID": "prj_heodKfTNzKoUpluyn277",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXmQ8aZ00l4gYGsJhP",
+        "sourceId": "783cbae539e21f02824e32ffd920186c8548d44cca50c062dd07572e141364df",
+        "title": "  命中 [notes].txt"
+      },
+      {
+        "id": "prt_g0VXmQ8ad00Rkxw99MWw",
+        "sourceId": "f2f62ea48516f1662fd8a15ac6dc0da20fc4ee02435be871c1c19a07f8bb5efd",
+        "title": "  命中 [notes].txt"
+      },
+      {
+        "id": "prt_g0VXmQ8af007sLSuApWr",
+        "sourceId": "7d6e4899b32bedf066f80be401065a6fb69f2369ed50bc0183a458ad83d2d91b",
+        "title": "second.txt"
+      },
+      {
+        "id": "prt_g0VXmQTQJ00TV5Dz3YoA",
+        "sourceId": "1953da9511f17e0ebb270a1db77943b919a8b851960bd657cd5c816b0bab0c46",
+        "title": "  命中 [notes].txt"
+      }
+    ]
+  }
+]

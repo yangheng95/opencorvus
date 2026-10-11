@@ -49,6 +49,12 @@ function sourceDirectory(): string {
   return source?.directory?.trim() || selectedTaskDirectory().trim()
 }
 
+function fileSourceLocation(label: string, range: ConversationSourcePart["range"]): string {
+  if (!range) return label
+  const lines = range.startLine === range.endLine ? `${range.startLine}` : `${range.startLine}-${range.endLine}`
+  return `${label}:${lines}`
+}
+
 function sourceLabel(source: ConversationSourcePart): string {
   if (source.type === "source-file") {
     const title = source.title || ""
@@ -56,7 +62,7 @@ function sourceLabel(source: ConversationSourcePart): string {
     const syntax = source.path || sourceDirectory()
     const filename = pathWithForwardSeparators(filePath, syntax).split("/").filter(Boolean).at(-1)
     const label = title && !pathWithForwardSeparators(title, syntax).includes("/") ? title : filename
-    if (label) return source.range ? `${label}:${source.range.startLine}-${source.range.endLine}` : label
+    if (label) return fileSourceLocation(label, source.range)
   }
   if (source.type === "source-url" && source.url) {
     const title = source.title?.trim() || ""
@@ -82,7 +88,7 @@ function sourceDetail(source: ConversationSourcePart): string {
   if (source.type === "source-url") return source.url || ""
   if (source.type === "source-file") {
     const path = shortRelativePath(source.path || "", sourceDirectory())
-    return source.range ? `${path}:${source.range.startLine}-${source.range.endLine}` : path
+    return fileSourceLocation(path, source.range)
   }
   return source.filename || source.mediaType || ""
 }
@@ -127,6 +133,7 @@ function sourcePublishedDate(value: string | undefined): string {
 function sourceProviderLabel(provider: string | undefined): string {
   if (provider === "opencorvus-webfetch") return t("chat.source_provider.webfetch")
   if (provider === "opencorvus-read") return t("chat.source_provider.read")
+  if (provider === "opencorvus-search-code") return t("chat.source_provider.search_code")
   if (provider === "exa") return "Exa"
   return provider || ""
 }

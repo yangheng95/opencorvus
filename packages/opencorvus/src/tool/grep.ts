@@ -4,6 +4,7 @@ import { Tool } from "./tool"
 import { Filesystem } from "../util/filesystem"
 import { Ripgrep } from "../file/ripgrep"
 import { Process } from "../util/process"
+import { fileSource } from "./source"
 
 import DESCRIPTION from "./grep.txt"
 import { Instance } from "../project/instance"
@@ -324,6 +325,11 @@ export const SearchCodeTool = Tool.define("search_code", {
         truncated,
       },
       output: redactInlinePayloads(outputLines.join("\n")),
+      sources: finalMatches.map((match) => fileSource({
+        path: match.path,
+        range: { startLine: match.lineNum, endLine: match.lineNum },
+        provider: "opencorvus-search-code",
+      })),
     }
   },
 })

@@ -1,0 +1,91 @@
+{
+  "observedAtUtc": "2026-10-11T21:49:07.979Z",
+  "sessionID": "ses_-zUSDZsfYzz1FASulxsi",
+  "requests": [
+    {
+      "id": "prt_g0VXmQ8NR00CvHde42Jr",
+      "messageID": "msg_g0VXmQ7ao0070FWWRNjB",
+      "type": "tool-request",
+      "callID": "call_6a86734c57f54a90b2ee84e74ba91599",
+      "tool": "search_code",
+      "input": {
+        "pattern": "SOURCE319_NEEDLE",
+        "include": "*.txt"
+      },
+      "time": {
+        "start": 1791755179421
+      }
+    },
+    {
+      "id": "prt_g0VXmQTLs00MI8iEg36J",
+      "messageID": "msg_g0VXmQSjn008UfZjlRgc",
+      "type": "tool-request",
+      "callID": "call_9ee4789d8d5c47078ef7ef2b64904d67",
+      "tool": "read",
+      "input": {
+        "filePath": "  命中 [notes].txt",
+        "offset": 2,
+        "limit": 3
+      },
+      "time": {
+        "start": 1791755260048
+      }
+    }
+  ],
+  "sourceFacts": [
+    {
+      "id": "prt_g0VXmQ8aZ00l4gYGsJhP",
+      "messageID": "msg_g0VXmQ7ao0070FWWRNjB",
+      "type": "source-file",
+      "sourceId": "783cbae539e21f02824e32ffd920186c8548d44cca50c062dd07572e141364df",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\search-sources-319-live-01\\project\\  命中 [notes].txt",
+      "title": "  命中 [notes].txt",
+      "range": {
+        "startLine": 2,
+        "endLine": 2
+      },
+      "provider": "opencorvus-search-code"
+    },
+    {
+      "id": "prt_g0VXmQ8ad00Rkxw99MWw",
+      "messageID": "msg_g0VXmQ7ao0070FWWRNjB",
+      "type": "source-file",
+      "sourceId": "f2f62ea48516f1662fd8a15ac6dc0da20fc4ee02435be871c1c19a07f8bb5efd",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\search-sources-319-live-01\\project\\  命中 [notes].txt",
+      "title": "  命中 [notes].txt",
+      "range": {
+        "startLine": 70,
+        "endLine": 70
+      },
+      "provider": "opencorvus-search-code"
+    },
+    {
+      "id": "prt_g0VXmQ8af007sLSuApWr",
+      "messageID": "msg_g0VXmQ7ao0070FWWRNjB",
+      "type": "source-file",
+      "sourceId": "7d6e4899b32bedf066f80be401065a6fb69f2369ed50bc0183a458ad83d2d91b",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\search-sources-319-live-01\\project\\second.txt",
+      "title": "second.txt",
+      "range": {
+        "startLine": 3,
+        "endLine": 3
+      },
+      "provider": "opencorvus-search-code"
+    },
+    {
+      "id": "prt_g0VXmQTQJ00TV5Dz3YoA",
+      "messageID": "msg_g0VXmQSjn008UfZjlRgc",
+      "type": "source-file",
+      "sourceId": "1953da9511f17e0ebb270a1db77943b919a8b851960bd657cd5c816b0bab0c46",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\search-sources-319-live-01\\project\\  命中 [notes].txt",
+      "title": "  命中 [notes].txt",
+      "range": {
+        "startLine": 2,
+        "endLine": 4
+      },
+      "provider": "opencorvus-read"
+    }
+  ],
+  "actualSearchOutput": "Found 3 matches\nC:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\search-sources-319-live-01\\project\\  命中 [notes].txt:\n  Line 2: SOURCE319_NEEDLE first location\n  Line 70: SOURCE319_NEEDLE distant location\n\nC:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\search-sources-319-live-01\\project\\second.txt:\n  Line 3: SOURCE319_NEEDLE second file",
+  "qualification": "Actual isolated filesystem, completed Tool requests/outcomes and closed canonical database agree. First request publishes three search Sources; later read separately verifies a multiline range. Manual screenshot review is independent."
+}

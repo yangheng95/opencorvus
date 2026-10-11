@@ -633,7 +633,7 @@ timestamps as the publisher's original calendar day. They retain the exact sourc
 value in the metadata title and preserve authored date text with its original
 precision. This presentation does not convert publication days into local event
 times or change the stored citation payload.
-Known built-in read and webfetch provenance uses localized resource-acquisition
+Known built-in read, local search and webfetch provenance uses localized resource-acquisition
 labels; the original provider identifier remains in the metadata title and stored
 payload. Other source-provider names retain their authored value.
 Webfetch publishes the document's own title from HTML/XHTML metadata or default
@@ -644,6 +644,9 @@ the Overlay displays the published Source payload without fetching or inventing
 another title.
 Tooltip detail adds location or media information only when it differs from the
 primary source identity; it does not repeat a root-level file's name or range.
+File citation labels and location details share one line-range presentation:
+single-line sources show `file:2`, while multi-line sources keep `file:2-8`.
+The original numeric range remains the file editor's exact navigation target.
 Source file routing and change summaries share one lexical directory relation.
 It recognizes server Windows drive/UNC paths independently of the browser host,
 normalizes their separators for comparison, and retains case-insensitive Windows

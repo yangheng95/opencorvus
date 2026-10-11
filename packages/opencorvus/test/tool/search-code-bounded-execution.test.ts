@@ -148,6 +148,13 @@ function matchOutput(filename: string, text: string): string {
   } }) + "\n"
 }
 
+function expectedSearchSource(filename: string, line: number) {
+  return {
+    type: "source-file", sourceId: expect.any(String), path: filename, title: path.basename(filename),
+    range: { startLine: line, endLine: line }, provider: "opencorvus-search-code",
+  }
+}
+
 describe("search_code bounded execution", () => {
   test("preserves Unicode paths and the exact trailing whitespace of a real final matching line", async () => {
     await using project = await memoryProject()
@@ -159,7 +166,26 @@ describe("search_code bounded execution", () => {
       const session = await Session.create({ kind: "assistant", title: "Exact search result text" })
       const context = await conversationContext(session)
       const result = await SearchCodeTool.init().then((tool) => tool.execute({ pattern: marker, path: filename }, context))
-      expect(result).toEqual({ title: marker, metadata: { matches: 1, truncated: false }, output: `Found 1 matches\n${filename}:\n  Line 2: ${line}` })
+      expect(result).toEqual({
+        title: marker, metadata: { matches: 1, truncated: false },
+        output: `Found 1 matches\n${filename}:\n  Line 2: ${line}`,
+        sources: [expectedSearchSource(filename, 2)],
+      })
+    } })
+  })
+
+  test.each([3, 125])("publishes precise sources for the displayed lines of a real %s-match search", async (count) => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "  来源 [lines].txt")
+      await fs.writeFile(filename, "heading\n" + Array.from({ length: count }, (_, index) => `source-lines-319 ${index}\nspacer\n`).join(""))
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Search source line bounds" }))
+      const result = await SearchCodeTool.init().then((tool) => tool.execute({ pattern: "source-lines-319", path: filename }, context))
+      const shown = Math.min(count, 100)
+      expect({ metadata: result.metadata, sources: result.sources }).toEqual({
+        metadata: { matches: count, truncated: count > 100 },
+        sources: Array.from({ length: shown }, (_, index) => expectedSearchSource(filename, 2 + index * 2)),
+      })
     } })
   })
 
@@ -190,6 +216,7 @@ describe("search_code bounded execution", () => {
           title: marker,
           metadata: { matches: 1, truncated: false },
           output: [`Found 1 matches`, `${visible}:`, `  Line 1: ${marker}`].join("\n"),
+          sources: [expectedSearchSource(visible, 1)],
         })
       },
     })
@@ -237,11 +264,13 @@ describe("search_code bounded execution", () => {
               `${rootTypeScript}:`,
               `  Line 1: ${marker}`,
             ].join("\n"),
+            sources: [expectedSearchSource(nestedTypeScript, 1), expectedSearchSource(rootTypeScript, 1)],
           },
           nestedTypeScriptOnly: {
             title: marker,
             metadata: { matches: 1, truncated: false },
             output: [`Found 1 matches`, `${nestedTypeScript}:`, `  Line 1: ${marker}`].join("\n"),
+            sources: [expectedSearchSource(nestedTypeScript, 1)],
           },
         })
       },
@@ -311,6 +340,7 @@ describe("search_code bounded execution", () => {
                 "",
                 "(Some paths were inaccessible and skipped)",
               ].join("\n"),
+              sources: [expectedSearchSource(visible, 1)],
             },
             multipleContentBatches: true,
             argumentBounds: contentCalls.map(() => true),

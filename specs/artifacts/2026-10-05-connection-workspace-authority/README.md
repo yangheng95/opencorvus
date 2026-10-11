@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [319 搜索命中来源](search-sources-plan-319.md)：直接打开搜索命中的文件行。
+
 - [318 搜索结果边界](search-framing-plan-318.md)：特殊文件名与命中文本的机器协议。
 
 - [317 空正文成员契约](source-text-membership-plan-317.md)：真实HTTP空text与已撤回正文的区别。

@@ -69,6 +69,13 @@ an incomplete frame is an execution error. `search_code` removes only the final
 line terminator from each match, preserving other whitespace. Its existing
 ignore rules, execution authority, cumulative raw-output budget and total
 deadline also apply to the structured protocol's overhead.
+Each displayed `search_code` match publishes a file Source through the shared
+`fileSource` and assistant-message persistence contract. Its exact path and
+single-line range come from that structured match. Sources follow the same
+ordered, at-most-100 displayed matches; undisplayed matches do not acquire
+citations. The existing source identity includes path and range, so distinct
+matching lines remain separately navigable and repeated semantic identities
+within one message use the existing persistence deduplication.
 
 Webfetch and the two Exa consumers share one Hypertext Transfer Protocol (HTTP) response-body owner. The
 existing overall/parent deadline stays active through headers, body consumption
