@@ -1,0 +1,17 @@
+Browser tab: 23, Title: "OpenCorvus", URL: "http://localhost:18233/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~												357 button Raw Input
+~												365 container
++													366 button (expanded) 3 fields, Secondary Actions: Collapse
++														367 text 3 fields
++													368 definition list
++														369 container url
++															370 text url
++														371 text https://www.w3.org/WAI/fundamentals/accessibility-intro/
++														372 container format
++															373 text format
++														374 text markdown
++														375 container timeout
++															376 text timeout
++														377 text 60
+The focused UI element is 357 button Raw Input

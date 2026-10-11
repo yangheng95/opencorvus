@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, Show } from "solid-js"
+import { createMemo, createSignal, createUniqueId, For, Show } from "solid-js"
 import { copyTextReporting } from "../services/clipboard"
 import { t } from "../utils/i18n"
 import { Button } from "./ui/Button"
@@ -50,8 +50,13 @@ function PayloadValue(props: { value: unknown; depth: number }) {
 /** Lossless output disclosure: JSON values preserve multiline strings; raw
  * bytes remain available for copying and inspection. Nested bodies mount on demand. */
 export function ToolPayload(props: { label: string; value: string; live?: boolean; collapsed?: boolean }) {
+  const id = createUniqueId()
   const [raw, setRaw] = createSignal(false)
   const [expanded, setExpanded] = createSignal(false)
+  const contentVisible = () => !props.collapsed || expanded()
+  const formatLabel = () => t(raw() ? "tool.readable_payload" : "tool.raw_payload", { label: props.label })
+  const expansionLabel = () => t(expanded() ? "tool.collapse_payload" : "tool.expand_payload", { label: props.label })
+  const copyLabel = () => t("tool.copy_payload", { label: props.label })
   const parsed = createMemo(() => {
     if (props.live) return undefined
     try {
@@ -63,18 +68,25 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
   return (
     <section
       class="msg-tool-payload"
+      role="group"
+      aria-labelledby={`${id}-label`}
       data-live={props.live ? "true" : undefined}
       data-expanded={expanded() ? "true" : undefined}
     >
       <div class="msg-tool-payload__toolbar">
-        <span class="msg-tool-payload__label">{props.label}</span>
+        <span id={`${id}-label`} class="msg-tool-payload__label">{props.label}</span>
         <Show when={parsed()}>
           <Button
             variant="ghost"
             tone="neutral"
             size="mini"
-            aria-pressed={raw()}
-            onClick={() => setRaw((value) => !value)}
+            aria-label={formatLabel()}
+            title={formatLabel()}
+            aria-controls={contentVisible() ? `${id}-content` : undefined}
+            onClick={() => {
+              setRaw((value) => !value)
+              if (props.collapsed) setExpanded(true)
+            }}
           >
             {t(raw() ? "tool.readable" : "tool.raw")}
           </Button>
@@ -83,7 +95,10 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
           variant="ghost"
           tone="neutral"
           size="mini"
+          aria-label={expansionLabel()}
+          title={expansionLabel()}
           aria-expanded={expanded()}
+          aria-controls={contentVisible() ? `${id}-content` : undefined}
           onClick={() => setExpanded((value) => !value)}
         >
           {t(expanded() ? "tool.collapse_output" : "tool.expand_output")}
@@ -92,15 +107,15 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
           variant="ghost"
           tone="neutral"
           size="icon"
-          title={t("common.copy")}
-          aria-label={t("common.copy")}
+          title={copyLabel()}
+          aria-label={copyLabel()}
           onClick={() => void copyTextReporting(props.value, "tool-output")}
         >
           <Icon name="copy" size="compact" />
         </Button>
       </div>
-      <Show when={!props.collapsed || expanded()}>
-        <div class="msg-tool-payload__content">
+      <Show when={contentVisible()}>
+        <div id={`${id}-content`} class="msg-tool-payload__content">
           <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>
             <PayloadValue value={parsed()!.value} depth={0} />
           </Show>

@@ -665,6 +665,12 @@ identity. Activity uses
 the owning card's live state, including Mission and subagent cards. Reduced
 motion retains static status. Valid JSON displays expandable values with
 multiline strings intact; full raw content and copy remain available.
+Tool payloads expose named Input, Output and Details groups. Format, expansion
+and copy actions name their own payload while retaining compact visible labels.
+The changing Raw/Readable action is an ordinary button; choosing a format reveals
+an initially collapsed payload through its existing expansion state. Output's
+bounded preview keeps its independent full-height expansion. Controls reference
+the currently mounted body, and copy continues to use the complete original value.
 Completed Tool groups and individual calls use a solid circular check with an
 accessible status instead of repeating Completed text.
 

@@ -1,0 +1,18 @@
+Browser tab: 23, Title: "OpenCorvus", URL: "http://localhost:18233/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 226
+~												223 button 原始内容：输入
++												341 container
++													342 button (expanded) 3 个字段, Secondary Actions: Collapse
++														343 text 3 个字段
++													344 definition list
++														345 container url
++															346 text url
++														347 text https://www.w3.org/WAI/fundamentals/accessibility-intro/
++														348 container format
++															349 text format
++														350 text markdown
++														351 container timeout
++															352 text timeout
++														353 text 60
+The focused UI element is 223 button 原始内容：输入

@@ -1,0 +1,47 @@
+[
+  {
+    "buttons": [
+      {
+        "body": "msg-tool-payload__content",
+        "controls": "cl-415-content",
+        "expanded": null,
+        "name": "Raw Input",
+        "pressed": null
+      },
+      {
+        "body": "msg-tool-payload__content",
+        "controls": "cl-415-content",
+        "expanded": "true",
+        "name": "Collapse Input",
+        "pressed": null
+      },
+      {
+        "controls": null,
+        "expanded": null,
+        "name": "Copy Input",
+        "pressed": null
+      }
+    ],
+    "label": "Input",
+    "role": "group"
+  },
+  {
+    "buttons": [
+      {
+        "body": "msg-tool-payload__content",
+        "controls": "cl-417-content",
+        "expanded": "false",
+        "name": "Expand Output",
+        "pressed": null
+      },
+      {
+        "controls": null,
+        "expanded": null,
+        "name": "Copy Output",
+        "pressed": null
+      }
+    ],
+    "label": "Output",
+    "role": "group"
+  }
+]
