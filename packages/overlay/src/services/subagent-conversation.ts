@@ -31,6 +31,8 @@ export interface SubagentConversationTranscript {
   liveEpoch: number
   transcriptMode: "snapshot" | "delta"
   removedMessageIDs: string[]
+  /** Sparse exclusions derived from prior authoritative reads of this target. */
+  removedPartIDs?: Record<string, string[]>
 }
 
 export interface SubagentConversationLiveProjection {
@@ -257,8 +259,10 @@ export function projectSubagentConversationLive(
   }
   const projectParts = (messageID: string, persistedParts: any[], completedAssistant = false) => {
     const changes = changesByMessageID.get(messageID) ?? []
+    const removedPartIDs = new Set(base.removedPartIDs?.[messageID])
     const parts = [...persistedParts]
     for (const change of changes) {
+      if (removedPartIDs.has(change.partID)) continue
       const index = parts.findIndex((part) => String(part?.id || "") === change.partID)
       if (change.removed) {
         if (index >= 0) parts.splice(index, 1)
@@ -652,6 +656,20 @@ export function mergeSubagentConversation(
 ): SubagentConversationTranscript {
   if (current.targetKey !== delta.targetKey) return delta
   const removedMessageIDs = new Set([...current.removedMessageIDs, ...delta.removedMessageIDs])
+  const removedParts = new Map<string, Set<string>>()
+  for (const transcript of [current, delta]) {
+    for (const [messageID, partIDs] of Object.entries(transcript.removedPartIDs ?? {})) {
+      const removed = removedParts.get(messageID) ?? new Set<string>()
+      for (const partID of partIDs) removed.add(partID)
+      removedParts.set(messageID, removed)
+    }
+  }
+  const previousMessages = new Map(current.messages.map((message) => [message.messageID, message]))
+  const retireParts = (message: SubagentTranscriptMessage) => {
+    const removed = removedParts.get(message.messageID) ?? new Set<string>()
+    for (const part of message.parts) removed.add(part.id)
+    removedParts.set(message.messageID, removed)
+  }
   const replacesMembership =
     delta.transcriptMode === "snapshot" ||
     current.liveEpoch !== delta.liveEpoch ||
@@ -661,9 +679,21 @@ export function mergeSubagentConversation(
     // members so an older live Info cannot reintroduce them after this read.
     for (const message of current.messages) removedMessageIDs.add(message.messageID)
   }
+  for (const message of current.messages) {
+    if (removedMessageIDs.has(message.messageID)) retireParts(message)
+  }
   const merged = new Map((replacesMembership ? [] : current.messages).map((message) => [message.messageID, message]))
   for (const messageID of removedMessageIDs) merged.delete(messageID)
   for (const message of delta.messages) {
+    // Each returned Message owns its complete presented Part membership;
+    // accepted live fields may still be ahead of those Parts' text checkpoints.
+    const previous = previousMessages.get(message.messageID)
+    if (previous) retireParts(previous)
+    const removed = removedParts.get(message.messageID)
+    if (removed) {
+      for (const part of message.parts) removed.delete(part.id)
+      if (removed.size === 0) removedParts.delete(message.messageID)
+    }
     merged.set(message.messageID, message)
     removedMessageIDs.delete(message.messageID)
   }
@@ -678,5 +708,6 @@ export function mergeSubagentConversation(
     liveEpoch: delta.liveEpoch,
     transcriptMode: delta.transcriptMode,
     removedMessageIDs: [...removedMessageIDs],
+    removedPartIDs: Object.fromEntries([...removedParts].filter(([, ids]) => ids.size > 0).map(([id, ids]) => [id, [...ids]])),
   }
 }

@@ -15,7 +15,13 @@ import { Database } from "@/storage/db"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { captureApiAuthority } from "../../overlay/src/services/api"
-import { parseSubagentConversation, mergeSubagentConversation } from "../../overlay/src/services/subagent-conversation"
+import {
+  createSubagentConversationLiveProjection,
+  mergeSubagentConversation,
+  observeSubagentConversationLiveEvent,
+  parseSubagentConversation,
+  projectSubagentConversationLive,
+} from "../../overlay/src/services/subagent-conversation"
 
 afterEach(resetMemoryDatabase)
 
@@ -99,6 +105,53 @@ async function taskWithStreamingSession() {
   await awaitTaskMessageProtocolBridgeIdle()
   return { taskID, rootSessionID: root.id, sessionID: session.id, messageID, partID }
 }
+
+test("Task child hydration preserves current Part membership after a real source withdrawal", async () => {
+  await using project = await memoryProject("task-source-withdrawal")
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const owner = await taskWithStreamingSession()
+      const body = await Session.updatePart({
+        id: Identifier.ascending("part"), sessionID: owner.sessionID, messageID: owner.messageID,
+        type: "text", text: "Current answer after the source is withdrawn.",
+      })
+      const source = await Session.updatePart({
+        id: Identifier.ascending("part"), sessionID: owner.sessionID, messageID: owner.messageID,
+        type: "source-url", sourceId: "withdrawn-source", url: "https://example.com/withdrawn", title: "Withdrawn source",
+      })
+      await Database.awaitEffectIdle(5_000)
+      await awaitTaskMessageProtocolBridgeIdle()
+      const route = new Hono().route("/", EngineRoutes())
+      const endpoint = `/task/${owner.taskID}/conversation/session/${owner.sessionID}`
+      const target = {
+        source: { kind: "task" as const, id: owner.taskID }, sessionID: owner.sessionID,
+        directory: project.path, authority: captureApiAuthority(),
+      }
+      const response = await route.request(endpoint)
+      expect(response.status).toBe(200)
+      const before = parseSubagentConversation(target, await response.json())
+      const beforeParts = before.messages.find((message) => message.messageID === owner.messageID)!.parts
+      expect(beforeParts.map((part) => part.id)).toEqual([body.id, source.id])
+      const live = beforeParts.reduce((current, part) => observeSubagentConversationLiveEvent(current, {
+        type: "message.part.updated", payload: { part },
+      }), createSubagentConversationLiveProjection(owner.sessionID))
+      expect(await Session.removePart({ sessionID: owner.sessionID, messageID: owner.messageID, partID: source.id })).toBe(source.id)
+      await Database.awaitEffectIdle(5_000)
+      await awaitTaskMessageProtocolBridgeIdle()
+      const query = new URLSearchParams({ after_live_epoch: String(before.liveEpoch), after_live_sequence: String(before.lastLiveSequence) })
+      for (const path of [`${endpoint}?${query}`, endpoint]) {
+        const updatedResponse = await route.request(path)
+        expect(updatedResponse.status).toBe(200)
+        const next = parseSubagentConversation(target, await updatedResponse.json())
+        expect(next.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual([body])
+        const projected = projectSubagentConversationLive(mergeSubagentConversation(before, next), live)
+        expect(projected.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual([body])
+        expect(projected.removedPartIDs).toEqual({ [owner.messageID]: [source.id] })
+      }
+    },
+  })
+}, 30_000)
 
 test("Task child snapshot and changed-message delta retain a real control-only assistant identity", async () => {
   await using project = await memoryProject("task-control-only-identity")

@@ -1,0 +1,44 @@
+{
+  "nativeTerminal": {
+    "occurrenceID": "source-part-membership-315-history-01-dd6c6b79-38c7-472d-83ca-64988b394ca8",
+    "pid": 68312,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "files": [
+    {
+      "bytes": 47224,
+      "birthUtc": "2026-10-11T20:11:39.7284675Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-part-membership-315\\generated-bun-history-01\\091d165574530ade.debug.pile",
+      "name": "091d165574530ade.debug.pile"
+    },
+    {
+      "bytes": 169556,
+      "birthUtc": "2026-10-11T20:11:39.7032218Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-part-membership-315\\generated-bun-history-01\\69cc5fa7b1dcf631.debug.pile",
+      "name": "69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "bytes": 59902,
+      "birthUtc": "2026-10-11T20:11:39.6534509Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-part-membership-315\\generated-bun-history-01\\7a87559fbb4087c4.debug.pile",
+      "name": "7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "bytes": 88408,
+      "birthUtc": "2026-10-11T20:11:39.6634581Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-part-membership-315\\generated-bun-history-01\\cf86f20c120ce818.debug.pile",
+      "name": "cf86f20c120ce818.debug.pile"
+    },
+    {
+      "bytes": 43530,
+      "birthUtc": "2026-10-11T20:11:39.7585666Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-part-membership-315\\generated-bun-history-01\\f9ce0c567348c89d.debug.pile",
+      "name": "f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "targetBirthUtc": "2026-10-11T20:11:39.4015644Z",
+  "observedAtUtc": "2026-10-11T20:13:57.0872132Z",
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0."
+}

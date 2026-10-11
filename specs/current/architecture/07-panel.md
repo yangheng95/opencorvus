@@ -667,6 +667,14 @@ well as live removal events. A message explicitly returned by a later read
 rejoins the target, and an unseen new live message remains eligible. A different
 target starts with its own membership facts. This repairs retained live content
 after a missed removal or move without treating an unpersisted text tail as lost.
+The same transcript owns sparse `removedPartIDs` grouped by Message identity.
+Each returned Message supplies its complete presented Part membership, so known
+prior Parts outside that set remain excluded from retained live snapshots.
+Whole-message retirement also retains its known Part exclusions; a later read
+restoring that Message or Part reestablishes only the returned membership.
+New live-only Parts remain eligible, and existing active Parts still accept
+unpersisted complete text fields. These are current-target projection facts,
+not another server protocol or persistent store.
 The same server-path primitive owns separator interpretation for project-file
 keys in the Explorer and workbench. Windows project paths use forward separators;
 POSIX filename backslashes stay literal. Source file labels, direct opens,

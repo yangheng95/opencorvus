@@ -646,8 +646,8 @@ test("task transcript delta replaces changed messages and removes deleted messag
     transcriptMode: "delta",
     removedMessageIDs: [],
     messages: [
-      { messageID: "message-early", orderKey: orderKey(100, "message-early") },
-      { messageID: "message-late", orderKey: orderKey(200, "message-late"), info: { error: "old" } },
+      { messageID: "message-early", orderKey: orderKey(100, "message-early"), parts: [] },
+      { messageID: "message-late", orderKey: orderKey(200, "message-late"), info: { error: "old" }, parts: [] },
     ],
   } as any
   const delta = {
@@ -662,7 +662,7 @@ test("task transcript delta replaces changed messages and removes deleted messag
     liveEpoch: 1779000000000,
     transcriptMode: "delta",
     removedMessageIDs: ["message-early", "message-late"],
-    messages: [{ messageID: "message-late", orderKey: orderKey(200, "message-late"), info: { error: "updated" } }],
+    messages: [{ messageID: "message-late", orderKey: orderKey(200, "message-late"), info: { error: "updated" }, parts: [] }],
   } as any
 
   expect(mergeSubagentConversation(current, delta)).toMatchObject({
@@ -687,7 +687,7 @@ test("task transcript snapshot replaces the prior live epoch", () => {
     liveEpoch: 1779000000000,
     transcriptMode: "delta",
     removedMessageIDs: [],
-    messages: [{ messageID: "stale-message", orderKey: orderKey(100, "stale-message") }],
+    messages: [{ messageID: "stale-message", orderKey: orderKey(100, "stale-message"), parts: [] }],
   } as any
   const snapshot = {
     targetKey: subagentConversationTargetKey({
@@ -701,7 +701,7 @@ test("task transcript snapshot replaces the prior live epoch", () => {
     liveEpoch: 1779000001000,
     transcriptMode: "snapshot",
     removedMessageIDs: [],
-    messages: [{ messageID: "current-message", orderKey: orderKey(200, "current-message") }],
+    messages: [{ messageID: "current-message", orderKey: orderKey(200, "current-message"), parts: [] }],
   } as any
 
   expect(mergeSubagentConversation(current, snapshot)).toMatchObject({

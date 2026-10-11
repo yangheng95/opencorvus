@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [315 子会话 Part 成员关系](source-part-membership-plan-315.md)：来源与文字撤回后的权威补全。
+
 - [314 子会话删除合并](source-removal-plan-314.md)：补全删除与旧实时消息的成员关系。
 
 - [313 子会话终态合并](source-settlement-plan-313.md)：持久化终态和实时片段的权威关系。

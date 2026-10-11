@@ -1,0 +1,62 @@
+{
+  "boundary": "Independent credentialless history physical/output/request and birth-port-pair readback; original history launcher foreground already joined, full-copy receipt and selected Task retained separately.",
+  "listeners": [],
+  "native": {
+    "occurrence": "source-part-membership-315-history-01-dd6c6b79-38c7-472d-83ca-64988b394ca8",
+    "outcome": "settled",
+    "host": {
+      "pid": 62736,
+      "processInstanceID": "win32:639273462986013039",
+      "occurrenceID": "f3d36652-f248-430c-b881-bad913cd0ef7"
+    },
+    "target": {
+      "pid": 68312,
+      "processInstanceID": "win32:639273462994015644",
+      "occurrenceID": "e3e2d37f-1c05-4921-b67f-a381ad37f507"
+    },
+    "observedAtUtc": "2026-10-11T20:12:55.696Z",
+    "deadlineAt": 1791750398521,
+    "terminal": {
+      "occurrenceID": "source-part-membership-315-history-01-dd6c6b79-38c7-472d-83ca-64988b394ca8",
+      "pid": 68312,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "states": [
+    {
+      "expected": {
+        "pid": 62736,
+        "processInstanceID": "win32:639273462986013039",
+        "occurrenceID": "f3d36652-f248-430c-b881-bad913cd0ef7"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 68312,
+        "processInstanceID": "win32:639273462994015644",
+        "occurrenceID": "e3e2d37f-1c05-4921-b67f-a381ad37f507"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "qualificationKind": null,
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "observedAtUtc": "2026-10-11T20:13:00.8360587Z",
+  "occurrence": "source-part-membership-315-history-01-dd6c6b79-38c7-472d-83ca-64988b394ca8"
+}

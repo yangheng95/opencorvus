@@ -1,0 +1,47 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\inspect-task-live-observation.test.ts:
+144 |         const updatedResponse = await route.request(path)
+145 |         expect(updatedResponse.status).toBe(200)
+146 |         const next = parseSubagentConversation(target, await updatedResponse.json())
+147 |         expect(next.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual([body])
+148 |         const projected = projectSubagentConversationLive(mergeSubagentConversation(before, next), live)
+149 |         expect(projected.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual([body])
+      ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "id": "prt_g0VXm1R5700pPbPOzzsY",
+      "messageID": "msg_g0VXm1R4i00If9dQ8WoI",
+      "orderKey": "v1:0001791749293121:0000000000000031:0000000000000000:part:prt_g0VXm1R5700pPbPOzzsY",
+      "sessionID": "ses_-zUSDyYw0zzz2MGQsWSW",
+      "text": "Current answer after the source is withdrawn.",
+      "type": "text",
+    },
++   {
++     "id": "prt_g0VXm1R5S00oayO2jVbo",
++     "messageID": "msg_g0VXm1R4i00If9dQ8WoI",
++     "orderKey": "v1:0001791749293144:0000000000000031:0000000000000000:part:prt_g0VXm1R5S00oayO2jVbo",
++     "sessionID": "ses_-zUSDyYw0zzz2MGQsWSW",
++     "sourceId": "withdrawn-source",
++     "title": "Withdrawn source",
++     "type": "source-url",
++     "url": "https://example.com/withdrawn",
++   },
+  ]
+
+- Expected  - 0
++ Received  + 10
+
+      at toEqual (unknown:1:1)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\inspect-task-live-observation.test.ts:149:100
+      at processTicksAndRejections (unknown:7:39)
+(fail) Task child hydration preserves current Part membership after a real source withdrawal [2187.73ms]
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [1817.25ms]
+(pass) Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor [3543.33ms]
+
+ 2 pass
+ 1 fail
+ 27 expect() calls
+Ran 3 tests across 1 file. [9.23s]
