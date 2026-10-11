@@ -7,7 +7,8 @@ import { ConversationArtifactInspector } from "./ConversationArtifactInspector"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { ArtifactResourceDownload } from "./ArtifactResourceDownload"
-import { copyTextReporting } from "../services/clipboard"
+import { createClipboardCopy } from "./ui/clipboard-copy"
+import { Feedback } from "./ui/Feedback"
 
 const DEFAULT_VISIBLE_OUTPUT_COUNT = 5
 
@@ -162,6 +163,11 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                   const identity = outputIdentity(output)
                   const open = () => openOutputID() === identity
                   const title = outputPrimaryLabel(output)
+                  const clipboard = createClipboardCopy({
+                    text: () => title,
+                    label: () => t("artifact.actions.copy_name"),
+                    diagnosticID: "delivery-name",
+                  })
                   return (
                     <div class="conversation-artifact-summary__artifact-item">
                       <div class="conversation-artifact-summary__resource-row">
@@ -202,11 +208,13 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                           variant="ghost"
                           tone="neutral"
                           size="icon"
-                          title={t("artifact.actions.copy_name")}
-                          aria-label={t("artifact.actions.copy_name")}
-                          onClick={() => void copyTextReporting(title, "delivery-name")}
+                          title={clipboard.label()}
+                          aria-label={clipboard.label()}
+                          aria-disabled={clipboard.pending() || undefined}
+                          aria-busy={clipboard.pending() || undefined}
+                          onClick={() => void clipboard.copy()}
                         >
-                          <Icon name="copy" size="compact" />
+                          <Icon name={clipboard.copied() ? "check" : "copy"} size="compact" />
                         </Button>
                         <ArtifactResourceDownload
                           taskID={props.summary.task.id}
@@ -214,6 +222,9 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                           filename={title}
                         />
                       </div>
+                      <Show when={clipboard.failure()}>
+                        {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
+                      </Show>
                       <Show when={open()}>
                         <ConversationArtifactInspector
                           taskID={props.summary.task.id}

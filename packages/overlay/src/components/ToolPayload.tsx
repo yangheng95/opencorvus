@@ -1,8 +1,9 @@
 import { createMemo, createSignal, createUniqueId, For, Show } from "solid-js"
-import { copyTextReporting } from "../services/clipboard"
 import { t } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
+import { Feedback } from "./ui/Feedback"
+import { createClipboardCopy } from "./ui/clipboard-copy"
 
 function PayloadValue(props: { value: unknown; depth: number }) {
   const entries = createMemo(() =>
@@ -56,7 +57,11 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
   const contentVisible = () => !props.collapsed || expanded()
   const formatLabel = () => t(raw() ? "tool.readable_payload" : "tool.raw_payload", { label: props.label })
   const expansionLabel = () => t(expanded() ? "tool.collapse_payload" : "tool.expand_payload", { label: props.label })
-  const copyLabel = () => t("tool.copy_payload", { label: props.label })
+  const clipboard = createClipboardCopy({
+    text: () => props.value,
+    label: () => t("tool.copy_payload", { label: props.label }),
+    diagnosticID: "tool-payload",
+  })
   const parsed = createMemo(() => {
     if (props.live) return undefined
     try {
@@ -107,13 +112,18 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
           variant="ghost"
           tone="neutral"
           size="icon"
-          title={copyLabel()}
-          aria-label={copyLabel()}
-          onClick={() => void copyTextReporting(props.value, "tool-output")}
+          title={clipboard.label()}
+          aria-label={clipboard.label()}
+          aria-disabled={clipboard.pending() || undefined}
+          aria-busy={clipboard.pending() || undefined}
+          onClick={() => void clipboard.copy()}
         >
-          <Icon name="copy" size="compact" />
+          <Icon name={clipboard.copied() ? "check" : "copy"} size="compact" />
         </Button>
       </div>
+      <Show when={clipboard.failure()}>
+        {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
+      </Show>
       <Show when={contentVisible()}>
         <div id={`${id}-content`} class="msg-tool-payload__content">
           <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>

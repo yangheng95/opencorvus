@@ -1,8 +1,7 @@
-import { afterEach, beforeEach, describe, expect, test } from "bun:test"
-import { copyText, copyTextReporting } from "../src/services/clipboard"
+import { afterEach, describe, expect, test } from "bun:test"
+import { copyText } from "../src/services/clipboard"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport } from "../src/services/host-transport"
-import { setLocaleData } from "../src/utils/i18n"
 
 // What this pins
 // ----------------
@@ -27,10 +26,6 @@ function transportWith(recorded: Recorded, failure?: Error): HostTransport {
   } as unknown as HostTransport
 }
 
-beforeEach(() => {
-  setLocaleData("en-US", { "common.error": "Error" })
-})
-
 afterEach(() => {
   __setHostTransportForTest(undefined)
 })
@@ -52,24 +47,5 @@ describe("clipboard writes go through the host", () => {
     )
 
     await expect(copyText("x")).rejects.toThrow(/needs a secure context/)
-  })
-
-  test("a reporting copy still reaches the host with the same text", async () => {
-    const recorded: Recorded = { commands: [] }
-    __setHostTransportForTest(transportWith(recorded))
-
-    await copyTextReporting("reported", "artifact-code")
-
-    expect(recorded.commands).toEqual([{ kind: "clipboard.writeText", text: "reported" }])
-  })
-
-  test("a reporting copy absorbs the failure so a bare onClick cannot reject", async () => {
-    const recorded: Recorded = { commands: [] }
-    __setHostTransportForTest(transportWith(recorded, new Error("no clipboard here")))
-
-    // Resolving is the contract: these call sites have nowhere to put a
-    // rejection, so the failure has to become a visible report instead.
-    await expect(copyTextReporting("x", "artifact-terminal")).resolves.toBeUndefined()
-    expect(recorded.commands).toEqual([{ kind: "clipboard.writeText", text: "x" }])
   })
 })

@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "port": 18235,
+  "occurrence": "clipboard-feedback-287-after-01-a5a4110a-cc25-47fd-a838-cb386beb4682",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\clipboard-feedback-287-after-01\\evidence",
+    "clipboard-feedback-287-after-01-a5a4110a-cc25-47fd-a838-cb386beb4682",
+    "1791699632497",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18235",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\clipboard-feedback-287-after-01\\startup.json",
+    "--startup-occurrence",
+    "clipboard-feedback-287-after-01-a5a4110a-cc25-47fd-a838-cb386beb4682",
+    "--log-level",
+    "INFO"
+  ]
+}

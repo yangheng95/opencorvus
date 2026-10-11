@@ -671,6 +671,12 @@ The changing Raw/Readable action is an ordinary button; choosing a format reveal
 an initially collapsed payload through its existing expansion state. Output's
 bounded preview keeps its independent full-height expansion. Controls reference
 the currently mounted body, and copy continues to use the complete original value.
+Tool-payload and delivery-name copying share one mounted copy-action owner over
+the canonical host clipboard writer. Only a fulfilled host write shows the brief
+checkmark and contextual copied label. The busy action retains keyboard focus;
+failure stays beside that payload or delivery with original error details and
+an explicit retry through the same button. Value replacement or disposal retires
+old feedback and its timer. No global toast or alternate clipboard writer is used.
 Completed Tool groups and individual calls use a solid circular check with an
 accessible status instead of repeating Completed text.
 

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [复制反馈287 Recall](clipboard-feedback-plan-287.md) / [真实证据](clipboard-feedback-287/README.md)：原剪贴板保护下的完整工具复制、完成反馈与共享 owner 修复。
+
 - [工具内容操作286 Recall](tool-payload-plan-286.md) / [真实证据](tool-payload-286/README.md)：输入/输出操作的可访问对象与模式显示语义修复。
 
 - [子侧栏285 Recall](child-review-plan-285.md) / [当前证据](child-review-285/README.md)：单agent使用既有真实Task完整历史，重新核对子Dock阅读与来源显示。
