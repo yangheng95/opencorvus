@@ -1,0 +1,126 @@
+{
+  "observedAtUtc": "2026-10-11T10:25:45.117Z",
+  "access": "Original and physically closed history clone readonly BEGIN/ROLLBACK; actual complete protected history rows and lifecycle values, runtime config direct bytes and original source-project file metadata; no hashes",
+  "comparison": [
+    {
+      "table": "session",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "message",
+      "sourceRows": 6,
+      "historyRows": 6,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "part",
+      "sourceRows": 16,
+      "historyRows": 16,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_request",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_progress",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_outcome",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_request",
+      "sourceRows": 4,
+      "historyRows": 4,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_outcome",
+      "sourceRows": 4,
+      "historyRows": 4,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_usage_event",
+      "sourceRows": 6,
+      "historyRows": 6,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_task",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "worker_turn_descriptor",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact_version",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "interactive_artifact",
+      "sourceRows": 0,
+      "historyRows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "memory_file",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "memory_chunk",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "session_control_record",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "session_control_event",
+      "sourceRows": 1,
+      "historyRows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "permission_execution_result",
+      "sourceRows": 2,
+      "historyRows": 2,
+      "fullRowContent": "equal"
+    }
+  ],
+  "lifecycleContent": "equal",
+  "originalLifecycleRows": 12,
+  "clonedLifecycleRows": 12,
+  "configContent": "equal",
+  "changedSourceFiles": [],
+  "boundary": "History runtime's new process/Bus/read receipts are runtime-specific; original conversation/tool/provider/memory/permission content remains exact"
+}

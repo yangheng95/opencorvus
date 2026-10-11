@@ -1,0 +1,167 @@
+diff --git a/packages/overlay/src/components/Card.tsx b/packages/overlay/src/components/Card.tsx
+index 10f244be9..6bb93f185 100644
+--- a/packages/overlay/src/components/Card.tsx
++++ b/packages/overlay/src/components/Card.tsx
+@@ -16,6 +16,7 @@ import { TracePanel } from "./TracePanel"
+ import { t } from "../utils/i18n"
+ import { StoreCardNode } from "./StoreCardNode"
+ import { createAnimationFrameScheduler } from "../utils/animation-frame"
++import { traceResize295 } from "../utils/resize-diagnostics-295"
+ import { workerSteerTargetSessionID } from "../utils/message"
+ 
+ /**
+@@ -163,7 +164,7 @@ export function Card(props: { node: CardNode; depth: number }) {
+     }
+ 
+     const updateStickyInlineSizeOnFrame = createAnimationFrameScheduler(updateStickyInlineSize)
+-    const observer = new ResizeObserver(updateStickyInlineSizeOnFrame.schedule)
++    const observer = new ResizeObserver(traceResize295("Card.sticky", updateStickyInlineSizeOnFrame.schedule))
+ 
+     observer.observe(article)
+     updateStickyInlineSize()
+diff --git a/packages/overlay/src/components/ChatComposer.tsx b/packages/overlay/src/components/ChatComposer.tsx
+index a29743c7e..9bb0d47b1 100644
+--- a/packages/overlay/src/components/ChatComposer.tsx
++++ b/packages/overlay/src/components/ChatComposer.tsx
+@@ -2,6 +2,7 @@
+ // Solid.js port of renderChatComposer / renderChatAttachments / chatForm submit
+ // and related attachment/keyboard logic
+ import type { ComposerExpertSquadPackage } from "../services/composer-expert-squad-catalog"
++import { traceResize295 } from "../utils/resize-diagnostics-295"
+ 
+ import {
+   createSignal,
+@@ -560,7 +561,7 @@ export function ChatComposer(props: ChatComposerProps) {
+       })
+   }
+   onMount(() => {
+-    const observer = new ResizeObserver(updateToolbarLayout)
++    const observer = new ResizeObserver(traceResize295("ChatComposer.toolbar", updateToolbarLayout))
+     observer.observe(toolbarRef)
+     updateToolbarLayout()
+     onCleanup(() => observer.disconnect())
+diff --git a/packages/overlay/src/components/Conversation.tsx b/packages/overlay/src/components/Conversation.tsx
+index 4d78a555d..7d77c5956 100644
+--- a/packages/overlay/src/components/Conversation.tsx
++++ b/packages/overlay/src/components/Conversation.tsx
+@@ -22,6 +22,7 @@ import { listenConversationCardScroll, requestConversationCardScroll, type Conve
+ import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
+ import { mainReadingPosition, setMainReadingPosition, registerMainReadingCapture, type MainConversationReadingPosition } from "../store/conversation-ui"
+ import { createAnimationFrameScheduler } from "../utils/animation-frame"
++import { traceResize295 } from "../utils/resize-diagnostics-295"
+ import { AppLog } from "../utils/log"
+ import { Icon } from "./ui/Icon"
+ import { DropdownMenu } from "./ui/DropdownMenu"
+@@ -315,7 +316,7 @@ function VirtualizedConversationCards(props: {
+   }
+ 
+   onMount(() => {
+-    const ro = new ResizeObserver(measuredContentChangedOnFrame.schedule)
++    const ro = new ResizeObserver(traceResize295("Conversation.virtualRoot", measuredContentChangedOnFrame.schedule))
+     virtualRootResizeObserver = ro
+     ro.observe(props.container)
+     if (rootEl) ro.observe(rootEl)
+@@ -719,7 +720,7 @@ export function Conversation(props: {
+     bindReader()
+     const stopReadingCapture = registerMainReadingCapture(rememberReadingPosition)
+     syncComposerClearance()
+-    const composerObserver = new ResizeObserver(composerClearanceOnFrame.schedule)
++    const composerObserver = new ResizeObserver(traceResize295("Conversation.composer", composerClearanceOnFrame.schedule))
+     composerObserver.observe(composerMount)
+     // Conversation is rendered directly into an existing `.chat-scroll`
+     // host owned by main.tsx. The host remains the
+diff --git a/packages/overlay/src/components/RightDock.tsx b/packages/overlay/src/components/RightDock.tsx
+index 21dd11661..9cfb99531 100644
+--- a/packages/overlay/src/components/RightDock.tsx
++++ b/packages/overlay/src/components/RightDock.tsx
+@@ -6,6 +6,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
+ import { Tab, TabList, Tabs } from "./ui/Tabs"
+ import { randomUUID } from "../utils/random-id"
+ import { createAnimationFrameScheduler } from "../utils/animation-frame"
++import { traceResize295 } from "../utils/resize-diagnostics-295"
+ 
+ export type RightDockPanel =
+   | "requirements"
+@@ -239,7 +240,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
+   })
+ 
+   if (typeof ResizeObserver !== "undefined") {
+-    const ro = new ResizeObserver(() => scheduleReflow())
++    const ro = new ResizeObserver(traceResize295("RightDock", () => scheduleReflow()))
+     createEffect(() => {
+       if (stripEl) ro.observe(stripEl)
+     })
+diff --git a/packages/overlay/src/components/ui/AutoGrowTextarea.tsx b/packages/overlay/src/components/ui/AutoGrowTextarea.tsx
+index bf79147bc..4486496f1 100644
+--- a/packages/overlay/src/components/ui/AutoGrowTextarea.tsx
++++ b/packages/overlay/src/components/ui/AutoGrowTextarea.tsx
+@@ -15,6 +15,7 @@
+ import { createEffect, onCleanup, onMount, splitProps, type JSX } from "solid-js"
+ import { autoGrowHeight, DEFAULT_MAX_VISIBLE_LINES } from "./AutoGrowTextareaMetrics"
+ import { TextField } from "./TextField"
++import { traceResize295 } from "../../utils/resize-diagnostics-295"
+ 
+ // Cap auto-grow at 10 visible lines by default; beyond that the textarea's
+ // own overflow-y:auto takes over. Single source for the line cap so every
+@@ -64,14 +65,14 @@ export function AutoGrowTextarea(props: AutoGrowTextareaProps) {
+   })
+ 
+   onMount(() => {
+-    observer = new ResizeObserver(([entry]) => {
++    observer = new ResizeObserver(traceResize295("AutoGrowTextarea", ([entry]) => {
+       // Mounts and hidden panes can precede their usable layout. Width changes
+       // invalidate wrapping; our own height writes must not trigger another resize.
+       const nextWidth = entry.contentRect.width
+       if (nextWidth === width) return
+       width = nextWidth
+       resize()
+-    })
++    }))
+     observer.observe(el!)
+     queueMicrotask(resize)
+   })
+diff --git a/packages/overlay/src/main.tsx b/packages/overlay/src/main.tsx
+index b2051d239..771bc598e 100644
+--- a/packages/overlay/src/main.tsx
++++ b/packages/overlay/src/main.tsx
+@@ -138,6 +138,7 @@ import {
+   type VisibleComposerReferences,
+ } from "@opencorvus-ai/transport-protocol"
+ import { waitForLogDrain, AppLog } from "./utils/log"
++import { recentResize295 } from "./utils/resize-diagnostics-295"
+ import { teardownApp } from "./services/init"
+ import { nativeOpen } from "./utils/native"
+ import { getHostTransport } from "./services/host-transport-runtime"
+@@ -339,9 +340,10 @@ function reportOverlayRuntimeError(scope: string, error: unknown): void {
+   const message = runtimeErrorMessage(error)
+   const diagnosticDetails = details ? `source: ${scope}\n\n${details}` : `source: ${scope}`
+   if (isBrowserResizeObserverDeliveryError(error)) {
+-    AppLog.debug("runtime", scope, {
++    AppLog.info("runtime", scope, {
+       message,
+       details,
++      resize295: recentResize295(),
+     })
+     return
+   }
+diff --git a/packages/overlay/src/utils/dom-utils.ts b/packages/overlay/src/utils/dom-utils.ts
+index 98ab8d92b..973cdcf94 100644
+--- a/packages/overlay/src/utils/dom-utils.ts
++++ b/packages/overlay/src/utils/dom-utils.ts
+@@ -14,6 +14,7 @@
+ // introduced during the Solid migration.
+ 
+ import { boardStore } from "../store/board"
++import { traceResize295 } from "./resize-diagnostics-295"
+ import { selectTask } from "../services/task"
+ import { settingsStore } from "../store/settings"
+ import { hasWorkspaceSelection, beginWorkspaceSelection } from "../services/workspace"
+@@ -97,7 +98,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+   let stableRestoreFrames = 0
+   let observedContentElements = new Set<Element>()
+ 
+-  const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll())
++  const contentResizeObserver = new ResizeObserver(traceResize295("AutoScroll.content", () => scheduleFollowScroll()))
+ 
+   function retirePositionRestore(restored = false) {
+     if (restoreTop === null) return

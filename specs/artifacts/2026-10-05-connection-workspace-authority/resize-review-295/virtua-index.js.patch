@@ -1,0 +1,18 @@
+diff --git "a/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resize-review-295\\original-virtua\\index.js" "b/D:\\myhexin-local\\opencorvus\\packages\\overlay\\node_modules\\virtua\\lib\\solid\\index.js"
+index da7ef9337..0416dae05 100644
+--- "a/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resize-review-295\\original-virtua\\index.js"
++++ "b/D:\\myhexin-local\\opencorvus\\packages\\overlay\\node_modules\\virtua\\lib\\solid\\index.js"
+@@ -1,3 +1,4 @@
++import { traceResize295 } from "D:/myhexin-local/opencorvus/packages/overlay/src/utils/resize-diagnostics-295.ts";
+ import { createComponent as e, Dynamic as t, spread as r, mergeProps as n, insert as o, template as s, use as i, effect as c, setStyleProperty as l } from "solid-js/web";
+ 
+ import { mergeProps as u, createEffect as f, createMemo as a, onCleanup as d, createSignal as g, onMount as h, createComputed as p, on as v, untrack as m, For as S, splitProps as $ } from "solid-js";
+@@ -254,7 +255,7 @@ const b = null, {min: z, max: w, abs: x, floor: y} = Math, _ = (e, t, r) => z(r,
+     let t;
+     return {
+         q(r) {
+-            (t || (t = new (L(H(r)).ResizeObserver)(e))).observe(r);
++            (t || (t = new (L(H(r)).ResizeObserver)(traceResize295("virtua.esm", e)))).observe(r);
+         },
+         N(e) {
+             t.unobserve(e);

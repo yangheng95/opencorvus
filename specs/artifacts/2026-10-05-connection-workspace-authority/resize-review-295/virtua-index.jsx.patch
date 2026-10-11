@@ -1,0 +1,18 @@
+diff --git "a/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resize-review-295\\original-virtua\\index.jsx" "b/D:\\myhexin-local\\opencorvus\\packages\\overlay\\node_modules\\virtua\\lib\\solid\\index.jsx"
+index 7c71ab9ce..03fd0d3d7 100644
+--- "a/D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resize-review-295\\original-virtua\\index.jsx"
++++ "b/D:\\myhexin-local\\opencorvus\\packages\\overlay\\node_modules\\virtua\\lib\\solid\\index.jsx"
+@@ -1,3 +1,4 @@
++import { traceResize295 } from "D:/myhexin-local/opencorvus/packages/overlay/src/utils/resize-diagnostics-295.ts";
+ import { mergeProps, createEffect, onCleanup, createMemo, createSignal, onMount, createComputed, on, untrack, For, splitProps } from 'solid-js';
+ import { Dynamic } from 'solid-js/web';
+ 
+@@ -1072,7 +1073,7 @@ const createResizeObserver = (cb) => {
+             // https://www.w3.org/TR/resize-observer/#intro
+             (ro ||
+                 // https://bugs.chromium.org/p/chromium/issues/detail?id=1491739
+-                (ro = new (getCurrentWindow(getCurrentDocument(e)).ResizeObserver)(cb))).observe(e);
++                (ro = new (getCurrentWindow(getCurrentDocument(e)).ResizeObserver)(traceResize295("virtua.solid", cb)))).observe(e);
+         },
+         _unobserve(e) {
+             ro.unobserve(e);

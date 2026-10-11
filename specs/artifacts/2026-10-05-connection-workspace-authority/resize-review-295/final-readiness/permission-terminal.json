@@ -1,0 +1,23 @@
+{
+  "observedAtUtc": "2026-10-11T10:23:22.542Z",
+  "access": "Original readonly BEGIN/ROLLBACK",
+  "rows": [
+    {
+      "attempt_id": "per_hACM4b2YlS9M8ePtChQS",
+      "request_id": "per_hhuvzOuW0jwso8Ez6WRA",
+      "outcome_id": "per_g0VXjXDP400yiNn3Yuiu",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791712538030
+    },
+    {
+      "attempt_id": "per_hWcDxkKGK7iWpqhhbLTh",
+      "request_id": "per_hmEBWJymTusBvd0xjyNq",
+      "outcome_id": "per_g0VXjXC5u00CMQmnZpoo",
+      "outcome": "execution_succeeded",
+      "reason": null,
+      "result_at": 1791712532998
+    }
+  ],
+  "contract": "permission/authority.ts completeExecution persists successful result; catch appendEffectOutcome persists execution_failed with original reason and retires effect lease. Failed execution is a terminal outcome, not a successful result."
+}

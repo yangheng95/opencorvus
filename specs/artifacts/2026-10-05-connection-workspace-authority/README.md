@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [布局通知295 Recall](resize-review-plan-295.md) / [真实证据](resize-review-295/README.md)：三次通知与Virtua父容器测量对应，移除全部临时诊断后正常页面复核。
+
 - [正文流式294 Recall](stream-reading-plan-294.md) / [真实证据](stream-reading-294/README.md)：两份官方来源和3249字符六节正文，生成期间回读保持，原Native/Provider严格通过。
 
 - [实时来源293 Recall](source-live-plan-293.md) / [真实证据](source-live-293/README.md)：原12次流式请求及预算失败、Sources读位保持、限流错误分层显示。

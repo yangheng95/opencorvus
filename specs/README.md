@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [布局通知295](records/2026-10/2026-10-11-resize-review-295.md)：真实回调记录将复现通知归因到虚拟列表测量；诊断全部移除并复核正常 Sources/Dock。
+
 - [正文流式294](records/2026-10/2026-10-11-stream-reading-294.md)：真实六节正文完成，Sources与回读段落在持续生成时稳定；六次Provider流式正常闭合。
 
 - [实时来源293](records/2026-10/2026-10-11-source-live-293.md)：真实Sources追加阅读及限流错误分层显示；原模型预算失败和未验边界保留。

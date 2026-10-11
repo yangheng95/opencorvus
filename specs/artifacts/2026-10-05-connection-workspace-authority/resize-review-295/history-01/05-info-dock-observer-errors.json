@@ -1,0 +1,1244 @@
+{
+  "observedAtUtc": "2026-10-11T10:15:51.475Z",
+  "events": [
+    {
+      "level": "info",
+      "time": "2026-10-11T10:15:21.562Z",
+      "service": "overlay:runtime",
+      "logDomain": "non-session",
+      "data": {
+        "message": "ResizeObserver loop completed with undelivered notifications.",
+        "details": "ResizeObserver loop completed with undelivered notifications.",
+        "resize295": {
+          "at": 17962.10000038147,
+          "recent": [
+            {
+              "at": 316.90000009536743,
+              "label": "RightDock",
+              "targets": [
+                {
+                  "element": "DIV#.oc-tabs right-dock-tab-strip",
+                  "before": {
+                    "width": 0,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 760,
+                    "height": 123.33333587646484
+                  },
+                  "after": {
+                    "width": 760,
+                    "height": 123.33333587646484
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317.5,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.30000019073486,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.30000019073486,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6771240234375,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6771240234375,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.7000002861023,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6771240234375,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6771240234375,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 348.6000003814697,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 356.30000019073486,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 375.7000002861023,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 395.40000009536743,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 405.90000009536743,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 406.5,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17848.60000038147,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 203.33334350585938
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 203.33334350585938
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17848.60000038147,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17849.400000095367,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 104
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 104
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17850.300000190735,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17855.800000190735,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17926.400000095367,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#.conversation-virtual-window",
+                  "before": {
+                    "width": 759.6666870117188,
+                    "height": 640
+                  },
+                  "after": {
+                    "width": 759.6666870117188,
+                    "height": 640
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17926.400000095367,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "message": "window.error"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T10:15:21.563Z",
+      "service": "overlay:runtime",
+      "logDomain": "non-session",
+      "data": {
+        "message": "ResizeObserver loop completed with undelivered notifications.",
+        "details": "ResizeObserver loop completed with undelivered notifications.",
+        "resize295": {
+          "at": 18101.300000190735,
+          "recent": [
+            {
+              "at": 317,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 760,
+                    "height": 123.33333587646484
+                  },
+                  "after": {
+                    "width": 760,
+                    "height": 123.33333587646484
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317.5,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.30000019073486,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.30000019073486,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6771240234375,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6771240234375,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.7000002861023,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6771240234375,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6771240234375,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 348.6000003814697,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 356.30000019073486,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 375.7000002861023,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 395.40000009536743,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 405.90000009536743,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 406.5,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17848.60000038147,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 203.33334350585938
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 203.33334350585938
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17848.60000038147,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17849.400000095367,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 104
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 104
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17850.300000190735,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17855.800000190735,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17926.400000095367,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#.conversation-virtual-window",
+                  "before": {
+                    "width": 759.6666870117188,
+                    "height": 640
+                  },
+                  "after": {
+                    "width": 759.6666870117188,
+                    "height": 640
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17926.400000095367,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17972.900000095367,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#.conversation-virtual-window",
+                  "before": {
+                    "width": 759.6666870117188,
+                    "height": 421.5
+                  },
+                  "after": {
+                    "width": 759.6666870117188,
+                    "height": 421.5
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17994.200000286102,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 299.3333435058594
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 299.3333435058594
+                  }
+                }
+              ]
+            },
+            {
+              "at": 18017.200000286102,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "message": "window.error"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T10:15:21.563Z",
+      "service": "overlay:runtime",
+      "logDomain": "non-session",
+      "data": {
+        "message": "ResizeObserver loop completed with undelivered notifications.",
+        "details": "ResizeObserver loop completed with undelivered notifications.",
+        "resize295": {
+          "at": 18135.700000286102,
+          "recent": [
+            {
+              "at": 317,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 760,
+                    "height": 123.33333587646484
+                  },
+                  "after": {
+                    "width": 760,
+                    "height": 123.33333587646484
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 317.5,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.30000019073486,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.30000019073486,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6771240234375,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6771240234375,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 328.7000002861023,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6771240234375,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6771240234375,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 348.6000003814697,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 356.30000019073486,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 375.7000002861023,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 395.40000009536743,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 683.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 405.90000009536743,
+              "label": "ChatComposer.toolbar",
+              "targets": [
+                {
+                  "element": "DIV#.chat-compose-meta",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 32
+                  }
+                }
+              ]
+            },
+            {
+              "at": 406.5,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 56
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17848.60000038147,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 203.33334350585938
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 203.33334350585938
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17848.60000038147,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17849.400000095367,
+              "label": "AutoGrowTextarea",
+              "targets": [
+                {
+                  "element": "TEXTAREA#chatTextarea.oc-text-field__textarea chat-textarea",
+                  "before": {
+                    "width": 718.6666870117188,
+                    "height": 104
+                  },
+                  "after": {
+                    "width": 718.6666870117188,
+                    "height": 104
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17850.300000190735,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17855.800000190735,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17926.400000095367,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#.conversation-virtual-window",
+                  "before": {
+                    "width": 759.6666870117188,
+                    "height": 640
+                  },
+                  "after": {
+                    "width": 759.6666870117188,
+                    "height": 640
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17926.400000095367,
+              "label": "AutoScroll.content",
+              "targets": [
+                {
+                  "element": "DIV#.quotation-scope",
+                  "before": {
+                    "width": 0,
+                    "height": 0
+                  },
+                  "after": {
+                    "width": 0,
+                    "height": 0
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17972.900000095367,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#.conversation-virtual-window",
+                  "before": {
+                    "width": 759.6666870117188,
+                    "height": 421.5
+                  },
+                  "after": {
+                    "width": 759.6666870117188,
+                    "height": 421.5
+                  }
+                }
+              ]
+            },
+            {
+              "at": 17994.200000286102,
+              "label": "Conversation.composer",
+              "targets": [
+                {
+                  "element": "DIV#solidChatComposer.",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 299.3333435058594
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 299.3333435058594
+                  }
+                }
+              ]
+            },
+            {
+              "at": 18017.200000286102,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#chatScroll.chat-scroll session-content",
+                  "before": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  },
+                  "after": {
+                    "width": 942.3333740234375,
+                    "height": 635.3333740234375
+                  }
+                }
+              ]
+            },
+            {
+              "at": 18134.800000190735,
+              "label": "Conversation.virtualRoot",
+              "targets": [
+                {
+                  "element": "DIV#.conversation-virtual-window",
+                  "before": {
+                    "width": 759.6666870117188,
+                    "height": 1477.59375
+                  },
+                  "after": {
+                    "width": 759.6666870117188,
+                    "height": 1477.59375
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "message": "window.error"
+    }
+  ],
+  "changes": []
+}
