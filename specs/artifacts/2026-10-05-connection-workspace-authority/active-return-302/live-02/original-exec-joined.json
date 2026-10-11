@@ -1,0 +1,11 @@
+{
+  "sessionID": 97911,
+  "result": {
+    "chunk_id": "841105",
+    "wall_time_seconds": 0.0000084,
+    "exit_code": 0,
+    "original_token_count": 107,
+    "output": "Owned Sol Target PID 7848, Host PID 64220, occurrence active-return-302-live-02-a589663f-ec19-4e9b-a6d1-9ef68e918c24; native settlement remains required.\r\nJoined exact physical settlement and paired cleanup receipt.\r\n{\"boundary\":\"Exact Task lifecycle and native/provider completion; UI remains Root-owned\",\"providerEOFRequests\":12,\"qualification\":\"Task\",\"taskID\":\"tsk_g00VXkXmMh00fjg3TMWB\",\"epoch\":1,\"physicalCompletion\":true}\r\n"
+  },
+  "boundary": "Original launch exec actual terminal join; no restart"
+}

@@ -1,0 +1,93 @@
+{
+  "body": {
+    "partID": "prt_g0VXkXyLr00Hiyub963S",
+    "messageID": "msg_g0VXkXwdB004kRrRnuVW",
+    "sessionID": "ses_hh91WUtOkVckOCvUjhXU",
+    "chars": 9012,
+    "partTime": {
+      "start": 1791727494835,
+      "end": 1791727647457
+    },
+    "messageTime": {
+      "created": 1791727488221,
+      "completed": 1791727648266
+    }
+  },
+  "samples": [
+    {
+      "file": "before-switch-bootstrap.json",
+      "at": "2026-10-11T14:04:58.385Z",
+      "taskStatus": "active",
+      "frames": 32,
+      "body": {
+        "sequence": 383,
+        "chars": 353,
+        "baselineChars": 353
+      }
+    },
+    {
+      "file": "after-child-open-bootstrap.json",
+      "at": "2026-10-11T14:05:52.800Z",
+      "taskStatus": "active",
+      "frames": 3,
+      "body": {
+        "sequence": 2222,
+        "chars": 3329,
+        "baselineChars": 3329
+      }
+    },
+    {
+      "file": "after-sources-reopen-bootstrap.json",
+      "at": "2026-10-11T14:07:07.851Z",
+      "taskStatus": "active",
+      "frames": 11,
+      "body": {
+        "sequence": 4813,
+        "chars": 7804,
+        "baselineChars": 7804
+      }
+    }
+  ],
+  "ui": [
+    {
+      "phase": "sources-before-switch",
+      "at": "2026-10-11T14:05:03.830Z"
+    },
+    {
+      "phase": "project-left",
+      "at": "2026-10-11T14:05:04.191Z"
+    },
+    {
+      "phase": "project-returned",
+      "at": "2026-10-11T14:05:13.923Z"
+    },
+    {
+      "phase": "child-reopened-while-generating",
+      "at": "2026-10-11T14:05:28.574Z"
+    },
+    {
+      "phase": "body-after-return-growing",
+      "at": "2026-10-11T14:05:58.581Z"
+    },
+    {
+      "phase": "sources-reading-during-growth",
+      "at": "2026-10-11T14:06:19.294Z"
+    },
+    {
+      "phase": "sources-dock-closed",
+      "at": "2026-10-11T14:06:32.507Z"
+    },
+    {
+      "phase": "sources-dock-reopened",
+      "at": "2026-10-11T14:06:38.446Z"
+    },
+    {
+      "phase": "completed-sources",
+      "at": "2026-10-11T14:08:56.523Z"
+    },
+    {
+      "phase": "completed-tail",
+      "at": "2026-10-11T14:08:57.031Z"
+    }
+  ]
+}

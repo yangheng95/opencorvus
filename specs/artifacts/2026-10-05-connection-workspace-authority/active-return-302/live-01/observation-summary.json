@@ -1,0 +1,90 @@
+{
+  "body": {
+    "partID": "prt_g0VXkWYX700pGEwq8jBY",
+    "messageID": "msg_g0VXkWXNK006ynz308fi",
+    "sessionID": "ses_hSEbd4M6nTM4OWrQt8bA",
+    "chars": 5043,
+    "partTime": {
+      "start": 1791727157261,
+      "end": 1791727249804
+    },
+    "messageTime": {
+      "created": 1791727152810,
+      "completed": 1791727249967
+    }
+  },
+  "samples": [
+    {
+      "file": "before-return-bootstrap.json",
+      "at": "2026-10-11T13:59:27.237Z",
+      "taskStatus": "active",
+      "frames": 26,
+      "body": {
+        "sequence": 619,
+        "chars": 664,
+        "baselineChars": 664
+      }
+    },
+    {
+      "file": "during-project-away-bootstrap.json",
+      "at": "2026-10-11T14:00:29.958Z",
+      "taskStatus": "active",
+      "frames": 2,
+      "body": {
+        "sequence": 2833,
+        "chars": 4000,
+        "baselineChars": 3982
+      }
+    },
+    {
+      "file": "after-project-return-bootstrap.json",
+      "at": "2026-10-11T14:00:51.182Z",
+      "taskStatus": "active",
+      "frames": 7,
+      "body": {
+        "sequence": 3571,
+        "chars": 5043,
+        "baselineChars": 5043,
+        "completedAt": 1791727249967
+      }
+    }
+  ],
+  "ui": [
+    {
+      "phase": "sources-start",
+      "at": "2026-10-11T13:59:14.098Z"
+    },
+    {
+      "phase": "body-before-dock",
+      "at": "2026-10-11T13:59:41.096Z"
+    },
+    {
+      "phase": "dock-close",
+      "at": "2026-10-11T13:59:48.224Z"
+    },
+    {
+      "phase": "dock-reopened",
+      "at": "2026-10-11T13:59:53.564Z"
+    },
+    {
+      "phase": "sources-before-project-switch",
+      "at": "2026-10-11T14:00:06.265Z"
+    },
+    {
+      "phase": "project-leave",
+      "at": "2026-10-11T14:00:23.327Z"
+    },
+    {
+      "phase": "project-return",
+      "at": "2026-10-11T14:00:45.928Z"
+    },
+    {
+      "phase": "child-reopened-after-project-return",
+      "at": "2026-10-11T14:01:11.737Z"
+    },
+    {
+      "phase": "completed-sources",
+      "at": "2026-10-11T14:02:06.664Z"
+    }
+  ]
+}

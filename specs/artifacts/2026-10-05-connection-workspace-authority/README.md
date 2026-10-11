@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [生成期间返回302 Recall](active-return-plan-302.md) / [真实证据](active-return-302/README.md)：两次真实活跃返回和 Sources 阅读，新增瞬时文字拼接异常复现。
+
 - [完整快照回放301 Recall](replay-snapshot-plan-301.md) / [真实证据](replay-snapshot-301/README.md)：共享最新完整状态修复、21 项后端回归和真实 Sources/正文验收。
 
 - [完整渲染观察300 Recall](render-lifetime-plan-300.md) / [实际证据](render-lifetime-300/README.md)：补齐生命周期覆盖，定位首次快照与旧live回放倒退，修复待继续。

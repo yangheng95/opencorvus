@@ -1,0 +1,6 @@
+请只委托一名只读研究员，使用webfetch实际读取下面三份官方网页正文：
+https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
+https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events
+https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html
+
+请研究员在自己的可见消息里直接写一篇中文分析，十二个小节、约4500汉字，每节至少两段。围绕长对话中的流式正文、来源阅读、用户上翻、布局变化、键盘焦点解释这些文档的适用边界，包含一张比较表和两个简短代码示例，明确区分文档事实与设计建议，引用实际读到的页面。只读取这三篇，不搜索扩展资料，不读取本地文件或凭据，不创建或修改文件，不发布额外产物。不需要调用任何其他成员，负责人直接核对研究员返回的正文和读取记录后收尾。保持所有研究结果在正常可见消息中。

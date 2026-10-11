@@ -1,0 +1,11 @@
+{
+  "sessionID": 24306,
+  "result": {
+    "chunk_id": "f26f38",
+    "wall_time_seconds": 0.0000086,
+    "exit_code": 0,
+    "original_token_count": 392,
+    "output": "\r\nlisteners             : \r\ncopiedPair            : {@{outcome=removed; path=C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\active-return-302-live-01\\runtime\\data\\auth.json; copiedLength=2194; presentAfter=False}, @{outcome=removed; path=C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\active-return-302-live-01\\runtime\\data\\models.json; copiedLength=9155406; presentAfter=False}}\r\npairedCleanupComplete : True\r\noccurrence            : active-return-302-live-01-a4af2e5a-c978-444d-bde1-17d835356fb1\r\nboundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup\r\nnativeSettlement      : @{occurrence=active-return-302-live-01-a4af2e5a-c978-444d-bde1-17d835356fb1; outcome=settled; host=; target=; observedAtUtc=2026/10/11 14:02:27; deadlineAt=1791728580327; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup}\r\nchain                 : {@{originalOccurrencePresent=False; expected=; state=dead_or_reused}, @{originalOccurrencePresent=False; expected=; state=dead_or_reused}}\r\nphysicalCompletion    : True\r\nobservedAtUtc         : 2026/10/11 14:02:29\r\n\r\n{\"providerEOFRequests\":12,\"qualification\":\"Task\",\"boundary\":\"Exact Task lifecycle and native/provider completion; UI remains Root-owned\",\"taskID\":\"tsk_g00VXkWMjM00p3vDI1MJ\",\"epoch\":1,\"physicalCompletion\":true}\r\n"
+  },
+  "boundary": "Original launch exec actual terminal join; no restart"
+}

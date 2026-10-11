@@ -1,0 +1,15 @@
+{
+  "pid": 7848,
+  "occurrence": "active-return-302-live-02-a589663f-ec19-4e9b-a6d1-9ef68e918c24",
+  "owner": {
+    "pid": 7848,
+    "processInstanceID": "win32:639273241984022822",
+    "occurrenceID": "e075ade4-7e70-4899-ad71-a4a0f6d8d918"
+  },
+  "parent": {
+    "pid": 68420,
+    "processInstanceID": "win32:639273241983655722",
+    "occurrenceID": "50f62268-dfbc-480b-80e2-b12423b1829c"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

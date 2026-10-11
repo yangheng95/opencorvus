@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-10-11T14:05:28.774Z",
+  "callID": "call_a5fc23a3aef04f6a9907b0b813eb2bc2",
+  "output": [
+    {
+      "type": "input_text",
+      "text": "Wall time: 0.5037 seconds\nOutput:"
+    },
+    {
+      "type": "input_text",
+      "text": "etch\n          - generic: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html (text/html; charset=utf-8)\n        - group \"Sources\":\n          - 'link \"Open web source: Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C · www.w3.org\"':\n            - /url: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\n            - generic: \"Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C\"\n            - generic: www.w3.org\n        - heading \"长对话中的流式正文、来源切回与交互稳定性\" [level=1]\n        - heading \"1. 研究范围与证据层级\" [level=2]\n        - paragraph:\n          - strong: 文档事实\n          - text: ：本次实际通过\n          - code: webfetch\n          - text: 读取了指定的三篇页面：MDN 的\n          - link \"ResizeObserver\":\n            - /url: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver\n          - text: 、\n          - link \"pointer-events\":\n            - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events\n          - text: ，以及 W3C 的\n          - link \"Understanding Focus Order\":\n            - /url: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\n          - text: 。前两篇解释浏览器接口与 CSS 属性；第三篇是 WCAG 2.2 成功准则 2.4.3 的解释性文档，页面明确说明 Understanding 文档属于信息性解释，不是额外的符合性要求。\n        - paragraph:\n          - strong: 设计建议\n          - text: ：应把问题分成尺寸观测、指针命中、键盘导航与阅读连续性四个层面。三篇文档分别提供部分依据，但不构成完整的聊天界面规范。下文关于自动跟随、阅读锚点、恢复位置与用户意图的方案，均是针对长对话的设计建议，不是这些页面直接规定的行为；本次没有检查实际产品，也不据此宣称任何实现已经合规。\n        - heading \"2. 流式正文不等于每次都发生尺寸变化\" [level=2]\n        - paragraph: \"**文档事实22/Understanding/focus-order.html)\"\n        - paragraph:\n          - strong: 设计建议\n          - text: ：用户主动"
+    }
+  ],
+  "pairedScreenshot": "02-live-body-after-return.png",
+  "boundary": "Original CUA result text; paired screenshot followed the DOM observation in the same tool call. No inferred frame duration or data-layer diagnosis."
+}
