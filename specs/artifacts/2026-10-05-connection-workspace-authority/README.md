@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [来源域名283 Recall](source-provenance-plan-283.md) / [真实证据](source-provenance-283/README.md)：修复长章节截断下域名不可见，实际导航/提示及完整服务收尾。
+
 - [搜索诊断275 Recall](search-diagnostic-plan-275.md) / [修复证据](search-diagnostic-275/README.md)：当前MCP原始诊断与Exa单一结果路径、标准JSON/SSE、协议测试及真实GUI。
 
 - [当前流式274 Recall](source-stream-plan-274.md) / [实际证据](source-stream-274/README.md)：当前工具运行/五来源与摘录，真实侧聊尾部重开及搜索诊断信息丢失调查。

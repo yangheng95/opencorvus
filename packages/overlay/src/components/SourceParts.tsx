@@ -151,7 +151,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
     if (props.source.type !== "source-url" || !props.source.url) return ""
     try {
       const url = new URL(props.source.url)
-      return url.hash ? `${url.hash} · ${url.host}` : url.host
+      return url.hash ? `${url.host} · ${url.hash}` : url.host
     } catch {
       return ""
     }

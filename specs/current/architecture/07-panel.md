@@ -570,9 +570,10 @@ an honest count; operator expansion state and exact source links remain availabl
 Both presentations use the same identity-keyed source entry renderer. Individual
 excerpt disclosure remains scoped to the real source. Citation identity uses body
 typography; site and index metadata retain caption.
-Web citations with a fragment put that exact navigation fragment before the host
-in their secondary caption, so chapters with the same publisher title remain
-distinguishable. The shared activation name carries the same location. URL captions
+Web citations put the host before the exact navigation fragment in their
+secondary caption, keeping website provenance visible when a long text anchor is
+clipped. Short chapters with the same publisher title remain distinguishable.
+The shared activation name carries the same location. URL captions
 use the existing two-line clamp pattern while their Tooltip retains the full URL.
 Source activation, group
 expansion and excerpt expansion use the existing transcript reading-intent
