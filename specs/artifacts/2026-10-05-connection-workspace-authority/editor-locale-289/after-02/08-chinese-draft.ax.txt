@@ -1,0 +1,169 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://localhost:18238/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18238/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-577-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-579-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-581-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-583-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: 对话快捷入口, ID: workspaceNavigation
+					12 container 对话快捷入口
+						13 button 对话
+						14 button Mission 看板
+						15 button 定时
+						16 button 专家团
+						17 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button 设置
+					19 button 关于
+					20 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button 搜索任务或运行命令
+							26 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container 对话导航
+									30 button 新对话
+								31 container workLedgerProjectsScroll
+									32 text 项目
+									33 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+										37 container
+											38 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											39 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+											40 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+										41 button (expanded) Description: 收起 匿名项目 229011, Secondary Actions: Collapse
+										42 container
+											43 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											44 button Reply with OK.
+											45 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+									46 container 最近
+										47 text 最近
+										48 container
+											49 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											50 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+											51 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+										52 container
+											53 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											54 button Reply with OK.
+											55 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							56 container 连接诊断
+								57 container Description: 连接诊断 · 在线 · 端口 18238, ID: connBadge
+									58 text 在线
+					59 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					60 container workspaceMain
+						61 container chatSection
+							62 container Description: 正在加载 Task, ID: taskSwitchProgress
+							63 container
+								64 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+								65 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-216-trigger, Secondary Actions: Expand
+								66 container Description: 非进行中, ID: taskStatus
+									67 text 非进行中
+								68 button 侧聊
+								69 container solidChatHeaderRuntimeActions
+									70 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+									71 checkbox Description: 关闭右侧面板, Value: 1
+							72 container
+								73 container Description: 对话, ID: chatScroll
+									74 container
+										75 container
+											76 text 用户
+											77 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts：第一次 offset=27、limit=11；第二次 offset=1、limit=1000，读取整文件。然后用中文各用一句话概述，并保留两个真实文件来源供点击。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+										78 container
+											79 text work
+											80 text 15 秒
+											81 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+												82 text read
+												83 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+												84 image
+											85 container 来源
+												86 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+													87 text read.ts:27-37
+													88 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+											89 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
+												90 text read
+												91 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
+												92 image
+											93 container 来源
+												94 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+													95 text read.ts
+													96 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+											97 container
+												98 text 第一次读取了  read.ts  第 27–37 行，其中  citedReadRange  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。
+											99 container
+												100 text 第二次读取了  read.ts  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
+								101 container chatHomeComposition
+									102 container solidChatComposer
+										103 container
+											104 text 模型配置暂不可用
+											105 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+											106 button (collapsed) 详细信息, Secondary Actions: Expand
+												107 text 详细信息
+											108 button 重试
+											109 container chatForm
+												110 splitter Description: 拖拽调整消息输入框大小, Value: 42
+												111 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+												112 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+												113 text Work
+												114 text Chat
+												115 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+												116 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+												117 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+													118 text 选择模型
+												119 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+										120 button 滚动到底部
+						121 splitter Description: 调整右侧面板大小, Value: 50, ID: rightDockResizer
+						122 container Description: 工具面板, ID: rightDock
+							123 container tabs-cl-64
+								124 tab group 已打开的工具
+									125 container
+										126 tab (selected, settable, boolean) Description: 文件, Value: 1, ID: tabs-cl-64-trigger-file
+										127 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+									128 container
+										129 tab (selectable, settable, boolean) Description: 文件, Value: 0, ID: tabs-cl-64-trigger-explorer
+										130 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+								131 pop up button (collapsed) Description: 添加工具, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+								132 button 关闭面板
+								133 container Description: 文件, ID: centerWorkbenchFile
+									134 container 编辑器
+										135 container
+											136 container README.md
+												137 text README.md
+												138 container 未保存的更改
+													139 text *
+											140 button 保存, Help: 保存 (Ctrl/Cmd+S)
+											141 button 从磁盘重新加载
+											142 button 关闭工作区
+										143 container
+											144 text Replaced match on line 1.
+											145 text entry area (settable) Description: 编辑器, Value: # Reviewed formal Task resource qualification
+
+
+												146 container
+													147 text #  Reviewed formal Task resource qualification
+											148 container
+												149 text field (settable) Description: 查找, Value: Isolated
+												150 button 下一个
+												151 button 上一个
+												152 button 全部
+												153 checkbox (settable, integer) Description: 区分大小写, Value: 0
+												154 checkbox (settable, integer) Description: 正则表达式, Value: 0
+												155 checkbox (settable, integer) Description: 全字匹配, Value: 0
+												156 text field (settable) Description: 替换, Value: Reviewed
+												157 button 替换
+												158 button 全部替换
+												159 button 关闭
+										160 text Markdown
+		161 container 设置 设置, ID: tooltip-cl-119-content
+			162 text 设置
+			163 text 设置
+
+The focused UI element is 18 button 设置

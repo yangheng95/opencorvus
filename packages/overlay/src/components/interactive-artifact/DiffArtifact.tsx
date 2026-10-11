@@ -6,6 +6,7 @@ import type { InteractiveArtifactPayload } from "../../services/interactive-arti
 import { t } from "../../utils/i18n"
 import { editorLanguage } from "../ui/code-editor-language"
 import { overlayCodeEditorExtensions } from "../ui/code-editor-theme"
+import { createCodeEditorLocale } from "../ui/code-editor-locale"
 import { Button } from "../ui/Button"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { artifactCodeFilename } from "./CodeArtifact"
@@ -15,6 +16,7 @@ type DiffPayload = Extract<InteractiveArtifactPayload, { renderer: "diff@1" }>
 export function DiffArtifact(props: { payload: DiffPayload }) {
   let host: HTMLDivElement | undefined
   let merge: MergeView | undefined
+  const localeExtension = createCodeEditorLocale(() => merge ? [merge.a, merge.b] : [])
   const languageCompartment = new Compartment()
   const language = () => editorLanguage(artifactCodeFilename(props.payload.language))
   const [languageFailed, setLanguageFailed] = createSignal(false)
@@ -40,6 +42,7 @@ export function DiffArtifact(props: { payload: DiffPayload }) {
     const extensions = [
       basicSetup,
       ...overlayCodeEditorExtensions(),
+      localeExtension(),
       languageCompartment.of([]),
       EditorState.readOnly.of(true),
       EditorView.editable.of(false),

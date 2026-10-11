@@ -1,0 +1,283 @@
+Browser tab: 27, Title: "OpenCorvus", URL: "http://localhost:18237/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18237/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-336-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-338-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-340-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-342-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: 对话快捷入口, ID: workspaceNavigation
+				11 container 对话快捷入口
+					12 button 对话
+					13 button Mission 看板
+					14 button 定时
+					15 button 专家团
+					16 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button 设置
+				18 button 关于
+				19 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button 搜索任务或运行命令
+						25 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container 对话导航
+								29 button 新对话
+							30 container workLedgerProjectsScroll
+								31 text 项目
+								32 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+									36 container
+										37 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										38 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										39 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+									40 button (expanded) Description: 收起 匿名项目 229011, Secondary Actions: Collapse
+									41 container
+										42 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										43 button Reply with OK.
+										44 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+								45 container 最近
+									46 text 最近
+									47 container
+										48 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										49 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										50 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+									51 container
+										52 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										53 button Reply with OK.
+										54 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						55 container 连接诊断
+							56 container Description: 连接诊断 · 在线 · 端口 18237, ID: connBadge
+								57 text 在线
+				58 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+				59 container workspaceMain
+					60 container chatSection
+						61 container Description: 正在加载 Task, ID: taskSwitchProgress
+						62 container
+							63 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+							64 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-216-trigger, Secondary Actions: Expand
+							65 container Description: 非进行中, ID: taskStatus
+								66 text 非进行中
+							67 button 侧聊
+							68 container solidChatHeaderRuntimeActions
+								69 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+								70 checkbox Description: 关闭右侧面板, Value: 1
+						71 container
+							72 container Description: 对话, ID: chatScroll
+								73 container
+									74 container
+										75 text 用户
+										76 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts：第一次 offset=27、limit=11；第二次 offset=1、limit=1000，读取整文件。然后用中文各用一句话概述，并保留两个真实文件来源供点击。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+									77 container
+										78 text work
+										79 text 15 秒
+										80 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+											81 text read
+											82 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+											83 image
+										84 container 来源
+											85 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+												86 text read.ts:27-37
+												87 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+										88 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
+											89 text read
+											90 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
+											91 image
+										92 container 来源
+											93 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+												94 text read.ts
+												95 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+										96 container
+											97 text 第一次读取了  read.ts  第 27–37 行，其中  citedReadRange  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。
+										98 container
+											99 text 第二次读取了  read.ts  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
+							100 container chatHomeComposition
+								101 container solidChatComposer
+									102 container
+										103 text 模型配置暂不可用
+										104 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+										105 button (collapsed) 详细信息, Secondary Actions: Expand
+											106 text 详细信息
+										107 button 重试
+										108 container chatForm
+											109 splitter Description: 拖拽调整消息输入框大小, Value: 42
+											110 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+											111 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											112 text Work
+											113 text Chat
+											114 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											115 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											116 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+												117 text 选择模型
+											118 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+									119 button 滚动到底部
+					120 splitter Description: 调整右侧面板大小, Value: 50, ID: rightDockResizer
+					121 container Description: 工具面板, ID: rightDock
+						122 container tabs-cl-64
+							123 tab group 已打开的工具
+								124 container
+									125 tab (selected, settable, boolean) Description: 文件, Value: 1, ID: tabs-cl-64-trigger-file
+									126 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+							127 pop up button (collapsed) Description: 添加工具, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							128 button 关闭面板
+							129 container Description: 文件, ID: centerWorkbenchFile
+								130 container 编辑器
+									131 container
+										132 text tool/read.ts
+										133 text 只读
+										134 button 从磁盘重新加载
+										135 button 关闭工作区
+									136 container
+										137 text 当前匹配. ...(citedReadRange(page) ?? {}), 行号 221.
+										138 text entry area Description: 编辑器, Value:     const isBinary = isBinaryBytes(filepath, bytes)
+    if (isBinary) throw new Error(`Cannot read binary file: ${filepath}`)
+
+
+    const page = readTextFilePageContent(bytes.toString("utf8"), {
+      offset: params.offset,
+      limit: params.limit ?? DEFAULT_READ_LIMIT,
+    })
+    const preview = redactInlinePayloads(page.raw.slice(0, 20).join("\n"))
+
+
+    let output = [`<path>${filepath}</path>`, `<type>file</type>`, "<content>"].join("\n")
+    output += renderTextFilePage(page)
+    output += "\n</content>"
+
+
+    FileTime.read(ctx.sessionID, filepath)
+
+
+    if (instructions.length > 0) {
+      output += `\n\n<system-reminder>\n${instructions.map((i) => i.content).join("\n\n")}\n</system-reminder>`
+    }
+    output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+ *     from references without carrying the project ID.
+											139 container
+												140 text const isBinary  =  isBinaryBytes ( filepath ,  bytes )
+											141 container
+												142 text if  ( isBinary )  throw new Error ( `Cannot read binary file:  ${ filepath } ` )
+											143 container
+												144 text const page  =  readTextFilePageContent ( bytes . toString ( "utf8" ), {
+											145 container
+												146 text offset :  params . offset ,
+											147 container
+												148 text limit :  params . limit  ??  DEFAULT_READ_LIMIT ,
+											149 text     })
+											150 container
+												151 text const preview  =  redactInlinePayloads ( page . raw . slice ( 0 ,  20 ). join ( "\n" ))
+											152 container
+												153 text let output  = [ `<path> ${ filepath } </path>` ,  `<type>file</type>` ,  "<content>" ]. join ( "\n" )
+											154 container
+												155 text output  +=  renderTextFilePage ( page )
+											156 container
+												157 text output  +=  "\n</content>"
+											158 container
+												159 text FileTime . read ( ctx . sessionID ,  filepath )
+											160 container
+												161 text if  ( instructions . length  >  0 ) {
+											162 container
+												163 text output  +=  `\n\n<system-reminder>\n ${ instructions . map (( i ) =>  i . content ). join ( "\n\n" )} \n</system-reminder>`
+											164 text     }
+											165 container
+												166 text output  =  redactInlinePayloads ( output )
+											167 container
+												168 text return  {
+											169 container
+												170 text title ,
+											171 container
+												172 text output ,
+											173 container
+												174 text metadata : {
+											175 container
+												176 text preview ,
+											177 container
+												178 text truncated :  page . truncated ,
+											179 container
+												180 text loaded :  instructions . map (( i ) =>  i . filepath ),
+											181 container
+												182 text lines :  page . lines ,
+											183 container
+												184 text totalLines :  page . totalLines ,
+											185 text       },
+											186 container
+												187 text sources : [
+											188 container
+												189 text fileSource ({
+											190 container
+												191 text path :  filepath ,
+											192 container
+												193 text title ,
+											194 container
+												195 text           ...( citedReadRange ( page ) ?? {}),
+											196 container
+												197 text provider :  "opencorvus-read" ,
+											198 text         }),
+											199 text       ],
+											200 text     }
+											201 text   },
+											202 text })
+											203 text /**
+											204 text  * Map an attachment reference to its on-disk filesystem path so the read tool
+											205 text  * can serve files uploaded to the task (images, PDFs, spec documents, …).
+											206 text  *
+											207 text  * Accepted forms:
+											208 text  *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+											209 text  *     AttachmentStore.write (served by AttachmentRoutes).
+											210 text  *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+											211 text  *     resolves inside the current project, useful when agents synthesize URLs
+											212 text  *     from references without carrying the project ID.
+										213 container
+											214 text field (settable) Description: 查找, Value: citedReadRange
+											215 button 下一个
+											216 button 上一个
+											217 button 全部
+											218 checkbox (settable, integer) Description: 区分大小写, Value: 1
+											219 checkbox (settable, integer) Description: 正则表达式, Value: 0
+											220 checkbox (settable, integer) Description: 全字匹配, Value: 0
+											221 button 关闭
+									222 text TypeScript
+
+The focused UI element is 216 button 上一个

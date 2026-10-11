@@ -4,6 +4,7 @@ import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type 
 import { t } from "../../utils/i18n"
 import { Button } from "./Button"
 import { editorLanguage } from "./code-editor-language"
+import { createCodeEditorLocale } from "./code-editor-locale"
 import { createAnimationFrameScheduler } from "../../utils/animation-frame"
 import {
   overlayCodeEditorExtensions,
@@ -40,12 +41,14 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   let applyingExternalValue = false
   let revealedIdentity = ""
   let revealObserver: ResizeObserver | undefined
+  const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
   const languageCompartment = new Compartment()
   const readOnlyCompartment = new Compartment()
   const readOnlyExtensions = (readOnly: boolean) => [
     EditorView.editable.of(!readOnly),
     EditorState.readOnly.of(readOnly),
     EditorView.contentAttributes.of({
+      "aria-label": local.ariaLabel,
       "aria-readonly": readOnly ? "true" : "false",
       ...(readOnly ? { tabindex: "0" } : {}),
     }),
@@ -144,10 +147,10 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
       extensions: [
         basicSetup,
         ...overlayCodeEditorExtensions(),
+        localeExtension(),
         languageCompartment.of([]),
         EditorView.lineWrapping,
         readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
-        EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
         EditorView.updateListener.of((update) => {
           if (!update.docChanged || applyingExternalValue) return
           local.onValueChange(update.state.doc.toString())

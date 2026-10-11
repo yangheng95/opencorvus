@@ -1,0 +1,232 @@
+Browser tab: 27, Title: "OpenCorvus", URL: "http://localhost:18237/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18237/ui/
+	2 container
+		3 container overlayAppHost
+			4 container titlebar
+				5 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				6 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					7 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-334-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-336-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-338-trigger, Secondary Actions: Expand
+					10 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-340-trigger, Secondary Actions: Expand
+			11 container panelBody
+				12 container Description: 对话快捷入口, ID: workspaceNavigation
+					13 container 对话快捷入口
+						14 button 对话
+						15 button Mission 看板
+						16 button 定时
+						17 button 专家团
+						18 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						19 button 设置
+					20 button 关于
+					21 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				22 container workspacePageStack
+					23 container leftActivityShell
+						24 container workspaceContextbar
+							25 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							26 button 搜索任务或运行命令
+							27 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						28 container sidebar
+							29 container workLedgerPanel
+								30 container 对话导航
+									31 button 新对话
+								32 container workLedgerProjectsScroll
+									33 text 项目
+									34 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									35 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									36 container
+										37 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+										38 container
+											39 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											40 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+											41 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+										42 button (expanded) Description: 收起 匿名项目 229011, Secondary Actions: Collapse
+										43 container
+											44 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											45 button Reply with OK.
+											46 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+									47 container 最近
+										48 text 最近
+										49 container
+											50 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+											51 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+											52 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+										53 container
+											54 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											55 button Reply with OK.
+											56 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+							57 container 连接诊断
+								58 container Description: 连接诊断 · 在线 · 端口 18237, ID: connBadge
+									59 text 在线
+					60 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					61 container workspaceMain
+						62 container chatSection
+							63 container Description: 正在加载 Task, ID: taskSwitchProgress
+							64 container
+								65 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+								66 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
+								67 container Description: 非进行中, ID: taskStatus
+									68 text 非进行中
+								69 button 侧聊
+								70 container solidChatHeaderRuntimeActions
+									71 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+									72 checkbox Description: 关闭右侧面板, Value: 1
+							73 container
+								74 container Description: 对话, ID: chatScroll
+									75 container
+										76 container
+											77 text 用户
+											78 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts：第一次 offset=27、limit=11；第二次 offset=1、limit=1000，读取整文件。然后用中文各用一句话概述，并保留两个真实文件来源供点击。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+										79 container
+											80 text work
+											81 text 15 秒
+											82 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+												83 text read
+												84 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+												85 image
+											86 container 来源
+												87 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+													88 text read.ts:27-37
+													89 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+											90 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
+												91 text read
+												92 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
+												93 image
+											94 container 来源
+												95 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+													96 text read.ts
+													97 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+											98 container
+												99 text 第一次读取了  read.ts  第 27–37 行，其中  citedReadRange  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。
+											100 container
+												101 text 第二次读取了  read.ts  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
+								102 container chatHomeComposition
+									103 container solidChatComposer
+										104 container
+											105 text 模型配置暂不可用
+											106 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+											107 button (collapsed) 详细信息, Secondary Actions: Expand
+												108 text 详细信息
+											109 button 重试
+											110 container chatForm
+												111 splitter Description: 拖拽调整消息输入框大小, Value: 42
+												112 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+												113 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+												114 text Work
+												115 text Chat
+												116 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+												117 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+												118 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+													119 text 选择模型
+												120 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+										121 button 滚动到底部
+						122 splitter Description: 调整右侧面板大小, Value: 50, ID: rightDockResizer
+						123 container Description: 工具面板, ID: rightDock
+							124 container tabs-cl-64
+								125 tab group 已打开的工具
+									126 container
+										127 tab (selected, settable, boolean) Description: 文件, Value: 1, ID: tabs-cl-64-trigger-file
+										128 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+								129 pop up button (collapsed) Description: 添加工具, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+								130 button 关闭面板
+								131 container Description: 文件, ID: centerWorkbenchFile
+									132 container 编辑器
+										133 container
+											134 text tool/read.ts
+											135 text 只读
+											136 button 从磁盘重新加载
+											137 button 关闭工作区
+										138 container
+											139 text Current match. ...(citedReadRange(page) ?? {}), on line 221.
+											140 text entry area Description: 编辑器, Value:           ...(citedReadRange(page) ?? {}),
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+ *     from references without carrying the project ID.
+ *
+ * Returns undefined when the input is a plain file path.
+ */
+function resolveAttachmentPath(raw: string): string | undefined {
+  if (!raw) return undefined
+  const trimmed = raw.trim()
+  const located = AttachmentStore.nameFromUrl(trimmed)
+  if (located) {
+    const abs = AttachmentStore.resolveAbsolute(located.projectID, located.name)
+    if (!abs) throw new Error(`attachment ${trimmed} not found in project ${located.projectID}`)
+    return abs
+  }
+  const schemeMatch = trimmed.match(/^attachment:(?:\/\/)?(.+)$/i)
+  if (schemeMatch) {
+    const name = schemeMatch[1].replace(/^\/+/, "")
+    if (!name || name.includes("/") || name.includes("\\")) {
+      throw new Error(`attachment shorthand must be 'attachment:<sha>.<ext>' without directory parts: ${trimmed}`)
+    }
+    const abs = AttachmentStore.resolveAbsolute(Instance.project.id, name)
+    if (!abs) throw new Error(`attachment ${name} not resolvable in current project`)
+    return abs
+  }
+  return undefined
+}
+
+
+												141 text           ...(citedReadRange(page) ?? {}),
+												142 text  *     AttachmentStore.write (served by AttachmentRoutes).
+												143 text  *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+												144 text  *     resolves inside the current project, useful when agents synthesize URLs
+												145 text  *     from references without carrying the project ID.
+												146 text  *
+												147 text  * Returns undefined when the input is a plain file path.
+												148 text  */
+												149 container
+													150 text function resolveAttachmentPath ( raw :  string ):  string  |  undefined  {
+												151 container
+													152 text if  (! raw )  return undefined
+												153 container
+													154 text const trimmed  =  raw . trim ()
+												155 container
+													156 text const located  =  AttachmentStore . nameFromUrl ( trimmed )
+												157 container
+													158 text if  ( located ) {
+												159 container
+													160 text const abs  =  AttachmentStore . resolveAbsolute ( located . projectID ,  located . name )
+												161 container
+													162 text if  (! abs )  throw new Error ( `attachment  ${ trimmed }  not found in project  ${ located . projectID } ` )
+												163 container
+													164 text return abs
+												165 text   }
+												166 container
+													167 text const schemeMatch  =  trimmed . match ( /^attachment:(?:\/\/)?(.+)$/i )
+												168 container
+													169 text if  ( schemeMatch ) {
+												170 container
+													171 text const name  =  schemeMatch [ 1 ]. replace ( /^\/+/ ,  "" )
+												172 container
+													173 text if  (! name  ||  name . includes ( "/" ) ||  name . includes ( "\\" )) {
+												174 container
+													175 text throw new Error ( `attachment shorthand must be 'attachment:<sha>.<ext>' without directory parts:  ${ trimmed } ` )
+												176 text     }
+												177 container
+													178 text const abs  =  AttachmentStore . resolveAbsolute ( Instance . project . id ,  name )
+												179 container
+													180 text if  (! abs )  throw new Error ( `attachment  ${ name }  not resolvable in current project` )
+												181 container
+													182 text return abs
+												183 text   }
+												184 container
+													185 text return undefined
+												186 text }
+											187 container
+												188 text field (settable) Description: 查找, Value: citedReadRange
+												189 button 下一个
+												190 button 上一个
+												191 button 全部
+												192 checkbox (settable, integer) Description: 区分大小写, Value: 1
+												193 checkbox (settable, integer) Description: 正则表达式, Value: 0
+												194 checkbox (settable, integer) Description: 全字匹配, Value: 0
+												195 button 关闭
+										196 text TypeScript
+		197 container 设置 设置, ID: tooltip-cl-119-content
+			198 text 设置
+			199 text 设置
+
+The focused UI element is 19 button 设置

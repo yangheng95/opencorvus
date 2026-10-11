@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "port": 18237,
+  "occurrence": "editor-locale-289-history-01-8190d446-a076-4a68-8efe-74476a21d77a",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\editor-locale-289-history-01\\evidence",
+    "editor-locale-289-history-01-8190d446-a076-4a68-8efe-74476a21d77a",
+    "1791702330067",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18237",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\source-whole-265-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\editor-locale-289-history-01\\startup.json",
+    "--startup-occurrence",
+    "editor-locale-289-history-01-8190d446-a076-4a68-8efe-74476a21d77a",
+    "--log-level",
+    "INFO"
+  ]
+}

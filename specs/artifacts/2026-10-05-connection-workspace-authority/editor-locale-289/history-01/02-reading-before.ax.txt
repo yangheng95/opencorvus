@@ -1,0 +1,100 @@
+Browser tab: 27, Title: "OpenCorvus", URL: "http://localhost:18237/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 140-154, 156-172
+~										139 text entry area Description: Editor, Value: export function citedReadRange(page: {
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
+}
+
+
+function isMissingPathError(error: unknown): boolean {
+  return error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
+}
+
+
+export async function taskFileStatOrMissing<T>(read: () => Promise<T>): Promise<T | undefined> {
+  try {
+    return await read()
+  } catch (error) {
+    if (isMissingPathError(error)) return undefined
+    throw error
+  }
+}
+
+
+export const READ_TOOL_DESCRIPTION = DESCRIPTION
+export const ReadToolParameters = z.object({
+  filePath: z
+    .string()
+    .describe(
+      "A path relative to the current Task directory, or an absolute path when the caller already has that exact native path",
+    ),
+  offset: z.coerce.number().describe("The line number to start reading from (1-indexed)").optional(),
+  limit: z.coerce.number().describe("The maximum number of lines to read (defaults to 2000)").optional(),
+})
+
+
+export const ReadTool = Tool.define("read", {
+  description: READ_TOOL_DESCRIPTION,
+  parameters: ReadToolParameters,
+  async execute(params, ctx) {
+    if (params.offset !== undefined && params.offset < 1) {
+      throw new Error("offset must be greater than or equal to 1")
+    }
+    let filepath = params.filePath
+    const viaAttachment = resolveAttachmentPath(filepath)
+    if (viaAttachment !== undefined) {
+      filepath = viaAttachment
+    } else if (!path.isAbsolute(filepath)) {
+      filepath = path.resolve(Instance.directory, filepath)
+    }
+    const title = path.relative(Instance.worktree, filepath)
+
+
+    const files = executionFiles(ctx)
+    const stat = await taskFileStatOrMissing(() => files.stat(filepath))
+
+
+    await assertExternalDirectory(ctx, filepath, {
+      bypass: Boolean(ctx.extra?.["bypassCwdCheck"]),
+      kind: stat?.isDirectory() ? "directory" : "file",
+~											155 text export function citedReadRange(page: {
++											222 text })
++											223 container
++												224 text export const ReadTool  =  Tool . define ( "read" , {
++											225 container
++												226 text description :  READ_TOOL_DESCRIPTION ,
++											227 container
++												228 text parameters :  ReadToolParameters ,
++											229 container
++												230 text async execute ( params ,  ctx ) {
++											231 container
++												232 text if  ( params . offset  !==  undefined  &&  params . offset  <  1 ) {
++											233 container
++												234 text throw new Error ( "offset must be greater than or equal to 1" )
++											235 text     }
++											236 container
++												237 text let filepath  =  params . filePath
++											238 container
++												239 text const viaAttachment  =  resolveAttachmentPath ( filepath )
++											240 container
++												241 text if  ( viaAttachment  !==  undefined ) {
++											242 container
++												243 text filepath  =  viaAttachment
++											244 container
++												245 text     }  else if  (! path . isAbsolute ( filepath )) {
++											246 container
++												247 text filepath  =  path . resolve ( Instance . directory ,  filepath )
++											248 text     }
++											249 container
++												250 text const title  =  path . relative ( Instance . worktree ,  filepath )
++											251 container
++												252 text const files  =  executionFiles ( ctx )
++											253 container
++												254 text const stat  =  await taskFileStatOrMissing (() =>  files . stat ( filepath ))
++											255 container
++												256 text await assertExternalDirectory ( ctx ,  filepath , {
++											257 container
++												258 text bypass :  Boolean ( ctx . extra ?.[ "bypassCwdCheck" ]),
++											259 container
++												260 text kind :  stat ?. isDirectory () ?  "directory"  :  "file" ,
+The focused UI element is 213 text field (settable) Description: Find, Value: citedReadRange

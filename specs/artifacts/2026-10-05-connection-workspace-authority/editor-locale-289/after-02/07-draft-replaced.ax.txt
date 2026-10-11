@@ -1,0 +1,14 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://localhost:18238/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 135, 140
++										157 container README.md
++											158 text README.md
++											159 container Unsaved changes
++												160 text *
+~										136 button Save, Help: Save (Ctrl/Cmd+S)
++										161 text Replaced match on line 1.
+~										141 text entry area (settable) Description: Editor, Value: # Reviewed formal Task resource qualification
+
+
+~												143 text #  Reviewed formal Task resource qualification
+The focused UI element is 153 button Replace

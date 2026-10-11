@@ -1,0 +1,283 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://localhost:18238/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18238/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								39 container
+									40 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									41 container
+										42 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										43 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										44 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+									45 button (expanded) Description: Collapse Anonymous 229011, Secondary Actions: Collapse
+									46 container
+										47 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										48 button Reply with OK.
+										49 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+								50 container Recents
+									51 text Recents
+									52 container
+										53 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										54 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										55 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+									56 container
+										57 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										58 button Reply with OK.
+										59 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18238, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				60 container workspaceMain
+					61 container chatSection
+						62 container Description: Loading task, ID: taskSwitchProgress
+						63 container
+							64 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+							65 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-216-trigger, Secondary Actions: Expand
+							66 container Description: Not running, ID: taskStatus
+								67 text Not running
+							68 button Side chat
+							69 container solidChatHeaderRuntimeActions
+								70 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								71 checkbox Description: Close right dock, Value: 1
+						72 container
+							73 container Description: Conversation, ID: chatScroll
+								74 container
+									75 container
+										76 text User
+										77 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts：第一次 offset=27、limit=11；第二次 offset=1、limit=1000，读取整文件。然后用中文各用一句话概述，并保留两个真实文件来源供点击。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+									78 container
+										79 text work
+										80 text 15s
+										81 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+											82 text read
+											83 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+											84 image
+										85 container Sources
+											86 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+												87 text read.ts:27-37
+												88 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+										89 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
+											90 text read
+											91 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
+											92 image
+										93 container Sources
+											94 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+												95 text read.ts
+												96 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+										97 container
+											98 text 第一次读取了  read.ts  第 27–37 行，其中  citedReadRange  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。
+										99 container
+											100 text 第二次读取了  read.ts  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
+							101 container chatHomeComposition
+								102 container solidChatComposer
+									103 container
+										104 text Model configuration unavailable
+										105 text You can still read this conversation. Review the details or choose a model before sending a message.
+										106 button (collapsed) Details, Secondary Actions: Expand
+											107 text Details
+										108 button Retry
+										109 container chatForm
+											110 splitter Description: Drag to resize the message input, Value: 42
+											111 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											112 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											113 text Work
+											114 text Chat
+											115 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											116 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											117 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												118 text Choose model
+											119 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									120 button Scroll to bottom
+					121 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					122 container Description: Tools panel, ID: rightDock
+						123 container tabs-cl-64
+							124 tab group Open tools
+								125 container
+									126 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
+									127 button Description: Close tab, Help: Close tab (Delete)
+							128 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							129 button Close panel
+							130 container Description: File, ID: centerWorkbenchFile
+								131 container Editor
+									132 container
+										133 text tool/read.ts
+										134 text Read only
+										135 button Reload from disk
+										136 button Close workspace
+									137 container
+										138 text Current match. ...(citedReadRange(page) ?? {}), on line 221.
+										139 text entry area Description: Editor, Value:     const isBinary = isBinaryBytes(filepath, bytes)
+    if (isBinary) throw new Error(`Cannot read binary file: ${filepath}`)
+
+
+    const page = readTextFilePageContent(bytes.toString("utf8"), {
+      offset: params.offset,
+      limit: params.limit ?? DEFAULT_READ_LIMIT,
+    })
+    const preview = redactInlinePayloads(page.raw.slice(0, 20).join("\n"))
+
+
+    let output = [`<path>${filepath}</path>`, `<type>file</type>`, "<content>"].join("\n")
+    output += renderTextFilePage(page)
+    output += "\n</content>"
+
+
+    FileTime.read(ctx.sessionID, filepath)
+
+
+    if (instructions.length > 0) {
+      output += `\n\n<system-reminder>\n${instructions.map((i) => i.content).join("\n\n")}\n</system-reminder>`
+    }
+    output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+ *     from references without carrying the project ID.
+											140 container
+												141 text const isBinary  =  isBinaryBytes ( filepath ,  bytes )
+											142 container
+												143 text if  ( isBinary )  throw new Error ( `Cannot read binary file:  ${ filepath } ` )
+											144 container
+												145 text const page  =  readTextFilePageContent ( bytes . toString ( "utf8" ), {
+											146 container
+												147 text offset :  params . offset ,
+											148 container
+												149 text limit :  params . limit  ??  DEFAULT_READ_LIMIT ,
+											150 text     })
+											151 container
+												152 text const preview  =  redactInlinePayloads ( page . raw . slice ( 0 ,  20 ). join ( "\n" ))
+											153 container
+												154 text let output  = [ `<path> ${ filepath } </path>` ,  `<type>file</type>` ,  "<content>" ]. join ( "\n" )
+											155 container
+												156 text output  +=  renderTextFilePage ( page )
+											157 container
+												158 text output  +=  "\n</content>"
+											159 container
+												160 text FileTime . read ( ctx . sessionID ,  filepath )
+											161 container
+												162 text if  ( instructions . length  >  0 ) {
+											163 container
+												164 text output  +=  `\n\n<system-reminder>\n ${ instructions . map (( i ) =>  i . content ). join ( "\n\n" )} \n</system-reminder>`
+											165 text     }
+											166 container
+												167 text output  =  redactInlinePayloads ( output )
+											168 container
+												169 text return  {
+											170 container
+												171 text title ,
+											172 container
+												173 text output ,
+											174 container
+												175 text metadata : {
+											176 container
+												177 text preview ,
+											178 container
+												179 text truncated :  page . truncated ,
+											180 container
+												181 text loaded :  instructions . map (( i ) =>  i . filepath ),
+											182 container
+												183 text lines :  page . lines ,
+											184 container
+												185 text totalLines :  page . totalLines ,
+											186 text       },
+											187 container
+												188 text sources : [
+											189 container
+												190 text fileSource ({
+											191 container
+												192 text path :  filepath ,
+											193 container
+												194 text title ,
+											195 container
+												196 text           ...( citedReadRange ( page ) ?? {}),
+											197 container
+												198 text provider :  "opencorvus-read" ,
+											199 text         }),
+											200 text       ],
+											201 text     }
+											202 text   },
+											203 text })
+											204 text /**
+											205 text  * Map an attachment reference to its on-disk filesystem path so the read tool
+											206 text  * can serve files uploaded to the task (images, PDFs, spec documents, …).
+											207 text  *
+											208 text  * Accepted forms:
+											209 text  *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+											210 text  *     AttachmentStore.write (served by AttachmentRoutes).
+											211 text  *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+											212 text  *     resolves inside the current project, useful when agents synthesize URLs
+											213 text  *     from references without carrying the project ID.
+										214 container
+											215 text field (settable) Description: Find, Value: citedReadRange
+											216 button Next
+											217 button Previous
+											218 button All
+											219 checkbox (settable, integer) Description: Match case, Value: 1
+											220 checkbox (settable, integer) Description: Regular expression, Value: 0
+											221 checkbox (settable, integer) Description: Whole word, Value: 0
+											222 button Close
+									223 text TypeScript
+
+The focused UI element is 217 button Previous

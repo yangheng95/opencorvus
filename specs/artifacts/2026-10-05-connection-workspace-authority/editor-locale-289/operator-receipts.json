@@ -1,0 +1,48 @@
+{
+  "initial": {
+    "fiveMinuteTarget": "not met by 20732ms",
+    "port": 18237,
+    "remainingMs": 279268,
+    "closedTab": 27,
+    "parentSession": 86553,
+    "actualExit": 0
+  },
+  "after": {
+    "fiveMinuteTarget": "met",
+    "port": 18238,
+    "remainingMs": 412062,
+    "closedTab": 28,
+    "parentSession": 2548,
+    "actualExit": 0
+  },
+  "builds": [
+    {
+      "actualExit": 0,
+      "seconds": 54.82,
+      "session": 99634
+    },
+    {
+      "actualExit": 0,
+      "seconds": 51.62,
+      "session": 90672
+    },
+    {
+      "actualExit": 0,
+      "seconds": 53.35,
+      "session": 65689
+    }
+  ],
+  "typechecks": {
+    "actualExit": 0,
+    "sessions": [
+      99566,
+      48645,
+      56120
+    ]
+  },
+  "i18n": {
+    "locales": 2,
+    "keys": 2119
+  },
+  "scope": "Final real readonly Source and editable README locale/query/draft/undo verification. Diff and full native UI matrix unqualified. Original failures retained."
+}

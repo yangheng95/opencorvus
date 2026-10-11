@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [编辑器语言289 Recall](editor-locale-plan-289.md) / [真实证据](editor-locale-289/README.md)：共享CodeMirror语言配置与阅读锚点、查询、草稿/Undo保留。
+
 - [文件来源288 Recall](source-file-plan-288.md) / [真实证据](source-file-288/README.md)：只读状态与内置查找框可读性修复、原来源及深浅主题复核。
 
 - [复制反馈287 Recall](clipboard-feedback-plan-287.md) / [真实证据](clipboard-feedback-287/README.md)：原剪贴板保护下的完整工具复制、完成反馈与共享 owner 修复。
