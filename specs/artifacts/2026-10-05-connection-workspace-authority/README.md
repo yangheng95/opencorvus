@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [来源原文读位296 Recall](text-owner-plan-296.md) / [真实证据](text-owner-296/README.md)：修复工具内容返回开头，保留实时闪烁及指针打开待查边界。
+
 - [布局通知295 Recall](resize-review-plan-295.md) / [真实证据](resize-review-295/README.md)：三次通知与Virtua父容器测量对应，移除全部临时诊断后正常页面复核。
 
 - [正文流式294 Recall](stream-reading-plan-294.md) / [真实证据](stream-reading-294/README.md)：两份官方来源和3249字符六节正文，生成期间回读保持，原Native/Provider严格通过。

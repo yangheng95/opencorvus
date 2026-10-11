@@ -1,0 +1,58 @@
+{
+  "build": {
+    "seconds": 53.43,
+    "actualExit": 0,
+    "parent": 48998
+  },
+  "stages": [
+    {
+      "terminal": {
+        "occurrenceID": "text-owner-296-history-01-3344c127-f5c2-4052-b32d-7db4df9c4ed6",
+        "pid": 73940,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "remainingMs": 342812,
+      "native": {
+        "pid": 73940,
+        "processInstanceID": "win32:639273122209269412",
+        "occurrenceID": "c22aff86-81f9-4377-9cd9-e43c0fb35198"
+      },
+      "observedAtUtc": "2026-10-11T10:52:57.249Z",
+      "stage": "history-01"
+    },
+    {
+      "terminal": {
+        "occurrenceID": "text-owner-296-history-02-87c6b5b4-4adc-4871-9214-2fb93ae5aa6f",
+        "pid": 52468,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "remainingMs": 497198,
+      "native": {
+        "pid": 52468,
+        "processInstanceID": "win32:639273128544214961",
+        "occurrenceID": "7dd1e2da-34db-4fe2-bc71-a5e7043be8f9"
+      },
+      "observedAtUtc": "2026-10-11T11:00:56.389Z",
+      "stage": "history-02"
+    }
+  ],
+  "boundary": "Actual tool return values recorded by root; native facts loaded from original settlement receipts; screenshots are manually reviewed, no UI automation tests",
+  "nativeParents": [
+    {
+      "parent": 87932,
+      "actualExit": 0
+    },
+    {
+      "parent": 2958,
+      "actualExit": 0
+    }
+  ],
+  "types": {
+    "parent": 57554,
+    "actualExit": 0
+  }
+}

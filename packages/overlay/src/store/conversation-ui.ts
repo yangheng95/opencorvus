@@ -4,7 +4,13 @@ import { getServerUrl, type ApiAuthority } from "../services/api-state"
 import type { BoardSource } from "./board"
 
 export type ConversationReadingPosition = { top: number; following: boolean }
-export type ToolPayloadDisplayState = { raw?: boolean; expanded?: boolean; limit?: number }
+export type ToolPayloadDisplayState = {
+  raw?: boolean
+  expanded?: boolean
+  limit?: number
+  readingTop?: number
+  rawReadingTop?: number
+}
 export type MainConversationReadingPosition = ConversationReadingPosition & {
   anchor?: { messageID: string; textIndex: number; offset: number }
 }

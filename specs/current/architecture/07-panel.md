@@ -721,6 +721,10 @@ path. Remounting a member's transcript retains those operator choices and its
 layout; translated labels and payload contents do not define identity. The same
 bounded store owns these preferences, without component-local duplicate state
 or a second payload cache. Clipboard feedback remains local to its actual action.
+Bounded payload bodies retain their scroll position in that same record, separately
+for raw and readable formats. Restoration waits for the visible content box and
+yields to user input. Full-height expansion keeps the bounded preview's reading
+position; hidden or retired content cannot overwrite another conversation's state.
 Tool-payload and delivery-name copying share one mounted copy-action owner over
 the canonical host clipboard writer. Only a fulfilled host write shows the brief
 checkmark and contextual copied label. The busy action retains keyboard focus;

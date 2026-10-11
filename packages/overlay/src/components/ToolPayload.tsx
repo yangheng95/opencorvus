@@ -1,5 +1,6 @@
-import { createMemo, createUniqueId, For, Show } from "solid-js"
-import { setToolPayloadDisplayState, toolPayloadDisplayState } from "../store/conversation-ui"
+import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show, untrack } from "solid-js"
+import { conversationUiStore, setToolPayloadDisplayState, toolPayloadDisplayState } from "../store/conversation-ui"
+import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { t } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
@@ -59,6 +60,45 @@ export function ToolPayload(props: { stateKey: string; label: string; value: str
   const raw = () => toolPayloadDisplayState(props.stateKey)?.raw ?? false
   const expanded = () => toolPayloadDisplayState(props.stateKey)?.expanded ?? false
   const contentVisible = () => !props.collapsed || expanded()
+  const [content, setContent] = createSignal<HTMLDivElement>()
+  createEffect(on([content, () => props.stateKey, raw, expanded, () => props.live], ([element, stateKey, raw, expanded, live]) => {
+    if (!element || (expanded && !live)) return
+    const owner = untrack(() => conversationUiStore.activeKey)
+    const field = raw ? "rawReadingTop" : "readingTop"
+    const top = untrack(() => toolPayloadDisplayState(stateKey)?.[field]) ?? 0
+    const current = () => conversationUiStore.activeKey === owner && props.stateKey === stateKey
+    const visible = () => element.isConnected && element.clientHeight > 0 && !element.closest("[hidden], [inert]")
+    let restoring = true
+    const restore = createAnimationFrameScheduler(() => {
+      if (!current() || !visible()) return
+      restoring = false
+      observer.disconnect()
+      element.scrollTop = top
+    })
+    const observer = new ResizeObserver(() => restore.schedule())
+    const read = () => {
+      if (!restoring && current() && visible()) setToolPayloadDisplayState(stateKey, { [field]: element.scrollTop })
+    }
+    const takeOver = () => {
+      restoring = false
+      restore.cancel()
+      observer.disconnect()
+    }
+    observer.observe(element)
+    element.addEventListener("scroll", read)
+    element.addEventListener("wheel", takeOver, { passive: true })
+    element.addEventListener("pointerdown", takeOver)
+    element.addEventListener("keydown", takeOver)
+    restore.schedule()
+    onCleanup(() => {
+      restore.cancel()
+      observer.disconnect()
+      element.removeEventListener("scroll", read)
+      element.removeEventListener("wheel", takeOver)
+      element.removeEventListener("pointerdown", takeOver)
+      element.removeEventListener("keydown", takeOver)
+    })
+  }))
   const formatLabel = () => t(raw() ? "tool.readable_payload" : "tool.raw_payload", { label: props.label })
   const expansionLabel = () => t(expanded() ? "tool.collapse_payload" : "tool.expand_payload", { label: props.label })
   const clipboard = createClipboardCopy({
@@ -128,7 +168,7 @@ export function ToolPayload(props: { stateKey: string; label: string; value: str
         {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
       </Show>
       <Show when={contentVisible()}>
-        <div id={`${id}-content`} class="msg-tool-payload__content">
+        <div ref={setContent} id={`${id}-content`} class="msg-tool-payload__content">
           <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>
             <PayloadValue value={parsed()!.value} depth={0} stateKey={props.stateKey} path={[]} />
           </Show>
