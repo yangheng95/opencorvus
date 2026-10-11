@@ -1,0 +1,22 @@
+{
+  "pid": 36012,
+  "owner": {
+    "pid": 36012,
+    "processInstanceID": "win32:639273590419827337",
+    "occurrenceID": "d0e41c84-b3a0-45a8-b98d-1cef1656682b"
+  },
+  "occurrence": "source-text-324-live-01-8021f516-d950-4ae2-9b10-41836959d7ce",
+  "port": 18294,
+  "preflight": {
+    "sessionID": "ses_hFwOVFvLOPR4v2LBCeAj",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 12,
+  "qualificationKind": "NativeService",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-manual-conversation",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

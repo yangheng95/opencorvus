@@ -9,6 +9,7 @@ import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
 import { urlSource } from "./source"
 import { createDocument } from "@mixmark-io/domino"
+import { compile as compileHtmlToText } from "html-to-text"
 import { YAMLException } from "js-yaml"
 import { parseFrontmatter } from "../util/frontmatter"
 import { readHttpResponseBody, disposeHttpResponseBody, fetchHttpResponseOwner } from "../util/http-response-body"
@@ -19,6 +20,21 @@ const MAX_TIMEOUT = 120 * 1000 // 2 minutes
 const TEXT_OUTPUT_MARKER_RESERVE_BYTES = 512
 const TEXT_OUTPUT_MAX_BYTES = Truncate.MAX_BYTES - TEXT_OUTPUT_MARKER_RESERVE_BYTES
 const EMBEDDED_BASE64_DATA_URL = /data:([a-z0-9.+-]+\/[a-z0-9.+-]+)(?:;[^;,\s"'()<>]+)*;base64,[a-z0-9+/]+={0,2}/gi
+
+const extractTextFromHTML = compileHtmlToText({
+  // Process the whole input, including fragments, through the same document path.
+  baseElements: { selectors: [] },
+  wordwrap: false,
+  selectors: [
+    ...["head", "title", "script", "style", "noscript", "iframe", "object", "embed", "img"].map((selector) => ({
+      selector,
+      format: "skip",
+    })),
+    { selector: "a", options: { ignoreHref: true } },
+    ...["h1", "h2", "h3", "h4", "h5", "h6"].map((selector) => ({ selector, options: { uppercase: false } })),
+    { selector: "table", options: { uppercaseHeaderCells: false } },
+  ],
+})
 
 export const WebFetchDescription = DESCRIPTION
 
@@ -165,7 +181,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
 
       case "text":
         if (isHtmlMime(mime)) {
-          const text = formatFetchedText(await extractTextFromHTML(content))
+          const text = formatFetchedText(extractTextFromHTML(content))
           return {
             ...text,
             title,
@@ -292,38 +308,6 @@ function formatFetchedText(text: string) {
     },
     ...(externalized.attachments.length > 0 ? { attachments: externalized.attachments } : {}),
   }
-}
-
-async function extractTextFromHTML(html: string) {
-  let text = ""
-  let skipContent = false
-
-  const rewriter = new HTMLRewriter()
-    .on("script, style, noscript, iframe, object, embed", {
-      element() {
-        skipContent = true
-      },
-      text() {
-        // Skip text content inside these elements
-      },
-    })
-    .on("*", {
-      element(element) {
-        // Reset skip flag when entering other elements
-        if (!["script", "style", "noscript", "iframe", "object", "embed"].includes(element.tagName)) {
-          skipContent = false
-        }
-      },
-      text(input) {
-        if (!skipContent) {
-          text += input.text
-        }
-      },
-    })
-    .transform(new Response(html))
-
-  await rewriter.text()
-  return text.trim()
 }
 
 function convertHTMLToMarkdown(html: string): string {

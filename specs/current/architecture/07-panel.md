@@ -646,6 +646,14 @@ The same normalized response media type selects HTML/XHTML title parsing and
 text/Markdown body conversion. Case variants and media-type parameters do not
 change that classification; parameter contents cannot turn a non-HTML type into
 HTML. An explicit HTML-format request retains the fetched markup.
+Plain-text HTML/XHTML retrieval uses one compiled html-to-text converter for
+documents and fragments. It decodes entities once, preserves inline text, separates
+block/list/line-break content and retains preformatted indentation. Head metadata,
+script/style and embedded-content subtrees are excluded structurally, without
+dropping subsequent visible tail text. Links contribute their authored text;
+headings retain case and lines are not forcibly wrapped. The published Source title
+remains metadata. The existing HTTP byte cap and final text-output budget stay
+authoritative; this text extraction neither executes scripts nor infers visual layout.
 Tooltip detail adds location or media information only when it differs from the
 primary source identity; it does not repeat a root-level file's name or range.
 File citation labels and location details share one line-range presentation:

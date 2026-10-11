@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [324 来源纯文本](source-text-plan-324.md)：字符实体与正文结构的统一提取。
+
 - [323 来源正文媒体类型](source-mime-plan-323.md)：HTML/XHTML实际正文与来源标题的一致性。
 
 - [322 早段正文读取](worker-narration-plan-322.md)：保留已结算来源边界的统一Part证据目录。

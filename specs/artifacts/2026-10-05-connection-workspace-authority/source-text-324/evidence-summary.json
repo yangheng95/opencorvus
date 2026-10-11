@@ -1,0 +1,36 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 2167686,
+    "archiveBytes": 64333,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 6,
+    "sessions": [
+      {
+        "id": "ses_hFwOVFvLOPR4v2LBCeAj",
+        "projectID": "prj_hgW80PTPQzGDWfOeUxhy",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSD61nszzp9Buuhd3w",
+        "projectID": "prj_hl36yVVMcIqeGnyf4KQT",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXmtzd200xkXKYgS4r",
+        "sourceId": "c0c7c43f6aa1e52d2245aff9381708a12e214c2f57be45f3d80540f9c19207ca",
+        "title": "Sample XHTML 1.0 document",
+        "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml"
+      },
+      {
+        "id": "prt_g0VXmu0Ud00WZJC2NUum",
+        "sourceId": "c0c7c43f6aa1e52d2245aff9381708a12e214c2f57be45f3d80540f9c19207ca",
+        "title": "Sample XHTML 1.0 document",
+        "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml"
+      }
+    ]
+  }
+]
