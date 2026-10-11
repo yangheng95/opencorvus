@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [321 真实子侧栏持续输出](source-child-stream-plan-321.md)：回到产品Task的真实流式来源与正文。
+
 - [320 长文件来源密度](source-density-plan-320.md)：窄侧栏中的长路径与同名文件辨识。
 
 - [319 搜索命中来源](search-sources-plan-319.md)：直接打开搜索命中的文件行。

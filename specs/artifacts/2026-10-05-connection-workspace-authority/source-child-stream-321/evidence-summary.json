@@ -1,0 +1,55 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 7825698,
+    "archiveBytes": 219117,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 15,
+    "sessions": [
+      {
+        "id": "ses_hxsQjo3K1UFjLSJfrrYA",
+        "projectID": "prj_hycntL03Me8FeSGeoJzQ",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSDRZzVzz5VHPTVVyS",
+        "projectID": "prj_hv2cD5rLzbARpqqMsDGX",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+        "projectID": "prj_hv2cD5rLzbARpqqMsDGX",
+        "parentID": "ses_-zUSDRZzVzz5VHPTVVyS"
+      },
+      {
+        "id": "ses_hu2FUdtPs2AFVV0uocmg",
+        "projectID": "prj_hv2cD5rLzbARpqqMsDGX",
+        "parentID": "ses_-zUSDRZDnzzmDQ0f9Rfa"
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXmYYXO002u2fxI0BI",
+        "sourceId": "d01a49b4b1f99035c6f5877a1565c315a7743571cb7b73f9ee0e626d4d8bf034",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXmYYXU00BdwQST2W7",
+        "sourceId": "b36cb8bdcb126f297370ad0055292f4e44d1e6024a09c6abee96bfe5b2e6e7be",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXmYYXX00M5WaTphTG",
+        "sourceId": "31e0ad45db89deffbdf3c49501405a1baac5ae351761141d986205e90d316541",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXmYllR008g71CTk5V",
+        "sourceId": "2208430db613c30235a43aa8ccd983d12dec3e8c276be645d118d0480c19b373",
+        "title": "Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html"
+      }
+    ]
+  }
+]

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [321 真实子侧栏持续输出](records/2026-10/2026-10-12-source-child-stream-321.md)：回到产品Task的真实流式来源与正文。
+
 - [320 长文件来源密度](records/2026-10/2026-10-12-source-density-320.md)：窄侧栏中的长路径与同名文件辨识。
 
 - [319 搜索命中来源](records/2026-10/2026-10-12-search-sources-319.md)：直接打开搜索命中的文件行。

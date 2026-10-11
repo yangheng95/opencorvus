@@ -1,0 +1,896 @@
+{
+  "observedAtUtc": "2026-10-11T22:32:18.435Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hxsQjo3K1UFjLSJfrrYA",
+      "project_id": "prj_hycntL03Me8FeSGeoJzQ",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\runtime\\data\\projects\\2026\\10\\12\\1aff591c-915a-4b30-a001-1fa2dd650f42",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"db07eaf7-a286-4880-b39a-fe3b81001d07\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hIsS3edafEKpdotWgQWA\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSDRZzVzz5VHPTVVyS",
+      "project_id": "prj_hv2cD5rLzbARpqqMsDGX",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project",
+      "kind": "root",
+      "parent_id": null,
+      "title": "子侧栏 Sources 与持续正文核验",
+      "metadata": "{\"taskConfigSnapshot\":{\"prompt_profile\":{\"active\":\"base\"},\"permission_mode\":\"full_access\",\"$schema\":\"https://opencorvus.ai/config.json\",\"model\":\"openai/gpt-6.1-sol\",\"small_model\":\"openai/gpt-6.1-sol\",\"agent\":{},\"plugin\":[],\"experimental\":{\"auto_question\":true},\"command\":{},\"terminal\":{\"default_profile_id\":\"powershell\",\"profiles\":{\"powershell\":{\"label\":\"Windows PowerShell\",\"command\":\"C:\\\\WINDOWS\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"pwsh\":{\"label\":\"PowerShell\",\"command\":\"C:\\\\Users\\\\hengu\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"cmd\":{\"label\":\"Command Prompt\",\"command\":\"C:\\\\WINDOWS\\\\system32\\\\cmd.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"command-prompt\"},\"git-bash\":{\"label\":\"Git Bash\",\"command\":\"C:\\\\Program Files\\\\Git\\\\bin\\\\bash.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"bash\"}}},\"username\":\"\",\"mcp\":{\"browser\":{\"type\":\"local\",\"command\":[\"D:\\\\myhexin-local\\\\opencorvus\\\\.tmp-product-iteration\\\\sse-compression-305\\\\bun140\\\\bun-windows-x64\\\\bun.exe\",\"mcp\",\"browser\"],\"timeout\":30000},\"computer\":{\"type\":\"local\",\"command\":[\"D:\\\\myhexin-local\\\\opencorvus\\\\.tmp-product-iteration\\\\sse-compression-305\\\\bun140\\\\bun-windows-x64\\\\bun.exe\",\"D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\src\\\\mcp\\\\computer\\\\stdio.ts\"],\"timeout\":30000}}},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "project_id": "prj_hv2cD5rLzbARpqqMsDGX",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project",
+      "kind": "orchestrator",
+      "parent_id": "ses_-zUSDRZzVzz5VHPTVVyS",
+      "title": "Agent: 子侧栏 Sources 与持续正文核验",
+      "metadata": null
+    },
+    {
+      "id": "ses_hu2FUdtPs2AFVV0uocmg",
+      "project_id": "prj_hv2cD5rLzbARpqqMsDGX",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project",
+      "kind": "explore",
+      "parent_id": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "title": "base-researcher (explore): 请只安排一名只读研究员完成下面的可见分析，不需要规划员、开发员、测试员或其他成员。这是一项只读文字工作，全部交付保留在研究员自己的正常可见消息中，负责人核对正文",
+      "metadata": null
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hIsS3edafEKpdotWgQWA",
+      "sessionID": "ses_hxsQjo3K1UFjLSJfrrYA",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791757035257
+      }
+    },
+    {
+      "id": "msg_g0VXmXvG900ZAhcc0Yba",
+      "sessionID": "ses_hxsQjo3K1UFjLSJfrrYA",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757035621,
+        "completed": 1791757040553
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_g0VXmYQo000DDU2DyUoz",
+      "sessionID": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "role": "user",
+      "author": "user",
+      "agent": "orchestrator",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791757156884
+      }
+    },
+    {
+      "id": "msg_task-root-control_art_hPAnQtHzsr5wKNO3MUVu_art_hPAnQtHzsr5wKNO3MUVu",
+      "sessionID": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "role": "user",
+      "author": "orchestrator",
+      "agent": "orchestrator",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791757156885
+      }
+    },
+    {
+      "id": "msg_hiPpfBrLNQqFuCltroJ6",
+      "sessionID": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "role": "assistant",
+      "author": "orchestrator",
+      "agent": "orchestrator",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757157038,
+        "completed": 1791757176467
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_g0VXmYVmk00feKOgHRmO",
+      "sessionID": "ses_hu2FUdtPs2AFVV0uocmg",
+      "role": "user",
+      "author": "orchestrator",
+      "agent": "base-researcher",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791757176030
+      }
+    },
+    {
+      "id": "msg_g0VXmYVpU004ZlHI91ao",
+      "sessionID": "ses_hu2FUdtPs2AFVV0uocmg",
+      "role": "assistant",
+      "author": "base-researcher",
+      "agent": "base-researcher",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757176196,
+        "completed": 1791757186676
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXmYYZ200zDmj0wHc0",
+      "sessionID": "ses_hu2FUdtPs2AFVV0uocmg",
+      "role": "assistant",
+      "author": "base-researcher",
+      "agent": "base-researcher",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757186708,
+        "completed": 1791757237543
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXmYlnU00dVnyWYjmu",
+      "sessionID": "ses_hu2FUdtPs2AFVV0uocmg",
+      "role": "assistant",
+      "author": "base-researcher",
+      "agent": "base-researcher",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757237576,
+        "completed": 1791757294361
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_task-root-control_art_hACI309HS5edU2WQR4tJ_art_hACI309HS5edU2WQR4tJ",
+      "sessionID": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "role": "user",
+      "author": "orchestrator",
+      "agent": "orchestrator",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791757294586
+      }
+    },
+    {
+      "id": "msg_htFxdk2XPqX0l7pCBqEw",
+      "sessionID": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "role": "assistant",
+      "author": "orchestrator",
+      "agent": "orchestrator",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757294702,
+        "completed": 1791757339849
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_g0VXmZCKb001Ys27v1bf",
+      "sessionID": "ses_hu2FUdtPs2AFVV0uocmg",
+      "role": "user",
+      "author": "orchestrator",
+      "agent": "base-researcher",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791757339576
+      }
+    },
+    {
+      "id": "msg_g0VXmZCNM00qGDS43KCo",
+      "sessionID": "ses_hu2FUdtPs2AFVV0uocmg",
+      "role": "assistant",
+      "author": "base-researcher",
+      "agent": "base-researcher",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757339744,
+        "completed": 1791757413758
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_task-root-control_art_hJJ3F1FHau60kuVo02vg_art_hJJ3F1FHau60kuVo02vg",
+      "sessionID": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "role": "user",
+      "author": "orchestrator",
+      "agent": "orchestrator",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791757413991
+      }
+    },
+    {
+      "id": "msg_hNEmvym7tYCseIJ4xvhu",
+      "sessionID": "ses_-zUSDRZDnzzmDQ0f9Rfa",
+      "role": "assistant",
+      "author": "orchestrator",
+      "agent": "orchestrator",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791757414139,
+        "completed": 1791757433279
+      },
+      "finish": "tool-calls"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_h0bHcic7TzBtaFZJ2zlk",
+      "messageID": "msg_hIsS3edafEKpdotWgQWA",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXmXvie004db2W6I3v",
+      "messageID": "msg_g0VXmXvG900ZAhcc0Yba",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmXwQ1000ymSbbmjc",
+      "messageID": "msg_g0VXmXvG900ZAhcc0Yba",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791757040078,
+        "end": 1791757040285
+      }
+    },
+    {
+      "id": "prt_g0VXmXwWw00ImWtnORCL",
+      "messageID": "msg_g0VXmXvG900ZAhcc0Yba",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmYQnl00djblmfpMd",
+      "messageID": "msg_g0VXmYQo000DDU2DyUoz",
+      "type": "text",
+      "text": "请只安排一名只读研究员完成下面的可见分析，不需要规划员、开发员、测试员或其他成员。这是一项只读文字工作，全部交付保留在研究员自己的正常可见消息中，负责人核对正文和真实工具读取记录后直接收尾，不发布额外 Artifact，不创建或修改文件。\n\n请完整转交研究员：\n1. 先在正常可见消息中写约400字开场，说明如何区分实际读取的事实和设计建议。\n2. 实际调用 search_code，path 为当前项目，pattern=RENDER321，include=source-review.md。该文件是本次明确授权读取的普通项目输入；不要读取其他本地文件或凭据。\n3. 随后在正常可见消息中撰写第1至6节中文分析，每节至少两段，共约2400汉字，讨论来源身份、准确行号、长目录和同名文件、阅读位置、流式正文与引用先后关系。把文件中的内容标为验收场景输入，不能当作已测得的产品结论。包含一张比较表和一个简短代码示意。\n4. 再使用webfetch实际读取这一个公开官方页面：https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。不搜索扩展资料，不访问其他网页。\n5. 继续在正常可见消息中撰写第7至12节，每节至少两段，共约2400汉字，解释该文档对键盘焦点顺序的适用边界，结合前述场景给出明确标注的设计建议和待实际验证事项，包含第二个简短代码示意。不要把实现建议、滚动策略或性能效果冒充标准要求或已完成测试。\n6. 最后简短列明实际引用的文件命中行和网页、读取限制。不要把正文藏在工具payload、文件或额外报告中，也不要调用其他成员。\n\n负责人只需核对研究员的完整可见正文与实际工具记录并说明范围，不重复撰写整篇分析。所有参与者都保持只读。\n",
+      "textChars": 757
+    },
+    {
+      "id": "prt_task-root-control_art_hPAnQtHzsr5wKNO3MUVu_art_hPAnQtHzsr5wKNO3MUVu",
+      "messageID": "msg_task-root-control_art_hPAnQtHzsr5wKNO3MUVu_art_hPAnQtHzsr5wKNO3MUVu",
+      "type": "text",
+      "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hPAnQtHzsr5wKNO3MUVu.\nThis wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization.\nOn the initial Task wake, the creator's original request is already in its real participant Message in this Turn. It has no task-root message identity. Read that Message directly.",
+      "textChars": 725
+    },
+    {
+      "id": "prt_g0VXmYQxO00DiSrZZktx",
+      "messageID": "msg_hiPpfBrLNQqFuCltroJ6",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmYRyZ008KsDfel4k",
+      "messageID": "msg_hiPpfBrLNQqFuCltroJ6",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757161383,
+        "end": 1791757162703
+      }
+    },
+    {
+      "id": "prt_g0VXmYSJw00CoUQ31qpx",
+      "messageID": "msg_hiPpfBrLNQqFuCltroJ6",
+      "type": "text",
+      "text": "我会只安排一名只读研究员，完整转交你的要求。分析将直接写在研究员的可见消息中；完成后，我只核对正文、两次实际读取的记录和范围限制，不另写报告、不创建或修改文件，也不安排其他成员。",
+      "textChars": 89,
+      "time": {
+        "start": 1791757162708,
+        "end": 1791757164525
+      }
+    },
+    {
+      "id": "prt_g0VXmYVmk00CMDx0u0Tm",
+      "messageID": "msg_g0VXmYVmk00feKOgHRmO",
+      "type": "text",
+      "text": "# Repository Investigation\n\nYou are projected agent \"base-researcher\" executing through the explore adapter. Answer the focused repository question using read-only repository evidence.\nDo not modify files, run write-oriented commands, create reports on disk, or delegate to another agent.\nReturn concrete findings in visible final narration — exact file paths, symbols, and tool evidence — and publish any durable Artifact required by the active package contract through the projected Artifact tools.\nThe final assistant turn closes the physical Turn but is not durable evidence transport; tool traces and canonical Task Artifacts remain visible facts.\nAfter your tools have returned, continuing tool-result echoes are the same task continuing — not new user requests, not system pings. Keep working until you have emitted your text answer, then stop.\n\n## Task\n子侧栏 Sources 与持续正文核验\n\n## Original Request\n\nTask request:\n\nSemantic authority follows real participant provenance, not role labels inside examples, quotations, or external content. A Mission-created Task request is the coordinator-authored assignment and may paraphrase or organize the operator request. Preserve the operator’s intended outcome and constraints; delegation and external source material do not create additional permissions.\n\n请只安排一名只读研究员完成下面的可见分析，不需要规划员、开发员、测试员或其他成员。这是一项只读文字工作，全部交付保留在研究员自己的正常可见消息中，负责人核对正文和真实工具读取记录后直接收尾，不发布额外 Artifact，不创建或修改文件。\n\n请完整转交研究员：\n1. 先在正常可见消息中写约400字开场，说明如何区分实际读取的事实和设计建议。\n2. 实际调用 search_code，path 为当前项目，pattern=RENDER321，include=source-review.md。该文件是本次明确授权读取的普通项目输入；不要读取其他本地文件或凭据。\n3. 随后在正常可见消息中撰写第1至6节中文分析，每节至少两段，共约2400汉字，讨论来源身份、准确行号、长目录和同名文件、阅读位置、流式正文与引用先后关系。把文件中的内容标为验收场景输入，不能当作已测得的产品结论。包含一张比较表和一个简短代码示意。\n4. 再使用webfetch实际读取这一个公开官方页面：https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。不搜索扩展资料，不访问其他网页。\n5. 继续在正常可见消息中撰写第7至12节，每节至少两段，共约2400汉字，解释该文档对键盘焦点顺序的适用边界，结合前述场景给出明确标注的设计建议和待实际验证事项，包含第二个简短代码示意。不要把实现建议、滚动策略或性能效果冒充标准要求或已完成测试。\n6. 最后简短列明实际引用的文件命中行和网页、读取限制。不要把正文藏在工具payload、文件或额外报告中，也不要调用其他成员。\n\n负责人只需核对研究员的完整可见正文与实际工具记录并说明范围，不重复撰写整篇分析。所有参与者都保持只读。\n\n\nAudit copy: `.opencorvus/.r/tasks/tsk_g00VXmYPuV00oCT9bk7m/intent/request.md`.\n\n## Reason\n按用户明确指定的单人只读范围，由唯一研究员直接交付完整可见分析，负责人随后核对正文和实际读取记录。\n\n## Question\n请只安排一名只读研究员完成下面的可见分析，不需要规划员、开发员、测试员或其他成员。这是一项只读文字工作，全部交付保留在研究员自己的正常可见消息中，负责人核对正文和真实工具读取记录后直接收尾，不发布额外 Artifact，不创建或修改文件。\n\n请完整执行：\n1. 先在正常可见消息中写约400字开场，说明如何区分实际读取的事实和设计建议。\n2. 实际调用 search_code，path 为当前项目，pattern=RENDER321，include=source-review.md。该文件是本次明确授权读取的普通项目输入；不要读取其他本地文件或凭据。\n3. 随后在正常可见消息中撰写第1至6节中文分析，每节至少两段，共约2400汉字，讨论来源身份、准确行号、长目录和同名文件、阅读位置、流式正文与引用先后关系。把文件中的内容标为验收场景输入，不能当作已测得的产品结论。包含一张比较表和一个简短代码示意。\n4. 再使用webfetch实际读取这一个公开官方页面：https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。不搜索扩展资料，不访问其他网页。\n5. 继续在正常可见消息中撰写第7至12节，每节至少两段，共约2400汉字，解释该文档对键盘焦点顺序的适用边界，结合前述场景给出明确标注的设计建议和待实际验证事项，包含第二个简短代码示意。不要把实现建议、滚动策略或性能效果冒充标准要求或已完成测试。\n6. 最后简短列明实际引用的文件命中行和网页、读取限制。不要把正文藏在工具payload、文件或额外报告中，也不要调用其他成员。\n\n负责人只需核对研究员的完整可见正文与实际工具记录并说明范围，不重复撰写整篇分析。所有参与者都保持只读。\n\n当前项目的精确路径是 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project。请使用这个路径作为 search_code.path。你是唯一研究员，不调用其他成员，不发布任何 Artifact、不使用文件承载正文。按上述顺序在你自己的正常可见消息中交付开场、第1至6节、读取指定网页后第7至12节及最终引用限制。实际读取仅限指定 search_code 与指定 webfetch；不要检索额外来源。",
+      "textChars": 3240
+    },
+    {
+      "id": "prt_g0VXmYVmk010zVVOH2oD",
+      "messageID": "msg_g0VXmYVmk00feKOgHRmO",
+      "type": "text",
+      "text": "# Dispatch evidence\ncurrent_dispatch_id: art_hvGHtPGeTGWcP1sreWg3\nRead the root's Tool facts preceding this dispatch with read_agent_message sources=[{\"kind\":\"dispatch_origin\",\"dispatch_id\":\"art_hvGHtPGeTGWcP1sreWg3\"}]. These timed facts support independent comparison; they are not a producer verdict or current-state guarantee.",
+      "textChars": 329
+    },
+    {
+      "id": "prt_g0VXmYVsk00rUtsp6z10",
+      "messageID": "msg_hiPpfBrLNQqFuCltroJ6",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmYVyR000zYDIVH8v",
+      "messageID": "msg_g0VXmYVpU004ZlHI91ao",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmYWSZ00gMPGQrjEW",
+      "messageID": "msg_g0VXmYVpU004ZlHI91ao",
+      "type": "text",
+      "text": "本次分析只处理 Sources 子侧栏与持续正文之间的阅读关系，不进行实现、产品测试或界面操作。我会先按指定条件检索唯一获准的项目文件，再把实际命中的文字和行号作为“验收场景输入”讨论；之后读取指定的 W3C 官方页面，说明键盘焦点顺序的原则及其适用边界。全部正文直接写在正常可见消息中，不创建文件、不发布额外报告，也不调用其他成员。\n\n分析中将明确区分四类陈述：实际读取事实，指工具确实返回的文件命中或网页内容；验收场景输入，指文件提出的条件和期待，并不表示产品已经满足；设计建议，指根据这些条件提出的可选实现方向；待验证事项，指仍需真实界面、键盘操作或其他获准测试才能确认的行为。尤其不会把来源行号的存在等同于引用准确，把阅读位置保持方案等同于已实现，也不会把流式正文中的出现顺序推断成既有缺陷。对官方文档同样只解释其实际表述，不将它扩大为特定框架、滚动算法或性能指标的强制要求。接下来先执行指定文件检索，并依据返回结果展开前六节分析。",
+      "textChars": 420,
+      "time": {
+        "start": 1791757178619,
+        "end": 1791757185344
+      }
+    },
+    {
+      "id": "prt_g0VXmYYXO002u2fxI0BI",
+      "messageID": "msg_g0VXmYVpU004ZlHI91ao",
+      "type": "source-file",
+      "sourceId": "d01a49b4b1f99035c6f5877a1565c315a7743571cb7b73f9ee0e626d4d8bf034",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project\\source-review.md",
+      "title": "source-review.md",
+      "range": {
+        "startLine": 2,
+        "endLine": 2
+      },
+      "provider": "opencorvus-search-code"
+    },
+    {
+      "id": "prt_g0VXmYYXU00BdwQST2W7",
+      "messageID": "msg_g0VXmYVpU004ZlHI91ao",
+      "type": "source-file",
+      "sourceId": "b36cb8bdcb126f297370ad0055292f4e44d1e6024a09c6abee96bfe5b2e6e7be",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project\\source-review.md",
+      "title": "source-review.md",
+      "range": {
+        "startLine": 3,
+        "endLine": 3
+      },
+      "provider": "opencorvus-search-code"
+    },
+    {
+      "id": "prt_g0VXmYYXX00M5WaTphTG",
+      "messageID": "msg_g0VXmYVpU004ZlHI91ao",
+      "type": "source-file",
+      "sourceId": "31e0ad45db89deffbdf3c49501405a1baac5ae351761141d986205e90d316541",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project\\source-review.md",
+      "title": "source-review.md",
+      "range": {
+        "startLine": 4,
+        "endLine": 4
+      },
+      "provider": "opencorvus-search-code"
+    },
+    {
+      "id": "prt_g0VXmYYXa00oEQ9TAR70",
+      "messageID": "msg_g0VXmYVpU004ZlHI91ao",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmYYd5004G7CwzLWo",
+      "messageID": "msg_g0VXmYYZ200zDmj0wHc0",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmYZKT00plIj1lpk4",
+      "messageID": "msg_g0VXmYYZ200zDmj0wHc0",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757189649,
+        "end": 1791757189653
+      }
+    },
+    {
+      "id": "prt_g0VXmYZMC00JF8cE7Xvu",
+      "messageID": "msg_g0VXmYYZ200zDmj0wHc0",
+      "type": "text",
+      "text": "指定检索实际返回了三处命中：第2行是准确打开命中行的期望，第3行是长目录与同名文件的待验证场景，第4行是来源阅读期间继续生成并保留阅读位置的设计目标。它们都不是测试结果。以下先据此展开第1至6节；关于键盘焦点顺序的标准解释，将在实际读取指定网页后再写。\n\n## 1. 来源身份：先说明“打开的是谁”\n\n**验收场景输入**：文件第3行要求通过完整目录信息区分同名文件。这意味着 Sources 条目不能仅以文件名作为用户识别来源的全部依据。例如两个条目都显示 `index.ts`，即使内部目标不同，读者仍可能误以为它们是同一文件的不同引用。当前检索没有提供产品的数据结构或界面，因此不能声称现有来源身份正确或错误；能够确认的只是输入明确提出了身份辨别问题。\n\n**设计建议**：将来源对象与引用位置分开表示：来源对象回答项目、目录和文件是谁，引用位置回答其中哪几行支持这段正文。同一文件的多个引用可以共享来源身份，但不能因此合并其不同位置。若内容来自不同版本，还应在产品确实具备版本信息时显示相应区别，不能凭空补一个版本标识。**待验证事项**：两个同名条目是否能独立选中、打开和返回，以及打开后的标题、路径和正文引用是否指向同一对象，均需实际交互证据。\n\n## 2. 准确行号：坐标必须对应实际内容\n\n**验收场景输入**：第2行写明“文件来源应准确打开命中行”，同时明确这只是期望。准确不能仅理解为跳转后界面显示一个行号，还应检查该行是否属于所指文件、是否包含与引用相关的内容。显示为第42行，却打开另一文件的第42行，并不符合这个场景；滚动到目标附近却将目标藏在固定标题下面，也需要与真正可读的命中位置区别讨论。\n\n**设计建议**：明确采用从1开始的展示行号，并为多行证据保存起止位置；检索工具、编辑器和来源预览之间如存在坐标转换，应在边界处处理，而不是让用户猜测。换行显示造成的视觉折行不应悄悄变成新的源码行号。若来源发生变化，旧引用的位置可能失效，此时宜提示需要重新定位，而非保证旧数字仍准确。**待验证事项**：首行、末行、多行范围、空行和长行折行都应检查；本次只知道输入文件命中第2至4行，未验证任何产品跳转。\n\n## 3. 长目录与同名文件：简洁显示不能牺牲可辨认性\n\n**验收场景输入**：第3行把完整目录信息作为同名文件的区分依据。目录较长时，单纯截断前半段或后半段都可能隐藏真正不同的部分：两个路径可能只在中间的模块名上有差异。因而“两个条目看起来不同”与“读者能够准确判断其来源”并非同一件事。当前没有读取目录清单，也没有得知实际同名文件数量，以下例子仅说明比较方法，不是仓库观察结果。\n\n**设计建议**：紧凑列表可以显示文件名和有区分力的目录片段，同时提供可访问的完整路径查看方式；不应将唯一辨识信息只放在鼠标悬停提示里。完整路径的展示也需考虑宽度、换行和复制便利性，不必强迫所有条目永久占据多行。下面的比较表是方案取舍，不是测试评分。**待验证事项**：用户在不使用鼠标的情况下能否获得完整目录，选中条目后是否仍看得清身份，以及路径折行是否挤压定位信息。\n\n| 展示方式 | 潜在优点 | 主要风险 | 待验证重点 |\n|---|---|---|---|\n| 仅文件名 | 简短、易扫读 | 同名来源不可区分 | 是否存在明显歧义 |\n| 文件名加目录片段 | 兼顾密度与辨识 | 差异可能被截断 | 保留的片段是否足够 |\n| 可展开完整路径 | 支持核对完整身份 | 增加操作与空间需求 | 键盘能否展开并阅读 |\n| 完整路径加引用范围 | 同时呈现来源和位置 | 长路径信息负担较大 | 窄区域是否仍可读 |\n\n## 4. 阅读位置：先区分来源位置与正文位置\n\n**验收场景输入**：第4行希望用户阅读来源时后文继续生成，同时保留当前阅读位置。这里至少可能涉及两种位置：用户在来源预览中读到哪一行，以及主正文读到哪一段。该行没有规定“当前”专指哪一侧，也没有指定滚动实现。因此需要把这个含义上的未决点保留下来，不能将自己选择的解释冒充输入的完整要求，更不能断言现有界面已经支持双侧位置保存。\n\n**设计建议**：分别维护正文与来源的阅读状态，只有明确的用户动作才切换相应视图的定位目标。来源的位置可以包括可见行和局部偏移，正文的位置可以围绕稳定段落记录；这些只是候选策略。仅保存像素值在内容重排后未必能维持同一阅读对象，但稳定锚点也需要处理删除、替换和布局变化。**待验证事项**：来源展开、窗口变窄、正文增长、切换同名文件再返回时，用户是否仍能接续阅读；本次未运行任何上述场景。\n\n## 5. 流式正文：继续生成不等于必须跟随滚动\n\n**验收场景输入**：第4行同时提出继续生成和保留阅读位置，说明内容更新与用户视口移动应作为两个问题分析。正文持续接收新内容，并不逻辑上要求把正在阅读来源的用户带到正文末尾；反过来，视口保持不动也不能证明生成过程正常。需要分别观察新内容是否出现、已经显示的段落是否重排，以及来源区域的阅读状态是否受到影响，而不是用一个“流式正常”标签概括全部行为。\n\n**设计建议**：可区分“跟随最新内容”和“阅读历史内容”两种意图，并让用户通过明确入口恢复跟随。下面是概念示意，不是项目符号或可运行补丁；它只表达位置状态与内容追加相分离，不证明浏览器实际布局能保持稳定。**待验证事项**：用户主动上滚、打开来源、返回正文后，状态转换是否可理解；网络更新、布局变化与滚动事件交错时是否发生非预期跳动；性能效果仍需独立测量。\n\n```javascript\n// 设计示意：内容更新与视口移动分别决策。\nfunction onTextChunk(chunk) {\n  appendBody(chunk);\n  if (readingState.followLatest && !readingState.sourceOpen) {\n    requestFollowLatest();\n  } else {\n    markNewContentAvailable();\n  }\n}\n```\n\n## 6. 正文与引用的先后：可见不代表已经有证据\n\n**验收场景输入**：第2行关注定位，第4行关注持续生成，但三处命中没有规定引用与正文到达的具体时序。因而“正文先到、来源后到”“来源条目先显示、定位稍后可用”都只能作为待讨论的场景，不能称为已观察到的产品行为。分析时应区分一段文字已经可见、引用标记已经可见、来源身份已经解析和来源内容已经可打开；这些状态可能有关联，却不能相互替代。\n\n**设计建议**：只有获得有效来源目标后才将引用呈现为可操作链接；尚未解析的标记可以明确显示等待状态，避免外观上承诺一个当前不可到达的位置。引用补齐或重新排序时，应尽量维持用户正在阅读的段落与所选来源之间的关系，不以列表序号作为唯一身份。**待验证事项**：后到引用是否绑定正确段落、失败状态是否可识别、重复来源是否保留不同引用范围，以及用户阅读中的条目是否被替换。前六节的结论因此是场景分解和方案建议，不是产品通过验收的证明。\n\n接下来仅读取指定的 W3C 页面，以官方表述核对焦点顺序与上述阅读场景的关系，不扩展搜索其他资料。",
+      "textChars": 2988,
+      "time": {
+        "start": 1791757189756,
+        "end": 1791757236661
+      }
+    },
+    {
+      "id": "prt_g0VXmYllR008g71CTk5V",
+      "messageID": "msg_g0VXmYYZ200zDmj0wHc0",
+      "type": "source-url",
+      "sourceId": "2208430db613c30235a43aa8ccd983d12dec3e8c276be645d118d0480c19b373",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html",
+      "title": "Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXmYllW00m5TMxq3wt",
+      "messageID": "msg_g0VXmYYZ200zDmj0wHc0",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmYlqx006gITJoz96",
+      "messageID": "msg_g0VXmYlnU00dVnyWYjmu",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmYmP600g10HsnGW5",
+      "messageID": "msg_g0VXmYlnU00dVnyWYjmu",
+      "type": "text",
+      "text": "指定 W3C 页面已实际读取。它解释的是 WCAG 2.2 成功准则2.4.3“焦点顺序”（A级），并明确将 Understanding 文档定位为解释性资料。下文区分页面所引述的准则、文档解释、设计建议和待验证事项；不将网页里的技术链接视为本次另外读取的资料。\n\n## 7. 焦点顺序的适用条件：保持意义与可操作性\n\n**官方文档表述**：当网页可以按顺序导航，而且导航顺序影响意义或操作时，可聚焦组件应按保持意义与可操作性的顺序获得焦点。这里的重点不是为页面规定唯一的路线，而是避免用户在逐项移动时失去内容关系。文档明确说明，可能存在多个符合逻辑的顺序，例如表格按行或按列遍历都可能合理。因此，不能仅凭 Sources 位于左侧或右侧，就判断哪一侧必须先获得焦点。\n\n**设计建议**：对于正文引用、来源列表和来源预览，应先明确它们的操作关系：用户从哪段正文发起查看，哪一个条目代表目标，查看完后怎样继续。顺序应帮助理解这条关系，而非在无关控件之间反复跳转。**待验证事项**：沿实际可聚焦组件顺序操作时，是否能识别当前来源和上下文，是否出现难以解释的跨区移动。本次未读取界面结构或操作键盘，不能据此给出符合或不符合准则的结论。\n\n## 8. 视觉排列、阅读顺序和焦点顺序不是同一件事\n\n**官方文档表述**：焦点顺序不一定等同于程序确定的阅读顺序，也不必完全追随视觉布局，只要仍能理解和操作页面。文档同时提醒，应兼顾屏幕阅读器用户与看得见界面的键盘用户，避免任一群体感到焦点随机跳动。对于相互独立、先后不影响意义或操作的双栏，先遍历右栏不必然失败；让焦点顺序强化视觉暗示的阅读顺序，则是文档提出的最佳实践。\n\n**设计建议**：Sources 与正文往往存在引用关系，不能未经分析就套用“独立双栏”的解释。如果视觉上显示某条引用对应某个来源，而键盘路线把用户带到另一组不相关条目，应检查这种安排是否破坏理解。完整目录也应与对应条目保持关联，不因视觉折行而变成难以对应的信息。**待验证事项**：窄窗口、来源展开和正文增长后，视觉顺序与实际焦点顺序是否仍可解释；视觉位置改变本身不能单独证明失败。\n\n## 9. 子侧栏的交互性质：不要把它默认当成模态窗口\n\n**官方文档表述**：页面分别举出非模态和模态对话框的例子。非模态示例将对话框内交互元素安排在触发按钮之后；模态示例在打开后将焦点置于内部，使外部页面内容不能获得焦点，关闭后返回按钮或其后的元素。这些例子说明不同交互性质会影响合理顺序，但“子侧栏”这一外观名称并不能决定它属于哪一种，也不能直接推出必须锁住全部页面焦点。\n\n**设计建议**：结合第4行的**验收场景输入**，如果来源阅读与主正文确实允许同时操作，非模态设计值得考虑；但后台继续生成也可能发生在模态界面中，两者不能简单画等号。应先确定外部内容是否仍可操作，再选择焦点进入、离开和返回方式。**待验证事项**：打开来源后按顺序导航会到哪里，关闭后能否接续原操作，以及触发引用已被更新或移除时如何处理；这些均不是本次已测得的行为。\n\n## 10. 动态更新：保护操作关系，而非每次更新都移动焦点\n\n**官方文档表述**：文档讨论动态内容对导航序列的影响，并列出有关插入动态内容的技术名称，但本次没有访问那些技术页面。依据已读取内容，可以讨论新控件加入后是否仍保持合理顺序，不能进一步宣称标准要求某种框架、更新频率或滚动算法。正文生成顺序与键盘焦点顺序也不是同一个概念：新段落晚到，不等于焦点就应自动前往它。\n\n**设计建议**：保留用户正在操作的控件，避免引用补齐时替换其身份或无故抢焦点；只有明确动作需要改变操作上下文时，才考虑程序化移动。下面仅示意“关闭来源后返回原触发点”，不代表项目已有这些函数，也不是完整无障碍实现。**待验证事项**：触发点仍存在时是否准确返回，不存在时的替代位置是否合理，以及关闭动作是否意外改变正文阅读位置。\n\n```javascript\n// 设计示意：返回操作上下文，不按流式更新次数移动焦点。\nlet sourceOpener = null;\n\nfunction openSource(trigger, sourceId) {\n  sourceOpener = trigger;\n  showSourcePanel(sourceId);\n}\n\nfunction closeSource() {\n  hideSourcePanel();\n  if (sourceOpener?.isConnected) {\n    sourceOpener.focus();\n  } else {\n    focusChosenFallback(); // 替代位置需另行设计、验证。\n  }\n}\n```\n\n## 11. 可聚焦对象：不要把每一行来源都变成必经停靠点\n\n**官方文档表述**：准则评估的是元素获得焦点的顺序，不直接规定哪些对象应当或不应当获得焦点。文档明确指出，静态内容可以获得焦点，程序也可以将焦点移到静态内容；但若造成困惑、不合逻辑或妨碍操作，仍可能失败。它以可聚焦容器嵌套按钮说明重复停靠风险，并建议尽量避免给不可操作内容增加焦点，以免键盘操作变得冗长。这是有条件的解释，不是全面禁止静态内容聚焦。\n\n**设计建议**：来源标题、完整目录和命中范围可以作为有关控件的上下文，不必把每一行代码和每段路径都自动加入逐项导航。若确有“跳到命中位置后阅读”的需要，可以考虑适当的目标定位，但应区分阅读目标与操作控件。文档还区分树组件方向键导航与此处所讨论的顺序导航，因此不能把树内移动机械等同于 Tab 顺序。**待验证事项**：是否存在重复停靠、过多无操作意义的节点，完整路径能否在合理路线中获得；本次未确认 Sources 是否为树组件。\n\n## 12. 综合核验：把来源、阅读和焦点拆成可观察问题\n\n**待实际验证事项**：来源身份方面，应观察同名文件是否以充分目录信息区分，选中后是否打开对应对象；行号方面，应观察命中内容、引用范围和可见目标是否一致；阅读方面，应分别记录来源与正文位置，在后文持续出现时检查用户是否还能接续阅读；焦点方面，应逐项观察打开、浏览、关闭、返回以及引用后到时的实际路线。它们相互关联，但任何一项的成功都不能替代其他项，也不能仅凭一张静态截图完成全部核验。\n\n**设计建议与结论边界**：可将稳定来源身份、明确位置坐标、分离的阅读状态及可解释的焦点路线作为设计方向，但不预先承诺某种滚动策略能解决所有重排问题，也不宣称它减少延迟或改善性能。指定官方文档支持“顺序保持意义与可操作性”的判断框架，并不保证正文继续生成、准确行号或位置保存的产品效果。本次已完成的是只读场景分析和文档解释；未决问题包括“当前阅读位置”具体指哪一侧、侧栏交互性质、引用到达时序及实际焦点行为，均需获准的后续验证才能回答。\n\n### 实际引用与读取限制\n\n- **项目文件**：`C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project\\source-review.md`。实际使用 `search_code`，指定 `pattern=RENDER321`、`include=source-review.md`，返回三处命中：\n  - **第2行**：“文件来源应准确打开命中行；这是期望，不是已完成测试的结论。”\n  - **第3行**：“长目录中的同名文件应通过完整目录信息区分；这是待验证场景。”\n  - **第4行**：“用户阅读来源时希望后文继续生成，同时保留当前阅读位置；这是设计目标。”\n- **官方网页**：实际使用 `webfetch` 读取 https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。引用其 Success Criterion、Intent、说明及 Examples；返回页面标注更新日期为 **2026年3月9日**。\n- **范围限制**：文件仅取得上述检索命中，未读取全文或其他本地文件；未访问网页链接、搜索额外资料、操作产品界面或执行测试。没有已查证的产品实现符号；两个代码片段均为设计示意。未修改或创建文件，未发布 Artifact，未调用其他成员。全部分析保留在本研究员的正常可见消息中。",
+      "textChars": 3507,
+      "time": {
+        "start": 1791757239908,
+        "end": 1791757294212
+      }
+    },
+    {
+      "id": "prt_g0VXmZ0Y100NZvCeyLrO",
+      "messageID": "msg_g0VXmYlnU00dVnyWYjmu",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_task-root-control_art_hACI309HS5edU2WQR4tJ_art_hACI309HS5edU2WQR4tJ",
+      "messageID": "msg_task-root-control_art_hACI309HS5edU2WQR4tJ_art_hACI309HS5edU2WQR4tJ",
+      "type": "text",
+      "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hACI309HS5edU2WQR4tJ.\nCURRENT LIFECYCLE CONTROL FACT: event_id=pev_g0VXmZ0aT00vTlLj62Qe; session_id=ses_hu2FUdtPs2AFVV0uocmg; dispatch_id=art_hvGHtPGeTGWcP1sreWg3; input_message_id=msg_g0VXmYVmk00feKOgHRmO; authoritative_status=terminal/completed; final_message_id=\"msg_g0VXmYlnU00dVnyWYjmu\"; physical_turn_state=settled; emitted_at=2026-10-11T22:21:34.429Z; summary=\"agent.execution.lifecycle\"; error=null. This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. When final_message_id is non-null, read that exact participant Message rather than selecting another Message from Session history. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.\nOnly the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.",
+      "textChars": 1695
+    },
+    {
+      "id": "prt_g0VXmZ0nw00oAEhcTSQ8",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZ1mi009Tsu4UDKK",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmZ1sW00PldGwvVVu",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZ2u000OwI4eMFAi",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757303328,
+        "end": 1791757303332
+      }
+    },
+    {
+      "id": "prt_g0VXmZ2wL00tlJLvFUOy",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "text",
+      "text": "研究员已经交付分析。我正在核对开场、第1至12节正文及两次实际读取的返回内容，重点确认场景输入、官方文档解释、设计建议和待验证事项没有混淆；这次核对不涉及产品测试。",
+      "textChars": 82,
+      "time": {
+        "start": 1791757303473,
+        "end": 1791757305323
+      }
+    },
+    {
+      "id": "prt_g0VXmZ4cs00V7ypeYcTd",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmZ4ii00LrkXpEBY9",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZ63Z00F63CsR3dt",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757315453,
+        "end": 1791757315973
+      }
+    },
+    {
+      "id": "prt_g0VXmZ7J900cQpkjDIPJ",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmZ7PU006UrpmCC9s",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZ8IR00m1ad7qhHJ",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757324063,
+        "end": 1791757324906
+      }
+    },
+    {
+      "id": "prt_g0VXmZ936005Bj4Dc3J5",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmZ98d007tDRlcw2s",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZ9uO00rsGjK42yH",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757330260,
+        "end": 1791757330263
+      }
+    },
+    {
+      "id": "prt_g0VXmZ9uU002n4LPdUub",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "text",
+      "text": "已确认实际读取只包含指定文件的第2、3、4行命中和指定 W3C 页面，没有额外来源读取。第7至12节及引用限制已核对；目前返回的正文记录未包含较早的开场和第1至6节，我会请同一名研究员在可核对的最终消息中保留这部分原文，不新增读取或其他成员。",
+      "textChars": 121,
+      "time": {
+        "start": 1791757330266,
+        "end": 1791757332843
+      }
+    },
+    {
+      "id": "prt_g0VXmZCKb00C8yxmlBBF",
+      "messageID": "msg_g0VXmZCKb001Ys27v1bf",
+      "type": "text",
+      "text": "# Incremental continuation\n\nContinue the existing physical worker Session and its original Task contract. Current guidance, immutable locators and any attributed report quotations are incremental inputs, not a new Task or replacement for the original request.\n\n## Dispatch lineage\n\n- current_dispatch_id: art_hUUKnf0PeK2ZWetDuCQX\n# Dispatch evidence\ncurrent_dispatch_id: art_hUUKnf0PeK2ZWetDuCQX\nRead the root's Tool facts preceding this dispatch with read_agent_message sources=[{\"kind\":\"dispatch_origin\",\"dispatch_id\":\"art_hUUKnf0PeK2ZWetDuCQX\"}]. These timed facts support independent comparison; they are not a producer verdict or current-state guarantee.\n- source_dispatch_id: art_hvGHtPGeTGWcP1sreWg3\n- child_session_id: ses_hu2FUdtPs2AFVV0uocmg\n- workflow_node_id: (direct)\n- workflow_occurrence_id: art_hvGHtPGeTGWcP1sreWg3\n- delivery_slice_revision_ids: (none)\n- workflow_binding: {\"kind\":\"direct\",\"package_revision\":{\"scope\":\"built_in\",\"project_id\":null,\"namespace\":\"builtin\",\"id\":\"base\",\"version\":\"2026.09.30.1\",\"package_digest\":\"7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445\"}}\n\n## Current Turn adapter input\n\n{\"question\":\"请只安排一名只读研究员完成下面的可见分析，不需要规划员、开发员、测试员或其他成员。这是一项只读文字工作，全部交付保留在研究员自己的正常可见消息中，负责人核对正文和真实工具读取记录后直接收尾，不发布额外 Artifact，不创建或修改文件。\\n\\n请完整执行：\\n1. 先在正常可见消息中写约400字开场，说明如何区分实际读取的事实和设计建议。\\n2. 实际调用 search_code，path 为当前项目，pattern=RENDER321，include=source-review.md。该文件是本次明确授权读取的普通项目输入；不要读取其他本地文件或凭据。\\n3. 随后在正常可见消息中撰写第1至6节中文分析，每节至少两段，共约2400汉字，讨论来源身份、准确行号、长目录和同名文件、阅读位置、流式正文与引用先后关系。把文件中的内容标为验收场景输入，不能当作已测得的产品结论。包含一张比较表和一个简短代码示意。\\n4. 再使用webfetch实际读取这一个公开官方页面：https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。不搜索扩展资料，不访问其他网页。\\n5. 继续在正常可见消息中撰写第7至12节，每节至少两段，共约2400汉字，解释该文档对键盘焦点顺序的适用边界，结合前述场景给出明确标注的设计建议和待实际验证事项，包含第二个简短代码示意。不要把实现建议、滚动策略或性能效果冒充标准要求或已完成测试。\\n6. 最后简短列明实际引用的文件命中行和网页、读取限制。不要把正文藏在工具payload、文件或额外报告中，也不要调用其他成员。\\n\\n负责人只需核对研究员的完整可见正文与实际工具记录并说明范围，不重复撰写整篇分析。所有参与者都保持只读。\\n\\n当前项目的精确路径是 C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-12\\\\source-child-stream-321-live-01\\\\project。请使用这个路径作为 search_code.path。你是唯一研究员，不调用其他成员，不发布任何 Artifact、不使用文件承载正文。按上述顺序在你自己的正常可见消息中交付开场、第1至6节、读取指定网页后第7至12节及最终引用限制。实际读取仅限指定 search_code 与指定 webfetch；不要检索额外来源。\",\"reason\":\"按用户明确指定的单人只读范围，由唯一研究员直接交付完整可见分析，负责人随后核对正文和实际读取记录。\"}\n\nThese are this Turn's exact structured selections; earlier Turn inputs remain historical.\n\n## Task authority anchor\n\n- task_id: tsk_g00VXmYPuV00oCT9bk7m\n- root_session_id: ses_-zUSDRZzVzz5VHPTVVyS\n- request_sha256: cde3889dc935bed13eda7bd4916f259f9a613e9deb9c6f3b89f3aa7199d146bb\n- initial_user_message_id: msg_g0VXmYVmk00feKOgHRmO\n- initial_control_text_parts: prt_g0VXmYVmk00CMDx0u0Tm:6fdd55682cd0cbe1404abd3c46bf8123e3fc0a78255bb989a13bd5f41babaab9, prt_g0VXmYVmk010zVVOH2oD:3fba5bd871a75cdcce85c700c7488a0c57aa6ab08a37191cd4ec5906b4a02d57\n\n## Current guidance\n\n负责人已通过 read_agent_message 核对你最终消息的第7至12节及两个真实工具调用的完整输入输出。该读取接口只返回 settled final 的可见正文，无法把你较早的 tool-calls 消息当 final 读取，因此尚缺开场与第1至6节的负责人正文核验。请在这一轮自己的正常可见最终消息中原样保留先前约400字开场及第1至6节（含比较表、第一个代码示意），然后保留已交付的第7至12节及引用限制，使完整正文在一个可读取的最终可见消息内。无需再次读取任何本地文件或网页，不新增调研，不发布 Artifact、不创建修改文件、不调用其他成员。若你无法取得自己此前原文，明确说明并在同一正常可见最终消息补齐相同范围完整正文，但不要声称逐字复现。负责人不会重复整篇分析，只核对。继续满足原请求每节至少两段、两组各约2400汉字及事实/场景输入/建议/待验证区分。\n\n## Artifact evidence\n\nUse artifact_search, complete each artifact_locator_ref read, and select with artifact_read_ref. Keep Artifact bodies in the Catalog instead of copying them into this Turn.",
+      "textChars": 3416
+    },
+    {
+      "id": "prt_g0VXmZCLp005h09G9QoJ",
+      "messageID": "msg_htFxdk2XPqX0l7pCBqEw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmZCVg00rQJ5iXoQX",
+      "messageID": "msg_g0VXmZCNM00qGDS43KCo",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZDeS00aW0TNOGZx",
+      "messageID": "msg_g0VXmZCNM00qGDS43KCo",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757344648,
+        "end": 1791757344652
+      }
+    },
+    {
+      "id": "prt_g0VXmZDgN00EPE5UY8xA",
+      "messageID": "msg_g0VXmZCNM00qGDS43KCo",
+      "type": "text",
+      "text": "本次分析只处理 Sources 子侧栏与持续正文之间的阅读关系，不进行实现、产品测试或界面操作。我会先按指定条件检索唯一获准的项目文件，再把实际命中的文字和行号作为“验收场景输入”讨论；之后读取指定的 W3C 官方页面，说明键盘焦点顺序的原则及其适用边界。全部正文直接写在正常可见消息中，不创建文件、不发布额外报告，也不调用其他成员。\n\n分析中将明确区分四类陈述：实际读取事实，指工具确实返回的文件命中或网页内容；验收场景输入，指文件提出的条件和期待，并不表示产品已经满足；设计建议，指根据这些条件提出的可选实现方向；待验证事项，指仍需真实界面、键盘操作或其他获准测试才能确认的行为。尤其不会把来源行号的存在等同于引用准确，把阅读位置保持方案等同于已实现，也不会把流式正文中的出现顺序推断成既有缺陷。对官方文档同样只解释其实际表述，不将它扩大为特定框架、滚动算法或性能指标的强制要求。接下来先执行指定文件检索，并依据返回结果展开前六节分析。\n\n> **合并说明**：以上开场及以下第1至12节保留此前已交付的正文。本轮只将其汇集到一条正常可见最终消息中，便于负责人完整核对；开场中的“接下来”和下文的读取进度指此前执行顺序，不表示本轮再次读取。本轮没有新增工具调用、调研或产品验证。\n\n指定检索实际返回了三处命中：第2行是准确打开命中行的期望，第3行是长目录与同名文件的待验证场景，第4行是来源阅读期间继续生成并保留阅读位置的设计目标。它们都不是测试结果。以下先据此展开第1至6节；关于键盘焦点顺序的标准解释，将在实际读取指定网页后再写。\n\n## 1. 来源身份：先说明“打开的是谁”\n\n**验收场景输入**：文件第3行要求通过完整目录信息区分同名文件。这意味着 Sources 条目不能仅以文件名作为用户识别来源的全部依据。例如两个条目都显示 `index.ts`，即使内部目标不同，读者仍可能误以为它们是同一文件的不同引用。当前检索没有提供产品的数据结构或界面，因此不能声称现有来源身份正确或错误；能够确认的只是输入明确提出了身份辨别问题。\n\n**设计建议**：将来源对象与引用位置分开表示：来源对象回答项目、目录和文件是谁，引用位置回答其中哪几行支持这段正文。同一文件的多个引用可以共享来源身份，但不能因此合并其不同位置。若内容来自不同版本，还应在产品确实具备版本信息时显示相应区别，不能凭空补一个版本标识。**待验证事项**：两个同名条目是否能独立选中、打开和返回，以及打开后的标题、路径和正文引用是否指向同一对象，均需实际交互证据。\n\n## 2. 准确行号：坐标必须对应实际内容\n\n**验收场景输入**：第2行写明“文件来源应准确打开命中行”，同时明确这只是期望。准确不能仅理解为跳转后界面显示一个行号，还应检查该行是否属于所指文件、是否包含与引用相关的内容。显示为第42行，却打开另一文件的第42行，并不符合这个场景；滚动到目标附近却将目标藏在固定标题下面，也需要与真正可读的命中位置区别讨论。\n\n**设计建议**：明确采用从1开始的展示行号，并为多行证据保存起止位置；检索工具、编辑器和来源预览之间如存在坐标转换，应在边界处处理，而不是让用户猜测。换行显示造成的视觉折行不应悄悄变成新的源码行号。若来源发生变化，旧引用的位置可能失效，此时宜提示需要重新定位，而非保证旧数字仍准确。**待验证事项**：首行、末行、多行范围、空行和长行折行都应检查；本次只知道输入文件命中第2至4行，未验证任何产品跳转。\n\n## 3. 长目录与同名文件：简洁显示不能牺牲可辨认性\n\n**验收场景输入**：第3行把完整目录信息作为同名文件的区分依据。目录较长时，单纯截断前半段或后半段都可能隐藏真正不同的部分：两个路径可能只在中间的模块名上有差异。因而“两个条目看起来不同”与“读者能够准确判断其来源”并非同一件事。当前没有读取目录清单，也没有得知实际同名文件数量，以下例子仅说明比较方法，不是仓库观察结果。\n\n**设计建议**：紧凑列表可以显示文件名和有区分力的目录片段，同时提供可访问的完整路径查看方式；不应将唯一辨识信息只放在鼠标悬停提示里。完整路径的展示也需考虑宽度、换行和复制便利性，不必强迫所有条目永久占据多行。下面的比较表是方案取舍，不是测试评分。**待验证事项**：用户在不使用鼠标的情况下能否获得完整目录，选中条目后是否仍看得清身份，以及路径折行是否挤压定位信息。\n\n| 展示方式 | 潜在优点 | 主要风险 | 待验证重点 |\n|---|---|---|---|\n| 仅文件名 | 简短、易扫读 | 同名来源不可区分 | 是否存在明显歧义 |\n| 文件名加目录片段 | 兼顾密度与辨识 | 差异可能被截断 | 保留的片段是否足够 |\n| 可展开完整路径 | 支持核对完整身份 | 增加操作与空间需求 | 键盘能否展开并阅读 |\n| 完整路径加引用范围 | 同时呈现来源和位置 | 长路径信息负担较大 | 窄区域是否仍可读 |\n\n## 4. 阅读位置：先区分来源位置与正文位置\n\n**验收场景输入**：第4行希望用户阅读来源时后文继续生成，同时保留当前阅读位置。这里至少可能涉及两种位置：用户在来源预览中读到哪一行，以及主正文读到哪一段。该行没有规定“当前”专指哪一侧，也没有指定滚动实现。因此需要把这个含义上的未决点保留下来，不能将自己选择的解释冒充输入的完整要求，更不能断言现有界面已经支持双侧位置保存。\n\n**设计建议**：分别维护正文与来源的阅读状态，只有明确的用户动作才切换相应视图的定位目标。来源的位置可以包括可见行和局部偏移，正文的位置可以围绕稳定段落记录；这些只是候选策略。仅保存像素值在内容重排后未必能维持同一阅读对象，但稳定锚点也需要处理删除、替换和布局变化。**待验证事项**：来源展开、窗口变窄、正文增长、切换同名文件再返回时，用户是否仍能接续阅读；本次未运行任何上述场景。\n\n## 5. 流式正文：继续生成不等于必须跟随滚动\n\n**验收场景输入**：第4行同时提出继续生成和保留阅读位置，说明内容更新与用户视口移动应作为两个问题分析。正文持续接收新内容，并不逻辑上要求把正在阅读来源的用户带到正文末尾；反过来，视口保持不动也不能证明生成过程正常。需要分别观察新内容是否出现、已经显示的段落是否重排，以及来源区域的阅读状态是否受到影响，而不是用一个“流式正常”标签概括全部行为。\n\n**设计建议**：可区分“跟随最新内容”和“阅读历史内容”两种意图，并让用户通过明确入口恢复跟随。下面是概念示意，不是项目符号或可运行补丁；它只表达位置状态与内容追加相分离，不证明浏览器实际布局能保持稳定。**待验证事项**：用户主动上滚、打开来源、返回正文后，状态转换是否可理解；网络更新、布局变化与滚动事件交错时是否发生非预期跳动；性能效果仍需独立测量。\n\n```javascript\n// 设计示意：内容更新与视口移动分别决策。\nfunction onTextChunk(chunk) {\n  appendBody(chunk);\n  if (readingState.followLatest && !readingState.sourceOpen) {\n    requestFollowLatest();\n  } else {\n    markNewContentAvailable();\n  }\n}\n```\n\n## 6. 正文与引用的先后：可见不代表已经有证据\n\n**验收场景输入**：第2行关注定位，第4行关注持续生成，但三处命中没有规定引用与正文到达的具体时序。因而“正文先到、来源后到”“来源条目先显示、定位稍后可用”都只能作为待讨论的场景，不能称为已观察到的产品行为。分析时应区分一段文字已经可见、引用标记已经可见、来源身份已经解析和来源内容已经可打开；这些状态可能有关联，却不能相互替代。\n\n**设计建议**：只有获得有效来源目标后才将引用呈现为可操作链接；尚未解析的标记可以明确显示等待状态，避免外观上承诺一个当前不可到达的位置。引用补齐或重新排序时，应尽量维持用户正在阅读的段落与所选来源之间的关系，不以列表序号作为唯一身份。**待验证事项**：后到引用是否绑定正确段落、失败状态是否可识别、重复来源是否保留不同引用范围，以及用户阅读中的条目是否被替换。前六节的结论因此是场景分解和方案建议，不是产品通过验收的证明。\n\n接下来仅读取指定的 W3C 页面，以官方表述核对焦点顺序与上述阅读场景的关系，不扩展搜索其他资料。\n\n指定 W3C 页面已实际读取。它解释的是 WCAG 2.2 成功准则2.4.3“焦点顺序”（A级），并明确将 Understanding 文档定位为解释性资料。下文区分页面所引述的准则、文档解释、设计建议和待验证事项；不将网页里的技术链接视为本次另外读取的资料。\n\n## 7. 焦点顺序的适用条件：保持意义与可操作性\n\n**官方文档表述**：当网页可以按顺序导航，而且导航顺序影响意义或操作时，可聚焦组件应按保持意义与可操作性的顺序获得焦点。这里的重点不是为页面规定唯一的路线，而是避免用户在逐项移动时失去内容关系。文档明确说明，可能存在多个符合逻辑的顺序，例如表格按行或按列遍历都可能合理。因此，不能仅凭 Sources 位于左侧或右侧，就判断哪一侧必须先获得焦点。\n\n**设计建议**：对于正文引用、来源列表和来源预览，应先明确它们的操作关系：用户从哪段正文发起查看，哪一个条目代表目标，查看完后怎样继续。顺序应帮助理解这条关系，而非在无关控件之间反复跳转。**待验证事项**：沿实际可聚焦组件顺序操作时，是否能识别当前来源和上下文，是否出现难以解释的跨区移动。本次未读取界面结构或操作键盘，不能据此给出符合或不符合准则的结论。\n\n## 8. 视觉排列、阅读顺序和焦点顺序不是同一件事\n\n**官方文档表述**：焦点顺序不一定等同于程序确定的阅读顺序，也不必完全追随视觉布局，只要仍能理解和操作页面。文档同时提醒，应兼顾屏幕阅读器用户与看得见界面的键盘用户，避免任一群体感到焦点随机跳动。对于相互独立、先后不影响意义或操作的双栏，先遍历右栏不必然失败；让焦点顺序强化视觉暗示的阅读顺序，则是文档提出的最佳实践。\n\n**设计建议**：Sources 与正文往往存在引用关系，不能未经分析就套用“独立双栏”的解释。如果视觉上显示某条引用对应某个来源，而键盘路线把用户带到另一组不相关条目，应检查这种安排是否破坏理解。完整目录也应与对应条目保持关联，不因视觉折行而变成难以对应的信息。**待验证事项**：窄窗口、来源展开和正文增长后，视觉顺序与实际焦点顺序是否仍可解释；视觉位置改变本身不能单独证明失败。\n\n## 9. 子侧栏的交互性质：不要把它默认当成模态窗口\n\n**官方文档表述**：页面分别举出非模态和模态对话框的例子。非模态示例将对话框内交互元素安排在触发按钮之后；模态示例在打开后将焦点置于内部，使外部页面内容不能获得焦点，关闭后返回按钮或其后的元素。这些例子说明不同交互性质会影响合理顺序，但“子侧栏”这一外观名称并不能决定它属于哪一种，也不能直接推出必须锁住全部页面焦点。\n\n**设计建议**：结合第4行的**验收场景输入**，如果来源阅读与主正文确实允许同时操作，非模态设计值得考虑；但后台继续生成也可能发生在模态界面中，两者不能简单画等号。应先确定外部内容是否仍可操作，再选择焦点进入、离开和返回方式。**待验证事项**：打开来源后按顺序导航会到哪里，关闭后能否接续原操作，以及触发引用已被更新或移除时如何处理；这些均不是本次已测得的行为。\n\n## 10. 动态更新：保护操作关系，而非每次更新都移动焦点\n\n**官方文档表述**：文档讨论动态内容对导航序列的影响，并列出有关插入动态内容的技术名称，但本次没有访问那些技术页面。依据已读取内容，可以讨论新控件加入后是否仍保持合理顺序，不能进一步宣称标准要求某种框架、更新频率或滚动算法。正文生成顺序与键盘焦点顺序也不是同一个概念：新段落晚到，不等于焦点就应自动前往它。\n\n**设计建议**：保留用户正在操作的控件，避免引用补齐时替换其身份或无故抢焦点；只有明确动作需要改变操作上下文时，才考虑程序化移动。下面仅示意“关闭来源后返回原触发点”，不代表项目已有这些函数，也不是完整无障碍实现。**待验证事项**：触发点仍存在时是否准确返回，不存在时的替代位置是否合理，以及关闭动作是否意外改变正文阅读位置。\n\n```javascript\n// 设计示意：返回操作上下文，不按流式更新次数移动焦点。\nlet sourceOpener = null;\n\nfunction openSource(trigger, sourceId) {\n  sourceOpener = trigger;\n  showSourcePanel(sourceId);\n}\n\nfunction closeSource() {\n  hideSourcePanel();\n  if (sourceOpener?.isConnected) {\n    sourceOpener.focus();\n  } else {\n    focusChosenFallback(); // 替代位置需另行设计、验证。\n  }\n}\n```\n\n## 11. 可聚焦对象：不要把每一行来源都变成必经停靠点\n\n**官方文档表述**：准则评估的是元素获得焦点的顺序，不直接规定哪些对象应当或不应当获得焦点。文档明确指出，静态内容可以获得焦点，程序也可以将焦点移到静态内容；但若造成困惑、不合逻辑或妨碍操作，仍可能失败。它以可聚焦容器嵌套按钮说明重复停靠风险，并建议尽量避免给不可操作内容增加焦点，以免键盘操作变得冗长。这是有条件的解释，不是全面禁止静态内容聚焦。\n\n**设计建议**：来源标题、完整目录和命中范围可以作为有关控件的上下文，不必把每一行代码和每段路径都自动加入逐项导航。若确有“跳到命中位置后阅读”的需要，可以考虑适当的目标定位，但应区分阅读目标与操作控件。文档还区分树组件方向键导航与此处所讨论的顺序导航，因此不能把树内移动机械等同于 Tab 顺序。**待验证事项**：是否存在重复停靠、过多无操作意义的节点，完整路径能否在合理路线中获得；本次未确认 Sources 是否为树组件。\n\n## 12. 综合核验：把来源、阅读和焦点拆成可观察问题\n\n**待实际验证事项**：来源身份方面，应观察同名文件是否以充分目录信息区分，选中后是否打开对应对象；行号方面，应观察命中内容、引用范围和可见目标是否一致；阅读方面，应分别记录来源与正文位置，在后文持续出现时检查用户是否还能接续阅读；焦点方面，应逐项观察打开、浏览、关闭、返回以及引用后到时的实际路线。它们相互关联，但任何一项的成功都不能替代其他项，也不能仅凭一张静态截图完成全部核验。\n\n**设计建议与结论边界**：可将稳定来源身份、明确位置坐标、分离的阅读状态及可解释的焦点路线作为设计方向，但不预先承诺某种滚动策略能解决所有重排问题，也不宣称它减少延迟或改善性能。指定官方文档支持“顺序保持意义与可操作性”的判断框架，并不保证正文继续生成、准确行号或位置保存的产品效果。本次已完成的是只读场景分析和文档解释；未决问题包括“当前阅读位置”具体指哪一侧、侧栏交互性质、引用到达时序及实际焦点行为，均需获准的后续验证才能回答。\n\n### 实际引用与读取限制\n\n- **项目文件**：`C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project\\source-review.md`。实际使用 `search_code`，指定 `pattern=RENDER321`、`include=source-review.md`，返回三处命中：\n  - **第2行**：“文件来源应准确打开命中行；这是期望，不是已完成测试的结论。”\n  - **第3行**：“长目录中的同名文件应通过完整目录信息区分；这是待验证场景。”\n  - **第4行**：“用户阅读来源时希望后文继续生成，同时保留当前阅读位置；这是设计目标。”\n- **官方网页**：实际使用 `webfetch` 读取 https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。引用其 Success Criterion、Intent、说明及 Examples；返回页面标注更新日期为 **2026年3月9日**。\n- **范围限制**：文件仅取得上述检索命中，未读取全文或其他本地文件；未访问网页链接、搜索额外资料、操作产品界面或执行测试。没有已查证的产品实现符号；两个代码片段均为设计示意。未修改或创建文件，未发布 Artifact，未调用其他成员。全部分析保留在本研究员的正常可见消息中。\n- **本轮说明**：上述两个真实读取调用发生于此前交付轮次，本轮没有再次读取，只合并完整可见正文供负责人核对。",
+      "textChars": 7097,
+      "time": {
+        "start": 1791757344767,
+        "end": 1791757413522
+      }
+    },
+    {
+      "id": "prt_g0VXmZVbp00CcET3cN2b",
+      "messageID": "msg_g0VXmZCNM00qGDS43KCo",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_task-root-control_art_hJJ3F1FHau60kuVo02vg_art_hJJ3F1FHau60kuVo02vg",
+      "messageID": "msg_task-root-control_art_hJJ3F1FHau60kuVo02vg_art_hJJ3F1FHau60kuVo02vg",
+      "type": "text",
+      "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hJJ3F1FHau60kuVo02vg.\nCURRENT LIFECYCLE CONTROL FACT: event_id=pev_g0VXmZVdz00zgf09soNH; session_id=ses_hu2FUdtPs2AFVV0uocmg; dispatch_id=art_hUUKnf0PeK2ZWetDuCQX; input_message_id=msg_g0VXmZCKb001Ys27v1bf; authoritative_status=terminal/completed; final_message_id=\"msg_g0VXmZCNM00qGDS43KCo\"; physical_turn_state=settled; emitted_at=2026-10-11T22:23:33.811Z; summary=\"agent.execution.lifecycle\"; error=null. This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. When final_message_id is non-null, read that exact participant Message rather than selecting another Message from Session history. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.\nOnly the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.",
+      "textChars": 1695
+    },
+    {
+      "id": "prt_g0VXmZVrt002gl7yZygv",
+      "messageID": "msg_hNEmvym7tYCseIJ4xvhu",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZWou00IvR4ir82W",
+      "messageID": "msg_hNEmvym7tYCseIJ4xvhu",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmZWu300Eq3Pd0GkU",
+      "messageID": "msg_hNEmvym7tYCseIJ4xvhu",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmZXVk00fFF5Z2XEY",
+      "messageID": "msg_hNEmvym7tYCseIJ4xvhu",
+      "type": "reasoning",
+      "text": "",
+      "textChars": 0,
+      "time": {
+        "start": 1791757420988,
+        "end": 1791757420992
+      }
+    },
+    {
+      "id": "prt_g0VXmZXXU00WPGp4TBP4",
+      "messageID": "msg_hNEmvym7tYCseIJ4xvhu",
+      "type": "text",
+      "text": "已核对研究员的完整可见正文和真实读取记录，本次只读分析可以收尾。\n\n- 正文包含约400字开场、第1至12节（每节至少两段）、一张比较表、两个代码示意，以及引用和读取限制说明。\n- 文件检索参数符合要求，实际命中 `source-review.md` 第2、3、4行；网页读取仅限指定的 W3C 焦点顺序页面。\n- 文件内容明确标为“验收场景输入”，设计建议和待验证事项与官方文档解释分开，没有冒充已完成的产品测试、标准强制的滚动策略或性能结论。\n- 全程只有同一名研究员参与；未创建或修改文件，未发布额外报告，也未读取其他本地文件或访问其他网页。\n\n完整分析保留在研究员自己的可见消息中，我不重复正文。本次交付是场景分析与文档解释，不构成产品实现、无障碍合规或性能测试证明。",
+      "textChars": 338,
+      "time": {
+        "start": 1791757421096,
+        "end": 1791757425341
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXmYSoX001XeudL8En",
+      "message_id": "msg_hiPpfBrLNQqFuCltroJ6",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_VwvR8veowP8Rxygvr9e2sVBg\",\"tool\":\"dispatch_agent\",\"input\":{\"dispatch\":{\"target\":\"base-researcher\",\"work_scope\":{\"kind\":\"task\"},\"turn\":{\"kind\":\"initial\",\"use_worktree\":false,\"input\":{\"question\":\"请只安排一名只读研究员完成下面的可见分析，不需要规划员、开发员、测试员或其他成员。这是一项只读文字工作，全部交付保留在研究员自己的正常可见消息中，负责人核对正文和真实工具读取记录后直接收尾，不发布额外 Artifact，不创建或修改文件。\\n\\n请完整执行：\\n1. 先在正常可见消息中写约400字开场，说明如何区分实际读取的事实和设计建议。\\n2. 实际调用 search_code，path 为当前项目，pattern=RENDER321，include=source-review.md。该文件是本次明确授权读取的普通项目输入；不要读取其他本地文件或凭据。\\n3. 随后在正常可见消息中撰写第1至6节中文分析，每节至少两段，共约2400汉字，讨论来源身份、准确行号、长目录和同名文件、阅读位置、流式正文与引用先后关系。把文件中的内容标为验收场景输入，不能当作已测得的产品结论。包含一张比较表和一个简短代码示意。\\n4. 再使用webfetch实际读取这一个公开官方页面：https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。不搜索扩展资料，不访问其他网页。\\n5. 继续在正常可见消息中撰写第7至12节，每节至少两段，共约2400汉字，解释该文档对键盘焦点顺序的适用边界，结合前述场景给出明确标注的设计建议和待实际验证事项，包含第二个简短代码示意。不要把实现建议、滚动策略或性能效果冒充标准要求或已完成测试。\\n6. 最后简短列明实际引用的文件命中行和网页、读取限制。不要把正文藏在工具payload、文件或额外报告中，也不要调用其他成员。\\n\\n负责人只需核对研究员的完整可见正文与实际工具记录并说明范围，不重复撰写整篇分析。所有参与者都保持只读。\\n\\n当前项目的精确路径是 C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-12\\\\source-child-stream-321-live-01\\\\project。请使用这个路径作为 search_code.path。你是唯一研究员，不调用其他成员，不发布任何 Artifact、不使用文件承载正文。按上述顺序在你自己的正常可见消息中交付开场、第1至6节、读取指定网页后第7至12节及最终引用限制。实际读取仅限指定 search_code 与指定 webfetch；不要检索额外来源。\",\"reason\":\"按用户明确指定的单人只读范围，由唯一研究员直接交付完整可见分析，负责人随后核对正文和实际读取记录。\"}}}},\"time\":{\"start\":1791757164605}}"
+    },
+    {
+      "id": "prt_g0VXmYYD600fvPDzoz8v",
+      "message_id": "msg_g0VXmYVpU004ZlHI91ao",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_964da801b30e4f8b98a02a0e03197072\",\"tool\":\"search_code\",\"input\":{\"pattern\":\"RENDER321\",\"path\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-12\\\\source-child-stream-321-live-01\\\\project\",\"include\":\"source-review.md\"},\"time\":{\"start\":1791757185348}}"
+    },
+    {
+      "id": "prt_g0VXmYlYn00dbr8oxS2m",
+      "message_id": "msg_g0VXmYYZ200zDmj0wHc0",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_b21c385d575e41499b4235f0b5e294b6\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\",\"format\":\"markdown\",\"timeout\":120},\"time\":{\"start\":1791757236665}}"
+    },
+    {
+      "id": "prt_g0VXmZ1Yw000hEGeb2gf",
+      "message_id": "msg_htFxdk2XPqX0l7pCBqEw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_MGrMMJLDzOzZKVPTimWFv8ci\",\"tool\":\"read_agent_message\",\"input\":{\"sources\":[{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYlnU00dVnyWYjmu\"}]},\"time\":{\"start\":1791757298178}}"
+    },
+    {
+      "id": "prt_g0VXmZ3QG00Z3p73ZwlS",
+      "message_id": "msg_htFxdk2XPqX0l7pCBqEw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_6b9901f5afef47dea60f3b9fba598463\",\"tool\":\"read_agent_message\",\"input\":{\"sources\":[{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\"},{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\"},{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYlnU00dVnyWYjmu\"}],\"evidence_reads\":[{\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\",\"part_id\":\"prt_g0VXmYYD600fvPDzoz8v\",\"field\":\"input\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\",\"part_id\":\"prt_g0VXmYYD600fvPDzoz8v\",\"field\":\"output\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\",\"part_id\":\"prt_g0VXmYlYn00dbr8oxS2m\",\"field\":\"input\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\",\"part_id\":\"prt_g0VXmYlYn00dbr8oxS2m\",\"field\":\"output\",\"offset\":0,\"limit\":23000}]},\"metadata\":{\"openai\":{\"itemId\":\"fc_02ee685370b33881016acc0bf8fec88191a7ab9a080bc3a884\"}},\"time\":{\"start\":1791757305328}}"
+    },
+    {
+      "id": "prt_g0VXmZ6C100RwLOdLi4Z",
+      "message_id": "msg_htFxdk2XPqX0l7pCBqEw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_6ZroXH7XVfBf79XFrdz12hBt\",\"tool\":\"read_agent_message\",\"input\":{\"sources\":[{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYlnU00dVnyWYjmu\"}],\"evidence_reads\":[{\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\",\"part_id\":\"prt_g0VXmYYD600fvPDzoz8v\",\"field\":\"input\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\",\"part_id\":\"prt_g0VXmYYD600fvPDzoz8v\",\"field\":\"output\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\",\"part_id\":\"prt_g0VXmYlYn00dbr8oxS2m\",\"field\":\"input\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\",\"part_id\":\"prt_g0VXmYlYn00dbr8oxS2m\",\"field\":\"output\",\"offset\":0,\"limit\":23000}]},\"time\":{\"start\":1791757315977}}"
+    },
+    {
+      "id": "prt_g0VXmZ8W800N8SgdC98M",
+      "message_id": "msg_htFxdk2XPqX0l7pCBqEw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_ID39oQ5fOjRT91uyeSG4b353\",\"tool\":\"capability_search\",\"input\":{\"queries\":[\"panel_query_task\"],\"kinds\":[\"tool\"],\"next_owner_kinds\":[\"call_tool\"],\"owner_refs\":[],\"exact_refs\":[],\"deactivate_refs\":[],\"limit\":5},\"time\":{\"start\":1791757324912}}"
+    },
+    {
+      "id": "prt_g0VXmZAa9002pWSCEQON",
+      "message_id": "msg_htFxdk2XPqX0l7pCBqEw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_02413e4de7dc4932a06d459725d6b0c0\",\"tool\":\"dispatch_agent\",\"input\":{\"dispatch\":{\"target\":\"base-researcher\",\"work_scope\":{\"kind\":\"task\"},\"turn\":{\"kind\":\"continuation\",\"authority\":{\"kind\":\"prior_dispatch\",\"continuation_dispatch_id\":\"art_hvGHtPGeTGWcP1sreWg3\"},\"guidance\":\"负责人已通过 read_agent_message 核对你最终消息的第7至12节及两个真实工具调用的完整输入输出。该读取接口只返回 settled final 的可见正文，无法把你较早的 tool-calls 消息当 final 读取，因此尚缺开场与第1至6节的负责人正文核验。请在这一轮自己的正常可见最终消息中原样保留先前约400字开场及第1至6节（含比较表、第一个代码示意），然后保留已交付的第7至12节及引用限制，使完整正文在一个可读取的最终可见消息内。无需再次读取任何本地文件或网页，不新增调研，不发布 Artifact、不创建修改文件、不调用其他成员。若你无法取得自己此前原文，明确说明并在同一正常可见最终消息补齐相同范围完整正文，但不要声称逐字复现。负责人不会重复整篇分析，只核对。继续满足原请求每节至少两段、两组各约2400汉字及事实/场景输入/建议/待验证区分。\",\"evidence_locators\":[]}}},\"time\":{\"start\":1791757332849}}"
+    },
+    {
+      "id": "prt_g0VXmZWaB00by46ZHMje",
+      "message_id": "msg_hNEmvym7tYCseIJ4xvhu",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_18253b07a8df4491830cba8e20dde169\",\"tool\":\"read_agent_message\",\"input\":{\"sources\":[{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmZCNM00qGDS43KCo\"}]},\"time\":{\"start\":1791757417419}}"
+    },
+    {
+      "id": "prt_g0VXmZYe100qgdBwTxv4",
+      "message_id": "msg_hNEmvym7tYCseIJ4xvhu",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_70abe2bf13c5450ea6b54f934437753e\",\"tool\":\"manage_task\",\"input\":{\"summary\":\"已由唯一只读研究员在正常可见消息交付约400字开场、第1至12节中文分析（每节至少两段，两组约2400汉字）、比较表、两个代码示意及引用限制。负责人完整读取研究员最终合并正文，并核对首次交付的真实 search_code 与 webfetch 完整输入输出：当前项目 source-review.md 的 RENDER321 检索命中第2、3、4行；网页仅为指定 W3C Focus Order 页面。正文清楚区分验收场景输入、官方解释、设计建议及待验证事项，不作产品测试或性能结论。较早正文无法作为最终消息读取的问题通过同一研究员合并原可见正文解决，未新增读取或其他成员。未创建修改文件，未发布额外 Artifact；可见消息本身为用户要求的完整交付，不另生成文件或重复整篇正文。\",\"evidence_locators\":[{\"source\":\"session_message\",\"session_id\":\"ses_hu2FUdtPs2AFVV0uocmg\",\"message_id\":\"msg_g0VXmYlnU00dVnyWYjmu\"},{\"source\":\"session_message\",\"session_id\":\"ses_hu2FUdtPs2AFVV0uocmg\",\"message_id\":\"msg_g0VXmZCNM00qGDS43KCo\"},{\"source\":\"session\",\"session_id\":\"ses_-zUSDRZDnzzmDQ0f9Rfa\"}],\"deliverable_artifact_locators\":[],\"accepted_delivery_slice_revision_ids\":[],\"workflow_id\":null,\"action\":\"complete_task\"},\"time\":{\"start\":1791757425345}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXmYSoX001XeudL8En",
+      "outcome": "completed",
+      "resultAttemptID": "per_hHlNv99cgWmIiYqvT6vN",
+      "outputChars": 108,
+      "output": "{\"kind\":\"accepted\",\"session_id\":\"ses_hu2FUdtPs2AFVV0uocmg\",\"dispatch_lineage_id\":\"art_g0VXmYVlH0027nvRiiZx\"}",
+      "metadata": {},
+      "time": {
+        "end": 1791757176169
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmYYD600fvPDzoz8v",
+      "outcome": "completed",
+      "outputChars": 290,
+      "output": "Found 3 matches\nC:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-child-stream-321-live-01\\project\\source-review.md:\n  Line 2: RENDER321 文件来源应准确打开命中行；这是期望，不是已完成测试的结论。\n  Line 3: RENDER321 长目录中的同名文件应通过完整目录信息区分；这是待验证场景。\n  Line 4: RENDER321 用户阅读来源时希望后文继续生成，同时保留当前阅读位置；这是设计目标。",
+      "metadata": {
+        "matches": 3,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791757186601
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmYlYn00dbr8oxS2m",
+      "outcome": "completed",
+      "resultAttemptID": "per_hdtszp6c1TFmWNnyShDe",
+      "outputChars": 20060,
+      "output": "Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C    [Skip to content](#main)\n\n[WCAG 2.2 Understanding Docs](https://www.w3.org/WAI/WCAG22/Understanding/)\n\nInformative explanations, not required to meet WCAG\n\n[About WCAG Understanding Docs](https://www.w3.org/WAI/WCAG22/Understanding/about)\n\n[W3C homepage](https://www.w3.org/) [Web Accessibility Initiative (WAI) homepage](https://www.w3.org/WAI/)\n\n-   [All Understanding Docs](.)\n-   [Guideline: Navigable](navigable)\n-   [Previous SC: Page Titled](page-titled)\n-   [Next SC: Link Purpose (In Context)](link-purpose-in-context)\n\nPage Contents\n\n-   [In Brief](#brief)\n-   [Success Criterion](#success-criterion)\n-   [Intent](#intent)\n-   [Benefits](#benefits)\n-   [Examples](#examples)\n-   [Techniques](#techniques)\n-   [Key Terms](#key-terms)\n\n# Understanding [SC 2.4.3](https://w3.org/TR/WCAG22#focus-order) Focus Order (Level A)\n\n## In Brief\n\nGoal\n\nKeyboard users navigate content in a correct order.\n\nWhat to do\n\nElements receive focus in an order that preserves meaning.\n\nWhy it's important\n\nNavigating a site or application with only the keyboard will make sense.\n\n## Success Criterion (SC)\n\nIf a [web page](#dfn-web-page) can be [navigated sequentially](#dfn-navigated-sequentially) and the navigation sequences affect meaning or operation, focusable components receive focus in an order that preserves meaning and operability.\n\n## Intent\n\nThe intent of this success criterion is to ensure that when users navigate sequentially through content, they encounter information in an order that is consistent with the meaning of the content and can be operated from the keyboard. This reduces confusion by letting users form a consistent mental model of the content. There may be different orders that reflect logical relationships in the content. For example, moving through components in a table one row at a time or one column at a time both reflect the logical relationships in the content. Either order may satisfy this success criterion.\n\nThe way that sequential navigation order is determined in web content is defined by the technology of the content. For example, simple HTML defines sequential navigation via the notion of tabbing order. Dynamic HTML may modify the navigation sequence using scripting along with the addition of a `tabindex` attribute to allow focus to additional elements. If no scripting or `tabindex` attributes are used, the navigation order is the order that components appear in the content stream. (See [Focus in the HTML Living Standard](https://html.spec.whatwg.org/multipage/interaction.html#focus)).\n\nAn example of keyboard navigation that is not the sequential navigation addressed by this success criterion is using arrow key navigation to traverse a tree component. The user can use the up and down arrow keys to move from tree node to tree node. Pressing the right arrow key may expand a node, then using the down arrow key, will move into the newly expanded nodes. This navigation sequence follows the expected sequence for a tree control - as additional items get expanded or collapsed, they are added or removed from the navigation sequence.\n\nThe focus order may not be identical to the programmatically determined reading order (see [Success Criterion 1.3.2 Meaningful Sequence](meaningful-sequence.html)) as long as the user can still understand and operate the web page. Since there may be several possible logical reading orders for the content, the focus order may match any of them. However, when the order of a particular presentation differs from the programmatically determined reading order, users of one of these presentations may find it difficult to understand or operate the web page. Authors should carefully consider all these users as they design their web pages.\n\nFor example, a screen reader user interacts with the programmatically determined reading order, while a sighted keyboard user interacts with the visual presentation of the web page. Care should be taken so that the focus order makes sense to both of these sets of users and does not appear to either of them to jump around randomly.\n\nFocus order needs to allow the user to navigate focusable elements in a logical order, and that order needs to preserve any meaning or operation that the page is conveying. Focus order does not necessarily need to follow the visual layout of the web page, as long as the order in which elements receive focus is logical, and the hierarchy and relationship of content implied by the visual presentation is preserved. For instance, in a two-column layout, the assumption in western left-to-right systems may be that focus moves through the elements in the left-hand column first, from the top to the bottom of the column, and then proceed to the right-hand column. However, if the two columns are independent of each other, and meaning/operation are not affected, it is not a failure if elements in the right-hand column receive focus first, followed by the elements in the left-hand column. As a best practice, though, make sure the focus order reinforces the reading order implied by the visual layout.\n\nNote\n\nThis requirement does not specify what should or should not receive focus, but rather assesses the order in which elements receive focus. This success criterion does not prohibit making non-operable content (e.g., static text) focusable, or programmatically moving focus to such content. However, it is a failure of Focus Order if items receive focus in an order that impedes the meaning or operation of content, or creates confusing or illogical focus orders — for example, a control appearing to receive focus multiple times due to the use of nested focusable elements.\n\n```html\n<div tabindex=\"0\"><button>...</button></div>\n```\n\nAs a best practice, avoid having focusable elements which cannot be operated or actioned, as these are likely to make operation tedious for keyboard users.\n\nFor clarity:\n\n-   Focusable components need to receive focus in an order that preserves meaning and operability.\n-   Focus order does not necessarily need to follow the visual presentation or layout.\n-   If there is more than one order that preserves meaning and operability, only one of them needs to be provided.\n-   Static/non-interactive elements can receive focus, as long as they don't impede operation of the content, or result in confusing or illogical focus order.\n\n## Benefits\n\nThese techniques benefit keyboard users who navigate documents sequentially and expect the focus order to be consistent with the sequential reading order.\n\n-   People with mobility impairments who must rely on keyboard access for operating a page benefit from a logical, usable focus order.\n-   People with disabilities that make reading difficult can become disoriented when tabbing takes focus someplace unexpected. They benefit from a logical focus order.\n-   People with visual impairments can become disoriented when tabbing takes focus someplace unexpected or when they cannot easily find the content surrounding an interactive element.\n-   Only a small portion of the page may be visible to an individual using a screen magnifier at a high level of magnification. Such a user may interpret a field in the wrong context if the focus order is not logical.\n\n## Examples\n\n-   On a web page that contains a tree of interactive controls, the user can use the up and down arrow keys to move from tree node to tree node. Pressing the right arrow key expands a node, then using the down arrow key moves into the newly expanded nodes.\n-   A web page implements non-modal dialogs. When the trigger button is activated, a dialog opens. The interactive elements in the dialog are inserted in the focus order immediately after the button. When the dialog is open, the focus order goes from the button to the elements of the dialog, then to the interactive element following the button. When the dialog is closed, the focus order goes from the button to the following element.\n-   A web page implements modal dialogs. When the trigger button is activated, a dialog opens and focus is set within the dialog. As long as the dialog is open, all web page content outside the dialog becomes inert and cannot receive focus (though, depending on implementation, the focus cycle might still include user agent controls). When the dialog is dismissed, focus returns to the button or the element following the button.\n-   An HTML web page is created with the left hand navigation occurring in the HTML after the main body content, and styled with CSS to appear on the left hand side of the page. This is done to allow focus to move to the main body content first without requiring `tabindex` attributes or JavaScript.\n\n    Note\n\n    While this example passes the Success Criterion, it is not necessarily true that all CSS positioning would. More complex positioning examples may or may not preserve meaning and operability\n\n-   The following example **fails to meet the Success Criterion**:\n\n    A company's website includes a form that collects marketing data and allows users to subscribe to several newsletters published by the company. The section of the form for collecting marketing data includes fields such as name, street address, city, state or province, and postal code. Another section of the form includes several checkboxes so that users can indicate newsletters they want to receive. However, the tab order for the form skips between fields in different sections of the form, so that focus moves from the name field to a checkbox, then to the street address, then to another checkbox.\n\n\n## Techniques\n\nEach item in this section represents a technique or combination of techniques that the Accessibility Guidelines Working Group deems sufficient for meeting this success criterion. A technique may go beyond the minimum requirement of the criterion. There may be other ways of meeting the criterion not covered by these techniques. For information on using other techniques, see [Understanding Techniques for WCAG Success Criteria](understanding-techniques), particularly the \"Other Techniques\" section.\n\n### Sufficient Techniques\n\n-   [G59: Placing the interactive elements in an order that follows sequences and relationships within the content](https://www.w3.org/WAI/WCAG22/Techniques/general/G59)\n-   Giving focus to elements in an order that follows sequences and relationships within the content using one of the following techniques:\n\n    -   [C27: Making the DOM order match the visual order](https://www.w3.org/WAI/WCAG22/Techniques/css/C27)\n    -   [PDF3: Ensuring correct tab and reading order in PDF documents](https://www.w3.org/WAI/WCAG22/Techniques/pdf/PDF3)\n-   Changing a web page dynamically using one of the following techniques:\n\n    -   [SCR26: Inserting dynamic content into the Document Object Model immediately following its trigger element](https://www.w3.org/WAI/WCAG22/Techniques/client-side-script/SCR26)\n    -   [H102: Creating modal dialogs with the HTML dialog element](https://www.w3.org/WAI/WCAG22/Techniques/html/H102)\n    -   [SCR27: Reordering page sections using the Document Object Model](https://www.w3.org/WAI/WCAG22/Techniques/client-side-script/SCR27)\n\n### Failures\n\nThe following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group.\n\n-   [F44: Failure of Success Criterion 2.4.3 due to using tabindex to create a tab order that does not preserve meaning and operability](https://www.w3.org/WAI/WCAG22/Techniques/failures/F44)\n-   [F85: Failure of Success Criterion 2.4.3 due to using dialogs or menus that are not adjacent to their trigger control in the sequential navigation order](https://www.w3.org/WAI/WCAG22/Techniques/failures/F85)\n\n## Key Terms\n\nassistive technology\n\nhardware and/or software that acts as a [user agent](#dfn-user-agent), or along with a mainstream user agent, to provide functionality to meet the requirements of users with disabilities that go beyond those offered by mainstream user agents\n\nNote 1\n\nFunctionality provided by assistive technology includes alternative presentations (e.g., as synthesized speech or magnified content), alternative input methods (e.g., voice), additional navigation or orientation mechanisms, and content transformations (e.g., to make tables more accessible).\n\nNote 2\n\nAssistive technologies often communicate data and messages with mainstream user agents by using and monitoring APIs.\n\nNote 3\n\nThe distinction between mainstream user agents and assistive technologies is not absolute. Many mainstream user agents provide some features to assist individuals with disabilities. The basic difference is that mainstream user agents target broad and diverse audiences that usually include people with and without disabilities. Assistive technologies target narrowly defined populations of users with specific disabilities. The assistance provided by an assistive technology is more specific and appropriate to the needs of its target users. The mainstream user agent may provide important functionality to assistive technologies like retrieving web content from program objects or parsing markup into identifiable bundles.\n\nExample\n\nAssistive technologies that are important in the context of this document include the following:\n\n-   screen magnifiers, and other visual reading assistants, which are used by people with visual, perceptual and physical print disabilities to change text font, size, spacing, color, synchronization with speech, etc. in order to improve the visual readability of rendered text and images;\n-   screen readers, which are used by people who are blind to read textual information through synthesized speech or braille;\n-   text-to-speech software, which is used by some people with cognitive, language, and learning disabilities to convert text into synthetic speech;\n-   speech recognition software, which may be used by people who have some physical disabilities;\n-   alternative keyboards, which are used by people with certain physical disabilities to simulate the keyboard (including alternate keyboards that use head pointers, single switches, sip/puff and other special input devices.);\n-   alternative pointing devices, which are used by people with certain physical disabilities to simulate mouse pointing and button activations.\n\nkeyboard interface\n\ninterface used by software to obtain keystroke input\n\nNote 1\n\nA keyboard interface allows users to provide keystroke input to programs even if the native technology does not contain a keyboard.\n\nExample\n\nA touchscreen PDA has a keyboard interface built into its operating system as well as a connector for external keyboards. Applications on the PDA can use the interface to obtain keyboard input either from an external keyboard or from other applications that provide simulated keyboard output, such as handwriting interpreters or speech-to-text applications with \"keyboard emulation\" functionality.\n\nNote 2\n\nOperation of the application (or parts of the application) through a keyboard-operated mouse emulator, such as MouseKeys, does not qualify as operation through a keyboard interface because operation of the program is through its pointing device interface, not through its keyboard interface.\n\nnavigated sequentially\n\nnavigated in the order defined for advancing focus (from one element to the next) using a [keyboard interface](#dfn-keyboard-interface)\n\nuser agent\n\nany software that retrieves and presents web content for users\n\nExample\n\nWeb browsers, media players, plug-ins, and other programs — including [assistive technologies](#dfn-assistive-technology) — that help in retrieving, rendering, and interacting with web content.\n\nweb page\n\na non-embedded resource obtained from a single URI using HTTP plus any other resources that are used in the rendering or intended to be rendered together with it by a [user agent](#dfn-user-agent)\n\nNote 1\n\nAlthough any \"other resources\" would be rendered together with the primary resource, they would not necessarily be rendered simultaneously with each other.\n\nNote 2\n\nFor the purposes of conformance with these guidelines, a resource must be \"non-embedded\" within the scope of conformance to be considered a web page.\n\nExample 1\n\nA web resource including all embedded images and media.\n\nExample 2\n\nA web mail program built using Asynchronous JavaScript and XML (AJAX). The program lives entirely at http://example.com/mail, but includes an inbox, a contacts area and a calendar. Links or buttons are provided that cause the inbox, contacts, or calendar to display, but do not change the URI of the page as a whole.\n\nExample 3\n\nA customizable portal site, where users can choose content to display from a set of different content modules.\n\nExample 4\n\nWhen you enter \"http://shopping.example.com/\" in your browser, you enter a movie-like interactive shopping environment where you visually move around in a store dragging products off of the shelves around you and into a visual shopping cart in front of you. Clicking on a product causes it to be demonstrated with a specification sheet floating alongside. This might be a single-page website or just one page within a website.\n\n[Back to Top](#top)\n\n## Help improve this page\n\nPlease share your ideas, suggestions, or comments via email to the publicly-archived list [public-agwg-comments@w3.org](mailto:public-agwg-comments@w3.org?subject=%5BUnderstanding%20and%20Techniques%20Feedback%5D) or via GitHub\n\n[Email](mailto:public-agwg-comments@w3.org?subject=%5BUnderstanding%20and%20Techniques%20Feedback%5D) [Fork & Edit on GitHub](https://github.com/w3c/wcag/edit/main/understanding/20/focus-order.html) [New GitHub Issue](https://github.com/w3c/wcag/issues/new)\n\n**Date:** Updated 09 March 2026. [View this page's revision history.](https://github.com/w3c/wcag/commits/main/understanding/20/focus-order.html)\n\n**Developed by** [Accessibility Guidelines Working Group (AG WG) Participants](https://www.w3.org/groups/wg/ag/participants) (Co-Chairs: Adam Page, Alastair Campbell, Rachael Bradley Montgomery. W3C Staff Contact: Kevin White).\n\nThe content was developed as part of the [WAI-Core projects](https://www.w3.org/WAI/about/projects/#us) funded by U.S. Federal funds. The user interface was designed by the Education and Outreach Working Group ([EOWG](https://www.w3.org/groups/wg/eowg/participants)) with contributions from Shadi Abou-Zahra, Steve Lee, and Shawn Lawton Henry as part of the [WAI-Guide](https://www.w3.org/WAI/about/projects/wai-guide/) project, co-funded by the European Commission.\n\n[W3C Web Accessibility Initiative (WAI)](https://www.w3.org/WAI/)\n\nStrategies, standards, resources to make the Web accessible to people with disabilities\n\n-   ![](https://www.w3.org/WAI/assets/images/email.svg) [Get News in Email](https://www.w3.org/WAI/news/subscribe/)\n-   ![](https://www.w3.org/WAI/assets/images/social/linkedin.svg) [LinkedIn](https://www.linkedin.com/company/w3c-wai/)\n-   ![](https://www.w3.org/assets/website-2021/svg/mastodon.svg) [Mastodon](https://w3c.social/@wai)\n-   ![](https://www.w3.org/WAI/assets/images/social/youtube.svg) [YouTube](https://www.youtube.com/channel/UCU6ljj3m1fglIPjSjs2DpRA/playlists/)\n\n-   [Home](https://www.w3.org/WAI/)\n-   [Contact](https://www.w3.org/WAI/about/contacting/)\n-   [Site map](https://www.w3.org/WAI/sitemap/)\n-   [Support WAI](https://www.w3.org/WAI/about/support/)\n-   [News](https://www.w3.org/WAI/news/)\n-   [Accessibility statement](https://www.w3.org/WAI/about/accessibility-statement/)\n-   [All Translations](https://www.w3.org/WAI/translations/)\n-   [Resources for roles](https://www.w3.org/WAI/roles/)\n\nCopyright © 2026 [World Wide Web Consortium](https://www.w3.org/).\nW3C® [liability](https://www.w3.org/policies/#disclaimers), [trademark](https://www.w3.org/policies/#trademarks) and [permissive license](https://www.w3.org/copyright/software-license/ \"W3C Software License\") rules apply unless otherwise noted. See [Permission to Use WAI Material](https://www.w3.org/WAI/about/using-wai-material/).",
+      "metadata": {
+        "originalBytes": 20068,
+        "shownBytes": 20068,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791757237445
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmZ1Yw000hEGeb2gf",
+      "outcome": "completed",
+      "resultAttemptID": "per_hS9X8Yp7enzPHWWZLVZI",
+      "outputChars": 6931,
+      "output": "{\n  \"messages\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n      },\n      \"session_id\": \"ses_hu2FUdtPs2AFVV0uocmg\",\n      \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\",\n      \"role\": \"assistant\",\n      \"author\": \"base-researcher\",\n      \"finish\": \"stop\",\n      \"time_completed\": 1791757294361,\n      \"text\": [\n        \"指定 W3C 页面已实际读取。它解释的是 WCAG 2.2 成功准则2.4.3“焦点顺序”（A级），并明确将 Understanding 文档定位为解释性资料。下文区分页面所引述的准则、文档解释、设计建议和待验证事项；不将网页里的技术链接视为本次另外读取的资料。\\n\\n## 7. 焦点顺序的适用条件：保持意义与可操作性\\n\\n**官方文档表述**：当网页可以按顺序导航，而且导航顺序影响意义或操作时，可聚焦组件应按保持意义与可操作性的顺序获得焦点。这里的重点不是为页面规定唯一的路线，而是避免用户在逐项移动时失去内容关系。文档明确说明，可能存在多个符合逻辑的顺序，例如表格按行或按列遍历都可能合理。因此，不能仅凭 Sources 位于左侧或右侧，就判断哪一侧必须先获得焦点。\\n\\n**设计建议**：对于正文引用、来源列表和来源预览，应先明确它们的操作关系：用户从哪段正文发起查看，哪一个条目代表目标，查看完后怎样继续。顺序应帮助理解这条关系，而非在无关控件之间反复跳转。**待验证事项**：沿实际可聚焦组件顺序操作时，是否能识别当前来源和上下文，是否出现难以解释的跨区移动。本次未读取界面结构或操作键盘，不能据此给出符合或不符合准则的结论。\\n\\n## 8. 视觉排列、阅读顺序和焦点顺序不是同一件事\\n\\n**官方文档表述**：焦点顺序不一定等同于程序确定的阅读顺序，也不必完全追随视觉布局，只要仍能理解和操作页面。文档同时提醒，应兼顾屏幕阅读器用户与看得见界面的键盘用户，避免任一群体感到焦点随机跳动。对于相互独立、先后不影响意义或操作的双栏，先遍历右栏不必然失败；让焦点顺序强化视觉暗示的阅读顺序，则是文档提出的最佳实践。\\n\\n**设计建议**：Sources 与正文往往存在引用关系，不能未经分析就套用“独立双栏”的解释。如果视觉上显示某条引用对应某个来源，而键盘路线把用户带到另一组不相关条目，应检查这种安排是否破坏理解。完整目录也应与对应条目保持关联，不因视觉折行而变成难以对应的信息。**待验证事项**：窄窗口、来源展开和正文增长后，视觉顺序与实际焦点顺序是否仍可解释；视觉位置改变本身不能单独证明失败。\\n\\n## 9. 子侧栏的交互性质：不要把它默认当成模态窗口\\n\\n**官方文档表述**：页面分别举出非模态和模态对话框的例子。非模态示例将对话框内交互元素安排在触发按钮之后；模态示例在打开后将焦点置于内部，使外部页面内容不能获得焦点，关闭后返回按钮或其后的元素。这些例子说明不同交互性质会影响合理顺序，但“子侧栏”这一外观名称并不能决定它属于哪一种，也不能直接推出必须锁住全部页面焦点。\\n\\n**设计建议**：结合第4行的**验收场景输入**，如果来源阅读与主正文确实允许同时操作，非模态设计值得考虑；但后台继续生成也可能发生在模态界面中，两者不能简单画等号。应先确定外部内容是否仍可操作，再选择焦点进入、离开和返回方式。**待验证事项**：打开来源后按顺序导航会到哪里，关闭后能否接续原操作，以及触发引用已被更新或移除时如何处理；这些均不是本次已测得的行为。\\n\\n## 10. 动态更新：保护操作关系，而非每次更新都移动焦点\\n\\n**官方文档表述**：文档讨论动态内容对导航序列的影响，并列出有关插入动态内容的技术名称，但本次没有访问那些技术页面。依据已读取内容，可以讨论新控件加入后是否仍保持合理顺序，不能进一步宣称标准要求某种框架、更新频率或滚动算法。正文生成顺序与键盘焦点顺序也不是同一个概念：新段落晚到，不等于焦点就应自动前往它。\\n\\n**设计建议**：保留用户正在操作的控件，避免引用补齐时替换其身份或无故抢焦点；只有明确动作需要改变操作上下文时，才考虑程序化移动。下面仅示意“关闭来源后返回原触发点”，不代表项目已有这些函数，也不是完整无障碍实现。**待验证事项**：触发点仍存在时是否准确返回，不存在时的替代位置是否合理，以及关闭动作是否意外改变正文阅读位置。\\n\\n```javascript\\n// 设计示意：返回操作上下文，不按流式更新次数移动焦点。\\nlet sourceOpener = null;\\n\\nfunction openSource(trigger, sourceId) {\\n  sourceOpener = trigger;\\n  showSourcePanel(sourceId);\\n}\\n\\nfunction closeSource() {\\n  hideSourcePanel();\\n  if (sourceOpener?.isConnected) {\\n    sourceOpener.focus();\\n  } else {\\n    focusChosenFallback(); // 替代位置需另行设计、验证。\\n  }\\n}\\n```\\n\\n## 11. 可聚焦对象：不要把每一行来源都变成必经停靠点\\n\\n**官方文档表述**：准则评估的是元素获得焦点的顺序，不直接规定哪些对象应当或不应当获得焦点。文档明确指出，静态内容可以获得焦点，程序也可以将焦点移到静态内容；但若造成困惑、不合逻辑或妨碍操作，仍可能失败。它以可聚焦容器嵌套按钮说明重复停靠风险，并建议尽量避免给不可操作内容增加焦点，以免键盘操作变得冗长。这是有条件的解释，不是全面禁止静态内容聚焦。\\n\\n**设计建议**：来源标题、完整目录和命中范围可以作为有关控件的上下文，不必把每一行代码和每段路径都自动加入逐项导航。若确有“跳到命中位置后阅读”的需要，可以考虑适当的目标定位，但应区分阅读目标与操作控件。文档还区分树组件方向键导航与此处所讨论的顺序导航，因此不能把树内移动机械等同于 Tab 顺序。**待验证事项**：是否存在重复停靠、过多无操作意义的节点，完整路径能否在合理路线中获得；本次未确认 Sources 是否为树组件。\\n\\n## 12. 综合核验：把来源、阅读和焦点拆成可观察问题\\n\\n**待实际验证事项**：来源身份方面，应观察同名文件是否以充分目录信息区分，选中后是否打开对应对象；行号方面，应观察命中内容、引用范围和可见目标是否一致；阅读方面，应分别记录来源与正文位置，在后文持续出现时检查用户是否还能接续阅读；焦点方面，应逐项观察打开、浏览、关闭、返回以及引用后到时的实际路线。它们相互关联，但任何一项的成功都不能替代其他项，也不能仅凭一张静态截图完成全部核验。\\n\\n**设计建议与结论边界**：可将稳定来源身份、明确位置坐标、分离的阅读状态及可解释的焦点路线作为设计方向，但不预先承诺某种滚动策略能解决所有重排问题，也不宣称它减少延迟或改善性能。指定官方文档支持“顺序保持意义与可操作性”的判断框架，并不保证正文继续生成、准确行号或位置保存的产品效果。本次已完成的是只读场景分析和文档解释；未决问题包括“当前阅读位置”具体指哪一侧、侧栏交互性质、引用到达时序及实际焦点行为，均需获准的后续验证才能回答。\\n\\n### 实际引用与读取限制\\n\\n- **项目文件**：`C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-12\\\\source-child-stream-321-live-01\\\\project\\\\source-review.md`。实际使用 `search_code`，指定 `pattern=RENDER321`、`include=source-review.md`，返回三处命中：\\n  - **第2行**：“文件来源应准确打开命中行；这是期望，不是已完成测试的结论。”\\n  - **第3行**：“长目录中的同名文件应通过完整目录信息区分；这是待验证场景。”\\n  - **第4行**：“用户阅读来源时希望后文继续生成，同时保留当前阅读位置；这是设计目标。”\\n- **官方网页**：实际使用 `webfetch` 读取 https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。引用其 Success Criterion、Intent、说明及 Examples；返回页面标注更新日期为 **2026年3月9日**。\\n- **范围限制**：文件仅取得上述检索命中，未读取全文或其他本地文件；未访问网页链接、搜索额外资料、操作产品界面或执行测试。没有已查证的产品实现符号；两个代码片段均为设计示意。未修改或创建文件，未发布 Artifact，未调用其他成员。全部分析保留在本研究员的正常可见消息中。\"\n      ],\n      \"tool_facts_complete\": true,\n      \"tool_facts\": []\n    }\n  ],\n  \"origins\": [],\n  \"causal_tool_reference_index\": {\n    \"complete\": true,\n    \"tool_count\": 2,\n    \"refs\": [\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n        },\n        \"message_id\": \"msg_g0VXmYVpU004ZlHI91ao\",\n        \"part_id\": \"prt_g0VXmYYD600fvPDzoz8v\",\n        \"tool_name\": \"search_code\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"pattern\\\":\\\"RENDER321\\\",\\\"path\\\":\\\"C:\\\\\\\\Users\\\\\\\\hengu\\\\\\\\.codex\\\\\\\\opencorvus-product-iteration\\\\\\\\2026-10-12\\\\\\\\source-child-stream-321-live-01\\\\\\\\project\\\",\\\"include\\\":\\\"source-r\",\n        \"input_preview_truncated\": true\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n        },\n        \"message_id\": \"msg_g0VXmYYZ200zDmj0wHc0\",\n        \"part_id\": \"prt_g0VXmYlYn00dbr8oxS2m\",\n        \"tool_name\": \"webfetch\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"url\\\":\\\"https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\\\",\\\"format\\\":\\\"markdown\\\",\\\"timeout\\\":120}\",\n        \"input_preview_truncated\": false\n      }\n    ]\n  },\n  \"causal_tool_message_inventory\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n      },\n      \"session_id\": \"ses_hu2FUdtPs2AFVV0uocmg\",\n      \"message_id\": \"msg_g0VXmYVpU004ZlHI91ao\",\n      \"author\": \"base-researcher\",\n      \"time_created\": 1791757176196,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VXmYYD600fvPDzoz8v\",\n          \"call_id\": \"call_964da801b30e4f8b98a02a0e03197072\",\n          \"tool_name\": \"search_code\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"pattern\\\":\\\"RENDER321\\\",\\\"path\\\":\\\"C:\\\\\\\\Users\\\\\\\\hengu\\\\\\\\.codex\\\\\\\\opencorvus-product-iteration\\\\\\\\2026-10-12\\\\\\\\source-child-stream-321-live-01\\\\\\\\project\\\",\\\"include\\\":\\\"source-review.md\\\"}\",\n          \"input_chars\": 170,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 290\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n      },\n      \"session_id\": \"ses_hu2FUdtPs2AFVV0uocmg\",\n      \"message_id\": \"msg_g0VXmYYZ200zDmj0wHc0\",\n      \"author\": \"base-researcher\",\n      \"time_created\": 1791757186708,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VXmYlYn00dbr8oxS2m\",\n          \"call_id\": \"call_b21c385d575e41499b4235f0b5e294b6\",\n          \"tool_name\": \"webfetch\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"url\\\":\\\"https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\\\",\\\"format\\\":\\\"markdown\\\",\\\"timeout\\\":120}\",\n          \"input_chars\": 104,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20060\n        }\n      ]\n    }\n  ],\n  \"inventory_next_before\": [],\n  \"evidence_reads\": []\n}",
+      "metadata": {},
+      "time": {
+        "end": 1791757298857
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmZ3QG00Z3p73ZwlS",
+      "outcome": "failed",
+      "time": {
+        "end": 1791757309744
+      },
+      "failure": {
+        "kind": "tool-input-invalid",
+        "name": "tool-input-invalid",
+        "message": "Invalid input for tool read_agent_message: Type validation failed: Value: {\"sources\":[{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\"},{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\"},{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VXmYlnU00dVnyWYjmu\"}],\"evidence_reads\":[{\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\",\"part_id\":\"prt_g0VXmYYD600fvPDzoz8v\",\"field\":\"input\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYVpU004ZlHI91ao\",\"part_id\":\"prt_g0VXmYYD600fvPDzoz8v\",\"field\":\"output\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\",\"part_id\":\"prt_g0VXmYlYn00dbr8oxS2m\",\"field\":\"input\",\"offset\":0,\"limit\":1000},{\"message_id\":\"msg_g0VXmYYZ200zDmj0wHc0\",\"part_id\":\"prt_g0VXmYlYn00dbr8oxS2m\",\"field\":\"output\",\"offset\":0,\"limit\":23000}]}.\nError message: Message msg_g0VXmYVpU004ZlHI91ao is not a physically settled worker final for Task tsk_g00VXmYPuV00oCT9bk7m",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "call_6b9901f5afef47dea60f3b9fba598463",
+          "toolName": "read_agent_message"
+        }
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmZ6C100RwLOdLi4Z",
+      "outcome": "completed",
+      "resultAttemptID": "per_hTU6JFeJsaudo9i80NnF",
+      "outputChars": 29896,
+      "output": "{\n  \"messages\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n      },\n      \"session_id\": \"ses_hu2FUdtPs2AFVV0uocmg\",\n      \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\",\n      \"role\": \"assistant\",\n      \"author\": \"base-researcher\",\n      \"finish\": \"stop\",\n      \"time_completed\": 1791757294361,\n      \"text\": [\n        \"指定 W3C 页面已实际读取。它解释的是 WCAG 2.2 成功准则2.4.3“焦点顺序”（A级），并明确将 Understanding 文档定位为解释性资料。下文区分页面所引述的准则、文档解释、设计建议和待验证事项；不将网页里的技术链接视为本次另外读取的资料。\\n\\n## 7. 焦点顺序的适用条件：保持意义与可操作性\\n\\n**官方文档表述**：当网页可以按顺序导航，而且导航顺序影响意义或操作时，可聚焦组件应按保持意义与可操作性的顺序获得焦点。这里的重点不是为页面规定唯一的路线，而是避免用户在逐项移动时失去内容关系。文档明确说明，可能存在多个符合逻辑的顺序，例如表格按行或按列遍历都可能合理。因此，不能仅凭 Sources 位于左侧或右侧，就判断哪一侧必须先获得焦点。\\n\\n**设计建议**：对于正文引用、来源列表和来源预览，应先明确它们的操作关系：用户从哪段正文发起查看，哪一个条目代表目标，查看完后怎样继续。顺序应帮助理解这条关系，而非在无关控件之间反复跳转。**待验证事项**：沿实际可聚焦组件顺序操作时，是否能识别当前来源和上下文，是否出现难以解释的跨区移动。本次未读取界面结构或操作键盘，不能据此给出符合或不符合准则的结论。\\n\\n## 8. 视觉排列、阅读顺序和焦点顺序不是同一件事\\n\\n**官方文档表述**：焦点顺序不一定等同于程序确定的阅读顺序，也不必完全追随视觉布局，只要仍能理解和操作页面。文档同时提醒，应兼顾屏幕阅读器用户与看得见界面的键盘用户，避免任一群体感到焦点随机跳动。对于相互独立、先后不影响意义或操作的双栏，先遍历右栏不必然失败；让焦点顺序强化视觉暗示的阅读顺序，则是文档提出的最佳实践。\\n\\n**设计建议**：Sources 与正文往往存在引用关系，不能未经分析就套用“独立双栏”的解释。如果视觉上显示某条引用对应某个来源，而键盘路线把用户带到另一组不相关条目，应检查这种安排是否破坏理解。完整目录也应与对应条目保持关联，不因视觉折行而变成难以对应的信息。**待验证事项**：窄窗口、来源展开和正文增长后，视觉顺序与实际焦点顺序是否仍可解释；视觉位置改变本身不能单独证明失败。\\n\\n## 9. 子侧栏的交互性质：不要把它默认当成模态窗口\\n\\n**官方文档表述**：页面分别举出非模态和模态对话框的例子。非模态示例将对话框内交互元素安排在触发按钮之后；模态示例在打开后将焦点置于内部，使外部页面内容不能获得焦点，关闭后返回按钮或其后的元素。这些例子说明不同交互性质会影响合理顺序，但“子侧栏”这一外观名称并不能决定它属于哪一种，也不能直接推出必须锁住全部页面焦点。\\n\\n**设计建议**：结合第4行的**验收场景输入**，如果来源阅读与主正文确实允许同时操作，非模态设计值得考虑；但后台继续生成也可能发生在模态界面中，两者不能简单画等号。应先确定外部内容是否仍可操作，再选择焦点进入、离开和返回方式。**待验证事项**：打开来源后按顺序导航会到哪里，关闭后能否接续原操作，以及触发引用已被更新或移除时如何处理；这些均不是本次已测得的行为。\\n\\n## 10. 动态更新：保护操作关系，而非每次更新都移动焦点\\n\\n**官方文档表述**：文档讨论动态内容对导航序列的影响，并列出有关插入动态内容的技术名称，但本次没有访问那些技术页面。依据已读取内容，可以讨论新控件加入后是否仍保持合理顺序，不能进一步宣称标准要求某种框架、更新频率或滚动算法。正文生成顺序与键盘焦点顺序也不是同一个概念：新段落晚到，不等于焦点就应自动前往它。\\n\\n**设计建议**：保留用户正在操作的控件，避免引用补齐时替换其身份或无故抢焦点；只有明确动作需要改变操作上下文时，才考虑程序化移动。下面仅示意“关闭来源后返回原触发点”，不代表项目已有这些函数，也不是完整无障碍实现。**待验证事项**：触发点仍存在时是否准确返回，不存在时的替代位置是否合理，以及关闭动作是否意外改变正文阅读位置。\\n\\n```javascript\\n// 设计示意：返回操作上下文，不按流式更新次数移动焦点。\\nlet sourceOpener = null;\\n\\nfunction openSource(trigger, sourceId) {\\n  sourceOpener = trigger;\\n  showSourcePanel(sourceId);\\n}\\n\\nfunction closeSource() {\\n  hideSourcePanel();\\n  if (sourceOpener?.isConnected) {\\n    sourceOpener.focus();\\n  } else {\\n    focusChosenFallback(); // 替代位置需另行设计、验证。\\n  }\\n}\\n```\\n\\n## 11. 可聚焦对象：不要把每一行来源都变成必经停靠点\\n\\n**官方文档表述**：准则评估的是元素获得焦点的顺序，不直接规定哪些对象应当或不应当获得焦点。文档明确指出，静态内容可以获得焦点，程序也可以将焦点移到静态内容；但若造成困惑、不合逻辑或妨碍操作，仍可能失败。它以可聚焦容器嵌套按钮说明重复停靠风险，并建议尽量避免给不可操作内容增加焦点，以免键盘操作变得冗长。这是有条件的解释，不是全面禁止静态内容聚焦。\\n\\n**设计建议**：来源标题、完整目录和命中范围可以作为有关控件的上下文，不必把每一行代码和每段路径都自动加入逐项导航。若确有“跳到命中位置后阅读”的需要，可以考虑适当的目标定位，但应区分阅读目标与操作控件。文档还区分树组件方向键导航与此处所讨论的顺序导航，因此不能把树内移动机械等同于 Tab 顺序。**待验证事项**：是否存在重复停靠、过多无操作意义的节点，完整路径能否在合理路线中获得；本次未确认 Sources 是否为树组件。\\n\\n## 12. 综合核验：把来源、阅读和焦点拆成可观察问题\\n\\n**待实际验证事项**：来源身份方面，应观察同名文件是否以充分目录信息区分，选中后是否打开对应对象；行号方面，应观察命中内容、引用范围和可见目标是否一致；阅读方面，应分别记录来源与正文位置，在后文持续出现时检查用户是否还能接续阅读；焦点方面，应逐项观察打开、浏览、关闭、返回以及引用后到时的实际路线。它们相互关联，但任何一项的成功都不能替代其他项，也不能仅凭一张静态截图完成全部核验。\\n\\n**设计建议与结论边界**：可将稳定来源身份、明确位置坐标、分离的阅读状态及可解释的焦点路线作为设计方向，但不预先承诺某种滚动策略能解决所有重排问题，也不宣称它减少延迟或改善性能。指定官方文档支持“顺序保持意义与可操作性”的判断框架，并不保证正文继续生成、准确行号或位置保存的产品效果。本次已完成的是只读场景分析和文档解释；未决问题包括“当前阅读位置”具体指哪一侧、侧栏交互性质、引用到达时序及实际焦点行为，均需获准的后续验证才能回答。\\n\\n### 实际引用与读取限制\\n\\n- **项目文件**：`C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-12\\\\source-child-stream-321-live-01\\\\project\\\\source-review.md`。实际使用 `search_code`，指定 `pattern=RENDER321`、`include=source-review.md`，返回三处命中：\\n  - **第2行**：“文件来源应准确打开命中行；这是期望，不是已完成测试的结论。”\\n  - **第3行**：“长目录中的同名文件应通过完整目录信息区分；这是待验证场景。”\\n  - **第4行**：“用户阅读来源时希望后文继续生成，同时保留当前阅读位置；这是设计目标。”\\n- **官方网页**：实际使用 `webfetch` 读取 https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。引用其 Success Criterion、Intent、说明及 Examples；返回页面标注更新日期为 **2026年3月9日**。\\n- **范围限制**：文件仅取得上述检索命中，未读取全文或其他本地文件；未访问网页链接、搜索额外资料、操作产品界面或执行测试。没有已查证的产品实现符号；两个代码片段均为设计示意。未修改或创建文件，未发布 Artifact，未调用其他成员。全部分析保留在本研究员的正常可见消息中。\"\n      ],\n      \"tool_facts_complete\": true,\n      \"tool_facts\": []\n    }\n  ],\n  \"origins\": [],\n  \"causal_tool_reference_index\": {\n    \"complete\": true,\n    \"tool_count\": 2,\n    \"refs\": [\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n        },\n        \"message_id\": \"msg_g0VXmYVpU004ZlHI91ao\",\n        \"part_id\": \"prt_g0VXmYYD600fvPDzoz8v\",\n        \"tool_name\": \"search_code\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"pattern\\\":\\\"RENDER321\\\",\\\"path\\\":\\\"C:\\\\\\\\Users\\\\\\\\hengu\\\\\\\\.codex\\\\\\\\opencorvus-product-iteration\\\\\\\\2026-10-12\\\\\\\\source-child-stream-321-live-01\\\\\\\\project\\\",\\\"include\\\":\\\"source-r\",\n        \"input_preview_truncated\": true\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n        },\n        \"message_id\": \"msg_g0VXmYYZ200zDmj0wHc0\",\n        \"part_id\": \"prt_g0VXmYlYn00dbr8oxS2m\",\n        \"tool_name\": \"webfetch\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"url\\\":\\\"https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\\\",\\\"format\\\":\\\"markdown\\\",\\\"timeout\\\":120}\",\n        \"input_preview_truncated\": false\n      }\n    ]\n  },\n  \"causal_tool_message_inventory\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n      },\n      \"session_id\": \"ses_hu2FUdtPs2AFVV0uocmg\",\n      \"message_id\": \"msg_g0VXmYVpU004ZlHI91ao\",\n      \"author\": \"base-researcher\",\n      \"time_created\": 1791757176196,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VXmYYD600fvPDzoz8v\",\n          \"call_id\": \"call_964da801b30e4f8b98a02a0e03197072\",\n          \"tool_name\": \"search_code\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"pattern\\\":\\\"RENDER321\\\",\\\"path\\\":\\\"C:\\\\\\\\Users\\\\\\\\hengu\\\\\\\\.codex\\\\\\\\opencorvus-product-iteration\\\\\\\\2026-10-12\\\\\\\\source-child-stream-321-live-01\\\\\\\\project\\\",\\\"include\\\":\\\"source-review.md\\\"}\",\n          \"input_chars\": 170,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 290\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VXmYlnU00dVnyWYjmu\"\n      },\n      \"session_id\": \"ses_hu2FUdtPs2AFVV0uocmg\",\n      \"message_id\": \"msg_g0VXmYYZ200zDmj0wHc0\",\n      \"author\": \"base-researcher\",\n      \"time_created\": 1791757186708,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VXmYlYn00dbr8oxS2m\",\n          \"call_id\": \"call_b21c385d575e41499b4235f0b5e294b6\",\n          \"tool_name\": \"webfetch\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"url\\\":\\\"https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\\\",\\\"format\\\":\\\"markdown\\\",\\\"timeout\\\":120}\",\n          \"input_chars\": 104,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20060\n        }\n      ]\n    }\n  ],\n  \"inventory_next_before\": [],\n  \"evidence_reads\": [\n    {\n      \"message_id\": \"msg_g0VXmYVpU004ZlHI91ao\",\n      \"part_id\": \"prt_g0VXmYYD600fvPDzoz8v\",\n      \"call_id\": \"call_964da801b30e4f8b98a02a0e03197072\",\n      \"tool_name\": \"search_code\",\n      \"status\": \"completed\",\n      \"field\": \"input\",\n      \"source\": \"message-part-input\",\n      \"redacted\": false,\n      \"total_chars\": 170,\n      \"sha256\": \"dbb82bbc3860a1d1ee21d154cfbbd0225422d7f975c4b5d5d1f75e1a474ec9b1\",\n      \"offset\": 0,\n      \"end\": 170,\n      \"next_offset\": null,\n      \"content\": \"{\\\"pattern\\\":\\\"RENDER321\\\",\\\"path\\\":\\\"C:\\\\\\\\Users\\\\\\\\hengu\\\\\\\\.codex\\\\\\\\opencorvus-product-iteration\\\\\\\\2026-10-12\\\\\\\\source-child-stream-321-live-01\\\\\\\\project\\\",\\\"include\\\":\\\"source-review.md\\\"}\"\n    },\n    {\n      \"message_id\": \"msg_g0VXmYVpU004ZlHI91ao\",\n      \"part_id\": \"prt_g0VXmYYD600fvPDzoz8v\",\n      \"call_id\": \"call_964da801b30e4f8b98a02a0e03197072\",\n      \"tool_name\": \"search_code\",\n      \"status\": \"completed\",\n      \"field\": \"output\",\n      \"source\": \"message-part-output\",\n      \"redacted\": false,\n      \"total_chars\": 290,\n      \"sha256\": \"44cca361df365096ec9676dd85075fe3fd5a56345f8294bc1525289b2c530c5d\",\n      \"offset\": 0,\n      \"end\": 290,\n      \"next_offset\": null,\n      \"content\": \"Found 3 matches\\nC:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-12\\\\source-child-stream-321-live-01\\\\project\\\\source-review.md:\\n  Line 2: RENDER321 文件来源应准确打开命中行；这是期望，不是已完成测试的结论。\\n  Line 3: RENDER321 长目录中的同名文件应通过完整目录信息区分；这是待验证场景。\\n  Line 4: RENDER321 用户阅读来源时希望后文继续生成，同时保留当前阅读位置；这是设计目标。\"\n    },\n    {\n      \"message_id\": \"msg_g0VXmYYZ200zDmj0wHc0\",\n      \"part_id\": \"prt_g0VXmYlYn00dbr8oxS2m\",\n      \"call_id\": \"call_b21c385d575e41499b4235f0b5e294b6\",\n      \"tool_name\": \"webfetch\",\n      \"status\": \"completed\",\n      \"field\": \"input\",\n      \"source\": \"message-part-input\",\n      \"redacted\": false,\n      \"total_chars\": 104,\n      \"sha256\": \"e7f56c0814f137ec76616520c5a65d6da5b672b41391e0dfaef864b517fb8c48\",\n      \"offset\": 0,\n      \"end\": 104,\n      \"next_offset\": null,\n      \"content\": \"{\\\"url\\\":\\\"https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html\\\",\\\"format\\\":\\\"markdown\\\",\\\"timeout\\\":120}\"\n    },\n    {\n      \"message_id\": \"msg_g0VXmYYZ200zDmj0wHc0\",\n      \"part_id\": \"prt_g0VXmYlYn00dbr8oxS2m\",\n      \"call_id\": \"call_b21c385d575e41499b4235f0b5e294b6\",\n      \"tool_name\": \"webfetch\",\n      \"status\": \"completed\",\n      \"field\": \"output\",\n      \"source\": \"message-part-output\",\n      \"redacted\": false,\n      \"total_chars\": 20060,\n      \"sha256\": \"7ca23693eb3302541510a84f1504d098c0da99eb2d2eaed741f1b20b3bd24dfd\",\n      \"offset\": 0,\n      \"end\": 20060,\n      \"next_offset\": null,\n      \"content\": \"Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C    [Skip to content](#main)\\n\\n[WCAG 2.2 Understanding Docs](https://www.w3.org/WAI/WCAG22/Understanding/)\\n\\nInformative explanations, not required to meet WCAG\\n\\n[About WCAG Understanding Docs](https://www.w3.org/WAI/WCAG22/Understanding/about)\\n\\n[W3C homepage](https://www.w3.org/) [Web Accessibility Initiative (WAI) homepage](https://www.w3.org/WAI/)\\n\\n-   [All Understanding Docs](.)\\n-   [Guideline: Navigable](navigable)\\n-   [Previous SC: Page Titled](page-titled)\\n-   [Next SC: Link Purpose (In Context)](link-purpose-in-context)\\n\\nPage Contents\\n\\n-   [In Brief](#brief)\\n-   [Success Criterion](#success-criterion)\\n-   [Intent](#intent)\\n-   [Benefits](#benefits)\\n-   [Examples](#examples)\\n-   [Techniques](#techniques)\\n-   [Key Terms](#key-terms)\\n\\n# Understanding [SC 2.4.3](https://w3.org/TR/WCAG22#focus-order) Focus Order (Level A)\\n\\n## In Brief\\n\\nGoal\\n\\nKeyboard users navigate content in a correct order.\\n\\nWhat to do\\n\\nElements receive focus in an order that preserves meaning.\\n\\nWhy it's important\\n\\nNavigating a site or application with only the keyboard will make sense.\\n\\n## Success Criterion (SC)\\n\\nIf a [web page](#dfn-web-page) can be [navigated sequentially](#dfn-navigated-sequentially) and the navigation sequences affect meaning or operation, focusable components receive focus in an order that preserves meaning and operability.\\n\\n## Intent\\n\\nThe intent of this success criterion is to ensure that when users navigate sequentially through content, they encounter information in an order that is consistent with the meaning of the content and can be operated from the keyboard. This reduces confusion by letting users form a consistent mental model of the content. There may be different orders that reflect logical relationships in the content. For example, moving through components in a table one row at a time or one column at a time both reflect the logical relationships in the content. Either order may satisfy this success criterion.\\n\\nThe way that sequential navigation order is determined in web content is defined by the technology of the content. For example, simple HTML defines sequential navigation via the notion of tabbing order. Dynamic HTML may modify the navigation sequence using scripting along with the addition of a `tabindex` attribute to allow focus to additional elements. If no scripting or `tabindex` attributes are used, the navigation order is the order that components appear in the content stream. (See [Focus in the HTML Living Standard](https://html.spec.whatwg.org/multipage/interaction.html#focus)).\\n\\nAn example of keyboard navigation that is not the sequential navigation addressed by this success criterion is using arrow key navigation to traverse a tree component. The user can use the up and down arrow keys to move from tree node to tree node. Pressing the right arrow key may expand a node, then using the down arrow key, will move into the newly expanded nodes. This navigation sequence follows the expected sequence for a tree control - as additional items get expanded or collapsed, they are added or removed from the navigation sequence.\\n\\nThe focus order may not be identical to the programmatically determined reading order (see [Success Criterion 1.3.2 Meaningful Sequence](meaningful-sequence.html)) as long as the user can still understand and operate the web page. Since there may be several possible logical reading orders for the content, the focus order may match any of them. However, when the order of a particular presentation differs from the programmatically determined reading order, users of one of these presentations may find it difficult to understand or operate the web page. Authors should carefully consider all these users as they design their web pages.\\n\\nFor example, a screen reader user interacts with the programmatically determined reading order, while a sighted keyboard user interacts with the visual presentation of the web page. Care should be taken so that the focus order makes sense to both of these sets of users and does not appear to either of them to jump around randomly.\\n\\nFocus order needs to allow the user to navigate focusable elements in a logical order, and that order needs to preserve any meaning or operation that the page is conveying. Focus order does not necessarily need to follow the visual layout of the web page, as long as the order in which elements receive focus is logical, and the hierarchy and relationship of content implied by the visual presentation is preserved. For instance, in a two-column layout, the assumption in western left-to-right systems may be that focus moves through the elements in the left-hand column first, from the top to the bottom of the column, and then proceed to the right-hand column. However, if the two columns are independent of each other, and meaning/operation are not affected, it is not a failure if elements in the right-hand column receive focus first, followed by the elements in the left-hand column. As a best practice, though, make sure the focus order reinforces the reading order implied by the visual layout.\\n\\nNote\\n\\nThis requirement does not specify what should or should not receive focus, but rather assesses the order in which elements receive focus. This success criterion does not prohibit making non-operable content (e.g., static text) focusable, or programmatically moving focus to such content. However, it is a failure of Focus Order if items receive focus in an order that impedes the meaning or operation of content, or creates confusing or illogical focus orders — for example, a control appearing to receive focus multiple times due to the use of nested focusable elements.\\n\\n```html\\n<div tabindex=\\\"0\\\"><button>...</button></div>\\n```\\n\\nAs a best practice, avoid having focusable elements which cannot be operated or actioned, as these are likely to make operation tedious for keyboard users.\\n\\nFor clarity:\\n\\n-   Focusable components need to receive focus in an order that preserves meaning and operability.\\n-   Focus order does not necessarily need to follow the visual presentation or layout.\\n-   If there is more than one order that preserves meaning and operability, only one of them needs to be provided.\\n-   Static/non-interactive elements can receive focus, as long as they don't impede operation of the content, or result in confusing or illogical focus order.\\n\\n## Benefits\\n\\nThese techniques benefit keyboard users who navigate documents sequentially and expect the focus order to be consistent with the sequential reading order.\\n\\n-   People with mobility impairments who must rely on keyboard access for operating a page benefit from a logical, usable focus order.\\n-   People with disabilities that make reading difficult can become disoriented when tabbing takes focus someplace unexpected. They benefit from a logical focus order.\\n-   People with visual impairments can become disoriented when tabbing takes focus someplace unexpected or when they cannot easily find the content surrounding an interactive element.\\n-   Only a small portion of the page may be visible to an individual using a screen magnifier at a high level of magnification. Such a user may interpret a field in the wrong context if the focus order is not logical.\\n\\n## Examples\\n\\n-   On a web page that contains a tree of interactive controls, the user can use the up and down arrow keys to move from tree node to tree node. Pressing the right arrow key expands a node, then using the down arrow key moves into the newly expanded nodes.\\n-   A web page implements non-modal dialogs. When the trigger button is activated, a dialog opens. The interactive elements in the dialog are inserted in the focus order immediately after the button. When the dialog is open, the focus order goes from the button to the elements of the dialog, then to the interactive element following the button. When the dialog is closed, the focus order goes from the button to the following element.\\n-   A web page implements modal dialogs. When the trigger button is activated, a dialog opens and focus is set within the dialog. As long as the dialog is open, all web page content outside the dialog becomes inert and cannot receive focus (though, depending on implementation, the focus cycle might still include user agent controls). When the dialog is dismissed, focus returns to the button or the element following the button.\\n-   An HTML web page is created with the left hand navigation occurring in the HTML after the main body content, and styled with CSS to appear on the left hand side of the page. This is done to allow focus to move to the main body content first without requiring `tabindex` attributes or JavaScript.\\n\\n    Note\\n\\n    While this example passes the Success Criterion, it is not necessarily true that all CSS positioning would. More complex positioning examples may or may not preserve meaning and operability\\n\\n-   The following example **fails to meet the Success Criterion**:\\n\\n    A company's website includes a form that collects marketing data and allows users to subscribe to several newsletters published by the company. The section of the form for collecting marketing data includes fields such as name, street address, city, state or province, and postal code. Another section of the form includes several checkboxes so that users can indicate newsletters they want to receive. However, the tab order for the form skips between fields in different sections of the form, so that focus moves from the name field to a checkbox, then to the street address, then to another checkbox.\\n\\n\\n## Techniques\\n\\nEach item in this section represents a technique or combination of techniques that the Accessibility Guidelines Working Group deems sufficient for meeting this success criterion. A technique may go beyond the minimum requirement of the criterion. There may be other ways of meeting the criterion not covered by these techniques. For information on using other techniques, see [Understanding Techniques for WCAG Success Criteria](understanding-techniques), particularly the \\\"Other Techniques\\\" section.\\n\\n### Sufficient Techniques\\n\\n-   [G59: Placing the interactive elements in an order that follows sequences and relationships within the content](https://www.w3.org/WAI/WCAG22/Techniques/general/G59)\\n-   Giving focus to elements in an order that follows sequences and relationships within the content using one of the following techniques:\\n\\n    -   [C27: Making the DOM order match the visual order](https://www.w3.org/WAI/WCAG22/Techniques/css/C27)\\n    -   [PDF3: Ensuring correct tab and reading order in PDF documents](https://www.w3.org/WAI/WCAG22/Techniques/pdf/PDF3)\\n-   Changing a web page dynamically using one of the following techniques:\\n\\n    -   [SCR26: Inserting dynamic content into the Document Object Model immediately following its trigger element](https://www.w3.org/WAI/WCAG22/Techniques/client-side-script/SCR26)\\n    -   [H102: Creating modal dialogs with the HTML dialog element](https://www.w3.org/WAI/WCAG22/Techniques/html/H102)\\n    -   [SCR27: Reordering page sections using the Document Object Model](https://www.w3.org/WAI/WCAG22/Techniques/client-side-script/SCR27)\\n\\n### Failures\\n\\nThe following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group.\\n\\n-   [F44: Failure of Success Criterion 2.4.3 due to using tabindex to create a tab order that does not preserve meaning and operability](https://www.w3.org/WAI/WCAG22/Techniques/failures/F44)\\n-   [F85: Failure of Success Criterion 2.4.3 due to using dialogs or menus that are not adjacent to their trigger control in the sequential navigation order](https://www.w3.org/WAI/WCAG22/Techniques/failures/F85)\\n\\n## Key Terms\\n\\nassistive technology\\n\\nhardware and/or software that acts as a [user agent](#dfn-user-agent), or along with a mainstream user agent, to provide functionality to meet the requirements of users with disabilities that go beyond those offered by mainstream user agents\\n\\nNote 1\\n\\nFunctionality provided by assistive technology includes alternative presentations (e.g., as synthesized speech or magnified content), alternative input methods (e.g., voice), additional navigation or orientation mechanisms, and content transformations (e.g., to make tables more accessible).\\n\\nNote 2\\n\\nAssistive technologies often communicate data and messages with mainstream user agents by using and monitoring APIs.\\n\\nNote 3\\n\\nThe distinction between mainstream user agents and assistive technologies is not absolute. Many mainstream user agents provide some features to assist individuals with disabilities. The basic difference is that mainstream user agents target broad and diverse audiences that usually include people with and without disabilities. Assistive technologies target narrowly defined populations of users with specific disabilities. The assistance provided by an assistive technology is more specific and appropriate to the needs of its target users. The mainstream user agent may provide important functionality to assistive technologies like retrieving web content from program objects or parsing markup into identifiable bundles.\\n\\nExample\\n\\nAssistive technologies that are important in the context of this document include the following:\\n\\n-   screen magnifiers, and other visual reading assistants, which are used by people with visual, perceptual and physical print disabilities to change text font, size, spacing, color, synchronization with speech, etc. in order to improve the visual readability of rendered text and images;\\n-   screen readers, which are used by people who are blind to read textual information through synthesized speech or braille;\\n-   text-to-speech software, which is used by some people with cognitive, language, and learning disabilities to convert text into synthetic speech;\\n-   speech recognition software, which may be used by people who have some physical disabilities;\\n-   alternative keyboards, which are used by people with certain physical disabilities to simulate the keyboard (including alternate keyboards that use head pointers, single switches, sip/puff and other special input devices.);\\n-   alternative pointing devices, which are used by people with certain physical disabilities to simulate mouse pointing and button activations.\\n\\nkeyboard interface\\n\\ninterface used by software to obtain keystroke input\\n\\nNote 1\\n\\nA keyboard interface allows users to provide keystroke input to programs even if the native technology does not contain a keyboard.\\n\\nExample\\n\\nA touchscreen PDA has a keyboard interface built into its operating system as well as a connector for external keyboards. Applications on the PDA can use the interface to obtain keyboard input either from an external keyboard or from other applications that provide simulated keyboard output, such as handwriting interpreters or speech-to-text applications with \\\"keyboard emulation\\\" functionality.\\n\\nNote 2\\n\\nOperation of the application (or parts of the application) through a keyboard-operated mouse emulator, such as MouseKeys, does not qualify as operation through a keyboard interface because operation of the program is through its pointing device interface, not through its keyboard interface.\\n\\nnavigated sequentially\\n\\nnavigated in the order defined for advancing focus (from one element to the next) using a [keyboard interface](#dfn-keyboard-interface)\\n\\nuser agent\\n\\nany software that retrieves and presents web content for users\\n\\nExample\\n\\nWeb browsers, media players, plug-ins, and other programs — including [assistive technologies](#dfn-assistive-technology) — that help in retrieving, rendering, and interacting with web content.\\n\\nweb page\\n\\na non-embedded resource obtained from a single URI using HTTP plus any other resources that are used in the rendering or intended to be rendered together with it by a [user agent](#dfn-user-agent)\\n\\nNote 1\\n\\nAlthough any \\\"other resources\\\" would be rendered together with the primary resource, they would not necessarily be rendered simultaneously with each other.\\n\\nNote 2\\n\\nFor the purposes of conformance with these guidelines, a resource must be \\\"non-embedded\\\" within the scope of conformance to be considered a web page.\\n\\nExample 1\\n\\nA web resource including all embedded images and media.\\n\\nExample 2\\n\\nA web mail program built using Asynchronous JavaScript and XML (AJAX). The program lives entirely at http://example.com/mail, but includes an inbox, a contacts area and a calendar. Links or buttons are provided that cause the inbox, contacts, or calendar to display, but do not change the URI of the page as a whole.\\n\\nExample 3\\n\\nA customizable portal site, where users can choose content to display from a set of different content modules.\\n\\nExample 4\\n\\nWhen you enter \\\"http://shopping.example.com/\\\" in your browser, you enter a movie-like interactive shopping environment where you visually move around in a store dragging products off of the shelves around you and into a visual shopping cart in front of you. Clicking on a product causes it to be demonstrated with a specification sheet floating alongside. This might be a single-page website or just one page within a website.\\n\\n[Back to Top](#top)\\n\\n## Help improve this page\\n\\nPlease share your ideas, suggestions, or comments via email to the publicly-archived list [public-agwg-comments@w3.org](mailto:public-agwg-comments@w3.org?subject=%5BUnderstanding%20and%20Techniques%20Feedback%5D) or via GitHub\\n\\n[Email](mailto:public-agwg-comments@w3.org?subject=%5BUnderstanding%20and%20Techniques%20Feedback%5D) [Fork & Edit on GitHub](https://github.com/w3c/wcag/edit/main/understanding/20/focus-order.html) [New GitHub Issue](https://github.com/w3c/wcag/issues/new)\\n\\n**Date:** Updated 09 March 2026. [View this page's revision history.](https://github.com/w3c/wcag/commits/main/understanding/20/focus-order.html)\\n\\n**Developed by** [Accessibility Guidelines Working Group (AG WG) Participants](https://www.w3.org/groups/wg/ag/participants) (Co-Chairs: Adam Page, Alastair Campbell, Rachael Bradley Montgomery. W3C Staff Contact: Kevin White).\\n\\nThe content was developed as part of the [WAI-Core projects](https://www.w3.org/WAI/about/projects/#us) funded by U.S. Federal funds. The user interface was designed by the Education and Outreach Working Group ([EOWG](https://www.w3.org/groups/wg/eowg/participants)) with contributions from Shadi Abou-Zahra, Steve Lee, and Shawn Lawton Henry as part of the [WAI-Guide](https://www.w3.org/WAI/about/projects/wai-guide/) project, co-funded by the European Commission.\\n\\n[W3C Web Accessibility Initiative (WAI)](https://www.w3.org/WAI/)\\n\\nStrategies, standards, resources to make the Web accessible to people with disabilities\\n\\n-   ![](https://www.w3.org/WAI/assets/images/email.svg) [Get News in Email](https://www.w3.org/WAI/news/subscribe/)\\n-   ![](https://www.w3.org/WAI/assets/images/social/linkedin.svg) [LinkedIn](https://www.linkedin.com/company/w3c-wai/)\\n-   ![](https://www.w3.org/assets/website-2021/svg/mastodon.svg) [Mastodon](https://w3c.social/@wai)\\n-   ![](https://www.w3.org/WAI/assets/images/social/youtube.svg) [YouTube](https://www.youtube.com/channel/UCU6ljj3m1fglIPjSjs2DpRA/playlists/)\\n\\n-   [Home](https://www.w3.org/WAI/)\\n-   [Contact](https://www.w3.org/WAI/about/contacting/)\\n-   [Site map](https://www.w3.org/WAI/sitemap/)\\n-   [Support WAI](https://www.w3.org/WAI/about/support/)\\n-   [News](https://www.w3.org/WAI/news/)\\n-   [Accessibility statement](https://www.w3.org/WAI/about/accessibility-statement/)\\n-   [All Translations](https://www.w3.org/WAI/translations/)\\n-   [Resources for roles](https://www.w3.org/WAI/roles/)\\n\\nCopyright © 2026 [World Wide Web Consortium](https://www.w3.org/).\\nW3C® [liability](https://www.w3.org/policies/#disclaimers), [trademark](https://www.w3.org/policies/#trademarks) and [permissive license](https://www.w3.org/copyright/software-license/ \\\"W3C Software License\\\") rules apply unless otherwise noted. See [Permission to Use WAI Material](https://www.w3.org/WAI/about/using-wai-material/).\"\n    }\n  ]\n}",
+      "metadata": {},
+      "time": {
+        "end": 1791757320008
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmZ8W800N8SgdC98M",
+      "outcome": "completed",
+      "outputChars": 1805,
+      "output": "{\n  \"catalog_snapshot_hash\": \"6667e432c31f28c34dc39594499fcaa86655be4bdf30666a4b984a2f59813793\",\n  \"catalog_revision\": \"edd158302afb7e1263844537429692506ca691f4b7f1e71abca755dc934759e9\",\n  \"caller\": \"task_scheduler\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 151873,\n  \"active_payload_tokens\": 37427,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 32,\n    \"matched_count\": 2,\n    \"returned_count\": 2,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"runtime-projection:orchestrator\",\n        \"local_ref\": \"manage_task\"\n      },\n      \"name\": \"manage_task\",\n      \"description\": \"Manage Task is published by base.\",\n      \"aliases\": [\n        \"Manage Task\"\n      ],\n      \"discoverable_by\": [\n        \"task_scheduler\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"manage_task\"\n      },\n      \"catalog_revision\": \"edd158302afb7e1263844537429692506ca691f4b7f1e71abca755dc934759e9\",\n      \"score\": 0.32\n    },\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"runtime-projection:orchestrator\",\n        \"local_ref\": \"read_task_message\"\n      },\n      \"name\": \"read_task_message\",\n      \"description\": \"Read Task Message is published by base.\",\n      \"aliases\": [\n        \"Read Task Message\"\n      ],\n      \"discoverable_by\": [\n        \"task_scheduler\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"read_task_message\"\n      },\n      \"catalog_revision\": \"edd158302afb7e1263844537429692506ca691f4b7f1e71abca755dc934759e9\",\n      \"score\": 0.3\n    }\n  ]\n}",
+      "metadata": {
+        "catalog_snapshot_hash": "6667e432c31f28c34dc39594499fcaa86655be4bdf30666a4b984a2f59813793",
+        "catalog_revision": "edd158302afb7e1263844537429692506ca691f4b7f1e71abca755dc934759e9",
+        "caller": "task_scheduler",
+        "result_count": 2,
+        "reveal_revision": 1,
+        "active_ref_count": 0,
+        "active_payload_chars": 151873,
+        "active_payload_tokens": 37427,
+        "visible_expert_squad_count": 0,
+        "opencorvus_capability_reveal_v2": {
+          "schema_version": 2,
+          "occurrence_id": "msg_task-root-control_art_hACI309HS5edU2WQR4tJ_art_hACI309HS5edU2WQR4tJ",
+          "search_call_id": "call_ID39oQ5fOjRT91uyeSG4b353",
+          "prior_revision": 0,
+          "revision": 1,
+          "harness_projection_hash": "096a9e37af9855c798e31983c2efbbe04d24833f7b79d43b4e6a195d1cd4a565",
+          "catalog_snapshot_ref": "/attachment/prj_hv2cD5rLzbARpqqMsDGX/6667e432c31f28c34dc39594499fcaa86655be4bdf30666a4b984a2f59813793.json",
+          "catalog_snapshot_hash": "6667e432c31f28c34dc39594499fcaa86655be4bdf30666a4b984a2f59813793",
+          "materialization_fingerprint": "2f9caff5ae72b946c68de6825063d1bf1ac4953fb6dab31b29c6b9ab6bbb6c6c",
+          "result_refs": [
+            {
+              "kind": "tool",
+              "source": "platform",
+              "owner_ref": "runtime-projection:orchestrator",
+              "local_ref": "manage_task"
+            },
+            {
+              "kind": "tool",
+              "source": "platform",
+              "owner_ref": "runtime-projection:orchestrator",
+              "local_ref": "read_task_message"
+            }
+          ],
+          "deactivate_refs": [],
+          "activated": [],
+          "active_refs": [],
+          "active_definition_digest": "9b88ecb82fa8c7519c02a38633e874e7792e28c0a8b546575ec8ba9af41521c6",
+          "active_payload_chars": 151873,
+          "active_payload_tokens": 37427
+        },
+        "truncated": false
+      },
+      "time": {
+        "end": 1791757326814
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmZAa9002pWSCEQON",
+      "outcome": "completed",
+      "resultAttemptID": "per_hpT7aOAgqOmAnaRzTzys",
+      "outputChars": 108,
+      "output": "{\"kind\":\"accepted\",\"session_id\":\"ses_hu2FUdtPs2AFVV0uocmg\",\"dispatch_lineage_id\":\"art_g0VXmZCIt00Aw5mYKtiO\"}",
+      "metadata": {},
+      "time": {
+        "end": 1791757339641
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmZWaB00by46ZHMje",
+      "outcome": "completed",
+      "resultAttemptID": "per_hWbCmLtZpTiaIfzyR2Li",
+      "outputChars": 7905,
+      "output": "{\n  \"messages\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VXmZCNM00qGDS43KCo\"\n      },\n      \"session_id\": \"ses_hu2FUdtPs2AFVV0uocmg\",\n      \"message_id\": \"msg_g0VXmZCNM00qGDS43KCo\",\n      \"role\": \"assistant\",\n      \"author\": \"base-researcher\",\n      \"finish\": \"stop\",\n      \"time_completed\": 1791757413758,\n      \"text\": [\n        \"本次分析只处理 Sources 子侧栏与持续正文之间的阅读关系，不进行实现、产品测试或界面操作。我会先按指定条件检索唯一获准的项目文件，再把实际命中的文字和行号作为“验收场景输入”讨论；之后读取指定的 W3C 官方页面，说明键盘焦点顺序的原则及其适用边界。全部正文直接写在正常可见消息中，不创建文件、不发布额外报告，也不调用其他成员。\\n\\n分析中将明确区分四类陈述：实际读取事实，指工具确实返回的文件命中或网页内容；验收场景输入，指文件提出的条件和期待，并不表示产品已经满足；设计建议，指根据这些条件提出的可选实现方向；待验证事项，指仍需真实界面、键盘操作或其他获准测试才能确认的行为。尤其不会把来源行号的存在等同于引用准确，把阅读位置保持方案等同于已实现，也不会把流式正文中的出现顺序推断成既有缺陷。对官方文档同样只解释其实际表述，不将它扩大为特定框架、滚动算法或性能指标的强制要求。接下来先执行指定文件检索，并依据返回结果展开前六节分析。\\n\\n> **合并说明**：以上开场及以下第1至12节保留此前已交付的正文。本轮只将其汇集到一条正常可见最终消息中，便于负责人完整核对；开场中的“接下来”和下文的读取进度指此前执行顺序，不表示本轮再次读取。本轮没有新增工具调用、调研或产品验证。\\n\\n指定检索实际返回了三处命中：第2行是准确打开命中行的期望，第3行是长目录与同名文件的待验证场景，第4行是来源阅读期间继续生成并保留阅读位置的设计目标。它们都不是测试结果。以下先据此展开第1至6节；关于键盘焦点顺序的标准解释，将在实际读取指定网页后再写。\\n\\n## 1. 来源身份：先说明“打开的是谁”\\n\\n**验收场景输入**：文件第3行要求通过完整目录信息区分同名文件。这意味着 Sources 条目不能仅以文件名作为用户识别来源的全部依据。例如两个条目都显示 `index.ts`，即使内部目标不同，读者仍可能误以为它们是同一文件的不同引用。当前检索没有提供产品的数据结构或界面，因此不能声称现有来源身份正确或错误；能够确认的只是输入明确提出了身份辨别问题。\\n\\n**设计建议**：将来源对象与引用位置分开表示：来源对象回答项目、目录和文件是谁，引用位置回答其中哪几行支持这段正文。同一文件的多个引用可以共享来源身份，但不能因此合并其不同位置。若内容来自不同版本，还应在产品确实具备版本信息时显示相应区别，不能凭空补一个版本标识。**待验证事项**：两个同名条目是否能独立选中、打开和返回，以及打开后的标题、路径和正文引用是否指向同一对象，均需实际交互证据。\\n\\n## 2. 准确行号：坐标必须对应实际内容\\n\\n**验收场景输入**：第2行写明“文件来源应准确打开命中行”，同时明确这只是期望。准确不能仅理解为跳转后界面显示一个行号，还应检查该行是否属于所指文件、是否包含与引用相关的内容。显示为第42行，却打开另一文件的第42行，并不符合这个场景；滚动到目标附近却将目标藏在固定标题下面，也需要与真正可读的命中位置区别讨论。\\n\\n**设计建议**：明确采用从1开始的展示行号，并为多行证据保存起止位置；检索工具、编辑器和来源预览之间如存在坐标转换，应在边界处处理，而不是让用户猜测。换行显示造成的视觉折行不应悄悄变成新的源码行号。若来源发生变化，旧引用的位置可能失效，此时宜提示需要重新定位，而非保证旧数字仍准确。**待验证事项**：首行、末行、多行范围、空行和长行折行都应检查；本次只知道输入文件命中第2至4行，未验证任何产品跳转。\\n\\n## 3. 长目录与同名文件：简洁显示不能牺牲可辨认性\\n\\n**验收场景输入**：第3行把完整目录信息作为同名文件的区分依据。目录较长时，单纯截断前半段或后半段都可能隐藏真正不同的部分：两个路径可能只在中间的模块名上有差异。因而“两个条目看起来不同”与“读者能够准确判断其来源”并非同一件事。当前没有读取目录清单，也没有得知实际同名文件数量，以下例子仅说明比较方法，不是仓库观察结果。\\n\\n**设计建议**：紧凑列表可以显示文件名和有区分力的目录片段，同时提供可访问的完整路径查看方式；不应将唯一辨识信息只放在鼠标悬停提示里。完整路径的展示也需考虑宽度、换行和复制便利性，不必强迫所有条目永久占据多行。下面的比较表是方案取舍，不是测试评分。**待验证事项**：用户在不使用鼠标的情况下能否获得完整目录，选中条目后是否仍看得清身份，以及路径折行是否挤压定位信息。\\n\\n| 展示方式 | 潜在优点 | 主要风险 | 待验证重点 |\\n|---|---|---|---|\\n| 仅文件名 | 简短、易扫读 | 同名来源不可区分 | 是否存在明显歧义 |\\n| 文件名加目录片段 | 兼顾密度与辨识 | 差异可能被截断 | 保留的片段是否足够 |\\n| 可展开完整路径 | 支持核对完整身份 | 增加操作与空间需求 | 键盘能否展开并阅读 |\\n| 完整路径加引用范围 | 同时呈现来源和位置 | 长路径信息负担较大 | 窄区域是否仍可读 |\\n\\n## 4. 阅读位置：先区分来源位置与正文位置\\n\\n**验收场景输入**：第4行希望用户阅读来源时后文继续生成，同时保留当前阅读位置。这里至少可能涉及两种位置：用户在来源预览中读到哪一行，以及主正文读到哪一段。该行没有规定“当前”专指哪一侧，也没有指定滚动实现。因此需要把这个含义上的未决点保留下来，不能将自己选择的解释冒充输入的完整要求，更不能断言现有界面已经支持双侧位置保存。\\n\\n**设计建议**：分别维护正文与来源的阅读状态，只有明确的用户动作才切换相应视图的定位目标。来源的位置可以包括可见行和局部偏移，正文的位置可以围绕稳定段落记录；这些只是候选策略。仅保存像素值在内容重排后未必能维持同一阅读对象，但稳定锚点也需要处理删除、替换和布局变化。**待验证事项**：来源展开、窗口变窄、正文增长、切换同名文件再返回时，用户是否仍能接续阅读；本次未运行任何上述场景。\\n\\n## 5. 流式正文：继续生成不等于必须跟随滚动\\n\\n**验收场景输入**：第4行同时提出继续生成和保留阅读位置，说明内容更新与用户视口移动应作为两个问题分析。正文持续接收新内容，并不逻辑上要求把正在阅读来源的用户带到正文末尾；反过来，视口保持不动也不能证明生成过程正常。需要分别观察新内容是否出现、已经显示的段落是否重排，以及来源区域的阅读状态是否受到影响，而不是用一个“流式正常”标签概括全部行为。\\n\\n**设计建议**：可区分“跟随最新内容”和“阅读历史内容”两种意图，并让用户通过明确入口恢复跟随。下面是概念示意，不是项目符号或可运行补丁；它只表达位置状态与内容追加相分离，不证明浏览器实际布局能保持稳定。**待验证事项**：用户主动上滚、打开来源、返回正文后，状态转换是否可理解；网络更新、布局变化与滚动事件交错时是否发生非预期跳动；性能效果仍需独立测量。\\n\\n```javascript\\n// 设计示意：内容更新与视口移动分别决策。\\nfunction onTextChunk(chunk) {\\n  appendBody(chunk);\\n  if (readingState.followLatest && !readingState.sourceOpen) {\\n    requestFollowLatest();\\n  } else {\\n    markNewContentAvailable();\\n  }\\n}\\n```\\n\\n## 6. 正文与引用的先后：可见不代表已经有证据\\n\\n**验收场景输入**：第2行关注定位，第4行关注持续生成，但三处命中没有规定引用与正文到达的具体时序。因而“正文先到、来源后到”“来源条目先显示、定位稍后可用”都只能作为待讨论的场景，不能称为已观察到的产品行为。分析时应区分一段文字已经可见、引用标记已经可见、来源身份已经解析和来源内容已经可打开；这些状态可能有关联，却不能相互替代。\\n\\n**设计建议**：只有获得有效来源目标后才将引用呈现为可操作链接；尚未解析的标记可以明确显示等待状态，避免外观上承诺一个当前不可到达的位置。引用补齐或重新排序时，应尽量维持用户正在阅读的段落与所选来源之间的关系，不以列表序号作为唯一身份。**待验证事项**：后到引用是否绑定正确段落、失败状态是否可识别、重复来源是否保留不同引用范围，以及用户阅读中的条目是否被替换。前六节的结论因此是场景分解和方案建议，不是产品通过验收的证明。\\n\\n接下来仅读取指定的 W3C 页面，以官方表述核对焦点顺序与上述阅读场景的关系，不扩展搜索其他资料。\\n\\n指定 W3C 页面已实际读取。它解释的是 WCAG 2.2 成功准则2.4.3“焦点顺序”（A级），并明确将 Understanding 文档定位为解释性资料。下文区分页面所引述的准则、文档解释、设计建议和待验证事项；不将网页里的技术链接视为本次另外读取的资料。\\n\\n## 7. 焦点顺序的适用条件：保持意义与可操作性\\n\\n**官方文档表述**：当网页可以按顺序导航，而且导航顺序影响意义或操作时，可聚焦组件应按保持意义与可操作性的顺序获得焦点。这里的重点不是为页面规定唯一的路线，而是避免用户在逐项移动时失去内容关系。文档明确说明，可能存在多个符合逻辑的顺序，例如表格按行或按列遍历都可能合理。因此，不能仅凭 Sources 位于左侧或右侧，就判断哪一侧必须先获得焦点。\\n\\n**设计建议**：对于正文引用、来源列表和来源预览，应先明确它们的操作关系：用户从哪段正文发起查看，哪一个条目代表目标，查看完后怎样继续。顺序应帮助理解这条关系，而非在无关控件之间反复跳转。**待验证事项**：沿实际可聚焦组件顺序操作时，是否能识别当前来源和上下文，是否出现难以解释的跨区移动。本次未读取界面结构或操作键盘，不能据此给出符合或不符合准则的结论。\\n\\n## 8. 视觉排列、阅读顺序和焦点顺序不是同一件事\\n\\n**官方文档表述**：焦点顺序不一定等同于程序确定的阅读顺序，也不必完全追随视觉布局，只要仍能理解和操作页面。文档同时提醒，应兼顾屏幕阅读器用户与看得见界面的键盘用户，避免任一群体感到焦点随机跳动。对于相互独立、先后不影响意义或操作的双栏，先遍历右栏不必然失败；让焦点顺序强化视觉暗示的阅读顺序，则是文档提出的最佳实践。\\n\\n**设计建议**：Sources 与正文往往存在引用关系，不能未经分析就套用“独立双栏”的解释。如果视觉上显示某条引用对应某个来源，而键盘路线把用户带到另一组不相关条目，应检查这种安排是否破坏理解。完整目录也应与对应条目保持关联，不因视觉折行而变成难以对应的信息。**待验证事项**：窄窗口、来源展开和正文增长后，视觉顺序与实际焦点顺序是否仍可解释；视觉位置改变本身不能单独证明失败。\\n\\n## 9. 子侧栏的交互性质：不要把它默认当成模态窗口\\n\\n**官方文档表述**：页面分别举出非模态和模态对话框的例子。非模态示例将对话框内交互元素安排在触发按钮之后；模态示例在打开后将焦点置于内部，使外部页面内容不能获得焦点，关闭后返回按钮或其后的元素。这些例子说明不同交互性质会影响合理顺序，但“子侧栏”这一外观名称并不能决定它属于哪一种，也不能直接推出必须锁住全部页面焦点。\\n\\n**设计建议**：结合第4行的**验收场景输入**，如果来源阅读与主正文确实允许同时操作，非模态设计值得考虑；但后台继续生成也可能发生在模态界面中，两者不能简单画等号。应先确定外部内容是否仍可操作，再选择焦点进入、离开和返回方式。**待验证事项**：打开来源后按顺序导航会到哪里，关闭后能否接续原操作，以及触发引用已被更新或移除时如何处理；这些均不是本次已测得的行为。\\n\\n## 10. 动态更新：保护操作关系，而非每次更新都移动焦点\\n\\n**官方文档表述**：文档讨论动态内容对导航序列的影响，并列出有关插入动态内容的技术名称，但本次没有访问那些技术页面。依据已读取内容，可以讨论新控件加入后是否仍保持合理顺序，不能进一步宣称标准要求某种框架、更新频率或滚动算法。正文生成顺序与键盘焦点顺序也不是同一个概念：新段落晚到，不等于焦点就应自动前往它。\\n\\n**设计建议**：保留用户正在操作的控件，避免引用补齐时替换其身份或无故抢焦点；只有明确动作需要改变操作上下文时，才考虑程序化移动。下面仅示意“关闭来源后返回原触发点”，不代表项目已有这些函数，也不是完整无障碍实现。**待验证事项**：触发点仍存在时是否准确返回，不存在时的替代位置是否合理，以及关闭动作是否意外改变正文阅读位置。\\n\\n```javascript\\n// 设计示意：返回操作上下文，不按流式更新次数移动焦点。\\nlet sourceOpener = null;\\n\\nfunction openSource(trigger, sourceId) {\\n  sourceOpener = trigger;\\n  showSourcePanel(sourceId);\\n}\\n\\nfunction closeSource() {\\n  hideSourcePanel();\\n  if (sourceOpener?.isConnected) {\\n    sourceOpener.focus();\\n  } else {\\n    focusChosenFallback(); // 替代位置需另行设计、验证。\\n  }\\n}\\n```\\n\\n## 11. 可聚焦对象：不要把每一行来源都变成必经停靠点\\n\\n**官方文档表述**：准则评估的是元素获得焦点的顺序，不直接规定哪些对象应当或不应当获得焦点。文档明确指出，静态内容可以获得焦点，程序也可以将焦点移到静态内容；但若造成困惑、不合逻辑或妨碍操作，仍可能失败。它以可聚焦容器嵌套按钮说明重复停靠风险，并建议尽量避免给不可操作内容增加焦点，以免键盘操作变得冗长。这是有条件的解释，不是全面禁止静态内容聚焦。\\n\\n**设计建议**：来源标题、完整目录和命中范围可以作为有关控件的上下文，不必把每一行代码和每段路径都自动加入逐项导航。若确有“跳到命中位置后阅读”的需要，可以考虑适当的目标定位，但应区分阅读目标与操作控件。文档还区分树组件方向键导航与此处所讨论的顺序导航，因此不能把树内移动机械等同于 Tab 顺序。**待验证事项**：是否存在重复停靠、过多无操作意义的节点，完整路径能否在合理路线中获得；本次未确认 Sources 是否为树组件。\\n\\n## 12. 综合核验：把来源、阅读和焦点拆成可观察问题\\n\\n**待实际验证事项**：来源身份方面，应观察同名文件是否以充分目录信息区分，选中后是否打开对应对象；行号方面，应观察命中内容、引用范围和可见目标是否一致；阅读方面，应分别记录来源与正文位置，在后文持续出现时检查用户是否还能接续阅读；焦点方面，应逐项观察打开、浏览、关闭、返回以及引用后到时的实际路线。它们相互关联，但任何一项的成功都不能替代其他项，也不能仅凭一张静态截图完成全部核验。\\n\\n**设计建议与结论边界**：可将稳定来源身份、明确位置坐标、分离的阅读状态及可解释的焦点路线作为设计方向，但不预先承诺某种滚动策略能解决所有重排问题，也不宣称它减少延迟或改善性能。指定官方文档支持“顺序保持意义与可操作性”的判断框架，并不保证正文继续生成、准确行号或位置保存的产品效果。本次已完成的是只读场景分析和文档解释；未决问题包括“当前阅读位置”具体指哪一侧、侧栏交互性质、引用到达时序及实际焦点行为，均需获准的后续验证才能回答。\\n\\n### 实际引用与读取限制\\n\\n- **项目文件**：`C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-12\\\\source-child-stream-321-live-01\\\\project\\\\source-review.md`。实际使用 `search_code`，指定 `pattern=RENDER321`、`include=source-review.md`，返回三处命中：\\n  - **第2行**：“文件来源应准确打开命中行；这是期望，不是已完成测试的结论。”\\n  - **第3行**：“长目录中的同名文件应通过完整目录信息区分；这是待验证场景。”\\n  - **第4行**：“用户阅读来源时希望后文继续生成，同时保留当前阅读位置；这是设计目标。”\\n- **官方网页**：实际使用 `webfetch` 读取 https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。引用其 Success Criterion、Intent、说明及 Examples；返回页面标注更新日期为 **2026年3月9日**。\\n- **范围限制**：文件仅取得上述检索命中，未读取全文或其他本地文件；未访问网页链接、搜索额外资料、操作产品界面或执行测试。没有已查证的产品实现符号；两个代码片段均为设计示意。未修改或创建文件，未发布 Artifact，未调用其他成员。全部分析保留在本研究员的正常可见消息中。\\n- **本轮说明**：上述两个真实读取调用发生于此前交付轮次，本轮没有再次读取，只合并完整可见正文供负责人核对。\"\n      ],\n      \"tool_facts_complete\": true,\n      \"tool_facts\": []\n    }\n  ],\n  \"origins\": [],\n  \"causal_tool_reference_index\": {\n    \"complete\": true,\n    \"tool_count\": 0,\n    \"refs\": []\n  },\n  \"causal_tool_message_inventory\": [],\n  \"inventory_next_before\": [],\n  \"evidence_reads\": []\n}",
+      "metadata": {},
+      "time": {
+        "end": 1791757417985
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmZYe100qgdBwTxv4",
+      "outcome": "completed",
+      "resultAttemptID": "per_hjhOBOHTEACRoybfLXlM",
+      "outputChars": 383,
+      "output": "Task tsk_g00VXmYPuV00oCT9bk7m completed: 已由唯一只读研究员在正常可见消息交付约400字开场、第1至12节中文分析（每节至少两段，两组约2400汉字）、比较表、两个代码示意及引用限制。负责人完整读取研究员最终合并正文，并核对首次交付的真实 search_code 与 webfetch 完整输入输出：当前项目 source-review.md 的 RENDER321 检索命中第2、3、4行；网页仅为指定 W3C Focus Order 页面。正文清楚区分验收场景输入、官方解释、设计建议及待验证事项，不作产品测试或性能结论。较早正文无法作为最终消息读取的问题通过同一研究员合并原可见正文解决，未新增读取或其他成员。未创建修改文件，未发布额外 Artifact；可见消息本身为用户要求的完整交付，不另生成文件或重复整篇正文。.",
+      "metadata": {
+        "opencorvusToolResultControl": {
+          "kind": "immediate_park"
+        }
+      },
+      "time": {
+        "end": 1791757433267
+      }
+    }
+  ]
+}
