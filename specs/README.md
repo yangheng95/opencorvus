@@ -2975,3 +2975,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Side实时固定阅读279](artifacts/2026-10-05-connection-workspace-authority/side-reading-return-279/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/side-reading-return-plan-279.md) / [月记录](records/2026-10/2026-10-10-side-reading-return-279.md)。
 
 - [来源章节定位280](artifacts/2026-10-05-connection-workspace-authority/source-fragment-280/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-fragment-plan-280.md) / [月记录](records/2026-10/2026-10-11-source-fragment-280.md)。
+
+- [来源章节次行281](artifacts/2026-10-05-connection-workspace-authority/source-location-281/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-location-plan-281.md) / [月记录](records/2026-10/2026-10-11-source-location-281.md)。

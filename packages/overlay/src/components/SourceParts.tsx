@@ -147,10 +147,11 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   const label = () => sourceLabel(props.source)
   const detail = () => sourceDetail(props.source)
   const icon = () => sourceIcon(props.source)
-  const host = () => {
+  const location = () => {
     if (props.source.type !== "source-url" || !props.source.url) return ""
     try {
-      return new URL(props.source.url).host
+      const url = new URL(props.source.url)
+      return url.hash ? `${url.hash} · ${url.host}` : url.host
     } catch {
       return ""
     }
@@ -165,7 +166,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             class="msg-source-chip"
             href={props.source.url}
             data-browser-preview-url={props.source.url}
-            aria-label={`${t("chat.source_open_web")}: ${label()}`}
+            aria-label={`${t("chat.source_open_web")}: ${label()} · ${location()}`}
             onClick={(event) => pauseAutoScrollForReading(event.currentTarget)}
           >
             <Show when={props.showIndex}>
@@ -174,7 +175,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__content">
               <span class="msg-source-chip__label">{label()}</span>
-              <Show when={host()}>{(value) => <span class="msg-source-chip__detail">{value()}</span>}</Show>
+              <Show when={location()}>{(value) => <span class="msg-source-chip__detail msg-source-chip__location">{value()}</span>}</Show>
             </span>
           </Tooltip.Trigger>
         </Match>

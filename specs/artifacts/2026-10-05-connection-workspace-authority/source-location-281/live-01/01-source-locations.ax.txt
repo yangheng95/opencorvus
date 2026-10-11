@@ -1,0 +1,125 @@
+Browser tab: 7, Title: "OpenCorvus", URL: "http://localhost:18225/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18225/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								59 container
+									81 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									82 container
+										83 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										84 button 请分别调用 webfetch 读取这三个资料地址：https://developer.mozilla.org/en-US/docs/Web/HTML/Re...
+										86 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									60 button (expanded) Description: Collapse Anonymous eef8c7, Secondary Actions: Collapse
+									61 container
+										62 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										63 button Reply with OK.
+										64 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								66 container Recents
+									67 text Recents
+									131 container
+										132 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										133 button 请分别调用 webfetch 读取这三个资料地址：https://developer.mozilla.org/en-US/docs/Web/HTML/Re...
+										134 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-394-trigger, Secondary Actions: Expand
+									135 container
+										136 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										137 button Reply with OK.
+										138 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-400-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18225, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					72 container
+						73 text 请分别调用 webfetch 读取这三个资料地址：https://developer.mozilla.org/en-US/docs/Web/HTML/Re...
+						96 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						97 container Description: Not running, ID: taskStatus
+							98 text Not running
+						74 button Side chat
+						75 container solidChatHeaderRuntimeActions
+							76 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							77 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							99 container
+								100 container
+									101 text User
+									102 container
+										103 text 请分别调用 webfetch 读取这三个资料地址：
+										104 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples
+										105 text  、
+										106 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary
+										107 text  和
+										108 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle
+										109 text . ，然后用一句话总结资料。不要额外搜索、写文件、创建任务或委托。
+								110 container
+									111 text work
+									112 text 25s
+									113 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples (text/html)
+										114 text webfetch
+										115 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples (text/html)
+										116 image
+									117 container Sources
+										118 link Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples, Description: Open web source: <details> HTML details disclosure element - HTML | MDN · #examples · developer.mozilla.org
+									119 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary (text/html)
+										120 text webfetch
+										121 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary (text/html)
+										122 image
+									123 container Sources
+										124 link Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary, Description: Open web source: <details> HTML details disclosure element - HTML | MDN · #technical_summary · developer.mozilla.org
+									125 button (collapsed) Description: webfetch · markdown, Secondary Actions: Expand
+										126 text webfetch
+										127 text markdown
+										128 image
+									129 container Sources
+										130 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle. · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle.
+									139 container
+										140 text MDN 资料说明，HTML  <details>  与首个子元素  <summary>  配合构成原生可展开／折叠组件，默认隐藏详情，可通过  open  属性展开、相同  name  实现互斥手风琴效果并用 CSS 自定义外观（
+										141 link Description: 示例, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples
+										142 text ），其内容结构为一个  <summary>  后接流式内容，起止标签均不可省略，隐式 ARIA 角色为  group ，DOM 接口为  HTMLDetailsElement （
+										143 link Description: 技术摘要, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary
+										144 text ）。
+						43 container chatHomeComposition
+							46 container chatForm
+								47 splitter Description: Drag to resize the message input, Value: 42
+								48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								49 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								78 text Work
+								79 text Chat
+								80 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+								55 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+									57 text openai/gpt-6.1-sol
+								58 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18225/ui/

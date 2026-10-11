@@ -633,3 +633,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [同一Side实时固定阅读279](side-reading-return-279/README.md) / [Recall](side-reading-return-plan-279.md)：恰好同reader内close/reopen、source/内外阅读保持与后续增长人工复核，01未捕到保留，原子侧栏全帧未验。
 
 - [来源章节定位280](source-fragment-280/README.md) / [Recall](source-fragment-plan-280.md)：完整导航URL和章节身份，真实前后网页点击/截图人工复核。
+
+- [来源章节次行281](source-location-281/README.md) / [Recall](source-location-plan-281.md)：共用位置次行和两行边界真实人工复核，完整长Tooltip未验不冒充通过。

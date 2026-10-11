@@ -1081,6 +1081,13 @@
   text-decoration: none;
 }
 
+.msg-source-chip__location {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .msg-source-entry {
   display: contents;
 }
