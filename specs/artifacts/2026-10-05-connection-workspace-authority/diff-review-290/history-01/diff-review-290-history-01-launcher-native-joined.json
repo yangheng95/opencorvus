@@ -1,0 +1,42 @@
+{
+  "target": {
+    "pid": 71936,
+    "processInstanceID": "win32:639273027060363892",
+    "occurrenceID": "f31ebc38-245a-4633-96c7-48470d665c16"
+  },
+  "exitCode": 0,
+  "host": {
+    "pid": 69296,
+    "processInstanceID": "win32:639273027052527302",
+    "occurrenceID": "f8b9864f-efc8-45ca-863b-b4d9b4bd6542"
+  },
+  "settlement": {
+    "occurrence": "diff-review-290-history-01-8cad2e62-a0b0-404b-994a-6ae10283d0f0",
+    "outcome": "settled",
+    "host": {
+      "pid": 69296,
+      "processInstanceID": "win32:639273027052527302",
+      "occurrenceID": "f8b9864f-efc8-45ca-863b-b4d9b4bd6542"
+    },
+    "target": {
+      "pid": 71936,
+      "processInstanceID": "win32:639273027060363892",
+      "occurrenceID": "f31ebc38-245a-4633-96c7-48470d665c16"
+    },
+    "observedAtUtc": "2026-10-11T08:06:29.702Z",
+    "deadlineAt": 1791706805181,
+    "terminal": {
+      "occurrenceID": "diff-review-290-history-01-8cad2e62-a0b0-404b-994a-6ae10283d0f0",
+      "pid": 71936,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "diff-review-290-history-01-8cad2e62-a0b0-404b-994a-6ae10283d0f0",
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner"
+}

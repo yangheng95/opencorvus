@@ -1,0 +1,216 @@
+Browser tab: 29, Title: "OpenCorvus", URL: "http://localhost:18239/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 124-267
+~										123 container
++											288 text entry area import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+29 unchanged lines
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
++												289 container
++													290 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
++												291 container
++													292 text import  {  basicSetup ,  EditorView  }  from "codemirror"
++												293 container
++													294 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
++												295 container
++													296 text import  {  t  }  from "../../utils/i18n"
++												297 container
++													298 text import  {  Button  }  from "./Button"
++												299 container
++													300 text import  {  editorLanguage  }  from "./code-editor-language"
++												301 container
++													302 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
++												303 container
++													304 text import  {
++												305 container
++													306 text overlayCodeEditorExtensions ,
++												307 container
++													308 text resolveRevealTarget ,
++												309 container
++													310 text ⦚ 29 unchanged lines ⦚
++												311 container
++													312 text let applyingExternalValue  =  false
++												313 container
++													314 text let revealedIdentity  =  ""
++												315 container
++													316 text let revealObserver :  ResizeObserver  |  undefined
++												317 container
++													318 text const l anguageCompartment  =  new Compartment ()
++												319 container
++													320 text const readOnlyCompartment  =  new Compartment ()
++												321 container
++													322 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
++												323 container
++													324 text EditorView . editable . of (! readOnly ),
++												325 container
++													326 text EditorState . readOnly . of ( readOnly ),
++												327 container
++													328 text EditorView . contentAttributes . of ({
++												329 container
++													330 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
++												331 container
++													332 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
++												333 text     }),
++												334 container
++													335 text ⦚ 92 unchanged lines ⦚
++												336 container
++													337 text extensions : [
++												338 container
++													339 text basicSetup ,
++												340 container
++													341 text         ... overlayCodeEditorExtensions (),
++												342 container
++													343 text l anguageCompartment . of ([]),
++												344 container
++													345 text EditorView . lineWrapping ,
++												346 container
++													347 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
++												348 container
++													349 text EditorView . contentAttributes . of ({  "aria-label" :  local . ariaLabel  }),
++												350 container
++													351 text EditorView . updateListener . of (( update ) => {
++												352 container
++													353 text if  (! update . docChanged  ||  applyingExternalValue )  return
++												354 container
++													355 text local . onValueChange ( update . state . doc . toString ())
++												356 container
++													357 text ⦚ 103 unchanged lines ⦚
++											358 text entry area import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createCodeEditorLocale } from "./code-editor-locale"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+29 unchanged lines
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-label": local.ariaLabel,
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        localeExtension(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
++												359 container
++													360 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
++												361 container
++													362 text import  {  basicSetup ,  EditorView  }  from "codemirror"
++												363 container
++													364 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
++												365 container
++													366 text import  {  t  }  from "../../utils/i18n"
++												367 container
++													368 text import  {  Button  }  from "./Button"
++												369 container
++													370 text import  {  editorLanguage  }  from "./code-editor-language"
++												371 container
++													372 text import  {  createCodeEditorLocale  }  from "./code-editor-locale"
++												373 container
++													374 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
++												375 container
++													376 text import  {
++												377 container
++													378 text overlayCodeEditorExtensions ,
++												379 container
++													380 text resolveRevealTarget ,
++												381 container
++													382 text ⦚ 29 unchanged lines ⦚
++												383 container
++													384 text let applyingExternalValue  =  false
++												385 container
++													386 text let revealedIdentity  =  ""
++												387 container
++													388 text let revealObserver :  ResizeObserver  |  undefined
++												389 container
++													390 text const localeExtension  =  createCodeEditorLocale (() =>  view  ? [ view ] : [])
++												391 container
++													392 text const l anguageCompartment  =  new Compartment ()
++												393 container
++													394 text const readOnlyCompartment  =  new Compartment ()
++												395 container
++													396 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
++												397 container
++													398 text EditorView . editable . of (! readOnly ),
++												399 container
++													400 text EditorState . readOnly . of ( readOnly ),
++												401 container
++													402 text EditorView . contentAttributes . of ({
++												403 container
++													404 text "aria-label" :  local . ariaLabel ,
++												405 container
++													406 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
++												407 container
++													408 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
++												409 text     }),
++												410 container
++													411 text ⦚ 92 unchanged lines ⦚
++												412 container
++													413 text extensions : [
++												414 container
++													415 text basicSetup ,
++												416 container
++													417 text         ... overlayCodeEditorExtensions (),
++												418 container
++													419 text localeExtension (),
++												420 container
++													421 text l anguageCompartment . of ([]),
++												422 container
++													423 text EditorView . lineWrapping ,
++												424 container
++													425 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
++												426 container
++													427 text EditorView . updateListener . of (( update ) => {
++												428 container
++													429 text if  (! update . docChanged  ||  applyingExternalValue )  return
+The focused UI element is 271 button Copy message

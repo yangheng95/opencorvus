@@ -365,6 +365,7 @@
     "rrule@2.8.1": "patches/rrule@2.8.1.patch",
     "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
     "drizzle-orm@1.0.0-beta.20": "patches/drizzle-orm@1.0.0-beta.20.patch",
+    "@codemirror/merge@6.12.2": "patches/@codemirror%2Fmerge@6.12.2.patch",
   },
   "overrides": {
     "@ai-sdk/cerebras": "2.0.51",

@@ -1,0 +1,417 @@
+Browser tab: 31, Title: "OpenCorvus", URL: "http://localhost:18241/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18241/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-446-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-448-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-450-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-452-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+										37 container
+											38 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											39 button 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+											40 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+										41 button (expanded) Description: Collapse Anonymous 241df7, Secondary Actions: Collapse
+										42 container
+											43 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											44 button Reply with OK.
+											45 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+									46 container Recents
+										47 text Recents
+										48 container
+											49 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											50 button 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+											51 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+										52 container
+											53 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											54 button Reply with OK.
+											55 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							56 container Connection Diagnostics
+								57 container Description: Connection Diagnostics · Online · Port 18241, ID: connBadge
+									58 text Online
+					59 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					60 container chatSection
+						61 container Description: Loading task, ID: taskSwitchProgress
+						62 container
+							63 text 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+							64 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-217-trigger, Secondary Actions: Expand
+							65 container Description: Not running, ID: taskStatus
+								66 text Not running
+							67 button Side chat
+							68 container solidChatHeaderRuntimeActions
+								69 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								70 checkbox Description: Open right dock, Value: 0
+						71 container
+							72 container Description: Conversation, ID: chatScroll
+								73 container
+									74 container
+										75 text User
+										76 text 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：packages/overlay/src/components/ui/CodeEditor.tsx，旧版提交 b34e232acc32406d18e6cd4738c3c1d2c505ea10，新版提交 58bdde186c9b31a5ae6cb87684771e1b6f849802。请发布一个可交互的双栏代码差异视图，标题为“编辑器语言改动审查”，左右分别放这两个版本的完整原始文件内容，语言使用 TypeScript，标清旧版和新版提交。保留全部原文与空行，不用省略号或摘要替代代码。发布后用两句中文解释这次改动的用途。不要修改任何文件，不创建 Task 或成员、不委托，不读取 auth、models 或其他文件。
+									77 container
+										78 text chat
+										79 text 1m 43s
+										80 container
+											81 text 我会只读获取指定文件在两个提交中的完整内容，核对语言相关改动，然后发布双栏差异视图；不会读取其他文件或修改仓库。
+											82 button (collapsed) Secondary Actions: Expand, Description: bash · git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+												83 text bash
+												84 text git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+												85 image
+										86 container
+											87 button (collapsed) Description: publish_interactive_artifact · 编辑器语言改动审查, Secondary Actions: Expand
+												88 text publish_interactive_artifact
+												89 text 编辑器语言改动审查
+												90 image
+											91 container 编辑器语言改动审查
+												92 container
+													93 text Diff
+													94 heading 编辑器语言改动审查, Value: 3
+														95 text 编辑器语言改动审查
+													96 button Copy text
+													97 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-244-trigger, Secondary Actions: Expand
+													98 button Open 编辑器语言改动审查 in artifact workspace
+												99 text 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+												100 container
+													101 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+  revealHighlightLines,
+  revealLinesEffect,
+  type CodeEditorLineRange,
+} from "./code-editor-theme"
+
+
+export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
+  value: string
+  path: string
+  ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined
+														102 container
+															103 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+														104 container
+															105 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+														106 container
+															107 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+														108 container
+															109 text import  {  t  }  from "../../utils/i18n"
+														110 container
+															111 text import  {  Button  }  from "./Button"
+														112 container
+															113 text import  {  editorLanguage  }  from "./code-editor-language"
+														114 container
+															115 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+														116 container
+															117 text import  {
+														118 container
+															119 text overlayCodeEditorExtensions ,
+														120 container
+															121 text resolveRevealTarget ,
+														122 container
+															123 text revealHighlightLines ,
+														124 container
+															125 text revealLinesEffect ,
+														126 container
+															127 text type CodeEditorLineRange ,
+														128 container
+															129 text }  from "./code-editor-theme"
+														130 container
+															131 text export interface CodeEditorProps extends Omit < JSX . HTMLAttributes < HTMLDivElement >,  "class"  |  "classList"  |  "onChange" > {
+														132 container
+															133 text value :  string
+														134 container
+															135 text path :  string
+														136 container
+															137 text ariaLabel :  string
+														138 container
+															139 text onValueChange : ( value :  string ) =>  void
+														140 container
+															141 text lineRange ?:  CodeEditorLineRange
+														142 container
+															143 text lineRangeRevealRevision ?:  number
+														144 container
+															145 text readOnly ?:  boolean
+														146 container
+															147 text class ?:  string
+														148 text }
+														149 container
+															150 text export function CodeEditor ( props :  CodeEditorProps ):  JSX . Element  {
+														151 container
+															152 text const  [ local ,  rest ] =  splitProps ( props , [
+														153 container
+															154 text "value" ,
+														155 container
+															156 text "path" ,
+														157 container
+															158 text "ariaLabel" ,
+														159 container
+															160 text "onValueChange" ,
+														161 container
+															162 text "lineRange" ,
+														163 container
+															164 text "lineRangeRevealRevision" ,
+														165 container
+															166 text "readOnly" ,
+														167 container
+															168 text "class" ,
+														169 text   ])
+														170 container
+															171 text let host :  HTMLDivElement  |  undefined
+													172 text entry area Description: Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createCodeEditorLocale } from "./code-editor-locale"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+  revealHighlightLines,
+  revealLinesEffect,
+  type CodeEditorLineRange,
+} from "./code-editor-theme"
+
+
+export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
+  value: string
+  path: string
+  ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined
+  let view: EditorView | undefined
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
+103 unchanged lines
+														173 container
+															174 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+														175 container
+															176 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+														177 container
+															178 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+														179 container
+															180 text import  {  t  }  from "../../utils/i18n"
+														181 container
+															182 text import  {  Button  }  from "./Button"
+														183 container
+															184 text import  {  editorLanguage  }  from "./code-editor-language"
+														185 container
+															186 text import  {  createCodeEditorLocale  }  from "./code-editor-locale"
+														187 container
+															188 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+														189 container
+															190 text import  {
+														191 container
+															192 text overlayCodeEditorExtensions ,
+														193 container
+															194 text resolveRevealTarget ,
+														195 container
+															196 text revealHighlightLines ,
+														197 container
+															198 text revealLinesEffect ,
+														199 container
+															200 text type CodeEditorLineRange ,
+														201 container
+															202 text }  from "./code-editor-theme"
+														203 container
+															204 text export interface CodeEditorProps extends Omit < JSX . HTMLAttributes < HTMLDivElement >,  "class"  |  "classList"  |  "onChange" > {
+														205 container
+															206 text value :  string
+														207 container
+															208 text path :  string
+														209 container
+															210 text ariaLabel :  string
+														211 container
+															212 text onValueChange : ( value :  string ) =>  void
+														213 container
+															214 text lineRange ?:  CodeEditorLineRange
+														215 container
+															216 text lineRangeRevealRevision ?:  number
+														217 container
+															218 text readOnly ?:  boolean
+														219 container
+															220 text class ?:  string
+														221 text }
+														222 container
+															223 text export function CodeEditor ( props :  CodeEditorProps ):  JSX . Element  {
+														224 container
+															225 text const  [ local ,  rest ] =  splitProps ( props , [
+														226 container
+															227 text "value" ,
+														228 container
+															229 text "path" ,
+														230 container
+															231 text "ariaLabel" ,
+														232 container
+															233 text "onValueChange" ,
+														234 container
+															235 text "lineRange" ,
+														236 container
+															237 text "lineRangeRevealRevision" ,
+														238 container
+															239 text "readOnly" ,
+														240 container
+															241 text "class" ,
+														242 text   ])
+														243 container
+															244 text let host :  HTMLDivElement  |  undefined
+														245 container
+															246 text let view :  EditorView  |  undefined
+														247 container
+															248 text let applyingExternalValue  =  false
+														249 container
+															250 text let revealedIdentity  =  ""
+														251 container
+															252 text let revealObserver :  ResizeObserver  |  undefined
+														253 container
+															254 text const localeExtension  =  createCodeEditorLocale (() =>  view  ? [ view ] : [])
+														255 button Expand 103 unchanged lines
+															256 text ⦚
+															257 text 103 unchanged lines
+															258 text ⦚
+										259 container
+											260 text 已发布“编辑器语言改动审查”完整双栏视图，可滚动对照原文与空行；这次改动通过引入并注册  createCodeEditorLocale ，为 CodeMirror 编辑器接入界面语言本地化，而非改变文件的语法高亮语言选择逻辑。
+											261 text 同时， aria-label  被移入可重新配置的内容属性扩展，使无障碍名称随该扩展更新，不再仅在编辑器初始化时设置。
+										262 button Copy message
+										263 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+										264 pop up button (collapsed) Description: View model usage for this turn: 141K Token, Secondary Actions: Expand
+										265 text Oct 11, 03:33 PM
+							266 container chatHomeComposition
+								267 container solidChatComposer
+									268 container
+										269 text Model configuration unavailable
+										270 text You can still read this conversation. Review the details or choose a model before sending a message.
+										271 button (collapsed) Details, Secondary Actions: Expand
+											272 text Details
+										273 button Retry
+										274 container chatForm
+											275 splitter Description: Drag to resize the message input, Value: 42
+											276 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											277 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											278 text Code
+											279 text Chat
+											280 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											281 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											282 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												283 text Choose model
+											284 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									285 button Scroll to bottom
+		286 container ID: tooltip-cl-26-content, Session usage estimate 141k tok Open the conversation menu to copy diagnostics, then paste them into AI for analysis.
+			287 text Session usage estimate
+			288 text 141k tok
+			289 text Open the conversation menu to copy diagnostics, then paste them into AI for analysis.
+
+The focused UI element is 101 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+  revealHighlightLines,
+  revealLinesEffect,
+  type CodeEditorLineRange,
+} from "./code-editor-theme"
+
+
+export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
+  value: string
+  path: string
+  ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined

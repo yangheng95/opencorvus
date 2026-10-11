@@ -36,6 +36,8 @@ export function createCodeEditorLocale(views: () => readonly EditorView[]) {
     Completions: t("code_editor.completions"),
     "Selection deleted": t("code_editor.selection_deleted"),
     "Control character": t("code_editor.control_character"),
+    "$ unchanged lines": t("code_editor.unchanged_lines"),
+    "Expand $ unchanged lines": t("code_editor.expand_unchanged_lines"),
   }), undefined, {
     equals: (previous, next) => !!previous && Object.keys(previous).length === Object.keys(next).length &&
       Object.keys(next).every((key) => previous[key] === next[key]),

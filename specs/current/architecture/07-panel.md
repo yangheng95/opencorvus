@@ -244,6 +244,13 @@ with its existing read-only content attributes instead of a mount-only label.
 Equivalent phrase records retain their extension identity. A real phrase change
 captures the library's scroll snapshot before configuration and applies it in a
 following transaction, preserving the reading anchor across internal remeasurement.
+Both ordinary CodeEditor and DiffArtifact use the same content configuration for
+editability, read-only semantics, keyboard entry and accessible name. Each Diff
+side combines its current translated role with the authored version label.
+The merge library's unchanged-region widget is a native button in the maintained
+package patch; Enter and Space use its existing synchronized expansion action,
+then return focus to the originating editor. Collapsed text and action names use
+the same phrase catalog, and the shared editor theme owns their surface and focus.
 Citation reveal completion also requires a visible editor host with usable
 dimensions. A retained hidden view keeps the current request unsettled;
 the shared animation-frame scheduler and host resize observation apply that
@@ -1865,6 +1872,10 @@ route scope. The session artifact route remains the only payload source across
 live display and replay, so standalone Chat, task conversations, Mission,
 delegated workers, and active expert-squad agents share the same protocol.
 Title, summary, compaction, and control roles do not receive the publisher.
+The exact artifact-body GET route requires Project identity and the persisted
+Project/Session/Message ownership join. Reading an existing payload does not
+require an executable model configuration. MCP App host requests and capability
+event routes retain their runtime authority.
 
 Each payload selects exactly one of twenty versioned renderer identities.
 Nineteen are declarative native renderers: `document@1`, `table@1`,

@@ -1,0 +1,680 @@
+Browser tab: 31, Title: "OpenCorvus", URL: "http://localhost:18241/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18241/ui/
+	1 container 编辑器语言改动审查
+		2 container
+			3 text Diff
+			4 heading 编辑器语言改动审查, Value: 3
+				5 text 编辑器语言改动审查
+			6 button 复制文本
+			7 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-244-trigger, Secondary Actions: Expand
+			8 button 关闭 编辑器语言改动审查 作品视图
+		9 text 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+		10 container
+			11 text entry area Description: 原始版本: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+  ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined
+  let view: EditorView | undefined
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+  ]
+  const [languageName, setLanguageName] = createSignal("")
+  const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
+  const [languageRetry, setLanguageRetry] = createSignal(0)
+
+
+  const revealIdentity = () => {
+    const range = local.lineRange
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+  }
+
+
+  /**
+   * Send the cursor to a cited line and band the cited range.
+   *
+   * A citation names a location, not a selection. Selecting
+   * `startLine`..`endLine` turned the common whole-file citation (a plain
+   * `read` cites lines 1..N) into "select the entire document", which is
+   * indistinguishable from no jump at all, so the cursor lands on the start
+   * line and the range is banded instead.
+   *
+   * The reveal is recorded as done only once the document actually holds the
+   * cited line. Latching earlier is what made jumps vanish: a reveal computed
+   * while the file was still loading clamped onto line 1 of an empty document
+   * and then refused to run again when the text finally arrived.
+   */
+  const revealLineRange = () => {
+    const editor = view
+    if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
+    const range = local.lineRange
+    const target = resolveRevealTarget(editor.state.doc.lines, range)
+    if (!range || !target) {
+      editor.dispatch({ effects: revealLinesEffect(null) })
+      revealedIdentity = range ? "" : identity
+      return
+    }
+    // A retained file view can receive a new citation before its Dock is
+    // visible. Keep that request unsettled until real layout can scroll and
+    // focus it; the host observer retries this same current request.
+    if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
+    const anchor = editor.state.doc.line(target.anchorLine).from
+    editor.dispatch({
+      selection: EditorSelection.cursor(anchor),
+      effects: [
+        revealLinesEffect(revealHighlightLines(editor.state.doc.lines, target)),
+        EditorView.scrollIntoView(anchor, { y: "center" }),
+      ],
+    })
+    // A view mounted in this same frame has not been measured yet, so the
+    // scroll effect would otherwise resolve against a zero-height scroller.
+    editor.requestMeasure()
+    editor.focus()
+    if (target.settled) revealedIdentity = identity
+  }
+
+
+  const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
+  const revealOnLayout = createAnimationFrameScheduler(() => {
+    const editor = view
+    if (!editor) return
+    if (!local.lineRange) {
+      revealLineRange()
+      return
+    }
+    if (revealIdentity() === revealedIdentity) return
+    editor.requestMeasure({
+      key: revealLineRange,
+      read: () => {
+        if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) {
+          return { visible: false, moving: false }
+        }
+        for (let element: HTMLElement | null = host; element; element = element.parentElement) {
+          if (element.getAnimations().some((animation) =>
+            animation.playState === "running" && Number.isFinite(animation.effect?.getComputedTiming().endTime),
+          )) return { visible: true, moving: true }
+        }
+        return { visible: true, moving: false }
+      },
+      write: ({ visible, moving }) => {
+        if (view !== editor || !visible) return
+        // CodeMirror is still updating in this callback. Dispatch the reveal
+        // in the next frame, after measured wrapping and Dock motion settle.
+        if (moving) revealOnLayout.schedule()
+        else revealAfterMeasure.schedule()
+      },
+    })
+				136 text import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+				137 container
+					138 text ariaLabel :  string
+				139 container
+					140 text onValueChange : ( value :  string ) =>  void
+				141 container
+					142 text lineRange ?:  CodeEditorLineRange
+				143 container
+					144 text lineRangeRevealRevision ?:  number
+				145 container
+					146 text readOnly ?:  boolean
+				147 container
+					148 text class ?:  string
+				149 text }
+				150 container
+					151 text export function CodeEditor ( props :  CodeEditorProps ):  JSX . Element  {
+				152 container
+					153 text const  [ local ,  rest ] =  splitProps ( props , [
+				154 container
+					155 text "value" ,
+				156 container
+					157 text "path" ,
+				158 container
+					159 text "ariaLabel" ,
+				160 container
+					161 text "onValueChange" ,
+				162 container
+					163 text "lineRange" ,
+				164 container
+					165 text "lineRangeRevealRevision" ,
+				166 container
+					167 text "readOnly" ,
+				168 container
+					169 text "class" ,
+				170 text   ])
+				171 container
+					172 text let host :  HTMLDivElement  |  undefined
+				173 container
+					174 text let view :  EditorView  |  undefined
+				175 container
+					176 text let applyingExternalValue  =  false
+				177 container
+					178 text let revealedIdentity  =  ""
+				179 container
+					180 text let revealObserver :  ResizeObserver  |  undefined
+				181 container
+					182 text const l anguageCompartment  =  new Compartment ()
+				183 container
+					184 text const readOnlyCompartment  =  new Compartment ()
+				185 container
+					186 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+				187 container
+					188 text EditorView . editable . of (! readOnly ),
+				189 container
+					190 text EditorState . readOnly . of ( readOnly ),
+				191 container
+					192 text EditorView . contentAttributes . of ({
+				193 container
+					194 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+				195 container
+					196 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+				197 text     }),
+				198 text   ]
+				199 container
+					200 text const  [ languageName ,  setLanguageName ] =  createSignal ( "" )
+				201 container
+					202 text const  [ languageStatus ,  setLanguageStatus ] =  createSignal < "loading"  |  "ready"  |  "failed" >( "ready" )
+				203 container
+					204 text const  [ languageRetry ,  setLanguageRetry ] =  createSignal ( 0 )
+				205 container
+					206 text const revealIdentity  = () => {
+				207 container
+					208 text const range  =  local . lineRange
+				209 container
+					210 text return  [ local . path ,  range ?. startLine  ??  "" ,  range ?. endLine  ??  "" ,  local . lineRangeRevealRevision  ??  0 ]. join ( "\0" )
+				211 text   }
+				212 container
+					213 text /**
+				214 text    * Send the cursor to a cited line and band the cited range.
+				215 text    *
+				216 text    * A citation names a location, not a selection. Selecting
+				217 text    * `startLine`..`endLine` turned the common whole-file citation (a plain
+				218 text    * `read` cites lines 1..N) into "select the entire document", which is
+				219 text    * indistinguishable from no jump at all, so the cursor lands on the start
+				220 text    * line and the range is banded instead.
+				221 text    *
+				222 text    * The reveal is recorded as done only once the document actually holds the
+				223 text    * cited line. Latching earlier is what made jumps vanish: a reveal computed
+				224 text    * while the file was still loading clamped onto line 1 of an empty document
+				225 text    * and then refused to run again when the text finally arrived.
+				226 text    */
+				227 container
+					228 text const revealLineRange  = () => {
+				229 container
+					230 text const editor  =  view
+				231 container
+					232 text if  (! editor )  return
+				233 container
+					234 text const identity  =  revealIdentity ()
+				235 container
+					236 text if  ( identity  ===  revealedIdentity )  return
+				237 container
+					238 text const range  =  local . lineRange
+				239 container
+					240 text const target  =  resolveRevealTarget ( editor . state . doc . lines ,  range )
+				241 container
+					242 text if  (! range  || ! target ) {
+				243 container
+					244 text editor . dispatch ({  effects :  revealLinesEffect ( null ) })
+				245 container
+					246 text revealedIdentity  =  range  ?  ""  :  identity
+				247 container
+					248 text return
+				249 text     }
+				250 container
+					251 text // A retained file view can receive a new citation before its Dock is
+				252 container
+					253 text // visible. Keep that request unsettled until real layout can scroll and
+				254 container
+					255 text // focus it; the host observer retries this same current request.
+				256 container
+					257 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" ))  return
+				258 container
+					259 text const anchor  =  editor . state . doc . line ( target . anchorLine ). from
+				260 container
+					261 text editor . dispatch ({
+				262 container
+					263 text selection :  EditorSelection . cursor ( anchor ),
+				264 container
+					265 text effects : [
+				266 container
+					267 text revealLinesEffect ( revealHighlightLines ( editor . state . doc . lines ,  target )),
+				268 container
+					269 text EditorView . scrollIntoView ( anchor , {  y :  "center"  }),
+				270 text       ],
+				271 text     })
+				272 container
+					273 text // A view mounted in this same frame has not been measured yet, so the
+				274 container
+					275 text // scroll effect would otherwise resolve against a zero-height scroller.
+				276 container
+					277 text editor . requestMeasure ()
+				278 container
+					279 text editor . focus ()
+				280 container
+					281 text if  ( target . settled )  revealedIdentity  =  identity
+				282 text   }
+				283 container
+					284 text const revealAfterMeasure  =  createAnimationFrameScheduler ( revealLineRange )
+				285 container
+					286 text const revealOnLayout  =  createAnimationFrameScheduler (() => {
+				287 container
+					288 text const editor  =  view
+				289 container
+					290 text if  (! editor )  return
+				291 container
+					292 text if  (! local . lineRange ) {
+				293 container
+					294 text revealLineRange ()
+				295 container
+					296 text return
+				297 text     }
+				298 container
+					299 text if  ( revealIdentity () ===  revealedIdentity )  return
+				300 container
+					301 text editor . requestMeasure ({
+				302 container
+					303 text key :  revealLineRange ,
+				304 container
+					305 text read : () => {
+				306 container
+					307 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" )) {
+				308 container
+					309 text return  {  visible :  false ,  moving :  false  }
+				310 text         }
+				311 container
+					312 text for  ( let element :  HTMLElement  |  null  =  host ;  element ;  element  =  element . parentElement ) {
+				313 container
+					314 text if  ( element . getAnimations (). some (( animation ) =>
+				315 container
+					316 text animation . playState  ===  "running"  &&  Number . isFinite ( animation . effect ?. getComputedTiming (). endTime ),
+				317 container
+					318 text           ))  return  {  visible :  true ,  moving :  true  }
+				319 text         }
+				320 container
+					321 text return  {  visible :  true ,  moving :  false  }
+				322 text       },
+				323 container
+					324 text write : ({  visible ,  moving  }) => {
+				325 container
+					326 text if  ( view  !==  editor  || ! visible )  return
+				327 container
+					328 text // CodeMirror is still updating in this callback. Dispatch the reveal
+				329 container
+					330 text // in the next frame, after measured wrapping and Dock motion settle.
+				331 container
+					332 text if  ( moving )  revealOnLayout . schedule ()
+				333 container
+					334 text else revealAfterMeasure . schedule ()
+				335 text       },
+				336 text     })
+			135 text entry area Description: 修改后: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value:   ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined
+  let view: EditorView | undefined
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-label": local.ariaLabel,
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+  ]
+  const [languageName, setLanguageName] = createSignal("")
+  const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
+  const [languageRetry, setLanguageRetry] = createSignal(0)
+
+
+  const revealIdentity = () => {
+    const range = local.lineRange
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+  }
+
+
+  /**
+   * Send the cursor to a cited line and band the cited range.
+   *
+   * A citation names a location, not a selection. Selecting
+   * `startLine`..`endLine` turned the common whole-file citation (a plain
+   * `read` cites lines 1..N) into "select the entire document", which is
+   * indistinguishable from no jump at all, so the cursor lands on the start
+   * line and the range is banded instead.
+   *
+   * The reveal is recorded as done only once the document actually holds the
+   * cited line. Latching earlier is what made jumps vanish: a reveal computed
+   * while the file was still loading clamped onto line 1 of an empty document
+   * and then refused to run again when the text finally arrived.
+   */
+  const revealLineRange = () => {
+    const editor = view
+    if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
+    const range = local.lineRange
+    const target = resolveRevealTarget(editor.state.doc.lines, range)
+    if (!range || !target) {
+      editor.dispatch({ effects: revealLinesEffect(null) })
+      revealedIdentity = range ? "" : identity
+      return
+    }
+    // A retained file view can receive a new citation before its Dock is
+    // visible. Keep that request unsettled until real layout can scroll and
+    // focus it; the host observer retries this same current request.
+    if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
+    const anchor = editor.state.doc.line(target.anchorLine).from
+    editor.dispatch({
+      selection: EditorSelection.cursor(anchor),
+      effects: [
+        revealLinesEffect(revealHighlightLines(editor.state.doc.lines, target)),
+        EditorView.scrollIntoView(anchor, { y: "center" }),
+      ],
+    })
+    // A view mounted in this same frame has not been measured yet, so the
+    // scroll effect would otherwise resolve against a zero-height scroller.
+    editor.requestMeasure()
+    editor.focus()
+    if (target.settled) revealedIdentity = identity
+  }
+
+
+  const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
+  const revealOnLayout = createAnimationFrameScheduler(() => {
+    const editor = view
+    if (!editor) return
+    if (!local.lineRange) {
+      revealLineRange()
+      return
+    }
+    if (revealIdentity() === revealedIdentity) return
+    editor.requestMeasure({
+      key: revealLineRange,
+      read: () => {
+        if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) {
+          return { visible: false, moving: false }
+        }
+        for (let element: HTMLElement | null = host; element; element = element.parentElement) {
+          if (element.getAnimations().some((animation) =>
+            animation.playState === "running" && Number.isFinite(animation.effect?.getComputedTiming().endTime),
+          )) return { visible: true, moving: true }
+        }
+        return { visible: true, moving: false }
+      },
+      write: ({ visible, moving }) => {
+        if (view !== editor || !visible) return
+        // CodeMirror is still updating in this callback. Dispatch the reveal
+        // in the next frame, after measured wrapping and Dock motion settle.
+        if (moving) revealOnLayout.schedule()
+        else revealAfterMeasure.schedule()
+      },
+    })
+103 行未更改
+				337 container
+					338 text ariaLabel :  string
+				339 container
+					340 text onValueChange : ( value :  string ) =>  void
+				341 container
+					342 text lineRange ?:  CodeEditorLineRange
+				343 container
+					344 text lineRangeRevealRevision ?:  number
+				345 container
+					346 text readOnly ?:  boolean
+				347 container
+					348 text class ?:  string
+				349 text }
+				350 container
+					351 text export function CodeEditor ( props :  CodeEditorProps ):  JSX . Element  {
+				352 container
+					353 text const  [ local ,  rest ] =  splitProps ( props , [
+				354 container
+					355 text "value" ,
+				356 container
+					357 text "path" ,
+				358 container
+					359 text "ariaLabel" ,
+				360 container
+					361 text "onValueChange" ,
+				362 container
+					363 text "lineRange" ,
+				364 container
+					365 text "lineRangeRevealRevision" ,
+				366 container
+					367 text "readOnly" ,
+				368 container
+					369 text "class" ,
+				370 text   ])
+				371 container
+					372 text let host :  HTMLDivElement  |  undefined
+				373 container
+					374 text let view :  EditorView  |  undefined
+				375 container
+					376 text let applyingExternalValue  =  false
+				377 container
+					378 text let revealedIdentity  =  ""
+				379 container
+					380 text let revealObserver :  ResizeObserver  |  undefined
+				381 container
+					382 text const localeExtension  =  createCodeEditorLocale (() =>  view  ? [ view ] : [])
+				383 container
+					384 text const l anguageCompartment  =  new Compartment ()
+				385 container
+					386 text const readOnlyCompartment  =  new Compartment ()
+				387 container
+					388 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+				389 container
+					390 text EditorView . editable . of (! readOnly ),
+				391 container
+					392 text EditorState . readOnly . of ( readOnly ),
+				393 container
+					394 text EditorView . contentAttributes . of ({
+				395 container
+					396 text "aria-label" :  local . ariaLabel ,
+				397 container
+					398 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+				399 container
+					400 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+				401 text     }),
+				402 text   ]
+				403 container
+					404 text const  [ languageName ,  setLanguageName ] =  createSignal ( "" )
+				405 container
+					406 text const  [ languageStatus ,  setLanguageStatus ] =  createSignal < "loading"  |  "ready"  |  "failed" >( "ready" )
+				407 container
+					408 text const  [ languageRetry ,  setLanguageRetry ] =  createSignal ( 0 )
+				409 container
+					410 text const revealIdentity  = () => {
+				411 container
+					412 text const range  =  local . lineRange
+				413 container
+					414 text return  [ local . path ,  range ?. startLine  ??  "" ,  range ?. endLine  ??  "" ,  local . lineRangeRevealRevision  ??  0 ]. join ( "\0" )
+				415 text   }
+				416 container
+					417 text /**
+				418 text    * Send the cursor to a cited line and band the cited range.
+				419 text    *
+				420 text    * A citation names a location, not a selection. Selecting
+				421 text    * `startLine`..`endLine` turned the common whole-file citation (a plain
+				422 text    * `read` cites lines 1..N) into "select the entire document", which is
+				423 text    * indistinguishable from no jump at all, so the cursor lands on the start
+				424 text    * line and the range is banded instead.
+				425 text    *
+				426 text    * The reveal is recorded as done only once the document actually holds the
+				427 text    * cited line. Latching earlier is what made jumps vanish: a reveal computed
+				428 text    * while the file was still loading clamped onto line 1 of an empty document
+				429 text    * and then refused to run again when the text finally arrived.
+				430 text    */
+				431 container
+					432 text const revealLineRange  = () => {
+				433 container
+					434 text const editor  =  view
+				435 container
+					436 text if  (! editor )  return
+				437 container
+					438 text const identity  =  revealIdentity ()
+				439 container
+					440 text if  ( identity  ===  revealedIdentity )  return
+				441 container
+					442 text const range  =  local . lineRange
+				443 container
+					444 text const target  =  resolveRevealTarget ( editor . state . doc . lines ,  range )
+				445 container
+					446 text if  (! range  || ! target ) {
+				447 container
+					448 text editor . dispatch ({  effects :  revealLinesEffect ( null ) })
+				449 container
+					450 text revealedIdentity  =  range  ?  ""  :  identity
+				451 container
+					452 text return
+				453 text     }
+				454 container
+					455 text // A retained file view can receive a new citation before its Dock is
+				456 container
+					457 text // visible. Keep that request unsettled until real layout can scroll and
+				458 container
+					459 text // focus it; the host observer retries this same current request.
+				460 container
+					461 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" ))  return
+				462 container
+					463 text const anchor  =  editor . state . doc . line ( target . anchorLine ). from
+				464 container
+					465 text editor . dispatch ({
+				466 container
+					467 text selection :  EditorSelection . cursor ( anchor ),
+				468 container
+					469 text effects : [
+				470 container
+					471 text revealLinesEffect ( revealHighlightLines ( editor . state . doc . lines ,  target )),
+				472 container
+					473 text EditorView . scrollIntoView ( anchor , {  y :  "center"  }),
+				474 text       ],
+				475 text     })
+				476 container
+					477 text // A view mounted in this same frame has not been measured yet, so the
+				478 container
+					479 text // scroll effect would otherwise resolve against a zero-height scroller.
+				480 container
+					481 text editor . requestMeasure ()
+				482 container
+					483 text editor . focus ()
+				484 container
+					485 text if  ( target . settled )  revealedIdentity  =  identity
+				486 text   }
+				487 container
+					488 text const revealAfterMeasure  =  createAnimationFrameScheduler ( revealLineRange )
+				489 container
+					490 text const revealOnLayout  =  createAnimationFrameScheduler (() => {
+				491 container
+					492 text const editor  =  view
+				493 container
+					494 text if  (! editor )  return
+				495 container
+					496 text if  (! local . lineRange ) {
+				497 container
+					498 text revealLineRange ()
+				499 container
+					500 text return
+				501 text     }
+				502 container
+					503 text if  ( revealIdentity () ===  revealedIdentity )  return
+				504 container
+					505 text editor . requestMeasure ({
+				506 container
+					507 text key :  revealLineRange ,
+				508 container
+					509 text read : () => {
+				510 container
+					511 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" )) {
+				512 container
+					513 text return  {  visible :  false ,  moving :  false  }
+				514 text         }
+				515 container
+					516 text for  ( let element :  HTMLElement  |  null  =  host ;  element ;  element  =  element . parentElement ) {
+				517 container
+					518 text if  ( element . getAnimations (). some (( animation ) =>
+				519 container
+					520 text animation . playState  ===  "running"  &&  Number . isFinite ( animation . effect ?. getComputedTiming (). endTime ),
+				521 container
+					522 text           ))  return  {  visible :  true ,  moving :  true  }
+				523 text         }
+				524 container
+					525 text return  {  visible :  true ,  moving :  false  }
+				526 text       },
+				527 container
+					528 text write : ({  visible ,  moving  }) => {
+				529 container
+					530 text if  ( view  !==  editor  || ! visible )  return
+				531 container
+					532 text // CodeMirror is still updating in this callback. Dispatch the reveal
+				533 container
+					534 text // in the next frame, after measured wrapping and Dock motion settle.
+				535 container
+					536 text if  ( moving )  revealOnLayout . schedule ()
+				537 container
+					538 text else revealAfterMeasure . schedule ()
+				539 text       },
+				540 text     })
+				541 button 展开 103 行未更改的代码
+					542 text ⦚
+					543 text 103 行未更改
+					544 text ⦚
+			545 container
+				546 text field (settable) Description: 查找, Value: readOnlyExtensions
+				547 button 下一个
+				548 button 上一个
+				549 button 全部
+				550 checkbox (settable, integer) Description: 区分大小写, Value: 0
+				551 checkbox (settable, integer) Description: 正则表达式, Value: 0
+				552 checkbox (settable, integer) Description: 全字匹配, Value: 0
+				553 button 关闭
+
+The focused UI element is 546 text field (settable) Description: 查找, Value: readOnlyExtensions

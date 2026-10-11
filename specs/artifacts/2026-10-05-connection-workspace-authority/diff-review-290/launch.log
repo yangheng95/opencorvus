@@ -1,0 +1,11 @@
+Owned Sol Target PID 68000, Host PID 36068, occurrence diff-review-290-live-01-0bd30efd-46e0-482f-932c-ebead2cd13f9; native settlement remains required.
+
+listeners             :
+occurrence            : diff-review-290-live-01-0bd30efd-46e0-482f-932c-ebead2cd13f9
+pairedCleanupComplete : True
+observedAtUtc         : 2026/10/11 7:40:50
+chain                 : {@{originalOccurrencePresent=False; expected=; state=dead_or_reused}, @{originalOccurrencePresent=False; expected=; state=dead_or_reused}}
+nativeSettlement      : @{occurrence=diff-review-290-live-01-0bd30efd-46e0-482f-932c-ebead2cd13f9; outcome=settled; host=; target=; observedAtUtc=2026/10/11 7:40:47; deadlineAt=1791704554076; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup}
+boundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup
+physicalCompletion    : True
+copiedPair            : {@{outcome=removed; copiedLength=2194; path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-11\diff-review-290-live-01\runtime\data\auth.json; presentAfter=False}, @{outcome=removed; copiedLength=9155406; path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-11\diff-review-290-live-01\runtime\data\models.json; presentAfter=False}}

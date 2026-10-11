@@ -1,0 +1,111 @@
+{
+  "requests": [
+    {
+      "sessionID": "ses_hkoTCCzev2MRQcyggRBT",
+      "agentID": "memory",
+      "model": "gpt-6.1-sol",
+      "terminal": "eof",
+      "streaming": true,
+      "activity": {
+        "id": "act_g0VXixEgx00Er30Qxu78",
+        "attempt": 0
+      },
+      "status": 200,
+      "reader": "settled"
+    },
+    {
+      "sessionID": null,
+      "agentID": null,
+      "model": "gpt-6.1-sol",
+      "terminal": null,
+      "streaming": true,
+      "activity": null,
+      "status": null,
+      "reader": "fetch_failed"
+    },
+    {
+      "sessionID": "ses_hkoTCCzev2MRQcyggRBT",
+      "agentID": "chat",
+      "model": "gpt-6.1-sol",
+      "terminal": "eof",
+      "streaming": true,
+      "activity": {
+        "id": "act_g0VXixErt00eV3Tz9KWO",
+        "attempt": 1,
+        "assistantMessageID": "msg_g0VXixEhQ00XgZeT405b"
+      },
+      "status": 200,
+      "reader": "settled"
+    },
+    {
+      "sessionID": "ses_-zUSH2VMPzzn4cTey584",
+      "agentID": "memory",
+      "model": "gpt-6.1-sol",
+      "terminal": "eof",
+      "streaming": true,
+      "activity": {
+        "id": "act_g0VXixUuv00s7EBWKwlq",
+        "attempt": 0
+      },
+      "status": 200,
+      "reader": "settled"
+    },
+    {
+      "sessionID": "ses_-zUSH2VMPzzn4cTey584",
+      "agentID": "chat",
+      "model": "gpt-6.1-sol",
+      "terminal": "eof",
+      "streaming": true,
+      "activity": {
+        "id": "act_g0VXixV2a009cPzw6UyD",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXixUv500ydMWbpY9R"
+      },
+      "status": 200,
+      "reader": "settled"
+    },
+    {
+      "sessionID": "ses_-zUSH2VMPzzn4cTey584",
+      "agentID": "chat",
+      "model": "gpt-6.1-sol",
+      "terminal": "eof",
+      "streaming": true,
+      "activity": {
+        "id": "act_g0VXixX7u00lNWoZqoxH",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXixX3000jwaUQ5UnS"
+      },
+      "status": 200,
+      "reader": "settled"
+    },
+    {
+      "sessionID": "ses_-zUSH2VMPzzn4cTey584",
+      "agentID": "chat",
+      "model": "gpt-6.1-sol",
+      "terminal": "eof",
+      "streaming": true,
+      "activity": {
+        "id": "act_g0VXixYPN005nr3uPwd1",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXixYKI000GmRqu9lh"
+      },
+      "status": 200,
+      "reader": "settled"
+    },
+    {
+      "sessionID": "ses_-zUSH2VMPzzn4cTey584",
+      "agentID": "chat",
+      "model": "gpt-6.1-sol",
+      "terminal": "eof",
+      "streaming": true,
+      "activity": {
+        "id": "act_g0VXixtu900mDLHV8kAl",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXixtoo00c7qQhv40y"
+      },
+      "status": 200,
+      "reader": "settled"
+    }
+  ],
+  "qualification": "Original foreground35972 exit1 OWNED_PROVIDER_REQUEST_INVALID; Native physically exited0. Preflight transport failure retained; successful main artifact is separately verified."
+}

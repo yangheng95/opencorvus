@@ -1,0 +1,364 @@
+Browser tab: 31, Title: "OpenCorvus", URL: "http://localhost:18241/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18241/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								44 container
+									45 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									46 container
+										47 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										48 button 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+										49 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+									50 button (expanded) Description: Collapse Anonymous 241df7, Secondary Actions: Collapse
+									51 container
+										52 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										53 button Reply with OK.
+										54 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+								55 container Recents
+									56 text Recents
+									57 container
+										58 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										59 button 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+										60 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+									61 container
+										62 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										63 button Reply with OK.
+										64 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18241, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					65 container
+						66 text 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+						67 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-217-trigger, Secondary Actions: Expand
+						68 container Description: Not running, ID: taskStatus
+							69 text Not running
+						70 button Side chat
+						71 container solidChatHeaderRuntimeActions
+							72 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							73 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							74 container
+								75 text chat
+								76 text 1m 43s
+								77 container
+									78 text 我会只读获取指定文件在两个提交中的完整内容，核对语言相关改动，然后发布双栏差异视图；不会读取其他文件或修改仓库。
+									79 button (collapsed) Secondary Actions: Expand, Description: bash · git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+										80 text bash
+										81 text git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+										82 image
+								83 container
+									84 button (collapsed) Description: publish_interactive_artifact · 编辑器语言改动审查, Secondary Actions: Expand
+										85 text publish_interactive_artifact
+										86 text 编辑器语言改动审查
+										87 image
+									88 container 编辑器语言改动审查
+										89 container
+											90 text Diff
+											91 heading 编辑器语言改动审查, Value: 3
+												92 text 编辑器语言改动审查
+											93 button Copy text
+											94 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-244-trigger, Secondary Actions: Expand
+											95 button Open 编辑器语言改动审查 in artifact workspace
+										96 text 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+										97 container
+											98 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+29 unchanged lines
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+												99 container
+													100 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+												101 container
+													102 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+												103 container
+													104 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+												105 container
+													106 text import  {  t  }  from "../../utils/i18n"
+												107 container
+													108 text import  {  Button  }  from "./Button"
+												109 container
+													110 text import  {  editorLanguage  }  from "./code-editor-language"
+												111 container
+													112 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+												113 container
+													114 text import  {
+												115 container
+													116 text overlayCodeEditorExtensions ,
+												117 container
+													118 text resolveRevealTarget ,
+												119 button Expand 29 unchanged lines
+													120 text ⦚
+													121 text 29 unchanged lines
+													122 text ⦚
+												123 container
+													124 text let applyingExternalValue  =  false
+												125 container
+													126 text let revealedIdentity  =  ""
+												127 container
+													128 text let revealObserver :  ResizeObserver  |  undefined
+												129 container
+													130 text const l anguageCompartment  =  new Compartment ()
+												131 container
+													132 text const readOnlyCompartment  =  new Compartment ()
+												133 container
+													134 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+												135 container
+													136 text EditorView . editable . of (! readOnly ),
+												137 container
+													138 text EditorState . readOnly . of ( readOnly ),
+												139 container
+													140 text EditorView . contentAttributes . of ({
+												141 container
+													142 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+												143 container
+													144 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+												145 text     }),
+												146 button Expand 92 unchanged lines
+													147 text ⦚
+													148 text 92 unchanged lines
+													149 text ⦚
+												150 container
+													151 text extensions : [
+												152 container
+													153 text basicSetup ,
+												154 container
+													155 text         ... overlayCodeEditorExtensions (),
+												156 container
+													157 text l anguageCompartment . of ([]),
+												158 container
+													159 text EditorView . lineWrapping ,
+												160 container
+													161 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+												162 container
+													163 text EditorView . contentAttributes . of ({  "aria-label" :  local . ariaLabel  }),
+												164 container
+													165 text EditorView . updateListener . of (( update ) => {
+												166 container
+													167 text if  (! update . docChanged  ||  applyingExternalValue )  return
+												168 container
+													169 text local . onValueChange ( update . state . doc . toString ())
+												170 button Expand 103 unchanged lines
+													171 text ⦚
+													172 text 103 unchanged lines
+													173 text ⦚
+											174 container
+												175 text field (settable) Description: Find, Value: readOnlyExtensions
+												176 button Next
+												177 button Previous
+												178 button All
+												179 checkbox (settable, integer) Description: Match case, Value: 0
+												180 checkbox (settable, integer) Description: Regular expression, Value: 0
+												181 checkbox (settable, integer) Description: Whole word, Value: 0
+												182 button Close
+											183 text entry area Description: Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createCodeEditorLocale } from "./code-editor-locale"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+29 unchanged lines
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-label": local.ariaLabel,
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        localeExtension(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+												184 container
+													185 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+												186 container
+													187 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+												188 container
+													189 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+												190 container
+													191 text import  {  t  }  from "../../utils/i18n"
+												192 container
+													193 text import  {  Button  }  from "./Button"
+												194 container
+													195 text import  {  editorLanguage  }  from "./code-editor-language"
+												196 container
+													197 text import  {  createCodeEditorLocale  }  from "./code-editor-locale"
+												198 container
+													199 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+												200 container
+													201 text import  {
+												202 container
+													203 text overlayCodeEditorExtensions ,
+												204 container
+													205 text resolveRevealTarget ,
+												206 button Expand 29 unchanged lines
+													207 text ⦚
+													208 text 29 unchanged lines
+													209 text ⦚
+												210 container
+													211 text let applyingExternalValue  =  false
+												212 container
+													213 text let revealedIdentity  =  ""
+												214 container
+													215 text let revealObserver :  ResizeObserver  |  undefined
+												216 container
+													217 text const localeExtension  =  createCodeEditorLocale (() =>  view  ? [ view ] : [])
+												218 container
+													219 text const l anguageCompartment  =  new Compartment ()
+												220 container
+													221 text const readOnlyCompartment  =  new Compartment ()
+												222 container
+													223 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+												224 container
+													225 text EditorView . editable . of (! readOnly ),
+												226 container
+													227 text EditorState . readOnly . of ( readOnly ),
+												228 container
+													229 text EditorView . contentAttributes . of ({
+												230 container
+													231 text "aria-label" :  local . ariaLabel ,
+												232 container
+													233 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+												234 container
+													235 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+												236 text     }),
+												237 button Expand 92 unchanged lines
+													238 text ⦚
+													239 text 92 unchanged lines
+													240 text ⦚
+												241 container
+													242 text extensions : [
+												243 container
+													244 text basicSetup ,
+												245 container
+													246 text         ... overlayCodeEditorExtensions (),
+												247 container
+													248 text localeExtension (),
+												249 container
+													250 text l anguageCompartment . of ([]),
+												251 container
+													252 text EditorView . lineWrapping ,
+												253 container
+													254 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+												255 container
+													256 text EditorView . updateListener . of (( update ) => {
+												257 container
+													258 text if  (! update . docChanged  ||  applyingExternalValue )  return
+												259 container
+													260 text local . onValueChange ( update . state . doc . toString ())
+												261 button Expand 103 unchanged lines
+													262 text ⦚
+													263 text 103 unchanged lines
+													264 text ⦚
+								265 container
+									266 text 已发布“编辑器语言改动审查”完整双栏视图，可滚动对照原文与空行；这次改动通过引入并注册  createCodeEditorLocale ，为 CodeMirror 编辑器接入界面语言本地化，而非改变文件的语法高亮语言选择逻辑。
+									267 text 同时， aria-label  被移入可重新配置的内容属性扩展，使无障碍名称随该扩展更新，不再仅在编辑器初始化时设置。
+								268 button Copy message
+								269 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+								270 pop up button (collapsed) Description: View model usage for this turn: 141K Token, Secondary Actions: Expand
+								271 text Oct 11, 03:33 PM
+						43 container chatHomeComposition
+							272 container solidChatComposer
+								273 container
+									274 text Model configuration unavailable
+									275 text You can still read this conversation. Review the details or choose a model before sending a message.
+									276 button (collapsed) Details, Secondary Actions: Expand
+										277 text Details
+									278 button Retry
+									279 container chatForm
+										280 splitter Description: Drag to resize the message input, Value: 42
+										281 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+										282 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+										283 text Code
+										284 text Chat
+										285 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+										286 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+										287 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+											288 text Choose model
+										289 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+								290 button Scroll to bottom
+
+The focused UI element is 175 text field (settable) Description: Find, Value: readOnlyExtensions

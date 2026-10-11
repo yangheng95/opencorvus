@@ -1,0 +1,43 @@
+Browser tab: 29, Title: "OpenCorvus", URL: "http://localhost:18239/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 34, 44-45, 50-54, 59-63
++								59 container
++									60 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									61 container
++										62 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										63 button Chat
++										64 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-224-trigger, Secondary Actions: Expand
++									65 button (expanded) Description: Collapse Anonymous 241df7, Secondary Actions: Collapse
++									66 container
++										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										68 button Reply with OK.
++										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
++								70 container Recents
++									71 text Recents
++									72 container
++										73 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										74 button Chat
++										75 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-230-trigger, Secondary Actions: Expand
++									76 container
++										77 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										78 button Reply with OK.
++										79 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-236-trigger, Secondary Actions: Expand
++					80 container
++						81 text Chat
++						82 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
++						83 container Description: Not running, ID: taskStatus
++							84 text Not running
++						85 button Side chat
++						86 container solidChatHeaderRuntimeActions
++							87 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							88 checkbox Description: Open right dock, Value: 0
+~								48 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~								49 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								89 text Code
++								90 text Chat
++								91 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
+~								55 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+~									57 text Choose model
+~								58 button (disabled) Description: Send, Help: Your message is being processed., ID: chatSend
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18239/ui/

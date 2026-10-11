@@ -1,0 +1,13 @@
+$ bun script/run-tests.ts test/server/interactive-artifact-read-identity.test.ts
+[1/1] START test/server/interactive-artifact-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold artifact reads return each Project's complete persisted record with unavailable execution models [4662.92ms]
+(pass) artifact reads enforce the exact Project and producing Session with explicit not-found responses [3644.95ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [10.78s]
+[1/1] DONE test/server/interactive-artifact-read-identity.test.ts exit=0 duration=11.52s

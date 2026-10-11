@@ -1,0 +1,463 @@
+Browser tab: 31, Title: "OpenCorvus", URL: "http://localhost:18241/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18241/ui/
+	1 container 编辑器语言改动审查
+		2 container
+			3 text Diff
+			4 heading 编辑器语言改动审查, Value: 3
+				5 text 编辑器语言改动审查
+			6 button Copy text
+			7 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-244-trigger, Secondary Actions: Expand
+			8 button Close 编辑器语言改动审查 artifact workspace
+		9 text 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+		10 container
+			11 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+  revealHighlightLines,
+  revealLinesEffect,
+  type CodeEditorLineRange,
+} from "./code-editor-theme"
+
+
+export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
+  value: string
+  path: string
+  ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined
+  let view: EditorView | undefined
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+				12 container
+					13 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+				14 container
+					15 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+				16 container
+					17 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+				18 container
+					19 text import  {  t  }  from "../../utils/i18n"
+				20 container
+					21 text import  {  Button  }  from "./Button"
+				22 container
+					23 text import  {  editorLanguage  }  from "./code-editor-language"
+				24 container
+					25 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+				26 container
+					27 text import  {
+				28 container
+					29 text overlayCodeEditorExtensions ,
+				30 container
+					31 text resolveRevealTarget ,
+				32 container
+					33 text revealHighlightLines ,
+				34 container
+					35 text revealLinesEffect ,
+				36 container
+					37 text type CodeEditorLineRange ,
+				38 container
+					39 text }  from "./code-editor-theme"
+				40 container
+					41 text export interface CodeEditorProps extends Omit < JSX . HTMLAttributes < HTMLDivElement >,  "class"  |  "classList"  |  "onChange" > {
+				42 container
+					43 text value :  string
+				44 container
+					45 text path :  string
+				46 container
+					47 text ariaLabel :  string
+				48 container
+					49 text onValueChange : ( value :  string ) =>  void
+				50 container
+					51 text lineRange ?:  CodeEditorLineRange
+				52 container
+					53 text lineRangeRevealRevision ?:  number
+				54 container
+					55 text readOnly ?:  boolean
+				56 container
+					57 text class ?:  string
+				58 text }
+				59 container
+					60 text export function CodeEditor ( props :  CodeEditorProps ):  JSX . Element  {
+				61 container
+					62 text const  [ local ,  rest ] =  splitProps ( props , [
+				63 container
+					64 text "value" ,
+				65 container
+					66 text "path" ,
+				67 container
+					68 text "ariaLabel" ,
+				69 container
+					70 text "onValueChange" ,
+				71 container
+					72 text "lineRange" ,
+				73 container
+					74 text "lineRangeRevealRevision" ,
+				75 container
+					76 text "readOnly" ,
+				77 container
+					78 text "class" ,
+				79 text   ])
+				80 container
+					81 text let host :  HTMLDivElement  |  undefined
+				82 container
+					83 text let view :  EditorView  |  undefined
+				84 container
+					85 text let applyingExternalValue  =  false
+				86 container
+					87 text let revealedIdentity  =  ""
+				88 container
+					89 text let revealObserver :  ResizeObserver  |  undefined
+				90 container
+					91 text const l anguageCompartment  =  new Compartment ()
+				92 container
+					93 text const readOnlyCompartment  =  new Compartment ()
+				94 container
+					95 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+				96 container
+					97 text EditorView . editable . of (! readOnly ),
+				98 container
+					99 text EditorState . readOnly . of ( readOnly ),
+				100 container
+					101 text EditorView . contentAttributes . of ({
+				102 container
+					103 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+				104 container
+					105 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+				106 text     }),
+				107 button Expand 92 unchanged lines
+					108 text ⦚
+					109 text 92 unchanged lines
+					110 text ⦚
+				111 container
+					112 text extensions : [
+				113 container
+					114 text basicSetup ,
+				115 container
+					116 text         ... overlayCodeEditorExtensions (),
+				117 container
+					118 text l anguageCompartment . of ([]),
+				119 container
+					120 text EditorView . lineWrapping ,
+				121 container
+					122 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+				123 container
+					124 text EditorView . contentAttributes . of ({  "aria-label" :  local . ariaLabel  }),
+				125 container
+					126 text EditorView . updateListener . of (( update ) => {
+				127 container
+					128 text if  (! update . docChanged  ||  applyingExternalValue )  return
+				129 container
+					130 text local . onValueChange ( update . state . doc . toString ())
+				131 button Expand 103 unchanged lines
+					132 text ⦚
+					133 text 103 unchanged lines
+					134 text ⦚
+			135 text entry area Description: Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createCodeEditorLocale } from "./code-editor-locale"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+  revealHighlightLines,
+  revealLinesEffect,
+  type CodeEditorLineRange,
+} from "./code-editor-theme"
+
+
+export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
+  value: string
+  path: string
+  ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined
+  let view: EditorView | undefined
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-label": local.ariaLabel,
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        localeExtension(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+				136 container
+					137 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+				138 container
+					139 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+				140 container
+					141 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+				142 container
+					143 text import  {  t  }  from "../../utils/i18n"
+				144 container
+					145 text import  {  Button  }  from "./Button"
+				146 container
+					147 text import  {  editorLanguage  }  from "./code-editor-language"
+				148 container
+					149 text import  {  createCodeEditorLocale  }  from "./code-editor-locale"
+				150 container
+					151 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+				152 container
+					153 text import  {
+				154 container
+					155 text overlayCodeEditorExtensions ,
+				156 container
+					157 text resolveRevealTarget ,
+				158 container
+					159 text revealHighlightLines ,
+				160 container
+					161 text revealLinesEffect ,
+				162 container
+					163 text type CodeEditorLineRange ,
+				164 container
+					165 text }  from "./code-editor-theme"
+				166 container
+					167 text export interface CodeEditorProps extends Omit < JSX . HTMLAttributes < HTMLDivElement >,  "class"  |  "classList"  |  "onChange" > {
+				168 container
+					169 text value :  string
+				170 container
+					171 text path :  string
+				172 container
+					173 text ariaLabel :  string
+				174 container
+					175 text onValueChange : ( value :  string ) =>  void
+				176 container
+					177 text lineRange ?:  CodeEditorLineRange
+				178 container
+					179 text lineRangeRevealRevision ?:  number
+				180 container
+					181 text readOnly ?:  boolean
+				182 container
+					183 text class ?:  string
+				184 text }
+				185 container
+					186 text export function CodeEditor ( props :  CodeEditorProps ):  JSX . Element  {
+				187 container
+					188 text const  [ local ,  rest ] =  splitProps ( props , [
+				189 container
+					190 text "value" ,
+				191 container
+					192 text "path" ,
+				193 container
+					194 text "ariaLabel" ,
+				195 container
+					196 text "onValueChange" ,
+				197 container
+					198 text "lineRange" ,
+				199 container
+					200 text "lineRangeRevealRevision" ,
+				201 container
+					202 text "readOnly" ,
+				203 container
+					204 text "class" ,
+				205 text   ])
+				206 container
+					207 text let host :  HTMLDivElement  |  undefined
+				208 container
+					209 text let view :  EditorView  |  undefined
+				210 container
+					211 text let applyingExternalValue  =  false
+				212 container
+					213 text let revealedIdentity  =  ""
+				214 container
+					215 text let revealObserver :  ResizeObserver  |  undefined
+				216 container
+					217 text const localeExtension  =  createCodeEditorLocale (() =>  view  ? [ view ] : [])
+				218 container
+					219 text const l anguageCompartment  =  new Compartment ()
+				220 container
+					221 text const readOnlyCompartment  =  new Compartment ()
+				222 container
+					223 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+				224 container
+					225 text EditorView . editable . of (! readOnly ),
+				226 container
+					227 text EditorState . readOnly . of ( readOnly ),
+				228 container
+					229 text EditorView . contentAttributes . of ({
+				230 container
+					231 text "aria-label" :  local . ariaLabel ,
+				232 container
+					233 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+				234 container
+					235 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+				236 text     }),
+				237 button Expand 92 unchanged lines
+					238 text ⦚
+					239 text 92 unchanged lines
+					240 text ⦚
+				241 container
+					242 text extensions : [
+				243 container
+					244 text basicSetup ,
+				245 container
+					246 text         ... overlayCodeEditorExtensions (),
+				247 container
+					248 text localeExtension (),
+				249 container
+					250 text l anguageCompartment . of ([]),
+				251 container
+					252 text EditorView . lineWrapping ,
+				253 container
+					254 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+				255 container
+					256 text EditorView . updateListener . of (( update ) => {
+				257 container
+					258 text if  (! update . docChanged  ||  applyingExternalValue )  return
+				259 container
+					260 text local . onValueChange ( update . state . doc . toString ())
+				261 button Expand 103 unchanged lines
+					262 text ⦚
+					263 text 103 unchanged lines
+					264 text ⦚
+
+The focused UI element is 11 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+  revealHighlightLines,
+  revealLinesEffect,
+  type CodeEditorLineRange,
+} from "./code-editor-theme"
+
+
+export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
+  value: string
+  path: string
+  ariaLabel: string
+  onValueChange: (value: string) => void
+  lineRange?: CodeEditorLineRange
+  lineRangeRevealRevision?: number
+  readOnly?: boolean
+  class?: string
+}
+
+
+export function CodeEditor(props: CodeEditorProps): JSX.Element {
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
+  let host: HTMLDivElement | undefined
+  let view: EditorView | undefined
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines

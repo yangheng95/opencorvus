@@ -1,0 +1,338 @@
+Browser tab: 31, Title: "OpenCorvus", URL: "http://localhost:18241/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18241/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-446-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-448-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-450-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-452-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									36 container
+										37 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										38 button 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+										39 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+									40 button (expanded) Description: Collapse Anonymous 241df7, Secondary Actions: Collapse
+									41 container
+										42 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										43 button Reply with OK.
+										44 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+								45 container Recents
+									46 text Recents
+									47 container
+										48 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										49 button 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+										50 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+									51 container
+										52 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										53 button Reply with OK.
+										54 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						55 container Connection Diagnostics
+							56 container Description: Connection Diagnostics · Online · Port 18241, ID: connBadge
+								57 text Online
+				58 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				59 container workspaceMain
+					60 container chatSection
+						61 container Description: Loading task, ID: taskSwitchProgress
+						62 container
+							63 text 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+							64 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-217-trigger, Secondary Actions: Expand
+							65 container Description: Not running, ID: taskStatus
+								66 text Not running
+							67 button Side chat
+							68 container solidChatHeaderRuntimeActions
+								69 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								70 checkbox Description: Close right dock, Value: 1
+						71 container
+							72 container Description: Conversation, ID: chatScroll
+								73 container
+									74 container
+										75 text User
+										76 text 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：packages/overlay/src/components/ui/CodeEditor.tsx，旧版提交 b34e232acc32406d18e6cd4738c3c1d2c505ea10，新版提交 58bdde186c9b31a5ae6cb87684771e1b6f849802。请发布一个可交互的双栏代码差异视图，标题为“编辑器语言改动审查”，左右分别放这两个版本的完整原始文件内容，语言使用 TypeScript，标清旧版和新版提交。保留全部原文与空行，不用省略号或摘要替代代码。发布后用两句中文解释这次改动的用途。不要修改任何文件，不创建 Task 或成员、不委托，不读取 auth、models 或其他文件。
+									77 container
+										78 text chat
+										79 text 1m 43s
+										80 text 我会只读获取指定文件在两个提交中的完整内容，核对语言相关改动，然后发布双栏差异视图；不会读取其他文件或修改仓库。
+										81 button (collapsed) Secondary Actions: Expand, Description: bash · git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+											82 text bash
+											83 text git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+											84 image
+										85 button (collapsed) Description: publish_interactive_artifact · 编辑器语言改动审查, Secondary Actions: Expand
+											86 text publish_interactive_artifact
+											87 text 编辑器语言改动审查
+											88 image
+										89 container 编辑器语言改动审查
+											90 container
+												91 text Diff
+												92 heading 编辑器语言改动审查, Value: 3
+													93 text 编辑器语言改动审查
+												94 button Copy text
+												95 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-244-trigger, Secondary Actions: Expand
+												96 button Open 编辑器语言改动审查 in artifact workspace
+											97 text 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+											98 container
+												99 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+  ]
+  const [languageName, setLanguageName] = createSignal("")
+  const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
+  const [languageRetry, setLanguageRetry] = createSignal(0)
+
+
+  const revealIdentity = () => {
+    const range = local.lineRange
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+  }
+
+
+  /**
+   * Send the cursor to a cited line and band the cited range.
+   *
+   * A citation names a location, not a selection. Selecting
+   * `startLine`..`endLine` turned the common whole-file citation (a plain
+   * `read` cites lines 1..N) into "select the entire document", which is
+   * indistinguishable from no jump at all, so the cursor lands on the start
+   * line and the range is banded instead.
+   *
+   * The reveal is recorded as done only once the document actually holds the
+   * cited line. Latching earlier is what made jumps vanish: a reveal computed
+   * while the file was still loading clamped onto line 1 of an empty document
+   * and then refused to run again when the text finally arrived.
+   */
+  const revealLineRange = () => {
+    const editor = view
+    if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
+    const range = local.lineRange
+    const target = resolveRevealTarget(editor.state.doc.lines, range)
+    if (!range || !target) {
+													100 text import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+													101 container
+														102 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+													103 container
+														104 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+													105 text     }),
+													106 text   ]
+													107 container
+														108 text const  [ languageName ,  setLanguageName ] =  createSignal ( "" )
+													109 container
+														110 text const  [ languageStatus ,  setLanguageStatus ] =  createSignal < "loading"  |  "ready"  |  "failed" >( "ready" )
+													111 container
+														112 text const  [ languageRetry ,  setLanguageRetry ] =  createSignal ( 0 )
+													113 container
+														114 text const revealIdentity  = () => {
+													115 container
+														116 text const range  =  local . lineRange
+													117 container
+														118 text return  [ local . path ,  range ?. startLine  ??  "" ,  range ?. endLine  ??  "" ,  local . lineRangeRevealRevision  ??  0 ]. join ( "\0" )
+													119 text   }
+													120 container
+														121 text /**
+													122 text    * Send the cursor to a cited line and band the cited range.
+													123 text    *
+													124 text    * A citation names a location, not a selection. Selecting
+													125 text    * `startLine`..`endLine` turned the common whole-file citation (a plain
+													126 text    * `read` cites lines 1..N) into "select the entire document", which is
+													127 text    * indistinguishable from no jump at all, so the cursor lands on the start
+													128 text    * line and the range is banded instead.
+													129 text    *
+													130 text    * The reveal is recorded as done only once the document actually holds the
+													131 text    * cited line. Latching earlier is what made jumps vanish: a reveal computed
+													132 text    * while the file was still loading clamped onto line 1 of an empty document
+													133 text    * and then refused to run again when the text finally arrived.
+													134 text    */
+													135 container
+														136 text const revealLineRange  = () => {
+													137 container
+														138 text const editor  =  view
+													139 container
+														140 text if  (! editor )  return
+													141 container
+														142 text const identity  =  revealIdentity ()
+													143 container
+														144 text if  ( identity  ===  revealedIdentity )  return
+													145 container
+														146 text const range  =  local . lineRange
+													147 container
+														148 text const target  =  resolveRevealTarget ( editor . state . doc . lines ,  range )
+													149 container
+														150 text if  (! range  || ! target ) {
+												151 text entry area Description: Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value:       ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+  ]
+  const [languageName, setLanguageName] = createSignal("")
+  const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
+  const [languageRetry, setLanguageRetry] = createSignal(0)
+
+
+  const revealIdentity = () => {
+    const range = local.lineRange
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+  }
+
+
+  /**
+   * Send the cursor to a cited line and band the cited range.
+   *
+   * A citation names a location, not a selection. Selecting
+   * `startLine`..`endLine` turned the common whole-file citation (a plain
+   * `read` cites lines 1..N) into "select the entire document", which is
+   * indistinguishable from no jump at all, so the cursor lands on the start
+   * line and the range is banded instead.
+   *
+   * The reveal is recorded as done only once the document actually holds the
+   * cited line. Latching earlier is what made jumps vanish: a reveal computed
+   * while the file was still loading clamped onto line 1 of an empty document
+   * and then refused to run again when the text finally arrived.
+   */
+  const revealLineRange = () => {
+    const editor = view
+    if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
+    const range = local.lineRange
+    const target = resolveRevealTarget(editor.state.doc.lines, range)
+103 unchanged lines
+													152 container
+														153 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+													154 text     }),
+													155 text   ]
+													156 container
+														157 text const  [ languageName ,  setLanguageName ] =  createSignal ( "" )
+													158 container
+														159 text const  [ languageStatus ,  setLanguageStatus ] =  createSignal < "loading"  |  "ready"  |  "failed" >( "ready" )
+													160 container
+														161 text const  [ languageRetry ,  setLanguageRetry ] =  createSignal ( 0 )
+													162 container
+														163 text const revealIdentity  = () => {
+													164 container
+														165 text const range  =  local . lineRange
+													166 container
+														167 text return  [ local . path ,  range ?. startLine  ??  "" ,  range ?. endLine  ??  "" ,  local . lineRangeRevealRevision  ??  0 ]. join ( "\0" )
+													168 text   }
+													169 container
+														170 text /**
+													171 text    * Send the cursor to a cited line and band the cited range.
+													172 text    *
+													173 text    * A citation names a location, not a selection. Selecting
+													174 text    * `startLine`..`endLine` turned the common whole-file citation (a plain
+													175 text    * `read` cites lines 1..N) into "select the entire document", which is
+													176 text    * indistinguishable from no jump at all, so the cursor lands on the start
+													177 text    * line and the range is banded instead.
+													178 text    *
+													179 text    * The reveal is recorded as done only once the document actually holds the
+													180 text    * cited line. Latching earlier is what made jumps vanish: a reveal computed
+													181 text    * while the file was still loading clamped onto line 1 of an empty document
+													182 text    * and then refused to run again when the text finally arrived.
+													183 text    */
+													184 container
+														185 text const revealLineRange  = () => {
+													186 container
+														187 text const editor  =  view
+													188 container
+														189 text if  (! editor )  return
+													190 container
+														191 text const identity  =  revealIdentity ()
+													192 container
+														193 text if  ( identity  ===  revealedIdentity )  return
+													194 container
+														195 text const range  =  local . lineRange
+													196 container
+														197 text const target  =  resolveRevealTarget ( editor . state . doc . lines ,  range )
+													198 button Expand 103 unchanged lines
+														199 text ⦚
+														200 text 103 unchanged lines
+														201 text ⦚
+										202 container
+											203 text 已发布“编辑器语言改动审查”完整双栏视图，可滚动对照原文与空行；这次改动通过引入并注册  createCodeEditorLocale ，为 CodeMirror 编辑器接入界面语言本地化，而非改变文件的语法高亮语言选择逻辑。
+											204 text 同时， aria-label  被移入可重新配置的内容属性扩展，使无障碍名称随该扩展更新，不再仅在编辑器初始化时设置。
+							205 container chatHomeComposition
+								206 container solidChatComposer
+									207 container
+										208 text Model configuration unavailable
+										209 text You can still read this conversation. Review the details or choose a model before sending a message.
+										210 button (collapsed) Details, Secondary Actions: Expand
+											211 text Details
+										212 button Retry
+										213 container chatForm
+											214 splitter Description: Drag to resize the message input, Value: 42
+											215 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											216 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											217 text Code
+											218 text Chat
+											219 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											220 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											221 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												222 text Choose model
+											223 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									224 button Scroll to bottom
+					225 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					226 container Description: Tools panel, ID: rightDock
+						227 container tabs-cl-64
+							228 tab group Open tools
+								229 container
+									230 tab (selectable, settable, boolean) Description: Files, Value: 0, ID: tabs-cl-64-trigger-explorer
+									231 button Description: Close tab, Help: Close tab (Delete)
+								232 container
+									233 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
+									234 button Description: Close tab, Help: Close tab (Delete)
+							235 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							236 button Close panel
+							237 container Description: File, ID: centerWorkbenchFile
+								238 container Editor
+									239 container
+										240 text README.md
+										241 button (disabled) Save, Help: Save (Ctrl/Cmd+S)
+										242 button Reload from disk
+										243 button Close workspace
+									244 container
+										245 text entry area (settable) Description: Editor, Value: # Isolated formal Task resource qualification
+
+
+											246 container
+												247 text # Isolated  formal Task resource qualification
+										248 container
+											249 text field (settable) Description: Find, Value: Isolated
+											250 button Next
+											251 button Previous
+											252 button All
+											253 checkbox (settable, integer) Description: Match case, Value: 0
+											254 checkbox (settable, integer) Description: Regular expression, Value: 0
+											255 checkbox (settable, integer) Description: Whole word, Value: 0
+											256 text field (settable) Replace
+											257 button Replace
+											258 button Replace all
+											259 button Close
+									260 text Markdown
+
+The focused UI element is 249 text field (settable) Description: Find, Value: Isolated

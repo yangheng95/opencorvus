@@ -1,0 +1,312 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...":
+      - generic: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+    - button "More actions":
+    - button "Collapse Anonymous 241df7" [expanded]:
+      - generic: Anonymous 241df7
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa..." [active]:
+        - generic: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18241":
+        - generic: Online
+  - separator "Resize left panel"
+  - generic "Loading task"
+  - generic: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+  - status
+  - button "Project actions":
+  - generic "Not running":
+    - generic: Not running
+  - button "Side chat":
+  - button "Environment information":
+  - button "Open right dock":
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：packages/overlay/src/components/ui/CodeEditor.tsx，旧版提交 b34e232acc32406d18e6cd4738c3c1d2c505ea10，新版提交 58bdde186c9b31a5ae6cb87684771e1b6f849802。请发布一个可交互的双栏代码差异视图，标题为“编辑器语言改动审查”，左右分别放这两个版本的完整原始文件内容，语言使用 TypeScript，标清旧版和新版提交。保留全部原文与空行，不用省略号或摘要替代代码。发布后用两句中文解释这次改动的用途。不要修改任何文件，不创建 Task 或成员、不委托，不读取 auth、models 或其他文件。
+    - article:
+      - generic: chat
+      - generic "Session ran for 1m 43s (between first message and terminal status)": 1m 43s
+      - paragraph: 我会只读获取指定文件在两个提交中的完整内容，核对语言相关改动，然后发布双栏差异视图；不会读取其他文件或修改仓库。
+      - button "bash · git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx":
+        - generic: bash
+        - generic: git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+      - button "publish_interactive_artifact · 编辑器语言改动审查":
+        - generic: publish_interactive_artifact
+        - generic: 编辑器语言改动审查
+      - region "编辑器语言改动审查":
+        - generic: Diff
+        - heading "编辑器语言改动审查" [level=3]
+        - button "Copy text":
+        - button "Download":
+          - generic: Download
+        - status
+        - button "Open 编辑器语言改动审查 in artifact workspace":
+          - text: Open
+        - generic: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10
+        - generic: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+        - generic: "1"
+        - generic: "2"
+        - generic: "3"
+        - generic: "4"
+        - generic: "5"
+        - generic: "6"
+        - generic: "7"
+        - generic: "8"
+        - generic: "9"
+        - generic: "10"
+        - generic: "40"
+        - generic: "41"
+        - generic: "42"
+        - generic: "43"
+        - generic: "44"
+        - generic: "45"
+        - generic: "46"
+        - generic: "47"
+        - generic: "48"
+        - generic: "49"
+        - generic: "50"
+        - generic: "51"
+        - generic: "144"
+        - generic: "145"
+        - generic: "146"
+        - generic: "147"
+        - generic: "148"
+        - generic: "149"
+        - generic: "150"
+        - generic: "151"
+        - generic: "152"
+        - generic: "153"
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - 'textbox "Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10"':
+          - generic: "import { Compartment, EditorSelection, EditorState } from \"@codemirror/state\""
+          - generic: "import { basicSetup, EditorView } from \"codemirror\""
+          - generic: "import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from \"solid-js\""
+          - generic: "import { t } from \"../../utils/i18n\""
+          - generic: "import { Button } from \"./Button\""
+          - generic: "import { editorLanguage } from \"./code-editor-language\""
+          - deletion:
+            - text: "import {"
+            - generic: create
+            - text: "AnimationFrameScheduler } from \"../../utils/animation-frame\""
+          - generic: "import {"
+          - generic: overlayCodeEditorExtensions,
+          - generic: resolveRevealTarget,
+          - button "Expand 29 unchanged lines": ⦚29 unchanged lines⦚
+          - generic: let applyingExternalValue = false
+          - generic: let revealedIdentity = ""
+          - generic: "let revealObserver: ResizeObserver | undefined"
+          - deletion:
+            - text: const
+            - generic: l
+            - text: anguageCompartment = new Compartment()
+          - generic: const readOnlyCompartment = new Compartment()
+          - generic: "const readOnlyExtensions = (readOnly: boolean) => ["
+          - generic: EditorView.editable.of(!readOnly),
+          - generic: EditorState.readOnly.of(readOnly),
+          - generic: "EditorView.contentAttributes.of({"
+          - generic: "\"aria-readonly\": readOnly ? \"true\" : \"false\","
+          - generic: "...(readOnly ? { tabindex: \"0\" } : {}),"
+          - generic: "}),"
+          - button "Expand 92 unchanged lines": ⦚92 unchanged lines⦚
+          - generic: "extensions: ["
+          - generic: basicSetup,
+          - generic: ...overlayCodeEditorExtensions(),
+          - deletion:
+            - generic: l
+            - text: anguageCompartment.of([]),
+          - generic: EditorView.lineWrapping,
+          - generic: readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+          - deletion:
+            - generic: "EditorView.contentAttributes.of({ \"aria-label\": local.ariaLabel }),"
+          - generic: "EditorView.updateListener.of((update) => {"
+          - generic: if (!update.docChanged || applyingExternalValue) return
+          - generic: local.onValueChange(update.state.doc.toString())
+          - button "Expand 103 unchanged lines": ⦚103 unchanged lines⦚
+        - generic: "1"
+        - generic: "2"
+        - generic: "3"
+        - generic: "4"
+        - generic: "5"
+        - generic: "6"
+        - generic: "7"
+        - generic: "8"
+        - generic: "9"
+        - generic: "10"
+        - generic: "11"
+        - generic: "41"
+        - generic: "42"
+        - generic: "43"
+        - generic: "44"
+        - generic: "45"
+        - generic: "46"
+        - generic: "47"
+        - generic: "48"
+        - generic: "49"
+        - generic: "50"
+        - generic: "51"
+        - generic: "52"
+        - generic: "53"
+        - generic: "54"
+        - generic: "147"
+        - generic: "148"
+        - generic: "149"
+        - generic: "150"
+        - generic: "151"
+        - generic: "152"
+        - generic: "153"
+        - generic: "154"
+        - generic: "155"
+        - generic: "156"
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - 'textbox "Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802"':
+          - generic: "import { Compartment, EditorSelection, EditorState } from \"@codemirror/state\""
+          - generic: "import { basicSetup, EditorView } from \"codemirror\""
+          - generic: "import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from \"solid-js\""
+          - generic: "import { t } from \"../../utils/i18n\""
+          - generic: "import { Button } from \"./Button\""
+          - generic: "import { editorLanguage } from \"./code-editor-language\""
+          - insertion:
+            - text: "import {"
+            - generic: "createCodeEditorLocale } from \"./code-editor-locale\""
+          - insertion:
+            - generic: "import { create"
+            - text: "AnimationFrameScheduler } from \"../../utils/animation-frame\""
+          - generic: "import {"
+          - generic: overlayCodeEditorExtensions,
+          - generic: resolveRevealTarget,
+          - button "Expand 29 unchanged lines": ⦚29 unchanged lines⦚
+          - generic: let applyingExternalValue = false
+          - generic: let revealedIdentity = ""
+          - generic: "let revealObserver: ResizeObserver | undefined"
+          - insertion:
+            - text: const
+            - generic: "localeExtension = createCodeEditorLocale(() => view ? [view] : [])"
+          - insertion:
+            - generic: const l
+            - text: anguageCompartment = new Compartment()
+          - generic: const readOnlyCompartment = new Compartment()
+          - generic: "const readOnlyExtensions = (readOnly: boolean) => ["
+          - generic: EditorView.editable.of(!readOnly),
+          - generic: EditorState.readOnly.of(readOnly),
+          - generic: "EditorView.contentAttributes.of({"
+          - insertion:
+            - generic: "\"aria-label\": local.ariaLabel,"
+          - generic: "\"aria-readonly\": readOnly ? \"true\" : \"false\","
+          - generic: "...(readOnly ? { tabindex: \"0\" } : {}),"
+          - generic: "}),"
+          - button "Expand 92 unchanged lines": ⦚92 unchanged lines⦚
+          - generic: "extensions: ["
+          - generic: basicSetup,
+          - generic: ...overlayCodeEditorExtensions(),
+          - insertion:
+            - generic: localeExtension(),
+          - insertion:
+            - generic: l
+            - text: anguageCompartment.of([]),
+          - generic: EditorView.lineWrapping,
+          - generic: readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+          - generic: "EditorView.updateListener.of((update) => {"
+          - generic: if (!update.docChanged || applyingExternalValue) return
+          - generic: local.onValueChange(update.state.doc.toString())
+          - button "Expand 103 unchanged lines": ⦚103 unchanged lines⦚
+      - paragraph:
+        - text: 已发布“编辑器语言改动审查”完整双栏视图，可滚动对照原文与空行；这次改动通过引入并注册
+        - code: createCodeEditorLocale
+        - text: ，为 CodeMirror 编辑器接入界面语言本地化，而非改变文件的语法高亮语言选择逻辑。
+        - text: 同时，
+        - code: aria-label
+        - text: 被移入可重新配置的内容属性扩展，使无障碍名称随该扩展更新，不再仅在编辑器初始化时设置。
+  - status:
+    - strong: Model configuration unavailable
+    - generic: You can still read this conversation. Review the details or choose a model before sending a message.
+    - generic "Details":
+      - text: Details
+    - button "Retry"
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Add a thought, or keep working…
+  - button
+  - button "Add supported files":
+  - generic "Repository-aware coding and software work.":
+    - generic: Code
+  - generic: Chat
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model Choose model. Click to change.":
+    - generic "Choose model"
+  - button "Send" [disabled]:
+    - generic: Send
+  - button:
+  - button:
+- tooltip "请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa... 35m ago Started Oct 11, 2026, 03:33 PM project":
+  - strong: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+  - time: 35m ago
+  - generic: Started
+  - time: Oct 11, 2026, 03:33 PM
+  - generic: project

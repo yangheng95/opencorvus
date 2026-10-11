@@ -1,0 +1,289 @@
+- banner:
+  - button "收起侧边栏" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "文件":
+      - generic: 文件
+    - menuitem "编辑":
+      - generic: 编辑
+    - menuitem "视图":
+      - generic: 视图
+    - menuitem "帮助":
+      - generic: 帮助
+- main:
+  - navigation "对话快捷入口":
+    - generic "对话快捷入口":
+      - button "对话":
+        - generic: 对话
+      - button "Mission 看板":
+        - generic: Mission 看板
+      - button "定时":
+        - generic: 定时
+      - button "专家团":
+        - generic: 专家团
+      - button "更多":
+        - generic: 更多
+      - button "设置" [active]:
+        - generic: 设置
+    - button "关于":
+    - button "OpenCorvus 菜单":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "搜索任务或运行命令":
+  - button "收件箱":
+  - complementary:
+    - generic "对话导航":
+      - button "新对话":
+        - generic: 新对话
+    - generic: 项目
+    - button "整理侧边栏":
+    - button "创建项目":
+    - button "收起 project" [expanded]:
+      - generic: project
+    - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+    - button "请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...":
+      - generic: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+    - button "更多操作":
+    - button "收起 匿名项目 241df7" [expanded]:
+      - generic: 匿名项目 241df7
+    - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "更多操作":
+    - region "最近":
+      - generic: 最近
+      - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+      - button "请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...":
+        - generic: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+      - button "更多操作":
+      - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "更多操作":
+    - generic "连接诊断":
+      - generic "连接诊断 · 在线 · 端口 18241":
+        - generic: 在线
+  - separator "调整左侧面板大小"
+  - generic "正在加载 Task"
+  - generic: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：pa...
+  - status
+  - button "项目操作":
+  - generic "非进行中":
+    - generic: 非进行中
+  - button "侧聊":
+  - button "环境信息":
+  - button "打开右侧面板":
+  - generic "对话":
+    - article:
+      - generic: 用户
+      - paragraph: 请在当前普通对话中审查真实的编辑器语言改动。只读读取仓库 D:/myhexin-local/opencorvus 中以下同一文件的两个 Git 版本：packages/overlay/src/components/ui/CodeEditor.tsx，旧版提交 b34e232acc32406d18e6cd4738c3c1d2c505ea10，新版提交 58bdde186c9b31a5ae6cb87684771e1b6f849802。请发布一个可交互的双栏代码差异视图，标题为“编辑器语言改动审查”，左右分别放这两个版本的完整原始文件内容，语言使用 TypeScript，标清旧版和新版提交。保留全部原文与空行，不用省略号或摘要替代代码。发布后用两句中文解释这次改动的用途。不要修改任何文件，不创建 Task 或成员、不委托，不读取 auth、models 或其他文件。
+    - article:
+      - generic: chat
+      - generic "会话耗时 1 分 43 秒（从首条消息到终态）": 1 分 43 秒
+      - paragraph: 我会只读获取指定文件在两个提交中的完整内容，核对语言相关改动，然后发布双栏差异视图；不会读取其他文件或修改仓库。
+      - button "bash · git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx":
+        - generic: bash
+        - generic: git show 58bdde186c9b31a5ae6cb87684771e1b6f849802:packages/overlay/src/components/ui/CodeEditor.tsx
+      - button "publish_interactive_artifact · 编辑器语言改动审查":
+        - generic: publish_interactive_artifact
+        - generic: 编辑器语言改动审查
+      - region "编辑器语言改动审查":
+        - generic: Diff
+        - heading "编辑器语言改动审查" [level=3]
+        - button "复制文本":
+        - button "下载":
+          - generic: 下载
+        - status
+        - button "在作品视图中打开 编辑器语言改动审查":
+          - text: 打开
+        - generic: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10
+        - generic: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+        - generic: "49"
+        - generic: "50"
+        - generic: "51"
+        - generic: "52"
+        - generic: "53"
+        - generic: "54"
+        - generic: "55"
+        - generic: "56"
+        - generic: "57"
+        - generic: "58"
+        - generic: "59"
+        - generic: "60"
+        - generic: "61"
+        - generic: "62"
+        - generic: "63"
+        - generic: "64"
+        - generic: "65"
+        - generic: "66"
+        - generic: "67"
+        - generic: "68"
+        - generic: "69"
+        - generic: "70"
+        - generic: "71"
+        - generic: "72"
+        - generic: "73"
+        - generic: "74"
+        - generic: "75"
+        - generic: "76"
+        - generic: "77"
+        - generic: "78"
+        - generic: "79"
+        - generic: "80"
+        - generic: "81"
+        - generic: "82"
+        - generic: "83"
+        - generic: "84"
+        - generic: "85"
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - 'textbox "原始版本: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10"':
+          - generic: "import { Compartment, EditorSelection, EditorState } from \"@codemirror/state\""
+          - generic: "\"aria-readonly\": readOnly ? \"true\" : \"false\","
+          - generic: "...(readOnly ? { tabindex: \"0\" } : {}),"
+          - generic: "}),"
+          - generic: "]"
+          - generic: const [languageName, setLanguageName] = createSignal("")
+          - generic: const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
+          - generic: const [languageRetry, setLanguageRetry] = createSignal(0)
+          - generic: "const revealIdentity = () => {"
+          - generic: const range = local.lineRange
+          - generic: return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+          - generic: "}"
+          - generic: /**
+          - generic: "* Send the cursor to a cited line and band the cited range."
+          - generic: "*"
+          - generic: "* A citation names a location, not a selection. Selecting"
+          - generic: "* `startLine`..`endLine` turned the common whole-file citation (a plain"
+          - generic: "* `read` cites lines 1..N) into \"select the entire document\", which is"
+          - generic: "* indistinguishable from no jump at all, so the cursor lands on the start"
+          - generic: "* line and the range is banded instead."
+          - generic: "*"
+          - generic: "* The reveal is recorded as done only once the document actually holds the"
+          - generic: "* cited line. Latching earlier is what made jumps vanish: a reveal computed"
+          - generic: "* while the file was still loading clamped onto line 1 of an empty document"
+          - generic: "* and then refused to run again when the text finally arrived."
+          - generic: "*/"
+          - generic: "const revealLineRange = () => {"
+          - generic: const editor = view
+          - generic: if (!editor) return
+          - generic: const identity = revealIdentity()
+          - generic: if (identity === revealedIdentity) return
+          - generic: const range = local.lineRange
+          - generic: const target = resolveRevealTarget(editor.state.doc.lines, range)
+          - generic: "if (!range || !target) {"
+          - generic: "editor.dispatch({ effects: revealLinesEffect(null) })"
+          - generic: "revealedIdentity = range ? \"\" : identity"
+        - generic: "55"
+        - generic: "56"
+        - generic: "57"
+        - generic: "58"
+        - generic: "59"
+        - generic: "60"
+        - generic: "61"
+        - generic: "62"
+        - generic: "63"
+        - generic: "64"
+        - generic: "65"
+        - generic: "66"
+        - generic: "67"
+        - generic: "68"
+        - generic: "69"
+        - generic: "70"
+        - generic: "71"
+        - generic: "72"
+        - generic: "73"
+        - generic: "74"
+        - generic: "75"
+        - generic: "76"
+        - generic: "77"
+        - generic: "78"
+        - generic: "79"
+        - generic: "80"
+        - generic: "81"
+        - generic: "82"
+        - generic: "83"
+        - generic: "84"
+        - generic: "85"
+        - generic: "86"
+        - generic: "87"
+        - generic: "88"
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - generic: ⌄
+        - 'textbox "修改后: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802"':
+          - generic: "import { Compartment, EditorSelection, EditorState } from \"@codemirror/state\""
+          - generic: "]"
+          - generic: const [languageName, setLanguageName] = createSignal("")
+          - generic: const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
+          - generic: const [languageRetry, setLanguageRetry] = createSignal(0)
+          - generic: "const revealIdentity = () => {"
+          - generic: const range = local.lineRange
+          - generic: return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+          - generic: "}"
+          - generic: /**
+          - generic: "* Send the cursor to a cited line and band the cited range."
+          - generic: "*"
+          - generic: "* A citation names a location, not a selection. Selecting"
+          - generic: "* `startLine`..`endLine` turned the common whole-file citation (a plain"
+          - generic: "* `read` cites lines 1..N) into \"select the entire document\", which is"
+          - generic: "* indistinguishable from no jump at all, so the cursor lands on the start"
+          - generic: "* line and the range is banded instead."
+          - generic: "*"
+          - generic: "* The reveal is recorded as done only once the document actually holds the"
+          - generic: "* cited line. Latching earlier is what made jumps vanish: a reveal computed"
+          - generic: "* while the file was still loading clamped onto line 1 of an empty document"
+          - generic: "* and then refused to run again when the text finally arrived."
+          - generic: "*/"
+          - generic: "const revealLineRange = () => {"
+          - generic: const editor = view
+          - generic: if (!editor) return
+          - generic: const identity = revealIdentity()
+          - generic: if (identity === revealedIdentity) return
+          - generic: const range = local.lineRange
+          - generic: const target = resolveRevealTarget(editor.state.doc.lines, range)
+          - generic: "if (!range || !target) {"
+          - generic: "editor.dispatch({ effects: revealLinesEffect(null) })"
+          - generic: "revealedIdentity = range ? \"\" : identity"
+      - paragraph:
+        - text: 已发布“编辑器语言改动审查”完整双栏视图，可滚动对照原文与空行；这次改动通过引入并注册
+        - code: createCodeEditorLocale
+        - text: ，为 CodeMirror 编辑器接入界面语言本地化，而非改变文件的语法高亮语言选择逻辑。
+        - text: 同时，
+        - code: aria-label
+        - text: 被移入可重新配置的内容属性扩展，使无障碍名称随该扩展更新，不再仅在编辑器初始化时设置。
+  - status:
+    - strong: 模型配置暂不可用
+    - generic: 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+    - generic "详细信息":
+      - text: 详细信息
+    - button "重试"
+  - separator "拖拽调整消息输入框大小"
+  - generic "支持拖拽文件 · 拖动上边缘调整输入框大小":
+    - textbox "支持拖拽文件 · 拖动上边缘调整输入框大小":
+      - /placeholder: 补充想法，或继续这项工作…
+  - button
+  - button "添加支持的文件":
+  - generic "面向代码仓库的编程与软件工作。":
+    - generic: Code
+  - generic: Chat
+  - button "Base":
+    - generic: Base
+  - button "授权模式，当前为 完全访问":
+    - generic: 完全访问
+  - button "OpenCorvus 模型 选择模型，点击切换":
+    - generic "选择模型"
+  - button "发送" [disabled]:
+    - generic: 发送
+  - button "滚动到底部":
+  - button:
+  - button:
+- tooltip "设置 设置":
+  - strong: 设置
+  - generic: 设置

@@ -1,0 +1,568 @@
+Browser tab: 31, Title: "OpenCorvus", URL: "http://localhost:18241/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18241/ui/
+	1 container 编辑器语言改动审查
+		2 container
+			3 text Diff
+			4 heading 编辑器语言改动审查, Value: 3
+				5 text 编辑器语言改动审查
+			6 button Copy text
+			7 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-244-trigger, Secondary Actions: Expand
+			8 button Close 编辑器语言改动审查 artifact workspace
+		9 text 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+		10 container
+			11 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+   * `startLine`..`endLine` turned the common whole-file citation (a plain
+   * `read` cites lines 1..N) into "select the entire document", which is
+   * indistinguishable from no jump at all, so the cursor lands on the start
+   * line and the range is banded instead.
+   *
+   * The reveal is recorded as done only once the document actually holds the
+   * cited line. Latching earlier is what made jumps vanish: a reveal computed
+   * while the file was still loading clamped onto line 1 of an empty document
+   * and then refused to run again when the text finally arrived.
+   */
+  const revealLineRange = () => {
+    const editor = view
+    if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
+    const range = local.lineRange
+    const target = resolveRevealTarget(editor.state.doc.lines, range)
+    if (!range || !target) {
+      editor.dispatch({ effects: revealLinesEffect(null) })
+      revealedIdentity = range ? "" : identity
+      return
+    }
+    // A retained file view can receive a new citation before its Dock is
+    // visible. Keep that request unsettled until real layout can scroll and
+    // focus it; the host observer retries this same current request.
+    if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
+    const anchor = editor.state.doc.line(target.anchorLine).from
+    editor.dispatch({
+      selection: EditorSelection.cursor(anchor),
+      effects: [
+        revealLinesEffect(revealHighlightLines(editor.state.doc.lines, target)),
+        EditorView.scrollIntoView(anchor, { y: "center" }),
+      ],
+    })
+    // A view mounted in this same frame has not been measured yet, so the
+    // scroll effect would otherwise resolve against a zero-height scroller.
+    editor.requestMeasure()
+    editor.focus()
+    if (target.settled) revealedIdentity = identity
+  }
+
+
+  const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
+  const revealOnLayout = createAnimationFrameScheduler(() => {
+    const editor = view
+    if (!editor) return
+    if (!local.lineRange) {
+      revealLineRange()
+      return
+    }
+    if (revealIdentity() === revealedIdentity) return
+    editor.requestMeasure({
+      key: revealLineRange,
+      read: () => {
+        if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) {
+          return { visible: false, moving: false }
+        }
+        for (let element: HTMLElement | null = host; element; element = element.parentElement) {
+          if (element.getAnimations().some((animation) =>
+            animation.playState === "running" && Number.isFinite(animation.effect?.getComputedTiming().endTime),
+          )) return { visible: true, moving: true }
+        }
+        return { visible: true, moving: false }
+      },
+      write: ({ visible, moving }) => {
+        if (view !== editor || !visible) return
+        // CodeMirror is still updating in this callback. Dispatch the reveal
+        // in the next frame, after measured wrapping and Dock motion settle.
+        if (moving) revealOnLayout.schedule()
+        else revealAfterMeasure.schedule()
+      },
+    })
+  })
+
+
+  onMount(() => {
+    if (!host) return
+    view = new EditorView({
+      doc: local.value,
+      parent: host,
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+				140 text import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+				141 text    * `startLine`..`endLine` turned the common whole-file citation (a plain
+				142 text    * `read` cites lines 1..N) into "select the entire document", which is
+				143 text    * indistinguishable from no jump at all, so the cursor lands on the start
+				144 text    * line and the range is banded instead.
+				145 text    *
+				146 text    * The reveal is recorded as done only once the document actually holds the
+				147 text    * cited line. Latching earlier is what made jumps vanish: a reveal computed
+				148 text    * while the file was still loading clamped onto line 1 of an empty document
+				149 text    * and then refused to run again when the text finally arrived.
+				150 text    */
+				151 container
+					152 text const revealLineRange  = () => {
+				153 container
+					154 text const editor  =  view
+				155 container
+					156 text if  (! editor )  return
+				157 container
+					158 text const identity  =  revealIdentity ()
+				159 container
+					160 text if  ( identity  ===  revealedIdentity )  return
+				161 container
+					162 text const range  =  local . lineRange
+				163 container
+					164 text const target  =  resolveRevealTarget ( editor . state . doc . lines ,  range )
+				165 container
+					166 text if  (! range  || ! target ) {
+				167 container
+					168 text editor . dispatch ({  effects :  revealLinesEffect ( null ) })
+				169 container
+					170 text revealedIdentity  =  range  ?  ""  :  identity
+				171 container
+					172 text return
+				173 text     }
+				174 container
+					175 text // A retained file view can receive a new citation before its Dock is
+				176 container
+					177 text // visible. Keep that request unsettled until real layout can scroll and
+				178 container
+					179 text // focus it; the host observer retries this same current request.
+				14 container
+					15 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" ))  return
+				180 container
+					181 text const anchor  =  editor . state . doc . line ( target . anchorLine ). from
+				182 container
+					183 text editor . dispatch ({
+				184 container
+					185 text selection :  EditorSelection . cursor ( anchor ),
+				186 container
+					187 text effects : [
+				188 container
+					189 text revealLinesEffect ( revealHighlightLines ( editor . state . doc . lines ,  target )),
+				190 container
+					191 text EditorView . scrollIntoView ( anchor , {  y :  "center"  }),
+				192 text       ],
+				193 text     })
+				194 container
+					195 text // A view mounted in this same frame has not been measured yet, so the
+				196 container
+					197 text // scroll effect would otherwise resolve against a zero-height scroller.
+				198 container
+					199 text editor . requestMeasure ()
+				200 container
+					201 text editor . focus ()
+				202 container
+					203 text if  ( target . settled )  revealedIdentity  =  identity
+				204 text   }
+				205 container
+					206 text const revealAfterMeasure  =  createAnimationFrameScheduler ( revealLineRange )
+				207 container
+					208 text const revealOnLayout  =  createAnimationFrameScheduler (() => {
+				209 container
+					210 text const editor  =  view
+				211 container
+					212 text if  (! editor )  return
+				213 container
+					214 text if  (! local . lineRange ) {
+				215 container
+					216 text revealLineRange ()
+				217 container
+					218 text return
+				219 text     }
+				220 container
+					221 text if  ( revealIdentity () ===  revealedIdentity )  return
+				222 container
+					223 text editor . requestMeasure ({
+				224 container
+					225 text key :  revealLineRange ,
+				226 container
+					227 text read : () => {
+				228 container
+					229 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" )) {
+				230 container
+					231 text return  {  visible :  false ,  moving :  false  }
+				232 text         }
+				233 container
+					234 text for  ( let element :  HTMLElement  |  null  =  host ;  element ;  element  =  element . parentElement ) {
+				235 container
+					236 text if  ( element . getAnimations (). some (( animation ) =>
+				237 container
+					238 text animation . playState  ===  "running"  &&  Number . isFinite ( animation . effect ?. getComputedTiming (). endTime ),
+				239 container
+					240 text           ))  return  {  visible :  true ,  moving :  true  }
+				241 text         }
+				242 container
+					243 text return  {  visible :  true ,  moving :  false  }
+				244 text       },
+				245 container
+					246 text write : ({  visible ,  moving  }) => {
+				247 container
+					248 text if  ( view  !==  editor  || ! visible )  return
+				249 container
+					250 text // CodeMirror is still updating in this callback. Dispatch the reveal
+				251 container
+					252 text // in the next frame, after measured wrapping and Dock motion settle.
+				253 container
+					254 text if  ( moving )  revealOnLayout . schedule ()
+				255 container
+					256 text else revealAfterMeasure . schedule ()
+				257 text       },
+				258 text     })
+				259 text   })
+				260 container
+					261 text onMount (() => {
+				262 container
+					263 text if  (! host )  return
+				264 container
+					265 text view  =  new EditorView ({
+				266 container
+					267 text doc :  local . value ,
+				268 container
+					269 text parent :  host ,
+				270 container
+					271 text extensions : [
+				272 container
+					273 text basicSetup ,
+				274 container
+					275 text         ... overlayCodeEditorExtensions (),
+				276 container
+					277 text l anguageCompartment . of ([]),
+				278 container
+					279 text EditorView . lineWrapping ,
+				280 container
+					281 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+				282 container
+					283 text EditorView . contentAttributes . of ({  "aria-label" :  local . ariaLabel  }),
+				284 container
+					285 text EditorView . updateListener . of (( update ) => {
+				286 container
+					287 text if  (! update . docChanged  ||  applyingExternalValue )  return
+				288 container
+					289 text local . onValueChange ( update . state . doc . toString ())
+				290 button Expand 103 unchanged lines
+					291 text ⦚
+					292 text 103 unchanged lines
+					293 text ⦚
+			135 text entry area Description: Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+   * `startLine`..`endLine` turned the common whole-file citation (a plain
+   * `read` cites lines 1..N) into "select the entire document", which is
+   * indistinguishable from no jump at all, so the cursor lands on the start
+   * line and the range is banded instead.
+   *
+   * The reveal is recorded as done only once the document actually holds the
+   * cited line. Latching earlier is what made jumps vanish: a reveal computed
+   * while the file was still loading clamped onto line 1 of an empty document
+   * and then refused to run again when the text finally arrived.
+   */
+  const revealLineRange = () => {
+    const editor = view
+    if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
+    const range = local.lineRange
+    const target = resolveRevealTarget(editor.state.doc.lines, range)
+    if (!range || !target) {
+      editor.dispatch({ effects: revealLinesEffect(null) })
+      revealedIdentity = range ? "" : identity
+      return
+    }
+    // A retained file view can receive a new citation before its Dock is
+    // visible. Keep that request unsettled until real layout can scroll and
+    // focus it; the host observer retries this same current request.
+    if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
+    const anchor = editor.state.doc.line(target.anchorLine).from
+    editor.dispatch({
+      selection: EditorSelection.cursor(anchor),
+      effects: [
+        revealLinesEffect(revealHighlightLines(editor.state.doc.lines, target)),
+        EditorView.scrollIntoView(anchor, { y: "center" }),
+      ],
+    })
+    // A view mounted in this same frame has not been measured yet, so the
+    // scroll effect would otherwise resolve against a zero-height scroller.
+    editor.requestMeasure()
+    editor.focus()
+    if (target.settled) revealedIdentity = identity
+  }
+
+
+  const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
+  const revealOnLayout = createAnimationFrameScheduler(() => {
+    const editor = view
+    if (!editor) return
+    if (!local.lineRange) {
+      revealLineRange()
+      return
+    }
+    if (revealIdentity() === revealedIdentity) return
+    editor.requestMeasure({
+      key: revealLineRange,
+      read: () => {
+        if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) {
+          return { visible: false, moving: false }
+        }
+        for (let element: HTMLElement | null = host; element; element = element.parentElement) {
+          if (element.getAnimations().some((animation) =>
+            animation.playState === "running" && Number.isFinite(animation.effect?.getComputedTiming().endTime),
+          )) return { visible: true, moving: true }
+        }
+        return { visible: true, moving: false }
+      },
+      write: ({ visible, moving }) => {
+        if (view !== editor || !visible) return
+        // CodeMirror is still updating in this callback. Dispatch the reveal
+        // in the next frame, after measured wrapping and Dock motion settle.
+        if (moving) revealOnLayout.schedule()
+        else revealAfterMeasure.schedule()
+      },
+    })
+  })
+
+
+  onMount(() => {
+    if (!host) return
+    view = new EditorView({
+      doc: local.value,
+      parent: host,
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        localeExtension(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+				294 text import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+				138 container
+					139 text // A retained file view can receive a new citation before its Dock is
+				295 container
+					296 text // visible. Keep that request unsettled until real layout can scroll and
+				297 container
+					298 text // focus it; the host observer retries this same current request.
+				299 container
+					300 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" ))  return
+				301 container
+					302 text const anchor  =  editor . state . doc . line ( target . anchorLine ). from
+				303 container
+					304 text editor . dispatch ({
+				305 container
+					306 text selection :  EditorSelection . cursor ( anchor ),
+				307 container
+					308 text effects : [
+				309 container
+					310 text revealLinesEffect ( revealHighlightLines ( editor . state . doc . lines ,  target )),
+				311 container
+					312 text EditorView . scrollIntoView ( anchor , {  y :  "center"  }),
+				313 text       ],
+				314 text     })
+				315 container
+					316 text // A view mounted in this same frame has not been measured yet, so the
+				317 container
+					318 text // scroll effect would otherwise resolve against a zero-height scroller.
+				319 container
+					320 text editor . requestMeasure ()
+				321 container
+					322 text editor . focus ()
+				323 container
+					324 text if  ( target . settled )  revealedIdentity  =  identity
+				325 text   }
+				326 container
+					327 text const revealAfterMeasure  =  createAnimationFrameScheduler ( revealLineRange )
+				328 container
+					329 text const revealOnLayout  =  createAnimationFrameScheduler (() => {
+				330 container
+					331 text const editor  =  view
+				332 container
+					333 text if  (! editor )  return
+				334 container
+					335 text if  (! local . lineRange ) {
+				336 container
+					337 text revealLineRange ()
+				338 container
+					339 text return
+				340 text     }
+				341 container
+					342 text if  ( revealIdentity () ===  revealedIdentity )  return
+				343 container
+					344 text editor . requestMeasure ({
+				345 container
+					346 text key :  revealLineRange ,
+				347 container
+					348 text read : () => {
+				349 container
+					350 text if  (! host ?. clientWidth  || ! host . clientHeight  ||  host . closest ( "[inert], [hidden]" )) {
+				351 container
+					352 text return  {  visible :  false ,  moving :  false  }
+				353 text         }
+				354 container
+					355 text for  ( let element :  HTMLElement  |  null  =  host ;  element ;  element  =  element . parentElement ) {
+				356 container
+					357 text if  ( element . getAnimations (). some (( animation ) =>
+				358 container
+					359 text animation . playState  ===  "running"  &&  Number . isFinite ( animation . effect ?. getComputedTiming (). endTime ),
+				360 container
+					361 text           ))  return  {  visible :  true ,  moving :  true  }
+				362 text         }
+				363 container
+					364 text return  {  visible :  true ,  moving :  false  }
+				365 text       },
+				366 container
+					367 text write : ({  visible ,  moving  }) => {
+				368 container
+					369 text if  ( view  !==  editor  || ! visible )  return
+				370 container
+					371 text // CodeMirror is still updating in this callback. Dispatch the reveal
+				372 container
+					373 text // in the next frame, after measured wrapping and Dock motion settle.
+				374 container
+					375 text if  ( moving )  revealOnLayout . schedule ()
+				376 container
+					377 text else revealAfterMeasure . schedule ()
+				378 text       },
+				379 text     })
+				380 text   })
+				381 container
+					382 text onMount (() => {
+				383 container
+					384 text if  (! host )  return
+				385 container
+					386 text view  =  new EditorView ({
+				387 container
+					388 text doc :  local . value ,
+				389 container
+					390 text parent :  host ,
+				391 container
+					392 text extensions : [
+				393 container
+					394 text basicSetup ,
+				395 container
+					396 text         ... overlayCodeEditorExtensions (),
+				397 container
+					398 text localeExtension (),
+				399 container
+					400 text l anguageCompartment . of ([]),
+				401 container
+					402 text EditorView . lineWrapping ,
+				403 container
+					404 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+				405 container
+					406 text EditorView . updateListener . of (( update ) => {
+				407 container
+					408 text if  (! update . docChanged  ||  applyingExternalValue )  return
+				409 container
+					410 text local . onValueChange ( update . state . doc . toString ())
+				411 button Expand 103 unchanged lines
+					412 text ⦚
+					413 text 103 unchanged lines
+					414 text ⦚
+
+The focused UI element is 135 text entry area Description: Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+   * `startLine`..`endLine` turned the common whole-file citation (a plain
+   * `read` cites lines 1..N) into "select the entire document", which is
+   * indistinguishable from no jump at all, so the cursor lands on the start
+   * line and the range is banded instead.
+   *
+   * The reveal is recorded as done only once the document actually holds the
+   * cited line. Latching earlier is what made jumps vanish: a reveal computed
+   * while the file was still loading clamped onto line 1 of an empty document
+   * and then refused to run again when the text finally arrived.
+   */
+  const revealLineRange = () => {
+    const editor = view
+    if (!editor) return
+    const identity = revealIdentity()
+    if (identity === revealedIdentity) return
+    const range = local.lineRange
+    const target = resolveRevealTarget(editor.state.doc.lines, range)
+    if (!range || !target) {
+      editor.dispatch({ effects: revealLinesEffect(null) })
+      revealedIdentity = range ? "" : identity
+      return
+    }
+    // A retained file view can receive a new citation before its Dock is
+    // visible. Keep that request unsettled until real layout can scroll and
+    // focus it; the host observer retries this same current request.
+    if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
+    const anchor = editor.state.doc.line(target.anchorLine).from
+    editor.dispatch({
+      selection: EditorSelection.cursor(anchor),
+      effects: [
+        revealLinesEffect(revealHighlightLines(editor.state.doc.lines, target)),
+        EditorView.scrollIntoView(anchor, { y: "center" }),
+      ],
+    })
+    // A view mounted in this same frame has not been measured yet, so the
+    // scroll effect would otherwise resolve against a zero-height scroller.
+    editor.requestMeasure()
+    editor.focus()
+    if (target.settled) revealedIdentity = identity
+  }
+
+
+  const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
+  const revealOnLayout = createAnimationFrameScheduler(() => {
+    const editor = view
+    if (!editor) return
+    if (!local.lineRange) {
+      revealLineRange()
+      return
+    }
+    if (revealIdentity() === revealedIdentity) return
+    editor.requestMeasure({
+      key: revealLineRange,
+      read: () => {
+        if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) {
+          return { visible: false, moving: false }
+        }
+        for (let element: HTMLElement | null = host; element; element = element.parentElement) {
+          if (element.getAnimations().some((animation) =>
+            animation.playState === "running" && Number.isFinite(animation.effect?.getComputedTiming().endTime),
+          )) return { visible: true, moving: true }
+        }
+        return { visible: true, moving: false }
+      },
+      write: ({ visible, moving }) => {
+        if (view !== editor || !visible) return
+        // CodeMirror is still updating in this callback. Dispatch the reveal
+        // in the next frame, after measured wrapping and Dock motion settle.
+        if (moving) revealOnLayout.schedule()
+        else revealAfterMeasure.schedule()
+      },
+    })
+  })
+
+
+  onMount(() => {
+    if (!host) return
+    view = new EditorView({
+      doc: local.value,
+      parent: host,
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        localeExtension(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines

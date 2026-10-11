@@ -1,0 +1,27 @@
+{
+  "port": 18240,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\diff-review-290-history-01\\evidence",
+    "diff-review-290-history-01-8cad2e62-a0b0-404b-994a-6ae10283d0f0",
+    "1791706805181",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18240",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\diff-review-290-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\diff-review-290-history-01\\startup.json",
+    "--startup-occurrence",
+    "diff-review-290-history-01-8cad2e62-a0b0-404b-994a-6ae10283d0f0",
+    "--log-level",
+    "INFO"
+  ],
+  "occurrence": "diff-review-290-history-01-8cad2e62-a0b0-404b-994a-6ae10283d0f0",
+  "credentialStaging": "None"
+}

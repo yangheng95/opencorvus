@@ -1,0 +1,253 @@
+Browser tab: 31, Title: "OpenCorvus", URL: "http://localhost:18241/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18241/ui/
+	1 container 编辑器语言改动审查
+		2 container
+			3 text Diff
+			4 heading 编辑器语言改动审查, Value: 3
+				5 text 编辑器语言改动审查
+			6 button Copy text
+			7 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-244-trigger, Secondary Actions: Expand
+			8 button Close 编辑器语言改动审查 artifact workspace
+		9 text 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802
+		10 container
+			11 text entry area Description: Original: 旧版 b34e232acc32406d18e6cd4738c3c1d2c505ea10, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+29 unchanged lines
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+				12 container
+					13 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+				14 container
+					15 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+				16 container
+					17 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+				18 container
+					19 text import  {  t  }  from "../../utils/i18n"
+				20 container
+					21 text import  {  Button  }  from "./Button"
+				22 container
+					23 text import  {  editorLanguage  }  from "./code-editor-language"
+				24 container
+					25 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+				26 container
+					27 text import  {
+				28 container
+					29 text overlayCodeEditorExtensions ,
+				30 container
+					31 text resolveRevealTarget ,
+				32 button Expand 29 unchanged lines
+					33 text ⦚
+					34 text 29 unchanged lines
+					35 text ⦚
+				36 container
+					37 text let applyingExternalValue  =  false
+				38 container
+					39 text let revealedIdentity  =  ""
+				40 container
+					41 text let revealObserver :  ResizeObserver  |  undefined
+				42 container
+					43 text const l anguageCompartment  =  new Compartment ()
+				44 container
+					45 text const readOnlyCompartment  =  new Compartment ()
+				46 container
+					47 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+				48 container
+					49 text EditorView . editable . of (! readOnly ),
+				50 container
+					51 text EditorState . readOnly . of ( readOnly ),
+				52 container
+					53 text EditorView . contentAttributes . of ({
+				54 container
+					55 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+				56 container
+					57 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+				58 text     }),
+				59 button Expand 92 unchanged lines
+					60 text ⦚
+					61 text 92 unchanged lines
+					62 text ⦚
+				63 container
+					64 text extensions : [
+				65 container
+					66 text basicSetup ,
+				67 container
+					68 text         ... overlayCodeEditorExtensions (),
+				69 container
+					70 text l anguageCompartment . of ([]),
+				71 container
+					72 text EditorView . lineWrapping ,
+				73 container
+					74 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+				75 container
+					76 text EditorView . contentAttributes . of ({  "aria-label" :  local . ariaLabel  }),
+				77 container
+					78 text EditorView . updateListener . of (( update ) => {
+				79 container
+					80 text if  (! update . docChanged  ||  applyingExternalValue )  return
+				81 container
+					82 text local . onValueChange ( update . state . doc . toString ())
+				83 button Expand 103 unchanged lines
+					84 text ⦚
+					85 text 103 unchanged lines
+					86 text ⦚
+		87 container
+			88 text entry area Description: Modified: 新版 58bdde186c9b31a5ae6cb87684771e1b6f849802, Value: import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { basicSetup, EditorView } from "codemirror"
+import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+import { t } from "../../utils/i18n"
+import { Button } from "./Button"
+import { editorLanguage } from "./code-editor-language"
+import { createCodeEditorLocale } from "./code-editor-locale"
+import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import {
+  overlayCodeEditorExtensions,
+  resolveRevealTarget,
+29 unchanged lines
+  let applyingExternalValue = false
+  let revealedIdentity = ""
+  let revealObserver: ResizeObserver | undefined
+  const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
+  const languageCompartment = new Compartment()
+  const readOnlyCompartment = new Compartment()
+  const readOnlyExtensions = (readOnly: boolean) => [
+    EditorView.editable.of(!readOnly),
+    EditorState.readOnly.of(readOnly),
+    EditorView.contentAttributes.of({
+      "aria-label": local.ariaLabel,
+      "aria-readonly": readOnly ? "true" : "false",
+      ...(readOnly ? { tabindex: "0" } : {}),
+    }),
+92 unchanged lines
+      extensions: [
+        basicSetup,
+        ...overlayCodeEditorExtensions(),
+        localeExtension(),
+        languageCompartment.of([]),
+        EditorView.lineWrapping,
+        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged || applyingExternalValue) return
+          local.onValueChange(update.state.doc.toString())
+103 unchanged lines
+				89 container
+					90 text import  {  Compartment ,  EditorSelection ,  EditorState  }  from "@codemirror/state"
+				91 container
+					92 text import  {  basicSetup ,  EditorView  }  from "codemirror"
+				93 container
+					94 text import  {  createEffect ,  createSignal ,  onCleanup ,  onMount ,  Show ,  splitProps ,  type JSX  }  from "solid-js"
+				95 container
+					96 text import  {  t  }  from "../../utils/i18n"
+				97 container
+					98 text import  {  Button  }  from "./Button"
+				99 container
+					100 text import  {  editorLanguage  }  from "./code-editor-language"
+				101 container
+					102 text import  {  createCodeEditorLocale  }  from "./code-editor-locale"
+				103 container
+					104 text import  {  create AnimationFrameScheduler  }  from "../../utils/animation-frame"
+				105 container
+					106 text import  {
+				107 container
+					108 text overlayCodeEditorExtensions ,
+				109 container
+					110 text resolveRevealTarget ,
+				111 button Expand 29 unchanged lines
+					112 text ⦚
+					113 text 29 unchanged lines
+					114 text ⦚
+				115 container
+					116 text let applyingExternalValue  =  false
+				117 container
+					118 text let revealedIdentity  =  ""
+				119 container
+					120 text let revealObserver :  ResizeObserver  |  undefined
+				121 container
+					122 text const localeExtension  =  createCodeEditorLocale (() =>  view  ? [ view ] : [])
+				123 container
+					124 text const l anguageCompartment  =  new Compartment ()
+				125 container
+					126 text const readOnlyCompartment  =  new Compartment ()
+				127 container
+					128 text const readOnlyExtensions  = ( readOnly :  boolean ) => [
+				129 container
+					130 text EditorView . editable . of (! readOnly ),
+				131 container
+					132 text EditorState . readOnly . of ( readOnly ),
+				133 container
+					134 text EditorView . contentAttributes . of ({
+				135 container
+					136 text "aria-label" :  local . ariaLabel ,
+				137 container
+					138 text "aria-readonly" :  readOnly  ?  "true"  :  "false" ,
+				139 container
+					140 text       ...( readOnly  ? {  tabindex :  "0"  } : {}),
+				141 text     }),
+				142 button Expand 92 unchanged lines
+					143 text ⦚
+					144 text 92 unchanged lines
+					145 text ⦚
+				146 container
+					147 text extensions : [
+				148 container
+					149 text basicSetup ,
+				150 container
+					151 text         ... overlayCodeEditorExtensions (),
+				152 container
+					153 text localeExtension (),
+				154 container
+					155 text l anguageCompartment . of ([]),
+				156 container
+					157 text EditorView . lineWrapping ,
+				158 container
+					159 text readOnlyCompartment . of ( readOnlyExtensions (!! local . readOnly )),
+				160 container
+					161 text EditorView . updateListener . of (( update ) => {
+				162 container
+					163 text if  (! update . docChanged  ||  applyingExternalValue )  return
+				164 container
+					165 text local . onValueChange ( update . state . doc . toString ())
+				166 button Expand 103 unchanged lines
+					167 text ⦚
+					168 text 103 unchanged lines
+					169 text ⦚
+			170 container
+				171 text field (settable) Description: Find, Value: readOnlyExtensions
+				172 button Next
+				173 button Previous
+				174 button All
+				175 checkbox (settable, integer) Description: Match case, Value: 0
+				176 checkbox (settable, integer) Description: Regular expression, Value: 0
+				177 checkbox (settable, integer) Description: Whole word, Value: 0
+				178 button Close
+
+The focused UI element is 171 text field (settable) Description: Find, Value: readOnlyExtensions

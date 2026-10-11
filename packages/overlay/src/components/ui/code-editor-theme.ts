@@ -177,6 +177,17 @@ const overlayEditorTheme = EditorView.theme({
     boxShadow: "0 0 0 calc(2px * var(--ui-scale)) var(--oc-control-focus-ring)",
   },
   ".cm-panel.cm-search label": { fontSize: "var(--ui-font-body)" },
+  ".cm-collapsedLines": {
+    background: "var(--subtle-2)",
+    color: "var(--text-muted)",
+    borderRadius: "var(--oc-radius-soft)",
+    boxShadow: "inset 0 0 0 var(--oc-border-width) var(--border)",
+  },
+  ".cm-collapsedLines:hover": { background: "var(--subtle-3)" },
+  ".cm-collapsedLines:focus-visible": {
+    outline: "none",
+    boxShadow: "inset 0 0 0 calc(2px * var(--ui-scale)) var(--accent)",
+  },
   ".cm-tooltip-autocomplete > ul > li[aria-selected]": {
     backgroundColor: "var(--subtle-3)",
     color: "var(--text-strong)",

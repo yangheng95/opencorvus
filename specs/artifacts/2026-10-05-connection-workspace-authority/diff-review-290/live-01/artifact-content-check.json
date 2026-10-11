@@ -1,0 +1,68 @@
+{
+  "observedAtUtc": "2026-10-11T07:36:14.503Z",
+  "results": [
+    {
+      "id": "art_g0VXixtjY00JZYwo14aL",
+      "messageID": "msg_g0VXixYKI000GmRqu9lh",
+      "sessionID": "ses_-zUSH2VMPzzn4cTey584",
+      "renderer": "diff@1",
+      "originalLogicalContent": "equal",
+      "modifiedLogicalContent": "equal",
+      "originalChars": 9039,
+      "modifiedChars": 9164
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hbNuVoYncIrA3AZqLxFv",
+      "session_id": "ses_hkoTCCzev2MRQcyggRBT",
+      "role": "user",
+      "completed_at": null,
+      "finish": null
+    },
+    {
+      "id": "msg_g0VXixEhQ00XgZeT405b",
+      "session_id": "ses_hkoTCCzev2MRQcyggRBT",
+      "role": "assistant",
+      "completed_at": 1791703975066,
+      "finish": "stop"
+    },
+    {
+      "id": "msg_15ab8e7d-7b1b-4a3c-b722-4f0dd4ae0c6c",
+      "session_id": "ses_-zUSH2VMPzzn4cTey584",
+      "role": "user",
+      "completed_at": null,
+      "finish": null
+    },
+    {
+      "id": "msg_g0VXixUv500ydMWbpY9R",
+      "session_id": "ses_-zUSH2VMPzzn4cTey584",
+      "role": "assistant",
+      "completed_at": 1791704033684,
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXixX3000jwaUQ5UnS",
+      "session_id": "ses_-zUSH2VMPzzn4cTey584",
+      "role": "assistant",
+      "completed_at": 1791704038613,
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXixYKI000GmRqu9lh",
+      "session_id": "ses_-zUSH2VMPzzn4cTey584",
+      "role": "assistant",
+      "completed_at": 1791704121227,
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXixtoo00c7qQhv40y",
+      "session_id": "ses_-zUSH2VMPzzn4cTey584",
+      "role": "assistant",
+      "completed_at": 1791704129194,
+      "finish": "stop"
+    }
+  ],
+  "tasks": [],
+  "boundary": "Actual canonical persisted model-produced artifacts compared to exact existing Git logical text; CRLF form and one terminal newline are not acceptance proxies. Root real UI review remains separate."
+}

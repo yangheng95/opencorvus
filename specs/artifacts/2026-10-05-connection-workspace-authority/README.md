@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [真实Diff290 Recall](diff-review-plan-290.md) / [真实证据](diff-review-290/README.md)：完整真实差异、模型不可用时历史读取、双栏键盘/语言/暗色外观；原Provider失败保留。
+
 - [编辑器语言289 Recall](editor-locale-plan-289.md) / [真实证据](editor-locale-289/README.md)：共享CodeMirror语言配置与阅读锚点、查询、草稿/Undo保留。
 
 - [文件来源288 Recall](source-file-plan-288.md) / [真实证据](source-file-288/README.md)：只读状态与内置查找框可读性修复、原来源及深浅主题复核。

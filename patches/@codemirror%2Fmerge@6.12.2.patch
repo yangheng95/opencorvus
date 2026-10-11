@@ -1,0 +1,80 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index f3f999863..51ba33977 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -1006,19 +1006,21 @@ class CollapseWidget extends view.WidgetType {
+     }
+     eq(other) { return this.lines == other.lines; }
+     toDOM(view) {
+-        let outer = document.createElement("div");
++        let outer = document.createElement("button");
++        outer.type = "button";
+         outer.className = "cm-collapsedLines";
+         outer.textContent = view.state.phrase("$ unchanged lines", this.lines);
++        outer.setAttribute("aria-label", view.state.phrase("Expand $ unchanged lines", this.lines));
+         outer.addEventListener("click", e => {
+             let pos = view.posAtDOM(e.target);
+             view.dispatch({ effects: uncollapseUnchanged.of(pos) });
+             let { side, sibling } = view.state.facet(mergeConfig);
+             if (sibling)
+                 sibling().dispatch({ effects: uncollapseUnchanged.of(mapPos(pos, view.state.field(ChunkField), side == "a")) });
++            view.focus();
+         });
+         return outer;
+     }
+-    ignoreEvent(e) { return e instanceof MouseEvent; }
+     get estimatedHeight() { return 27; }
+     get type() { return "collapsed-unchanged-code"; }
+ }
+@@ -1153,6 +1155,11 @@ const baseTheme = view.EditorView.baseTheme({
+         },
+     },
+     ".cm-collapsedLines": {
++        display: "block",
++        width: "100%",
++        border: "none",
++        font: "inherit",
++        textAlign: "start",
+         padding: "5px 5px 5px 10px",
+         cursor: "pointer",
+         "&:before": {
+diff --git a/dist/index.js b/dist/index.js
+index 8322cf9b1..87a7d604f 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1004,19 +1004,21 @@ class CollapseWidget extends WidgetType {
+     }
+     eq(other) { return this.lines == other.lines; }
+     toDOM(view) {
+-        let outer = document.createElement("div");
++        let outer = document.createElement("button");
++        outer.type = "button";
+         outer.className = "cm-collapsedLines";
+         outer.textContent = view.state.phrase("$ unchanged lines", this.lines);
++        outer.setAttribute("aria-label", view.state.phrase("Expand $ unchanged lines", this.lines));
+         outer.addEventListener("click", e => {
+             let pos = view.posAtDOM(e.target);
+             view.dispatch({ effects: uncollapseUnchanged.of(pos) });
+             let { side, sibling } = view.state.facet(mergeConfig);
+             if (sibling)
+                 sibling().dispatch({ effects: uncollapseUnchanged.of(mapPos(pos, view.state.field(ChunkField), side == "a")) });
++            view.focus();
+         });
+         return outer;
+     }
+-    ignoreEvent(e) { return e instanceof MouseEvent; }
+     get estimatedHeight() { return 27; }
+     get type() { return "collapsed-unchanged-code"; }
+ }
+@@ -1151,6 +1153,11 @@ const baseTheme = /*@__PURE__*/EditorView.baseTheme({
+         },
+     },
+     ".cm-collapsedLines": {
++        display: "block",
++        width: "100%",
++        border: "none",
++        font: "inherit",
++        textAlign: "start",
+         padding: "5px 5px 5px 10px",
+         cursor: "pointer",
+         "&:before": {

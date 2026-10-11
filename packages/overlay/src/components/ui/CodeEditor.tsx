@@ -1,10 +1,11 @@
-import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+import { Compartment, EditorSelection } from "@codemirror/state"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
 import { t } from "../../utils/i18n"
 import { Button } from "./Button"
 import { editorLanguage } from "./code-editor-language"
 import { createCodeEditorLocale } from "./code-editor-locale"
+import { codeEditorContent } from "./code-editor-content"
 import { createAnimationFrameScheduler } from "../../utils/animation-frame"
 import {
   overlayCodeEditorExtensions,
@@ -44,15 +45,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   const localeExtension = createCodeEditorLocale(() => view ? [view] : [])
   const languageCompartment = new Compartment()
   const readOnlyCompartment = new Compartment()
-  const readOnlyExtensions = (readOnly: boolean) => [
-    EditorView.editable.of(!readOnly),
-    EditorState.readOnly.of(readOnly),
-    EditorView.contentAttributes.of({
-      "aria-label": local.ariaLabel,
-      "aria-readonly": readOnly ? "true" : "false",
-      ...(readOnly ? { tabindex: "0" } : {}),
-    }),
-  ]
+  const readOnlyExtensions = (readOnly: boolean) => codeEditorContent({ readOnly, ariaLabel: local.ariaLabel })
   const [languageName, setLanguageName] = createSignal("")
   const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
   const [languageRetry, setLanguageRetry] = createSignal(0)
