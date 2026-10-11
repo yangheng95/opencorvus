@@ -1,0 +1,94 @@
+[
+  {
+    "event": "long-submit-start",
+    "at": "2026-10-11T17:09:24.660Z"
+  },
+  {
+    "event": "long-submit-accepted-ui",
+    "at": "2026-10-11T17:09:25.122Z"
+  },
+  {
+    "event": "before-close",
+    "at": "2026-10-11T17:09:51.816Z",
+    "reading": {
+      "clientHeight": 466,
+      "excerpts": [
+        {
+          "content": 1692,
+          "height": 287,
+          "title": "Source excerpt: <details> HTML details disclosure element - HTML | MDN",
+          "top": 250.6666717529297
+        }
+      ],
+      "outerTop": 396,
+      "scrollHeight": 2974,
+      "width": 380
+    }
+  },
+  {
+    "event": "dock-closed",
+    "at": "2026-10-11T17:09:52.219Z"
+  },
+  {
+    "event": "dock-reopened",
+    "at": "2026-10-11T17:09:52.647Z"
+  },
+  {
+    "event": "after-reopen-reading",
+    "at": "2026-10-11T17:09:52.709Z",
+    "reading": {
+      "clientHeight": 466,
+      "excerpts": [
+        {
+          "content": 1692,
+          "height": 287,
+          "title": "Source excerpt: <details> HTML details disclosure element - HTML | MDN",
+          "top": 250.6666717529297
+        }
+      ],
+      "outerTop": 396,
+      "scrollHeight": 2998,
+      "width": 380
+    }
+  },
+  {
+    "event": "later-growth-reading",
+    "at": "2026-10-11T17:10:29.803Z",
+    "reading": {
+      "clientHeight": 466,
+      "excerpts": [
+        {
+          "content": 1692,
+          "height": 287,
+          "title": "Source excerpt: <details> HTML details disclosure element - HTML | MDN",
+          "top": 250.6666717529297
+        }
+      ],
+      "outerTop": 396,
+      "scrollHeight": 5869,
+      "width": 380
+    }
+  },
+  {
+    "event": "completed-reading",
+    "at": "2026-10-11T17:11:45.397Z",
+    "reading": {
+      "clientHeight": 388,
+      "excerpts": [
+        {
+          "content": 1692,
+          "height": 287,
+          "title": "Source excerpt: <details> HTML details disclosure element - HTML | MDN",
+          "top": 250.6666717529297
+        }
+      ],
+      "outerTop": 396,
+      "scrollHeight": 7302,
+      "width": 380
+    }
+  },
+  {
+    "event": "page-closed",
+    "at": "2026-10-11T17:12:06.294Z"
+  }
+]

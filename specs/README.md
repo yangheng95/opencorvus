@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [窄侧聊来源307](records/2026-10/2026-10-12-source-side-307.md)：真实多来源在窄Dock中的层级和流式阅读复核。
+
 - [多来源层级306](records/2026-10/2026-10-12-source-group-306.md)：检查真实多来源的分组、直接链接与阅读操作。
 
 - [SSE压缩305](records/2026-10/2026-10-12-sse-compression-305.md)：修复旧运行时流式解压，真实传输减少95.38%，保持Sources与完整文字恢复。
