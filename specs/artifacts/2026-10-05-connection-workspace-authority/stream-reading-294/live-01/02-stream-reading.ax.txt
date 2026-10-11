@@ -1,0 +1,142 @@
+Browser tab: 40, Title: "OpenCorvus", URL: "http://localhost:18249/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18249/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									87 container
+										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										89 button 请只读这两份官方资料：https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus...
+										90 image Running
+										91 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 67f494, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									92 container
+										93 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										94 button 请只读这两份官方资料：https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus...
+										95 image Running
+										96 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-327-trigger, Secondary Actions: Expand
+									97 container
+										98 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										99 button Reply with OK.
+										100 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-333-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18249, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					77 container
+						78 text 请只读这两份官方资料：https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus...
+						101 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						102 container Description: Running, ID: taskStatus
+							103 text Running
+						79 button Side chat
+						80 container solidChatHeaderRuntimeActions
+							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							82 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							104 container
+								133 container
+									134 text User
+									135 container
+										136 text 请只读这两份官方资料：
+										137 link Description: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus, Value: developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
+										138 text  和
+										139 link Description: https://www.w3.org/WAI/WCAG22/Understanding/focus-order, Value: w3.org/WAI/WCAG22/Understanding/focus-order
+										140 text  。基于它们，用中文写六节、约2000–2400字，说明长对话里阅读引用来源、键盘焦点和返回原阅读位置的交互设计。每节有具体情境，适当给出短代码例子或比较表，区分文档事实与设计建议并保留真实引用。就在当前普通会话直接完成，不修改文件、不读取auth/models或任何凭据，不创建Task、成员或委托，也不要发布新项目。
+								113 container
+									114 text work
+									115 text 39s
+									116 text 我会只读取你指定的两份官方资料，区分文档事实与设计建议，并在当前会话中完成六节正文，不修改文件或创建任务。
+									117 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus (text/html), Secondary Actions: Expand
+										118 text webfetch
+										119 text https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus (text/html)
+										120 image
+									121 container Sources
+										122 link Description: Open web source: HTMLElement: focus() method - Web APIs | MDN · developer.mozilla.org, Value: developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
+									123 button (collapsed) Description: webfetch · https://www.w3.org/WAI/WCAG22/Understanding/focus-order (text/html; charset=utf-8), Secondary Actions: Expand
+										124 text webfetch
+										125 text https://www.w3.org/WAI/WCAG22/Understanding/focus-order (text/html; charset=utf-8)
+										126 image
+									127 container Sources
+										128 link Description: Open web source: Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C · www.w3.org, Value: w3.org/WAI/WCAG22/Understanding/focus-order
+									129 heading 长对话中的引用阅读、键盘焦点与原位返回, Value: 1
+										130 text 长对话中的引用阅读、键盘焦点与原位返回
+									131 heading 一、先区分“读到哪里”与“焦点在哪里”, Value: 2
+										132 text 一、先区分“读到哪里”与“焦点在哪里”
+									141 container
+										142 text 情境 ：用户读到第十八条回复，打开一句结论后的引用。关闭来源后，画面仍显示原段落，但按 Tab 却跳到页面底部的输入框。视觉位置保住了，键盘操作的上下文却丢了。
+									143 container
+										144 text 文档事实 ：MDN 说明， HTMLElement.focus()  会在目标可聚焦时设置焦点；该元素默认接收键盘及类似事件。浏览器通常还会把它滚动到可见区域。因此，焦点与滚动相关，但不是同一个状态。W3C 的说明页则解释，顺序导航应保持内容的意义和可操作性，而不是让用户面对意外跳转。
+										145 link Description: MDN, Value: developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
+										146 text  ·
+										147 link Description: W3C, Value: w3.org/WAI/WCAG22/Understanding/focus-order
+									148 container
+										149 text 设计建议 ：把“返回原位”拆成两项：恢复阅读段落在视口中的位置，以及恢复合理的键盘操作起点。前者服务于继续阅读，后者服务于继续操作。不要用“画面没动”证明焦点正确，也不要把一次  focus()  当成完整的位置恢复方案。两份资料均未定义长对话的书签机制；这属于产品设计。
+									150 heading 二、让引用入口遵循内容关系，而非机械坐标, Value: 2
+										151 text 二、让引用入口遵循内容关系，而非机械坐标
+									152 container
+										153 text 情境 ：一条回复包含三个论点，各有引用按钮，右侧另有来源列表。如果 Tab 在正文引用、全局工具栏和其他回复的按钮之间反复跳转，用户就难以知道正在核查哪个论点。
+									154 container
+										155 text 文档事实 ：SC 2.4.3 针对顺序导航：当导航顺序影响意义或操作时，可聚焦组件应按保留意义和可操作性的顺序获得焦点。W3C 明确指出，焦点顺序不必完全等同于视觉布局，也可能存在多个合理顺序；但不应显得随机。说明页本身是解释性资料，不是额外的规范要求。
+										156 link Description: W3C, Value: w3.org/WAI/WCAG22/Understanding/focus-order
+									157 container
+										158 text 设计建议 ：优先形成“当前论点—对应引用—相关操作—下一论点”的关系。入口可写成“查看来源：报告名称”，帮助用户辨认去向。左右两栏独立时，不必强求逐行交替；关联紧密时，则应避免把来源操作隔到无关控件之后。验收重点是能否理解关系，而不是焦点移动是否画出整齐路线。
+									159 heading 三、按来源容器决定进入与退出路径, Value: 2
+										160 text 三、按来源容器决定进入与退出路径
+									176 container
+										177 text 情境 ：用户只想快速核对一段引文，适合展开内联来源；需要专注阅读完整材料时，则可能打开模态窗口。两者不能只换外观，却沿用同一套焦点行为。
+						43 container chatHomeComposition
+							163 container solidChatComposer
+								164 container chatForm
+									165 splitter Description: Drag to resize the message input, Value: 42
+									166 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									167 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									168 text Work
+									169 text Chat
+									170 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									171 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									172 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										173 text openai/gpt-6.1-sol
+									174 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+								175 button Scroll to bottom
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18249/ui/

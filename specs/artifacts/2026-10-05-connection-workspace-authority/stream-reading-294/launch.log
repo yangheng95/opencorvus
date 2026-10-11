@@ -1,0 +1,13 @@
+Owned Sol Target PID 67744, Host PID 58032, occurrence stream-reading-294-live-01-d66b19e6-e1c3-44a4-8155-5b50b079450d; native settlement remains required.
+
+chain                 : {@{expected=; state=dead_or_reused; originalOccurrencePresent=False}, @{expected=; state=dead_or_reused; originalOccurrencePresent=False}}
+pairedCleanupComplete : True
+boundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup
+nativeSettlement      : @{occurrence=stream-reading-294-live-01-d66b19e6-e1c3-44a4-8155-5b50b079450d; outcome=settled; host=; target=; observedAtUtc=2026/10/11 9:57:40; deadlineAt=1791713094266; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup}
+physicalCompletion    : True
+observedAtUtc         : 2026/10/11 9:57:42
+listeners             :
+occurrence            : stream-reading-294-live-01-d66b19e6-e1c3-44a4-8155-5b50b079450d
+copiedPair            : {@{path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-11\stream-reading-294-live-01\runtime\data\auth.json; presentAfter=False; copiedLength=2194; outcome=removed}, @{path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-11\stream-reading-294-live-01\runtime\data\models.json; presentAfter=False; copiedLength=9155406; outcome=removed}}
+
+{"providerEOFRequests":6,"cancellation":null,"boundary":"Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned","providerUserCancelledRequests":0,"physicalCompletion":true,"qualification":"NativeService"}

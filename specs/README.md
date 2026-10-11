@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [正文流式294](records/2026-10/2026-10-11-stream-reading-294.md)：真实六节正文完成，Sources与回读段落在持续生成时稳定；六次Provider流式正常闭合。
+
 - [实时来源293](records/2026-10/2026-10-11-source-live-293.md)：真实Sources追加阅读及限流错误分层显示；原模型预算失败和未验边界保留。
 
 - [Task返回292](records/2026-10/2026-10-11-task-return-292.md)：修复工具展示状态丢失和选中对象字段残留导致的子侧栏阅读跳动，真实成员/跨项目/整Dock返回通过。
