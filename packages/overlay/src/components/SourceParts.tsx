@@ -3,6 +3,7 @@ import { Match, Show, Switch, onCleanup, onMount, untrack } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
 import { relativePathFrom, shortRelativePath } from "../utils/tool"
+import { pathWithForwardSeparators } from "../utils/server-path"
 import { localeTag, t } from "../utils/i18n"
 import { Icon, type IconName } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
@@ -50,10 +51,11 @@ function sourceDirectory(): string {
 
 function sourceLabel(source: ConversationSourcePart): string {
   if (source.type === "source-file") {
-    const title = source.title?.trim() || ""
-    const filePath = source.filename?.trim() || source.path || title
-    const filename = filePath.split(/[\\/]/).filter(Boolean).at(-1)
-    const label = title && !/[\\/]/.test(title) ? title : filename
+    const title = source.title || ""
+    const filePath = source.filename || source.path || title
+    const syntax = source.path || sourceDirectory()
+    const filename = pathWithForwardSeparators(filePath, syntax).split("/").filter(Boolean).at(-1)
+    const label = title && !pathWithForwardSeparators(title, syntax).includes("/") ? title : filename
     if (label) return source.range ? `${label}:${source.range.startLine}-${source.range.endLine}` : label
   }
   if (source.type === "source-url" && source.url) {
@@ -93,7 +95,7 @@ async function openSourceFile(source: ConversationSourcePart): Promise<void> {
   const authority = captureApiAuthority()
   const epoch = boardStore.selectEpoch
   const directory = sourceDirectory()
-  const path = source.path?.trim() || ""
+  const path = source.path || ""
   if (!directory || !path) return
   const projectPath = relativePathFrom(directory, path)
   try {
@@ -131,7 +133,7 @@ function sourceProviderLabel(provider: string | undefined): string {
 
 function SourceTooltipContent(props: { source: ConversationSourcePart }) {
   return (
-    <Tooltip.Content class="msg-source-tooltip" data-ui="message-source-tooltip">
+    <Tooltip.Content class="msg-source-tooltip" data-ui="message-source-tooltip" data-source-type={props.source.type}>
       <strong>{sourceLabel(props.source)}</strong>
       <Show when={sourceDetail(props.source) !== sourceLabel(props.source)}>
         <span>{sourceDetail(props.source)}</span>

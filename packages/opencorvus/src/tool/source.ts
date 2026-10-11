@@ -46,7 +46,7 @@ export function fileSource(input: {
     type: "source-file",
     sourceId: semanticSourceId("source-file", `${absolutePath}\0${rangeIdentity}\0${input.symbol ?? ""}`),
     path: absolutePath,
-    title: input.title?.trim() || path.basename(absolutePath),
+    title: input.title?.trim() ? input.title : path.basename(absolutePath),
     ...(input.range ? { range: input.range } : {}),
     ...(input.symbol?.trim() ? { symbol: input.symbol.trim() } : {}),
     ...(input.provider?.trim() ? { provider: input.provider.trim() } : {}),

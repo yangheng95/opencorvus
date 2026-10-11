@@ -335,7 +335,7 @@ export function FileEditorPane() {
       >
         <header class="file-editor-header">
           <div class="file-editor-title" title={path()}>
-            <span class="file-editor-title-name">{shortWorkbenchPath(path())}</span>
+            <span class="file-editor-title-name">{shortWorkbenchPath(path(), target()?.sourceAbsolutePath || target()?.directory || "")}</span>
             <Show when={dirty()}>
               <span class="file-editor-dirty" aria-label={t("file_editor.unsaved")}>
                 *

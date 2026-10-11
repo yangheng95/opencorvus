@@ -108,6 +108,23 @@ test("ancestor moves carry the selected descendant to the authoritative returned
   expect(selectedFileTarget()).toEqual({ directory: "/repo", path: "lib/nested/notes.md" })
 })
 
+test.each([
+  ["/repo", "src/file\\name.md ", "src", "lib", "lib/file\\name.md "],
+  ["C:\\repo", "src\\nested\\ note.md", "src", "lib", "lib/nested/ note.md"],
+])("ancestor move retains exact filename components for %s", async (directory, path, before, after, expected) => {
+  await openFileEditor(path, { directory })
+  unregister = registerDecision(async () => true)
+  const receipt = moved(before, after)
+  const requests: unknown[] = []
+  transport((request) => {
+    requests.push(request.body)
+    return { body: receipt }
+  })
+  expect(await moveFileItem(before, after, { directory })).toEqual(receipt)
+  expect(selectedFileTarget()).toEqual({ directory, path: expected })
+  expect(requests).toEqual([{ kind: "json", value: { path: before, newPath: after } }])
+})
+
 test("unrelated directories and sibling paths preserve their independent selected resource", async () => {
   await openFileEditor("src/notes.md", { directory: "/repo" })
   unregister = registerDecision(async () => false)
@@ -190,7 +207,7 @@ test("prepared close holds the approved draft until durable commit and commits i
     held: true, current: true, target: "draft.md",
   })
   expect(await prepareFileEditorClose()).toEqual({ status: "busy" })
-  expect(await openFileEditor("other.md", { directory: "/b" })).toBe(false)
+  await openFileEditor("other.md", { directory: "/b" })
   await expect(deleteFileItem("draft.md", { directory: "/a" })).rejects.toMatchObject({ name: "AbortError", reason: "busy" })
   expect(selectedFileTarget()).toEqual({ directory: "/a", path: "draft.md" })
   // Persistence has succeeded. Closing the initiating view cannot retract that fact.

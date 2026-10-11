@@ -9,11 +9,31 @@ import {
   openFileEditor,
   openSourceFileEditor,
   selectedFileTarget,
+  shortWorkbenchPath,
 } from "../src/services/file-workbench"
 
 afterEach(async () => {
   await closeFileEditor()
   __setHostTransportForTest(undefined)
+})
+
+test.each([
+  ["C:/project", " Source note.md", " Source note.md"],
+  ["C:\\project", "dir\\ Source note.md", "dir/ Source note.md"],
+  ["/repo", "file\\name.ts", "file\\name.ts"],
+  ["/repo", "note.md ", "note.md "],
+])("editor target retains filename identity for %s / %s", async (directory, path, expected) => {
+  expect(await openFileEditor(path, { directory }, { startLine: 1, endLine: 2 })).toBe(true)
+  expect(selectedFileTarget()).toEqual({ directory, path: expected, range: { startLine: 1, endLine: 2 } })
+  expect(shortWorkbenchPath(expected, directory)).toBe(expected)
+})
+
+test("read-only source target preserves a POSIX filename suffix", async () => {
+  expect(await openSourceFileEditor("/outside/file\\name.md ", { directory: "/repo" })).toBe(true)
+  expect(selectedFileTarget()).toEqual({
+    directory: "/repo", path: "/outside/file\\name.md ", sourceAbsolutePath: "/outside/file\\name.md ",
+  })
+  expect(shortWorkbenchPath("/outside/file\\name.md ", "/outside/file\\name.md ")).toBe("/outside/file\\name.md ")
 })
 
 test("every accepted range-free open emits a reveal revision with its exact resource target", async () => {

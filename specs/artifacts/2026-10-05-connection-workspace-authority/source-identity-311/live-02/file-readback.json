@@ -1,0 +1,14 @@
+{
+  "observedAtUtc": "2026-10-11T18:46:53.0616511Z",
+  "boundary": "Physical files after actual UI rename and independent open",
+  "files": [
+    {
+      "name": " Renamed source.md",
+      "content": "# Space-prefixed source\nThis is the cited file with a leading space.\n"
+    },
+    {
+      "name": "Source note.md",
+      "content": "# Different ordinary file\nThis is a separate file without the leading space.\n"
+    }
+  ]
+}

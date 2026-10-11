@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [311 来源文件身份](source-identity-plan-311.md)：文件名空白、分隔符与真实来源打开。
+
 - [310 来源路径Recall](source-path-plan-310.md)：共享路径归属数据契约与真实文件来源验证，单agent。
 
 - [309 来源信息层级Recall](source-hierarchy-plan-309.md) / [真实修复](source-hierarchy-309/README.md)：无标题站点重复和下划线层级修复，四类真实资源/键盘导航与文件打开。

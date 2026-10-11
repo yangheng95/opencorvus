@@ -32,6 +32,7 @@ import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
 import { fileReferenceRange, type FileReferenceLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
+import { pathWithForwardSeparators } from "../utils/server-path"
 import { AppLog } from "../utils/log"
 import { t } from "../utils/i18n"
 import {
@@ -1303,7 +1304,7 @@ export async function openProjectFile(target: string, location?: Partial<FileRef
 async function openProjectPathInWorkbench(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
   const authority = captureApiAuthority()
   const directory = activeDirectory().trim()
-  const rawTarget = typeof target === "string" ? target.trim() : ""
+  const rawTarget = typeof target === "string" ? target : ""
   if (!directory || !rawTarget) return
   const { openFileEditor, openSourceFileEditor } = await import("./file-workbench")
   assertApiAuthorityCurrent(authority)
@@ -1320,12 +1321,11 @@ function isAbsoluteEditorPath(path: string): boolean {
 }
 
 export function editorTargetPath(target: string): string {
-  const path = typeof target === "string" ? target.trim() : ""
+  const path = typeof target === "string" ? target : ""
   if (!path || isAbsoluteEditorPath(path)) return path
   const base = activeDirectory().trim()
   if (!base) return ""
-  const separator = base.includes("\\") ? "\\" : "/"
-  return `${base.replace(/[\\/]+$/, "")}${separator}${path.replace(/^[\\/]+/, "")}`
+  return `${pathWithForwardSeparators(base, base).replace(/\/+$/, "")}/${pathWithForwardSeparators(path, base).replace(/^\/+/, "")}`
 }
 
 // ── setDirectory ──

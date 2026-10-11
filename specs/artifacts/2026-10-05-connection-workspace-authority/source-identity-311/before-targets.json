@@ -1,0 +1,47 @@
+{
+  "observedAtUtc": "2026-10-11T18:36:11.851Z",
+  "boundary": "Actual service state only; no DOM, component or synthetic Source",
+  "observations": [
+    {
+      "directory": "C:/project",
+      "input": " Source note.md",
+      "target": {
+        "path": "Source note.md",
+        "directory": "C:/project"
+      }
+    },
+    {
+      "directory": "/repo",
+      "input": "file\\name.ts",
+      "target": {
+        "path": "file/name.ts",
+        "directory": "/repo"
+      }
+    },
+    {
+      "directory": "/repo",
+      "input": "note.md ",
+      "target": {
+        "path": "note.md",
+        "directory": "/repo"
+      }
+    },
+    {
+      "directory": "C:/project",
+      "input": "dir\\note.md",
+      "target": {
+        "path": "dir/note.md",
+        "directory": "C:/project"
+      }
+    },
+    {
+      "directory": "/repo",
+      "input": "/outside/note.md ",
+      "target": {
+        "path": "/outside/note.md",
+        "directory": "/repo",
+        "sourceAbsolutePath": "/outside/note.md"
+      }
+    }
+  ]
+}

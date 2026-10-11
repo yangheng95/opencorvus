@@ -1,0 +1,70 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\server-path.test.ts:
+(pass) project-relative keys preserve server filename characters for C:/repo [0.37ms]
+(pass) project-relative keys preserve server filename characters for \\server\share\repo [0.01ms]
+(pass) project-relative keys preserve server filename characters for /repo [0.01ms]
+(pass) project-relative keys preserve server filename characters for /repo
+(pass) project-relative keys preserve server filename characters for /repo
+(pass) absolute path presentation retains roots, case and filename whitespace [0.02ms]
+
+test\tool-path.test.ts:
+(pass) server-owned path relationships > resolves /srv/project → /srv/project/src/Source.ts as the exact relative resource [0.14ms]
+(pass) server-owned path relationships > resolves /srv/project/ → /srv/project/src/Source.ts as the exact relative resource [0.01ms]
+(pass) server-owned path relationships > resolves / → /var/source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves /srv/project → /srv/project/file\name.ts as the exact relative resource
+(pass) server-owned path relationships > resolves /srv/project\ → /srv/project\/source.ts as the exact relative resource [0.02ms]
+(pass) server-owned path relationships > resolves C:\Work\Project → c:/work/project/src/Source.ts as the exact relative resource [0.02ms]
+(pass) server-owned path relationships > resolves C:/Work/Project/ → c:\work\project\src\Source.ts as the exact relative resource [0.02ms]
+(pass) server-owned path relationships > resolves C:\ → c:/src/Source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves \\Server\Share\Project → //server/share/project/src/Source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves //Server/Share/Project → \\server\share\project\src\Source.ts as the exact relative resource
+(pass) server-owned path relationships > retains the absolute external resource /srv/project → /srv/Project/source.ts [0.04ms]
+(pass) server-owned path relationships > retains the absolute external resource /srv/project → /srv/project-other/source.ts
+(pass) server-owned path relationships > retains the absolute external resource /srv/project\ → /srv/project/source.ts
+(pass) server-owned path relationships > retains the absolute external resource C:\Work\Project → D:\Work\Project\Source.ts
+(pass) server-owned path relationships > retains the absolute external resource C:\Work\Project → C:/Work/Project-other/Source.ts
+(pass) server-owned path relationships > retains the absolute external resource \\Server\Share\Project → \\Server\Other\Project\Source.ts
+
+test\file-workbench-revision.test.ts:
+(pass) editor target retains filename identity for C:/project /  Source note.md [0.64ms]
+(pass) editor target retains filename identity for C:\project / dir\ Source note.md [0.06ms]
+(pass) editor target retains filename identity for /repo / file\name.ts [0.02ms]
+(pass) editor target retains filename identity for /repo / note.md  [0.03ms]
+(pass) read-only source target preserves a POSIX filename suffix [0.18ms]
+(pass) every accepted range-free open emits a reveal revision with its exact resource target [0.17ms]
+(pass) file editor navigation retains and updates the exact cited line range [0.12ms]
+(pass) absolute source navigation retains the exact read-only source path [0.10ms]
+(pass) a successful file mutation advances the exact workbench revision [1.11ms]
+
+test\file-workbench-mutation.test.ts:
+(pass) rename resolves the shared decision at the original target before applying its exact receipt [0.89ms]
+(pass) cancelling an affected mutation returns AbortError and retains the authored resource target [0.27ms]
+(pass) a newer navigation supersedes an outstanding mutation decision [0.37ms]
+(pass) ancestor moves carry the selected descendant to the authoritative returned path [0.43ms]
+(pass) ancestor move retains exact filename components for /repo [0.39ms]
+(pass) ancestor move retains exact filename components for C:\repo [0.15ms]
+(pass) unrelated directories and sibling paths preserve their independent selected resource [0.38ms]
+(pass) deleting an approved ancestor closes the exact writable target and advances its revision [0.35ms]
+(pass) project mutations retain the independent read-only source target [0.19ms]
+(pass) each successful mutation remains reconciled when a later batch member fails [0.93ms]
+(pass) prepared close holds the approved draft until durable commit and commits its boundary exactly once [0.35ms]
+(pass) failed persistence releases admission and retains the exact saved or dirty owner revision [0.21ms]
+(pass) busy work, cancellation and changed approval revisions have explicit preparation outcomes [0.15ms]
+(pass) an affected rename holds its target through the actual pending transport and releases on exact failure [0.35ms]
+(pass) a retired rename retains its real response receipt and releases the original target admission [0.52ms]
+(pass) authority renewal during a file decision yields its typed retirement and preserves the authored target [0.21ms]
+(pass) all file operation entry points preserve a caller's retired logical authority [0.50ms]
+(pass) a batch retains its first accepted copy and uses the same authority for the next member [0.25ms]
+(pass) file opens consume the caller's exact current authority while retaining resource-only target identity [0.26ms]
+(pass) the supplied open authority remains the decision owner across its actual wait [0.27ms]
+
+test\workspace-file-identity.test.ts:
+(pass) located file references retain exact filenames from C:\repo [0.68ms]
+(pass) located file references retain exact filenames from /repo [0.07ms]
+(pass) an absolute located source retains its exact suffix and read-only target [0.12ms]
+
+ 54 pass
+ 0 fail
+ 134 expect() calls
+Ran 54 tests across 5 files. [91.00ms]

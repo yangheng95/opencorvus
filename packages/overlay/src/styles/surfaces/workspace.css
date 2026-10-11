@@ -273,7 +273,7 @@ code .file-link:focus-visible {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: pre;
 }
 
 .file-editor-dirty {

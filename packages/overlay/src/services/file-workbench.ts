@@ -3,6 +3,7 @@ import type { FileContent as SdkFileContent } from "@opencorvus-ai/sdk"
 import { uint8ToBase64 } from "@opencorvus-ai/transport-protocol"
 import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { projectScopedPath } from "./project-directory"
+import { normalizeProjectFilePath, pathWithForwardSeparators } from "../utils/server-path"
 
 export interface FileNode {
   name: string
@@ -114,23 +115,15 @@ export function bumpFileWorkbenchRevision(): void {
   setFileWorkbenchRevision((current) => current + 1)
 }
 
-function normalizeWorkbenchPath(path: string): string {
-  return String(path || "")
-    .replaceAll("\\", "/")
-    .split("/")
-    .filter(Boolean)
-    .join("/")
-}
-
-function joinWorkbenchPath(parent: string, child: string): string {
-  const normalizedParent = normalizeWorkbenchPath(parent)
-  const normalizedChild = normalizeWorkbenchPath(child)
+function joinWorkbenchPath(parent: string, child: string, directory: string): string {
+  const normalizedParent = normalizeProjectFilePath(parent, directory)
+  const normalizedChild = normalizeProjectFilePath(child, directory)
   return [normalizedParent, normalizedChild].filter(Boolean).join("/")
 }
 
-function descendantSuffix(path: string, base: string): string | null {
-  const normalizedPath = normalizeWorkbenchPath(path)
-  const normalizedBase = normalizeWorkbenchPath(base)
+function descendantSuffix(path: string, base: string, directory: string): string | null {
+  const normalizedPath = normalizeProjectFilePath(path, directory)
+  const normalizedBase = normalizeProjectFilePath(base, directory)
   if (!normalizedBase) return normalizedPath ? normalizedPath : null
   if (normalizedPath === normalizedBase) return ""
   const prefix = `${normalizedBase}/`
@@ -155,11 +148,11 @@ function normalizeFileEditorTarget(
   scope: FileOperationScope,
   range?: FileEditorLineRange,
 ): FileEditorTarget {
-  const next = String(path || "").trim()
+  const next = String(path || "")
   const directory = scope.directory.trim()
   if (!next || !directory) throw new Error("openFileEditor: path and directory are required")
   return {
-    path: normalizeWorkbenchPath(next),
+    path: normalizeProjectFilePath(next, directory),
     directory,
     ...(range ? { range: normalizeFileEditorRange(range) } : {}),
   }
@@ -170,7 +163,7 @@ function normalizeSourceFileEditorTarget(
   scope: FileOperationScope,
   range?: FileEditorLineRange,
 ): FileEditorTarget {
-  const sourceAbsolutePath = String(absolutePath || "").trim()
+  const sourceAbsolutePath = String(absolutePath || "")
   const directory = scope.directory.trim()
   if (!sourceAbsolutePath || !directory) {
     throw new Error("openSourceFileEditor: absolutePath and directory are required")
@@ -322,15 +315,15 @@ async function admitFileMutation(
   assertFileEditorAvailable()
   const target = selectedFileTarget()
   if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
-  if (descendantSuffix(target.path, path) === null) return
+  if (descendantSuffix(target.path, path, scope.directory) === null) return
   const prepared = await prepareFileEditorTarget(destination, true, authority)
   if (prepared.status !== "ready") throw new FileEditorAdmissionError(prepared.status)
   return prepared.handle
 }
 
-export function shortWorkbenchPath(path: string): string {
-  const parts = String(path || "")
-    .split(/[\\/]/)
+export function shortWorkbenchPath(path: string, directory: string): string {
+  const parts = pathWithForwardSeparators(path, directory)
+    .split("/")
     .filter(Boolean)
   if (parts.length <= 2) return path
   return parts.slice(-2).join("/")
@@ -396,8 +389,8 @@ export async function moveFileItem(path: string, newPath: string, scope: FileOpe
   const target = selectedFileTarget()
   let result: FileMoveResult
   const admission = await admitFileMutation(path, scope, () => {
-    const suffix = descendantSuffix(target!.path, result.previousPath)
-    return { ...target!, path: suffix ? joinWorkbenchPath(result.path, suffix) : normalizeWorkbenchPath(result.path) }
+    const suffix = descendantSuffix(target!.path, result.previousPath, scope.directory)
+    return { ...target!, path: suffix ? joinWorkbenchPath(result.path, suffix, scope.directory) : normalizeProjectFilePath(result.path, scope.directory) }
   }, authority)
   try {
     if (!admission) assertFileEditorAvailable()

@@ -1,0 +1,16 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\tool\source-file-title.test.ts:
+(pass) file source preserves authored title characters in  Source note.md [0.22ms]
+(pass) file source preserves authored title characters in notes/ Source note.md [0.02ms]
+(pass) file source preserves authored title characters in Source note.md  [0.01ms]
+(pass) an untitled file source uses the exact filesystem basename [0.04ms]
+(pass) source validation retains exact path and title characters [0.76ms]
+
+test\session\source-persistence.test.ts:
+(pass) message source persistence > persists URL and source-file evidence once with durable timeline identities [1719.03ms]
+
+ 6 pass
+ 0 fail
+ 8 expect() calls
+Ran 6 tests across 2 files. [2.57s]

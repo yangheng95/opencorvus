@@ -31,6 +31,7 @@ import {
   type FileNode,
   type FileOperationScope,
 } from "../services/file-workbench"
+import { normalizeProjectFilePath } from "../utils/server-path"
 import { currentUIScale } from "../utils/layout-tokens"
 import { t, tc } from "../utils/i18n"
 import { Icon } from "./ui/Icon"
@@ -97,80 +98,6 @@ function ExplorerVirtualItem(props: CustomItemComponentProps) {
       {props.children}
     </div>
   )
-}
-
-function normalizeExplorerPath(path: string): string {
-  return String(path || "")
-    .replaceAll("\\", "/")
-    .split("/")
-    .filter(Boolean)
-    .join("/")
-}
-
-function joinExplorerPath(parent: string, child: string): string {
-  const normalizedParent = normalizeExplorerPath(parent)
-  const normalizedChild = normalizeExplorerPath(child)
-  return [normalizedParent, normalizedChild].filter(Boolean).join("/")
-}
-
-function parentPath(path: string): string {
-  const parts = normalizeExplorerPath(path).split("/").filter(Boolean)
-  parts.pop()
-  return parts.join("/")
-}
-
-function fileName(path: string): string {
-  const parts = normalizeExplorerPath(path).split("/").filter(Boolean)
-  return parts.at(-1) || path
-}
-
-function copyNameSuggestion(path: string): string {
-  const name = fileName(path)
-  const extensionStart = name.lastIndexOf(".")
-  if (extensionStart > 0 && extensionStart < name.length - 1) {
-    return `${name.slice(0, extensionStart)}-copy${name.slice(extensionStart)}`
-  }
-  return `${name}-copy`
-}
-
-function dirname(path: string): string {
-  return parentPath(path)
-}
-
-function isPathOrDescendant(path: string, root: string): boolean {
-  const normalizedPath = normalizeExplorerPath(path)
-  const normalizedRoot = normalizeExplorerPath(root)
-  if (!normalizedRoot) return normalizedPath.length > 0
-  return normalizedPath === normalizedRoot || normalizedPath.startsWith(`${normalizedRoot}/`)
-}
-
-function replacePathPrefix(path: string, previousPath: string, nextPath: string): string {
-  const normalizedPath = normalizeExplorerPath(path)
-  const normalizedPrevious = normalizeExplorerPath(previousPath)
-  const normalizedNext = normalizeExplorerPath(nextPath)
-  if (normalizedPath === normalizedPrevious) return normalizedNext
-  const suffix = normalizedPath.slice(normalizedPrevious.length).replace(/^\/+/, "")
-  return joinExplorerPath(normalizedNext, suffix)
-}
-
-function selectionFromNode(node: FileNode): ExplorerSelection {
-  return {
-    path: normalizeExplorerPath(node.path),
-    name: node.name,
-    type: node.type,
-  }
-}
-
-function selectionFromFilePath(path: string): ExplorerSelection {
-  return {
-    path: normalizeExplorerPath(path),
-    name: fileName(path),
-    type: "file",
-  }
-}
-
-function selectionFromRow(row: ExplorerRow): ExplorerSelection {
-  return row.kind === "search" ? selectionFromFilePath(row.path) : selectionFromNode(row.node)
 }
 
 function scaledExplorerRowHeight(): number {
@@ -249,6 +176,77 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [mutationMessageStatus, setMutationMessageStatus] = createSignal<"active" | "error">("active")
   const active = createMemo(() => props.active?.() ?? true)
   const directory = createMemo(() => (props.directory ? props.directory().trim() : ""))
+
+  function normalizeExplorerPath(path: string): string {
+    return normalizeProjectFilePath(path, directory())
+  }
+
+  function joinExplorerPath(parent: string, child: string): string {
+    const normalizedParent = normalizeExplorerPath(parent)
+    const normalizedChild = normalizeExplorerPath(child)
+    return [normalizedParent, normalizedChild].filter(Boolean).join("/")
+  }
+
+  function parentPath(path: string): string {
+    const parts = normalizeExplorerPath(path).split("/").filter(Boolean)
+    parts.pop()
+    return parts.join("/")
+  }
+
+  function fileName(path: string): string {
+    const parts = normalizeExplorerPath(path).split("/").filter(Boolean)
+    return parts.at(-1) || path
+  }
+
+  function copyNameSuggestion(path: string): string {
+    const name = fileName(path)
+    const extensionStart = name.lastIndexOf(".")
+    if (extensionStart > 0 && extensionStart < name.length - 1) {
+      return `${name.slice(0, extensionStart)}-copy${name.slice(extensionStart)}`
+    }
+    return `${name}-copy`
+  }
+
+  function dirname(path: string): string {
+    return parentPath(path)
+  }
+
+  function isPathOrDescendant(path: string, root: string): boolean {
+    const normalizedPath = normalizeExplorerPath(path)
+    const normalizedRoot = normalizeExplorerPath(root)
+    if (!normalizedRoot) return normalizedPath.length > 0
+    return normalizedPath === normalizedRoot || normalizedPath.startsWith(`${normalizedRoot}/`)
+  }
+
+  function replacePathPrefix(path: string, previousPath: string, nextPath: string): string {
+    const normalizedPath = normalizeExplorerPath(path)
+    const normalizedPrevious = normalizeExplorerPath(previousPath)
+    const normalizedNext = normalizeExplorerPath(nextPath)
+    if (normalizedPath === normalizedPrevious) return normalizedNext
+    const suffix = normalizedPath.slice(normalizedPrevious.length).replace(/^\/+/, "")
+    return joinExplorerPath(normalizedNext, suffix)
+  }
+
+  function selectionFromNode(node: FileNode): ExplorerSelection {
+    return {
+      path: normalizeExplorerPath(node.path),
+      name: node.name,
+      type: node.type,
+    }
+  }
+
+  function selectionFromFilePath(path: string): ExplorerSelection {
+    return {
+      path: normalizeExplorerPath(path),
+      name: fileName(path),
+      type: "file",
+    }
+  }
+
+  function selectionFromRow(row: ExplorerRow): ExplorerSelection {
+    return row.kind === "search" ? selectionFromFilePath(row.path) : selectionFromNode(row.node)
+  }
+
   const uploading = createMemo(() => uploadOperation()?.directory === directory())
   let disposed = false
   onCleanup(() => {
@@ -959,7 +957,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const name = String(result.value || "").trim()
+    const name = String(result.value || "")
     if (!name) {
       setMutationError(t("explorer.name_required"))
       return
@@ -1012,7 +1010,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const name = String(result.value || "").trim()
+    const name = String(result.value || "")
     if (!name) {
       setMutationError(t("explorer.name_required"))
       return
@@ -1049,7 +1047,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const nextPath = normalizeExplorerPath(String(result.value || "").trim())
+    const nextPath = normalizeExplorerPath(String(result.value || ""))
     if (!nextPath) {
       setMutationError(t("explorer.name_required"))
       return
@@ -1089,7 +1087,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const targetDir = normalizeExplorerPath(String(result.value || "").trim())
+    const targetDir = normalizeExplorerPath(String(result.value || ""))
     if (!targetDir) {
       setMutationError(t("explorer.name_required"))
       return
@@ -1156,7 +1154,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const nextPath = normalizeExplorerPath(String(result.value || "").trim())
+    const nextPath = normalizeExplorerPath(String(result.value || ""))
     if (!nextPath) {
       setMutationError(t("explorer.name_required"))
       return
@@ -1199,7 +1197,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const targetDir = normalizeExplorerPath(String(result.value || "").trim())
+    const targetDir = normalizeExplorerPath(String(result.value || ""))
     if (!targetDir) {
       setMutationError(t("explorer.name_required"))
       return

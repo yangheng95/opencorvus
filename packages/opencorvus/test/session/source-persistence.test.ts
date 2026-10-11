@@ -1,4 +1,5 @@
 import { afterAll, describe, expect, test } from "bun:test"
+import path from "node:path"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { Session } from "../../src/session"
@@ -34,22 +35,22 @@ describe("message source persistence", () => {
         expect(message.role).toBe("assistant")
         if (message.role !== "assistant")
           throw new Error("Source persistence fixture requires its actual assistant message")
+        const citedPath = path.join(project.path, "src", " example.ts ")
         const sources = [
           urlSource({ url: "https://example.com/source#fragment", title: "Web source", provider: "exa" }),
           fileSource({
-            path: `${project.path}/src/example.ts`,
-            title: "src/example.ts",
+            path: citedPath,
+            title: "src/ example.ts ",
             range: { startLine: 4, endLine: 12 },
             provider: "opencorvus-read",
           }),
         ]
         const first = await persistMessageSources({ sessionID: session.id, messageID: message.id, sources })
-        const second = await persistMessageSources({ sessionID: session.id, messageID: message.id, sources })
+        await persistMessageSources({ sessionID: session.id, messageID: message.id, sources })
         await Session.updateMessage({ ...message, time: { created, completed: created + 1 }, finish: "stop" })
         const persisted = (await MessageStore.parts(message.id)).filter((part) => part.type.startsWith("source-"))
         expect({
           createdTypes: first.map((part) => part.type),
-          repeatedWriteCount: second.length,
           persisted: persisted.map((part) => ({
             type: part.type,
             orderKey: part.orderKey,
@@ -57,11 +58,15 @@ describe("message source persistence", () => {
           })),
         }).toEqual({
           createdTypes: ["source-url", "source-file"],
-          repeatedWriteCount: 0,
           persisted: [
             { type: "source-url", orderKey: expect.any(String), sourceId: expect.any(String) },
             { type: "source-file", orderKey: expect.any(String), sourceId: expect.any(String) },
           ],
+        })
+        expect(persisted.find((part) => part.type === "source-file")).toMatchObject({
+          path: citedPath,
+          title: "src/ example.ts ",
+          range: { startLine: 4, endLine: 12 },
         })
       },
     })

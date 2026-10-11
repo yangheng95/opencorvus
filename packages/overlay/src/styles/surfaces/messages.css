@@ -1069,6 +1069,13 @@
   overflow-wrap: anywhere;
 }
 
+button.msg-source-chip .msg-source-chip__label,
+button.msg-source-chip .msg-source-chip__detail,
+.msg-source-tooltip[data-source-type="source-file"] > strong,
+.msg-source-tooltip[data-source-type="source-file"] > span {
+  white-space: pre-wrap;
+}
+
 .msg-source-chip__location {
   display: -webkit-box;
   overflow: hidden;

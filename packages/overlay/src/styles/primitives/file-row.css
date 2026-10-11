@@ -79,6 +79,7 @@
 }
 
 .oc-file-row__name {
+  white-space: pre;
   min-width: 0;
   color: currentColor;
   font-size: var(--ui-font-body);

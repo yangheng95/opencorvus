@@ -652,6 +652,18 @@ name's end; the root directory remains a valid base. Project-relative Windows
 results use forward separators without changing filename case. External locations
 keep their original absolute identity. The server still owns physical realpath
 and access validation; this display/routing relation is not a permission check.
+The same server-path primitive owns separator interpretation for project-file
+keys in the Explorer and workbench. Windows project paths use forward separators;
+POSIX filename backslashes stay literal. Source file labels, direct opens,
+workbench reference targets and Explorer filename input preserve authored filename
+whitespace. File labels render that whitespace rather than collapsing it. Accepted
+move receipts reconcile the same exact descendant target; the server continues to
+validate filesystem names and write permissions. This filename contract does not
+change global project-directory selection or natural-language reference parsing.
+The file-source producer preserves nonblank authored title characters, including
+filename whitespace; an untitled source uses its exact filesystem basename.
+Source-file payload and persisted-part validation retain path/title characters
+while enforcing nonempty strings. Validation does not rewrite a resource name.
 Child conversation message dividers retain the shared transcript margin and use
 the medium spacing token for their inner top inset. This keeps independent
 Source-bearing messages distinct without repeating a large blank band; the

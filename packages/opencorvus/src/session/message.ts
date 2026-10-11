@@ -307,8 +307,8 @@ export namespace Message {
     .object({
       type: z.literal(VISIBLE_PART_TYPE.sourceFile),
       sourceId: z.string().trim().min(1),
-      path: z.string().trim().min(1),
-      title: z.string().trim().min(1),
+      path: z.string().min(1),
+      title: z.string().min(1),
       range: SourceFileRange.optional(),
       symbol: z.string().trim().min(1).optional(),
       ...SourceProviderFields,
