@@ -15,6 +15,16 @@ const markdownBodies = {
   "markdown-script": "---javascript\n({ title: 'Computed script label' })\n---\nLiteral remote resource\n",
 }
 
+const formatBody = "<html><head><title>Format &amp; 标题</title></head><body><h1>Actual heading</h1><p>Actual body</p></body></html>"
+const formatMediaTypes = {
+  formats: "text/html",
+  "formats-uppercase": "TEXT/HTML; charset=utf-8",
+  "formats-xhtml": "application/xhtml+xml; charset=utf-8",
+  "formats-xhtml-uppercase": "Application/XHTML+XML; charset=utf-8",
+  "formats-plain": "text/plain; charset=utf-8",
+  "formats-json": 'application/json; profile="text/html"',
+}
+
 test("fetched document metadata preserves published titles, resource content and persisted source", async () => {
   await using project = await memoryProject()
   const server = Bun.serve({
@@ -38,11 +48,8 @@ test("fetched document metadata preserves published titles, resource content and
         return new Response("<html><body><p>Actual untitled body</p></body></html>", {
           headers: { "content-type": "text/html" },
         })
-      if (pathname === "/formats")
-        return new Response(
-          "<html><head><title>Format &amp; 标题</title></head><body><h1>Actual heading</h1><p>Actual body</p></body></html>",
-          { headers: { "content-type": "text/html" } },
-        )
+      const formatMediaType = formatMediaTypes[pathname.slice(1) as keyof typeof formatMediaTypes]
+      if (formatMediaType) return new Response(formatBody, { headers: { "content-type": formatMediaType } })
       const markdownBody = markdownBodies[pathname.slice(1) as keyof typeof markdownBodies]
       if (markdownBody)
         return new Response(markdownBody, {
@@ -135,6 +142,24 @@ test("fetched document metadata preserves published titles, resource content and
           "Format & 标题\n\n# Actual heading\n\nActual body",
           "<html><head><title>Format &amp; 标题</title></head><body><h1>Actual heading</h1><p>Actual body</p></body></html>",
         ])
+        for (const route of ["formats-uppercase", "formats-xhtml", "formats-xhtml-uppercase"] as const) {
+          const equivalent = await Promise.all((["text", "markdown", "html"] as const).map(format =>
+            executeWebFetch({ url: `${server.url}${route}`, format }, ctx),
+          ))
+          expect(equivalent.map(value => value.output)).toEqual(formats.map(value => value.output))
+          expect(equivalent.map(value => value.sources)).toEqual(Array.from({ length: 3 }, () => [
+            urlSource({ url: `${server.url}${route}`, title: "Format & 标题", provider: "opencorvus-webfetch" }),
+          ]))
+        }
+        for (const route of ["formats-plain", "formats-json"] as const) {
+          const literal = await Promise.all((["text", "markdown", "html"] as const).map(format =>
+            executeWebFetch({ url: `${server.url}${route}`, format }, ctx),
+          ))
+          expect(literal.map(value => value.output)).toEqual(Array(3).fill(formatBody))
+          expect(literal.map(value => value.sources)).toEqual(Array.from({ length: 3 }, () => [
+            urlSource({ url: `${server.url}${route}`, provider: "opencorvus-webfetch" }),
+          ]))
+        }
         expect(untitled).toMatchObject({
           output: "<html><body><p>Actual untitled body</p></body></html>",
           sources: [urlSource({ url: `${server.url}untitled`, provider: "opencorvus-webfetch" })],

@@ -1,0 +1,48 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 2369648,
+    "archiveBytes": 74993,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 10,
+    "sessions": [
+      {
+        "id": "ses_hwYKMK96Pxpniehu3pBD",
+        "projectID": "prj_hISNIBDNpW59yZg7qLYI",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSDALzRzzkSHjoUQek",
+        "projectID": "prj_hmfBESHjCpb3SEnAx50o",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXmpfIX00zLso0vXru",
+        "sourceId": "1b4f731b39b07b19d128c1c278cdfc1376cb39b2e469f12b4f0c990760aa7e0e",
+        "title": "XHTML media type test",
+        "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/"
+      },
+      {
+        "id": "prt_g0VXmpgKM00c1Ack2mev",
+        "sourceId": "1b4f731b39b07b19d128c1c278cdfc1376cb39b2e469f12b4f0c990760aa7e0e",
+        "title": "XHTML media type test",
+        "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/"
+      },
+      {
+        "id": "prt_g0VXmpsv700TYWXsYqlh",
+        "sourceId": "c0c7c43f6aa1e52d2245aff9381708a12e214c2f57be45f3d80540f9c19207ca",
+        "title": "Sample XHTML 1.0 document",
+        "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml"
+      },
+      {
+        "id": "prt_g0VXmptnD00CTAssTUct",
+        "sourceId": "c0c7c43f6aa1e52d2245aff9381708a12e214c2f57be45f3d80540f9c19207ca",
+        "title": "Sample XHTML 1.0 document",
+        "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml"
+      }
+    ]
+  }
+]

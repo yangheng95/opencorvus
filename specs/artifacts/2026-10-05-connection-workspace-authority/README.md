@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [323 来源正文媒体类型](source-mime-plan-323.md)：HTML/XHTML实际正文与来源标题的一致性。
+
 - [322 早段正文读取](worker-narration-plan-322.md)：保留已结算来源边界的统一Part证据目录。
 
 - [321 真实子侧栏持续输出](source-child-stream-plan-321.md)：回到产品Task的真实流式来源与正文。

@@ -1,0 +1,420 @@
+{
+  "observedAtUtc": "2026-10-11T23:30:48.627Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hwYKMK96Pxpniehu3pBD",
+      "project_id": "prj_hISNIBDNpW59yZg7qLYI",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-mime-323-live-01\\runtime\\data\\projects\\2026\\10\\12\\bbe74c63-4cbf-4966-a02e-f1549d045381",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"b5e62705-6b0e-48c5-b967-ad3f2230745c\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hteSOgZwzuAhuyka80UK\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSDALzRzzkSHjoUQek",
+      "project_id": "prj_hmfBESHjCpb3SEnAx50o",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-mime-323-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请保持单人只读，不委托、不创建文件或额外报告。实际使用 webfetch 读取这个公开 W3C 页面：https://www.w3.org/People/...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hteSOgZwzuAhuyka80UK",
+      "sessionID": "ses_hwYKMK96Pxpniehu3pBD",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791761221530
+      }
+    },
+    {
+      "id": "msg_g0VXmpUIs00tTDKMSh7t",
+      "sessionID": "ses_hwYKMK96Pxpniehu3pBD",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791761221906,
+        "completed": 1791761225246
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_42071295-dd2b-4c1d-abcb-94aea5889270",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791761259920
+      }
+    },
+    {
+      "id": "msg_g0VXmpeF400aBaWMvnql",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791761260110,
+        "completed": 1791761264210
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXmpfKH00C4n50TzMt",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791761264277,
+        "completed": 1791761268163
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXmpgLq00hC6RVgdYb",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791761268218,
+        "completed": 1791761275210
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_d78d23be-e3f2-4fa3-a5f4-d8a1f72d7d0d",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791761312423
+      }
+    },
+    {
+      "id": "msg_g0VXmprtP00pRNtiGhWw",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791761312583,
+        "completed": 1791761316573
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXmpswC00HCJREeku7",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791761316600,
+        "completed": 1791761320489
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXmptxI00qTI3QIyNX",
+      "sessionID": "ses_-zUSDALzRzzkSHjoUQek",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791761320512,
+        "completed": 1791761328582
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hZQqe8Vn5jGHNJ4izKoC",
+      "messageID": "msg_hteSOgZwzuAhuyka80UK",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXmpUUg005o08cFU99",
+      "messageID": "msg_g0VXmpUIs00tTDKMSh7t",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmpV5400RAmLPm2qv",
+      "messageID": "msg_g0VXmpUIs00tTDKMSh7t",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791761224894,
+        "end": 1791761224999
+      }
+    },
+    {
+      "id": "prt_g0VXmpV9e0006Zglr11o",
+      "messageID": "msg_g0VXmpUIs00tTDKMSh7t",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmpeC000siMu8T7p3",
+      "messageID": "msg_42071295-dd2b-4c1d-abcb-94aea5889270",
+      "type": "text",
+      "text": "请保持单人只读，不委托、不创建文件或额外报告。实际使用 webfetch 读取这个公开 W3C 页面：https://www.w3.org/People/mimasa/test/xhtml/media-types/ 。先明确使用 format=markdown，再对同一地址使用 format=text；不要访问其他页面。随后用简短中文分别说明两次工具返回的正文形式、文档标题和一条实际读到的内容，区分读取事实与推测。请不要在回答中复制整篇正文，也不要把你的叙述当成独立测试结论。",
+      "textChars": 240
+    },
+    {
+      "id": "prt_g0VXmpeN0004T5HI3ytT",
+      "messageID": "msg_g0VXmpeF400aBaWMvnql",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmpfIX00zLso0vXru",
+      "messageID": "msg_g0VXmpeF400aBaWMvnql",
+      "type": "source-url",
+      "sourceId": "1b4f731b39b07b19d128c1c278cdfc1376cb39b2e469f12b4f0c990760aa7e0e",
+      "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/",
+      "title": "XHTML media type test",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXmpfIb00tDrt772IA",
+      "messageID": "msg_g0VXmpeF400aBaWMvnql",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmpfOY003bnx30K4R",
+      "messageID": "msg_g0VXmpfKH00C4n50TzMt",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmpgKM00c1Ack2mev",
+      "messageID": "msg_g0VXmpfKH00C4n50TzMt",
+      "type": "source-url",
+      "sourceId": "1b4f731b39b07b19d128c1c278cdfc1376cb39b2e469f12b4f0c990760aa7e0e",
+      "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/",
+      "title": "XHTML media type test",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXmpgKP00tK5YdPmYM",
+      "messageID": "msg_g0VXmpfKH00C4n50TzMt",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmpgPW004oAvobo5t",
+      "messageID": "msg_g0VXmpgLq00hC6RVgdYb",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmpgvO009wPQXtXiH",
+      "messageID": "msg_g0VXmpgLq00hC6RVgdYb",
+      "type": "text",
+      "text": "已按顺序仅对指定地址读取两次，未访问其他页面、委托或创建文件。\n\n1. **`format=markdown`**：返回正文含 Markdown 标题、列表和链接语法；文档标题为 **XHTML media type test**。实际读到：同时包含 `xml-stylesheet PI` 和 `link` 的 XHTML 分组列出了 `text/html`、`application/xhtml+xml`、`text/xml`、`application/xml` 四种媒体类型。\n2. **`format=text`**：返回正文为纯文本，以换行分隔标题和条目，没有 Markdown 链接语法；文档标题同样为 **XHTML media type test**。实际读到：“HTML 4 document”分组写着“Test documents other than text/html should fail.”\n\n以上仅描述两次工具返回中观察到的内容；页面所写的“should fail”是预期说明，不是我实际运行测试所得的结论。",
+      "textChars": 470,
+      "time": {
+        "start": 1791761270422,
+        "end": 1791761275043
+      }
+    },
+    {
+      "id": "prt_g0VXmpiA200w7T0EN0Um",
+      "messageID": "msg_g0VXmpgLq00hC6RVgdYb",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmprqp00hESBl5TFv",
+      "messageID": "msg_d78d23be-e3f2-4fa3-a5f4-d8a1f72d7d0d",
+      "type": "text",
+      "text": "继续保持同一人只读。刚才索引页实际返回的是 text/html，不能作为 application/xhtml+xml 的验收。请现在仅读取该索引明确列出的 https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml ，仍先使用 webfetch format=markdown，再用 format=text。不要打开其他资源。最后简短报告实际文档标题和两种输出的结构差别，不要把文档的测试预期当作已执行的浏览器测试。",
+      "textChars": 245
+    },
+    {
+      "id": "prt_g0VXmps0V009Bp1lhQ3B",
+      "messageID": "msg_g0VXmprtP00pRNtiGhWw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmpsv700TYWXsYqlh",
+      "messageID": "msg_g0VXmprtP00pRNtiGhWw",
+      "type": "source-url",
+      "sourceId": "c0c7c43f6aa1e52d2245aff9381708a12e214c2f57be45f3d80540f9c19207ca",
+      "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml",
+      "title": "Sample XHTML 1.0 document",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXmpsvA00QKyfami6I",
+      "messageID": "msg_g0VXmprtP00pRNtiGhWw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmpt0000MCI784fOB",
+      "messageID": "msg_g0VXmpswC00HCJREeku7",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmptnD00CTAssTUct",
+      "messageID": "msg_g0VXmpswC00HCJREeku7",
+      "type": "source-url",
+      "sourceId": "c0c7c43f6aa1e52d2245aff9381708a12e214c2f57be45f3d80540f9c19207ca",
+      "url": "https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml",
+      "title": "Sample XHTML 1.0 document",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXmptwL002ekS6gqZj",
+      "messageID": "msg_g0VXmpswC00HCJREeku7",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXmpu0s004435BfkYR",
+      "messageID": "msg_g0VXmptxI00qTI3QIyNX",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXmpunt009OLsmQfZf",
+      "messageID": "msg_g0VXmptxI00qTI3QIyNX",
+      "type": "text",
+      "text": "已按顺序仅对指定 `test.xhtml` 地址读取两次，未打开其他资源、委托或创建文件。\n\n- **`format=markdown`**：实际返回标题为 **Sample XHTML 1.0 document**。正文包含 `#` 层级标题、目录链接、有序／无序列表、强调及图片链接语法；阿拉伯文示例显示为 `غرب`。\n- **`format=text`**：实际返回标题同样为 **Sample XHTML 1.0 document**。正文主要通过空行和缩进分隔，没有 Markdown 标题、链接或列表标记；同一阿拉伯文示例保留为 `&#x063A;&#x0631;&#x0628;`。\n\n这些是两次返回内容的观察，不是浏览器测试结论；工具返回未展示 HTTP `Content-Type`，因此也不能仅凭 `.xhtml` 后缀确认媒体类型验收通过。",
+      "textChars": 382,
+      "time": {
+        "start": 1791761323773,
+        "end": 1791761328226
+      }
+    },
+    {
+      "id": "prt_g0VXmpw2O00SWSYIN3bm",
+      "messageID": "msg_g0VXmptxI00qTI3QIyNX",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXmpey500wmJFuXNXc",
+      "message_id": "msg_g0VXmpeF400aBaWMvnql",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_4f0bf3e94dae48c4acdafceea37d94e9\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/People/mimasa/test/xhtml/media-types/\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791761262901}}"
+    },
+    {
+      "id": "prt_g0VXmpg2N00Xn3TNA2vs",
+      "message_id": "msg_g0VXmpfKH00C4n50TzMt",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_f5ed32f7e1704a9ebd7beee56237e6aa\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/People/mimasa/test/xhtml/media-types/\",\"format\":\"text\",\"timeout\":60},\"time\":{\"start\":1791761267011}}"
+    },
+    {
+      "id": "prt_g0VXmpsd900PuAsmJEZY",
+      "message_id": "msg_g0VXmprtP00pRNtiGhWw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_39bce01008cf43029f4557b37874acd6\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791761315419}}"
+    },
+    {
+      "id": "prt_g0VXmptZk00uRyUmTWPZ",
+      "message_id": "msg_g0VXmpswC00HCJREeku7",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_96651e5de4124ff6b327bcb8726c9257\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/People/mimasa/test/xhtml/media-types/test.xhtml\",\"format\":\"text\",\"timeout\":60},\"time\":{\"start\":1791761319052}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXmpey500wmJFuXNXc",
+      "outcome": "completed",
+      "resultAttemptID": "per_hBdskedHeK25PMHYNQPX",
+      "outputChars": 2241,
+      "output": "XHTML media type test\n\n# XHTML media type test ([results](results))\n\nSee also: [XHTML entities test](../entities/)\n\n## XHTML with both xml-stylesheet PI and `link`\n\n-   [text/html](test.html)\n-   [application/xhtml+xml](test.xhtml)\n-   [text/xml](test.xml)\n-   [application/xml](test.axml)\n\n## XHTML with `link` only (without xml-stylesheet PI)\n\n-   [text/html](test2.html)\n-   [application/xhtml+xml](test2.xhtml)\n-   [text/xml](test2.xml)\n-   [application/xml](test2.axml)\n\n## XHTML with xml-stylesheet PI only (without `link`)\n\n-   [text/html](test3.html)\n-   [application/xhtml+xml](test3.xhtml)\n-   [text/xml](test3.xml)\n-   [application/xml](test3.axml)\n\n## XHTML with both xml-stylesheet PI and `link`, but without namespace declaration\n\n-   [text/html](test4.html)\n-   [application/xhtml+xml](test4.xhtml)\n-   [text/xml](test4.xml)\n-   [application/xml](test4.axml)\n\n## XHTML with both xml-stylesheet PI and `link`, but without the `DOCTYPE` declaration\n\n-   [text/html](test5.html)\n-   [application/xhtml+xml](test5.xhtml)\n-   [text/xml](test5.xml)\n-   [application/xml](test5.axml)\n\n## XHTML with both xml-stylesheet PI and `link`, but without both the `DOCTYPE` declaration and namespace declaration\n\n-   [text/html](test6.html)\n-   [application/xhtml+xml](test6.xhtml)\n-   [text/xml](test6.xml)\n-   [application/xml](test6.axml)\n\n## Broken (not well-formed) XHTML\n\nTest documents (other than text/html?) should fail.\n\n-   [text/html](test7.html)\n-   [application/xhtml+xml](test7.xhtml)\n-   [text/xml](test7.xml)\n-   [application/xml](test7.axml)\n\n## HTML 4 document\n\nTest documents other than text/html should fail.\n\n-   [text/html](test8.html)\n-   [application/xhtml+xml](test8.xhtml)\n-   [text/xml](test8.xml)\n-   [application/xml](test8.axml)\n\n## References\n\ntext/html\n\n[RFC 2854: The 'text/html' Media Type](http://www.rfc-editor.org/rfc/rfc2854.txt), D. Connolly, L. Masinter, June 2000\n\napplication/xhtml+xml\n\n[RFC 3236: The 'application/xhtml+xml' Media Type](http://www.rfc-editor.org/rfc/rfc3236.txt), M. Baker, P. Stark, January 2002\n\ntext/xml, application/xml\n\n[RFC 3023: XML Media Types](http://www.rfc-editor.org/rfc/rfc3023.txt), M. Murata, S. St.Laurent, D. Kohn, January 2001\n\n---\n\n[mimasa](mailto:mimasa@w3.org)",
+      "metadata": {
+        "originalBytes": 2241,
+        "shownBytes": 2241,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791761264165
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmpg2N00Xn3TNA2vs",
+      "outcome": "completed",
+      "resultAttemptID": "per_hThmUxJ8J2SlDo7SM0Z6",
+      "outputChars": 1461,
+      "output": "XHTML media type test\n\n\nXHTML media type test (results)\n\nSee also: XHTML entities test\n\nXHTML with both xml-stylesheet PI and link\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nXHTML with link only (without xml-stylesheet PI)\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nXHTML with xml-stylesheet PI only (without link)\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nXHTML with both xml-stylesheet PI\nand link, but without namespace declaration\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nXHTML with both xml-stylesheet PI\nand link, but without the DOCTYPE declaration\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nXHTML with both\nxml-stylesheet PI and link, but without both\nthe DOCTYPE declaration and namespace declaration\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nBroken (not well-formed) XHTML\n\nTest documents (other than text/html?) should fail.\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nHTML 4 document\n\nTest documents other than text/html should fail.\n\n\ntext/html\napplication/xhtml+xml\ntext/xml\napplication/xml\n\n\nReferences\n\n\ntext/html\n  RFC 2854:\n  The 'text/html' Media Type, D. Connolly, L. Masinter, June 2000\napplication/xhtml+xml\n  RFC 3236:\n  The 'application/xhtml+xml' Media Type, M. Baker, P. Stark,\n  January 2002\ntext/xml, application/xml\n  RFC 3023:\n  XML Media Types, M. Murata, S. St.Laurent, D. Kohn, January 2001\n\n\nmimasa",
+      "metadata": {
+        "originalBytes": 1461,
+        "shownBytes": 1461,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791761268122
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmpsd900PuAsmJEZY",
+      "outcome": "completed",
+      "resultAttemptID": "per_hZrpK2kzxMKk6ewDmr4l",
+      "outputChars": 7553,
+      "output": "Sample XHTML 1.0 document\n\n# Sample XHTML 1.0 document\n\n## Contents\n\n-   [Grouping elements: `div` and `span`](#grouping.heading)\n-   [Headings: `h1`, `h2`, `h3`, `h4`, `h5`, `h6`](#headings.heading)\n-   [Address: `address`](#address.heading)\n-   [Bidrectionality](#bidi.heading)\n    -   [Base directionality: left to right](#ltr.heading)\n    -   [Base directionality: right to left](#rtl.heading)\n    -   [Bidirectionality override: `bdo`](#bdo.heading)\n-   [Text](#text.heading)\n    -   [Phrase elements: `em`, `strong`, `dfn`, `code`, `samp`, `kbd`, `var`, `cite`, `abbr`, and `acronym`](#phrase.heading)\n    -   [Font style elements: `tt`, `i`, `b`, `big`, and `small`](#fonts.heading)\n    -   [Quotations: `blockquote` and `q`](#quotations.heading)\n    -   [Subscripts and superscripts: `sub` and `sup`](#sub-sup.heading)\n    -   [Paragraphs: `p`](#p.heading)\n    -   [Forcing a line break: `br`](#br.heading)\n    -   [Preformatted text: `pre`](#pre.heading)\n    -   [Marking document changes: `ins` and `del`](#ins-del.heading)\n    -   [Rules: `hr`](#hr.heading)\n-   [Lists](#lists.heading)\n    -   [Unordered lists: `ul`](#ul.heading)\n    -   [Ordered lists: `ol`](#ol.heading)\n    -   [Definition lists: `dl`](#dl.heading)\n-   [Tables](#tables.heading)\n    -   [Using column and row groups: `colgroup`, `col`, `thead`, `tfoot`, and `tbody`](#tables.grouping.heading)\n    -   [Associating header information with data cells](#tables.header.heading)\n    -   [Basic table, with categorizing cells](#tables.categorize.heading)\n-   [Anchors: `a`](#a.heading)\n-   [Objects, Images, and Applets](#objects.heading)\n    -   [Including an image: `img`](#img.heading)\n    -   [Generic inclusion: `object`](#object.heading)\n    -   [Client-side image maps: `map` and `area`](#usemap.heading)\n    -   [Server-side image maps](#ismap.heading)\n-   [Forms](#forms.heading)\n-   [Script](#script.heading)\n\n## Grouping elements: `div` and `span`\n\n`div`\n\n`span`\n\n## Headings: `h1`, `h2`, `h3`, `h4`, `h5`, `h6`\n\n# h1\n\n## h2\n\n### h3\n\n#### h4\n\n##### h5\n\n###### h6\n\n## Address: `address`\n\nAddress\n\n## Bidirectionality\n\n### Base directionality: left to right\n\nArabic text: غرب\n\n### Base directionality: right to left\n\nArabic text: غرب\n\n### Bidirectionality override: `bdo`\n\nleft to right: 1234567890\n\nright to left: 1234567890\n\n## Text\n\n### Phrase elements: `em`, `strong`, `dfn`, `code`, `samp`, `kbd`, `var`, `cite`, `abbr`, and `acronym`\n\n-   *em*\n-   **strong**\n-   dfn\n-   `code`\n-   samp\n-   kbd\n-   var\n-   cite\n-   abbr: abbr.\n-   acronym: WWW\n\n### Font style elements: `tt`, `i`, `b`, `big`, and `small`\n\n-   tt\n-   *i*\n-   **b**\n-   big\n-   small\n\n### Quotations: `blockquote` and `q`\n\nAn example of quotation:\n\n> John said, I saw Lucy at lunch, she told me Mary wants you to get some ice cream on your way home. I think I will get some at Ben and Jerry's, on Gloucester Road.\n\n### Subscripts and superscripts: `sub` and `sup`\n\nThis is subscript, and this is superscript.\n\n### Paragraphs: `p`\n\nThis is paragraph.\n\n### Forcing a line break: `br`\n\nLine\nbreak\n\n### Preformatted text: `pre`\n\n    This is\n        preformatted\n    text.\n\n\n### Marking document changes: `ins` and `del`\n\nins and del\n\nInserted paragraph\n\nDeleted paragraph\n\nSome words were inserted, but later whole paragraph was deleted\n\n### Rules: `hr`\n\n---\n\n## Lists\n\n### Unordered lists: `ul`\n\n-   \"Inline\" list item\n-   \"Block\" list item\n\n\n### Ordered lists: `ol`\n\n1.  \"Inline\" list item\n2.  \"Block\" list item\n\n\n### Definition lists: `dl`\n\nDefinition term\n\n\"Inline\" definition description\n\n\"Block\" definition description\n\n## Tables\n\n### Using column and row groups: `colgroup`, `col`, `thead`, `tfoot`, and `tbody`\n\nCaption\n\nInline content in `th` in `thead`\n\nBlock content in `th` in `thead`\n\nInline content in `td` in `thead`\n\nBlock content in `td` in `thead`\n\nInline content in `th` in `tfoot`\n\nBlock content in `th` in `tfoot`\n\nInline content in `td` in `tfoot`\n\nBlock content in `td` in `tfoot`\n\nInline content in `th` in `tbody`\n\nBlock content in `th` in `tbody`\n\nInline content in `td` in `tbody`\n\nBlock content in `td` in `tbody`\n\n### Associating header information with data cells\n\n\nthead.th1\n\nthead.th2\n\nthead.th3\n\nthead.th4\n\ntbody.tr1.th1\n\ntbody.tr1.td1\n\ntbody.tr1.td2\n\ntbody.tr1.td3\n\ntbody.tr2.th1\n\ntbody.tr2.td1\n\ntbody.tr2.td2\n\ntbody.tr2.td3\n\n### Basic table, with categorizing cells\n\nTravel Expense Report\n\nMeals\n\nHotels\n\nTransport\n\nsubtotals\n\nSan Jose\n\n25-Aug-97\n\n37.74\n\n112.00\n\n45.00\n\n26-Aug-97\n\n27.28\n\n112.00\n\n45.00\n\nsubtotals\n\n65.02\n\n224.00\n\n90.00\n\n379.02\n\nSeattle\n\n27-Aug-97\n\n96.25\n\n109.00\n\n36.00\n\n28-Aug-97\n\n35.00\n\n109.00\n\n36.00\n\nsubtotals\n\n131.25\n\n218.00\n\n72.00\n\n421.25\n\nTotals\n\n196.27\n\n442.00\n\n162.00\n\n800.27\n\n## Anchors: `a`\n\nFor more information about XHTML 1.0, please consult the [XHTML 1.0 Specification](http://www.w3.org/TR/xhtml1 \"a\").\n\nFor more information about semantics of the elements and their attributes in XHTML, please consult the [HTML 4 Specification](http://www.w3.org/TR/html4).\n\nLinks to the [previous section](#tables.heading) and the [next section](#objects.heading).\n\nBody elements: [div](#div), [span](#span), [h1](#h1), [h2](#h2), [h3](#h3), [h4](#h4), [h5](#h5), [h6](#h6), [address](#address), [bdo](#bdo), [em](#em), [strong](#strong), [dfn](#dfn), [code](#code), [samp](#samp), [kbd](#kbd), [var](#var), [cite](#cite), [abbr](#abbr), [acronym](#acronym), [tt](#tt), [i](#i), [b](#b), [big](#big), [small](#small), [blockquote](#blockquote), [q](#q), [sub](#sub), [sup](#sup), [p](#p), [br](#br), [pre](#pre), [ins](#ins), [del](#del), [hr](#hr), [ul](#ul), [ol](#ol), [li](#ul.li.inline), [dl](#dl), [dt](#dt), [dd](#dd.inline), [table](#table), [caption](#caption), [colgroup](#colgroup), [col](#col), [thead](#thead), [tfoot](#tfoot), [tbody](#tbody), [tr](#thead.tr), [th](#thead.th.inline), [td](#thead.td.inline), [a](#a), [img](#img), [object](#object), [map](#map), [area](#area)\n\n## Objects, Images, and Applets\n\n### Including an image: `img`\n\n![image](dot.png \"img\")\n\n### Generic inclusion: `object`\n\n    ![Image](dot.png)\n\n### Client-side image maps: `map` and `area`\n\n![image](dot.png)\n\n![image](dot.png)\n\n\n-   [Grouping elements: div and span](#grouping.heading)\n-   [Headings: h1, h2, h3, h4, h5, h6](#headings.heading)\n-   [Address: address](#address.heading)\n\n### Server-side image maps\n\n[![Server-side image maps](dot.png)](uri)\n\n## Forms\n\nInput fields\n\nText input\n\nText input field:\n\nDisabled text input field:\n\nReadonly text input field:\n\nPassword input\n\nPassword input field:\n\nDisabled password input field:\n\nReadonly password input field:\n\nCheckboxes\n\n1:  2:  3:  4:  5:  disabled:\n\nRadio buttons\n\na.  b.  c.  d.  e.  disabled.\n\nFile upload\n\nFile upload:\n\nDisabled file upload:\n\nImage submit button\n\nImage submit button:\n\nDisabled image submit button:\n\nSubmit/Reset\n\n\nButton Submit button using\nthe `button` element Reset button using\nthe `button` element A button using the\n`button` element A disabled button using\nthe `button` element\n\nOption selector\n\nSingle selection: Option 1 Option 2 Option 3 (disabled) Option 4 (disabled) Option 5 Option 6 (default) Option 7 (disabled)\n\nMultiple selections: Option 1 Option 2 Option 3 (disabled) Option 4 (disabled) Option 5 Option 6 (default) Option 7 (disabled)\n\nDisabled selection: Option 1 Option 2 Option 3 (disabled) Option 4 (disabled) Option 5 Option 6 (default) Option 7 (disabled)\n\nTextarea\n\nTextarea: default text\n\nDisabled textarea: default text\n\nReadonly textarea: default text\n\n## Script\n\nAlternate text in `noscript`.\n\n---\n\n[Masayasu Ishikawa](mailto:mimasa@w3.org)",
+      "metadata": {
+        "originalBytes": 7559,
+        "shownBytes": 7559,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791761316527
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXmptZk00uRyUmTWPZ",
+      "outcome": "completed",
+      "resultAttemptID": "per_hvMcamJ9FYcNctcRefp6",
+      "outputChars": 6927,
+      "output": "Sample XHTML 1.0 document\n\n\n    Sample XHTML 1.0 document\n\n\n    Contents\n\n\n      Grouping elements: div and span\n      Headings: h1, h2, h3, h4, h5, h6\n      Address: address\n      Bidrectionality\n\n\t  Base directionality: left to right\n\t  Base directionality: right to left\n\t  Bidirectionality override: bdo\n\n\n      Text\n\n\t  Phrase elements: em, strong, dfn, code, samp, kbd, var, cite, abbr, and acronym\n\t  Font style elements: tt, i, b, big, and small\n\t  Quotations: blockquote and q\n\t  Subscripts and superscripts: sub and sup\n\t  Paragraphs: p\n\t  Forcing a line break: br\n\t  Preformatted text: pre\n\t  Marking document changes: ins and del\n\t  Rules: hr\n\n\n      Lists\n\n\t  Unordered lists: ul\n\t  Ordered lists: ol\n\t  Definition lists: dl\n\n\n      Tables\n\n          Using column and row groups: colgroup, col, thead, tfoot, and tbody\n          Associating header information with data cells\n\t  Basic table, with categorizing cells\n\n\n      Anchors: a\n      Objects, Images, and Applets\n\n          Including an image: img\n          Generic inclusion: object\n          Client-side image maps: map and area\n          Server-side image maps\n\n\n      Forms\n      Script\n\n\n    Grouping elements: div and span\n\n\n    div\n    span\n\n\n    Headings: h1, h2, h3, h4, h5, h6\n\n      h1\n      h2\n      h3\n      h4\n      h5\n      h6\n\n\n    Address: address\n\n\n     Address\n\n\n    Bidirectionality\n\n    Base directionality: left to right\n\n\n    Arabic text:\n    &#x063A;&#x0631;&#x0628;\n\n\n    Base directionality: right to left\n\n\n    Arabic text:\n    &#x063A;&#x0631;&#x0628;\n\n\n    Bidirectionality override: bdo\n\n    left to right:\n    1234567890\n\n    right to left:\n    1234567890\n\n\n    Text\n\n\n    Phrase elements: em, strong, dfn, code, samp, kbd, var, cite, abbr, and acronym\n\n\n      em\n      strong\n      dfn\n      code\n      samp\n      kbd\n      var\n      cite\n     abbr: abbr.\n     acronym: WWW\n\n\n    Font style elements: tt, i, b, big, and small\n\n\n      tt\n      i\n      b\n      big\n      small\n\n\n    Quotations:\n    blockquote and q\n\n    An example of quotation:\n\n\n    John said, I saw\n    Lucy at lunch, she told me Mary wants you to get some\n    ice cream on your way home. I think I will get some at Ben and\n    Jerry's, on Gloucester Road.\n\n\n    Subscripts and superscripts: sub and sup\n\n\n    This is\n    subscript,\n    and this is\n    superscript.\n\n\n    Paragraphs: p\n\n\n    This is paragraph.\n\n\n    Forcing a line break: br\n\n    Linebreak\n\n\n    Preformatted text: pre\n\n\n    This is\n        preformatted\n    text.\n\n\n    Marking document changes:\n    ins and del\n\n    ins and del\n\n\n    Inserted paragraph\n\n\n    Deleted paragraph\n\n\n    Some words were inserted,\n    but later whole paragraph was deleted\n\n\n    Rules: hr\n\n\n    Lists\n\n\n    Unordered lists: ul\n\n\n      \"Inline\" list item\n      \"Block\" list item\n\n\n    Ordered lists: ol\n\n\n      \"Inline\" list item\n      \"Block\" list item\n\n\n    Definition lists: dl\n\n\n      Definition term\n      \"Inline\" definition description\n      \"Block\" definition description\n\n\n    Tables\n\n    Using column and row groups: colgroup, col, thead, tfoot, and tbody\n\n\n      Caption\n\n\n\t  Inline content in th in thead\n\t  Block content in th in thead\n\t  Inline content in td in thead\n\t  Block content in td in thead\n\n\n\t  Inline content in th in tfoot\n\t  Block content in th in tfoot\n\t  Inline content in td in tfoot\n\t  Block content in td in tfoot\n\n\n\t  Inline content in th in tbody\n\t  Block content in th in tbody\n\t  Inline content in td in tbody\n\t  Block content in td in tbody\n\n\n    Associating header information with data cells\n\n\n\t  thead.th1\n\t  thead.th2\n\t  thead.th3\n\t  thead.th4\n\n\n\t  tbody.tr1.th1\n\t  tbody.tr1.td1\n\t  tbody.tr1.td2\n\t  tbody.tr1.td3\n\n\n\t  tbody.tr2.th1\n\t  tbody.tr2.td1\n\t  tbody.tr2.td2\n\t  tbody.tr2.td3\n\n\n    Basic table, with categorizing cells\n\n\n      Travel Expense Report\n\n\n        Meals\n        Hotels\n        Transport\n        subtotals\n\n\n        San Jose\n\n\n        25-Aug-97\n        37.74\n        112.00\n        45.00\n\n\n        26-Aug-97\n        27.28\n        112.00\n        45.00\n\n\n        subtotals\n        65.02\n        224.00\n        90.00\n        379.02\n\n\n        Seattle\n\n\n        27-Aug-97\n        96.25\n        109.00\n        36.00\n\n\n        28-Aug-97\n        35.00\n        109.00\n        36.00\n\n\n        subtotals\n        131.25\n        218.00\n        72.00\n        421.25\n\n\n        Totals\n        196.27\n        442.00\n        162.00\n        800.27\n\n\n    Anchors: a\n\n    For more information about XHTML 1.0, please consult the\n    XHTML 1.0 Specification.\n\n    For more information about semantics of the elements and their\n    attributes in XHTML, please consult the\n    HTML 4 Specification.\n\n    Links to the previous section and the next section.\n\n\n    Body elements:\n    div, span,\n    h1, h2, h3,\n    h4, h5, h6,\n    address, bdo,\n    em, strong, dfn,\n    code, samp, kbd,\n    var, cite, abbr,\n    acronym, tt, i,\n    b, big, small,\n    blockquote, q,\n    sub, sup, p,\n    br, pre,\n    ins, del, hr,\n    ul, ol, li,\n    dl, dt, dd,\n    table, caption,\n    colgroup, col,\n    thead, tfoot,\n    tbody, tr,\n    th, td,\n    a, img, object,\n    map, area\n\n\n    Objects, Images, and Applets\n\n\n    Including an image: img\n\n\n    Generic inclusion: object\n\n\n    Client-side image maps: map and area\n\n\n        Grouping elements: div and span\n        Headings: h1, h2, h3, h4, h5, h6\n        Address: address\n\n\n    Server-side image maps\n\n\n    Forms\n\n\n      Input fields\n\n\n      Text input\n\n\n      Text input field:\n\n\n      Disabled text input field:\n\n\n      Readonly text input field:\n\n\n      Password input\n\n\n      Password input field:\n\n\n      Disabled password input field:\n\n\n      Readonly password input field:\n\n\n      Checkboxes\n\n      1:\n\n      2:\n\n      3:\n\n      4:\n\n      5:\n\n      disabled:\n\n\n      Radio buttons\n\n      a.\n\n      b.\n\n      c.\n\n      d.\n\n      e.\n\n      disabled.\n\n\n      File upload\n      File upload:\n\n\n      Disabled file upload:\n\n\n      Image submit button\n      Image submit button:\n\n\n      Disabled image submit button:\n\n\n      Submit/Reset\n\n\n      Button\n\n      Submit button using the button element\n\n      Reset button using the button element\n\n      A button using the button element\n\n      A disabled button using the button element\n\n\n      Option selector\n\n      Single selection:\n\n\n\t    Option 1\n\t    Option 2\n\n\n\t    Option 3 (disabled)\n\t    Option 4 (disabled)\n\n\t  Option 5\n\t  Option 6 (default)\n\t  Option 7 (disabled)\n\n\n      Multiple selections:\n\n\n\t    Option 1\n\t    Option 2\n\n\n\t    Option 3 (disabled)\n\t    Option 4 (disabled)\n\n\t  Option 5\n\t  Option 6 (default)\n\t  Option 7 (disabled)\n\n\n      Disabled selection:\n\n\n\t    Option 1\n\t    Option 2\n\n\n\t    Option 3 (disabled)\n\t    Option 4 (disabled)\n\n\t  Option 5\n\t  Option 6 (default)\n\t  Option 7 (disabled)\n\n\n      Textarea\n      Textarea:\n      default text\n      Disabled textarea:\n      default text\n      Readonly textarea:\n      default text\n\n\n    Script\n\n\n       Masayasu Ishikawa",
+      "metadata": {
+        "originalBytes": 6927,
+        "shownBytes": 6927,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791761319882
+      }
+    }
+  ]
+}

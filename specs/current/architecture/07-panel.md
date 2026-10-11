@@ -642,6 +642,10 @@ parser. Remote script-language metadata is literal resource content. Optional
 malformed YAML metadata leaves the successful body and canonical URL intact;
 the Overlay displays the published Source payload without fetching or inventing
 another title.
+The same normalized response media type selects HTML/XHTML title parsing and
+text/Markdown body conversion. Case variants and media-type parameters do not
+change that classification; parameter contents cannot turn a non-HTML type into
+HTML. An explicit HTML-format request retains the fetched markup.
 Tooltip detail adds location or media information only when it differs from the
 primary source identity; it does not repeat a root-level file's name or range.
 File citation labels and location details share one line-range presentation:

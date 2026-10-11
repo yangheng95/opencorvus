@@ -148,7 +148,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
     // Handle content based on requested format and actual content type
     switch (params.format) {
       case "markdown":
-        if (contentType.includes("text/html")) {
+        if (isHtmlMime(mime)) {
           const markdown = formatFetchedText(convertHTMLToMarkdown(content))
           return {
             ...markdown,
@@ -164,7 +164,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
         }
 
       case "text":
-        if (contentType.includes("text/html")) {
+        if (isHtmlMime(mime)) {
           const text = formatFetchedText(await extractTextFromHTML(content))
           return {
             ...text,
@@ -200,8 +200,12 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
   }
 }
 
+function isHtmlMime(mime: string): boolean {
+  return mime === "text/html" || mime === "application/xhtml+xml"
+}
+
 function fetchedDocumentTitle(mime: string, content: string): string | undefined {
-  if (mime === "text/html" || mime === "application/xhtml+xml") return createDocument(content).title.trim() || undefined
+  if (isHtmlMime(mime)) return createDocument(content).title.trim() || undefined
   if (mime !== "text/markdown" && mime !== "text/x-markdown") return undefined
   // Remote metadata is YAML data. A language marker could select a script
   // engine in the frontmatter library, so only the default delimiter is read.
