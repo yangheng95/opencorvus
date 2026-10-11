@@ -680,8 +680,10 @@ Its resource settles the received scope, merged transcript and that observation
 together. Reconciliation retires only unchanged observed entries in the returned
 Message scope; events received during the read keep their own identities. A delta
 does not acknowledge unreturned Messages. Durable Info, Source snapshots and old
-removal events can yield to this later read. Unpersisted text fields, omitted
-empty text/reasoning scaffolds and uncommitted pending Tool input remain live.
+removal events can yield to this later read. Unpersisted text fields on returned
+Parts, omitted reasoning scaffolds and uncommitted pending Tool input remain live.
+Empty text Parts remain in the HTTP transcript. A known text Part missing from
+the later read is retired, including its earlier unpersisted field observation.
 The live Message removal map retains original event objects, allowing independent
 removals to be compared without inventing a sequence or wall-clock watermark.
 The display projects the reconciled live data with the same settled base before

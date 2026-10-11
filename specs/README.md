@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [317 空正文成员契约](records/2026-10/2026-10-12-source-text-membership-317.md)：真实HTTP空text与已撤回正文的区别。
+
 - [316 子会话补全顺序](records/2026-10/2026-10-12-source-read-order-316.md)：首次读取、来源更新与真实删除观察的接管。
 
 - [315 子会话 Part 成员关系](records/2026-10/2026-10-12-source-part-membership-315.md)：来源与文字撤回后的权威补全。

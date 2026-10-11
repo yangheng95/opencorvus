@@ -219,12 +219,12 @@ export function reconcileSubagentConversationLive(
     const persisted = message?.parts.some((part) => part.id === change.partID)
     const hasFields = Object.keys(change.fields).length > 0
     if (message && !persisted && !change.removed) {
-      // Empty streamed Parts can be omitted from the presented transcript.
+      // Reasoning is omitted from the presented transcript; empty text is not.
       // Pending Tool input is explicitly ephemeral until validation commits it.
-      if (change.snapshot?.type === "text" || change.snapshot?.type === "reasoning" || hasFields) continue
+      if (change.snapshot?.type === "reasoning" || (!change.snapshot && hasFields)) continue
       if (change.snapshot?.type === "tool" && (change.snapshot.state as { status?: string })?.status === "pending") continue
     }
-    if (message && hasFields && !change.removed) {
+    if (message && persisted && hasFields && !change.removed) {
       if (!change.snapshot) continue
       if (parts === current.parts) parts = { ...parts }
       parts[key] = { messageID: change.messageID, partID: change.partID, fields: change.fields }

@@ -203,6 +203,43 @@ test.each(["withdrawn", "replaced", "restored"] as const)("first child read owns
   } })
 }, 30_000)
 
+test.each(["retained", "withdrawn"] as const)("first child read projects a %s text Part using its real persisted membership", async (change) => {
+  await using project = await memoryProject(`first-text-${change}`)
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const owner = await taskWithStreamingSession()
+    const text = await Session.updatePart({ id: Identifier.ascending("part"), sessionID: owner.sessionID, messageID: owner.messageID, type: "text", text: "" })
+    const source = await Session.updatePart({ id: Identifier.ascending("part"), sessionID: owner.sessionID, messageID: owner.messageID, type: "source-url", sourceId: "current-source", url: "https://example.com/current", title: "Current source" })
+    await Database.awaitEffectIdle(5_000)
+    await awaitTaskMessageProtocolBridgeIdle()
+    const route = new Hono().route("/", EngineRoutes())
+    const endpoint = `/task/${owner.taskID}/conversation/session/${owner.sessionID}`
+    const target = { source: { kind: "task" as const, id: owner.taskID }, sessionID: owner.sessionID, directory: project.path, authority: captureApiAuthority() }
+    const response = await route.request(endpoint)
+    expect(response.status).toBe(200)
+    const before = parseSubagentConversation(target, await response.json())
+    const parts = before.messages.find((message) => message.messageID === owner.messageID)!.parts
+    expect(parts).toEqual([text, source])
+    let live = parts.reduce((current, part) => observeSubagentConversationLiveEvent(current, { type: "message.part.updated", payload: { part } }), createSubagentConversationLiveProjection(owner.sessionID))
+    const accepted = "Accepted unpersisted text"
+    const stop = Bus.subscribe(Message.Event.PartDelta, (event) => {
+      if (event.properties.partID === text.id) live = observeSubagentConversationLiveEvent(live, { type: Message.Event.PartDelta.type, payload: event.properties })
+    })
+    try {
+      await Session.updatePartDelta({ sessionID: owner.sessionID, messageID: owner.messageID, partID: text.id, partType: "text", field: "text", delta: accepted, value: accepted })
+    } finally { stop() }
+    if (change === "withdrawn") await Session.removePart({ sessionID: owner.sessionID, messageID: owner.messageID, partID: text.id })
+    await Database.awaitEffectIdle(5_000)
+    await awaitTaskMessageProtocolBridgeIdle()
+    const observed = live
+    const currentResponse = await route.request(endpoint)
+    expect(currentResponse.status).toBe(200)
+    const incoming = parseSubagentConversation(target, await currentResponse.json())
+    expect(incoming.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(change === "retained" ? [text, source] : [source])
+    const projected = projectSubagentConversationLive(incoming, reconcileSubagentConversationLive(incoming, observed, live))
+    expect(projected.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(change === "retained" ? [{ ...text, text: accepted }, source] : [source])
+  } })
+}, 30_000)
+
 test("Task child snapshot and changed-message delta retain a real control-only assistant identity", async () => {
   await using project = await memoryProject("task-control-only-identity")
   await Instance.provide({

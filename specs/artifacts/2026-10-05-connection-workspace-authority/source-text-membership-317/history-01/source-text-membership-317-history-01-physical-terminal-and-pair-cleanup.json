@@ -1,0 +1,68 @@
+{
+  "occurrence": "source-text-membership-317-history-01-2d6cd992-4705-4081-9bd3-42de4072f415",
+  "observedAtUtc": "2026-10-11T20:53:16.2082389Z",
+  "listeners": null,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 70420,
+        "processInstanceID": "win32:639273487216261473",
+        "occurrenceID": "282aba1c-fe02-4e78-b8e7-7e8afccfc17e"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 75916,
+        "processInstanceID": "win32:639273487208619160",
+        "occurrenceID": "c42fb8af-e1ea-4316-a9ef-3298015bf808"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "source-text-membership-317-history-01-2d6cd992-4705-4081-9bd3-42de4072f415",
+    "outcome": "settled",
+    "host": {
+      "pid": 75916,
+      "processInstanceID": "win32:639273487208619160",
+      "occurrenceID": "c42fb8af-e1ea-4316-a9ef-3298015bf808"
+    },
+    "target": {
+      "pid": 70420,
+      "processInstanceID": "win32:639273487216261473",
+      "occurrenceID": "282aba1c-fe02-4e78-b8e7-7e8afccfc17e"
+    },
+    "observedAtUtc": "2026-10-11T20:53:13.682Z",
+    "deadlineAt": 1791752820782,
+    "terminal": {
+      "occurrenceID": "source-text-membership-317-history-01-2d6cd992-4705-4081-9bd3-42de4072f415",
+      "pid": 70420,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-text-membership-317-history-01\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-text-membership-317-history-01\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "copiedLength": 2001983
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true
+}

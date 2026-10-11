@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [317 空正文成员契约](source-text-membership-plan-317.md)：真实HTTP空text与已撤回正文的区别。
+
 - [316 子会话补全顺序](source-read-order-plan-316.md)：首次读取、来源更新与真实删除观察的接管。
 
 - [315 子会话 Part 成员关系](source-part-membership-plan-315.md)：来源与文字撤回后的权威补全。

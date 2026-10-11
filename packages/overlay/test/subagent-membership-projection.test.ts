@@ -200,8 +200,8 @@ test("read reconciliation retains accepted unpersisted text over its new persist
   ])
 })
 
-test.each(["text", "reasoning"])("an omitted empty %s scaffold accepts a later live field", (type) => {
-  const scaffold = { ...textPart, type, text: "" }
+test("an omitted reasoning scaffold accepts a later live field", () => {
+  const scaffold = { ...textPart, type: "reasoning", text: "" }
   const observed = retainedLive([withParts([keptSource, scaffold])])
   const read = transcript([partOwner])
   const reconciled = reconcileSubagentConversationLive(read, observed, observed)
@@ -211,6 +211,26 @@ test.each(["text", "reasoning"])("an omitted empty %s scaffold accepts a later l
   expect(projectSubagentConversationLive(read, current).messages[0]!.parts).toEqual([
     keptSource, { ...scaffold, text: "Accepted after hydration" },
   ])
+})
+
+test("a returned empty text Part accepts its subsequent unpersisted field", () => {
+  const empty = { ...textPart, text: "" }
+  const observed = retainedLive([withParts([keptSource, empty])])
+  const incoming = transcript([withParts([keptSource, empty])])
+  const reconciled = reconcileSubagentConversationLive(incoming, observed, observed)
+  const current = observeSubagentConversationLiveEvent(reconciled, {
+    type: "message.part.delta", payload: { sessionID: partOwner.sessionID, messageID: partOwner.messageID, partID: textPart.id, field: "text", value: "Accepted after the read" },
+  })
+  expect(projectSubagentConversationLive(incoming, current).messages[0]!.parts).toEqual([
+    keptSource, { ...empty, text: "Accepted after the read" },
+  ])
+})
+
+test("a withdrawn text Part yields to the current source even with a retained unpersisted field", () => {
+  const observed = observeSubagentConversationLiveEvent(retainedLive([withParts([keptSource, textPart])]), {
+    type: "message.part.delta", payload: { sessionID: partOwner.sessionID, messageID: partOwner.messageID, partID: textPart.id, field: "text", value: "Withdrawn live text" },
+  })
+  expect(afterRead(transcript([partOwner]), observed).messages[0]!.parts).toEqual([keptSource])
 })
 
 test("pending Tool input survives a read until its canonical committed request is returned", () => {
