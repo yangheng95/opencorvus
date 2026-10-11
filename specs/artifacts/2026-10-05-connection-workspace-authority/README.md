@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [308 子会话来源Recall](child-source-plan-308.md) / [实际结果](child-source-308/README.md)：90表完整历史、真正研究员三来源及列表/关闭/跨项目阅读返回，单agent。
+
 - [307 窄侧聊来源Recall](source-side-plan-307.md) / [实际结果](source-side-307/README.md)：380px五来源、5050字符同reader真实关闭重开/后续阅读保持，单agent。
 
 - [306 多来源层级方案](source-group-plan-306.md) / [真实结果](source-group-306/README.md)：首条直接链接、余项独立展开；中英文/原文读位与15次Sol流式复核，单agent。

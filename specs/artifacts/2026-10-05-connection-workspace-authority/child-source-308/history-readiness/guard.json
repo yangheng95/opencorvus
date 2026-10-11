@@ -1,0 +1,140 @@
+{
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/sse-compression-305-live-01",
+  "boundary": "Fresh exact original Native/Host, port, pair and actual physical/output/request settled receipt; original Task qualification retained. Parent16895 actual exit0 was observed in batch305; no new parent execution claimed.",
+  "readQualified": true,
+  "listenerCount": 0,
+  "originalQualification": {
+    "physicalCompletion": true,
+    "pairedCleanupComplete": true,
+    "nativeSettlement": {
+      "occurrence": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+      "outcome": "settled",
+      "host": {
+        "pid": 32404,
+        "processInstanceID": "win32:639273321369717971",
+        "occurrenceID": "62454bc9-def0-4f60-9a19-bc15a8ebb7a3"
+      },
+      "target": {
+        "pid": 11300,
+        "processInstanceID": "win32:639273321377038761",
+        "occurrenceID": "04c5d5de-a8e0-4b8d-8e08-86e837450624"
+      },
+      "observedAtUtc": "2026-10-11T16:25:33.932Z",
+      "deadlineAt": 1791736836957,
+      "terminal": {
+        "occurrenceID": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+        "pid": 11300,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 11300,
+          "processInstanceID": "win32:639273321377038761",
+          "occurrenceID": "04c5d5de-a8e0-4b8d-8e08-86e837450624"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 32404,
+          "processInstanceID": "win32:639273321369717971",
+          "occurrenceID": "62454bc9-def0-4f60-9a19-bc15a8ebb7a3"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "listeners": null,
+    "occurrence": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+    "observedAtUtc": "2026-10-11T16:25:36.4358706Z",
+    "copiedPair": [
+      {
+        "copiedLength": 2194,
+        "presentAfter": false,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\sse-compression-305-live-01\\runtime\\data\\auth.json",
+        "outcome": "removed"
+      },
+      {
+        "copiedLength": 9155406,
+        "presentAfter": false,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\sse-compression-305-live-01\\runtime\\data\\models.json",
+        "outcome": "removed"
+      }
+    ]
+  },
+  "native": {
+    "occurrence": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+    "outcome": "settled",
+    "host": {
+      "pid": 32404,
+      "processInstanceID": "win32:639273321369717971",
+      "occurrenceID": "62454bc9-def0-4f60-9a19-bc15a8ebb7a3"
+    },
+    "target": {
+      "pid": 11300,
+      "processInstanceID": "win32:639273321377038761",
+      "occurrenceID": "04c5d5de-a8e0-4b8d-8e08-86e837450624"
+    },
+    "observedAtUtc": "2026-10-11T16:25:33.932Z",
+    "deadlineAt": 1791736836957,
+    "terminal": {
+      "occurrenceID": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+      "pid": 11300,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "observedAtUtc": "2026-10-11T17:21:29.2253994Z",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 32404,
+        "processInstanceID": "win32:639273321369717971",
+        "occurrenceID": "62454bc9-def0-4f60-9a19-bc15a8ebb7a3"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 11300,
+        "processInstanceID": "win32:639273321377038761",
+        "occurrenceID": "04c5d5de-a8e0-4b8d-8e08-86e837450624"
+      }
+    }
+  ],
+  "originalTask": {
+    "taskID": "tsk_g00VXl5hD700hVMdFR1S",
+    "projectID": "prj_hFND5NLAruqz7d195aO4",
+    "rootSessionID": "ses_-zUSEuIfOzzhSTClzD9u",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXl5hLA00kI34cHdaO",
+    "openedAt": 1791735532097
+  }
+}
