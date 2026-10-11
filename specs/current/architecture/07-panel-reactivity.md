@@ -127,12 +127,23 @@ Task-owned questions remain sourced only from `board.interactions`.
 
 The public Session Server-Sent Events (SSE) route subscribes before reading the
 bounded canonical Message/Part tail. Protocol events received during that read
-are buffered. The route first emits the typed `session.connected` envelope,
-whose required payload contains the exact Session ID and projected connection
-snapshot, then emits the pending interaction snapshots, and finally releases
-the buffered live events in arrival order. A live update to an identity already
-present in the snapshot is therefore applied after the older snapshot value;
-stable IDs provide overlap identity, while transport order provides freshness.
+are buffered. After reading the transcript and pending interactions, the route
+drains deliveries already accepted by its subscriptions. This barrier waits for
+that accepted prefix, not future events. The route first emits the typed
+`session.connected` envelope, whose required payload contains the exact Session
+ID and projected connection snapshot, then emits pending interaction snapshots,
+and finally releases the compacted original events in their retained order.
+
+Session bootstrap and Task live replay use the same conversation buffer rule:
+the latest complete Message metadata or Part snapshot supersedes earlier values
+for that exact Task/Session/Message/Part identity. A complete Part absorbs its
+earlier deltas; later deltas keep their original sequence and epoch. Shorter
+authoritative rewrites are valid. Message metadata updates preserve Parts,
+removals supersede the removed identity, and a complete Task-root Message move
+supersedes its source and destination copies. This avoids replaying historical
+empty text over an already hydrated body. Connected subscribers still receive
+every original live event. Compaction does not advance the retention floor;
+the existing expiration, terminal retirement and epoch rules remain authoritative.
 
 The transcript snapshot is additive and bounded. It repairs creation events
 missed before stream attachment or during disconnection and supplies the

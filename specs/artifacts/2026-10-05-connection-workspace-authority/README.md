@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [完整快照回放301 Recall](replay-snapshot-plan-301.md) / [真实证据](replay-snapshot-301/README.md)：共享最新完整状态修复、21 项后端回归和真实 Sources/正文验收。
+
 - [完整渲染观察300 Recall](render-lifetime-plan-300.md) / [实际证据](render-lifetime-300/README.md)：补齐生命周期覆盖，定位首次快照与旧live回放倒退，修复待继续。
 
 - [工具失败摘要299 Recall](tool-failure-plan-299.md) / [真实证据](tool-failure-299/README.md)：修复结构化失败摘要漏读及误显示输入格式，完整原历史复核。

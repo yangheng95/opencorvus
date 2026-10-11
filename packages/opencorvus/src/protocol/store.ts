@@ -12,6 +12,7 @@ import { projectLifecycleProperties } from "./lifecycle-projection"
 import { projectMailboxAcknowledgementPayload, projectMailboxAgentMessagePayload } from "@/engine/mailbox-event"
 import { assertControlLeaseInTransaction } from "@/engine/control-lease"
 import { EngineTaskTable } from "@/engine/engine.sql"
+import { appendConversationLiveEvent } from "./conversation-live-buffer"
 
 const eventLocks = new Map<string, Promise<void>>()
 const log = Log.create({ service: "protocol.store" })
@@ -380,32 +381,6 @@ function eventView(row: EventRow) {
   }
 }
 
-function eventLiveReplayKey(event: EventView): string {
-  const payload = event.payload ?? {}
-  if (event.type === "message.part.delta") {
-    const partID = typeof payload.partID === "string" ? payload.partID : ""
-    const messageID = typeof payload.messageID === "string" ? payload.messageID : ""
-    const sessionID = typeof payload.sessionID === "string" ? payload.sessionID : (event.sessionID ?? "")
-    const field = typeof payload.field === "string" ? payload.field : ""
-    return `${event.taskID ?? ""}|${sessionID}|${messageID}|${partID}|${field}`
-  }
-  const part = payload.part && typeof payload.part === "object" ? (payload.part as Record<string, unknown>) : undefined
-  const partID = typeof part?.id === "string" ? part.id : typeof payload.partID === "string" ? payload.partID : ""
-  const messageID =
-    typeof part?.messageID === "string"
-      ? part.messageID
-      : typeof payload.messageID === "string"
-        ? payload.messageID
-        : ""
-  const sessionID =
-    typeof part?.sessionID === "string"
-      ? part.sessionID
-      : typeof payload.sessionID === "string"
-        ? payload.sessionID
-        : (event.sessionID ?? "")
-  return `${event.taskID ?? ""}|${sessionID}|${messageID}|${partID}|`
-}
-
 function markLiveReplayFloor(taskID: string, sequence: number) {
   if (sequence <= 0) return
   taskLiveRetentionFloors.set(taskID, Math.max(taskLiveRetentionFloors.get(taskID) ?? 0, sequence))
@@ -442,81 +417,6 @@ function ensureTaskLiveReplaySweep() {
   const timer = setInterval(() => compactTaskLiveReplay(Date.now()), TASK_LIVE_REPLAY_SWEEP_MS)
   const unrefTimer = timer as { unref?: () => void }
   unrefTimer.unref?.()
-}
-
-function partUpdatedClosed(payload: Payload | undefined): boolean {
-  const part = payload?.part && typeof payload.part === "object" ? (payload.part as Record<string, any>) : undefined
-  if (!part) return false
-  if ((part.type === "text" || part.type === "reasoning") && typeof part.time?.end === "number") return true
-  if (part.type === "tool" && part.state?.status && part.state.status !== "pending") return true
-  return false
-}
-
-function pruneLiveReplayEvents(taskID: string, predicate: (event: EventView) => boolean) {
-  const events = taskLiveReplayEvents.get(taskID)
-  if (!events?.length) return
-  const next = events.filter((event) => !predicate(event))
-  if (next.length === 0) taskLiveReplayEvents.delete(taskID)
-  else if (next.length !== events.length) taskLiveReplayEvents.set(taskID, next)
-}
-
-function pruneClosedLiveDeltas(taskID: string, event: EventView) {
-  const part = event.payload?.part as { type?: string; state?: { status?: string } } | undefined
-  if (event.type === "message.part.updated" && part?.type === "tool" && part.state?.status === "pending") {
-    // Each input draft publication is a complete transport snapshot. Keeping
-    // its predecessors wastes the bounded replay window and revives stale raw
-    // input on reconnect; the newest snapshot contains the entire current draft.
-    const key = eventLiveReplayKey(event)
-    pruneLiveReplayEvents(taskID, (candidate) =>
-      candidate.type === "message.part.updated" && eventLiveReplayKey(candidate) === key,
-    )
-    return
-  }
-  if (event.type === "message.part.updated" && partUpdatedClosed(event.payload)) {
-    const closedKey = eventLiveReplayKey(event)
-    pruneLiveReplayEvents(
-      taskID,
-      (candidate) => candidate.type === "message.part.delta" && eventLiveReplayKey(candidate).startsWith(closedKey),
-    )
-    return
-  }
-  if (event.type === "message.part.removed") {
-    const removedKey = eventLiveReplayKey(event)
-    pruneLiveReplayEvents(taskID, (candidate) => eventLiveReplayKey(candidate).startsWith(removedKey))
-    return
-  }
-  if (event.type === "message.removed") {
-    const payload = event.payload ?? {}
-    const messageID =
-      typeof payload.messageID === "string"
-        ? payload.messageID
-        : typeof payload.info === "object" &&
-            payload.info &&
-            typeof (payload.info as Record<string, unknown>).id === "string"
-          ? String((payload.info as Record<string, unknown>).id)
-          : ""
-    const sessionID = typeof payload.sessionID === "string" ? payload.sessionID : (event.sessionID ?? "")
-    pruneLiveReplayEvents(taskID, (candidate) => {
-      const candidatePayload = candidate.payload ?? {}
-      const candidatePart =
-        candidatePayload.part && typeof candidatePayload.part === "object"
-          ? (candidatePayload.part as Record<string, unknown>)
-          : undefined
-      const candidateMessageID =
-        typeof candidatePart?.messageID === "string"
-          ? candidatePart.messageID
-          : typeof candidatePayload.messageID === "string"
-            ? candidatePayload.messageID
-            : ""
-      const candidateSessionID =
-        typeof candidatePart?.sessionID === "string"
-          ? candidatePart.sessionID
-          : typeof candidatePayload.sessionID === "string"
-            ? candidatePayload.sessionID
-            : (candidate.sessionID ?? "")
-      return candidateSessionID === sessionID && candidateMessageID === messageID
-    })
-  }
 }
 
 function taskLiveReplayExpiredEvent(taskID: string, reason: string): EventView {
@@ -825,10 +725,13 @@ export namespace ProtocolStore {
       },
     }
     globalSubscriptions.add(subscription)
-    return () => {
+    const stop = () => {
       if (!globalSubscriptions.delete(subscription)) return
       subscription.close()
     }
+    // A snapshot reader waits for exactly the deliveries already accepted by
+    // this subscription, without waiting for future stream activity.
+    return Object.assign(stop, { drain: () => tail })
   }
 
   /**
@@ -882,10 +785,8 @@ export namespace ProtocolStore {
     }
     if (taskID) {
       ensureTaskLiveReplaySweep()
-      pruneClosedLiveDeltas(taskID, event)
       const events = taskLiveReplayEvents.get(taskID) ?? []
-      events.push(event)
-      taskLiveReplayEvents.set(taskID, events)
+      taskLiveReplayEvents.set(taskID, appendConversationLiveEvent(events, event))
       compactTaskLiveReplay(now)
     }
     void dispatchEvent(event).catch((error) => {

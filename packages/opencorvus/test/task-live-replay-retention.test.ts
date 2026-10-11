@@ -65,7 +65,7 @@ function dispatchDelta(taskID: string, index: number): void {
   })
 }
 
-test("live replay retention expires a resuming cursor but never a fresh subscriber", () => {
+test("live replay retention reports an expired resume and returns the current window to a fresh subscriber", () => {
   const taskID = "tsk_live_replay_retention"
   dispatchDelta(taskID, 1)
   dispatchDelta(taskID, 2)
@@ -91,6 +91,157 @@ test("live replay retention expires a resuming cursor but never a fresh subscrib
   const fresh = ProtocolStore.listTaskLiveEventsAfter(taskID, 0)
   expect(fresh.expired).toBe(false)
   expect(fresh.expired ? [] : fresh.events.map((event) => event.liveSequence)).toEqual([4])
+})
+
+test("text replay starts at the latest full snapshot and retains subsequent live deltas", async () => {
+  const taskID = "tsk_text_snapshot_replay"
+  const sessionID = "ses_text_snapshot_replay"
+  const messageID = "msg_text_snapshot_replay"
+  const delivered: string[] = []
+  const stop = ProtocolStore.subscribeEvents(
+    (event) => {
+      const part = event.payload?.part as { text?: string } | undefined
+      delivered.push(part?.text ?? String(event.payload?.delta))
+    },
+    { aggregate: "task", taskID },
+  )
+  const snapshot = (text: string) =>
+    ProtocolStore.dispatchEphemeral({
+      type: "message.part.updated",
+      aggregate: "task",
+      taskID,
+      sessionID,
+      source: "test.text-snapshot",
+      orderKey: "message/text-snapshot",
+      payload: { part: { id: "prt_text", messageID, sessionID, type: "text", text } },
+    })
+  const delta = (text: string) =>
+    ProtocolStore.dispatchEphemeral({
+      type: "message.part.delta",
+      aggregate: "task",
+      taskID,
+      sessionID,
+      source: "test.text-snapshot",
+      orderKey: "message/text-snapshot",
+      payload: { partID: "prt_text", messageID, sessionID, field: "text", delta: text },
+    })
+  try {
+    snapshot("")
+    delta("A")
+    snapshot("A")
+    const cursor = ProtocolStore.currentTaskLiveSequence(taskID)
+    delta("B")
+    snapshot("AB")
+    delta("C")
+    const replay = ProtocolStore.listTaskLiveEventsAfter(taskID, 0)
+    expect(replay).toMatchObject({
+      expired: false,
+      events: [
+        { liveSequence: 5, payload: { part: { id: "prt_text", text: "AB" } } },
+        { liveSequence: 6, payload: { delta: "C" } },
+      ],
+    })
+    expect(ProtocolStore.listTaskLiveEventsAfter(taskID, cursor)).toEqual(replay)
+    snapshot("Final")
+    expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0)).toMatchObject({
+      expired: false,
+      events: [{ liveSequence: 7, payload: { part: { id: "prt_text", text: "Final" } } }],
+    })
+    snapshot("短")
+    expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0)).toMatchObject({
+      expired: false,
+      events: [{ liveSequence: 8, payload: { part: { id: "prt_text", text: "短" } } }],
+    })
+    await stop.drain()
+    expect(delivered).toEqual(["", "A", "A", "B", "AB", "C", "Final", "短"])
+  } finally {
+    stop()
+  }
+})
+
+test("replay keeps exact message and Part identities across Tasks, metadata, transfer and deletion", () => {
+  const taskID = "tsk_replay_identities"
+  const publish = (type: string, payload: Record<string, unknown>, owner = taskID) =>
+    ProtocolStore.dispatchEphemeral({
+      type,
+      aggregate: "task",
+      taskID: owner,
+      sessionID: "ses_from",
+      source: "test.replay-identities",
+      orderKey: "message/replay-identities",
+      payload,
+    })
+  const info = { id: "msg_same", sessionID: "ses_from", value: "before" }
+  const part = { id: "prt_same", messageID: info.id, sessionID: info.sessionID, type: "text", text: "before" }
+  publish("message.updated", { info })
+  publish("message.part.updated", { part })
+  publish("message.part.updated", { part: { ...part, id: "prt_other", text: "other Part" } })
+  publish("message.part.updated", { part: { ...part, sessionID: "ses_other", text: "other Session" } })
+  publish("message.part.updated", { part: { ...part, text: "other Task" } }, "tsk_replay_other")
+  publish("message.updated", { info: { ...info, value: "current" } })
+  publish("message.part.updated", { part: { ...part, text: "current" } })
+  const replay = ProtocolStore.listTaskLiveEventsAfter(taskID, 0)
+  if (replay.expired) throw Error("Fresh identity replay expired")
+  expect(replay.events.map((event) => event.payload)).toEqual([
+    { part: { ...part, id: "prt_other", text: "other Part" } },
+    { part: { ...part, sessionID: "ses_other", text: "other Session" } },
+    { info: { ...info, value: "current" } },
+    { part: { ...part, text: "current" } },
+  ])
+  publish("message.moved", {
+    sourceSessionID: "ses_from",
+    info: { ...info, sessionID: "ses_to", value: "current" },
+    parts: [{ ...part, sessionID: "ses_to", text: "current" }],
+  })
+  publish("message.removed", { sessionID: "ses_to", messageID: info.id })
+  const retired = ProtocolStore.listTaskLiveEventsAfter(taskID, 0)
+  if (retired.expired) throw Error("Fresh deletion replay expired")
+  expect(retired.events.map((event) => event.payload)).toEqual([
+    { part: { ...part, sessionID: "ses_other", text: "other Session" } },
+    { sessionID: "ses_to", messageID: info.id },
+  ])
+  expect(ProtocolStore.listTaskLiveEventsAfter("tsk_replay_other", 0)).toMatchObject({
+    expired: false,
+    events: [{ payload: { part: { ...part, text: "other Task" } } }],
+  })
+})
+
+test("subscription drain settles its accepted prefix while a later delivery has its own lifetime", async () => {
+  const taskID = "tsk_subscription_drain"
+  let releaseFirst!: () => void
+  let releaseThird!: () => void
+  const first = new Promise<void>((resolve) => {
+    releaseFirst = resolve
+  })
+  const third = new Promise<void>((resolve) => {
+    releaseThird = resolve
+  })
+  const completed: string[] = []
+  const stop = ProtocolStore.subscribeEvents(
+    async (event) => {
+      const value = String(event.payload?.delta)
+      if (value === "delta 1") await first
+      if (value === "delta 3") await third
+      completed.push(value)
+    },
+    { aggregate: "task", taskID },
+  )
+  try {
+    dispatchDelta(taskID, 1)
+    dispatchDelta(taskID, 2)
+    const prefix = stop.drain()
+    dispatchDelta(taskID, 3)
+    releaseFirst()
+    await prefix
+    expect(completed).toEqual(["delta 1", "delta 2"])
+    releaseThird()
+    await stop.drain()
+    expect(completed).toEqual(["delta 1", "delta 2", "delta 3"])
+  } finally {
+    releaseFirst()
+    releaseThird()
+    stop()
+  }
 })
 
 test("pending Tool snapshots replay the latest input per call and retire at real admission", () => {

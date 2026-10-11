@@ -970,14 +970,22 @@ test("session.connected precedes a newer live Part update captured after snapsho
         SessionEventStreamTestHooks.afterConversationSnapshotRead = undefined
         await Instance.provide({
           directory: project.path,
-          fn: () =>
-            Session.updatePart({
+          fn: async () => {
+            await Session.updatePart({
+              id: partID,
+              sessionID: work.id,
+              messageID: message.id,
+              type: "text",
+              text: "",
+            })
+            await Session.updatePart({
               id: partID,
               sessionID: work.id,
               messageID: message.id,
               type: "text",
               text: "newer live content",
-            }),
+            })
+          },
         })
       }
 

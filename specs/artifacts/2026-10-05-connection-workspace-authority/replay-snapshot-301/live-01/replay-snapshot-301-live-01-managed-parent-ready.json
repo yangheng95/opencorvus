@@ -1,0 +1,15 @@
+{
+  "pid": 74656,
+  "occurrence": "replay-snapshot-301-live-01-b30c2bd9-2699-420c-8bc7-8e41abc0f188",
+  "owner": {
+    "pid": 74656,
+    "processInstanceID": "win32:639273223487836157",
+    "occurrenceID": "c2d6e740-99c6-4527-bf90-a779f94659cc"
+  },
+  "parent": {
+    "pid": 77596,
+    "processInstanceID": "win32:639273223487468952",
+    "occurrenceID": "bca7745c-b9ec-4438-8db0-be480902c6af"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

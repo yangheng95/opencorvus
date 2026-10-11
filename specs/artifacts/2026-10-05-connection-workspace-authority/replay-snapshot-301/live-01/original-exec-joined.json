@@ -1,0 +1,11 @@
+{
+  "sessionID": 76451,
+  "result": {
+    "chunk_id": "6a61ae",
+    "wall_time_seconds": 0.0000084,
+    "exit_code": 0,
+    "original_token_count": 215,
+    "output": "boundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup\r\nlisteners             : \r\nphysicalCompletion    : True\r\nnativeSettlement      : @{occurrence=replay-snapshot-301-live-01-b30c2bd9-2699-420c-8bc7-8e41abc0f188; outcome=settled; host=; target=; observedAtUtc=2026/10/11 13:43:06; deadlineAt=1791727047978; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup}\r\n\r\n{\"physicalCompletion\":true,\"providerEOFRequests\":13,\"qualification\":\"Task\",\"boundary\":\"Exact Task lifecycle and native/provider completion; UI remains Root-owned\",\"epoch\":1,\"taskID\":\"tsk_g00VXkQ94100eWOVXTaJ\"}\r\n"
+  },
+  "boundary": "Original launch exec joined after actual native settlement; not inferred from logs"
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [完整快照回放修复301](records/2026-10/2026-10-11-replay-snapshot-301.md)：Task/Session 统一保留最新完整状态，修复历史空正文覆盖；21 项后端回归及真实流式和来源视觉复核。
+
 - [完整渲染观察300](records/2026-10/2026-10-11-render-lifetime-300.md)：完整子侧栏流式稳定观察，复现主会话快照被旧live回放覆盖并开展共享边界审计。
 
 - [工具失败摘要299](records/2026-10/2026-10-11-tool-failure-299.md)：共享结构化failure展示，修复404行误显示markdown，真实原Task复核。

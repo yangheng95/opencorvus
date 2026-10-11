@@ -46,7 +46,8 @@ import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation
 import { ProjectMemory } from "@/memory/project-memory"
 import { NotFoundError } from "../../storage/db"
 import { lazy } from "../../util/lazy"
-import { ProtocolStore } from "@/protocol/store"
+import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
+import { appendConversationLiveEvent } from "@/protocol/conversation-live-buffer"
 import {
   enrichStandaloneSessionTranscript,
   mapSessionBusEvent,
@@ -1244,7 +1245,7 @@ export const SessionRoutes = lazy(() =>
           })
           let writes = Promise.resolve()
           let bufferingProtocolEvents = true
-          const bufferedProtocolEvents: string[] = []
+          let bufferedProtocolEvents: ProtocolEventView[] = []
           const seenProtocolEventIDs = new Set<string>()
           const writeData = (data: string) => {
             writes = writes
@@ -1271,14 +1272,13 @@ export const SessionRoutes = lazy(() =>
             )
               return
             if (conversationTransportEventDisposition(event.type, event.payload) === "omit") return
-            const data = JSON.stringify(protocolSessionEvent(event))
             if (bufferingProtocolEvents) {
               if (seenProtocolEventIDs.has(event.id)) return
               seenProtocolEventIDs.add(event.id)
-              bufferedProtocolEvents.push(data)
+              bufferedProtocolEvents = appendConversationLiveEvent(bufferedProtocolEvents, event)
               return
             }
-            void writeData(data)
+            void writeData(JSON.stringify(protocolSessionEvent(event)))
           })
           const stopSessionProtocol = ProtocolStore.subscribeEvents(receiveProtocolEvent, {
             aggregate: "session",
@@ -1296,8 +1296,9 @@ export const SessionRoutes = lazy(() =>
           // Subscribe first, then read their bounded tail: a message committed
           // before this subscription is in the snapshot, while one committed
           // afterwards is delivered by ProtocolStore. Stable message/part IDs
-          // are buffered until the older snapshot is sent, then replayed in
-          // arrival order so newer content always wins for a stable identity.
+          // are buffered until the snapshot is sent. Complete values supersede
+          // older snapshots and their deltas in that buffer, so replay cannot
+          // take a persisted Part back through its historical empty prefix.
           const connectionConversation = await sessionConversationTailProjection(
             session,
             CONVERSATION_TAIL_MESSAGE_LIMIT,
@@ -1320,6 +1321,7 @@ export const SessionRoutes = lazy(() =>
           const pendingPermissionEvents = (await PermissionAuthority.list())
             .filter((item) => sessionTreeIDs.has(item.sessionID))
             .map(pendingPermissionProtocolSessionEvent)
+          await Promise.all([stopSessionProtocol.drain(), stopTaskLifecycleProtocol.drain()])
           const connectedAt = Date.now()
           await writeData(
             JSON.stringify(
@@ -1351,7 +1353,9 @@ export const SessionRoutes = lazy(() =>
           for (const event of pendingQuestionEvents) await writeData(JSON.stringify(event))
           for (const event of pendingPermissionEvents) await writeData(JSON.stringify(event))
           bufferingProtocolEvents = false
-          const releaseWrites = bufferedProtocolEvents.splice(0).map(writeData)
+          const releaseWrites = bufferedProtocolEvents
+            .splice(0)
+            .map((event) => writeData(JSON.stringify(protocolSessionEvent(event))))
           seenProtocolEventIDs.clear()
           if (releaseWrites.length > 0) await releaseWrites[releaseWrites.length - 1]
           if (closed) {

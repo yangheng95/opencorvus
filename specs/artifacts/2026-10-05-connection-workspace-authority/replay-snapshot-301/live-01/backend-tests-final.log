@@ -1,0 +1,40 @@
+$ bun script/run-tests.ts test/task-live-replay-retention.test.ts test/server/session-event-connection-snapshot.test.ts
+[1/2] START test/task-live-replay-retention.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) task.completed retires payloads while preserving the live cursor through reopen [3213.79ms]
+(pass) task.failed retires payloads while preserving the live cursor through reopen [2625.86ms]
+(pass) task.cancelled retires payloads while preserving the live cursor through reopen [2830.15ms]
+(pass) live replay retention reports an expired resume and returns the current window to a fresh subscriber [2.13ms]
+(pass) text replay starts at the latest full snapshot and retains subsequent live deltas [2.94ms]
+(pass) replay keeps exact message and Part identities across Tasks, metadata, transfer and deletion [1.99ms]
+(pass) subscription drain settles its accepted prefix while a later delivery has its own lifetime [1.78ms]
+(pass) pending Tool snapshots replay the latest input per call and retire at real admission [1.67ms]
+
+ 8 pass
+ 0 fail
+ 32 expect() calls
+Ran 8 tests across 1 file. [10.35s]
+[1/2] DONE test/task-live-replay-retention.test.ts exit=0 duration=11.33s
+[2/2] START test/server/session-event-connection-snapshot.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Session stream reads durable history and interactions with an unavailable execution model [2741.82ms]
+(pass) ordinary Session hydrate, history and reconnect retain both idle input occurrences [2098.79ms]
+(pass) Session stream schema classifies connection snapshots and ordinary protocol events by type [2.80ms]
+(pass) Session stream schema reports malformed connection frames as a Zod contract error [2.73ms]
+(pass) Session stream projects a non-message Session diff through Bus and ProtocolStore [1791.37ms]
+(pass) Session stream receives durable lifecycle and error facts for a non-Task Session [2118.26ms]
+(pass) Session reconnect selects the globally newest lifecycle across Session and Task aggregates [2872.40ms]
+(pass) session.connected converges the persisted first Work prompt at the stream cutover [2002.10ms]
+(pass) session.connected publishes a pageable canonical tail after a long disconnect [4027.70ms]
+(pass) session.connected precedes a newer live Part update captured after snapshot read [2338.45ms]
+(pass) two project streams receive their own non-Task child Message and Part events [3779.54ms]
+
+ 11 pass
+ 0 fail
+ 37 expect() calls
+Ran 11 tests across 1 file. [27.05s]
+[2/2] DONE test/server/session-event-connection-snapshot.test.ts exit=0 duration=27.32s
