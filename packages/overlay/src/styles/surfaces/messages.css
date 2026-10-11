@@ -1014,15 +1014,16 @@
   background: transparent;
   color: var(--text-soft);
   font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
-  text-decoration: underline;
-  text-decoration-color: var(--border);
-  text-underline-offset: 0.2em;
+  text-decoration: none;
   cursor: pointer;
 }
 
 .msg-source-chip:hover {
   background: var(--hover-wash);
   color: var(--text-strong);
+}
+
+.msg-source-chip:hover .msg-source-chip__label {
   text-decoration-color: currentColor;
 }
 
@@ -1048,6 +1049,9 @@
   white-space: normal;
   overflow-wrap: anywhere;
   text-align: start;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 0.2em;
 }
 
 .msg-source-chip__content {
@@ -1063,7 +1067,6 @@
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   overflow-wrap: anywhere;
-  text-decoration: none;
 }
 
 .msg-source-chip__location {

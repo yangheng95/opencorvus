@@ -1,0 +1,98 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 3192329,
+    "archiveBytes": 94091,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 10,
+    "sessions": [
+      {
+        "id": "ses_hrtMbLi3dlHgTHrYFASr",
+        "projectID": "prj_hm0rwRK6yJ5tBVZ3SBPk",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSEa36mzzeoZsItVil",
+        "projectID": "prj_hyPzofYad0RETV5Rc0Mt",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSEZRSYzzKSVzPevuU",
+        "projectID": "prj_hLn6JRnTkfsPf3qE5XQP",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXlPyih00u0vCjjf46",
+        "sourceId": "752028585ecece87d8280ddf037e2e68b3f4faa70f19072d95020a777874ab06",
+        "url": "https://www.w3.org/robots.txt"
+      },
+      {
+        "id": "prt_g0VXlQ0CH00qCtu7sXQR",
+        "sourceId": "9832a3668bf67c6ccdb2d2fae575ffff88eaffe01d7dbad18aa6f63173c8ad8d",
+        "title": "text-decoration CSS property - CSS | MDN",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-decoration"
+      },
+      {
+        "id": "prt_g0VXlQ1Hd00rYcE8WH08",
+        "sourceId": "03870e2916aa5b73b0bf2fd070bae41e78386a3a5ec231a827e3f82fccf6c3a3",
+        "title": "README.md"
+      },
+      {
+        "id": "prt_g0VXlQafK00R9hGRFycs",
+        "sourceId": "86a4b44de30fad6b346278c796250b1696f93d2c940ad994efc9de77bbecd489",
+        "url": "https://api.github.com/"
+      }
+    ]
+  },
+  {
+    "stage": "02",
+    "originalBytes": 3785454,
+    "archiveBytes": 106759,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 10,
+    "sessions": [
+      {
+        "id": "ses_hM1fxLwS6j3h9ZmLXEkH",
+        "projectID": "prj_hM8EmXxpL2zqc0AcWnNL",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSEYEy8zzjLghaBnM6",
+        "projectID": "prj_hJgWEbOwrtbjW86GxGHT",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSEXh16zzxOjpcRBDf",
+        "projectID": "prj_hxyyiTf71RsMF1NabMpE",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXlRmM100vNS9uJjUJ",
+        "sourceId": "752028585ecece87d8280ddf037e2e68b3f4faa70f19072d95020a777874ab06",
+        "url": "https://www.w3.org/robots.txt"
+      },
+      {
+        "id": "prt_g0VXlRoM700LYkWqXFNf",
+        "sourceId": "9832a3668bf67c6ccdb2d2fae575ffff88eaffe01d7dbad18aa6f63173c8ad8d",
+        "title": "text-decoration CSS property - CSS | MDN",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-decoration"
+      },
+      {
+        "id": "prt_g0VXlRq0K00CQXi0D7Mr",
+        "sourceId": "78ca0fd59bf1d93227e82e564457954662239248ad76cc8f76e58c868803ba19",
+        "title": "README.md"
+      },
+      {
+        "id": "prt_g0VXlSKiB00UaRu5OGhu",
+        "sourceId": "86a4b44de30fad6b346278c796250b1696f93d2c940ad994efc9de77bbecd489",
+        "url": "https://api.github.com/"
+      }
+    ]
+  }
+]

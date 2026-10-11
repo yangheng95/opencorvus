@@ -1,0 +1,427 @@
+{
+  "observedAtUtc": "2026-10-11T17:43:25.714Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hrtMbLi3dlHgTHrYFASr",
+      "project_id": "prj_hm0rwRK6yJ5tBVZ3SBPk",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-hierarchy-309-live-01\\runtime\\data\\projects\\2026\\10\\12\\e09292a6-b15d-444e-a5ad-fca7c78c643a",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"64d43bfd-48a7-4f61-9837-0fe49d9fca69\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hlUNYQlCXn3gbqQ5TUnt\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSEa36mzzeoZsItVil",
+      "project_id": "prj_hyPzofYad0RETV5Rc0Mt",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-hierarchy-309-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请独立用webfetch实际读取 https://www.w3.org/robots.txt 和 https://developer.mozilla.or...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    },
+    {
+      "id": "ses_-zUSEZRSYzzKSVzPevuU",
+      "project_id": "prj_hLn6JRnTkfsPf3qE5XQP",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-hierarchy-309-live-01\\runtime\\data\\projects\\2026\\10\\12\\ec67457e-cd19-4452-a6a8-6002e7d98d44",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请独立只用webfetch读取公开的 https://api.github.com/ ，不要使用任何认证信息，不查询其他地址，不委托成员或修改文件。完成后...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hlUNYQlCXn3gbqQ5TUnt",
+      "sessionID": "ses_hrtMbLi3dlHgTHrYFASr",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791740339114
+      }
+    },
+    {
+      "id": "msg_g0VXlPrnT00N9eNiReA1",
+      "sessionID": "ses_hrtMbLi3dlHgTHrYFASr",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791740339351,
+        "completed": 1791740344388
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_55a1b216-2f8e-42f4-ba47-ab7c572a9fdc",
+      "sessionID": "ses_-zUSEa36mzzeoZsItVil",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791740359745
+      }
+    },
+    {
+      "id": "msg_g0VXlPx9N00OsoS8q0PK",
+      "sessionID": "ses_-zUSEa36mzzeoZsItVil",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791740359929,
+        "completed": 1791740366000
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXlPyk800G2oj7IYhL",
+      "sessionID": "ses_-zUSEa36mzzeoZsItVil",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791740366052,
+        "completed": 1791740371694
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXlQ0E2005ZFHiF4JQ",
+      "sessionID": "ses_-zUSEa36mzzeoZsItVil",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791740371750,
+        "completed": 1791740376096
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXlQ1Mz002yxKounWb",
+      "sessionID": "ses_-zUSEa36mzzeoZsItVil",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791740376149,
+        "completed": 1791740383066
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_52d873bb-2ac1-4338-aa94-21be45c23a97",
+      "sessionID": "ses_-zUSEZRSYzzKSVzPevuU",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791740504280
+      }
+    },
+    {
+      "id": "msg_g0VXlQYky00DK3srr64P",
+      "sessionID": "ses_-zUSEZRSYzzKSVzPevuU",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791740504488,
+        "completed": 1791740511910
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXlQah900YtryzrkCB",
+      "sessionID": "ses_-zUSEZRSYzzKSVzPevuU",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791740511939,
+        "completed": 1791740517687
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hJyu5fjbUAgUbqN5eShZ",
+      "messageID": "msg_hlUNYQlCXn3gbqQ5TUnt",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXlPsEI00MTdEN7Q2H",
+      "messageID": "msg_g0VXlPrnT00N9eNiReA1",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXlPsvH00gQitZz9dO",
+      "messageID": "msg_g0VXlPrnT00N9eNiReA1",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791740343679,
+        "end": 1791740344138
+      }
+    },
+    {
+      "id": "prt_g0VXlPt5y00RVwEMx1dW",
+      "messageID": "msg_g0VXlPrnT00N9eNiReA1",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXlPx6P00H3EdLXuMr",
+      "messageID": "msg_55a1b216-2f8e-42f4-ba47-ab7c572a9fdc",
+      "type": "text",
+      "text": "请独立用webfetch实际读取 https://www.w3.org/robots.txt 和 https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-decoration ，并用read读取当前项目已有README.md的前20行。只读这些资源，不搜索其他资料，不委托成员，不修改文件或发布产物。完成后用中文约150字概括三份资料用途，保留真实来源。",
+      "textChars": 224
+    },
+    {
+      "id": "prt_g0VXlPxFj00M4Bnxfwtr",
+      "messageID": "msg_g0VXlPx9N00OsoS8q0PK",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXlPyih00u0vCjjf46",
+      "messageID": "msg_g0VXlPx9N00OsoS8q0PK",
+      "type": "source-url",
+      "sourceId": "752028585ecece87d8280ddf037e2e68b3f4faa70f19072d95020a777874ab06",
+      "url": "https://www.w3.org/robots.txt",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXlPyil00ivc6TgxPf",
+      "messageID": "msg_g0VXlPx9N00OsoS8q0PK",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXlPyni00msNmZMFg8",
+      "messageID": "msg_g0VXlPyk800G2oj7IYhL",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXlQ0CH00qCtu7sXQR",
+      "messageID": "msg_g0VXlPyk800G2oj7IYhL",
+      "type": "source-url",
+      "sourceId": "9832a3668bf67c6ccdb2d2fae575ffff88eaffe01d7dbad18aa6f63173c8ad8d",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-decoration",
+      "title": "text-decoration CSS property - CSS | MDN",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXlQ0CM00E4VwM63Jg",
+      "messageID": "msg_g0VXlPyk800G2oj7IYhL",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXlQ0He00xrqo0bVZN",
+      "messageID": "msg_g0VXlQ0E2005ZFHiF4JQ",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXlQ1Hd00rYcE8WH08",
+      "messageID": "msg_g0VXlQ0E2005ZFHiF4JQ",
+      "type": "source-file",
+      "sourceId": "03870e2916aa5b73b0bf2fd070bae41e78386a3a5ec231a827e3f82fccf6c3a3",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-hierarchy-309-live-01\\project\\README.md",
+      "title": "README.md",
+      "provider": "opencorvus-read"
+    },
+    {
+      "id": "prt_g0VXlQ1Lb00cyiBBGRVq",
+      "messageID": "msg_g0VXlQ0E2005ZFHiF4JQ",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXlQ1QO002OyTB6T5k",
+      "messageID": "msg_g0VXlQ1Mz002yxKounWb",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXlQ2FD006za6FbZuE",
+      "messageID": "msg_g0VXlQ1Mz002yxKounWb",
+      "type": "text",
+      "text": "已实际读取三份资料。[W3C robots.txt](https://www.w3.org/robots.txt)用于向爬虫声明抓取限制，列出后台、维基及高成本路径，并允许链接检查器访问。[MDN text-decoration](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-decoration)用于查阅文字装饰线的简写语法、颜色、样式、粗细及示例。当前项目 `README.md:1` 仅有标题“Isolated formal Task resource qualification”，用于标识项目主题；文件共一行，不足20行。",
+      "textChars": 319,
+      "time": {
+        "start": 1791740379511,
+        "end": 1791740382934
+      }
+    },
+    {
+      "id": "prt_g0VXlQ39z00I1VfvINkY",
+      "messageID": "msg_g0VXlQ1Mz002yxKounWb",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXlQYhc00mmlp1HoEd",
+      "messageID": "msg_52d873bb-2ac1-4338-aa94-21be45c23a97",
+      "type": "text",
+      "text": "请独立只用webfetch读取公开的 https://api.github.com/ ，不要使用任何认证信息，不查询其他地址，不委托成员或修改文件。完成后只回复一句话概括用途，保留真实来源。",
+      "textChars": 95
+    },
+    {
+      "id": "prt_g0VXlQYsu00DWoSNTsPr",
+      "messageID": "msg_g0VXlQYky00DK3srr64P",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXlQafK00R9hGRFycs",
+      "messageID": "msg_g0VXlQYky00DK3srr64P",
+      "type": "source-url",
+      "sourceId": "86a4b44de30fad6b346278c796250b1696f93d2c940ad994efc9de77bbecd489",
+      "url": "https://api.github.com/",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXlQafM00P1WKrL2oF",
+      "messageID": "msg_g0VXlQYky00DK3srr64P",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXlQakp00N4OBYlBUM",
+      "messageID": "msg_g0VXlQah900YtryzrkCB",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXlQbmx00gqH4c5l4P",
+      "messageID": "msg_g0VXlQah900YtryzrkCB",
+      "type": "text",
+      "text": "[GitHub API 根入口](https://api.github.com/)提供用户、仓库、组织、搜索等接口的地址及参数模板，用于发现和访问 GitHub REST API 的各类资源。",
+      "textChars": 96,
+      "time": {
+        "start": 1791740516143,
+        "end": 1791740517373
+      }
+    },
+    {
+      "id": "prt_g0VXlQcAf00Bga3mGAw3",
+      "messageID": "msg_g0VXlQah900YtryzrkCB",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXlPyN600F0KHO2fGI",
+      "message_id": "msg_g0VXlPx9N00OsoS8q0PK",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_jB2djHizENjt3AWAxbf1sxR8\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/robots.txt\",\"format\":\"text\",\"timeout\":60},\"time\":{\"start\":1791740364624}}"
+    },
+    {
+      "id": "prt_g0VXlPztD00M35Z7vW12",
+      "message_id": "msg_g0VXlPyk800G2oj7IYhL",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_ZiB6VJe32nfdCHNteZIbHtjz\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-decoration\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791740370459}}"
+    },
+    {
+      "id": "prt_g0VXlQ1AQ00JltLkYWEK",
+      "message_id": "msg_g0VXlQ0E2005ZFHiF4JQ",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_7302a0cfd2a74edcb36b8861780875f3\",\"tool\":\"read\",\"input\":{\"filePath\":\"README.md\",\"offset\":1,\"limit\":20},\"time\":{\"start\":1791740375370}}"
+    },
+    {
+      "id": "prt_g0VXlQaWo007t7sjYM8D",
+      "message_id": "msg_g0VXlQYky00DK3srr64P",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_e52d976488e54ff68b34205dfb31dff3\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://api.github.com/\",\"format\":\"text\",\"timeout\":30},\"time\":{\"start\":1791740511298}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXlPyN600F0KHO2fGI",
+      "outcome": "completed",
+      "resultAttemptID": "per_hlrl0NZuZPi4nnQs5rDN",
+      "outputChars": 3842,
+      "output": "#\n# robots.txt for https://www.w3.org/\n#\n# $Id: robots.txt,v 1.107 2026/10/07 16:17:21 gerald Exp $\n#\n\n# the following settings apply to all bots\nUser-agent: *\n# Blogs - WordPress\n# https://wordpress.org/documentation/article/search-engine-optimization/#robots-txt-optimization\nDisallow: /*/wp-admin/\nDisallow: /*/wp-includes/\nDisallow: /*/wp-content/plugins/\nDisallow: /*/wp-content/cache/\nDisallow: /*/wp-content/themes/\nDisallow: /blog/?\nDisallow: /blog/*/trackback/\nDisallow: /blog/*/feed/\nDisallow: /blog/*/comments/\nDisallow: /blog/*/category/*/*\nDisallow: /blog/*/*/trackback/\nDisallow: /blog/*/*/feed/\nDisallow: /blog/*/*/comments/\nDisallow: /blog/*/*?\nDisallow: /community/trackback/\nDisallow: /community/feed/\nDisallow: /community/comments/\nDisallow: /community/category/*/*\nDisallow: /community/*/trackback/\nDisallow: /community/*/feed/\nDisallow: /community/*/comments/\nDisallow: /community/*/category/*/*\nDisallow: /community/*?\nDisallow: /Consortium/Offices/trackback/\nDisallow: /Consortium/Offices/feed/\nDisallow: /Consortium/Offices/comments/\nDisallow: /Consortium/Offices/category/*/*\nDisallow: /Consortium/Offices/*/trackback/\nDisallow: /Consortium/Offices/*/feed/\nDisallow: /Consortium/Offices/*/comments/\nDisallow: /Consortium/Offices/*?\n# Wikis - Mediawiki\n# https://www.mediawiki.org/wiki/Manual:Robots.txt\nDisallow: /wiki/index.php?\nDisallow: /wiki/index.php/Help\nDisallow: /wiki/index.php/MediaWiki\nDisallow: /wiki/index.php/Special:\nDisallow: /wiki/index.php/Template\nDisallow: /wiki/Special:\nDisallow: /wiki/Help:\nDisallow: /wiki/Talk:\nDisallow: /wiki/skins/\nDisallow: /wiki/*/info\nDisallow: /wiki/*/edit\nDisallow: /wiki/*/history\nDisallow: /*/wiki/index.php?\nDisallow: /*/wiki/index.php/Help\nDisallow: /*/wiki/index.php/MediaWiki\nDisallow: /*/wiki/index.php/Special:\nDisallow: /*/wiki/index.php/Template\nDisallow: /*/wiki/Special:\nDisallow: /*/wiki/Help:\nDisallow: /*/wiki/Talk:\nDisallow: /*/wiki/skins/\nDisallow: /*/wiki/*/info\nDisallow: /*/wiki/*/edit\nDisallow: /*/wiki/*/history\n# various other access-controlled or expensive areas\nDisallow: /2004/ontaria/basic\nDisallow: /Member/\nDisallow: /Team/\nDisallow: /Project/\nDisallow: /Web/\nDisallow: /Systems/\nDisallow: /Out-Of-Date\nDisallow: /2005/06/blog/\nDisallow: /2004/08/W3CTalks\nDisallow: /2007/11/Talks/search\nDisallow: /People/all/\nDisallow: /people/all/\nDisallow: /People/domain/\nDisallow: /people/domain/\nDisallow: /RDF/Validator/ARPServlet\nDisallow: /RDF/Validator/rdfval\nDisallow: /2003/03/Translations/byLanguage\nDisallow: /2003/03/Translations/byTechnology\nDisallow: /2005/11/Translations/Query\nDisallow: /2000/06/webdata/xslt\nDisallow: /2000/09/webdata/xslt\nDisallow: /2005/08/online_xslt/xslt\nDisallow: /Search/Mail/Public/\nDisallow: /2006/02/chartergen\nDisallow: /2004/01/pp-impl\nDisallow: /Consortium/supporters\nDisallow: /2012/pyRdfa/extract\nDisallow: /2012/pyRdfa/?\nDisallow: /WAI/PF/comments/\nDisallow: /WAI/events/\nDisallow: /participate/conferences.xml\nDisallow: /scripts/\nDisallow: /2005/01/yacker/\nDisallow: /2005/01/yacker?\nDisallow: /2005/07/pubrules?\nDisallow: /ns/hydra/console/?\nDisallow: /2007/08/grddl/?\nDisallow: /2009/07/webidl-check?\nDisallow: /RDF/Validator/ARPServlet?\nDisallow: /2000/06/webdata/xsv?\nDisallow: /2000/09/webdata/xsv?\nDisallow: /2007/10/htmldiff?\nDisallow: /Style/CSS/members.be/\nDisallow: /services\nDisallow: /2021/05/view-gallery/\nDisallow: /International/questions/qa-html-language-declarations/icons/\nDisallow: /International/questions/qa-html-language-declarations/qa-html-language-declarations-data/icons/\nDisallow: /*,*\nDisallow: /WAI/beta/\nDisallow: /WAI/ut1/\nDisallow: /WAI/ut2/\nDisallow: /WAI/ut3/\nDisallow: /WAI/ut4/\nDisallow: /WAI/drafts/\nDisallow: /WAI/search/?\nDisallow: /TR/?\nDisallow: /groups/*/activity/*?\n\n# Allow W3C Link checker to check any paths on this site\nUser-agent: W3C-checklink\nDisallow:",
+      "metadata": {
+        "originalBytes": 3842,
+        "shownBytes": 3842,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791740365959
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXlPztD00M35Z7vW12",
+      "outcome": "completed",
+      "resultAttemptID": "per_hyNqQe5AtqpkhMSNNmun",
+      "outputChars": 50707,
+      "output": "text-decoration CSS property - CSS | MDN\n\n-   [Skip to main content](#content)\n-   [Skip to search](#mdn-search)\n\n[MDN](/en-US/)\n\nHTML\n\n[HTML: Markup language](/en-US/docs/Web/HTML)\n\nHTML reference\n\n-   [Elements](/en-US/docs/Web/HTML/Reference/Elements)\n-   [Global attributes](/en-US/docs/Web/HTML/Reference/Global_attributes)\n-   [Attributes](/en-US/docs/Web/HTML/Reference/Attributes)\n-   [See all…](/en-US/docs/Web/HTML/Reference \"See all HTML references\")\n\nHTML guides\n\n-   [Responsive images](/en-US/docs/Web/HTML/Guides/Responsive_images)\n-   [HTML cheatsheet](/en-US/docs/Web/HTML/Guides/Cheatsheet)\n-   [Date & time formats](/en-US/docs/Web/HTML/Guides/Date_and_time_formats)\n-   [See all…](/en-US/docs/Web/HTML/Guides \"See all HTML guides\")\n\nMarkup languages\n\n-   [SVG](/en-US/docs/Web/SVG)\n-   [MathML](/en-US/docs/Web/MathML)\n-   [XML](/en-US/docs/Web/XML)\n\nCSS\n\n[CSS: Styling language](/en-US/docs/Web/CSS)\n\nCSS reference\n\n-   [Properties](/en-US/docs/Web/CSS/Reference/Properties)\n-   [Selectors](/en-US/docs/Web/CSS/Reference/Selectors)\n-   [At-rules](/en-US/docs/Web/CSS/Reference/At-rules)\n-   [Values](/en-US/docs/Web/CSS/Reference/Values)\n-   [See all…](/en-US/docs/Web/CSS/Reference \"See all CSS references\")\n\nCSS guides\n\n-   [Box model](/en-US/docs/Web/CSS/Guides/Box_model/Introduction)\n-   [Animations](/en-US/docs/Web/CSS/Guides/Animations/Using)\n-   [Flexbox](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Basic_concepts)\n-   [Colors](/en-US/docs/Web/CSS/Guides/Colors/Applying_color)\n-   [See all…](/en-US/docs/Web/CSS/Guides \"See all CSS guides\")\n\nLayout cookbook\n\n-   [Column layouts](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Column_layouts)\n-   [Centering an element](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Center_an_element)\n-   [Card component](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Card)\n-   [See all…](/en-US/docs/Web/CSS/How_to/Layout_cookbook)\n\nJavaScriptJS\n\n[JavaScript: Scripting language](/en-US/docs/Web/JavaScript)\n\nJS reference\n\n-   [Standard built-in objects](/en-US/docs/Web/JavaScript/Reference/Global_Objects)\n-   [Expressions & operators](/en-US/docs/Web/JavaScript/Reference/Operators)\n-   [Statements & declarations](/en-US/docs/Web/JavaScript/Reference/Statements)\n-   [Functions](/en-US/docs/Web/JavaScript/Reference/Functions)\n-   [See all…](/en-US/docs/Web/JavaScript/Reference \"See all JavaScript references\")\n\nJS guides\n\n-   [Control flow & error handling](/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling)\n-   [Loops and iteration](/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration)\n-   [Working with objects](/en-US/docs/Web/JavaScript/Guide/Working_with_objects)\n-   [Using classes](/en-US/docs/Web/JavaScript/Guide/Using_classes)\n-   [See all…](/en-US/docs/Web/JavaScript/Guide \"See all JavaScript guides\")\n\nWeb APIs\n\n[Web APIs: Programming interfaces](/en-US/docs/Web/API)\n\nWeb API reference\n\n-   [File system API](/en-US/docs/Web/API/File_System_API)\n-   [Fetch API](/en-US/docs/Web/API/Fetch_API)\n-   [Geolocation API](/en-US/docs/Web/API/Geolocation_API)\n-   [HTML DOM API](/en-US/docs/Web/API/HTML_DOM_API)\n-   [Push API](/en-US/docs/Web/API/Push_API)\n-   [Service worker API](/en-US/docs/Web/API/Service_Worker_API)\n-   [See all…](/en-US/docs/Web/API \"See all Web API guides\")\n\nWeb API guides\n\n-   [Using the Web animation API](/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API)\n-   [Using the Fetch API](/en-US/docs/Web/API/Fetch_API/Using_Fetch)\n-   [Working with the History API](/en-US/docs/Web/API/History_API/Working_with_the_History_API)\n-   [Using the Web speech API](/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API)\n-   [Using web workers](/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)\n\nAll\n\n[All web technology](/en-US/docs/Web)\n\nTechnologies\n\n-   [Accessibility](/en-US/docs/Web/Accessibility)\n-   [HTTP](/en-US/docs/Web/HTTP)\n-   [URI](/en-US/docs/Web/URI)\n-   [Web extensions](/en-US/docs/Mozilla/Add-ons/WebExtensions)\n-   [WebAssembly](/en-US/docs/WebAssembly)\n-   [WebDriver](/en-US/docs/Web/WebDriver)\n-   [See all…](/en-US/docs/Web \"See all web technology references\")\n\nTopics\n\n-   [Media](/en-US/docs/Web/Media)\n-   [Performance](/en-US/docs/Web/Performance)\n-   [Privacy](/en-US/docs/Web/Privacy)\n-   [Security](/en-US/docs/Web/Security)\n-   [Progressive web apps](/en-US/docs/Web/Progressive_web_apps)\n\nLearn\n\n[Learn web development](/en-US/docs/Learn_web_development)\n\nFrontend developer course\n\n-   [Getting started modules](/en-US/docs/Learn_web_development/Getting_started)\n-   [Core modules](/en-US/docs/Learn_web_development/Core)\n-   [MDN Curriculum](/en-US/curriculum/)\n-   [Check out the video course from Scrimba, our partner](https://scrimba.com/frontend-path-c0j?via=mdn-learn-navbar)\n\nLearn HTML\n\n-   [Structuring content with HTML module](/en-US/docs/Learn_web_development/Core/Structuring_content)\n\nLearn CSS\n\n-   [CSS styling basics module](/en-US/docs/Learn_web_development/Core/Styling_basics)\n-   [CSS layout module](/en-US/docs/Learn_web_development/Core/CSS_layout)\n\nLearn JavaScript\n\n-   [Dynamic scripting with JavaScript module](/en-US/docs/Learn_web_development/Core/Scripting)\n\nTools\n\nDiscover our tools\n\n-   [Playground](/en-US/play)\n-   [HTTP Observatory](/en-US/observatory)\n\n-   [Border-image generator](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Border-image_generator)\n-   [Border-radius generator](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Border-radius_generator)\n-   [Box-shadow generator](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Box-shadow_generator)\n-   [Color format converter](/en-US/docs/Web/CSS/Guides/Colors/Color_format_converter)\n-   [Color mixer](/en-US/docs/Web/CSS/Guides/Colors/Color_mixer)\n-   [Shape generator](/en-US/docs/Web/CSS/Guides/Shapes/Shape_generator)\n\nAbout\n\nGet to know MDN better\n\n-   [About MDN](/en-US/about)\n-   [Advertise with us](/en-US/advertising)\n\n-   [Community](/en-US/community)\n-   [MDN on GitHub](https://github.com/mdn)\n\n[Blog](/en-US/blog/)\n\n1.  [Web](/en-US/docs/Web)\n2.  [CSS](/en-US/docs/Web/CSS)\n3.  [Reference](/en-US/docs/Web/CSS/Reference)\n4.  [Properties](/en-US/docs/Web/CSS/Reference/Properties)\n5.  [text-decoration](/en-US/docs/Web/CSS/Reference/Properties/text-decoration)\n\n# `text-decoration` CSS property\n\nBaseline\n\nWidely available\n\n\\*\n\nThis feature is well established and works across many devices and browser versions. It’s been available across browsers since July 2015.\n\n\\* Some parts of this feature may have varying levels of support.\n\n-   [See full compatibility](#browser_compatibility)\n-   [Learn more](/en-US/docs/Glossary/Baseline/Compatibility)\n\nThe **`text-decoration`** [CSS](/en-US/docs/Web/CSS) [shorthand](/en-US/docs/Web/CSS/Guides/Cascade/Shorthand_properties) property sets the appearance of decorative lines on text. It is a shorthand for [`text-decoration-line`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line), [`text-decoration-color`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color), [`text-decoration-style`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style), and the newer [`text-decoration-thickness`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness) property.\n\nText decorations are drawn across descendant text elements. This means that if an element specifies a text decoration, then a child element can't remove the decoration. For example, in the markup `<p>This text has <em>some emphasized words</em> in it.</p>`, the style rule `p { text-decoration: underline; }` would cause the entire paragraph to be underlined. The style rule `em { text-decoration: none; }` would not cause any change; the entire paragraph would still be underlined. However, the rule `em { text-decoration: overline; }` would cause a second decoration to appear on \"some emphasized words\".\n\n## In this article\n\n-   [Try it](#try_it)\n-   [Constituent properties](#constituent_properties)\n-   [Syntax](#syntax)\n-   [Formal definition](#formal_definition)\n-   [Formal syntax](#formal_syntax)\n-   [Examples](#examples)\n-   [Specifications](#specifications)\n-   [Browser compatibility](#browser_compatibility)\n-   [See also](#see_also)\n\n## [Try it](#try_it)\n\n```\ntext-decoration: underline;\n```\n\n```\ntext-decoration: underline dotted;\n```\n\n```\ntext-decoration: underline dotted red;\n```\n\n```\ntext-decoration: green wavy underline;\n```\n\n```\ntext-decoration: underline overline #ff3028;\n```\n\n```\n<section id=\"default-example\">\n  <p>\n    I'd far rather be\n    <span class=\"transition-all\" id=\"example-element\">happy than right</span>\n    any day.\n  </p>\n</section>\n```\n\n```\np {\n  font: 1.5em sans-serif;\n}\n```\n\n## [Constituent properties](#constituent_properties)\n\nThis property is a shorthand for the following CSS properties:\n\n-   [`text-decoration-color`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color)\n-   [`text-decoration-line`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line)\n-   [`text-decoration-style`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style)\n-   [`text-decoration-thickness`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness)\n\n## [Syntax](#syntax)\n\ncss\n\n```\ntext-decoration: underline;\ntext-decoration: overline red;\ntext-decoration: none;\n\n/* Global values */\ntext-decoration: inherit;\ntext-decoration: initial;\ntext-decoration: revert;\ntext-decoration: revert-layer;\ntext-decoration: unset;\n```\n\nThe `text-decoration` property is specified as one or more space-separated values representing the various longhand text-decoration properties.\n\n### [Values](#values)\n\n[`text-decoration-line`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line)\n\nSets the kind of decoration used, such as `underline` or `line-through`.\n\n[`text-decoration-color`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color)\n\nSets the color of the decoration.\n\n[`text-decoration-style`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style)\n\nSets the style of the line used for the decoration, such as `solid`, `wavy`, or `dashed`.\n\n[`text-decoration-thickness`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness)\n\nSets the thickness of the line used for the decoration.\n\n## [Formal definition](#formal_definition)\n\n[Initial value](/en-US/docs/Web/CSS/Guides/Cascade/Property_value_processing#initial_value)\n\nas each of the properties of the shorthand:\n\n-   [`text-decoration-color`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color): `currentcolor`\n-   [`text-decoration-style`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style): `solid`\n-   [`text-decoration-line`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line): `none`\n\nApplies to\n\nall elements. It also applies to [`::first-letter`](/en-US/docs/Web/CSS/Reference/Selectors/::first-letter) and [`::first-line`](/en-US/docs/Web/CSS/Reference/Selectors/::first-line).\n\n[Inherited](/en-US/docs/Web/CSS/Guides/Cascade/Inheritance)\n\nno\n\n[Computed value](/en-US/docs/Web/CSS/Guides/Cascade/Property_value_processing#computed_value)\n\nas each of the properties of the shorthand:\n\n-   [`text-decoration-line`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line): as specified\n-   [`text-decoration-style`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style): as specified\n-   [`text-decoration-color`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color): computed color\n-   [`text-decoration-thickness`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness): as specified\n\n[Animation type](/en-US/docs/Web/CSS/Guides/Animations/Animatable_properties)\n\nas each of the properties of the shorthand:\n\n-   [`text-decoration-color`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color): a [color](/en-US/docs/Web/CSS/Reference/Values/color_value#interpolation \"Values of the <color> CSS data type are interpolated on each of their red, green, blue components, each handled as a real, floating-point number. Note that interpolation of colors happens in the alpha-premultiplied sRGBA color space to prevent unexpected grey colors to appear.\")\n-   [`text-decoration-style`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style): discrete\n-   [`text-decoration-line`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line): discrete\n-   [`text-decoration-thickness`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness): by computed value type\n\n## [Formal syntax](#formal_syntax)\n\ntext-decoration =\n  [<'text-decoration-line'>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line)       [||](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#double_bar \"Double bar: one or several of the entities must be present, in any order\")\n  [<'text-decoration-thickness'>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness)  [||](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#double_bar \"Double bar: one or several of the entities must be present, in any order\")\n  [<'text-decoration-style'>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style)      [||](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#double_bar \"Double bar: one or several of the entities must be present, in any order\")\n  [<'text-decoration-color'>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color)\n\n[<text-decoration-line>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line) =\n  none                                                [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  [\\[](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#brackets \"Brackets: enclose several entities, combinators, and multipliers to transform them as a single component\") underline [||](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#double_bar \"Double bar: one or several of the entities must be present, in any order\") overline [||](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#double_bar \"Double bar: one or several of the entities must be present, in any order\") line-through [||](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#double_bar \"Double bar: one or several of the entities must be present, in any order\") blink [\\]](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#brackets \"Brackets: enclose several entities, combinators, and multipliers to transform them as a single component\")  [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  spelling-error                                      [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  grammar-error\n\n[<text-decoration-thickness>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness) =\n  auto                 [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  from-font            [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  <length-percentage>  [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  <line-width>\n\n[<text-decoration-style>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style) =\n  solid   [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  double  [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  dotted  [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  dashed  [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  wavy\n\n[<text-decoration-color>](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color) =\n  [<color>](/en-US/docs/Web/CSS/Reference/Values/color_value)\n\n[<length-percentage>](/en-US/docs/Web/CSS/Reference/Values/length-percentage) =\n  [<length>](/en-US/docs/Web/CSS/Reference/Values/length)      [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  [<percentage>](/en-US/docs/Web/CSS/Reference/Values/percentage)\n\n[<line-width>](/en-US/docs/Web/CSS/Reference/Values/line-width) =\n  [<length \\[0,∞\\]>](/en-US/docs/Web/CSS/Reference/Values/length)  [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  hairline        [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  thin            [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  medium          [|](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax#single_bar \"Single bar: exactly one of the entities must be present\")\n  thick\n\nThis syntax reflects the latest standard as per [CSS Borders and Box Decorations Module Level 4](https://drafts.csswg.org/css-borders-4/ \"External link (opens in new tab)\"), [CSS Text Decoration Module Level 4](https://drafts.csswg.org/css-text-decor-4/ \"External link (opens in new tab)\"), [CSS Values and Units Module Level 4](https://drafts.csswg.org/css-values-4/ \"External link (opens in new tab)\"). Not all browsers may have implemented every part. See [Browser compatibility](#browser_compatibility) for support information.\n\n## [Examples](#examples)\n\n### [Demonstration of text-decoration values](#demonstration_of_text-decoration_values)\n\ncss\n\n```\n.under {\n  text-decoration: underline red;\n}\n\n.over {\n  text-decoration: wavy overline lime;\n}\n\n.line {\n  text-decoration: line-through;\n}\n\n.plain {\n  text-decoration: none;\n}\n\n.underover {\n  text-decoration: dashed underline overline;\n}\n\n.thick {\n  text-decoration: solid underline purple 4px;\n}\n\n.blink {\n  text-decoration: blink;\n}\n```\n\nhtml\n\n```\n<p class=\"under\">This text has a line underneath it.</p>\n<p class=\"over\">This text has a line over it.</p>\n<p class=\"line\">This text has a line going through it.</p>\n<p>\n  This <a class=\"plain\" href=\"#\">link will not be underlined</a>, as links\n  generally are by default. Be careful when removing the text decoration on\n  anchors since users often depend on the underline to denote hyperlinks.\n</p>\n<p class=\"underover\">This text has lines above <em>and</em> below it.</p>\n<p class=\"thick\">\n  This text has a really thick purple underline in supporting browsers.\n</p>\n<p class=\"blink\">\n  This text might blink for you, depending on the browser you use.\n</p>\n```\n\n#### Result\n\n## [Specifications](#specifications)\n\nSpecification\n\n[CSS Text Decoration Module Level 4\n\\# text-decoration-property](https://drafts.csswg.org/css-text-decor-4/#text-decoration-property)\n\n[Scalable Vector Graphics (SVG) 2\n\\# TextDecorationProperties](https://w3c.github.io/svgwg/svg2-draft/text.html#TextDecorationProperties)\n\n## [Browser compatibility](#browser_compatibility)\n\n## [See also](#see_also)\n\n-   The individual text-decoration properties are [`text-decoration-line`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-line), [`text-decoration-color`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-color), [`text-decoration-style`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-style), and [`text-decoration-thickness`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-thickness).\n-   The [`text-decoration-skip-ink`](/en-US/docs/Web/CSS/Reference/Properties/text-decoration-skip-ink), [`text-underline-offset`](/en-US/docs/Web/CSS/Reference/Properties/text-underline-offset), and [`text-underline-position`](/en-US/docs/Web/CSS/Reference/Properties/text-underline-position) properties also affect text-decoration, but are not included in the shorthand.\n-   The [`list-style`](/en-US/docs/Web/CSS/Reference/Properties/list-style) property controls the appearance of items in HTML [`<ol>`](/en-US/docs/Web/HTML/Reference/Elements/ol) and [`<ul>`](/en-US/docs/Web/HTML/Reference/Elements/ul) lists.\n-   SVG [`text-decoration`](/en-US/docs/Web/SVG/Reference/Attribute/text-decoration) attribute\n\n## Help improve MDN\n\n[Learn how to contribute](/en-US/docs/MDN/Community/Getting_started)\n\nThis page was last modified on Sep 10, 2026 by [MDN contributors](/en-US/docs/Web/CSS/Reference/Properties/text-decoration/contributors.txt).\n\n[View this page on GitHub](https://github.com/mdn/content/blob/main/files/en-us/web/css/reference/properties/text-decoration/index.md?plain=1 \"Folder: en-us/web/css/reference/properties/text-decoration (Opens in a new tab)\") • [Report a problem with this content](https://github.com/mdn/content/issues/new?template=page-report.yml&mdn-url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FCSS%2FReference%2FProperties%2Ftext-decoration&metadata=%3C%21--+Do+not+make+changes+below+this+line+--%3E%0A%3Cdetails%3E%0A%3Csummary%3EPage+report+details%3C%2Fsummary%3E%0A%0A*+Folder%3A+%60en-us%2Fweb%2Fcss%2Freference%2Fproperties%2Ftext-decoration%60%0A*+MDN+URL%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FCSS%2FReference%2FProperties%2Ftext-decoration%0A*+GitHub+URL%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fblob%2Fmain%2Ffiles%2Fen-us%2Fweb%2Fcss%2Freference%2Fproperties%2Ftext-decoration%2Findex.md%0A*+Last+commit%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fcommit%2F3fb9ea0187429234b47cb0385a9515a69757fe63%0A*+Document+last+modified%3A+2026-09-10T12%3A13%3A15.000Z%0A%0A%3C%2Fdetails%3E \"This will take you to GitHub to file a new issue.\")\n\n1.  [CSS](/en-US/docs/Web/CSS)\n2.  [Guides](/en-US/docs/Web/CSS/Guides)\n3.  Modules\n\n    1.  [Anchor positioning](/en-US/docs/Web/CSS/Guides/Anchor_positioning)\n    2.  [Animation triggers](/en-US/docs/Web/CSS/Guides/Animation_triggers)\n    3.  [Animations](/en-US/docs/Web/CSS/Guides/Animations)\n    4.  [Backgrounds and borders](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders)\n    5.  [Basic user interface](/en-US/docs/Web/CSS/Guides/Basic_user_interface)\n    6.  [Borders and box decorations](/en-US/docs/Web/CSS/Guides/Borders_and_box_decorations)\n    7.  [Box alignment](/en-US/docs/Web/CSS/Guides/Box_alignment)\n    8.  [Box model](/en-US/docs/Web/CSS/Guides/Box_model)\n    9.  [Box sizing](/en-US/docs/Web/CSS/Guides/Box_sizing)\n    10.  [Cascading and inheritance](/en-US/docs/Web/CSS/Guides/Cascade)\n    11.  [Color adjustment](/en-US/docs/Web/CSS/Guides/Color_adjustment)\n    12.  [Colors](/en-US/docs/Web/CSS/Guides/Colors)\n    13.  [Compositing and blending](/en-US/docs/Web/CSS/Guides/Compositing_and_blending)\n    14.  [Conditional rules](/en-US/docs/Web/CSS/Guides/Conditional_rules)\n    15.  [Containment](/en-US/docs/Web/CSS/Guides/Containment)\n    16.  [Counter styles](/en-US/docs/Web/CSS/Guides/Counter_styles)\n    17.  [CSSOM view](/en-US/docs/Web/CSS/Guides/CSSOM_view)\n    18.  [Custom functions and mixins](/en-US/docs/Web/CSS/Guides/Custom_functions_and_mixins)\n    19.  [Custom highlight API](/en-US/docs/Web/CSS/Guides/Custom_highlight_API)\n    20.  [Custom properties for cascading variables](/en-US/docs/Web/CSS/Guides/Cascading_variables)\n    21.  [Display](/en-US/docs/Web/CSS/Guides/Display)\n    22.  [Easing functions](/en-US/docs/Web/CSS/Guides/Easing_functions)\n    23.  [Environment variables](/en-US/docs/Web/CSS/Guides/Environment_variables)\n    24.  [Filter effects](/en-US/docs/Web/CSS/Guides/Filter_effects)\n    25.  [Flexible box layout](/en-US/docs/Web/CSS/Guides/Flexible_box_layout)\n    26.  [Font loading](/en-US/docs/Web/CSS/Guides/Font_loading)\n    27.  [Fonts](/en-US/docs/Web/CSS/Guides/Fonts)\n    28.  [Fragmentation](/en-US/docs/Web/CSS/Guides/Fragmentation)\n    29.  [Gaps](/en-US/docs/Web/CSS/Guides/Gaps)\n    30.  [Generated content](/en-US/docs/Web/CSS/Guides/Generated_content)\n    31.  [Grid layout](/en-US/docs/Web/CSS/Guides/Grid_layout)\n    32.  [Images](/en-US/docs/Web/CSS/Guides/Images)\n    33.  [Inline layout](/en-US/docs/Web/CSS/Guides/Inline_layout)\n    34.  [Lists and counters](/en-US/docs/Web/CSS/Guides/Lists)\n    35.  [Logical properties and values](/en-US/docs/Web/CSS/Guides/Logical_properties_and_values)\n    36.  [Masking](/en-US/docs/Web/CSS/Guides/Masking)\n    37.  [Media queries](/en-US/docs/Web/CSS/Guides/Media_queries)\n    38.  [Motion path](/en-US/docs/Web/CSS/Guides/Motion_path)\n    39.  [Multi-column layout](/en-US/docs/Web/CSS/Guides/Multicol_layout)\n    40.  [Namespaces](/en-US/docs/Web/CSS/Guides/Namespaces)\n    41.  [Nesting](/en-US/docs/Web/CSS/Guides/Nesting)\n    42.  [Overflow](/en-US/docs/Web/CSS/Guides/Overflow)\n    43.  [Overscroll behavior](/en-US/docs/Web/CSS/Guides/Overscroll_behavior)\n    44.  [Paged media](/en-US/docs/Web/CSS/Guides/Paged_media)\n    45.  [Positioned layout](/en-US/docs/Web/CSS/Guides/Positioned_layout)\n    46.  [Properties and values API](/en-US/docs/Web/CSS/Guides/Properties_and_values_API)\n    47.  [Pseudo-elements](/en-US/docs/Web/CSS/Guides/Pseudo-elements)\n    48.  [Round display](/en-US/docs/Web/CSS/Guides/Round_display)\n    49.  [Ruby layout](/en-US/docs/Web/CSS/Guides/Ruby_layout)\n    50.  [Scoping](/en-US/docs/Web/CSS/Guides/Scoping)\n    51.  [Scroll anchoring](/en-US/docs/Web/CSS/Guides/Scroll_anchoring)\n    52.  [Scroll snap](/en-US/docs/Web/CSS/Guides/Scroll_snap)\n    53.  [Scroll-driven animations](/en-US/docs/Web/CSS/Guides/Scroll-driven_animations)\n    54.  [Scrollbars styling](/en-US/docs/Web/CSS/Guides/Scrollbars_styling)\n    55.  [Selectors](/en-US/docs/Web/CSS/Guides/Selectors)\n    56.  [Shadow parts](/en-US/docs/Web/CSS/Guides/Shadow_parts)\n    57.  [Shapes](/en-US/docs/Web/CSS/Guides/Shapes)\n    58.  [Syntax](/en-US/docs/Web/CSS/Guides/Syntax)\n    59.  [Table](/en-US/docs/Web/CSS/Guides/Table)\n    60.  [Text](/en-US/docs/Web/CSS/Guides/Text)\n    61.  [Text decoration](/en-US/docs/Web/CSS/Guides/Text_decoration)\n    62.  [Transforms](/en-US/docs/Web/CSS/Guides/Transforms)\n    63.  [Transitions](/en-US/docs/Web/CSS/Guides/Transitions)\n    64.  [Values and units](/en-US/docs/Web/CSS/Guides/Values_and_units)\n    65.  [View transitions](/en-US/docs/Web/CSS/Guides/View_transitions)\n    66.  [Viewport](/en-US/docs/Web/CSS/Guides/Viewport)\n    67.  [WebXR DOM overlays](/en-US/docs/Web/CSS/Guides/WebXR_DOM_overlays)\n    68.  [Will change](/en-US/docs/Web/CSS/Guides/Will_change)\n    69.  [Writing modes](/en-US/docs/Web/CSS/Guides/Writing_modes)\n\n4.  Anchor positioning\n\n    1.  [Using anchor positioning](/en-US/docs/Web/CSS/Guides/Anchor_positioning/Using)\n    2.  [Handling overflow](/en-US/docs/Web/CSS/Guides/Anchor_positioning/Try_options_hiding)\n    3.  [Anchored container queries](/en-US/docs/Web/CSS/Guides/Anchor_positioning/Anchored_container_queries)\n\n5.  Animations\n\n    1.  [Animatable properties](/en-US/docs/Web/CSS/Guides/Animations/Animatable_properties)\n    2.  [Using animations](/en-US/docs/Web/CSS/Guides/Animations/Using)\n\n6.  Backgrounds and borders\n\n    1.  [Using multiple backgrounds](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Using_multiple_backgrounds)\n    2.  [Resizing background images](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Resizing_background_images)\n    3.  [Scaling SVG backgrounds](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Scaling_SVG_backgrounds)\n\n7.  Borders and box decorations\n\n    1.  [border-shape nav menu](/en-US/docs/Web/CSS/Guides/Borders_and_box_decorations/Border_shape_nav_menu)\n\n8.  Box alignment\n\n    1.  [Overview](/en-US/docs/Web/CSS/Guides/Box_alignment/Overview)\n    2.  [In block layout](/en-US/docs/Web/CSS/Guides/Box_alignment/In_block_abspos_tables)\n    3.  [In flexbox](/en-US/docs/Web/CSS/Guides/Box_alignment/In_flexbox)\n    4.  [In grid layout](/en-US/docs/Web/CSS/Guides/Box_alignment/In_grid_layout)\n    5.  [In multi-column layout](/en-US/docs/Web/CSS/Guides/Box_alignment/In_multi-column_layout)\n\n9.  Box model\n\n    1.  [Introduction](/en-US/docs/Web/CSS/Guides/Box_model/Introduction)\n    2.  [Margin collapsing](/en-US/docs/Web/CSS/Guides/Box_model/Margin_collapsing)\n\n10.  Box sizing\n\n    1.  [Aspect ratios](/en-US/docs/Web/CSS/Guides/Box_sizing/Aspect_ratios)\n\n11.  Cascade\n\n    1.  [Introduction](/en-US/docs/Web/CSS/Guides/Cascade/Introduction)\n    2.  [Inheritance](/en-US/docs/Web/CSS/Guides/Cascade/Inheritance)\n    3.  [Specificity](/en-US/docs/Web/CSS/Guides/Cascade/Specificity)\n    4.  [Property value processing](/en-US/docs/Web/CSS/Guides/Cascade/Property_value_processing)\n    5.  [Shorthand properties](/en-US/docs/Web/CSS/Guides/Cascade/Shorthand_properties)\n\n12.  Cascading variables\n\n    1.  [Using custom properties](/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties)\n\n13.  Colors\n\n    1.  [Applying color](/en-US/docs/Web/CSS/Guides/Colors/Applying_color)\n    2.  [Color values](/en-US/docs/Web/CSS/Guides/Colors/Color_values)\n    3.  [Using relative colors](/en-US/docs/Web/CSS/Guides/Colors/Using_relative_colors)\n    4.  [Using color wisely](/en-US/docs/Web/CSS/Guides/Colors/Using_color_wisely)\n    5.  [Accessibility: Colors and luminance](/en-US/docs/Web/Accessibility/Guides/Colors_and_Luminance)\n    6.  [Accessibility: Color contrast](/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Perceivable/Color_contrast)\n\n14.  Columns\n\n    1.  [Basic concepts](/en-US/docs/Web/CSS/Guides/Multicol_layout/Basic_concepts)\n    2.  [Styling columns](/en-US/docs/Web/CSS/Guides/Multicol_layout/Styling_columns)\n    3.  [Using multi-column layouts](/en-US/docs/Web/CSS/Guides/Multicol_layout/Using)\n    4.  [Spanning and balancing columns](/en-US/docs/Web/CSS/Guides/Multicol_layout/Spanning_balancing_columns)\n    5.  [Handling overflow](/en-US/docs/Web/CSS/Guides/Multicol_layout/Handling_overflow)\n    6.  [Handling content breaks](/en-US/docs/Web/CSS/Guides/Multicol_layout/Handling_content_breaks)\n\n15.  Conditional rules\n\n    1.  [Using feature queries](/en-US/docs/Web/CSS/Guides/Conditional_rules/Using_feature_queries)\n    2.  [Using container scroll-state queries](/en-US/docs/Web/CSS/Guides/Conditional_rules/Container_scroll-state_queries)\n\n16.  Containment\n\n    1.  [Container queries](/en-US/docs/Web/CSS/Guides/Containment/Container_queries)\n    2.  [Using containment](/en-US/docs/Web/CSS/Guides/Containment/Using)\n    3.  [Using container size and style queries](/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries)\n\n17.  Counters\n\n    1.  [Using counters](/en-US/docs/Web/CSS/Guides/Counter_styles/Using_counters)\n\n18.  CSSOM view\n\n    1.  [Coordinate systems (API)](/en-US/docs/Web/API/CSSOM_view_API/Coordinate_systems)\n    2.  [Viewport concepts](/en-US/docs/Web/CSS/Guides/CSSOM_view/Viewport_concepts)\n\n19.  Custom functions and mixins\n\n    1.  [Using CSS custom functions](/en-US/docs/Web/CSS/Guides/Custom_functions_and_mixins/Using_custom_functions)\n\n20.  Display\n\n    1.  [Block and inline layout](/en-US/docs/Web/CSS/Guides/Display/Block_and_inline_layout)\n    2.  [Flow layout](/en-US/docs/Web/CSS/Guides/Display/Flow_layout)\n    3.  [Flow layout and overflow](/en-US/docs/Web/CSS/Guides/Display/Flow_layout_and_overflow)\n    4.  [Flow layout and writing modes](/en-US/docs/Web/CSS/Guides/Display/Flow_layout_and_writing_modes)\n    5.  [In flow and out of flow](/en-US/docs/Web/CSS/Guides/Display/In_flow_and_out_of_flow)\n    6.  [Layout and the containing block](/en-US/docs/Web/CSS/Guides/Display/Containing_block)\n    7.  [Formatting contexts](/en-US/docs/Web/CSS/Guides/Display/Formatting_contexts)\n    8.  [Block formatting context](/en-US/docs/Web/CSS/Guides/Display/Block_formatting_context)\n    9.  [Inline formatting context](/en-US/docs/Web/CSS/Guides/Inline_layout/Inline_formatting_context)\n    10.  [Using multi-keyword syntax](/en-US/docs/Web/CSS/Guides/Display/Multi-keyword_syntax)\n    11.  [Visual formatting model](/en-US/docs/Web/CSS/Guides/Display/Visual_formatting_model)\n\n21.  Environment variables\n\n    1.  [Using environment variables](/en-US/docs/Web/CSS/Guides/Environment_variables/Using)\n\n22.  Filter effects\n\n    1.  [Using filter effects](/en-US/docs/Web/CSS/Guides/Filter_effects/Using)\n\n23.  Flexbox\n\n    1.  [Basic concepts](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Basic_concepts)\n    2.  [Flexbox and other layouts](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Relationship_with_other_layout_methods)\n    3.  [Aligning flex items](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Aligning_items)\n    4.  [Ordering flex items](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Ordering_items)\n    5.  [Controlling flex item ratios](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Controlling_flex_item_ratios)\n    6.  [Wrapping flex items](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Wrapping_items)\n    7.  [Typical use cases](/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Use_cases)\n\n24.  Fonts\n\n    1.  [OpenType features](/en-US/docs/Web/CSS/Guides/Fonts/OpenType_fonts)\n    2.  [Variable fonts](/en-US/docs/Web/CSS/Guides/Fonts/Variable_fonts)\n    3.  [WOFF](/en-US/docs/Web/CSS/Guides/Fonts/WOFF)\n\n25.  Grid\n\n    1.  [Basic concepts](/en-US/docs/Web/CSS/Guides/Grid_layout/Basic_concepts)\n    2.  [Grid and other layouts](/en-US/docs/Web/CSS/Guides/Grid_layout/Relationship_with_other_layout_methods)\n    3.  [Using line-based placement](/en-US/docs/Web/CSS/Guides/Grid_layout/Line-based_placement)\n    4.  [Grid template areas](/en-US/docs/Web/CSS/Guides/Grid_layout/Grid_template_areas)\n    5.  [Using named grid lines](/en-US/docs/Web/CSS/Guides/Grid_layout/Named_grid_lines)\n    6.  [Using auto-placement](/en-US/docs/Web/CSS/Guides/Grid_layout/Auto-placement)\n    7.  [Aligning items](/en-US/docs/Web/CSS/Guides/Grid_layout/Box_alignment)\n    8.  [Logical values and writing modes](/en-US/docs/Web/CSS/Guides/Grid_layout/Logical_values_and_writing_modes)\n    9.  [Grid layout and accessibility](/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility)\n    10.  [Common grid layouts](/en-US/docs/Web/CSS/Guides/Grid_layout/Common_grid_layouts)\n    11.  [Subgrid](/en-US/docs/Web/CSS/Guides/Grid_layout/Subgrid)\n    12.  [Grid lanes layout](/en-US/docs/Web/CSS/Guides/Grid_layout/Grid_lanes)\n\n26.  Images\n\n    1.  [Using gradients](/en-US/docs/Web/CSS/Guides/Images/Using_gradients)\n    2.  [Using object-view-box](/en-US/docs/Web/CSS/Guides/Images/Using_object-view-box)\n    3.  [Styling replaced elements](/en-US/docs/Web/CSS/Guides/Images/Replaced_element_properties)\n    4.  [Implementing image sprites](/en-US/docs/Web/CSS/Guides/Images/Implementing_image_sprites)\n\n27.  Lists\n\n    1.  [Indenting lists](/en-US/docs/Web/CSS/Guides/Lists/Indenting)\n\n28.  Logical properties\n\n    1.  [Basic concepts](/en-US/docs/Web/CSS/Guides/Logical_properties_and_values/Basic_concepts)\n    2.  [For floating and positioning](/en-US/docs/Web/CSS/Guides/Logical_properties_and_values/Floating_and_positioning)\n    3.  [For margins, borders, and padding](/en-US/docs/Web/CSS/Guides/Logical_properties_and_values/Margins_borders_padding)\n    4.  [For sizing](/en-US/docs/Web/CSS/Guides/Logical_properties_and_values/Sizing)\n\n29.  Masking\n\n    1.  [Introduction](/en-US/docs/Web/CSS/Guides/Masking/Introduction)\n    2.  [Clipping](/en-US/docs/Web/CSS/Guides/Masking/Clipping)\n    3.  [Multiple masks](/en-US/docs/Web/CSS/Guides/Masking/Multiple_masks)\n    4.  [Mask properties](/en-US/docs/Web/CSS/Guides/Masking/Mask_properties)\n\n30.  Media queries\n\n    1.  [Using media queries](/en-US/docs/Web/CSS/Guides/Media_queries/Using)\n    2.  [For accessibility](/en-US/docs/Web/CSS/Guides/Media_queries/Using_for_accessibility)\n    3.  [Testing](/en-US/docs/Web/CSS/Guides/Media_queries/Testing)\n    4.  [Printing](/en-US/docs/Web/CSS/Guides/Media_queries/Printing)\n\n31.  Nesting\n\n    1.  [Nesting at-rules](/en-US/docs/Web/CSS/Guides/Nesting/At-rules)\n    2.  [Nesting and specificity](/en-US/docs/Web/CSS/Guides/Nesting/Nesting_and_specificity)\n    3.  [Using nesting](/en-US/docs/Web/CSS/Guides/Nesting/Using)\n\n32.  Overflow\n\n    1.  [Creating carousels](/en-US/docs/Web/CSS/Guides/Overflow/Carousels)\n\n33.  Positioning\n\n    1.  [Stacking context](/en-US/docs/Web/CSS/Guides/Positioned_layout/Stacking_context)\n    2.  [Stacking floating elements](/en-US/docs/Web/CSS/Guides/Positioned_layout/Stacking_floating_elements)\n    3.  [Understanding z-index](/en-US/docs/Web/CSS/Guides/Positioned_layout/Understanding_z-index)\n    4.  [Using z-index](/en-US/docs/Web/CSS/Guides/Positioned_layout/Using_z-index)\n    5.  [Stacking without z-index](/en-US/docs/Web/CSS/Guides/Positioned_layout/Stacking_without_z-index)\n\n34.  Properties and Values API\n\n    1.  [CSS Houdini](/en-US/docs/Web/CSS/Guides/Properties_and_values_API/Houdini)\n    2.  [Registering custom properties in CSS](/en-US/docs/Web/CSS/Guides/Properties_and_values_API/Registering_properties)\n\n35.  Scroll anchoring\n\n    1.  [Overview](/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview)\n\n36.  Scroll-driven animations\n\n    1.  [Scroll-driven animation timelines](/en-US/docs/Web/CSS/Guides/Scroll-driven_animations/Timelines)\n    2.  [Understanding timeline insets](/en-US/docs/Web/CSS/Guides/Scroll-driven_animations/Timeline_insets)\n    3.  [Understanding timeline range names](/en-US/docs/Web/CSS/Guides/Scroll-driven_animations/Timeline_range_names)\n\n37.  Scroll snap\n\n    1.  [Basic concepts](/en-US/docs/Web/CSS/Guides/Scroll_snap/Basic_concepts)\n    2.  [Using scroll snap events](/en-US/docs/Web/CSS/Guides/Scroll_snap/Using_scroll_snap_events)\n\n38.  Selectors\n\n    1.  [Selectors and combinators](/en-US/docs/Web/CSS/Guides/Selectors/Selectors_and_combinators)\n    2.  [Selector structure](/en-US/docs/Web/CSS/Guides/Selectors/Selector_structure)\n    3.  [Privacy and :visited](/en-US/docs/Web/CSS/Guides/Selectors/Privacy_and_:visited)\n    4.  [Using :target](/en-US/docs/Web/CSS/Guides/Selectors/Using_:target)\n\n39.  Shapes\n\n    1.  [Overview](/en-US/docs/Web/CSS/Guides/Shapes/Overview)\n    2.  [Box-value shapes](/en-US/docs/Web/CSS/Guides/Shapes/From_box_values)\n    3.  [Image-based shapes](/en-US/docs/Web/CSS/Guides/Shapes/From_images)\n    4.  [Using shape-outside](/en-US/docs/Web/CSS/Guides/Shapes/Using_shape-outside)\n    5.  [Shape generator](/en-US/docs/Web/CSS/Guides/Shapes/Shape_generator)\n\n40.  Syntax\n\n    1.  [Introduction](/en-US/docs/Web/CSS/Guides/Syntax/Introduction)\n    2.  [Comments](/en-US/docs/Web/CSS/Guides/Syntax/Comments)\n    3.  [At-rules](/en-US/docs/Web/CSS/Guides/Syntax/At-rules)\n    4.  [Error handling](/en-US/docs/Web/CSS/Guides/Syntax/Error_handling)\n\n41.  Text\n\n    1.  [Wrapping and breaking text](/en-US/docs/Web/CSS/Guides/Text/Wrapping_breaking_text)\n    2.  [Handling whitespace](/en-US/docs/Web/CSS/Guides/Text/Whitespace)\n\n42.  Text decoration\n\n    1.  [Text shadows](/en-US/docs/Web/CSS/Guides/Text_decoration/Text_shadows)\n\n43.  Transforms\n\n    1.  [Using transforms](/en-US/docs/Web/CSS/Guides/Transforms/Using)\n\n44.  Transitions\n\n    1.  [Using transitions](/en-US/docs/Web/CSS/Guides/Transitions/Using)\n\n45.  Values and units\n\n    1.  [Value definition syntax](/en-US/docs/Web/CSS/Guides/Values_and_units/Value_definition_syntax)\n    2.  [Numeric data types](/en-US/docs/Web/CSS/Guides/Values_and_units/Numeric_data_types)\n    3.  [Textual data types](/en-US/docs/Web/CSS/Guides/Values_and_units/Textual_data_types)\n    4.  [Using math functions](/en-US/docs/Web/CSS/Guides/Values_and_units/Using_math_functions)\n    5.  [Using typed arithmetic](/en-US/docs/Web/CSS/Guides/Values_and_units/Using_typed_arithmetic)\n\n46.  Writing modes\n\n    1.  [Introduction](/en-US/docs/Web/CSS/Guides/Writing_modes/Writing_mode_systems)\n    2.  [Vertical form controls](/en-US/docs/Web/CSS/Guides/Writing_modes/Vertical_controls)\n\n47.  [How to](/en-US/docs/Web/CSS/How_to)\n48.  [Layout cookbook](/en-US/docs/Web/CSS/How_to/Layout_cookbook)\n\n    1.  [Media objects](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Media_objects)\n    2.  [Column layouts](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Column_layouts)\n    3.  [Center an element](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Center_an_element)\n    4.  [Sticky footers](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Sticky_footers)\n    5.  [Split navigation](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Split_navigation)\n    6.  [Breadcrumb navigation](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Breadcrumb_navigation)\n    7.  [List group with badges](/en-US/docs/Web/CSS/How_to/Layout_cookbook/List_group_with_badges)\n    8.  [Pagination](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Pagination)\n    9.  [Card](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Card)\n    10.  [Grid wrapper](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Grid_wrapper)\n    11.  [Contribute a recipe](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Contribute_a_recipe)\n\n        1.  [Cookbook template](/en-US/docs/Web/CSS/How_to/Layout_cookbook/Contribute_a_recipe/Cookbook_template)\n\n\n49.  Tools\n50.  1.  [Border-image generator](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Border-image_generator)\n    2.  [Border-radius generator](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Border-radius_generator)\n    3.  [Box-shadow generator](/en-US/docs/Web/CSS/Guides/Backgrounds_and_borders/Box-shadow_generator)\n    4.  [Color format converter](/en-US/docs/Web/CSS/Guides/Colors/Color_format_converter)\n    5.  [Color mixer](/en-US/docs/Web/CSS/Guides/Colors/Color_mixer)\n    6.  [Shape generator](/en-US/docs/Web/CSS/Guides/Shapes/Shape_generator)\n51.  [Reference](/en-US/docs/Web/CSS/Reference)\n52.  [Properties](/en-US/docs/Web/CSS/Reference/Properties)\n\n    1.  \\-moz-\\*\n\n        1.  [`-moz-float-edge`](/en-US/docs/Web/CSS/Reference/Properties/-moz-float-edge)\n        2.  [`-moz-force-broken-image-icon`](/en-US/docs/Web/CSS/Reference/Properties/-moz-force-broken-image-icon)\n        3.  [`-moz-orient`](/en-US/docs/Web/CSS/Reference/Properties/-moz-orient)\n        4.  [`-moz-user-focus`](/en-US/docs/Web/CSS/Reference/Properties/-moz-user-focus)\n        5.  [`-moz-user-input`](/en-US/docs/Web/CSS/Reference/Properties/-moz-user-input)\n\n    2.  \\-webkit-\\*\n\n        1.  [`-webkit-border-before`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-border-before)\n        2.  [`-webkit-box-reflect`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-box-reflect)\n        3.  [`-webkit-mask-box-image`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-mask-box-image)\n        4.  [`-webkit-mask-composite`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-mask-composite)\n        5.  [`-webkit-mask-position-x`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-mask-position-x)\n        6.  [`-webkit-mask-position-y`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-mask-position-y)\n        7.  [`-webkit-mask-repeat-x`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-x)\n        8.  [`-webkit-mask-repeat-y`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-mask-repeat-y)\n        9.  [`-webkit-tap-highlight-color`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-tap-highlight-color)\n        10.  [`-webkit-text-fill-color`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-fill-color)\n        11.  [`-webkit-text-security`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-security)\n        12.  [`-webkit-text-stroke`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-stroke)\n        13.  [`-webkit-text-stroke-color`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-color)\n        14.  [`-webkit-text-stroke-width`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-width)\n        15.  [`-webkit-touch-callout`](/en-US/docs/Web/CSS/Reference/Properties/-webkit-touch-callout)\n\n    3.  [`Custom properties (--*): CSS variables`](/en-US/docs/Web/CSS/Reference/Properties/--*)\n    4.  [`accent-color`](/en-US/docs/Web/CSS/Reference/Properties/accent-color)\n    5.  align-\\*\n\n        1.  [`align-content`](/en-US/docs/Web/CSS/Reference/Properties/align-content)\n        2.  [`align-items`](/en-US/docs/Web/CSS/Reference/Properties/align-items)\n        3.  [`align-self`](/en-US/docs/Web/CSS/Reference/Properties/align-self)\n\n    6.  [`alignment-baseline`](/en-US/docs/Web/CSS/Reference/Properties/alignment-baseline)\n    7.  [`all`](/en-US/docs/Web/CSS/Reference/Properties/all)\n    8.  [`anchor-name`](/en-US/docs/Web/CSS/Reference/Properties/anchor-name)\n    9.  [`anchor-scope`](/en-US/docs/Web/CSS/Reference/Properties/anchor-scope)\n    10.  animation-\\*\n\n        1.  [`animation-composition`](/en-US/docs/Web/CSS/Reference/Properties/animation-composition)\n        2.  [`animation-delay`](/en-US/docs/Web/CSS/Reference/Properties/animation-delay)\n        3.  [`animation-direction`](/en-US/docs/Web/CSS/Reference/Properties/animation-direction)\n        4.  [`animation-duration`](/en-US/docs/Web/CSS/Reference/Properties/animation-duration)\n        5.  [`animation-fill-mode`](/en-US/docs/Web/CSS/Reference/Properties/animation-fill-mode)\n        6.  [`animation-iteration-count`](/en-US/docs/Web/CSS/Reference/Properties/animation-iteration-count)\n        7.  [`animation-name`](/en-US/docs/Web/CSS/Reference/Properties/animation-name)\n        8.  [`animation-play-state`](/en-US/docs/Web/CSS/Reference/Properties/animation-play-state)\n        9.  [`animation-range`](/en-US/docs/Web/CSS/Reference/Properties/animation-range)\n        10.  [`animation-range-end`](/en-US/docs/Web/CSS/Reference/Properties/animation-range-end)\n        11.  [`animation-range-start`](/en-US/docs/Web/CSS/Reference/Properties/animation-range-start)\n        12.  [`animation-timeline`](/en-US/docs/Web/CSS/Reference/Properties/animation-timeline)\n        13.  [`animation-timing-function`](/en-US/docs/Web/CSS/Reference/Properties/animation-timing-function)\n        14.  [`animation-trigger`](/en-US/docs/Web/CSS/Reference/Properties/animation-trigger)\n\n    11.  [`animation`](/en-US/docs/Web/CSS/Reference/Properties/animation)\n    12.  [`appearance`](/en-US/docs/Web/CSS/Reference/Properties/appearance)\n    13.  [`aspect-ratio`](/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio)\n    14.  [`backdrop-filter`](/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter)\n    15.  [`backface-visibility`](/en-US/docs/Web/CSS/Reference/Properties/backface-visibility)\n    16.  background-\\*\n\n        1.  [`background-attachment`](/en-US/docs/Web/CSS/Reference/Properties/background-attachment)\n        2.  [`background-blend-mode`](/en-US/docs/Web/CSS/Reference/Properties/background-blend-mode)\n        3.  [`background-clip`](/en-US/docs/Web/CSS/Reference/Properties/background-clip)\n        4.  [`background-color`](/en-US/docs/Web/CSS/Reference/Properties/background-color)\n        5.  [`background-image`](/en-US/docs/Web/CSS/Reference/Properties/background-image)\n        6.  [`background-origin`](/en-US/docs/Web/CSS/Reference/Properties/background-origin)\n        7.  [`background-position`](/en-US/docs/Web/CSS/Reference/Properties/background-position)\n        8.  [`background-position-x`](/en-US/docs/Web/CSS/Reference/Properties/background-position-x)\n        9.  [`background-position-y`](/en-US/docs/Web/CSS/Reference/Properties/background-position-y)\n        10.  [`background-repeat`](/en-US/docs/Web/CSS/Reference/Properties/background-repeat)\n        11.  [`background-repeat-x`](/en-US/docs/Web/CSS/Reference/Properties/background-repeat-x)\n        12.  [`background-repeat-y`](/en-US/docs/Web/CSS/Reference/Properties/background-repeat-y)\n        13.  [`background-size`](/en-US/docs/Web/CSS/Reference/Properties/background-size)\n\n    17.  [`background`](/en-US/docs/Web/CSS/Reference/Properties/background)\n    18.  [`baseline-shift`](/en-US/docs/Web/CSS/Reference/Properties/baseline-shift)\n    19.  [`baseline-source`](/en-US/docs/Web/CSS/Reference/Properties/baseline-source)\n    20.  [`block-size`](/en-US/docs/Web/CSS/Reference/Properties/block-size)\n    21.  border-\\*\n\n        1.  [`border-block`](/en-US/docs/Web/CSS/Reference/Properties/border-block)\n        2.  [`border-block-color`](/en-US/docs/Web/CSS/Reference/Properties/border-block-color)\n        3.  [`border-block-end`](/en-US/docs/Web/CSS/Reference/Properties/border-block-end)\n        4.  [`border-block-end-color`](/en-US/docs/Web/CSS/Reference/Properties/border-block-end-color)\n        5.  [`border-block-end-style`](/en-US/docs/Web/CSS/Reference/Properties/border-block-end-style)\n        6.  [`border-block-end-width`](/en-US/docs/Web/CSS/Reference/Properties/border-block-end-width)\n        7.  [`border-block-start`](/en-US/docs/Web/CSS/Reference/Properties/border-block-start)\n        8.  [`border-block-start-color`](/en-US/docs/Web/CSS/Reference/Properties/border-block-start-color)\n        9.  [`border-block-start-style`](/en-US/docs/Web/CSS/Reference/Properties/border-block-start-style)\n        10.  [`border-block-start-width`](/en-US/docs/Web/CSS/Reference/Properties/border-block-start-width)\n        11.  [`border-block-style`](/en-US/docs/Web/CSS/Reference/Properties/border-block-style)\n        12.  [`border-block-width`](/en-US/docs/Web/CSS/Reference/Properties/border-block-width)\n        13.  [`border-bottom`](/en-US/docs/Web/CSS/Reference/Properties/border-bottom)\n        14.  [`border-bottom-color`](/en-US/docs/Web/CSS/Reference/Properties/border-bottom-color)\n        15.  [`border-bottom-left-radius`](/en-US/docs/Web/CSS/Reference/Properties/border-bottom-left-radius)\n        16.  [`border-bottom-right-radius`](/en-US/docs/Web/CSS/Reference/Properties/border-bottom-right-radius)\n        17.  [`border-bottom-style`](/en-US/docs/Web/CSS/Reference/Properties/border-bottom-style)\n        18.  [`border-bottom-width`](/en-US/docs/Web/CSS/Reference/Properties/border-bottom-width)\n        19.  [`border-collapse`](/en-US/docs/Web/CSS/Reference/Properties/border-collapse)\n        20.  [`border-color`](/en-US/docs/Web/CSS/Reference/Properties/border-color)\n        21.  [`border-end-end-radius`](/en-US/docs/Web/CSS/Reference/Properties/border-end-end-radius)\n        22.  [`border-end-start-radius`](/en-US/docs/Web/CSS/Reference/Properties/border-end-start-radius)\n        23.  [`border-image`](/en-US/docs/Web/CSS/Reference/Properties/border-image)\n\n[webfetch output clipped: 50635 of 135594 bytes shown, 84959 bytes omitted from model context]",
+      "metadata": {
+        "originalBytes": 135594,
+        "shownBytes": 50635,
+        "omittedBytes": 84959,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791740371635
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXlQ1AQ00JltLkYWEK",
+      "outcome": "completed",
+      "outputChars": 239,
+      "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-hierarchy-309-live-01\\project\\README.md</path>\n<type>file</type>\n<content>1: # Isolated formal Task resource qualification\n\n(End of file - total 1 lines)\n</content>",
+      "metadata": {
+        "preview": "# Isolated formal Task resource qualification",
+        "truncated": false,
+        "loaded": [],
+        "lines": 1,
+        "totalLines": 1
+      },
+      "time": {
+        "end": 1791740375814
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXlQaWo007t7sjYM8D",
+      "outcome": "completed",
+      "resultAttemptID": "per_h3iqfRxqgQ31es68CiSF",
+      "outputChars": 2395,
+      "output": "{\n  \"current_user_url\": \"https://api.github.com/user\",\n  \"current_user_authorizations_html_url\": \"https://github.com/settings/connections/applications{/client_id}\",\n  \"authorizations_url\": \"https://api.github.com/authorizations\",\n  \"code_search_url\": \"https://api.github.com/search/code?q={query}{&page,per_page,sort,order}\",\n  \"commit_search_url\": \"https://api.github.com/search/commits?q={query}{&page,per_page,sort,order}\",\n  \"emails_url\": \"https://api.github.com/user/emails\",\n  \"emojis_url\": \"https://api.github.com/emojis\",\n  \"events_url\": \"https://api.github.com/events\",\n  \"feeds_url\": \"https://api.github.com/feeds\",\n  \"followers_url\": \"https://api.github.com/user/followers\",\n  \"following_url\": \"https://api.github.com/user/following{/target}\",\n  \"gists_url\": \"https://api.github.com/gists{/gist_id}\",\n  \"hub_url\": \"https://api.github.com/hub\",\n  \"issue_search_url\": \"https://api.github.com/search/issues?q={query}{&page,per_page,sort,order}\",\n  \"issues_url\": \"https://api.github.com/issues\",\n  \"keys_url\": \"https://api.github.com/user/keys\",\n  \"label_search_url\": \"https://api.github.com/search/labels?q={query}&repository_id={repository_id}{&page,per_page}\",\n  \"notifications_url\": \"https://api.github.com/notifications\",\n  \"organization_url\": \"https://api.github.com/orgs/{org}\",\n  \"organization_repositories_url\": \"https://api.github.com/orgs/{org}/repos{?type,page,per_page,sort}\",\n  \"organization_teams_url\": \"https://api.github.com/orgs/{org}/teams\",\n  \"public_gists_url\": \"https://api.github.com/gists/public\",\n  \"rate_limit_url\": \"https://api.github.com/rate_limit\",\n  \"repository_url\": \"https://api.github.com/repos/{owner}/{repo}\",\n  \"repository_search_url\": \"https://api.github.com/search/repositories?q={query}{&page,per_page,sort,order}\",\n  \"current_user_repositories_url\": \"https://api.github.com/user/repos{?type,page,per_page,sort}\",\n  \"starred_url\": \"https://api.github.com/user/starred{/owner}{/repo}\",\n  \"starred_gists_url\": \"https://api.github.com/gists/starred\",\n  \"topic_search_url\": \"https://api.github.com/search/topics?q={query}{&page,per_page}\",\n  \"user_url\": \"https://api.github.com/users/{user}\",\n  \"user_organizations_url\": \"https://api.github.com/user/orgs\",\n  \"user_repositories_url\": \"https://api.github.com/users/{user}/repos{?type,page,per_page,sort}\",\n  \"user_search_url\": \"https://api.github.com/search/users?q={query}{&page,per_page,sort,order}\"\n}",
+      "metadata": {
+        "originalBytes": 2395,
+        "shownBytes": 2395,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791740511823
+      }
+    }
+  ]
+}

@@ -67,7 +67,7 @@ function sourceLabel(source: ConversationSourcePart): string {
           return title
         }
       }
-      return `${url.pathname}${url.search} · ${url.hostname}`
+      return url.pathname === "/" && !url.search ? url.host : `${url.pathname}${url.search}`
     } catch {
       return title || source.url
     }
@@ -151,6 +151,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
     if (props.source.type !== "source-url" || !props.source.url) return ""
     try {
       const url = new URL(props.source.url)
+      if (label() === url.host) return url.hash
       return url.hash ? `${url.host} · ${url.hash}` : url.host
     } catch {
       return ""
@@ -166,7 +167,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             class="msg-source-chip"
             href={props.source.url}
             data-browser-preview-url={props.source.url}
-            aria-label={`${t("chat.source_open_web")}: ${label()} · ${location()}`}
+            aria-label={`${t("chat.source_open_web")}: ${[label(), location()].filter(Boolean).join(" · ")}`}
             onClick={(event) => pauseAutoScrollForReading(event.currentTarget)}
           >
             <Show when={props.showIndex}>

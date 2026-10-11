@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [309 来源信息层级Recall](source-hierarchy-plan-309.md) / [真实修复](source-hierarchy-309/README.md)：无标题站点重复和下划线层级修复，四类真实资源/键盘导航与文件打开。
+
 - [308 子会话来源Recall](child-source-plan-308.md) / [实际结果](child-source-308/README.md)：90表完整历史、真正研究员三来源及列表/关闭/跨项目阅读返回，单agent。
 
 - [307 窄侧聊来源Recall](source-side-plan-307.md) / [实际结果](source-side-307/README.md)：380px五来源、5050字符同reader真实关闭重开/后续阅读保持，单agent。

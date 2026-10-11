@@ -614,6 +614,9 @@ operator expansion state and exact source links remain available. Both portions
 use the same identity-keyed source entry renderer. Individual
 excerpt disclosure remains scoped to the real source. Citation identity uses body
 typography; site and index metadata retain caption.
+The label alone carries the link underline. Hover strengthens that label's
+decoration while metadata remains visually secondary; the complete entry keeps
+its existing activation area and visible keyboard focus.
 Web citations put the host before the exact navigation fragment in their
 secondary caption, keeping website provenance visible when a long text anchor is
 clipped. Short chapters with the same publisher title remain distinguishable.
@@ -652,8 +655,11 @@ keyboard focus is visible and native horizontal keys reach the remaining cells.
 Table identity, alignment, links and inline rendering remain ordinary Markdown.
 The label uses an actual source title when supplied. Webfetch reads that title only
 from the fetched text/html document using the public HTML parser; an empty title
-remains optional and uses a path-and-query preview followed by the hostname,
-keeping same-site resource differences near the start of a compact label.
+remains optional and uses a path-and-query preview with the host on the location
+line, keeping same-site resource differences near the start of a compact label.
+A root URL without a query uses its host as the label; if the label already names
+the host, the location line contains only an actual fragment when present.
+Accessible link names combine the nonempty label and location once.
 The complete URL remains available in its tooltip and activation target.
 New URL sources use the native URL serializer for that complete navigation
 location, including its fragment. Distinct document chapters retain distinct
