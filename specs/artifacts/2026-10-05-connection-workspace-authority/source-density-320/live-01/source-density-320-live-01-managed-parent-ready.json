@@ -1,0 +1,15 @@
+{
+  "pid": 72116,
+  "occurrence": "source-density-320-live-01-6441f31c-a1f0-4dcf-b156-64b924ea0aa3",
+  "owner": {
+    "pid": 72116,
+    "processInstanceID": "win32:639273525520616473",
+    "occurrenceID": "4847ef7e-67f8-4907-a885-668519688bf2"
+  },
+  "parent": {
+    "pid": 53056,
+    "processInstanceID": "win32:639273525520241832",
+    "occurrenceID": "30d3358d-7428-4d94-a999-e49f61d66a63"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

@@ -647,6 +647,11 @@ primary source identity; it does not repeat a root-level file's name or range.
 File citation labels and location details share one line-range presentation:
 single-line sources show `file:2`, while multi-line sources keep `file:2-8`.
 The original numeric range remains the file editor's exact navigation target.
+When a file label already contains its actual basename and range, its secondary
+caption shows the complete parent directory, including its final separator,
+instead of repeating the filename and range. Custom titles retain the actual
+file location in that caption. Tooltips and accessible action names still carry
+the complete location; source identity and file navigation remain unchanged.
 Source file routing and change summaries share one lexical directory relation.
 It recognizes server Windows drive/UNC paths independently of the browser host,
 normalizes their separators for comparison, and retains case-insensitive Windows

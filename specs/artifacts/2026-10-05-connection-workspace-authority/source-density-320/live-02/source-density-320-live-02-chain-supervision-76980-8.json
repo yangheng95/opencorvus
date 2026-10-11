@@ -1,0 +1,28 @@
+{
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18290,
+      "OwningProcess": 70244
+    }
+  ],
+  "presence": [
+    {
+      "processInstanceID": "win32:639273528514462596",
+      "processID": 70244,
+      "originalOccurrencePresent": true,
+      "state": "exact_live"
+    },
+    {
+      "processInstanceID": "win32:639273528507129569",
+      "processID": 78672,
+      "originalOccurrencePresent": true,
+      "state": "exact_live"
+    }
+  ],
+  "phase": "supervision-76980-8",
+  "occurrence": "source-density-320-live-02-4941b007-6f48-490e-9cbf-3d098075aff9",
+  "observedAtUtc": "2026-10-11T22:01:37.0903160Z",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "nativeSettlement": null
+}

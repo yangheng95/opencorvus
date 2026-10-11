@@ -1,0 +1,222 @@
+{
+  "observedAtUtc": "2026-10-11T22:06:20.283Z",
+  "qualification": "Closed actual Tool outcomes, inherited-history ownership and actual filesystem match. No browser assertions or inferred physical calls from copied history.",
+  "reports": [
+    {
+      "stage": "01",
+      "sessions": [
+        {
+          "id": "ses_hMbizQ6cfxVnyYohDf4n",
+          "metadata": {
+            "globalChatStart": {
+              "version": 2,
+              "requestID": "4e85896e-3f6e-46e4-b4ab-ec020953820b",
+              "requestFingerprint": "0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543",
+              "messageID": "msg_hjeSWWKkDv1CVYsIs98Z"
+            },
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            },
+            "configOverlay": {
+              "model": "openai/gpt-6.1-sol",
+              "prompt_profile": {
+                "active": "base"
+              }
+            }
+          }
+        },
+        {
+          "id": "ses_-zUSDXI0Fzz97OX8QAzO",
+          "metadata": {
+            "conversation": {
+              "experience": "work",
+              "surface": "right-sidebar"
+            }
+          }
+        },
+        {
+          "id": "ses_-zUSDXCUGzzTRwgMUAjq",
+          "metadata": {
+            "configOverlay": {},
+            "sideChat": {
+              "sourceSessionID": "ses_-zUSDXI0Fzz97OX8QAzO",
+              "inheritedMessageIDs": [
+                "msg_g0VXmSnVk00HGWCy15VG",
+                "msg_g0VXmSnVk01gF7fQ0gvb",
+                "msg_g0VXmSnVk02UsxtbkTeQ"
+              ]
+            }
+          }
+        }
+      ],
+      "currentToolCalls": [
+        {
+          "id": "prt_g0VXmSivL000gMMx1aHy",
+          "messageID": "msg_g0VXmSiFN00MV31hahMQ",
+          "callID": "call_bbcf8507877a4c3db6f5abc099504c39",
+          "input": {
+            "pattern": "SOURCE320_NEEDLE",
+            "include": "*.md"
+          }
+        },
+        {
+          "id": "prt_g0VXmSqVJ00oenBWVshP",
+          "messageID": "msg_g0VXmSpoE00qsHDGDOZ6",
+          "callID": "call_46b5409a18c44d529fcd9d472b071615",
+          "input": {
+            "pattern": "SOURCE320_NEEDLE",
+            "path": "研究资料及阶段结论核对",
+            "include": "*.md"
+          }
+        },
+        {
+          "id": "prt_g0VXmSs1p00MGkJ8w0lX",
+          "messageID": "msg_g0VXmSqjR00yo5l93rCp",
+          "callID": "call_f909c2284ee24ca9ab0a065f096ce75c",
+          "input": {
+            "pattern": "SOURCE320_NEEDLE",
+            "path": ".",
+            "include": "*.md"
+          }
+        }
+      ],
+      "inheritedReferenceToolCalls": [
+        {
+          "id": "prt_g0VXmSnVk02iphuWc5mP",
+          "messageID": "msg_g0VXmSnVk01gF7fQ0gvb",
+          "inherited": true,
+          "type": "tool-request",
+          "callID": "call_bbcf8507877a4c3db6f5abc099504c39",
+          "tool": "search_code",
+          "input": {
+            "pattern": "SOURCE320_NEEDLE",
+            "include": "*.md"
+          },
+          "time": {
+            "start": 1791755796563
+          }
+        }
+      ],
+      "canonicalSourceInstances": 8,
+      "sourceLocations": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-density-320-live-01\\project\\研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案甲\\来源展示与文件定位完整说明及验证记录.md",
+          "relative": "研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案甲\\来源展示与文件定位完整说明及验证记录.md",
+          "line": 2,
+          "value": "Alpha source"
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-density-320-live-01\\project\\研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案乙\\来源展示与文件定位完整说明及验证记录.md",
+          "relative": "研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案乙\\来源展示与文件定位完整说明及验证记录.md",
+          "line": 2,
+          "value": "Beta source"
+        }
+      ]
+    },
+    {
+      "stage": "02",
+      "sessions": [
+        {
+          "id": "ses_hvP4Ur5UIvSeKpMZGkd2",
+          "metadata": {
+            "globalChatStart": {
+              "version": 2,
+              "requestID": "8fbd6af1-ac3f-473f-9535-00ebc9d35f04",
+              "requestFingerprint": "0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543",
+              "messageID": "msg_hK85VI3ejJ1ov7f8Lf5O"
+            },
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            },
+            "configOverlay": {
+              "model": "openai/gpt-6.1-sol",
+              "prompt_profile": {
+                "active": "base"
+              }
+            }
+          }
+        },
+        {
+          "id": "ses_-zUSDW3M7zz5bU9oVacI",
+          "metadata": {
+            "conversation": {
+              "experience": "work",
+              "surface": "right-sidebar"
+            }
+          }
+        },
+        {
+          "id": "ses_-zUSDVylGzzE75cz4xc1",
+          "metadata": {
+            "configOverlay": {},
+            "sideChat": {
+              "sourceSessionID": "ses_-zUSDW3M7zz5bU9oVacI",
+              "inheritedMessageIDs": [
+                "msg_g0VXmU1El00IXvuMAeKX",
+                "msg_g0VXmU1El01xOYnD0k8K",
+                "msg_g0VXmU1El02OAALLG0XV"
+              ]
+            }
+          }
+        }
+      ],
+      "currentToolCalls": [
+        {
+          "id": "prt_g0VXmTxpn00nJ7YzQYQe",
+          "messageID": "msg_g0VXmTwrn001Zz2kVP3l",
+          "callID": "call_fb1d55c41a054f3d9e149bddb3e4404f",
+          "input": {
+            "pattern": "SOURCE320_NEEDLE",
+            "path": ".",
+            "include": "*.md"
+          }
+        },
+        {
+          "id": "prt_g0VXmU6dd00Pkpf2lUiR",
+          "messageID": "msg_g0VXmU5zK00YhgOuWa7Z",
+          "callID": "call_87a549acef06473bab62617fab07e459",
+          "input": {
+            "pattern": "SOURCE320_NEEDLE",
+            "path": ".",
+            "include": "*.md"
+          }
+        }
+      ],
+      "inheritedReferenceToolCalls": [
+        {
+          "id": "prt_g0VXmU1El024Kg0PSa08",
+          "messageID": "msg_g0VXmU1El01xOYnD0k8K",
+          "inherited": true,
+          "type": "tool-request",
+          "callID": "call_fb1d55c41a054f3d9e149bddb3e4404f",
+          "tool": "search_code",
+          "input": {
+            "pattern": "SOURCE320_NEEDLE",
+            "path": ".",
+            "include": "*.md"
+          },
+          "time": {
+            "start": 1791756092207
+          }
+        }
+      ],
+      "canonicalSourceInstances": 6,
+      "sourceLocations": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-density-320-live-02\\project\\研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案甲\\来源展示与文件定位完整说明及验证记录.md",
+          "relative": "研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案甲\\来源展示与文件定位完整说明及验证记录.md",
+          "line": 2,
+          "value": "Alpha source"
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-density-320-live-02\\project\\研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案乙\\来源展示与文件定位完整说明及验证记录.md",
+          "relative": "研究资料及阶段结论核对\\模型能力与工具调用体验\\深层同名文件引用验证\\实验方案乙\\来源展示与文件定位完整说明及验证记录.md",
+          "line": 2,
+          "value": "Beta source"
+        }
+      ]
+    }
+  ]
+}

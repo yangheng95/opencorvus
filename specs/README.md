@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [320 长文件来源密度](records/2026-10/2026-10-12-source-density-320.md)：窄侧栏中的长路径与同名文件辨识。
+
 - [319 搜索命中来源](records/2026-10/2026-10-12-search-sources-319.md)：直接打开搜索命中的文件行。
 
 - [318 搜索结果边界](records/2026-10/2026-10-12-search-framing-318.md)：特殊文件名与命中文本的机器协议。

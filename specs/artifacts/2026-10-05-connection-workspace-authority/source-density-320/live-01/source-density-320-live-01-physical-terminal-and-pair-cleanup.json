@@ -1,0 +1,69 @@
+{
+  "nativeSettlement": {
+    "occurrence": "source-density-320-live-01-6441f31c-a1f0-4dcf-b156-64b924ea0aa3",
+    "outcome": "settled",
+    "host": {
+      "pid": 71168,
+      "processInstanceID": "win32:639273525511833681",
+      "occurrenceID": "fc7085d4-60f8-406f-9b13-705bc420b3e1"
+    },
+    "target": {
+      "pid": 72116,
+      "processInstanceID": "win32:639273525520616473",
+      "occurrenceID": "87d91559-f828-4016-8ea9-ea748d3360cb"
+    },
+    "observedAtUtc": "2026-10-11T21:58:04.62Z",
+    "deadlineAt": 1791756351168,
+    "terminal": {
+      "occurrenceID": "source-density-320-live-01-6441f31c-a1f0-4dcf-b156-64b924ea0aa3",
+      "pid": 72116,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 72116,
+        "processInstanceID": "win32:639273525520616473",
+        "occurrenceID": "87d91559-f828-4016-8ea9-ea748d3360cb"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 71168,
+        "processInstanceID": "win32:639273525511833681",
+        "occurrenceID": "fc7085d4-60f8-406f-9b13-705bc420b3e1"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "listeners": null,
+  "occurrence": "source-density-320-live-01-6441f31c-a1f0-4dcf-b156-64b924ea0aa3",
+  "observedAtUtc": "2026-10-11T21:58:06.8024615Z",
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-density-320-live-01\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "copiedLength": 2194,
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-density-320-live-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "copiedLength": 9155406,
+      "presentAfter": false
+    }
+  ],
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true
+}

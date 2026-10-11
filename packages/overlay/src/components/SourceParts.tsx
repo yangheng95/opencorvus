@@ -93,6 +93,16 @@ function sourceDetail(source: ConversationSourcePart): string {
   return source.filename || source.mediaType || ""
 }
 
+function sourceFileCaption(source: ConversationSourcePart): string {
+  const relative = shortRelativePath(source.path || "", sourceDirectory())
+  const location = pathWithForwardSeparators(relative, source.path || sourceDirectory())
+  const separator = location.lastIndexOf("/")
+  const filename = location.slice(separator + 1)
+  // Keep the actual filename visible when a publisher supplies a custom title.
+  if (fileSourceLocation(filename, source.range) !== sourceLabel(source)) return sourceDetail(source)
+  return location.slice(0, separator + 1)
+}
+
 function sourceIcon(source: ConversationSourcePart): IconName {
   return source.type === "source-url" ? "web-search" : source.type === "source-file" ? "file-document" : "channel-link"
 }
@@ -155,6 +165,7 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
 function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean }) {
   const label = () => sourceLabel(props.source)
   const detail = () => sourceDetail(props.source)
+  const fileCaption = () => sourceFileCaption(props.source)
   const icon = () => sourceIcon(props.source)
   const location = () => {
     if (props.source.type !== "source-url" || !props.source.url) return ""
@@ -206,8 +217,8 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__content">
               <span class="msg-source-chip__label">{label()}</span>
-              <Show when={detail() !== label()}>
-                <span class="msg-source-chip__detail">{detail()}</span>
+              <Show when={fileCaption()}>
+                <span class="msg-source-chip__detail">{fileCaption()}</span>
               </Show>
             </span>
           </Tooltip.Trigger>

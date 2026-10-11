@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [320 长文件来源密度](source-density-plan-320.md)：窄侧栏中的长路径与同名文件辨识。
+
 - [319 搜索命中来源](search-sources-plan-319.md)：直接打开搜索命中的文件行。
 
 - [318 搜索结果边界](search-framing-plan-318.md)：特殊文件名与命中文本的机器协议。
