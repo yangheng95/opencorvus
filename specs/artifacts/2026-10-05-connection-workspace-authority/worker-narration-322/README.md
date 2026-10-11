@@ -27,3 +27,5 @@
 原启动执行器19409、流观察器25279均actual exit0；Native43208、Host75784通过原生产ProcessFacade物理退出及输出drain，端口18292释放，复制的auth/models配对清理，tab92关闭。原始终态、Provider请求及清理记录在[live-01](live-01/worker-narration-322-live-01-physical-terminal-and-pair-cleanup.json)。runtime日志完整脱敏后压缩，原记录私有保留。
 
 后端聚焦测试与类型检查、原失败夹具日志见checks目录及月度记录。旧fixture缺少物理终态、错误Session种类和事后追加已冻结输入的修复过程属于检查器数据修正，不是实际产品调度失败。此次旧目录被统一Part合同替换，未保留旧字段别名；未改调度器、生命周期或终态权限。
+
+接口产物补全：首个pre-push因tracked OpenAPI尚未收录text字段而拒绝；现有SDK事务生成及内部TypeScript编译通过，三份生成产物仅变动新字段与说明，真实路由检查6条规则/34文件通过。补全过程日志保存在checks目录，原失败不被覆盖。

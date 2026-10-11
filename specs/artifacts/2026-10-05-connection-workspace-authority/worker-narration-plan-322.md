@@ -42,3 +42,6 @@ evidence_reads增加field=text，复用同一个精确因果Part映射和evidenc
 真实Task一次派发，487/3037字符早段正文由新field=text精确读取，10次真实GPT-6.1 Sol流式请求正常结束；从321的重复请求收敛为当前完整读取后完成。UI通过真实Sources展开后继续生成的人工截图、文件准确第4行及返回展开状态核验。未通过首次点击保留，未宣称全帧零闪烁。本轮没有UI代码修改，未部署或发布版本；旧来源目录已唯一替换，没有fallback/旧字段兼容路径。
 
 全部原始运行与检查handle已join，页面/Native/Host/端口/复制权限配对完成清理。后续只完成范围提交、正常fetch/merge/push与远端核对；持续goal保持active，下一批从新的可验证问题开始，不重复本轮已过验收。
+
+## 推送检查补全
+首个范围提交13fe6855594c86714ae8968f2e560e882165a2a1的pre-push在api:routes-check被阻止：Panel共享schema的field=text与说明会进入OpenAPI，但tracked SDK定义尚未生成。工作区干净，SDK当前无用户差异；使用现有packages/sdk/js/script/build.ts的事务生成流程同步OpenAPI/SDK及docs renderer，而不运行会刷新无关expert squad版本的全仓生成。修复后重跑实际路由合同检查、SDK类型与原push hooks，并将生成产物作为同一任务独立提交；不跳过钩子。

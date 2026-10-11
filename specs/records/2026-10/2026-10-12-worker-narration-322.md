@@ -11,3 +11,5 @@ Sources展开后，第4–6节继续生成时截图中的阅读位置保持；�
 验证：7个聚焦后端文件36 pass、597 expect、0 fail（147.27秒）；核心包typecheck exit0；docs:check 345 ops/25 groups；architecture-index 18文档。原测试夹具缺少物理终态并使用过期Session种类，已按现有生产合同修复；补控制Part时先后顺序错误和一次工作目录错误也保留为检查器修复证据，不冒充产品bug。最终全部原聚焦验收重跑通过。
 
 原执行器19409、事件观察器25279、检查执行器58058均已实际join并exit0。Native43208/Host75784物理退出，18292释放，复制auth/models配对清理，独立tab92关闭。没有重启或刷新用户窗口。完成范围提交和常规上游同步；goal保持active，继续单agent调查下一项有真实证据的问题。
+
+推送检查补全：首轮pre-push的OpenAPI一致性检查发现Panel共享schema尚未同步。已通过现有SDK事务生成补齐openapi.json和两份生成类型/客户端中的field=text及目录说明；生成含TypeScript编译通过，api:routes-check的6条规则/34个文件通过，文档生成后无内容差异。未更改或绕过检查器，原阻止日志保留。

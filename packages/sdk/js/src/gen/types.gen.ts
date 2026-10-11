@@ -19014,10 +19014,10 @@ export type GatewayControlActionData = {
     | {
         action: "read_task_dispatch_evidence"
         /**
-         * Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. Each omitted limit requests 8000 characters, even for a short field. The sum of every effective limit in one call must be at most 30000 characters. At most 3 reads fit with all limits omitted. For 4–8 reads, explicitly allocate limits within that total; eight reads can each request 3750 characters. Follow next_offset until null.
+         * Optional exact visible text, Tool input, output, or failure chunks from the selected sources' causal Part inventory in this or an earlier call. Use field='text' for a text Part, including narration in earlier assistant Messages. Keep sources anchored to the settled final; earlier message_id values are chunk targets, not dispatch_result anchors. Copy returned message_id and part_id values exactly. Each omitted limit requests 8000 characters, even for a short field. The sum of every effective limit in one call must be at most 30000 characters. At most 3 reads fit with all limits omitted. For 4–8 reads, explicitly allocate limits within that total; eight reads can each request 3750 characters. Follow next_offset until null.
          */
         evidence_reads?: Array<{
-          field: "input" | "output" | "failure"
+          field: "text" | "input" | "output" | "failure"
           /**
            * Requested character budget for this chunk; omission consumes 8000 of the 30000-character aggregate call budget.
            */
@@ -19027,7 +19027,7 @@ export type GatewayControlActionData = {
           part_id: string
         }>
         /**
-         * Optional older-page cursors returned by a prior causal Tool Message inventory.
+         * Optional older-page cursors returned by a prior causal Part Message inventory.
          */
         inventory_before?: Array<{
           before_message_id: string
