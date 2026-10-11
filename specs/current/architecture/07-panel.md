@@ -671,6 +671,11 @@ per presentation field. Only card folds persist across reloads, under the server
 URL and source kind/ID; reading positions remain in memory. The previous bare
 Task-ID folding keys are no longer read, so that old presentation preference
 starts from its default on first use. There is no second active-state copy.
+Board source selection writes a complete discriminated union through the one
+`setSelectedSource` store operation. It reconciles the incoming value instead
+of shallow-merging fields from the previously selected kind. Task, ordinary
+Session, Mission and selection retirement use that same operation within their
+existing selection batches, so request/reader identity reflects the current source.
 Position keys also include the current API authority revision and canonical
 Source identity. The reader uses
 the shared animation-frame scheduler after visible geometry is ready, retires
@@ -703,6 +708,13 @@ The changing Raw/Readable action is an ordinary button; choosing a format reveal
 an initially collapsed payload through its existing expansion state. Output's
 bounded preview keeps its independent full-height expansion. Controls reference
 the currently mounted body, and copy continues to use the complete original value.
+Tool payload format, expansion and JSON node expansion/item limits belong to
+the current conversation presentation record. Keys use the canonical producing
+Session, Message and Part, the input/metadata/output slot, and the JSON field
+path. Remounting a member's transcript retains those operator choices and its
+layout; translated labels and payload contents do not define identity. The same
+bounded store owns these preferences, without component-local duplicate state
+or a second payload cache. Clipboard feedback remains local to its actual action.
 Tool-payload and delivery-name copying share one mounted copy-action owner over
 the canonical host clipboard writer. Only a fulfilled host write shows the brief
 checkmark and contextual copied label. The busy action retains keyboard focus;

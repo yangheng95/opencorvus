@@ -77,6 +77,7 @@ import {
   clearBoard,
   rootTaskSessionID,
   setBoardStore,
+  setSelectedSource,
   type BoardSource,
 } from "./store/board"
 import { abortChatRequest, messageStore, setChatAttachments } from "./store/messages"
@@ -1543,7 +1544,7 @@ async function openMissionSession(
   batch(() => {
     loadConversationUiStateForSource(source, authority)
     resetConversationProjection({ scrollIntent: "bottom", cause: "mission-session-switch" })
-    setBoardStore("selectedSource", source)
+    setSelectedSource(source)
     clearBoard()
     setBoardStore("taskSwitching", true)
   })

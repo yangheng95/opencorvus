@@ -4,6 +4,7 @@ import { getServerUrl, type ApiAuthority } from "../services/api-state"
 import type { BoardSource } from "./board"
 
 export type ConversationReadingPosition = { top: number; following: boolean }
+export type ToolPayloadDisplayState = { raw?: boolean; expanded?: boolean; limit?: number }
 export type MainConversationReadingPosition = ConversationReadingPosition & {
   anchor?: { messageID: string; textIndex: number; offset: number }
 }
@@ -14,6 +15,7 @@ type ConversationUiState = {
   expandedDisclosures: Record<string, boolean>
   sourceExcerptPositions: Record<string, number>
   sideChatReadingPositions: Record<string, ConversationReadingPosition>
+  toolPayloadDisplays: Record<string, ToolPayloadDisplayState>
 }
 
 const [store, setStore] = createStore({
@@ -154,6 +156,7 @@ export function loadConversationUiStateForSource(source: Pick<BoardSource, "kind
         expandedDisclosures: {},
         sourceExcerptPositions: {},
         sideChatReadingPositions: {},
+        toolPayloadDisplays: {},
       })
     }
     for (const retired of recentConversations) {
@@ -216,6 +219,17 @@ export function setSourceExcerptReadingTop(id: string, top: number): void {
 
 export function sideChatReadingPosition(id: string): ConversationReadingPosition | undefined {
   return currentState()?.sideChatReadingPositions[id]
+}
+
+export function toolPayloadDisplayState(id: string): ToolPayloadDisplayState | undefined {
+  return currentState()?.toolPayloadDisplays[id]
+}
+
+export function setToolPayloadDisplayState(id: string, value: ToolPayloadDisplayState): void {
+  const current = currentState()
+  if (!id || !current) return
+  const next = { ...current.toolPayloadDisplays[id], ...value }
+  setStore("conversations", store.activeKey, "toolPayloadDisplays", reconcile(remember(current.toolPayloadDisplays, id, next), { merge: false }))
 }
 
 export function setSideChatReadingPosition(id: string, position: ConversationReadingPosition): void {

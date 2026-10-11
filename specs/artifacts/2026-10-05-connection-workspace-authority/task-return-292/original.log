@@ -1,0 +1,57 @@
+{
+  "observedAtUtc": "2026-10-11T08:52:39.492Z",
+  "sourceFile": "C:/Users/hengu/AppData/Local/opencorvus/data/opencorvus.db",
+  "access": "Original production readonly BEGIN/ROLLBACK; explicit canonical lifecycle client; no bootstrap, mutation or process/window action",
+  "schemaDrift": "unexpected schema object index:engine_dispatch_lineage_initial_workflow_node_idx",
+  "task": {
+    "id": "tsk_g00VXMejke00KwIb9xRv",
+    "project_id": "prj_h5qbWiFVHxI6qXpzkg8E",
+    "session_id": "ses_-zUSdLG7mzz2z8XPgyML",
+    "request_id": null,
+    "time_created": 1791374474944
+  },
+  "lifecycle": {
+    "status": "failed",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXMejst00Eze6KoQU7",
+    "terminalEventID": "pev_g0VXPigX300oLaV5z1Kq"
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUSdLF94zzJawyj4Zuy",
+      "kind": "orchestrator",
+      "parent_id": "ses_-zUSdLG7mzz2z8XPgyML",
+      "message_count": 43,
+      "url_sources": 0
+    },
+    {
+      "id": "ses_-zUSdLG7mzz2z8XPgyML",
+      "kind": "root",
+      "parent_id": null,
+      "message_count": 0,
+      "url_sources": 0
+    },
+    {
+      "id": "ses_h0crs8qatiIhgesOsaX1",
+      "kind": "delegated-worker",
+      "parent_id": "ses_-zUSdLF94zzJawyj4Zuy",
+      "message_count": 432,
+      "url_sources": 12
+    },
+    {
+      "id": "ses_hbLhVnvjgyxCro475ne2",
+      "kind": "deep-research",
+      "parent_id": "ses_-zUSdLF94zzJawyj4Zuy",
+      "message_count": 719,
+      "url_sources": 209
+    },
+    {
+      "id": "ses_hkefueMHhyuPuNBZHeIH",
+      "kind": "delegated-worker",
+      "parent_id": "ses_-zUSdLF94zzJawyj4Zuy",
+      "message_count": 11,
+      "url_sources": 0
+    }
+  ],
+  "boundary": "Current identity/schema facts only. Schema drift forbids current runtime qualification; no compatibility index deletion or copied-row pruning. User runtime activity and full recovery frontiers are not inferred from one Task terminal."
+}

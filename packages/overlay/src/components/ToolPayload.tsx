@@ -1,16 +1,18 @@
-import { createMemo, createSignal, createUniqueId, For, Show } from "solid-js"
+import { createMemo, createUniqueId, For, Show } from "solid-js"
+import { setToolPayloadDisplayState, toolPayloadDisplayState } from "../store/conversation-ui"
 import { t } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
 import { createClipboardCopy } from "./ui/clipboard-copy"
 
-function PayloadValue(props: { value: unknown; depth: number }) {
+function PayloadValue(props: { value: unknown; depth: number; stateKey: string; path: string[] }) {
   const entries = createMemo(() =>
     props.value !== null && typeof props.value === "object" ? Object.entries(props.value) : null,
   )
-  const [open, setOpen] = createSignal(props.depth < 1)
-  const [limit, setLimit] = createSignal(30)
+  const key = () => JSON.stringify([props.stateKey, props.path])
+  const open = () => toolPayloadDisplayState(key())?.expanded ?? props.depth < 1
+  const limit = () => toolPayloadDisplayState(key())?.limit ?? 30
   return (
     <Show
       when={entries()}
@@ -21,7 +23,9 @@ function PayloadValue(props: { value: unknown; depth: number }) {
       }
     >
       {(items) => (
-        <details class="msg-tool-object" open={open()} onToggle={(event) => setOpen(event.currentTarget.open)}>
+        <details class="msg-tool-object" open={open()} onToggle={(event) => {
+          if (open() !== event.currentTarget.open) setToolPayloadDisplayState(key(), { expanded: event.currentTarget.open })
+        }}>
           <summary>{t(Array.isArray(props.value) ? "tool.items" : "tool.fields", { count: items().length })}</summary>
           <Show when={open()}>
             <dl>
@@ -30,14 +34,14 @@ function PayloadValue(props: { value: unknown; depth: number }) {
                   <div class="msg-tool-field">
                     <dt>{key}</dt>
                     <dd>
-                      <PayloadValue value={value} depth={props.depth + 1} />
+                      <PayloadValue value={value} depth={props.depth + 1} stateKey={props.stateKey} path={[...props.path, key]} />
                     </dd>
                   </div>
                 )}
               </For>
             </dl>
             <Show when={items().length > limit()}>
-              <Button variant="ghost" tone="neutral" size="mini" onClick={() => setLimit((count) => count + 100)}>
+              <Button variant="ghost" tone="neutral" size="mini" onClick={() => setToolPayloadDisplayState(key(), { limit: limit() + 100 })}>
                 {t("tool.more_items", { count: items().length - limit() })}
               </Button>
             </Show>
@@ -50,10 +54,10 @@ function PayloadValue(props: { value: unknown; depth: number }) {
 
 /** Lossless output disclosure: JSON values preserve multiline strings; raw
  * bytes remain available for copying and inspection. Nested bodies mount on demand. */
-export function ToolPayload(props: { label: string; value: string; live?: boolean; collapsed?: boolean }) {
+export function ToolPayload(props: { stateKey: string; label: string; value: string; live?: boolean; collapsed?: boolean }) {
   const id = createUniqueId()
-  const [raw, setRaw] = createSignal(false)
-  const [expanded, setExpanded] = createSignal(false)
+  const raw = () => toolPayloadDisplayState(props.stateKey)?.raw ?? false
+  const expanded = () => toolPayloadDisplayState(props.stateKey)?.expanded ?? false
   const contentVisible = () => !props.collapsed || expanded()
   const formatLabel = () => t(raw() ? "tool.readable_payload" : "tool.raw_payload", { label: props.label })
   const expansionLabel = () => t(expanded() ? "tool.collapse_payload" : "tool.expand_payload", { label: props.label })
@@ -89,8 +93,7 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
             title={formatLabel()}
             aria-controls={contentVisible() ? `${id}-content` : undefined}
             onClick={() => {
-              setRaw((value) => !value)
-              if (props.collapsed) setExpanded(true)
+              setToolPayloadDisplayState(props.stateKey, { raw: !raw(), ...(props.collapsed ? { expanded: true } : {}) })
             }}
           >
             {t(raw() ? "tool.readable" : "tool.raw")}
@@ -104,7 +107,7 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
           title={expansionLabel()}
           aria-expanded={expanded()}
           aria-controls={contentVisible() ? `${id}-content` : undefined}
-          onClick={() => setExpanded((value) => !value)}
+          onClick={() => setToolPayloadDisplayState(props.stateKey, { expanded: !expanded() })}
         >
           {t(expanded() ? "tool.collapse_output" : "tool.expand_output")}
         </Button>
@@ -127,7 +130,7 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
       <Show when={contentVisible()}>
         <div id={`${id}-content`} class="msg-tool-payload__content">
           <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>
-            <PayloadValue value={parsed()!.value} depth={0} />
+            <PayloadValue value={parsed()!.value} depth={0} stateKey={props.stateKey} path={[]} />
           </Show>
         </div>
       </Show>

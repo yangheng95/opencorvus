@@ -1,5 +1,5 @@
 import { batch } from "solid-js"
-import { clearBoard, setBoardStore, boardStore, type BoardSource } from "../store/board"
+import { clearBoard, setBoardStore, setSelectedSource, boardStore, type BoardSource } from "../store/board"
 import { abortChatRequest, setChatAttachments } from "../store/messages"
 import {
   conversationSessionStore,
@@ -376,7 +376,7 @@ export async function selectConversationSession(options: SelectConversationSessi
     loadConversationUiStateForSource(initialSource, authority)
     clearBoard()
     resetConversationProjection({ scrollIntent: "bottom", cause: "conversation-session-switch" })
-    setBoardStore("selectedSource", initialSource)
+    setSelectedSource(initialSource)
     setBoardStore("taskSwitching", true)
   })
   const currentActivation = (async () => {
@@ -412,7 +412,7 @@ export async function selectConversationSession(options: SelectConversationSessi
       sessionKind: "conversation",
       experience: options.experience,
     }
-    setBoardStore("selectedSource", source)
+    setSelectedSource(source)
     try {
       await hydrateConversation(source, {
         authority,
@@ -445,7 +445,7 @@ export async function selectConversationSession(options: SelectConversationSessi
       batch(() => {
         clearBoard()
         resetConversationProjection({ scrollIntent: "bottom", cause: "conversation-session-switch-failed" })
-        setBoardStore("selectedSource", null)
+        setSelectedSource(null)
       })
     }
     throw error
@@ -540,7 +540,7 @@ export async function deleteConversationSession(target: ConversationSessionActio
         batch(() => {
           clearBoard()
           resetConversationProjection({ scrollIntent: "bottom", cause: "conversation-session-delete" })
-          setBoardStore("selectedSource", null)
+          setSelectedSource(null)
           setBoardStore("selectEpoch", (value: number) => value + 1)
           setBoardStore("taskSwitching", false)
         })
@@ -597,7 +597,7 @@ export async function setConversationSessionArchived(
         batch(() => {
           clearBoard()
           resetConversationProjection({ scrollIntent: "bottom", cause: "conversation-session-archive" })
-          setBoardStore("selectedSource", null)
+          setSelectedSource(null)
           setBoardStore("selectEpoch", (value: number) => value + 1)
           setBoardStore("taskSwitching", false)
         })

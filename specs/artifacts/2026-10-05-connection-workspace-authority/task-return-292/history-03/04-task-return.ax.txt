@@ -1,0 +1,11 @@
+Browser tab: 37, Title: "OpenCorvus", URL: "http://localhost:18246/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++											370 text User
++											371 text 请委托合适的只读研究员阅读以下三份官方网页，并根据实际读取内容给我一份简短中文报告，用三点分别说明网页无障碍是什么、基本原则、开发者如何开始落实，每点附对应来源链接。保留三份资料的差别，不扩大到其他页面；由任务负责人根据实际发现最终给出可读总结。无需修改文件或制作额外报告文件。
++													372 AXListMarker 1.
+~													121 link Description: https://www.w3.org/WAI/fundamentals/accessibility-intro/, Value: w3.org/WAI/fundamentals/accessibility-intro/
++													373 AXListMarker 2.
+~													123 link Description: https://www.w3.org/WAI/fundamentals/accessibility-principles/, Value: w3.org/WAI/fundamentals/accessibility-principles/
++													374 AXListMarker 3.
+~													125 link Description: https://developer.mozilla.org/en-US/docs/Web/Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+The focused UI element is 147 button Open the full base-researcher conversation

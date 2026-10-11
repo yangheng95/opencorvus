@@ -15,6 +15,7 @@ import { bumpWorkspaceEpoch, saveSettings, settingsStore, setSettingsStore } fro
 import {
   boardStore,
   setBoardStore,
+  setSelectedSource,
   activeTaskID,
   clearTasksForMissingDirectory,
   type BoardSource,
@@ -676,7 +677,7 @@ export async function deleteProjectState(
  */
 export function enterEmptyWorkspace(options: EnterEmptyWorkspaceOptions = {}): void {
   batch(() => {
-    setBoardStore("selectedSource", null)
+    setSelectedSource(null)
     restoreDraftComposerModel()
     if (options.restoreDirectory !== false) {
       restoreWorkspaceDirectory()
@@ -718,18 +719,20 @@ function joinPath(base: string, value: string): string {
 }
 
 function clearSelectedWorkItem(): void {
-  clearConversationRuntime("project-selection")
-  setBoardStore({
-    selectedSource: null,
-    board: null,
-    loading: false,
-    taskSwitching: false,
-    taskSequence: 0,
-    boardEtag: "",
-    boardQueued: false,
-    snapshotVersion: "",
+  batch(() => {
+    clearConversationRuntime("project-selection")
+    setSelectedSource(null)
+    setBoardStore({
+      board: null,
+      loading: false,
+      taskSwitching: false,
+      taskSequence: 0,
+      boardEtag: "",
+      boardQueued: false,
+      snapshotVersion: "",
+    })
+    restoreDraftComposerModel()
   })
-  restoreDraftComposerModel()
 }
 
 // ── Tauri file / directory pickers ──

@@ -96,6 +96,11 @@ export const [boardStore, setBoardStore] = createStore({
   tasksLoadingMore: false as boolean,
 })
 
+/** A selection is a complete union value; fields from the previous kind retire. */
+export function setSelectedSource(source: BoardSource | null): void {
+  setBoardStore("selectedSource", reconcile(source, { merge: false }))
+}
+
 // ── Loaders ──
 
 export interface LoadBoardOptions {

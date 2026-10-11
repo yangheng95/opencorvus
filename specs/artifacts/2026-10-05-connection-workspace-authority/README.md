@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Task返回292 Recall](task-return-plan-292.md) / [真实证据](task-return-292/README.md)：工具内部选择与选中变体替换修复，子侧栏成员/跨项目/整Dock阅读保持；原ResearchStudio限制重新核对。
+
 - [来源返回291 Recall](source-return-plan-291.md) / [真实证据](source-return-291/README.md)：按对话持有Sources展开、摘录和侧聊引用读位，跨项目返回实际通过。
 
 - [真实Diff290 Recall](diff-review-plan-290.md) / [真实证据](diff-review-290/README.md)：完整真实差异、模型不可用时历史读取、双栏键盘/语言/暗色外观；原Provider失败保留。

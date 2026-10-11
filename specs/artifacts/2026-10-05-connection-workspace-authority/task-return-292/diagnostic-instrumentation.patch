@@ -1,0 +1,31 @@
+diff --git a/packages/overlay/src/components/SubagentConversationPanel.tsx b/packages/overlay/src/components/SubagentConversationPanel.tsx
+index 1127a5843..7647a94b7 100644
+--- a/packages/overlay/src/components/SubagentConversationPanel.tsx
++++ b/packages/overlay/src/components/SubagentConversationPanel.tsx
+@@ -90,6 +90,7 @@ function SubagentConversationScroll(props: {
+   }
+ 
+   onMount(() => {
++    console.debug("task-return-292 mount " + JSON.stringify({ targetKey: props.conversation().targetKey, initial: props.initialReadingPosition }))
+     if (!scrollElement) throw new Error("Sub-agent conversation scroll container is missing")
+     const layoutRoot = scrollElement.closest<HTMLElement>(".right-dock")
+     if (!layoutRoot) throw new Error("Sub-agent conversation requires its right dock layout owner")
+@@ -137,8 +138,10 @@ export function SubagentConversationPanel(props: {
+   onSessionSelect: (sessionID: string) => void
+ }) {
+   type AgentOption = { sessionID: string; agentID: string }
++  console.debug("task-return-292 panel created")
+   const readingPositions = new Map<string, SubagentReadingPosition>()
+   const saveReadingPosition = (targetKey: string, position: SubagentReadingPosition) => {
++    console.debug("task-return-292 save " + JSON.stringify({ targetKey, position }))
+     readingPositions.delete(targetKey)
+     readingPositions.set(targetKey, position)
+     if (readingPositions.size > MAX_REMEMBERED_READING_POSITIONS)
+@@ -265,6 +268,7 @@ export function SubagentConversationPanel(props: {
+   })
+   onCleanup(() => {
+     readingPositions.clear()
++    console.debug("task-return-292 panel disposed")
+     stopLiveProjection()
+     flushLiveProjection.cancel()
+     transcriptRefresh.dispose()

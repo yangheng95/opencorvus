@@ -31,6 +31,7 @@ import {
   clearBoard,
   boardStore,
   setBoardStore,
+  setSelectedSource,
   setOrphanedSelectionHandler,
   taskByID,
   activeTaskID,
@@ -280,8 +281,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
   batch(() => {
     if (nextTaskID) loadConversationUiStateForSource({ kind: "task", id: nextTaskID }, authority)
     else clearConversationUiState()
-    setBoardStore(
-      "selectedSource",
+    setSelectedSource(
       nextTaskID ? { kind: "task", id: nextTaskID, ...(taskDirectory ? { directory: taskDirectory } : {}) } : null,
     )
     setBoardStore("selectEpoch", epoch)

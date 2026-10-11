@@ -503,6 +503,8 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   )
   const bodyReady = () => !persistedPart.loading && !persistedPart.error && (!deferredSource() || !!persistedPart())
   const inputPayload = () => (status() === "pending" && raw() ? raw() : toolPayloadText(state().input))
+  const payloadStateKey = (section: "input" | "metadata" | "output") =>
+    JSON.stringify([part().sessionID, part().messageID, part().id, section])
   const hasReadOutputBody = () =>
     status() === "completed" &&
     FILE_READ_TOOLS.has(key()) &&
@@ -546,7 +548,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
             when={hasToolPayloadValue(state().input) || raw()}
             fallback={<div class="msg-tool-state">{t("tool.no_arguments")}</div>}
           >
-            <ToolPayload label={t("tool.input")} value={inputPayload()} live={status() === "pending"} collapsed />
+            <ToolPayload stateKey={payloadStateKey("input")} label={t("tool.input")} value={inputPayload()} live={status() === "pending"} collapsed />
           </Show>
           <Show when={status() === "pending" || status() === "running"}>
             <div class="msg-tool-state" role="status">
@@ -556,7 +558,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           <Show when={status() === "completed" && !hasResultBody()}>
             <div class="msg-tool-state">{t("tool.empty_result")}</div>
             <Show when={hasToolPayloadValue(state().metadata)}>
-              <ToolPayload label={t("tool.metadata")} value={toolPayloadText(state().metadata)} collapsed />
+              <ToolPayload stateKey={payloadStateKey("metadata")} label={t("tool.metadata")} value={toolPayloadText(state().metadata)} collapsed />
             </Show>
           </Show>
           <Show
@@ -631,7 +633,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                   </section>
                 </Show>
                 <Show when={showPlainOutput()}>
-                  <ToolPayload label={t("tool.output")} value={output()} />
+                  <ToolPayload stateKey={payloadStateKey("output")} label={t("tool.output")} value={output()} />
                 </Show>
               </>
             }
