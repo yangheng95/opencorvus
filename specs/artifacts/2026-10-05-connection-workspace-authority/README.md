@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [压缩305 Recall](sse-compression-plan-305.md) / [真实证据](sse-compression-305/README.md)：压缩同次流量62.72MB→2.90MB，完整事件保留，运行时与Sources验收。
+
 - [完整字段304 Recall](field-value-plan-304.md) / [实际证据](field-value-304/README.md)：共享流式恢复修复、Sources 真页面验收、传输开销量化与后续方向。
 
 - [返回输入链303 Recall](return-input-plan-303.md) / [完整证据](return-input-303/README.md)：确认 HTTP 快照落后于其游标，7 字符短暂缺失；临时诊断全部撤除，共享修复继续。

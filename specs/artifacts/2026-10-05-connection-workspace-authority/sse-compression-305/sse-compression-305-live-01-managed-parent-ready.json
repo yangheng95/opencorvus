@@ -1,0 +1,15 @@
+{
+  "pid": 11300,
+  "occurrence": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+  "owner": {
+    "pid": 11300,
+    "processInstanceID": "win32:639273321377038761",
+    "occurrenceID": "0c6e49b5-1967-41f1-bd8e-a1688b4ec3b4"
+  },
+  "parent": {
+    "pid": 66180,
+    "processInstanceID": "win32:639273321376687779",
+    "occurrenceID": "c7862326-acbb-46c6-b51a-57e4683d5530"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

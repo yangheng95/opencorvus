@@ -1,0 +1,26 @@
+{
+  "nativeRun": {"sessionID": 16895, "exitCode": 0, "providerEOFRequests": 12, "physicalCompletion": true},
+  "publicStreamObserver": {"sessionID": 17246, "exitCode": 0, "events": 6005, "wireBytes": 2900365, "decodedBytes": 62719532},
+  "checks": [
+    {"sessionID": 65257, "check": "overlay build under Bun 1.4.0", "exitCode": 0, "viteSeconds": 48.88, "asset": "main-1LYwgkry.js"},
+    {"toolChunk": "1065b2", "runtime": "1.4.0", "exitCode": 0, "files": {"sse-compression-final-including-empty-and-error-frames": 17}},
+    {"sessionID": 38192, "runtime": "1.4.0", "exitCode": 0, "files": {"streaming-text-prefix": 6, "session-event-connection-snapshot": 11, "task-live-replay-retention": 8, "inspect-task-live-observation": 2}},
+    {"sessionID": 29423, "runtime": "1.4.0", "exitCode": 0, "files": {"sse-compression-at-that-point": 15, "network-proxy-fetch-init": 1, "browser-mcp-node-bundle": 5}},
+    {"sessionID": 82141, "runtime": "1.4.0", "exitCode": 0, "files": {"sse-compression-final": 16, "browser-authorization-lifetime": 5, "processor-llm-activity-retry": 6}},
+    {"sessionID": 88266, "check": "root typecheck", "exitCode": 0, "successfulPackages": 8}
+  ],
+  "runtimeProbes": [
+    {"runtime": "Bun 1.3.14", "encoding": "gzip", "headersMs": 15.7554, "firstFrameMs": 1218.8123, "producerCloseAfterMs": 1200},
+    {"runtime": "Node 25.7.0", "encoding": "gzip", "headersMs": 19.5148, "firstFrameMs": 20.2963, "producerCloseAfterMs": 1200},
+    {"runtime": "Bun 1.4.0", "encoding": "gzip", "headersMs": 13.4076, "firstFrameMs": 13.5906, "producerCloseAfterMs": 1200}
+  ],
+  "failedAttempts": [
+    "Bun 1.3.14: initial 13 compression checks passed, fetch first-frame/cancellation case timed out; reproduced without project/Hono for gzip, deflate, br.",
+    "Bun 1.3.14: independent gzip members still delayed the first read and the observed result contained only its first member; rejected.",
+    "Initial native --version after compile omitted co-located package runtime; production runtime staging repaired the checker and actual native --version returned 0.1.23.",
+    "Bun types 1.4.0 hid Node Process off/removeListener signatures; upstream 1.4.2 type package fixes them. All attempted MCP method changes reverted.",
+    "First public Session compression check cancelled its reader after abort; Bun 1.4 correctly rejects that errored body. The checker now cancels the owned reader before aborting its request; final 16 cases passed."
+  ],
+  "nativeCompile": {"runtime": "1.4.0", "binaryBytes": 124732416, "exitCode": 0, "versionOutput": "0.1.23", "scope": "Production CLI compile helpers and runtime modules in isolated output, not installer or release matrix"},
+  "cleanupLimitation": {"path": "packages/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/sse-compression-305", "contents": "empty", "reason": "Automatic approval review rejected nonrecursive empty-directory cleanup with blocked by policy; left ignored and uncommitted. Existing sibling reader-helper-observation-126 was preserved."}
+}

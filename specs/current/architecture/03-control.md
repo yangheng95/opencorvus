@@ -359,8 +359,10 @@ Turn。Runtime 闭包不是可持久化的续跑协议；历史 terminal executi
     `routes/gateway.ts` · `routes/global.ts` · `routes/app.ts` · `routes/attachment.ts` ·
     `routes/auth.ts` · `routes/coding.ts` · `routes/documentation.ts` · `routes/mission.ts` ·
     `routes/plugin.ts` · `routes/experimental.ts` · `routes/export.ts`
-- **SSE 端点**：分散在 5 个 route 文件——`routes/orchestrator.ts`（task / task event 双流，主线）·
-  `routes/panel.ts`（control stream）· `routes/global.ts` · `routes/app.ts` · `routes/coding.ts`。
+- **SSE 端点**：通过 `server/sse.ts` 的同一传输边界，入口位于
+  `routes/orchestrator.ts`（Task）· `routes/session.ts`（Session/Mission/Side Chat）·
+  `routes/work-ledger.ts` · `routes/panel.ts` · `routes/global.ts` · `routes/app.ts` ·
+  `routes/interactive-artifact.ts` · `routes/pty.ts`。app 同时承载两处流入口。
   `src/server/event.ts` **不是** SSE 端点，只是一个 7 行的 BusEvent 类型声明文件（`server.connected` / `global.disposed`）。历史文档中"`routes/task-event.ts`"路径不存在；该角色已并入 `routes/orchestrator.ts`。
 
 ## 关键文件一览

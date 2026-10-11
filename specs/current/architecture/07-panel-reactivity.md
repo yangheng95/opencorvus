@@ -156,6 +156,17 @@ writer's bounded batch retains the latest actual field event, and child/Side Cha
 projections apply the same value contract without string-overlap inference.
 Tool input drafts continue to use complete pending Part snapshots.
 
+All server SSE routes share HTTP content-encoding negotiation in `server/sse.ts`.
+Accepted gzip responses use one compressor per connection and flush each original
+frame immediately; identity remains the standard unencoded representation.
+`Vary: Accept-Encoding` is merged with existing response variation. An explicit
+exclusion of both representations returns HTTP 406 before subscribing. Event
+contents, ordering, cursors and participant identity are unchanged. Cancellation
+propagates through the Web stream to the original Hono stream owner; reconnection
+creates a new compressor. The packageManager-pinned Bun 1.4 runtime is required
+for immediate decoding of compressed fetch streams; Bun 1.3.14 buffered them.
+Compression reduces wire bytes, not the decoded JSON or field-value allocation.
+
 The transcript snapshot is additive and bounded. It repairs creation events
 missed before stream attachment or during disconnection and supplies the
 history cursor for the returned tail. It is not a deletion manifest and does

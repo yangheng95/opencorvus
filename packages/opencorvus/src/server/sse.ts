@@ -1,6 +1,10 @@
 import type { Context } from "hono"
 import { streamSSE as honoStreamSSE, type SSEStreamingApi } from "hono/streaming"
+import { accepts } from "hono/accepts"
+import { HTTPException } from "hono/http-exception"
 import { AsyncLocalStorage } from "node:async_hooks"
+import { Duplex } from "node:stream"
+import { constants, createGzip } from "node:zlib"
 import { Log } from "@/util/log"
 import { runOutsideInstanceContext } from "@/project/instance"
 import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
@@ -12,10 +16,7 @@ export type StreamSSEBind = <Args extends unknown[], Result>(
 
 export type SerializedSSEStream = Pick<SSEStreamingApi, "writeSSE">
 
-export function createSerializedSSEWriter(
-  stream: SerializedSSEStream,
-  onFailure: (error: unknown) => void,
-) {
+export function createSerializedSSEWriter(stream: SerializedSSEStream, onFailure: (error: unknown) => void) {
   let accepting = true
   let failed = false
   let failure: unknown
@@ -62,6 +63,28 @@ type AbortListener = () => void | Promise<void>
 
 const log = Log.create({ service: "server.sse" })
 
+function responseEncoding(c: Context): string {
+  return accepts(c, {
+    header: "Accept-Encoding",
+    supports: ["gzip", "identity"],
+    default: "identity",
+    match(values) {
+      const quality = (name: string) => {
+        const value = values.find((value) => value.type.toLowerCase() === name)
+        if (!value) return undefined
+        const weight = Object.entries(value.params).find(([key]) => key.toLowerCase() === "q")?.[1]
+        return weight === undefined ? value.q : Number(weight)
+      }
+      const wildcard = quality("*")
+      const gzip = quality("gzip") ?? wildcard ?? 0
+      const identity = quality("identity")
+      if (gzip > 0 && (identity === undefined || gzip >= identity)) return "gzip"
+      if (identity !== undefined ? identity > 0 : wildcard !== 0) return "identity"
+      throw new HTTPException(406, { message: "SSE requires an acceptable gzip or identity content encoding" })
+    },
+  })
+}
+
 // SSE means Server-Sent Events; this wrapper is the only server-side SSE primitive.
 function attachRequestAbort(c: Context, stream: SSEStreamingApi) {
   const signal = c.req.raw.signal
@@ -97,7 +120,9 @@ function createSSEStream(
   cb: StreamSSECallback,
   onError?: StreamSSEErrorHandler,
 ): Response {
-  return honoStreamSSE(
+  // Negotiate before the callback can acquire subscriptions or other owners.
+  const encoding = responseEncoding(c)
+  const response = honoStreamSSE(
     c,
     async (stream) => {
       const run = async () => {
@@ -116,6 +141,19 @@ function createSSEStream(
     },
     onError,
   )
+  const vary = response.headers.get("Vary")
+  if (vary !== "*" && !vary?.split(",").some((value) => value.trim().toLowerCase() === "accept-encoding"))
+    response.headers.set("Vary", vary ? `${vary}, Accept-Encoding` : "Accept-Encoding")
+  if (encoding === "identity" || !response.body) return response
+
+  // Flush each original SSE frame while retaining the connection's dictionary.
+  // Web-stream cancellation propagates through the codec to Hono's onAbort.
+  const gzip = createGzip({ flush: constants.Z_SYNC_FLUSH })
+  const codec = Duplex.toWeb(gzip) as unknown as ReadableWritablePair<Uint8Array, Uint8Array>
+  const body = response.body.pipeThrough(codec)
+  response.headers.delete("Content-Length")
+  response.headers.set("Content-Encoding", "gzip")
+  return new Response(body, response)
 }
 
 export function streamGlobalSSE(c: Context, cb: StreamSSECallback, onError?: StreamSSEErrorHandler): Response {

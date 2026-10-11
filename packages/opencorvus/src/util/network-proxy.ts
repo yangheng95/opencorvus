@@ -11,7 +11,7 @@ export type NetworkProxyScope = "llmProvider" | "webResearch"
 export { NetworkProxyTransportOwner, type NetworkProxyTransportScope } from "./network-proxy-transport"
 
 export type ProxyFetchInit = RequestInit & {
-  proxy?: string | { url: string; headers?: Bun.HeadersInit }
+  proxy?: string | URL | { url: string | URL; headers?: Bun.HeadersInit }
   dispatcher?: Dispatcher
 }
 

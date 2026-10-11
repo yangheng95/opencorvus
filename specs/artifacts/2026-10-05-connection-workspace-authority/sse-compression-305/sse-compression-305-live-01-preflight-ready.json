@@ -1,0 +1,22 @@
+{
+  "pid": 11300,
+  "owner": {
+    "pid": 11300,
+    "processInstanceID": "win32:639273321377038761",
+    "occurrenceID": "0c6e49b5-1967-41f1-bd8e-a1688b4ec3b4"
+  },
+  "occurrence": "sse-compression-305-live-01-9231ba95-f552-48e9-ada2-186ab2bebec4",
+  "port": 18268,
+  "preflight": {
+    "sessionID": "ses_hiqIngNkvR3wQP6uyuoB",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 20,
+  "qualificationKind": "Task",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-genuine-cli-task-create",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

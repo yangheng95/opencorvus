@@ -12,7 +12,7 @@ OpenCorvus 是一个面向 AI 编码代理的开发编排工具。它把用户�
 - 多渠道运行时（Slack、Telegram、Discord、Feishu 等聊天渠道适配）。
 - JavaScript SDK、插件接口、专家团/技能扩展包。
 
-仓库是 Bun workspace + Turborepo monorepo，根 `package.json` 声明 `packageManager: bun@1.3.14`，workspace 覆盖 `packages/*` 和 `packages/sdk/js`。
+仓库是 Bun workspace + Turborepo monorepo，根 `package.json` 声明 `packageManager: bun@1.4.0`，workspace 覆盖 `packages/*` 和 `packages/sdk/js`。
 
 ## 2. 顶层目录
 
