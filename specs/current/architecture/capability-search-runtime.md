@@ -58,6 +58,18 @@ v2 search receipts continue to record only dynamically activated extensions.
 
 ## General tool contracts
 
+Local `search_code` and the host file search share ripgrep's JSON Lines decoder.
+Paths, line numbers, matching text and byte offsets come from their structured
+fields; separators inside a filename or matching text are not parsed as field
+boundaries. Wire `text` and Base64 `bytes` normalize to the existing application
+text contract. File identities require lossless UTF-8 decoding, while content
+retains the existing UTF-8 display semantics. Local file enumeration uses NUL
+terminators and a streaming UTF-8 decoder, including across chunk boundaries;
+an incomplete frame is an execution error. `search_code` removes only the final
+line terminator from each match, preserving other whitespace. Its existing
+ignore rules, execution authority, cumulative raw-output budget and total
+deadline also apply to the structured protocol's overhead.
+
 Webfetch and the two Exa consumers share one Hypertext Transfer Protocol (HTTP) response-body owner. The
 existing overall/parent deadline stays active through headers, body consumption
 and normal conversion, and is cleared once in the outer finally. Each physical

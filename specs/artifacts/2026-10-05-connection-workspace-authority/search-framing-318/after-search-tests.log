@@ -1,0 +1,47 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\tool\search-code-bounded-execution.test.ts:
+(pass) search_code bounded execution > preserves Unicode paths and the exact trailing whitespace of a real final matching line [2098.86ms]
+(pass) search_code bounded execution > keeps repository ignore boundaries when include is broad [1983.74ms]
+(pass) search_code bounded execution > filters ignored-aware candidates before narrow content searches consume the shared output budget [1748.09ms]
+(pass) search_code bounded execution > preserves partial enumeration results across argument batches under one deadline and output budget [1195.54ms]
+(pass) search_code bounded execution > shares one retained-output budget across enumeration and successive content batches [1217.08ms]
+(pass) search_code bounded execution > returns a typed regex failure even when include selects no candidates [1518.88ms]
+(pass) search_code bounded execution > rejects include complexity that cannot be matched completely [1275.95ms]
+(pass) search_code bounded execution > returns typed incomplete errors when partial enumeration cannot establish a match [1433.11ms]
+real search budget receipt {"kind":"conversation","receipt":{"occurrenceID":"a9a28f0c-760e-47d1-8ab5-ae02e47f7bce","pid":71844,"reason":"output_limit","exitCode":1,"signal":null},"bytes":2097152}
+(pass) search_code bounded execution > settles a real over-budget conversation search with its output-limit receipt [1329.68ms]
+real search budget receipt {"kind":"task","receipt":{"occurrenceID":"e85ebddd-1738-4708-b4ef-bbb38a8d82f8","pid":72548,"reason":"output_limit","exitCode":1,"signal":null},"bytes":2097152}
+(pass) search_code bounded execution > settles a real over-budget task search with its output-limit receipt [1698.56ms]
+
+test\file\ripgrep-protocol.test.ts:
+161 |         stdout: Buffer.from(result.stdout),
+162 |         stderr: Buffer.from(result.stderr),
+163 |       }
+164 |     } catch (error) {
+165 |       if (error instanceof SharedProcessRunFailedError) {
+166 |         throw new RunFailedError(cmd, error.receipt.exitCode ?? 1, Buffer.from(error.stdout), Buffer.from(error.stderr))
+                    ^
+ProcessRunFailedError: Command failed with code 2: C:\Users\hengu\.local\bin\rg.EXE --json --line-number --label search|目录
+quoted-"name".txt needle -
+rg: unrecognized flag --label
+    cmd: [ "C:\\Users\\hengu\\.local\\bin\\rg.EXE", "--json", "--line-number", "--label", "search|目录\nquoted-\"name\".txt",
+  "needle", "-"
+],
+   code: 2,
+ stdout: "",
+ stderr: "rg: unrecognized flag --label\n",
+
+      at runWithFacade (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\process.ts:166:15)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\file\ripgrep-protocol.test.ts:16:34)
+(fail) actual ripgrep JSON preserves separators, line breaks and Unicode in its supplied path label [1401.03ms]
+(pass) actual host search decodes byte-encoded line content while preserving its Unicode file identity [1368.24ms]
+(pass) actual NUL file enumeration retains visible Unicode and whitespace names under ignore rules [1330.99ms]
+(pass) NUL file framing retains newline and separator characters as one filename [0.12ms]
+(pass) an incomplete file frame produces a precise protocol error [0.09ms]
+(pass) an unrepresentable file identity produces a UTF-8 decode error [0.30ms]
+
+ 15 pass
+ 1 fail
+ 15 expect() calls
+Ran 16 tests across 2 files. [20.53s]

@@ -1,0 +1,29 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 1215957,
+    "archiveBytes": 44090,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 6,
+    "sessions": [
+      {
+        "id": "ses_hG9FWxknuhHZSrXltAfN",
+        "projectID": "prj_hjxqqF5b70zdJpESLBXb",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSDcYhUzzOAWmky5kK",
+        "projectID": "prj_hHwkkAS7d2HHLSKlENrd",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXmNTKU005BhQLCQCT",
+        "sourceId": "1cfc0483f78e4a46e4eb2f9223f2011ef2dad9b15de4b99c37ae58791773335e",
+        "title": "  检索 [sample].txt"
+      }
+    ]
+  }
+]

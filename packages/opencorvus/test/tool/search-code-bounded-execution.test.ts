@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { PassThrough } from "node:stream"
+import { ProcessOutputLimitError } from "@opencorvus-ai/util/process"
 import { resolveSessionExecutionAuthority } from "../../src/engine/task-session-lineage"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../../src/id/id"
@@ -140,7 +141,28 @@ function completedHandle(input: {
   }
 }
 
+function matchOutput(filename: string, text: string): string {
+  return JSON.stringify({ type: "match", data: {
+    path: { text: filename }, lines: { text: `${text}\n` }, line_number: 1, absolute_offset: 0,
+    submatches: [],
+  } }) + "\n"
+}
+
 describe("search_code bounded execution", () => {
+  test("preserves Unicode paths and the exact trailing whitespace of a real final matching line", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "  检索 [sample].txt")
+      const marker = "search-code-exact-line-318"
+      const line = `${marker} | value  \t  `
+      await fs.writeFile(filename, `header\r\n${line}\r\n`)
+      const session = await Session.create({ kind: "assistant", title: "Exact search result text" })
+      const context = await conversationContext(session)
+      const result = await SearchCodeTool.init().then((tool) => tool.execute({ pattern: marker, path: filename }, context))
+      expect(result).toEqual({ title: marker, metadata: { matches: 1, truncated: false }, output: `Found 1 matches\n${filename}:\n  Line 2: ${line}` })
+    } })
+  })
+
   test("keeps repository ignore boundaries when include is broad", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -246,9 +268,9 @@ describe("search_code bounded execution", () => {
           candidates.push(candidate)
           candidateCharacters += candidate.length + 3
         }
-        const enumerationOutput = `${candidates.join("\n")}\n`
+        const enumerationOutput = `${candidates.join("\0")}\0`
         const enumerationError = "one path was inaccessible\n"
-        const matchOutput = `${visible}|1|${marker}\n`
+        const contentOutput = matchOutput(visible, marker)
         const spawned: ProcessSupervisor.CommandSpawnOptions[] = []
         let settledCount = 0
         const restore = ProcessSupervisor.setCommandFactoryForTest(async (options) => {
@@ -256,7 +278,7 @@ describe("search_code bounded execution", () => {
           return completedHandle({
             pid: 992000 + callIndex,
             code: callIndex === 0 ? 2 : callIndex === 1 ? 0 : 1,
-            stdoutText: callIndex === 0 ? enumerationOutput : callIndex === 1 ? matchOutput : "",
+            stdoutText: callIndex === 0 ? enumerationOutput : callIndex === 1 ? contentOutput : "",
             stderrText: callIndex === 0 ? enumerationError : "",
             onSettled: () => settledCount++,
           })
@@ -308,8 +330,10 @@ describe("search_code bounded execution", () => {
       directory: project.path,
       fn: async () => {
         await Ripgrep.filepath()
-        const candidates: string[] = []
-        let candidateCharacters = 0
+        const visible = path.join(project.path, "visible.ts")
+        await fs.writeFile(visible, "batch-budget\n")
+        const candidates: string[] = [visible]
+        let candidateCharacters = visible.length + 3
         for (let index = 0; candidateCharacters < 30_000; index++) {
           const candidate = path.join(
             project.path,
@@ -319,10 +343,11 @@ describe("search_code bounded execution", () => {
           candidates.push(candidate)
           candidateCharacters += candidate.length + 3
         }
-        const enumerationOutput = `${candidates.join("\n")}\n`
+        const enumerationOutput = `${candidates.join("\0")}\0`
         const remainingAfterEnumeration = SEARCH_CODE_MAX_OUTPUT_BYTES - Buffer.byteLength(enumerationOutput)
-        const firstContentOutput = "x".repeat(Math.floor(remainingAfterEnumeration / 2))
-        const secondContentOutput = "y".repeat(remainingAfterEnumeration - Buffer.byteLength(firstContentOutput) + 1)
+        const overhead = Buffer.byteLength(matchOutput(visible, "batch-budget "))
+        const firstContentOutput = matchOutput(visible, `batch-budget ${"x".repeat(Math.floor(remainingAfterEnumeration / 2) - overhead)}`)
+        const secondContentOutput = matchOutput(visible, `batch-budget ${"y".repeat(remainingAfterEnumeration - Buffer.byteLength(firstContentOutput) + 1 - overhead)}`)
         const spawned: ProcessSupervisor.CommandSpawnOptions[] = []
         const restore = ProcessSupervisor.setCommandFactoryForTest(async (options) => {
           const callIndex = spawned.push(options) - 1
@@ -449,7 +474,7 @@ describe("search_code bounded execution", () => {
             return completedHandle({
               pid: 994000 + scenarioIndex * 10 + callIndex,
               code: callIndex === 0 ? 2 : 1,
-              stdoutText: callIndex === 0 ? `${scenario.candidate}\n` : "",
+              stdoutText: callIndex === 0 ? `${scenario.candidate}\0` : "",
               stderrText: callIndex === 0 ? "enumeration incomplete\n" : "",
             })
           })
@@ -490,84 +515,44 @@ describe("search_code bounded execution", () => {
     })
   })
 
-  test("terminates and settles an over-budget command with a typed execution error", async () => {
+  test.each(["conversation", "task"] as const)("settles a real over-budget %s search with its output-limit receipt", async (kind) => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        await Ripgrep.filepath()
-        const session = await Session.create({ kind: "assistant", title: "Bounded search output contract" })
-        const context = await conversationContext(session)
+        const filename = path.join(project.path, "large-search.txt")
+        const marker = "real-bounded-search-318"
+        await fs.writeFile(filename, `${marker} ${"x".repeat(1000)}\n`.repeat(6000))
+        const context = kind === "task"
+          ? await taskContext(project.path)
+          : await conversationContext(await Session.create({ kind: "assistant", title: "Real bounded search" }))
         const liveBefore = ProcessSupervisor.metricsSnapshot().live
-        const stdout = new PassThrough()
-        const stderr = new PassThrough()
-        let resolveExit!: (code: number) => void
-        let resolveOutput!: () => void
-        let resolveSettlement!: () => void
-        const exited = new Promise<number>((resolve) => (resolveExit = resolve))
-        const outputSettled = new Promise<void>((resolve) => (resolveOutput = resolve))
-        const settled = new Promise<void>((resolve) => (resolveSettlement = resolve))
-        let terminationCount = 0
-        let observedOwner: string | undefined
-        let closed = false
-        const close = () => {
-          if (closed) return
-          closed = true
-          stdout.end()
-          stderr.end()
-          resolveExit(1)
-          resolveOutput()
-          resolveSettlement()
-        }
-        const restore = ProcessSupervisor.setCommandFactoryForTest(async (options) => {
-          observedOwner = options.owner
-          return {
-            pid: 991026,
-            stdin: null,
-            stdout,
-            stderr,
-            exited,
-            outputSettled,
-            settled,
-            async terminate() {
-              terminationCount++
-              close()
-            },
-            async dispose() {
-              close()
-            },
-            unref() {},
-          }
-        })
-        const emit = setTimeout(() => stdout.write(Buffer.alloc(SEARCH_CODE_MAX_OUTPUT_BYTES + 1, "x")), 0)
         let observed: unknown
         try {
           await SearchCodeTool.init().then((tool) =>
-            tool.execute({ pattern: "bounded-output", path: project.path }, context),
+            tool.execute({ pattern: marker, path: filename }, context),
           )
         } catch (error) {
           observed = error
-        } finally {
-          clearTimeout(emit)
-          restore()
         }
-        await Promise.resolve()
-
+        const limitError = observed instanceof SearchCodeExecutionError && observed.cause instanceof Error
+          ? observed.cause.cause : undefined
+        if (!(limitError instanceof ProcessOutputLimitError)) throw observed ?? new Error("Expected actual output-limit receipt")
+        console.info("real search budget receipt", JSON.stringify({ kind, receipt: limitError.result.receipt, bytes: limitError.result.stdout.byteLength + limitError.result.stderr.byteLength }))
         expect({
-          error:
-            observed instanceof SearchCodeExecutionError
-              ? { name: observed.name, code: observed.code, cause: observed.cause instanceof Error }
-              : observed,
-          terminationCount,
-          owner: observedOwner,
+          error: { name: (observed as SearchCodeExecutionError).name, code: (observed as SearchCodeExecutionError).code },
+          reason: limitError.result.receipt.reason,
+          retainedBytes: limitError.result.stdout.byteLength + limitError.result.stderr.byteLength,
+          authority: context.executionAuthority?.kind,
           liveProcesses: ProcessSupervisor.metricsSnapshot().live,
         }).toEqual({
-          error: { name: "SearchCodeExecutionError", code: "SEARCH_CODE_EXECUTION_FAILED", cause: true },
-          terminationCount: 1,
-          owner: "search-code",
+          error: { name: "SearchCodeExecutionError", code: "SEARCH_CODE_EXECUTION_FAILED" },
+          reason: "output_limit",
+          retainedBytes: SEARCH_CODE_MAX_OUTPUT_BYTES,
+          authority: kind,
           liveProcesses: liveBefore,
         })
       },
     })
-  })
+  }, 30_000)
 })

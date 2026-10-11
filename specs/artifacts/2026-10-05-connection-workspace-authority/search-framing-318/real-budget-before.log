@@ -1,0 +1,13 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\tool\search-code-bounded-execution.test.ts:
+real search budget receipt {"kind":"conversation","receipt":{"occurrenceID":"9a6fc37f-7a18-4059-a4d6-0e2e6e65e2f7","pid":44692,"reason":"output_limit","exitCode":0,"signal":null},"bytes":2097152}
+(pass) search_code bounded execution > settles a real over-budget conversation search with its output-limit receipt [1852.56ms]
+real search budget receipt {"kind":"task","receipt":{"occurrenceID":"0d7476a1-cba9-4879-948f-effe3a1fecab","pid":46956,"reason":"output_limit","exitCode":0,"signal":null},"bytes":2097152}
+(pass) search_code bounded execution > settles a real over-budget task search with its output-limit receipt [2004.17ms]
+
+ 2 pass
+ 8 filtered out
+ 0 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [4.70s]

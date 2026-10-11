@@ -1,0 +1,29 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\tool\search-code-bounded-execution.test.ts:
+(pass) search_code bounded execution > preserves Unicode paths and the exact trailing whitespace of a real final matching line [1878.19ms]
+(pass) search_code bounded execution > keeps repository ignore boundaries when include is broad [2156.80ms]
+(pass) search_code bounded execution > filters ignored-aware candidates before narrow content searches consume the shared output budget [1730.76ms]
+(pass) search_code bounded execution > preserves partial enumeration results across argument batches under one deadline and output budget [1238.19ms]
+(pass) search_code bounded execution > shares one retained-output budget across enumeration and successive content batches [1271.50ms]
+(pass) search_code bounded execution > returns a typed regex failure even when include selects no candidates [1553.72ms]
+(pass) search_code bounded execution > rejects include complexity that cannot be matched completely [1374.89ms]
+(pass) search_code bounded execution > returns typed incomplete errors when partial enumeration cannot establish a match [1284.41ms]
+real search budget receipt {"kind":"conversation","receipt":{"occurrenceID":"fef53180-e4c7-4183-920b-25a8d907766d","pid":78064,"reason":"output_limit","exitCode":0,"signal":null},"bytes":2097152}
+(pass) search_code bounded execution > settles a real over-budget conversation search with its output-limit receipt [1559.79ms]
+real search budget receipt {"kind":"task","receipt":{"occurrenceID":"e866b91b-622d-493a-acae-ba8d70114690","pid":68740,"reason":"output_limit","exitCode":0,"signal":null},"bytes":2097152}
+(pass) search_code bounded execution > settles a real over-budget task search with its output-limit receipt [1667.17ms]
+
+test\file\ripgrep-protocol.test.ts:
+(pass) JSON file identities retain separators, line breaks and Unicode as one protocol field [0.23ms]
+(pass) actual host search decodes byte-encoded line content while preserving its Unicode file identity [1493.99ms]
+(pass) actual NUL file enumeration retains Unicode and whitespace names under explicit glob rules [1330.40ms]
+(pass) the streaming file-list reader retains a Unicode filename split inside a UTF-8 character [1256.80ms]
+(pass) NUL file framing retains newline and separator characters as one filename [0.08ms]
+(pass) an incomplete file frame produces a precise protocol error [0.06ms]
+(pass) an unrepresentable file identity produces a UTF-8 decode error [0.25ms]
+
+ 17 pass
+ 0 fail
+ 17 expect() calls
+Ran 17 tests across 2 files. [20.64s]

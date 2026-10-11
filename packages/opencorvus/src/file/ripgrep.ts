@@ -81,13 +81,53 @@ export namespace Ripgrep {
     }),
   })
 
-  const Result = z.union([Begin, Match, End, Summary])
-
-  export type Result = z.infer<typeof Result>
+  export type Result = Begin | Match | End | Summary
   export type Match = z.infer<typeof Match>
   export type Begin = z.infer<typeof Begin>
   export type End = z.infer<typeof End>
   export type Summary = z.infer<typeof Summary>
+  const EncodedText = z.union([z.object({ text: z.string() }), z.object({ bytes: z.base64() })])
+  const WireMatch = Match.extend({
+    data: Match.shape.data.extend({
+      path: EncodedText,
+      lines: EncodedText,
+      submatches: z.array(Match.shape.data.shape.submatches.element.extend({ match: EncodedText })),
+    }),
+  })
+  const WireResult = z.union([
+    Begin.extend({ data: Begin.shape.data.extend({ path: EncodedText.nullable() }) }),
+    WireMatch,
+    WireMatch.extend({ type: z.literal("context") }),
+    End.extend({ data: End.shape.data.extend({ path: EncodedText.nullable() }) }),
+    Summary,
+  ])
+  const pathDecoder = () => new TextDecoder("utf-8", { fatal: true, ignoreBOM: true })
+  function decodedText(value: z.infer<typeof EncodedText>, filePath = false): { text: string } {
+    if ("text" in value) return value
+    const bytes = Buffer.from(value.bytes, "base64")
+    // Application file identities are Unicode strings. A lossy path decode
+    // could address another file; content keeps the existing UTF-8 display.
+    return { text: filePath ? pathDecoder().decode(bytes) : bytes.toString("utf8") }
+  }
+
+  export function parseSearchOutput(output: string): Match["data"][] {
+    return output.split(/\r?\n/).filter(Boolean).flatMap((line) => {
+      const result = WireResult.parse(JSON.parse(line))
+      if (result.type !== "match") return []
+      return [{
+        ...result.data,
+        path: decodedText(result.data.path, true),
+        lines: decodedText(result.data.lines),
+        submatches: result.data.submatches.map((match) => ({ ...match, match: decodedText(match.match) })),
+      }]
+    })
+  }
+
+  export function parseFileList(output: Uint8Array): string[] {
+    const text = pathDecoder().decode(output)
+    if (text && !text.endsWith("\0")) throw new Error("ripgrep file list ended without a NUL terminator")
+    return text.split("\0").filter(Boolean)
+  }
   const state = lazy(async () => {
     const runtime = await resolveRipgrepRuntime()
     return { filepath: runtime.filepath }
@@ -132,7 +172,7 @@ export namespace Ripgrep {
     const executable = input.owner === "task"
       ? (await activeExecutionCapsuleRuntimeFact())?.ripgrepPath ?? (await filepath())
       : await filepath()
-    const args = ["--files", "--glob=!.git/*"]
+    const args = ["--files", "--null", "--glob=!.git/*"]
     if (input.follow) args.push("--follow")
     if (input.hidden !== false) args.push("--hidden")
     if (input.maxDepth !== undefined) args.push(`--max-depth=${input.maxDepth}`)
@@ -169,6 +209,7 @@ export namespace Ripgrep {
     const stderr = readStreamBuffer(proc.stderr)
     void stderr.catch(() => undefined)
     let buffer = ""
+    const decoder = pathDecoder()
     let sawFile = false
     let completed = false
     try {
@@ -176,9 +217,8 @@ export namespace Ripgrep {
       for await (const chunk of stream) {
         input.signal?.throwIfAborted()
 
-        buffer += typeof chunk === "string" ? chunk : chunk.toString()
-        // Handle both Unix (\n) and Windows (\r\n) line endings
-        const lines = buffer.split(/\r?\n/)
+        buffer += decoder.decode(typeof chunk === "string" ? new TextEncoder().encode(chunk) : chunk, { stream: true })
+        const lines = buffer.split("\0")
         buffer = lines.pop() || ""
 
         for (const line of lines) {
@@ -189,10 +229,8 @@ export namespace Ripgrep {
         }
       }
 
-      if (buffer) {
-        sawFile = true
-        yield buffer
-      }
+      buffer += decoder.decode()
+      if (buffer) throw new Error("ripgrep file list ended without a NUL terminator")
       const [code, stderrBuffer] = await Promise.all([proc.exited, stderr, proc.outputSettled ?? Promise.resolve()])
       if (code === 1 && !sawFile && !stderrBuffer.toString().trim()) {
         completed = true
@@ -283,7 +321,7 @@ export namespace Ripgrep {
     limit?: number
     follow?: boolean
   }) {
-    const args = [`${await filepath()}`, "--json", "--hidden", "--glob=!.git/*"]
+    const args = [`${await filepath()}`, "--json", "--line-number", "--hidden", "--glob=!.git/*"]
     if (input.follow) args.push("--follow")
 
     if (input.glob) {
@@ -307,14 +345,6 @@ export namespace Ripgrep {
       throw new Error(ripgrepFailure("search", result.code, result.stderr, result.stdout))
     }
 
-    // Handle both Unix (\n) and Windows (\r\n) line endings
-    const lines = result.stdout.toString().trim().split(/\r?\n/).filter(Boolean)
-    // Parse JSON lines from ripgrep output
-
-    return lines
-      .map((line) => JSON.parse(line))
-      .map((parsed) => Result.parse(parsed))
-      .filter((r) => r.type === "match")
-      .map((r) => r.data)
+    return parseSearchOutput(result.stdout.toString())
   }
 }

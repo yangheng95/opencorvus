@@ -188,9 +188,14 @@ export const SearchCodeTool = Tool.define("search_code", {
       }
       searchTargets = [[searchPath]]
     } else if (params.include) {
-      const files = await run(["--files", "--hidden", "--glob", "!**/.git/**", searchPath])
-      const fileOutput = files.stdout.toString()
-      if (files.code === 2 && fileOutput.trim()) {
+      const files = await run(["--files", "--null", "--hidden", "--glob", "!**/.git/**", searchPath])
+      let filePaths: string[]
+      try {
+        filePaths = Ripgrep.parseFileList(files.stdout)
+      } catch (cause) {
+        throw executionError(cause)
+      }
+      if (files.code === 2 && filePaths.length > 0) {
         hasErrors = true
         partialErrorDetail = files.stderr.toString().trim()
       } else if (files.code !== 0 && files.code !== 1) {
@@ -198,8 +203,7 @@ export const SearchCodeTool = Tool.define("search_code", {
         throw executionError(new Error(detail || `ripgrep file enumeration exited with code ${files.code}`))
       }
       const candidates: string[] = []
-      for (const filePath of fileOutput.split(/\r?\n/)) {
-        if (!filePath) continue
+      for (const filePath of filePaths) {
         ctx.abort.throwIfAborted()
         if (Date.now() >= deadlineAt) {
           throw executionError(new Error(`search_code exceeded its ${SEARCH_CODE_TIMEOUT_MS}ms deadline`))
@@ -223,9 +227,9 @@ export const SearchCodeTool = Tool.define("search_code", {
     }
 
     const searchArgs = [
-      "-nH",
+      "--json",
+      "--line-number",
       "--hidden",
-      "--field-match-separator=|",
       "--regexp",
       params.pattern,
       "--glob",
@@ -252,26 +256,21 @@ export const SearchCodeTool = Tool.define("search_code", {
         partialErrorDetail ||= errorOutput
       }
 
-      // Handle both Unix (\n) and Windows (\r\n) line endings
-      const lines = output.trim().split(/\r?\n/)
-
-      for (const line of lines) {
-        if (!line) continue
-
-        const [filePath, lineNumStr, ...lineTextParts] = line.split("|")
-        if (!filePath || !lineNumStr || lineTextParts.length === 0) continue
-
-        const lineNum = parseInt(lineNumStr, 10)
-        const lineText = lineTextParts.join("|")
-
-        const stats = Filesystem.stat(filePath)
+      let results: Ripgrep.Match["data"][]
+      try {
+        results = Ripgrep.parseSearchOutput(output)
+      } catch (cause) {
+        throw executionError(cause)
+      }
+      for (const result of results) {
+        const stats = Filesystem.stat(result.path.text)
         if (!stats) continue
 
         matches.push({
-          path: filePath,
+          path: result.path.text,
           modTime: stats.mtime.getTime(),
-          lineNum,
-          lineText,
+          lineNum: result.line_number,
+          lineText: result.lines.text.replace(/\r?\n$/, ""),
         })
       }
     }
