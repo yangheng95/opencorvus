@@ -1,0 +1,41 @@
+{
+  "observedAt": "2026-10-11T15:08:30.662Z",
+  "files": [
+    {
+      "file": "live-01/return-input-303-live-01-runtime.log.gz",
+      "expandedBytes": 15981507,
+      "archiveBytes": 716203,
+      "expandedCredentialMatches": 0,
+      "expandedBytesEqualActualOriginal": true
+    },
+    {
+      "file": "live-02/return-input-303-live-02-runtime.log.gz",
+      "expandedBytes": 210037032,
+      "archiveBytes": 10161314,
+      "expandedCredentialMatches": 0,
+      "expandedBytesEqualActualOriginal": true
+    },
+    {
+      "file": "live-03/return-input-303-live-03-runtime.log.gz",
+      "expandedBytes": 2591184,
+      "archiveBytes": 88396,
+      "expandedCredentialMatches": 0,
+      "expandedBytesEqualActualOriginal": true
+    },
+    {
+      "file": "live-01/diagnostic-v1-backend.json.gz",
+      "expandedBytes": 10075736,
+      "archiveBytes": 582863,
+      "expandedCredentialMatches": 0,
+      "expandedBytesEqualActualOriginal": true
+    },
+    {
+      "file": "live-01/diagnostic-v1-client.json.gz",
+      "expandedBytes": 8250627,
+      "archiveBytes": 1056789,
+      "expandedCredentialMatches": 0,
+      "expandedBytesEqualActualOriginal": true
+    }
+  ],
+  "boundary": "Lossless compression of already redacted owned evidence. Exact expanded bytes compared to original source; no mutable-code checksum acceptance."
+}

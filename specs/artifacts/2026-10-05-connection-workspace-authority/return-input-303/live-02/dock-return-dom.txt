@@ -1,0 +1,341 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+    - button "返回正文输入链核验":
+      - generic: 返回正文输入链核验
+    - img "Running":
+    - button "More actions":
+    - button "Collapse Anonymous 799e67" [expanded]:
+      - generic: Anonymous 799e67
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+      - button "返回正文输入链核验":
+        - generic: 返回正文输入链核验
+      - img "Running":
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18265":
+        - generic: Online
+  - separator "Resize left panel"
+  - complementary "Agent activity":
+    - list:
+      - button "orchestrator · Pending · 请只委托一名只读研究员，使用webfetch实际读取下面三份官方网页正文： https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 请研究员在自己的可见消息里直接写一篇中文分析，十八个小节、约6000汉字，每节至少两段。围绕长对话中的流式正文、来源阅读、用户上翻、布局变化、键盘焦点解释这些文档的适用边界，包含一张比较表和两个简短代码示例，明确区分文档事实与设计建议，引用实际读到的页面。只读取这三篇，不搜索扩展资料，不读取本地文件或凭据，不创建或修改文件，不发布额外产物。不需要调用任何其他成员，负责人直接核对研究员返回的正文和读取记录后收尾。保持所有研究结果在正常可见消息中。"
+      - 'button "orchestrator · Idle · ## Orchestrator Control Occurrence Continue the same unresolved durable ingress from the exact preceding assistant Turn. ## Wake Provenance 这是一条 wake 消息，不是用户发送的新消息。 This is a wake message, not a user-authored message. Current durable wake occurrence=art_hSzoWuvOidC7IuYJCNUe. This wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization. On the initial Task wake, the creator''s original request is already in its real participant Message in this Turn. It has no task-root message identity. Read that Message directly."'
+      - button
+  - generic "Loading task"
+  - generic: 返回正文输入链核验
+  - status
+  - button "Project actions":
+  - generic "Running · 2m 25s":
+    - generic: Running
+    - generic: 2m 25s
+  - button "Side chat":
+  - button "Environment information":
+  - button "Close right dock" [active] [pressed]:
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph:
+        - text: 请只委托一名只读研究员，使用webfetch实际读取下面三份官方网页正文：
+        - link "https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver":
+          - /url: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
+        - link "https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events":
+          - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events
+        - link "https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html":
+          - /url: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html
+      - paragraph: 请研究员在自己的可见消息里直接写一篇中文分析，十八个小节、约6000汉字，每节至少两段。围绕长对话中的流式正文、来源阅读、用户上翻、布局变化、键盘焦点解释这些文档的适用边界，包含一张比较表和两个简短代码示例，明确区分文档事实与设计建议，引用实际读到的页面。只读取这三篇，不搜索扩展资料，不读取本地文件或凭据，不创建或修改文件，不发布额外产物。不需要调用任何其他成员，负责人直接核对研究员返回的正文和读取记录后收尾。保持所有研究结果在正常可见消息中。
+    - article:
+      - generic: orchestrator
+      - generic "Session ran for 22s (between first message and terminal status)": 22s
+      - button "Handoff context":
+        - generic: Handoff context
+      - paragraph: 我会只委托一名只读研究员，限定其实际读取这三篇网页，并在可见消息中直接完成中文分析。随后我会核对正文结构、引用与读取记录，不调用其他成员，也不创建文件或额外产物。
+      - button "dispatch_agent · target=base-researcher":
+        - generic: dispatch_agent
+        - generic: target=base-researcher
+    - region "Sub-agent progress":
+      - article:
+        - strong: base-researcher
+        - button "Open the full base-researcher conversation":
+          - text: Open
+        - log "base-researcher activity":
+          - button "Handoff context":
+            - generic: Handoff context
+          - generic: webfetch
+          - generic: "The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to f..."
+          - generic: "两篇 MDN 页面的核心正文已读到：尺寸观察的回调与循环风险、指针命中规则，以及 `pointer-events: none` 不会排除 Tab 焦点。第二篇返回内容在后续站点导航处被截断，核心正文可见；W3C 页面首次读取遇到连接关闭，我将只重试同一个指定 URL。"
+          - generic: webfetch
+          - generic: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html (text/html; charset=utf-8)
+          - generic: "# 长对话中的正文增长、来源阅读与焦点秩序：三份官方文档的适用边界 ## 1. 研究范围与证据性质 **文档事实**：本分析只依据实际通过 `webfetch` 读取的三篇指定网页：MDN 的 [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver..."
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Add a thought, or keep working…
+  - button
+  - button "Add supported files":
+  - generic "Longer research, office, production, and finished deliverables.":
+    - generic: Work
+  - generic: Task
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model openai/gpt-6.1-sol. Click to change.":
+    - generic "openai/gpt-6.1-sol"
+  - button "Stop":
+    - generic: Stop
+  - button "Scroll to bottom":
+  - separator "Resize right panel"
+  - complementary "Tools panel":
+    - tablist "Open tools":
+      - tab "Expert Squad agents" [selected]:
+        - generic: Expert Squad agents
+      - button "Close tab":
+    - button "Add tool":
+    - button "Close panel":
+    - tabpanel "Expert Squad agents":
+      - button "All agents (1)":
+        - text: All agents (1)
+      - button "Expert Squad agents base-researcher":
+        - generic: base-researcher
+      - textbox
+      - combobox
+      - article:
+        - generic: base-researcher
+        - generic "Session ran for 1m 59s (between first message and terminal status)": 1m 59s
+        - button "Handoff context":
+          - generic: Handoff context
+        - paragraph: 我会只读取指定的三篇官方网页正文，不访问其他链接或本地文件。读取后将直接在可见消息中交付十八节中文分析，区分文档事实与设计建议，并核对表格、代码示例和段落数量。
+        - button "webfetch · https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver (text/html)":
+          - generic: webfetch
+          - generic: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver (text/html)
+        - group "Sources":
+          - 'link "Open web source: ResizeObserver - Web APIs | MDN · developer.mozilla.org"':
+            - /url: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
+            - generic: ResizeObserver - Web APIs | MDN
+            - generic: developer.mozilla.org
+        - button "webfetch · https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events (text/html)":
+          - generic: webfetch
+          - generic: https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events (text/html)
+        - group "Sources":
+          - 'link "Open web source: pointer-events CSS property - CSS | MDN · developer.mozilla.org"':
+            - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/pointer-events
+            - generic: pointer-events CSS property - CSS | MDN
+            - generic: developer.mozilla.org
+        - 'button "webfetch · The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"':
+          - generic: webfetch
+          - generic: "The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+          - generic: 1 failed
+        - paragraph:
+          - text: 两篇 MDN 页面的核心正文已读到：尺寸观察的回调与循环风险、指针命中规则，以及
+          - code: "pointer-events: none"
+          - text: 不会排除 Tab 焦点。第二篇返回内容在后续站点导航处被截断，核心正文可见；W3C 页面首次读取遇到连接关闭，我将只重试同一个指定 URL。
+        - button "webfetch · https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html (text/html; charset=utf-8)":
+          - generic: webfetch
+          - generic: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html (text/html; charset=utf-8)
+        - group "Sources":
+          - 'link "Open web source: Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C · www.w3.org"':
+            - /url: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html
+            - generic: "Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C"
+            - generic: www.w3.org
+        - heading "长对话中的正文增长、来源阅读与焦点秩序：三份官方文档的适用边界" [level=1]
+        - heading "1. 研究范围与证据性质" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：本分析只依据实际通过
+          - code: webfetch
+          - text: 读取的三篇指定网页：MDN 的
+          - link "ResizeObserver":
+            - /url: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
+          - text: 、MDN 的
+          - link "pointer-events":
+            - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events
+          - text: ，以及 W3C 的
+          - 'link "Understanding SC 2.4.3: Focus Order"':
+            - /url: https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html
+          - text: 。下文分别简称为文档 A、B、C。没有访问页面中的扩展链接，没有搜索其他资料，也没有读取本地文件。
+        - paragraph:
+          - strong: 分析边界
+          - text: ：两篇 MDN 文档说明接口或属性的行为；文档 C 是成功准则的解释页面，页面明确标注其解释性内容并非额外的 WCAG 合规要求。以下标为“设计建议”的内容，是将已读事实应用于长对话场景的推导，不是文档直接规定的聊天产品方案，也不构成对任何实际产品的验证结论。
+        - heading "2. 三份文档解决的是不同层次的问题" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 讨论元素盒子尺寸的变化及观察回调；文档 B 讨论元素在什么条件下成为指针事件目标；文档 C 讨论顺序导航中可聚焦组件的次序是否保留意义与可操作性。因此，正文变高、遮罩是否挡住点击、Tab 是否按合理顺序移动，是三个相关但不能互相替代的问题。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：长对话应分别管理布局状态、阅读状态和焦点状态。正文增长可以触发布局处理，却不能直接证明用户愿意追随最新消息；指针穿透可以方便点击底层内容，却不能证明键盘导航也合理。下表中的应用方案均为建议，不能倒过来作为文档要求。
+        - table:
+          - rowgroup:
+            - row "文档 已读正文明确说明 长对话中的设计应用 不能据此保证":
+              - columnheader "文档"
+              - columnheader "已读正文明确说明"
+              - columnheader "长对话中的设计应用"
+              - columnheader "不能据此保证"
+          - rowgroup:
+            - row "A：ResizeObserver 报告内容盒、边框盒或 SVG 包围盒的尺寸变化 感知正文增长、栏宽变化后的尺寸结果 用户滚动意图、消息完成、焦点正确":
+              - cell "A：ResizeObserver"
+              - cell "报告内容盒、边框盒或 SVG 包围盒的尺寸变化"
+              - cell "感知正文增长、栏宽变化后的尺寸结果"
+              - cell "用户滚动意图、消息完成、焦点正确"
+            - row "B：pointer-events 控制指针事件目标；none 不排除 Tab 焦点 让装饰层穿透，允许指定子控件接收指针事件 整体禁用、模态隔离、键盘不可达":
+              - cell "B：pointer-events"
+              - cell "控制指针事件目标；none 不排除 Tab 焦点":
+                - text: 控制指针事件目标；
+                - code: none
+                - text: 不排除 Tab 焦点
+              - cell "让装饰层穿透，允许指定子控件接收指针事件"
+              - cell "整体禁用、模态隔离、键盘不可达"
+            - row "C：Focus Order 在准则适用条件下，焦点次序保留意义与可操作性 组织来源入口、面板控件及返回路径 唯一视觉顺序、完整无障碍合规":
+              - cell "C：Focus Order"
+              - cell "在准则适用条件下，焦点次序保留意义与可操作性"
+              - cell "组织来源入口、面板控件及返回路径"
+              - cell "唯一视觉顺序、完整无障碍合规"
+        - heading "3. ResizeObserver 观察的是尺寸，不是正文内容" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 的定义是报告元素内容盒或边框盒的尺寸变化，也可以报告 SVG 元素包围盒的变化。内容盒不包含内边距和边框，边框盒则包含这些部分。这一对象边界很重要：观察结果描述的是指定元素的尺寸，而不是文本含义、网络传输阶段或者消息生成状态。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：流式正文不断增加时，可以观察承载正文的内容区域，以获知尺寸变化的结果。但不能将一次观察通知理解为“一段文字已经完整生成”，也不能将没有通知理解为“没有新内容”。如果观察的是固定高度的滚动容器，其内部文字增加未必改变容器自身盒子；因此应先明确观察目标，再决定它能支持什么判断。
+        - heading "4. 流式更新与布局通知不是一一对应关系" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 的示例通过滑块改变容器宽度，再按照观察到的尺寸调整字体。正文特别说明，元素尺寸变化可以与视口变化无关。该示例说明观察器能够响应元素局部变化，但没有承诺每个字符、每个传输片段或每个语义段落都会对应一次独立回调。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：应把“收到正文片段”和“布局出现尺寸变化”作为不同事件处理。文字可能先填满现有行再换行，也可能在同一高度内替换内容；这些场景说明尺寸信号不足以承担内容状态判断。产品可用正文更新记录表达生成进度，用尺寸观察表达布局结果，避免以回调次数估算生成速度或完成程度。
+        - heading "5. 用户上翻不能由尺寸变化推断" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 列出的能力是开始观察指定元素、停止观察某个元素，以及断开全部观察目标。其定义和示例都没有把尺寸通知描述为滚动事件或用户意图事件。因此，ResizeObserver 不是滚动意图检测机制；它也没有说明如何判断用户正在阅读历史消息、拖动滚动条或准备返回底部。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：可将界面分为“追随最新内容”和“阅读历史内容”两种状态，并由独立的用户操作与位置判断决定切换。用户上翻后，正文即使继续变高，也不应仅因观察通知而把视口拉回底部。提供明确的“返回最新”操作，是让用户重新表达追随意愿的方案；具体阈值和恢复规则则需要产品自行定义。
+        - heading "6. 保持阅读位置不等于保持一个固定数字" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 提供尺寸变化信号，但正文没有给出完整的滚动位置保持算法，也没有承诺保存某个滚动偏移量即可保持同一阅读内容。尺寸观察本身不标识用户正看的句子，更不解释变化发生在阅读点之前还是之后。因此，它只能是位置维护的输入之一，而不是完整解决方案。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：对正在上翻核对来源的用户，优先考虑保留“哪条消息、哪个段落及其附近位置”，而不只是记录一个像素数。如果阅读点之前的内容展开，原偏移量可能仍然有效却对应不同文字；如果变化发生在阅读点之后，则可能无需修正。这样的语义锚点方案属于设计推导，本次没有实现或测试其浏览器行为。
+        - heading "7. 来源面板也会改变正文布局" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 的示例明确展示了容器宽度变化对文字表现的影响，并强调变化不必来自视口。因而，尺寸观察并不限于浏览器窗口调整。在长对话的情境中，来源栏打开或关闭所引发的局部尺寸变化，属于该接口可以辅助观察的一类布局结果。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：打开来源面板可能压缩正文宽度，使同一段文字重新换行；设计时应同时考虑正文阅读点与来源控件的焦点位置。不能把这种增高误判为新正文到达，更不能因此强制追随消息末尾。建议区分正文追加、来源展开、容器宽度变化等原因，让位置恢复和追随逻辑依据场景作决定，而不是统一执行滚到底部。
+        - heading "8. 回调中的布局写入可能产生反馈循环" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 的 “Observation Errors” 说明，符合规范的实现会在绘制前调用观察通知，样式和布局重新计算又可能引发进一步通知。浏览器通过处理更深层元素、延后部分通知等方式避免锁死，并可能报告
+          - code: ResizeObserver loop completed with undelivered notifications.
+          - text: 。文档明确指出，这并不消除无限循环本身。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：应避免在回调里无条件扩大被观察元素，或让正文与来源栏彼此根据对方尺寸不断调整。文档介绍了延后写入和检查预期尺寸等办法，但不能把
+          - code: requestAnimationFrame
+          - text: 当作自动收敛保证：其无限增宽示例即使延后执行，仍然会持续增长。长对话的稳定性需要有终止条件，而不是只隐藏或推迟错误。
+        - heading "9. 代码示例一：尺寸通知只触发有条件的处理" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 A 展示了创建观察器、调用
+          - code: observe()
+          - text: ，以及通过
+          - code: disconnect()
+          - text: 结束全部观察的接口。下例据此展示一种职责分离：尺寸变化只发出处理信号，是否追随最新内容由另一份状态决定。观察器不会自行判断用户意图，也没有调用焦点管理。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：示例中的追随状态应由界面的独立交互逻辑维护，进入历史阅读时关闭，用户明确返回最新时再开启。示例仅展示这种分离关系，不是完整的滚动保持算法；它没有处理反向布局、历史加载或阅读锚点，并且未经执行验证。辅助函数代表应用已有逻辑，不是文档 A 提供的方法。
+        - generic: js
+        - button "Copy code":
+        - code: "// followingLatest 由独立的用户交互逻辑维护。 let pending = false; const observer = new ResizeObserver(() => { if (pending) return; pending = true; requestAnimationFrame(() => { pending = false; if (readingState.followingLatest) { updateLatestPosition(); // 应用函数；不应改变被观察内容的尺寸 } }); }); observer.observe(messageContent); // 视图销毁时：observer.disconnect();"
+        - heading "10. pointer-events 控制的是指针命中" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 B 将
+          - code: pointer-events
+          - text: 定义为控制元素成为指针事件目标的条件。其 “Description” 说明，
+          - code: none
+          - text: 会让事件穿过该元素，命中下方目标。正文还把若干取值标注为 SVG 专用，或在 HTML 中属于实验性支持，不能因为语法表列出了某个值，就认为普通 HTML 中所有取值都具备相同适用性。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：在聊天正文上方的装饰渐变、非交互提示背景等场景中，可以考虑使用
+          - code: none
+          - text: ，减少覆盖层对下方来源链接的阻挡。但这一属性不是内容权限控制，也不是统一的“禁用组件”开关。对于“加载中暂不可操作”的真实按钮，应单独设计可操作状态与提示，不能只让鼠标点击穿透后就宣称组件已被禁用。
+        - heading "11. 父元素穿透不代表父监听器永不执行" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 B 明确说明，如果子元素允许成为指针目标，针对子元素的事件仍可沿父链传播，在捕获或冒泡阶段触发父元素监听器。页面还特别解释，指针进入或离开后代时，即使父元素设置了
+          - code: none
+          - text: ，父元素仍可能收到
+          - code: pointerenter
+          - text: 、
+          - code: pointerleave
+          - text: 。该属性也具有继承性。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：如果来源浮层背景采用穿透，而关闭按钮恢复指针命中，应检查父层是否仍有点击后跳转、折叠或追随最新内容的逻辑。不要假设“父层不可命中”就意味着父层的所有交互代码失效。设计事件处理时应区分实际目标与传播路径，避免用户关闭来源面板的操作同时触发正文区域的不相关动作。
+        - heading "12. pointer-events 与键盘焦点的明确边界" [level=2]
+        - paragraph:
+          - strong: 文档事实
+          - text: ：文档 B 的 “Description” 直接指出，设置了
+          - code: "pointer-events: none"
+          - text: 的元素仍然可以通过 Tab 顺序导航获得焦点。准确理解是：这个属性不会单凭自身把原本可聚焦的元素从键盘顺序中排除；它也不会把原本不可聚焦的所有元素自动变为可聚焦元素。指针命中与键盘可达性必须分别判断。
+        - paragraph:
+          - strong: 设计建议
+          - text: ：如果来源链接仍在 Tab 路径中，却因为样式不能被鼠标点击，用户会面对不同输入方式下不一致的状态。可以有意采用这种设计，但必须解释其用途并验证操作逻辑，而不是把它当成默认禁用方式。尤其不能只给模态背景设置
+          - code: none
+          - text: 就宣称背景

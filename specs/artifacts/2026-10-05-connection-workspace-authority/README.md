@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [返回输入链303 Recall](return-input-plan-303.md) / [完整证据](return-input-303/README.md)：确认 HTTP 快照落后于其游标，7 字符短暂缺失；临时诊断全部撤除，共享修复继续。
+
 - [生成期间返回302 Recall](active-return-plan-302.md) / [真实证据](active-return-302/README.md)：两次真实活跃返回和 Sources 阅读，新增瞬时文字拼接异常复现。
 
 - [完整快照回放301 Recall](replay-snapshot-plan-301.md) / [真实证据](replay-snapshot-301/README.md)：共享最新完整状态修复、21 项后端回归和真实 Sources/正文验收。

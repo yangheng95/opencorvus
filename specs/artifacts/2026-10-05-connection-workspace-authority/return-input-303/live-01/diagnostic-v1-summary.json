@@ -1,0 +1,40 @@
+{
+  "backendRecords": 1420,
+  "clientRecords": 1983,
+  "mergedRecords": 3272,
+  "conflicts": [],
+  "gaps": [
+    {
+      "after": 0,
+      "before": 2,
+      "at": "2026-10-11T14:23:42.135Z"
+    },
+    {
+      "after": 1290,
+      "before": 2943,
+      "at": "2026-10-11T14:26:01.415Z"
+    }
+  ],
+  "last": {
+    "message": "Markdown input",
+    "sequence": 4925,
+    "at": 274153,
+    "utc": "2026-10-11T14:27:49.142Z",
+    "group": "render",
+    "counts": {
+      "control": 58,
+      "event": 4167,
+      "projection": 195,
+      "render": 505
+    },
+    "facts": {
+      "owner": 14,
+      "revision": 30,
+      "text": "核对完成。研究员已在自己的可见消息中交付十八节中文分析，篇幅接近要求，每节至少两段，包含一张比较表和两个简短代码示例，并明确区分文档事实与设计建议。\n\n实际读取记录确认只访问了指定的三篇官方网页，没有搜索扩展资料、读取本地文件或凭据、创建或修改文件，也没有发布额外产物。关键论述与返回的正文一致。`pointer-events` 返回内容的末尾确有截断，但被省略的是站点导航，分析引用的核心正文已返回；研究员已如实说明这一限制。代码仅作示意，未执行，也未声称完成产品实测。全部研究结果保留在正常可见消息中。",
+      "streaming": false,
+      "localeSeq": 3
+    }
+  },
+  "caps": [],
+  "boundary": "Raw backend plus actual UI Copy export; retain missing ranges. A zero mismatch sample is not complete validation."
+}

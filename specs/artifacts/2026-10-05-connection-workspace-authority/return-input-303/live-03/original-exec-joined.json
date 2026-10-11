@@ -1,0 +1,8 @@
+{
+  "sessionID": 32835,
+  "chunk_id": "c7b044",
+  "wall_time_seconds": 1.6648561,
+  "exit_code": 0,
+  "original_token_count": 307,
+  "output": "copiedPair            : {@{outcome=removed; presentAfter=False; copiedLength=2194; path=C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\return-input-303-live-03\\runtime\\data\\auth.json}, @{outcome=removed; presentAfter=False; copiedLength=9155406; path=C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\return-input-303-live-03\\runtime\\data\\models.json}}\r\nnativeSettlement      : @{occurrence=return-input-303-live-03-ae4cb902-ebb1-499a-90d9-25204d8ae6d0; outcome=settled; host=; target=; observedAtUtc=2026/10/11 15:07:11; deadlineAt=1791732498110; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup}\r\noccurrence            : return-input-303-live-03-ae4cb902-ebb1-499a-90d9-25204d8ae6d0\r\nphysicalCompletion    : True\r\npairedCleanupComplete : True\r\nobservedAtUtc         : 2026/10/11 15:07:14\r\n\r\n{\"physicalCompletion\":true,\"taskID\":\"tsk_g00VXkmp7a008aQiq1Mi\",\"boundary\":\"Exact Task lifecycle and native/provider completion; UI remains Root-owned\",\"providerEOFRequests\":13,\"epoch\":1,\"qualification\":\"Task\"}\r\n"
+}
