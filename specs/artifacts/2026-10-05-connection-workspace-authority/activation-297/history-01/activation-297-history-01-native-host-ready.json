@@ -1,0 +1,40 @@
+{
+  "occurrence": "activation-297-history-01-9fd197f5-f252-4a68-94c4-059c46dc8ab6",
+  "outcome": "ready",
+  "host": {
+    "pid": 65220,
+    "processInstanceID": "win32:639273138473798750",
+    "occurrenceID": "6e2bd059-a588-41c2-bd56-b6d567c6fd30"
+  },
+  "parent": {
+    "pid": 61284,
+    "processInstanceID": "win32:639273138454073147",
+    "occurrenceID": "bbe6de59-9274-4105-b5fc-99cf21f32d04"
+  },
+  "target": {
+    "pid": 45208,
+    "processInstanceID": "win32:639273138482745773",
+    "occurrenceID": "7ef0907e-c12e-4e3b-95cb-439586d35149"
+  },
+  "targetBirthAtMs": 1791717048274,
+  "deadlineAt": 1791717947282,
+  "observedAtUtc": "2026-10-11T11:10:48.303Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18254",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\activation-297-history-01\\startup.json",
+    "--startup-occurrence",
+    "activation-297-history-01-9fd197f5-f252-4a68-94c4-059c46dc8ab6",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

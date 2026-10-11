@@ -1,0 +1,35 @@
+{
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\activation-297-history-04\\runtime",
+  "evidencePrefix": "activation-297-history-04",
+  "port": 18257,
+  "targetBirthAtMs": 1791718438332,
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\activation-297-history-04\\evidence",
+  "owner": {
+    "processInstanceID": "win32:639273152383323959",
+    "ProcessId": 67852
+  },
+  "occurrence": "activation-297-history-04-ba50001f-a951-4ca2-b72c-6764e639c20c",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\activation-297\\history-04",
+  "nativeTarget": {
+    "pid": 67852,
+    "processInstanceID": "win32:639273152383323959",
+    "occurrenceID": "6c9146d9-72a2-4405-a51f-41bddcb9c3db"
+  },
+  "nativeDeadlineAt": 1791719337512,
+  "authorityStaging": "None; no model Task requested",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\activation-297-history-04",
+  "host": {
+    "pid": 77944,
+    "processInstanceID": "win32:639273152375891091",
+    "occurrenceID": "34417cfa-8886-4481-8286-59fc0f026a42"
+  },
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "observedProcessChain": [
+    {
+      "pid": 67852,
+      "processInstanceID": "win32:639273152383323959",
+      "occurrenceID": "6c9146d9-72a2-4405-a51f-41bddcb9c3db"
+    }
+  ]
+}

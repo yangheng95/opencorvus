@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [会话点击297 Recall](activation-plan-297.md) / [真实证据](activation-297/README.md)：滚动时的命中抑制导致点击落背景；恢复交互行原生点击。
+
 - [来源原文读位296 Recall](text-owner-plan-296.md) / [真实证据](text-owner-296/README.md)：修复工具内容返回开头，保留实时闪烁及指针打开待查边界。
 
 - [布局通知295 Recall](resize-review-plan-295.md) / [真实证据](resize-review-295/README.md)：三次通知与Virtua父容器测量对应，移除全部临时诊断后正常页面复核。

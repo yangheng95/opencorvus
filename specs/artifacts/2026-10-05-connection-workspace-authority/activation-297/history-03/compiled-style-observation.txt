@@ -1,0 +1,9 @@
+Actual excerpt read from main-BudIr4v5.js by exec during this turn, before the subsequent build retired that file. These lines preserve the observed compiler output; they are not a fresh read of the current bundle.
+
+Template excerpt:
+TIe=k("<div class=conversation-virtual-window style=pointer-events:inherit>")
+
+Dynamic update excerpt:
+var M=TIe();return Ir(A,M),g(M,()=>C.children),ue(te=>{var X=l().length,z={...C.style};return X!==te.e&&N(M,"data-count",te.e=X),te.t=bo(M,z,te.t),te},{e:void 0,t:void 0}),M
+
+The actual UI failed in history-03. The final memo implementation was separately verified through the real history-04 page and screenshots.

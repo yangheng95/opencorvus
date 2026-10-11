@@ -546,6 +546,11 @@ resizes; explicit history restoration, user navigation and bottom following
 retain their existing controls. The inner virtual window's own opt-out alone
 does not define the policy of the surrounding scrollport. Child transcript and
 editor scrollports keep their separate existing ownership.
+The virtual-window adapter inherits the surrounding surface's pointer policy
+through one computed style object. Library scroll updates keep visible buttons,
+source links and tool controls interactive while modal background restrictions
+still apply. Item mounting, measurement, scroll compensation and keyboard
+semantics stay with their owners.
 The same measured Composer block size supplies main content end padding and
 native scroll-padding clearance, including the existing edge-fade extent, so
 browser focus scrolling can use the region above the floating Composer's paint.

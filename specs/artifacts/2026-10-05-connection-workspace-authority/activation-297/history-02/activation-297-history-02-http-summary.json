@@ -1,0 +1,126 @@
+{
+  "requests": [
+    {
+      "level": "info",
+      "time": "2026-10-11T11:23:57.578Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "68f27c07-6306-4fb9-8639-ff1b05e4023c",
+        "method": "GET",
+        "path": "/ui",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T11:23:57.579Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "68f27c07-6306-4fb9-8639-ff1b05e4023c",
+        "method": "GET",
+        "path": "/ui",
+        "status": "completed",
+        "statusCode": 308,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T11:23:57.587Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8062d663-51bd-4a70-92e1-f11079db4070",
+        "method": "GET",
+        "path": "/ui/",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T11:23:57.587Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8062d663-51bd-4a70-92e1-f11079db4070",
+        "method": "GET",
+        "path": "/ui/",
+        "status": "completed",
+        "statusCode": 404,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T11:24:52.946Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d8945e31-1dac-457d-90a5-bb330bfe6a03",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T11:24:52.946Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d8945e31-1dac-457d-90a5-bb330bfe6a03",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T11:26:41.650Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "21911837-c3ec-47b2-bfdc-61c3b9064d10",
+        "method": "POST",
+        "path": "/shutdown",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-11T11:26:41.750Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "21911837-c3ec-47b2-bfdc-61c3b9064d10",
+        "method": "POST",
+        "path": "/shutdown",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 100
+      },
+      "message": "request"
+    }
+  ],
+  "qualifier": "Only canonical timestamp rows are assigned to the new process window; ambiguous raw lines retained separately",
+  "unknownTimestampLines": [],
+  "target": {
+    "pid": 76748,
+    "processInstanceID": "win32:639273145981628812",
+    "occurrenceID": "e422378f-eb75-4fa9-a3ed-9b65ffa6dd7b"
+  },
+  "afterTargetBirthUtc": "2026-10-11T11:23:18.1628812Z",
+  "unparsedSourceLines": 0,
+  "retainedNewLines": 18
+}

@@ -1,0 +1,106 @@
+{
+  "finalTypes": {
+    "actualExit": 0,
+    "parent": 83513
+  },
+  "nativeParents": [
+    {
+      "actualExit": 0,
+      "parent": 95962
+    },
+    {
+      "actualExit": 0,
+      "parent": 16577
+    },
+    {
+      "actualExit": 0,
+      "parent": 66849
+    },
+    {
+      "actualExit": 0,
+      "parent": 95621
+    }
+  ],
+  "stages": [
+    {
+      "terminal": {
+        "occurrenceID": "activation-297-history-01-9fd197f5-f252-4a68-94c4-059c46dc8ab6",
+        "pid": 45208,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "observedAtUtc": "2026-10-11T11:18:46.749Z",
+      "native": {
+        "pid": 45208,
+        "processInstanceID": "win32:639273138482745773",
+        "occurrenceID": "7ef0907e-c12e-4e3b-95cb-439586d35149"
+      },
+      "stage": "history-01",
+      "remainingMs": 420533
+    },
+    {
+      "terminal": {
+        "occurrenceID": "activation-297-history-02-f2064618-13ba-44e2-bbd6-e85194396f90",
+        "pid": 76748,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "observedAtUtc": "2026-10-11T11:26:41.878Z",
+      "native": {
+        "pid": 76748,
+        "processInstanceID": "win32:639273145981628812",
+        "occurrenceID": "e422378f-eb75-4fa9-a3ed-9b65ffa6dd7b"
+      },
+      "stage": "history-02",
+      "remainingMs": 695397
+    },
+    {
+      "terminal": {
+        "occurrenceID": "activation-297-history-03-b2dc81ea-e188-42f1-8a5c-617d155a89c7",
+        "pid": 68636,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "observedAtUtc": "2026-10-11T11:31:40.886Z",
+      "native": {
+        "pid": 68636,
+        "processInstanceID": "win32:639273149254262196",
+        "occurrenceID": "acbdf47f-a130-4039-af7f-bb5c9f91f9d8"
+      },
+      "stage": "history-03",
+      "remainingMs": 723717
+    },
+    {
+      "terminal": {
+        "occurrenceID": "activation-297-history-04-ba50001f-a951-4ca2-b72c-6764e639c20c",
+        "pid": 67852,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "observedAtUtc": "2026-10-11T11:37:05.835Z",
+      "native": {
+        "pid": 67852,
+        "processInstanceID": "win32:639273152383323959",
+        "occurrenceID": "6c9146d9-72a2-4405-a51f-41bddcb9c3db"
+      },
+      "stage": "history-04",
+      "remainingMs": 711677
+    }
+  ],
+  "finalBuild": {
+    "parent": 38693,
+    "seconds": 50.96,
+    "actualExit": 0
+  },
+  "uiOutcomes": {
+    "history02": "Failed: missing UI frozen before build completed",
+    "history03": "Failed: inline constant overwritten by compiled spread",
+    "history04": "Passed: actual final page interactions and manual screenshots",
+    "history01": "Diagnostic/intermediate CSS only"
+  },
+  "boundary": "Actual tool returns recorded by root; native details read from original settlement receipts; no UI automated tests"
+}

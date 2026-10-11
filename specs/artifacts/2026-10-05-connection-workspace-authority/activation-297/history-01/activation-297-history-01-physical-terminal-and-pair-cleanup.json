@@ -1,0 +1,68 @@
+{
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "activation-297-history-01-9fd197f5-f252-4a68-94c4-059c46dc8ab6",
+    "outcome": "settled",
+    "host": {
+      "pid": 65220,
+      "processInstanceID": "win32:639273138473798750",
+      "occurrenceID": "6e2bd059-a588-41c2-bd56-b6d567c6fd30"
+    },
+    "target": {
+      "pid": 45208,
+      "processInstanceID": "win32:639273138482745773",
+      "occurrenceID": "7ef0907e-c12e-4e3b-95cb-439586d35149"
+    },
+    "observedAtUtc": "2026-10-11T11:18:46.749Z",
+    "deadlineAt": 1791717947282,
+    "terminal": {
+      "occurrenceID": "activation-297-history-01-9fd197f5-f252-4a68-94c4-059c46dc8ab6",
+      "pid": 45208,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 45208,
+        "processInstanceID": "win32:639273138482745773",
+        "occurrenceID": "7ef0907e-c12e-4e3b-95cb-439586d35149"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 65220,
+        "processInstanceID": "win32:639273138473798750",
+        "occurrenceID": "6e2bd059-a588-41c2-bd56-b6d567c6fd30"
+      }
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\activation-297-history-01\\runtime\\data\\auth.json",
+      "outcome": "already_absent",
+      "presentAfter": false
+    },
+    {
+      "copiedLength": 2001983,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\activation-297-history-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "observedAtUtc": "2026-10-11T11:18:49.4254038Z",
+  "occurrence": "activation-297-history-01-9fd197f5-f252-4a68-94c4-059c46dc8ab6"
+}

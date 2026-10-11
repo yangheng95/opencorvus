@@ -296,6 +296,9 @@ function VirtualizedConversationCards(props: {
 
   const VirtualWindowShell = (shellProps: CustomContainerComponentProps) => {
     let shellEl: HTMLDivElement | undefined
+    // Keep one dynamic style object so library updates retain the surrounding
+    // surface's modal and interaction policy while rendered controls scroll.
+    const windowStyle = createMemo(() => ({ ...shellProps.style, "pointer-events": "inherit" as const }))
     const setRef = (node: HTMLDivElement) => {
       if (rootEl && rootEl !== node) virtualRootResizeObserver?.unobserve(rootEl)
       rootEl = shellEl = node
@@ -308,7 +311,12 @@ function VirtualizedConversationCards(props: {
       if (rootEl === shellEl) rootEl = undefined
     })
     return (
-      <div ref={setRef} class="conversation-virtual-window" data-count={order().length} style={shellProps.style}>
+      <div
+        ref={setRef}
+        class="conversation-virtual-window"
+        data-count={order().length}
+        style={windowStyle()}
+      >
         {shellProps.children}
       </div>
     )
