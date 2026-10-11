@@ -137,13 +137,24 @@ and finally releases the compacted original events in their retained order.
 Session bootstrap and Task live replay use the same conversation buffer rule:
 the latest complete Message metadata or Part snapshot supersedes earlier values
 for that exact Task/Session/Message/Part identity. A complete Part absorbs its
-earlier deltas; later deltas keep their original sequence and epoch. Shorter
+earlier deltas; only the latest subsequent delta for each field is retained,
+with its original sequence and epoch. Shorter
 authoritative rewrites are valid. Message metadata updates preserve Parts,
 removals supersede the removed identity, and a complete Task-root Message move
 supersedes its source and destination copies. This avoids replaying historical
 empty text over an already hydrated body. Connected subscribers still receive
 every original live event. Compaction does not advance the retention floor;
 the existing expiration, terminal retirement and epoch rules remain authoritative.
+
+Text and reasoning `message.part.delta` events require `field: "text"`, the
+original `delta` fragment and the complete current `value` from the processor's
+existing accumulator. Command-line and Agent Client Protocol consumers output
+the fragment; conversation projections assign the complete value. Task live
+cursors still include unpersisted activity, so a newly attached projection must
+not append a fragment to an HTTP prefix that may precede that cursor. The main
+writer's bounded batch retains the latest actual field event, and child/Side Chat
+projections apply the same value contract without string-overlap inference.
+Tool input drafts continue to use complete pending Part snapshots.
 
 The transcript snapshot is additive and bounded. It repairs creation events
 missed before stream attachment or during disconnection and supplies the

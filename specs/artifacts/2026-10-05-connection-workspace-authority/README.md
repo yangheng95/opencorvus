@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [完整字段304 Recall](field-value-plan-304.md) / [实际证据](field-value-304/README.md)：共享流式恢复修复、Sources 真页面验收、传输开销量化与后续方向。
+
 - [返回输入链303 Recall](return-input-plan-303.md) / [完整证据](return-input-303/README.md)：确认 HTTP 快照落后于其游标，7 字符短暂缺失；临时诊断全部撤除，共享修复继续。
 
 - [生成期间返回302 Recall](active-return-plan-302.md) / [真实证据](active-return-302/README.md)：两次真实活跃返回和 Sources 阅读，新增瞬时文字拼接异常复现。

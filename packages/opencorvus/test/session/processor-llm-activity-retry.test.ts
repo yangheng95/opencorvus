@@ -672,6 +672,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               field: "text",
               partType: "reasoning",
               delta: "Bounded reasoning before abort.",
+              value: "Bounded reasoning before abort.",
             },
           ])
           expect(

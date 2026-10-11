@@ -1,0 +1,37 @@
+{
+  "boundary": "Actual live public Task stream compared to completed canonical Parts",
+  "parts": [
+    {
+      "partID": "prt_g0VXkxKpQ00sI1r1zDbO",
+      "events": 45,
+      "chars": 84,
+      "discontinuities": 0,
+      "canonicalMatch": false
+    },
+    {
+      "partID": "prt_g0VXkxPnd00oJO3V4suc",
+      "events": 61,
+      "chars": 94,
+      "discontinuities": 0,
+      "canonicalMatch": false
+    },
+    {
+      "partID": "prt_g0VXkxVON00LC1KahQmK",
+      "events": 4529,
+      "chars": 7738,
+      "discontinuities": 0,
+      "canonicalMatch": true
+    },
+    {
+      "partID": "prt_g0VXkyGha00N5R019R4p",
+      "events": 197,
+      "chars": 304,
+      "discontinuities": 0,
+      "canonicalMatch": true
+    }
+  ],
+  "wireBytes": 53141140,
+  "fieldBytes": 41749950,
+  "rawBytes": 19525,
+  "events": 5551
+}

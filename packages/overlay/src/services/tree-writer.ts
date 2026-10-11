@@ -516,7 +516,6 @@ const terminalCardProjectionByReason = {
 const standaloneQuestionInteractions = new Map<string, any>()
 interface BufferedPartDelta {
   event: any
-  delta: string
 }
 
 const PART_DELTA_FLUSH_INTERVAL_MS = 50
@@ -827,39 +826,24 @@ function requireMessageCardProjection(session: SessionInfo, messageID: string, e
 
 function validatePartDeltaTarget(event: any): {
   key: string
-  delta: string
 } {
   const p = propsOf(event)
   const partID = String(p.partID || "")
   const sessionID = String(p.sessionID || "")
   const field = String(p.field || "")
-  if (!partID || !sessionID || !field) {
-    throw new Error("message.part.delta missing partID/sessionID/field")
+  if (!partID || !sessionID || field !== "text" || typeof p.value !== "string") {
+    throw new Error("message.part.delta requires partID/sessionID/text field/complete value")
   }
   const session = requireSessionProjection(sessionID, "message.part.delta")
   requirePartProjection(session, partID, "message.part.delta")
   return {
     key: `${sessionID}|${partID}|${field}`,
-    delta: typeof p.delta === "string" ? p.delta : "",
   }
-}
-
-function mergedPartDeltaEvent(entry: BufferedPartDelta): any {
-  const props = propsOf(entry.event)
-  if (entry.event?.properties && typeof entry.event.properties === "object" && !Array.isArray(entry.event.properties)) {
-    return { ...entry.event, properties: { ...props, delta: entry.delta } }
-  }
-  return { ...entry.event, payload: { ...props, delta: entry.delta } }
 }
 
 function queuePartDelta(event: any): void {
-  const { key, delta } = validatePartDeltaTarget(event)
-  const buffered = bufferedPartDeltas.get(key)
-  if (buffered) {
-    buffered.delta += delta
-  } else {
-    bufferedPartDeltas.set(key, { event, delta })
-  }
+  const { key } = validatePartDeltaTarget(event)
+  bufferedPartDeltas.set(key, { event })
   if (bufferedPartDeltaTimer !== null) return
   bufferedPartDeltaTimer = setTimeout(() => {
     bufferedPartDeltaTimer = null
@@ -877,7 +861,7 @@ export function flushBufferedPartDeltas(): void {
   batch(() => {
     for (const [key, entry] of entries) {
       bufferedPartDeltas.delete(key)
-      handlePartDelta(mergedPartDeltaEvent(entry))
+      handlePartDelta(entry.event)
     }
   })
   scheduleCardTreeDisplayAggregates()
@@ -1569,9 +1553,9 @@ function handlePartDelta(event: any): void {
   const partID = String(p.partID || "")
   const sessionID = String(p.sessionID || "")
   const field = String(p.field || "")
-  const delta = typeof p.delta === "string" ? p.delta : ""
-  if (!partID || !sessionID || !field) {
-    throw new Error("message.part.delta missing partID/sessionID/field")
+  const value = p.value
+  if (!partID || !sessionID || field !== "text" || typeof value !== "string") {
+    throw new Error("message.part.delta requires partID/sessionID/text field/complete value")
   }
 
   const session = requireSessionProjection(sessionID, "message.part.delta")
@@ -1581,29 +1565,9 @@ function handlePartDelta(event: any): void {
   // message turn must land on that turn's card, never on whatever turn is
   // currently active for the session (spec §3.3 — primary failure mode).
   const cardBefore = cardTreeStore.cards[target.cardID]
-  const part = cardBefore?.parts?.[target.index]
   const wasHiddenSessionCard = shouldHideSessionCard(cardBefore)
   const sessionWasTopLevelVisible = session.topLevelVisible
-  if (field === "raw" && part?.type === "tool") {
-    setCardTreeStore(
-      "cards",
-      target.cardID,
-      "parts",
-      target.index,
-      "state",
-      "raw",
-      (prev: any) => String(prev ?? "") + delta,
-    )
-  } else {
-    setCardTreeStore(
-      "cards",
-      target.cardID,
-      "parts",
-      target.index,
-      field as any,
-      (prev: any) => String(prev ?? "") + delta,
-    )
-  }
+  setCardTreeStore("cards", target.cardID, "parts", target.index, "text", value)
   markCardStatsDirty(target.cardID)
   const cardAfter = cardTreeStore.cards[target.cardID]
   const isHiddenSessionCard = shouldHideSessionCard(cardAfter)

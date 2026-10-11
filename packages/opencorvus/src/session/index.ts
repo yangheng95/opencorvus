@@ -2464,17 +2464,10 @@ export namespace Session {
   // Deltas remain ephemeral live transport. The processor owns their content
   // accumulator and checkpoints full text through the existing Part writer
   // on its bounded streamed-Part cadence and at natural/failure boundaries.
-  // Canonical prefixes repair late/reconnected readers without a second text
-  // store or a database transaction per token. CLI and ACP consumers retain
-  // their original delta contract; reasoning keeps its own natural boundary.
-  const UpdatePartDeltaInput = z.object({
-    sessionID: z.string(),
-    messageID: z.string(),
-    partID: z.string(),
-    partType: Message.DeltaPartType,
-    field: z.string(),
-    delta: z.string(),
-  })
+  // Each delta carries the producer's complete field value so a subscriber
+  // can resume across an unpersisted prefix. CLI and ACP consume the original
+  // fragment; no additional text store or per-token transaction is needed.
+  const UpdatePartDeltaInput = Message.Event.PartDelta.properties
 
   async function updatePartDeltaImpl(input: z.output<typeof UpdatePartDeltaInput>, signal?: AbortSignal) {
     signal?.throwIfAborted()

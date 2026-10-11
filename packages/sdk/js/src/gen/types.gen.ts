@@ -1263,11 +1263,12 @@ export type EventMessageMoved = {
 export type EventMessagePartDelta = {
   properties: {
     delta: string
-    field: string
+    field: "text"
     messageID: string
     partID: string
-    partType: "text" | "reasoning" | "tool"
+    partType: "text" | "reasoning"
     sessionID: string
+    value: string
   }
   type: "message.part.delta"
 }

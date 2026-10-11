@@ -3973,6 +3973,7 @@
                 "type": "string"
               },
               "field": {
+                "const": "text",
                 "type": "string"
               },
               "messageID": {
@@ -3984,12 +3985,14 @@
               "partType": {
                 "enum": [
                   "text",
-                  "reasoning",
-                  "tool"
+                  "reasoning"
                 ],
                 "type": "string"
               },
               "sessionID": {
+                "type": "string"
+              },
+              "value": {
                 "type": "string"
               }
             },
@@ -3999,7 +4002,8 @@
               "partID",
               "partType",
               "field",
-              "delta"
+              "delta",
+              "value"
             ],
             "type": "object"
           },

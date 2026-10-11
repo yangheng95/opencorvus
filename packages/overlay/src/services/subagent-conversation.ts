@@ -42,8 +42,7 @@ export interface SubagentConversationLiveProjection {
       messageID: string
       partID: string
       snapshot?: Record<string, unknown>
-      deltas: Record<string, string>
-      anchors: Record<string, string>
+      fields: Record<string, string>
       removed?: boolean
     }
   >
@@ -108,13 +107,12 @@ function livePartKey(messageID: string, partID: string): string {
 
 /**
  * Compact exact selected-Session message events into an overlay for the
- * persisted transcript. Full snapshots supersede older deltas; only deltas
- * observed after that snapshot remain append operations.
+ * persisted transcript. Full snapshots supersede older field values; each
+ * subsequent delta supplies its complete field independently of that prefix.
  */
 export function observeSubagentConversationLiveEvent(
   current: SubagentConversationLiveProjection,
   event: unknown,
-  base?: SubagentConversationTranscript,
 ): SubagentConversationLiveProjection {
   const type = liveEventType(event)
   const identity = liveEventIdentity(event)
@@ -151,12 +149,7 @@ export function observeSubagentConversationLiveEvent(
           messageID: identity.messageID,
           partID: identity.partID,
           snapshot: { ...part },
-          deltas: {},
-          anchors: Object.fromEntries(
-            Object.entries(part)
-              .filter((entry): entry is [string, string] => typeof entry[1] === "string")
-              .map(([field, value]) => [field, value]),
-          ),
+          fields: {},
         },
       },
     }
@@ -164,18 +157,9 @@ export function observeSubagentConversationLiveEvent(
 
   if (type === "message.part.delta") {
     const field = String(identity.properties.field || "")
-    const delta = typeof identity.properties.delta === "string" ? identity.properties.delta : ""
-    if (!field || !delta) return current
-    const persistedPart = base?.messages
-      .find((message) => message.messageID === identity.messageID)
-      ?.parts.find((part) => String(part?.id || "") === identity.partID)
-    const anchor =
-      previous?.anchors[field] ??
-      (typeof previous?.snapshot?.[field] === "string"
-        ? previous.snapshot[field]
-        : typeof persistedPart?.[field] === "string"
-          ? persistedPart[field]
-          : "")
+    const value = identity.properties.value
+    if (field !== "text" || typeof value !== "string")
+      throw new Error("message.part.delta requires text field and complete value")
     return {
       ...current,
       parts: {
@@ -184,11 +168,7 @@ export function observeSubagentConversationLiveEvent(
           messageID: identity.messageID,
           partID: identity.partID,
           snapshot: previous?.snapshot,
-          deltas: {
-            ...(previous?.deltas ?? {}),
-            [field]: `${previous?.deltas[field] ?? ""}${delta}`,
-          },
-          anchors: { ...(previous?.anchors ?? {}), [field]: anchor },
+          fields: { ...(previous?.fields ?? {}), [field]: value },
         },
       },
     }
@@ -202,8 +182,7 @@ export function observeSubagentConversationLiveEvent(
         [key]: {
           messageID: identity.messageID,
           partID: identity.partID,
-          deltas: {},
-          anchors: {},
+          fields: {},
           removed: true,
         },
       },
@@ -211,15 +190,6 @@ export function observeSubagentConversationLiveEvent(
   }
 
   return current
-}
-
-function projectLivePartField(persisted: unknown, anchor: string, delta: string): string {
-  const persistedValue = typeof persisted === "string" ? persisted : ""
-  if (!persistedValue.startsWith(anchor)) return `${anchor}${delta}`
-  const absorbed = persistedValue.slice(anchor.length)
-  if (delta.startsWith(absorbed)) return `${persistedValue}${delta.slice(absorbed.length)}`
-  if (absorbed.startsWith(delta)) return persistedValue
-  return anchor ? `${anchor}${delta}` : `${persistedValue}${delta}`
 }
 
 function liveMessageFromInfo(
@@ -298,8 +268,8 @@ export function projectSubagentConversationLive(
       const source = change.snapshot ?? persisted
       if (!source || typeof source !== "object" || Array.isArray(source)) continue
       const next = { ...(persisted && typeof persisted === "object" ? persisted : {}), ...source }
-      for (const [field, delta] of Object.entries(change.deltas)) {
-        next[field] = projectLivePartField(persisted?.[field], change.anchors[field] ?? "", delta)
+      for (const [field, value] of Object.entries(change.fields)) {
+        next[field] = value
       }
       if (index >= 0) parts[index] = next
       else parts.push(next)

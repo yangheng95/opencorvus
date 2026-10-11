@@ -1,5 +1,5 @@
 /** Rebuildable conversation state keeps the latest complete value for each
- * identity, followed by deltas published after that value. Live subscribers
+ * identity, followed by the latest field value published after it. Live subscribers
  * still receive every original event; only replay/bootstrap buffers compact. */
 type ConversationEvent = {
   type: string
@@ -45,6 +45,9 @@ export function appendConversationLiveEvent<T extends ConversationEvent>(events:
     typeof next.partID === "string"
   ) {
     supersedes = samePart
+  } else if (event.type === "message.part.delta" && typeof next.partID === "string") {
+    supersedes = (candidate) =>
+      samePart(candidate) && candidate.type === "message.part.delta" && candidate.payload?.field === event.payload?.field
   } else if (event.type === "message.updated") {
     supersedes = (candidate) =>
       sameMessage(candidate) && (candidate.type === "message.updated" || candidate.type === "message.removed")
@@ -68,7 +71,7 @@ export function appendConversationLiveEvent<T extends ConversationEvent>(events:
     }
     events.length = retained
   }
-  // The owning replay queue is mutable; ordinary token deltas remain O(1).
+  // Retain actual events, including their original sequence and raw fragment.
   events.push(event)
   return events
 }

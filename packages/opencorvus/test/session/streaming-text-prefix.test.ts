@@ -12,6 +12,7 @@ import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { SessionProcessor } from "@/session/processor"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -268,12 +269,16 @@ async function withPrefixProcessor<T>(
 function observePrefix(fixture: PrefixFixture, prefix: string) {
   const checkpoint = inactivityReceipt<Message.TextPart>(`Canonical prefix ${fixture.sessionID}`)
   const deltas: string[] = []
+  const values: string[] = []
   const starts = new Map<string, number>()
   const completed: { id: string; time: { start: number; end: number } }[] = []
   const stopDelta = Bus.subscribe(Message.Event.PartDelta, (event) => {
     if (event.properties.sessionID !== fixture.sessionID || event.properties.messageID !== fixture.assistantID) return
     checkpoint.progress()
-    if (event.properties.partType === "text") deltas.push(event.properties.delta)
+    if (event.properties.partType === "text") {
+      deltas.push(event.properties.delta)
+      values.push(event.properties.value)
+    }
   })
   const stopPart = Bus.subscribe(Message.Event.PartUpdated, (event) => {
     const part = event.properties.part
@@ -289,6 +294,7 @@ function observePrefix(fixture: PrefixFixture, prefix: string) {
   return {
     promise: checkpoint.promise,
     deltas,
+    values,
     starts,
     completed,
     dispose: () => {
@@ -371,8 +377,65 @@ test("a running HTTP Provider persists its exact prefix for a late Session subsc
         deltaText: prefix + suffix,
       })
       expect(fixture.provider.requests[0]).toMatchObject({ model: "prefix-checker", stream: true })
+      expect(observed.values).toEqual([prefix, prefix + suffix])
     } finally {
       observed.dispose()
+    }
+  })
+}, 30_000)
+
+test("a late Session stream receives the complete field after missing an unpersisted Provider fragment", async () => {
+  const prefix = "设置 `none` 就"
+  const suffix = "宣称背景"
+  await withPrefixProcessor(prefix, suffix, async (fixture) => {
+    const accepted = inactivityReceipt<string>("First unpersisted field")
+    ensureTaskMessageProtocolBridge()
+    const stop = Bus.subscribe(Message.Event.PartDelta, async (event) => {
+      if (event.properties.sessionID !== fixture.sessionID || event.properties.delta !== prefix) return
+      const message = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+      accepted.resolve((message.parts.find((part) => part.type === "text") as Message.TextPart).text)
+    })
+    const abort = new AbortController()
+    const deadline = setTimeout(() => abort.abort(new Error("Late Session stream inactivity")), 5_000)
+    let reader: ReadableStreamDefaultReader<Uint8Array> | undefined
+    const running = fixture.start()
+    try {
+      expect(await accepted.promise).toBe("")
+      const response = await Server.App().request(`/session/${fixture.sessionID}/events`, {
+        headers: { "x-opencorvus-directory": fixture.directory }, signal: abort.signal,
+      })
+      expect(response.status).toBe(200)
+      reader = response.body!.getReader()
+      const decoder = new TextDecoder()
+      let pending = ""
+      const next = async (type: string) => {
+        for (;;) {
+          const boundary = pending.indexOf("\n\n")
+          if (boundary >= 0) {
+            const frame = pending.slice(0, boundary)
+            pending = pending.slice(boundary + 2)
+            const data = frame.split("\n").filter((line) => line.startsWith("data:")).map((line) => line.slice(5).trimStart()).join("\n")
+            if (data) { const event = JSON.parse(data); if (event.type === type) return event }
+            continue
+          }
+          const chunk = await reader!.read()
+          if (chunk.done) throw new Error(`Session stream ended before ${type}`)
+          pending += decoder.decode(chunk.value, { stream: true }).replaceAll("\r\n", "\n")
+        }
+      }
+      await next("session.connected")
+      fixture.provider.release()
+      const event = await next("message.part.delta")
+      expect(event.payload).toMatchObject({ sessionID: fixture.sessionID, messageID: fixture.assistantID,
+        partType: "text", field: "text", delta: suffix, value: prefix + suffix })
+      expect(await running).toBe("continue")
+    } finally {
+      accepted.dispose()
+      clearTimeout(deadline)
+      stop()
+      abort.abort()
+      await reader?.cancel()
+      reader?.releaseLock()
     }
   })
 }, 30_000)
@@ -395,6 +458,7 @@ test("natural short completion commits its complete text and stream deltas", asy
       expect({
         parts: complete.parts.filter((part) => part.type === "text"),
         deltas: observed.deltas.join(""),
+        values: observed.values,
       }).toMatchObject({
         parts: [
           {
@@ -404,6 +468,7 @@ test("natural short completion commits its complete text and stream deltas", asy
           },
         ],
         deltas: "Short 🌐 completed.",
+        values: ["Short 🌐", "Short 🌐 completed."],
       })
     } finally {
       observed.dispose()

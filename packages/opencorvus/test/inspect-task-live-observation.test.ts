@@ -200,6 +200,7 @@ test("Inspect observes real unpersisted descendant reasoning through the Task HT
       partType: "reasoning",
       field: "text",
       delta: "local streaming activity",
+      value: "local streaming activity",
     })
   await Instance.provide({ directory: project.path, fn: () => delta(owner) })
   await awaitTaskMessageProtocolBridgeIdle()

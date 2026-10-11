@@ -243,7 +243,6 @@ export function SubagentConversationPanel(props: {
     pendingLiveProjection = observeSubagentConversationLiveEvent(
       pendingLiveProjection ?? liveProjection(),
       event,
-      conversation(),
     )
     flushLiveProjection.schedule()
   })

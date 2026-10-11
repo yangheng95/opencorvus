@@ -361,7 +361,7 @@ test("task child transcript uses the exact task/session route and canonical orde
   ])
 })
 
-test("persisted child transcript projects exact live Part snapshots and later deltas", async () => {
+test("a complete live field repairs a stale persisted prefix before later Part snapshots", async () => {
   __setHostTransportForTest(transport([], payload()))
   const persisted = await loadSubagentConversation({
     source: { kind: "task", id: "task-one" },
@@ -379,15 +379,15 @@ test("persisted child transcript projects exact live Part snapshots and later de
         partID: "late-text",
         field: "text",
         delta: " live",
+        value: "Done missing live",
       },
     },
-    persisted,
   )
-  expect(projectSubagentConversationLive(persisted, live).messages.at(-1)?.parts[0]?.text).toBe("Done live")
+  expect(projectSubagentConversationLive(persisted, live).messages.at(-1)?.parts[0]?.text).toBe("Done missing live")
 
   const refreshed = structuredClone(persisted)
-  refreshed.messages.at(-1)!.parts[0]!.text = "Done live"
-  expect(projectSubagentConversationLive(refreshed, live).messages.at(-1)?.parts[0]?.text).toBe("Done live")
+  refreshed.messages.at(-1)!.parts[0]!.text = "Done missing live"
+  expect(projectSubagentConversationLive(refreshed, live).messages.at(-1)?.parts[0]?.text).toBe("Done missing live")
 
   live = observeSubagentConversationLiveEvent(live, {
     type: "message.part.updated",
@@ -411,6 +411,7 @@ test("persisted child transcript projects exact live Part snapshots and later de
       partID: "late-text",
       field: "text",
       delta: " again",
+      value: "Done persisted again",
     },
   })
 
@@ -469,6 +470,7 @@ test("a new live child message projects before the persisted transcript refreshe
       partID: "new-text",
       field: "text",
       delta: " now",
+      value: "Working now",
     },
   })
 

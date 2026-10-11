@@ -724,8 +724,9 @@ export namespace SessionProcessor {
                 messageID: part.messageID,
                 partID: part.id,
                 partType: "reasoning" as const,
-                field: "text",
+                field: "text" as const,
                 delta,
+                value: part.text,
               }
               if (signal) await Session.updatePartDeltaWithSignal(signal, input)
               else await Session.updatePartDelta(input)
@@ -1436,6 +1437,7 @@ export namespace SessionProcessor {
                             partType: "text",
                             field: "text",
                             delta: value.text,
+                            value: currentText.text,
                           })
                           semanticChunkAccepted = true
                         } else {

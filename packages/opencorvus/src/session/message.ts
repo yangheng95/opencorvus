@@ -792,7 +792,7 @@ export namespace Message {
     })
   export type VisibleInfo = z.infer<typeof VisibleInfo>
 
-  export const DeltaPartType = z.enum(["text", "reasoning", "tool"])
+  export const DeltaPartType = z.enum(["text", "reasoning"])
   export type DeltaPartType = z.infer<typeof DeltaPartType>
 
   export const Event = {
@@ -843,8 +843,9 @@ export namespace Message {
         messageID: z.string(),
         partID: z.string(),
         partType: DeltaPartType,
-        field: z.string(),
+        field: z.literal("text"),
         delta: z.string(),
+        value: z.string(),
       }),
       { tier: 3 },
     ),

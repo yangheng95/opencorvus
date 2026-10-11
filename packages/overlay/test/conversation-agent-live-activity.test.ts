@@ -87,7 +87,7 @@ test("visible Text deltas update the exact child-Agent occurrence before the com
     emitted(
       "message.part.delta",
       1_200,
-      properties({ partID, partType: "text", field: "text", delta: "first visible words" }),
+      properties({ partID, partType: "text", field: "text", delta: "first visible words", value: "first visible words" }),
     ),
   )
   flushLiveConversationAgentPartDeltas()
@@ -221,7 +221,7 @@ test("hydrated child-Agent activity anchors retained Text deltas after reconnect
     emitted(
       "message.part.delta",
       1_200,
-      properties({ partID, partType: "text", field: "text", delta: " plus retained delta" }),
+      properties({ partID, partType: "text", field: "text", delta: " plus retained delta", value: "persisted prefix plus retained delta" }),
     ),
   )
   flushLiveConversationAgentPartDeltas()

@@ -202,6 +202,7 @@ test("classifies the complete live Reasoning Part sequence as omitted display tr
       partType: "reasoning",
       field: "text",
       delta: "runtime-only reasoning",
+      value: "runtime-only reasoning",
     }),
     conversationTransportEventDisposition(Message.Event.PartUpdated.type, {
       part: {
@@ -233,6 +234,7 @@ test("retains the exact live Text delta classification", () => {
     partType: "text",
     field: "text",
     delta: "visible answer",
+    value: "visible answer",
   })
 
   expect(disposition).toBe("project")

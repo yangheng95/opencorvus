@@ -61,6 +61,7 @@ function dispatchDelta(taskID: string, index: number): void {
       partType: "text",
       field: "text",
       delta: `delta ${index}`,
+      value: `delta ${index}`,
     },
   })
 }
@@ -93,7 +94,7 @@ test("live replay retention reports an expired resume and returns the current wi
   expect(fresh.expired ? [] : fresh.events.map((event) => event.liveSequence)).toEqual([4])
 })
 
-test("text replay starts at the latest full snapshot and retains subsequent live deltas", async () => {
+test("text replay retains the latest complete field value while live subscribers receive every fragment", async () => {
   const taskID = "tsk_text_snapshot_replay"
   const sessionID = "ses_text_snapshot_replay"
   const messageID = "msg_text_snapshot_replay"
@@ -115,7 +116,7 @@ test("text replay starts at the latest full snapshot and retains subsequent live
       orderKey: "message/text-snapshot",
       payload: { part: { id: "prt_text", messageID, sessionID, type: "text", text } },
     })
-  const delta = (text: string) =>
+  const delta = (text: string, value: string) =>
     ProtocolStore.dispatchEphemeral({
       type: "message.part.delta",
       aggregate: "task",
@@ -123,37 +124,38 @@ test("text replay starts at the latest full snapshot and retains subsequent live
       sessionID,
       source: "test.text-snapshot",
       orderKey: "message/text-snapshot",
-      payload: { partID: "prt_text", messageID, sessionID, field: "text", delta: text },
+      payload: { partID: "prt_text", messageID, sessionID, partType: "text", field: "text", delta: text, value },
     })
   try {
     snapshot("")
-    delta("A")
+    delta("A", "A")
     snapshot("A")
     const cursor = ProtocolStore.currentTaskLiveSequence(taskID)
-    delta("B")
+    delta("B", "AB")
     snapshot("AB")
-    delta("C")
+    delta("C", "ABC")
+    delta("D", "ABCD")
     const replay = ProtocolStore.listTaskLiveEventsAfter(taskID, 0)
     expect(replay).toMatchObject({
       expired: false,
       events: [
         { liveSequence: 5, payload: { part: { id: "prt_text", text: "AB" } } },
-        { liveSequence: 6, payload: { delta: "C" } },
+        { liveSequence: 7, payload: { delta: "D", value: "ABCD" } },
       ],
     })
     expect(ProtocolStore.listTaskLiveEventsAfter(taskID, cursor)).toEqual(replay)
     snapshot("Final")
     expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0)).toMatchObject({
       expired: false,
-      events: [{ liveSequence: 7, payload: { part: { id: "prt_text", text: "Final" } } }],
+      events: [{ liveSequence: 8, payload: { part: { id: "prt_text", text: "Final" } } }],
     })
     snapshot("短")
     expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0)).toMatchObject({
       expired: false,
-      events: [{ liveSequence: 8, payload: { part: { id: "prt_text", text: "短" } } }],
+      events: [{ liveSequence: 9, payload: { part: { id: "prt_text", text: "短" } } }],
     })
     await stop.drain()
-    expect(delivered).toEqual(["", "A", "A", "B", "AB", "C", "Final", "短"])
+    expect(delivered).toEqual(["", "A", "A", "B", "AB", "C", "D", "Final", "短"])
   } finally {
     stop()
   }

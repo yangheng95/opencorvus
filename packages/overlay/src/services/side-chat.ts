@@ -89,7 +89,7 @@ export function connectSideChat(
               handlers.connection(true)
               void refreshActivity()
             } else if (base) {
-              live = observeSubagentConversationLiveEvent(live, event, base)
+              live = observeSubagentConversationLiveEvent(live, event)
             }
             if (base && event.type !== "session.heartbeat")
               handlers.transcript(projectSubagentConversationLive(base, live))

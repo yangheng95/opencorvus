@@ -1510,8 +1510,10 @@ export function applyLiveConversationAgentPartDelta(sourceKeyInput: string, even
   const properties = liveEventProperties(event)
   const partType = String(properties?.partType || "")
   const field = String(properties?.field || "")
-  const delta = typeof properties?.delta === "string" ? properties.delta : ""
-  if (partType !== "text" || field !== "text" || !delta) return
+  if (partType !== "text") return
+  const value = properties?.value
+  if (field !== "text" || typeof value !== "string")
+    throw new Error("conversation agent live text delta requires complete value")
   const channel = typeof properties?.channel === "string" ? properties.channel.trim() : ""
   const role = typeof properties?.role === "string" ? properties.role.trim() : ""
   const rawStage = liveRawStageFromMessageInfo({ channel, role })
@@ -1543,7 +1545,7 @@ export function applyLiveConversationAgentPartDelta(sourceKeyInput: string, even
   if (!(observedAt > 0)) throw new Error("conversation agent live text delta missing emitted time")
   const nextPart = {
     ...initialPart,
-    text: `${typeof initialPart.text === "string" ? initialPart.text : ""}${delta}`,
+    text: value,
   }
   rememberLiveActivityPart(sourceKey, nextPart, observedAt)
   pendingLiveActivityPartKeys.add(key)
