@@ -1,0 +1,55 @@
+$ bun script/run-tests.ts test/tool/source-fragment.test.ts test/tool/codesearch-sources.test.ts test/tool/websearch-service.test.ts test/tool/webfetch-source-title.test.ts
+[1/4] START test/tool/source-fragment.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) source URL serialization preserves the precise navigation location [0.11ms]
+(pass) real HTTP sources and persisted citations retain distinct chapters and final redirect locations [2149.02ms]
+
+ 2 pass
+ 0 fail
+ 5 expect() calls
+Ran 2 tests across 1 file. [5.05s]
+[1/4] DONE test/tool/source-fragment.test.ts exit=0 duration=7.01s
+[2/4] START test/tool/codesearch-sources.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current code-context records preserve complete source facts [0.44ms]
+(pass) declared empty code context yields the empty source contract [0.03ms]
+(pass) an unknown code record returns the typed original-record error [0.24ms]
+(pass) the model-visible code search parameter projects the current result count [0.57ms]
+(pass) real assistant source persistence retains distinct code locations and deduplicates the same location [1896.84ms]
+
+ 5 pass
+ 0 fail
+ 7 expect() calls
+Ran 5 tests across 1 file. [3.01s]
+[2/4] DONE test/tool/codesearch-sources.test.ts exit=0 duration=3.20s
+[3/4] START test/tool/websearch-service.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current Exa search result contracts > decodes Exa records into the shared result and source contracts [0.72ms]
+(pass) current Exa search result contracts > current Text and metadata-only records preserve source identities [0.21ms]
+(pass) current Exa search result contracts > a declared empty search maps to the current empty result contract [0.04ms]
+(pass) current Exa search result contracts > an unknown search record returns its typed original-text error [0.17ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [1.54s]
+[3/4] DONE test/tool/websearch-service.test.ts exit=0 duration=1.71s
+[4/4] START test/tool/webfetch-source-title.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Owned HTTP title outputs [{"title":"http://127.0.0.1:63963/redirect (text/html; charset=utf-8)","sources":[{"type":"source-url","sourceId":"7931c4d099a255813af3f8ca38a33471989ab63b22961c28303231a033a802b8","url":"http://127.0.0.1:63963/title","provider":"opencorvus-webfetch","title":"真正 & 标题 页面"}],"output":"<!doctype html><html><head><title>  真正 &amp; 标题\n 页面  </title></head><body><p>Actual content</p><script>document.title='Invented script title'</script></body></html>"},{"title":"http://127.0.0.1:63963/empty (text/html)","sources":[{"type":"source-url","sourceId":"bff7dcaa62763e2589949dac26f2e54fb0088240ee65d3ae65a16962e4b32361","url":"http://127.0.0.1:63963/empty","provider":"opencorvus-webfetch"}],"output":"<html><head><title>\n </title></head><body>No title</body></html>"},{"title":"http://127.0.0.1:63963/plain (text/plain)","sources":[{"type":"source-url","sourceId":"1b351582a3eaa773199293840c7c60c3b88f4bf2afa9d04e07ab05a30b4e2445","url":"http://127.0.0.1:63963/plain","provider":"opencorvus-webfetch"}],"output":"<title>Text is not HTML</title>"},{"title":"http://127.0.0.1:63963/image (image/png)","sources":[{"type":"source-url","sourceId":"a38e66a530ed27d88b5eb06ca1a37a922496000b1a01aa70d29d502486cebd3b","url":"http://127.0.0.1:63963/image","provider":"opencorvus-webfetch"}],"output":"Image fetched successfully","attachments":[{"type":"file","mime":"image/png","url":"data:image/png;base64,iVBORw=="}]}]
+Owned HTTP format outputs {"formats":[{"output":"Format &amp; 标题Actual headingActual body","metadata":{"originalBytes":44,"shownBytes":44,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:63963/formats (text/html)","sources":[{"type":"source-url","sourceId":"30483ff295e2a33688c60a52fa3414f78ee4248a96e61f8cf7847b562ee68271","url":"http://127.0.0.1:63963/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]},{"output":"Format & 标题\n\n# Actual heading\n\nActual body","metadata":{"originalBytes":46,"shownBytes":46,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:63963/formats (text/html)","sources":[{"type":"source-url","sourceId":"30483ff295e2a33688c60a52fa3414f78ee4248a96e61f8cf7847b562ee68271","url":"http://127.0.0.1:63963/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]},{"output":"<html><head><title>Format &amp; 标题</title></head><body><h1>Actual heading</h1><p>Actual body</p></body></html>","metadata":{"originalBytes":114,"shownBytes":114,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:63963/formats (text/html)","sources":[{"type":"source-url","sourceId":"30483ff295e2a33688c60a52fa3414f78ee4248a96e61f8cf7847b562ee68271","url":"http://127.0.0.1:63963/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]}],"untitled":{"output":"<html><body><p>Actual untitled body</p></body></html>","metadata":{"originalBytes":53,"shownBytes":53,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:63963/untitled (text/html)","sources":[{"type":"source-url","sourceId":"676370bda665425c7d87e77ac0f6d7a2fc2cdc5dc1b3a0eff50cbac6c85ad84b","url":"http://127.0.0.1:63963/untitled","provider":"opencorvus-webfetch"}]}}
+(pass) fetched document metadata preserves published titles, resource content and persisted source [2071.33ms]
+
+ 1 pass
+ 0 fail
+ 20 expect() calls
+Ran 1 test across 1 file. [3.47s]
+[4/4] DONE test/tool/webfetch-source-title.test.ts exit=0 duration=3.65s

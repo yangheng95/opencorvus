@@ -605,6 +605,10 @@ from the fetched text/html document using the public HTML parser; an empty title
 remains optional and uses a path-and-query preview followed by the hostname,
 keeping same-site resource differences near the start of a compact label.
 The complete URL remains available in its tooltip and activation target.
+New URL sources use the native URL serializer for that complete navigation
+location, including its fragment. Distinct document chapters retain distinct
+source identities; repeated canonical locations deduplicate through the existing
+Message source owner. Webfetch, web search and code search share that generator.
 Redirected URL owns source
 identity and activation independently of the title. Historical source payloads
 retain their original recorded values.

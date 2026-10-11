@@ -21,7 +21,7 @@ test("current code-context records preserve complete source facts", () => {
     "Title: N/A\nURL: https://example.com/untitled",
   ].join("\n\n---\n\n")
   expect(parseExaCodeSearchSources(text.replaceAll("\n", "\r\n"))).toEqual([
-    urlSource({ title: "Publisher guide", url: "https://example.com/guide", snippet, provider: "exa" }),
+    urlSource({ title: "Publisher guide", url: "https://example.com/guide#keyboard", snippet, provider: "exa" }),
     urlSource({
       title: "API reference",
       url: "https://example.com/api",
@@ -52,7 +52,7 @@ test("the model-visible code search parameter projects the current result count"
   ])
 })
 
-test("real assistant source persistence retains code-search facts and shared URL identity", async () => {
+test("real assistant source persistence retains distinct code locations and deduplicates the same location", async () => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
@@ -78,14 +78,26 @@ test("real assistant source persistence retains code-search facts and shared URL
       )
       const persisted = await persistMessageSources({ sessionID: session.id, messageID, sources })
       expect(persisted).toMatchObject(sources)
-      await persistMessageSources({
+      const pointer = await persistMessageSources({
         sessionID: session.id,
         messageID,
         sources: parseExaCodeSearchSources(
           "Title: Current guide\nURL: https://example.com/guide#pointer\nCode/Highlights:\nComplete current excerpt",
         ),
       })
-      expect(await MessageStore.parts(messageID)).toEqual(persisted)
+      await persistMessageSources({
+        sessionID: session.id,
+        messageID,
+        sources: parseExaCodeSearchSources(
+          "Title: Current guide\nURL: https://EXAMPLE.com:443/guide#keyboard\nCode/Highlights:\nComplete current excerpt",
+        ),
+      })
+      const parts = await MessageStore.parts(messageID)
+      expect(parts).toEqual([...persisted, ...pointer])
+      expect(parts.map((part) => part.type === "source-url" ? part.url : part.type)).toEqual([
+        "https://example.com/guide#keyboard",
+        "https://example.com/guide#pointer",
+      ])
     },
   })
 })

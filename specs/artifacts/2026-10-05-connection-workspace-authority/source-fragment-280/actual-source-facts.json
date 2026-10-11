@@ -1,0 +1,94 @@
+[
+  {
+    "stage": "01",
+    "toolInputs": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples",
+        "format": "markdown",
+        "timeout": 120
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXhrwdH009duNBW105",
+        "messageID": "msg_g0VXhrvhn00Npf4LQ7QT",
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    ],
+    "sessions": [
+      {
+        "id": "ses_hUGkoePdWMM61Ym4fIHT",
+        "projectID": "prj_hjdQb117x6SBiCocbVHE",
+        "kind": "assistant"
+      },
+      {
+        "id": "ses_-zUSI84YnzzML3X7MJVT",
+        "projectID": "prj_hEPtbskw7ND486po3D4d",
+        "kind": "assistant"
+      }
+    ],
+    "completedFetches": 1,
+    "providerEOF": 5,
+    "physicalAtUtc": "2026-10-11T03:09:11.846Z",
+    "deadlineAt": 1791688431254,
+    "remainingAtPhysicalMs": 279408,
+    "qualification": "Observed before: requested chapter discarded in actual Source"
+  },
+  {
+    "stage": "02",
+    "toolInputs": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples",
+        "format": "markdown",
+        "timeout": 120
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary",
+        "format": "markdown",
+        "timeout": 120
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXhtVDg00K06iSji8X",
+        "messageID": "msg_g0VXhtTwO007I6srE4b2",
+        "type": "source-url",
+        "sourceId": "b4b01886e0b66478b9bbb2c030c1fe73d07d5c0128aa86d7ba2e83cf90d4301b",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXhtWeb00gCZrqEMV1",
+        "messageID": "msg_g0VXhtVFn00UvZQ2E23A",
+        "type": "source-url",
+        "sourceId": "b06728e7436a93bea6ddc583688eb649616770996b0adabdad293b9c66649c5b",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    ],
+    "sessions": [
+      {
+        "id": "ses_hcxOJV2fvz3d6GOXRIZD",
+        "projectID": "prj_hwxUjIf0xF0VOHtmaWwJ",
+        "kind": "assistant"
+      },
+      {
+        "id": "ses_-zUSI6WLfzzXR25rL3RK",
+        "projectID": "prj_hv58brfmXssfVy6Ypwjm",
+        "kind": "assistant"
+      }
+    ],
+    "completedFetches": 2,
+    "providerEOF": 6,
+    "physicalAtUtc": "2026-10-11T03:12:32.075Z",
+    "deadlineAt": 1791688858287,
+    "remainingAtPhysicalMs": 506212,
+    "qualification": "Actual durable chapter URLs preserved; UI navigation and screenshots reviewed separately by Root"
+  }
+]

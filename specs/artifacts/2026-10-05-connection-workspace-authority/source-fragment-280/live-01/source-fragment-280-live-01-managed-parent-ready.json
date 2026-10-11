@@ -1,0 +1,15 @@
+{
+  "pid": 77600,
+  "occurrence": "source-fragment-280-live-01-78e7c382-dec6-46be-8a3a-ef6a2f1345a8",
+  "owner": {
+    "pid": 77600,
+    "processInstanceID": "win32:639272846362148669",
+    "occurrenceID": "b027468d-84af-48cc-8fd4-10ac357a75ea"
+  },
+  "parent": {
+    "pid": 78064,
+    "processInstanceID": "win32:639272846361667864",
+    "occurrenceID": "a8ca0844-52c1-4d42-9d10-77b34c1ed019"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

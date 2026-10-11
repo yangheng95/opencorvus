@@ -527,3 +527,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Side来源/术语误动作278](2026-10-10-side-source-live-278.md)：真实误文件404、唯一UI语义修复、after引用与Source点击复核；原实时/子侧栏未达成。
 
 - [Side实时固定阅读279](2026-10-10-side-reading-return-279.md)：真实reader范围内侧栏返回/来源和双层位置保持，原失败与收尾目标不足保留。
+
+- [来源章节定位280](2026-10-11-source-fragment-280.md)：共享来源生成器保留章节，真实前后导航与同位置去重验证。

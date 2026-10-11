@@ -1,0 +1,62 @@
+{
+  "states": [
+    {
+      "expected": {
+        "pid": 46420,
+        "processInstanceID": "win32:639272846312731406",
+        "occurrenceID": "1a879e80-74d8-4be9-867d-738b3f56f95f"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 77600,
+        "processInstanceID": "win32:639272846362148669",
+        "occurrenceID": "2d43a203-eae5-4de6-9850-32cf18a0c95a"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": [],
+  "native": {
+    "occurrence": "source-fragment-280-live-01-78e7c382-dec6-46be-8a3a-ef6a2f1345a8",
+    "outcome": "settled",
+    "host": {
+      "pid": 46420,
+      "processInstanceID": "win32:639272846312731406",
+      "occurrenceID": "1a879e80-74d8-4be9-867d-738b3f56f95f"
+    },
+    "target": {
+      "pid": 77600,
+      "processInstanceID": "win32:639272846362148669",
+      "occurrenceID": "2d43a203-eae5-4de6-9850-32cf18a0c95a"
+    },
+    "observedAtUtc": "2026-10-11T03:09:11.846Z",
+    "deadlineAt": 1791688431254,
+    "terminal": {
+      "occurrenceID": "source-fragment-280-live-01-78e7c382-dec6-46be-8a3a-ef6a2f1345a8",
+      "pid": 77600,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "qualificationKind": "NativeService",
+  "observedAtUtc": "2026-10-11T03:09:28.1433411Z",
+  "occurrence": "source-fragment-280-live-01-78e7c382-dec6-46be-8a3a-ef6a2f1345a8",
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "boundary": "Independent actual NativeService physical/output/request birth-port-pair readback; original live-sol foreground already joined. Real service emits owner/startup/preflight receipts, not full-history copy launcher receipts."
+}

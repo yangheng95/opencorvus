@@ -50,7 +50,7 @@ describe("current Exa search result contracts", () => {
         {
           type: "source-url",
           sourceId: expect.any(String),
-          url: "https://example.com/opencorvus",
+          url: "https://example.com/opencorvus#overview",
           title: "OpenCorvus",
           publishedAt: "2026-08-10T00:00:00.000Z",
           author: "Corvus Team",

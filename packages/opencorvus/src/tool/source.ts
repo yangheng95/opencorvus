@@ -7,9 +7,7 @@ function semanticSourceId(kind: Message.SourcePayload["type"], identity: string)
 }
 
 export function canonicalSourceUrl(raw: string): string {
-  const url = new URL(raw)
-  url.hash = ""
-  return url.toString()
+  return new URL(raw).toString()
 }
 
 export function urlSource(input: {

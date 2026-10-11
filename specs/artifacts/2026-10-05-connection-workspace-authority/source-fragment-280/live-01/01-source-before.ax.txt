@@ -1,0 +1,53 @@
+Browser tab: 2, Title: "OpenCorvus", URL: "http://localhost:18223/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 70, 73-76
++									86 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									87 container
++										88 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										89 button 请只调用一次 webfetch 读取 https://developer.mozilla.org/en-US/docs/Web/HTML/Referenc...
++										90 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
++									91 container
++										92 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										93 button 请只调用一次 webfetch 读取 https://developer.mozilla.org/en-US/docs/Web/HTML/Referenc...
++										94 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-311-trigger, Secondary Actions: Expand
++									95 container
++										96 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										97 button Reply with OK.
++										98 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-317-trigger, Secondary Actions: Expand
+~						78 text 请只调用一次 webfetch 读取 https://developer.mozilla.org/en-US/docs/Web/HTML/Referenc...
++						99 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
++						100 container Description: Not running, ID: taskStatus
++							101 text Not running
++							102 container
++								103 container
++									104 text User
++									105 container
++										106 text 请只调用一次 webfetch 读取
++										107 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples
++										108 text  ，然后用一句话说明资料是什么。不要额外搜索、写文件、创建任务或委托。
++								109 container
++									110 text work
++									111 text 8s
++									112 container
++										113 button (collapsed) Secondary Actions: Expand, Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples (text/html)
++											114 text webfetch
++											115 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples (text/html)
++											116 image
++										117 container Sources
++											118 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++									119 container
++										120 text 这份资料是
++										121 link Description: MDN 的 HTML <details> 元素参考文档, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples
++										122 text ，介绍可展开与折叠的内容组件，并提供基本用法、默认展开、互斥分组和样式定制示例。
++									123 button Copy message
++									124 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++									125 pop up button (collapsed) Description: View model usage for this turn: 75K Token, Secondary Actions: Expand
++									126 text Oct 11, 11:05 AM
+~								48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~								49 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+~								85 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+~								55 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+~									57 text openai/gpt-6.1-sol
+~								58 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18223/ui/
