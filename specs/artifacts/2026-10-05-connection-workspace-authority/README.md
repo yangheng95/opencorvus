@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [完整渲染观察300 Recall](render-lifetime-plan-300.md) / [实际证据](render-lifetime-300/README.md)：补齐生命周期覆盖，定位首次快照与旧live回放倒退，修复待继续。
+
 - [工具失败摘要299 Recall](tool-failure-plan-299.md) / [真实证据](tool-failure-299/README.md)：修复结构化失败摘要漏读及误显示输入格式，完整原历史复核。
 
 - [子侧栏实时298 Recall](live-child-plan-298.md) / [真实证据](live-child-298/README.md)：真实Task及来源观察完成，诊断全部撤除，无推测性补丁。

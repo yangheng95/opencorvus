@@ -1,0 +1,26 @@
+{
+  "pid": 53672,
+  "occurrence": "render-lifetime-300-live-01-b39fb09a-9620-4575-bf04-5ea201be9648",
+  "selected": {
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\render-lifetime-300-live-01\\project",
+    "projectID": "prj_h7tzlqyxCnGT8E2fZ9XE",
+    "acceptedObservedAt": "2026-10-11T12:46:45.7752656Z",
+    "requestID": "88ea9da2-b0e2-4698-997c-4344770dfb68",
+    "requestSentAt": "2026-10-11T12:46:41.7093255Z",
+    "taskID": "tsk_g00VXkEIMP00wBs43Mn0",
+    "productPillar": "work",
+    "occurrence": "render-lifetime-300-live-01-b39fb09a-9620-4575-bf04-5ea201be9648"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXkEIMP00wBs43Mn0",
+    "projectID": "prj_h7tzlqyxCnGT8E2fZ9XE",
+    "rootSessionID": "ses_-zUSFlhWvzzIPbwf1dVz",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXkEITe00IpdJm9fSJ",
+    "openedAt": 1791722805189
+  },
+  "totalDeadlineMs": 1791723705189,
+  "maximumMilliseconds": 900000,
+  "inactivityMilliseconds": 180000,
+  "boundary": "Fixed actual Task opening boundary survives monitor failure; parent supervision owns settlement"
+}

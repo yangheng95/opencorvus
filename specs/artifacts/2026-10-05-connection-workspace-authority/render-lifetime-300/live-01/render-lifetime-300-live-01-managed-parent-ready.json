@@ -1,0 +1,15 @@
+{
+  "pid": 53672,
+  "occurrence": "render-lifetime-300-live-01-b39fb09a-9620-4575-bf04-5ea201be9648",
+  "owner": {
+    "pid": 53672,
+    "processInstanceID": "win32:639273195520690134",
+    "occurrenceID": "fe427651-7b1d-491e-8c3f-3e28890b4db0"
+  },
+  "parent": {
+    "pid": 34404,
+    "processInstanceID": "win32:639273195520242908",
+    "occurrenceID": "b4802e78-2b0f-4c8a-a975-b8a8505b9b18"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
