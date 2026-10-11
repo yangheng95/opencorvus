@@ -1,0 +1,80 @@
+[
+  {
+    "level": "debug",
+    "time": "2026-10-11T03:44:53.474Z",
+    "service": "overlay:source-tooltip-diagnostic",
+    "logDomain": "non-session",
+    "data": {
+      "open": true,
+      "sourceId": "8ba8fb2958e87e6905cd723d78092c91077898626dbbccdd003b461c5b25a0e4",
+      "activeLabel": "Open web source: <details> HTML details disclosure element - HTML | MDN · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle. · developer.mozilla.org",
+      "stack": "Error: Source tooltip transition\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:70731:14)\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18665:51)\\x0a    at Object.onChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12415:46)\\x0a    at http://localhost:18227/ui/assets/main-Br2z6X1N.js:12393:25\\x0a    at untrack (http://localhost:18227/ui/assets/CommandMenuSurface-DaS4IonA.js:412:33)\\x0a    at setValue (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12387:5)\\x0a    at Object.open (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12418:5)\\x0a    at showTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18718:21)\\x0a    at Object.openTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18743:7)\\x0a    at handleShow (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18865:15)"
+    },
+    "message": "Source tooltip transition"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-11T03:44:53.474Z",
+    "service": "overlay:source-tooltip-diagnostic",
+    "logDomain": "non-session",
+    "data": {
+      "open": false,
+      "sourceId": "8ba8fb2958e87e6905cd723d78092c91077898626dbbccdd003b461c5b25a0e4",
+      "activeLabel": "Open web source: <details> HTML details disclosure element - HTML | MDN · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle. · developer.mozilla.org",
+      "stack": "Error: Source tooltip transition\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:70731:14)\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18665:51)\\x0a    at Object.onChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12415:46)\\x0a    at http://localhost:18227/ui/assets/main-Br2z6X1N.js:12393:25\\x0a    at untrack (http://localhost:18227/ui/assets/CommandMenuSurface-DaS4IonA.js:412:33)\\x0a    at setValue (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12387:5)\\x0a    at Object.close (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12421:5)\\x0a    at hideTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18688:23)\\x0a    at handleScroll (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18802:9)"
+    },
+    "message": "Source tooltip transition"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-11T03:44:53.474Z",
+    "service": "overlay:source-tooltip-diagnostic",
+    "logDomain": "non-session",
+    "data": {
+      "open": true,
+      "sourceId": "b06728e7436a93bea6ddc583688eb649616770996b0adabdad293b9c66649c5b",
+      "activeLabel": "Open web source: <details> HTML details disclosure element - HTML | MDN · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle. · developer.mozilla.org",
+      "stack": "Error: Source tooltip transition\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:70731:14)\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18665:51)\\x0a    at Object.onChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12415:46)\\x0a    at http://localhost:18227/ui/assets/main-Br2z6X1N.js:12393:25\\x0a    at untrack (http://localhost:18227/ui/assets/CommandMenuSurface-DaS4IonA.js:412:33)\\x0a    at setValue (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12387:5)\\x0a    at Object.open (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12418:5)\\x0a    at showTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18718:21)\\x0a    at Object.openTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18743:7)\\x0a    at handleShow (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18865:15)"
+    },
+    "message": "Source tooltip transition"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-11T03:44:53.474Z",
+    "service": "overlay:source-tooltip-diagnostic",
+    "logDomain": "non-session",
+    "data": {
+      "open": false,
+      "sourceId": "b06728e7436a93bea6ddc583688eb649616770996b0adabdad293b9c66649c5b",
+      "activeLabel": "Open web source: <details> HTML details disclosure element - HTML | MDN · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle. · developer.mozilla.org",
+      "stack": "Error: Source tooltip transition\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:70731:14)\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18665:51)\\x0a    at Object.onChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12415:46)\\x0a    at http://localhost:18227/ui/assets/main-Br2z6X1N.js:12393:25\\x0a    at untrack (http://localhost:18227/ui/assets/CommandMenuSurface-DaS4IonA.js:412:33)\\x0a    at setValue (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12387:5)\\x0a    at Object.close (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12421:5)\\x0a    at Object.hideTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18688:23)\\x0a    at Proxy.onDismiss (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18580:38)\\x0a    at Object.onPointerDownOutside (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12297:24)"
+    },
+    "message": "Source tooltip transition"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-11T03:45:04.770Z",
+    "service": "overlay:source-tooltip-diagnostic",
+    "logDomain": "non-session",
+    "data": {
+      "open": true,
+      "sourceId": "8ba8fb2958e87e6905cd723d78092c91077898626dbbccdd003b461c5b25a0e4",
+      "activeLabel": "Open web source: <details> HTML details disclosure element - HTML | MDN · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle. · developer.mozilla.org",
+      "stack": "Error: Source tooltip transition\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:70731:14)\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18665:51)\\x0a    at Object.onChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12415:46)\\x0a    at http://localhost:18227/ui/assets/main-Br2z6X1N.js:12393:25\\x0a    at untrack (http://localhost:18227/ui/assets/CommandMenuSurface-DaS4IonA.js:412:33)\\x0a    at setValue (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12387:5)\\x0a    at Object.open (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12418:5)\\x0a    at showTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18718:21)\\x0a    at Object.openTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18743:7)\\x0a    at handleShow (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18865:15)"
+    },
+    "message": "Source tooltip transition"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-11T03:45:04.770Z",
+    "service": "overlay:source-tooltip-diagnostic",
+    "logDomain": "non-session",
+    "data": {
+      "open": false,
+      "sourceId": "8ba8fb2958e87e6905cd723d78092c91077898626dbbccdd003b461c5b25a0e4",
+      "activeLabel": "Open web source: <details> HTML details disclosure element - HTML | MDN · #:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle. · developer.mozilla.org",
+      "stack": "Error: Source tooltip transition\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:70731:14)\\x0a    at Object.onOpenChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18665:51)\\x0a    at Object.onChange (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12415:46)\\x0a    at http://localhost:18227/ui/assets/main-Br2z6X1N.js:12393:25\\x0a    at untrack (http://localhost:18227/ui/assets/CommandMenuSurface-DaS4IonA.js:412:33)\\x0a    at setValue (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12387:5)\\x0a    at Object.close (http://localhost:18227/ui/assets/main-Br2z6X1N.js:12421:5)\\x0a    at hideTooltip (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18688:23)\\x0a    at handleScroll (http://localhost:18227/ui/assets/main-Br2z6X1N.js:18802:9)"
+    },
+    "message": "Source tooltip transition"
+  }
+]

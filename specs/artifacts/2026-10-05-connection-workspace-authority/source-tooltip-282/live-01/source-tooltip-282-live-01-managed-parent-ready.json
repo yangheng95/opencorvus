@@ -1,0 +1,15 @@
+{
+  "pid": 78632,
+  "occurrence": "source-tooltip-282-live-01-99c951dd-80e6-4849-9708-46997b11aef4",
+  "owner": {
+    "pid": 78632,
+    "processInstanceID": "win32:639272863527484113",
+    "occurrenceID": "f051e941-3f29-447e-8e29-8ed1a9f9f400"
+  },
+  "parent": {
+    "pid": 39920,
+    "processInstanceID": "win32:639272863527034353",
+    "occurrenceID": "217a9c53-90d5-4315-be69-a80df7d509f5"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

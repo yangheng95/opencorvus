@@ -1,0 +1,44 @@
+{
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0.",
+  "observedAtUtc": "2026-10-11T03:49:14.4441359Z",
+  "targetBirthUtc": "2026-10-11T03:43:42.3020541Z",
+  "files": [
+    {
+      "birthUtc": "2026-10-11T03:43:43.2045427Z",
+      "name": "091d165574530ade.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-tooltip-282\\generated-bun-live02\\091d165574530ade.debug.pile",
+      "bytes": 47224
+    },
+    {
+      "birthUtc": "2026-10-11T03:43:43.1820400Z",
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-tooltip-282\\generated-bun-live02\\69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556
+    },
+    {
+      "birthUtc": "2026-10-11T03:43:43.1565306Z",
+      "name": "7a87559fbb4087c4.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-tooltip-282\\generated-bun-live02\\7a87559fbb4087c4.debug.pile",
+      "bytes": 59902
+    },
+    {
+      "birthUtc": "2026-10-11T03:43:43.1661926Z",
+      "name": "cf86f20c120ce818.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-tooltip-282\\generated-bun-live02\\cf86f20c120ce818.debug.pile",
+      "bytes": 88408
+    },
+    {
+      "birthUtc": "2026-10-11T03:43:43.2213780Z",
+      "name": "f9ce0c567348c89d.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-tooltip-282\\generated-bun-live02\\f9ce0c567348c89d.debug.pile",
+      "bytes": 43530
+    }
+  ],
+  "nativeTerminal": {
+    "occurrenceID": "source-tooltip-282-live-02-614f3809-9fb0-4de3-b86f-fb6af2e28f86",
+    "pid": 41860,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  }
+}

@@ -1,0 +1,460 @@
+$ node --max-old-space-size=8192 ./node_modules/vite/bin/vite.js build --config vite.config.ts --minify false --sourcemap
+vite v6.4.3 building for production...
+transforming...
+../../node_modules/.bun/@radix-ui+react-direction@1.1.4+e14d3f224186685e/node_modules/@radix-ui/react-direction/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-direction@1.1.4+e14d3f224186685e/node_modules/@radix-ui/react-direction/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-dialog@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-dialog/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-dialog@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-dialog/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-popover@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-popover/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-popover@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-popover/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-dropdown-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-dropdown-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-hover-card@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-hover-card/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-hover-card@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-hover-card/dist/index.mjs" was ignored.
+../../node_modules/.bun/sonner@2.0.7+7492c01c6988791b/node_modules/sonner/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/sonner@2.0.7+7492c01c6988791b/node_modules/sonner/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-portal@1.1.17+7492c01c6988791b/node_modules/@radix-ui/react-portal/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-portal@1.1.17+7492c01c6988791b/node_modules/@radix-ui/react-portal/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-dismissable-layer@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-dismissable-layer@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-focus-guards@1.1.6+e14d3f224186685e/node_modules/@radix-ui/react-focus-guards/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-focus-guards@1.1.6+e14d3f224186685e/node_modules/@radix-ui/react-focus-guards/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-focus-scope@1.1.16+7492c01c6988791b/node_modules/@radix-ui/react-focus-scope/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-focus-scope@1.1.16+7492c01c6988791b/node_modules/@radix-ui/react-focus-scope/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-presence@1.1.10+7492c01c6988791b/node_modules/@radix-ui/react-presence/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-presence@1.1.10+7492c01c6988791b/node_modules/@radix-ui/react-presence/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-popper@1.3.7+7492c01c6988791b/node_modules/@radix-ui/react-popper/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-popper@1.3.7+7492c01c6988791b/node_modules/@radix-ui/react-popper/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-menu/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-menu/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-roving-focus@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-roving-focus/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-roving-focus@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-roving-focus/dist/index.mjs" was ignored.
+../../node_modules/.bun/@radix-ui+react-collection@1.1.15+7492c01c6988791b/node_modules/@radix-ui/react-collection/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-collection@1.1.15+7492c01c6988791b/node_modules/@radix-ui/react-collection/dist/index.mjs" was ignored.
+✓ 7272 modules transformed.
+rendering chunks...
+[plugin vite:reporter]
+(!) D:/myhexin-local/opencorvus/packages/overlay/src/services/file-workbench.ts is dynamically imported by D:/myhexin-local/opencorvus/packages/overlay/src/services/workspace.ts but also statically imported by D:/myhexin-local/opencorvus/packages/overlay/src/components/ChatComposer.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/FileEditorPane.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/FileExplorerPanel.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/SideChatPanel.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/SourceParts.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/TaskDirBar.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/settings/ServerConnectionSettingsGroup.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/main.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/services/connection-settings.ts, D:/myhexin-local/opencorvus/packages/overlay/src/services/events.ts, D:/myhexin-local/opencorvus/packages/overlay/src/services/workspace.ts, dynamic import will not move module into another chunk.
+
+computing gzip size...
+../dist-vite/native-menu.html                                                  0.62 kB │ gzip:     0.34 kB
+../dist-vite/assets/opencorvus-logo-dark-DzLoBvHF.svg                          6.43 kB │ gzip:     2.09 kB
+../dist-vite/assets/opencorvus-logo-light-D2HTuSVO.svg                         6.43 kB │ gzip:     2.09 kB
+../dist-vite/assets/noto-sans-sc-88-wght-normal-ClNDOCGW.woff2                 7.34 kB
+../dist-vite/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2              7.42 kB
+../dist-vite/assets/jetbrains-mono-vietnamese-wght-normal-Bt-aOZkq.woff2       7.50 kB
+../dist-vite/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2                8.00 kB
+../dist-vite/assets/noto-sans-sc-87-wght-normal-DYfJ-vGE.woff2                 8.01 kB
+../dist-vite/assets/noto-sans-sc-latin-ext-wght-normal-CqPqLCfe.woff2          8.24 kB
+../dist-vite/assets/noto-sans-sc-91-wght-normal-CGekvDdH.woff2                 8.70 kB
+../dist-vite/assets/jetbrains-mono-greek-wght-normal-Bw9x6K1M.woff2            9.00 kB
+../dist-vite/assets/noto-sans-sc-vietnamese-wght-normal-y5SU35Rl.woff2         9.10 kB
+../dist-vite/assets/noto-sans-sc-90-wght-normal-BWcrRNoG.woff2                 9.34 kB
+../dist-vite/assets/noto-sans-sc-99-wght-normal-Q_IptJM5.woff2                 9.70 kB
+../dist-vite/assets/noto-sans-sc-cyrillic-wght-normal-CRA5_Pf1.woff2          10.01 kB
+../dist-vite/assets/noto-sans-sc-89-wght-normal-IQU_KQA8.woff2                10.98 kB
+../dist-vite/assets/noto-sans-sc-21-wght-normal-DIu_1ZBI.woff2                11.36 kB
+../dist-vite/assets/noto-sans-sc-6-wght-normal-ozUCEY9O.woff2                 11.46 kB
+../dist-vite/index.html                                                       12.08 kB │ gzip:     2.91 kB
+../dist-vite/assets/jetbrains-mono-cyrillic-wght-normal-D73BlboJ.woff2        12.11 kB
+../dist-vite/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2                 15.08 kB
+../dist-vite/assets/jetbrains-mono-latin-ext-wght-normal-DBQx-q_a.woff2       15.20 kB
+../dist-vite/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2                16.51 kB
+../dist-vite/assets/noto-sans-sc-5-wght-normal-DI846rD9.woff2                 20.18 kB
+../dist-vite/assets/noto-sans-sc-latin-wght-normal-DYAKOyvl.woff2             25.24 kB
+../dist-vite/assets/noto-sans-sc-85-wght-normal-DBcDBu1n.woff2                26.90 kB
+../dist-vite/assets/geist-latin-wght-normal-BgDaEnEv.woff2                    29.40 kB
+../dist-vite/assets/noto-sans-sc-84-wght-normal-C7NxT478.woff2                32.61 kB
+../dist-vite/assets/noto-sans-sc-80-wght-normal-BEFypWOO.woff2                32.63 kB
+../dist-vite/assets/noto-sans-sc-86-wght-normal-CLJIoPpl.woff2                33.58 kB
+../dist-vite/assets/noto-sans-sc-41-wght-normal-CZqajZnl.woff2                36.42 kB
+../dist-vite/assets/noto-sans-sc-77-wght-normal-Dkbi3pye.woff2                36.79 kB
+../dist-vite/assets/noto-sans-sc-73-wght-normal-DwSJRYPJ.woff2                39.31 kB
+../dist-vite/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2           40.40 kB
+../dist-vite/assets/noto-sans-sc-79-wght-normal-DoJG4UTB.woff2                41.23 kB
+../dist-vite/assets/noto-sans-sc-60-wght-normal-C1lngC61.woff2                41.43 kB
+../dist-vite/assets/noto-sans-sc-64-wght-normal-CbIuD2Eg.woff2                41.54 kB
+../dist-vite/assets/noto-sans-sc-68-wght-normal-c0FjfUaj.woff2                41.57 kB
+../dist-vite/assets/noto-sans-sc-65-wght-normal-BGqvKda2.woff2                41.61 kB
+../dist-vite/assets/noto-sans-sc-51-wght-normal-C2bq6hC8.woff2                41.62 kB
+../dist-vite/assets/noto-sans-sc-36-wght-normal-CtU9CyKw.woff2                41.83 kB
+../dist-vite/assets/noto-sans-sc-70-wght-normal-ColEcmtJ.woff2                42.24 kB
+../dist-vite/assets/noto-sans-sc-83-wght-normal-C9UjAcMM.woff2                43.50 kB
+../dist-vite/assets/noto-sans-sc-53-wght-normal-Bgkuo2tF.woff2                43.53 kB
+../dist-vite/assets/noto-sans-sc-75-wght-normal-B0qL41rF.woff2                43.94 kB
+../dist-vite/assets/noto-sans-sc-61-wght-normal-BxWkGF5M.woff2                45.28 kB
+../dist-vite/assets/noto-sans-sc-42-wght-normal-CQ4lY28u.woff2                45.54 kB
+../dist-vite/assets/noto-sans-sc-50-wght-normal-C5KfAmFp.woff2                45.88 kB
+../dist-vite/assets/noto-sans-sc-82-wght-normal-DcxfR5OJ.woff2                46.18 kB
+../dist-vite/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2               46.19 kB
+../dist-vite/assets/noto-sans-sc-43-wght-normal-psppu0d8.woff2                46.62 kB
+../dist-vite/assets/noto-sans-sc-40-wght-normal-BVn4-kgX.woff2                46.63 kB
+../dist-vite/assets/noto-sans-sc-34-wght-normal-BF1rqDSt.woff2                46.89 kB
+../dist-vite/assets/noto-sans-sc-72-wght-normal-D1VyfEG3.woff2                47.03 kB
+../dist-vite/assets/noto-sans-sc-31-wght-normal-DW0t445S.woff2                47.22 kB
+../dist-vite/assets/noto-sans-sc-33-wght-normal-BOTZYTjM.woff2                47.45 kB
+../dist-vite/assets/noto-sans-sc-27-wght-normal-BP2pEGQH.woff2                47.49 kB
+../dist-vite/assets/noto-sans-sc-81-wght-normal-ed_TZlfo.woff2                47.55 kB
+../dist-vite/assets/noto-sans-sc-59-wght-normal-Azv2Ku9_.woff2                47.68 kB
+../dist-vite/assets/noto-sans-sc-71-wght-normal-ChZfXpdg.woff2                47.90 kB
+../dist-vite/assets/noto-sans-sc-55-wght-normal-BV_Oy6IF.woff2                48.13 kB
+../dist-vite/assets/noto-sans-sc-76-wght-normal-BPLMO_2x.woff2                48.42 kB
+../dist-vite/assets/noto-sans-sc-78-wght-normal-BFUXeSw6.woff2                49.16 kB
+../dist-vite/assets/noto-sans-sc-63-wght-normal-4La5uKvS.woff2                49.18 kB
+../dist-vite/assets/noto-sans-sc-28-wght-normal-BWPKDbtH.woff2                50.20 kB
+../dist-vite/assets/noto-sans-sc-35-wght-normal-Bosspiyr.woff2                50.69 kB
+../dist-vite/assets/noto-sans-sc-48-wght-normal-DFMjDDY6.woff2                50.76 kB
+../dist-vite/assets/noto-sans-sc-26-wght-normal-YNOygvr_.woff2                50.89 kB
+../dist-vite/assets/noto-sans-sc-39-wght-normal-Ddtm1XVC.woff2                51.78 kB
+../dist-vite/assets/noto-sans-sc-52-wght-normal-P18e_Y0j.woff2                51.84 kB
+../dist-vite/assets/noto-sans-sc-54-wght-normal-DL5lmlUd.woff2                52.00 kB
+../dist-vite/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2               52.46 kB
+../dist-vite/assets/noto-sans-sc-32-wght-normal-ShbWPcei.woff2                52.55 kB
+../dist-vite/assets/noto-sans-sc-67-wght-normal-CC-WRBV-.woff2                52.58 kB
+../dist-vite/assets/noto-sans-sc-49-wght-normal-B7l_3BZr.woff2                52.84 kB
+../dist-vite/assets/noto-sans-sc-66-wght-normal-BvNozWOY.woff2                52.87 kB
+../dist-vite/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2               52.98 kB
+../dist-vite/assets/noto-sans-sc-56-wght-normal-B4L7Hj8f.woff2                53.50 kB
+../dist-vite/assets/noto-sans-sc-37-wght-normal-ghDiyiuv.woff2                53.53 kB
+../dist-vite/assets/noto-sans-sc-29-wght-normal-45aVmHn_.woff2                54.01 kB
+../dist-vite/assets/noto-sans-sc-44-wght-normal-cbKJlTUe.woff2                54.24 kB
+../dist-vite/assets/noto-sans-sc-38-wght-normal-4Nz8k_dt.woff2                54.59 kB
+../dist-vite/assets/noto-sans-sc-30-wght-normal-B8_s30jZ.woff2                54.66 kB
+../dist-vite/assets/noto-sans-sc-57-wght-normal-DU8YBsDj.woff2                55.50 kB
+../dist-vite/assets/noto-sans-sc-69-wght-normal-D596Jjl2.woff2                55.60 kB
+../dist-vite/assets/noto-sans-sc-47-wght-normal-C5Kgg1_m.woff2                56.16 kB
+../dist-vite/assets/noto-sans-sc-74-wght-normal-Cte7o1QG.woff2                56.42 kB
+../dist-vite/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2               56.51 kB
+../dist-vite/assets/noto-sans-sc-23-wght-normal-4HrHKhpL.woff2                56.79 kB
+../dist-vite/assets/noto-sans-sc-58-wght-normal-CE0BKS9u.woff2                57.65 kB
+../dist-vite/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2               57.65 kB
+../dist-vite/assets/noto-sans-sc-46-wght-normal-CErGc6Mt.woff2                57.67 kB
+../dist-vite/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2               57.96 kB
+../dist-vite/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2               58.20 kB
+../dist-vite/assets/noto-sans-sc-25-wght-normal-C3Jm6l7O.woff2                58.32 kB
+../dist-vite/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2               58.65 kB
+../dist-vite/assets/noto-sans-sc-62-wght-normal-CXXMAq-5.woff2                59.11 kB
+../dist-vite/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2               60.37 kB
+../dist-vite/assets/noto-sans-sc-102-wght-normal-C1RtbCZr.woff2               60.71 kB
+../dist-vite/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2               61.08 kB
+../dist-vite/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2               61.47 kB
+../dist-vite/assets/noto-sans-sc-104-wght-normal-CJT2ioDJ.woff2               61.59 kB
+../dist-vite/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2               61.83 kB
+../dist-vite/assets/noto-sans-sc-24-wght-normal-B58DWgHS.woff2                62.58 kB
+../dist-vite/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2               62.64 kB
+../dist-vite/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2               62.66 kB
+../dist-vite/assets/noto-sans-sc-103-wght-normal-DGHo20nu.woff2               63.86 kB
+../dist-vite/assets/noto-sans-sc-100-wght-normal-DrqXJETY.woff2               64.55 kB
+../dist-vite/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2               64.55 kB
+../dist-vite/assets/noto-sans-sc-22-wght-normal-VXjdYcT-.woff2                65.38 kB
+../dist-vite/assets/noto-sans-sc-45-wght-normal-MKIEVRIC.woff2                67.62 kB
+../dist-vite/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2               76.80 kB
+../dist-vite/assets/markdown-render.worker-Bx44SgeF.js                       351.70 kB
+../dist-vite/assets/maplibre-gl-worker-BzyLzIJJ.js                           473.61 kB
+../dist-vite/assets/pdf.worker.min-Cpi8b8z3.mjs                            1,050.96 kB
+../dist-vite/assets/native-menu-D_5d37eP.css                                   0.45 kB │ gzip:     0.26 kB
+../dist-vite/assets/vega-embed-policy-C0rvHKVS.css                             3.73 kB │ gzip:     1.23 kB
+../dist-vite/assets/TerminalArtifact-GVL3fBIr.css                              7.11 kB │ gzip:     2.52 kB
+../dist-vite/assets/TimelineArtifact-Wz_cB3Nl.css                             26.12 kB │ gzip:     4.63 kB
+../dist-vite/assets/PresentationArtifact-DIdUo969.css                         62.21 kB │ gzip:    13.18 kB
+../dist-vite/assets/SpreadsheetArtifact-CdLdnRwl.css                          82.37 kB │ gzip:    12.85 kB
+../dist-vite/assets/MapArtifact-B2In2hIc.css                                  83.20 kB │ gzip:    10.55 kB
+../dist-vite/assets/CommandMenuSurface-B2Lq9ltB.css                          172.47 kB │ gzip:    57.68 kB
+../dist-vite/assets/main-DzDMLwU1.css                                        681.02 kB │ gzip:   105.96 kB
+../dist-vite/assets/colors-CJG58WzC.js                                         0.25 kB │ gzip:     0.21 kB │ map:      0.74 kB
+../dist-vite/assets/channel-DidISeoe.js                                        0.27 kB │ gzip:     0.22 kB │ map:      0.62 kB
+../dist-vite/assets/range-BRcAanmR.js                                          0.40 kB │ gzip:     0.27 kB │ map:      1.17 kB
+../dist-vite/assets/chunk-2Q5K7J3B-CKU8Dv6C.js                                 0.47 kB │ gzip:     0.30 kB │ map:      1.00 kB
+../dist-vite/assets/chunk-JWPE2WC7-CqqnmtR6.js                                 0.47 kB │ gzip:     0.27 kB │ map:      1.06 kB
+../dist-vite/assets/chunk-5VM5RSS4-CgXVEe3i.js                                 0.52 kB │ gzip:     0.37 kB │ map:      0.86 kB
+../dist-vite/assets/chunk-XXDRQBXY-B1NLnf7X.js                                 0.54 kB │ gzip:     0.34 kB │ map:      1.27 kB
+../dist-vite/assets/diff-DQutOIXs.js                                           0.62 kB │ gzip:     0.35 kB │ map:      1.60 kB
+../dist-vite/assets/init-CT6u7j_0.js                                           0.72 kB │ gzip:     0.29 kB │ map:      1.63 kB
+../dist-vite/assets/DocumentArtifact-CBpTl3Pm.js                               0.84 kB │ gzip:     0.42 kB │ map:      1.70 kB
+../dist-vite/assets/stateDiagram-v2-UEYNNEHI-DaJah-mY.js                       0.92 kB │ gzip:     0.50 kB │ map:      1.78 kB
+../dist-vite/assets/classDiagram-JCYQIIEL-CGL7vVpM.js                          0.96 kB │ gzip:     0.52 kB │ map:      1.79 kB
+../dist-vite/assets/classDiagram-v2-OCEON4UE-DC4A237B.js                       0.96 kB │ gzip:     0.52 kB │ map:      1.80 kB
+../dist-vite/assets/swimlanesDiagram-ULZ7WXOC-CfeBAGqP.js                      1.01 kB │ gzip:     0.55 kB │ map:      1.73 kB
+../dist-vite/assets/chunk-KBJHAD2P-t0LPihzx.js                                 1.17 kB │ gzip:     0.55 kB │ map:      2.70 kB
+../dist-vite/assets/infoDiagram-6WML65LV-ClPZYsv3.js                           1.27 kB │ gzip:     0.67 kB │ map:      2.65 kB
+../dist-vite/assets/MediaArtifact-CDOT2LZu.js                                  1.31 kB │ gzip:     0.53 kB │ map:      2.47 kB
+../dist-vite/assets/pa-C54UG8eN-DkWJqd3w.js                                    1.37 kB │ gzip:     0.74 kB │ map:      2.03 kB
+../dist-vite/assets/SelectField-CYsPZCf8.js                                    1.41 kB │ gzip:     0.60 kB │ map:      3.57 kB
+../dist-vite/assets/or-50rxpoq4-sT6eqV2a.js                                    1.42 kB │ gzip:     0.75 kB │ map:      2.10 kB
+../dist-vite/assets/gu-Bjl0l-cf-BYLEHg-3.js                                    1.43 kB │ gzip:     0.75 kB │ map:      2.12 kB
+../dist-vite/assets/brainfuck-COwWCBpq.js                                      1.45 kB │ gzip:     0.56 kB │ map:      3.27 kB
+../dist-vite/assets/hi-DsAaTPCC-D4VfmsYX.js                                    1.47 kB │ gzip:     0.76 kB │ map:      2.17 kB
+../dist-vite/assets/mr-CjWJPVmH-C4HRFU8U.js                                    1.47 kB │ gzip:     0.76 kB │ map:      2.17 kB
+../dist-vite/assets/as-BPtSu6VN-BdH-z2CV.js                                    1.49 kB │ gzip:     0.77 kB │ map:      2.20 kB
+../dist-vite/assets/bn-NCLZcWHi-L0Vt25Ff.js                                    1.49 kB │ gzip:     0.77 kB │ map:      2.20 kB
+../dist-vite/assets/te-B5Spl2Jk-CNkJB6p7.js                                    1.49 kB │ gzip:     0.76 kB │ map:      2.20 kB
+../dist-vite/assets/kn-C6Lov-DP-SQ42GiSr.js                                    1.50 kB │ gzip:     0.77 kB │ map:      2.21 kB
+../dist-vite/assets/properties-o21uErwC.js                                     1.56 kB │ gzip:     0.56 kB │ map:      3.46 kB
+../dist-vite/assets/ta-BcghgTbD-C-F0JCI_.js                                    1.58 kB │ gzip:     0.75 kB │ map:      2.29 kB
+../dist-vite/assets/asciiarmor-CmJEbAuq.js                                     1.58 kB │ gzip:     0.55 kB │ map:      3.72 kB
+../dist-vite/assets/protobuf-YxlANsmD.js                                       1.58 kB │ gzip:     0.72 kB │ map:      3.52 kB
+../dist-vite/assets/ml-2xLVYkVY-Ba22K1GV.js                                    1.70 kB │ gzip:     0.82 kB │ map:      2.48 kB
+../dist-vite/assets/troff-DckGF2AE.js                                          1.74 kB │ gzip:     0.57 kB │ map:      4.43 kB
+../dist-vite/assets/pi-B9cgjyG1-DiermFYv.js                                    1.81 kB │ gzip:     0.85 kB │ map:      2.70 kB
+../dist-vite/assets/http-BOd5SYCT.js                                           1.82 kB │ gzip:     0.60 kB │ map:      4.48 kB
+../dist-vite/assets/solr-v_XRf31C.js                                           1.85 kB │ gzip:     0.66 kB │ map:      4.35 kB
+../dist-vite/assets/cmake-BGrEgXCL.js                                          2.03 kB │ gzip:     0.83 kB │ map:      4.46 kB
+../dist-vite/assets/sizeCapture-X5ZJPWSS-CIOYP_Lp.js                           2.07 kB │ gzip:     0.88 kB │ map:      3.99 kB
+../dist-vite/assets/toml-D3FQuihs.js                                           2.31 kB │ gzip:     0.79 kB │ map:      5.41 kB
+../dist-vite/assets/spreadsheet-Csn84Pef.js                                    2.32 kB │ gzip:     0.77 kB │ map:      5.44 kB
+../dist-vite/assets/zh-latn-pinyin-BdYb-Ey_-DsMuh5QB.js                        2.44 kB │ gzip:     0.70 kB │ map:      3.67 kB
+../dist-vite/assets/theme-color-DzoNbKEq.js                                    2.48 kB │ gzip:     0.91 kB │ map:      5.90 kB
+../dist-vite/assets/CodeArtifact-COnJJuev.js                                   2.49 kB │ gzip:     0.84 kB │ map:      4.51 kB
+../dist-vite/assets/eu-Ctv_kq9Z-BeUQ5sHd.js                                    2.70 kB │ gzip:     0.69 kB │ map:      4.04 kB
+../dist-vite/assets/ordinal-CLnAkJCc.js                                        2.71 kB │ gzip:     0.86 kB │ map:      6.94 kB
+../dist-vite/assets/factor-3HKrNxCe.js                                         2.72 kB │ gzip:     0.91 kB │ map:      5.59 kB
+../dist-vite/assets/rpm-Duv_WH0z.js                                            3.00 kB │ gzip:     1.14 kB │ map:      6.07 kB
+../dist-vite/assets/eiffel-lj7uLahq.js                                         3.03 kB │ gzip:     1.15 kB │ map:      7.32 kB
+../dist-vite/assets/ArmedConfirmButton-DBXgSnDX.js                             3.04 kB │ gzip:     1.02 kB │ map:      6.58 kB
+../dist-vite/assets/railroadDiagram-AXF67PYL-Cbzm9tGS.js                       3.04 kB │ gzip:     1.10 kB │ map:      6.15 kB
+../dist-vite/assets/z80-P1j44jDI.js                                            3.09 kB │ gzip:     1.00 kB │ map:      6.37 kB
+../dist-vite/assets/native-menu-BE_NGGUf.js                                    3.10 kB │ gzip:     1.07 kB │ map:      7.01 kB
+../dist-vite/assets/mbox-CYTvs5kC.js                                           3.12 kB │ gzip:     1.08 kB │ map:      6.61 kB
+../dist-vite/assets/settings-status-labels-BJ6TdVv-.js                         3.19 kB │ gzip:     0.79 kB │ map:      6.88 kB
+../dist-vite/assets/sieve-CWCD62sW.js                                          3.52 kB │ gzip:     1.24 kB │ map:      8.30 kB
+../dist-vite/assets/apl-NdZ6-T1z.js                                            3.61 kB │ gzip:     1.44 kB │ map:      8.95 kB
+../dist-vite/assets/pascal-Dksf1EyF.js                                         3.64 kB │ gzip:     1.46 kB │ map:      7.66 kB
+../dist-vite/assets/abnfDiagram-N423BO3Z-DqVNavlx.js                           3.66 kB │ gzip:     1.32 kB │ map:      7.65 kB
+../dist-vite/assets/pt-Cum2_NUC-DnW2bZ56.js                                    3.68 kB │ gzip:     0.78 kB │ map:      5.46 kB
+../dist-vite/assets/index-CnRJp-4X.js                                          3.72 kB │ gzip:     1.85 kB │ map:      6.19 kB
+../dist-vite/assets/chunk-2GRJ4B5K-D8xMh-fy.js                                 3.79 kB │ gzip:     1.17 kB │ map:      8.84 kB
+../dist-vite/assets/fcl-DiozYjc8.js                                            3.81 kB │ gzip:     1.28 kB │ map:      9.11 kB
+../dist-vite/assets/octave-6yR_ix15.js                                         3.84 kB │ gzip:     1.42 kB │ map:      8.54 kB
+../dist-vite/assets/id-DifDyWg9-DjhSzHy4.js                                    3.89 kB │ gzip:     1.15 kB │ map:      6.27 kB
+../dist-vite/assets/pegDiagram-VL7TDLO6-BI7FlGkM.js                            3.90 kB │ gzip:     1.35 kB │ map:      8.15 kB
+../dist-vite/assets/turtle-D9Js0BlL.js                                         3.90 kB │ gzip:     1.23 kB │ map:      9.41 kB
+../dist-vite/assets/dockerfile-Bc2C4Ut8.js                                     3.91 kB │ gzip:     1.02 kB │ map:      8.60 kB
+../dist-vite/assets/dtd-C1CeYVnM.js                                            3.92 kB │ gzip:     1.20 kB │ map:      9.63 kB
+../dist-vite/assets/smalltalk-DSQbF4MF.js                                      3.92 kB │ gzip:     1.17 kB │ map:      9.28 kB
+../dist-vite/assets/oc-P_i3-xLA-bdErcZzK.js                                    3.93 kB │ gzip:     1.20 kB │ map:      5.66 kB
+../dist-vite/assets/commonlisp-8oE2EpEe.js                                     3.93 kB │ gzip:     1.38 kB │ map:      9.28 kB
+../dist-vite/assets/index-CIkiTTo3.js                                          3.94 kB │ gzip:     2.04 kB │ map:      7.00 kB
+../dist-vite/assets/ChartArtifact-9K8q3HOA.js                                  4.02 kB │ gzip:     1.48 kB │ map:      8.58 kB
+../dist-vite/assets/ebnfDiagram-BXEA7PRR-B8OTvc_n.js                           4.07 kB │ gzip:     1.30 kB │ map:      8.27 kB
+../dist-vite/assets/ebnf-jWG_1Yly.js                                           4.13 kB │ gzip:     1.11 kB │ map:      9.37 kB
+../dist-vite/assets/kmr-Cfwhwuff-BoDicBDm.js                                   4.20 kB │ gzip:     1.33 kB │ map:      6.10 kB
+../dist-vite/assets/forth-B7vn5ze0.js                                          4.21 kB │ gzip:     1.66 kB │ map:      8.39 kB
+../dist-vite/assets/tcl-BRlMUELr.js                                            4.25 kB │ gzip:     1.51 kB │ map:      8.75 kB
+../dist-vite/assets/elm-Cz7o1ijk.js                                            4.37 kB │ gzip:     1.21 kB │ map:     10.52 kB
+../dist-vite/assets/mumps-Bf1EyDa6.js                                          4.38 kB │ gzip:     1.74 kB │ map:      9.33 kB
+../dist-vite/assets/simple-mode-DouSrWNz.js                                    4.40 kB │ gzip:     1.47 kB │ map:     10.88 kB
+../dist-vite/assets/yacas-DQ1WucF0.js                                          4.54 kB │ gzip:     1.63 kB │ map:      9.88 kB
+../dist-vite/assets/AppearancePanel-SA5KfB1E.js                                4.54 kB │ gzip:     1.13 kB │ map:      8.39 kB
+../dist-vite/assets/pig-DFeDRta6.js                                            4.62 kB │ gzip:     1.95 kB │ map:      8.68 kB
+../dist-vite/assets/shell-Bx6QZTgx.js                                          4.63 kB │ gzip:     1.56 kB │ map:     11.28 kB
+../dist-vite/assets/mathematica-Dkv0uCYF.js                                    4.76 kB │ gzip:     1.70 kB │ map:      9.15 kB
+../dist-vite/assets/fi-RW5VB8Yp-_SI1jZnB.js                                    4.77 kB │ gzip:     1.30 kB │ map:      6.90 kB
+../dist-vite/assets/la-DuvHjUWw-Y7xILl6H.js                                    4.78 kB │ gzip:     1.16 kB │ map:      6.94 kB
+../dist-vite/assets/ntriples-C7VJ7pnm.js                                       4.88 kB │ gzip:     1.07 kB │ map:     10.76 kB
+../dist-vite/assets/lua-JSpo1NmE.js                                            4.96 kB │ gzip:     1.79 kB │ map:     11.45 kB
+../dist-vite/assets/pms-BRGfm5gS-DwMhBvUg.js                                   5.01 kB │ gzip:     1.45 kB │ map:      7.26 kB
+../dist-vite/assets/modelica-CR6hTSce.js                                       5.05 kB │ gzip:     1.73 kB │ map:     11.01 kB
+../dist-vite/assets/index-CmW7CtxM.js                                          5.09 kB │ gzip:     2.17 kB │ map:      8.41 kB
+../dist-vite/assets/webidl-Cp3tcqdk.js                                         5.23 kB │ gzip:     1.81 kB │ map:     10.47 kB
+../dist-vite/assets/it-Bt_Meacx-bf6rza_Q.js                                    5.27 kB │ gzip:     1.42 kB │ map:      7.53 kB
+../dist-vite/assets/mul-ethi-D_CMSMEq-CJgia8VW.js                              5.33 kB │ gzip:     1.59 kB │ map:      7.58 kB
+../dist-vite/assets/velocity-D6hz3Hzw.js                                       5.35 kB │ gzip:     1.60 kB │ map:     11.39 kB
+../dist-vite/assets/rm-C0MIK9N4-COcb1EMn.js                                    5.37 kB │ gzip:     1.49 kB │ map:      7.76 kB
+../dist-vite/assets/DesktopUpdatePanel-DEX8AbR6.js                             5.54 kB │ gzip:     1.20 kB │ map:      8.60 kB
+../dist-vite/assets/cypher-Bayei42D.js                                         5.57 kB │ gzip:     1.85 kB │ map:     13.16 kB
+../dist-vite/assets/mscgen-D0GXtzMS.js                                         5.60 kB │ gzip:     1.28 kB │ map:     12.79 kB
+../dist-vite/assets/fur-AC12wySk-Q7Vw1aaV.js                                   5.66 kB │ gzip:     1.57 kB │ map:      8.16 kB
+../dist-vite/assets/oz-CEUnktiQ.js                                             5.85 kB │ gzip:     1.93 kB │ map:     12.91 kB
+../dist-vite/assets/tr-CIHIuzqc-gb1Q-ics.js                                    5.90 kB │ gzip:     0.82 kB │ map:      8.74 kB
+../dist-vite/assets/r-D73k5lac.js                                              5.91 kB │ gzip:     1.86 kB │ map:     13.88 kB
+../dist-vite/assets/vhdl-BlTiZo_v.js                                           5.91 kB │ gzip:     1.96 kB │ map:     13.08 kB
+../dist-vite/assets/q-kdDZprHD.js                                              5.93 kB │ gzip:     2.04 kB │ map:     14.59 kB
+../dist-vite/assets/NetworkArtifact-ipg8sPN0.js                                5.96 kB │ gzip:     2.05 kB │ map:     13.94 kB
+../dist-vite/assets/sparql-BrfDqf0-.js                                         6.11 kB │ gzip:     2.04 kB │ map:     13.65 kB
+../dist-vite/assets/livescript-Dci8HnOi.js                                     6.38 kB │ gzip:     1.93 kB │ map:     13.35 kB
+../dist-vite/assets/asterisk-D6r__RMF.js                                       6.49 kB │ gzip:     2.17 kB │ map:     14.10 kB
+../dist-vite/assets/swift-CHbTprt3.js                                          6.66 kB │ gzip:     2.30 kB │ map:     14.92 kB
+../dist-vite/assets/d-B0hhz6be.js                                              6.71 kB │ gzip:     2.15 kB │ map:     14.81 kB
+../dist-vite/assets/TreeArtifact-BSh-LvnG.js                                   6.75 kB │ gzip:     1.75 kB │ map:     12.20 kB
+../dist-vite/assets/puppet-B8WICGYE.js                                         6.77 kB │ gzip:     2.49 kB │ map:     11.95 kB
+../dist-vite/assets/mn-cyrl-x-lmc-3aetruI8-FSLaVD69.js                         6.82 kB │ gzip:     1.81 kB │ map:      9.75 kB
+../dist-vite/assets/stex-DBkktma-.js                                           6.85 kB │ gzip:     1.80 kB │ map:     15.59 kB
+../dist-vite/assets/el-monoton-D3aKqTz2-CKOGDoTv.js                            6.90 kB │ gzip:     1.46 kB │ map:      9.92 kB
+../dist-vite/assets/tiddlywiki-BrsoM8KB.js                                     6.96 kB │ gzip:     1.94 kB │ map:     15.04 kB
+../dist-vite/assets/haskell-BHnm1B83.js                                        7.00 kB │ gzip:     2.41 kB │ map:     16.58 kB
+../dist-vite/assets/asn1-Ctc8K72v.js                                           7.39 kB │ gzip:     2.47 kB │ map:     14.79 kB
+../dist-vite/assets/NotebookArtifact-B3ovNrLx.js                               7.40 kB │ gzip:     1.45 kB │ map:      9.78 kB
+../dist-vite/assets/fortran-D2XNEnBT.js                                        7.45 kB │ gzip:     2.46 kB │ map:     15.61 kB
+../dist-vite/assets/tiki-D-ivWPkc.js                                           7.55 kB │ gzip:     2.04 kB │ map:     17.12 kB
+../dist-vite/assets/groovy-ioGz2WSV.js                                         7.56 kB │ gzip:     2.32 kB │ map:     17.57 kB
+../dist-vite/assets/vb-CbIGLrpY.js                                             7.62 kB │ gzip:     2.50 kB │ map:     16.85 kB
+../dist-vite/assets/diagram-LBJQPF4R-DE-Nw34h.js                               7.65 kB │ gzip:     2.53 kB │ map:     16.53 kB
+../dist-vite/assets/_initCloneObject-B0pHwX-R.js                               7.66 kB │ gzip:     2.29 kB │ map:     15.13 kB
+../dist-vite/assets/ttcn-cfg-NHh25oCM.js                                       7.80 kB │ gzip:     2.23 kB │ map:     14.78 kB
+../dist-vite/assets/nsis-DwujDy1z.js                                           7.86 kB │ gzip:     3.31 kB │ map:     10.56 kB
+../dist-vite/assets/ecl-CgJPA6z9.js                                            7.87 kB │ gzip:     2.78 kB │ map:     15.80 kB
+../dist-vite/assets/index-Ca_bh2CN.js                                          8.06 kB │ gzip:     3.04 kB │ map:     13.24 kB
+../dist-vite/assets/mllike-C6tNn2Yt.js                                         8.22 kB │ gzip:     1.91 kB │ map:     18.16 kB
+../dist-vite/assets/coffeescript-BG8vTfSz.js                                   8.56 kB │ gzip:     2.49 kB │ map:     19.31 kB
+../dist-vite/assets/ttcn-B8TAFbRR.js                                           8.56 kB │ gzip:     2.71 kB │ map:     18.02 kB
+../dist-vite/assets/gas-B_Tj57Ve.js                                            8.90 kB │ gzip:     2.07 kB │ map:     18.79 kB
+../dist-vite/assets/arc-CRUlcUHC.js                                            8.93 kB │ gzip:     2.63 kB │ map:     21.45 kB
+../dist-vite/assets/ia-Cr4TJH0c-Ac3FIahX.js                                    8.94 kB │ gzip:     2.45 kB │ map:     12.99 kB
+../dist-vite/assets/dylan-Dm9-uD-A.js                                          9.10 kB │ gzip:     2.65 kB │ map:     18.95 kB
+../dist-vite/assets/mirc-DpgP3GCo.js                                           9.19 kB │ gzip:     3.10 kB │ map:     14.62 kB
+../dist-vite/assets/cobol-DShPmpZe.js                                          9.28 kB │ gzip:     3.60 kB │ map:     16.32 kB
+../dist-vite/assets/cop-C3sk0IUo-YlgiR18c.js                                   9.29 kB │ gzip:     1.26 kB │ map:     13.07 kB
+../dist-vite/assets/nginx-By9Phklj.js                                          9.40 kB │ gzip:     3.08 kB │ map:     15.29 kB
+../dist-vite/assets/Switch-9GBfQ2o0.js                                         9.46 kB │ gzip:     2.40 kB │ map:     21.85 kB
+../dist-vite/assets/DashboardArtifact-Bm0TR-r4.js                              9.74 kB │ gzip:     2.87 kB │ map:     20.02 kB
+../dist-vite/assets/ruby-Bv6ja8WW.js                                           9.81 kB │ gzip:     2.92 kB │ map:     22.95 kB
+../dist-vite/assets/ro-0fmdH0HA-BH_-NbDa.js                                    9.82 kB │ gzip:     2.79 kB │ map:     13.91 kB
+../dist-vite/assets/julia-DM42tOPB.js                                         10.16 kB │ gzip:     2.97 kB │ map:     22.94 kB
+../dist-vite/assets/index-BzC_wqfL.js                                         10.73 kB │ gzip:     2.81 kB │ map:     29.08 kB
+../dist-vite/assets/ca-SUf6Y2Om-DoqvMUwA.js                                   10.82 kB │ gzip:     1.69 kB │ map:     16.09 kB
+../dist-vite/assets/crystal--rIRMl16.js                                       10.98 kB │ gzip:     2.80 kB │ map:     25.38 kB
+../dist-vite/assets/defaultLocale-DG5JsUjF.js                                 11.61 kB │ gzip:     3.73 kB │ map:     27.58 kB
+../dist-vite/assets/scheme-DeaA28vt.js                                        11.69 kB │ gzip:     3.53 kB │ map:     20.38 kB
+../dist-vite/assets/diagram-UB23O5K3-BDcxiTBk.js                              11.71 kB │ gzip:     3.49 kB │ map:     26.74 kB
+../dist-vite/assets/powershell-DhwsNWMx.js                                    11.75 kB │ gzip:     3.97 kB │ map:     21.90 kB
+../dist-vite/assets/la-x-classic-yTyAOQEt-D0KUn-1s.js                         11.91 kB │ gzip:     2.95 kB │ map:     16.82 kB
+../dist-vite/assets/textile-CqfTUjd4.js                                       12.15 kB │ gzip:     3.08 kB │ map:     28.68 kB
+../dist-vite/assets/gherkin-CJ6Qk4EZ.js                                       12.15 kB │ gzip:     5.42 kB │ map:     16.61 kB
+../dist-vite/assets/pug-bUgjeODZ.js                                           12.21 kB │ gzip:     2.51 kB │ map:     26.20 kB
+../dist-vite/assets/sa-CKY9c_Vq-BOQFAkXg.js                                   12.58 kB │ gzip:     2.29 kB │ map:     17.29 kB
+../dist-vite/assets/vbscript-8ANWle9n.js                                      12.97 kB │ gzip:     3.64 kB │ map:     24.86 kB
+../dist-vite/assets/linear-BUcYiviJ.js                                        13.04 kB │ gzip:     3.75 kB │ map:     35.03 kB
+../dist-vite/assets/pieDiagram-7S7Q4E2Y-DJMQYG_q.js                           13.10 kB │ gzip:     3.75 kB │ map:     28.78 kB
+../dist-vite/assets/_baseSet-D9JaKCVA.js                                      13.15 kB │ gzip:     3.83 kB │ map:     25.41 kB
+../dist-vite/assets/sas-XjPv1Vy5.js                                           13.53 kB │ gzip:     5.14 kB │ map:     22.69 kB
+../dist-vite/assets/idl-FSFk8_xX.js                                           13.87 kB │ gzip:     5.06 kB │ map:     26.78 kB
+../dist-vite/assets/python-D3FFx1Id.js                                        13.88 kB │ gzip:     3.86 kB │ map:     29.33 kB
+../dist-vite/assets/xquery-Dd4TBzXv.js                                        14.62 kB │ gzip:     4.29 kB │ map:     29.62 kB
+../dist-vite/assets/map-B7_z5zUc.js                                           15.25 kB │ gzip:     4.02 kB │ map:     29.75 kB
+../dist-vite/assets/hr-DT1SBBes-BDtsYxGy.js                                   15.36 kB │ gzip:     1.53 kB │ map:     22.34 kB
+../dist-vite/assets/haxe-Bn6Yo6N3.js                                          15.86 kB │ gzip:     4.17 kB │ map:     38.01 kB
+../dist-vite/assets/hy-e995ysyO-BChCO4xY.js                                   15.93 kB │ gzip:     0.86 kB │ map:     22.91 kB
+../dist-vite/assets/mn-cyrl-lHM4n0oC-Baty6akR.js                              15.94 kB │ gzip:     2.83 kB │ map:     22.49 kB
+../dist-vite/assets/clojure-C2XPrGCa.js                                       16.14 kB │ gzip:     4.88 kB │ map:     31.93 kB
+../dist-vite/assets/sl-DpiklF-D-Bi2s-_ma.js                                   16.52 kB │ gzip:     4.15 kB │ map:     23.33 kB
+../dist-vite/assets/diagram-7IWD3JNH-DQHWAGQe.js                              16.75 kB │ gzip:     5.16 kB │ map:     36.23 kB
+../dist-vite/assets/erlang-CyL5QOyR.js                                        16.75 kB │ gzip:     4.55 kB │ map:     38.16 kB
+../dist-vite/assets/da-CCDXfXtG-8XQkY5gZ.js                                   16.79 kB │ gzip:     4.20 kB │ map:     23.92 kB
+../dist-vite/assets/ArchivePanel-Bja51tFh.js                                  18.20 kB │ gzip:     3.84 kB │ map:     34.25 kB
+../dist-vite/assets/ConversationCapabilityPanel-B6Aa6icM.js                   18.55 kB │ gzip:     2.71 kB │ map:     25.48 kB
+../dist-vite/assets/dagre-VZM6K2ZE-Kfn23pDL.js                                18.58 kB │ gzip:     4.64 kB │ map:     41.87 kB
+../dist-vite/assets/hsb-DC_ITc1e-BEj4ww-H.js                                  18.69 kB │ gzip:     2.57 kB │ map:     27.49 kB
+../dist-vite/assets/chunk-RYQCIY6F-BiNE4lug.js                                18.72 kB │ gzip:     4.86 kB │ map:     41.47 kB
+../dist-vite/assets/cynefinDiagram-MW4NZA55-lCOetcAD.js                       18.78 kB │ gzip:     4.75 kB │ map:     43.33 kB
+../dist-vite/assets/index-R9YnyN1-.js                                         18.94 kB │ gzip:     8.10 kB │ map:     24.89 kB
+../dist-vite/assets/lt-BBe8DlDF-BXz3pGjx.js                                   19.26 kB │ gzip:     4.31 kB │ map:     27.23 kB
+../dist-vite/assets/ExpertSquadMarketPanel-6U3nP2L6.js                        19.28 kB │ gzip:     3.75 kB │ map:     34.59 kB
+../dist-vite/assets/stateDiagram-OKZ733FA-gattv-OR.js                         19.47 kB │ gzip:     5.01 kB │ map:     45.90 kB
+../dist-vite/assets/verilog-DIV442at.js                                       19.90 kB │ gzip:     6.11 kB │ map:     39.23 kB
+../dist-vite/assets/index-kQWdNFzz.js                                         20.94 kB │ gzip:     7.56 kB │ map:     36.66 kB
+../dist-vite/assets/index-CsLNWyGm.js                                         21.73 kB │ gzip:     7.28 kB │ map:     41.03 kB
+../dist-vite/assets/diagram-B4RE2ZJO-sq6MUplT.js                              21.94 kB │ gzip:     5.65 kB │ map:     47.27 kB
+../dist-vite/assets/el-polyton-ogVWcTzh-B11HROqC.js                           22.56 kB │ gzip:     3.58 kB │ map:     31.38 kB
+../dist-vite/assets/tk-BMbKB10q-C1797aEV.js                                   22.91 kB │ gzip:     1.55 kB │ map:     33.79 kB
+../dist-vite/assets/diagram-Q27KOJAE-Dzkjs4Ff.js                              22.91 kB │ gzip:     5.59 kB │ map:     49.37 kB
+../dist-vite/assets/ChannelsPanel-Di_g4rLR.js                                 23.32 kB │ gzip:     4.82 kB │ map:     46.77 kB
+../dist-vite/assets/index-CB5ZUqhR.js                                         24.12 kB │ gzip:     7.62 kB │ map:     45.32 kB
+../dist-vite/assets/NetworkPanel-vOwDhiZQ.js                                  26.21 kB │ gzip:     4.89 kB │ map:     52.68 kB
+../dist-vite/assets/index-CerGSn5O.js                                         26.27 kB │ gzip:     7.15 kB │ map:     57.29 kB
+../dist-vite/assets/MemoryContextPanel-BDhSXHFO.js                            27.24 kB │ gzip:     6.23 kB │ map:     57.62 kB
+../dist-vite/assets/index-CqGiqnpk.js                                         28.18 kB │ gzip:    10.69 kB │ map:     42.24 kB
+../dist-vite/assets/MissionSkillPanel-BYZs-6xV.js                             28.27 kB │ gzip:     4.65 kB │ map:     43.68 kB
+../dist-vite/assets/perl-B99DUQQt.js                                          29.01 kB │ gzip:     7.48 kB │ map:     58.87 kB
+../dist-vite/assets/la-x-liturgic-CXeQb4FY-BvTGu9Oq.js                        29.08 kB │ gzip:     6.55 kB │ map:     40.54 kB
+../dist-vite/assets/index-BPmnz4uv.js                                         29.57 kB │ gzip:    11.69 kB │ map:     45.07 kB
+../dist-vite/assets/index-DyzwO9eW.js                                         30.04 kB │ gzip:    11.63 kB │ map:     46.08 kB
+../dist-vite/assets/fr-BC2onEz9-CJ0iYLEs.js                                   30.95 kB │ gzip:     5.04 kB │ map:     43.57 kB
+../dist-vite/assets/chunk-6Q2QTUOP-CysVtDnH.js                                31.06 kB │ gzip:     5.97 kB │ map:     65.49 kB
+../dist-vite/assets/ka-jyoLzyDE-zbgXF2I9.js                                   32.67 kB │ gzip:     5.33 kB │ map:     44.60 kB
+../dist-vite/assets/UsagePanel-BkHULGSU.js                                    34.97 kB │ gzip:     7.49 kB │ map:     65.50 kB
+../dist-vite/assets/ishikawaDiagram-WSZJBQD7-BkS4s-_J.js                      35.42 kB │ gzip:     9.44 kB │ map:     81.52 kB
+../dist-vite/assets/be-CrQ0smca-CVs5QwO7.js                                   35.63 kB │ gzip:     2.92 kB │ map:     50.20 kB
+../dist-vite/assets/index-2Tzp5wIO.js                                         35.69 kB │ gzip:    14.23 kB │ map:     60.01 kB
+../dist-vite/assets/index-BTqQiNni.js                                         36.80 kB │ gzip:    13.96 kB │ map:     50.04 kB
+../dist-vite/assets/javascript-DGrAs70C.js                                    37.39 kB │ gzip:     8.28 kB │ map:     85.86 kB
+../dist-vite/assets/time-caecme61.js                                          37.85 kB │ gzip:     8.58 kB │ map:     98.69 kB
+../dist-vite/assets/kanban-definition-27J2QSJJ-CPeRDNOB.js                    38.45 kB │ gzip:     9.62 kB │ map:     88.48 kB
+../dist-vite/assets/sh-latn-sRy4Tuaj-BbEUyp1U.js                              38.54 kB │ gzip:     6.14 kB │ map:     56.64 kB
+../dist-vite/assets/GeneralPanel-BLjcngGi.js                                  38.61 kB │ gzip:     6.62 kB │ map:     60.66 kB
+../dist-vite/assets/stylus-DpEwo3pY.js                                        38.78 kB │ gzip:    10.18 kB │ map:     81.47 kB
+../dist-vite/assets/clike-C2p99vbu.js                                         39.00 kB │ gzip:    10.20 kB │ map:     74.25 kB
+../dist-vite/assets/css-C_ZeEwz2.js                                           39.21 kB │ gzip:     9.82 kB │ map:     80.10 kB
+../dist-vite/assets/sr-cyrl-Dpzrbd0W-BCXGtWwD.js                              39.91 kB │ gzip:     6.47 kB │ map:     57.32 kB
+../dist-vite/assets/sk-_iOeDNrQ-CDOm4fT4.js                                   40.21 kB │ gzip:     7.72 kB │ map:     56.30 kB
+../dist-vite/assets/sh-cyrl-BpCRFOmq-BtjpaPHp.js                              41.14 kB │ gzip:     6.34 kB │ map:     59.01 kB
+../dist-vite/assets/index-Du-WLivZ.js                                         42.07 kB │ gzip:    17.18 kB │ map:     48.16 kB
+../dist-vite/assets/gl-DZGc-K_G-Bl9wZsRA.js                                   43.08 kB │ gzip:     5.06 kB │ map:     60.94 kB
+../dist-vite/assets/mindmap-definition-FAOFIHXS-BGC4FJiV.js                   43.87 kB │ gzip:    10.82 kB │ map:     99.22 kB
+../dist-vite/assets/wardleyDiagram-T6FBY63Y-CB-sIlxN.js                       44.89 kB │ gzip:     8.95 kB │ map:    103.92 kB
+../dist-vite/assets/journeyDiagram-NVQOT4AX-CAydboz2.js                       45.69 kB │ gzip:    11.39 kB │ map:    103.22 kB
+../dist-vite/assets/sql-D4utlq1l.js                                           46.74 kB │ gzip:    13.23 kB │ map:     62.34 kB
+../dist-vite/assets/sankeyDiagram-W5VNT64P-Cc1Mt1vP.js                        47.67 kB │ gzip:    12.22 kB │ map:    112.92 kB
+../dist-vite/assets/isArrayLikeObject-BOFHN_Q4.js                             48.13 kB │ gzip:    10.68 kB │ map:     94.79 kB
+../dist-vite/assets/erDiagram-JOGREHBK-DnOrpe8D.js                            49.15 kB │ gzip:    12.18 kB │ map:    118.67 kB
+../dist-vite/assets/cs-CmAteokq-DlFZgaf6.js                                   50.98 kB │ gzip:    11.17 kB │ map:     72.49 kB
+../dist-vite/assets/requirementDiagram-LRYGKXZP-DGbW_aGp.js                   52.99 kB │ gzip:    12.31 kB │ map:    130.51 kB
+../dist-vite/assets/index-DIROAA0T.js                                         53.48 kB │ gzip:    16.40 kB │ map:     84.76 kB
+../dist-vite/assets/index-DbWET1N1.js                                         54.98 kB │ gzip:    14.21 kB │ map:    138.89 kB
+../dist-vite/assets/timer-Bucz5XNy.js                                         56.27 kB │ gzip:    13.48 kB │ map:    148.12 kB
+../dist-vite/assets/es-DcaaHPU_-B7_jo2hK.js                                   56.51 kB │ gzip:     7.17 kB │ map:     80.26 kB
+../dist-vite/assets/index-UdOsTK2m.js                                         57.34 kB │ gzip:    21.32 kB │ map:     85.95 kB
+../dist-vite/assets/pl-9fg-ESVt-l1hHRqVW.js                                   57.78 kB │ gzip:     8.67 kB │ map:     80.44 kB
+../dist-vite/assets/gitGraphDiagram-DS77QQ5N-DFOZVaNZ.js                      57.83 kB │ gzip:    11.70 kB │ map:    147.69 kB
+../dist-vite/assets/DiffArtifact--AIXN4w_.js                                  59.58 kB │ gzip:    14.89 kB │ map:    143.42 kB
+../dist-vite/assets/et-B_spaleu-B18iVFSV.js                                   60.32 kB │ gzip:    12.76 kB │ map:     85.54 kB
+../dist-vite/assets/timeline-definition-Z64GVDOM-BVYTlBDt.js                  60.90 kB │ gzip:    13.69 kB │ map:    138.14 kB
+../dist-vite/assets/is-BT8UVRze-CP8GsuCu.js                                   61.64 kB │ gzip:    14.16 kB │ map:     87.08 kB
+../dist-vite/assets/quadrantDiagram-CIZ2JOQS-B2D6-Cu9.js                      62.00 kB │ gzip:    12.67 kB │ map:    144.21 kB
+../dist-vite/assets/SkillMarketPanel-CCdy07J4.js                              66.70 kB │ gzip:    10.30 kB │ map:    124.40 kB
+../dist-vite/assets/bg-CrQqGwni-DkJziXfq.js                                   71.97 kB │ gzip:     5.82 kB │ map:    101.04 kB
+../dist-vite/assets/sv-CFm5y56M-CYzLQadW.js                                   72.50 kB │ gzip:    15.98 kB │ map:    102.86 kB
+../dist-vite/assets/chunk-5RXB4S5H-CQtbdPrI.js                                73.27 kB │ gzip:    17.38 kB │ map:    162.86 kB
+../dist-vite/assets/ProvidersPanel-BY_G8u0W.js                                75.80 kB │ gzip:    12.95 kB │ map:    145.55 kB
+../dist-vite/assets/xychartDiagram-ELKLHX3M-C6qhsO8W.js                       78.82 kB │ gzip:    15.72 kB │ map:    178.53 kB
+../dist-vite/assets/uk-Dir3oxLs-BmvkDAlV.js                                   79.66 kB │ gzip:     9.70 kB │ map:    109.98 kB
+../dist-vite/assets/ReleaseNotesPanel-ByIW2qga.js                             82.45 kB │ gzip:    30.00 kB │ map:     94.44 kB
+../dist-vite/assets/graph-DAzmMwHK.js                                         83.11 kB │ gzip:    17.55 kB │ map:    148.54 kB
+../dist-vite/assets/th-DWX5iPSo-gdxpVYQR.js                                   84.31 kB │ gzip:    14.60 kB │ map:    114.66 kB
+../dist-vite/assets/chunk-GF5L2VYU-D6iirx1G.js                                84.80 kB │ gzip:    20.43 kB │ map:    198.91 kB
+../dist-vite/assets/index-CawO-kKx.js                                         86.91 kB │ gzip:    31.20 kB │ map:     97.12 kB
+../dist-vite/assets/grc-DOlGgO8T-y1Avhlp_.js                                  89.17 kB │ gzip:     9.96 kB │ map:    123.25 kB
+../dist-vite/assets/ganttDiagram-PKOTCBZU-RAPAhQEi.js                         93.19 kB │ gzip:    22.94 kB │ map:    215.75 kB
+../dist-vite/assets/index-DY8kM1wT.js                                        101.55 kB │ gzip:    37.54 kB │ map:    133.71 kB
+../dist-vite/assets/cy-BBPa6z2x-vC-5dMYn.js                                  102.12 kB │ gzip:    21.06 kB │ map:    144.95 kB
+../dist-vite/assets/ScheduledAutomationsPanel-Dwx8Iwwc.js                    102.36 kB │ gzip:    15.21 kB │ map:    162.60 kB
+../dist-vite/assets/flowDiagram-UKHOOZJN-6YLF6k01.js                         103.14 kB │ gzip:    24.23 kB │ map:    250.97 kB
+../dist-vite/assets/layout-DDZ1FHtP.js                                       103.37 kB │ gzip:    26.85 kB │ map:    222.71 kB
+../dist-vite/assets/ga-Cn6LkudM-Baii5eQY.js                                  103.53 kB │ gzip:    21.99 kB │ map:    145.94 kB
+../dist-vite/assets/index-DlGeftgl.js                                        104.34 kB │ gzip:    29.83 kB │ map:    120.70 kB
+../dist-vite/assets/ru-v4l-ayaq-F9QJpkWo.js                                  105.61 kB │ gzip:    18.51 kB │ map:    147.83 kB
+../dist-vite/assets/index-CvafeQz4.js                                        107.33 kB │ gzip:    35.40 kB │ map:    118.80 kB
+../dist-vite/assets/vennDiagram-T6HMQDX7-DLbwqJih.js                         108.81 kB │ gzip:    27.68 kB │ map:    240.37 kB
+../dist-vite/assets/c4Diagram-5PPSVZJV-CeIdrW8E.js                           118.82 kB │ gzip:    24.35 kB │ map:    261.54 kB
+../dist-vite/assets/TableArtifact-Cajils2B.js                                128.30 kB │ gzip:    23.73 kB │ map:    281.69 kB
+../dist-vite/assets/index-DtctyycD.js                                        133.76 kB │ gzip:    32.98 kB │ map:    284.02 kB
+../dist-vite/assets/en-gb-B7Al27b_-Bz9nGVGY.js                               133.87 kB │ gzip:    28.66 kB │ map:    189.95 kB
+../dist-vite/assets/blockDiagram-VBNYF7ZC-CMt_sR0Y.js                        142.20 kB │ gzip:    28.52 kB │ map:    331.73 kB
+../dist-vite/assets/PresentationArtifact-yXDzpJue.js                         144.96 kB │ gzip:    35.03 kB │ map:    365.19 kB
+../dist-vite/assets/lv-Q2BBHnzp-D0V-fjkA.js                                  146.22 kB │ gzip:    17.73 kB │ map:    212.30 kB
+../dist-vite/assets/nl-BHQJ6Gvn-3Jvyzaat.js                                  175.78 kB │ gzip:    39.39 kB │ map:    249.95 kB
+../dist-vite/assets/McpAppArtifact-BUMqx8qF.js                               178.81 kB │ gzip:    37.61 kB │ map:    349.49 kB
+../dist-vite/assets/CandlestickArtifact-DiKx_5T1.js                          181.44 kB │ gzip:    55.70 kB │ map:    614.74 kB
+../dist-vite/assets/cose-bilkent-JH36ORCC-UHCEO7UM.js                        198.89 kB │ gzip:    42.52 kB │ map:    389.37 kB
+../dist-vite/assets/sequenceDiagram-SI44F4Z6-CPjMJxYr.js                     202.04 kB │ gzip:    38.45 kB │ map:    452.22 kB
+../dist-vite/assets/cu-CBUlrW6Y-Cb3eyNCA.js                                  208.43 kB │ gzip:    28.70 kB │ map:    286.96 kB
+../dist-vite/assets/af-DK_CjRn6-yKDcjgUf.js                                  226.58 kB │ gzip:    42.37 kB │ map:    321.81 kB
+../dist-vite/assets/CommandMenuSurface-DaS4IonA.js                           233.36 kB │ gzip:    51.75 kB │ map:    538.44 kB
+../dist-vite/assets/swimlanes-SLNWSIFB-COowCjHz.js                           307.47 kB │ gzip:    63.11 kB │ map:    700.18 kB
+../dist-vite/assets/de-ch-1901-hVThVHVb-DEZDC7fj.js                          333.96 kB │ gzip:    76.35 kB │ map:    472.17 kB
+../dist-vite/assets/de-1996-BL6awyxG-a3I3F4NV.js                             336.94 kB │ gzip:    76.96 kB │ map:    475.90 kB
+../dist-vite/assets/de-1901-CWoAOigE-4MT3rggZ.js                             340.84 kB │ gzip:    77.80 kB │ map:    481.41 kB
+../dist-vite/assets/TerminalArtifact-BJnSX52J.js                             374.66 kB │ gzip:    96.46 kB │ map:  1,022.22 kB
+../dist-vite/assets/architectureDiagram-T3A2C74G-CE-TtRN2.js                 390.14 kB │ gzip:    80.96 kB │ map:    754.16 kB
+../dist-vite/assets/no-B8ItS0F3-CpHMMXPo.js                                  428.65 kB │ gzip:    94.56 kB │ map:    602.70 kB
+../dist-vite/assets/nb-DI8u59ch-BqPHwh0J.js                                  428.68 kB │ gzip:    94.56 kB │ map:    602.76 kB
+../dist-vite/assets/nn-ntZvarUK-CDDB5SMv.js                                  428.68 kB │ gzip:    94.56 kB │ map:    602.76 kB
+../dist-vite/assets/ExpertSquadPanel-YAgfiJ7W.js                             490.53 kB │ gzip:    72.18 kB │ map:    886.01 kB
+../dist-vite/assets/katex-Sf5R2jnM.js                                        601.15 kB │ gzip:   149.18 kB │ map:  1,242.89 kB
+../dist-vite/assets/FilePreviewArtifact-BDNyBiok.js                          796.82 kB │ gzip:   162.06 kB │ map:  2,594.71 kB
+../dist-vite/assets/hu-DVk7Y_ka-B6kaQxcu.js                                  971.46 kB │ gzip:   186.99 kB │ map:  1,382.57 kB
+../dist-vite/assets/MapArtifact-D0M92vAM.js                                  972.70 kB │ gzip:   249.94 kB │ map:  3,224.18 kB
+../dist-vite/assets/DiagramArtifact-CWO-YdjK.js                            1,038.93 kB │ gzip:   193.13 kB │ map:  2,387.37 kB
+../dist-vite/assets/cytoscape.esm-vCfDE9xP.js                              1,108.33 kB │ gzip:   255.74 kB │ map:  2,378.84 kB
+../dist-vite/assets/CodeEditor-BMHyQob3.js                                 1,130.22 kB │ gzip:   268.86 kB │ map:  2,307.40 kB
+../dist-vite/assets/cynefin-VYW2F7L2-DOjTYjb2.js                           1,354.19 kB │ gzip:   218.48 kB │ map:  2,599.02 kB
+../dist-vite/assets/TimelineArtifact-DHOx_5OZ.js                           1,816.23 kB │ gzip:   379.25 kB │ map:  3,554.29 kB
+../dist-vite/assets/vega-embed-policy-CABofoN8.js                          2,020.54 kB │ gzip:   491.04 kB │ map:  4,348.70 kB
+../dist-vite/assets/Model3dArtifact-Cs-QUCJR.js                            2,637.81 kB │ gzip:   576.92 kB │ map:  5,558.68 kB
+../dist-vite/assets/main-Br2z6X1N.js                                       3,693.20 kB │ gzip:   742.99 kB │ map:  7,120.71 kB
+../dist-vite/assets/SpreadsheetArtifact-CetqyJ-w.js                       12,219.01 kB │ gzip: 2,438.02 kB │ map: 25,077.36 kB
+✓ built in 1m 2s

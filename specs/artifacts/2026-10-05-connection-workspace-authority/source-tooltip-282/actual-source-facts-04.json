@@ -1,0 +1,48 @@
+{
+  "sources": [
+    {
+      "id": "prt_g0VXi7ie900nHv8cm6KT",
+      "messageID": "msg_g0VXi7hU700En9DeqjMa",
+      "type": "source-url",
+      "sourceId": "b4b01886e0b66478b9bbb2c030c1fe73d07d5c0128aa86d7ba2e83cf90d4301b",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples",
+      "title": "<details> HTML details disclosure element - HTML | MDN",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXi7jcF00ug4Gn6LlN",
+      "messageID": "msg_g0VXi7igM00t5NdvR2xT",
+      "type": "source-url",
+      "sourceId": "b06728e7436a93bea6ddc583688eb649616770996b0adabdad293b9c66649c5b",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary",
+      "title": "<details> HTML details disclosure element - HTML | MDN",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXi7lIL00244uwTMkG",
+      "messageID": "msg_g0VXi7jeO00JPV46oX1T",
+      "type": "source-url",
+      "sourceId": "8ba8fb2958e87e6905cd723d78092c91077898626dbbccdd003b461c5b25a0e4",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle.",
+      "title": "<details> HTML details disclosure element - HTML | MDN",
+      "provider": "opencorvus-webfetch"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "ses_hQpED7yEzbBBBaujAzag",
+      "projectID": "prj_h1v3cXUx9VlfDgAfZ5Td",
+      "kind": "assistant"
+    },
+    {
+      "id": "ses_-zUSHsIn8zz23OeIYtIN",
+      "projectID": "prj_h2gA2XyT6ZnVYqWkNaDP",
+      "kind": "assistant"
+    }
+  ],
+  "completedFetches": 3,
+  "providerEOF": 7,
+  "physicalAtUtc": "2026-10-11T04:10:33.063Z",
+  "remainingAtPhysicalMs": 413257,
+  "boundary": "Actual backend facts only; screenshot and focus/tooltip qualification belongs to Root's explicit manual record"
+}

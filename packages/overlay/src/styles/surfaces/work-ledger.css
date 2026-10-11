@@ -428,10 +428,6 @@
   max-width: min(calc(560px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - calc(32px * var(--ui-scale))));
 }
 
-[data-popper-positioner]:has(> :is(.work-row-summary-tooltip, .project-group-summary-tooltip)) {
-  pointer-events: none;
-}
-
 .work-row-summary-tooltip__headline {
   min-width: 0;
   display: grid;

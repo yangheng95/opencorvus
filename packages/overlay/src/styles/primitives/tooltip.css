@@ -1,3 +1,7 @@
+[data-popper-positioner]:has(> .oc-tooltip) {
+  pointer-events: none;
+}
+
 .oc-tooltip {
   /* Kobalte owns positioning. Its patched LayerStack leaves non-blocking
      layers free of inline pointer styles, so this descriptive primitive

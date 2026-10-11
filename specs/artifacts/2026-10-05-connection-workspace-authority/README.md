@@ -635,3 +635,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [来源章节定位280](source-fragment-280/README.md) / [Recall](source-fragment-plan-280.md)：完整导航URL和章节身份，真实前后网页点击/截图人工复核。
 
 - [来源章节次行281](source-location-281/README.md) / [Recall](source-location-plan-281.md)：共用位置次行和两行边界真实人工复核，完整长Tooltip未验不冒充通过。
+
+- [来源提示焦点与点击穿透282](source-tooltip-282/README.md) / [Recall](source-tooltip-plan-282.md)：聚焦滚动误关闭与定位层拦截根因、最终一次鼠标点击及首次返回提示实证。

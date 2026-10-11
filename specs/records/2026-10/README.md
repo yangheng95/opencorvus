@@ -531,3 +531,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [来源章节定位280](2026-10-11-source-fragment-280.md)：共享来源生成器保留章节，真实前后导航与同位置去重验证。
 
 - [来源章节次行281](2026-10-11-source-location-281.md)：真实章节辨识/长位置两行/焦点和导航，长Tooltip未捕获保留。
+
+- [来源提示焦点与点击穿透282](2026-10-11-source-tooltip-282.md)：真实关闭栈与命中定位，两项公共修复和四轮人工验收。

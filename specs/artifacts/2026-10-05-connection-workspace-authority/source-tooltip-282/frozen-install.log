@@ -1,0 +1,10 @@
+bun install v1.3.14 (0d9b296a)
+Resolving dependencies
+Resolved, downloaded and extracted [5]
+error: failed to parse patchfile: hunk_header_integrity_check_failed
+error: failed to patch package: @kobalte/core@0.13.11
+
+$ husky
+
+Failed to install 1 package
+[2.58s] done

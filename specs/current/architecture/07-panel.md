@@ -640,6 +640,15 @@ cancel a pending restore. Hidden geometry and stale connection/selection owners
 cannot overwrite the last observed position. Excerpt text remains the canonical
 source text and has no parallel content cache.
 The noninteractive source tooltip contains identity, detail and metadata.
+The canonical Kobalte Tooltip scroll handler preserves an open tooltip while
+its trigger has native `:focus-visible`. Focus-driven scrolling and viewport
+adjustments therefore keep keyboard context readable. Hover-only tooltips retain
+their ancestor-scroll dismissal; Escape, blur, activation and disposal retain
+their existing library ownership. The dependency's single patch applies this
+rule to both runtime exports and its source without a second tooltip state.
+The shared noninteractive tooltip recipe also makes its direct Popper positioner
+transparent to pointer hit testing. Its visual bounds therefore do not intercept
+links or controls underneath. Project and work-row summaries use the same recipe.
 The Source
 Disclosure's native content box and expanded list are bounded by the actual
 source region. Expanded source labels use that available width and wrap long

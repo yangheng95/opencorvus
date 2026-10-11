@@ -332,3 +332,43 @@ diff --git a/dist/chunk/ZKYDDHM6.js b/dist/chunk/ZKYDDHM6.js
    }
  }
  function disableBodyPointerEvents(node) {
+diff --git a/dist/chunk/2N4PRSLE.jsx b/dist/chunk/2N4PRSLE.jsx
+index 65184a8c6..ab17efad7 100644
+--- a/dist/chunk/2N4PRSLE.jsx
++++ b/dist/chunk/2N4PRSLE.jsx
+@@ -355,7 +355,7 @@ function TooltipRoot(props) {
+     }
+     const handleScroll = (event) => {
+       const target = event.target;
+-      if (contains(target, trigger)) {
++      if (contains(target, trigger) && !trigger.matches(":focus-visible")) {
+         hideTooltip(true);
+       }
+     };
+diff --git a/dist/chunk/JTUFZ2M6.js b/dist/chunk/JTUFZ2M6.js
+index f03fbb435..6f385ebf6 100644
+--- a/dist/chunk/JTUFZ2M6.js
++++ b/dist/chunk/JTUFZ2M6.js
+@@ -307,7 +307,7 @@ function TooltipRoot(props) {
+     }
+     const handleScroll = (event) => {
+       const target = event.target;
+-      if (contains(target, trigger)) {
++      if (contains(target, trigger) && !trigger.matches(":focus-visible")) {
+         hideTooltip(true);
+       }
+     };
+diff --git a/src/tooltip/tooltip-root.tsx b/src/tooltip/tooltip-root.tsx
+index dc2d6c5fb..1eb0ca5b7 100644
+--- a/src/tooltip/tooltip-root.tsx
++++ b/src/tooltip/tooltip-root.tsx
+@@ -362,7 +362,8 @@ export function TooltipRoot(props: TooltipRootProps) {
+ 		const handleScroll = (event: Event) => {
+ 			const target = event.target as HTMLElement;
+ 
+-			if (contains(target, trigger)) {
++			// Focus can scroll the trigger into view after opening the tooltip.
++			if (contains(target, trigger) && !trigger.matches(":focus-visible")) {
+ 				hideTooltip(true);
+ 			}
+ 		};

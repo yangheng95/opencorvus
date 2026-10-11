@@ -1,0 +1,108 @@
+Browser tab: 15, Title: "OpenCorvus", URL: "http://localhost:18228/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18228/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 container
+											37 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+											38 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-189-trigger, Secondary Actions: Expand
+											39 button New chat for this project
+										40 container
+											41 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+											42 button 请分别调用 webfetch 读取这三个资料地址：https://developer.mozilla.org/en-US/docs/Web/HTML/Re...
+											43 image Running
+											44 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+										45 button (expanded) Description: Collapse Anonymous 2be0f1, Secondary Actions: Collapse
+										46 container
+											47 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											48 button Reply with OK.
+											49 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+									50 container Recents
+										51 text Recents
+										52 container
+											53 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+											54 button 请分别调用 webfetch 读取这三个资料地址：https://developer.mozilla.org/en-US/docs/Web/HTML/Re...
+											55 image Running
+											56 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-255-trigger, Secondary Actions: Expand
+										57 container
+											58 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											59 button Reply with OK.
+											60 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-261-trigger, Secondary Actions: Expand
+							61 container Connection Diagnostics
+								62 container Description: Connection Diagnostics · Online · Port 18228, ID: connBadge
+									63 text Online
+					64 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					65 container chatSection
+						66 container Description: Loading task, ID: taskSwitchProgress
+						67 container
+							68 text 请分别调用 webfetch 读取这三个资料地址：https://developer.mozilla.org/en-US/docs/Web/HTML/Re...
+							69 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							70 container Description: Running, ID: taskStatus
+								71 text Running
+							72 button Side chat
+							73 container solidChatHeaderRuntimeActions
+								74 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								75 checkbox Description: Open right dock, Value: 0
+						76 container
+							77 container Description: Conversation, ID: chatScroll
+								78 container
+									79 container
+										80 text User
+										81 container
+											82 text 请分别调用 webfetch 读取这三个资料地址：
+											83 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#examples
+											84 text  、
+											85 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#technical_summary
+											86 text  和
+											87 link Description: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details#:~:text=The%20%3Cdetails%3E%20HTML%20element%20creates%20a%20disclosure%20widget%20in%20which%20information%20is%20visible%20only%20when%20the%20widget%20is%20toggled%20into%20an%20open%20state.%20A%20summary%20or%20label%20must%20be%20provided%20using%20the%20%3Csummary%3E%20element.%20A%20disclosure%20widget%20is%20typically%20presented%20onscreen%20using%20a%20small%20triangle%20that%20rotates%20%28or%20twists%29%20to%20indicate%20open%2Fclosed%20state%2C%20with%20a%20label%20next%20to%20the%20triangle
+											88 text . ，然后用一句话总结资料。不要额外搜索、写文件、创建任务或委托。
+									89 text Thinking
+							90 container chatHomeComposition
+								91 container chatForm
+									92 splitter Description: Drag to resize the message input, Value: 42
+									93 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									94 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									95 text Work
+									96 text Chat
+									97 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									98 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									99 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										100 text openai/gpt-6.1-sol
+									101 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+		102 container ID: tooltip-cl-186-content, project 1 Tasks, Chats, and Missions C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-11\source-tooltip-282-live-03\project
+			103 text project
+			104 text 1 Tasks, Chats, and Missions C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-11\source-tooltip-282-live-03\project
+
+The focused UI element is 37 button (expanded) Description: Collapse project, Secondary Actions: Collapse
