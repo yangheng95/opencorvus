@@ -1,0 +1,34 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 3845723,
+    "archiveBytes": 99967,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 7,
+    "sessions": [
+      {
+        "id": "ses_haH7WUmoJrFN6Lo8Mk4H",
+        "projectID": "prj_hW9VwmZIuDD5rIALS7dP",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSEFSqbzzmtyHDgQQE",
+        "projectID": "prj_hW9VwmZIuDD5rIALS7dP",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXlkiIw00iQaRMLdMh",
+        "sourceId": "752028585ecece87d8280ddf037e2e68b3f4faa70f19072d95020a777874ab06",
+        "url": "https://www.w3.org/robots.txt"
+      },
+      {
+        "id": "prt_g0VXlkwh6001aYswliUe",
+        "sourceId": "103df0f1d64c47e13b581d665544b7bb5facc8c41a9a40212bba6f24e831aaca",
+        "title": "..\\..\\..\\..\\..\\..\\..\\project\\README.md"
+      }
+    ]
+  }
+]
