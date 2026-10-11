@@ -1,0 +1,18 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\inspect-task-live-observation.test.ts:
+(pass) Task child hydration preserves current Part membership after a real source withdrawal [2563.12ms]
+(pass) first child read owns the actual withdrawn source over earlier live observations [1980.74ms]
+(pass) first child read owns the actual replaced source over earlier live observations [1929.22ms]
+(pass) first child read owns the actual restored source over earlier live observations [1825.20ms]
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [1861.94ms]
+(pass) Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor [3806.16ms]
+
+test\orchestrator-mission-root-message-read.test.ts:
+(pass) Mission acceptance wake reads its exact Mission-authored Task-root message [1761.66ms]
+(pass) successor runtime replays one atomic Task-root Message move after registering its durable bridge [2254.55ms]
+
+ 8 pass
+ 0 fail
+ 68 expect() calls
+Ran 8 tests across 2 files. [19.95s]

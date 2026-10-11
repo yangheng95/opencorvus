@@ -4,6 +4,7 @@ import {
   mergeSubagentConversation,
   observeSubagentConversationLiveEvent,
   projectSubagentConversationLive,
+  reconcileSubagentConversationLive,
   type SubagentConversationTranscript,
   type SubagentTranscriptMessage,
 } from "../src/services/subagent-conversation"
@@ -153,4 +154,104 @@ test("a different target owns independently restored Part identities", () => {
   expect(projectSubagentConversationLive(merged, retainedLive([withParts([keptSource])])).messages[0]!.parts).toEqual([
     keptSource, withdrawnSource,
   ])
+})
+
+function afterRead(incoming: SubagentConversationTranscript, observed: ReturnType<typeof retainedLive>, current = observed) {
+  return projectSubagentConversationLive(incoming, reconcileSubagentConversationLive(incoming, observed, current))
+}
+
+test("a first complete read owns a replacement source and retires prior withdrawn sources", () => {
+  const currentSource = { ...newSource, title: "Current title", url: "https://example.com/current" }
+  const live = retainedLive([withParts([keptSource, withdrawnSource])])
+  const incoming = transcript([withParts([currentSource])], { transcriptMode: "snapshot" })
+  expect(afterRead(incoming, live).messages[0]!.parts).toEqual([currentSource])
+})
+
+test("a source received during a read retains its new live identity", () => {
+  const observed = retainedLive([withParts([keptSource])])
+  const changed = { ...newSource, title: "Received during the read" }
+  const current = observeSubagentConversationLiveEvent(observed, { type: "message.part.updated", payload: { part: changed } })
+  expect(afterRead(transcript([partOwner]), observed, current).messages[0]!.parts).toEqual([keptSource, changed])
+})
+
+test("a partial read preserves an uncovered message's live sources", () => {
+  const observed = retainedLive([withParts([keptSource, newSource])])
+  const read = transcript([survivor])
+  const live = reconcileSubagentConversationLive(read, observed, observed)
+  expect(live).toBe(observed)
+  expect(projectSubagentConversationLive(transcript([partOwner, survivor]), live).messages.find((m) => m.messageID === partOwner.messageID)!.parts).toEqual([keptSource, newSource])
+})
+
+test("a read receives committed Info while an Info event during the request remains current", () => {
+  const observed = retainedLive([partOwner])
+  const canonical = { ...partOwner, info: { ...partOwner.info, cost: 2 } }
+  expect(afterRead(transcript([canonical]), observed).messages[0]!.info).toEqual(canonical.info)
+  const newer = { ...canonical.info, cost: 3 }
+  const current = observeSubagentConversationLiveEvent(observed, { type: "message.updated", payload: { info: newer } })
+  expect(afterRead(transcript([canonical]), observed, current).messages[0]!.info).toEqual(newer)
+})
+
+test("read reconciliation retains accepted unpersisted text over its new persisted checkpoint", () => {
+  const observed = observeSubagentConversationLiveEvent(retainedLive([withParts([textPart])]), {
+    type: "message.part.delta", payload: { sessionID: partOwner.sessionID, messageID: partOwner.messageID, partID: textPart.id, field: "text", value: "Current answer with accepted live tail" },
+  })
+  expect(afterRead(transcript([withParts([{ ...textPart, text: "Current answer with" }])]), observed).messages[0]!.parts).toEqual([
+    { ...textPart, text: "Current answer with accepted live tail" },
+  ])
+})
+
+test.each(["text", "reasoning"])("an omitted empty %s scaffold accepts a later live field", (type) => {
+  const scaffold = { ...textPart, type, text: "" }
+  const observed = retainedLive([withParts([keptSource, scaffold])])
+  const read = transcript([partOwner])
+  const reconciled = reconcileSubagentConversationLive(read, observed, observed)
+  const current = observeSubagentConversationLiveEvent(reconciled, {
+    type: "message.part.delta", payload: { sessionID: partOwner.sessionID, messageID: partOwner.messageID, partID: textPart.id, field: "text", value: "Accepted after hydration" },
+  })
+  expect(projectSubagentConversationLive(read, current).messages[0]!.parts).toEqual([
+    keptSource, { ...scaffold, text: "Accepted after hydration" },
+  ])
+})
+
+test("pending Tool input survives a read until its canonical committed request is returned", () => {
+  const draft = { ...textPart, id: "draft-tool", type: "tool", tool: "read", state: { status: "pending", input: {} } }
+  const observed = retainedLive([withParts([keptSource, draft])])
+  expect(afterRead(transcript([partOwner]), observed).messages[0]!.parts).toEqual([keptSource, draft])
+  const running = { ...draft, state: { status: "running", input: { filePath: "README.md" } } }
+  expect(afterRead(transcript([withParts([keptSource, running])]), observed).messages[0]!.parts).toEqual([keptSource, running])
+})
+
+test("a current read restores a source after its earlier observed removal", () => {
+  const observed = observeSubagentConversationLiveEvent(retainedLive([partOwner]), {
+    type: "message.part.removed", payload: { sessionID: partOwner.sessionID, messageID: partOwner.messageID, partID: keptSource.id },
+  })
+  expect(afterRead(transcript([partOwner]), observed).messages[0]!.parts).toEqual([keptSource])
+})
+
+test("a Part removal received during the read remains authoritative to live projection", () => {
+  const observed = retainedLive([withParts([keptSource, withdrawnSource])])
+  const current = observeSubagentConversationLiveEvent(observed, {
+    type: "message.part.removed", payload: { sessionID: partOwner.sessionID, messageID: partOwner.messageID, partID: withdrawnSource.id },
+  })
+  expect(afterRead(transcript([withParts([keptSource, withdrawnSource])]), observed, current).messages[0]!.parts).toEqual([keptSource])
+})
+
+test("a full read owns known prior live-only message membership", () => {
+  const observed = retainedLive([retired, survivor])
+  expect(afterRead(transcript([survivor], { transcriptMode: "snapshot" }), observed).messages.map((message) => message.messageID)).toEqual(["survivor"])
+})
+
+test("independent Message removals retain later original events while the read restores earlier ones", () => {
+  const removal = (messageID: string) => ({ type: "message.removed", payload: { sessionID: "child-session", messageID } })
+  let observed = retainedLive([retired, survivor, incoming])
+  observed = observeSubagentConversationLiveEvent(observed, removal(retired.messageID))
+  observed = observeSubagentConversationLiveEvent(observed, removal(survivor.messageID))
+  const current = observeSubagentConversationLiveEvent(observed, removal(survivor.messageID))
+  expect(afterRead(transcript([retired, survivor, incoming], { transcriptMode: "snapshot" }), observed, current).messages.map((message) => message.messageID)).toEqual(["retired", "incoming"])
+})
+
+test("a read from another Session preserves current live ownership", () => {
+  const observed = retainedLive([partOwner])
+  const read = transcript([survivor], { sessionID: "another-session" })
+  expect(reconcileSubagentConversationLive(read, observed, observed)).toBe(observed)
 })

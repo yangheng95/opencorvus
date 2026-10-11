@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [316 子会话补全顺序](records/2026-10/2026-10-12-source-read-order-316.md)：首次读取、来源更新与真实删除观察的接管。
+
 - [315 子会话 Part 成员关系](records/2026-10/2026-10-12-source-part-membership-315.md)：来源与文字撤回后的权威补全。
 
 - [314 子会话删除合并](records/2026-10/2026-10-12-source-removal-314.md)：补全删除与旧实时消息的成员关系。

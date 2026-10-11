@@ -48,7 +48,7 @@ export interface SubagentConversationLiveProjection {
       removed?: boolean
     }
   >
-  removedMessageIDs: string[]
+  removedMessages: Record<string, unknown>
 }
 
 type SubagentConversationLiveListener = (event: unknown) => void
@@ -69,7 +69,7 @@ export function createSubagentConversationLiveProjection(sessionID: string): Sub
     sessionID: sessionID.trim(),
     messageInfos: {},
     parts: {},
-    removedMessageIDs: [],
+    removedMessages: {},
   }
 }
 
@@ -123,17 +123,17 @@ export function observeSubagentConversationLiveEvent(
   if (type === "message.updated") {
     const info = identity.properties.info
     if (!info || typeof info !== "object" || Array.isArray(info)) return current
+    const removedMessages = { ...current.removedMessages }
+    delete removedMessages[identity.messageID]
     return {
       ...current,
       messageInfos: { ...current.messageInfos, [identity.messageID]: { ...info } },
-      removedMessageIDs: current.removedMessageIDs.filter((messageID) => messageID !== identity.messageID),
+      removedMessages,
     }
   }
 
   if (type === "message.removed") {
-    return current.removedMessageIDs.includes(identity.messageID)
-      ? current
-      : { ...current, removedMessageIDs: [...current.removedMessageIDs, identity.messageID] }
+    return { ...current, removedMessages: { ...current.removedMessages, [identity.messageID]: event } }
   }
 
   if (!identity.partID) return current
@@ -194,6 +194,54 @@ export function observeSubagentConversationLiveEvent(
   return current
 }
 
+/** A read can retire durable observations received before it started, but
+ * cannot acknowledge unpersisted text fields or events received during it. */
+export function reconcileSubagentConversationLive(
+  incoming: SubagentConversationTranscript,
+  observed: SubagentConversationLiveProjection,
+  current: SubagentConversationLiveProjection,
+): SubagentConversationLiveProjection {
+  if (incoming.sessionID !== current.sessionID || observed.sessionID !== current.sessionID) return current
+  const messages = new Map(incoming.messages.map((message) => [message.messageID, message]))
+  const removed = new Set(incoming.removedMessageIDs)
+  const covers = (id: string) => incoming.transcriptMode === "snapshot" || messages.has(id) || removed.has(id)
+  let messageInfos = current.messageInfos
+  let parts = current.parts
+  let removedMessages = current.removedMessages
+  for (const [id, info] of Object.entries(observed.messageInfos)) {
+    if (!covers(id) || current.messageInfos[id] !== info) continue
+    if (messageInfos === current.messageInfos) messageInfos = { ...messageInfos }
+    delete messageInfos[id]
+  }
+  for (const [key, change] of Object.entries(observed.parts)) {
+    if (!covers(change.messageID) || current.parts[key] !== change) continue
+    const message = messages.get(change.messageID)
+    const persisted = message?.parts.some((part) => part.id === change.partID)
+    const hasFields = Object.keys(change.fields).length > 0
+    if (message && !persisted && !change.removed) {
+      // Empty streamed Parts can be omitted from the presented transcript.
+      // Pending Tool input is explicitly ephemeral until validation commits it.
+      if (change.snapshot?.type === "text" || change.snapshot?.type === "reasoning" || hasFields) continue
+      if (change.snapshot?.type === "tool" && (change.snapshot.state as { status?: string })?.status === "pending") continue
+    }
+    if (message && hasFields && !change.removed) {
+      if (!change.snapshot) continue
+      if (parts === current.parts) parts = { ...parts }
+      parts[key] = { messageID: change.messageID, partID: change.partID, fields: change.fields }
+      continue
+    }
+    if (parts === current.parts) parts = { ...parts }
+    delete parts[key]
+  }
+  for (const [id, event] of Object.entries(observed.removedMessages)) {
+    if (!covers(id) || current.removedMessages[id] !== event) continue
+    if (removedMessages === current.removedMessages) removedMessages = { ...removedMessages }
+    delete removedMessages[id]
+  }
+  if (messageInfos === current.messageInfos && parts === current.parts && removedMessages === current.removedMessages) return current
+  return { ...current, messageInfos, parts, removedMessages }
+}
+
 function liveMessageFromInfo(
   sessionID: string,
   messageID: string,
@@ -244,13 +292,13 @@ export function projectSubagentConversationLive(
 ): SubagentConversationTranscript {
   if (base.sessionID !== live.sessionID) return base
   if (
-    live.removedMessageIDs.length === 0 &&
+    Object.keys(live.removedMessages).length === 0 &&
     Object.keys(live.messageInfos).length === 0 &&
     Object.keys(live.parts).length === 0
   ) {
     return base
   }
-  const removedMessageIDs = new Set([...base.removedMessageIDs, ...live.removedMessageIDs])
+  const removedMessageIDs = new Set([...base.removedMessageIDs, ...Object.keys(live.removedMessages)])
   const changesByMessageID = new Map<string, SubagentConversationLiveProjection["parts"][string][]>()
   for (const change of Object.values(live.parts)) {
     const changes = changesByMessageID.get(change.messageID) ?? []

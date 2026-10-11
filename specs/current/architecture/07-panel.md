@@ -675,6 +675,18 @@ restoring that Message or Part reestablishes only the returned membership.
 New live-only Parts remain eligible, and existing active Parts still accept
 unpersisted complete text fields. These are current-target projection facts,
 not another server protocol or persistent store.
+Each child HTTP read captures the already received live objects before dispatch.
+Its resource settles the received scope, merged transcript and that observation
+together. Reconciliation retires only unchanged observed entries in the returned
+Message scope; events received during the read keep their own identities. A delta
+does not acknowledge unreturned Messages. Durable Info, Source snapshots and old
+removal events can yield to this later read. Unpersisted text fields, omitted
+empty text/reasoning scaffolds and uncommitted pending Tool input remain live.
+The live Message removal map retains original event objects, allowing independent
+removals to be compared without inventing a sequence or wall-clock watermark.
+The display projects the reconciled live data with the same settled base before
+an effect retires those observations from the existing frame queue and signal;
+cleanup never exposes the previous base between resource settlements.
 The same server-path primitive owns separator interpretation for project-file
 keys in the Explorer and workbench. Windows project paths use forward separators;
 POSIX filename backslashes stay literal. Source file labels, direct opens,

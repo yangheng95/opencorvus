@@ -1,0 +1,86 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\inspect-task-live-observation.test.ts:
+(pass) Task child hydration preserves current Part membership after a real source withdrawal [2236.78ms]
+195 |     const response = await route.request(endpoint)
+196 |     expect(response.status).toBe(200)
+197 |     const incoming = parseSubagentConversation(target, await response.json())
+198 |     expect(incoming.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+199 |     const projected = projectSubagentConversationLive(incoming, live)
+200 |     expect(projected.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+      ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "id": "prt_g0VXm64ps00b6LvNVTzL",
+      "messageID": "msg_g0VXm64ph00SnFDFvgi7",
+      "orderKey": "v1:0001791750399248:0000000000000031:0000000000000000:part:prt_g0VXm64ps00b6LvNVTzL",
+      "sessionID": "ses_-zUSDtvAbzzrEfmsxD6l",
+      "text": "Current source evidence.",
+      "type": "text",
+    },
++   {
++     "id": "prt_g0VXm64pt00vr7uPT6B4",
++     "messageID": "msg_g0VXm64ph00SnFDFvgi7",
++     "orderKey": "v1:0001791750399249:0000000000000031:0000000000000000:part:prt_g0VXm64pt00vr7uPT6B4",
++     "sessionID": "ses_-zUSDtvAbzzrEfmsxD6l",
++     "sourceId": "changing-source",
++     "title": "Original title",
++     "type": "source-url",
++     "url": "https://example.com/original",
++   },
+  ]
+
+- Expected  - 0
++ Received  + 10
+
+      at toEqual (unknown:1:1)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\inspect-task-live-observation.test.ts:200:96
+      at processTicksAndRejections (unknown:7:39)
+(fail) first child read owns the actual withdrawn source over earlier live observations [1950.49ms]
+2296 |         if (!isCheckpointAppend) throw new HostProcessingFaultError(`Part ${id} is immutable after assistant completion`)
+2297 |       }
+2298 |       if (existingPart) {
+2299 |         const current = existingPart.data as { type?: string }
+2300 |         if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === part.type)) {
+2301 |           throw new HostProcessingFaultError(`Non-streaming Part ${id} is immutable`)
+                           ^
+HostProcessingFaultError: Non-streaming Part prt_g0VXm65MW008wVsoKiGf is immutable
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2301:21)
+      at run (node:async_hooks:99:29)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\node_modules\drizzle-orm\bun-sqlite\session.js:38:13
+      at transaction (bun:sqlite:400:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2321:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2369:39)
+(fail) first child read owns the actual revised source over earlier live observations [1990.86ms]
+2108 |     assertPartHasNoInlineBase64(part)
+2109 |     const { id, messageID, sessionID, orderKey: providedOrderKey, ...data } = part
+2110 |     const assertProvidedPartOrderKey = (canonicalOrderKey: string) => {
+2111 |       const supplied = typeof providedOrderKey === "string" ? providedOrderKey.trim() : ""
+2112 |       if (supplied && supplied !== canonicalOrderKey) {
+2113 |         throw new HostProcessingFaultError(`Session.updatePart: part ${id} orderKey drift between input and persisted row`)
+                     ^
+HostProcessingFaultError: Session.updatePart: part prt_g0VXm65uj00tDcNNDDnp orderKey drift between input and persisted row
+      at assertProvidedPartOrderKey (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2113:15)
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2284:7)
+      at run (node:async_hooks:99:29)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:400:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2321:19)
+(fail) first child read owns the actual restored source over earlier live observations [2129.77ms]
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [1862.00ms]
+(pass) Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor [3593.11ms]
+
+ 3 pass
+ 3 fail
+ 38 expect() calls
+Ran 6 tests across 1 file. [15.41s]

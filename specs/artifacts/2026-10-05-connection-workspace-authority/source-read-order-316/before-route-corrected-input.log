@@ -1,0 +1,126 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\inspect-task-live-observation.test.ts:
+(pass) Task child hydration preserves current Part membership after a real source withdrawal [2161.75ms]
+197 |     const response = await route.request(endpoint)
+198 |     expect(response.status).toBe(200)
+199 |     const incoming = parseSubagentConversation(target, await response.json())
+200 |     expect(incoming.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+201 |     const projected = projectSubagentConversationLive(incoming, live)
+202 |     expect(projected.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "id": "prt_g0VXm7Sb800S2j7C5h2I",
+      "messageID": "msg_g0VXm7San00bBQohL7gl",
+      "orderKey": "v1:0001791750728918:0000000000000031:0000000000000000:part:prt_g0VXm7Sb800S2j7C5h2I",
+      "sessionID": "ses_-zUSDsXPVzzy9KJBsoO3",
+      "text": "Current source evidence.",
+      "type": "text",
+    },
++   {
++     "id": "prt_g0VXm7SbB004LOp8vFs5",
++     "messageID": "msg_g0VXm7San00bBQohL7gl",
++     "orderKey": "v1:0001791750728921:0000000000000031:0000000000000000:part:prt_g0VXm7SbB004LOp8vFs5",
++     "sessionID": "ses_-zUSDsXPVzzy9KJBsoO3",
++     "sourceId": "changing-source",
++     "title": "Original title",
++     "type": "source-url",
++     "url": "https://example.com/original",
++   },
+  ]
+
+- Expected  - 0
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\inspect-task-live-observation.test.ts:202:96)
+(fail) first child read owns the actual withdrawn source over earlier live observations [1935.20ms]
+197 |     const response = await route.request(endpoint)
+198 |     expect(response.status).toBe(200)
+199 |     const incoming = parseSubagentConversation(target, await response.json())
+200 |     expect(incoming.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+201 |     const projected = projectSubagentConversationLive(incoming, live)
+202 |     expect(projected.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "id": "prt_g0VXm7T8A00uCjtu6n5H",
+      "messageID": "msg_g0VXm7T8000mrDf4P8sZ",
+      "orderKey": "v1:0001791750730966:0000000000000031:0000000000000000:part:prt_g0VXm7T8A00uCjtu6n5H",
+      "sessionID": "ses_-zUSDsWsJzzXXHCk6VJG",
+      "text": "Current source evidence.",
+      "type": "text",
+    },
+    {
+      "id": "prt_g0VXm7T8P00q5SDaKEKz",
+      "messageID": "msg_g0VXm7T8000mrDf4P8sZ",
+      "orderKey": "v1:0001791750730981:0000000000000031:0000000000000000:part:prt_g0VXm7T8P00q5SDaKEKz",
+      "sessionID": "ses_-zUSDsWsJzzXXHCk6VJG",
+      "sourceId": "current-source",
+      "title": "Current title",
+      "type": "source-url",
+      "url": "https://example.com/current",
+    },
++   {
++     "id": "prt_g0VXm7T8C00eZDiWjtbI",
++     "messageID": "msg_g0VXm7T8000mrDf4P8sZ",
++     "orderKey": "v1:0001791750730968:0000000000000031:0000000000000000:part:prt_g0VXm7T8C00eZDiWjtbI",
++     "sessionID": "ses_-zUSDsWsJzzXXHCk6VJG",
++     "sourceId": "changing-source",
++     "title": "Original title",
++     "type": "source-url",
++     "url": "https://example.com/original",
++   },
+  ]
+
+- Expected  - 0
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\inspect-task-live-observation.test.ts:202:96)
+(fail) first child read owns the actual replaced source over earlier live observations [2044.49ms]
+197 |     const response = await route.request(endpoint)
+198 |     expect(response.status).toBe(200)
+199 |     const incoming = parseSubagentConversation(target, await response.json())
+200 |     expect(incoming.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+201 |     const projected = projectSubagentConversationLive(incoming, live)
+202 |     expect(projected.messages.find((message) => message.messageID === owner.messageID)!.parts).toEqual(expectedParts)
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "id": "prt_g0VXm7Tb800mDkWibjIT",
+      "messageID": "msg_g0VXm7Tax00eROggjXIP",
+      "orderKey": "v1:0001791750732762:0000000000000031:0000000000000000:part:prt_g0VXm7Tb800mDkWibjIT",
+      "sessionID": "ses_-zUSDsWPIzzAdA4MB0MP",
+      "text": "Current source evidence.",
+      "type": "text",
+    },
+-   {
+-     "id": "prt_g0VXm7Tb900iO777pT8I",
+-     "messageID": "msg_g0VXm7Tax00eROggjXIP",
+-     "orderKey": "v1:0001791750732776:0000000000000031:0000000000000000:part:prt_g0VXm7Tb900iO777pT8I",
+-     "sessionID": "ses_-zUSDsWPIzzAdA4MB0MP",
+-     "sourceId": "current-source",
+-     "title": "Current title",
+-     "type": "source-url",
+-     "url": "https://example.com/current",
+-   },
+  ]
+
+- Expected  - 10
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\inspect-task-live-observation.test.ts:202:96)
+(fail) first child read owns the actual restored source over earlier live observations [1800.03ms]
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [1868.31ms]
+(pass) Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor [3580.87ms]
+
+ 3 pass
+ 3 fail
+ 44 expect() calls
+Ran 6 tests across 1 file. [15.14s]

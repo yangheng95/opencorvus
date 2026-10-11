@@ -8,6 +8,7 @@ import {
   on,
   onCleanup,
   onMount,
+  untrack,
   type Accessor,
 } from "solid-js"
 import { boardStore } from "../store/board"
@@ -20,6 +21,7 @@ import {
   mergeSubagentConversation,
   observeSubagentConversationLiveEvent,
   projectSubagentConversationLive,
+  reconcileSubagentConversationLive,
   projectSubagentConversationCard,
   subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
@@ -198,15 +200,27 @@ export function SubagentConversationPanel(props: {
     if (props.active()) return
     transcriptAbort?.abort()
   })
-  const [conversation, { refetch }] = createResource<SubagentConversationTranscript, string>(
+  const [liveProjection, setLiveProjection] = createSignal(createSubagentConversationLiveProjection(props.sessionID()))
+  let pendingLiveProjection: ReturnType<typeof createSubagentConversationLiveProjection> | undefined
+  const flushLiveProjection = createAnimationFrameScheduler(() => {
+    if (!pendingLiveProjection) return
+    setLiveProjection(pendingLiveProjection)
+    pendingLiveProjection = undefined
+  })
+  const [conversation, { refetch }] = createResource<{
+    transcript: SubagentConversationTranscript
+    received: SubagentConversationTranscript
+    observedLive: ReturnType<typeof createSubagentConversationLiveProjection>
+  }, string>(
     requestKey,
     async (serialized, context) => {
       transcriptAbort?.abort()
       const controller = new AbortController()
       transcriptAbort = controller
       const target = JSON.parse(serialized) as SubagentConversationTarget
+      const observedLive = untrack(() => pendingLiveProjection ?? liveProjection())
       try {
-        const previous = context.value?.targetKey === serialized ? context.value : undefined
+        const previous = context.value?.transcript.targetKey === serialized ? context.value.transcript : undefined
         const delta = await loadSubagentConversation({
           ...target,
           afterSequence: target.source.kind === "task" ? previous?.lastLiveSequence : undefined,
@@ -216,20 +230,13 @@ export function SubagentConversationPanel(props: {
         // Solid owns settlement of the original resource request. Retain its
         // actual value, but only the current source may merge prior cursors.
         if (!isApiAuthorityCurrent(target.authority) || transcriptAbort !== controller || requestKey() !== serialized)
-          return delta
-        return previous ? mergeSubagentConversation(previous, delta) : delta
+          return { transcript: delta, received: delta, observedLive }
+        return { transcript: previous ? mergeSubagentConversation(previous, delta) : delta, received: delta, observedLive }
       } finally {
         if (transcriptAbort === controller) transcriptAbort = undefined
       }
     },
   )
-  const [liveProjection, setLiveProjection] = createSignal(createSubagentConversationLiveProjection(props.sessionID()))
-  let pendingLiveProjection: ReturnType<typeof createSubagentConversationLiveProjection> | undefined
-  const flushLiveProjection = createAnimationFrameScheduler(() => {
-    if (!pendingLiveProjection) return
-    setLiveProjection(pendingLiveProjection)
-    pendingLiveProjection = undefined
-  })
   createEffect(
     on(requestKey, (target) => {
       flushLiveProjection.cancel()
@@ -248,9 +255,25 @@ export function SubagentConversationPanel(props: {
   })
   const displayedConversation = createMemo(() => {
     const target = requestKey()
-    const base = conversation()
-    if (!target || !base || base.targetKey !== target) return undefined
-    return projectSubagentConversationLive(base, liveProjection())
+    const read = conversation()
+    if (!target || !read || read.transcript.targetKey !== target) return undefined
+    const flushedLive = liveProjection()
+    return projectSubagentConversationLive(
+      read.transcript,
+      reconcileSubagentConversationLive(read.received, read.observedLive, pendingLiveProjection ?? flushedLive),
+    )
+  })
+  createEffect(() => {
+    const read = conversation()
+    if (!read || read.transcript.targetKey !== requestKey()) return
+    const current = untrack(() => pendingLiveProjection ?? liveProjection())
+    const next = reconcileSubagentConversationLive(read.received, read.observedLive, current)
+    if (next === current) return
+    // The display already uses this same completed read and reconciliation;
+    // clearing the queue cannot briefly expose the previous HTTP base.
+    flushLiveProjection.cancel()
+    pendingLiveProjection = undefined
+    setLiveProjection(next)
   })
   const transcriptRefresh = createSubagentTranscriptRefreshController(() => refetch())
   createEffect(() => {
