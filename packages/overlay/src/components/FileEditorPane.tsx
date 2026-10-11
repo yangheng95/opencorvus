@@ -19,6 +19,7 @@ import { Icon } from "./ui/Icon"
 // loads on demand.
 const CodeEditor = lazy(async () => ({ default: (await import("./ui/CodeEditor")).CodeEditor }))
 import { Button } from "./ui/Button"
+import { Badge } from "./ui/Badge"
 import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 
@@ -341,20 +342,27 @@ export function FileEditorPane() {
               </span>
             </Show>
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            tone={dirty() ? "accent" : "neutral"}
-            data-ui="file-editor-save"
-            data-dirty={dirty() ? "true" : "false"}
-            title={`${t("common.save")} (Ctrl/Cmd+S)`}
-            aria-keyshortcuts="Control+s Meta+s"
-            disabled={!dirty() || isBusy() || fileEditorReserved()}
-            onClick={() => void save()}
+          <Show
+            when={target()?.sourceAbsolutePath}
+            fallback={
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone={dirty() ? "accent" : "neutral"}
+                data-ui="file-editor-save"
+                data-dirty={dirty() ? "true" : "false"}
+                title={`${t("common.save")} (Ctrl/Cmd+S)`}
+                aria-keyshortcuts="Control+s Meta+s"
+                disabled={!dirty() || isBusy() || fileEditorReserved()}
+                onClick={() => void save()}
+              >
+                {saving() ? t("common.saving") : t("common.save")}
+              </Button>
+            }
           >
-            {saving() ? t("common.saving") : t("common.save")}
-          </Button>
+            <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
+          </Show>
           <Button
             type="button"
             variant="ghost"

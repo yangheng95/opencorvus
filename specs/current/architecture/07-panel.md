@@ -229,6 +229,13 @@ Read-only CodeEditor content keeps a normal keyboard focus entry through the
 existing read-only compartment's content attributes. It remains non-editable
 at both the state and DOM levels; range reveals can focus the same view, and
 navigation/search commands belong to that editor rather than the page.
+An absolute Source target displays a localized read-only badge in the file
+toolbar's save position. This status derives from the same target that owns
+the editor's read-only mode; project-file targets retain their save action.
+The shared CodeMirror theme also owns its built-in panel fields and buttons:
+input surfaces, text, control sizing and focus use the existing design tokens,
+so library light defaults cannot mix with the application's dark text palette.
+The library retains its search layout, commands and keyboard behavior.
 Citation reveal completion also requires a visible editor host with usable
 dimensions. A retained hidden view keeps the current request unsettled;
 the shared animation-frame scheduler and host resize observation apply that

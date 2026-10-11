@@ -1,0 +1,310 @@
+Browser tab: 26, Title: "OpenCorvus", URL: "http://localhost:18236/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18236/ui/
+	2 container overlayAppHost
+		3 container titlebar
+			4 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+			5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				339 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-337-trigger, Secondary Actions: Expand
+				340 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-339-trigger, Secondary Actions: Expand
+				341 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-341-trigger, Secondary Actions: Expand
+				342 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-343-trigger, Secondary Actions: Expand
+		10 container panelBody
+			11 container Description: 对话快捷入口, ID: workspaceNavigation
+				12 container 对话快捷入口
+					13 button 对话
+					14 button Mission 看板
+					15 button 定时
+					16 button 专家团
+					17 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					18 button 设置
+				19 button 关于
+				20 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			21 container workspacePageStack
+				22 container leftActivityShell
+					23 container workspaceContextbar
+						24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						25 button 搜索任务或运行命令
+						26 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+					27 container sidebar
+						28 container workLedgerPanel
+							29 container 对话导航
+								30 button 新对话
+							31 container workLedgerProjectsScroll
+								32 text 项目
+								33 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								34 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								35 container
+									337 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+									40 container
+										41 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										42 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										43 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+									44 button (expanded) Description: 收起 匿名项目 229011, Secondary Actions: Collapse
+									45 container
+										46 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										47 button Reply with OK.
+										48 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+								49 container 最近
+									50 text 最近
+									51 container
+										52 container 用于调研、分析和生成可复核交互式交付物的长程多步对话。
+										53 button 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+										54 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+									55 container
+										56 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+										57 button Reply with OK.
+										58 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+						59 container 连接诊断
+							60 container Description: 连接诊断 · 在线 · 端口 18236, ID: connBadge
+								61 text 在线
+				62 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+				63 container workspaceMain
+					64 container chatSection
+						65 container Description: 正在加载 Task, ID: taskSwitchProgress
+						66 container
+							67 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
+							68 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
+							69 container Description: 非进行中, ID: taskStatus
+								70 text 非进行中
+							71 button 侧聊
+							72 container solidChatHeaderRuntimeActions
+								73 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+								74 checkbox Description: 关闭右侧面板, Value: 1
+						75 container
+							76 container Description: 对话, ID: chatScroll
+								343 container
+									344 container
+										345 text 用户
+										346 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts：第一次 offset=27、limit=11；第二次 offset=1、limit=1000，读取整文件。然后用中文各用一句话概述，并保留两个真实文件来源供点击。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+									347 container
+										348 text work
+										349 text 15 秒
+										350 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+											351 text read
+											352 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+											353 image
+										354 container 来源
+											355 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+												356 text read.ts:27-37
+												357 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+										358 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
+											359 text read
+											360 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
+											361 image
+										362 container 来源
+											363 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+												364 text read.ts
+												365 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
+										366 container
+											367 text 第一次读取了  read.ts  第 27–37 行，其中  citedReadRange  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。
+										368 container
+											369 text 第二次读取了  read.ts  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
+							104 container chatHomeComposition
+								105 container solidChatComposer
+									106 container
+										107 text 模型配置暂不可用
+										108 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+										109 button (collapsed) 详细信息, Secondary Actions: Expand
+											110 text 详细信息
+										111 button 重试
+										112 container chatForm
+											113 splitter Description: 拖拽调整消息输入框大小, Value: 42
+											114 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+											115 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											116 text Work
+											117 text Chat
+											118 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											119 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											120 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+												121 text 选择模型
+											122 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+									123 button 滚动到底部
+					124 splitter Description: 调整右侧面板大小, Value: 50, ID: rightDockResizer
+					125 container Description: 工具面板, ID: rightDock
+						126 container tabs-cl-64
+							127 tab group 已打开的工具
+								128 container
+									129 tab (selected, settable, boolean) Description: 文件, Value: 1, ID: tabs-cl-64-trigger-file
+									130 button Description: 关闭标签页, Help: 关闭标签页 (Delete)
+							131 pop up button (collapsed) Description: 添加工具, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							132 button 关闭面板
+							133 container Description: 文件, ID: centerWorkbenchFile
+								134 container 编辑器
+									135 container
+										136 text tool/read.ts
+										137 text 只读
+										138 button 从磁盘重新加载
+										139 button 关闭工作区
+									140 container
+										338 text current match. ...(citedReadRange(page) ?? {}), on line 221.
+										141 text entry area Description: Editor, Value:           if (isMissingPathError(error)) return []
+          throw error
+        })
+
+
+      if (suggestions.length > 0) {
+        throw new Error(`File not found: ${filepath}\n\nDid you mean one of these?\n${suggestions.join("\n")}`)
+      }
+
+
+      throw new Error(`File not found: ${filepath}`)
+    }
+
+
+    if (stat.isDirectory()) {
+      const dirents = await files.readdir(filepath, { withFileTypes: true })
+      const entries = await Promise.all(
+        dirents.map(async (dirent) => {
+          if (dirent.isDirectory()) return dirent.name + "/"
+          if (dirent.isSymbolicLink()) {
+            const target = await files.stat(path.join(filepath, dirent.name)).catch(() => undefined)
+            if (target?.isDirectory()) return dirent.name + "/"
+          }
+          return dirent.name
+        }),
+      )
+      entries.sort((a, b) => a.localeCompare(b))
+
+
+      const limit = params.limit ?? DEFAULT_READ_LIMIT
+      const offset = params.offset ?? 1
+      const start = offset - 1
+      const sliced = entries.slice(start, start + limit)
+      const truncated = start + sliced.length < entries.length
+
+
+      const output = [
+        `<path>${filepath}</path>`,
+        `<type>directory</type>`,
+        `<entries>`,
+        sliced.join("\n"),
+        truncated
+          ? `\n(Showing ${sliced.length} of ${entries.length} entries. Use 'offset' parameter to read beyond entry ${offset + sliced.length})`
+          : `\n(${entries.length} entries)`,
+        `</entries>`,
+      ].join("\n")
+
+
+      return {
+        title,
+        output,
+        metadata: {
+          preview: sliced.slice(0, 20).join("\n"),
+          truncated,
+          loaded: [] as string[],
+          lines: sliced.length,
+          totalLines: entries.length,
+        },
+      }
+    }
+
+
+    const instructions = await InstructionPrompt.resolve(ctx.messages, filepath, ctx.messageID)
+
+
+    // Exclude SVG (XML-based) and vnd.fastbidsheet (.fbs extension, commonly FlatBuffers schema files)
+          ...(citedReadRange(page) ?? {}),
+											370 container
+												371 text if  ( isMissingPathError ( error ))  return  []
+											372 container
+												373 text throw error
+											374 text         })
+											375 container
+												376 text if  ( suggestions . length  >  0 ) {
+											377 container
+												378 text throw new Error ( `File not found:  ${ filepath } \n\nDid you mean one of these?\n ${ suggestions . join ( "\n" )} ` )
+											379 text       }
+											380 container
+												381 text throw new Error ( `File not found:  ${ filepath } ` )
+											382 text     }
+											383 container
+												384 text if  ( stat . isDirectory ()) {
+											385 container
+												386 text const dirents  =  await files . readdir ( filepath , {  withFileTypes :  true  })
+											387 container
+												388 text const entries  =  await Promise . all (
+											389 container
+												390 text dirents . map ( async  ( dirent ) => {
+											391 container
+												392 text if  ( dirent . isDirectory ())  return dirent . name  +  "/"
+											393 container
+												394 text if  ( dirent . isSymbolicLink ()) {
+											395 container
+												396 text const target  =  await files . stat ( path . join ( filepath ,  dirent . name )). catch (() =>  undefined )
+											397 container
+												398 text if  ( target ?. isDirectory ())  return dirent . name  +  "/"
+											399 text           }
+											400 container
+												401 text return dirent . name
+											402 text         }),
+											403 text       )
+											404 container
+												405 text entries . sort (( a ,  b ) =>  a . localeCompare ( b ))
+											406 container
+												407 text const limit  =  params . limit  ??  DEFAULT_READ_LIMIT
+											408 container
+												409 text const offset  =  params . offset  ??  1
+											410 container
+												411 text const start  =  offset  -  1
+											412 container
+												413 text const sliced  =  entries . slice ( start ,  start  +  limit )
+											414 container
+												415 text const truncated  =  start  +  sliced . length  <  entries . length
+											416 container
+												417 text const output  = [
+											418 container
+												419 text `<path> ${ filepath } </path>` ,
+											420 container
+												421 text `<type>directory</type>` ,
+											422 container
+												423 text `<entries>` ,
+											424 container
+												425 text sliced . join ( "\n" ),
+											426 container
+												427 text truncated
+											428 container
+												429 text           ?  `\n(Showing  ${ sliced . length }  of  ${ entries . length }  entries. Use 'offset' parameter to read beyond entry  ${ offset  +  sliced . length } )`
+											430 container
+												431 text           :  `\n( ${ entries . length }  entries)` ,
+											432 container
+												433 text `</entries>` ,
+											434 container
+												435 text       ]. join ( "\n" )
+											436 container
+												437 text return  {
+											438 container
+												439 text title ,
+											440 container
+												441 text output ,
+											442 container
+												443 text metadata : {
+											444 container
+												445 text preview :  sliced . slice ( 0 ,  20 ). join ( "\n" ),
+											446 container
+												447 text truncated ,
+											448 container
+												449 text loaded : []  as string [],
+											450 container
+												451 text lines :  sliced . length ,
+											452 container
+												453 text totalLines :  entries . length ,
+											454 text         },
+											455 text       }
+											456 text     }
+											457 container
+												458 text const instructions  =  await InstructionPrompt . resolve ( ctx . messages ,  filepath ,  ctx . messageID )
+											459 container
+												460 text // Exclude SVG (XML-based) and vnd.fastbidsheet (.fbs extension, commonly FlatBuffers schema files)
+											461 text           ...(citedReadRange(page) ?? {}),
+										462 container
+											463 text field (settable) Description: Find, Value: citedReadRange
+											464 button next
+											465 button previous
+											466 button all
+											467 checkbox (settable, integer) Description: match case, Value: 0
+											468 checkbox (settable, integer) Description: regexp, Value: 0
+											469 checkbox (settable, integer) Description: by word, Value: 0
+											470 button close
+									226 text TypeScript
+
+The focused UI element is 463 text field (settable) Description: Find, Value: citedReadRange

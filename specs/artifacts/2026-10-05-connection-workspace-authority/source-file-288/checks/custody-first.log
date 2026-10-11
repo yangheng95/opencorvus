@@ -1,0 +1,16 @@
+21 |     const current=fs.statSync(item.path)
+22 |     return current.size===item.bytes&&current.mtimeMs===item.mtimeMs?[]:[{path:item.path,before:item,after:{bytes:current.size,mtimeMs:current.mtimeMs}}]
+23 |   })
+24 |   const result={observedAtUtc:new Date().toISOString(),access:"Original and physically closed history clone readonly BEGIN/ROLLBACK; actual complete protected history rows and lifecycle values, original source-project file metadata; no hashes",comparison,lifecycleContent,originalLifecycleRows:lifecycle.length,clonedLifecycleRows:clonedLifecycle.length,changedSourceFiles:changedFiles,boundary:"History runtime's new process/Bus/read receipts are runtime-specific; original conversation/tool/provider/memory/permission content remains exact"}
+25 |   fs.writeFileSync(path.join(output,"actual-history-custody.json"),JSON.stringify(result,null,2)+"\n",{flag:"wx"})
+26 |   const referenced = JSON.parse(fs.readFileSync(path.join(output,"../history-readiness/referenced-file-readback.json"),"utf8"))
+                                        ^
+ENOENT: no such file or directory, open 'D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\source-file-288\history-readiness\referenced-file-readback.json'
+    path: "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-file-288\\history-readiness\\referenced-file-readback.json",
+ syscall: "open",
+   errno: -2,
+    code: "ENOENT"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\source-file-288\history-custody.ts:26:36
+
+Bun v1.3.14 (Windows x64)

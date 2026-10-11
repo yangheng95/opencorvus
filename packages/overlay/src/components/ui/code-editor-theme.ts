@@ -160,6 +160,23 @@ const overlayEditorTheme = EditorView.theme({
     color: "var(--text)",
     border: "var(--oc-border-width) solid var(--border)",
   },
+  ".cm-textfield, .cm-button": {
+    fontFamily: "var(--font)",
+    fontSize: "var(--ui-font-body)",
+    lineHeight: "var(--ui-line-height-tight)",
+    color: "var(--text-strong)",
+    border: "var(--oc-border-width) solid var(--border)",
+    borderRadius: "var(--oc-radius-soft)",
+  },
+  ".cm-textfield": { backgroundColor: "var(--surface-strong)", caretColor: "var(--accent)" },
+  ".cm-button, .cm-button:active": { backgroundColor: "var(--subtle-2)", backgroundImage: "none" },
+  ".cm-button:hover": { backgroundColor: "var(--subtle-3)" },
+  ".cm-textfield:focus-visible, .cm-button:focus-visible": {
+    outline: "none",
+    borderColor: "var(--accent)",
+    boxShadow: "0 0 0 calc(2px * var(--ui-scale)) var(--oc-control-focus-ring)",
+  },
+  ".cm-panel.cm-search label": { fontSize: "var(--ui-font-body)" },
   ".cm-tooltip-autocomplete > ul > li[aria-selected]": {
     backgroundColor: "var(--subtle-3)",
     color: "var(--text-strong)",

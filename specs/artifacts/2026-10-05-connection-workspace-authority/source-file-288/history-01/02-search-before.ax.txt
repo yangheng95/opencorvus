@@ -1,0 +1,187 @@
+Browser tab: 26, Title: "OpenCorvus", URL: "http://localhost:18236/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 142-170, 172, 174, 176-225
+~										141 text entry area Description: Editor, Value: export function citedReadRange(page: {
+            .filter(
+              (entry) =>
+                entry.toLowerCase().includes(base.toLowerCase()) || base.toLowerCase().includes(entry.toLowerCase()),
+            )
+            .map((entry) => path.join(dir, entry))
+            .slice(0, 3),
+        )
+        .catch((error) => {
+          if (isMissingPathError(error)) return []
+          throw error
+        })
+
+
+      if (suggestions.length > 0) {
+        throw new Error(`File not found: ${filepath}\n\nDid you mean one of these?\n${suggestions.join("\n")}`)
+      }
+
+
+      throw new Error(`File not found: ${filepath}`)
+    }
+
+
+    if (stat.isDirectory()) {
+      const dirents = await files.readdir(filepath, { withFileTypes: true })
+      const entries = await Promise.all(
+        dirents.map(async (dirent) => {
+          if (dirent.isDirectory()) return dirent.name + "/"
+          if (dirent.isSymbolicLink()) {
+            const target = await files.stat(path.join(filepath, dirent.name)).catch(() => undefined)
+            if (target?.isDirectory()) return dirent.name + "/"
+          }
+          return dirent.name
+        }),
+      )
+      entries.sort((a, b) => a.localeCompare(b))
+
+
+      const limit = params.limit ?? DEFAULT_READ_LIMIT
+      const offset = params.offset ?? 1
+      const start = offset - 1
+      const sliced = entries.slice(start, start + limit)
+      const truncated = start + sliced.length < entries.length
+
+
+      const output = [
+        `<path>${filepath}</path>`,
+        `<type>directory</type>`,
+        `<entries>`,
+        sliced.join("\n"),
+        truncated
+          ? `\n(Showing ${sliced.length} of ${entries.length} entries. Use 'offset' parameter to read beyond entry ${offset + sliced.length})`
+          : `\n(${entries.length} entries)`,
+        `</entries>`,
+      ].join("\n")
+
+
+      return {
+        title,
+        output,
+        metadata: {
+          preview: sliced.slice(0, 20).join("\n"),
+          truncated,
+          loaded: [] as string[],
+          lines: sliced.length,
+          totalLines: entries.length,
+        },
+      }
+    }
+
+
+    const instructions = await InstructionPrompt.resolve(ctx.messages, filepath, ctx.messageID)
+~											171 text export function citedReadRange(page: {
++												227 text             . filter (
++												228 text               ( entry ) =>
++											229 container
++												230 text entry . toLowerCase (). includes ( base . toLowerCase ()) ||  base . toLowerCase (). includes ( entry . toLowerCase ()),
++											231 text             )
++											232 container
++												233 text             . map (( entry ) =>  path . join ( dir ,  entry ))
++											234 container
++												235 text             . slice ( 0 ,  3 ),
++											236 text         )
++											237 container
++												238 text         . catch (( error ) => {
++											239 container
++												240 text if  ( isMissingPathError ( error ))  return  []
++											241 container
++												242 text throw error
++											243 text         })
++											244 container
++												245 text if  ( suggestions . length  >  0 ) {
++											246 container
++												247 text throw new Error ( `File not found:  ${ filepath } \n\nDid you mean one of these?\n ${ suggestions . join ( "\n" )} ` )
++											248 text       }
++											249 container
++												250 text throw new Error ( `File not found:  ${ filepath } ` )
++											251 text     }
++											252 container
++												253 text if  ( stat . isDirectory ()) {
++											254 container
++												255 text const dirents  =  await files . readdir ( filepath , {  withFileTypes :  true  })
++											256 container
++												257 text const entries  =  await Promise . all (
++											258 container
++												259 text dirents . map ( async  ( dirent ) => {
++											260 container
++												261 text if  ( dirent . isDirectory ())  return dirent . name  +  "/"
++											262 container
++												263 text if  ( dirent . isSymbolicLink ()) {
++											264 container
++												265 text const target  =  await files . stat ( path . join ( filepath ,  dirent . name )). catch (() =>  undefined )
++											266 container
++												267 text if  ( target ?. isDirectory ())  return dirent . name  +  "/"
++											268 text           }
++											269 container
++												270 text return dirent . name
++											271 text         }),
++											272 text       )
++											273 container
++												274 text entries . sort (( a ,  b ) =>  a . localeCompare ( b ))
++											275 container
++												276 text const limit  =  params . limit  ??  DEFAULT_READ_LIMIT
++											277 container
++												278 text const offset  =  params . offset  ??  1
++											279 container
++												280 text const start  =  offset  -  1
++											281 container
++												282 text const sliced  =  entries . slice ( start ,  start  +  limit )
++											283 container
++												284 text const truncated  =  start  +  sliced . length  <  entries . length
++											285 container
++												286 text const output  = [
++											287 container
++												288 text `<path> ${ filepath } </path>` ,
++											289 container
++												290 text `<type>directory</type>` ,
++											291 container
++												292 text `<entries>` ,
++											293 container
++												294 text sliced . join ( "\n" ),
++											295 container
++												296 text truncated
++											297 container
++												298 text           ?  `\n(Showing  ${ sliced . length }  of  ${ entries . length }  entries. Use 'offset' parameter to read beyond entry  ${ offset  +  sliced . length } )`
++											299 container
++												300 text           :  `\n( ${ entries . length }  entries)` ,
++											301 container
++												302 text `</entries>` ,
++											303 container
++												304 text       ]. join ( "\n" )
++											305 container
++												306 text return  {
++											307 container
++												308 text title ,
++											309 container
++												310 text output ,
++											311 container
++												312 text metadata : {
++											313 container
++												314 text preview :  sliced . slice ( 0 ,  20 ). join ( "\n" ),
++											315 container
++												316 text truncated ,
++											317 container
++												318 text loaded : []  as string [],
++											319 container
++												320 text lines :  sliced . length ,
++											321 container
++												322 text totalLines :  entries . length ,
++											323 text         },
++											324 text       }
++											325 text     }
++											326 container
++												327 text const instructions  =  await InstructionPrompt . resolve ( ctx . messages ,  filepath ,  ctx . messageID )
++										328 container
++											329 text field (settable) Description: Find, Value: citedReadRange
++											330 button next
++											331 button previous
++											332 button all
++											333 checkbox (settable, integer) Description: match case, Value: 0
++											334 checkbox (settable, integer) Description: regexp, Value: 0
++											335 checkbox (settable, integer) Description: by word, Value: 0
++											336 button close
+The focused UI element is 329 text field (settable) Description: Find, Value: citedReadRange

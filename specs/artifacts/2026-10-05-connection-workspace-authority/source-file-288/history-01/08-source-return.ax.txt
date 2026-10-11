@@ -1,0 +1,64 @@
+Browser tab: 26, Title: "OpenCorvus", URL: "http://localhost:18236/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 63-76, 104-141, 226, 338, 343-470
++				343 container chatSection
++					344 container Description: 正在加载 Task, ID: taskSwitchProgress
++					345 container
++						346 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/r...
++						347 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
++						348 container Description: 非进行中, ID: taskStatus
++							349 text 非进行中
++						350 button 侧聊
++						351 container solidChatHeaderRuntimeActions
++							352 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
++							353 checkbox Description: 打开右侧面板, Value: 0
++					354 container
++						355 container Description: 对话, ID: chatScroll
++							356 container
++								357 container
++									358 text 用户
++									359 text 请依次仅调用两次 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts：第一次 offset=27、limit=11；第二次 offset=1、limit=1000，读取整文件。然后用中文各用一句话概述，并保留两个真实文件来源供点击。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
++								360 container
++									361 text work
++									362 text 15 秒
++									363 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
++										364 text read
++										365 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
++										366 image
++									367 container 来源
++										368 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++											369 text read.ts:27-37
++											370 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++									371 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
++										372 text read
++										373 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
++										374 image
++									375 container 来源
++										376 button 打开来源文件: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
++											377 text read.ts
++											378 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
++									379 container
++										380 text 第一次读取了  read.ts  第 27–37 行，其中  citedReadRange  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。
++									381 container
++										382 text 第二次读取了  read.ts  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
++						383 container chatHomeComposition
++							384 container solidChatComposer
++								385 container
++									386 text 模型配置暂不可用
++									387 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
++									388 button (collapsed) 详细信息, Secondary Actions: Expand
++										389 text 详细信息
++									390 button 重试
++									391 container chatForm
++										392 splitter Description: 拖拽调整消息输入框大小, Value: 42
++										393 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
++										394 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++										395 text Work
++										396 text Chat
++										397 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++										398 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++										399 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
++											400 text 选择模型
++										401 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
++								402 button 滚动到底部
+The focused UI element is 353 checkbox Description: 打开右侧面板, Value: 0

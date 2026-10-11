@@ -1,0 +1,37 @@
+Browser tab: 26, Title: "OpenCorvus", URL: "http://localhost:18236/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 77-103, 328-336
++								413 container
++									414 text work
++									415 text 15s
++									416 container
++										417 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
++											418 text read
++											419 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
++											420 image
++										421 container Sources
++											422 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++												423 text read.ts:27-37
++												424 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++									425 container
++										426 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines), Secondary Actions: Expand
++											427 text read
++											428 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @1+1000 (262 lines)
++											429 image
++										430 container Sources
++											431 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
++												432 text read.ts
++												433 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
++									434 container
++										435 text 第一次读取了
++										436 text read.ts
++										437 text  第 27–37 行，其中
++										438 text citedReadRange
++										439 text  对空内容或未截断的整文件读取不返回行范围，其余情况返回实际读取的起止行。 第二次读取了
++										440 text read.ts
++										441 text  全部 262 行，该文件实现读取工具的参数校验、路径与附件解析、目录分页、图片及 PDF 读取、文本分页和文件来源引用。
++									442 button Copy message
++									443 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++									444 pop up button (collapsed) Description: View model usage for this turn: 100K Token, Secondary Actions: Expand
++									445 text Oct 10, 11:57 AM
+The focused UI element is 431 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts
