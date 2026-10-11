@@ -1,40 +1,50 @@
+import { batch } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
+import { getServerUrl, type ApiAuthority } from "../services/api-state"
+import type { BoardSource } from "./board"
 
 export type ConversationReadingPosition = { top: number; following: boolean }
 export type MainConversationReadingPosition = ConversationReadingPosition & {
   anchor?: { messageID: string; textIndex: number; offset: number }
 }
 
+type ConversationUiState = {
+  storageKey: string
+  expandedCards: Record<string, boolean>
+  expandedDisclosures: Record<string, boolean>
+  sourceExcerptPositions: Record<string, number>
+  sideChatReadingPositions: Record<string, ConversationReadingPosition>
+}
+
 const [store, setStore] = createStore({
-  // Operator-owned presentation state. Runtime card status must never rewrite
-  // an explicit expand/collapse choice.
-  expandedCards: {} as Record<string, boolean>,
-  /** Task-scoped operator disclosures that must survive conversation tree
-   * replacement without becoming persisted message data. */
-  expandedDisclosures: {} as Record<string, boolean>,
-  sourceExcerptPositions: {} as Record<string, number>,
-  sideChatReadingPositions: {} as Record<string, ConversationReadingPosition>,
+  activeKey: "",
+  conversations: {} as Record<string, ConversationUiState | undefined>,
   mainReadingPositions: {} as Record<string, MainConversationReadingPosition>,
 })
 
 export { store as conversationUiStore }
 
 // ── localStorage persistence ──
-// Card collapse is per-task (cleared on selectTask), but persisting across
-// page reloads keeps the operator's review state when they refresh or the
-// overlay restarts. Stored under `oc_card_expand:<taskID>`. We cap the
-// persisted task list (LRU) so localStorage doesn't grow unbounded across
-// hundreds of tasks. Per-task entry count is also capped to keep the JSON
-// size sub-100KB.
+// Only card folding persists across reloads. Reading positions and other
+// disclosures live in the one record owned by the current API/source identity.
+// Both storage and memory retain a bounded set of recently visited conversations.
 const STORAGE_PREFIX = "oc_card_expand:"
 const STORAGE_INDEX_KEY = "oc_card_expand_index"
-const MAX_PERSISTED_TASKS = 50
-const MAX_ENTRIES_PER_TASK = 200
+const MAX_CONVERSATIONS = 50
+const MAX_UI_ENTRIES = 200
 const MAX_MAIN_READERS = 50
 let captureMainReader: (() => void) | undefined
-let activeTaskID = ""
+let recentConversations: string[] = []
 let saveTimer: any = null
 const SAVE_DEBOUNCE_MS = 400
+
+const currentState = () => store.conversations[store.activeKey]
+
+function remember<T>(record: Record<string, T>, id: string, value: T): Record<string, T> {
+  const entries = Object.entries(record).filter(([key]) => key !== id)
+  entries.push([id, value])
+  return Object.fromEntries(entries.slice(-MAX_UI_ENTRIES))
+}
 
 function isStorageAvailable(): boolean {
   try {
@@ -65,10 +75,10 @@ function writeIndex(ids: string[]): void {
   }
 }
 
-function bumpIndex(taskID: string): void {
-  const idx = readIndex().filter((id) => id !== taskID)
-  idx.unshift(taskID)
-  while (idx.length > MAX_PERSISTED_TASKS) {
+function bumpIndex(key: string): void {
+  const idx = readIndex().filter((id) => id !== key)
+  idx.unshift(key)
+  while (idx.length > MAX_CONVERSATIONS) {
     const evict = idx.pop()!
     try {
       window.localStorage.removeItem(STORAGE_PREFIX + evict)
@@ -79,15 +89,15 @@ function bumpIndex(taskID: string): void {
   writeIndex(idx)
 }
 
-function loadFromStorage(taskID: string): Record<string, boolean> {
-  if (!isStorageAvailable() || !taskID) return {}
+function loadFromStorage(key: string): Record<string, boolean> {
+  if (!isStorageAvailable() || !key) return {}
   try {
-    const raw = window.localStorage.getItem(STORAGE_PREFIX + taskID)
+    const raw = window.localStorage.getItem(STORAGE_PREFIX + key)
     if (!raw) return {}
     const parsed = JSON.parse(raw)
     if (!parsed || typeof parsed !== "object") return {}
     const out: Record<string, boolean> = {}
-    for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+    for (const [k, v] of Object.entries(parsed as Record<string, unknown>).slice(-MAX_UI_ENTRIES)) {
       if (typeof v !== "boolean") continue
       out[k] = v
     }
@@ -97,20 +107,14 @@ function loadFromStorage(taskID: string): Record<string, boolean> {
   }
 }
 
-// Synchronous flush for the currently-active task. Called both by the
-// debounced timer AND by the task-switch path so the previous task's
-// in-flight changes never get dropped when the operator switches before
-// the 400ms debounce fires. Returns true on a successful write.
-function flushActiveTaskNow(): boolean {
-  if (!activeTaskID || !isStorageAvailable()) return false
+// Flush the same active record before selection changes, including changes
+// made within the save debounce window.
+function flushActiveConversationNow(): boolean {
+  const current = currentState()
+  if (!current || !isStorageAvailable()) return false
   try {
-    const entries = Object.entries(store.expandedCards)
-    // Cap entries — if a task touched >200 cards, drop the oldest by
-    // iteration order (Object.entries preserves insertion order).
-    const trimmed = entries.slice(-MAX_ENTRIES_PER_TASK)
-    const payload = Object.fromEntries(trimmed)
-    window.localStorage.setItem(STORAGE_PREFIX + activeTaskID, JSON.stringify(payload))
-    bumpIndex(activeTaskID)
+    window.localStorage.setItem(STORAGE_PREFIX + current.storageKey, JSON.stringify(current.expandedCards))
+    bumpIndex(current.storageKey)
     return true
   } catch {
     // ignore quota errors
@@ -119,105 +123,105 @@ function flushActiveTaskNow(): boolean {
 }
 
 function scheduleSave(): void {
-  if (!activeTaskID || !isStorageAvailable()) return
+  if (!currentState() || !isStorageAvailable()) return
   if (saveTimer) clearTimeout(saveTimer)
   saveTimer = setTimeout(() => {
     saveTimer = null
-    flushActiveTaskNow()
+    flushActiveConversationNow()
   }, SAVE_DEBOUNCE_MS)
 }
 
-/** Switch the active task — load that task's persisted collapse state into
- *  the in-memory store at the task-selection boundary.
- *  CRITICAL: flushes the previous task's pending debounced save BEFORE
- *  swapping in the new state, so rapid task switches don't drop the
- *  prior task's collapse changes. */
-export function loadConversationUiStateForTask(taskID: string): void {
-  if (activeTaskID === taskID) return
+function flushPendingSave(): void {
   if (saveTimer) {
     clearTimeout(saveTimer)
     saveTimer = null
-    // Drain any debounced edits from the previous task synchronously
-    // before the activeTaskID flip — otherwise the new taskID would
-    // capture the previous task's keys.
-    flushActiveTaskNow()
+    flushActiveConversationNow()
   }
-  activeTaskID = taskID
-  const persisted = loadFromStorage(taskID)
-  setStore("expandedCards", reconcile(persisted, { merge: false }))
-  setStore("expandedDisclosures", reconcile({}, { merge: false }))
-  setStore("sourceExcerptPositions", reconcile({}, { merge: false }))
-  setStore("sideChatReadingPositions", reconcile({}, { merge: false }))
 }
 
+/** All conversation kinds select one presentation record at the same boundary. */
+export function loadConversationUiStateForSource(source: Pick<BoardSource, "kind" | "id">, authority: ApiAuthority): void {
+  const key = JSON.stringify([authority.revision, source.kind, source.id])
+  if (store.activeKey === key) return
+  flushPendingSave()
+  const storageKey = JSON.stringify([getServerUrl(), source.kind, source.id])
+  const next = [...recentConversations.filter((item) => item !== key), key].slice(-MAX_CONVERSATIONS)
+  batch(() => {
+    if (!store.conversations[key]) {
+      setStore("conversations", key, {
+        storageKey,
+        expandedCards: loadFromStorage(storageKey),
+        expandedDisclosures: {},
+        sourceExcerptPositions: {},
+        sideChatReadingPositions: {},
+      })
+    }
+    for (const retired of recentConversations) {
+      if (!next.includes(retired)) setStore("conversations", retired, undefined)
+    }
+    recentConversations = next
+    setStore("activeKey", key)
+  })
+}
+
+/** Deselect the current view; its bounded record remains available on return. */
 export function clearConversationUiState(): void {
-  if (saveTimer) {
-    clearTimeout(saveTimer)
-    saveTimer = null
-    // Same race as loadConversationUiStateForTask — flush before clear
-    // so explicit "no task selected" doesn't drop the prior task's edits.
-    flushActiveTaskNow()
-  }
-  activeTaskID = ""
-  setStore("expandedCards", reconcile({}, { merge: false }))
-  setStore("expandedDisclosures", reconcile({}, { merge: false }))
-  setStore("sourceExcerptPositions", reconcile({}, { merge: false }))
-  setStore("sideChatReadingPositions", reconcile({}, { merge: false }))
+  flushPendingSave()
+  setStore("activeKey", "")
 }
 
 /** Read the effective expanded state for a card. */
 export function cardExpanded(id: string, defaultVal = true): boolean {
   if (!id) return defaultVal
-  return store.expandedCards[id] ?? defaultVal
+  return currentState()?.expandedCards[id] ?? defaultVal
 }
 
 /** Flip the card's operator-owned expanded state. */
 export function toggleCard(id: string, defaultVal = true): void {
-  if (!id) return
-  const cur = cardExpanded(id, defaultVal)
-  setStore("expandedCards", id, !cur)
-  scheduleSave()
+  setCardExpanded(id, !cardExpanded(id, defaultVal))
 }
 
 /** Directly set a card's expanded state (used by bulk operations). */
 export function setCardExpanded(id: string, value: boolean): void {
-  if (!id) return
-  setStore("expandedCards", id, value)
+  const current = currentState()
+  if (!id || !current) return
+  setStore("conversations", store.activeKey, "expandedCards", reconcile(remember(current.expandedCards, id, value), { merge: false }))
   scheduleSave()
 }
 
-/** Read task-scoped execution/reasoning presentation state. Unlike card
+/** Read conversation-scoped execution/reasoning presentation state. Unlike card
  * folding, disclosures are intentionally independent of runtime status: a
  * data refresh must not rewrite the operator's current page arrangement. */
 export function conversationDisclosureExpanded(id: string, defaultVal = false): boolean {
   if (!id) return defaultVal
-  return store.expandedDisclosures[id] ?? defaultVal
+  return currentState()?.expandedDisclosures[id] ?? defaultVal
 }
 
 export function setConversationDisclosureExpanded(id: string, value: boolean): void {
-  if (!id) return
-  setStore("expandedDisclosures", id, value)
+  const current = currentState()
+  if (!id || !current) return
+  setStore("conversations", store.activeKey, "expandedDisclosures", reconcile(remember(current.expandedDisclosures, id, value), { merge: false }))
 }
 
-/** Session-local reading intent; primary selection clears it with the other UI state. */
+/** Source reading intent belongs to the same retained conversation record. */
 export function sourceExcerptReadingTop(id: string): number | undefined {
-  return store.sourceExcerptPositions[id]
+  return currentState()?.sourceExcerptPositions[id]
 }
 
 export function setSourceExcerptReadingTop(id: string, top: number): void {
-  if (!id || !Number.isFinite(top)) return
-  const entries = Object.entries({ ...store.sourceExcerptPositions, [id]: Math.max(0, top) })
-  setStore("sourceExcerptPositions", reconcile(Object.fromEntries(entries.slice(-MAX_ENTRIES_PER_TASK)), { merge: false }))
+  const current = currentState()
+  if (!id || !current || !Number.isFinite(top)) return
+  setStore("conversations", store.activeKey, "sourceExcerptPositions", reconcile(remember(current.sourceExcerptPositions, id, Math.max(0, top)), { merge: false }))
 }
 
 export function sideChatReadingPosition(id: string): ConversationReadingPosition | undefined {
-  return store.sideChatReadingPositions[id]
+  return currentState()?.sideChatReadingPositions[id]
 }
 
 export function setSideChatReadingPosition(id: string, position: ConversationReadingPosition): void {
-  if (!id || !Number.isFinite(position.top)) return
-  const entries = Object.entries({ ...store.sideChatReadingPositions, [id]: { top: Math.max(0, position.top), following: position.following } })
-  setStore("sideChatReadingPositions", reconcile(Object.fromEntries(entries.slice(-MAX_ENTRIES_PER_TASK)), { merge: false }))
+  const current = currentState()
+  if (!id || !current || !Number.isFinite(position.top)) return
+  setStore("conversations", store.activeKey, "sideChatReadingPositions", reconcile(remember(current.sideChatReadingPositions, id, { top: Math.max(0, position.top), following: position.following }), { merge: false }))
 }
 
 /** One visible main reader supplies its actual intent before projection retirement. */

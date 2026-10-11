@@ -1,0 +1,15 @@
+Browser tab: 32, Title: "OpenCorvus", URL: "http://localhost:18242/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 74-175
++							74 container chatForm
++								75 splitter Description: Drag to resize the message input, Value: 42
++								76 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++								77 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								78 text Work
++								79 text Chat
++								80 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++								81 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++								82 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++									83 text Choose model
++								84 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 59 button 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...

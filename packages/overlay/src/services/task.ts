@@ -23,7 +23,7 @@ import { getHostTransport } from "./host-transport-runtime"
 import { isSelectedTaskSSEConnected, startSSE, stopSSE } from "./sse"
 import { t } from "../utils/i18n"
 import { abortChatRequest, setChatAttachments, messageStore } from "../store/messages"
-import { clearConversationUiState, loadConversationUiStateForTask } from "../store/conversation-ui"
+import { clearConversationUiState, loadConversationUiStateForSource } from "../store/conversation-ui"
 import {
   loadTasks,
   applyTasks,
@@ -277,9 +277,9 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
   if (!options.preserveComposerAttachments) setChatAttachments([])
   stopSSE()
   resetSelectedLiveCursor()
-  if (nextTaskID) loadConversationUiStateForTask(nextTaskID)
-  else clearConversationUiState()
   batch(() => {
+    if (nextTaskID) loadConversationUiStateForSource({ kind: "task", id: nextTaskID }, authority)
+    else clearConversationUiState()
     setBoardStore(
       "selectedSource",
       nextTaskID ? { kind: "task", id: nextTaskID, ...(taskDirectory ? { directory: taskDirectory } : {}) } : null,

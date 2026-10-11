@@ -1,0 +1,219 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.":
+    - button "请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...":
+      - generic: 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+    - button "More actions":
+    - button "Collapse Anonymous ae6aad" [expanded]:
+      - generic: Anonymous ae6aad
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.":
+      - button "请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...":
+        - generic: 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18242":
+        - generic: Online
+  - separator "Resize left panel"
+  - generic "Loading task"
+  - generic: 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...
+  - status
+  - button "Project actions":
+  - generic "Not running":
+    - generic: Not running
+  - button "Side chat":
+  - button "Environment information":
+  - button "Open right dock":
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph: 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释键盘焦点与 Sources 阅读体验的具体建议。区分文档事实与产品评审建议，不把建议说成已经实现的功能。请在当前普通对话中完成，不创建任务、不委托agent、不生成或修改本地文件。
+    - article:
+      - generic: work
+      - generic "Session ran for 1m 1s (between first message and terminal status)": 1m 1s
+      - paragraph: 我会只读检索并核对 MDN 官方资料，先给出简短结论和真实来源，再用八段说明键盘焦点与 Sources 阅读体验的具体建议，明确区分文档事实和产品评审建议。
+      - 'button "websearch · Web search: site:developer.mozilla.org CSS :focus-visible"':
+        - generic: websearch
+        - generic: "Web search: site:developer.mozilla.org CSS :focus-visible"
+      - group "Sources":
+        - 'generic "Sources: focus-visible CSS pseudo-class - MDN Web Docs (5)" [active]':
+          - generic: focus-visible CSS pseudo-class - MDN Web Docs
+          - generic: "5"
+        - 'link "Open web source: focus-visible CSS pseudo-class - MDN Web Docs · developer.mozilla.org"':
+          - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible
+          - generic: "1"
+          - generic: focus-visible CSS pseudo-class - MDN Web Docs
+          - generic: developer.mozilla.org
+        - 'generic "Source excerpt: focus-visible CSS pseudo-class - MDN Web Docs"':
+          - text: Source excerpt
+        - 'link "Open web source: Pseudo-classes - CSS | MDN · developer.mozilla.org"':
+          - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Pseudo-classes
+          - generic: "2"
+          - generic: Pseudo-classes - CSS | MDN
+          - generic: developer.mozilla.org
+        - 'generic "Source excerpt: Pseudo-classes - CSS | MDN"':
+          - text: Source excerpt
+        - 'link "Open web source: :focus-visible - CSS：层叠样式表 | MDN · developer.mozilla.org"':
+          - /url: https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+          - generic: "3"
+          - generic: :focus-visible - CSS：层叠样式表 | MDN
+          - generic: developer.mozilla.org
+        - 'generic "Source excerpt: :focus-visible - CSS：层叠样式表 | MDN"':
+          - text: Source excerpt
+        - 'link "Open web source: CSS-Pseudoklasse :focus-visible - MDN Web Docs · developer.mozilla.org"':
+          - /url: https://developer.mozilla.org/de/docs/Web/CSS/Reference/Selectors/:focus-visible
+          - generic: "4"
+          - generic: CSS-Pseudoklasse :focus-visible - MDN Web Docs
+          - generic: developer.mozilla.org
+        - 'generic "Source excerpt: CSS-Pseudoklasse :focus-visible - MDN Web Docs"':
+          - text: Source excerpt
+        - 'link "Open web source: focus CSS pseudo-class - MDN Web Docs - Mozilla · developer.mozilla.org"':
+          - /url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus
+          - generic: "5"
+          - generic: focus CSS pseudo-class - MDN Web Docs - Mozilla
+          - generic: developer.mozilla.org
+        - 'generic "Source excerpt: focus CSS pseudo-class - MDN Web Docs - Mozilla"':
+          - text: Source excerpt
+      - button "webfetch · https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible (text/html)":
+        - generic: webfetch
+        - generic: https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible (text/html)
+      - group "Sources":
+        - 'link "Open web source: :focus-visible - CSS：层叠样式表 | MDN · developer.mozilla.org"':
+          - /url: https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+          - generic: :focus-visible - CSS：层叠样式表 | MDN
+          - generic: developer.mozilla.org
+      - paragraph:
+        - strong: 简短结论
+        - text: ：
+        - code: :focus-visible
+        - text: 适合用于 Sources 中交互控件的焦点样式：保留键盘操作所需的明确位置提示，同时尊重浏览器对鼠标等输入方式的判断。它不是“只在按键时显示”的开关，也不能单独解决焦点顺序、跳转和返回定位问题。以下产品建议均为评审建议，不代表已经实现。
+      - paragraph:
+        - strong: 真实来源
+        - text: ：已只读检索并打开核对
+        - link "MDN 中文官方文档：:focus-visible":
+          - /url: https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible
+          - text: MDN 中文官方文档：
+          - code: :focus-visible
+        - text: 。重点依据该页的“
+        - code: :focus
+        - text: 与
+        - code: :focus-visible
+        - text: ”“无障碍”“示例”章节；页面标示最后更新于 2025 年 11 月 4 日。
+      - heading "详细说明" [level=3]
+      - paragraph:
+        - strong: 一、文档事实：焦点与焦点可见性不同。
+        - text: MDN 说明，
+        - code: :focus-visible
+        - text: 匹配的前提是元素已经符合
+        - code: :focus
+        - text: ，且浏览器通过启发式判断认为应显示焦点提示。因此，“获得焦点”与“显示焦点环”不是同一件事。它只负责匹配状态、允许作者设置外观，不会让普通文本自动可聚焦，也不会改变键盘导航顺序。评审 Sources 时，应分别检查控件能否到达、到达后能否看清位置，而不能只检查有没有这条 CSS。
+      - paragraph:
+        - strong: 二、文档事实：不能把它理解成纯键盘检测。
+        - text: MDN 举例指出，鼠标点击按钮时通常不显示焦点环，但需要输入的文本框获得焦点时仍会显示；使用键盘导航到按钮时则会显示。这说明判断还涉及元素用途，而不只是最近使用了鼠标还是键盘。产品评审建议：若 Sources 有搜索框、筛选按钮和来源链接，应允许浏览器保留这种差异，不要制定“鼠标点击后一律隐藏焦点”的规则，以免输入位置也失去提示。
+      - paragraph:
+        - strong: 三、产品评审建议：先保证完整的键盘路径。
+        - text: 若 Sources 包含来源列表与阅读区域，建议按内容和操作逻辑组织焦点顺序，让用户通过 Tab、Shift+Tab 能到达来源链接及实际存在的阅读操作。导航使用链接，执行操作使用按钮，避免只有鼠标点击才能使用的文本或图标。不要为了强调阅读内容而把每段正文都加入 Tab 顺序；否则长文会产生大量无意义停靠点。以上是交互设计建议，并非 MDN 对 Sources 结构的描述。
+      - paragraph:
+        - strong: 四、产品评审建议：区分焦点、选中与悬停。
+        - text: Sources 中“正在阅读哪篇来源”与“下一次键盘操作作用于哪个控件”是不同状态。建议选中来源使用持续的背景、标记或文字提示，键盘焦点使用清楚的轮廓，悬停采用较轻的反馈。如果三者共用同一种高亮，用户可能误把焦点移动当成来源切换。MDN 提醒，混合输入方式下焦点指示出现和消失可能令人困惑；上述状态区分是针对这一风险提出的产品建议。
+      - paragraph:
+        - strong: 五、文档事实与建议：可见性优先于装饰。
+        - text: MDN 要求关注低视力用户，并在无障碍章节引用视觉焦点指示器至少 3:1 的对比度要求；它也说明移除焦点样式会妨碍有视力的键盘用户导航。建议 Sources 使用明显轮廓并留出适当间距，而不是仅作细微文字变色。评审时还应检查浅色、深色背景，以及列表边缘和滚动容器中的轮廓是否被裁切。具体颜色、粗细和间距应以实际界面验证为准。
+      - paragraph:
+        - strong: 六、产品评审建议：保护阅读位置与焦点连续性。
+        - text: 若打开来源会更新阅读区域，建议明确决定焦点是保留在来源入口，还是移到新内容的合理起点，不要在每次内容刷新时无条件抢走焦点。如果存在预览弹层，关闭后建议回到原触发入口；加载更多或更新列表时，也应避免让当前控件消失后焦点无处可寻。这些需要交互逻辑处理，不能由
+        - code: :focus-visible
+        - text: 自动完成。目标是让用户始终知道自己在哪里、接下来能做什么。
+      - paragraph:
+        - strong: 七、文档事实与建议：兼容处理不等于清空默认轮廓。
+        - text: MDN 标示该特性自 2022 年 3 月起在主流浏览器中广泛可用，并给出用
+        - code: "@supports not selector(:focus-visible)"
+        - text: 提供
+        - code: :focus
+        - text: 样式的示例；同时说明旧浏览器的原生轮廓也可能足够。建议 Sources 按实际目标环境确定兼容策略，优先保留可用的原生指示，再做定制。不要先全局移除 outline，再假设所有环境都会成功应用新样式。
+      - paragraph:
+        - strong: 八、产品评审建议：以真实操作验收，而非样式存在验收。
+        - text: 建议完成“进入 Sources—定位来源—打开阅读—返回继续选择”的纯键盘流程，再检查鼠标点击后转用键盘的混合流程。每一步都应确认焦点可辨认、顺序合理、不被遮挡，并按控件语义验证激活方式；如有弹层，再检查关闭与返回位置。此次只核对了 MDN 资料，没有检查 Sources 的实际界面，因此这些是待验证的评审标准，不能据此宣称产品已经实现或通过无障碍验收。
+      - button "Copy message":
+      - button "Add guidance":
+      - 'button "View model usage for this turn: 123K Token"':
+        - generic: 123K
+      - time: Oct 9, 09:08 PM
+  - status:
+    - strong: Model configuration unavailable
+    - generic: You can still read this conversation. Review the details or choose a model before sending a message.
+    - generic "Details":
+      - text: Details
+    - button "Retry"
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Add a thought, or keep working…
+  - button
+  - button "Add supported files":
+  - generic "Longer research, office, production, and finished deliverables.":
+    - generic: Work
+  - generic: Chat
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model Choose model. Click to change.":
+    - generic "Choose model"
+  - button "Send" [disabled]:
+    - generic: Send
+  - button "Scroll to bottom":
+  - button:
+  - button:

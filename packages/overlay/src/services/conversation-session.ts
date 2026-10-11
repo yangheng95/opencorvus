@@ -11,7 +11,7 @@ import {
 import { cancelConversationReplay, hydrateConversation, resetConversationProjection } from "./conversation"
 import { startSSE, stopSSE } from "./sse"
 import { resetSelectedLiveCursor } from "./selected-stream-cursor"
-import { clearConversationUiState } from "../store/conversation-ui"
+import { loadConversationUiStateForSource } from "../store/conversation-ui"
 import { apiJson, ApiError, serverSettledRequest } from "./api"
 import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { applyDirectory, ownsWorkspaceSelection } from "./workspace"
@@ -372,8 +372,8 @@ export async function selectConversationSession(options: SelectConversationSessi
   setChatAttachments([])
   stopSSE()
   resetSelectedLiveCursor()
-  clearConversationUiState()
   batch(() => {
+    loadConversationUiStateForSource(initialSource, authority)
     clearBoard()
     resetConversationProjection({ scrollIntent: "bottom", cause: "conversation-session-switch" })
     setBoardStore("selectedSource", initialSource)

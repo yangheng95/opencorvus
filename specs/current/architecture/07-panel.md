@@ -424,7 +424,8 @@ and transcript remain independent. Side chats are retained and reopenable;
 closing their tab hides the panel rather than deleting audit history.
 The reference-history disclosure retains the user's open/closed choice in the
 existing conversation disclosure store, scoped to API authority, source and Side
-Session. Its layout choice survives Dock remounts alongside the reading position;
+Session. Its layout choice survives Dock remounts and primary-conversation
+returns alongside the reading position;
 opening it pauses the nearest transcript's follow controller for reading.
 Pending questions and permissions render through the existing InteractionCard.
 Side Chat cards project their body parts through the shared conversation display
@@ -660,9 +661,18 @@ The existing conversation UI store owns its expansion by canonical source
 identity. Opening or focusing the
 reading region pauses transcript following through the shared reading intent.
 The same conversation UI store retains the excerpt's last visible scroll
-position across reader remounts, with the existing per-selection entry bound.
-Position keys include the current API authority revision and canonical source
-identity; primary selection clears these transient positions. The reader uses
+position across reader remounts and primary-conversation returns. Each current
+API revision and source kind/ID selects one presentation record containing card
+folds, reference disclosures, excerpt positions and Side reading positions.
+Task, ordinary Session and Mission entry points select that record in the same
+synchronous batch as their Board source; an empty workspace deselects it. The
+store retains fifty recently selected conversations, with two hundred entries
+per presentation field. Only card folds persist across reloads, under the server
+URL and source kind/ID; reading positions remain in memory. The previous bare
+Task-ID folding keys are no longer read, so that old presentation preference
+starts from its default on first use. There is no second active-state copy.
+Position keys also include the current API authority revision and canonical
+Source identity. The reader uses
 the shared animation-frame scheduler after visible geometry is ready, retires
 its observer on completion or disposal, and lets new native reading input
 cancel a pending restore. Hidden geometry and stale connection/selection owners

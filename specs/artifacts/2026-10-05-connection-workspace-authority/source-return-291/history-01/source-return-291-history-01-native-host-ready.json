@@ -1,0 +1,40 @@
+{
+  "occurrence": "source-return-291-history-01-723b9bb8-2207-46b1-a44f-22cc501480d3",
+  "outcome": "ready",
+  "host": {
+    "pid": 74852,
+    "processInstanceID": "win32:639273038686978154",
+    "occurrenceID": "ac06647d-faf5-40ac-814a-1d765c335ef9"
+  },
+  "parent": {
+    "pid": 55056,
+    "processInstanceID": "win32:639273038650230301",
+    "occurrenceID": "f5570578-e01d-43bc-a755-ed3a3679603d"
+  },
+  "target": {
+    "pid": 76360,
+    "processInstanceID": "win32:639273038694823152",
+    "occurrenceID": "9a040155-3417-44fb-ba06-8ff024be92fd"
+  },
+  "targetBirthAtMs": 1791707069482,
+  "deadlineAt": 1791707968654,
+  "observedAtUtc": "2026-10-11T08:24:29.517Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18242",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\source-return-291-history-01\\startup.json",
+    "--startup-occurrence",
+    "source-return-291-history-01-723b9bb8-2207-46b1-a44f-22cc501480d3",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

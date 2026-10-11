@@ -80,7 +80,7 @@ import {
   type BoardSource,
 } from "./store/board"
 import { abortChatRequest, messageStore, setChatAttachments } from "./store/messages"
-import { clearConversationUiState } from "./store/conversation-ui"
+import { loadConversationUiStateForSource } from "./store/conversation-ui"
 import { appStore } from "./store/app"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./services/composer-model"
 import { projectComposerIntent, rememberProjectComposerIntent } from "./services/project-composer-preferences"
@@ -1540,8 +1540,8 @@ async function openMissionSession(
   clearComposerModelProjection()
   cancelConversationReplay()
   setChatAttachments([])
-  clearConversationUiState()
   batch(() => {
+    loadConversationUiStateForSource(source, authority)
     resetConversationProjection({ scrollIntent: "bottom", cause: "mission-session-switch" })
     setBoardStore("selectedSource", source)
     clearBoard()
