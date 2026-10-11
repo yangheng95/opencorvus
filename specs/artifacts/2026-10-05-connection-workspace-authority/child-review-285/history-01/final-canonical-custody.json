@@ -1,0 +1,1706 @@
+{
+  "observedAtUtc": "2026-10-11T05:03:07.278Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-11/child-review-285-history-01",
+  "task": {
+    "id": "tsk_g00VXRkMRi00ID2TqzPU",
+    "project_id": "prj_honTzv1SylD1sTwgEqBC",
+    "session_id": "ses_-zUSYFdRdzzk2frR62zX",
+    "request_id": "0f315e79-0af3-438e-b26e-d312f2f3e65e"
+  },
+  "session": {
+    "id": "ses_-zUSYFdRdzzk2frR62zX",
+    "project_id": "prj_honTzv1SylD1sTwgEqBC",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "kind": "root",
+    "parent_id": null
+  },
+  "completeRows": [
+    {
+      "table": "session",
+      "rows": 5,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "message",
+      "rows": 22,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "part",
+      "rows": 59,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_request",
+      "rows": 14,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_progress",
+      "rows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_outcome",
+      "rows": 14,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_request",
+      "rows": 17,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_outcome",
+      "rows": 17,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_usage_event",
+      "rows": 19,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_task",
+      "rows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "worker_turn_descriptor",
+      "rows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact",
+      "rows": 10,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact_version",
+      "rows": 0,
+      "fullRowContent": "equal"
+    }
+  ],
+  "projects": [
+    {
+      "id": "prj_hVAc7t3PtYTtTTJZWWvx",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365",
+      "before": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365",
+          "type": "directory",
+          "mtimeMs": 1791449668663.1765
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git",
+          "type": "directory",
+          "mtimeMs": 1791586108096.844
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\HEAD",
+          "type": "file",
+          "bytes": 23,
+          "mtimeMs": 1791449666686.1914
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\config",
+          "type": "file",
+          "bytes": 130,
+          "mtimeMs": 1791449666683.1902
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791449666662.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791449666670.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791449666663.6746
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791449666664.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791449666664.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791449666665.6729
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791449666665.6729
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791449666666.674
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791449666666.674
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791449666667.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791449666667.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791449666668.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791449666668.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791449666669.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791449666669.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791449666670.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791449666671.6733
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791449666671.6733
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791449666688.194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791449666688.194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791449666687.193
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791449667083.6194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791449666684.1904
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791449666684.1904
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791449666684.1904
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791449668263.696
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791449668259.6853
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791449669588.7798
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791449669588.7798
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791450326445.959
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791449669589.777
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab",
+          "type": "directory",
+          "mtimeMs": 1791449669730.0222
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\794095e1b2947e49843b563ab2279b0229080f1c3f7802b25c4087c49b4a927f.json",
+          "type": "file",
+          "bytes": 88883,
+          "mtimeMs": 1791449669603.7786
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\794095e1b2947e49843b563ab2279b0229080f1c3f7802b25c4087c49b4a927f.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791449669609.343
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791449669877.6506
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791449669877.6506
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hVAc7t3PtYTtTTJZWWvx",
+          "type": "directory",
+          "mtimeMs": 1791449674396.377
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hVAc7t3PtYTtTTJZWWvx\\qdC7QjXO.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449674391.3794
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791450326458.3313
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1355,
+          "mtimeMs": 1791449668786.6108
+        }
+      ],
+      "after": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365",
+          "type": "directory",
+          "mtimeMs": 1791449668663.1765
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git",
+          "type": "directory",
+          "mtimeMs": 1791586108096.844
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\HEAD",
+          "type": "file",
+          "bytes": 23,
+          "mtimeMs": 1791449666686.1914
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\config",
+          "type": "file",
+          "bytes": 130,
+          "mtimeMs": 1791449666683.1902
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791449666662.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791449666670.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791449666663.6746
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791449666664.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791449666664.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791449666665.6729
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791449666665.6729
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791449666666.674
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791449666666.674
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791449666667.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791449666667.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791449666668.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791449666668.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791449666669.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791449666669.673
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791449666670.6738
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791449666671.6733
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791449666671.6733
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791449666688.194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791449666688.194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791449666687.193
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791449667083.6194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791449666684.1904
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791449666684.1904
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791449666684.1904
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791449668263.696
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791449668259.6853
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791449669588.7798
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791449669588.7798
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791450326445.959
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791449669589.777
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab",
+          "type": "directory",
+          "mtimeMs": 1791449669730.0222
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\794095e1b2947e49843b563ab2279b0229080f1c3f7802b25c4087c49b4a927f.json",
+          "type": "file",
+          "bytes": 88883,
+          "mtimeMs": 1791449669603.7786
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\794095e1b2947e49843b563ab2279b0229080f1c3f7802b25c4087c49b4a927f.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791449669609.343
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791449669877.6506
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791449669877.6506
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hVAc7t3PtYTtTTJZWWvx",
+          "type": "directory",
+          "mtimeMs": 1791449674396.377
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hVAc7t3PtYTtTTJZWWvx\\qdC7QjXO.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449674391.3794
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791450326458.3313
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1355,
+          "mtimeMs": 1791449668786.6108
+        }
+      ],
+      "added": [],
+      "removed": [],
+      "changed": [],
+      "observedProperties": "equal",
+      "boundary": "Readonly filesystem attributes, not file-content identity. Current production Vcs status observes the source worktree; this qualification only admits the exact inspected .git directory timestamp difference."
+    },
+    {
+      "id": "prj_honTzv1SylD1sTwgEqBC",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+      "before": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+          "type": "directory",
+          "mtimeMs": 1791449661703.129
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git",
+          "type": "directory",
+          "mtimeMs": 1791614499983.0522
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\COMMIT_EDITMSG",
+          "type": "file",
+          "bytes": 40,
+          "mtimeMs": 1791449661261.2922
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\HEAD",
+          "type": "file",
+          "bytes": 21,
+          "mtimeMs": 1791449660917.7188
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\config",
+          "type": "file",
+          "bytes": 206,
+          "mtimeMs": 1791449661044.8074
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791449660899.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791449660906.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791449660900.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791449660900.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791449660901.5334
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791449660901.5334
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791449660902.533
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791449660902.533
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791449660903.5332
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791449660903.5332
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791449660904.5354
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791449660904.5354
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791449660905.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791449660905.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791449660906.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791449660906.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\index",
+          "type": "file",
+          "bytes": 429,
+          "mtimeMs": 1791449746335.6194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791449660907.7185
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791449660907.7185
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs",
+          "type": "directory",
+          "mtimeMs": 1791449661271.1262
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\HEAD",
+          "type": "file",
+          "bytes": 364,
+          "mtimeMs": 1791449700521.0457
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\refs",
+          "type": "directory",
+          "mtimeMs": 1791449661271.1262
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791449661272.1277
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 364,
+          "mtimeMs": 1791449700520.0454
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791449700369.5098
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\27",
+          "type": "directory",
+          "mtimeMs": 1791449699663.8765
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\27\\c7a06d435760c2187cfa405bee58e2528cebe1",
+          "type": "file",
+          "bytes": 471,
+          "mtimeMs": 1791449923155.5376
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\34",
+          "type": "directory",
+          "mtimeMs": 1791449661121.403
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\34\\fb713629ac11020fd44a4449d7b5e1799ae646",
+          "type": "file",
+          "bytes": 62,
+          "mtimeMs": 1791449923155.5376
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\35",
+          "type": "directory",
+          "mtimeMs": 1791449700095.7773
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\35\\35e5a9059c4a15442e71984ef159c333473200",
+          "type": "file",
+          "bytes": 61,
+          "mtimeMs": 1791449923574.4875
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\35\\39e7d5e7cdfb5254fc9114dd5f59cf92c760fa",
+          "type": "file",
+          "bytes": 124,
+          "mtimeMs": 1791449661253.198
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\42",
+          "type": "directory",
+          "mtimeMs": 1791449661107.9954
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\42\\fdeb2f52db9d1845188ac151e4991bd66f5d92",
+          "type": "file",
+          "bytes": 67,
+          "mtimeMs": 1791449923153.5374
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\60",
+          "type": "directory",
+          "mtimeMs": 1791449700373.5107
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\60\\612078fa8899ad94f7034d26bf614b23e08a3d",
+          "type": "file",
+          "bytes": 663,
+          "mtimeMs": 1791449700370.5095
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\a9",
+          "type": "directory",
+          "mtimeMs": 1791449661267.0264
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\a9\\bd5286f88af8371006468ce3c604aeeca9abfd",
+          "type": "file",
+          "bytes": 163,
+          "mtimeMs": 1791449661262.3198
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\c2",
+          "type": "directory",
+          "mtimeMs": 1791449700100.7776
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\c2\\96dda0f5281f1df3e3b6aafe22b9d21a6d160c",
+          "type": "file",
+          "bytes": 160,
+          "mtimeMs": 1791449923575.4873
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\d6",
+          "type": "directory",
+          "mtimeMs": 1791449661114.3242
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\d6\\e3f6bd7bf1c1af01941aedb4babbdd0a87eafd",
+          "type": "file",
+          "bytes": 32,
+          "mtimeMs": 1791449923154.5374
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791449660919.7197
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791449923158.9163
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791449664036.3025
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791449660916.719
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791449700520.0454
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 41,
+          "mtimeMs": 1791449700518.042
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791449660916.719
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791449661058.9321
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791449661056.8933
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791449697507.5193
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791449697626.6082
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791449701306.555
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791449701069.2217
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab",
+          "type": "directory",
+          "mtimeMs": 1791449897736.736
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\0ce6f4b2c44cc1d8da40c66fca16cb96c6f887029373b62a0169e8b1b08ccb9f.json",
+          "type": "file",
+          "bytes": 106960,
+          "mtimeMs": 1791449890477
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\0ce6f4b2c44cc1d8da40c66fca16cb96c6f887029373b62a0169e8b1b08ccb9f.json.metadata.json",
+          "type": "file",
+          "bytes": 287,
+          "mtimeMs": 1791449890477
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\6fcfbaa4057af8803120a574df89f3e8b62adc734dea6d9ac8a7614927cf9d4e.json",
+          "type": "file",
+          "bytes": 94636,
+          "mtimeMs": 1791449814998.006
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\6fcfbaa4057af8803120a574df89f3e8b62adc734dea6d9ac8a7614927cf9d4e.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791449814999.0066
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\d9c3fd958337ccc53d901505305d16e66e865f2474c389e4554e19b55617acc7.json",
+          "type": "file",
+          "bytes": 71354,
+          "mtimeMs": 1791449723870.0095
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\d9c3fd958337ccc53d901505305d16e66e865f2474c389e4554e19b55617acc7.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791449723870.0095
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791449701306.555
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791449701307.6047
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC",
+          "type": "directory",
+          "mtimeMs": 1791449897596.1096
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC\\b3spDSGQ.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449784803.0046
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC\\nAEolo7J.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449889747.5835
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC\\pGcmzNkZ.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449897589.2798
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes",
+          "type": "directory",
+          "mtimeMs": 1791449697627.1216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions",
+          "type": "directory",
+          "mtimeMs": 1791449815349.8418
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFccyzzf546Yf4gG",
+          "type": "directory",
+          "mtimeMs": 1791449701391.545
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFccyzzf546Yf4gG\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449924373.934
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFdRdzzk2frR62zX",
+          "type": "directory",
+          "mtimeMs": 1791449697627.6353
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFdRdzzk2frR62zX\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449697628.1516
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hMlVNrRdOLxQf4XhSds7",
+          "type": "directory",
+          "mtimeMs": 1791449724179.121
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hMlVNrRdOLxQf4XhSds7\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449784948.707
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hmr5hLvn696a1dvBqrh0",
+          "type": "directory",
+          "mtimeMs": 1791449815349.8418
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hmr5hLvn696a1dvBqrh0\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449889876.9407
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791449924360.933
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks",
+          "type": "directory",
+          "mtimeMs": 1791449697507.5193
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU",
+          "type": "directory",
+          "mtimeMs": 1791449924097.228
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\decision-log.md",
+          "type": "file",
+          "bytes": 0,
+          "mtimeMs": 1791449924083.5945
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\intent",
+          "type": "directory",
+          "mtimeMs": 1791449697560.526
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\intent\\request.md",
+          "type": "file",
+          "bytes": 778,
+          "mtimeMs": 1791449697551.5098
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\logs",
+          "type": "directory",
+          "mtimeMs": 1791449697509.5173
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\logs\\events.ndjson",
+          "type": "file",
+          "bytes": 8738,
+          "mtimeMs": 1791449924368.9382
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\logs\\timeline.log",
+          "type": "file",
+          "bytes": 3191,
+          "mtimeMs": 1791449924367.9326
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\trace",
+          "type": "directory",
+          "mtimeMs": 1791449697624.5383
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\trace\\_index.jsonl",
+          "type": "file",
+          "bytes": 819,
+          "mtimeMs": 1791449815347.8413
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\trace.jsonl",
+          "type": "file",
+          "bytes": 100529,
+          "mtimeMs": 1791449924375.9358
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1404,
+          "mtimeMs": 1791449696872.2173
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\README.md",
+          "type": "file",
+          "bytes": 46,
+          "mtimeMs": 1791449661050.8147
+        }
+      ],
+      "after": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+          "type": "directory",
+          "mtimeMs": 1791449661703.129
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git",
+          "type": "directory",
+          "mtimeMs": 1791694642097.9702
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\COMMIT_EDITMSG",
+          "type": "file",
+          "bytes": 40,
+          "mtimeMs": 1791449661261.2922
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\HEAD",
+          "type": "file",
+          "bytes": 21,
+          "mtimeMs": 1791449660917.7188
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\config",
+          "type": "file",
+          "bytes": 206,
+          "mtimeMs": 1791449661044.8074
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791449660899.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791449660906.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791449660900.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791449660900.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791449660901.5334
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791449660901.5334
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791449660902.533
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791449660902.533
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791449660903.5332
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791449660903.5332
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791449660904.5354
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791449660904.5354
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791449660905.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791449660905.5337
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791449660906.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791449660906.5352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\index",
+          "type": "file",
+          "bytes": 429,
+          "mtimeMs": 1791449746335.6194
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791449660907.7185
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791449660907.7185
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs",
+          "type": "directory",
+          "mtimeMs": 1791449661271.1262
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\HEAD",
+          "type": "file",
+          "bytes": 364,
+          "mtimeMs": 1791449700521.0457
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\refs",
+          "type": "directory",
+          "mtimeMs": 1791449661271.1262
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791449661272.1277
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\logs\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 364,
+          "mtimeMs": 1791449700520.0454
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791449700369.5098
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\27",
+          "type": "directory",
+          "mtimeMs": 1791449699663.8765
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\27\\c7a06d435760c2187cfa405bee58e2528cebe1",
+          "type": "file",
+          "bytes": 471,
+          "mtimeMs": 1791449923155.5376
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\34",
+          "type": "directory",
+          "mtimeMs": 1791449661121.403
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\34\\fb713629ac11020fd44a4449d7b5e1799ae646",
+          "type": "file",
+          "bytes": 62,
+          "mtimeMs": 1791449923155.5376
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\35",
+          "type": "directory",
+          "mtimeMs": 1791449700095.7773
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\35\\35e5a9059c4a15442e71984ef159c333473200",
+          "type": "file",
+          "bytes": 61,
+          "mtimeMs": 1791449923574.4875
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\35\\39e7d5e7cdfb5254fc9114dd5f59cf92c760fa",
+          "type": "file",
+          "bytes": 124,
+          "mtimeMs": 1791449661253.198
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\42",
+          "type": "directory",
+          "mtimeMs": 1791449661107.9954
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\42\\fdeb2f52db9d1845188ac151e4991bd66f5d92",
+          "type": "file",
+          "bytes": 67,
+          "mtimeMs": 1791449923153.5374
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\60",
+          "type": "directory",
+          "mtimeMs": 1791449700373.5107
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\60\\612078fa8899ad94f7034d26bf614b23e08a3d",
+          "type": "file",
+          "bytes": 663,
+          "mtimeMs": 1791449700370.5095
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\a9",
+          "type": "directory",
+          "mtimeMs": 1791449661267.0264
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\a9\\bd5286f88af8371006468ce3c604aeeca9abfd",
+          "type": "file",
+          "bytes": 163,
+          "mtimeMs": 1791449661262.3198
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\c2",
+          "type": "directory",
+          "mtimeMs": 1791449700100.7776
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\c2\\96dda0f5281f1df3e3b6aafe22b9d21a6d160c",
+          "type": "file",
+          "bytes": 160,
+          "mtimeMs": 1791449923575.4873
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\d6",
+          "type": "directory",
+          "mtimeMs": 1791449661114.3242
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\d6\\e3f6bd7bf1c1af01941aedb4babbdd0a87eafd",
+          "type": "file",
+          "bytes": 32,
+          "mtimeMs": 1791449923154.5374
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791449660919.7197
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791449923158.9163
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791449664036.3025
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791449660916.719
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791449700520.0454
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 41,
+          "mtimeMs": 1791449700518.042
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791449660916.719
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791449661058.9321
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791449661056.8933
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791449697507.5193
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791449697626.6082
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791449701306.555
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791449701069.2217
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab",
+          "type": "directory",
+          "mtimeMs": 1791449897736.736
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\0ce6f4b2c44cc1d8da40c66fca16cb96c6f887029373b62a0169e8b1b08ccb9f.json",
+          "type": "file",
+          "bytes": 106960,
+          "mtimeMs": 1791449890477
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\0ce6f4b2c44cc1d8da40c66fca16cb96c6f887029373b62a0169e8b1b08ccb9f.json.metadata.json",
+          "type": "file",
+          "bytes": 287,
+          "mtimeMs": 1791449890477
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\6fcfbaa4057af8803120a574df89f3e8b62adc734dea6d9ac8a7614927cf9d4e.json",
+          "type": "file",
+          "bytes": 94636,
+          "mtimeMs": 1791449814998.006
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\6fcfbaa4057af8803120a574df89f3e8b62adc734dea6d9ac8a7614927cf9d4e.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791449814999.0066
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\d9c3fd958337ccc53d901505305d16e66e865f2474c389e4554e19b55617acc7.json",
+          "type": "file",
+          "bytes": 71354,
+          "mtimeMs": 1791449723870.0095
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\attachments\\d06c011498e338b5202533a7441f0d900b09ed93506997cc9d211aa86f62c1ab\\d9c3fd958337ccc53d901505305d16e66e865f2474c389e4554e19b55617acc7.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791449723870.0095
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791449701306.555
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791449701307.6047
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC",
+          "type": "directory",
+          "mtimeMs": 1791449897596.1096
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC\\b3spDSGQ.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449784803.0046
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC\\nAEolo7J.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449889747.5835
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_honTzv1SylD1sTwgEqBC\\pGcmzNkZ.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791449897589.2798
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes",
+          "type": "directory",
+          "mtimeMs": 1791449697627.1216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions",
+          "type": "directory",
+          "mtimeMs": 1791449815349.8418
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFccyzzf546Yf4gG",
+          "type": "directory",
+          "mtimeMs": 1791449701391.545
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFccyzzf546Yf4gG\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449924373.934
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFdRdzzk2frR62zX",
+          "type": "directory",
+          "mtimeMs": 1791449697627.6353
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_-zUSYFdRdzzk2frR62zX\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449697628.1516
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hMlVNrRdOLxQf4XhSds7",
+          "type": "directory",
+          "mtimeMs": 1791449724179.121
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hMlVNrRdOLxQf4XhSds7\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449784948.707
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hmr5hLvn696a1dvBqrh0",
+          "type": "directory",
+          "mtimeMs": 1791449815349.8418
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\indexes\\task-sessions\\ses_hmr5hLvn696a1dvBqrh0\\index.json",
+          "type": "file",
+          "bytes": 77,
+          "mtimeMs": 1791449889876.9407
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791449924360.933
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks",
+          "type": "directory",
+          "mtimeMs": 1791449697507.5193
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU",
+          "type": "directory",
+          "mtimeMs": 1791449924097.228
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\decision-log.md",
+          "type": "file",
+          "bytes": 0,
+          "mtimeMs": 1791449924083.5945
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\intent",
+          "type": "directory",
+          "mtimeMs": 1791449697560.526
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\intent\\request.md",
+          "type": "file",
+          "bytes": 778,
+          "mtimeMs": 1791449697551.5098
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\logs",
+          "type": "directory",
+          "mtimeMs": 1791449697509.5173
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\logs\\events.ndjson",
+          "type": "file",
+          "bytes": 8738,
+          "mtimeMs": 1791449924368.9382
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\logs\\timeline.log",
+          "type": "file",
+          "bytes": 3191,
+          "mtimeMs": 1791449924367.9326
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\trace",
+          "type": "directory",
+          "mtimeMs": 1791449697624.5383
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\trace\\_index.jsonl",
+          "type": "file",
+          "bytes": 819,
+          "mtimeMs": 1791449815347.8413
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXRkMRi00ID2TqzPU\\trace.jsonl",
+          "type": "file",
+          "bytes": 100529,
+          "mtimeMs": 1791449924375.9358
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1404,
+          "mtimeMs": 1791449696872.2173
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\README.md",
+          "type": "file",
+          "bytes": 46,
+          "mtimeMs": 1791449661050.8147
+        }
+      ],
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "before": {
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git",
+            "type": "directory",
+            "mtimeMs": 1791614499983.0522
+          },
+          "after": {
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project\\.git",
+            "type": "directory",
+            "mtimeMs": 1791694642097.9702
+          }
+        }
+      ],
+      "observedProperties": "Reviewed .git directory timestamp only; complete difference retained",
+      "boundary": "Readonly filesystem attributes, not file-content identity. Current production Vcs status observes the source worktree; this qualification only admits the exact inspected .git directory timestamp difference."
+    }
+  ],
+  "runtimeConfiguration": {
+    "originalConfig": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\config\\opencorvus.jsonc",
+    "copiedConfig": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\child-review-285-history-01\\runtime\\config\\opencorvus.jsonc",
+    "bytes": 173,
+    "directContent": "equal",
+    "boundary": "Original and whole-history copy direct byte equality at final observation; not a historical pre-launch byte baseline"
+  },
+  "boundary": "Actual complete stored row equality after native closure in readonly BEGIN/ROLLBACK; Tool facts checked independently; no hashes or count-only evidence"
+}

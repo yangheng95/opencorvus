@@ -1,0 +1,54 @@
+Browser tab: 22, Title: "OpenCorvus", URL: "http://localhost:18232/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 211-214
+~								207 container
+~									208 button All agents (2)
+~									209 pop up button (collapsed) Expert Squad agents base-tester, ID: select-cl-523-trigger, Secondary Actions: Expand
+~										210 text base-tester
++									211 container
++										212 text base-tester
++										213 text 1m 15s
++										214 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										215 container
++											216 text 我会先核对研究员实际读取的三页正文，再逐项比较拟交付摘要，重点检查来源归属与是否把页面概览误写成深入教程结论；全程只读，不打开其他页面。
++											217 button (collapsed) Description: read_agent_message · Task participant evidence, Secondary Actions: Expand
++												218 text read_agent_message
++												219 text Task participant evidence
++												220 image
++										221 container
++											222 text 核验结论：拟交付的三点摘要可接受，未发现实质性误述或来源混淆。
++											223 text  已读取研究员最终消息及三次实际
++											224 text webfetch
++											225 text  原始输出，而非仅依据其总结。
++											226 content list
++												227 container
++													228 AXListMarker 1.
++													229 text “是什么”准确。
++													230 link Description: WAI 介绍页, Value: w3.org/WAI/fundamentals/accessibility-intro/
++													231 text 明确支持感知、理解、导航、交互及贡献网络内容的定义，也列出老年人、暂时性障碍和情境限制用户等受益人群。
++												232 container
++													233 AXListMarker 2.
++													234 text 四项原则及例子准确。
++													235 link Description: WAI 原则页, Value: w3.org/WAI/fundamentals/accessibility-principles/
++													236 text 正文支持所列的文本替代、字幕、对比度、键盘操作、足够时间、导航、可预测行为、纠错支持与可靠解释；页面也明确声明不是完整要求清单。保留“要求概览”限定即可，不应暗示这些例子足以证明符合全部要求。
++												237 container
++													238 AXListMarker 3.
++													239 text 开发起步建议有正文依据。
++													240 link Description: MDN 入口页, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++													241 text 自身的教程、指南简介支持正确使用 HTML 元素、键盘无障碍、多媒体文字替代、CSS/JavaScript 注意事项及 WAI-ARIA 补充语义；“从项目开始纳入、开发过程中持续评估”确实来自 WAI 介绍页。建议将“自动工具不能独自判断合规”微调为：
++													242 text “评估工具可辅助检查，但任何工具都不能单独判断网站是否符合无障碍指南，仍需具备相关知识的人工评估。”
++													243 text  这更贴近原文，也避免把“合规”误解为法律合规。
++											244 text 边界核验：
++											245 text  研究员完整工具记录仅包含指定三页的三次网页读取及一次证据读取，没有其他页面访问或文件修改操作。教程详情未读取，应保留现有边界说明。本次亦未打开网页或创建文件。以上接受的是拟交付文案的来源忠实度；负责人最终发送的报告尚未在本次核验中观察到。 原始证据消息：介绍页
++											246 text msg_g0VXRkTOy00aS36l2A6T
++											247 text ；原则页
++											248 text msg_g0VXRkVST008O7SaWYos
++											249 text ；MDN 页
++											250 text msg_g0VXRkX5W00iRFA1Jjs6
++											251 text （均属研究员会话
++											252 text ses_hMlVNrRdOLxQf4XhSds7
++											253 text ）。
++										254 button Copy message
++										255 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++										256 text Oct 8, 04:56 PM
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18232/ui/

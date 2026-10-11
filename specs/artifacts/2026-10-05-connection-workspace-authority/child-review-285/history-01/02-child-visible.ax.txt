@@ -1,0 +1,35 @@
+Browser tab: 22, Title: "OpenCorvus", URL: "http://localhost:18232/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 270-305
++									347 container
++										348 text User
++										349 text 请委托合适的只读研究员阅读以下三份官方网页，并根据实际读取内容给我一份简短中文报告，用三点分别说明网页无障碍是什么、基本原则、开发者如何开始落实，每点附对应来源链接。保留三份资料的差别，不扩大到其他页面；由任务负责人根据实际发现最终给出可读总结。无需修改文件或制作额外报告文件。
++										350 content list
++											351 container
++												352 AXListMarker 1.
++												353 link Description: https://www.w3.org/WAI/fundamentals/accessibility-intro/, Value: w3.org/WAI/fundamentals/accessibility-intro/
++											354 container
++												355 AXListMarker 2.
++												356 link Description: https://www.w3.org/WAI/fundamentals/accessibility-principles/, Value: w3.org/WAI/fundamentals/accessibility-principles/
++											357 container
++												358 AXListMarker 3.
++												359 link Description: https://developer.mozilla.org/en-US/docs/Web/Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++									360 container
++										361 text orchestrator
++										362 text 1m 55s
++										363 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										364 text 我会委托只读研究员仅阅读这三页官方资料，核对各自的重点与差别，再根据实际发现整理成三点中文总结，不修改文件或另做报告文件。
++										365 button (collapsed) Description: dispatch_agent · target=base-researcher, Secondary Actions: Expand
++											366 text dispatch_agent
++											367 text target=base-researcher
++											368 image
++										369 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										370 button (collapsed) Description: read_agent_message, Secondary Actions: Expand
++											371 text read_agent_message
++											372 image
++										373 text 研究员已读到三页正文：WAI 介绍页侧重定义与受益人群，原则页展开四项要求，MDN 则提供开发学习入口。我将据此整理三点总结，并核对摘要是否准确、是否误把链接中的未读内容当作依据。
++										374 button (collapsed) Description: dispatch_agent · target=base-tester, Secondary Actions: Expand
++											375 text dispatch_agent
++											376 text target=base-tester
++											377 image
+The focused UI element is 89 container Description: Conversation, ID: chatScroll

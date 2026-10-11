@@ -1,0 +1,70 @@
+{
+  "readQualified": true,
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "listenerCount": 0,
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "native": {
+    "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+    "outcome": "settled",
+    "host": {
+      "pid": 77936,
+      "processInstanceID": "win32:639270464599331036",
+      "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+    },
+    "target": {
+      "pid": 63112,
+      "processInstanceID": "win32:639270464606887343",
+      "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+    },
+    "observedAtUtc": "2026-10-08T09:05:26.551Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "states": [
+    {
+      "expected": {
+        "pid": 77936,
+        "processInstanceID": "win32:639270464599331036",
+        "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 63112,
+        "processInstanceID": "win32:639270464606887343",
+        "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Fresh285 exact original process birth, listeners, pair, physical/output/request settlement; original parent30224 receipt and original raw length retained, not a fresh parent execution",
+  "parent": {
+    "rawPrivatePath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\store-card-accessor-153-owned-dev.log",
+    "rawLength": 8807157,
+    "rows": 1212,
+    "parentSession": 30224,
+    "parentExit": 0,
+    "joined": true,
+    "finalAuditOriginal": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\evidence\\provider-63112-ff3b4e05-aa72-48c5-9953-92a1a52db67f-58.json",
+    "finalAuditLastWriteTimeUtc": "2026-10-08T08:58:43.3674348Z",
+    "boundary": "Complete whole owned closure and selected safe metadata; no natural cadence or exactbuffer verdict"
+  },
+  "observedAtUtc": "2026-10-11T04:55:00.2520666Z",
+  "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda"
+}

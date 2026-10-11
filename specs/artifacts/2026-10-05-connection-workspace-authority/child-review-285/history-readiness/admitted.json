@@ -1,0 +1,32 @@
+{
+  "selectedSubject": {
+    "id": "tsk_g00VXRkMRi00ID2TqzPU",
+    "kind": "task",
+    "projectID": "prj_honTzv1SylD1sTwgEqBC",
+    "requestID": "0f315e79-0af3-438e-b26e-d312f2f3e65e",
+    "sessionID": "ses_-zUSYFdRdzzk2frR62zX"
+  },
+  "runtimeLeaseStates": [
+    {
+      "state": "dead_or_reused",
+      "lease": {
+        "id": "act_g0VXRkF3G00oXeV8wUOH",
+        "target": "runtime_process",
+        "target_id": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35",
+        "owner_occurrence_id": "{\"pid\":63112,\"processInstanceID\":\"win32:639270464606887343\",\"occurrenceID\":\"ef6866b5-d536-4c92-a1f1-ca385fbc6f35\"}",
+        "time_activated": 1791449668582,
+        "expires_at": 9007199254740991
+      },
+      "expected": {
+        "pid": 63112,
+        "processInstanceID": "win32:639270464606887343",
+        "occurrenceID": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35"
+      }
+    }
+  ],
+  "review": "Fresh285 whole-source observations: schema current; Task completed epoch1 and dispatch/recovery frontiers closed; assistants15 complete; permissions8 outcomes and checkpoints2 settled; three ingresses resolved/terminal inapplicable; both ProjectMemory snapshots idle pending0; original runtime lease exact birth dead. Original parent30224 joined0/raw8807157 retained. No auth/model/Task/member staging; full copy and root visual observation still required.",
+  "sourceOccurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "startupQualified": true,
+  "observedAtUtc": "2026-10-11T04:56:40.9971523Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01"
+}
