@@ -321,25 +321,19 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
 }
 
 export function SourceParts(props: { sources: ConversationSourcePart[] }) {
-  const preview = () => (props.sources[0] ? sourceLabel(props.sources[0]) : "")
   const key = () => {
     const first = props.sources[0]
     return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
   }
   const expanded = () => cardExpanded(key(), false)
-  const entries = () => (
-    <Key each={props.sources} by={sourceIdentity}>
-      {(source, index) => <SourceEntry source={source()} index={index()} showIndex={props.sources.length > 1} />}
-    </Key>
-  )
   return (
-    <Show
-      when={props.sources.length === 1}
-      fallback={
+    <div class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
+      <Key each={props.sources.slice(0, 1)} by={sourceIdentity}>
+        {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} />}
+      </Key>
+      <Show when={props.sources.length > 1}>
         <Disclosure.Root
-          class="msg-sources"
-          aria-label={t("chat.sources")}
-          data-ui="message-sources"
+          class="msg-sources__remaining"
           open={expanded()}
           onOpenChange={(open) => setCardExpanded(key(), open)}
         >
@@ -348,25 +342,19 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
             onClick={(event) => {
               if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
             }}
-            aria-label={`${t("chat.sources")}: ${preview()} (${props.sources.length})`}
-            title={preview()}
             indicatorPosition="end"
           >
-            <Show when={props.sources[0]}>{(source) => <Icon name={sourceIcon(source())} size="compact" />}</Show>
-            <Show when={preview()} fallback={<span class="msg-sources__preview">{t("chat.sources")}</span>}>
-              <span class="msg-sources__preview">{preview()}</span>
-            </Show>
-            <span class="msg-sources__count">{props.sources.length}</span>
+            {t(props.sources.length === 2 ? "chat.more_source" : "chat.more_sources", { count: props.sources.length - 1 })}
           </Disclosure.Trigger>
           <Show when={expanded()}>
-            <Disclosure.Content class="msg-sources__list">{entries()}</Disclosure.Content>
+            <Disclosure.Content class="msg-sources__list">
+              <Key each={props.sources.slice(1)} by={sourceIdentity}>
+                {(source, index) => <SourceEntry source={source()} index={index() + 1} showIndex />}
+              </Key>
+            </Disclosure.Content>
           </Show>
         </Disclosure.Root>
-      }
-    >
-      <div class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
-        {entries()}
-      </div>
-    </Show>
+      </Show>
+    </div>
   )
 }

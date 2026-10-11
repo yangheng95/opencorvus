@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [306 多来源层级方案](source-group-plan-306.md) / [真实结果](source-group-306/README.md)：首条直接链接、余项独立展开；中英文/原文读位与15次Sol流式复核，单agent。
+
 - [压缩305 Recall](sse-compression-plan-305.md) / [真实证据](sse-compression-305/README.md)：压缩同次流量62.72MB→2.90MB，完整事件保留，运行时与Sources验收。
 
 - [完整字段304 Recall](field-value-plan-304.md) / [实际证据](field-value-304/README.md)：共享流式恢复修复、Sources 真页面验收、传输开销量化与后续方向。

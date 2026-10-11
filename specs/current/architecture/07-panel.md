@@ -607,11 +607,11 @@ diagnostics remain available in the existing disclosures. Sources and tool input
 retain their own controls.
 Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position.
-A single source is a directly available citation with its complete readable
-identity and existing resource action. Runs with multiple sources use the shared
-native Disclosure, initially collapsed with the first real source's identity and
-an honest count; operator expansion state and exact source links remain available.
-Both presentations use the same identity-keyed source entry renderer. Individual
+A source run keeps its first citation directly available with its complete
+readable identity and existing resource action. Additional sources use the shared
+native Disclosure, initially collapsed with an explicit remaining count;
+operator expansion state and exact source links remain available. Both portions
+use the same identity-keyed source entry renderer. Individual
 excerpt disclosure remains scoped to the real source. Citation identity uses body
 typography; site and index metadata retain caption.
 Web citations put the host before the exact navigation fragment in their
@@ -665,8 +665,8 @@ retain their original recorded values.
 The shared Message source schema validates HTTP and HTTPS URLs with the native
 URL validator. Malformed and other-protocol inputs produce a URL-format schema
 error; accepted URL strings and source metadata retain their recorded values.
-Source snippets belong to a separate native disclosure within the expanded
-source group. Its normal page reading region retains the complete text and
+Source snippets belong to a separate native disclosure within each source
+entry. Its normal page reading region retains the complete text and
 supports native keyboard and pointer scrolling.
 Its text uses the body typography role, while the excerpt action and source
 metadata keep their caption role. The reading region is capped at forty percent
@@ -708,10 +708,11 @@ rule to both runtime exports and its source without a second tooltip state.
 The shared noninteractive tooltip recipe also makes its direct Popper positioner
 transparent to pointer hit testing. Its visual bounds therefore do not intercept
 links or controls underneath. Project and work-row summaries use the same recipe.
-The Source
-Disclosure's native content box and expanded list are bounded by the actual
-source region. Expanded source labels use that available width and wrap long
-titles or tokens within it; the collapsed preview keeps its compact ellipsis.
+The first Source remains a directly actionable entry with its location and
+excerpt, regardless of the group's size. A separate native disclosure names
+the remaining source count and reveals those entries in their original order.
+Its content box and expanded list are bounded by the actual source region.
+Source labels use that available width and wrap long titles or tokens within it.
 Indexes, icons, full tooltips and activation targets keep their actual source
 identity. Activity uses
 the owning card's live state, including Mission and subagent cards. Reduced

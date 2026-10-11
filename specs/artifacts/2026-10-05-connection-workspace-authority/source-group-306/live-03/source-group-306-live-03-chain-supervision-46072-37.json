@@ -1,0 +1,48 @@
+{
+  "phase": "supervision-46072-37",
+  "nativeSettlement": {
+    "occurrence": "source-group-306-live-03-800f7ae6-416a-4590-adc4-a81dfdcbdbe0",
+    "outcome": "settled",
+    "host": {
+      "pid": 70296,
+      "processInstanceID": "win32:639273346458822520",
+      "occurrenceID": "dd7c7a97-9103-4792-9be9-828db49596a1"
+    },
+    "target": {
+      "pid": 23056,
+      "processInstanceID": "win32:639273346466456586",
+      "occurrenceID": "28b3d4d4-b8f5-4df8-aa08-ef9b8816fe6a"
+    },
+    "observedAtUtc": "2026-10-11T17:01:08.921Z",
+    "deadlineAt": 1791738445867,
+    "terminal": {
+      "occurrenceID": "source-group-306-live-03-800f7ae6-416a-4590-adc4-a81dfdcbdbe0",
+      "pid": 23056,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "source-group-306-live-03-800f7ae6-416a-4590-adc4-a81dfdcbdbe0",
+  "observedAtUtc": "2026-10-11T17:01:12.2851654Z",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "presence": [
+    {
+      "processID": 23056,
+      "state": "dead_or_reused",
+      "processInstanceID": "win32:639273346466456586",
+      "originalOccurrencePresent": false
+    },
+    {
+      "processID": 70296,
+      "state": "dead_or_reused",
+      "processInstanceID": "win32:639273346458822520",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "listeners": []
+}
