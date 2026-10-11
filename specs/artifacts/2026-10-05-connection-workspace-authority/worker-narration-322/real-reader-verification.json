@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-10-11T23:11:28.201Z",
+  "taskID": "tsk_g00VXmjqDl00GCczWitJ",
+  "readerTextChunks": [
+    {
+      "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+      "partID": "prt_g0VXmjxyT001xbrLoner",
+      "characters": 487,
+      "exactCanonicalText": true
+    },
+    {
+      "messageID": "msg_g0VXmk0M000Olz8Wh0YD",
+      "partID": "prt_g0VXmk18D004fRhcMVzi",
+      "characters": 3037,
+      "exactCanonicalText": true
+    }
+  ],
+  "dispatchCalls": 1,
+  "acceptedWorkerInputs": 1,
+  "providerRequests": 10,
+  "actualModel": "gpt-6.1-sol",
+  "providerCompletion": "all streaming HTTP 200 EOF",
+  "taskCompletion": "completed",
+  "evidenceScope": "Real Task tool request/outcome Parts compared with the same canonical text Parts; UI is separately documented manual screenshots."
+}

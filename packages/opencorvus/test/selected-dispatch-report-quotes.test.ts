@@ -19,6 +19,7 @@ import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { recordTestSettledWorkerReport } from "./fixture/settled-worker-report"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -76,7 +77,7 @@ test("selected report projection preserves exact cross-Session sources, bounded 
       const finals: Extract<EvidenceLocator, { source: "session_message" }>[] = []
       const originalTexts: string[] = []
       for (let index = 0; index < 9; index++) {
-        const worker = await Session.create({ kind: "assistant", parentID: root.id, title: `Reviewer ${index}` })
+        const worker = await Session.create({ kind: workerCapability.identity.sessionKind, parentID: root.id, title: `Reviewer ${index}` })
         const input = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: worker.id,
@@ -85,6 +86,10 @@ test("selected report projection preserves exact cross-Session sources, bounded 
           time: { created: now + index * 10 + 1 },
           agent: "base-tester",
           model: { providerID: "test", modelID: "test" },
+        })
+        const control = await Session.updatePart({
+          id: Identifier.ascending("part"), sessionID: worker.id, messageID: input.id,
+          type: "text", kind: "user_content", text: "Verify original business obligations.",
         })
         const final = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -133,6 +138,11 @@ test("selected report projection preserves exact cross-Session sources, bounded 
           }),
           childSessionID: worker.id,
           now: now + index * 10 + 4,
+        })
+        await recordTestSettledWorkerReport({
+          taskID, rootSessionID: root.id, worker, capability: workerCapability,
+          inputMessageID: input.id, controlPartID: control.id, finalMessageID: final.id, dispatchID: lineage.dispatchID,
+          workflowBinding: lineage.payload.workflow_binding, request: "Verify original business obligations.",
         })
         recordDispatchSettlement({
           taskID,

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [322 早段正文读取](worker-narration-plan-322.md)：保留已结算来源边界的统一Part证据目录。
+
 - [321 真实子侧栏持续输出](source-child-stream-plan-321.md)：回到产品Task的真实流式来源与正文。
 
 - [320 长文件来源密度](source-density-plan-320.md)：窄侧栏中的长路径与同名文件辨识。

@@ -1007,7 +1007,7 @@ describe("Light Expert Squad package", () => {
               { message_id: finalIDs[0], part_id: "part_b", field: "output", limit: 20_000 },
             ],
           })
-          expect(oversizedEvidence?.success).toBe(false)
+          if (!oversizedEvidence || oversizedEvidence.success) throw new Error("Expected the aggregate evidence budget error")
           if (oversizedEvidence?.success === false) {
               expect(JSON.parse(oversizedEvidence.error.message)).toMatchObject([
                 {
@@ -1020,7 +1020,7 @@ describe("Light Expert Squad package", () => {
             const rejected = await providerContract.validate?.({
               sources: [{ kind: "dispatch_result" as const, message_id: "msg_not_a_current_settlement" }],
             })
-          expect(rejected?.success).toBe(false)
+          if (!rejected || rejected.success) throw new Error("Expected the settled source authority error")
           if (rejected?.success === false) {
             expect(rejected.error).toMatchObject({
               name: "TaskEvidenceSourceError",
@@ -1056,10 +1056,10 @@ describe("Light Expert Squad package", () => {
               expect.arrayContaining([expect.objectContaining({ tool_name: "read", status: "completed" })]),
             )
           }
-          const evidenceSelection = output.causal_tool_message_inventory
+          const evidenceSelection = output.causal_part_message_inventory
             .filter((message: { session_id: string }) => message.session_id === dispatches[0]!.session_id)
-            .flatMap((message: { message_id: string; tool_facts: Array<{ part_id: string; tool_name: string }> }) =>
-              message.tool_facts.map((part) => ({ message_id: message.message_id, ...part })),
+            .flatMap((message: { message_id: string; part_facts: Array<{ part_id: string; tool_name: string }> }) =>
+              message.part_facts.map((part) => ({ message_id: message.message_id, ...part })),
             )
             .find((part: { tool_name: string }) => part.tool_name === "read")
           if (!evidenceSelection) throw new Error("Current worker occurrence has no causal read Tool Part")
@@ -1212,10 +1212,10 @@ describe("Light Expert Squad package", () => {
                 })),
               },
           })
-          const historicalEvidenceSelection = output.causal_tool_message_inventory
+          const historicalEvidenceSelection = output.causal_part_message_inventory
             .filter((message: { session_id: string }) => message.session_id === dispatches[2]!.session_id)
-            .flatMap((message: { message_id: string; tool_facts: Array<{ part_id: string; tool_name: string }> }) =>
-              message.tool_facts.map((part) => ({ message_id: message.message_id, ...part })),
+            .flatMap((message: { message_id: string; part_facts: Array<{ part_id: string; tool_name: string }> }) =>
+              message.part_facts.map((part) => ({ message_id: message.message_id, ...part })),
             )
             .find((part: { tool_name: string }) => part.tool_name === "read")
             if (!historicalEvidenceSelection)

@@ -1,0 +1,39 @@
+{
+  "focused": {
+    "originalExecutor": 58058,
+    "actualExitCode": 0,
+    "files": 7,
+    "passed": 36,
+    "failed": 0,
+    "expectCalls": 597,
+    "durationSeconds": 147.27
+  },
+  "typecheck": {
+    "originalExecutor": 89269,
+    "actualExitCode": 0
+  },
+  "liveLauncher": {
+    "originalExecutor": 19409,
+    "actualExitCode": 0
+  },
+  "streamObserver": {
+    "originalExecutor": 25279,
+    "actualExitCode": 0
+  },
+  "ui": "manual actual page screenshots only",
+  "retainedChecks": [
+    "before-narration.log",
+    "before-narration-corrected.log",
+    "before-narration-ready.log",
+    "focused-tests-01.log",
+    "repaired-fixtures-02.log",
+    "repaired-fixtures-03.log",
+    "repaired-fixtures-04.log",
+    "repaired-fixtures-05.log",
+    "focused-tests-final.log",
+    "typecheck-01.log",
+    "typecheck-02.log",
+    "docs-final.log",
+    "architecture-final.log"
+  ]
+}

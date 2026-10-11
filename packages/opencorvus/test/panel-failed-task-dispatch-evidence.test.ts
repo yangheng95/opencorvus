@@ -23,6 +23,7 @@ import { PanelLeafTools } from "@/tool/panel"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { memoryProject } from "./fixture/memory"
+import { recordTestSettledWorkerReport } from "./fixture/settled-worker-report"
 
 async function panelLeaf(action: "query_task" | "read_task_dispatch_evidence") {
   const id = panelLeafToolID(action)
@@ -84,22 +85,26 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
         sessionID: taskRoot.id,
         patch: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
-      const worker = await Session.create({ kind: "assistant", parentID: taskRoot.id, title: "Verifier" })
+      const worker = await Session.create({ kind: workerCapability.identity.sessionKind, parentID: taskRoot.id, title: "Verifier" })
       const workerInput = await Session.updateMessage({
         id: Identifier.ascending("message"),
         sessionID: worker.id,
         role: "user",
         author: "orchestrator",
         time: { created: now + 1 },
-        agent: "verifier",
+        agent: workerCapability.identity.agentID,
         model: { providerID: "test", modelID: "test" },
+      })
+      const control = await Session.updatePart({
+        id: Identifier.ascending("part"), sessionID: worker.id, messageID: workerInput.id,
+        type: "text", kind: "user_content", text: "Inspect the original source rows.",
       })
       const assistantBase = {
         sessionID: worker.id,
         parentID: workerInput.id,
         role: "assistant" as const,
-        author: "verifier",
-        agent: "verifier",
+        author: workerCapability.identity.agentID,
+        agent: workerCapability.identity.agentID,
         providerID: "test",
         modelID: "test",
         path: { cwd: project.path, root: project.path },
@@ -244,11 +249,11 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
           before_provider_step: { part_id: boundaryID, time_created: now + 5 },
         },
       ])
-      expect(new Set(originEvidence.causal_tool_reference_index.refs.map((ref: { part_id: string }) => ref.part_id))).toEqual(new Set([rootReadID, ...bulkIDs]))
+      expect(new Set(originEvidence.causal_part_reference_index.refs.map((ref: { part_id: string }) => ref.part_id))).toEqual(new Set([rootReadID, ...bulkIDs]))
       const visitedParts: string[] = []
       let page = originEvidence
       for (;;) {
-        const parts = page.causal_tool_message_inventory.flatMap((message: { tool_facts: Array<{ part_id: string }> }) => message.tool_facts.map((part) => part.part_id))
+        const parts = page.causal_part_message_inventory.flatMap((message: { part_facts: Array<{ part_id: string }> }) => message.part_facts.map((part) => part.part_id))
         expect(parts.length).toBeLessThanOrEqual(16)
         visitedParts.push(...parts)
         if (page.inventory_next_before.length === 0) break
@@ -272,6 +277,11 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
       }
       await expect(readAgentMessages(Identifier.ascending("task"), originInput)).rejects.toMatchObject({
         code: "TASK_EVIDENCE_SOURCE_INVALID",
+      })
+      await recordTestSettledWorkerReport({
+        taskID, rootSessionID: taskRoot.id, worker, capability: workerCapability,
+        inputMessageID: workerInput.id, controlPartID: control.id, finalMessageID: workerFinal.id, dispatchID: lineage.dispatchID,
+        workflowBinding: lineage.payload.workflow_binding, request: "Inspect the original source rows.",
       })
       recordDispatchSettlement({
         taskID,
@@ -386,7 +396,7 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
         taskID,
         terminal_lifecycle_reference: terminalReference,
         messages: [{ message_id: workerFinal.id, text: [expect.stringContaining("eligible candidate")] }],
-        causal_tool_message_inventory: [{ message_id: toolMessage.id }],
+        causal_part_message_inventory: [{ message_id: toolMessage.id }, { message_id: workerFinal.id }],
       })
       const evidence = await executeRead(
         {

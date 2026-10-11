@@ -1,0 +1,371 @@
+{
+  "observedAtUtc": "2026-10-11T23:10:12.012Z",
+  "taskID": "tsk_g00VXmjqDl00GCczWitJ",
+  "boundary": "Actual completed public Task stream and readonly canonical storage. This is not a browser-lifetime assertion. Intermediate assistant prose is read from canonical text Parts through exact settled occurrence authority; actual inputs and outputs remain in this evidence.",
+  "terminal": {
+    "type": "task.completed",
+    "eventID": "pev_g0VXmke6100XActl1jV5",
+    "at": "2026-10-11T23:07:47.939Z"
+  },
+  "events": 5343,
+  "wireBytes": 766852,
+  "decodedBytes": 26247649,
+  "sources": [
+    {
+      "observedAt": "2026-10-11T23:05:15.094Z",
+      "part": {
+        "id": "prt_g0VXmk0KY005tkq2X6wv",
+        "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+        "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+        "orderKey": "v1:0001791759915050:0000000000000031:0000000000000000:part:prt_g0VXmk0KY005tkq2X6wv",
+        "type": "source-file",
+        "sourceId": "789b900bde02a38864c336986a12cb911ee27859f313736c625cb68bb60b85f6",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\worker-narration-322-live-01\\project\\source-review.md",
+        "title": "source-review.md",
+        "range": {
+          "startLine": 2,
+          "endLine": 2
+        },
+        "provider": "opencorvus-search-code"
+      }
+    },
+    {
+      "observedAt": "2026-10-11T23:05:15.095Z",
+      "part": {
+        "id": "prt_g0VXmk0Kc00SjiQrRyKJ",
+        "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+        "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+        "orderKey": "v1:0001791759915054:0000000000000031:0000000000000000:part:prt_g0VXmk0Kc00SjiQrRyKJ",
+        "type": "source-file",
+        "sourceId": "2df19b38e6884dd3c6ecc6db525cbbfb616635e7b1c5cb7b40792ac88b4465a5",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\worker-narration-322-live-01\\project\\source-review.md",
+        "title": "source-review.md",
+        "range": {
+          "startLine": 3,
+          "endLine": 3
+        },
+        "provider": "opencorvus-search-code"
+      }
+    },
+    {
+      "observedAt": "2026-10-11T23:05:15.095Z",
+      "part": {
+        "id": "prt_g0VXmk0Ke0035820UeaG",
+        "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+        "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+        "orderKey": "v1:0001791759915056:0000000000000031:0000000000000000:part:prt_g0VXmk0Ke0035820UeaG",
+        "type": "source-file",
+        "sourceId": "c6ef2b16284dd695932dfe1aebe8cf551143b9cb0a9bf71fa705b2cfa9e92011",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\worker-narration-322-live-01\\project\\source-review.md",
+        "title": "source-review.md",
+        "range": {
+          "startLine": 4,
+          "endLine": 4
+        },
+        "provider": "opencorvus-search-code"
+      }
+    },
+    {
+      "observedAt": "2026-10-11T23:06:12.493Z",
+      "part": {
+        "id": "prt_g0VXmkFGD00s7KQupWt6",
+        "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+        "messageID": "msg_g0VXmk0M000Olz8Wh0YD",
+        "orderKey": "v1:0001791759972442:0000000000000031:0000000000000000:part:prt_g0VXmkFGD00s7KQupWt6",
+        "type": "source-url",
+        "sourceId": "2208430db613c30235a43aa8ccd983d12dec3e8c276be645d118d0480c19b373",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html",
+        "title": "Understanding Success Criterion 2.4.3: Focus Order | WAI | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+      "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+      "partID": "prt_g0VXmjxyT001xbrLoner",
+      "field": "text",
+      "events": 317,
+      "wireChars": 487,
+      "canonicalChars": 487,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+      "messageID": "msg_g0VXmk0M000Olz8Wh0YD",
+      "partID": "prt_g0VXmk18D004fRhcMVzi",
+      "field": "text",
+      "events": 1915,
+      "wireChars": 3037,
+      "canonicalChars": 3037,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+      "messageID": "msg_g0VXmkFHl006TQWz9mVG",
+      "partID": "prt_g0VXmkGCt00Ml14vaaI2",
+      "field": "text",
+      "events": 2179,
+      "wireChars": 3603,
+      "canonicalChars": 3603,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_-zUSDG8qpzz4WdN3DVdw",
+      "messageID": "msg_haOUxFiISn9wZ0FkBcsM",
+      "partID": "prt_g0VXmkW1Y00p5CYDR99o",
+      "field": "text",
+      "events": 45,
+      "wireChars": 63,
+      "canonicalChars": 63,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_-zUSDG8qpzz4WdN3DVdw",
+      "messageID": "msg_haOUxFiISn9wZ0FkBcsM",
+      "partID": "prt_g0VXmkaKb00IEPtGjOmw",
+      "field": "text",
+      "events": 214,
+      "wireChars": 321,
+      "canonicalChars": 321,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    }
+  ],
+  "workerMessages": [
+    {
+      "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+      "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+      "parentID": "msg_g0VXmjxDJ00t5d4aKGr7",
+      "time": {
+        "created": 1791759903322,
+        "completed": 1791759915110
+      },
+      "finish": "tool-calls",
+      "textParts": [
+        {
+          "id": "prt_g0VXmjxyT001xbrLoner",
+          "chars": 487,
+          "headings": []
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXmk0M000Olz8Wh0YD",
+      "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+      "parentID": "msg_g0VXmjxDJ00t5d4aKGr7",
+      "time": {
+        "created": 1791759915140,
+        "completed": 1791759972508
+      },
+      "finish": "tool-calls",
+      "textParts": [
+        {
+          "id": "prt_g0VXmk18D004fRhcMVzi",
+          "chars": 3037,
+          "headings": [
+            "## 1. 来源身份：先说明读到了什么，再说明希望实现什么",
+            "## 2. 准确行号：检索坐标与产品跳转不是同一项证据",
+            "## 3. 长目录和同名文件：简洁展示不应抹去区分信息",
+            "## 4. 阅读位置：保留用户正在看的内容，不只是保存数值",
+            "## 5. 流式正文：继续生成与自动跟随应分别表达",
+            "## 6. 正文与引用先后关系：出现时间不能替代对应关系"
+          ]
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXmkFHl006TQWz9mVG",
+      "sessionID": "ses_hYSuR8yyXbT2CGtPwyB4",
+      "parentID": "msg_g0VXmjxDJ00t5d4aKGr7",
+      "time": {
+        "created": 1791759972537,
+        "completed": 1791760033524
+      },
+      "finish": "stop",
+      "textParts": [
+        {
+          "id": "prt_g0VXmkGCt00Ml14vaaI2",
+          "chars": 3603,
+          "headings": [
+            "## 7. 焦点顺序的要求：保持意义与可操作性，而非规定固定路线",
+            "## 8. 视觉位置与阅读顺序：允许差异，但不能破坏理解",
+            "## 9. 来源面板的交互类型：不能凭“侧栏”二字推导焦点规则",
+            "## 10. 动态引用与持续生成：新增内容不应制造混乱的操作路径",
+            "## 11. 静态内容与重复焦点：可聚焦不等于更容易使用",
+            "## 12. 将位置、引用和焦点分开核验：不能用一项成功代替全部目标",
+            "### 实际引用与读取限制"
+          ]
+        }
+      ]
+    }
+  ],
+  "reads": [
+    {
+      "requestPartID": "prt_g0VXmkWRb00Jt9LBhMzq",
+      "input": {
+        "sources": [
+          {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VXmkFHl006TQWz9mVG"
+          }
+        ]
+      },
+      "outcome": "completed",
+      "returnedMessages": [
+        {
+          "messageID": "msg_g0VXmkFHl006TQWz9mVG",
+          "textChars": 3603
+        }
+      ],
+      "inventoryMessageIDs": [
+        "msg_g0VXmjxHO00L8QY5krs7",
+        "msg_g0VXmk0M000Olz8Wh0YD",
+        "msg_g0VXmkFHl006TQWz9mVG"
+      ],
+      "returnedEvidenceFields": []
+    },
+    {
+      "requestPartID": "prt_g0VXmkXZ900BgN0DNq21",
+      "input": {
+        "sources": [
+          {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VXmkFHl006TQWz9mVG"
+          }
+        ],
+        "evidence_reads": [
+          {
+            "message_id": "msg_g0VXmjxHO00L8QY5krs7",
+            "part_id": "prt_g0VXmjxyT001xbrLoner",
+            "field": "text",
+            "offset": 0,
+            "limit": 1000
+          },
+          {
+            "message_id": "msg_g0VXmk0M000Olz8Wh0YD",
+            "part_id": "prt_g0VXmk18D004fRhcMVzi",
+            "field": "text",
+            "offset": 0,
+            "limit": 4000
+          },
+          {
+            "message_id": "msg_g0VXmjxHO00L8QY5krs7",
+            "part_id": "prt_g0VXmjzzd00QAU1YJRmk",
+            "field": "input",
+            "offset": 0,
+            "limit": 500
+          },
+          {
+            "message_id": "msg_g0VXmjxHO00L8QY5krs7",
+            "part_id": "prt_g0VXmjzzd00QAU1YJRmk",
+            "field": "output",
+            "offset": 0,
+            "limit": 500
+          },
+          {
+            "message_id": "msg_g0VXmk0M000Olz8Wh0YD",
+            "part_id": "prt_g0VXmkF0W00G89a28xDA",
+            "field": "input",
+            "offset": 0,
+            "limit": 500
+          },
+          {
+            "message_id": "msg_g0VXmk0M000Olz8Wh0YD",
+            "part_id": "prt_g0VXmkF0W00G89a28xDA",
+            "field": "output",
+            "offset": 0,
+            "limit": 22000
+          }
+        ]
+      },
+      "outcome": "completed",
+      "returnedMessages": [
+        {
+          "messageID": "msg_g0VXmkFHl006TQWz9mVG",
+          "textChars": 3603
+        }
+      ],
+      "inventoryMessageIDs": [
+        "msg_g0VXmjxHO00L8QY5krs7",
+        "msg_g0VXmk0M000Olz8Wh0YD",
+        "msg_g0VXmkFHl006TQWz9mVG"
+      ],
+      "returnedEvidenceFields": [
+        {
+          "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+          "partID": "prt_g0VXmjxyT001xbrLoner",
+          "field": "text",
+          "chars": 487,
+          "nextOffset": null
+        },
+        {
+          "messageID": "msg_g0VXmk0M000Olz8Wh0YD",
+          "partID": "prt_g0VXmk18D004fRhcMVzi",
+          "field": "text",
+          "chars": 3037,
+          "nextOffset": null
+        },
+        {
+          "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+          "partID": "prt_g0VXmjzzd00QAU1YJRmk",
+          "field": "input",
+          "chars": 167,
+          "nextOffset": null
+        },
+        {
+          "messageID": "msg_g0VXmjxHO00L8QY5krs7",
+          "partID": "prt_g0VXmjzzd00QAU1YJRmk",
+          "field": "output",
+          "chars": 287,
+          "nextOffset": null
+        },
+        {
+          "messageID": "msg_g0VXmk0M000Olz8Wh0YD",
+          "partID": "prt_g0VXmkF0W00G89a28xDA",
+          "field": "input",
+          "chars": 104,
+          "nextOffset": null
+        },
+        {
+          "messageID": "msg_g0VXmk0M000Olz8Wh0YD",
+          "partID": "prt_g0VXmkF0W00G89a28xDA",
+          "field": "output",
+          "chars": 20060,
+          "nextOffset": null
+        }
+      ]
+    }
+  ],
+  "dispatches": [
+    {
+      "id": "prt_g0VXmjt6900mnXFBHTKG",
+      "input": {
+        "dispatch": {
+          "target": "base-researcher",
+          "work_scope": {
+            "kind": "task"
+          },
+          "turn": {
+            "kind": "initial",
+            "use_worktree": false,
+            "input": {
+              "question": "请完成以下原始请求，所有交付只放在你自己的正常可见消息正文中。你是唯一成员，保持只读；不调用其他成员，不创建或修改文件，不发布额外 Artifact，也不要使用交互式报告代替正常正文。当前项目：C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\worker-narration-322-live-01\\project。source-review.md 是明确授权直接读取的普通项目输入；不要读取其他本地文件或凭据。严格按照顺序执行：\n1. 先在正常可见消息中写约400字中文开场，说明如何区分实际读取的事实和设计建议。\n2. 实际调用 search_code，path 为上述当前项目，pattern=RENDER321，include=source-review.md。保留真实命中路径和准确行号；不能以推测替代读取。\n3. 随后在正常可见消息中撰写第1至6节中文分析，每节至少两段，共约2400汉字，讨论来源身份、准确行号、长目录和同名文件、阅读位置、流式正文与引用先后关系。把文件中的内容明确标为验收场景输入，不能当作已测得的产品结论。包含一张 Markdown 比较表和一个简短代码示意。此部分必须在下一次网页读取之前可见发布。\n4. 再使用 webfetch 实际读取这一个公开官方页面：https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html 。不搜索扩展资料，不访问其他网页。\n5. 继续在正常可见消息中撰写第7至12节中文分析，每节至少两段，共约2400汉字，解释该文档对键盘焦点顺序的适用边界，结合前述场景给出明确标注的设计建议和待实际验证事项，包含第二个简短代码示意。不要把实现建议、滚动策略或性能效果冒充标准要求或已完成测试。\n6. 最后简短列明实际引用的文件命中行和网页、读取限制。不要把正文藏在工具 payload、文件或额外报告中。\n负责人只核对你的完整可见正文与实际工具记录并说明范围，不重复撰写整篇分析。正常可见开场、前六节、后六节必须按上述顺序出现；建议各组六节写足约2400汉字，避免明显过短。仅进行指定 search_code 与指定 webfetch 读取，不做产品测试或实现。发生读取失败时如实报告，不编造命中或标准内容。",
+              "reason": "用户明确要求只有一名只读研究员提供分阶段可见中文分析；由你独立完成指定两项读取和全部正文，负责人核对真实记录后收尾。"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

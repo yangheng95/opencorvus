@@ -24,7 +24,7 @@ describe("read_agent_message causal evidence projection", () => {
     expect(ReadAgentMessageInputSchema.parse({ sources, evidence_reads: reads.slice(0, 3) }).evidence_reads?.map((read) => read.limit)).toEqual([8000, 8000, 8000])
   })
 
-  test("pages every causal Tool Message and fences equal-time messages by persisted identity", () => {
+  test("pages every causal Part and fences equal-time messages by persisted identity", () => {
     const boundary = { time: { created: 100 }, id: "msg_m" }
     const candidates = [{ time: { created: 100 }, id: "msg_a" }, boundary, { time: { created: 100 }, id: "msg_z" }]
     expect(candidates.filter((candidate) => ReadAgentMessageTestHooks.orderedBeforeOrAt(candidate, boundary))).toEqual([
@@ -58,6 +58,13 @@ describe("read_agent_message causal evidence projection", () => {
       request: "inspect source record",
     })
     expect(preview.input_preview).toBe('{"headers":{"Authorization":"<redacted>"},"request":"inspect source record"}')
+    expect(ReadAgentMessageTestHooks.safeTextPreview('{"Authorization":"Bearer SYNTHETIC_REVIEW_CANARY"}')).toEqual({
+      text_preview: '{"Authorization":"<redacted>"}', text_chars: 30, text_preview_truncated: false,
+    })
+    expect(ReadAgentMessageInputSchema.parse({
+      sources: [{ kind: "dispatch_result", message_id: "msg_final" }],
+      evidence_reads: [{ message_id: "msg_early", part_id: "prt_text", field: "text" }],
+    }).evidence_reads).toEqual([{ message_id: "msg_early", part_id: "prt_text", field: "text", offset: 0, limit: 8000 }])
 
     const output = "x".repeat(300_000)
     const chunk = ReadAgentMessageTestHooks.evidenceOutputChunk(
@@ -102,6 +109,7 @@ describe("read_agent_message causal evidence projection", () => {
       source: { kind: "dispatch_result" as const, message_id: "msg_final" },
       message_id: "msg_early",
       part_id: "part_source",
+      part_type: "tool" as const,
       tool_name: "api_fetch",
       status: "completed",
       input_preview: ReadAgentMessageTestHooks.safeInputPreview(
@@ -113,9 +121,9 @@ describe("read_agent_message causal evidence projection", () => {
       ).input_preview,
       input_preview_truncated: false,
     }
-    expect(ReadAgentMessageTestHooks.compactCausalToolReferenceIndex([reference])).toEqual({
+    expect(ReadAgentMessageTestHooks.compactCausalPartReferenceIndex([reference])).toEqual({
       complete: true,
-      tool_count: 1,
+      part_count: 1,
       refs: [
         {
           ...reference,
@@ -123,10 +131,10 @@ describe("read_agent_message causal evidence projection", () => {
         },
       ],
     })
-    const oversized = ReadAgentMessageTestHooks.compactCausalToolReferenceIndex([
+    const oversized = ReadAgentMessageTestHooks.compactCausalPartReferenceIndex([
       { ...reference, input_preview: "x".repeat(21_000) },
       { ...reference, message_id: "msg_late", input_preview: "x".repeat(21_000) },
     ])
-    expect(oversized).toEqual({ complete: false, tool_count: 2, refs: [] })
+    expect(oversized).toEqual({ complete: false, part_count: 2, refs: [] })
   })
 })

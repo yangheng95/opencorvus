@@ -2,7 +2,7 @@
 
 This chapter is the current authority for Task execution input, lifecycle, physical activation, external-effect settlement, Session continuation, scheduler delivery, cancellation, closure, and restart recovery.
 
-Worker continuation retains one visible incremental user text Part. In the central runner, explicitly selected `session_message` locators that identify this Task's settled dispatch reports add attributed quotations through the same authenticated source selector as `read_agent_message`. They retain source, Session, Message, author, completion time and text-Part identities; Provider-secret redaction and explicit excerpt offsets use the existing evidence reader. At most eight selected reports are quoted in caller order, with at most 8000 characters per report and 30000 aggregate text characters; further selected report sources are explicitly deferred. Full reports and causal Tool facts remain available through the public reader. Other valid locator kinds and non-terminal messages retain their reference contracts. The quotes, current guidance and attachment context share the actual persisted Part and its existing input authority; no hidden Message or copied Artifact body is created. Participant reports and coordinator candidates remain claims to reconcile against original authority, not a Host-derived acceptance decision or new requirement.
+Worker continuation retains one visible incremental user text Part. In the central runner, explicitly selected `session_message` locators that identify this Task's settled dispatch reports add attributed quotations through the same authenticated source selector as `read_agent_message`. They retain source, Session, Message, author, completion time and text-Part identities; Provider-secret redaction and explicit excerpt offsets use the existing evidence reader. At most eight selected reports are quoted in caller order, with at most 8000 characters per report and 30000 aggregate text characters; further selected report sources are explicitly deferred. Full reports, earlier visible worker narration and causal Tool facts remain available through the public reader. Other valid locator kinds and non-terminal messages retain their reference contracts. The quotes, current guidance and attachment context share the actual persisted Part and its existing input authority; no hidden Message or copied Artifact body is created. Participant reports and coordinator candidates remain claims to reconcile against original authority, not a Host-derived acceptance decision or new requirement.
 
 ## Authority rule
 
@@ -169,19 +169,23 @@ same finish/completion facts without inferring success. Its required input is
 an ordered set of one to eight globally unique terminal dispatch-settlement
 Message IDs. A later dispatch does not revoke an earlier terminal worker
 Message whose evidence remains material. The
-first read also returns a bounded, redacted page of real Tool Message and Part
+first read also returns a bounded, redacted page of real text and Tool Message/Part
 identities from the same Session, the same accepted input parent and no later
 than each selected final in persisted `(time,id)` order. A compact reference
-index lists every causal Tool Part's exact Message/Part identity and redacted
-short input preview when its serialized size fits the declared bound;
-`complete=false` and the total Tool count explicitly mark an oversized index.
+`causal_part_reference_index` lists every causal Part's exact Message/Part identity,
+`part_type` and redacted short text or input preview when its serialized size fits
+the declared bound; `complete=false` and `part_count` explicitly mark an oversized
+index. `causal_part_message_inventory` groups at most 16 Parts per source into
+`part_facts`. Text belongs to the selected final's exact worker agent; other actors
+and reasoning Parts are outside this projection. A prose-only earlier Message is
+readable through its original identity without becoming a dispatch-result anchor.
 This is another density of the same persisted facts, not a second authority or
 an inferred business decision. Older detailed pages use the returned per-final
 `inventory_next_before` cursor. A caller may then supply up
 to eight exact `message_id+part_id` pairs returned by that final's index or inventory
 in this or an earlier call through
-`evidence_reads` with an explicit `input`, `output`, or `failure` field; the
-same reader returns a structured-redacted projection of that persisted Tool
+`evidence_reads` with an explicit `text`, `input`, `output`, or `failure` field; the
+same reader returns a structured-redacted projection of that persisted Part
 field in chunks whose requested total is at most 30000 characters, with
 `next_offset` until complete. Final-Message Tool parts use the same safe
 metadata projection rather than bypassing this chunk path. Materialized

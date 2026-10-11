@@ -191,7 +191,7 @@ for (const usePatch of [false, true])
               const value = JSON.parse(evidence.state.output)
               expect(value.origins[0].source).toEqual({ kind: "dispatch_origin", dispatch_id: latest!.dispatchID })
               expect(
-                value.causal_tool_reference_index.refs.map((ref: { tool_name: string }) => ref.tool_name),
+                value.causal_part_reference_index.refs.map((ref: { tool_name: string }) => ref.tool_name),
               ).toContain(usePatch ? "apply_patch" : "write")
               return call("read", { filePath })
             }

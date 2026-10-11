@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [322 早段正文读取](records/2026-10/2026-10-12-worker-narration-322.md)：保留已结算来源边界的统一Part证据目录。
+
 - [321 真实子侧栏持续输出](records/2026-10/2026-10-12-source-child-stream-321.md)：回到产品Task的真实流式来源与正文。
 
 - [320 长文件来源密度](records/2026-10/2026-10-12-source-density-320.md)：窄侧栏中的长路径与同名文件辨识。

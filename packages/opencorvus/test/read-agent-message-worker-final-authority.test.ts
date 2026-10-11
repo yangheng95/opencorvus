@@ -160,6 +160,45 @@ for (const mode of ["coordinated", "completed", "error", "aborted", "pending", "
             },
           },
         })
+        const narration = async (body: string, parentID = input.id, agent = cap.identity.agentID) => {
+          const message = await Session.updateMessage({
+            id: Identifier.ascending("message"), sessionID: worker.id, parentID,
+            role: "assistant", author: agent, agent,
+            providerID: "fixture", modelID: "metadata-only",
+            time: { created: Date.now() },
+            path: { cwd: project.path, root: project.path }, cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          })
+          if (message.role !== "assistant") throw new Error("Expected narration assistant Message")
+          const part = await Session.updatePart({
+            id: Identifier.ascending("part"), sessionID: worker.id, messageID: message.id, type: "text", text: body,
+          })
+          return { message, part }
+        }
+        const earlierBody = "前段分析。\n".repeat(1600)
+        const earlier = await narration(earlierBody)
+        const earlierTool = await Session.updatePart({
+          id: Identifier.ascending("part"), sessionID: worker.id, messageID: earlier.message.id,
+          type: "tool", tool: "read", callID: "call_earlier_narration",
+          state: { status: "completed", input: { filePath: "source-review.md" }, output: "Captured source evidence.",
+            title: "Read source", metadata: {}, time: { start: Date.now() - 1, end: Date.now() } },
+        })
+        const reasoning = await Session.updatePart({
+          id: Identifier.ascending("part"), sessionID: worker.id, messageID: earlier.message.id,
+          type: "reasoning", text: "Synthetic reasoning placeholder", time: { start: Date.now(), end: Date.now() },
+        })
+        const textOnly = await narration("Visible narration between provider steps.")
+        const { orderKey: otherInputOrderKey, ...otherInputFields } = input
+        const differentInput = await Session.updateMessage({
+          ...otherInputFields, id: Identifier.ascending("message"), time: { created: Date.now() },
+        })
+        const otherInput = await narration("Another input occurrence.", differentInput.id)
+        const compactor = await narration("Compactor context.", input.id, "compaction")
+        for (const item of [earlier, textOnly, otherInput, compactor]) {
+          await Session.updateMessage({
+            ...item.message, time: { ...item.message.time, completed: Date.now() }, finish: "tool-calls",
+          })
+        }
         const final = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: worker.id,
@@ -355,6 +394,35 @@ for (const mode of ["coordinated", "completed", "error", "aborted", "pending", "
           kind: "read",
           value: { reports: [{ message_id: final.id, session_id: worker.id, text: { content: body } }] },
         })
+        if (read.kind !== "read") throw new Error("Expected qualified occurrence reader")
+        expect(read.value.causal_part_reference_index.refs.map((part: { part_id: string }) => part.part_id)).toEqual([
+          earlier.part.id, earlierTool.id, textOnly.part.id, ...partIDs,
+        ])
+        const sources = [{ kind: "dispatch_result", message_id: final.id }]
+        const firstText = JSON.parse(await readAgentMessages(taskID, { sources, evidence_reads: [{
+          message_id: earlier.message.id, part_id: earlier.part.id, field: "text", limit: 8000,
+        }] })).evidence_reads[0]
+        expect(firstText).toMatchObject({
+          part_type: "text", field: "text", source: "message-part-text",
+          total_chars: earlierBody.length, offset: 0, end: 8000, next_offset: 8000,
+          content: earlierBody.slice(0, 8000),
+        })
+        const remaining = JSON.parse(await readAgentMessages(taskID, { sources, evidence_reads: [
+          { message_id: earlier.message.id, part_id: earlier.part.id, field: "text", offset: firstText.next_offset },
+          { message_id: earlier.message.id, part_id: earlierTool.id, field: "output", limit: 100 },
+        ] })).evidence_reads
+        expect({ text: firstText.content + remaining[0].content, next: remaining[0].next_offset, tool: remaining[1].content })
+          .toEqual({ text: earlierBody, next: null, tool: "Captured source evidence." })
+        for (const target of [
+          { message_id: otherInput.message.id, part_id: otherInput.part.id },
+          { message_id: earlier.message.id, part_id: reasoning.id },
+        ]) {
+          await expect(readAgentMessages(taskID, { sources, evidence_reads: [{ ...target, field: "text" }] }))
+            .rejects.toMatchObject({
+              name: "TaskEvidenceSourceError", code: "TASK_EVIDENCE_SOURCE_INVALID",
+              message: `Evidence Part ${target.part_id} of Message ${target.message_id} is not causal to the selected sources`,
+            })
+        }
         const { orderKey: inputOrderKey, ...inputFields } = input
         const { orderKey: finalOrderKey, ...finalFields } = final
         const wrongInput = await Session.updateMessage({
