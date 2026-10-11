@@ -1,0 +1,30 @@
+{
+  "observedAtUtc": "2026-10-11T18:22:12.453Z",
+  "boundary": "Actual current path functions; data observations only, no Source injection or UI assertion",
+  "results": [
+    {
+      "base": "/srv/project",
+      "target": "/srv/Project/source.ts",
+      "relative": "",
+      "location": "/srv/Project/source.ts"
+    },
+    {
+      "base": "C:\\Work\\Project",
+      "target": "c:/work/project/src/Source.ts",
+      "relative": "src/Source.ts",
+      "location": "src/Source.ts"
+    },
+    {
+      "base": "/",
+      "target": "/var/source.ts",
+      "relative": "var/source.ts",
+      "location": "var/source.ts"
+    },
+    {
+      "base": "/srv/project",
+      "target": "/srv/project/file\\name.ts",
+      "relative": "file\\name.ts",
+      "location": "file\\name.ts"
+    }
+  ]
+}

@@ -39,7 +39,7 @@ function text(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value : undefined
 }
 function displayPath(path: string, base: string): string {
-  return relativePathFrom(base.replaceAll("\\", "/").replace(/\/+$/, ""), path.replaceAll("\\", "/")) || path
+  return relativePathFrom(base, path) || path
 }
 function receiptsUnique(receipts: readonly FileChangeReceipt[]): FileChangeReceipt[] {
   return [...new Map(receipts.map((receipt) => [JSON.stringify(receipt), receipt])).values()]

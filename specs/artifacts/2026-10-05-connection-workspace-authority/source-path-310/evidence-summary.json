@@ -1,0 +1,34 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 1199678,
+    "archiveBytes": 44051,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 6,
+    "sessions": [
+      {
+        "id": "ses_hIokeLuQIlwq9JpW8Wer",
+        "projectID": "prj_hPQPlsXnuFCksW7A8l41",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSENuedzztBSLOrGtw",
+        "projectID": "prj_h79kfmsYPAB7HrEPqIBh",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXlc6e200aLBfctbTG",
+        "sourceId": "be4b40ee780c5c3d9093a7ad564e068495505e6eebc33738e2545f918bd57e91",
+        "title": "README.md"
+      },
+      {
+        "id": "prt_g0VXlc7aS0079cDsh5pQ",
+        "sourceId": "fb023834b071a2b3e851f0d41ccee79f4849b6ecb1a0681bd4ad94e5a38f825c",
+        "title": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\utils\\tool.ts"
+      }
+    ]
+  }
+]

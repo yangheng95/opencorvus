@@ -13,6 +13,21 @@ import {
 } from "@opencorvus-ai/transport-protocol"
 const base = "D:/project",
   file = "D:/project/value.txt"
+
+test.each([
+  ["/srv/project", "/srv/Project/source.ts", "/srv/Project/source.ts"],
+  ["/srv/project", "/srv/project/file\\name.ts", "file\\name.ts"],
+  ["C:\\Work\\Project", "c:/work/project/src/Source.ts", "src/Source.ts"],
+])("file change metadata preserves its server path identity from %s", (directory, target, display) => {
+  const changes = toolFileChangesFromState({
+    status: "completed",
+    metadata: { filediff: { file: target, before: "before\n", after: "after\n", additions: 1, deletions: 1 } },
+  }, directory)
+  expect(changes.map(({ openPath, displayPath, file }) => ({ openPath, displayPath, file }))).toEqual([
+    { openPath: target, displayPath: display, file: display },
+  ])
+})
+
 function tool(index: number, before: string, after: string) {
   return {
     type: "tool",

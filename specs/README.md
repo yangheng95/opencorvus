@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源路径关系310](records/2026-10/2026-10-12-source-path-310.md)：检查POSIX大小写、Windows分隔符和来源文件归属。
+
 - [来源信息层级309](records/2026-10/2026-10-12-source-hierarchy-309.md)：无标题来源与标题/站点修饰层级调查。
 
 - [子会话来源308](records/2026-10/2026-10-12-child-source-308.md)：完整当前真实Task历史的子面板与阅读返回调查。

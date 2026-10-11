@@ -644,6 +644,14 @@ the Overlay displays the published Source payload without fetching or inventing
 another title.
 Tooltip detail adds location or media information only when it differs from the
 primary source identity; it does not repeat a root-level file's name or range.
+Source file routing and change summaries share one lexical directory relation.
+It recognizes server Windows drive/UNC paths independently of the browser host,
+normalizes their separators for comparison, and retains case-insensitive Windows
+matching. POSIX paths retain case and literal backslashes, including at a directory
+name's end; the root directory remains a valid base. Project-relative Windows
+results use forward separators without changing filename case. External locations
+keep their original absolute identity. The server still owns physical realpath
+and access validation; this display/routing relation is not a permission check.
 Child conversation message dividers retain the shared transcript margin and use
 the medium spacing token for their inner top inset. This keeps independent
 Source-bearing messages distinct without repeating a large blank band; the

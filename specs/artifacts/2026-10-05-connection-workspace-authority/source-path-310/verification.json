@@ -1,0 +1,40 @@
+{
+  "observedAtUtc": "2026-10-11T18:29:55.7095756Z",
+  "focusedTests": {
+    "files": 2,
+    "scope": "Pure path and change metadata contracts",
+    "expectCalls": 55,
+    "exitCode": 0,
+    "passed": 28
+  },
+  "typecheck": {
+    "actualJoinedExitCode": 0,
+    "sessionID": 74167
+  },
+  "build": {
+    "sessionID": 43131,
+    "actualJoinedExitCode": 0,
+    "seconds": 48.91,
+    "rendererPublicSurface": "passed"
+  },
+  "live": {
+    "actualModel": "gpt-6.1-sol",
+    "hostPID": 46396,
+    "qualification": "Windows actual UI manual screenshots and clicks",
+    "actualJoinedExitCode": 0,
+    "port": 18276,
+    "terminal": "eof",
+    "sessionID": 10130,
+    "nativePID": 77620,
+    "tabID": 76,
+    "streaming": true,
+    "providerRequests": 6
+  },
+  "docs": {
+    "groups": 25,
+    "exitCode": 0,
+    "operations": 345,
+    "architectureDocuments": 18
+  },
+  "limitation": "Linux native UI and adjacent FileWorkbench POSIX backslash normalization remain unverified"
+}

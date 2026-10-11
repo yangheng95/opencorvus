@@ -319,15 +319,17 @@ function flattenToolArgumentValue(value: unknown): string {
 // coupling this pure utility to the reactive store.
 
 export function relativePathFrom(base: string, target: string): string {
-  const baseText = typeof base === "string" ? base.replace(/[\\/]+$/, "") : ""
-  const targetText = typeof target === "string" ? target.replace(/[\\/]+$/, "") : ""
-  if (!baseText || !targetText) return ""
-  const lBase = baseText.toLowerCase()
-  const lTarget = targetText.toLowerCase()
-  if (lTarget.startsWith(lBase + "/") || lTarget.startsWith(lBase + "\\")) {
-    return targetText.slice(baseText.length + 1)
-  }
-  return ""
+  if (typeof base !== "string" || typeof target !== "string" || !base || !target) return ""
+  // The server's path syntax, rather than the browser's platform, owns this comparison.
+  const windows = /^(?:[A-Za-z]:[\\/]|\\\\[^\\]|\/\/[^/])/.test(base)
+  const separators = (value: string) => (windows ? value.replaceAll("\\", "/") : value)
+  const basePath = separators(base)
+  const baseText = basePath.replace(/\/+$/, "") || (basePath.startsWith("/") ? "/" : "")
+  const targetText = separators(target).replace(/\/+$/, "")
+  const prefix = baseText === "/" ? "/" : baseText + "/"
+  const comparablePrefix = windows ? prefix.toLowerCase() : prefix
+  const comparableTarget = windows ? targetText.toLowerCase() : targetText
+  return comparableTarget.startsWith(comparablePrefix) ? targetText.slice(prefix.length) : ""
 }
 
 export function shortPath(p: string): string {

@@ -1,0 +1,38 @@
+bun test v1.4.0 (34cbb9a40)
+
+packages\overlay\test\file-change-evidence-reducer.test.ts:
+(pass) file change metadata preserves its server path identity from /srv/project [0.83ms]
+(pass) file change metadata preserves its server path identity from /srv/project [0.06ms]
+(pass) file change metadata preserves its server path identity from C:\Work\Project [0.03ms]
+(pass) individual completed comparison preserves empty existing after and original receipt [0.17ms]
+(pass) normal cross-assistant original controls and intervening Read compose exact net interval [3.00ms]
+(pass) Write receipt and multiple step observations preserve the recorded two-Edit interval [0.37ms]
+(pass) exact replay deduplicates while conflicting receipt is explicit incomplete [0.79ms]
+(pass) unqualified batch, controls, step membership, branch and endpoint have precise incomplete reasons [1.40ms]
+(pass) canonical Patch keeps path-only coverage independently of exact Edit interval [0.41ms]
+(pass) actual deferred mutation without observed path retains unknown receipts [0.17ms]
+(pass) distinct saved/live intervals retain honest flags and revision includes endpoint changes [0.79ms]
+(pass) separate actual Session and actor scopes retain their own recorded endpoints [0.27ms]
+
+packages\overlay\test\tool-path.test.ts:
+(pass) server-owned path relationships > resolves /srv/project → /srv/project/src/Source.ts as the exact relative resource [0.06ms]
+(pass) server-owned path relationships > resolves /srv/project/ → /srv/project/src/Source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves / → /var/source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves /srv/project → /srv/project/file\name.ts as the exact relative resource
+(pass) server-owned path relationships > resolves /srv/project\ → /srv/project\/source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves C:\Work\Project → c:/work/project/src/Source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves C:/Work/Project/ → c:\work\project\src\Source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves C:\ → c:/src/Source.ts as the exact relative resource [0.02ms]
+(pass) server-owned path relationships > resolves \\Server\Share\Project → //server/share/project/src/Source.ts as the exact relative resource
+(pass) server-owned path relationships > resolves //Server/Share/Project → \\server\share\project\src\Source.ts as the exact relative resource
+(pass) server-owned path relationships > retains the absolute external resource /srv/project → /srv/Project/source.ts [0.03ms]
+(pass) server-owned path relationships > retains the absolute external resource /srv/project → /srv/project-other/source.ts
+(pass) server-owned path relationships > retains the absolute external resource /srv/project\ → /srv/project/source.ts
+(pass) server-owned path relationships > retains the absolute external resource C:\Work\Project → D:\Work\Project\Source.ts
+(pass) server-owned path relationships > retains the absolute external resource C:\Work\Project → C:/Work/Project-other/Source.ts
+(pass) server-owned path relationships > retains the absolute external resource \\Server\Share\Project → \\Server\Other\Project\Source.ts
+
+ 28 pass
+ 0 fail
+ 55 expect() calls
+Ran 28 tests across 2 files. [1.55s]
