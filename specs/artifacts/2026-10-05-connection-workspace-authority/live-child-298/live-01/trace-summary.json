@@ -1,0 +1,114 @@
+{
+  "entries": 500,
+  "cap": 500,
+  "capReached": true,
+  "firstAt": "2026-10-11T12:14:14.057Z",
+  "lastAt": "2026-10-11T12:15:10.448Z",
+  "owners": [
+    {
+      "owner": 1,
+      "phase": "mounted-rendering",
+      "length": 411,
+      "messageID": "msg_g0VXk63GI00RQZJcDb0l",
+      "partID": "prt_g0VXk63Fw00mG2hA8Aqg",
+      "surface": "main-or-side",
+      "firstAt": "2026-10-11T12:14:14.057Z",
+      "lastAt": "2026-10-11T12:14:14.057Z",
+      "phases": [
+        "mounted-rendering",
+        "content"
+      ],
+      "samples": 4,
+      "firstLength": 411,
+      "lastLength": 411
+    },
+    {
+      "owner": 2,
+      "phase": "mounted-rendering",
+      "length": 77,
+      "messageID": "msg_hvOA4TvUqJ6ddnFhFTiq",
+      "partID": "prt_g0VXk64dw00bLGiN74Ay",
+      "surface": "main-or-side",
+      "firstAt": "2026-10-11T12:14:14.057Z",
+      "lastAt": "2026-10-11T12:14:14.057Z",
+      "phases": [
+        "mounted-rendering",
+        "retired"
+      ],
+      "samples": 2,
+      "firstLength": 77,
+      "lastLength": 77
+    },
+    {
+      "owner": 3,
+      "phase": "mounted-rendering",
+      "length": 14,
+      "messageID": "msg_hvOA4TvUqJ6ddnFhFTiq",
+      "partID": "prt_g0VXk64dw00bLGiN74Ay",
+      "surface": "main-or-side",
+      "firstAt": "2026-10-11T12:14:14.057Z",
+      "lastAt": "2026-10-11T12:14:18.676Z",
+      "phases": [
+        "mounted-rendering",
+        "content"
+      ],
+      "samples": 5,
+      "firstLength": 14,
+      "lastLength": 77
+    },
+    {
+      "owner": 4,
+      "phase": "mounted-rendering",
+      "length": 69,
+      "messageID": "msg_g0VXk67vw00n3vx8GAFW",
+      "partID": "prt_g0VXk68hs003MgqkJlKB",
+      "surface": "child",
+      "firstAt": "2026-10-11T12:14:28.434Z",
+      "lastAt": "2026-10-11T12:14:28.434Z",
+      "phases": [
+        "mounted-rendering",
+        "content"
+      ],
+      "samples": 3,
+      "firstLength": 69,
+      "lastLength": 69
+    },
+    {
+      "owner": 5,
+      "phase": "mounted-rendering",
+      "length": 1,
+      "messageID": "msg_g0VXk6CZI00tko5Cv7sR",
+      "partID": "prt_g0VXk6EPv002GRzNCYYw",
+      "surface": "child",
+      "firstAt": "2026-10-11T12:14:43.948Z",
+      "lastAt": "2026-10-11T12:14:46.201Z",
+      "phases": [
+        "mounted-rendering",
+        "content"
+      ],
+      "samples": 50,
+      "firstLength": 1,
+      "lastLength": 92
+    },
+    {
+      "owner": 6,
+      "phase": "mounted-rendering",
+      "length": 11,
+      "messageID": "msg_g0VXk6FOn006VNhhPZPT",
+      "partID": "prt_g0VXk6GMg00lA23U5pJE",
+      "surface": "child",
+      "firstAt": "2026-10-11T12:14:51.437Z",
+      "lastAt": "2026-10-11T12:15:10.448Z",
+      "phases": [
+        "mounted-rendering",
+        "content"
+      ],
+      "samples": 363,
+      "firstLength": 11,
+      "lastLength": 1356
+    }
+  ],
+  "projections": 73,
+  "regressions": [],
+  "boundary": "Actual diagnostic observations only. Repeated unchanged content phases exhausted the cap; later lifetime and projection coverage are incomplete. Screenshots are Root manual review, not automated UI assertions."
+}

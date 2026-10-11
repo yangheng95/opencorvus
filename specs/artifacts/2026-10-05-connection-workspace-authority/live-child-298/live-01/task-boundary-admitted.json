@@ -1,0 +1,26 @@
+{
+  "pid": 49988,
+  "occurrence": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171",
+  "selected": {
+    "occurrence": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171",
+    "requestSentAt": "2026-10-11T12:13:53.6216969Z",
+    "taskID": "tsk_g00VXk62Kd009TdxRiqF",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-11\\live-child-298-live-01\\project",
+    "projectID": "prj_henwry6SsjtljpGkako9",
+    "productPillar": "work",
+    "requestID": "29c0a3dc-c763-41b8-b12d-f6904883dcc5",
+    "acceptedObservedAt": "2026-10-11T12:13:57.5823003Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXk62Kd009TdxRiqF",
+    "projectID": "prj_henwry6SsjtljpGkako9",
+    "rootSessionID": "ses_-zUSFtxYVzzl0HrpVQeK",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXk62S700ykn5CIGrJ",
+    "openedAt": 1791720836951
+  },
+  "totalDeadlineMs": 1791721736951,
+  "maximumMilliseconds": 900000,
+  "inactivityMilliseconds": 180000,
+  "boundary": "Fixed actual Task opening boundary survives monitor failure; parent supervision owns settlement"
+}

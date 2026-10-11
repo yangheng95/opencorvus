@@ -1,0 +1,62 @@
+{
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "occurrence": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171",
+  "states": [
+    {
+      "expected": {
+        "pid": 78672,
+        "processInstanceID": "win32:639273173151653004",
+        "occurrenceID": "eea789c5-e980-42aa-a7c9-d826d757154d"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 49988,
+        "processInstanceID": "win32:639273173159528200",
+        "occurrenceID": "0d74da7f-1e5e-49b3-827d-e4264b70cbdb"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": [],
+  "boundary": "Independent actual NativeService physical/output/request birth-port-pair readback; original live-sol foreground already joined. Real service emits owner/startup/preflight receipts, not full-history copy launcher receipts.",
+  "native": {
+    "occurrence": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171",
+    "outcome": "settled",
+    "host": {
+      "pid": 78672,
+      "processInstanceID": "win32:639273173151653004",
+      "occurrenceID": "eea789c5-e980-42aa-a7c9-d826d757154d"
+    },
+    "target": {
+      "pid": 49988,
+      "processInstanceID": "win32:639273173159528200",
+      "occurrenceID": "0d74da7f-1e5e-49b3-827d-e4264b70cbdb"
+    },
+    "observedAtUtc": "2026-10-11T12:17:21.49Z",
+    "deadlineAt": 1791722015149,
+    "terminal": {
+      "occurrenceID": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171",
+      "pid": 49988,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-11T12:17:33.6178976Z",
+  "qualificationKind": "Task"
+}

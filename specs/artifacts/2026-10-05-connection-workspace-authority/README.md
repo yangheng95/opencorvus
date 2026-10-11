@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [子侧栏实时298 Recall](live-child-plan-298.md) / [真实证据](live-child-298/README.md)：真实Task及来源观察完成，诊断全部撤除，无推测性补丁。
+
 - [会话点击297 Recall](activation-plan-297.md) / [真实证据](activation-297/README.md)：滚动时的命中抑制导致点击落背景；恢复交互行原生点击。
 
 - [来源原文读位296 Recall](text-owner-plan-296.md) / [真实证据](text-owner-296/README.md)：修复工具内容返回开头，保留实时闪烁及指针打开待查边界。

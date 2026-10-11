@@ -1,0 +1,15 @@
+{
+  "pid": 49988,
+  "occurrence": "live-child-298-live-01-1df5acb8-7786-462d-9951-678270143171",
+  "owner": {
+    "pid": 49988,
+    "processInstanceID": "win32:639273173159528200",
+    "occurrenceID": "82fc693b-c12c-484f-9827-2794001c98cf"
+  },
+  "parent": {
+    "pid": 72384,
+    "processInstanceID": "win32:639273173159054910",
+    "occurrenceID": "814fc8f1-e968-4f0c-95a2-e7e11d3dee6f"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
