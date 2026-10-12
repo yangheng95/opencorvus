@@ -30,6 +30,7 @@ import { quotedPrompt, type Quotation } from "../services/quotation"
 import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "../services/subagent-conversation"
 import { formatErrorDetails } from "../services/diagnostics"
 import { pauseAutoScrollForReading, setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
+import { captureConversationReadingAnchor, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
 import { assistantMessageFailure, conversationMessageHasDisplayContent, isCardBodyMessagePart } from "../utils/message-part"
 import { t } from "../utils/i18n"
 import { ConversationCard } from "./ConversationCard"
@@ -106,7 +107,7 @@ export function SideChatPanel(props: {
   let scroll!: HTMLDivElement
   let textarea: HTMLTextAreaElement | undefined
   let follow: AutoScrollController | undefined
-  let reader: { key: string; sourceKey: string; sessionID: string; authority: ApiAuthority; epoch: number; controller: AutoScrollController } | undefined
+  let reader: { key: string; sourceKey: string; sessionID: string; authority: ApiAuthority; epoch: number; controller: AutoScrollController; restoring: boolean } | undefined
   const sourceKey = () => `${captureApiAuthority().revision}\0${JSON.stringify(props.source)}`
   const historyKey = () => `side-history:${JSON.stringify([sourceKey(), selected()])}`
   const historyExpanded = () => conversationDisclosureExpanded(historyKey(), false)
@@ -133,9 +134,9 @@ export function SideChatPanel(props: {
   const report = (error: unknown) => setError(formatErrorDetails(error))
   const rememberReadingPosition = () => {
     const owner = reader
-    if (!owner || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
+    if (!owner || owner.restoring || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
     if (!scroll?.isConnected || scroll.clientHeight <= 0 || scroll.closest("[inert], [hidden]")) return
-    setSideChatReadingPosition(owner.key, owner.controller.readingPosition())
+    setSideChatReadingPosition(owner.key, { ...owner.controller.readingPosition(), anchor: captureConversationReadingAnchor(scroll) })
   }
   onCleanup(() => {
     generation++
@@ -241,13 +242,21 @@ export function SideChatPanel(props: {
         const layoutRoot = scroll.closest<HTMLElement>(".right-dock")
         if (!layoutRoot) throw new Error("Side Chat requires its right dock layout owner")
         const controller = setupAutoScroll(scroll, {
-          initialPosition: position && !position.following ? { kind: "position", top: position.top, layoutRoot } : { kind: "bottom" },
+          initialPosition: position && !position.following ? {
+            kind: "position", top: position.top, layoutRoot,
+            resolveTop: position.anchor ? () => resolveConversationReadingTop(scroll, position.anchor!) : undefined,
+            onRestoreSettled: () => {
+              if (reader?.controller !== controller) return
+              reader.restoring = false
+              rememberReadingPosition()
+            },
+          } : { kind: "bottom" },
           isTracking: tracking,
           onUserScrollUp: () => { setTracking(false); rememberReadingPosition() },
           onFollowRequested: () => { setTracking(true); rememberReadingPosition() },
         })
         follow = controller
-        reader = { key: readingKey, sourceKey: readingSource, sessionID, authority, epoch: boardStore.selectEpoch, controller }
+        reader = { key: readingKey, sourceKey: readingSource, sessionID, authority, epoch: boardStore.selectEpoch, controller, restoring: Boolean(position && !position.following) }
         onCleanup(() => {
           if (reader?.controller === controller) reader = undefined
           controller.cleanup()

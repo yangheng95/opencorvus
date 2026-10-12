@@ -8,6 +8,7 @@ import { conversationSessionStore } from "../store/conversation-session"
 import { t } from "../utils/i18n"
 import { topLevelCardIDForCard } from "../utils/card-tree"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
+import { captureConversationReadingAnchor, conversationReadingAnchorOwner, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
 import { taskLifecycleStatusOrIdleLabel } from "../utils/status-labels"
 import { StoreCardNode } from "./StoreCardNode"
 import {
@@ -439,14 +440,6 @@ export function Conversation(props: {
   }
   const ownsReader = (owner: NonNullable<typeof reader>) => reader === owner &&
     isApiAuthorityCurrent(owner.authority) && readingKey() === owner.key
-  const readingAnchorOwner = (anchor: NonNullable<MainConversationReadingPosition["anchor"]>) =>
-    anchor.kind === "source"
-      ? el.querySelector<HTMLElement>(`[data-source-identity="${CSS.escape(anchor.sourceIdentity)}"]`)
-      : el.querySelectorAll<HTMLElement>(`[data-quotation-message="${CSS.escape(anchor.messageID)}"]`)[anchor.textIndex]
-  const readingAnchorElement = (anchor: NonNullable<MainConversationReadingPosition["anchor"]>) =>
-    anchor.kind === "source"
-      ? readingAnchorOwner(anchor)
-      : readingAnchorOwner(anchor)?.querySelectorAll<HTMLElement>(".md-frozen-block")[anchor.blockIndex]
   const rememberReadingPosition = (currentLayout = false) => {
     const owner = reader
     if (!owner || !ownsReader(owner) || owner.pending || !scrollController || boardStore.taskSwitching ||
@@ -457,38 +450,7 @@ export function Conversation(props: {
     // Layout-induced scroll/clamp events must not replace the pre-resize reader.
     // Explicit reading input and settled restoration can adopt the new layout.
     if (!currentLayout && remembered && !remembered.following && remembered.viewportWidth !== el.clientWidth && !scrollController.hasScrollInput()) return
-    const viewport = el.getBoundingClientRect()
-    const quotes = Array.from(el.querySelectorAll<HTMLElement>("[data-quotation-message]"))
-    const candidates = el.querySelectorAll<HTMLElement>("[data-quotation-message], [data-source-identity][data-source-message-id]")
-    let anchor: MainConversationReadingPosition["anchor"]
-    for (const quote of candidates) {
-      const rect = quote.getBoundingClientRect()
-      if (rect.height <= 0 || rect.bottom <= viewport.top || rect.top >= viewport.bottom) continue
-      if (quote.dataset.sourceIdentity && quote.dataset.sourceMessageId) {
-        anchor = {
-          kind: "source",
-          sourceIdentity: quote.dataset.sourceIdentity,
-          messageID: quote.dataset.sourceMessageId,
-          offset: rect.top - viewport.top,
-        }
-        break
-      }
-      const blocks = Array.from(quote.querySelectorAll<HTMLElement>(".md-frozen-block"))
-      const blockIndex = blocks.findIndex(block => {
-        const rect = block.getBoundingClientRect()
-        return rect.height > 0 && rect.bottom > viewport.top && rect.top < viewport.bottom
-      })
-      const messageID = quote.dataset.quotationMessage
-      if (blockIndex < 0 || !messageID) continue
-      anchor = {
-        kind: "text",
-        messageID,
-        textIndex: quotes.filter(node => node.dataset.quotationMessage === messageID).indexOf(quote),
-        blockIndex,
-        offset: blocks[blockIndex]!.getBoundingClientRect().top - viewport.top,
-      }
-      break
-    }
+    const anchor = captureConversationReadingAnchor(el)
     setMainReadingPosition(owner.key, { ...position, viewportWidth: el.clientWidth, anchor })
   }
   const changeTracking = (following: boolean, explicit = true) => {
@@ -550,23 +512,21 @@ export function Conversation(props: {
         if (!ownsReader(owner) || owner.pending !== position) return
         const cardID = targetCard()
         if (!cardID) throw new Error(`Main reading message ${anchor.messageID} is outside current conversation history`)
-        if (readingAnchorOwner(anchor)) setHistoryAnchorPinID(cardID)
+        if (conversationReadingAnchorOwner(el, anchor)) setHistoryAnchorPinID(cardID)
         else if (!await requestConversationCardScroll({ cardID, block: "start", readingRestore: true }))
           throw new Error(`Main reading card ${cardID} could not be mounted`)
         if (!ownsReader(owner) || owner.pending !== position) return
-        let element = readingAnchorOwner(anchor)
+        let element = conversationReadingAnchorOwner(el, anchor)
         for (let frame = 0; (!element || element.getBoundingClientRect().height <= 0) && frame < CARD_SCROLL_TARGET_MAX_FRAMES; frame++) {
           await waitForAnimationFrame()
           if (!ownsReader(owner) || owner.pending !== position) return
-          element = readingAnchorOwner(anchor)
+          element = conversationReadingAnchorOwner(el, anchor)
         }
         if (!element) throw new Error(`Main reading message ${anchor.messageID} has no visible ${anchor.kind} anchor`)
         createReaderController(position, {
           resolveTop: () => {
             if (!ownsReader(owner) || owner.pending !== position) return null
-            const current = readingAnchorElement(anchor)
-            if (!current || current.getBoundingClientRect().height <= 0) return null
-            return Math.max(0, el.scrollTop + current.getBoundingClientRect().top - el.getBoundingClientRect().top - anchor.offset)
+            return resolveConversationReadingTop(el, anchor)
           },
           onRestoreSettled,
         })

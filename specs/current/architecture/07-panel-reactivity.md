@@ -256,12 +256,17 @@ body is collapsed. Main conversation, Side Chat and member transcripts use
 the same bubble renderer and the same projected `CardNode.errorReason`; this
 presentation does not create a Message/Part or a second lifecycle source.
 
-Side Chat's visible reader retains its top/following intent in the existing
+Side Chat's visible reader retains its top/following intent and first visible
+Source row or Markdown block anchor in the existing
 conversation UI owner, keyed by applied authority, source and Side Session.
 Primary selection clears that bounded intent; hidden geometry and retired
 selection/authority owners cannot write it. The selected reader restores through
 the shared scroll controller, whose intent getter retains the original pending
-top through incomplete layout instead of saving a clamped zero. Explicit reader
+top through incomplete layout instead of saving a clamped zero. Main, Side Chat
+and member transcripts share one stateless content-anchor capture and resolution
+implementation. Returning to a Side Session after a hidden width change resolves
+the same original Source identity or Message/block offset in its current layout;
+intermediate restore geometry cannot replace the saved anchor. Explicit reader
 input and a return to the bottom retain the controller's existing semantics.
 
 The primary conversation keeps at most 50 reading positions in that same UI
@@ -462,7 +467,8 @@ and subsequent Tab navigation pauses following for the newly focused control.
 
 The sub-agent panel owns at most 32 recent reading positions, keyed by the
 canonical target identity including API authority, parent source, session and
-directory. These positions contain only viewport geometry and follow intent;
+directory. These positions contain viewport geometry, follow intent and the same
+Source/Markdown content anchor used by Main and Side Chat;
 transcript data still comes from the existing projection. The outer panel is
 force-mounted to retain this UI state across Dock closure. The canonical target
 identity is independent of visibility. Its already presented transcript and
@@ -474,8 +480,11 @@ reactivation catches up through the existing resource and cursor. Live projectio
 resets on actual target replacement, not on hiding the current target.
 The scroll controller follows visible activity: cleanup retires its listeners and
 observers while hidden, and reactivation restores from the same reading-position
-Map. Only visible active observations save the controller's reading intent,
-including its pending restore position instead of a transient layout clamp.
+Map. Only visible active observations outside pending restoration save the
+controller's reading intent and current content anchor. Hidden width changes
+resolve that anchor through the existing scroll controller on reactivation,
+including when a source grid changes column count. User input or successful
+settlement retires the pending restoration before new reading observations.
 Parent disposal clears the Map and retires the retained presentation.
 
 Each shared scroll-controller caller supplies an explicit initial bottom or

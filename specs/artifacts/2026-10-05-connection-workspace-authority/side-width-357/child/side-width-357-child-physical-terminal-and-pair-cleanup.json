@@ -1,0 +1,68 @@
+{
+  "listeners": null,
+  "chain": [
+    {
+      "expected": {
+        "pid": 78132,
+        "processInstanceID": "win32:639274230056364895",
+        "occurrenceID": "f431718e-eff6-439d-80e5-1176a8902ad8"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 75344,
+        "processInstanceID": "win32:639274230047659994",
+        "occurrenceID": "26522ee1-53a3-41e9-b2ce-11a8f19d4c59"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "side-width-357-child-0d9fc49b-f8f5-418e-aadb-915546f5034a",
+    "outcome": "settled",
+    "host": {
+      "pid": 75344,
+      "processInstanceID": "win32:639274230047659994",
+      "occurrenceID": "26522ee1-53a3-41e9-b2ce-11a8f19d4c59"
+    },
+    "target": {
+      "pid": 78132,
+      "processInstanceID": "win32:639274230056364895",
+      "occurrenceID": "f431718e-eff6-439d-80e5-1176a8902ad8"
+    },
+    "observedAtUtc": "2026-10-12T17:33:47.381Z",
+    "deadlineAt": 1791826804675,
+    "terminal": {
+      "occurrenceID": "side-width-357-child-0d9fc49b-f8f5-418e-aadb-915546f5034a",
+      "pid": 78132,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\side-width-357-child\\runtime\\data\\auth.json",
+      "outcome": "already_absent",
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\side-width-357-child\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "observedAtUtc": "2026-10-12T17:33:50.0748370Z",
+  "physicalCompletion": true,
+  "occurrence": "side-width-357-child-0d9fc49b-f8f5-418e-aadb-915546f5034a"
+}

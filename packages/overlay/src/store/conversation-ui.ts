@@ -2,8 +2,9 @@ import { batch } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
 import { getServerUrl, type ApiAuthority } from "../services/api-state"
 import type { BoardSource } from "./board"
+import type { ConversationReadingAnchor } from "../utils/conversation-reading-anchor"
 
-export type ConversationReadingPosition = { top: number; following: boolean }
+export type ConversationReadingPosition = { top: number; following: boolean; anchor?: ConversationReadingAnchor }
 export type ToolPayloadDisplayState = {
   raw?: boolean
   expanded?: boolean
@@ -13,10 +14,6 @@ export type ToolPayloadDisplayState = {
 }
 export type MainConversationReadingPosition = ConversationReadingPosition & {
   viewportWidth: number
-  anchor?: { messageID: string; offset: number } & (
-    | { kind: "text"; textIndex: number; blockIndex: number }
-    | { kind: "source"; sourceIdentity: string }
-  )
 }
 
 type ConversationUiState = {
@@ -245,7 +242,7 @@ export function setToolPayloadDisplayState(id: string, value: ToolPayloadDisplay
 export function setSideChatReadingPosition(id: string, position: ConversationReadingPosition): void {
   const current = currentState()
   if (!id || !current || !Number.isFinite(position.top)) return
-  setStore("conversations", store.activeKey, "sideChatReadingPositions", reconcile(remember(current.sideChatReadingPositions, id, { top: Math.max(0, position.top), following: position.following }), { merge: false }))
+  setStore("conversations", store.activeKey, "sideChatReadingPositions", reconcile(remember(current.sideChatReadingPositions, id, { ...position, top: Math.max(0, position.top) }), { merge: false }))
 }
 
 /** One visible main reader supplies its actual intent before projection retirement. */

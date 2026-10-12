@@ -1,0 +1,68 @@
+{
+  "chain": [
+    {
+      "expected": {
+        "pid": 43788,
+        "processInstanceID": "win32:639274227442381989",
+        "occurrenceID": "28f66cfc-a966-44f9-974f-df778bd2b962"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 49896,
+        "processInstanceID": "win32:639274227433582003",
+        "occurrenceID": "68aca964-e743-4d67-8ae2-f1b5dbbae787"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\side-width-357-after\\runtime\\data\\auth.json"
+    },
+    {
+      "copiedLength": 2001983,
+      "presentAfter": false,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\side-width-357-after\\runtime\\data\\models.json"
+    }
+  ],
+  "listeners": null,
+  "pairedCleanupComplete": true,
+  "nativeSettlement": {
+    "occurrence": "side-width-357-after-a3e3273f-9113-4166-8118-daa1f97ac262",
+    "outcome": "settled",
+    "host": {
+      "pid": 49896,
+      "processInstanceID": "win32:639274227433582003",
+      "occurrenceID": "68aca964-e743-4d67-8ae2-f1b5dbbae787"
+    },
+    "target": {
+      "pid": 43788,
+      "processInstanceID": "win32:639274227442381989",
+      "occurrenceID": "28f66cfc-a966-44f9-974f-df778bd2b962"
+    },
+    "observedAtUtc": "2026-10-12T17:29:41.877Z",
+    "deadlineAt": 1791826543270,
+    "terminal": {
+      "occurrenceID": "side-width-357-after-a3e3273f-9113-4166-8118-daa1f97ac262",
+      "pid": 43788,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-12T17:29:44.6993443Z",
+  "occurrence": "side-width-357-after-a3e3273f-9113-4166-8118-daa1f97ac262"
+}

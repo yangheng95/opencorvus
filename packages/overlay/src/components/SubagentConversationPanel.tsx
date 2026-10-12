@@ -30,6 +30,8 @@ import {
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { formatErrorDetails } from "../services/diagnostics"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
+import { captureConversationReadingAnchor, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
+import type { ConversationReadingPosition } from "../store/conversation-ui"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { t } from "../utils/i18n"
 import { isSubagentActivityRecord, subagentSessionRecords } from "../utils/subagent-presentation"
@@ -54,18 +56,18 @@ function selectedConversationDirectory(): string {
   return String(board.directory || "").trim()
 }
 
-type SubagentReadingPosition = { top: number; following: boolean }
 const MAX_REMEMBERED_READING_POSITIONS = 32
 
 function SubagentConversationScroll(props: {
   conversation: Accessor<SubagentConversationTranscript>
   active: Accessor<boolean>
-  readingPosition: Accessor<SubagentReadingPosition | undefined>
-  saveReadingPosition: (position: SubagentReadingPosition) => void
+  readingPosition: Accessor<ConversationReadingPosition | undefined>
+  saveReadingPosition: (position: ConversationReadingPosition) => void
   activity: Accessor<AgentActivityRecord | undefined>
 }) {
   let scrollElement: HTMLDivElement | undefined
   let scrollController: AutoScrollController | undefined
+  let restoringPosition = false
   const [tracking, setTracking] = createSignal(props.readingPosition()?.following ?? true)
   const card = createMemo(() => {
     const activity = props.activity()
@@ -82,8 +84,8 @@ function SubagentConversationScroll(props: {
   const saveReadingPosition = () => {
     // Hiding the pane can clamp its geometry before Solid retires this owner.
     // The last visible observation remains the reader's intended position.
-    if (props.active() && scrollController && scrollElement && scrollElement.clientHeight > 0)
-      props.saveReadingPosition(scrollController.readingPosition())
+    if (props.active() && !restoringPosition && scrollController && scrollElement && scrollElement.clientHeight > 0)
+      props.saveReadingPosition({ ...scrollController.readingPosition(), anchor: captureConversationReadingAnchor(scrollElement) })
   }
   const changeTracking = (value: boolean) => {
     setTracking(value)
@@ -96,10 +98,18 @@ function SubagentConversationScroll(props: {
     const layoutRoot = scrollElement.closest<HTMLElement>(".right-dock")
     if (!layoutRoot) throw new Error("Sub-agent conversation requires its right dock layout owner")
     const position = props.readingPosition()
+    restoringPosition = Boolean(position && !position.following)
     setTracking(position?.following ?? true)
     scrollController = setupAutoScroll(scrollElement, {
       initialPosition: position && !position.following
-        ? { kind: "position", top: position.top, layoutRoot }
+        ? {
+            kind: "position", top: position.top, layoutRoot,
+            resolveTop: position.anchor ? () => resolveConversationReadingTop(scrollElement!, position.anchor!) : undefined,
+            onRestoreSettled: () => {
+              restoringPosition = false
+              saveReadingPosition()
+            },
+          }
         : { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => changeTracking(false),
@@ -141,8 +151,8 @@ export function SubagentConversationPanel(props: {
   onSessionSelect: (sessionID: string) => void
 }) {
   type AgentOption = { sessionID: string; agentID: string }
-  const readingPositions = new Map<string, SubagentReadingPosition>()
-  const saveReadingPosition = (targetKey: string, position: SubagentReadingPosition) => {
+  const readingPositions = new Map<string, ConversationReadingPosition>()
+  const saveReadingPosition = (targetKey: string, position: ConversationReadingPosition) => {
     readingPositions.delete(targetKey)
     readingPositions.set(targetKey, position)
     if (readingPositions.size > MAX_REMEMBERED_READING_POSITIONS)
