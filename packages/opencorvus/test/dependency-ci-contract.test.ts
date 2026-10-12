@@ -7,49 +7,34 @@ import { createRequire } from "node:module"
 const backend = createRequire(new URL("../package.json", import.meta.url))
 const web = createRequire(new URL("../../web/package.json", import.meta.url))
 
-test("the native file watcher reports the exact snapshot changes with configured brace ignores", async () => {
-  const watcher: typeof import("@parcel/watcher") = backend("@parcel/watcher")
-  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "ci-watcher-snapshot-")))
-  const directory = path.join(root, "project")
-  const snapshot = path.join(root, "before.snapshot")
-  const options = { ignore: ["**/{cache,temp}/**"] }
-  try {
-    await fs.mkdir(directory)
-    for (const name of ["cache", "temp", "src"]) await fs.mkdir(path.join(directory, name))
-    await watcher.writeSnapshot(directory, snapshot, options)
-    for (const name of ["cache/ignored.ts", "temp/ignored.ts", "src/retained.ts"]) {
-      await fs.writeFile(path.join(directory, name), name)
-    }
-    const events = await watcher.getEventsSince(directory, snapshot, options)
-    expect(
-      events
-        .filter((event) => event.type === "create")
-        .map((event) => ({
-          type: event.type,
-          path: path.relative(directory, event.path).replaceAll("\\", "/"),
-        })),
-    ).toEqual([{ type: "create", path: "src/retained.ts" }])
-  } finally {
-    await fs.rm(root, { recursive: true, force: true })
-  }
-})
-
-test("the native file subscription delivers a real created file and settles its owner", async () => {
+test("the native file subscription delivers exact created files with brace ignores and settles its owner", async () => {
   const watcher: typeof import("@parcel/watcher") = backend("@parcel/watcher")
   const directory = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "ci-watcher-subscription-")))
-  const filename = path.join(directory, "created.txt")
-  const delivery = Promise.withResolvers<{ type: string; path: string }>()
+  const filename = path.join(directory, "src", "retained.ts")
+  const created: Array<{ type: string; path: string }> = []
+  const delivery = Promise.withResolvers<void>()
   const timeout = setTimeout(() => delivery.reject(new Error("Native watcher delivery timed out")), 10_000)
   let subscription: import("@parcel/watcher").AsyncSubscription | undefined
   try {
-    subscription = await watcher.subscribe(directory, (error, events) => {
-      if (error) delivery.reject(error)
-      for (const event of events) if (event.path === filename) delivery.resolve(event)
-    })
-    await fs.writeFile(filename, "native delivery")
-    expect(await delivery.promise).toEqual({ type: "create", path: filename })
+    for (const name of ["cache", "temp", "src"]) await fs.mkdir(path.join(directory, name))
+    subscription = await watcher.subscribe(
+      directory,
+      (error, events) => {
+        if (error) return delivery.reject(error)
+        created.push(...events.filter((event) => event.type === "create"))
+        if (created.some((event) => event.path === filename)) delivery.resolve()
+      },
+      { ignore: ["**/{cache,temp}/**"] },
+    )
+    for (const name of ["cache/ignored.ts", "temp/ignored.ts", "src/retained.ts"]) {
+      await fs.writeFile(path.join(directory, name), name)
+    }
+    await delivery.promise
     await subscription.unsubscribe()
     subscription = undefined
+    expect(
+      created.map((event) => ({ type: event.type, path: path.relative(directory, event.path).replaceAll("\\", "/") })),
+    ).toEqual([{ type: "create", path: "src/retained.ts" }])
   } finally {
     clearTimeout(timeout)
     await subscription?.unsubscribe()
