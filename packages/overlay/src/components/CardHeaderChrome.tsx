@@ -22,7 +22,7 @@ async function writeClipboard(text: string): Promise<boolean> {
   return true
 }
 
-export function CardErrorReasonIndicator(props: { reason: string }) {
+export function CardErrorReasonIndicator(props: { reason: string; details?: string }) {
   const [copyFeedback, setCopyFeedback] = createSignal<"copied" | "failed" | null>(null)
   let copyFeedbackTimer: number | undefined
 
@@ -33,7 +33,7 @@ export function CardErrorReasonIndicator(props: { reason: string }) {
   async function copyReason(): Promise<void> {
     if (copyFeedbackTimer !== undefined) window.clearTimeout(copyFeedbackTimer)
     try {
-      const copied = await writeClipboard(props.reason)
+      const copied = await writeClipboard([props.reason, props.details].filter(Boolean).join("\n\n"))
       setCopyFeedback(copied ? "copied" : "failed")
     } catch {
       setCopyFeedback("failed")
@@ -205,7 +205,7 @@ export function CardHeaderChrome(props: {
       <Show when={!props.hideErrorReason && props.node.status === "error" && props.node.errorReason}>
         {(reason) => (
           <div class="card__error-actions">
-            <CardErrorReasonIndicator reason={reason()} />
+            <CardErrorReasonIndicator reason={reason()} details={props.node.errorDetails} />
           </div>
         )}
       </Show>

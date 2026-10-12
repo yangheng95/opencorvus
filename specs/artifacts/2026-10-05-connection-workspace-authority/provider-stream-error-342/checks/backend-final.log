@@ -1,0 +1,30 @@
+$ bun script/run-tests.ts test/provider-stream-error.test.ts test/provider-error-redaction.test.ts
+[1/2] START test/provider-stream-error.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) typed nested and flat stream events expose Provider message and code [2.46ms]
+(pass) actual overload maps to a readable APIError with its diagnostic body [0.89ms]
+(pass) stream diagnostics use structured redaction and retain ordinary coordinates [0.57ms]
+(pass) flat quota and context failures retain their explicit contracts [0.29ms]
+(pass) consumed output followed by a Provider error settles as an explicit failed activity [2.65ms]
+
+ 5 pass
+ 0 fail
+ 10 expect() calls
+Ran 5 tests across 1 file. [1.92s]
+[1/2] DONE test/provider-stream-error.test.ts exit=0 duration=2.59s
+[2/2] START test/provider-error-redaction.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ProviderError redacts provider credential fragments while preserving diagnostics [0.41ms]
+(pass) ProviderError projects safe response-header diagnostics without transient credentials [1.74ms]
+(pass) ProviderError redacts complete structured credential fields while preserving safe coordinates [5.39ms]
+(pass) ProviderError returns redacted stream error contracts for every recognized provider error [0.50ms]
+
+ 4 pass
+ 0 fail
+ 20 expect() calls
+Ran 4 tests across 1 file. [849.00ms]
+[2/2] DONE test/provider-error-redaction.test.ts exit=0 duration=1.00s

@@ -1642,6 +1642,20 @@ export namespace Session {
   })
   export type PersistMessageInput = z.infer<typeof PersistMessageInput>
 
+  function initialMessageForPartWrite(info: Message.Info): Message.Info {
+    if (info.role !== "assistant" || info.time.completed === undefined) return info
+    const { completed: _completed, ...time } = info.time
+    const {
+      finish: _finish,
+      error: _error,
+      failureOccurrence: _failureOccurrence,
+      convergenceFailure: _convergenceFailure,
+      observationFailures: _observationFailures,
+      ...assistant
+    } = info
+    return { ...assistant, time }
+  }
+
   function persistMessageBundleRows(
     input: PersistMessageInput,
     commit?: () => void,
@@ -1663,12 +1677,7 @@ export namespace Session {
         .from(MessageTable)
         .where(eq(MessageTable.id, input.info.id))
         .get()
-      let initialInfo = input.info
-      if (!existing && input.info.role === "assistant" && input.info.time.completed !== undefined) {
-        const { completed: _completed, ...initialTime } = input.info.time
-        const { finish: _finish, error: _error, ...initialAssistant } = input.info
-        initialInfo = { ...initialAssistant, time: initialTime } as Message.Info
-      }
+      const initialInfo = existing ? input.info : initialMessageForPartWrite(input.info)
       const initialPersisted = upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
       beforeVisibilityEffects?.()
       if (!existing) {
@@ -2440,12 +2449,7 @@ export namespace Session {
           } as Message.Info & { orderKey?: string }
           const existing = db.select({ id: MessageTable.id }).from(MessageTable)
             .where(eq(MessageTable.id, messageInfo.id)).get()
-          let initialInfo = messageInfo
-          if (!existing && messageInfo.role === "assistant" && messageInfo.time.completed !== undefined) {
-            const { completed: _completed, ...initialTime } = messageInfo.time
-            const { finish: _finish, error: _error, ...initialAssistant } = messageInfo
-            initialInfo = { ...initialAssistant, time: initialTime } as Message.Info
-          }
+          const initialInfo = existing ? messageInfo : initialMessageForPartWrite(messageInfo)
           upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
           for (const part of msg.parts) {
             const { orderKey: _partOrderKey, ...partInfo } = {

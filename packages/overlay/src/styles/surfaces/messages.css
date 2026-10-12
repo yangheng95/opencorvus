@@ -337,6 +337,26 @@
   overflow-x: auto;
 }
 
+.msg-assistant-error {
+  font-family: inherit;
+  white-space: normal;
+}
+
+.msg-assistant-error__details {
+  margin-top: var(--ui-gap-sm);
+  color: var(--text-soft);
+}
+
+.msg-assistant-error__details pre {
+  margin: var(--ui-gap-sm) 0 0;
+  font-family: var(--mono);
+  font-size: var(--ui-font-body);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
 .msg-tool-diffs {
   display: flex;
   flex-direction: column;

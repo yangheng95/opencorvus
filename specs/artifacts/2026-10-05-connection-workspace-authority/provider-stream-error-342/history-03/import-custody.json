@@ -1,0 +1,55 @@
+{
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/skill-loader-341-live-01",
+  "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/provider-stream-error-342-history-03",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project",
+  "projectID": "prj_hzFmYE2g0r98G6gaV0zz",
+  "sessionID": "ses_-zUSBKhbizzj0BUgz0kf",
+  "messages": 9,
+  "parts": 21,
+  "error": {
+    "author": "work",
+    "role": "assistant",
+    "time": {
+      "created": 1791788355589,
+      "completed": 1791788358707
+    },
+    "error": {
+      "name": "UnknownError",
+      "data": {
+        "message": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+      }
+    },
+    "failureOccurrence": {
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "assistant_message_id": "msg_g0VXofL0v00voJgQANZ1",
+      "error_name": "UnknownError"
+    },
+    "parentID": "msg_cb5da2ac-d9bc-46c4-b701-52047aabcdd2",
+    "acceptedInputMessageIDs": [
+      "msg_cb5da2ac-d9bc-46c4-b701-52047aabcdd2"
+    ],
+    "modelID": "gpt-6.1-sol",
+    "providerID": "openai",
+    "agent": "work",
+    "path": {
+      "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project",
+      "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project"
+    },
+    "cost": 0,
+    "tokens": {
+      "total": 0,
+      "input": 0,
+      "output": 0,
+      "reasoning": 0,
+      "cache": {
+        "read": 0,
+        "write": 0
+      }
+    },
+    "finish": "error",
+    "orderKey": "v1:0001791788355589:0000000000000030:0000000000000000:message:msg_g0VXofL0v00voJgQANZ1",
+    "id": "msg_g0VXofL0v00voJgQANZ1",
+    "sessionID": "ses_-zUSBKhbizzj0BUgz0kf"
+  },
+  "contract": "Actual source readonly export through current schemas/tool projection, formal importSessionData, persisted Message.Info equality; no generated messages or background memory copied"
+}

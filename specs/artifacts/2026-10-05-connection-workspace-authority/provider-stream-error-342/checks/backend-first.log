@@ -1,0 +1,55 @@
+$ bun script/run-tests.ts test/provider-stream-error.test.ts test/provider-error-redaction.test.ts
+[1/2] START test/provider-stream-error.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) typed nested and flat stream events expose Provider message and code [3.01ms]
+(pass) actual overload maps to a readable APIError with its diagnostic body [1.19ms]
+(pass) stream diagnostics use structured redaction and retain ordinary coordinates [0.69ms]
+(pass) flat quota and context failures retain their explicit contracts [0.31ms]
+67 |       yield { type: "error", error: overload }
+68 |     })() }),
+69 |   }).catch((error) => error)
+70 |   expect(deltas).toEqual(["Partial answer"])
+71 |   expect(result).toMatchObject({ cls: "provider_stream_error", attempts: 0, cause: overload })
+72 |   expect(events.filter((event) => event.type === "llm.terminal")).toMatchObject([
+                                                                       ^
+error: expect(received).toMatchObject(expected)
+
+- [
+-   {
+-     "cls": "provider_stream_error",
+-     "outcome": "failed",
+-   },
+- ]
++ []
+
+- Expected  - 6
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-stream-error.test.ts:72:67)
+(fail) consumed output followed by a Provider error settles as an explicit failed activity [4.31ms]
+
+ 4 pass
+ 1 fail
+ 10 expect() calls
+Ran 5 tests across 1 file. [2.37s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-stream-error.test.ts
+[1/2] DONE test/provider-stream-error.test.ts exit=1 duration=2.99s
+[2/2] START test/provider-error-redaction.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ProviderError redacts provider credential fragments while preserving diagnostics [0.57ms]
+(pass) ProviderError projects safe response-header diagnostics without transient credentials [1.49ms]
+(pass) ProviderError redacts complete structured credential fields while preserving safe coordinates [4.56ms]
+(pass) ProviderError returns redacted stream error contracts for every recognized provider error [0.41ms]
+
+ 4 pass
+ 0 fail
+ 20 expect() calls
+Ran 4 tests across 1 file. [922.00ms]
+[2/2] DONE test/provider-error-redaction.test.ts exit=0 duration=1.05s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-stream-error.test.ts
+error: script "test" exited with code 1

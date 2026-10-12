@@ -253,6 +253,7 @@ export interface CardNode {
    *  Surfaced in CardHeader as a read-only chip when present so the operator
    *  sees why the card flipped red instead of only the badge color change. */
   errorReason?: string
+  errorDetails?: string
   /** Terminal display semantic projected from `agent.execution.lifecycle`.
    *  Overlay keeps this separate from `status` because cancelled/aborted
    *  sessions intentionally use the terminal status channel while rendering

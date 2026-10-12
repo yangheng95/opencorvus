@@ -51,6 +51,7 @@ export type ErrorClass =
   | "network"
   | "server_5xx"
   | "stream_protocol"
+  | "provider_stream_error"
   | "client_4xx"
   | "request_timeout"
   | "payload_too_large"
@@ -300,6 +301,11 @@ function classify(err: unknown, ctx: ClassifyContext): ErrorClass {
   // condition; it must not fall through to the retryable "unknown" default.
   if (isHostProcessingFault(err)) return "host_fault"
   if (ProviderAuthRequiredError.isInstance(err)) return "auth_required"
+
+  // Semantic failures delivered inside a stream are not HTTP failures. Replaying
+  // them may repeat already consumed output, so retain a distinct terminal class.
+  const streamError = ProviderError.parseStreamError(err)
+  if (streamError) return streamError.type === "context_overflow" ? "context_overflow" : "provider_stream_error"
 
   // HTTP status — APICallError carries it directly; ctx.httpStatus is the
   // explicit override path for callers that already extracted it.

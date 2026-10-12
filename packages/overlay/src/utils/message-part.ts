@@ -1,4 +1,5 @@
 import {
+  decodeProviderStreamError,
   isConversationDisplayMessagePartType,
   isConversationRenderableMessagePartType,
 } from "@opencorvus-ai/transport-protocol"
@@ -39,23 +40,29 @@ export function messagePartHasDisplayContent(part: any): boolean {
   return true
 }
 
-export function assistantMessageErrorReason(info: any): string | undefined {
+export function messageFailurePresentation(reason: string, responseBody?: string): { reason: string; details?: string } {
+  const packet = decodeProviderStreamError(reason)
+  const details = responseBody?.trim() || (packet ? reason : undefined)
+  return { reason: packet?.message ?? packet?.code ?? packet?.type ?? reason, details }
+}
+
+export function assistantMessageFailure(info: any): { reason: string; details?: string } | undefined {
   if (String(info?.role || "") !== "assistant" || !info?.error) return undefined
   const error = info.error
   if (typeof error === "object") {
-    const dataMessage = error?.data?.message
-    if (typeof dataMessage === "string" && dataMessage.trim()) return dataMessage.trim()
-    const message = error?.message
-    if (typeof message === "string" && message.trim()) return message.trim()
-    const name = error?.name
-    if (typeof name === "string" && name.trim()) return name.trim()
+    const reason = [error?.data?.message, error?.message, error?.name]
+      .find((value) => typeof value === "string" && value.trim())?.trim()
+    if (reason) {
+      const responseBody = error?.data?.responseBody
+      return messageFailurePresentation(reason, typeof responseBody === "string" ? responseBody : undefined)
+    }
   }
   throw new Error(`assistant message ${String(info.id || "")} has an error without a displayable reason`)
 }
 
 export function conversationMessageHasDisplayContent(message: { info?: unknown; parts?: unknown } | null | undefined): boolean {
   return Boolean(
-    assistantMessageErrorReason(message?.info) ||
+    assistantMessageFailure(message?.info) ||
       (Array.isArray(message?.parts) && message.parts.some(messagePartHasDisplayContent)),
   )
 }

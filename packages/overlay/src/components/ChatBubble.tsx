@@ -26,6 +26,7 @@ import { storeCardNode } from "./StoreCardNode"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { ConversationTurnControl } from "./ConversationTurnControl"
+import { Disclosure } from "./ui/Disclosure"
 
 function UnsupportedChatBubbleChild(props: { child: CardNode; parentID: string }): null {
   throw new Error(`ChatBubble: unsupported child kind "${props.child.kind}" for ${props.parentID}`)
@@ -55,9 +56,17 @@ function ChatBubbleFailureState(props: { node: CardNode }) {
   const errorReason = () => props.node.errorReason?.trim() || ""
   return (
     <Show when={props.node.status === "error" && errorReason()}>
-      <div class="msg-tool-error" data-agent-error-card-id={props.node.id} role="alert">
+      <div class="msg-tool-error msg-assistant-error" data-agent-error-card-id={props.node.id} role="alert">
         <strong>{t("card.error_reason_title")}</strong>
         <div>{errorReason()}</div>
+        <Show when={props.node.errorDetails}>
+          {(details) => (
+            <Disclosure.Root class="msg-assistant-error__details" size="sm">
+              <Disclosure.Trigger>{t("common.details")}</Disclosure.Trigger>
+              <Disclosure.Content><pre>{details()}</pre></Disclosure.Content>
+            </Disclosure.Root>
+          )}
+        </Show>
       </div>
     </Show>
   )
@@ -143,7 +152,7 @@ function ChatBubbleChild(props: {
         <div class="chat-bubble__child-identity">
           <ChatBubbleIdentity node={child()} compact />
           <Show when={child().status === "error" && String(child().errorReason || "").trim()}>
-            {(reason) => <CardErrorReasonIndicator reason={reason()} />}
+            {(reason) => <CardErrorReasonIndicator reason={reason()} details={child().errorDetails} />}
           </Show>
         </div>
       </Show>
@@ -303,7 +312,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
                 </span>
               </Button>
             </Show>
-            <Show when={errorReason()}>{(reason) => <CardErrorReasonIndicator reason={reason()} />}</Show>
+            <Show when={errorReason()}>{(reason) => <CardErrorReasonIndicator reason={reason()} details={props.node.errorDetails} />}</Show>
             <Show when={errorReason()}>
               <CardDurationChip node={props.node} />
             </Show>

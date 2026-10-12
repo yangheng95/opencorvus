@@ -1,0 +1,2 @@
+$ tsc --noEmit
+src/components/ChatBubble.tsx(155,85): error TS2551: Property 'child' does not exist on type '{ childID: string; depth: number; parentID: string; rootTaskSessionID?: string; onOperatorSteer: (sessionID: string, requestID: string, message: string) => Promise<OperatorSteerResult>; }'. Did you mean 'childID'?

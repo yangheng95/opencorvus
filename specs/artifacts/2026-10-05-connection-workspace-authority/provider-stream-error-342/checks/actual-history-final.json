@@ -1,0 +1,83 @@
+{
+  "checkedAt": "2026-10-12T07:57:49.208Z",
+  "source": "Actual341 readonly session export and formal production import, no fabricated messages",
+  "facts": {
+    "messages": 9,
+    "assistantMessages": 7,
+    "parts": 21,
+    "providerRequests": 0,
+    "error": {
+      "id": "msg_g0VXofL0v00voJgQANZ1",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+        }
+      }
+    }
+  },
+  "asset": {
+    "level": "info",
+    "time": "2026-10-12T07:56:17.401Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "0819241c-d34d-4968-95c8-405530d059de",
+      "method": "GET",
+      "path": "/ui/assets/main-DrobkXyT.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2
+    },
+    "message": "request"
+  },
+  "initialLauncherHandle": 57394,
+  "launcherExitCode": 0,
+  "native": {
+    "occurrence": "provider-stream-error-342-history-04-55dc87a4-811b-4b45-994a-e88d37ebb11b",
+    "outcome": "settled",
+    "host": {
+      "pid": 71700,
+      "processInstanceID": "win32:639273885623843153",
+      "occurrenceID": "0a97bc71-94f4-4bf8-9071-730e3dba3fdb"
+    },
+    "target": {
+      "pid": 78368,
+      "processInstanceID": "win32:639273885631419346",
+      "occurrenceID": "623632f2-f7a4-464a-a459-9d535c1bf058"
+    },
+    "observedAtUtc": "2026-10-12T07:57:15.123Z",
+    "deadlineAt": 1791792362295,
+    "terminal": {
+      "occurrenceID": "provider-stream-error-342-history-04-55dc87a4-811b-4b45-994a-e88d37ebb11b",
+      "pid": 78368,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "elapsedMs": 71982,
+  "credentialStaging": "None; history only, model catalog intentionally absent",
+  "screenshots": {
+    "01-error-summary.png": "Initial viewport misses target; retained as incomplete capture",
+    "02-error-summary-visible.png": "Readable summary, upper edge clipped",
+    "03-error-details.png": "Entire error card and exact raw packet manually reviewed",
+    "04-error-summary-final.png": "Full collapsed card after keyboard Return, manually reviewed"
+  },
+  "copy": "Actual double-click showed Copied. Browser virtual clipboard returned unrelated older contents; raw read kept privately. Source uses Host native clipboard, so browser virtual read does not prove actual copy content. Content verification remains incomplete.",
+  "limitations": [
+    "No fresh upstream overload reproduction",
+    "No child Dock or Side Chat visual error occurrence in this run",
+    "No new model request",
+    "Original341 Memory retry_wait/pending1 retained outside imported conversation"
+  ],
+  "finalScreenshots": {
+    "06-authority-details.png": "Final history-04 page127 expanded raw diagnostic, manually reviewed",
+    "05-authority-summary.png": "Final history-04 page127 collapsed error, manually reviewed"
+  },
+  "earlierScreenshotAndCopyScope": "The earlier screenshots/copy observations above belong to history-03; final visual evidence is 05/06 and page127."
+}

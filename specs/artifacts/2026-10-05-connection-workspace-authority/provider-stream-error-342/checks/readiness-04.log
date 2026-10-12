@@ -1,0 +1,244 @@
+{
+  "schemaDrift": null,
+  "projects": [
+    {
+      "id": "prj_hzFmYE2g0r98G6gaV0zz",
+      "config": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "full_access",
+        "$schema": "https://opencorvus.ai/config.json",
+        "model": "openai/gpt-6.1-sol",
+        "small_model": "openai/gpt-6.1-sol",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "primary_assistant_capabilities": {
+          "work": {
+            "skill_refs": [
+              "page-probe-340"
+            ],
+            "mcp_server_refs": []
+          }
+        },
+        "terminal": {
+          "default_profile_id": "powershell",
+          "profiles": {
+            "powershell": {
+              "label": "Windows PowerShell",
+              "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "pwsh": {
+              "label": "PowerShell",
+              "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "cmd": {
+              "label": "Command Prompt",
+              "command": "C:\\WINDOWS\\system32\\cmd.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "command-prompt"
+            },
+            "git-bash": {
+              "label": "Git Bash",
+              "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "bash"
+            }
+          }
+        },
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        }
+      },
+      "files": 67
+    }
+  ],
+  "tasks": [],
+  "leases": [],
+  "capacity": [],
+  "controls": [],
+  "permissions": [],
+  "permissionRequests": [],
+  "checkpoints": [],
+  "messages": [
+    {
+      "id": "msg_cb5da2ac-d9bc-46c4-b701-52047aabcdd2",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "user",
+      "completed_at": null,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofIdr00lhbGCgeF4",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788355529,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofL0v00voJgQANZ1",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788358707,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_fb07ad69-1073-412d-b001-d8dd99937b83",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "user",
+      "completed_at": null,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofgUi00MjFu0741U",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788447249,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofire00CrwNmPJEt",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788458224,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXoflii001yfD73e0Z",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788469211,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofoZs00jYvhI6ClU",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788478945,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofr6t00gOBoR3ZCk",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788494509,
+      "pending_delivery": null
+    }
+  ],
+  "memory": [],
+  "memoryDocuments": [
+    {
+      "projectID": "prj_hzFmYE2g0r98G6gaV0zz",
+      "fileID": "mem_h1D6dP5wOk1Hz0M0ZUe7",
+      "chunkID": "mck_h1BKgV6o06OrYxwVDSEn",
+      "state": "fresh-import-without-memory-document"
+    }
+  ],
+  "recoveryTableCounts": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "providerPending": [],
+  "toolPending": [],
+  "unsettledPublications": [],
+  "unsettledDeliveries": []
+}

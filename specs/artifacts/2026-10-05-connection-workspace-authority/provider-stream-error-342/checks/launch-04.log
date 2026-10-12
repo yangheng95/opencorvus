@@ -1,0 +1,35 @@
+{
+  "settlementEvidenceRoot": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/provider-stream-error-342/history-04",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\provider-stream-error-342-history-04\\runtime",
+  "evidencePrefix": "provider-stream-error-342-history-04",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\provider-stream-error-342-history-04\\evidence",
+  "occurrence": "provider-stream-error-342-history-04-55dc87a4-811b-4b45-994a-e88d37ebb11b",
+  "targetBirthAtMs": 1791791763141,
+  "host": {
+    "pid": 71700,
+    "processInstanceID": "win32:639273885623843153",
+    "occurrenceID": "0a97bc71-94f4-4bf8-9071-730e3dba3fdb"
+  },
+  "port": 18319,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project",
+  "authorityStaging": "None; no model Task requested",
+  "nativeDeadlineAt": 1791792362295,
+  "observedProcessChain": [
+    {
+      "pid": 78368,
+      "processInstanceID": "win32:639273885631419346",
+      "occurrenceID": "623632f2-f7a4-464a-a459-9d535c1bf058"
+    }
+  ],
+  "owner": {
+    "ProcessId": 78368,
+    "processInstanceID": "win32:639273885631419346"
+  },
+  "nativeTarget": {
+    "pid": 78368,
+    "processInstanceID": "win32:639273885631419346",
+    "occurrenceID": "623632f2-f7a4-464a-a459-9d535c1bf058"
+  },
+  "purpose": "Current credentialless complete original ordinary Session history; no Provider or Task rearm",
+  "runRoot": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/provider-stream-error-342-history-04"
+}

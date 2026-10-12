@@ -1,4 +1,5 @@
 import { APICallError } from "ai"
+import { decodeProviderStreamError } from "@opencorvus-ai/transport-protocol"
 import { STATUS_CODES } from "http"
 import { createScanner, parseTree, type Node as JSONNode } from "jsonc-parser"
 import { iife } from "@/util/iife"
@@ -404,46 +405,51 @@ export namespace ProviderError {
       }
 
   export function parseStreamError(input: unknown): ParsedStreamError | undefined {
-    const body = json(input)
-    if (!body) return
-
-    const responseBody = JSON.stringify(body)
-    if (body.type !== "error") return
+    const decoded = decodeProviderStreamError(input)
+    if (!decoded) return
+    const body = decoded.body
+    const responseBody = redactSensitiveProviderPayload(JSON.stringify(body))
 
     const overflow = overflowSignal(body)
     if (overflow) {
       return {
         type: "context_overflow",
         message: redactSensitiveProviderText(overflow),
-        responseBody: redactSensitiveProviderText(responseBody),
+        responseBody,
       }
     }
 
-    switch (body?.error?.code) {
+    switch (decoded.code) {
       case "insufficient_quota":
         return {
           type: "api_error",
           message: "Quota exceeded. Check your plan and billing details.",
           isRetryable: false,
-          responseBody: redactSensitiveProviderText(responseBody),
+          responseBody,
         }
       case "usage_not_included":
         return {
           type: "api_error",
           message: "To use Codex with your ChatGPT plan, upgrade to Plus: https://chatgpt.com/explore/plus.",
           isRetryable: false,
-          responseBody: redactSensitiveProviderText(responseBody),
+          responseBody,
         }
       case "invalid_prompt":
         return {
           type: "api_error",
           message:
-            typeof body?.error?.message === "string"
-              ? redactSensitiveProviderText(body?.error?.message)
+            decoded.message
+              ? redactSensitiveProviderText(decoded.message)
               : "Invalid prompt.",
           isRetryable: false,
-          responseBody: redactSensitiveProviderText(responseBody),
+          responseBody,
         }
+    }
+    return {
+      type: "api_error",
+      message: redactSensitiveProviderText(decoded.message ?? decoded.code ?? decoded.type!),
+      isRetryable: false,
+      responseBody,
     }
   }
 

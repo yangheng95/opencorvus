@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [342 流式错误展示](provider-stream-error-plan-342.md)：真实过载包的可读摘要、诊断详情与非重放终态。
+
 - [341 Skill调用入口](skill-loader-plan-341.md)：通用loader直接可用，精确Skill范围由轮次授权持有。
 
 - [340 Skill文件分页](skill-page-plan-340.md)：统一分页计数、字节上限与续读事实。

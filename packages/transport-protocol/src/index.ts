@@ -5,6 +5,7 @@
  */
 import { z } from "zod"
 import { ProductPillarSchema } from "@opencorvus-ai/util/product-pillar"
+export { decodeProviderStreamError } from "./provider-stream-error"
 
 export { ProductPillarSchema }
 export type { ProductPillar } from "@opencorvus-ai/util/product-pillar"

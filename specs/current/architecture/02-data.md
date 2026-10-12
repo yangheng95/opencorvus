@@ -850,5 +850,7 @@ harvest。
 
 ## 相关文档
 
+完成的助手消息在原子整批写入及正式会话导入时，共用同一初始行构造器：先在事务内保留可写入 Parts 的开放行，临时移除 completed、finish、error 以及依附 error 的 failureOccurrence、convergenceFailure、observationFailures；Parts 写入后再统一持久化完整原终态。临时行不作为对外消息发布，最终错误及诊断归属必须满足原 Message schema，已完成消息仍不可变。
+
 - [17-code-work-agent-platform.md](17-code-work-agent-platform.md) — 动态 Agent 投影、runtime template 与 typed adapter 的职责边界
 - [03-control.md](03-control.md) — Trace/Bus 如何流向 overlay

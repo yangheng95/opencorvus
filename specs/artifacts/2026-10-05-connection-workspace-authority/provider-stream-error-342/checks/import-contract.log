@@ -1,0 +1,13 @@
+$ bun script/run-tests.ts test/session/completed-failure-write.test.ts
+[1/1] START test/session/completed-failure-write.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) import atomically retains completed assistant failure evidence and authored text [1935.43ms]
+(pass) persist atomically retains completed assistant failure evidence and authored text [1454.95ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [5.38s]
+[1/1] DONE test/session/completed-failure-write.test.ts exit=0 duration=5.95s

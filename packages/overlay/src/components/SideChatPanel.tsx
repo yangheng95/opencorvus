@@ -30,7 +30,7 @@ import { quotedPrompt, type Quotation } from "../services/quotation"
 import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "../services/subagent-conversation"
 import { formatErrorDetails } from "../services/diagnostics"
 import { pauseAutoScrollForReading, setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
-import { assistantMessageErrorReason, conversationMessageHasDisplayContent, isCardBodyMessagePart } from "../utils/message-part"
+import { assistantMessageFailure, conversationMessageHasDisplayContent, isCardBodyMessagePart } from "../utils/message-part"
 import { t } from "../utils/i18n"
 import { ConversationCard } from "./ConversationCard"
 import { QuotationSelection } from "./QuotationSelection"
@@ -55,7 +55,8 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
     const message = props.message
     const user = message.info.role === "user"
     const time = message.info.time as { completed?: number } | undefined
-    const errorReason = assistantMessageErrorReason(message.info)
+    const failure = assistantMessageFailure(message.info)
+    const errorReason = failure?.reason
     return {
       id: `side-message:${message.messageID}`,
       kind: "agent" as const,
@@ -73,6 +74,7 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
           ? ("completed" as const)
           : ("running" as const),
       errorReason,
+      errorDetails: failure?.details,
       orderKey: message.orderKey,
       time: message.time,
       timeCompleted: time?.completed,

@@ -3,7 +3,7 @@ import type { CardNode } from "../store/card-tree"
 import type { AgentActivityRecord } from "../utils/agent-activity"
 import { conversationMessageDisplayStage, isDelegatedContextMessage } from "../utils/message-origin"
 import {
-  assistantMessageErrorReason,
+  assistantMessageFailure,
   conversationMessageHasDisplayContent,
   isCardBodyMessagePart,
 } from "../utils/message-part"
@@ -502,8 +502,8 @@ export function projectSubagentConversationCard(
   const first = messages[0]
   if (!first) return null
   const last = messages.at(-1) ?? first
-  const errorReason = messages
-    .map((message) => assistantMessageErrorReason(message.info))
+  const failure = messages
+    .map((message) => assistantMessageFailure(message.info))
     .filter(Boolean)
     .at(-1)
   const parts: any[] = []
@@ -533,8 +533,9 @@ export function projectSubagentConversationCard(
     messageID: first.messageID,
     stage: last.stage,
     role: last.stage,
-    status: errorReason ? "error" : status,
-    errorReason,
+    status: failure ? "error" : status,
+    errorReason: failure?.reason,
+    errorDetails: failure?.details,
     title: last.agentID,
     parts,
     childIDs: [],

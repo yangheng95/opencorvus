@@ -1,0 +1,13 @@
+48 |   const memory = sqlite.query("SELECT f.id,f.project_id,f.kind,f.source,f.key,c.id AS chunk_id,length(c.content) AS content_chars FROM memory_file f LEFT JOIN memory_chunk c ON c.file_id=f.id ORDER BY f.project_id,f.id").all()
+49 |   const memoryDocuments = projects.map(project => {
+50 |     const fileID = ProjectMemory.TestHooks.documentFile(project.id)
+51 |     const chunkID = ProjectMemory.TestHooks.documentChunk(project.id)
+52 |     const chunk = sqlite.query("SELECT content FROM memory_chunk WHERE id=? AND file_id=?").get(chunkID, fileID) as {content:string}|null
+53 |     if (!chunk) throw Error(`Project ${project.id} document must be qualified before any bootstrap initialization`)
+                           ^
+error: Project prj_hzFmYE2g0r98G6gaV0zz document must be qualified before any bootstrap initialization
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\provider-stream-error-342\import-readiness.ts:53:23)
+      at map (1:11)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\provider-stream-error-342\import-readiness.ts:49:36
+
+Bun v1.4.0 (Windows x64)

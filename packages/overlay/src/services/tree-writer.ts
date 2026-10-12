@@ -39,7 +39,7 @@ import {
 } from "../store/card-tree-stats"
 import { boardStore, setBoardProjectionHandler, setBoardStore } from "../store/board"
 import { agentStageLabel, normalizeAgentRole, roleLabel } from "../utils/message"
-import { assistantMessageErrorReason, conversationMessageHasDisplayContent, isBoundaryMessagePart, isCardBodyMessagePart, messagePartHasDisplayContent } from "../utils/message-part"
+import { assistantMessageFailure, messageFailurePresentation, conversationMessageHasDisplayContent, isBoundaryMessagePart, isCardBodyMessagePart, messagePartHasDisplayContent } from "../utils/message-part"
 import { conversationMessageDisplayStage, isDelegatedContextMessage, type MessageOrigin } from "../utils/message-origin"
 import { stageAccent } from "../utils/card-color"
 import { t } from "../utils/i18n"
@@ -123,12 +123,13 @@ function assistantMessageSettlement(info: any): ProjectedSessionStatus | undefin
       ...(completedAt > 0 ? { timeCompleted: completedAt } : {}),
     }
   }
-  const errorReason = assistantMessageErrorReason(info)
-  if (errorReason) {
+  const failure = assistantMessageFailure(info)
+  if (failure) {
     return {
       cardStatus: "error",
       terminalReason: "error",
-      errorReason,
+      errorReason: failure.reason,
+      errorDetails: failure.details,
       ...(completedAt > 0 ? { timeCompleted: completedAt } : {}),
     }
   }
@@ -495,6 +496,7 @@ interface ProjectedSessionStatus {
   cardStatus: CardStatus
   terminalReason?: CardTerminalReason
   errorReason?: string
+  errorDetails?: string
   timeCompleted?: number
 }
 const pendingSessionStatus = new Map<string, ProjectedSessionStatus>()
@@ -1856,7 +1858,9 @@ function projectSessionStatus(event: any): ProjectedSessionStatus {
     projected.terminalReason = terminalCardProjection(status).terminalReason
     projected.timeCompleted = eventEmittedAt(event, "agent.execution.lifecycle terminal")
     if (cardStatus === "error") {
-      projected.errorReason = typeof status.error === "string" ? status.error : ""
+      const failure = messageFailurePresentation(typeof status.error === "string" ? status.error : "")
+      projected.errorReason = failure.reason
+      projected.errorDetails = failure.details
     }
   }
   return projected
@@ -1881,8 +1885,19 @@ function applyProjectedSessionStatus(cardID: string, projected: ProjectedSession
   ) {
     setCardTreeStore("cards", cardID, "timeCompleted", projected.timeCompleted)
   }
-  if (projected.errorReason) {
-    setCardTreeStore("cards", cardID, "errorReason", projected.errorReason)
+  let latestMessage: MessageInfo | undefined
+  if (projected.inputMessageID) {
+    for (const message of messages.values()) {
+      if (message.sessionID !== projected.sessionID || message.parentMessageID !== projected.inputMessageID) continue
+      if (!latestMessage || compareTimelineOrderKeys(message.orderKey, latestMessage.orderKey, "failure message") > 0) {
+        latestMessage = message
+      }
+    }
+  }
+  const failure = latestMessage?.settlement?.errorReason ? latestMessage.settlement : projected
+  if (failure.errorReason) {
+    setCardTreeStore("cards", cardID, "errorReason", failure.errorReason)
+    setCardTreeStore("cards", cardID, "errorDetails", failure.errorDetails)
   }
 }
 
@@ -2955,6 +2970,7 @@ function projectedCardIsUnchanged(
     timeCompleted: number | undefined
     terminalReason: CardTerminalReason | undefined
     errorReason: string | undefined
+    errorDetails: string | undefined
     collapsedContextMessageIDs: string[]
   },
   parts: readonly any[],
@@ -2973,7 +2989,8 @@ function projectedCardIsUnchanged(
     current.status !== fields.status ||
     current.timeCompleted !== fields.timeCompleted ||
     current.terminalReason !== fields.terminalReason ||
-    current.errorReason !== fields.errorReason
+    current.errorReason !== fields.errorReason ||
+    current.errorDetails !== fields.errorDetails
   ) {
     return false
   }
@@ -3144,6 +3161,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       ? segment.session.occurrenceIdentities.get(occurrenceInput)?.lifecycle
       : undefined
     const settlement = lifecycle?.terminalReason ? lifecycle : latest.settlement ?? lifecycle
+    const failure = latest.settlement?.errorReason ? latest.settlement : settlement
     const hasCurrentAssistant = latest.role === "assistant" && latest.serverTimeConfirmed
     const active = activeBySession.get(first.sessionID)?.cardID === segment.cardID
     const status: CardStatus = (() => {
@@ -3170,7 +3188,8 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       status,
       timeCompleted: latest.settlement?.timeCompleted ?? settlement?.timeCompleted ?? (hasCurrentAssistant ? undefined : existing?.timeCompleted),
       terminalReason: settlement?.terminalReason ?? (hasCurrentAssistant ? undefined : existing?.terminalReason),
-      errorReason: settlement?.errorReason ?? (hasCurrentAssistant ? undefined : existing?.errorReason),
+      errorReason: failure?.errorReason ?? (hasCurrentAssistant ? undefined : existing?.errorReason),
+      errorDetails: failure ? failure.errorDetails : (hasCurrentAssistant ? undefined : existing?.errorDetails),
       collapsedContextMessageIDs: segment.messages
         .filter((message) => message.delegatedContext)
         .map((message) => message.id),
