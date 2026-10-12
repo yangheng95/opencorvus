@@ -91,3 +91,13 @@ Evolution失败另有明确分层：Windows runner临时目录使用RUNNER~1，�
 38259887245的Windows selected unit随后成功，17个文件中的物理/逻辑Task路径修复已在真实Windows runner通过；macOS其余16个文件成功。03546870c修正watcher测试临时根，隔离安装上的5测试/10断言、本地文档和完整推送钩子通过并推送。2026-10-12T14:20Z从既有手动入口启动watcher聚焦run38262258110及新完整run38262262133；运行中的完整旧run38256988111继续保留以发现其余失败，不将其已知失败重标为通过。
 
 38262258110在Windows/Linux成功，macOS订阅也通过；快照仍在写入后49ms返回空事件。此次新增快照测试错误地假定操作系统历史缓存即时可见：官方watcher文档区分实时订阅与后台守护进程支持的历史查询，源码全仓搜索表明产品仅由file/watcher.ts使用subscribeWithParcel，不调用writeSnapshot/getEventsSince。此前路径修复解决了事件身份，但没有消除新增测试对历史缓存时序的额外假定。将brace忽略规则的真实创建事件验证并入订阅测试：先建目录、订阅后顺序写入两个忽略文件和一个可见文件，以收到可见事件为交付条件，断言实际累计创建事件的完整明确列表并await unsubscribe。删除产品未使用的快照API验收；不删除忽略规则覆盖，不加sleep/retry、不放宽超时或跳过平台。生产订阅、事件处理和取消契约保持现状。
+
+## 完整运行第三批：继续调查与实施范围
+
+完整旧run38256988111的Linux/macOS已跑完591文件，分别62/65个文件失败（包含已修复的第二批）；这是真实未完成事实。原生订阅修正5b6285704已正常推送，隔离4测试/9断言和推送钩子通过，单文件三平台run38264650642正在验证。
+
+- 多数专家团失败固定2026.08/09旧版本，而当前发布源为2026.10.12.1。需要逐包核对当前manifest、Skill/Tool投影和可选工作流，再把可变版本复制改成从既有发布元数据验证精确当前身份，保留真实工具执行/安装/HTTP路径。不能盲目替换所有日期或删除行为断言。另有旧能力清单、提示词和配置读取预期，须按当前公开契约分别核对。
+- CLI（Command Line Interface，命令行）正常结束/错误/超时路径均可在Linux/macOS出现exit7和未处理AbortError。SDK（Software Development Kit，软件开发包）生成的SSE（Server-Sent Events，服务器发送事件）abortHandler调用reader.cancel()却只捕获同步throw，异步拒绝脱离其owner；调用者loopTask虽被await也无法处理该游离Promise。所有SDK事件订阅共用此生成实现，应修生成权威并重生当前产物，取消Promise必须同步挂拒绝处理并在释放reader锁前join；非取消读取错误仍交给原onSseError。保留真实CLI子进程七种场景原退出码和结构化响应，不接受exit7或吞所有进程异常。
+- 跨进程Session重复summary在两个远端平台及本地稳定卡住，不能判定为平台偶发或简单旧fixture。已读Session loop、compaction与02-data，正在审计控制请求的exact source/control receipt、过滤后历史、owner释放/重启与Task/Mission/普通Session共享调用；先补采真实测试运行的持久化控制、Message与Provider请求证据，再决定修复。不延长等待、不跳过用例，未完成共享根因审计前不改生产调度。
+
+SSE修正已通过正式SDK生成及TypeScript编译，仅生成预期core文件差异。原CLI真实子进程七场景从3通过/4失败恢复为7通过/18断言，exit和错误输出合同保持不变。生成脚本对固定上游模板形状做显式契约检查，形状改变会要求重新审查，不静默跳过修正；未改共享node_modules或应用进程。

@@ -178,7 +178,12 @@ observes `server.connected` before submitting that Message. Only `idle` or `term
 for that exact Session and input Message settles the event reader; an intermediate
 `step_finish`, a peer occurrence, or a heartbeat cannot complete the command. Normal
 standalone replies settle idle; Task/Mission lifecycle reducers remain unchanged.
-The reader cancels its owned connection before releasing its stream lock. The command
+The reader cancels its owned connection before releasing its stream lock. The SDK's
+generated event iterator observes the cancellation Promise immediately and joins it
+before releasing the reader lock. An aborted body can reject cancellation; that
+cleanup result must remain owned by the iterator instead of becoming an unhandled
+process rejection. The SDK build applies this ownership correction to its pinned
+generator template, so regeneration preserves the same runtime contract. The command
 also joins its HTTP request, so full output and reply failures precede process exit.
 Local bootstrap settles its own runtime; attached execution releases only client resources.
 

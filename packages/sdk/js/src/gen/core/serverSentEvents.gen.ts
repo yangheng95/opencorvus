@@ -136,12 +136,9 @@ export function createSseClient<TData = unknown>({
 
         let buffer = ""
 
+        let cancellation: Promise<void> | undefined
         const abortHandler = () => {
-          try {
-            reader.cancel()
-          } catch {
-            // noop
-          }
+          cancellation ??= reader.cancel().catch(() => {})
         }
 
         signal.addEventListener("abort", abortHandler)
@@ -213,6 +210,7 @@ export function createSseClient<TData = unknown>({
           }
         } finally {
           signal.removeEventListener("abort", abortHandler)
+          await cancellation
           reader.releaseLock()
         }
 

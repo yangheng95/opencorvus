@@ -270,6 +270,29 @@ const generate = async (input: string, output: string) =>
     ],
   })
 
+// The upstream 0.97.3 fetch template drops the asynchronous cancel result.
+// Keep stream teardown owned by its iterator, including a rejected body cancel.
+async function joinGeneratedStreamCancellation(output: string) {
+  const file = path.join(output, "core", "serverSentEvents.gen.ts")
+  const source = await fs.readFile(file, "utf8")
+  const handler = /const abortHandler = \(\) => \{\s*try \{\s*reader\.cancel\(\);?\s*\} catch \{\s*\/\/ noop\s*\}\s*\};?/
+  const release = /signal\.removeEventListener\(['"]abort['"], abortHandler\);?\s*reader\.releaseLock\(\);?/
+  if (!handler.test(source) || !release.test(source)) {
+    throw new Error("SSE generator cancellation contract changed; review stream ownership before generating")
+  }
+  await fs.writeFile(
+    file,
+    source
+      .replace(handler, `let cancellation: Promise<void> | undefined
+        const abortHandler = () => {
+          cancellation ??= reader.cancel().catch(() => {})
+        }`)
+      .replace(release, `signal.removeEventListener("abort", abortHandler)
+          await cancellation
+          reader.releaseLock()`),
+  )
+}
+
 const transactionRelative = ".tmp-sdk-build"
 const transactionRoot = path.join(dir, transactionRelative)
 const transactionSrc = path.join(transactionRoot, "src")
@@ -291,6 +314,7 @@ try {
   await writeFileWithRetry(transactionOpenapi, generatedOpenapi)
   await generate(transactionOpenapi, transactionGen)
   await waitForGeneratedClient(transactionGen)
+  await joinGeneratedStreamCancellation(transactionGen)
 
   const prettierBin = await Bun.resolve("prettier/bin/prettier.cjs", dir)
   for (let attempt = 1; attempt <= 5; attempt++) {
