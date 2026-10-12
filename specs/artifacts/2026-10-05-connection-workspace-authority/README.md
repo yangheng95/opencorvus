@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [344 子侧栏来源复制](source-copy-plan-344.md)：完整位置复制与真实子会话阅读复核。
+
 - [343 错误详情复制](error-copy-plan-343.md)：原生按钮单击与键盘激活，真实页面对照。
 
 - [342 流式错误展示](provider-stream-error-plan-342.md)：真实过载包的可读摘要、诊断详情与非重放终态。

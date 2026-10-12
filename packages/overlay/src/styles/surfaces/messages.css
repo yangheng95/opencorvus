@@ -1139,6 +1139,28 @@ button.msg-source-chip .msg-source-chip__detail,
   display: contents;
 }
 
+.msg-source-entry__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.msg-source-entry__row > .msg-source-chip {
+  flex: 0 1 auto;
+}
+
+.msg-source-copy.oc-button {
+  --oc-button-height: var(--oc-density-chip-height);
+  flex: none;
+  color: var(--text-muted);
+}
+
+.msg-source-copy.oc-button[data-copied="true"] {
+  color: var(--good);
+}
+
 .msg-source-entry[data-has-excerpt="true"] {
   display: flex;
   flex-direction: column;

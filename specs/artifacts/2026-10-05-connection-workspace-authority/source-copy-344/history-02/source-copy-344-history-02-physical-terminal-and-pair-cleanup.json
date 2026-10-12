@@ -1,0 +1,68 @@
+{
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "source-copy-344-history-02-46c2318d-b571-4534-9176-48a7555d98ce",
+    "outcome": "settled",
+    "host": {
+      "pid": 74844,
+      "processInstanceID": "win32:639273913199504537",
+      "occurrenceID": "909bace4-0221-41b4-ab99-52b3cea2d935"
+    },
+    "target": {
+      "pid": 69216,
+      "processInstanceID": "win32:639273913207289584",
+      "occurrenceID": "cfdd7bb1-b0d1-40e6-b4dc-e0e216eaba2d"
+    },
+    "observedAtUtc": "2026-10-12T08:47:00.011Z",
+    "deadlineAt": 1791795119863,
+    "terminal": {
+      "occurrenceID": "source-copy-344-history-02-46c2318d-b571-4534-9176-48a7555d98ce",
+      "pid": 69216,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "source-copy-344-history-02-46c2318d-b571-4534-9176-48a7555d98ce",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-copy-344-history-02\\runtime\\data\\auth.json"
+    },
+    {
+      "presentAfter": false,
+      "copiedLength": 2001983,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-copy-344-history-02\\runtime\\data\\models.json"
+    }
+  ],
+  "listeners": null,
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "expected": {
+        "pid": 69216,
+        "processInstanceID": "win32:639273913207289584",
+        "occurrenceID": "cfdd7bb1-b0d1-40e6-b4dc-e0e216eaba2d"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 74844,
+        "processInstanceID": "win32:639273913199504537",
+        "occurrenceID": "909bace4-0221-41b4-ab99-52b3cea2d935"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T08:47:02.5271922Z",
+  "pairedCleanupComplete": true
+}

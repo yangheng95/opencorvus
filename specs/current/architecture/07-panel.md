@@ -939,6 +939,13 @@ Requested literal text, code and other formats retain their own contract. This i
 authoring guidance; the same renderer parses the actual text without rewriting
 persisted Messages, stripping delimiters or introducing another Markdown dialect.
 
+Conversation Source entries keep opening and copying as separate native actions.
+Copy location uses the actual URL including encoded query/fragment, or the full
+file path with its recorded line range; a display title never replaces that
+location. Sources without a URL or file path remain informational. The shared
+clipboard owner scopes pending/success/error feedback to the mounted control
+and its current value, while source identity and disclosure state remain intact.
+
 Interactive Artifact frames expose a shared copy/download/open strip. Downloads
 name their actual format: original attachments, Markdown, CSV, source code,
 patches, notebooks or visualization data. Editable Code and Spreadsheet exports

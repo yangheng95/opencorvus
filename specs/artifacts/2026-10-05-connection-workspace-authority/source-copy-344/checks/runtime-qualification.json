@@ -1,0 +1,119 @@
+{
+  "checkedAt": "2026-10-12T08:51:06.575Z",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-live-329-live-01",
+  "runs": [
+    {
+      "suffix": "01",
+      "initialHandle": 13632,
+      "launcherExitCode": 0,
+      "settled": {
+        "occurrence": "source-copy-344-history-01-8e33e2bd-0ee2-4898-a328-c43532b97f55",
+        "outcome": "settled",
+        "host": {
+          "pid": 66688,
+          "processInstanceID": "win32:639273908528228713",
+          "occurrenceID": "316203f2-8358-4063-a6a7-1a68aff20863"
+        },
+        "target": {
+          "pid": 67872,
+          "processInstanceID": "win32:639273908536072981",
+          "occurrenceID": "6f482779-c4b4-49cf-a2cd-48fde1a79ff7"
+        },
+        "observedAtUtc": "2026-10-12T08:38:02.333Z",
+        "deadlineAt": 1791794652748,
+        "terminal": {
+          "occurrenceID": "source-copy-344-history-01-8e33e2bd-0ee2-4898-a328-c43532b97f55",
+          "pid": 67872,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 228726,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T08:34:26.583Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "6dda3ed9-0cad-4558-97df-02e7b2be7cff",
+          "method": "GET",
+          "path": "/ui/assets/main-DE9lj1nS.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "sourceMessages": 14,
+      "sourceProviderRequests": 15,
+      "newProviderRequests": 0,
+      "sources": 6,
+      "identity": "Complete Message rows, Provider request identities and Source rows equal closed original after actual UI interaction"
+    },
+    {
+      "suffix": "02",
+      "initialHandle": 14069,
+      "launcherExitCode": 0,
+      "settled": {
+        "occurrence": "source-copy-344-history-02-46c2318d-b571-4534-9176-48a7555d98ce",
+        "outcome": "settled",
+        "host": {
+          "pid": 74844,
+          "processInstanceID": "win32:639273913199504537",
+          "occurrenceID": "909bace4-0221-41b4-ab99-52b3cea2d935"
+        },
+        "target": {
+          "pid": 69216,
+          "processInstanceID": "win32:639273913207289584",
+          "occurrenceID": "cfdd7bb1-b0d1-40e6-b4dc-e0e216eaba2d"
+        },
+        "observedAtUtc": "2026-10-12T08:47:00.011Z",
+        "deadlineAt": 1791795119863,
+        "terminal": {
+          "occurrenceID": "source-copy-344-history-02-46c2318d-b571-4534-9176-48a7555d98ce",
+          "pid": 69216,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 299283,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T08:42:14.116Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "9e07941e-5b47-47b5-8b41-10d5dd34da7b",
+          "method": "GET",
+          "path": "/ui/assets/main-tuh6dcX2.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "sourceMessages": 14,
+      "sourceProviderRequests": 15,
+      "newProviderRequests": 0,
+      "sources": 6,
+      "identity": "Complete Message rows, Provider request identities and Source rows equal closed original after actual UI interaction"
+    }
+  ],
+  "clipboardQualification": "Root manually reviewed actual readbacks and real unsent Ctrl+V; raw captures and screenshots are separate. No UI automation assertions.",
+  "limits": [
+    "Historical current Task, no new continuous generation sample",
+    "No new original Research Studio209-source history",
+    "Attachment/document/POSIX paths not visually sampled",
+    "No Tauri window interaction"
+  ]
+}

@@ -9,6 +9,9 @@ import { localeTag, t } from "../utils/i18n"
 import { Icon, type IconName } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
 import { Disclosure } from "./ui/Disclosure"
+import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
+import { createClipboardCopy } from "./ui/clipboard-copy"
 import {
   cardExpanded,
   setCardExpanded,
@@ -337,10 +340,46 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
   const expanded = () => cardExpanded(excerptKey(), false)
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
+  const location = () => props.source.type === "source-url"
+    ? props.source.url || ""
+    : props.source.type === "source-file" && props.source.path
+      ? fileSourceLocation(props.source.path, props.source.range)
+      : ""
+  const clipboard = createClipboardCopy({
+    text: location,
+    label: () => t("chat.source_copy_location", { source: sourceLabel(props.source) }),
+    diagnosticID: "source-location",
+  })
 
   return (
     <div class="msg-source-entry" data-has-excerpt={props.source.snippet ? "true" : undefined}>
-      <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} />
+      <div class="msg-source-entry__row">
+        <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} />
+        <Show when={location()}>
+          <Button
+            type="button"
+            class="msg-source-copy"
+            variant="ghost"
+            size="icon"
+            tone="neutral"
+            title={clipboard.label()}
+            aria-label={clipboard.label()}
+            aria-disabled={clipboard.pending() || undefined}
+            aria-busy={clipboard.pending() || undefined}
+            data-copied={clipboard.copied() ? "true" : undefined}
+            onClick={(event) => {
+              event.stopPropagation()
+              pauseAutoScrollForReading(event.currentTarget)
+              void clipboard.copy()
+            }}
+          >
+            <Icon name={clipboard.copied() ? "check" : "copy"} size="compact" />
+          </Button>
+        </Show>
+      </div>
+      <Show when={clipboard.failure()}>
+        {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
+      </Show>
       <Show when={Boolean(props.source.snippet)}>
         <Disclosure.Root
           class="msg-source-excerpt"
