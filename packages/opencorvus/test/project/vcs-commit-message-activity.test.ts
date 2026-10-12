@@ -31,7 +31,7 @@ test("streams one bounded VCS commit subject and publishes each successful delta
   track(spyOn(Provider, "getLanguage").mockResolvedValue({} as never))
   const streamSpy = track(
     spyOn(LLMApi, "streamText").mockReturnValue({
-      fullStream: (async function* () {
+      stream: (async function* () {
         yield { type: "start" as const }
         yield { type: "text-delta" as const, id: "text-1", text: "fix: " }
         yield { type: "text-delta" as const, id: "text-1", text: "bound helper streams" }

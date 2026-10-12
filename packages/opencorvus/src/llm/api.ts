@@ -3,8 +3,8 @@ import {
   Output,
   type StreamTextOnChunkCallback,
   type StreamTextOnErrorCallback,
-  type StreamTextOnFinishCallback,
-  type StreamTextOnStepFinishCallback,
+  type StreamTextOnEndCallback,
+  type GenerateTextOnStepEndCallback,
   type StepResult,
   type ToolSet,
 } from "ai"
@@ -33,8 +33,8 @@ export type TextHooks<TOOLS extends ToolSet = ToolSet> = {
   onAbort?: StreamTextOnAbortCallback<TOOLS>
   onChunk?: StreamTextOnChunkCallback<TOOLS>
   onError?: StreamTextOnErrorCallback
-  onFinish?: StreamTextOnFinishCallback<TOOLS>
-  onStepFinish?: StreamTextOnStepFinishCallback<TOOLS>
+  onEnd?: StreamTextOnEndCallback<TOOLS>
+  onStepEnd?: GenerateTextOnStepEndCallback<TOOLS>
 }
 
 const DEFAULT_TIMEOUT_MS = 5_000
@@ -71,7 +71,7 @@ export function streamText<
   TOOLS extends ToolSet = ToolSet,
   STRUCTURED_OUTPUT extends Output.Output = Output.Output<string, string, never>,
 >(
-  input: Parameters<typeof streamTextBase<TOOLS, STRUCTURED_OUTPUT>>[0] & {
+  input: Parameters<typeof streamTextBase<TOOLS, Record<string, unknown>, STRUCTURED_OUTPUT>>[0] & {
     timeoutMs?: number | false
     retries?: number
     usagePurpose?: UsagePurpose
@@ -86,24 +86,24 @@ export function streamText<
     usagePurpose = "other",
     usageAttribution,
     abortSignal,
-    onStepFinish: callerOnStepFinish,
+    onStepEnd: callerOnStepEnd,
     ...rest
   } = input
   const composed = signal(abortSignal, timeout)
-  type StreamTextInput = Parameters<typeof streamTextBase<TOOLS, STRUCTURED_OUTPUT>>[0]
+  type StreamTextInput = Parameters<typeof streamTextBase<TOOLS, Record<string, unknown>, STRUCTURED_OUTPUT>>[0]
   type StreamTextInputWithRepair = StreamTextInput & {
-    experimental_repairToolCall?: ReturnType<typeof createToolCallRepair>
+    repairToolCall?: ReturnType<typeof createToolCallRepair>
   }
   const restInput = rest as StreamTextInputWithRepair
   const repairToolCall =
-    restInput.experimental_repairToolCall ??
+    restInput.repairToolCall ??
     createToolCallRepair((restInput.tools ?? {}) as Parameters<typeof createToolCallRepair>[0], repairLog)
   const trackedModel = ProviderLLM.model(restInput.model)
-  const onStepFinish: StreamTextOnStepFinishCallback<TOOLS> | undefined = trackedModel
+  const onStepEnd: GenerateTextOnStepEndCallback<TOOLS> | undefined = trackedModel
     ? async (event) => {
         const failures: unknown[] = []
         try {
-          await callerOnStepFinish?.(event)
+          await callerOnStepEnd?.(event)
         } catch (error) {
           failures.push(error)
         }
@@ -134,18 +134,18 @@ export function streamText<
           })
         }
       }
-    : callerOnStepFinish
+    : callerOnStepEnd
   const result = streamTextBase({
     ...restInput,
     abortSignal: composed,
     maxRetries: retries(count),
-    onStepFinish,
+    onStepEnd,
     // Caller-supplied repair wins (none currently); otherwise the single
     // wrapper-level repair covers this call. `tools` is read off the same
     // input so name-normalization keeps working.
-    experimental_repairToolCall: repairToolCall,
+    repairToolCall: repairToolCall,
   } as StreamTextInput)
-  // The AI SDK's fullStream/textStream are AsyncIterableStreams whose
+  // The AI SDK's stream/textStream are AsyncIterableStreams whose
   // backing reader.read() can park indefinitely on a stalled upstream
   // socket; the abortSignal closes the connection but does not reject the
   // pending read. Wrap each iterable so consumers' for-await loops throw
@@ -155,7 +155,7 @@ export function streamText<
   if (!composed) return result
   return new Proxy(result, {
     get(target, prop, receiver) {
-      if (prop === "fullStream") return abortableIterable(target.fullStream, composed)
+      if (prop === "stream") return abortableIterable(target.stream, composed)
       if (prop === "textStream") return abortableIterable(target.textStream, composed)
       return Reflect.get(target, prop, receiver)
     },

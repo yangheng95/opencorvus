@@ -873,7 +873,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           compaction: { tail_turns: 0 },
         } as never)
         const streamSpy = spyOn(LLM, "stream").mockResolvedValue({
-          fullStream: (async function* () {
+          stream: (async function* () {
             yield { type: "start" }
             yield { type: "reasoning-start", id: "reasoning-empty" }
             yield { type: "reasoning-delta", id: "reasoning-empty", text: "No visible continuation was emitted." }

@@ -59,6 +59,22 @@ export function createIntegrityAcceptanceToolFactory(
     | (() => IntegrityFactSelection & { instruction: string }),
   options?: { signal?: AbortSignal; onToolMaterialized?: (toolID: string) => void },
 ) {
+  const integrityEvidenceInputSchema = z.object({
+    section: z.enum([
+      "overview",
+      "changed_directories",
+      "changed_files_in_directory",
+      "diff_for_file",
+      "goal_summary",
+      "goal_detail",
+      "attachments",
+    ]),
+    directory: z.string().optional(),
+    file_path: z.string().optional(),
+    goal_id: z.string().optional(),
+    max_chars: z.number().int().min(1_000).max(40_000).default(12_000),
+  })
+
   const projectDir = Filesystem.resolve(Instance.directory)
   const resolveSelection = () =>
     typeof selection === "function" ? selection() : selection
@@ -96,22 +112,8 @@ export function createIntegrityAcceptanceToolFactory(
     inspect_integrity_evidence: () => tool({
       description:
         "Inspect scoped integrity evidence on demand. Start from changed_directories, then request exact files or diffs only for directories and files relevant to this review scope.",
-      inputSchema: z.object({
-        section: z.enum([
-          "overview",
-          "changed_directories",
-          "changed_files_in_directory",
-          "diff_for_file",
-          "goal_summary",
-          "goal_detail",
-          "attachments",
-        ]),
-        directory: z.string().optional(),
-        file_path: z.string().optional(),
-        goal_id: z.string().optional(),
-        max_chars: z.number().int().min(1_000).max(40_000).default(12_000),
-      }),
-      execute: async ({ section, directory, file_path, goal_id, max_chars }) =>
+      inputSchema: integrityEvidenceInputSchema,
+      execute: async ({ section, directory, file_path, goal_id, max_chars }: z.infer<typeof integrityEvidenceInputSchema>) =>
         truncateIntegrityEvidence(
           renderIntegrityEvidenceSection(
             resolveSelection(),

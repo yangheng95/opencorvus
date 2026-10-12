@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { stepCountIs, tool } from "ai"
+import { isStepCount, tool } from "ai"
 import z from "zod"
 import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
@@ -434,13 +434,13 @@ describe("real local streaming compaction transport", () => {
               },
               prepareStep: ({ stepNumber }) =>
                 stepNumber > 0 && growth === "step-system"
-                  ? { system: [{ role: "system", content: "expanded step instructions ".repeat(20_000) }] }
+                  ? { instructions: [{ role: "system", content: "expanded step instructions ".repeat(20_000) }] }
                   : undefined,
-              stopWhen: stepCountIs(3),
+              stopWhen: isStepCount(3),
               abort: AbortSignal.timeout(10_000),
             })
             const errors: unknown[] = []
-            for await (const part of stream.fullStream) {
+            for await (const part of stream.stream) {
               if (part.type === "error") errors.push(Message.fromError(part.error, { providerID: target.providerID }))
             }
             expect(executed).toEqual(["Read"])
@@ -631,7 +631,7 @@ describe("real local streaming compaction transport", () => {
                 tools: {},
                 abort: AbortSignal.timeout(10_000),
               })
-              for await (const _part of stream.fullStream) {
+              for await (const _part of stream.stream) {
                 /* Consume the real continuation response. */
               }
               expect(requests).toHaveLength(2)

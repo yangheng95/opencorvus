@@ -76,7 +76,7 @@ export async function rejectLocalStream(input: {
       tools: {},
       retries: 0,
     })
-    for await (const chunk of result.fullStream) {
+    for await (const chunk of result.stream) {
       /* Consume the actual rejected stream. */
     }
     await delivered.promise

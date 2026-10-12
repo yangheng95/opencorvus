@@ -1,5 +1,8 @@
 # 2026-10 Records
 
+- [Dependabot全部升级与测试兼容](2026-10-13-dependabot-upgrades.md)：十项PR、共享AI SDK图和隔离验收。
+- [对应界面证据](../../artifacts/2026-10-13-dependabot-upgrades/README.md)：CodeMirror、Geist 与 Timeline 桌面人工验收。
+
 - [CI workflow与依赖修复](2026-10-12-ci-workflow-dependencies.md)：当前失败根因、有限依赖升级及远端运行证据。
 
 - [350 长消息重排阅读位置](2026-10-12-main-transition-350.md)：段落锚点、宽度恢复与键盘输入优先。

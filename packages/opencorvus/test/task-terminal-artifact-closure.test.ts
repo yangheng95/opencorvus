@@ -336,11 +336,11 @@ test("observes the completion call usage after the real Task terminal tool retur
             },
           }),
         },
-        onStepFinish: async () => {
+        onStepEnd: async () => {
           await observe("caller-step-finish")
         },
       })
-      for await (const _part of response.fullStream) {
+      for await (const _part of response.stream) {
         /* consume the actual SDK stream */
       }
       await observe("stream-finished")

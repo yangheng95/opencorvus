@@ -60,7 +60,7 @@ describe("shared streamed-call usage ledger", () => {
         })
         const outcome = (async () => {
           try {
-            for await (const _part of result.fullStream) {
+            for await (const _part of result.stream) {
               // Provider deliberately never emits its first chunk.
             }
           } catch (error) {
@@ -109,8 +109,8 @@ describe("shared streamed-call usage ledger", () => {
           prompt: "measure this",
           timeoutMs: false,
         })
-        for await (const _part of result.fullStream) {
-          // Exhausting the real stream reaches the shared onStepFinish persistence callback.
+        for await (const _part of result.stream) {
+          // Exhausting the real stream reaches the shared onStepEnd persistence callback.
         }
 
         const stats = await UsageStats.read({ period: "month", timeZone: "UTC" })

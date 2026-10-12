@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Dependabot升级验收](2026-10-13-dependabot-upgrades/README.md)：实际Provider/ACP流式测试、逐文件回归结果、编辑保存与时间线截图。
+
 - [Issue 40：Parallel Search MCP](2026-10-12-parallel-search-issue-40/README.md)：真实匿名搜索、公开双语指南、0.1.25发布、完整公开日志修订及Issue回复回执。
 
 - [Live Tool payload viewport119](2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/README.md): one-selector live viewport change; genuine11901 Sources/answer complete while long-input after remains unmet.

@@ -36,6 +36,16 @@ const MAX_DECODE_BYTES = 200_000
  * ever share the same sha, so we require it explicitly.
  */
 export function createReadAttachmentTool(defaultProjectID: string) {
+  const attachmentReadInputSchema = z.object({
+    reference: z
+      .string()
+      .describe(
+        "Either the full `/attachment/<projectID>/<sha>.<ext>` URL from the manifest " +
+          "or the bare `<sha>.<ext>` name.",
+      ),
+    projectID: z.string().optional().describe("Required only when `reference` is a bare name (not a /attachment/… URL)."),
+  })
+
   return {
     read_attachment: tool({
       description:
@@ -44,19 +54,8 @@ export function createReadAttachmentTool(defaultProjectID: string) {
         "design tokens, style guides, brand docs, etc. " +
         "Binary image / PDF / audio / video refs are rejected here unless they decode as text; use visual/runtime evidence tooling for pixel-level inspection. " +
         "Returns a UTF-8 decoded string (binary files are rejected) truncated to 200 KB.",
-      inputSchema: z.object({
-        reference: z
-          .string()
-          .describe(
-            "Either the full `/attachment/<projectID>/<sha>.<ext>` URL from the manifest " +
-              "or the bare `<sha>.<ext>` name.",
-          ),
-        projectID: z
-          .string()
-          .optional()
-          .describe("Required only when `reference` is a bare name (not a /attachment/… URL)."),
-      }),
-      execute: async ({ reference, projectID }) => {
+      inputSchema: attachmentReadInputSchema,
+      execute: async ({ reference, projectID }: z.infer<typeof attachmentReadInputSchema>) => {
         let resolved: { projectID: string; name: string } | undefined
         if (reference.startsWith("/attachment/") || reference.startsWith("attachment:")) {
           resolved = AttachmentStore.nameFromUrl(reference.replace(/^attachment:/, "/attachment/"))

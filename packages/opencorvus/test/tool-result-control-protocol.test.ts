@@ -872,7 +872,7 @@ describe("single Tool-result turn-control protocol", () => {
         const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
         const metadata = withImmediateParkToolResultControl({ jobID: "automation_live" })
         const stream = spyOn(LLM, "stream").mockResolvedValue({
-          fullStream: (async function* () {
+          stream: (async function* () {
             yield { type: "start" }
             yield { type: "tool-call", toolCallId: "call_live_park", toolName: "wait", input: {} }
             yield {

@@ -62,7 +62,7 @@ test("consumed output followed by a Provider error settles as an explicit failed
     policy: { ...DefaultLLMActivityPolicy, totalMs: 5_000, maxRetries: { default: 3 } },
     sink: (event) => events.push(event),
     onTextDelta: (delta) => { deltas.push(delta) },
-    start: () => ({ fullStream: (async function* () {
+    start: () => ({ stream: (async function* () {
       yield { type: "text-delta", text: "Partial answer" }
       yield { type: "error", error: overload }
     })() }),

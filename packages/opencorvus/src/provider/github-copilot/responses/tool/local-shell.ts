@@ -1,5 +1,4 @@
 // Upstream source: anomalyco/opencode packages/core/src/github-copilot/responses/tool/local-shell.ts @ 8e2d422ffe56f3b2eb52e3f7195a2f9722a9fc46.
-import { createProviderToolFactoryWithOutputSchema } from "@ai-sdk/provider-utils"
 import { z } from "zod/v4"
 
 export const localShellInputSchema = z.object({
@@ -15,51 +14,4 @@ export const localShellInputSchema = z.object({
 
 export const localShellOutputSchema = z.object({
   output: z.string(),
-})
-
-export const localShell = createProviderToolFactoryWithOutputSchema<
-  {
-    /**
-     * Execute a shell command on the server.
-     */
-    action: {
-      type: "exec"
-
-      /**
-       * The command to run.
-       */
-      command: string[]
-
-      /**
-       * Optional timeout in milliseconds for the command.
-       */
-      timeoutMs?: number
-
-      /**
-       * Optional user to run the command as.
-       */
-      user?: string
-
-      /**
-       * Optional working directory to run the command in.
-       */
-      workingDirectory?: string
-
-      /**
-       * Environment variables to set for the command.
-       */
-      env?: Record<string, string>
-    }
-  },
-  {
-    /**
-     * The output of local shell tool call.
-     */
-    output: string
-  },
-  {}
->({
-  id: "openai.local_shell",
-  inputSchema: localShellInputSchema,
-  outputSchema: localShellOutputSchema,
 })

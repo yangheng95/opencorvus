@@ -75,7 +75,7 @@ const source = await wait(runCommand("git", ["-C", runtime, "rev-parse", "HEAD"]
 const dirty = await wait(runCommand("git", ["-C", runtime, "status", "--porcelain"], { signal: abort.signal }))
 if (source.stdout.trim() !== runtimeRevision || dirty.stdout.trim()) throw new Error("runtime_source_identity_mismatch")
 const requireRuntime = createRequire(path.join(runtime, "packages/opencorvus/package.json"))
-const { streamText, jsonSchema, stepCountIs } = await wait(import(requireRuntime.resolve("ai")))
+const { streamText, jsonSchema, isStepCount } = await wait(import(requireRuntime.resolve("ai")))
 const { Provider } = await wait(import(path.join(runtime, "packages/opencorvus/src/provider/provider.ts")))
 const { Config } = await wait(import(path.join(runtime, "packages/opencorvus/src/config/config.ts")))
 const { ProviderError } = await wait(import(path.join(runtime, "packages/opencorvus/src/provider/error.ts")))
@@ -147,16 +147,16 @@ const call = (request: unknown): Promise<any> => {
   const system = ready.prompt.filter((message: any) => message.role === "system").map((message: any) => message.content).join("\n\n")
   const messages = ready.prompt.filter((message: any) => message.role !== "system")
   const stream = streamText({
-    model: language, messages, tools, stopWhen: stepCountIs(maxResponseSteps), maxRetries: 0, abortSignal: abort.signal,
+    model: language, messages, tools, stopWhen: isStepCount(maxResponseSteps), maxRetries: 0, abortSignal: abort.signal,
     providerOptions: { openai: { store: false, instructions: system, reasoningEffort: effort } },
-    onStepFinish: async (step: any) => {
+    onStepEnd: async (step: any) => {
       const request = typeof step.request.body === "string" ? JSON.parse(step.request.body) : step.request.body
       await append("steps.jsonl", { finish_reason: step.finishReason, usage: step.usage,
         request_model: request.model, response_model: step.response.modelId, messages: step.response.messages })
       if (request.model !== modelID) throw new Error("actual_request_model_mismatch")
     },
   })
-  const chunks = stream.fullStream[Symbol.asyncIterator]()
+  const chunks = stream.stream[Symbol.asyncIterator]()
   for (;;) {
     const next = await wait<any>(chunks.next())
     if (next.done) break

@@ -533,7 +533,7 @@ export type Config = {
       token_budget?: number
     }
     /**
-     * Enable OpenTelemetry spans for AI SDK calls (using the 'experimental_telemetry' flag)
+     * Enable OpenTelemetry spans for AI SDK calls (using the 'telemetry' flag)
      */
     openTelemetry?: boolean
     /**

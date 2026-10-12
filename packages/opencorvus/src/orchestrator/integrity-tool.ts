@@ -45,7 +45,7 @@ export function createIntegrityTool<
   requireExecutionContext(options: unknown): ExecutionContext
   runReview(context: ExecutionContext, toolInput: Input): Promise<DispatchOutcome>
 }) {
-  return tool<Input, DispatchOutcome>({
+  return tool<Input, DispatchOutcome, {}>({
     description:
       "Adversarial integrity evidence review of scheduler-provided structured contracts and the delivered system. " +
       "One projected streaming review session registers task-specific evidence perspectives through read-only inspection tools. Findings, evidence, required repairs, unresolved disagreements, and optional judgment remain visible as IntegrityReview artifact facts. Reviewer rows are evidence perspectives, not child sessions. " +

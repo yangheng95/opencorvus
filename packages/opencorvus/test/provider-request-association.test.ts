@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test"
-import { streamText, stepCountIs, tool, jsonSchema } from "ai"
+import { streamText, isStepCount, tool, jsonSchema } from "ai"
 import { Config } from "@/config/config"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
@@ -183,7 +183,7 @@ test("one real SDK multi-step stream binds both HTTP responses to its original c
       const language = await Provider.getLanguage(model, { config, requestContext: caller })
       using audit = new RealProviderAudit(modelID, 2, undefined, undefined, undefined, { redactor: new CredentialRedactor() })
       const result = streamText({ model: language, prompt: "Perform the actual lookup", maxRetries: 0,
-        stopWhen: stepCountIs(2), tools: { lookup: tool({
+        stopWhen: isStepCount(2), tools: { lookup: tool({
           inputSchema: jsonSchema<{ value: string }>({ type: "object", properties: { value: { type: "string" } },
             required: ["value"], additionalProperties: false }),
           execute: async ({ value }) => { executions.push(value); return "actual-tool-result" },

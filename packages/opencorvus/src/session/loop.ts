@@ -389,7 +389,7 @@ export namespace SessionLoop {
       const declaration = toolDecisionDeclarationOf(current as object)
       const coordinated = {
         ...current,
-        execute(args: unknown, options: ToolExecutionOptions) {
+        execute(args: unknown, options: ToolExecutionOptions<Record<string, unknown>>) {
           const mode = toolExecutionModeOf(current as object, args)
           const decision = declaration
             ? {
@@ -647,7 +647,7 @@ export namespace SessionLoop {
   // generation once the tool has acknowledged the dispatch (the orchestrator
   // pattern: `dispatch_agent` fires, the signal aborts the active turn) need
   // a hook that runs after every LLM turn inside the session loop. AI SDK's
-  // `onStepFinish` gives this at the stream level; SessionLoop does not
+  // `onStepEnd` gives this at the stream level; SessionLoop does not
   // expose it natively, so callers register a process-local callback the
   // loop fires after each `processTurn` returns.
   //
@@ -975,7 +975,7 @@ export namespace SessionLoop {
       }),
       ...(typeof execute === "function"
         ? {
-            async execute(args: unknown, options: ToolExecutionOptions) {
+            async execute(args: unknown, options: ToolExecutionOptions<Record<string, unknown>>) {
               const materializedArgs = await materializeProviderToolExecutionInput({
                 name: input.name,
                 model: input.model,
@@ -2625,6 +2625,7 @@ export namespace SessionLoop {
     const raw = await tool.execute(input.part.state.input, {
       toolCallId: input.part.callID,
       messages: [],
+      context: {},
       abortSignal: input.signal ?? new AbortController().signal,
       opencorvus: {
         sessionID: input.sessionID,
@@ -2633,7 +2634,7 @@ export namespace SessionLoop {
         toolPartID: input.part.id,
         visibleToolName: input.part.tool,
       },
-    } as ToolExecutionOptions)
+    } as ToolExecutionOptions<Record<string, unknown>>)
     return normalizeToolResult(raw)
   }
 
@@ -3604,7 +3605,7 @@ export namespace SessionLoop {
       }).sha256
     const context = (
       args: any,
-      options: ToolExecutionOptions,
+      options: ToolExecutionOptions<Record<string, unknown>>,
       invocation?: {
         projectID: string
         toolPartID: string
@@ -4250,7 +4251,7 @@ export namespace SessionLoop {
 
       const mcpTool = {
         ...(item as any),
-        async execute(args: any, opts: ToolExecutionOptions) {
+        async execute(args: any, opts: ToolExecutionOptions<Record<string, unknown>>) {
           const ctx = context(args, opts)
           const normalizedInput = normalizeToolInput(args)
           const persistedInput = cloneToolInputForPersistence(normalizedInput.ok ? normalizedInput.value : {})
@@ -4901,6 +4902,7 @@ export namespace SessionLoop {
       raw = await recoveredTool.execute(toolPart.state.input, {
         toolCallId: request.toolCallID,
         messages: [],
+        context: {},
         abortSignal: abortController.signal,
       })
     } catch (error) {

@@ -1042,6 +1042,51 @@ export function createOrchestratorTools(input: {
   /** Materialize one exact public scheduler leaf without constructing the rest of the surface. */
   exactToolID?: string
 }) {
+  const agentCoordinationResponseInputSchema = z
+    .object({
+      request_id: z.string().min(1).describe("Pending agent_coordination_request artifact id."),
+      decision: (input.terminalConversationAuthority
+        ? z.enum(AGENT_COORDINATION_DECISIONS)
+        : z.enum(AGENT_COORDINATION_ACTIVE_DECISIONS)
+      ).describe(
+        input.terminalConversationAuthority
+          ? "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
+          : "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome.",
+      ) as z.ZodType<AgentCoordinationDecision>,
+      message: z
+        .string()
+        .optional()
+        .describe(
+          "Visible incremental guidance for redispatch, question text for ask_user when questions is omitted, or failure detail for fail_task.",
+        ),
+      questions: z
+        .array(
+          z.object({
+            question: z.string().min(1).describe("The complete question text to show the user."),
+            header: z.string().min(1).describe("Short label used as a chip/title."),
+            options: z
+              .array(
+                z.object({
+                  value: z.string().min(1).describe("Stable machine-facing value returned when selected."),
+                  label: z.string().min(1).describe("Display text."),
+                  description: z.string().min(1).describe("Explanation of this choice."),
+                }),
+              )
+              .default([]),
+            multiple: z.boolean().optional(),
+            custom: z.boolean().optional(),
+          }),
+        )
+        .min(1)
+        .max(4)
+        .optional()
+        .describe(
+          "Concrete user questions for decision=ask_user. Omit to ask one free-text question from message or reason.",
+        ),
+      reason: z.string().min(1).describe("Why this is the correct scheduling decision."),
+    })
+    .strict()
+
   if (!Array.isArray(input.dispatchAgents)) {
     throw new Error("createOrchestratorTools requires the exact turn-owned dynamic-agent projection.")
   }
@@ -1289,7 +1334,7 @@ export function createOrchestratorTools(input: {
         "It does NOT acquire new source evidence and is NOT the final acceptance authority. " +
         "The active expert-squad scheduler decides when to invoke this adapter and which projected consumers use its evidence.",
       inputSchema: VisualQaInputSchema,
-      execute: async ({ reason, focus, app_url, preview_command, goal_ids }, executionInput) => {
+      execute: async ({ reason, focus, app_url, preview_command, goal_ids }: z.infer<typeof VisualQaInputSchema>, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
         const task = requireTask(taskID)
         const dispatch = await dispatchVisualQaStage({
@@ -1376,7 +1421,7 @@ export function createOrchestratorTools(input: {
       description:
           "OPTIONAL interface investigation publisher. Pass the authorized HTTP(S) source set for this bounded responsibility; the active expert-squad projection decides how its dynamic worker acquires and partitions evidence through visible tools. Persist one structured brief Artifact built from small update_* result tools, not a giant terminal payload. Partition independent investigations or continue the exact existing responsibility according to actual source needs and capability authority. Consume existing frontend_research and frontend_design Artifacts through exact catalog locators. It does not own the frontend implementation template, route selection, implementation, or final acceptance; projected consumers use its Artifact only when their declared contracts require it.",
       inputSchema: FrontendResearchInputSchema,
-      execute: async ({ reason, source_urls, focus, goal_ids }, executionInput) => {
+      execute: async ({ reason, source_urls, focus, goal_ids }: z.infer<typeof FrontendResearchInputSchema>, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
         const task = requireTask(taskID)
         const dispatch = await dispatchFrontendResearchStage({
@@ -1396,7 +1441,7 @@ export function createOrchestratorTools(input: {
       description:
         "OPTIONAL deep evidence agent. Use when the task depends on multi-source external facts, current documentation, competitor/industry/API research, source maps, or PRD/SPEC/report source material that should become a durable citation bundle. For supplied URLs that need functional/visual frontend analysis, `frontend_research` is a separate capability; for implementation-template/source evidence, `frontend_design` is a separate capability. The result is a compact research_brief Artifact plus bundle paths and may include subpage_research_tasks for independent follow-up deep research. It does not select routes or replace requirements, architecture, implementation, or acceptance evidence.",
       inputSchema: DeepResearchInputSchema,
-      execute: async ({ reason, target_deliverable, source_urls, focus }, executionInput) => {
+      execute: async ({ reason, target_deliverable, source_urls, focus }: z.infer<typeof DeepResearchInputSchema>, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
         const task = requireTask(taskID)
         const dispatch = await dispatchDeepResearchStage({
@@ -1506,51 +1551,8 @@ export function createOrchestratorTools(input: {
       tool({
         description:
           "Answer one pending worker/operator-to-orchestrator coordination request. This is the only orchestrator path for scheduler guidance that continues/cancels a worker, asks the user through a real interaction, fails the task through a terminal lifecycle event, or acknowledges an exact terminal occurrence during a host-authorized terminal conversation; it requires request_id and writes visible request/response/action artifacts before executing the bound side effect.",
-        inputSchema: z
-          .object({
-            request_id: z.string().min(1).describe("Pending agent_coordination_request artifact id."),
-            decision: (input.terminalConversationAuthority
-              ? z.enum(AGENT_COORDINATION_DECISIONS)
-              : z.enum(AGENT_COORDINATION_ACTIVE_DECISIONS)
-            ).describe(
-              input.terminalConversationAuthority
-                ? "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
-                : "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome.",
-            ) as z.ZodType<AgentCoordinationDecision>,
-            message: z
-              .string()
-              .optional()
-              .describe(
-                "Visible incremental guidance for redispatch, question text for ask_user when questions is omitted, or failure detail for fail_task.",
-              ),
-            questions: z
-              .array(
-                z.object({
-                  question: z.string().min(1).describe("The complete question text to show the user."),
-                  header: z.string().min(1).describe("Short label used as a chip/title."),
-                  options: z
-                    .array(
-                      z.object({
-                        value: z.string().min(1).describe("Stable machine-facing value returned when selected."),
-                        label: z.string().min(1).describe("Display text."),
-                        description: z.string().min(1).describe("Explanation of this choice."),
-                      }),
-                    )
-                    .default([]),
-                  multiple: z.boolean().optional(),
-                  custom: z.boolean().optional(),
-                }),
-              )
-              .min(1)
-              .max(4)
-              .optional()
-              .describe(
-                "Concrete user questions for decision=ask_user. Omit to ask one free-text question from message or reason.",
-              ),
-            reason: z.string().min(1).describe("Why this is the correct scheduling decision."),
-          })
-          .strict(),
-        execute: async ({ request_id, decision, message, questions, reason }, options) => {
+        inputSchema: agentCoordinationResponseInputSchema,
+        execute: async ({ request_id, decision, message, questions, reason }: z.infer<typeof agentCoordinationResponseInputSchema>, options) => {
           const toolExecution = await requireTaskOrchestratorToolExecutionContext(
             options,
             "respond_agent_coordination",
@@ -2290,7 +2292,7 @@ export function createOrchestratorTools(input: {
       explore: dispatchAdapterExecutor("explore", tools.explore),
       integrity: dispatchAdapterExecutor("integrity", tools.integrity),
     })
-    dispatchAgentToolCache = createDispatchAgentTool({
+    const dispatchAgentTool = createDispatchAgentTool({
     taskID,
     projectedAgents: input.dispatchAgents,
     executors: dispatchAdapterExecutors,
@@ -3005,7 +3007,8 @@ export function createOrchestratorTools(input: {
       }
     }) satisfies OpenDispatchAgentLineage,
     })
-    return dispatchAgentToolCache
+    dispatchAgentToolCache = dispatchAgentTool
+    return dispatchAgentTool
   }
 
   let manageTaskToolCache: ReturnType<typeof bindToolExecutionMode> | undefined
@@ -3025,7 +3028,7 @@ export function createOrchestratorTools(input: {
       execute: async (toolInput, options) => {
         const { action, ...actionInput } = ManageTaskInputSchema.parse(toolInput)
         const actionTool = (
-          tools as Record<string, { execute?: (args: unknown, options: unknown) => Promise<unknown> }>
+          tools as Record<string, { execute?: (args: unknown, options: unknown) => unknown }>
         )[action]
         if (typeof actionTool?.execute !== "function") {
           throw new Error(`manage_task action ${action} is not backed by an internal scheduler tool`)

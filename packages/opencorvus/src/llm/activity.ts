@@ -89,7 +89,7 @@ export function reasoningDeltaHasSemanticContent(value: unknown): boolean {
 }
 
 /**
- * Map AI SDK fullStream chunks to semantic progress. Physical transport
+ * Map AI SDK stream chunks to semantic progress. Physical transport
  * arrival is reported separately as `first-byte`: unknown, empty, and no-op
  * chunks prove only that bytes are moving and cannot extend semantic idle.
  */
@@ -824,7 +824,7 @@ export async function withLLMActivity<T>(
 }
 
 export interface LLMTextActivityStream {
-  fullStream: AsyncIterable<Record<string, unknown>>
+  stream: AsyncIterable<Record<string, unknown>>
 }
 
 export interface CollectLLMTextInput {
@@ -851,7 +851,7 @@ export function collectLLMText(input: CollectLLMTextInput): Promise<string> {
     async (run) => {
       const stream = await input.start(run)
       let text = ""
-      for await (const chunk of stream.fullStream) {
+      for await (const chunk of stream.stream) {
         run.bump("first-byte")
         run.signal.throwIfAborted()
         if (chunk.type === "error") throw chunk.error

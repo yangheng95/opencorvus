@@ -1,0 +1,138 @@
+[1/23] START test/capability/capability-search-processor-idempotency.test.ts
+ 1 pass
+ 0 fail
+ 6 expect() calls
+Ran 1 test across 1 file. [27.45s]
+[1/23] DONE test/capability/capability-search-processor-idempotency.test.ts exit=0 duration=28.28s
+[2/23] START test/capability/native-mcp-search-execution.test.ts
+ 4 pass
+ 0 fail
+ 13 expect() calls
+Ran 4 tests across 1 file. [20.95s]
+[2/23] DONE test/capability/native-mcp-search-execution.test.ts exit=0 duration=21.22s
+[3/23] START test/capability/native-mission-transport-base.test.ts
+ 21 pass
+ 0 fail
+ 51 expect() calls
+Ran 21 tests across 1 file. [116.85s]
+[3/23] DONE test/capability/native-mission-transport-base.test.ts exit=0 duration=117.08s
+[4/23] START test/capability/structured-output-base-budget.test.ts
+ 2 pass
+ 0 fail
+ 9 expect() calls
+Ran 2 tests across 1 file. [13.75s]
+[4/23] DONE test/capability/structured-output-base-budget.test.ts exit=0 duration=13.96s
+[5/23] START test/compaction-integrity.test.ts
+ 13 pass
+ 0 fail
+ 83 expect() calls
+Ran 13 tests across 1 file. [23.82s]
+[5/23] DONE test/compaction-integrity.test.ts exit=0 duration=24.05s
+[6/23] START test/llm/activity.test.ts
+ 13 pass
+ 0 fail
+ 38 expect() calls
+Ran 13 tests across 1 file. [1286.00ms]
+[6/23] DONE test/llm/activity.test.ts exit=0 duration=1.43s
+[7/23] START test/memory/project-memory.test.ts
+ 25 pass
+ 0 fail
+ 145 expect() calls
+Ran 25 tests across 1 file. [58.10s]
+[7/23] DONE test/memory/project-memory.test.ts exit=0 duration=58.34s
+[8/23] START test/memory/session-memory.test.ts
+ 11 pass
+ 0 fail
+ 34 expect() calls
+Ran 11 tests across 1 file. [27.52s]
+[8/23] DONE test/memory/session-memory.test.ts exit=0 duration=27.74s
+[9/23] START test/project/vcs-commit-message-activity.test.ts
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [1.52s]
+[9/23] DONE test/project/vcs-commit-message-activity.test.ts exit=0 duration=1.69s
+[10/23] START test/provider-request-association.test.ts
+ 5 pass
+ 0 fail
+ 37 expect() calls
+Ran 5 tests across 1 file. [9.63s]
+[10/23] DONE test/provider-request-association.test.ts exit=0 duration=9.81s
+[11/23] START test/provider-stream-error.test.ts
+ 5 pass
+ 0 fail
+ 10 expect() calls
+Ran 5 tests across 1 file. [892.00ms]
+[11/23] DONE test/provider-stream-error.test.ts exit=0 duration=1.08s
+[12/23] START test/session-loop-tool-authority-integration.test.ts
+ 9 pass
+ 0 fail
+ 27 expect() calls
+Ran 9 tests across 1 file. [44.58s]
+[12/23] DONE test/session-loop-tool-authority-integration.test.ts exit=0 duration=44.82s
+[13/23] START test/session/processor-llm-activity-retry.test.ts
+ 6 pass
+ 0 fail
+ 18 expect() calls
+Ran 6 tests across 1 file. [21.69s]
+[13/23] DONE test/session/processor-llm-activity-retry.test.ts exit=0 duration=21.94s
+[14/23] START test/session/processor-producer-boundary.test.ts
+ 10 pass
+ 0 fail
+ 39 expect() calls
+Ran 10 tests across 1 file. [25.46s]
+[14/23] DONE test/session/processor-producer-boundary.test.ts exit=0 duration=25.74s
+[15/23] START test/session/provider-usage-normalization.test.ts
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [986.00ms]
+[15/23] DONE test/session/provider-usage-normalization.test.ts exit=0 duration=1.17s
+[16/23] START test/session/task-root-multistep-assistant.test.ts
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [5.52s]
+[16/23] DONE test/session/task-root-multistep-assistant.test.ts exit=0 duration=5.72s
+[17/23] START test/session/title-activity.test.ts
+ 3 pass
+ 0 fail
+ 8 expect() calls
+Ran 3 tests across 1 file. [3.64s]
+[17/23] DONE test/session/title-activity.test.ts exit=0 duration=3.88s
+[18/23] START test/task-terminal-artifact-closure.test.ts
+ 12 pass
+ 0 fail
+ 64 expect() calls
+Ran 12 tests across 1 file. [91.51s]
+[18/23] DONE test/task-terminal-artifact-closure.test.ts exit=0 duration=91.73s
+[19/23] START test/tool-result-control-protocol.test.ts
+ 36 pass
+ 0 fail
+ 117 expect() calls
+Ran 36 tests across 1 file. [135.25s]
+[19/23] DONE test/tool-result-control-protocol.test.ts exit=0 duration=135.51s
+[20/23] START test/usage/stream-ledger.test.ts
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [6.22s]
+[20/23] DONE test/usage/stream-ledger.test.ts exit=0 duration=6.48s
+[21/23] START test/dependabot-runtime-contract.test.ts
+ 4 pass
+ 0 fail
+ 20 expect() calls
+Ran 4 tests across 1 file. [13.09s]
+[21/23] DONE test/dependabot-runtime-contract.test.ts exit=0 duration=13.40s
+[22/23] START test/session/provider-usage-normalization.test.ts
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [1279.00ms]
+[22/23] DONE test/session/provider-usage-normalization.test.ts exit=0 duration=1.49s
+[23/23] START test/provider-helper-chat-hooks.test.ts
+ 4 pass
+ 0 fail
+ 7 expect() calls
+Ran 4 tests across 1 file. [1.93s]
+[23/23] DONE test/provider-helper-chat-hooks.test.ts exit=0 duration=2.22s

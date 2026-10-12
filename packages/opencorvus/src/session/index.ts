@@ -2502,9 +2502,9 @@ export namespace Session {
       }
       const inputTokens = safe(input.usage.inputTokens)
       const outputTokens = safe(input.usage.outputTokens)
-      const reasoningTokens = safe(input.usage.outputTokenDetails?.reasoningTokens ?? input.usage.reasoningTokens)
+      const reasoningTokens = safe(input.usage.outputTokenDetails?.reasoningTokens)
       const textOutputTokens = safe(input.usage.outputTokenDetails?.textTokens ?? outputTokens - reasoningTokens)
-      const cacheReadInputTokens = safe(input.usage.inputTokenDetails?.cacheReadTokens ?? input.usage.cachedInputTokens)
+      const cacheReadInputTokens = safe(input.usage.inputTokenDetails?.cacheReadTokens)
       const cacheWriteInputTokens = safe(
         (input.usage.inputTokenDetails?.cacheWriteTokens ??
           input.metadata?.["anthropic"]?.["cacheCreationInputTokens"] ??
@@ -2513,7 +2513,7 @@ export namespace Session {
           0) as number,
       )
 
-      // AI SDK 6 owns the provider-specific input convention and exposes the
+      // AI SDK 7 owns the provider-specific input convention and exposes the
       // normalized non-cache count. Only fall back to subtraction for adapters
       // that do not supply that detail.
       const adjustedInputTokens = safe(

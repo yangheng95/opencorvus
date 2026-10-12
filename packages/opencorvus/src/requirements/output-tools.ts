@@ -106,7 +106,7 @@ export function createRequirementsOutputToolFactory(options: RequirementsOutputT
     const exact = toolID === "register_requirement" ? tool({
       description: "Register a parsed requirement from user input. Call once per requirement.",
       inputSchema: RequirementRegistrationSchema,
-      execute: async ({ id, type, description, acceptance, non_goals, evidence_refs = [] }) => {
+      execute: async ({ id, type, description, acceptance, non_goals, evidence_refs = [] }: z.infer<typeof RequirementRegistrationSchema>) => {
         if (collector.requirements.some((r) => r.id === id)) return `Error: ${id} already registered`
         collector.requirements.push({ id, type, description, acceptance, non_goals, evidence_refs })
         return `OK: ${id} registered (${collector.requirements.length} total)`

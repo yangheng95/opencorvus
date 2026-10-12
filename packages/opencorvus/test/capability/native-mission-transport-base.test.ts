@@ -929,7 +929,7 @@ describe("native Mission transport base", () => {
             limit: 1,
           }
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield {
                 type: "tool-call",

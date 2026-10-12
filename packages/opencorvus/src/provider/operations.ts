@@ -205,7 +205,7 @@ export async function testProviderConnection(
       }),
     })
     const streamErrors: string[] = []
-    for await (const part of stream.fullStream) {
+    for await (const part of stream.stream) {
       if (part.type === "error") {
         const error = part.error
         streamErrors.push(

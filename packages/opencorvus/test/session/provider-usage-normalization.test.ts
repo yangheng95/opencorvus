@@ -53,7 +53,7 @@ function usage(input?: Partial<LanguageModelUsage>): LanguageModelUsage {
 }
 
 describe("Provider-neutral usage normalization", () => {
-  test("projects AI SDK 6 token details and charges every output token exactly once", () => {
+  test("projects AI SDK 7 token details and charges every output token exactly once", () => {
     expect(
       Session.getUsage({
         model: model({ available: true }),

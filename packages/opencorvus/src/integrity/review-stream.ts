@@ -163,7 +163,7 @@ export function createReviewReasoningForwarder(input: {
       buffer += text
       if (!timer) timer = setTimeout(flush, 500)
     },
-    onFinish: async () => flush(),
+    onEnd: async () => flush(),
     onError: async (event) => {
       flush()
       log.warn("review stream forwarder saw LLM error", {

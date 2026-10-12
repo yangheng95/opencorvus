@@ -1,5 +1,8 @@
 # Specs Storage Index
 
+- [Dependabot全部升级与测试兼容](records/2026-10/2026-10-13-dependabot-upgrades.md)：十项PR、共享AI SDK图和隔离验收。
+- [Dependabot界面验收证据](artifacts/2026-10-13-dependabot-upgrades/README.md)：编辑保存与真实工具发布的时间线截图。
+
 - [CI workflow与依赖修复](records/2026-10/2026-10-12-ci-workflow-dependencies.md)：发布步骤契约、五项审计依赖链与真实远端验收。
 
 - [350 长消息重排阅读位置](records/2026-10/2026-10-12-main-transition-350.md)：段落锚点、宽度恢复与键盘输入优先。

@@ -991,6 +991,14 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 - 编辑器扮演 client，OpenCorvus 扮演 agent
 - 与 `ChannelIngress` / `ControlMessage` 并列为入站入口之一（见 [03-control.md](03-control.md)）
 
+当前使用官方 `@agentclientprotocol/sdk` 1.4。会话列表和恢复采用稳定的
+`listSessions` / `resumeSession`；分叉仍采用 SDK 的 `unstable_forkSession`。
+模型及 variant 由会话返回的 `configOptions` 中唯一 `model` select 选项声明，
+通过 `setSessionConfigOption` 更新并返回完整当前选项；值须属于实际投影的模型目录。
+不再提供旧的 model setter 或平行模型状态。MCP（Model Context Protocol，模型上下文协议）
+入站配置支持 stdio、声明的 HTTP/SSE 传输；SDK 新增的 MCP-over-ACP 类型返回
+`RequestError.invalidParams`。
+
 文件：`agent.ts` · `session.ts` · `types.ts`（README 存于目录内）。
 
 ## Public Market runtime

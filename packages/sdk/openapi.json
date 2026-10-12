@@ -1667,7 +1667,7 @@
                 "type": "object"
               },
               "openTelemetry": {
-                "description": "Enable OpenTelemetry spans for AI SDK calls (using the 'experimental_telemetry' flag)",
+                "description": "Enable OpenTelemetry spans for AI SDK calls (using the 'telemetry' flag)",
                 "type": "boolean"
               },
               "primary_tools": {

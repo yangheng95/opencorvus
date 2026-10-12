@@ -288,7 +288,7 @@ async function resume() {
   const state = JSON.parse(await fs.readFile(statePath, "utf8")) as ProcessState
   Provider.getModel = (async () => model) as typeof Provider.getModel
   LLM.stream = (async () => ({
-    fullStream: (async function* () {
+    stream: (async function* () {
       yield { type: "start" }
       yield { type: "finish-step", finishReason: "stop", usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
       yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
