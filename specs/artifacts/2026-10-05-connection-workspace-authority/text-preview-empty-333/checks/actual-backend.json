@@ -1,0 +1,60 @@
+{
+  "observedAt": "2026-10-12T03:19:53.406Z",
+  "runs": [
+    {
+      "stage": "01",
+      "providerRequests": 7,
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "artifacts": [
+        {
+          "id": "art_g0VXnjYl800KBuRjoWRT",
+          "title": "空文本预览333",
+          "filename": "empty-source.txt",
+          "bytes": 0,
+          "canonicalReferenceEqual": true
+        },
+        {
+          "id": "art_g0VXnjask00ntMajLZHB",
+          "title": "正文对照333",
+          "filename": "reference-source.txt",
+          "bytes": 83,
+          "canonicalReferenceEqual": true
+        }
+      ],
+      "sourceFiles": 1,
+      "nativeExit": 0,
+      "pairedCleanupComplete": true
+    },
+    {
+      "stage": "02",
+      "providerRequests": 7,
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "artifacts": [
+        {
+          "id": "art_g0VXnkiIK00DeJ9VEVra",
+          "title": "空文本预览333",
+          "filename": "empty-source.txt",
+          "bytes": 0,
+          "canonicalReferenceEqual": true
+        },
+        {
+          "id": "art_g0VXnkjyr00Z65CZYnFs",
+          "title": "正文对照333",
+          "filename": "reference-source.txt",
+          "bytes": 83,
+          "canonicalReferenceEqual": true
+        }
+      ],
+      "sourceFiles": 1,
+      "nativeExit": 0,
+      "pairedCleanupComplete": true
+    }
+  ],
+  "liveInputContract": "passed",
+  "browserDownloadedBytes": 0,
+  "boundary": "Positive actual persisted publication/request/outcome identities, Provider streams, input bytes, download and physical completion. No DOM, component, screenshot or visual assertion."
+}

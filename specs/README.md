@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [333 空文本来源与附件预览](records/2026-10/2026-10-12-text-preview-empty-333.md)：区分成功空内容和正在加载。
+
 - [332 PDF文件来源阅读](records/2026-10/2026-10-12-pdf-source-332.md)：复用已有阅读器查看真实PDF来源。
 
 - [331 图片解码失败](records/2026-10/2026-10-12-image-failure-331.md)：共享预览失败与恢复体验。

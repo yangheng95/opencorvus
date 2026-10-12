@@ -33,25 +33,21 @@ function TextPreview(props: { payload: FilePreviewPayload }) {
   return (
     <Show when={!text.error} fallback={<div class="msg-artifact-render-error">{String(text.error)}</div>}>
       <Show
-        when={!text.loading && text()}
+        when={text.state === "ready"}
         fallback={<div class="msg-artifact-file__loading">{t("artifact.file.loading_text")}</div>}
       >
-        {(source) => (
-          <CodeEditor
-            class="msg-artifact-code"
-            value={source()}
-            path={props.payload.source.filename ?? "artifact.txt"}
-            ariaLabel={props.payload.title}
-            readOnly
-            onValueChange={() => undefined}
-          />
-        )}
+        <CodeEditor
+          class="msg-artifact-code"
+          value={text()!}
+          path={props.payload.source.filename ?? "artifact.txt"}
+          ariaLabel={props.payload.title}
+          readOnly
+          onValueChange={() => undefined}
+        />
       </Show>
     </Show>
   )
 }
-
-
 export function FilePreviewArtifact(props: { payload: FilePreviewPayload }) {
   return (
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="File">

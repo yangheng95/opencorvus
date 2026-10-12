@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-10-12T03:14:38.467Z",
+  "attachments": [
+    {
+      "filename": "empty-source.txt",
+      "status": 200,
+      "mime": "text/plain; charset=utf-8",
+      "bytes": 0,
+      "originalBytesEqual": true
+    },
+    {
+      "filename": "reference-source.txt",
+      "status": 200,
+      "mime": "text/plain; charset=utf-8",
+      "bytes": 83,
+      "originalBytesEqual": true
+    }
+  ],
+  "source": {
+    "status": 200,
+    "type": "text",
+    "contentBytes": 0
+  },
+  "boundary": "Actual live HTTP file and canonical attachment reads, exact byte comparison against current owned inputs; no UI assertions."
+}

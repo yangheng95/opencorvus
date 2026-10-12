@@ -54,6 +54,12 @@ Changing the document or page resets that local position. PDF and CodeEditor
 share the existing finite ancestor-animation decision through the animation
 utility; no global PDF history or conversation-follow controller is introduced.
 
+Text file-preview Artifacts use the existing resource's ready state to admit
+CodeEditor. Successfully loaded zero-byte text is valid content and displays the
+same read-only editor as nonempty text. Loading and resource failure remain
+separate from content truthiness; no replacement characters, alternate attachment
+contract or parallel loading state is introduced.
+
 The main Composer owner derives ready, submitting or unavailable from the existing
 connection/workspace admission and launcher submission signals. ChatComposer
 derives interactivity from ready at the same dispatch, attachment, mention and

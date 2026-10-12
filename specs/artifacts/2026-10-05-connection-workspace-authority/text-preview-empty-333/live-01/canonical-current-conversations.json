@@ -1,0 +1,308 @@
+{
+  "observedAtUtc": "2026-10-12T03:12:32.225Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hC03EWAkLCKyL41LKHI0",
+      "project_id": "prj_hFYTEV4fMVPeJ6piH4r4",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\text-preview-empty-333-live-01\\runtime\\data\\projects\\2026\\10\\12\\6d066f2d-26be-4f2d-a475-6b2cd97d7bc7",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"3e99a644-ed87-4acb-bc5d-5701d555e7d6\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hMUSxWobeKFuFcRsoIJ8\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSCGV42zzwE1ygDIjJ",
+      "project_id": "prj_hQaq0aIVif5YZlqvbVW1",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\text-preview-empty-333-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请仅由你自己完成，不委派或创建任务。先用 read 实际读取项目内 empty-source.txt；然后用 publish_interactive_ar...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hMUSxWobeKFuFcRsoIJ8",
+      "sessionID": "ses_hC03EWAkLCKyL41LKHI0",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791774504151
+      }
+    },
+    {
+      "id": "msg_g0VXnjDju0080YqiGpPs",
+      "sessionID": "ses_hC03EWAkLCKyL41LKHI0",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791774504602,
+        "completed": 1791774509351
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_9fcbf73e-343a-40a4-933f-96792511778a",
+      "sessionID": "ses_-zUSCGV42zzwE1ygDIjJ",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791774571547
+      }
+    },
+    {
+      "id": "msg_g0VXnjVDe00vElp2ZOU1",
+      "sessionID": "ses_-zUSCGV42zzwE1ygDIjJ",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791774571794,
+        "completed": 1791774577343
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXnjWg700n9HXA9PQQ",
+      "sessionID": "ses_-zUSCGV42zzwE1ygDIjJ",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791774577403,
+        "completed": 1791774585523
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXnjYnb00CMCKUoZuR",
+      "sessionID": "ses_-zUSCGV42zzwE1ygDIjJ",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791774585555,
+        "completed": 1791774593950
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXnjazX005gWSq3TiQ",
+      "sessionID": "ses_-zUSCGV42zzwE1ygDIjJ",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791774593983,
+        "completed": 1791774603264
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hzaSjHZ7hVriGlgwJF5U",
+      "messageID": "msg_hMUSxWobeKFuFcRsoIJ8",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXnjDuz00cUbb34y1N",
+      "messageID": "msg_g0VXnjDju0080YqiGpPs",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXnjEse003wWuY1rQc",
+      "messageID": "msg_g0VXnjDju0080YqiGpPs",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791774508988,
+        "end": 1791774509077
+      }
+    },
+    {
+      "id": "prt_g0VXnjExa00pQbbUV1mg",
+      "messageID": "msg_g0VXnjDju0080YqiGpPs",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXnjV9f00SUCcTp8OO",
+      "messageID": "msg_9fcbf73e-343a-40a4-933f-96792511778a",
+      "type": "text",
+      "text": "请仅由你自己完成，不委派或创建任务。先用 read 实际读取项目内 empty-source.txt；然后用 publish_interactive_artifact 将以下两个已由当前项目实际上传接口返回的文本附件，各发布为 file-preview@1、kind=text 的预览。标题分别为「空文本预览333」和「正文对照333」。保留这些原始 source 引用及0字节内容，不补空格、不用 document/code 替代。这里只观察实际显示，不预先宣称通过。附件引用：[{\"sha\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"url\":\"/attachment/prj_hQaq0aIVif5YZlqvbVW1/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt\",\"mime\":\"text/plain\",\"size\":0,\"filename\":\"empty-source.txt\"},{\"sha\":\"46e87db61d8bc3125186a53f6eeaec29d515c543f236a2cedd17fcf43983a5d6\",\"url\":\"/attachment/prj_hQaq0aIVif5YZlqvbVW1/46e87db61d8bc3125186a53f6eeaec29d515c543f236a2cedd17fcf43983a5d6.txt\",\"mime\":\"text/plain\",\"size\":83,\"filename\":\"reference-source.txt\"}]",
+      "textChars": 742
+    },
+    {
+      "id": "prt_g0VXnjVMi007fukiuPrg",
+      "messageID": "msg_g0VXnjVDe00vElp2ZOU1",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXnjWUP00axFGSqKbb",
+      "messageID": "msg_g0VXnjVDe00vElp2ZOU1",
+      "type": "source-file",
+      "sourceId": "fd23085503d15710f8d3b05b04a468823d091a5370fc505ac4f940634d6c13d4",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\text-preview-empty-333-live-01\\project\\empty-source.txt",
+      "title": "empty-source.txt",
+      "provider": "opencorvus-read"
+    },
+    {
+      "id": "prt_g0VXnjWeH005WrgS707q",
+      "messageID": "msg_g0VXnjVDe00vElp2ZOU1",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXnjWlO005h8DGrOa0",
+      "messageID": "msg_g0VXnjWg700n9HXA9PQQ",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXnjYl900DoOcMMA3R",
+      "messageID": "msg_g0VXnjWg700n9HXA9PQQ",
+      "type": "interactive-artifact"
+    },
+    {
+      "id": "prt_g0VXnjYm9002Xrbsl6m1",
+      "messageID": "msg_g0VXnjWg700n9HXA9PQQ",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXnjYsn00q3ib6ucjA",
+      "messageID": "msg_g0VXnjYnb00CMCKUoZuR",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXnjask00BbTNiqTnp",
+      "messageID": "msg_g0VXnjYnb00CMCKUoZuR",
+      "type": "interactive-artifact"
+    },
+    {
+      "id": "prt_g0VXnjayE00OIr31e6St",
+      "messageID": "msg_g0VXnjYnb00CMCKUoZuR",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXnjb4i00kDPQzKnvO",
+      "messageID": "msg_g0VXnjazX005gWSq3TiQ",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXnjcGu00LNN235Piu",
+      "messageID": "msg_g0VXnjazX005gWSq3TiQ",
+      "type": "text",
+      "text": "已实际读取项目内 `empty-source.txt`，并分别发布「空文本预览333」和「正文对照333」，均使用 `file-preview@1`、`kind=text`，原始附件引用及大小保持不变，未修改文件或补入空格。\n\n工具已返回两个预览的发布记录，但未提供界面渲染截图；因此不宣称显示验证通过。请以这两个预览卡片的实际显示作对照。",
+      "textChars": 170,
+      "time": {
+        "start": 1791774598904,
+        "end": 1791774602905
+      }
+    },
+    {
+      "id": "prt_g0VXnjdOO00YUfMdENm7",
+      "messageID": "msg_g0VXnjazX005gWSq3TiQ",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXnjWJ900PCQocwaEM",
+      "message_id": "msg_g0VXnjVDe00vElp2ZOU1",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_97bd1c20efea47cda21371af22d3a5ae\",\"tool\":\"read\",\"input\":{\"filePath\":\"empty-source.txt\"},\"time\":{\"start\":1791774575979}}"
+    },
+    {
+      "id": "prt_g0VXnjY7N00hQPJPhwbM",
+      "message_id": "msg_g0VXnjWg700n9HXA9PQQ",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_rjPc8aAQ0l8VW3H76jCQVrw8\",\"tool\":\"publish_interactive_artifact\",\"input\":{\"artifact\":{\"schemaVersion\":\"1\",\"title\":\"空文本预览333\",\"content\":{\"renderer\":\"file-preview@1\",\"kind\":\"text\",\"source\":{\"sha\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"url\":\"/attachment/prj_hQaq0aIVif5YZlqvbVW1/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt\",\"mime\":\"text/plain\",\"size\":0,\"filename\":\"empty-source.txt\"}}}},\"time\":{\"start\":1791774582937}}"
+    },
+    {
+      "id": "prt_g0VXnja4300J5EQEZYnP",
+      "message_id": "msg_g0VXnjYnb00CMCKUoZuR",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_140851bb8e2f4892a61fe42e25b0f4e5\",\"tool\":\"publish_interactive_artifact\",\"input\":{\"artifact\":{\"schemaVersion\":\"1\",\"title\":\"正文对照333\",\"content\":{\"renderer\":\"file-preview@1\",\"kind\":\"text\",\"source\":{\"sha\":\"46e87db61d8bc3125186a53f6eeaec29d515c543f236a2cedd17fcf43983a5d6\",\"url\":\"/attachment/prj_hQaq0aIVif5YZlqvbVW1/46e87db61d8bc3125186a53f6eeaec29d515c543f236a2cedd17fcf43983a5d6.txt\",\"mime\":\"text/plain\",\"size\":83,\"filename\":\"reference-source.txt\"}}}},\"time\":{\"start\":1791774590419}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXnjWJ900PCQocwaEM",
+      "outcome": "completed",
+      "outputChars": 203,
+      "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\text-preview-empty-333-live-01\\project\\empty-source.txt</path>\n<type>file</type>\n<content>1: \n\n(End of file - total 1 lines)\n</content>",
+      "metadata": {
+        "preview": "",
+        "truncated": false,
+        "loaded": [],
+        "lines": 1,
+        "totalLines": 1
+      },
+      "time": {
+        "end": 1791774576672
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXnjY7N00hQPJPhwbM",
+      "outcome": "completed",
+      "resultAttemptID": "per_hu41klVmOnRfjvKJt1S4",
+      "outputChars": 69,
+      "output": "{\"artifactID\":\"art_g0VXnjYl800KBuRjoWRT\",\"renderer\":\"file-preview@1\"}",
+      "metadata": {
+        "artifactID": "art_g0VXnjYl800KBuRjoWRT",
+        "renderer": "file-preview@1",
+        "truncated": false
+      },
+      "time": {
+        "end": 1791774585407
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXnja4300J5EQEZYnP",
+      "outcome": "completed",
+      "resultAttemptID": "per_h50CZWRSHSbZOzZ1Zep0",
+      "outputChars": 69,
+      "output": "{\"artifactID\":\"art_g0VXnjask00ntMajLZHB\",\"renderer\":\"file-preview@1\"}",
+      "metadata": {
+        "artifactID": "art_g0VXnjask00ntMajLZHB",
+        "renderer": "file-preview@1",
+        "truncated": false
+      },
+      "time": {
+        "end": 1791774593564
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "art_g0VXnjYl800KBuRjoWRT",
+      "message_id": "msg_g0VXnjWg700n9HXA9PQQ",
+      "payload": "{\"schemaVersion\":\"1\",\"title\":\"空文本预览333\",\"renderer\":\"file-preview@1\",\"kind\":\"text\",\"source\":{\"sha\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\"url\":\"/attachment/prj_hQaq0aIVif5YZlqvbVW1/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt\",\"mime\":\"text/plain\",\"size\":0,\"filename\":\"empty-source.txt\"}}"
+    },
+    {
+      "id": "art_g0VXnjask00ntMajLZHB",
+      "message_id": "msg_g0VXnjYnb00CMCKUoZuR",
+      "payload": "{\"schemaVersion\":\"1\",\"title\":\"正文对照333\",\"renderer\":\"file-preview@1\",\"kind\":\"text\",\"source\":{\"sha\":\"46e87db61d8bc3125186a53f6eeaec29d515c543f236a2cedd17fcf43983a5d6\",\"url\":\"/attachment/prj_hQaq0aIVif5YZlqvbVW1/46e87db61d8bc3125186a53f6eeaec29d515c543f236a2cedd17fcf43983a5d6.txt\",\"mime\":\"text/plain\",\"size\":83,\"filename\":\"reference-source.txt\"}}"
+    }
+  ]
+}
