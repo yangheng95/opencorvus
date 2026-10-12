@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [330 文件来源图片查看](source-image-plan-330.md)：图片来源查看与引用恢复。
+
 - [329 子会话来源后续生成](child-live-plan-329.md)：提前进入来源区观察真实流式正文。
 
 - [328 真实子会话复查](child-render-plan-328.md)：Sources与正文流式渲染的当前证据。

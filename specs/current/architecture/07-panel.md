@@ -30,6 +30,14 @@ available. The leave dialog reads the same action error. Save conflicts retain
 their existing message and write preconditions. No automatic retry loop or
 parallel file loader is introduced.
 
+File Editor renders base64 image content from its existing FileContent response
+through the shared PreviewableImage and image preview host. Image viewing is
+separate from text editability: images carry the existing read-only badge while
+text files retain CodeEditor, citation ranges and save admission. Other binary
+content keeps the existing non-editable description. The file-image container
+owns its bounded layout and scrolling; there is no additional fetch, image
+cache, file mutation or parallel preview implementation.
+
 The main Composer owner derives ready, submitting or unavailable from the existing
 connection/workspace admission and launcher submission signals. ChatComposer
 derives interactivity from ready at the same dispatch, attachment, mention and

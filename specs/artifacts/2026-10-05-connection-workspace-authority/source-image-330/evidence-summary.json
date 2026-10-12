@@ -1,0 +1,34 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 3418472,
+    "archiveBytes": 95071,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 6,
+    "sessions": [
+      {
+        "id": "ses_hVb9FlRuDoObXh8Q32Kn",
+        "projectID": "prj_hPkHul9VPAyZPpjy8plV",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCdxy0zz9iE9qKXK5",
+        "projectID": "prj_hUhf3bohMDCztH2X51op",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXnM3mH00PXmhDYJHT",
+        "sourceId": "bd78beaf0e155afaedd4ca76489967a4bff3d00294fc462327ab0bc79fec2487",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnM52I00nj9aHpv5F",
+        "sourceId": "cc14adc45984b8dee416aadea115fc2472ceca17faf440ca2b42e72007a70b22",
+        "title": "source-image.png"
+      }
+    ]
+  }
+]

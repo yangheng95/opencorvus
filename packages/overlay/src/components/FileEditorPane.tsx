@@ -22,6 +22,7 @@ import { Button } from "./ui/Button"
 import { Badge } from "./ui/Badge"
 import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
+import { PreviewableImage } from "./ImagePreview"
 
 function fileContentPath(target: FileEditorTarget): string {
   const query = new URLSearchParams({
@@ -128,6 +129,12 @@ export function FileEditorPane() {
   const target = createMemo(() => selectedFileTarget())
   const path = createMemo(() => target()?.path ?? "")
   const textContent = createMemo(() => canEdit(content()))
+  const imageSource = createMemo(() => {
+    const file = content()
+    return file?.encoding === "base64" && file.mimeType?.startsWith("image/")
+      ? `data:${file.mimeType};base64,${file.content}`
+      : undefined
+  })
   const writable = createMemo(() => textContent() && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
   const identityOf = (file: FileEditorTarget | null) => file
@@ -343,7 +350,7 @@ export function FileEditorPane() {
             </Show>
           </div>
           <Show
-            when={target()?.sourceAbsolutePath}
+            when={target()?.sourceAbsolutePath || imageSource()}
             fallback={
               <Button
                 type="button"
@@ -426,24 +433,28 @@ export function FileEditorPane() {
                 </Feedback>
               }
             >
-              <Show
-                when={textContent()}
-                fallback={
-                  <div class="file-editor-empty">
-                    <Icon name="file-document" size="medium" />
-                    <p>{t("file_editor.binary")}</p>
-                  </div>
-                }
-              >
-                <CodeEditor
-                  value={draft()}
-                  path={path()}
-                  lineRange={target()?.range}
-                  lineRangeRevealRevision={fileEditorRevealRevision()}
-                  ariaLabel={t("file_editor.title")}
-                  onValueChange={updateDraft}
-                  readOnly={!!target()?.sourceAbsolutePath || fileEditorReserved()}
-                />
+              <Show when={imageSource()} fallback={
+                <Show
+                  when={textContent()}
+                  fallback={
+                    <div class="file-editor-empty">
+                      <Icon name="file-document" size="medium" />
+                      <p>{t("file_editor.binary")}</p>
+                    </div>
+                  }
+                >
+                  <CodeEditor
+                    value={draft()}
+                    path={path()}
+                    lineRange={target()?.range}
+                    lineRangeRevealRevision={fileEditorRevealRevision()}
+                    ariaLabel={t("file_editor.title")}
+                    onValueChange={updateDraft}
+                    readOnly={!!target()?.sourceAbsolutePath || fileEditorReserved()}
+                  />
+                </Show>
+              }>
+                {(src) => <div class="file-editor-image"><PreviewableImage src={src()} alt={path()} /></div>}
               </Show>
             </Show>
           </Show>

@@ -1,0 +1,65 @@
+{
+  "observedAt": "2026-10-12T01:43:22.455Z",
+  "providerRequests": 6,
+  "model": "gpt-6.1-sol",
+  "streaming": true,
+  "sourceParts": [
+    {
+      "id": "prt_g0VXnM3mH00PXmhDYJHT",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-image-330-live-01\\project\\source-review.md",
+      "range": {
+        "startLine": 24,
+        "endLine": 24
+      }
+    },
+    {
+      "id": "prt_g0VXnM52I00nj9aHpv5F",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-image-330-live-01\\project\\source-image.png"
+    }
+  ],
+  "imageContent": {
+    "imageBytes": 22168,
+    "type": "text",
+    "boundary": "Actual file/content response compared with the exact owned project image bytes; no UI assertion.",
+    "mimeType": "image/png",
+    "exactOriginalBytes": true,
+    "observedAt": "2026-10-12T01:37:36.5671418Z",
+    "encoding": "base64"
+  },
+  "responses": [
+    {
+      "time": "2026-10-12T01:36:43.056Z",
+      "requestID": "1bcf370f-01ce-440e-a9ab-ce88e92d13fe",
+      "status": 200
+    },
+    {
+      "time": "2026-10-12T01:37:36.488Z",
+      "requestID": "eeef4512-adbd-4c70-8746-93a4f6dc5aba",
+      "status": 200
+    },
+    {
+      "time": "2026-10-12T01:39:49.626Z",
+      "requestID": "df34949d-ea59-4272-8f1d-c91441f0ee1b",
+      "status": 200
+    },
+    {
+      "time": "2026-10-12T01:40:29.486Z",
+      "requestID": "5b142d8a-6774-4afc-84fe-e1ad8e1bc1ed",
+      "status": 404
+    },
+    {
+      "time": "2026-10-12T01:40:58.323Z",
+      "requestID": "1a406f9c-caa6-47ba-8de0-420997795015",
+      "status": 200
+    },
+    {
+      "time": "2026-10-12T01:41:38.658Z",
+      "requestID": "794a5d70-127e-4641-bfc6-83c031fddd66",
+      "status": 200
+    }
+  ],
+  "originalTextRestored": true,
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "boundary": "Positive actual backend/source/storage and owned-input checks. No browser, component, DOM, screenshot or pixel assertions. Manual visual proof is separate."
+}
