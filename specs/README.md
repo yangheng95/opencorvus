@@ -3156,3 +3156,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [折叠历史与来源读点363](artifacts/2026-10-05-connection-workspace-authority/closed-history-363/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/closed-history-plan-363.md)。
 
 - [文件来源匹配行预览364](artifacts/2026-10-05-connection-workspace-authority/source-preview-364/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-preview-plan-364.md)。
+
+- [折叠历史与来源摘要365](records/2026-10/2026-10-13-source-excerpt-hidden-365.md)：真实长摘要读点与隔离复核，未证实新缺陷。

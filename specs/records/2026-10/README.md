@@ -709,3 +709,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [折叠历史与来源读点363](2026-10-13-closed-history-363.md)：共享阅读锚点的可见性调查。
 
 - [文件来源匹配行预览364](2026-10-13-source-preview-364.md)：真实搜索来源内容辨认。
+
+- [2026-10-13 折叠历史与来源摘要365](2026-10-13-source-excerpt-hidden-365.md)。
