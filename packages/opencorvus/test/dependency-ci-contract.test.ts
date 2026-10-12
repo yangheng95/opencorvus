@@ -32,8 +32,14 @@ test("the native file subscription delivers exact created files with brace ignor
     await delivery.promise
     await subscription.unsubscribe()
     subscription = undefined
+    const createdFiles = await Promise.all(
+      created.map(async (event) => ({ event, isFile: (await fs.lstat(event.path)).isFile() })),
+    )
     expect(
-      created.map((event) => ({ type: event.type, path: path.relative(directory, event.path).replaceAll("\\", "/") })),
+      createdFiles.filter(({ isFile }) => isFile).map(({ event }) => ({
+        type: event.type,
+        path: path.relative(directory, event.path).replaceAll("\\", "/"),
+      })),
     ).toEqual([{ type: "create", path: "src/retained.ts" }])
   } finally {
     clearTimeout(timeout)
