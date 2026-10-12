@@ -13,6 +13,7 @@ import { compile as compileHtmlToText } from "html-to-text"
 import { YAMLException } from "js-yaml"
 import { parseFrontmatter } from "../util/frontmatter"
 import { readHttpResponseBody, disposeHttpResponseBody, fetchHttpResponseOwner } from "../util/http-response-body"
+import { decodeUtf8Prefix } from "../util/utf8"
 
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
 const DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
@@ -289,7 +290,7 @@ function formatFetchedText(text: string) {
     shownBytes += separatorBytes + lineBytes
   }
   if (shown.length === 0) {
-    const head = Buffer.from(normalized, "utf8").subarray(0, TEXT_OUTPUT_MAX_BYTES).toString("utf8")
+    const head = decodeUtf8Prefix(Buffer.from(normalized, "utf8"), TEXT_OUTPUT_MAX_BYTES)
     shown.push(head)
     shownBytes = Buffer.byteLength(head, "utf8")
   }

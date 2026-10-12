@@ -654,6 +654,13 @@ dropping subsequent visible tail text. Links contribute their authored text;
 headings retain case and lines are not forcibly wrapped. The published Source title
 remains metadata. The existing HTTP byte cap and final text-output budget stay
 authoritative; this text extraction neither executes scripts nor infers visual layout.
+When webfetch's first line exceeds its byte budget, its visible prefix ends at a
+complete UTF-8 character. Shown and omitted byte counts describe that exact prefix.
+The shared byte-prefix decoder also serves tool-result text attachments and Bash
+live previews; a budget cut retains partial encoding bytes as omitted input,
+whereas the real end of malformed input keeps normal replacement-character decoding.
+Existing size limits, line-first selection, truncation notices and source identity
+remain owned by their original consumers.
 Tooltip detail adds location or media information only when it differs from the
 primary source identity; it does not repeat a root-level file's name or range.
 File citation labels and location details share one line-range presentation:

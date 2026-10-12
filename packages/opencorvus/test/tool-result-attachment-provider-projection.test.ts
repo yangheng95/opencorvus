@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test"
 import type { Provider } from "../src/provider/provider"
 import { ProviderTransform } from "../src/provider/transform"
 import { Message } from "../src/session/message"
-import { isDecodableText } from "../src/session/text-mime"
+import { isDecodableText, MAX_TEXT_DECODE_BYTES } from "../src/session/text-mime"
 import { Instance } from "../src/project/instance"
 import { AttachmentStore } from "../src/storage/attachment-store"
 import { tmpdir } from "./fixture/fixture"
@@ -35,6 +35,40 @@ const openAIModel = {
 } satisfies Provider.Model
 
 describe("tool-result attachment provider projection", () => {
+  test.each(["inline", "persisted"])(
+    "projects the complete UTF-8 prefix of a large %s text attachment",
+    async (storage) => {
+      const body = "x" + "文".repeat(MAX_TEXT_DECODE_BYTES)
+      const bytes = Buffer.from(body)
+      const expected =
+        "x" +
+        "文".repeat(Math.floor((MAX_TEXT_DECODE_BYTES - 1) / 3)) +
+        `\n\n[... truncated — file exceeds ${MAX_TEXT_DECODE_BYTES / 1024}KB limit ...]`
+      await using tmp = await tmpdir({ git: true })
+      await Instance.provide({
+        directory: tmp.path,
+        fn: async () => {
+          const url =
+            storage === "persisted"
+              ? (await AttachmentStore.write(Instance.project.id, bytes, "text/plain", "long.txt")).url
+              : `data:text/plain;base64,${bytes.toString("base64")}`
+          const output = await Message.toolResultToModelOutput(
+            { attachments: [{ mime: "text/plain", filename: "long.txt", url }] },
+            openAIModel,
+          )
+          expect(output.type).toBe("text")
+          if (output.type !== "text") throw new Error(`Expected text output, received ${output.type}`)
+          const decoded = output.value.slice(output.value.indexOf("\n") + 1)
+          console.log(
+            "Attachment prefix observation",
+            JSON.stringify({ storage, tail: decoded.slice(-90), bytes: Buffer.byteLength(decoded) }),
+          )
+          expect(Buffer.compare(Buffer.from(decoded), Buffer.from(expected))).toBe(0)
+        },
+      })
+    },
+  )
+
   test.each([
     ["application/schema+json", "schema.json"],
     ["application/problem+json; charset=utf-8", "problem.json"],

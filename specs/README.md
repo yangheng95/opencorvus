@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [325 来源与附件字节边界](records/2026-10/2026-10-12-source-utf8-325.md)：完整 UTF-8 前缀的统一解码。
+
 - [324 来源纯文本](records/2026-10/2026-10-12-source-text-324.md)：字符实体与正文结构的统一提取。
 
 - [323 来源正文媒体类型](records/2026-10/2026-10-12-source-mime-323.md)：HTML/XHTML实际正文与来源标题的一致性。

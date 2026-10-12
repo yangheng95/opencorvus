@@ -31,6 +31,7 @@ import { forbiddenShellEnvironmentKeys, sanitizeShellEnvironment } from "@/shell
 import { redactInlinePayloads } from "@/util/inline-base64"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
 import { StringDecoder } from "node:string_decoder"
+import { decodeUtf8Prefix } from "@/util/utf8"
 
 const MAX_METADATA_LENGTH = 30_000
 export const BASH_LIVE_PREVIEW_LENGTH = 4_096
@@ -64,21 +65,15 @@ function bashMetadataOutput(output: string): string {
 
 /** Bounded visible output plus a real monotone coordinate that continues to
  * change after the preview reaches its truncation limit. */
-function utf8Prefix(text: string, maxBytes: number): string {
-  const bytes = Buffer.from(text, "utf8")
-  if (bytes.length <= maxBytes) return text
-  let end = maxBytes
-  while (end > 0 && (bytes[end]! & 0xc0) === 0x80) end--
-  return bytes.subarray(0, end).toString("utf8")
-}
-
 export function bashLiveProgressMetadata(preview: string, outputBytes: number, description?: string) {
   const safe = redactInlinePayloads(preview)
   const marker = "\n\n..."
-  const truncated = Buffer.byteLength(safe, "utf8") > BASH_LIVE_PREVIEW_LENGTH || outputBytes > Buffer.byteLength(preview, "utf8")
+  const truncated =
+    Buffer.byteLength(safe, "utf8") > BASH_LIVE_PREVIEW_LENGTH || outputBytes > Buffer.byteLength(preview, "utf8")
   return {
     output: truncated
-      ? utf8Prefix(safe, BASH_LIVE_PREVIEW_LENGTH - Buffer.byteLength(marker, "utf8")) + marker
+      ? decodeUtf8Prefix(Buffer.from(safe, "utf8"), BASH_LIVE_PREVIEW_LENGTH - Buffer.byteLength(marker, "utf8")) +
+        marker
       : safe,
     output_bytes: outputBytes,
     description,
@@ -99,7 +94,7 @@ export class BashLiveOutputAccumulator {
     this.bytesValue += chunk.length
     const text = this.decoders[stream].write(chunk)
     if (Buffer.byteLength(this.previewValue, "utf8") < BASH_LIVE_PREVIEW_LENGTH) {
-      this.previewValue = utf8Prefix(this.previewValue + text, BASH_LIVE_PREVIEW_LENGTH)
+      this.previewValue = decodeUtf8Prefix(Buffer.from(this.previewValue + text, "utf8"), BASH_LIVE_PREVIEW_LENGTH)
     }
     return text
   }
@@ -109,7 +104,7 @@ export class BashLiveOutputAccumulator {
     this.ended = true
     const text = this.decoders.stdout.end() + this.decoders.stderr.end()
     if (Buffer.byteLength(this.previewValue, "utf8") < BASH_LIVE_PREVIEW_LENGTH) {
-      this.previewValue = utf8Prefix(this.previewValue + text, BASH_LIVE_PREVIEW_LENGTH)
+      this.previewValue = decodeUtf8Prefix(Buffer.from(this.previewValue + text, "utf8"), BASH_LIVE_PREVIEW_LENGTH)
     }
     return text
   }

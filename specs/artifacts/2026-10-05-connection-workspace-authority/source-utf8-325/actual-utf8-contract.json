@@ -1,0 +1,47 @@
+{
+  "observedAtUtc": "2026-10-12T00:07:54.015Z",
+  "sessionID": "ses_-zUSD0wObzzWIfrgMMs4",
+  "toolPartID": "prt_g0VXmz4mA00fgTsmBqFK",
+  "input": {
+    "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82",
+    "format": "text",
+    "timeout": 120
+  },
+  "originalBytes": 80190,
+  "shownBytes": 50687,
+  "omittedBytes": 29503,
+  "fullCanonicalOutputEqualsIndependentWholeCharacterPrefix": true,
+  "actualTail": "严厉措施来缓解交通拥堵问题，其中包括将每月核发的乘用车新车牌数量限制在2万个，并",
+  "firstOmittedCharacter": "在",
+  "marker": "[webfetch output clipped: 50687 of 80190 bytes shown, 29503 bytes omitted from model context]",
+  "sources": [
+    {
+      "id": "prt_g0VXmz5Ma00ZO51y2ZMU",
+      "messageID": "msg_g0VXmz3pW00z5ERfOxli",
+      "type": "source-url",
+      "sourceId": "0d6b825cf9bccf8bbf22ea1cd0eadd81ba4e746782cf51931839430c6f8e7aae",
+      "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82",
+      "provider": "opencorvus-webfetch"
+    }
+  ],
+  "providerRequests": 5,
+  "probe": {
+    "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82",
+    "status": 200,
+    "type": "application/json; charset=utf-8",
+    "bytes": 80190,
+    "firstLineBytes": 80190,
+    "atCut": [
+      229,
+      185,
+      182,
+      229,
+      156,
+      168,
+      233,
+      171
+    ],
+    "oldTail": "厉措施来缓解交通拥堵问题，其中包括将每月核发的乘用车新车牌数量限制在2万个，并�"
+  },
+  "qualification": "Actual model-issued public HTTP read; canonical Tool payload compared in full to the independently accumulated character prefix of the real public response. No UI assertion, fixture substitution or model narration oracle."
+}

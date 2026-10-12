@@ -1,3 +1,5 @@
+import { decodeUtf8Prefix } from "../util/utf8"
+
 const TEXT_APP_MIMES = new Set([
   "application/json",
   "application/xml",
@@ -74,12 +76,11 @@ export function isDecodableText(mime: string, filename?: string): boolean {
 export const MAX_TEXT_DECODE_BYTES = 200_000
 
 export function decodeTextBytes(raw: Uint8Array): string {
-  const bytes = Buffer.from(raw)
-  if (bytes.length > MAX_TEXT_DECODE_BYTES) {
-    const truncated = bytes.subarray(0, MAX_TEXT_DECODE_BYTES).toString("utf-8")
-    return `${truncated}\n\n[... truncated — file exceeds ${MAX_TEXT_DECODE_BYTES / 1024}KB limit ...]`
+  const text = decodeUtf8Prefix(raw, MAX_TEXT_DECODE_BYTES)
+  if (raw.byteLength > MAX_TEXT_DECODE_BYTES) {
+    return `${text}\n\n[... truncated — file exceeds ${MAX_TEXT_DECODE_BYTES / 1024}KB limit ...]`
   }
-  return bytes.toString("utf-8")
+  return text
 }
 
 /**

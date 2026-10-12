@@ -68,7 +68,7 @@ describe("Bash live durable progress", () => {
       bytes: encoded.length,
       metadata: { output: "训练", output_bytes: encoded.length, description: "split" },
       bounded: {
-        output: expect.any(String),
+        output: "训".repeat(Math.floor((BASH_LIVE_PREVIEW_LENGTH - Buffer.byteLength("\n\n...")) / 3)) + "\n\n...",
         output_bytes: Buffer.byteLength(cjk, "utf8"),
         description: "CJK",
       },

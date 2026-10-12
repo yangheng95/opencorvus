@@ -1,0 +1,29 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 1474388,
+    "archiveBytes": 50664,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 5,
+    "sessions": [
+      {
+        "id": "ses_h5YC5eqFjtjE1VTgz0bL",
+        "projectID": "prj_h1tBK3kTq0RaI7pWL5s4",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSD0wObzzWIfrgMMs4",
+        "projectID": "prj_hm6KytJqcPTaKTw7WXdy",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXmz5Ma00ZO51y2ZMU",
+        "sourceId": "0d6b825cf9bccf8bbf22ea1cd0eadd81ba4e746782cf51931839430c6f8e7aae",
+        "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82"
+      }
+    ]
+  }
+]
