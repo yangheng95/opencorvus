@@ -1,0 +1,74 @@
+{
+  "observedAtUtc": "2026-10-12T00:24:12.712Z",
+  "expectedResourceURLs": [
+    "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82",
+    "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&exlimit=2&titles=%E5%8C%97%E4%BA%AC%E5%B8%82%7C%E4%B8%8A%E6%B5%B7%E5%B8%82",
+    "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0"
+  ],
+  "outcomes": [
+    {
+      "partID": "prt_g0VXn31W00075E2EQojk",
+      "characters": 18732,
+      "metadata": {
+        "originalBytes": 80190,
+        "shownBytes": 50687,
+        "omittedBytes": 29503,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      }
+    },
+    {
+      "partID": "prt_g0VXn33B300A6RR7Wd4B",
+      "characters": 18753,
+      "metadata": {
+        "originalBytes": 88400,
+        "shownBytes": 50688,
+        "omittedBytes": 37712,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      }
+    },
+    {
+      "partID": "prt_g0VXn34sU00nELzdx6dn",
+      "characters": 5181,
+      "metadata": {
+        "originalBytes": 6593,
+        "shownBytes": 6593,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "prt_g0VXn324I00QnIFcrb50",
+      "messageID": "msg_g0VXn30iI00OD77Ld9RO",
+      "type": "source-url",
+      "sourceId": "0d6b825cf9bccf8bbf22ea1cd0eadd81ba4e746782cf51931839430c6f8e7aae",
+      "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXn33zp00nvJJe1FfT",
+      "messageID": "msg_g0VXn325v006jgAWLj4L",
+      "type": "source-url",
+      "sourceId": "a2e1a10cc5697e3529b164e2226e60e8381d9da6e2a81a5b1e4a7b643fb21606",
+      "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&exlimit=2&titles=%E5%8C%97%E4%BA%AC%E5%B8%82%7C%E4%B8%8A%E6%B5%B7%E5%B8%82",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXn357900FGdksFhi2",
+      "messageID": "msg_g0VXn341K00pP3SKK1Wo",
+      "type": "source-url",
+      "sourceId": "7d57976d1f413cc15d4e0bf59cf63edc1920d78b9df4eb703e75d62b29e4c86b",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0",
+      "title": "URL() - Web API | MDN",
+      "provider": "opencorvus-webfetch"
+    }
+  ],
+  "providerRequests": 7,
+  "boundary": "Backend canonical inputs, source identity and completed tool/provider outcomes only. Source labels, Tooltip and clicked-page navigation were inspected manually in the real UI; this checker does not inspect DOM, rendering code, component output or screenshot pixels."
+}

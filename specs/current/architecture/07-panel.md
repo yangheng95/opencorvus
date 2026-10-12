@@ -737,10 +737,16 @@ horizontal scroll surface. The existing Marked renderer emits focusable native
 tables and delegates header/body cells and rows to its standard primitives;
 keyboard focus is visible and native horizontal keys reach the remaining cells.
 Table identity, alignment, links and inline rendering remain ordinary Markdown.
-The label uses an actual source title when supplied. Webfetch reads that title only
-from the fetched text/html document using the public HTML parser; an empty title
+The label uses the actual publisher title from the Source payload; webfetch's
+HTML/XHTML and native Markdown metadata contract is defined above. An empty title
 remains optional and uses a path-and-query preview with the host on the location
 line, keeping same-site resource differences near the start of a compact label.
+This preview and its fragment caption decode visible non-ASCII percent-encoded
+text through the native UTF-8 URI decoder. Encoded ASCII delimiters, percent signs,
+spaces, Unicode controls/separators/default-ignorable characters and malformed
+UTF-8 sequences retain their exact encoded representation. Publisher titles are
+authored text and are not URL-decoded. Query order and source/navigation identity
+remain unchanged; the full serialized URL is still shown in the Tooltip detail.
 A root URL without a query uses its host as the label; if the label already names
 the host, the location line contains only an actual fragment when present.
 Accessible link names combine the nonempty label and location once.

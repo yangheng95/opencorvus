@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [326 来源 URL 可读文字](source-url-display-plan-326.md)：保留真实导航的显示层改进。
+
 - [325 来源与附件字节边界](source-utf8-plan-325.md)：完整 UTF-8 前缀的统一解码。
 
 - [324 来源纯文本](source-text-plan-324.md)：字符实体与正文结构的统一提取。

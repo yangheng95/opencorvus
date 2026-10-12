@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [326 来源 URL 可读文字](records/2026-10/2026-10-12-source-url-display-326.md)：保留真实导航的显示层改进。
+
 - [325 来源与附件字节边界](records/2026-10/2026-10-12-source-utf8-325.md)：完整 UTF-8 前缀的统一解码。
 
 - [324 来源纯文本](records/2026-10/2026-10-12-source-text-324.md)：字符实体与正文结构的统一提取。

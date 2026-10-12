@@ -55,6 +55,20 @@ function fileSourceLocation(label: string, range: ConversationSourcePart["range"
   return `${label}:${lines}`
 }
 
+/** Decode visible international URL text without changing encoded ASCII structure. */
+function readableSourceUrlText(value: string): string {
+  return value.replace(/(?:%[89a-f][0-9a-f])+/gi, (encoded) => {
+    try {
+      const decoded = decodeURIComponent(encoded)
+      return /[\p{C}\p{Z}\p{Default_Ignorable_Code_Point}]/u.test(decoded) ? encoded : decoded
+    } catch (error) {
+      // An invalid UTF-8 sequence retains its exact visible URL representation.
+      if (error instanceof URIError) return encoded
+      throw error
+    }
+  })
+}
+
 function sourceLabel(source: ConversationSourcePart): string {
   if (source.type === "source-file") {
     const title = source.title || ""
@@ -75,7 +89,7 @@ function sourceLabel(source: ConversationSourcePart): string {
           return title
         }
       }
-      return url.pathname === "/" && !url.search ? url.host : `${url.pathname}${url.search}`
+      return url.pathname === "/" && !url.search ? url.host : readableSourceUrlText(`${url.pathname}${url.search}`)
     } catch {
       return title || source.url
     }
@@ -171,8 +185,9 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
     if (props.source.type !== "source-url" || !props.source.url) return ""
     try {
       const url = new URL(props.source.url)
-      if (label() === url.host) return url.hash
-      return url.hash ? `${url.host} · ${url.hash}` : url.host
+      const fragment = readableSourceUrlText(url.hash)
+      if (label() === url.host) return fragment
+      return fragment ? `${url.host} · ${fragment}` : url.host
     } catch {
       return ""
     }

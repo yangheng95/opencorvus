@@ -1,0 +1,69 @@
+{
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "copiedLength": 2194,
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-url-display-326-live-01\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "removed",
+      "copiedLength": 9155406,
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-url-display-326-live-01\\runtime\\data\\models.json"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T00:23:06.1929730Z",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 66668,
+        "processInstanceID": "win32:639273611956578408",
+        "occurrenceID": "3dc951d6-ea60-4fde-88d1-657dcb225329"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 16268,
+        "processInstanceID": "win32:639273611948429069",
+        "occurrenceID": "48910782-0e79-45a2-b9ca-5a787c831d99"
+      }
+    }
+  ],
+  "occurrence": "source-url-display-326-live-01-ccbedcf0-9a8c-4ac9-83fa-e7ba4df8eff3",
+  "nativeSettlement": {
+    "occurrence": "source-url-display-326-live-01-ccbedcf0-9a8c-4ac9-83fa-e7ba4df8eff3",
+    "outcome": "settled",
+    "host": {
+      "pid": 16268,
+      "processInstanceID": "win32:639273611948429069",
+      "occurrenceID": "48910782-0e79-45a2-b9ca-5a787c831d99"
+    },
+    "target": {
+      "pid": 66668,
+      "processInstanceID": "win32:639273611956578408",
+      "occurrenceID": "3dc951d6-ea60-4fde-88d1-657dcb225329"
+    },
+    "observedAtUtc": "2026-10-12T00:23:03.666Z",
+    "deadlineAt": 1791764994828,
+    "terminal": {
+      "occurrenceID": "source-url-display-326-live-01-ccbedcf0-9a8c-4ac9-83fa-e7ba4df8eff3",
+      "pid": 66668,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true
+}
