@@ -70,7 +70,25 @@ test.skipIf(process.platform !== "win32")("actual exclusive README lock measures
   const ready = path.join(barriers, "ready")
   const release = path.join(barriers, "release")
   const quote = (value: string) => "'" + value.replaceAll("'", "''") + "'"
-  const script = `$ErrorActionPreference='Stop'; $held=$null; try { $held=[IO.File]::Open(${quote(readme)},[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::None); [IO.File]::WriteAllText(${quote(ready)},'ready'); Write-Output 'LOCK_READY'; $until=[DateTime]::UtcNow.AddSeconds(45); while(-not [IO.File]::Exists(${quote(release)})) { if([DateTime]::UtcNow -ge $until){throw 'Owned lock release deadline exceeded'}; Start-Sleep -Milliseconds 20 } } finally { if($held){$held.Dispose()}; Write-Output 'LOCK_RELEASED' }`
+  const script = `
+$ErrorActionPreference='Stop'
+$held=$null
+try {
+  $held=[IO.File]::Open(${quote(readme)},[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::None)
+  $until=[DateTime]::UtcNow.AddSeconds(45)
+  [Threading.Thread]::Sleep(0)
+  [Console]::Out.WriteLine('LOCK_READY')
+  [Console]::Out.Flush()
+  [IO.File]::WriteAllText(${quote(ready)},'ready')
+  while(-not [IO.File]::Exists(${quote(release)})) {
+    if([DateTime]::UtcNow -ge $until){throw 'Owned lock release deadline exceeded'}
+    [Threading.Thread]::Sleep(20)
+  }
+} finally {
+  if($held){$held.Dispose()}
+  [Console]::Out.WriteLine('LOCK_RELEASED')
+  [Console]::Out.Flush()
+}`
   const handle = await ProcessSupervisor.spawnHostCommand({ executable: "powershell.exe", args: ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(script, "utf16le").toString("base64")], cwd: project.path, env: process.env, owner: "candidate-reader97-exclusive-readme" })
   let stdout = "", stderr = ""
   handle.stdout?.setEncoding("utf8")
@@ -125,6 +143,7 @@ test.skipIf(process.platform !== "win32")("actual exclusive README lock measures
   const recoveredHTTP = await cold(project.path)
   console.log("reader97 recovered", JSON.stringify({ identity: { id: recovered.id, namespace: recovered.namespace, version: recovered.version }, recoveredCandidate, recoveredHTTP, locked }))
   expect(exitCode).toBe(0)
+  expect(stdout.replaceAll("\r\n", "\n").trim()).toBe("LOCK_READY\nLOCK_RELEASED")
   expect({ id: recovered.id, namespace: recovered.namespace, version: recovered.version }).toEqual({ id: profile, namespace: "reader97", version: "2026.10.07.1" })
   expect(recoveredCandidate).toEqual({ kind: "value", value: undefined })
   expect(recoveredHTTP).toMatchObject({ kind: "value", value: { status: 200, body: {} } })

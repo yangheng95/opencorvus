@@ -125,3 +125,13 @@ af4512839已正常推送，所有推送钩子通过。原本地46个当前批次
 run38269770174暴露真实手动入口工具链问题：本机PowerShell写出的46行列表是CRLF（Carriage Return + Line Feed，回车换行），YAML中的Bash read按LF切行却保留CR，导致46个文件名都带末尾回车并在模块导入前失败。日志并无测试断言失败，不能把这一轮计作已验收。test_files公开约定是逐行文件路径，全仓仅test.yml这一个输入消费点，现有合同测试只检查字符串，漏了Windows输入。最小修复在该文本边界去掉每行一个末尾CR，保留路径内空格和原argv引用；正向执行实际workflow步骤的Bash解析（仅记录bunx实参），覆盖LF、CRLF、空列表/空行和带空格路径，再用原CRLF输入运行真实selected CI。完整run test_files为空，因此继续保留，不因这次手动列表问题重跑整套。
 
 两个原workflow checker的精确文件入口22测试/213断言通过，包含实际Bash步骤的四种输入到argv正向合同。文档检查通过；不修改unit runner的通用文件名语义、不忽略缺失模块错误，仅修复公开多行输入的行结束符边界。
+
+## Windows独占锁辅助进程的就绪边界
+
+4f3f1947a已收敛到upstream。原CRLF列表run38271719489在Linux/macOS全部46文件通过；Windows45通过，唯一失败在candidate-reader-provenance的独占README锁辅助进程。它已写ready文件，但stdout/stderr仍空；测试在15:55:32完成读检查后等待固定5秒，于15:55:37主动terminate，实际terminal.exitCode=1。这是测试主动终止的明确路径，不是随机退出；不改期望为1或延长预算。此前本地同入口exit0，stdout为LOCK_READY/LOCK_RELEASED，stderr明确出现PowerShell“Preparing modules for first use”。
+
+直接控制流问题是辅助脚本先用.NET写ready，再首次执行Write-Output和Start-Sleep；就绪回执没有覆盖后续命令自动加载/输出管线初始化。微软[模块说明](https://learn.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_Modules)明确首次使用模块命令会自动导入，而两命令属于Utility模块。CI日志没有该阻塞内部栈，具体模块初始化耗时仍未知；不能宣称测得其耗时。可确定的是ready以后还保留不必要的Shell模块初始化，而终止先于首条输出，测试就绪合同不足。
+
+横审spawnHostCommand→defaultSpawnCommand→Windows supervisor请求、物理settled marker、exited/outputSettled/settled与cleanup：该测试仅创建Host辅助进程，没有Task/Mission/Session调度轮次；其退出来自测试finally的5秒terminate分支，supervisor按该物理事实结算。共享Task/Session owner恢复与原生命令回归此前三平台均通过，本次不修改生产进程管理、恢复、重试或项目隔离。将辅助进程的日志和20ms轮询统一使用.NET Console/Thread，与既有FileStream/File barrier同一运行时，在锁及输出初始化完成后才写ready；补验最终完整两条物理输出和exit0，并重跑同文件及共享监督/流式输入合同。保持15秒就绪、45秒持锁、5秒释放预算。该修复只收敛测试辅助进程的真实准备状态，不绕过独占锁读操作或修改产品文件访问。
+
+2026-10-13本地原入口三个文件22测试/50断言通过：辅助进程真实exit0/terminal0，stdout完整LOCK_READY/LOCK_RELEASED，stderr为空；共享监督17项与流式输入3项均通过。远端Windows待复核。4f3f1947a的CodeQL成功；af4512839的官网流水线成功。原46文件两Unix平台成功及Windows45/46成功均保留，不把单平台剩余项包装为整体成功。
