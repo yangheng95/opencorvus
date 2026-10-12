@@ -238,31 +238,45 @@ describe("cross-process dispatch abandonment", () => {
   })
 
   test("keeps a live peer's Task active and schedules its physical-owner recheck", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const { taskID, dispatchID, lineage } = await seedPeerOwnedDispatch(project.path)
-        recordTestProcessIdentity(PEER, "live")
+    const startedAt = Date.now()
+    const trace = (phase: string, details: Record<string, unknown> = {}) =>
+      console.log("live-peer-recheck", JSON.stringify({ phase, elapsedMs: Date.now() - startedAt, ...details }))
+    trace("project:create")
+    {
+      await using project = await memoryProject()
+      trace("project:created")
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          trace("dispatch:prepare")
+          const { taskID, dispatchID, lineage } = await seedPeerOwnedDispatch(project.path)
+          trace("dispatch:prepared", { taskID, dispatchID })
+          recordTestProcessIdentity(PEER, "live")
 
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
-        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
-        await reconcileTaskControlPlane(taskID)
+          using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
+          using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+          trace("reconcile:start")
+          await reconcileTaskControlPlane(taskID)
+          trace("reconcile:complete", { driver: taskControlDriverSnapshot() })
 
-        // This process holds no pipeline for the peer's dispatch and never
-        // will. Reading its own memory would declare a live worker abandoned
-        // on every heartbeat — the cross-process kill loop this fences.
-        expect({
-          deliveryOwner: lineage.payload.delivery_owner,
-          taskStatus: taskLifecycleProjection(taskID).status,
-          scheduled: taskControlDriverSnapshot().find((entry) => entry.taskID === taskID)?.wakeAt,
-        }).toEqual({
-          deliveryOwner: { kind: "runtime_process", process_occurrence_id: PEER },
-          taskStatus: "active",
-          scheduled: expect.any(Number),
-        })
-      },
-    })
+          // This process holds no pipeline for the peer's dispatch and never
+          // will. Reading its own memory would declare a live worker abandoned
+          // on every heartbeat — the cross-process kill loop this fences.
+          expect({
+            deliveryOwner: lineage.payload.delivery_owner,
+            taskStatus: taskLifecycleProjection(taskID).status,
+            scheduled: taskControlDriverSnapshot().find((entry) => entry.taskID === taskID)?.wakeAt,
+          }).toEqual({
+            deliveryOwner: { kind: "runtime_process", process_occurrence_id: PEER },
+            taskStatus: "active",
+            scheduled: expect.any(Number),
+          })
+          trace("assertion:complete")
+        },
+      })
+      trace("instance:returned")
+    }
+    trace("project:disposed")
   })
 
   test("settles the same dispatch once the peer's physical process has exited", async () => {
