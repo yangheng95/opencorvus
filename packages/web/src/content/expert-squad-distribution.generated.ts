@@ -2,10 +2,10 @@
 // The final signed bundle path is resolved at runtime from /expert-squads/catalog.json.
 export const generatedExpertSquadDistribution = {
   "total": 122,
-  "embeddedAlreadyAvailable": 4,
-  "bundledMarketImportable": 118,
-  "catalogSha256": "59446dd4a5827ee4de1a84a8994ec86b9e3f52e1db1e64a86a204522b9512748",
-  "catalogPath": "/expert-squads/catalogs/59446dd4a5827ee4de1a84a8994ec86b9e3f52e1db1e64a86a204522b9512748.json",
-  "catalogBytes": 78474,
+  "embeddedAlreadyAvailable": 5,
+  "bundledMarketImportable": 117,
+  "catalogSha256": "66d16895befc766643afd27c0279af03ff41639d3bc44a4c3d556d6d8483a795",
+  "catalogPath": "/expert-squads/catalogs/66d16895befc766643afd27c0279af03ff41639d3bc44a4c3d556d6d8483a795.json",
+  "catalogBytes": 78471,
   "trustedKeys": []
 } as const

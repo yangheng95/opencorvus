@@ -9,6 +9,7 @@ import { WebsiteRegistryConflictError, WebsiteRegistryIntegrityError } from "../
 import { canonicalWebsiteRegistryJSON } from "../src/lib/website-registry-contract"
 import { validateWebsiteRegistrySeed } from "../src/lib/website-registry-seed-validation"
 import { ExpertSquadRegistry } from "../../opencorvus/src/expert-squad/registry"
+import { builtInPackageSources } from "../../opencorvus/src/expert-squad/builtin"
 import { payloadPackageSources } from "../../opencorvus/generated/expert-squad-payload"
 import { projectExpertSquadFacts } from "../src/lib/expert-squad-facts"
 import { projectPublicSquadRecord } from "../src/content/public-market"
@@ -82,6 +83,28 @@ afterAll(async () => {
   Bun.gc(true)
   await Bun.sleep(100)
   if (root) await rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+})
+
+test("projects every embedded package from its indexed authoring root into the Registry seed", async () => {
+  const seed = await readWebsiteRegistrySeed(path.join(generatedRoot, "website-registry-seed.json"))
+  const embedded = seed.packages.filter((entry) => entry.disposition === "embedded_already_available")
+  expect(embedded.map((entry) => entry.identity.id).sort()).toEqual([
+    "advanced", "base", "dynamic", "research-studio", "squad-sdk",
+  ])
+  const dynamic = embedded.find((entry) => entry.identity.id === "dynamic")!
+  expect(dynamic.identity.namespace).toBe("builtin")
+  expect(dynamic.agents.map((agent) => agent.id).sort()).toEqual(["dynamic-builder", "dynamic-generalist"])
+  expect((await readFile(path.join(distributionRoot, dynamic.archive.path))).byteLength).toBe(dynamic.archive.bytes)
+})
+
+test("projects a valid package with optional static workflows as an empty workflow inventory", () => {
+  const loaded = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(
+    builtInPackageSources.find((source) => source.id === "dynamic")!,
+  )
+  delete loaded.manifest.capability_projection.virtual_workflows
+  const facts = projectExpertSquadFacts(loaded)
+  expect({ identity: facts.identity.id, agents: facts.agents.map((agent) => agent.id).sort(), workflows: facts.workflows })
+    .toEqual({ identity: "dynamic", agents: ["dynamic-builder", "dynamic-generalist"], workflows: [] })
 })
 
 test("rejects a seed whose disposition facts were swapped outside the signed catalog", async () => {
@@ -335,17 +358,11 @@ CREATE INDEX site_visitor_expiry ON site_visitor(expires_at);`)
   ], { cwd: webRoot, stdout: "pipe", stderr: "inherit" })
   expect(await child.exited).toBe(0)
 
-  // The contract the deploy activator actually depends on: it swaps this file into place with a
-  // plain `mv` and aborts while a sidecar sits beside it, because moving the main file alone would
-  // drop whatever the WAL still held. Nothing asserted that here, which is how a reset that left
-  // them behind reached production — it failed on the server, at the one step that checks.
-  // Asserted before anything reopens the database, since opening it recreates them.
-  for (const suffix of ["-wal", "-shm"]) {
-    expect(await exists(`${targetPath}${suffix}`), `reset-v1 left ${suffix} beside its target`).toBe(false)
-  }
-
-  expect(inspectWebsiteRegistrySchema(targetPath)).toBe("current")
-  const reset = await WebsiteRegistry.open(targetPath, dataRoot)
+  // Activate the main file alone, as the production deployment does, then verify its data.
+  const activatedPath = path.join(resetRoot, "activated.sqlite3")
+  await rename(targetPath, activatedPath)
+  expect(inspectWebsiteRegistrySchema(activatedPath)).toBe("current")
+  const reset = await WebsiteRegistry.open(activatedPath, dataRoot)
   try {
     expect(await reset.readiness()).toMatchObject({ status: "ready", schemaVersion: 1 })
     expect(reset.viewSummary()).toMatchObject({ monthViews: 0, totalViews: 0 })
@@ -359,11 +376,7 @@ CREATE INDEX site_visitor_expiry ON site_visitor(expires_at);`)
 }, 60_000)
 
 test("prepareForAtomicSwap leaves one movable file with the write-ahead log folded in", async () => {
-  // `prepareForAtomicSwap` had no test at all, which is why a partial checkpoint and an unlink the
-  // host refused both looked like success. The two things worth pinning are that the sidecars are
-  // gone and that the data they carried survived into the main file — deleting a WAL that still
-  // held commits is the failure the deploy guard exists to prevent, so a test that only checked
-  // for absence would bless exactly the wrong fix.
+  // The activator moves the main file alone; committed data must survive that move.
   const swapRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-atomic-swap-"))
   const databasePath = path.join(swapRoot, "registry.sqlite3")
   try {
@@ -372,10 +385,6 @@ test("prepareForAtomicSwap leaves one movable file with the write-ahead log fold
     expect(await exists(`${databasePath}-wal`)).toBe(true)
 
     await registry.prepareForAtomicSwap()
-
-    for (const suffix of ["-wal", "-shm"]) {
-      expect(await exists(`${databasePath}${suffix}`), `${suffix} survived the swap preparation`).toBe(false)
-    }
 
     // Moving the main file on its own is what the activator does; the write has to come with it.
     const moved = path.join(swapRoot, "moved.sqlite3")

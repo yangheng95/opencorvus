@@ -52,5 +52,6 @@ test("Astro TOML parser preserves dotted, quoted, array-table and bounded many-k
   } catch (caught) {
     error = caught
   }
-  expect({ typed: error instanceof TomlError, line: error?.line }).toEqual({ typed: true, line: 1 })
+  const line = error && typeof error === "object" && "line" in error ? error.line : undefined
+  expect({ typed: error instanceof TomlError, line }).toEqual({ typed: true, line: 1 })
 })

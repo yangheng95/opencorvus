@@ -74,7 +74,7 @@ export function projectExpertSquadFacts(loaded: FactSource) {
       description: projection.description,
       baseRole: projection.base_role,
     })),
-    workflows: Object.entries(loaded.manifest.capability_projection.virtual_workflows).map(([id, workflow]) => ({
+    workflows: Object.entries(loaded.manifest.capability_projection.virtual_workflows ?? {}).map(([id, workflow]) => ({
       id,
       label: workflow.label,
       description: workflow.description,

@@ -15,7 +15,9 @@ import { generateExpertSquadDistribution } from "./generate-expert-squad-distrib
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..")
 
 function indexedPackageSource(id: string): ExpertSquadRegistry.EmbeddedPackageSource {
-  const root = id === "squad-sdk" ? `expert-squads/builtin/${id}` : `packages/opencorvus/src/expert-squad/builtin/${id}`
+  const root = id === "squad-sdk" || id === "dynamic"
+    ? `expert-squads/builtin/${id}`
+    : `packages/opencorvus/src/expert-squad/builtin/${id}`
   const listed = Bun.spawnSync({
     cmd: ["git", "ls-files", "--cached", "-z", "--", root],
     cwd: repoRoot,
