@@ -1,0 +1,15 @@
+{
+  "pid": 77744,
+  "occurrence": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+  "owner": {
+    "pid": 77744,
+    "processInstanceID": "win32:639274018483944714",
+    "occurrenceID": "55471d6f-ae50-41f4-84f2-298625f2a2ad"
+  },
+  "parent": {
+    "pid": 41248,
+    "processInstanceID": "win32:639274018483576368",
+    "occurrenceID": "28f03482-1c4a-419f-83a2-50256842a295"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

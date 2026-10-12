@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [349 分散网页来源与长子会话](child-history-plan-349.md)：37段真实正文、缓存边界与主会话跳位时序。
+
 - [348 多来源子侧栏](child-dense-plan-348.md)：66条真实来源、流式阅读位置与同名文件复制区分。
 
 - [347 连续来源目录密度](source-context-plan-347.md)：真实26来源与同名文件边界、复制和定位。

@@ -1,0 +1,1961 @@
+{
+  "taskID": "tsk_g00VXpnbRn00L81V59Oh",
+  "workerID": "ses_huwYlKst4LVMvtJUgEta",
+  "taskElapsedMs": 448813,
+  "nativeElapsedMs": 773412,
+  "workerTextParts": 37,
+  "workerChars": 5682,
+  "answers": [
+    {
+      "item": "R01",
+      "question": "URL接口用途",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpnpk400laFUA2TPb",
+      "chars": 130,
+      "headings": [
+        "### R01 URL接口用途"
+      ],
+      "messageID": "msg_g0VXpnocb00l24sVsuS1"
+    },
+    {
+      "item": "R02",
+      "question": "相对地址与base",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpnrm0005gmEGvAPE",
+      "chars": 128,
+      "headings": [
+        "### R02 相对地址与base"
+      ],
+      "messageID": "msg_g0VXpnqph00SD2C52YkC"
+    },
+    {
+      "item": "R03",
+      "question": "查询参数基本读取",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpnuEx00761oP1mJJ",
+      "chars": 145,
+      "headings": [
+        "### R03 查询参数基本读取"
+      ],
+      "messageID": "msg_g0VXpnsqR00A4jaFOXpe"
+    },
+    {
+      "item": "R04",
+      "question": "fragment的用途",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXpnwvS00uXLX064Qj",
+      "chars": 137,
+      "headings": [
+        "### R04 fragment的用途"
+      ],
+      "messageID": "msg_g0VXpnvKb00b0UdKZuTt"
+    },
+    {
+      "item": "R05",
+      "question": "hostname与host区别",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpnz5300oEYoH7rjz",
+      "chars": 139,
+      "headings": [
+        "### R05 hostname与host区别"
+      ],
+      "messageID": "msg_g0VXpnxw200cH6d2bc3W"
+    },
+    {
+      "item": "R06",
+      "question": "无效构造输入",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpo1Kk00zTKDSaAmc",
+      "chars": 214,
+      "headings": [
+        "### R06 无效构造输入"
+      ],
+      "messageID": "msg_g0VXpo0Bx00NDrW4VeQs"
+    },
+    {
+      "item": "R07",
+      "question": "重复查询键",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpo4jM00y1NfukK2M",
+      "chars": 134,
+      "headings": [
+        "### R07 重复查询键"
+      ],
+      "messageID": "msg_g0VXpo2cC00Ll0li1MLJ"
+    },
+    {
+      "item": "R08",
+      "question": "fragment与网络请求",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXpo6p200Pix16BkfM",
+      "chars": 145,
+      "headings": [
+        "### R08 fragment与网络请求"
+      ],
+      "messageID": "msg_g0VXpo5n200jn40mNXB0"
+    },
+    {
+      "item": "R09",
+      "question": "href与origin区别",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpo9T100JtaPjT2Pw",
+      "chars": 142,
+      "headings": [
+        "### R09 href与origin区别"
+      ],
+      "messageID": "msg_g0VXpo84900JzWrZeh9X"
+    },
+    {
+      "item": "R10",
+      "question": "base路径末尾斜杠",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpoBMw00DL20OvOKq",
+      "chars": 138,
+      "headings": [
+        "### R10 base路径末尾斜杠"
+      ],
+      "messageID": "msg_g0VXpoA8400PtwYxG5SF"
+    },
+    {
+      "item": "R11",
+      "question": "参数遍历顺序",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpoE8y00mm1cysxZ1",
+      "chars": 144,
+      "headings": [
+        "### R11 参数遍历顺序"
+      ],
+      "messageID": "msg_g0VXpoCV300fLJ2XbvhA"
+    },
+    {
+      "item": "R12",
+      "question": "文档元素定位",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXpoGpc00hH8Q7KVDi",
+      "chars": 194,
+      "headings": [
+        "### R12 文档元素定位"
+      ],
+      "messageID": "msg_g0VXpoFHM00aDsxUG3st"
+    },
+    {
+      "item": "R13",
+      "question": "pathname与search区别",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpoIzd00aF3uOYHhh",
+      "chars": 155,
+      "headings": [
+        "### R13 pathname与search区别"
+      ],
+      "messageID": "msg_g0VXpoI8H00FQfDzUq3g"
+    },
+    {
+      "item": "R14",
+      "question": "绝对URL与base",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpoLJW00oMQdSQQXF",
+      "chars": 141,
+      "headings": [
+        "### R14 绝对URL与base"
+      ],
+      "messageID": "msg_g0VXpoJtz00ysHEowRph"
+    },
+    {
+      "item": "R15",
+      "question": "append和set区别",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpoNXH003bpajTSA3",
+      "chars": 143,
+      "headings": [
+        "### R15 append和set区别"
+      ],
+      "messageID": "msg_g0VXpoMVF00AJZe1ivBI"
+    },
+    {
+      "item": "R16",
+      "question": "媒体片段示例",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXpoPdf00XTBdi3R6U",
+      "chars": 127,
+      "headings": [
+        "### R16 媒体片段示例"
+      ],
+      "messageID": "msg_g0VXpoOa500UVAQh46vu"
+    },
+    {
+      "item": "R17",
+      "question": "hash属性边界",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpoRnW006mjCiLPEo",
+      "chars": 134,
+      "headings": [
+        "### R17 hash属性边界"
+      ],
+      "messageID": "msg_g0VXpoQrh00kxg7flVYs"
+    },
+    {
+      "item": "R18",
+      "question": "构造器字符串转换",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpoU3L00Bk3jTtZmc",
+      "chars": 214,
+      "headings": [
+        "### R18 构造器字符串转换"
+      ],
+      "messageID": "msg_g0VXpoT5g00R8kRef79I"
+    },
+    {
+      "item": "R19",
+      "question": "get和getAll区别",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpoWnK00wTV9a9R7c",
+      "chars": 146,
+      "headings": [
+        "### R19 get和getAll区别"
+      ],
+      "messageID": "msg_g0VXpoVL2003rXiF8uCW"
+    },
+    {
+      "item": "R20",
+      "question": "文本片段的形式",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXpoZ8q00HLpEaYfUB",
+      "chars": 141,
+      "headings": [
+        "### R20 文本片段的形式"
+      ],
+      "messageID": "msg_g0VXpoXmN00TNWFAwnSC"
+    },
+    {
+      "item": "R21",
+      "question": "URL规范化范围",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpob4S00vZh46hvDx",
+      "chars": 135,
+      "headings": [
+        "### R21 URL规范化范围"
+      ],
+      "messageID": "msg_g0VXpoaBf00e1Hqk6u7y"
+    },
+    {
+      "item": "R22",
+      "question": "相对路径解析示例",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpodCz00kF255ZeR2",
+      "chars": 132,
+      "headings": [
+        "### R22 相对路径解析示例"
+      ],
+      "messageID": "msg_g0VXpoc6U00Nax2k5Cmm"
+    },
+    {
+      "item": "R23",
+      "question": "删除查询参数",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpofwM00MihmcmibW",
+      "chars": 141,
+      "headings": [
+        "### R23 删除查询参数"
+      ],
+      "messageID": "msg_g0VXpoeTj00gB2LEx03G"
+    },
+    {
+      "item": "R24",
+      "question": "fragment与查询的顺序",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXpoiYW00bOAwcV5AD",
+      "chars": 242,
+      "headings": [
+        "### R24 fragment与查询的顺序"
+      ],
+      "messageID": "msg_g0VXpoguv00UaR0OzlM7"
+    },
+    {
+      "item": "R25",
+      "question": "属性修改与序列化",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpol0F005O4eXbx8j",
+      "chars": 157,
+      "headings": [
+        "### R25 属性修改与序列化"
+      ],
+      "messageID": "msg_g0VXpok0K009gvLv1ZVd"
+    },
+    {
+      "item": "R26",
+      "question": "构造异常与try/catch",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXponFS00yNG5ueHMk",
+      "chars": 150,
+      "headings": [
+        "### R26 构造异常与try/catch"
+      ],
+      "messageID": "msg_g0VXpom6S00pJCnn7aVh"
+    },
+    {
+      "item": "R27",
+      "question": "百分号编码注意点",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpopaW00GgbjwJ4iI",
+      "chars": 141,
+      "headings": [
+        "### R27 百分号编码注意点"
+      ],
+      "messageID": "msg_g0VXpooMk00yb5wvmdIK"
+    },
+    {
+      "item": "R28",
+      "question": "fragment编码边界",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXporWw00QBGczZ9WI",
+      "chars": 135,
+      "headings": [
+        "### R28 fragment编码边界"
+      ],
+      "messageID": "msg_g0VXpoqbV00tV5CsiJ9x"
+    },
+    {
+      "item": "R29",
+      "question": "toString与toJSON",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpotYm00Gf5ipSsVf",
+      "chars": 161,
+      "headings": [
+        "### R29 toString与toJSON"
+      ],
+      "messageID": "msg_g0VXposWd000KK7vev20"
+    },
+    {
+      "item": "R30",
+      "question": "有效base与错误base",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpovvG00QbBpUR02g",
+      "chars": 224,
+      "headings": [
+        "### R30 有效base与错误base"
+      ],
+      "messageID": "msg_g0VXpoudG00kof1lsS1U"
+    },
+    {
+      "item": "R31",
+      "question": "空格与加号",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpoypp00ruhNoXZLn",
+      "chars": 134,
+      "headings": [
+        "### R31 空格与加号"
+      ],
+      "messageID": "msg_g0VXpoxDW00YAzI7VND8"
+    },
+    {
+      "item": "R32",
+      "question": "fragment与页面标题区别",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXpp1H900pIBnLpP0n",
+      "chars": 147,
+      "headings": [
+        "### R32 fragment与页面标题区别"
+      ],
+      "messageID": "msg_g0VXpp048002CtHhpqw5"
+    },
+    {
+      "item": "R33",
+      "question": "静态方法与实例方法",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+      "id": "prt_g0VXpp3DS002qCTGmZ06",
+      "chars": 154,
+      "headings": [
+        "### R33 静态方法与实例方法"
+      ],
+      "messageID": "msg_g0VXpp2OB00o5DcjntwX"
+    },
+    {
+      "item": "R34",
+      "question": "构造器示例的适用范围",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+      "id": "prt_g0VXpp5Or00nUZrxRK7P",
+      "chars": 143,
+      "headings": [
+        "### R34 构造器示例的适用范围"
+      ],
+      "messageID": "msg_g0VXpp4Bm00cF3hNzZ5W"
+    },
+    {
+      "item": "R35",
+      "question": "排序与serialization",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "id": "prt_g0VXpp7yV00MGJvIJ4vF",
+      "chars": 154,
+      "headings": [
+        "### R35 排序与serialization"
+      ],
+      "messageID": "msg_g0VXpp6hr00j7nRNPylr"
+    },
+    {
+      "item": "R36",
+      "question": "资料证据与真实导航验收区别",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+      "id": "prt_g0VXppA2r005NTgg0hAO",
+      "chars": 275,
+      "headings": [
+        "### R36 资料证据与真实导航验收区别"
+      ],
+      "messageID": "msg_g0VXpp95P00GJO6WK38Y"
+    }
+  ],
+  "completeOriginalNarrationReads": [
+    {
+      "item": "R01",
+      "partID": "prt_g0VXpnpk400laFUA2TPb",
+      "chars": 130,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppOIn00XqwEICbIp",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R02",
+      "partID": "prt_g0VXpnrm0005gmEGvAPE",
+      "chars": 128,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppOIn00XqwEICbIp",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R03",
+      "partID": "prt_g0VXpnuEx00761oP1mJJ",
+      "chars": 145,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppOIn00XqwEICbIp",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R04",
+      "partID": "prt_g0VXpnwvS00uXLX064Qj",
+      "chars": 137,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppOIn00XqwEICbIp",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R05",
+      "partID": "prt_g0VXpnz5300oEYoH7rjz",
+      "chars": 139,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R06",
+      "partID": "prt_g0VXpo1Kk00zTKDSaAmc",
+      "chars": 214,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "complete text evidence read"
+        },
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R07",
+      "partID": "prt_g0VXpo4jM00y1NfukK2M",
+      "chars": 134,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R08",
+      "partID": "prt_g0VXpo6p200Pix16BkfM",
+      "chars": 145,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R09",
+      "partID": "prt_g0VXpo9T100JtaPjT2Pw",
+      "chars": 142,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R10",
+      "partID": "prt_g0VXpoBMw00DL20OvOKq",
+      "chars": 138,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R11",
+      "partID": "prt_g0VXpoE8y00mm1cysxZ1",
+      "chars": 144,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R12",
+      "partID": "prt_g0VXpoGpc00hH8Q7KVDi",
+      "chars": 194,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "complete text evidence read"
+        },
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R13",
+      "partID": "prt_g0VXpoIzd00aF3uOYHhh",
+      "chars": 155,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R14",
+      "partID": "prt_g0VXpoLJW00oMQdSQQXF",
+      "chars": 141,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R15",
+      "partID": "prt_g0VXpoNXH003bpajTSA3",
+      "chars": 143,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R16",
+      "partID": "prt_g0VXpoPdf00XTBdi3R6U",
+      "chars": 127,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R17",
+      "partID": "prt_g0VXpoRnW006mjCiLPEo",
+      "chars": 134,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R18",
+      "partID": "prt_g0VXpoU3L00Bk3jTtZmc",
+      "chars": 214,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "complete text evidence read"
+        },
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R19",
+      "partID": "prt_g0VXpoWnK00wTV9a9R7c",
+      "chars": 146,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R20",
+      "partID": "prt_g0VXpoZ8q00HLpEaYfUB",
+      "chars": 141,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R21",
+      "partID": "prt_g0VXpob4S00vZh46hvDx",
+      "chars": 135,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R22",
+      "partID": "prt_g0VXpodCz00kF255ZeR2",
+      "chars": 132,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R23",
+      "partID": "prt_g0VXpofwM00MihmcmibW",
+      "chars": 141,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R24",
+      "partID": "prt_g0VXpoiYW00bOAwcV5AD",
+      "chars": 242,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "complete text evidence read"
+        }
+      ]
+    },
+    {
+      "item": "R25",
+      "partID": "prt_g0VXpol0F005O4eXbx8j",
+      "chars": 157,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R26",
+      "partID": "prt_g0VXponFS00yNG5ueHMk",
+      "chars": 150,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R27",
+      "partID": "prt_g0VXpopaW00GgbjwJ4iI",
+      "chars": 141,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R28",
+      "partID": "prt_g0VXporWw00QBGczZ9WI",
+      "chars": 135,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R29",
+      "partID": "prt_g0VXpotYm00Gf5ipSsVf",
+      "chars": 161,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R30",
+      "partID": "prt_g0VXpovvG00QbBpUR02g",
+      "chars": 224,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R31",
+      "partID": "prt_g0VXpoypp00ruhNoXZLn",
+      "chars": 134,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R32",
+      "partID": "prt_g0VXpp1H900pIBnLpP0n",
+      "chars": 147,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R33",
+      "partID": "prt_g0VXpp3DS002qCTGmZ06",
+      "chars": 154,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R34",
+      "partID": "prt_g0VXpp5Or00nUZrxRK7P",
+      "chars": 143,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R35",
+      "partID": "prt_g0VXpp7yV00MGJvIJ4vF",
+      "chars": 154,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "inventory delivered entire original text"
+        }
+      ]
+    },
+    {
+      "item": "R36",
+      "partID": "prt_g0VXppA2r005NTgg0hAO",
+      "chars": 275,
+      "receipts": [
+        {
+          "requestPartID": "prt_g0VXppD9G00pfj2UfHq3",
+          "kind": "complete selected message"
+        },
+        {
+          "requestPartID": "prt_g0VXppFE600KIyC3So45",
+          "kind": "complete selected message"
+        },
+        {
+          "requestPartID": "prt_g0VXppJBL000TzKZmvTM",
+          "kind": "complete selected message"
+        },
+        {
+          "requestPartID": "prt_g0VXppM7300z1g5NXnIk",
+          "kind": "complete selected message"
+        },
+        {
+          "requestPartID": "prt_g0VXppOIn00XqwEICbIp",
+          "kind": "complete selected message"
+        }
+      ]
+    }
+  ],
+  "webfetches": [
+    {
+      "id": "prt_g0VXpnoDC00cWpMeeH1A",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpnqcD00FJSVgizSF",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpnsah0060J35IGXi",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpnv7I00odzxDx3sz",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXpnxgQ00vhstxozSS",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpnzyk00UioVegzGc",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpo2Ho00ShwjfePTy",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpo5XD00q94HRwSWr",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXpo7ok00M8amoB3N6",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpo9rH00bu0IZ19L1",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpoCCS00y215Ntp6j",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpoF9900xu7p1QNUt",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXpoHrg00Zhile09CB",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpoJer00dxkZ1WZgE",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpoMBR00fkl5hjAxn",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpoOK5009M5HL4Guz",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXpoQad00XMzCEBGHj",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpoSkh003ZjSJe2zQ",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpoV6k00CBklU2zMu",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpoXWN00zOPWSq3Ur",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXpoZwj007tcTrOWto",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpobmj00V5XZm0HMN",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpoeEU00wZB0nLqBB",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpoggc00IXI9orxgp",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXpojjp00DP55df4wL",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpolr200aN28mQ0C2",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpoo7z00SsCbfA2QF",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpoqM800esqeOdolb",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXposHT00Bko7tbtBR",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpouLk00BwzqR457a",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpoww200Bx6hUIvWe",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpozhn00XlOqQzFDn",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    },
+    {
+      "id": "prt_g0VXpp25j00KIbO0CSrk",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 18051
+    },
+    {
+      "id": "prt_g0VXpp3uH00TFBZ3HjuQ",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 15278
+    },
+    {
+      "id": "prt_g0VXpp6GE00jwHx5cnRJ",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 22859
+    },
+    {
+      "id": "prt_g0VXpp8mr00xkLQ9rbkK",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "format": "markdown",
+        "timeout": 120
+      },
+      "outcome": "completed",
+      "outputChars": 12679
+    }
+  ],
+  "sourceCount": 36,
+  "sourceIDs": [
+    "prt_g0VXpnoXG00fzSN2NcRi",
+    "prt_g0VXpnqnb00N3mA7cHmM",
+    "prt_g0VXpnsns009C6wcDqlE",
+    "prt_g0VXpnvHR007rvypXJ8h",
+    "prt_g0VXpnxtK00HLgi9ZHke",
+    "prt_g0VXpo08i000WA5wIBhz",
+    "prt_g0VXpo2Ul00AUlVG5BxS",
+    "prt_g0VXpo5ho00IY7oaIHVO",
+    "prt_g0VXpo80700zTWiEG2JZ",
+    "prt_g0VXpoA3x0043WXf6gvR",
+    "prt_g0VXpoCPt002tjyacm36",
+    "prt_g0VXpoFC200LvN2Pdet9",
+    "prt_g0VXpoI5C00G8LkKalCb",
+    "prt_g0VXpoJq500RuATQtn13",
+    "prt_g0VXpoMQF00UMa3wQlxR",
+    "prt_g0VXpoOX600W0uazZPLw",
+    "prt_g0VXpoQk9001lHXo7m6R",
+    "prt_g0VXpoT3100TUJD33JlW",
+    "prt_g0VXpoVH300NY0Tl03BT",
+    "prt_g0VXpoXgq00BMZ3lOKRd",
+    "prt_g0VXpoa7500pCmKH9qgm",
+    "prt_g0VXpoc0E008tHex8tS6",
+    "prt_g0VXpoeMP001tp4CJ3YL",
+    "prt_g0VXpogpU00V1uybRUsI",
+    "prt_g0VXpojur00lWdHJREdk",
+    "prt_g0VXpom1f005zRBmZiMS",
+    "prt_g0VXpooIs00Un4Yz0Jgg",
+    "prt_g0VXpoqWM00ECY9oJ4XB",
+    "prt_g0VXposS300Q9kI4N7X5",
+    "prt_g0VXpouXG00rbV96EKKr",
+    "prt_g0VXpox7N00Gkm80x7UE",
+    "prt_g0VXpozzv00asOHJ5jMJ",
+    "prt_g0VXpp2Hu000xuS6y9GP",
+    "prt_g0VXpp49H00RRihOyJnc",
+    "prt_g0VXpp6ct00bcj871YW9",
+    "prt_g0VXpp8yW00WmH3s3syL"
+  ],
+  "sourceStreamEvents": 36,
+  "streamComparisons": [
+    {
+      "sessionID": "ses_-zUSACNizzzYjQ4egQIp",
+      "messageID": "msg_hepaEWnYjWWJnIhGrVsE",
+      "partID": "prt_g0VXpndpj00WDMWopQQs",
+      "field": "text",
+      "events": 53,
+      "wireChars": 71,
+      "canonicalChars": 70,
+      "exact": false,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpnmPY00x8lPa14Nm",
+      "partID": "prt_g0VXpnnlA00A66z50i1L",
+      "field": "text",
+      "events": 45,
+      "wireChars": 67,
+      "canonicalChars": 66,
+      "exact": false,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpnocb00l24sVsuS1",
+      "partID": "prt_g0VXpnpk400laFUA2TPb",
+      "field": "text",
+      "events": 79,
+      "wireChars": 131,
+      "canonicalChars": 130,
+      "exact": false,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpnqph00SD2C52YkC",
+      "partID": "prt_g0VXpnrm0005gmEGvAPE",
+      "field": "text",
+      "events": 82,
+      "wireChars": 128,
+      "canonicalChars": 128,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpnsqR00A4jaFOXpe",
+      "partID": "prt_g0VXpnuEx00761oP1mJJ",
+      "field": "text",
+      "events": 78,
+      "wireChars": 145,
+      "canonicalChars": 145,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpnvKb00b0UdKZuTt",
+      "partID": "prt_g0VXpnwvS00uXLX064Qj",
+      "field": "text",
+      "events": 75,
+      "wireChars": 137,
+      "canonicalChars": 137,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpnxw200cH6d2bc3W",
+      "partID": "prt_g0VXpnz5300oEYoH7rjz",
+      "field": "text",
+      "events": 86,
+      "wireChars": 139,
+      "canonicalChars": 139,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpo0Bx00NDrW4VeQs",
+      "partID": "prt_g0VXpo1Kk00zTKDSaAmc",
+      "field": "text",
+      "events": 127,
+      "wireChars": 214,
+      "canonicalChars": 214,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpo2cC00Ll0li1MLJ",
+      "partID": "prt_g0VXpo4jM00y1NfukK2M",
+      "field": "text",
+      "events": 85,
+      "wireChars": 134,
+      "canonicalChars": 134,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpo5n200jn40mNXB0",
+      "partID": "prt_g0VXpo6p200Pix16BkfM",
+      "field": "text",
+      "events": 86,
+      "wireChars": 145,
+      "canonicalChars": 145,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpo84900JzWrZeh9X",
+      "partID": "prt_g0VXpo9T100JtaPjT2Pw",
+      "field": "text",
+      "events": 88,
+      "wireChars": 142,
+      "canonicalChars": 142,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoA8400PtwYxG5SF",
+      "partID": "prt_g0VXpoBMw00DL20OvOKq",
+      "field": "text",
+      "events": 90,
+      "wireChars": 138,
+      "canonicalChars": 138,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoCV300fLJ2XbvhA",
+      "partID": "prt_g0VXpoE8y00mm1cysxZ1",
+      "field": "text",
+      "events": 85,
+      "wireChars": 144,
+      "canonicalChars": 144,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoFHM00aDsxUG3st",
+      "partID": "prt_g0VXpoGpc00hH8Q7KVDi",
+      "field": "text",
+      "events": 116,
+      "wireChars": 194,
+      "canonicalChars": 194,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoI8H00FQfDzUq3g",
+      "partID": "prt_g0VXpoIzd00aF3uOYHhh",
+      "field": "text",
+      "events": 76,
+      "wireChars": 155,
+      "canonicalChars": 155,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoJtz00ysHEowRph",
+      "partID": "prt_g0VXpoLJW00oMQdSQQXF",
+      "field": "text",
+      "events": 88,
+      "wireChars": 141,
+      "canonicalChars": 141,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoMVF00AJZe1ivBI",
+      "partID": "prt_g0VXpoNXH003bpajTSA3",
+      "field": "text",
+      "events": 91,
+      "wireChars": 143,
+      "canonicalChars": 143,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoOa500UVAQh46vu",
+      "partID": "prt_g0VXpoPdf00XTBdi3R6U",
+      "field": "text",
+      "events": 86,
+      "wireChars": 127,
+      "canonicalChars": 127,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoQrh00kxg7flVYs",
+      "partID": "prt_g0VXpoRnW006mjCiLPEo",
+      "field": "text",
+      "events": 85,
+      "wireChars": 134,
+      "canonicalChars": 134,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoT5g00R8kRef79I",
+      "partID": "prt_g0VXpoU3L00Bk3jTtZmc",
+      "field": "text",
+      "events": 116,
+      "wireChars": 214,
+      "canonicalChars": 214,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoVL2003rXiF8uCW",
+      "partID": "prt_g0VXpoWnK00wTV9a9R7c",
+      "field": "text",
+      "events": 88,
+      "wireChars": 146,
+      "canonicalChars": 146,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoXmN00TNWFAwnSC",
+      "partID": "prt_g0VXpoZ8q00HLpEaYfUB",
+      "field": "text",
+      "events": 91,
+      "wireChars": 141,
+      "canonicalChars": 141,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoaBf00e1Hqk6u7y",
+      "partID": "prt_g0VXpob4S00vZh46hvDx",
+      "field": "text",
+      "events": 83,
+      "wireChars": 135,
+      "canonicalChars": 135,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoc6U00Nax2k5Cmm",
+      "partID": "prt_g0VXpodCz00kF255ZeR2",
+      "field": "text",
+      "events": 91,
+      "wireChars": 132,
+      "canonicalChars": 132,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoeTj00gB2LEx03G",
+      "partID": "prt_g0VXpofwM00MihmcmibW",
+      "field": "text",
+      "events": 89,
+      "wireChars": 141,
+      "canonicalChars": 141,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoguv00UaR0OzlM7",
+      "partID": "prt_g0VXpoiYW00bOAwcV5AD",
+      "field": "text",
+      "events": 134,
+      "wireChars": 242,
+      "canonicalChars": 242,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpok0K009gvLv1ZVd",
+      "partID": "prt_g0VXpol0F005O4eXbx8j",
+      "field": "text",
+      "events": 84,
+      "wireChars": 157,
+      "canonicalChars": 157,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpom6S00pJCnn7aVh",
+      "partID": "prt_g0VXponFS00yNG5ueHMk",
+      "field": "text",
+      "events": 87,
+      "wireChars": 150,
+      "canonicalChars": 150,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpooMk00yb5wvmdIK",
+      "partID": "prt_g0VXpopaW00GgbjwJ4iI",
+      "field": "text",
+      "events": 94,
+      "wireChars": 141,
+      "canonicalChars": 141,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoqbV00tV5CsiJ9x",
+      "partID": "prt_g0VXporWw00QBGczZ9WI",
+      "field": "text",
+      "events": 90,
+      "wireChars": 135,
+      "canonicalChars": 135,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXposWd000KK7vev20",
+      "partID": "prt_g0VXpotYm00Gf5ipSsVf",
+      "field": "text",
+      "events": 83,
+      "wireChars": 161,
+      "canonicalChars": 161,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoudG00kof1lsS1U",
+      "partID": "prt_g0VXpovvG00QbBpUR02g",
+      "field": "text",
+      "events": 132,
+      "wireChars": 224,
+      "canonicalChars": 224,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpoxDW00YAzI7VND8",
+      "partID": "prt_g0VXpoypp00ruhNoXZLn",
+      "field": "text",
+      "events": 100,
+      "wireChars": 134,
+      "canonicalChars": 134,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpp048002CtHhpqw5",
+      "partID": "prt_g0VXpp1H900pIBnLpP0n",
+      "field": "text",
+      "events": 86,
+      "wireChars": 147,
+      "canonicalChars": 147,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpp2OB00o5DcjntwX",
+      "partID": "prt_g0VXpp3DS002qCTGmZ06",
+      "field": "text",
+      "events": 86,
+      "wireChars": 154,
+      "canonicalChars": 154,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpp4Bm00cF3hNzZ5W",
+      "partID": "prt_g0VXpp5Or00nUZrxRK7P",
+      "field": "text",
+      "events": 95,
+      "wireChars": 143,
+      "canonicalChars": 143,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpp6hr00j7nRNPylr",
+      "partID": "prt_g0VXpp7yV00MGJvIJ4vF",
+      "field": "text",
+      "events": 89,
+      "wireChars": 154,
+      "canonicalChars": 154,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+      "messageID": "msg_g0VXpp95P00GJO6WK38Y",
+      "partID": "prt_g0VXppA2r005NTgg0hAO",
+      "field": "text",
+      "events": 180,
+      "wireChars": 275,
+      "canonicalChars": 275,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_-zUSACNizzzYjQ4egQIp",
+      "messageID": "msg_hBWB3rrD4k9zVWjVK8ht",
+      "partID": "prt_g0VXppEtE00adFODaX2T",
+      "field": "text",
+      "events": 43,
+      "wireChars": 65,
+      "canonicalChars": 65,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_-zUSACNizzzYjQ4egQIp",
+      "messageID": "msg_hBWB3rrD4k9zVWjVK8ht",
+      "partID": "prt_g0VXppROd00IBQo5sCYE",
+      "field": "text",
+      "events": 99,
+      "wireChars": 144,
+      "canonicalChars": 144,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    }
+  ],
+  "shots": [
+    {
+      "file": "01-early-sources-reading.png",
+      "at": "2026-10-12T11:39:32.127Z",
+      "actualWorkerReaders": [
+        {
+          "context": {
+            "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+            "streamRequest": {
+              "requestID": "msg_g0VXpnmMb00LvogDNJbG",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpnsvO00GMl3z7gWJ",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpnsqR00A4jaFOXpe"
+            }
+          },
+          "from": 1791805170177,
+          "to": 1791805178068
+        }
+      ],
+      "workerPartsObservedByThisTime": 3
+    },
+    {
+      "file": "02-early-region-after-nine-sources.png",
+      "at": "2026-10-12T11:40:39.353Z",
+      "actualWorkerReaders": [
+        {
+          "context": {
+            "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+            "streamRequest": {
+              "requestID": "msg_g0VXpnmMb00LvogDNJbG",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpoABM00IJb45Fytf",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpoA8400PtwYxG5SF"
+            }
+          },
+          "from": 1791805237171,
+          "to": 1791805243998
+        }
+      ],
+      "workerPartsObservedByThisTime": 10
+    },
+    {
+      "file": "03-middle-reading-anchor.png",
+      "at": "2026-10-12T11:41:03.859Z",
+      "actualWorkerReaders": [
+        {
+          "context": {
+            "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+            "streamRequest": {
+              "requestID": "msg_g0VXpnmMb00LvogDNJbG",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpoFKh006gYrJlHTJ",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpoFHM00aDsxUG3st"
+            }
+          },
+          "from": 1791805258687,
+          "to": 1791805265706
+        }
+      ],
+      "workerPartsObservedByThisTime": 13
+    },
+    {
+      "file": "04-middle-region-after-24-sources.png",
+      "at": "2026-10-12T11:42:51.224Z",
+      "actualWorkerReaders": [
+        {
+          "context": {
+            "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+            "streamRequest": {
+              "requestID": "msg_g0VXpnmMb00LvogDNJbG",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpogzn00UsOIqOxxK",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpoguv00UaR0OzlM7"
+            }
+          },
+          "from": 1791805365154,
+          "to": 1791805372820
+        }
+      ],
+      "workerPartsObservedByThisTime": 25
+    },
+    {
+      "file": "05-over-32-parts-before-return.png",
+      "at": "2026-10-12T11:44:24.195Z",
+      "actualWorkerReaders": [
+        {
+          "context": {
+            "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+            "streamRequest": {
+              "requestID": "msg_g0VXpnmMb00LvogDNJbG",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpp6me00Fv7JU8hHp",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpp6hr00j7nRNPylr"
+            }
+          },
+          "from": 1791805461889,
+          "to": 1791805469177
+        }
+      ],
+      "workerPartsObservedByThisTime": 35
+    },
+    {
+      "file": "06-first-return-over-cache-boundary.png",
+      "at": "2026-10-12T11:44:43.958Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    },
+    {
+      "file": "07-agent-list-return.png",
+      "at": "2026-10-12T11:45:23.835Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    },
+    {
+      "file": "08-completed-main-before-dock-toggle.png",
+      "at": "2026-10-12T11:47:37.294Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    },
+    {
+      "file": "09-completed-main-dock-closed.png",
+      "at": "2026-10-12T11:47:49.144Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    },
+    {
+      "file": "10-completed-main-dock-reopened.png",
+      "at": "2026-10-12T11:48:05.182Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    },
+    {
+      "file": "11-completed-main-open-member.png",
+      "at": "2026-10-12T11:48:43.527Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    },
+    {
+      "file": "12-original-mdn-target.png",
+      "at": "2026-10-12T11:49:58.936Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    },
+    {
+      "file": "13-return-from-original-source.png",
+      "at": "2026-10-12T11:49:59.668Z",
+      "actualWorkerReaders": [],
+      "workerPartsObservedByThisTime": 37
+    }
+  ],
+  "copy": {
+    "at": "2026-10-12T11:39:32.127Z",
+    "value": "https://developer.mozilla.org/en-US/docs/Web/API/URL"
+  },
+  "target": {
+    "at": "2026-10-12T11:49:58.936Z",
+    "tab": "139",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+    "title": "URL: URL() constructor - Web APIs | MDN"
+  },
+  "served": [
+    {
+      "path": "/ui/assets/main-enuOTKXR.js",
+      "status": 200
+    }
+  ],
+  "providerRequests": 47,
+  "qualification": {
+    "providerEOFRequests": 47,
+    "taskID": "tsk_g00VXpnbRn00L81V59Oh",
+    "boundary": "Exact Task lifecycle and native/provider completion; UI remains Root-owned",
+    "physicalCompletion": true,
+    "epoch": 1,
+    "qualification": "Task"
+  },
+  "native": {
+    "occurrence": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+    "outcome": "settled",
+    "host": {
+      "pid": 14344,
+      "processInstanceID": "win32:639274018476231346",
+      "occurrenceID": "74e6e821-6046-4b82-8c71-4a1f5f1a8640"
+    },
+    "target": {
+      "pid": 77744,
+      "processInstanceID": "win32:639274018483944714",
+      "occurrenceID": "11154154-74b3-425d-8cfe-3b9607d5ab12"
+    },
+    "observedAtUtc": "2026-10-12T11:50:21.806Z",
+    "deadlineAt": 1791806547607,
+    "terminal": {
+      "occurrenceID": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+      "pid": 77744,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "actualJoins": {
+    "taskCreate": 0,
+    "observer": {
+      "handle": 69669,
+      "exitCode": 0
+    },
+    "launcher": {
+      "handle": 15819,
+      "exitCode": 0
+    }
+  },
+  "boundary": "Actual backend data, model request, clipboard and ownership contracts only. No UI assertions. 13 screenshots and manual-reading-observations.json require manual interpretation; current main-conversation movement during first streaming reopen is unresolved, completed-state repeats preserved the reading area."
+}

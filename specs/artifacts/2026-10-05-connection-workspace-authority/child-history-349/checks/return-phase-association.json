@@ -1,0 +1,144 @@
+{
+  "shots": [
+    {
+      "file": "05-over-32-parts-before-return.png",
+      "at": "2026-10-12T11:44:24.195Z"
+    },
+    {
+      "file": "06-first-return-over-cache-boundary.png",
+      "at": "2026-10-12T11:44:43.958Z"
+    },
+    {
+      "file": "07-agent-list-return.png",
+      "at": "2026-10-12T11:45:23.835Z"
+    }
+  ],
+  "interval": {
+    "from": 1791805464195,
+    "to": 1791805523835
+  },
+  "readers": [
+    {
+      "context": {
+        "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+        "streamRequest": {
+          "requestID": "msg_g0VXpnmMb00LvogDNJbG",
+          "agentID": "base-researcher",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXpp6me00Fv7JU8hHp",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXpp6hr00j7nRNPylr"
+        }
+      },
+      "from": "2026-10-12T11:44:21.889Z",
+      "to": "2026-10-12T11:44:29.177Z",
+      "terminal": "eof"
+    },
+    {
+      "context": {
+        "sessionID": "ses_huwYlKst4LVMvtJUgEta",
+        "streamRequest": {
+          "requestID": "msg_g0VXpnmMb00LvogDNJbG",
+          "agentID": "base-researcher",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXpp9BK00YQ3QinpeE",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXpp95P00GJO6WK38Y"
+        }
+      },
+      "from": "2026-10-12T11:44:31.509Z",
+      "to": "2026-10-12T11:44:38.846Z",
+      "terminal": "eof"
+    },
+    {
+      "context": {
+        "sessionID": "ses_-zUSACNizzzYjQ4egQIp",
+        "streamRequest": {
+          "requestID": "msg_task-root-control_art_hZJsU5lymXoMyStrCGfN_art_hZJsU5lymXoMyStrCGfN",
+          "agentID": "orchestrator",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXppBs700EMcT1uD0G",
+          "attempt": 0,
+          "assistantMessageID": "msg_hBWB3rrD4k9zVWjVK8ht"
+        }
+      },
+      "from": "2026-10-12T11:44:42.538Z",
+      "to": "2026-10-12T11:44:46.338Z",
+      "terminal": "eof"
+    },
+    {
+      "context": {
+        "sessionID": "ses_-zUSACNizzzYjQ4egQIp",
+        "streamRequest": {
+          "requestID": "msg_task-root-control_art_hZJsU5lymXoMyStrCGfN_art_hZJsU5lymXoMyStrCGfN",
+          "agentID": "orchestrator",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXppDch00XH02qrKSw",
+          "attempt": 0,
+          "assistantMessageID": "msg_hBWB3rrD4k9zVWjVK8ht"
+        }
+      },
+      "from": "2026-10-12T11:44:48.152Z",
+      "to": "2026-10-12T11:44:59.553Z",
+      "terminal": "eof"
+    },
+    {
+      "context": {
+        "sessionID": "ses_-zUSACNizzzYjQ4egQIp",
+        "streamRequest": {
+          "requestID": "msg_task-root-control_art_hZJsU5lymXoMyStrCGfN_art_hZJsU5lymXoMyStrCGfN",
+          "agentID": "orchestrator",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXppH4X00WKpM8swMe",
+          "attempt": 0,
+          "assistantMessageID": "msg_hBWB3rrD4k9zVWjVK8ht"
+        }
+      },
+      "from": "2026-10-12T11:45:01.421Z",
+      "to": "2026-10-12T11:45:14.262Z",
+      "terminal": "eof"
+    },
+    {
+      "context": {
+        "sessionID": "ses_-zUSACNizzzYjQ4egQIp",
+        "streamRequest": {
+          "requestID": "msg_task-root-control_art_hZJsU5lymXoMyStrCGfN_art_hZJsU5lymXoMyStrCGfN",
+          "agentID": "orchestrator",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXppKs600iJ2oFm13D",
+          "attempt": 0,
+          "assistantMessageID": "msg_hBWB3rrD4k9zVWjVK8ht"
+        }
+      },
+      "from": "2026-10-12T11:45:16.100Z",
+      "to": "2026-10-12T11:45:22.541Z",
+      "terminal": "eof"
+    }
+  ],
+  "workerLastEOF": "2026-10-12T11:44:38.846Z",
+  "boundary": "Actual reader timing only; temporal overlap cannot by itself establish DOM remount, scroll owner, or root cause. First reopen screenshot follows worker EOF."
+}
