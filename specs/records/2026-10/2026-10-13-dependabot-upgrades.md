@@ -69,3 +69,9 @@ critical-build.log结束码0：Windows x64原生后端包构建并执行真正�
 runtime-leaf-verified.log最后6测试/30断言通过，含GitLab本地direct-access与proxy实际HTTP流、Gateway的Fireworks helper与ACP typed invalidParams。最终frozen-leaf-final.log安装成功、audit-leaf-final.log检查1732包无漏洞。删除最后三项触及的负向空数组断言后，原LLM activity/Project Memory两文件38测试通过，当前typed credential终态、受保护Memory错误等正向合同保留。人工/后端范围与原始runner逐文件结果已保存到artifacts，后续不会依赖未跟踪scratch日志才能复核。
 
 typecheck-leaf-final.log：当前最终依赖图与schema参数修正后8/8任务成功；API生成器固定点和根docs/architecture checker已通过。下一步提交、fresh merge origin/main及正式pre-push hooks；远端结果仍待核实。
+
+## 交付与远端验证
+
+实现提交`1fbad2847`，fresh fetch后普通merge最新main为`2ccf6a76d`；没有冲突，没有rebase或force。全部待推送提交只有本任务实现与该merge，其他4项交付已在upstream。正式pre-push的8任务类型检查、路由、文档、18控制owner/22获取点、18架构文档、10package拓扑、发布变更拓扑、1140模块/5813边/4真实导入、凭据扫描0命中全部通过。`git push origin HEAD:main`成功，远端CI（Continuous Integration，持续集成）[38298767867](https://github.com/yangheng95/opencorvus/actions/runs/38298767867)开始运行，尚未声明成功。最后公共合同检索补齐中英文models页的旧ACP setter引用。
+
+push提示的4条GitHub Dependabot漏洞已读取真实alert metadata：rand/glib的两条位于`packages/overlay/src-tauri/Cargo.lock`，另两条属于历史before/Cargo.lock证据副本，全部Rust生态；不是本轮10个Bun/Actions升级，也不由bun audit覆盖。没有修改这些既有Rust公共图或历史证据，不能把Bun审计0漏洞表述为全部GitHub告警清零。

@@ -56,7 +56,7 @@ opencorvus models openai --verbose
 
 ## 模型变体
 
-部分 provider 暴露模型变体（如长上下文 / 标准）。ACP 的 `unstable_setSessionModel` 直接支持变体。
+部分 provider 暴露模型变体（如长上下文 / 标准）。ACP 在会话的 `configOptions` 中声明可用模型及变体；通过 `setSessionConfigOption` 设置 `configId: "model"` 并选择目录中实际声明的值。
 
 ## 选型建议
 
