@@ -10,6 +10,7 @@ import {
 import { AgentRoleContract } from "@/agent/role-contract"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { isMissionCallerReceiptParticipant } from "@/mission/caller-participant"
+import { Message } from "@/session/message"
 import type { Todo } from "@/session/todo"
 import type { TodoStore } from "@/session/todo-store"
 
@@ -516,6 +517,22 @@ export function projectConversationAgentView(
   const transcriptByMessageID = new Map(
     (Array.isArray(transcript) ? transcript : []).map((message) => [String(message?.info?.id || ""), message]),
   )
+  const acceptedInputsByExecution = new Map<string, Set<string>>()
+  const acceptingExecutionByInput = new Map<string, { sessionID: string; inputMessageID: string }>()
+  for (const message of [...transcriptByMessageID.values()].sort(conversationTranscriptMessageOrder)) {
+    const info = message.info
+    if (info.role !== "assistant") continue
+    const accepted = acceptedInputsByExecution.get(info.parentID) ?? new Set<string>()
+    for (const id of Message.acceptedInputMessageIDs(info)) {
+      accepted.add(id)
+      // The first actual reply owns an input's initial acceptance. Later Tool
+      // steps and retries can carry the same immutable batch again.
+      if (!acceptingExecutionByInput.has(id)) {
+        acceptingExecutionByInput.set(id, { sessionID: info.sessionID, inputMessageID: info.parentID })
+      }
+    }
+    acceptedInputsByExecution.set(info.parentID, accepted)
+  }
   const executionSessions = new Map<string, ConversationSessionView>()
   const sessionsWithExecutions = new Set<string>()
   const ensureExecution = (input: ConversationPreparedExecution): ConversationSessionView | undefined => {
@@ -540,11 +557,13 @@ export function projectConversationAgentView(
       return existing
     }
     const inputMessage = transcriptByMessageID.get(inputMessageID)
+    const acceptedInputs = acceptedInputsByExecution.get(inputMessageID)
     const scopedMessageIDs = (Array.isArray(transcript) ? transcript : [])
       .filter(
         (message) =>
           String(message?.info?.sessionID || "") === sessionID &&
           (String(message?.info?.id || "") === inputMessageID ||
+            acceptedInputs?.has(String(message?.info?.id || "")) ||
             String(message?.info?.parentID || "") === inputMessageID),
       )
       .sort(conversationTranscriptMessageOrder)
@@ -596,7 +615,15 @@ export function projectConversationAgentView(
     if (!execution) continue
     applyLifecycleSession(new Map([[sessionID, execution]]), event)
   }
-  for (const message of view.messages) {
+  // Prepared/lifecycle occurrences remain authoritative, including an earlier
+  // failed execution whose input was accepted again. Only transcript-only
+  // inputs resolve through their actual reply's acceptance batch.
+  const messages = view.messages.map((message) => {
+    if (executionSessions.has(message.inputMessageID)) return message
+    const accepted = acceptingExecutionByInput.get(message.inputMessageID)
+    return accepted?.sessionID === message.sessionID ? { ...message, inputMessageID: accepted.inputMessageID } : message
+  })
+  for (const message of messages) {
     if (executionSessions.has(message.inputMessageID)) continue
     const owner = bySession.get(message.sessionID)
     if (!owner) continue
@@ -655,6 +682,6 @@ export function projectConversationAgentView(
       )
       .map((session) => session.executionID),
     sessions,
-    messages: view.messages.filter((message) => sessionIDs.has(message.sessionID)),
+    messages: messages.filter((message) => sessionIDs.has(message.sessionID)),
   }
 }

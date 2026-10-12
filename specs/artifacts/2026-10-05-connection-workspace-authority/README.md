@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [345 活动执行批次](activity-occurrence-plan-345.md)：按真实接收批次修复多余Pending活动。
+
 - [344 子侧栏来源复制](source-copy-plan-344.md)：完整位置复制与真实子会话阅读复核。
 
 - [343 错误详情复制](error-copy-plan-343.md)：原生按钮单击与键盘激活，真实页面对照。

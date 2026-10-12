@@ -93,6 +93,15 @@ navigation targets; only actual lifecycle facts change execution status, so a
 late body snapshot cannot revive a settled input. A slow same-source hydration
 also retires the replaced preparation placeholder.
 
+One assistant reply can accept several real input Messages. Agent hydration
+uses that reply's `acceptedInputMessageIDs` to associate transcript-only batch
+members with its parent execution, retaining every member in that execution's
+message navigation. A batch member with its own prepared or lifecycle evidence
+retains that independent occurrence. Repeated reply steps retain the first
+acceptance association; later unaccepted inputs remain pending. This projection
+is shared by Task and Session hydration and does not alter the transcript,
+persisted Messages, or the status of any actual execution.
+
 Task Message lifecycle has one exact live bridge. Initial hydrate supplies the
 persisted tail; reconnect resumes the bounded Task live sequence in its exact
 process epoch. Replay expiry or an epoch change first replaces the canonical

@@ -157,3 +157,144 @@ test("an accepted input with visible content retains its pending occurrence unti
     }),
   ])
 })
+
+const batchInputID = "message_batch_tail"
+const batchReplyID = "message_batch_reply"
+const batchTranscript = [
+  transcript[0]!,
+  {
+    ...transcript[0]!,
+    info: { ...transcript[0]!.info, id: batchInputID, time: { created: 1_050 } },
+  },
+  {
+    ...transcript[1]!,
+    info: {
+      ...transcript[1]!.info,
+      id: batchReplyID,
+      parentID: batchInputID,
+      acceptedInputMessageIDs: [inputMessageID, batchInputID],
+    },
+  },
+]
+const batchLifecycle = {
+  type: "agent.execution.lifecycle",
+  emittedAt: 1_200,
+  payload: {
+    sessionID,
+    inputMessageID: batchInputID,
+    agentID: "architect",
+    status: { type: "idle" },
+  },
+}
+
+test("one reply acceptance batch projects its complete input messages under the actual execution", () => {
+  const view = projectConversationAgentView(batchTranscript, [batchLifecycle], ledgerSessions)
+  expect(view.topLevelExecutionIDs).toEqual([batchInputID])
+  expect(view.sessions).toEqual([
+    expect.objectContaining({
+      sessionID,
+      inputMessageID: batchInputID,
+      status: "idle",
+      messageIDs: [inputMessageID, batchInputID, batchReplyID],
+    }),
+  ])
+  expect(view.messages.map(({ messageID, inputMessageID }) => ({ messageID, inputMessageID }))).toEqual([
+    { messageID: inputMessageID, inputMessageID: batchInputID },
+    { messageID: batchInputID, inputMessageID: batchInputID },
+    { messageID: batchReplyID, inputMessageID: batchInputID },
+  ])
+  expect(
+    projectConversationView({ transcript: batchTranscript, ledgerSessions }).messages.map((row) => row.messageID),
+  ).toEqual([inputMessageID, batchInputID, batchReplyID])
+})
+
+test("repeated reply steps retain batch identity while a later unaccepted input remains pending", () => {
+  const laterInputID = "message_waiting_input"
+  const repeatedReplyID = "message_batch_tool_reply"
+  const view = projectConversationAgentView(
+    [
+      ...batchTranscript,
+      {
+        ...batchTranscript[2]!,
+        info: { ...batchTranscript[2]!.info, id: repeatedReplyID, time: { created: 1_150 } },
+      },
+      { ...transcript[0]!, info: { ...transcript[0]!.info, id: laterInputID, time: { created: 1_300 } } },
+    ],
+    [batchLifecycle],
+    ledgerSessions,
+  )
+  expect(
+    view.sessions.map(({ inputMessageID, status, messageIDs }) => ({ inputMessageID, status, messageIDs })),
+  ).toEqual([
+    {
+      inputMessageID: batchInputID,
+      status: "idle",
+      messageIDs: [inputMessageID, batchInputID, batchReplyID, repeatedReplyID],
+    },
+    { inputMessageID: laterInputID, status: "pending", messageIDs: [laterInputID] },
+  ])
+})
+
+test("a real earlier lifecycle retains its occurrence when a later reply accepts that input again", () => {
+  const view = projectConversationAgentView(
+    [
+      batchTranscript[0]!,
+      {
+        ...transcript[1]!,
+        info: { ...transcript[1]!.info, time: { created: 1_030 } },
+      },
+      batchTranscript[1]!,
+      batchTranscript[2]!,
+    ],
+    [
+      {
+        ...batchLifecycle,
+        emittedAt: 1_040,
+        payload: { ...batchLifecycle.payload, inputMessageID, status: { type: "terminal", reason: "error" } },
+      },
+      batchLifecycle,
+    ],
+    ledgerSessions,
+  )
+  expect(
+    view.sessions.map(({ inputMessageID, status, messageIDs }) => ({ inputMessageID, status, messageIDs })),
+  ).toEqual([
+    { inputMessageID, status: "error", messageIDs: [inputMessageID, assistantMessageID] },
+    { inputMessageID: batchInputID, status: "idle", messageIDs: [inputMessageID, batchInputID, batchReplyID] },
+  ])
+  expect(view.messages.find((row) => row.messageID === inputMessageID)?.inputMessageID).toBe(inputMessageID)
+})
+
+test("prepared execution evidence and other Session input identities retain their own pending records", () => {
+  const otherSessionID = "session_other_architect"
+  const otherInputID = "message_other_input"
+  const view = projectConversationAgentView(
+    [
+      ...batchTranscript,
+      {
+        ...transcript[0]!,
+        info: { ...transcript[0]!.info, id: otherInputID, sessionID: otherSessionID, time: { created: 1_300 } },
+      },
+    ],
+    [batchLifecycle],
+    [
+      ...ledgerSessions,
+      {
+        ...ledgerSessions[0]!,
+        sessionID: otherSessionID,
+        orderKey: timelineOrderKey({ domain: "session", time: 1_250, id: otherSessionID }),
+        timeCreated: 1_250,
+      },
+    ],
+    new Map(),
+    new Map(),
+    [{ inputMessageID, sessionID, agent: "architect", kind: "architect", preparedAt: 950 }],
+  )
+  expect(view.sessions.map(({ sessionID, inputMessageID, status }) => ({ sessionID, inputMessageID, status }))).toEqual(
+    [
+      { sessionID, inputMessageID, status: "pending" },
+      { sessionID, inputMessageID: batchInputID, status: "idle" },
+      { sessionID: otherSessionID, inputMessageID: otherInputID, status: "pending" },
+    ],
+  )
+})

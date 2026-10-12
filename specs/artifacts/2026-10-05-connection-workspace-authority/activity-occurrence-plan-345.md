@@ -1,0 +1,35 @@
+# 345 活动执行轮次调查
+
+## Recall
+
+用户要求持续自主体验、修复与迭代，最新明确只使用单 agent，不再委托。Sources 显示与子侧栏 Rendering 闪烁仍是原始重点；344 来源复制已由真实历史子侧栏和剪贴板验收并提交推送 d144c4317，开始工作区干净。本轮调查344真实页面中的已完成 Task 仍有初始 orchestrator Pending、子会话仍有 Add guidance；不能根据标签推断调度故障或直接隐藏能力。
+
+## 已读与影响分析
+
+已读344 Recall、03-control operator steer契约、07-panel-reactivity执行轮次与Dock契约、conversation/view.ts、Task/Session hydrate路由、conversation-agents、workerSteerTargetSessionID、OperatorSteerBox、Task API operatorSteerAgentSession、agent-coordination与Task ingress reducer。全仓搜索定义、调用与测试：共享projectConversationAgentView由Task与Session两入口调用；conversation-projector-ownership是后端投影契约测试，不是DOM/渲染测试。现有测试明确把无生命周期但有消息的输入保留为pending。
+
+可观察现象是344已完成Task的活动表存在Pending。直接路径是projectConversationAgentView把所有消息inputMessageID补成execution，默认pending；真正原因尚待原始Message、prepared occurrence和lifecycle证据区分。初始Task root输入可能只是用户原始请求，不能假装执行完成，也不能隐藏真实消息。既有修复按输入切分活动，但仍可能把非执行输入当作执行；这项推断尚未实证。
+
+Add guidance已有明确契约：历史Session terminal不是新协调请求准入条件，因此当前不能据此删按钮。Task终态后请求的处理需要单独核验，未确认无效操作。若发现真正调度/恢复/终态异常，立即横向审计Task/Mission/Session、所有生产入口、重试/重启、串并行与项目隔离。只出现读侧错误时也须以持久化和真实运行证据排除共享执行根因。
+
+## 调查与实施边界
+
+先对已物理闭合的329原始runtime做新的只读资格/执行证据核对，记录Message与轮次对应，沿共享生产入口阅读；未知项明确保留。得到根因和完整影响面后补写具体实现方案，再修改生产代码。保留所有真实消息与真实生命周期，不以Task最终状态覆盖历史轮次。凭据不复制；不启动新模型任务或子agent。
+
+如需要页面验收，使用新的完整已闭合历史副本、独立18322/ui与固定600000ms寿命，实际交互/截图/人工查看。禁止任何UI自动化测试。非UI变更需聚焦正向契约测试；typecheck/build/docs不替代真实视觉。结束前归档实际结果、关闭仅本轮页面/服务并join原句柄、更新索引、范围明确提交，fresh fetch/merge、核对待推送集合后正常push。持续goal保持active。
+
+## 实证根因与实施决定
+
+新的原始只读资格通过；完整90表副本启动18322，真实132页和HTTP hydrate均复现4条活动。原始首条msg_g0VXnHYNh00vQfmcZ1yI与首个control输入被同一回复msg_huE9jYvZb3HfJpmexgNX的acceptedInputMessageIDs明确共同接收，parentID只指向最后的control。首条没有独立lifecycle；control有真实idle生命周期，后续worker/第二control各自completed。并非上下文未执行，而是同一批次的非parent输入被错误分裂。原14条消息、15持久Provider身份、实际17流闭合、Task epoch1完成、全部recovery入口空闲与两条ingress结算排除了当前执行卡死；01/02截图人工查看，原始请求可定位并完整保留。
+
+横向已读共同SessionLoop的currentUnacceptedInputBatch/failedAcceptedInputBatch、beginAssistantReplyWithCommit、Message.acceptedInputMessageIDs/acceptsInputMessage、Task描述符/lifecycle投影、Session/Mission/Side Chat hydrate入口、scheduler延迟admission、live message/part/lifecycle活动处理。执行层原子记录并消费整个batch；失败重试沿同一accepted batch；项目/Session完整性在admission检查。问题在两个hydrate入口共用的读侧，不能推断所有调度场景重新通过端到端。原Idle是其真实历史轮次，不改成Completed。Add guidance契约保留；本轮不提交新引导，不声称已验证终态后引导的完整执行。
+
+实现仅修改共享agentView投影：复用Message.acceptedInputMessageIDs读取真实接收批次，将未拥有自己prepared/lifecycle证据的批次输入归到接收它的parent occurrence，并把全部被接收的真实消息计入该occurrence；独立prepared/lifecycle轮次优先保留，后续未接收输入仍pending。消息正文投影与持久数据完全不改，agentView的消息定位同步使用对应occurrence；接受证据在当前Session内解析，重复Tool步/重试保持同一归属。真实live路径只由assistant parent和lifecycle创建轮次，用户事件只更新preview，不会新建这个假轮次；hydrate修复使用同一事实源，无并行状态或新协议。
+
+聚焦后端正向测试覆盖批次接收、后续pending、独立历史轮次、prepared、同Session/多Session隔离与重复reply步。测试只验证共享HTTP数据投影契约，不访问UI/DOM或截图。再次启动新完整副本，真实页面核对3个真实活动、原始输入完整可读与子Dock来源。纯后端读侧修改不需要重建未改前端bundle；两次页面使用同一现有已验证bundle。实际HTTP before/after响应、原始Message/Provider全字段比较与截图共同验收。
+
+## 实施结果
+
+7 tests/14 expect通过，opencorvus typecheck句柄66112实际exit0，docs:check通过345 ops/25 groups。两次实际页面132/133及五张人工截图完成；Task和Session实际HTTP均得到3个真实轮次，完整transcript、主view与executionProjection等于修复前；第一轮包含两条输入与实际回复。两份实例14个Message全字段、6个Source全字段和15个Provider身份均与原始closed runtime完整相等。
+
+47270/11378原启动句柄实际join0；149156/121852ms，均在原600000ms上限内闭合，未延长时限。页面/服务退出、真实native/output/request与配对退休receipt归档；5个01出生的native缓存文件在两次服务闭合后精确移至本轮私有目录。完整响应压缩归档后原文件移至私有目录保存。79份含压缩解码的文本凭据扫描为0。原始Sources实时全帧问题仍未由这一历史轮次实验覆盖。

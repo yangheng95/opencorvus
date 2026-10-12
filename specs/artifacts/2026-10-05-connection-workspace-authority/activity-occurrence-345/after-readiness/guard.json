@@ -1,0 +1,140 @@
+{
+  "boundary": "Fresh exact original Native/Host, port, pair and actual physical/output/request settled receipt; original Task qualification retained. Parent5414 actual exit0 was observed in batch329; no new parent execution claimed.",
+  "observedAtUtc": "2026-10-12T09:23:38.9118601Z",
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "originalTask": {
+    "taskID": "tsk_g00VXnHXUY002nUsxVFT",
+    "projectID": "prj_hnAe7JXn1mGYEFjYlQiU",
+    "rootSessionID": "ses_-zUSCiSOSzzpr2sGgxF6",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXnHXc400GKBhuLC7j",
+    "openedAt": 1791767907346
+  },
+  "occurrence": "child-live-329-live-01-4f01997e-4272-4252-854b-1456e77396d7",
+  "listenerCount": 0,
+  "native": {
+    "occurrence": "child-live-329-live-01-4f01997e-4272-4252-854b-1456e77396d7",
+    "outcome": "settled",
+    "host": {
+      "pid": 61472,
+      "processInstanceID": "win32:639273646773556078",
+      "occurrenceID": "44f003c4-f137-44e7-81b4-3fa7010e953d"
+    },
+    "target": {
+      "pid": 76068,
+      "processInstanceID": "win32:639273646781380174",
+      "occurrenceID": "baf6923b-aeff-4904-ad4f-ddad351e8f6f"
+    },
+    "observedAtUtc": "2026-10-12T01:23:02.811Z",
+    "deadlineAt": 1791769377341,
+    "terminal": {
+      "occurrenceID": "child-live-329-live-01-4f01997e-4272-4252-854b-1456e77396d7",
+      "pid": 76068,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "originalQualification": {
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 76068,
+          "processInstanceID": "win32:639273646781380174",
+          "occurrenceID": "baf6923b-aeff-4904-ad4f-ddad351e8f6f"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 61472,
+          "processInstanceID": "win32:639273646773556078",
+          "occurrenceID": "44f003c4-f137-44e7-81b4-3fa7010e953d"
+        }
+      }
+    ],
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "observedAtUtc": "2026-10-12T01:23:05.2718475Z",
+    "pairedCleanupComplete": true,
+    "physicalCompletion": true,
+    "occurrence": "child-live-329-live-01-4f01997e-4272-4252-854b-1456e77396d7",
+    "listeners": null,
+    "copiedPair": [
+      {
+        "presentAfter": false,
+        "outcome": "removed",
+        "copiedLength": 2194,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-live-329-live-01\\runtime\\data\\auth.json"
+      },
+      {
+        "presentAfter": false,
+        "outcome": "removed",
+        "copiedLength": 9155406,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-live-329-live-01\\runtime\\data\\models.json"
+      }
+    ],
+    "nativeSettlement": {
+      "occurrence": "child-live-329-live-01-4f01997e-4272-4252-854b-1456e77396d7",
+      "outcome": "settled",
+      "host": {
+        "pid": 61472,
+        "processInstanceID": "win32:639273646773556078",
+        "occurrenceID": "44f003c4-f137-44e7-81b4-3fa7010e953d"
+      },
+      "target": {
+        "pid": 76068,
+        "processInstanceID": "win32:639273646781380174",
+        "occurrenceID": "baf6923b-aeff-4904-ad4f-ddad351e8f6f"
+      },
+      "observedAtUtc": "2026-10-12T01:23:02.811Z",
+      "deadlineAt": 1791769377341,
+      "terminal": {
+        "occurrenceID": "child-live-329-live-01-4f01997e-4272-4252-854b-1456e77396d7",
+        "pid": 76068,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    }
+  },
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-live-329-live-01",
+  "readQualified": true,
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 61472,
+        "processInstanceID": "win32:639273646773556078",
+        "occurrenceID": "44f003c4-f137-44e7-81b4-3fa7010e953d"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 76068,
+        "processInstanceID": "win32:639273646781380174",
+        "occurrenceID": "baf6923b-aeff-4904-ad4f-ddad351e8f6f"
+      }
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "checkedAt": "2026-10-12T09:28:44.128Z",
+  "taskID": "tsk_g00VXnHXUY002nUsxVFT",
+  "before": [
+    {
+      "inputMessageID": "msg_g0VXnHYNh00vQfmcZ1yI",
+      "status": "pending"
+    },
+    {
+      "inputMessageID": "msg_task-root-control_art_hrl5KKUEJ5kWYF9kbAbx_art_hrl5KKUEJ5kWYF9kbAbx",
+      "status": "idle"
+    },
+    {
+      "inputMessageID": "msg_g0VXnHhvP00LmjMWNYz8",
+      "status": "completed"
+    },
+    {
+      "inputMessageID": "msg_task-root-control_art_hYD9w3IXY4ZrcLaMSRLQ_art_hYD9w3IXY4ZrcLaMSRLQ",
+      "status": "completed"
+    }
+  ],
+  "after": [
+    {
+      "inputMessageID": "msg_task-root-control_art_hrl5KKUEJ5kWYF9kbAbx_art_hrl5KKUEJ5kWYF9kbAbx",
+      "status": "idle"
+    },
+    {
+      "inputMessageID": "msg_g0VXnHhvP00LmjMWNYz8",
+      "status": "completed"
+    },
+    {
+      "inputMessageID": "msg_task-root-control_art_hYD9w3IXY4ZrcLaMSRLQ_art_hYD9w3IXY4ZrcLaMSRLQ",
+      "status": "completed"
+    }
+  ],
+  "session": [
+    {
+      "inputMessageID": "msg_task-root-control_art_hrl5KKUEJ5kWYF9kbAbx_art_hrl5KKUEJ5kWYF9kbAbx",
+      "status": "idle"
+    },
+    {
+      "inputMessageID": "msg_g0VXnHhvP00LmjMWNYz8",
+      "status": "completed"
+    },
+    {
+      "inputMessageID": "msg_task-root-control_art_hYD9w3IXY4ZrcLaMSRLQ_art_hYD9w3IXY4ZrcLaMSRLQ",
+      "status": "completed"
+    }
+  ],
+  "firstExecutionMessages": [
+    "msg_g0VXnHYNh00vQfmcZ1yI",
+    "msg_task-root-control_art_hrl5KKUEJ5kWYF9kbAbx_art_hrl5KKUEJ5kWYF9kbAbx",
+    "msg_huE9jYvZb3HfJpmexgNX"
+  ],
+  "transcript": "Complete transport transcript and main view equal before",
+  "lifecycle": "Complete durable executionProjection equal before",
+  "boundary": "Actual production Task and Session HTTP responses; backend data contract, not UI automation"
+}
