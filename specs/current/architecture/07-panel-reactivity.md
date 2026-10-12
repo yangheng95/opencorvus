@@ -320,7 +320,10 @@ Session, Task and Mission main views share this implementation; failed active
 restoration is reported through the existing application diagnostic boundary.
 
 Source disclosures retain their actual adjacent Part group and truthful group
-count. Expanded leaves retain canonical type/Session/Message/source identity
+count. The summary states its next action from the same expansion state: show
+the remaining source count when closed, collapse that count when open. Its
+count excludes the first, always-visible leaf, and follows the actual group.
+Expanded leaves retain canonical type/Session/Message/source identity
 while reading current metadata and index. A single-source group needs no leaf
 ordinal; a larger group keeps its current per-group order. Opening a disclosure
 and focusing its URL/file/document leaf declare reading intent through the

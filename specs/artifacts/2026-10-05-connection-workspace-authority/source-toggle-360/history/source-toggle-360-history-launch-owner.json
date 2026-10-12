@@ -1,0 +1,35 @@
+{
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-history\\runtime",
+  "authorityStaging": "None; no model Task requested",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-history",
+  "nativeDeadlineAt": 1791833406383,
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-history\\evidence",
+  "host": {
+    "pid": 67928,
+    "processInstanceID": "win32:639274296065144292",
+    "occurrenceID": "7bf24cb4-931b-496e-bb33-2f74f5c7c5f5"
+  },
+  "occurrence": "source-toggle-360-history-cf779a4b-5dfc-4558-ab25-536de81761aa",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project",
+  "nativeTarget": {
+    "pid": 80016,
+    "processInstanceID": "win32:639274296081452975",
+    "occurrenceID": "0d585a41-f1d6-440c-a20f-a59649c1325f"
+  },
+  "evidencePrefix": "source-toggle-360-history",
+  "targetBirthAtMs": 1791832808145,
+  "owner": {
+    "processInstanceID": "win32:639274296081452975",
+    "ProcessId": 80016
+  },
+  "observedProcessChain": [
+    {
+      "pid": 80016,
+      "processInstanceID": "win32:639274296081452975",
+      "occurrenceID": "0d585a41-f1d6-440c-a20f-a59649c1325f"
+    }
+  ],
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-toggle-360\\history",
+  "port": 18355
+}

@@ -1,0 +1,15 @@
+{
+  "pid": 76476,
+  "occurrence": "source-toggle-360-integrated-645ba914-ca59-4aaf-bfff-d4363b34b18d",
+  "owner": {
+    "pid": 76476,
+    "processInstanceID": "win32:639274309588713874",
+    "occurrenceID": "59bbb9b1-45f3-4e1c-ae52-d81f48d6a7c7"
+  },
+  "parent": {
+    "pid": 42788,
+    "processInstanceID": "win32:639274309588003922",
+    "occurrenceID": "0ccec099-9a9e-4896-93cd-cef42951ba54"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
