@@ -1,0 +1,41 @@
+{
+  "observedAt": "2026-10-12T03:01:07.398Z",
+  "runs": [
+    {
+      "stage": "01",
+      "actualRequests": 5,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "sourceFiles": 1,
+      "nativeExit": 0,
+      "physicalCompletion": true,
+      "pairedCleanupComplete": true
+    },
+    {
+      "stage": "02",
+      "actualRequests": 5,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "sourceFiles": 1,
+      "nativeExit": 0,
+      "physicalCompletion": true,
+      "pairedCleanupComplete": true
+    },
+    {
+      "stage": "03",
+      "actualRequests": 6,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "sourceFiles": 2,
+      "nativeExit": 0,
+      "physicalCompletion": true,
+      "pairedCleanupComplete": true
+    }
+  ],
+  "pdfBytes": 4472337,
+  "restoredInputEqualsRepositoryOriginal": true,
+  "boundary": "Positive checks over actual provider, canonical persisted sources, file response and physical completion evidence. Screenshot and geometry observations are not asserted; manual visual review is separate."
+}

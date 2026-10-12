@@ -38,6 +38,22 @@ content keeps the existing non-editable description. The file-image container
 owns its bounded layout and scrolling; there is no additional fetch, image
 cache, file mutation or parallel preview implementation.
 
+Project and absolute-source file reads also return PDF bytes through the same
+FileContent base64/mimeType contract. Encoded PDFs remain read-only under the
+existing write admission. File Editor lazily loads the shared PdfPreview used
+by FilePreviewArtifact, retaining one PDF.js document/canvas lifecycle, resource
+authority, page and zoom controls. The current viewport ref owns its resize
+observer so error recovery observes the replacement node. Resource errors are
+checked before reading a failed Solid resource, and original parse/resource
+diagnostics remain visible through Feedback. No synthetic Artifact is created
+for a file source, and no second PDF renderer or file-read endpoint is added.
+The current PDF document/page remembers only visible, stable top/left reading
+offsets. Hiding a pane cannot replace them with zero-size geometry; reopening
+restores them after the current-width page paint and layout animation settle.
+Changing the document or page resets that local position. PDF and CodeEditor
+share the existing finite ancestor-animation decision through the animation
+utility; no global PDF history or conversation-follow controller is introduced.
+
 The main Composer owner derives ready, submitting or unavailable from the existing
 connection/workspace admission and launcher submission signals. ChatComposer
 derives interactivity from ready at the same dispatch, attachment, mention and

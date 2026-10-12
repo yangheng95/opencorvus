@@ -71,6 +71,28 @@ test("source readers retain explicit path and missing-file error contracts", asy
   })
 }, 30_000)
 
+test("PDF and image readers return exact encoded preview bytes in both file scopes", async () => {
+  await using project = await memoryProject("file-reader-media")
+  await configure(project.path, "Encoded preview inputs\n")
+  const inputs = [
+    ["source.PDF", "../../../web/public/papers/opencorvus-poc.pdf", "application/pdf"],
+    ["source.png", "../../../overlay/src-tauri/icons/128x128@2x.png", "image/png"],
+  ] as const
+  for (const [filename, repositoryPath, mimeType] of inputs) {
+    const original = await fs.readFile(path.resolve(import.meta.dir, repositoryPath))
+    const absolutePath = path.join(project.path, filename)
+    await fs.writeFile(absolutePath, original)
+    for (const route of [
+      `/file/content?${new URLSearchParams({ path: filename })}`,
+      `/file/source-content?${new URLSearchParams({ path: absolutePath })}`,
+    ]) {
+      const response = await read(project.path, route)
+      expect(response).toMatchObject({ status: 200, body: { type: "text", encoding: "base64", mimeType } })
+      expect(Buffer.from(response.body.content, "base64").equals(original)).toBe(true)
+    }
+  }
+}, 30_000)
+
 test("file writes retain the execution model error contract", async () => {
   await using project = await memoryProject("file-reader-write-runtime")
   await configure(project.path, "FileReaderMarker\n")

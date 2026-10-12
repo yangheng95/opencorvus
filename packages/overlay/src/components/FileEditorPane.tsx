@@ -1,4 +1,4 @@
-import { batch, createEffect, createMemo, createSignal, lazy, onCleanup, Show, untrack } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, lazy, Match, onCleanup, Show, Switch, untrack } from "solid-js"
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
   closeFileEditor,
@@ -18,6 +18,7 @@ import { Icon } from "./ui/Icon"
 // open. This pane stays mounted to keep its state, so the editor itself is what
 // loads on demand.
 const CodeEditor = lazy(async () => ({ default: (await import("./ui/CodeEditor")).CodeEditor }))
+const PdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
 import { Button } from "./ui/Button"
 import { Badge } from "./ui/Badge"
 import { Dialog } from "./ui/Dialog"
@@ -132,6 +133,12 @@ export function FileEditorPane() {
   const imageSource = createMemo(() => {
     const file = content()
     return file?.encoding === "base64" && file.mimeType?.startsWith("image/")
+      ? `data:${file.mimeType};base64,${file.content}`
+      : undefined
+  })
+  const pdfSource = createMemo(() => {
+    const file = content()
+    return file?.encoding === "base64" && file.mimeType === "application/pdf"
       ? `data:${file.mimeType};base64,${file.content}`
       : undefined
   })
@@ -350,7 +357,7 @@ export function FileEditorPane() {
             </Show>
           </div>
           <Show
-            when={target()?.sourceAbsolutePath || imageSource()}
+            when={target()?.sourceAbsolutePath || imageSource() || pdfSource()}
             fallback={
               <Button
                 type="button"
@@ -433,16 +440,19 @@ export function FileEditorPane() {
                 </Feedback>
               }
             >
-              <Show when={imageSource()} fallback={
-                <Show
-                  when={textContent()}
-                  fallback={
-                    <div class="file-editor-empty">
-                      <Icon name="file-document" size="medium" />
-                      <p>{t("file_editor.binary")}</p>
-                    </div>
-                  }
-                >
+              <Switch fallback={
+                <div class="file-editor-empty">
+                  <Icon name="file-document" size="medium" />
+                  <p>{t("file_editor.binary")}</p>
+                </div>
+              }>
+                <Match when={imageSource()}>
+                  {(src) => <div class="file-editor-image"><PreviewableImage src={src()} alt={path()} /></div>}
+                </Match>
+                <Match when={pdfSource()}>
+                  {(url) => <PdfPreview url={url()} label={path()} class="file-editor-pdf" />}
+                </Match>
+                <Match when={textContent()}>
                   <CodeEditor
                     value={draft()}
                     path={path()}
@@ -452,10 +462,8 @@ export function FileEditorPane() {
                     onValueChange={updateDraft}
                     readOnly={!!target()?.sourceAbsolutePath || fileEditorReserved()}
                   />
-                </Show>
-              }>
-                {(src) => <div class="file-editor-image"><PreviewableImage src={src()} alt={path()} /></div>}
-              </Show>
+                </Match>
+              </Switch>
             </Show>
           </Show>
         </div>

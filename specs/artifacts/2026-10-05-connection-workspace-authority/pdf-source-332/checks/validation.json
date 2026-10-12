@@ -1,0 +1,52 @@
+{
+  "observedAt": "2026-10-12T03:02:52.195Z",
+  "backendBaseline": {
+    "handle": 86973,
+    "actualExit": 1,
+    "qualification": "Expected new PDF contract failure"
+  },
+  "backendFixed": {
+    "handle": 31525,
+    "actualExit": 0,
+    "tests": 5,
+    "assertions": 24
+  },
+  "backendTypecheck": {
+    "handle": 59850,
+    "actualExit": 0
+  },
+  "overlayTypecheck": {
+    "handle": 34097,
+    "actualExit": 0
+  },
+  "finalBuild": {
+    "handle": 82210,
+    "actualExit": 0,
+    "bundle": "main-DRlPTkRX.js"
+  },
+  "originalLaunches": [
+    {
+      "handle": 41845,
+      "actualExit": 0
+    },
+    {
+      "handle": 6763,
+      "actualExit": 0
+    },
+    {
+      "handle": 65995,
+      "qualification": "Final join response not available after context recovery; subsequent query Unknown process id. Native exit 0 and complete physical cleanup are independently recorded."
+    }
+  ],
+  "actualBackendCheckExit": 0,
+  "docsCheckExit": 0,
+  "ownedTabsClosed": [
+    "110",
+    "111",
+    "112"
+  ],
+  "manuallyReviewedAppScreenshots": 16,
+  "textEvidenceScanned": 100,
+  "credentialMatches": 0,
+  "boundary": "Actual command outcomes, evidence check and credential scan. UI screenshots reviewed manually, no automated UI assertions."
+}

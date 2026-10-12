@@ -1,0 +1,32 @@
+{
+  "boundary": "Manual interaction and read-only DOM observations; no UI assertions.",
+  "observations": [
+    {
+      "at": "2026-10-12T02:36:30.861Z",
+      "canvasHeight": 806,
+      "canvasWidth": 623,
+      "phase": "before-close",
+      "scrollTop": 29.33333396911621,
+      "viewportHeight": 533,
+      "viewportWidth": 380
+    },
+    {
+      "at": "2026-10-12T02:36:38.478Z",
+      "canvasHeight": 806,
+      "canvasWidth": 623,
+      "phase": "closed",
+      "scrollTop": 0,
+      "viewportHeight": 0,
+      "viewportWidth": 0
+    },
+    {
+      "at": "2026-10-12T02:38:58.552Z",
+      "canvasHeight": 806,
+      "canvasWidth": 623,
+      "phase": "reopened",
+      "scrollTop": 0,
+      "viewportHeight": 533,
+      "viewportWidth": 380
+    }
+  ]
+}

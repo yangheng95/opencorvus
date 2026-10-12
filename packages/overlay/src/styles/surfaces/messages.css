@@ -1509,6 +1509,7 @@ button.msg-source-chip .msg-source-chip__detail,
 }
 
 .msg-artifact-file__toolbar {
+  flex-wrap: wrap;
   border-bottom: var(--oc-border-width) solid var(--border);
 }
 

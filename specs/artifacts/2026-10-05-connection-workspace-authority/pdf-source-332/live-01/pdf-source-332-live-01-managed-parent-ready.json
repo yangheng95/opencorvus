@@ -1,0 +1,15 @@
+{
+  "pid": 51776,
+  "occurrence": "pdf-source-332-live-01-b62e056b-dae4-41ff-a775-89c46545ceae",
+  "owner": {
+    "pid": 51776,
+    "processInstanceID": "win32:639273683186967407",
+    "occurrenceID": "c2ee1cc5-0784-4611-83a0-9cc68f4f968c"
+  },
+  "parent": {
+    "pid": 77584,
+    "processInstanceID": "win32:639273683186518443",
+    "occurrenceID": "2e8733ae-9ae0-4a47-91c6-5851065232ee"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

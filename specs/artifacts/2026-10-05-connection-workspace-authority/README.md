@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [332 PDF文件来源阅读](pdf-source-plan-332.md)：复用已有阅读器查看真实PDF来源。
+
 - [331 图片解码失败](image-failure-plan-331.md)：共享预览失败与恢复体验。
 
 - [330 文件来源图片查看](source-image-plan-330.md)：图片来源查看与引用恢复。

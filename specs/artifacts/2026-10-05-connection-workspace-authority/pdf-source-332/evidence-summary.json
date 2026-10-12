@@ -1,0 +1,88 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 1490072,
+    "archiveBytes": 48159,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 5,
+    "sessions": [
+      {
+        "id": "ses_h8F7TCaNIZtQNjKHOgjN",
+        "projectID": "prj_hzEDkEGISJU0rCEJnvn9",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCT9o8zz5UT3hqnxj",
+        "projectID": "prj_hgfunGJ1U8T3SeD6l3xI",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXnWrny005SPYsBpI8",
+        "sourceId": "15cc597ca9d43b377d0c8c32ef6a1cd864714a7b08daf16d072535e18e18a867",
+        "title": "source-document.pdf"
+      }
+    ]
+  },
+  {
+    "stage": "02",
+    "originalBytes": 4639795,
+    "archiveBytes": 113574,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 5,
+    "sessions": [
+      {
+        "id": "ses_hkxgUG4Ay4sXrGd7LLCh",
+        "projectID": "prj_hIvNYMnaP4gsscjrCKxz",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCQPHizzf73a6ZvI7",
+        "projectID": "prj_h4TH7QltKVYapTyBdzpz",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXnZcjw00FTQ3EPnJm",
+        "sourceId": "65ee27c4b33f980013f6dfc58135c22101420c36654a63f9005da7771b17a2b5",
+        "title": "source-document.pdf"
+      }
+    ]
+  },
+  {
+    "stage": "03",
+    "originalBytes": 4350636,
+    "archiveBytes": 110145,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 6,
+    "sessions": [
+      {
+        "id": "ses_hamGfJg9SdycMyaNUery",
+        "projectID": "prj_hY2NCaizWcle8YKUMlKa",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCLmUCzzyyunn4kH9",
+        "projectID": "prj_hFGUbikjjcqlhbamvk8U",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXneF8r007pfRScNpr",
+        "sourceId": "c7f05fd1aaf43b6b16702ea8fc7720e5c361c2951cf843792d158a48ad4576bd",
+        "title": "source-document.pdf"
+      },
+      {
+        "id": "prt_g0VXneIZd00q3MjAS4d3",
+        "sourceId": "c8df0ef7818b4ef75e3313cd5aa0a8c11a5871f37c9328de3263f782988d8b82",
+        "title": "source-review.md"
+      }
+    ]
+  }
+]

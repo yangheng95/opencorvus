@@ -6,7 +6,7 @@ import { Button } from "./Button"
 import { editorLanguage } from "./code-editor-language"
 import { createCodeEditorLocale } from "./code-editor-locale"
 import { codeEditorContent } from "./code-editor-content"
-import { createAnimationFrameScheduler } from "../../utils/animation-frame"
+import { createAnimationFrameScheduler, hasRunningLayoutAnimation } from "../../utils/animation-frame"
 import {
   overlayCodeEditorExtensions,
   resolveRevealTarget,
@@ -115,11 +115,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
         if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) {
           return { visible: false, moving: false }
         }
-        for (let element: HTMLElement | null = host; element; element = element.parentElement) {
-          if (element.getAnimations().some((animation) =>
-            animation.playState === "running" && Number.isFinite(animation.effect?.getComputedTiming().endTime),
-          )) return { visible: true, moving: true }
-        }
+        if (hasRunningLayoutAnimation(host)) return { visible: true, moving: true }
         return { visible: true, moving: false }
       },
       write: ({ visible, moving }) => {

@@ -875,12 +875,13 @@ export namespace File {
     await statReadableFile(file, full)
     await assertReadableFile(file, full)
 
-    // Fast path: check extension before any filesystem operations
-    if (isImageByExtension(file)) {
+    const previewMimeType = path.extname(file).toLowerCase() === ".pdf"
+      ? "application/pdf"
+      : isImageByExtension(file) ? getImageMimeType(file) : undefined
+    if (previewMimeType) {
       const buffer = await readFileBytes(file, full)
       const content = buffer.toString("base64")
-      const mimeType = getImageMimeType(file)
-      return { type: "text", content, mimeType, encoding: "base64" }
+      return { type: "text", content, mimeType: previewMimeType, encoding: "base64" }
     }
 
     const text = isTextByExtension(file) || isTextByName(file)
