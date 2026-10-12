@@ -1,0 +1,37 @@
+# 354 历史错误与当前执行状态分离
+
+## Recall
+
+用户要求持续自主迭代UI（User Interface，用户界面）/UX（User Experience，用户体验）与功能，重点Sources和子Dock Rendering；最新只用单agent。353属于progress，b93fe9a824e2dd0a9db109b406c8e15132d6370b已推送：保留同目标子会话，37正文历史和真实隐藏补读已验证。真实Task tsk_g00VXqO7wS00Jmf0HdZh的研究员完成36来源/37正文5499字符，但负责人收尾遭结构化server_is_overloaded，Task.failed，完整任务与负责人全文核对未达。全部原生/页面/凭据配对闭合。
+
+开始HEAD699538b23，存在另一已授权CI任务的大量测试与记录改动，保留。重读353 Recall与真实错误/来源/消息，当前Subagent投影、CardNode、CardParts、CardMessageRun、ChatBubble、Card、Message失败摘要与共享Provider/Session activity策略，检索全部定义/调用与历史架构06/07。projectSubagentConversationCard只有一个生产调用，传入最新真实activity.status；服务测试调用是数据解析/投影合同，无DOM或组件渲染。没有引入或运行UI自动化测试。
+
+## 调查结论与影响
+
+ProviderError.parseStreamError明确保留无HTTP状态的流错误并标记不可重试，架构06同样规定provider_stream_error终止而不自动重放；SessionProcessor的activity是唯一重试所有者，有attempt内容与工具执行清理。已使用OpenAI Docs搜索并实际读取[官方重试说明](https://developers.openai.com/api/docs/guides/rate-limits)：服务过载可按响应等待，但已消费输出的流请求不能自动重放。因此本轮不修改isRetryable或增加第二重试器，不把该字段直接判为bug；进一步恢复设计仍需验证输出/工具副作用与实际owner范围。
+
+显示的直接根因已经明确：projectSubagentConversationCard从全部历史Message寻找最后failure，并用它覆盖传入的当前status，随后把该错误作为整卡errorReason交给ChatBubble在末尾展示。353当前worker最后Message无error且finish=stop，最新activity为completed；其五条真实历史API错误仍导致error状态并出现在R36之后。消息没有改变，但错误的位置与状态含义被投影错了。旧342只改错误可读性，345处理execution身份，353处理视图生命周期，都没有修这个全历史聚合。
+
+不能只去掉旧错误：原错误必须继续可见并保留自己的MessageID与诊断。新增CardNode的每消息failure投影字段，来源仍是原Message.info.error，只有Subagent填充；当前卡状态直接采用传入的真实activity.status，参数改为显式必填，删除全历史覆盖路径。每条错误按原message边界在正文之后呈现；无正文的失败Message也保留可显示的run。既有boundary只是已有消息的显示分隔，不生成新Message、Part、API事件或数据库记录。MessageFailure数组是不可持久化的派生视图，不能成为第二事实源。
+
+复用当前错误面板、Details disclosure与错误复制能力，抽取已经存在的ChatBubble错误块以供每消息run共用，不复制整套实现。以MessageID保留错误视图身份，避免无关Source更新让Details状态重建。Main/Side原来的单卡错误继续使用同一块；仅Subagent走历史消息错误字段。CardParts/ChatBubble/Card传递该字段，分组器以明确的投影MessageID保留空内容run，与已有turn artifact合同一致。完整搜索调用后同步旧数据合同测试；不把纯数据投影测试当作视觉验收。
+
+涉及前端数据投影、CardNode内部类型、消息分组与共享错误块；没有服务端协议、数据库、模型/配置/工具变更。风险包括空失败Message丢失、原正文/Source顺序变化、错误复制指向错误消息、Details随刷新丢失、Header仍用旧errorReason。必须在353真实五次失败并最终worker完成的原历史上逐项人工检查。当前没有新队列或恢复异常；若发现即按Task/Mission/Session全部入口/轮次/正常终态/重启重试/串并行/多项目横审。
+
+## 实施与真实验收
+
+读取353失败Task的完整当前schema/config/recovery/lease/Task/Message/Memory及原物理/输出/请求/配对闭合。历史帮助器过去只接受completed场景；本次按真实failed终态扩展私有准入，保留原资格失败，要求actual生命周期failed、epoch1、派发与其他恢复前沿闭合。不能把failed改写completed，也不移除schema检查或修改数据库。完整runtime复制并逐表逐行核对，保留原Project/Task/Session身份。若存在未闭合恢复任务，先调查，不启动副本掩盖它。
+
+使用fresh message-failure-354-history-01、18335/ui、600000ms固定窗口，先实际看到旧版错误归因；正式改动构建完成后以新的完整副本history-02、18336/ui复核最新状态、五条原错误的消息位置、Details和复制、R24至R25恢复接缝、R36结尾及侧栏返回。无auth/models或新模型调用，不把该失败历史变成完整Task通过。只操作自己的页面/服务，所有截图实际呈现并人工查看。
+
+聚焦数据合同正向检查、类型/构建/docs补充，UI只能真实交互截图。完整原句柄actual exit、精确Native/Host/端口/output/request收尾、脱敏证据、根/月/目录索引、范围commit、fresh fetch/merge、完整待推送集审查和正常push。原Task失败与流式恢复未达项继续保留，goal保持active。
+
+## 实施进度
+
+完整原始只读检查确认90表、67消息、两个Project、当前Task.failed/epoch1及精确终态pev_g0VXqR1Hl00rlGobCLYi，Provider/Tool和dispatch恢复前沿均已结算。私有历史checker原用wait registration表行数判断恢复未闭合，该判断与现行不可变事实合同不符：唯一wait atm_hbI9UTh5Ha9IZ2lLoeBW有due_ingress_accepted结算，精确ingress art_hDNgbmH9Gey3cq1u7oG1已resolved。当前projectTaskWaitInTransaction返回due_ingress_accepted，dueTaskWaitsInTransaction返回空。已全仓搜索该表，并读取Task控制架构、入口注册/结算、当前轮次查询、启动恢复分页、Tool恢复及Task/Mission ingress共同路径：均按Project/Task/epoch与settlement/terminal筛选；Session wait属于独立Automation。原353真实执行也证明等待只唤醒一次并随后终态。这不是生产调度异常，修复的是本轮私有准入checker；不修改原始DB或生产调度。原失败资格保留。
+
+history-01完整复制90表逐行相等；隔离18335/ui实际截图01、02已人工查看，确认旧error footer在R36和完成说明之后，旧error indicator在最新completed研究员头部。页面148已关闭；原launch64560实际exit0，Native35612/Host77908正常退出、端口/输出/请求收尾完成，无凭据。原失败Task仍failed。已实现按消息错误投影、空失败消息保留和共用错误块；正式页面视觉验收待做。
+
+正式验收已完成：history-02新90表完整副本，18336/ui main-K84VChgh.js，页面149截图03至13全部实际呈现并人工查看。五条错误匹配原始Message ID；实际后两处位于R26、R28的Source之后而不是原先待验证的R24接缝，按真实数据记录。37条assistant正文5499字符与36Source仍完整；当前worker最后消息finish=stop/error=null，成员Completed，Task仍failed。第一条错误Details、原生点击复制及真实粘贴成功；DOM点击的旧工具剪贴板观察排除，临时草稿清空。列表往返与Dock关闭重开保持展开详情与位置。
+
+launch75612实际exit0，Native77240/Host68340在15:29:45.014Z物理退出，独立端口/输出/request闭合，页面先关闭；两批都在600000ms原窗口内完成。typecheck17266、build85095实际exit0；25项会话数据测试63断言、CSS、docs均通过。方案和README列明原353完整Task资格失败未解决，未新增模型调用或凭据副本；当前goal保持active，single agent继续。

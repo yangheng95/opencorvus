@@ -342,6 +342,13 @@
   white-space: normal;
 }
 
+.msg-assistant-error__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-sm);
+}
+
 .msg-assistant-error__details {
   margin-top: var(--ui-gap-sm);
   color: var(--text-soft);

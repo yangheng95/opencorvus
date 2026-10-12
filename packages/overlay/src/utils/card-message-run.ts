@@ -43,5 +43,5 @@ export function partitionCardMessageRuns(
       parts: [part],
     })
   }
-  return runs.filter((run) => run.parts.length > 0)
+  return runs.filter((run) => run.parts.length > 0 || projected.has(run.messageID))
 }

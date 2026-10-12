@@ -496,19 +496,20 @@ function delegatedContextMessage(message: SubagentTranscriptMessage): boolean {
  * Message boundaries remain inside that one continuous card. */
 export function projectSubagentConversationCard(
   conversation: SubagentConversationTranscript,
-  status: CardNode["status"] = "completed",
+  status: CardNode["status"],
 ): Omit<CardNode, "time" | "timeCompleted"> | null {
   const messages = conversation.messages.filter(conversationMessageHasDisplayContent)
   const first = messages[0]
   if (!first) return null
   const last = messages.at(-1) ?? first
-  const failure = messages
-    .map((message) => assistantMessageFailure(message.info))
-    .filter(Boolean)
-    .at(-1)
+  const messageFailures = messages.flatMap((message) => {
+    const failure = assistantMessageFailure(message.info)
+    return failure ? [{ messageID: message.messageID, ...failure }] : []
+  })
+  const failedMessageIDs = new Set(messageFailures.map((failure) => failure.messageID))
   const parts: any[] = []
   for (const [index, message] of messages.entries()) {
-    if (index > 0) {
+    if (index > 0 || failedMessageIDs.has(message.messageID)) {
       parts.push({
         type: "boundary",
         messageID: message.messageID,
@@ -533,9 +534,8 @@ export function projectSubagentConversationCard(
     messageID: first.messageID,
     stage: last.stage,
     role: last.stage,
-    status: failure ? "error" : status,
-    errorReason: failure?.reason,
-    errorDetails: failure?.details,
+    status,
+    messageFailures,
     title: last.agentID,
     parts,
     childIDs: [],

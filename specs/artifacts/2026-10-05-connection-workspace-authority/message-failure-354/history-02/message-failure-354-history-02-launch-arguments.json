@@ -1,0 +1,27 @@
+{
+  "occurrence": "message-failure-354-history-02-3b189a2f-619f-447a-86dc-af6ec7b37905",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-02\\evidence",
+    "message-failure-354-history-02-3b189a2f-619f-447a-86dc-af6ec7b37905",
+    "1791819316075",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18336",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-02\\startup.json",
+    "--startup-occurrence",
+    "message-failure-354-history-02-3b189a2f-619f-447a-86dc-af6ec7b37905",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18336,
+  "credentialStaging": "None"
+}

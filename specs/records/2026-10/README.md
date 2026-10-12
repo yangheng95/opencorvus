@@ -682,3 +682,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [长子会话 Markdown 生命周期352](2026-10-12-markdown-lifetime-352.md)：真实历史的组件卸载、缓存与占位时序。
 
 - [同目标子会话呈现保留353](2026-10-12-child-view-retention-353.md)：隐藏与成员列表返回的正文生命周期修复。
+
+- [历史错误的消息归属354](2026-10-12-message-failure-354.md)：原消息失败与最新执行状态的真实历史复核。

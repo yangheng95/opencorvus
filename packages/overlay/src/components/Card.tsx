@@ -231,6 +231,7 @@ export function Card(props: { node: CardNode; depth: number }) {
               depth={props.depth}
               streaming={props.node.status === "running"}
               turnArtifacts={props.node.turnArtifacts}
+              messageFailures={props.node.messageFailures}
               renderNestedCard={(node, depth) => <Card node={node} depth={depth} />}
             />
           </Show>

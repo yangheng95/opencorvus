@@ -1,4 +1,5 @@
 import { Index, Switch, Match, Show, createMemo, type JSX } from "solid-js"
+import { Key } from "@solid-primitives/keyed"
 import type { CardNode } from "../store/card-tree"
 import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
@@ -23,6 +24,7 @@ import { DelegatedContextDisclosure } from "./DelegatedContextDisclosure"
 import { ConversationTurnArtifactSummary } from "./ConversationTurnArtifactSummary"
 import { isConversationSourcePart, SourceParts } from "./SourceParts"
 import { InlineToolPart } from "./InlineToolPart"
+import { AssistantMessageFailure } from "./AssistantMessageFailure"
 
 function unsupportedPartFallback(part: any) {
   const type = String(part?.type || "")
@@ -348,13 +350,16 @@ function DelegatedContextParts(props: PartCollectionProps & { messageID: string 
 
 /** Render a card without splitting transcript ownership. Context delegation
  * changes only the default disclosure state of the matching message runs. */
-export function CardParts(props: PartCollectionProps & { collapsedContextMessageIDs?: string[] }) {
+export function CardParts(props: PartCollectionProps & {
+  collapsedContextMessageIDs?: string[]
+  messageFailures?: CardNode["messageFailures"]
+}) {
   const displayParts = createMemo(() => props.parts.filter((part) => !isNoActionDecisionToolPart(part)))
   const runs = createMemo(() =>
     partitionCardMessageRuns(
       displayParts(),
       props.collapsedContextMessageIDs || [],
-      (props.turnArtifacts || []).map((summary) => summary.messageID),
+      [...(props.turnArtifacts || []), ...(props.messageFailures || [])].map((item) => item.messageID),
     ),
   )
   const streamingTextPart = createMemo(() => trailingLiveTextPart(displayParts(), props.streaming))
@@ -373,6 +378,9 @@ export function CardParts(props: PartCollectionProps & { collapsedContextMessage
               messageID={run().messageID}
             />
           </Show>
+          <Key each={(props.messageFailures || []).filter((failure) => failure.messageID === run().messageID)} by="messageID">
+            {(failure) => <AssistantMessageFailure {...failure()} />}
+          </Key>
           <Index each={(props.turnArtifacts || []).filter((summary) => summary.messageID === run().messageID)}>
             {(summary) => <ConversationTurnArtifactSummary summary={summary()} />}
           </Index>

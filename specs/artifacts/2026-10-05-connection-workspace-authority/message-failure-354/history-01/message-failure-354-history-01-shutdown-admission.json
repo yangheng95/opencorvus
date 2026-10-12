@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-12T15:21:53.3788549Z",
+  "occurrence": "message-failure-354-history-01-e78a9438-bfe3-4d54-bd31-97fd3a76a54b",
+  "owner": {
+    "pid": 35612,
+    "processInstanceID": "win32:639274152291002918",
+    "occurrenceID": "40fd514c-7959-4864-a129-3d757a81b86f"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXqhsRk00Tgh922FrC"
+  }
+}

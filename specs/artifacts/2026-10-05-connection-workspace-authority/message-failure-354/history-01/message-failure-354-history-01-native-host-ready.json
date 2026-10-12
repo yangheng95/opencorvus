@@ -1,0 +1,40 @@
+{
+  "occurrence": "message-failure-354-history-01-e78a9438-bfe3-4d54-bd31-97fd3a76a54b",
+  "outcome": "ready",
+  "host": {
+    "pid": 77908,
+    "processInstanceID": "win32:639274152282031819",
+    "occurrenceID": "569783ed-70d1-4f6c-a09d-08cf23c93303"
+  },
+  "parent": {
+    "pid": 75308,
+    "processInstanceID": "win32:639274152260191270",
+    "occurrenceID": "c8bf9cdc-6fcd-4ee6-9135-f2411500a674"
+  },
+  "target": {
+    "pid": 35612,
+    "processInstanceID": "win32:639274152291002918",
+    "occurrenceID": "40fd514c-7959-4864-a129-3d757a81b86f"
+  },
+  "targetBirthAtMs": 1791818429100,
+  "deadlineAt": 1791819028074,
+  "observedAtUtc": "2026-10-12T15:20:29.118Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18335",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-01\\startup.json",
+    "--startup-occurrence",
+    "message-failure-354-history-01-e78a9438-bfe3-4d54-bd31-97fd3a76a54b",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

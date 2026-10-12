@@ -26,7 +26,7 @@ import { storeCardNode } from "./StoreCardNode"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { ConversationTurnControl } from "./ConversationTurnControl"
-import { Disclosure } from "./ui/Disclosure"
+import { AssistantMessageFailure } from "./AssistantMessageFailure"
 
 function UnsupportedChatBubbleChild(props: { child: CardNode; parentID: string }): null {
   throw new Error(`ChatBubble: unsupported child kind "${props.child.kind}" for ${props.parentID}`)
@@ -56,18 +56,7 @@ function ChatBubbleFailureState(props: { node: CardNode }) {
   const errorReason = () => props.node.errorReason?.trim() || ""
   return (
     <Show when={props.node.status === "error" && errorReason()}>
-      <div class="msg-tool-error msg-assistant-error" data-agent-error-card-id={props.node.id} role="alert">
-        <strong>{t("card.error_reason_title")}</strong>
-        <div>{errorReason()}</div>
-        <Show when={props.node.errorDetails}>
-          {(details) => (
-            <Disclosure.Root class="msg-assistant-error__details" size="sm">
-              <Disclosure.Trigger>{t("common.details")}</Disclosure.Trigger>
-              <Disclosure.Content><pre>{details()}</pre></Disclosure.Content>
-            </Disclosure.Root>
-          )}
-        </Show>
-      </div>
+      <AssistantMessageFailure reason={errorReason()} details={props.node.errorDetails} cardID={props.node.id} />
     </Show>
   )
 }
@@ -94,6 +83,7 @@ function ChatBubbleAgentChildBody(props: {
           streaming={props.child.status === "running"}
           collapseWorkDetails
           turnArtifacts={props.child.turnArtifacts}
+          messageFailures={props.child.messageFailures}
           renderNestedCard={(node, depth) => <Card node={node} depth={depth} />}
         />
       </Show>
@@ -165,6 +155,7 @@ function ChatBubbleChild(props: {
             streaming={child().status === "running"}
             collapseWorkDetails
             turnArtifacts={child().turnArtifacts}
+            messageFailures={child().messageFailures}
             renderNestedCard={(node, depth) => <Card node={node} depth={depth} />}
           />
         </Match>
@@ -248,6 +239,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
       streaming={props.node.status === "running"}
       collapseWorkDetails
       turnArtifacts={props.node.turnArtifacts}
+      messageFailures={props.node.messageFailures}
       renderNestedCard={(node, depth) => <Card node={node} depth={depth} />}
     />
   )

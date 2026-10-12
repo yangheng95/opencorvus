@@ -1,0 +1,76 @@
+[
+  {
+    "at": "2026-10-12T15:26:10.810Z",
+    "label": "actual formal page loaded",
+    "dom": {
+      "failures": [
+        {
+          "messageID": "msg_g0VXqOIdt00gsI3Q5AYm",
+          "text": "Error detailsOur servers are currently overloaded. Please try again later.Details{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+        },
+        {
+          "messageID": "msg_g0VXqOU0A00dVl8Lp1mf",
+          "text": "Error detailsOur servers are currently overloaded. Please try again later.Details{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+        },
+        {
+          "messageID": "msg_g0VXqOcxq00ylb6VLAbA",
+          "text": "Error detailsOur servers are currently overloaded. Please try again later.Details{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+        },
+        {
+          "messageID": "msg_g0VXqQC0W0050QAGAr8f",
+          "text": "Error detailsOur servers are currently overloaded. Please try again later.Details{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+        },
+        {
+          "messageID": "msg_g0VXqQQRW00H2WQImazc",
+          "text": "Error detailsOur servers are currently overloaded. Please try again later.Details{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+        }
+      ],
+      "head": "base-researcher1m 52s",
+      "scripts": [
+        "http://localhost:18336/ui/assets/main-K84VChgh.js"
+      ]
+    }
+  },
+  {
+    "at": "2026-10-12T15:26:50.961Z",
+    "label": "Manual first message diagnostic copy",
+    "messageID": "msg_g0VXqOIdt00gsI3Q5AYm",
+    "copiedText": "本轮只需用一句话确认收到以下36条清单，不执行清单，不调用工具，不进行研究，不声称已经核验来源。清单用于我在界面中阅读长段落。\n\nR01 URL接口用途\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR02 相对地址与base\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR03 查询参数基本读取\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR04 fragment的用途\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR05 hostname与host区别\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR06 无效构造输入\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR07 重复查询键\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR08 fragment与网络请求\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR09 href与origin区别\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR10 base路径末尾斜杠\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR11 参数遍历顺序\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR12 文档元素定位\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR13 pathname与search区别\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR14 绝对URL与base\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR15 append和set区别\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR16 媒体片段示例\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR17 hash属性边界\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR18 构造器字符串转换\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR19 get和getAll区别\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR20 文本片段的形式\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR21 URL规范化范围\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR22 相对路径解析示例\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR23 删除查询参数\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR24 fragment与查询的顺序\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR25 属性修改与序列化\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR26 构造异常与try/catch\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR27 百分号编码注意点\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR28 fragment编码边界\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR29 toString与toJSON\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR30 有效base与错误base\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR31 空格与加号\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR32 fragment与页面标题区别\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n\nR33 静态方法与实例方法\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL\n\nR34 构造器示例的适用范围\nhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL\n\nR35 排序与serialization\nhttps://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams\n\nR36 资料证据与真实导航验收区别\nhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment\n"
+  },
+  {
+    "at": "2026-10-12T15:27:41.475Z",
+    "label": "Native AX copy action and clipboard observation",
+    "copiedText": "Our servers are currently overloaded. Please try again later.\n\n{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+  },
+  {
+    "at": "2026-10-12T15:28:57.696Z",
+    "label": "Original failure neighboring message runs",
+    "observations": [
+      {
+        "messageID": "msg_g0VXqOIdt00gsI3Q5AYm",
+        "next": "Handoff context",
+        "previous": "Handoff context"
+      },
+      {
+        "messageID": "msg_g0VXqOU0A00dVl8Lp1mf",
+        "next": "Handoff context",
+        "previous": "Handoff context"
+      },
+      {
+        "messageID": "msg_g0VXqOcxq00ylb6VLAbA",
+        "next": "Handoff context",
+        "previous": "Handoff context"
+      },
+      {
+        "messageID": "msg_g0VXqQC0W0050QAGAr8f",
+        "next": "Handoff context",
+        "previous": "整字符串；路径中的特殊字符会按规则编码，而不是原样拼接。但资料不能证明实际产品已经把对象修改结果写入链接或当前窗口，也不能证明保存、复制及导航后的地址与页面状态一致。\nwebfetchhttps://developer.mozilla.org/en-US/docs/Web/API/URL/URL (text/html)URL: URL() constructor - Web APIs | MDNdeveloper.mozilla.org"
+      },
+      {
+        "messageID": "msg_g0VXqQQRW00H2WQImazc",
+        "next": "Handoff context",
+        "previous": "追加键值应使用未编码形式，已经编码的百分号键再次追加会被重复编码。但资料不能证明实际产品没有重复编码，也不能证明服务器解码层数与客户端一致，特殊字符的真实往返结果仍需验证。\nwebfetchhttps://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment (text/html)URI fragment - URIs | MDNdeveloper.mozilla.org"
+      }
+    ]
+  }
+]

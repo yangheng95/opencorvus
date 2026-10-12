@@ -1,0 +1,68 @@
+{
+  "observedAtUtc": "2026-10-12T15:21:56.3172182Z",
+  "nativeSettlement": {
+    "occurrence": "message-failure-354-history-01-e78a9438-bfe3-4d54-bd31-97fd3a76a54b",
+    "outcome": "settled",
+    "host": {
+      "pid": 77908,
+      "processInstanceID": "win32:639274152282031819",
+      "occurrenceID": "569783ed-70d1-4f6c-a09d-08cf23c93303"
+    },
+    "target": {
+      "pid": 35612,
+      "processInstanceID": "win32:639274152291002918",
+      "occurrenceID": "40fd514c-7959-4864-a129-3d757a81b86f"
+    },
+    "observedAtUtc": "2026-10-12T15:21:53.559Z",
+    "deadlineAt": 1791819028074,
+    "terminal": {
+      "occurrenceID": "message-failure-354-history-01-e78a9438-bfe3-4d54-bd31-97fd3a76a54b",
+      "pid": 35612,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 35612,
+        "processInstanceID": "win32:639274152291002918",
+        "occurrenceID": "40fd514c-7959-4864-a129-3d757a81b86f"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 77908,
+        "processInstanceID": "win32:639274152282031819",
+        "occurrenceID": "569783ed-70d1-4f6c-a09d-08cf23c93303"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "occurrence": "message-failure-354-history-01-e78a9438-bfe3-4d54-bd31-97fd3a76a54b",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-01\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "copiedLength": 2001983
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "listeners": null
+}

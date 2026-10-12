@@ -1,0 +1,35 @@
+{
+  "port": 18336,
+  "nativeTarget": {
+    "pid": 77240,
+    "processInstanceID": "win32:639274155169256525",
+    "occurrenceID": "6fbbe37a-67ec-4a95-946e-c65ee4ad3a1f"
+  },
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\message-failure-354\\history-02",
+  "authorityStaging": "None; no model Task requested",
+  "evidencePrefix": "message-failure-354-history-02",
+  "nativeDeadlineAt": 1791819316075,
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-02\\runtime",
+  "owner": {
+    "processInstanceID": "win32:639274155169256525",
+    "ProcessId": 77240
+  },
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-02\\evidence",
+  "targetBirthAtMs": 1791818716925,
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\message-failure-354-history-02",
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "occurrence": "message-failure-354-history-02-3b189a2f-619f-447a-86dc-af6ec7b37905",
+  "host": {
+    "pid": 68340,
+    "processInstanceID": "win32:639274155161579772",
+    "occurrenceID": "6ae4e52a-dd10-457c-9450-e37304dcc960"
+  },
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\project",
+  "observedProcessChain": [
+    {
+      "pid": 77240,
+      "processInstanceID": "win32:639274155169256525",
+      "occurrenceID": "6fbbe37a-67ec-4a95-946e-c65ee4ad3a1f"
+    }
+  ]
+}

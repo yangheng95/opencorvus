@@ -86,7 +86,7 @@ test("actual control-only owner accepts pending Part without message replay", ()
     },
   })
   expect(base.messages.map((message) => message.messageID)).toEqual([visible.id, control.id])
-  expect(projectSubagentConversationCard(base)?.parts).toEqual([body])
+  expect(projectSubagentConversationCard(base, "completed")?.parts).toEqual([body])
   const pending = {
     id: "pending-tool",
     messageID: control.id,
@@ -157,7 +157,7 @@ test("actual control-only owner accepts pending Part without message replay", ()
     type: "message.part.removed",
     payload: { sessionID: target.sessionID, messageID: control.id, partID: pending.id, partType: "tool" },
   })
-  expect(projectSubagentConversationCard(projectSubagentConversationLive(base, retired))?.parts).toEqual([body])
+  expect(projectSubagentConversationCard(projectSubagentConversationLive(base, retired), "completed")?.parts).toEqual([body])
   const errored = {
     ...base,
     messages: [
@@ -168,11 +168,31 @@ test("actual control-only owner accepts pending Part without message replay", ()
       },
     ],
   }
-  expect(projectSubagentConversationCard(errored)).toMatchObject({
+  expect(projectSubagentConversationCard(errored, "error")).toMatchObject({
     status: "error",
-    errorReason: "Actual Message failure",
+    messageFailures: [{ messageID: control.id, reason: "Actual Message failure" }],
     messageID: visible.id,
   })
+  const recovered = {
+    ...base,
+    messages: [errored.messages[1]!, {
+      ...base.messages[0]!,
+      messageID: "recovered-message",
+      info: { ...visible, id: "recovered-message", time: { created: 300, completed: 301 }, finish: "stop" },
+      parts: [{ ...body, id: "recovered-body", messageID: "recovered-message", text: "Recovered answer" }],
+    }],
+  }
+  for (const status of ["running", "completed"] as const) {
+    expect(projectSubagentConversationCard(recovered, status)).toMatchObject({
+      status,
+      messageFailures: [{ messageID: control.id, reason: "Actual Message failure" }],
+      parts: [
+        { type: "boundary", messageID: control.id },
+        { type: "boundary", messageID: "recovered-message" },
+        { type: "text", messageID: "recovered-message", text: "Recovered answer" },
+      ],
+    })
+  }
   const missingActor = structuredClone(base.messages[1]!.info)
   delete missingActor.sessionAgentID
   expect(() =>

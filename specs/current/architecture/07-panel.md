@@ -1140,6 +1140,16 @@ The main progress grid, inner Agent selector, and Right Dock transcript remain
 presentations of one backend session/message stream rather than parallel
 frontend Agent lists or message stores.
 
+The continuous Agent transcript header uses the selected execution's canonical
+activity status. Historical assistant failures belong to their original Message,
+including failures with no body Parts. The child projection derives message-bound
+failure metadata from `Message.info.error`; CardParts presents it at that message
+boundary through the same error block used by ordinary Chat bubbles. Details and
+copy actions retain their Message identity across transcript refreshes. A prior
+failure never substitutes for the latest execution status or moves to the end of
+the complete transcript. This metadata is a view projection, not a persisted Part
+or a second error store.
+
 ConversationCard owns its bubble/card branch through a non-keyed boolean
 condition. A new selected-child transcript projection updates the mounted
 renderer through reactive props; object replacement is not a reason to

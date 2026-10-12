@@ -149,6 +149,9 @@ export interface CardNode {
    *  once another session interrupts, the next message opens a new segment.
    *  Unset on interaction and task-context cards. */
   messageID?: string
+  /** Failures from the canonical assistant messages in a continuous transcript.
+   * These stay beside their message instead of overriding the latest execution. */
+  messageFailures?: Array<{ messageID: string; reason: string; details?: string }>
   /** Terminal artifacts authored for the exact user/assistant turn represented
    * by this card. The backend resolves immutable completion locators; the
    * renderer never infers ownership from the currently selected Task. */
