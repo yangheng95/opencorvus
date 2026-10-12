@@ -1,0 +1,90 @@
+{
+  "actions": [
+    {
+      "open": "false",
+      "text": ""
+    },
+    {
+      "open": "false",
+      "text": ""
+    },
+    {
+      "open": "false",
+      "text": ""
+    },
+    {
+      "open": "false",
+      "text": "search_code资料/流式来源"
+    }
+  ],
+  "active": "\n    FileFEditEViewVHelpHChatsMission BoardScheduledExpert SquadsMoreSettingsOCOpenCorvusv0.1.25Open",
+  "pane": {
+    "follow": "true",
+    "height": 465.6000061035156,
+    "scrollHeight": 1452,
+    "scrollTop": 986.4000244140624,
+    "top": 172.8000030517578,
+    "width": 380
+  },
+  "parts": [
+    {
+      "blocks": 1,
+      "chars": 22,
+      "closedDetails": true,
+      "head": "请只回复：侧栏流式检查就绪。不要调用工具。\n",
+      "message": "msg_g0VXryhyS00cLT9xu7jG",
+      "pending": null
+    },
+    {
+      "blocks": 1,
+      "chars": 10,
+      "closedDetails": true,
+      "head": "侧栏流式检查就绪。\n",
+      "message": "msg_g0VXryhyS01VFWHb45ER",
+      "pending": null
+    },
+    {
+      "blocks": 1,
+      "chars": 343,
+      "closedDetails": false,
+      "head": "请先用 search_code 在当前项目的“资料/流式来源”目录检索字面量 STREAM362，限定 Markdown 文件，保留工具产生",
+      "message": "msg_56568dfd-86dd-4022-8158-7bd8e3f17eb9",
+      "pending": null
+    },
+    {
+      "blocks": 6,
+      "chars": 628,
+      "closedDetails": false,
+      "head": "来源与流式阅读核对说明\n第一节：检索范围与本次证据的边界\n本次已经按要求，先使用 search_code 在当前项目的 资料/流式来源 目录",
+      "message": "msg_g0VXrymGD004FprspYlD",
+      "pending": null
+    }
+  ],
+  "placeholder": [],
+  "sourceRows": [
+    {
+      "identity": "[\"source-file\",\"ses_-zUS81I1YzzCP0HGaA7M\",\"msg_g0VXrylCv00KevUio22d\",\"227477e97436eb99c71ef9937899c5251e38103d4f3f5d432d44eb15afd98f38\"]",
+      "text": "1来源记录_流式正文与阅读位置核对.mdL2资料/流式来源/候选方案乙/",
+      "top": -251.2250061035156
+    }
+  ],
+  "visibleBlocks": [
+    {
+      "text": "本次已经按要求，先使用 search_code 在当前项目的 资料/流式来源 目录检索字面量 STREAM362，并通过 *.md 将候选文件限定为 Markdown 文件。工具返回了十六处匹配，分布于“候选方案乙”和“候选方案甲”两个目录中的同名文件，每个文件各有八处命中，行号均为第二行至第九行。工具产生的全部十六条真实来源均保留在前面的检索结果中，没有挑选其中几条替代全部结果，也没有将两个文件",
+      "top": -61.22500228881836
+    },
+    {
+      "text": "这篇说明只以已经返回的路径、匹配行号和命中文本为事实基础，讨论这些证据应当怎样与流式正文、来源展示和阅读位置相互核对。没有额外读取文件，因此不能描述第一行是什么，也不能断言第九行之后没有其他内容；没有操作网页，因此不能把展开效果、收起效果、复制结果或滚动表现写成已验证事实。下文涉及界面行为的地方，表达的是核对原则、预期观察方式和判定边界，而不是实际点击记录。这样的区分十分重要：一篇解释充分的说明可",
+      "top": 203.4125061035156
+    },
+    {
+      "text": "第二节：两个目录中的同名文件如何识别\n",
+      "top": 474.0500183105469
+    },
+    {
+      "text": "这次返回的两个文件都叫 来源记录_流式正文与阅读位置核对.md，但它们分别位于 资料/流式来源/候选方案甲 与 `资料/流式来源/候选方案\n",
+      "top": 501.6499938964844
+    }
+  ],
+  "observedAt": "2026-10-12T20:35:36.799Z"
+}
