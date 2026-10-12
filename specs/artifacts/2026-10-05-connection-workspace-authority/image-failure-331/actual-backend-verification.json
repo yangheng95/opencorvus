@@ -1,0 +1,22 @@
+{
+  "observedAt": "2026-10-12T02:04:33.288Z",
+  "providerRequests": 5,
+  "model": "gpt-6.1-sol",
+  "streaming": true,
+  "sourceParts": [
+    {
+      "id": "prt_g0VXnQ6o6000xeuxGHQn",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\image-failure-331-live-01\\project\\source-image.png"
+    }
+  ],
+  "failedResponse": {
+    "mimeType": "image/png",
+    "encoding": "base64",
+    "actualDecodedText": "IMAGE_FAILURE_331: plain text at an image filename for decode-error investigation."
+  },
+  "originalBytesRestored": true,
+  "failedInputPreserved": true,
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "boundary": "Positive actual backend/source and owned input verification only. Native decode state, UI, copy feedback and screenshots are manual observations, not assertions here."
+}

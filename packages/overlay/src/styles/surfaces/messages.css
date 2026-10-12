@@ -656,6 +656,33 @@
   background: color-mix(in srgb, var(--surface-inset) 96%, transparent);
 }
 
+.msg-image-trigger[data-image-failed="true"] .md-img,
+.image-preview-dialog__image[data-unavailable="true"] {
+  display: none;
+}
+
+.msg-image-failure {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+  max-width: 100%;
+  color: var(--text-muted);
+}
+
+.msg-image-failure > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-preview-dialog__failure {
+  width: min(calc(420px * var(--ui-scale)), calc(100vw - 2 * var(--ui-gap-lg)));
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+
 .dialog.dialog-fullscreen .dialog-form.image-preview-dialog__form {
   padding: 0;
   gap: 0;

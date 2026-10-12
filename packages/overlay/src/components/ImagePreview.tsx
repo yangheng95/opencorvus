@@ -29,6 +29,7 @@ import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
 import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
+import { Feedback } from "./ui/Feedback"
 
 const SCALE_STEP = 0.25
 const COPY_FEEDBACK_DURATION_MS = 2400
@@ -38,6 +39,7 @@ const IMAGE_COPY_CLIPBOARD_UNAVAILABLE_KEY = "image_preview.copy_status.clipboar
 const IMAGE_COPY_SOURCE_KEY = "image_preview.copy_status.source_unavailable"
 const IMAGE_COPY_FORMAT_KEY = "image_preview.copy_status.png_required"
 const IMAGE_COPY_BLOCKED_KEY = "image_preview.copy_status.clipboard_blocked"
+const IMAGE_COPY_IMAGE_UNAVAILABLE_KEY = "image_preview.copy_status.image_unavailable"
 type ImageCopyFeedbackKey =
   | typeof IMAGE_COPY_SUCCESS_KEY
   | typeof IMAGE_COPY_LOADING_KEY
@@ -45,6 +47,7 @@ type ImageCopyFeedbackKey =
   | typeof IMAGE_COPY_SOURCE_KEY
   | typeof IMAGE_COPY_FORMAT_KEY
   | typeof IMAGE_COPY_BLOCKED_KEY
+  | typeof IMAGE_COPY_IMAGE_UNAVAILABLE_KEY
 
 type CopyFeedback = {
   tone: "success" | "error"
@@ -86,6 +89,8 @@ export function PreviewableImage(props: {
   const triggerClass = () => imagePreviewTriggerClass(props.triggerClass)
   const imageClass = () => ["md-img", props.imageClass].filter(Boolean).join(" ")
   const imageAttributes = () => props.imageAttributes ?? {}
+  const [failedSource, setFailedSource] = createSignal<string | null>(null)
+  const failed = () => failedSource() === props.src
   const delegatedPreview = () => !props.previewLoader
   const loadPreviewSource = async () => (props.previewLoader ? await props.previewLoader() : props.src)
   let pendingRequestRevision: number | null = null
@@ -142,7 +147,8 @@ export function PreviewableImage(props: {
       data-image-preview-trigger={delegatedPreview() ? trigger().triggerFlag : undefined}
       data-image-preview-src={delegatedPreview() ? trigger().src : undefined}
       data-image-preview-alt={delegatedPreview() ? trigger().alt : undefined}
-      title={trigger().label}
+      data-image-failed={failed() ? "true" : undefined}
+      title={failed() ? t("image_preview.load_failed") : trigger().label}
       aria-label={trigger().label}
       onClick={(event) => void handlePreviewOpen(event)}
     >
@@ -153,7 +159,19 @@ export function PreviewableImage(props: {
         alt={alt()}
         loading="lazy"
         data-ui={props.imageDataUI}
+        onError={(event) => {
+          if (event.currentTarget.getAttribute("src") === props.src) setFailedSource(props.src)
+        }}
+        onLoad={(event) => {
+          if (event.currentTarget.getAttribute("src") === props.src) setFailedSource(null)
+        }}
       />
+      <Show when={failed()}>
+        <span class="msg-image-failure" role="status">
+          <Icon name="file-document" size="compact" />
+          <span>{t("image_preview.load_failed")}</span>
+        </span>
+      </Show>
     </Button>
   )
 }
@@ -175,6 +193,9 @@ export function ImagePreviewHost() {
   }
   const [scale, setScale] = createSignal(1)
   const [imageSize, setImageSize] = createSignal<ImagePreviewSize>({ width: 0, height: 0 })
+  const [imageFailed, setImageFailed] = createSignal(false)
+  const imageUnavailable = () => imageFailed() || Boolean(imagePreviewState().resourceUrl && resource.error)
+  const imageReady = () => !imageUnavailable() && imageSize().width > 0 && imageSize().height > 0
   const [bodyGeometry, setBodyGeometry] = createSignal<ImagePreviewBodyGeometry | null>(null)
   const [copyInFlight, setCopyInFlight] = createSignal(false)
   const [copyFeedback, setCopyFeedback] = createSignal<CopyFeedback | null>(null)
@@ -215,6 +236,7 @@ export function ImagePreviewHost() {
     setCopyInFlight(false)
     clearCopyFeedback()
     setPanStart(null)
+    setImageFailed(false)
     if (!state.open) {
       pendingWheelScale = null
       applyWheelScaleOnFrame.cancel()
@@ -226,7 +248,7 @@ export function ImagePreviewHost() {
     applyOpenScaleOnFrame.schedule()
     queueMicrotask(() => {
       if (imagePreviewState().revision !== state.revision || previewSource() !== src) return
-      if (imageRef?.complete) measureLoadedImage(imageRef)
+      if (src && imageRef?.complete && imageRef.getAttribute("src") === src) measureLoadedImage(imageRef)
     })
   })
 
@@ -304,9 +326,15 @@ export function ImagePreviewHost() {
 
   function measureLoadedImage(image: HTMLImageElement): void {
     const nextSize = {
-      width: image.naturalWidth || image.width,
-      height: image.naturalHeight || image.height,
+      width: image.naturalWidth,
+      height: image.naturalHeight,
     }
+    if (nextSize.width <= 0 || nextSize.height <= 0) {
+      setImageFailed(true)
+      setImageSize({ width: 0, height: 0 })
+      return
+    }
+    setImageFailed(false)
     setImageSize(nextSize)
     setScale(calculateImagePreviewOpenScale(nextSize, readBodyGeometry()?.viewportSize ?? viewportSize()))
     requestAnimationFrame(() => {
@@ -317,6 +345,7 @@ export function ImagePreviewHost() {
   }
 
   function applyScale(nextScale: number, anchor?: { x: number; y: number }): void {
+    if (!imageReady()) return
     const body = bodyRef
     const size = imageSize()
     const previousScale = scale()
@@ -397,6 +426,7 @@ export function ImagePreviewHost() {
       [IMAGE_COPY_SOURCE_KEY]: t("image_preview.copy_status.source_unavailable"),
       [IMAGE_COPY_FORMAT_KEY]: t("image_preview.copy_status.png_required"),
       [IMAGE_COPY_BLOCKED_KEY]: t("image_preview.copy_status.clipboard_blocked"),
+      [IMAGE_COPY_IMAGE_UNAVAILABLE_KEY]: t("image_preview.copy_status.image_unavailable"),
     }
     return labels[key]
   }
@@ -428,6 +458,10 @@ export function ImagePreviewHost() {
       previewSource() === src &&
       (!authority || isApiAuthorityCurrent(authority))
     clearCopyFeedback()
+    if (imageUnavailable()) {
+      showCopyFeedback({ tone: "error", key: IMAGE_COPY_IMAGE_UNAVAILABLE_KEY })
+      return
+    }
     if (!image || !image.complete || imageSize().width <= 0 || imageSize().height <= 0) {
       showCopyFeedback({ tone: "error", key: IMAGE_COPY_LOADING_KEY })
       return
@@ -469,6 +503,7 @@ export function ImagePreviewHost() {
     if (!event.ctrlKey && !event.metaKey) return
     event.preventDefault()
     event.stopPropagation()
+    if (!imageReady()) return
     const direction = event.deltaY > 0 ? -1 : 1
     pendingWheelScale = {
       clientX: event.clientX,
@@ -480,7 +515,7 @@ export function ImagePreviewHost() {
 
   function startPan(event: PointerEvent): void {
     const body = bodyRef
-    if (!body || event.button !== 0 || event.isPrimary === false) return
+    if (!body || !imageReady() || event.button !== 0 || event.isPrimary === false) return
     event.preventDefault()
     body.setPointerCapture(event.pointerId)
     setPanStart({
@@ -531,6 +566,7 @@ export function ImagePreviewHost() {
             data-chrome="icon-action"
             title={t("file.download")}
             aria-label={t("file.download")}
+            disabled={!previewSource()}
             onClick={downloadPreviewImage}
           >
             <Icon name="download" />
@@ -567,6 +603,7 @@ export function ImagePreviewHost() {
             <ContextMenu.Trigger as="div" class="image-preview-dialog__image-menu-target">
               <img
                 class="image-preview-dialog__image"
+                data-unavailable={imageUnavailable() ? "true" : undefined}
                 src={previewSource() || undefined}
                 alt={imagePreviewState().alt}
                 ref={(element) => {
@@ -576,11 +613,22 @@ export function ImagePreviewHost() {
                   if (previewSource() && event.currentTarget.getAttribute("src") === previewSource())
                     measureLoadedImage(event.currentTarget)
                 }}
+                onError={(event) => {
+                  if (previewSource() && event.currentTarget.getAttribute("src") === previewSource()) {
+                    setImageFailed(true)
+                    setImageSize({ width: 0, height: 0 })
+                  }
+                }}
               />
-              <Show when={imagePreviewState().resourceUrl && resource.error}>
-                <div class="msg-file-error" role="alert">
-                  {t("image_preview.copy_status.source_unavailable")}
-                </div>
+              <Show when={imageUnavailable()}>
+                <Feedback
+                  class="image-preview-dialog__failure"
+                  tone="error"
+                  title={t("image_preview.load_failed")}
+                  details={resource.error ? formatErrorDetails(resource.error) : undefined}
+                >
+                  {t("image_preview.load_failed_hint")}
+                </Feedback>
               </Show>
             </ContextMenu.Trigger>
             <ContextMenu.Portal mount={bodyRef}>
@@ -593,15 +641,15 @@ export function ImagePreviewHost() {
                   <span>{t("image_preview.copy_image")}</span>
                 </ContextMenu.Item>
                 <ContextMenu.Separator />
-                <ContextMenu.Item closeOnSelect onSelect={setWidthScale}>
+                <ContextMenu.Item disabled={!imageReady()} closeOnSelect onSelect={setWidthScale}>
                   <Icon name="panel-right" size="compact" />
                   <span>{t("image_preview.fit_width")}</span>
                 </ContextMenu.Item>
-                <ContextMenu.Item closeOnSelect onSelect={setFitScale}>
+                <ContextMenu.Item disabled={!imageReady()} closeOnSelect onSelect={setFitScale}>
                   <Icon name="maximize" size="compact" />
                   <span>{t("image_preview.fit_image")}</span>
                 </ContextMenu.Item>
-                <ContextMenu.Item closeOnSelect onSelect={setOriginalScale}>
+                <ContextMenu.Item disabled={!imageReady()} closeOnSelect onSelect={setOriginalScale}>
                   <span class="image-preview-dialog__context-ratio" aria-hidden="true">
                     1:1
                   </span>
@@ -625,6 +673,7 @@ export function ImagePreviewHost() {
           </span>
         )}
       </Show>
+      <Show when={imageReady()}>
       <div class="image-preview-dialog__zoom" role="toolbar" aria-label={t("image_preview.controls")}>
         <Button
           type="button"
@@ -654,6 +703,7 @@ export function ImagePreviewHost() {
           <Icon name="plus" />
         </Button>
       </div>
+      </Show>
     </Dialog>
   )
 }

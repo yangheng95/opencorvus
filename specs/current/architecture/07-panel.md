@@ -1415,6 +1415,16 @@ whole-image fit, original size, copy, pan, and modified-wheel zoom remain
 behaviors of that one host; consumers cannot introduce another lightbox or
 parallel image source.
 
+PreviewableImage reports the current image element's native decode failure with
+a compact localized description while retaining its full-preview action. The
+single image preview host reports native decode failures and original resource
+errors through Feedback. Only positive intrinsic dimensions qualify an image
+for zoom and pan; rendered layout dimensions and `complete` alone do not prove
+successful decoding. Copy reports image unavailability before clipboard work.
+Source changes retire the previous decode result, and a successful native load
+restores normal controls. No alternate image, retry loop or second resource
+loader is introduced; original resource error details remain available.
+
 The canonical TextField primitive also owns the regular body font weight for
 entered input and textarea text. Parent headings or emphasized layouts cannot
 leak heavy typography into editable content, and feature surfaces such as

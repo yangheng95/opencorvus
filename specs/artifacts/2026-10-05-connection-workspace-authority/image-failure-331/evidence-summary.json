@@ -1,0 +1,29 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 4259597,
+    "archiveBytes": 109673,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 5,
+    "sessions": [
+      {
+        "id": "ses_hRZ5A5j0CVXoNQd9WGNf",
+        "projectID": "prj_hHw8C0UJhUnMkY6NAEul",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCZvNbzzIfW1Srzyr",
+        "projectID": "prj_hB99Rs0zRwxEfNeewLEw",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXnQ6o6000xeuxGHQn",
+        "sourceId": "852edb3df9ef3cbf7b534ba3a7651bdae5c0d2a36274ff38aedd5d8fae8806e3",
+        "title": "source-image.png"
+      }
+    ]
+  }
+]
