@@ -100,3 +100,17 @@ test("Decision Log reads retain every previously visible page in model context",
   expect(visible).toContain(earlyDecision)
   expect(visible).toContain(laterDecision)
 })
+
+test("file evidence projects its original line and column into model context", async () => {
+  const history = turn(3, "matching line")
+  const assistant = history[1]!
+  assistant.parts.push({
+    id: "prt_source_column", messageID: assistant.info.id, sessionID: assistant.info.sessionID,
+    type: "source-file", sourceId: "src_column", path: "src/example.ts",
+    range: { startLine: 4, endLine: 4, startColumn: 9 },
+  })
+  const projected = await Message.toModelMessages(history, model)
+  const text = projected.flatMap(message => typeof message.content === "string" ? [message.content] :
+    message.content.flatMap(part => part.type === "text" ? [part.text] : []))
+  expect(text).toContain('<source-file path="src/example.ts" start-line=4 end-line=4 start-column=9 />')
+})

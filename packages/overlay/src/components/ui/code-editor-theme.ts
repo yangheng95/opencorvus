@@ -19,11 +19,7 @@ import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { RangeSetBuilder, StateEffect, StateField, type Extension } from "@codemirror/state"
 import { Decoration, EditorView, type DecorationSet } from "@codemirror/view"
 import { tags } from "@lezer/highlight"
-
-export interface CodeEditorLineRange {
-  startLine: number
-  endLine: number
-}
+import type { SourceFileRange } from "@opencorvus-ai/sdk"
 
 /** Where a reveal should land once the document is known. */
 export interface CodeEditorRevealTarget {
@@ -51,7 +47,7 @@ const REVEAL_HIGHLIGHT_LINE_LIMIT = 400
  */
 export function resolveRevealTarget(
   documentLines: number,
-  range: CodeEditorLineRange | undefined,
+  range: SourceFileRange | undefined,
 ): CodeEditorRevealTarget | null {
   if (!range || !Number.isInteger(documentLines) || documentLines < 1) return null
   const { startLine, endLine } = range

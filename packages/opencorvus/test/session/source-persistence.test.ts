@@ -47,6 +47,7 @@ describe("message source persistence", () => {
             range: { startLine: 4, endLine: 12 },
             provider: "opencorvus-read",
           }),
+          fileSource({ path: citedPath, range: { startLine: 4, endLine: 4, startColumn: 9 }, provider: "opencorvus-search-code" }),
         ]
         const first = await persistMessageSources({ sessionID: session.id, messageID: message.id, sources })
         await persistMessageSources({ sessionID: session.id, messageID: message.id, sources })
@@ -60,9 +61,10 @@ describe("message source persistence", () => {
             sourceId: "sourceId" in part ? part.sourceId : "",
           })),
         }).toEqual({
-          createdTypes: ["source-url", "source-file"],
+          createdTypes: ["source-url", "source-file", "source-file"],
           persisted: [
             { type: "source-url", orderKey: expect.any(String), sourceId: expect.any(String) },
+            { type: "source-file", orderKey: expect.any(String), sourceId: expect.any(String) },
             { type: "source-file", orderKey: expect.any(String), sourceId: expect.any(String) },
           ],
         })
@@ -73,6 +75,7 @@ describe("message source persistence", () => {
           origin: "attachment",
           range: { startLine: 4, endLine: 12 },
         })
+        expect(persisted[2]).toMatchObject({ path: citedPath, range: { startLine: 4, endLine: 4, startColumn: 9 } })
       },
     })
   })

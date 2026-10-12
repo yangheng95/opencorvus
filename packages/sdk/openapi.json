@@ -17431,6 +17431,12 @@
             "maximum": 9007199254740991,
             "type": "integer"
           },
+          "startColumn": {
+            "description": "1-based UTF-16 column within a single-line source",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "type": "integer"
+          },
           "startLine": {
             "exclusiveMinimum": 0,
             "maximum": 9007199254740991,

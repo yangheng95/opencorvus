@@ -3160,3 +3160,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [折叠历史与来源摘要365](records/2026-10/2026-10-13-source-excerpt-hidden-365.md)：真实长摘要读点与隔离复核，未证实新缺陷。
 
 - [超长搜索行命中窗口366](records/2026-10/2026-10-13-source-match-window-366.md)：真实匹配位置、完整字符及一致安全片段。
+
+- [文件来源精确列定位367](records/2026-10/2026-10-13-source-column-367.md)：统一列事实、长行打开与真实验收边界。

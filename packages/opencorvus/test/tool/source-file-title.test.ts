@@ -28,3 +28,25 @@ test.each(["  const value = '中文😀'\t  ", "", " \t "])(
     expect(Message.SourcePayload.parse(source)).toEqual({ ...source, snippet })
   },
 )
+
+test("file source schema retains an exact single-line column", () => {
+  const source = fileSource({ path: path.resolve("column.md"), range: { startLine: 4, endLine: 4, startColumn: 9 } })
+  expect(Message.SourcePayload.parse(source)).toEqual(source)
+})
+
+test("different cited columns have distinct source identities on the same line", () => {
+  const sources = [9, 24].map((startColumn) => fileSource({
+    path: path.resolve("column.md"), range: { startLine: 4, endLine: 4, startColumn },
+  }))
+  expect(new Set(sources.map((source) => source.sourceId)).size).toBe(2)
+})
+
+test.each([
+  [{ startLine: 4, endLine: 4, startColumn: 0 }, "too_small"],
+  [{ startLine: 4, endLine: 5, startColumn: 9 }, "custom"],
+])("invalid source columns produce a precise range issue for %j", (range, code) => {
+  const result = Message.SourceFileRange.safeParse(range)
+  expect(result.error?.issues.map((issue) => ({ code: issue.code, path: issue.path }))).toEqual([
+    { code, path: ["startColumn"] },
+  ])
+})

@@ -38,7 +38,7 @@ export type ConversationSourcePart = {
   mediaType?: string
   filename?: string
   origin?: SourceFilePart["origin"]
-  range?: { startLine: number; endLine: number }
+  range?: SourceFilePart["range"]
 }
 
 export function isConversationSourcePart(part: any): part is ConversationSourcePart {
@@ -57,7 +57,7 @@ function sourceDirectory(): string {
 function fileSourceLocation(label: string, range: ConversationSourcePart["range"]): string {
   if (!range) return label
   const lines = range.startLine === range.endLine ? `${range.startLine}` : `${range.startLine}-${range.endLine}`
-  return `${label}:${lines}`
+  return `${label}:${lines}${range.startColumn === undefined ? "" : `:${range.startColumn}`}`
 }
 
 /** Decode visible international URL text without changing encoded ASCII structure. */
@@ -217,6 +217,9 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   const fileRange = () => {
     const range = props.source.range
     if (!range) return ""
+    if (range.startColumn !== undefined && range.startColumn > 1) {
+      return t("chat.source_line_column", { line: range.startLine, column: range.startColumn })
+    }
     return range.startLine === range.endLine
       ? t("chat.source_line", { line: range.startLine })
       : t("chat.source_lines", { start: range.startLine, end: range.endLine })

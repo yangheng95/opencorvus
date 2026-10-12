@@ -5069,6 +5069,10 @@ export type SourceFilePart = {
 
 export type SourceFileRange = {
   endLine: number
+  /**
+   * 1-based UTF-16 column within a single-line source
+   */
+  startColumn?: number
   startLine: number
 }
 

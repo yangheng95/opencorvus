@@ -26,3 +26,7 @@ test("a path without a well-formed location survives intact", () => {
 test("a cited line becomes an editor range", () => {
   expect(fileReferenceRange(parseFileReference("src/a.ts:42"))).toEqual({ startLine: 42, endLine: 42 })
 })
+
+test("a cited column survives the location-to-range data mapping", () => {
+  expect(fileReferenceRange(parseFileReference("src/a.ts:42:7"))).toEqual({ startLine: 42, endLine: 42, startColumn: 7 })
+})

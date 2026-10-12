@@ -7,6 +7,8 @@
 // so the markdown renderer, the click delegation in `main.tsx` and the unit
 // tests all agree on exactly one grammar.
 
+import type { SourceFileRange } from "@opencorvus-ai/sdk"
+
 /** Attribute carrying the cited path on a rendered codespan reference. */
 export const FILE_REFERENCE_PATH_ATTRIBUTE = "data-file-path"
 /** Attribute carrying the cited path on a rendered markdown link. */
@@ -57,10 +59,14 @@ export function parseFileReference(raw: string): FileReference {
  */
 export function fileReferenceRange(
   reference: Partial<FileReferenceLocation> | undefined,
-): { startLine: number; endLine: number } | undefined {
+): SourceFileRange | undefined {
   const line = reference?.line
   if (line === undefined || !Number.isSafeInteger(line) || line < 1) return undefined
-  return { startLine: line, endLine: line }
+  return {
+    startLine: line,
+    endLine: line,
+    ...(reference?.column === undefined ? {} : { startColumn: reference.column }),
+  }
 }
 
 /** Serialise a reference into HTML attributes for the delegated click handler. */

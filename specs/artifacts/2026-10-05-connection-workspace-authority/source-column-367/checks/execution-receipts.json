@@ -1,0 +1,14 @@
+{
+  "basis": "Original exec handles joined through write_stdin; launcher error below is the returned terminal output, not an inferred exit.",
+  "sdk": { "handle": 36854, "exitCode": 0 },
+  "backendBefore": { "handle": 74528, "exitCode": 1 },
+  "backendAfter": { "handle": 77697, "exitCode": 0, "tests": 40 },
+  "overlayDataContracts": { "exitCode": 0, "tests": 15 },
+  "typecheck": { "handle": 52472, "exitCode": 0, "packages": 8 },
+  "build": { "handle": 99057, "exitCode": 0, "asset": "main-Du3_bV1a.js" },
+  "live": { "handle": 10710, "exitCode": 1, "error": "OWNED_PROVIDER_COMPLETION_INVALID", "reason": "Final provider audit exhausted=true at fixed cumulative budget of 12; source tool completed but final Side response did not." },
+  "shutdown": { "exitCode": 0, "boundary": "Owned physical chain and paired credential cleanup only; does not qualify full live acceptance." },
+  "i18n": { "exitCode": 0 },
+  "docs": { "exitCode": 0 },
+  "architecture": { "exitCode": 0 }
+}

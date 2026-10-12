@@ -852,6 +852,16 @@ The optional file snippet preserves its indentation and trailing whitespace
 through the canonical Source schema and persistence; source identity remains
 path/range/symbol based. Other file producers and historical Parts only carry
 the facts they actually supplied, without a presentation-time file read.
+Single-line sources may also carry a positive, one-based UTF-16 `startColumn`
+from the original first match. It is independent of redacted or cropped preview
+coordinates and participates in source identity. Byte spans inside a UTF-8
+decoding unit point to that displayed character's beginning. The canonical
+Source range is also the SDK, workbench and editor range contract; Markdown
+`path:line:column` references retain their parsed column through that same path.
+Navigation retains the column through repeated and hidden-editor reveals,
+clamping to current line content and complete surrogate boundaries. Line-only
+and multiline sources retain their existing line reveal semantics. Full source
+locations include a supplied column; compact badges show columns beyond one.
 File tooltips expose this preview on pointer hover or keyboard focus, with a
 localized excerpt label and four-line visual limit. Exact file/range activation
 provides the full original content. This preview keeps the compact citation row;

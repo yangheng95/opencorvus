@@ -38,12 +38,14 @@ export function fileSource(input: {
   title?: string
   snippet?: string
   origin?: Message.SourceFilePayload["origin"]
-  range?: { startLine: number; endLine: number }
+  range?: Message.SourceFilePayload["range"]
   symbol?: string
   provider?: string
 }): Message.SourceFilePayload {
   const absolutePath = path.resolve(input.path)
-  const rangeIdentity = input.range ? `${input.range.startLine}:${input.range.endLine}` : ""
+  const rangeIdentity = input.range
+    ? `${input.range.startLine}:${input.range.endLine}${input.range.startColumn === undefined ? "" : `:${input.range.startColumn}`}`
+    : ""
   return {
     type: "source-file",
     sourceId: semanticSourceId("source-file", `${absolutePath}\0${rangeIdentity}\0${input.symbol ?? ""}`),

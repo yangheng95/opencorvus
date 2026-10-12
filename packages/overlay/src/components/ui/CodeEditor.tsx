@@ -1,4 +1,5 @@
 import { Compartment, EditorSelection } from "@codemirror/state"
+import type { SourceFileRange } from "@opencorvus-ai/sdk"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
 import { t } from "../../utils/i18n"
@@ -12,7 +13,6 @@ import {
   resolveRevealTarget,
   revealHighlightLines,
   revealLinesEffect,
-  type CodeEditorLineRange,
 } from "./code-editor-theme"
 
 export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
@@ -20,7 +20,7 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   path: string
   ariaLabel: string
   onValueChange: (value: string) => void
-  lineRange?: CodeEditorLineRange
+  lineRange?: SourceFileRange
   lineRangeRevealRevision?: number
   readOnly?: boolean
   class?: string
@@ -52,7 +52,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
 
   const revealIdentity = () => {
     const range = local.lineRange
-    return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", range?.startColumn ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
   }
 
   /**
@@ -85,7 +85,12 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     // visible. Keep that request unsettled until real layout can scroll and
     // focus it; the host observer retries this same current request.
     if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
-    const anchor = editor.state.doc.line(target.anchorLine).from
+    const line = editor.state.doc.line(target.anchorLine)
+    let column = Math.min((range.startColumn ?? 1) - 1, line.length)
+    const unit = line.text.charCodeAt(column)
+    const previous = line.text.charCodeAt(column - 1)
+    if (unit >= 0xdc00 && unit <= 0xdfff && previous >= 0xd800 && previous <= 0xdbff) column--
+    const anchor = line.from + column
     editor.dispatch({
       selection: EditorSelection.cursor(anchor),
       effects: [
@@ -208,6 +213,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     void local.value
     void local.lineRange?.startLine
     void local.lineRange?.endLine
+    void local.lineRange?.startColumn
     void local.lineRangeRevealRevision
     revealOnLayout.schedule()
   })

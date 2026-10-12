@@ -148,14 +148,35 @@ function matchOutput(filename: string, text: string): string {
   } }) + "\n"
 }
 
-function expectedSearchSource(filename: string, line: number, snippet: string) {
+function expectedSearchSource(filename: string, line: number, snippet: string, startColumn?: number) {
   return {
     type: "source-file", sourceId: expect.any(String), path: filename, title: path.basename(filename),
-    range: { startLine: line, endLine: line }, provider: "opencorvus-search-code", snippet,
+    range: { startLine: line, endLine: line, ...(startColumn === undefined ? {} : { startColumn }) }, provider: "opencorvus-search-code", snippet,
   }
 }
 
 describe("search_code bounded execution", () => {
+  test.each([
+    { name: "unicode", bytes: Buffer.from("before中😀NEEDLE"), pattern: "NEEDLE", line: 1, column: 10 },
+    { name: "invalid-prefix", bytes: Buffer.concat([Buffer.from([255, 255]), Buffer.from("中😀NEEDLE")]), pattern: "NEEDLE", line: 1, column: 6 },
+    { name: "inside-codepoint", bytes: Buffer.from("beforeé suffix"), pattern: "(?-u:\\xA9)", line: 1, column: 7 },
+    { name: "inside-replacement", bytes: Buffer.concat([Buffer.from("before"), Buffer.from([0xe1, 0x80]), Buffer.from(" suffix")]), pattern: "(?-u:\\x80)", line: 1, column: 7 },
+    { name: "crlf", bytes: Buffer.from("header\r\nbefore中😀NEEDLE\r\n"), pattern: "NEEDLE", line: 2, column: 10 },
+  ])("publishes the displayed character column of a real $name match", async ({ name, bytes, pattern, line, column }) => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, `${name}.md`)
+      await fs.writeFile(filename, bytes)
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Exact source column" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern, path: filename }, context))
+      expect(result.sources).toEqual([{
+        type: "source-file", sourceId: expect.any(String), path: filename, title: path.basename(filename),
+        range: { startLine: line, endLine: line, startColumn: column }, provider: "opencorvus-search-code",
+        snippet: expect.any(String),
+      }])
+    } })
+  })
+
   test("previews a late real regex match with complete Unicode window boundaries", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
@@ -167,7 +188,7 @@ describe("search_code bounded execution", () => {
       const preview = "..." + contextText + "MATCH366" + "后".repeat(1950) + "..."
       expect({ output: result.output, sources: result.sources }).toEqual({
         output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
-        sources: [expectedSearchSource(filename, 1, preview)],
+        sources: [expectedSearchSource(filename, 1, preview, 2442)],
       })
     } })
   })
@@ -183,7 +204,7 @@ describe("search_code bounded execution", () => {
       const preview = "..." + tail
       expect({ output: result.output, sources: result.sources }).toEqual({
         output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
-        sources: [expectedSearchSource(filename, 1, preview)],
+        sources: [expectedSearchSource(filename, 1, preview, 2441)],
       })
     } })
   })
@@ -213,7 +234,7 @@ describe("search_code bounded execution", () => {
       const preview = "inline_binary_omitted(kind=data_url offset=0 media=text/plain payload_chars=3012)"
       expect({ output: result.output, sources: result.sources }).toEqual({
         output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
-        sources: [expectedSearchSource(filename, 1, preview)],
+        sources: [expectedSearchSource(filename, 1, preview, 3024)],
       })
     } })
   })
@@ -229,7 +250,7 @@ describe("search_code bounded execution", () => {
       const preview = "..." + tail
       expect({ output: result.output, sources: result.sources }).toEqual({
         output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
-        sources: [expectedSearchSource(filename, 1, preview)],
+        sources: [expectedSearchSource(filename, 1, preview, 2370)],
       })
     } })
   })
@@ -245,7 +266,7 @@ describe("search_code bounded execution", () => {
       const preview = "...inline_binary_omitted(kind=raw_base64 offset=3 reason=binary_magic payload_chars=2000)..."
       expect({ output: result.output, sources: result.sources }).toEqual({
         output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
-        sources: [expectedSearchSource(filename, 1, preview)],
+        sources: [expectedSearchSource(filename, 1, preview, 2441)],
       })
     } })
   })
@@ -262,7 +283,7 @@ describe("search_code bounded execution", () => {
       const preview = `${prefix}...`
       expect({ output: result.output, sources: result.sources }).toEqual({
         output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
-        sources: [expectedSearchSource(filename, 1, preview)],
+        sources: [expectedSearchSource(filename, 1, preview, 1)],
       })
     } })
   })
@@ -278,7 +299,7 @@ describe("search_code bounded execution", () => {
       const preview = `${marker} inline_binary_omitted(kind=data_url offset=12 media=text/plain payload_chars=4) tail`
       expect({ output: result.output, sources: result.sources }).toEqual({
         output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
-        sources: [expectedSearchSource(filename, 1, preview)],
+        sources: [expectedSearchSource(filename, 1, preview, 1)],
       })
     } })
   })
@@ -296,7 +317,7 @@ describe("search_code bounded execution", () => {
       expect(result).toEqual({
         title: marker, metadata: { matches: 1, truncated: false },
         output: `Found 1 matches\n${filename}:\n  Line 2: ${line}`,
-        sources: [expectedSearchSource(filename, 2, line)],
+        sources: [expectedSearchSource(filename, 2, line, 1)],
       })
     } })
   })
@@ -311,7 +332,7 @@ describe("search_code bounded execution", () => {
       const shown = Math.min(count, 100)
       expect({ metadata: result.metadata, sources: result.sources }).toEqual({
         metadata: { matches: count, truncated: count > 100 },
-        sources: Array.from({ length: shown }, (_, index) => expectedSearchSource(filename, 2 + index * 2, `source-lines-319 ${index}`)),
+        sources: Array.from({ length: shown }, (_, index) => expectedSearchSource(filename, 2 + index * 2, `source-lines-319 ${index}`, 1)),
       })
     } })
   })
@@ -343,7 +364,7 @@ describe("search_code bounded execution", () => {
           title: marker,
           metadata: { matches: 1, truncated: false },
           output: [`Found 1 matches`, `${visible}:`, `  Line 1: ${marker}`].join("\n"),
-          sources: [expectedSearchSource(visible, 1, marker)],
+          sources: [expectedSearchSource(visible, 1, marker, 1)],
         })
       },
     })
@@ -391,13 +412,13 @@ describe("search_code bounded execution", () => {
               `${rootTypeScript}:`,
               `  Line 1: ${marker}`,
             ].join("\n"),
-            sources: [expectedSearchSource(nestedTypeScript, 1, marker), expectedSearchSource(rootTypeScript, 1, marker)],
+            sources: [expectedSearchSource(nestedTypeScript, 1, marker, 1), expectedSearchSource(rootTypeScript, 1, marker, 1)],
           },
           nestedTypeScriptOnly: {
             title: marker,
             metadata: { matches: 1, truncated: false },
             output: [`Found 1 matches`, `${nestedTypeScript}:`, `  Line 1: ${marker}`].join("\n"),
-            sources: [expectedSearchSource(nestedTypeScript, 1, marker)],
+            sources: [expectedSearchSource(nestedTypeScript, 1, marker, 1)],
           },
         })
       },

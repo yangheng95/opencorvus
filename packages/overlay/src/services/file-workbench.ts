@@ -1,5 +1,5 @@
 import { batch, createSignal } from "solid-js"
-import type { FileContent as SdkFileContent } from "@opencorvus-ai/sdk"
+import type { FileContent as SdkFileContent, SourceFileRange } from "@opencorvus-ai/sdk"
 import { uint8ToBase64 } from "@opencorvus-ai/transport-protocol"
 import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { projectScopedPath } from "./project-directory"
@@ -54,14 +54,9 @@ export interface FileOperationScope {
   authority?: ApiAuthority
 }
 
-export interface FileEditorLineRange {
-  startLine: number
-  endLine: number
-}
-
 export interface FileEditorTarget extends FileOperationScope {
   path: string
-  range?: FileEditorLineRange
+  range?: SourceFileRange
   sourceAbsolutePath?: string
   displayName?: string
 }
@@ -131,7 +126,7 @@ function descendantSuffix(path: string, base: string, directory: string): string
   return normalizedPath.startsWith(prefix) ? normalizedPath.slice(prefix.length) : null
 }
 
-function normalizeFileEditorRange(range?: FileEditorLineRange): FileEditorLineRange | undefined {
+function normalizeFileEditorRange(range?: SourceFileRange): SourceFileRange | undefined {
   if (!range) return undefined
   if (
     !Number.isInteger(range.startLine) ||
@@ -141,13 +136,22 @@ function normalizeFileEditorRange(range?: FileEditorLineRange): FileEditorLineRa
   ) {
     throw new Error("openFileEditor: range must be a positive inclusive line range")
   }
-  return { startLine: range.startLine, endLine: range.endLine }
+  if (range.startColumn !== undefined && (
+    !Number.isSafeInteger(range.startColumn) || range.startColumn < 1 || range.startLine !== range.endLine
+  )) {
+    throw new Error("openFileEditor: startColumn must be a positive safe integer within a single-line range")
+  }
+  return {
+    startLine: range.startLine,
+    endLine: range.endLine,
+    ...(range.startColumn === undefined ? {} : { startColumn: range.startColumn }),
+  }
 }
 
 function normalizeFileEditorTarget(
   path: string,
   scope: FileOperationScope,
-  range?: FileEditorLineRange,
+  range?: SourceFileRange,
 ): FileEditorTarget {
   const next = String(path || "")
   const directory = scope.directory.trim()
@@ -162,7 +166,7 @@ function normalizeFileEditorTarget(
 function normalizeSourceFileEditorTarget(
   absolutePath: string,
   scope: FileOperationScope,
-  range?: FileEditorLineRange,
+  range?: SourceFileRange,
   displayName?: string,
 ): FileEditorTarget {
   const sourceAbsolutePath = String(absolutePath || "")
@@ -195,7 +199,8 @@ function sameFileEditorTarget(left: FileEditorTarget | null, right: FileEditorTa
     sameFileEditorResource(left, right) &&
     left?.displayName === right?.displayName &&
     left?.range?.startLine === right?.range?.startLine &&
-    left?.range?.endLine === right?.range?.endLine
+    left?.range?.endLine === right?.range?.endLine &&
+    left?.range?.startColumn === right?.range?.startColumn
   )
 }
 
@@ -291,7 +296,7 @@ export function registerFileEditorBeforeNavigate(owner: FileEditorNavigationOwne
   }
 }
 
-export function openFileEditor(path: string, scope: FileOperationScope, range?: FileEditorLineRange): Promise<boolean> {
+export function openFileEditor(path: string, scope: FileOperationScope, range?: SourceFileRange): Promise<boolean> {
   const authority = scope.authority ?? captureApiAuthority()
   return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, range), authority)
 }
@@ -299,7 +304,7 @@ export function openFileEditor(path: string, scope: FileOperationScope, range?: 
 export function openSourceFileEditor(
   absolutePath: string,
   scope: FileOperationScope,
-  range?: FileEditorLineRange,
+  range?: SourceFileRange,
   displayName?: string,
 ): Promise<boolean> {
   const authority = scope.authority ?? captureApiAuthority()

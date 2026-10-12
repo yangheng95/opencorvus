@@ -237,7 +237,7 @@ export const SearchCodeTool = Tool.define("search_code", {
       "--glob",
       "!**/.git/**",
     ]
-    const matches: Array<{ path: string; modTime: number; lineNum: number; lineText: string; matchOffset: number }> = []
+    const matches: Array<{ path: string; modTime: number; lineNum: number; lineText: string; matchOffset: number; startColumn?: number }> = []
 
     for (const targets of searchTargets) {
       const result = await run([...searchArgs, ...targets])
@@ -267,13 +267,21 @@ export const SearchCodeTool = Tool.define("search_code", {
       for (const { data: result, lineBytes } of results) {
         const stats = Filesystem.stat(result.path.text)
         if (!stats) continue
-
+        const firstMatch = result.submatches[0]
+        const byteOffset = firstMatch?.start ?? 0
+        const prefix = lineBytes.subarray(0, byteOffset).toString("utf8")
+        const suffix = lineBytes.subarray(byteOffset).toString("utf8")
+        // Splitting a UTF-8 decoding unit flushes a replacement character at
+        // the end of the prefix. Anchor that unit at its displayed beginning.
+        const matchOffset = prefix.length - (prefix + suffix === result.lines.text ? 0 : 1)
+        const lineText = result.lines.text.replace(/\r?\n$/, "")
         matches.push({
           path: result.path.text,
           modTime: stats.mtime.getTime(),
           lineNum: result.line_number,
-          lineText: result.lines.text.replace(/\r?\n$/, ""),
-          matchOffset: lineBytes.subarray(0, result.submatches[0]?.start ?? 0).toString("utf8").length,
+          lineText,
+          matchOffset,
+          ...(firstMatch ? { startColumn: Math.min(matchOffset, lineText.length) + 1 } : {}),
         })
       }
     }
@@ -344,7 +352,11 @@ export const SearchCodeTool = Tool.define("search_code", {
       output: redactInlinePayloads(outputLines.join("\n")),
       sources: presentedMatches.map((match) => fileSource({
         path: match.path,
-        range: { startLine: match.lineNum, endLine: match.lineNum },
+        range: {
+          startLine: match.lineNum,
+          endLine: match.lineNum,
+          ...(match.startColumn === undefined ? {} : { startColumn: match.startColumn }),
+        },
         snippet: match.snippet,
         provider: "opencorvus-search-code",
       })),

@@ -805,3 +805,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [折叠历史与来源摘要365](source-excerpt-hidden-365/README.md) / [Recall](source-excerpt-hidden-plan-365.md)。
 
 - [超长搜索行命中窗口366](source-match-window-366/README.md) / [Recall](source-match-window-plan-366.md)。
+
+- [文件来源精确列定位367](source-column-367/README.md) / [Recall](source-column-plan-367.md)。

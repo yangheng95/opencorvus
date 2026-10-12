@@ -90,6 +90,22 @@ test("file editor navigation retains and updates the exact cited line range", as
   expect(fileEditorRevealRevision()).toBe(beforeRepeatReveal + 1)
 })
 
+test("column navigation preserves each precise target and its reveal revision", async () => {
+  const before = fileEditorRevealRevision()
+  for (const [index, startColumn] of [9, 24, 24].entries()) {
+    expect(await openFileEditor("src/source.ts", { directory: "/repo" }, { startLine: 7, endLine: 7, startColumn })).toBe(true)
+    expect({ target: selectedFileTarget(), revision: fileEditorRevealRevision() }).toEqual({
+      target: { directory: "/repo", path: "src/source.ts", range: { startLine: 7, endLine: 7, startColumn } },
+      revision: before + index + 1,
+    })
+  }
+  expect(await openSourceFileEditor("/outside/source.ts", { directory: "/repo" }, { startLine: 7, endLine: 7, startColumn: 24 })).toBe(true)
+  expect(selectedFileTarget()).toEqual({
+    directory: "/repo", path: "/outside/source.ts", sourceAbsolutePath: "/outside/source.ts",
+    range: { startLine: 7, endLine: 7, startColumn: 24 },
+  })
+})
+
 test("absolute source navigation retains the exact read-only source path", async () => {
   await openSourceFileEditor(
     "C:\\external-worktree\\src\\source.ts",
