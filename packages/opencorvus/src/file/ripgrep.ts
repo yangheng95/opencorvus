@@ -110,15 +110,25 @@ export namespace Ripgrep {
     return { text: filePath ? pathDecoder().decode(bytes) : bytes.toString("utf8") }
   }
 
-  export function parseSearchOutput(output: string): Match["data"][] {
+  // Byte offsets belong to the original line, including byte-encoded content
+  // whose displayed UTF-8 text contains replacement characters.
+  export type ParsedMatch = { data: Match["data"]; lineBytes: Buffer }
+
+  export function parseSearchOutput(output: string): ParsedMatch[] {
     return output.split(/\r?\n/).filter(Boolean).flatMap((line) => {
       const result = WireResult.parse(JSON.parse(line))
       if (result.type !== "match") return []
+      const lineBytes = "text" in result.data.lines
+        ? Buffer.from(result.data.lines.text, "utf8")
+        : Buffer.from(result.data.lines.bytes, "base64")
       return [{
-        ...result.data,
-        path: decodedText(result.data.path, true),
-        lines: decodedText(result.data.lines),
-        submatches: result.data.submatches.map((match) => ({ ...match, match: decodedText(match.match) })),
+        data: {
+          ...result.data,
+          path: decodedText(result.data.path, true),
+          lines: { text: lineBytes.toString("utf8") },
+          submatches: result.data.submatches.map((match) => ({ ...match, match: decodedText(match.match) })),
+        },
+        lineBytes,
       }]
     })
   }
@@ -345,6 +355,6 @@ export namespace Ripgrep {
       throw new Error(ripgrepFailure("search", result.code, result.stderr, result.stdout))
     }
 
-    return parseSearchOutput(result.stdout.toString())
+    return parseSearchOutput(result.stdout.toString()).map((match) => match.data)
   }
 }

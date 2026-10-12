@@ -15,6 +15,7 @@ import { redactInlinePayloads } from "../util/inline-base64"
 import { activeExecutionCapsuleRuntimeFact } from "@/execution-capsule/runtime"
 
 const MAX_LINE_LENGTH = 2000
+const MATCH_CONTEXT_BEFORE = 40
 const MAX_BATCH_ARGUMENT_CHARACTERS = 12_000
 const MAX_INCLUDE_PATTERN_LENGTH = 4096
 const MAX_INCLUDE_EXPANSIONS = 256
@@ -236,7 +237,7 @@ export const SearchCodeTool = Tool.define("search_code", {
       "--glob",
       "!**/.git/**",
     ]
-    const matches: Array<{ path: string; modTime: number; lineNum: number; lineText: string }> = []
+    const matches: Array<{ path: string; modTime: number; lineNum: number; lineText: string; matchOffset: number }> = []
 
     for (const targets of searchTargets) {
       const result = await run([...searchArgs, ...targets])
@@ -257,13 +258,13 @@ export const SearchCodeTool = Tool.define("search_code", {
         partialErrorDetail ||= errorOutput
       }
 
-      let results: Ripgrep.Match["data"][]
+      let results: Ripgrep.ParsedMatch[]
       try {
         results = Ripgrep.parseSearchOutput(output)
       } catch (cause) {
         throw executionError(cause)
       }
-      for (const result of results) {
+      for (const { data: result, lineBytes } of results) {
         const stats = Filesystem.stat(result.path.text)
         if (!stats) continue
 
@@ -272,6 +273,7 @@ export const SearchCodeTool = Tool.define("search_code", {
           modTime: stats.mtime.getTime(),
           lineNum: result.line_number,
           lineText: result.lines.text.replace(/\r?\n$/, ""),
+          matchOffset: lineBytes.subarray(0, result.submatches[0]?.start ?? 0).toString("utf8").length,
         })
       }
     }
@@ -292,11 +294,20 @@ export const SearchCodeTool = Tool.define("search_code", {
     const totalMatches = matches.length
     const outputLines: string[] = [`Found ${totalMatches} matches${truncated ? ` (showing first ${limit})` : ""}`]
     const presentedMatches = finalMatches.map((match) => {
-      let end = Math.min(match.lineText.length, MAX_LINE_LENGTH)
-      const last = match.lineText.charCodeAt(end - 1)
-      const next = match.lineText.charCodeAt(end)
+      let matchOffset = match.matchOffset
+      const lineText = redactInlinePayloads(match.lineText, (start, end, replacement) => {
+        if (matchOffset >= end) matchOffset += replacement.length - (end - start)
+        else if (matchOffset >= start) matchOffset = start
+      })
+      let start = lineText.length > MAX_LINE_LENGTH ? Math.max(0, matchOffset - MATCH_CONTEXT_BEFORE) : 0
+      const first = lineText.charCodeAt(start)
+      const previous = lineText.charCodeAt(start - 1)
+      if (first >= 0xdc00 && first <= 0xdfff && previous >= 0xd800 && previous <= 0xdbff) start--
+      let end = Math.min(lineText.length, start + MAX_LINE_LENGTH)
+      const last = lineText.charCodeAt(end - 1)
+      const next = lineText.charCodeAt(end)
       if (last >= 0xd800 && last <= 0xdbff && next >= 0xdc00 && next <= 0xdfff) end--
-      const text = match.lineText.slice(0, end) + (end < match.lineText.length ? "..." : "")
+      const text = (start > 0 ? "..." : "") + lineText.slice(start, end) + (end < lineText.length ? "..." : "")
       return { ...match, snippet: redactInlinePayloads(text) }
     })
 

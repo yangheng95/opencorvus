@@ -836,8 +836,18 @@ The shared Message source schema validates HTTP and HTTPS URLs with the native
 URL validator. Malformed and other-protocol inputs produce a URL-format schema
 error; accepted URL strings and source metadata retain their recorded values.
 Local search file sources retain the same bounded, inline-payload-redacted
-matching-line preview that appears in the Tool output. The existing 2000 UTF-16
-code-unit limit ends at a complete character, with the ordinary omission marker.
+matching-line preview that appears in the Tool output. Short safe lines remain
+complete. Longer safe lines use the existing 2000 UTF-16 code-unit budget around
+the first reported ripgrep match span, with up to 40 preceding code units.
+Records without a reported span retain the bounded line prefix. Original
+byte coordinates are retained at the parser boundary, including for byte-encoded
+lines; the public find-text response keeps its original data shape and offsets.
+Full-line inline-payload redaction adjusts the match position through the same
+replacement pass before window selection, so a match inside omitted data points
+to its omission marker. Both window boundaries retain complete characters, and
+ordinary omission markers identify clipped ends. The resulting window passes
+through the same redactor before either Tool output or Source persistence, since
+cropping can expose a new binary-signature boundary within a longer token.
 The optional file snippet preserves its indentation and trailing whitespace
 through the canonical Source schema and persistence; source identity remains
 path/range/symbol based. Other file producers and historical Parts only carry

@@ -711,3 +711,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [文件来源匹配行预览364](2026-10-13-source-preview-364.md)：真实搜索来源内容辨认。
 
 - [2026-10-13 折叠历史与来源摘要365](2026-10-13-source-excerpt-hidden-365.md)。
+
+- [2026-10-13 超长搜索行命中窗口366](2026-10-13-source-match-window-366.md)。

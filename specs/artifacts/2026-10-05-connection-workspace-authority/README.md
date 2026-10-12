@@ -803,3 +803,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [文件来源匹配行预览364](source-preview-364/README.md) / [Recall](source-preview-plan-364.md)。
 
 - [折叠历史与来源摘要365](source-excerpt-hidden-365/README.md) / [Recall](source-excerpt-hidden-plan-365.md)。
+
+- [超长搜索行命中窗口366](source-match-window-366/README.md) / [Recall](source-match-window-plan-366.md)。

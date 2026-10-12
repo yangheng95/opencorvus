@@ -1,0 +1,91 @@
+{
+  "at": "2026-10-12T22:25:55.773Z",
+  "initialHandle": 98870,
+  "launcherExitCode": 0,
+  "requestCount": 5,
+  "elapsedMs": 122549,
+  "settled": {
+    "occurrence": "source-match-window-366-edge-01b2e9dd-973f-49e9-bad5-b320628e7b31",
+    "outcome": "settled",
+    "host": {
+      "pid": 61328,
+      "processInstanceID": "win32:639274405465961157",
+      "occurrenceID": "275af430-dda1-4a92-9638-d377e9f8db82"
+    },
+    "target": {
+      "pid": 74844,
+      "processInstanceID": "win32:639274405473699392",
+      "occurrenceID": "38d95d17-0300-4945-afd1-163df237b3c1"
+    },
+    "observedAtUtc": "2026-10-12T22:24:29.918Z",
+    "deadlineAt": 1791844346580,
+    "terminal": {
+      "occurrenceID": "source-match-window-366-edge-01b2e9dd-973f-49e9-bad5-b320628e7b31",
+      "pid": 74844,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "qualified": {
+    "providerEOFRequests": 5,
+    "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+    "physicalCompletion": true,
+    "cancellation": null,
+    "qualification": "NativeService",
+    "providerUserCancelledRequests": 0
+  },
+  "served": {
+    "level": "info",
+    "time": "2026-10-12T22:22:53.310Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "aa75995f-4966-4954-991a-7a12edd648cf",
+      "method": "GET",
+      "path": "/ui/assets/main-C_UK_gz4.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 13
+    },
+    "message": "request"
+  },
+  "sourceCount": 6,
+  "sourceSnippets": [
+    {
+      "id": "prt_g0VXsPvav00m6Ey62LGy",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-match-window-366-edge\\project\\资料\\长行检索\\裁切载荷.md",
+      "snippet": "...inline_binary_omitted(kind=raw_base64 offset=3 reason=binary_magic payload_chars=2000)..."
+    },
+    {
+      "id": "prt_g0VXsPvb200Dyq0OdpJ3",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-match-window-366-edge\\project\\资料\\长行检索\\短行.md",
+      "snippet": "    MATCH366_短行记录 😀 尾空白 \t "
+    },
+    {
+      "id": "prt_g0VXsPvb6000CEh9ypfL",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-match-window-366-edge\\project\\资料\\长行检索\\载荷后命中.md",
+      "snippet": "...文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文MATCH366_载荷后记录"
+    },
+    {
+      "id": "prt_g0VXsPvb900XmHdNT1Au",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-match-window-366-edge\\project\\资料\\长行检索\\载荷内命中.md",
+      "snippet": "inline_binary_omitted(kind=data_url offset=0 media=text/plain payload_chars=3012)"
+    },
+    {
+      "id": "prt_g0VXsPvbC00jshp5xmTv",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-match-window-366-edge\\project\\资料\\长行检索\\字节编码.md",
+      "snippet": "...界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界MATCH366_字节命中 尾部"
+    },
+    {
+      "id": "prt_g0VXsPvbG00A4q93NdB5",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-match-window-366-edge\\project\\资料\\长行检索\\中文长行.md",
+      "snippet": "...😀文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文MATCH366_中文命中后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后续内容。后..."
+    }
+  ],
+  "boundary": "Final crop-redaction implementation: actual completed SQLite Source, production ToolOutcome and authored file bytes compared. Six real files, five real streaming gpt-6.1-sol EOF responses and Native closure. Earlier Side coverage is separate; special cropped payload was exercised in Main only."
+}

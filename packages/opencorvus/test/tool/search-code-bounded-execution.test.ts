@@ -156,6 +156,100 @@ function expectedSearchSource(filename: string, line: number, snippet: string) {
 }
 
 describe("search_code bounded execution", () => {
+  test("previews a late real regex match with complete Unicode window boundaries", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "late-unicode-match.md")
+      const contextText = "😀" + "文".repeat(39)
+      await fs.writeFile(filename, "p".repeat(2400) + contextText + "MATCH366" + "后".repeat(1950) + "😀 tail\n")
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Late regex match" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH[0-9]+", path: filename }, context))
+      const preview = "..." + contextText + "MATCH366" + "后".repeat(1950) + "..."
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview)],
+      })
+    } })
+  })
+
+  test("locates a late match from original invalid UTF-8 bytes before displaying its text", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "late-byte-match.md")
+      const tail = "界".repeat(40) + "MATCH366  after"
+      await fs.writeFile(filename, Buffer.concat([Buffer.alloc(2400, 255), Buffer.from(tail)]))
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Late byte match" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH366", path: filename }, context))
+      const preview = "..." + tail
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview)],
+      })
+    } })
+  })
+
+  test("preserves bounded line context when a real zero-width search reports no submatch span", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "line-end-match.md")
+      await fs.writeFile(filename, "begin" + "文".repeat(2500))
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Line end match" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "$", path: filename }, context))
+      const preview = "begin" + "文".repeat(1995) + "..."
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview)],
+      })
+    } })
+  })
+
+  test("represents a late match inside a complete inline payload with its omission marker", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "payload-window.md")
+      await fs.writeFile(filename, "data:text/plain;base64," + "A".repeat(3000) + "TUFUQ0gzNjY=")
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Payload match window" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "TUFUQ0gzNjY", path: filename }, context))
+      const preview = "inline_binary_omitted(kind=data_url offset=0 media=text/plain payload_chars=3012)"
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview)],
+      })
+    } })
+  })
+
+  test("keeps a real late match aligned after an earlier payload is redacted", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "match-after-payload.md")
+      const tail = "文".repeat(40) + "MATCH366末尾"
+      await fs.writeFile(filename, "d".repeat(2300) + " data:text/plain;base64,YQ== " + tail)
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Match after payload" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH366", path: filename }, context))
+      const preview = "..." + tail
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview)],
+      })
+    } })
+  })
+
+  test("publishes one safe preview when cropping exposes a binary signature in a base64 token", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "cropped-binary-token.md")
+      const header = Buffer.from("%PDF-1.7\n" + "x".repeat(21)).toString("base64")
+      await fs.writeFile(filename, "YWJj".repeat(600) + header + "MATCH366" + "YWFh".repeat(600))
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Safe cropped token" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH366", path: filename }, context))
+      const preview = "...inline_binary_omitted(kind=raw_base64 offset=3 reason=binary_magic payload_chars=2000)..."
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview)],
+      })
+    } })
+  })
+
   test("publishes the same complete-character bounded line in tool output and source preview", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {

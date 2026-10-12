@@ -59,31 +59,38 @@ export function inlineRawBase64PayloadSnippet(text: string, match: InlineRawBase
  * Remove inline binary bytes from diagnostic text before it becomes durable
  * retry evidence. The marker preserves structural debugging facts without
  * reproducing the forbidden data URL header or base64 token.
+ * Observers receive UTF-16 offsets in the current text before each replacement,
+ * allowing a caller to retain a position through the same redaction pass.
  */
-export function redactInlinePayloads(text: string): string {
+export function redactInlinePayloads(
+  text: string,
+  onReplacement?: (start: number, end: number, replacement: string) => void,
+): string {
   let redacted = text
+  const replace = (start: number, end: number, replacement: string) => {
+    onReplacement?.(start, end, replacement)
+    redacted = redacted.slice(0, start) + replacement + redacted.slice(end)
+  }
   for (;;) {
     const match = inlineBase64DataUrlMatch(redacted)
     if (!match) break
     const payload = inlineBase64PayloadAfterHeader(redacted, match)
     const end = match.index + match[0].length + payload.length
-    redacted = redacted.slice(0, match.index) + inlineBase64DataUrlSnippet(redacted, match) + redacted.slice(end)
+    replace(match.index, end, inlineBase64DataUrlSnippet(redacted, match))
   }
   for (;;) {
     const match = inlineDataUrlMatch(redacted)
     if (!match) break
-    redacted =
-      redacted.slice(0, match.index) +
-      `inline_payload_omitted(kind=data_url offset=${match.index} chars=${match[0].length})` +
-      redacted.slice(match.index + match[0].length)
+    replace(
+      match.index,
+      match.index + match[0].length,
+      `inline_payload_omitted(kind=data_url offset=${match.index} chars=${match[0].length})`,
+    )
   }
   for (;;) {
     const match = inlineRawBase64PayloadMatch(redacted)
     if (!match) break
-    redacted =
-      redacted.slice(0, match.index) +
-      inlineRawBase64PayloadSnippet(redacted, match) +
-      redacted.slice(match.index + match.token.length)
+    replace(match.index, match.index + match.token.length, inlineRawBase64PayloadSnippet(redacted, match))
   }
   return redacted
 }
