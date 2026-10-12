@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -133,7 +134,7 @@ describe("Human Resources Operations expert squad package", () => {
       namespace: "builtin",
       id: "hr-operations",
       name: "Human Resources & Organization Operations",
-      version: "2026.09.27.2",
+      version: sourcePackageVersion(packageRoot),
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))

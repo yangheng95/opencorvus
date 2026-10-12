@@ -118,7 +118,7 @@ test("real project HTTP bootstrap serves VCS and skill mounts alongside an inval
       const body = await response.json()
       expect({ route, status: response.status, body }).toMatchObject({ route, status: 200 })
       if (route === "/vcs") expect(body).toMatchObject({ branch: expect.any(String) })
-      else expect(body).toMatchObject({ active_profile: "base", agents: expect.any(Array), skills: expect.any(Array) })
+      else expect(body).toMatchObject({ active_profile: "dynamic", agents: expect.any(Array), skills: expect.any(Array) })
     }
   } finally {
     server.stop(true)

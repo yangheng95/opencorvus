@@ -51,7 +51,7 @@ test("serves and installs the ninth ten Skill-and-asset domain Squads through is
     ]
     expect(result.packages).toBe(10)
     expect(result.requestCount).toBe(41)
-    expect(result.activeSquadID).toBe("base")
+    expect(result.activeSquadID).toBe("dynamic")
     expect(result.projections).toHaveLength(10)
     expect(result.projections.every((entry) => /^[a-f0-9]{64}$/.test(entry.packageDigest))).toBe(true)
     expect(result.projections.map(({ id, skillRef }) => ({ id, skillRef }))).toEqual(

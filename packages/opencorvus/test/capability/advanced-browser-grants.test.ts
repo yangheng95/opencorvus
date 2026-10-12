@@ -27,7 +27,11 @@ test("Advanced browser responsibilities resolve exact Browser execution grants o
           agentID,
         })
         expect(capability.defaultMcpTools.map((entry) => entry.ref).sort()).toEqual(
-          [...BrowserMCPBuiltin.ImportableToolRefs].sort(),
+          [
+            "check", "click", "diagnostics_get", "hover", "navigate", "observe", "press_key",
+            "screenshot", "scroll", "select_option", "session_create", "session_destroy", "type",
+            "uncheck", "viewport_set", "wait_for_load", "wait_for_selector",
+          ].map((name) => `default/mcp/browser/tool/${name}`),
         )
         const harness = PromptProfileResolver.workerHarnessGrants({
           taskID: "tsk_browser-grants",

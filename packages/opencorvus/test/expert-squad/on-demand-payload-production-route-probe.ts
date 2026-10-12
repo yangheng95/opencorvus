@@ -46,7 +46,7 @@ try {
   const activeProjection = initialCatalog.active_skill_projection as Record<string, unknown>
   const defaultEntries = defaultPage.entries as Array<Record<string, unknown>>
   const defaultIDs = defaultEntries.map((entry) => entry.id as string).sort()
-  const expectedDefaultIDs = ["advanced", "base", "research-studio", "squad-sdk"]
+  const expectedDefaultIDs = ["advanced", "base", "dynamic", "research-studio", "squad-sdk"]
 
   if (
     defaultPage.total_count !== expectedDefaultIDs.length ||
@@ -55,12 +55,12 @@ try {
     throw new Error(`Fresh project defaults drifted: ${JSON.stringify({ defaultIDs, defaultPage })}`)
   }
   if (
-    activeProjection.active_squad_id !== "base" ||
+    activeProjection.active_squad_id !== "dynamic" ||
     !(activeProjection.production_grants as Array<Record<string, unknown>>).some(
-      (grant) => grant.ref === "base/shared/method",
+      (grant) => grant.ref === "dynamic/shared/method",
     )
   ) {
-    throw new Error("Fresh project did not retain the embedded Base runtime projection")
+    throw new Error("Fresh project did not retain the embedded Dynamic runtime projection")
   }
   if (
     market.length !== payloadPackageSources.length ||
@@ -113,12 +113,12 @@ try {
   const postInstallCatalog = await requestJson("/expert-squad/catalog")
   const postInstallProjection = postInstallCatalog.active_skill_projection as Record<string, unknown>
   if (
-    postInstallProjection.active_squad_id !== "base" ||
+    postInstallProjection.active_squad_id !== "dynamic" ||
     !(postInstallProjection.production_grants as Array<Record<string, unknown>>).some(
-      (grant) => grant.ref === "base/shared/method",
+      (grant) => grant.ref === "dynamic/shared/method",
     )
   ) {
-    throw new Error("Explicit Market installation changed the active embedded Base projection")
+    throw new Error("Explicit Market installation changed the active embedded Dynamic projection")
   }
 
   console.log(

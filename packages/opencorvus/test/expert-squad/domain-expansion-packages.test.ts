@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Config } from "../../src/config/config"
@@ -125,7 +126,7 @@ const packages = [
 
 const packageRoot = (id: string) => path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", id)
 const skillRef = (id: string) => `${id}/shared/method`
-const packageVersion = (id: string) => id === "scientific-research-design" ? "2026.09.21.1" : "2026.08.30.2"
+const packageVersion = (id: string) => sourcePackageVersion(packageRoot(id))
 
 afterAll(async () => {
   await resetMemoryDatabase()

@@ -22,7 +22,7 @@
  * real assembled surface.
  */
 import { afterAll, expect, test } from "bun:test"
-import { ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS } from "../src/agent/tool-pool-data"
+import { ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS, TASK_OWNER_REGISTRY_TOOL_IDS } from "../src/agent/tool-pool-data"
 import { EngineTaskTable } from "../src/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "../src/engine/task-lifecycle"
 import { Identifier } from "../src/id/id"
@@ -133,11 +133,12 @@ test("builds every scheduler-projectable built-in Tool an expert-squad manifest 
     fn: async () => {
       const { tools } = await orchestratorToolSurface("Scheduler projectable tool surface", sendSchedulerMessage)
       const built = new Set(Object.keys(tools))
+      const registryOwned = ["capability_search", ...TASK_OWNER_REGISTRY_TOOL_IDS]
       const factoryOwned = [...new Set(ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS)].filter(
-        (id) => id !== "capability_search",
+        (id) => !registryOwned.includes(id),
       )
       expect(factoryOwned.map((id) => built.has(id))).toEqual(factoryOwned.map(() => true))
-      expect(await ToolRegistry.ids()).toContain("capability_search")
+      expect(await ToolRegistry.ids()).toEqual(expect.arrayContaining(registryOwned))
     },
   })
 })

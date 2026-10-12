@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -136,7 +137,7 @@ describe("Data Analysis expert squad package", () => {
       namespace: "builtin",
       id: "data-analysis",
       name: "Data Analysis & Business Insights",
-      version: "2026.09.27.5",
+      version: sourcePackageVersion(packageRoot),
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))

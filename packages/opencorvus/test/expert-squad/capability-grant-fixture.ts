@@ -4,6 +4,18 @@ import {
   type MaterializedExpertSquadCapabilities,
 } from "../../src/expert-squad/capability-grants"
 import type { ExpertSquadRegistry } from "../../src/expert-squad/registry"
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { parse, type ParseError } from "jsonc-parser"
+
+export function sourcePackageVersion(directory: string): string {
+  const errors: ParseError[] = []
+  const manifest = parse(readFileSync(path.join(directory, "expert-squad.jsonc"), "utf8"), errors)
+  if (errors.length || typeof manifest?.version !== "string" || !manifest.version) {
+    throw new Error(`Source package has no valid declared version: ${directory}`)
+  }
+  return manifest.version
+}
 
 export function schedulerCapabilityGrants(
   manifest: ExpertSquadRegistry.Manifest,

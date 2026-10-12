@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Config } from "../../src/config/config"
@@ -110,7 +111,7 @@ describe("Expert Squad swimlanes 04-06 packages", () => {
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: "2026.08.30.2",
+        version: sourcePackageVersion(packageRoot(definition.id)),
         product_pillars: ["work"],
       })
       expect([...loaded.packageSkills.keys()]).toEqual([definition.skillRef])
@@ -154,7 +155,7 @@ describe("Expert Squad swimlanes 04-06 packages", () => {
           })
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: "2026.08.30.2" },
+            packageRevision: { id: definition.id, version: sourcePackageVersion(packageRoot(definition.id)) },
           })
           expect(scheduler.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
             { ref: definition.skillRef, source: "package" },

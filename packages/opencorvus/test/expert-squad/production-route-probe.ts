@@ -203,10 +203,10 @@ const result = await Instance.provide({
       const activeProductionGrants = activeSkillProjection.production_grants as Array<Record<string, unknown>>
       const activeProductionSkillRefs = activeProductionGrants.map((grant) => grant.ref as string)
       if (
-        activeSkillProjection.active_squad_id !== "base" ||
-        !activeProductionSkillRefs.includes("base/shared/method")
+        activeSkillProjection.active_squad_id !== "dynamic" ||
+        !activeProductionSkillRefs.includes("dynamic/shared/method")
       ) {
-        throw new Error("Active runtime catalog did not grant the repaired Base Skill")
+        throw new Error("Active runtime catalog did not grant the current Dynamic Skill")
       }
 
       return {
@@ -214,7 +214,7 @@ const result = await Instance.provide({
         requestCount,
         projections,
         repairedProjections,
-        activeBaseSkillRefs: activeProductionSkillRefs,
+        activeSkillRefs: activeProductionSkillRefs,
       }
     } finally {
       server.stop(true)

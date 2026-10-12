@@ -44,7 +44,7 @@ test("serves ten new and three repaired Skill-complete Squads through an isolate
         skillRef: string
         agentCount: number
       }>
-      activeBaseSkillRefs: string[]
+      activeSkillRefs: string[]
     }
 
     expect(result.packages).toBe(10)
@@ -68,7 +68,7 @@ test("serves ten new and three repaired Skill-complete Squads through an isolate
     ])
     expect(result.repairedProjections.every((projection) => /^[a-f0-9]{64}$/.test(projection.packageDigest))).toBe(true)
     expect(result.repairedProjections.every((projection) => projection.agentCount > 0)).toBe(true)
-    expect(result.activeBaseSkillRefs).toContain("base/shared/method")
+    expect(result.activeSkillRefs).toContain("dynamic/shared/method")
   } finally {
     await fs.rm(isolatedRoot, { recursive: true, force: true })
   }

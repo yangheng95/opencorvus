@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { describe, expect, test } from "bun:test"
 import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
@@ -43,7 +44,7 @@ describe("Generate Expert Squads expert squad", () => {
       schema_version: 2,
       namespace: "builtin",
       id: "squad-sdk",
-      version: "2026.09.12.2",
+      version: sourcePackageVersion(packageRoot),
       system_role: "expert_squad_generator",
     })
     expect(schedulerCapabilityGrants(loaded.manifest).explicitBuiltInToolIDs).toEqual([...schedulerTools].sort())

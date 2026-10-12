@@ -37,6 +37,7 @@ function completedTurn(suffix: string) {
       },
     ],
     completion: {
+      kind: "accepted",
       summary: input.summary,
       messageID: output.assistant_message_id,
       toolCallID: output.tool_call_id,
@@ -53,7 +54,7 @@ function audit(turns: ReturnType<typeof completedTurn>[]) {
       sessionID: "session",
       interruptible: false,
       tasks: [],
-      completion: turns.at(-1)!.completion,
+      outcome: turns.at(-1)!.completion,
     },
     missionStatus: { status: "inactive", tasks: [] },
     missionTranscript: turns.flatMap((turn) => turn.messages),

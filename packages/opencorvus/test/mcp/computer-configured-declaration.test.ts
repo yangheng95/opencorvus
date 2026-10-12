@@ -111,6 +111,7 @@ describe("the configured declaration is the Computer provider", () => {
           "browser_get_value",
           "browser_go_back",
           "browser_go_forward",
+          "browser_help",
           "browser_hover",
           "browser_is_visible",
           "browser_keyboard_shortcut",

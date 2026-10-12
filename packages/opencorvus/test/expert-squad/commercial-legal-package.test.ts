@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
 import { EngineArtifactEnvelopeSchema, readExactArtifact, type EngineArtifactLocator } from "@opencorvus-ai/plugin"
@@ -225,7 +226,7 @@ describe("Commercial Legal Expert Squad", () => {
       namespace: "builtin",
       id: "commercial-legal",
       name: "Commercial Legal",
-      version: "2026.09.27.1",
+      version: sourcePackageVersion(packageRoot),
       product_pillars: ["work"],
     })
     expect([...source.packageSkills.keys()].sort()).toEqual([...skillRefs].sort())

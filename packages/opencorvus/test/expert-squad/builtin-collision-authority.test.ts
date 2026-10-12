@@ -108,8 +108,10 @@ async function coldRequest(directory: string) {
   await Instance.disposeAll()
   Server.resetProjectRoutesAppForTest()
   return runOutsideInstanceContext(async () => {
-    const response = await Server.App().request(`/session/status?directory=${encodeURIComponent(directory)}`, {
-      headers: { "x-opencorvus-directory": directory },
+    const response = await Server.App().request(`/config?directory=${encodeURIComponent(directory)}`, {
+      method: "PATCH",
+      headers: { "x-opencorvus-directory": directory, "content-type": "application/json" },
+      body: JSON.stringify({}),
     })
     return { status: response.status, body: await response.json() }
   })
@@ -350,7 +352,7 @@ test("matching pinned mount does not exempt another colliding builtin mount targ
   expect(collisionFact(result)).toEqual({ kind: "error", name: "Error", message: message("research-studio") })
 })
 
-test("cold actual config preserves model-first error and builtin collision candidate wrapper", async () => {
+test("cold configuration writes preserve model-first validation and the builtin collision response", async () => {
   await using project = await memoryProject("collision94-cold")
   await collision(project.path, "project", true)
   const file = ConfigPaths.projectFile(project.path)
@@ -367,6 +369,6 @@ test("cold actual config preserves model-first error and builtin collision candi
   console.log("cold collision", JSON.stringify(rejected))
   expect(rejected).toMatchObject({
     status: 400,
-    body: { name: "ConfigCandidateValidationError", data: { message: message("base") } },
+    body: { success: false, data: { message: message("base") }, error: [{ message: message("base") }] },
   })
 })

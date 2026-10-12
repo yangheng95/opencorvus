@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
@@ -209,7 +210,7 @@ describe("Fourth ten-domain Expert Squad package expansion", () => {
           schema_version: 2,
           namespace: "builtin",
           id: definition.id,
-          version: "2026.08.30.2",
+          version: sourcePackageVersion(packageRoot(definition.id)),
         })
         expect([...loaded.packageSkills.keys()]).toEqual([skillRef])
         expect(method.definition.name).toBe(definition.id + "-method")

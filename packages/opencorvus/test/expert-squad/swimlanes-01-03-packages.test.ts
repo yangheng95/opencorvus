@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Config } from "../../src/config/config"
@@ -11,7 +12,6 @@ import { allCapabilityGrants } from "./capability-grant-fixture"
 const packages = [
   {
     id: "browser-research-acceptance",
-    version: "2026.08.30.2",
     name: "Browser Research & Acceptance",
     productPillars: ["code", "work"],
     skillName: "browser-evidence-acceptance",
@@ -36,7 +36,6 @@ const packages = [
   },
   {
     id: "office-delivery",
-    version: "2026.09.12.1",
     name: "Office Delivery",
     productPillars: ["work"],
     skillName: "office-delivery-method",
@@ -53,7 +52,6 @@ const packages = [
   },
   {
     id: "product-management",
-    version: "2026.08.30.2",
     name: "Product Management",
     productPillars: ["work"],
     skillName: "evidence-backed-product-planning",
@@ -117,7 +115,7 @@ describe("Expert Squad swimlanes 01-03 packages", () => {
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: definition.version,
+        version: sourcePackageVersion(packageRoot(definition.id)),
         product_pillars: definition.productPillars,
       })
       expect([...loaded.packageSkills.keys()]).toEqual([definition.skillRef])
@@ -169,7 +167,7 @@ describe("Expert Squad swimlanes 01-03 packages", () => {
 
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: definition.version },
+            packageRevision: { id: definition.id, version: sourcePackageVersion(packageRoot(definition.id)) },
             productionSkills: [
               {
                 authority: "manifest",

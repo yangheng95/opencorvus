@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import Ajv2020 from "ajv/dist/2020"
 import { readFile } from "node:fs/promises"
@@ -218,7 +219,7 @@ describe("Eighth ten-domain Expert Squad package expansion", () => {
           schema_version: 2,
           namespace: "builtin",
           id: definition.id,
-          version: "2026.08.30.2",
+          version: sourcePackageVersion(packageRoot(definition.id)),
         })
         expect([...loaded.packageSkills.keys()]).toEqual([skillRef])
         expect(method.definition.name).toBe(definition.id + "-method")

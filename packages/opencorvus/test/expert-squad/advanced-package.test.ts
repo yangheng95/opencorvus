@@ -118,10 +118,10 @@ describe("built-in interface review workflow authority", () => {
       "use its executable surface only for read/list/get/search operations",
     )
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
-      "requested outcome is a change to an external system of record",
+      "For external-system delivery, choose the exact experts whose capabilities can read the authoritative sources, perform the authorized effect and independently verify it.",
     )
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
-      "Do not dispatch platform `universal-build` directly for that work",
+      "references illustrate possible combinations; they do not restrict delegation or ordering.",
     )
     expect(loaded.selectorInstructions).toContain(
       "Select `researched-planned-delivery` when one coherent load-bearing external web-evidence gap",

@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { RequestBudget } from "@/session/request-budget"
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
@@ -159,7 +160,7 @@ describe("Light Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "light",
-      version: "2026.09.09.1",
+      version: sourcePackageVersion(packageRoot),
       product_pillars: ["code", "work"],
     })
     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
@@ -183,7 +184,7 @@ describe("Light Expert Squad package", () => {
         })
         expect(receipt).toMatchObject({
           operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "light", version: "2026.09.09.1" },
+          after: { installationScope: "project", namespace: "builtin", id: "light", version: sourcePackageVersion(packageRoot) },
         })
 
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -204,7 +205,7 @@ describe("Light Expert Squad package", () => {
           packageRevision: revision,
         })
 
-        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.09.09.1" })
+        expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: sourcePackageVersion(packageRoot) })
         expect(scheduler.builtInToolIDs).toEqual(schedulerTools)
         expect(authoredRevealRefs(scheduler.promptOverlay)).toEqual(
           ["dispatch_agents", "read_agent_message", "manage_task"].map((local_ref) => ({
@@ -561,6 +562,7 @@ describe("Light Expert Squad package", () => {
                         "read",
                         "read_agent_message",
                         "search_code",
+                        "skill",
                         "webfetch",
                         "websearch",
                       ])

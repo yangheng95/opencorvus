@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Config } from "../../src/config/config"
@@ -29,7 +30,7 @@ describe("Frontend Replica acceptance package", () => {
       schema_version: 2,
       namespace: "builtin",
       id: "frontend-replica",
-      version: "2026.08.30.2",
+      version: sourcePackageVersion(packageRoot),
     })
     expect([...loaded.packageSkills.keys()]).toEqual([acceptanceSkillRef])
     expect(acceptance?.content).toContain(

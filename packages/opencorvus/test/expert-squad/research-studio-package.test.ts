@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Config } from "../../src/config/config"
@@ -22,7 +23,7 @@ describe("Research Studio report-quality package", () => {
     expect(loaded.manifest).toMatchObject({
       id: "research-studio",
       name: "Research Studio",
-      version: "2026.09.12.1",
+      version: sourcePackageVersion(packageRoot),
       product_pillars: ["code", "work"],
     })
     expect(reportSkill?.snapshot.files.map((file) => file.path)).toEqual([

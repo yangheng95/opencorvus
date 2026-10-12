@@ -97,12 +97,12 @@ try {
   const catalog = await requestJson("/expert-squad/catalog")
   const activeProjection = catalog.active_skill_projection as Record<string, unknown>
   if (
-    activeProjection.active_squad_id !== "base" ||
+    activeProjection.active_squad_id !== "dynamic" ||
     !(activeProjection.production_grants as Array<Record<string, unknown>>).some(
-      (grant) => grant.ref === "base/shared/method",
+      (grant) => grant.ref === "dynamic/shared/method",
     )
   ) {
-    throw new Error("Explicit Market installations changed the active embedded Base projection")
+    throw new Error("Explicit Market installations changed the active embedded Dynamic projection")
   }
 
   console.log(

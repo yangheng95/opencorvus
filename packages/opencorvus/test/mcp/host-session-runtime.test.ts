@@ -300,6 +300,7 @@ describe("host-owned native Session MCP composition", () => {
         unavailable.mockRestore()
 
         const codingBase = [
+          "apply_patch",
           "bash",
           "capability_search",
           "delegate_agent",
@@ -314,6 +315,7 @@ describe("host-owned native Session MCP composition", () => {
           "read",
           "schedule",
           "search_code",
+          "skill",
           "skill_market",
           "todo",
           "webfetch",
@@ -443,12 +445,14 @@ describe("host-owned native Session MCP composition", () => {
               .sort(),
           )
           expect(Object.keys(tools).sort()).toEqual([
+            "apply_patch",
             "bash",
             "capability_search",
             "edit",
             "external_code_search",
             "glob",
             "memory",
+            "mission_skill",
             "mission_state",
             "panel_block_mission",
             "panel_cancel_task",

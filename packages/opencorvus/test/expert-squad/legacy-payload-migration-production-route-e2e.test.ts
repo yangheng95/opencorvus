@@ -49,7 +49,7 @@ test("production bootstrap preserves legacy project and global installations wit
         bytes: { digest: expect.stringMatching(/^[a-f0-9]{64}$/), fileCount: expect.any(Number) },
       },
       ledgerDigest: expect.stringMatching(/^[a-f0-9]{64}$/),
-      activeSquadID: "base",
+      activeSquadID: "dynamic",
     })
     expect(result.project.bytes.fileCount).toBeGreaterThan(0)
     expect(result.global.bytes.fileCount).toBeGreaterThan(0)

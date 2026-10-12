@@ -23,6 +23,7 @@ import { SessionProcessor } from "../../src/session/processor"
 import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
 import { capabilityRevealBaseDefinitions } from "../../src/capability/reveal-receipt"
 import { normalizedProviderToolDefinition } from "../../src/capability/reveal-owner"
+import { sourcePackageVersion } from "./capability-grant-fixture"
 
 function scalePackageDefinition(id: string): ExpertSquadPackageDefinition {
   const emptyResources = { capability_refs: [] as string[] }
@@ -97,7 +98,7 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.09.30.1",
+      version: sourcePackageVersion(path.resolve(import.meta.dir, "../../src/expert-squad/builtin/base")),
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
@@ -340,6 +341,7 @@ describe("Expert Squad catalog index", () => {
           "external_code_search",
           "glob",
           "memory",
+          "mission_skill",
           "mission_state",
           "panel_block_mission",
           "panel_cancel_task",

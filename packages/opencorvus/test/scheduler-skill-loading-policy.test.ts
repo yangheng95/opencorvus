@@ -17,7 +17,7 @@ describe("scheduler Skill loading policy", () => {
   test("projects the exact worker Message reader required by the Orchestrator evidence contract", () => {
     expect(ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS).toContain("read_agent_message")
     expect(ORCHESTRATOR_CORE).toContain(
-      "Submit one collection together in one `read_agent_message` call",
+      'Submit one collection as `sources=[{kind:"dispatch_result",message_id:...}]` in one `read_agent_message` call',
     )
     expect(ORCHESTRATOR_CORE).toContain("submit consecutive ordered chunks of at most eight")
   })

@@ -130,7 +130,7 @@ test.skipIf(process.platform !== "win32")("actual exclusive README lock measures
   expect(recoveredHTTP).toMatchObject({ kind: "value", value: { status: 200, body: {} } })
 }, 90000)
 
-test("genuine malformed owned builtin declaration retains current semantic candidate response", async () => {
+test("status reads remain available while the owned malformed declaration has a typed candidate error", async () => {
   await using project = await memoryProject("candidate-reader97-semantic")
   const config = await Instance.provideProjectIdentity({ directory: project.path, fn: () => Config.get() })
   const root = path.join(project.path, ".opencorvus", "expert-squads", "reader97", "base")
@@ -139,5 +139,18 @@ test("genuine malformed owned builtin declaration retains current semantic candi
   await fs.writeFile(ConfigPaths.projectFile(project.path), JSON.stringify({ ...config, prompt_profile: { active: "base" } }))
   const result = await cold(project.path)
   console.log("reader97 semantic", JSON.stringify({ project: project.path, root, config, result }))
-  expect(result).toMatchObject({ kind: "value", value: { status: 400, body: { name: "ConfigCandidateValidationError", data: { message: 'External expert squad package id "base" collides with a built-in expert squad id.' } } } })
+  expect(result).toMatchObject({ kind: "value", value: { status: 200, body: {} } })
+  const candidate = await Instance.provideProjectIdentity({
+    directory: project.path,
+    fn: () => observe(() => validateConfigCandidate({
+      config: { ...config, prompt_profile: { active: "base" } },
+      root: "config",
+      projectDirectory: project.path,
+      projectOwnedCapabilities: true,
+    })),
+  })
+  expect(candidate).toMatchObject({ kind: "error", error: {
+    name: "ConfigCandidateValidationError",
+    message: 'ConfigCandidateValidationError: External expert squad package id "base" collides with a built-in expert squad id.',
+  } })
 })

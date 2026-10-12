@@ -24,6 +24,7 @@ const SERVER_ID = "searchnative"
 const TOOL_ID = `${SERVER_ID}_echo`
 const workRoutineNames = [
   "capability_search",
+  "apply_patch",
   "bash",
   "delegate_agent",
   "edit",
@@ -34,6 +35,7 @@ const workRoutineNames = [
   "panel_cancel_task",
   "panel_create_task",
   "panel_delete_goal",
+  "panel_expert_squad_inspect",
   "panel_query_task",
   "panel_query_task_artifacts",
   "panel_respond_interaction",
@@ -58,6 +60,7 @@ const workRoutineNames = [
   "work_artifact_inspect",
   "work_artifact_validate",
   "write",
+  "skill",
 ]
 
 function model(): ProviderType.Model {

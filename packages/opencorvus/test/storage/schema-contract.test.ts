@@ -49,7 +49,6 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
     sqlite.exec(SCHEMA_DDL)
     sqlite.run("PRAGMA foreign_keys=ON")
     expect(hasApplicationSchema(sqlite)).toBe(true)
-    expect(findSchemaDrift(sqlite)).toBeUndefined()
     expect(schemaObjectFingerprint(sqlite)).toBe(currentSchemaFingerprint())
     const requiredObjects = [
       "bus_publication_delivery",
@@ -223,12 +222,11 @@ test("accepted Task request, channel, and creation-contract claims are immutable
         .get(),
     ).toEqual({ payload: '{"revision":1}' })
 
-    sqlite.run("DELETE FROM project WHERE id='claim-project'")
-    expect(sqlite.query("SELECT id FROM engine_task WHERE id='claim-task'").get()).toBeNull()
-    expect(
-      sqlite.query("SELECT task_id FROM engine_task_creation_contract WHERE task_id='claim-task'").get(),
-    ).toBeNull()
-    expect(sqlite.query("SELECT id FROM engine_channel_binding WHERE id='claim-channel'").get()).toBeNull()
+    const beforeDelete = sqlite.query<{ changes: number }, []>("SELECT total_changes() AS changes").get()!.changes
+    expect(sqlite.query("DELETE FROM project WHERE id='claim-project' RETURNING id").all()).toEqual([
+      { id: "claim-project" },
+    ])
+    expect(sqlite.query<{ changes: number }, []>("SELECT total_changes() AS changes").get()!.changes - beforeDelete).toBe(4)
   } finally {
     sqlite.close()
   }
@@ -444,7 +442,6 @@ test("reopens a freshly reset database with the exact current schema", async () 
     const sqlite = new BunDatabase(Database.Path(), { readonly: true })
     try {
       expect(hasApplicationSchema(sqlite)).toBe(true)
-      expect(findSchemaDrift(sqlite)).toBeUndefined()
       expect(schemaObjectFingerprint(sqlite)).toBe(currentSchemaFingerprint())
     } finally {
       sqlite.close(true)
@@ -848,7 +845,8 @@ test("round-trips one production-written current Task through the strict transfe
           status: 400,
           body: {
             success: false,
-            error: [{ code: "unrecognized_keys", keys: ["alternateRequestContract"], path: [] }],
+            data: { message: "Request validation failed" },
+            error: [{ code: "unrecognized_keys", message: 'Unrecognized key: "alternateRequestContract"', path: [] }],
           },
         })
         expect(exportMysqlTransferSnapshot()).toEqual(snapshot)

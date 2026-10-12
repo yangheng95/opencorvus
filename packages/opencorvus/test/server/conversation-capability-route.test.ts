@@ -128,8 +128,8 @@ describe("native conversation capability routes", () => {
           const browserToolNames = toolNames.filter((name) => name.startsWith(`${BrowserMCPBuiltin.ServerName}_`))
           const computerToolNames = toolNames.filter((name) => name.startsWith(`${ComputerMCPBuiltin.ServerName}_`))
           expect({ total: toolNames.length, browser: browserToolNames.length, computer: computerToolNames }).toEqual({
-            total: 53,
-            browser: 45,
+            total: 46 + ComputerMCPBuiltin.ImportableToolNames.length,
+            browser: 46,
             computer: ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`).sort(),
           })
           expect(toolNames.length).toBeGreaterThan(0)

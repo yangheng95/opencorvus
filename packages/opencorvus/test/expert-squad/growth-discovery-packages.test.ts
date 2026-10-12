@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Config } from "../../src/config/config"
@@ -94,7 +95,7 @@ describe("Growth and discovery Expert Squad packages", () => {
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: "2026.08.30.2",
+        version: sourcePackageVersion(packageRoot),
         product_pillars: ["work"],
       })
       expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(definition.agentIDs)
@@ -163,7 +164,7 @@ describe("Growth and discovery Expert Squad packages", () => {
           })
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: "2026.08.30.2" },
+            packageRevision: { id: definition.id, version: sourcePackageVersion(packageRoot) },
           })
           expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual([
             `${definition.id}/shared/method`,

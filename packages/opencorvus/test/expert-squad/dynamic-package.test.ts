@@ -1,3 +1,4 @@
+import { sourcePackageVersion } from "./capability-grant-fixture"
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "../../src/agent/dispatch-adapter-contract"
@@ -93,7 +94,7 @@ describe("Dynamic Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "dynamic",
-      version: "2026.09.05.1",
+      version: sourcePackageVersion(packageRoot),
       product_pillars: ["code", "work"],
       capability_projection: {
         agents: {

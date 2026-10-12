@@ -89,6 +89,7 @@
         "nodes": {
           "briefing-planner": {
             "agent_id": "briefing-planner",
+            "depends_on": [],
             "description": "Freeze the evidence boundary, briefing structure, and worker acceptance allocation."
           },
           "briefing-writer": {
