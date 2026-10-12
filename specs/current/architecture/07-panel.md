@@ -952,6 +952,8 @@ require a path prefix or a declared file extension with a directory separator
 or cited line. Unprefixed slash-delimited concepts and MIME types remain code
 prose. Rooted Windows drive paths
 retain their drive and either separator through the same reference grammar.
+Path tokens accept Unicode letters, numbers and combining marks, preserving
+the authored character sequence through the existing file-reference attributes.
 Bare filenames remain code
 prose; explicit Markdown file links retain their authored destinations.
 Parsing and highlighting occur

@@ -336,8 +336,9 @@ function extractFileReference(text: string): { display: string; reference: FileR
   const pathPart = reference.path
   // A rooted Windows drive prefix belongs to the path; its colon is not a
   // protocol or a cited location. The remaining path uses the same token
-  // grammar as relative and Unix paths.
-  if (!/^(?:[A-Za-z]:[\\/])?[\w./\\@~-]+$/.test(pathPart)) return null
+  // grammar as relative and Unix paths. Preserve letters, numbers and combining
+  // marks from every script without normalizing the authored filename.
+  if (!/^(?:[A-Za-z]:[\\/])?[\p{L}\p{N}\p{M}_./\\@~-]+$/u.test(pathPart)) return null
   const hasSlash = /[\/\\]/.test(pathPart)
   const hasFileExt = FILE_EXT_RE.test(pathPart)
   const hasPathPrefix = /^(?:[A-Za-z]:[\\/]|[\\/]|\.{1,2}[\\/]|~[\\/])/.test(pathPart)

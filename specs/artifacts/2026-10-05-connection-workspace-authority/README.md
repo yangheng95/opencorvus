@@ -807,3 +807,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [超长搜索行命中窗口366](source-match-window-366/README.md) / [Recall](source-match-window-plan-366.md)。
 
 - [文件来源精确列定位367](source-column-367/README.md) / [Recall](source-column-plan-367.md)。
+
+- [Unicode文件引用368](source-unicode-reference-368/README.md) / [Recall](source-unicode-reference-plan-368.md)。

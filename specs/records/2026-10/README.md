@@ -715,3 +715,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [2026-10-13 超长搜索行命中窗口366](2026-10-13-source-match-window-366.md)。
 
 - [2026-10-13 文件来源精确列定位367](2026-10-13-source-column-367.md)。
+
+- [2026-10-13 Unicode文件引用368](2026-10-13-source-unicode-reference-368.md)。

@@ -3162,3 +3162,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [超长搜索行命中窗口366](records/2026-10/2026-10-13-source-match-window-366.md)：真实匹配位置、完整字符及一致安全片段。
 
 - [文件来源精确列定位367](records/2026-10/2026-10-13-source-column-367.md)：统一列事实、长行打开与真实验收边界。
+
+- [Unicode文件引用368](records/2026-10/2026-10-13-source-unicode-reference-368.md)：中文及组合字符代码引用的真实导航。

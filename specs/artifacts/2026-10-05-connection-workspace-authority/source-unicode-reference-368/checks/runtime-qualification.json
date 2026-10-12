@@ -1,0 +1,180 @@
+{
+  "checkedAt": "2026-10-12T23:11:21.700Z",
+  "initialHandle": 91532,
+  "launcherExitCode": 0,
+  "sourceResults": [
+    {
+      "name": "main",
+      "sessionID": "ses_-zUS7OxAbzz23rpKkhtG",
+      "messageID": "msg_g0VXsb38y00g2yzDJM5I",
+      "count": 4,
+      "pattern": "MATCH368",
+      "finalID": "msg_g0VXsb4Ew00bAjxSm1Rw",
+      "requestPartID": "prt_g0VXsb3xL00P4sEvev4x",
+      "outputChars": 617,
+      "finalText": "`资料/代码引用/中文记录.md:2:10`\n`资料/代码引用/café.md:2:10`\n`资料/代码引用/記録٢.md:2:10`\n`资料/代码引用/ascii.md:2:10`\n`C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-unicode-reference-368/project/资料/代码引用/中文记录.md:2:10`",
+      "sources": [
+        {
+          "id": "prt_g0VXsb4Cb00FJ5m6ndti",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\ascii.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        },
+        {
+          "id": "prt_g0VXsb4Ci00AFQO5c7Uj",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\記録٢.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        },
+        {
+          "id": "prt_g0VXsb4Cm00p1cI5Q91w",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\café.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        },
+        {
+          "id": "prt_g0VXsb4Cr00JiIlWvJif",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\中文记录.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "side-reference",
+      "sessionID": "ses_-zUS7Oag0zzqh2nR9gHt",
+      "messageID": "msg_g0VXsbPK401iPCoggQys",
+      "count": 4,
+      "pattern": "MATCH368",
+      "finalID": "msg_g0VXsbPK402bkII7yPWL",
+      "requestPartID": "prt_g0VXsbPK402f8t0Z9txs",
+      "outputChars": 617,
+      "finalText": "`资料/代码引用/中文记录.md:2:10`\n`资料/代码引用/café.md:2:10`\n`资料/代码引用/記録٢.md:2:10`\n`资料/代码引用/ascii.md:2:10`\n`C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-unicode-reference-368/project/资料/代码引用/中文记录.md:2:10`",
+      "sources": [
+        {
+          "id": "prt_g0VXsbPK4033buxbMDg4",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\ascii.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        },
+        {
+          "id": "prt_g0VXsbPK4041A6xbi8bm",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\記録٢.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        },
+        {
+          "id": "prt_g0VXsbPK405hbyIqPFyK",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\café.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        },
+        {
+          "id": "prt_g0VXsbPK4068RAvbS96G",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\中文记录.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "side-current",
+      "sessionID": "ses_-zUS7Oag0zzqh2nR9gHt",
+      "messageID": "msg_g0VXsbUrS00D3WN7XUyH",
+      "count": 1,
+      "pattern": "MATCH368_中文",
+      "finalID": "msg_g0VXsbVra00Zw3wrjB7E",
+      "requestPartID": "prt_g0VXsbVbd00jetVdyBHc",
+      "outputChars": 162,
+      "finalText": "`资料/代码引用/中文记录.md:2:10`",
+      "sources": [
+        {
+          "id": "prt_g0VXsbVpa00AO5IHpso1",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-unicode-reference-368\\project\\资料\\代码引用\\中文记录.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 10
+          }
+        }
+      ]
+    }
+  ],
+  "providerRequests": 9,
+  "qualification": {
+    "physicalCompletion": true,
+    "qualification": "NativeService",
+    "providerEOFRequests": 9,
+    "providerUserCancelledRequests": 0,
+    "cancellation": null,
+    "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned"
+  },
+  "elapsedMs": 221188,
+  "settled": {
+    "occurrence": "source-unicode-reference-368-live-02f4eea9-a6ff-4ef4-9c35-2e35a9775d20",
+    "outcome": "settled",
+    "host": {
+      "pid": 71888,
+      "processInstanceID": "win32:639274431970780605",
+      "occurrenceID": "d4f2d70d-de17-4d9f-8a9d-e1f5de9a7626"
+    },
+    "target": {
+      "pid": 74156,
+      "processInstanceID": "win32:639274431979234849",
+      "occurrenceID": "9105655a-6307-49c3-a95e-2b7758ee13b2"
+    },
+    "observedAtUtc": "2026-10-12T23:10:19.111Z",
+    "deadlineAt": 1791846997062,
+    "terminal": {
+      "occurrenceID": "source-unicode-reference-368-live-02f4eea9-a6ff-4ef4-9c35-2e35a9775d20",
+      "pid": 74156,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "served": {
+    "level": "info",
+    "time": "2026-10-12T23:07:09.731Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "e1f94bed-9fad-4e5e-9200-909bdbab6c52",
+      "method": "GET",
+      "path": "/ui/assets/main-aBfB0VSj.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 7
+    },
+    "message": "request"
+  },
+  "boundary": "Real canonical Source and natural model messages retain exact authored Unicode paths and columns. Main/Side copy/current facts distinguished. Complete file bytes, production ToolOutcome output, provider streams and physical closure. No renderer, DOM or screenshot assertions; UI verification is manual."
+}
