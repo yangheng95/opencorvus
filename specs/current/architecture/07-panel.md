@@ -835,7 +835,41 @@ retain their original recorded values.
 The shared Message source schema validates HTTP and HTTPS URLs with the native
 URL validator. Malformed and other-protocol inputs produce a URL-format schema
 error; accepted URL strings and source metadata retain their recorded values.
-Source snippets belong to a separate native disclosure within each source
+Local search file sources retain the same bounded, inline-payload-redacted
+matching-line preview that appears in the Tool output. Short safe lines remain
+complete. Longer safe lines use the existing 2000 UTF-16 code-unit budget around
+the first reported ripgrep match span, with up to 40 preceding code units.
+Records without a reported span retain the bounded line prefix. Original
+byte coordinates are retained at the parser boundary, including for byte-encoded
+lines; the public find-text response keeps its original data shape and offsets.
+Full-line inline-payload redaction adjusts the match position through the same
+replacement pass before window selection, so a match inside omitted data points
+to its omission marker. Both window boundaries retain complete characters, and
+ordinary omission markers identify clipped ends. The resulting window passes
+through the same redactor before either Tool output or Source persistence, since
+cropping can expose a new binary-signature boundary within a longer token.
+The optional file snippet preserves its indentation and trailing whitespace
+through the canonical Source schema and persistence; source identity remains
+path/range/symbol based. Other file producers and historical Parts only carry
+the facts they actually supplied, without a presentation-time file read.
+Single-line sources may also carry a positive, one-based UTF-16 `startColumn`
+from the original first match. It is independent of redacted or cropped preview
+coordinates and participates in source identity. Byte spans inside a UTF-8
+decoding unit point to that displayed character's beginning. The canonical
+Source range is also the SDK, workbench and editor range contract; Markdown
+`path:line:column` references retain their parsed column through that same path.
+Navigation retains the column through repeated and hidden-editor reveals,
+clamping to current line content and complete surrogate boundaries. Line-only
+and multiline sources retain their existing line reveal semantics. Source
+navigation completes at the clamped location when a file has become shorter;
+the file pane owns content-loading readiness, while later draft edits retain
+the user's cursor. An out-of-range historical line is not a loading signal.
+Full source locations include a supplied column; compact badges show columns beyond one.
+File tooltips expose this preview on pointer hover or keyboard focus, with a
+localized excerpt label and four-line visual limit. Exact file/range activation
+provides the full original content. This preview keeps the compact citation row;
+it does not add a separate excerpt action to every file match.
+Web source snippets belong to a separate native disclosure within each source
 entry. Its normal page reading region retains the complete text and
 supports native keyboard and pointer scrolling.
 Its text uses the body typography role, while the excerpt action and source
@@ -921,6 +955,8 @@ require a path prefix or a declared file extension with a directory separator
 or cited line. Unprefixed slash-delimited concepts and MIME types remain code
 prose. Rooted Windows drive paths
 retain their drive and either separator through the same reference grammar.
+Path tokens accept Unicode letters, numbers and combining marks, preserving
+the authored character sequence through the existing file-reference attributes.
 Bare filenames remain code
 prose; explicit Markdown file links retain their authored destinations.
 Parsing and highlighting occur

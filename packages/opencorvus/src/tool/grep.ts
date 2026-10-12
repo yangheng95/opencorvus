@@ -15,6 +15,7 @@ import { redactInlinePayloads } from "../util/inline-base64"
 import { activeExecutionCapsuleRuntimeFact } from "@/execution-capsule/runtime"
 
 const MAX_LINE_LENGTH = 2000
+const MATCH_CONTEXT_BEFORE = 40
 const MAX_BATCH_ARGUMENT_CHARACTERS = 12_000
 const MAX_INCLUDE_PATTERN_LENGTH = 4096
 const MAX_INCLUDE_EXPANSIONS = 256
@@ -236,7 +237,7 @@ export const SearchCodeTool = Tool.define("search_code", {
       "--glob",
       "!**/.git/**",
     ]
-    const matches: Array<{ path: string; modTime: number; lineNum: number; lineText: string }> = []
+    const matches: Array<{ path: string; modTime: number; lineNum: number; lineText: string; matchOffset: number; startColumn?: number }> = []
 
     for (const targets of searchTargets) {
       const result = await run([...searchArgs, ...targets])
@@ -257,21 +258,30 @@ export const SearchCodeTool = Tool.define("search_code", {
         partialErrorDetail ||= errorOutput
       }
 
-      let results: Ripgrep.Match["data"][]
+      let results: Ripgrep.ParsedMatch[]
       try {
         results = Ripgrep.parseSearchOutput(output)
       } catch (cause) {
         throw executionError(cause)
       }
-      for (const result of results) {
+      for (const { data: result, lineBytes } of results) {
         const stats = Filesystem.stat(result.path.text)
         if (!stats) continue
-
+        const firstMatch = result.submatches[0]
+        const byteOffset = firstMatch?.start ?? 0
+        const prefix = lineBytes.subarray(0, byteOffset).toString("utf8")
+        const suffix = lineBytes.subarray(byteOffset).toString("utf8")
+        // Splitting a UTF-8 decoding unit flushes a replacement character at
+        // the end of the prefix. Anchor that unit at its displayed beginning.
+        const matchOffset = prefix.length - (prefix + suffix === result.lines.text ? 0 : 1)
+        const lineText = result.lines.text.replace(/\r?\n$/, "")
         matches.push({
           path: result.path.text,
           modTime: stats.mtime.getTime(),
           lineNum: result.line_number,
-          lineText: result.lines.text.replace(/\r?\n$/, ""),
+          lineText,
+          matchOffset,
+          ...(firstMatch ? { startColumn: Math.min(matchOffset, lineText.length) + 1 } : {}),
         })
       }
     }
@@ -291,9 +301,26 @@ export const SearchCodeTool = Tool.define("search_code", {
 
     const totalMatches = matches.length
     const outputLines: string[] = [`Found ${totalMatches} matches${truncated ? ` (showing first ${limit})` : ""}`]
+    const presentedMatches = finalMatches.map((match) => {
+      let matchOffset = match.matchOffset
+      const lineText = redactInlinePayloads(match.lineText, (start, end, replacement) => {
+        if (matchOffset >= end) matchOffset += replacement.length - (end - start)
+        else if (matchOffset >= start) matchOffset = start
+      })
+      let start = lineText.length > MAX_LINE_LENGTH ? Math.max(0, matchOffset - MATCH_CONTEXT_BEFORE) : 0
+      const first = lineText.charCodeAt(start)
+      const previous = lineText.charCodeAt(start - 1)
+      if (first >= 0xdc00 && first <= 0xdfff && previous >= 0xd800 && previous <= 0xdbff) start--
+      let end = Math.min(lineText.length, start + MAX_LINE_LENGTH)
+      const last = lineText.charCodeAt(end - 1)
+      const next = lineText.charCodeAt(end)
+      if (last >= 0xd800 && last <= 0xdbff && next >= 0xdc00 && next <= 0xdfff) end--
+      const text = (start > 0 ? "..." : "") + lineText.slice(start, end) + (end < lineText.length ? "..." : "")
+      return { ...match, snippet: redactInlinePayloads(text) }
+    })
 
     let currentFile = ""
-    for (const match of finalMatches) {
+    for (const match of presentedMatches) {
       if (currentFile !== match.path) {
         if (currentFile !== "") {
           outputLines.push("")
@@ -301,9 +328,7 @@ export const SearchCodeTool = Tool.define("search_code", {
         currentFile = match.path
         outputLines.push(`${match.path}:`)
       }
-      const truncatedLineText =
-        match.lineText.length > MAX_LINE_LENGTH ? match.lineText.substring(0, MAX_LINE_LENGTH) + "..." : match.lineText
-      outputLines.push(`  Line ${match.lineNum}: ${truncatedLineText}`)
+      outputLines.push(`  Line ${match.lineNum}: ${match.snippet}`)
     }
 
     if (truncated) {
@@ -325,9 +350,14 @@ export const SearchCodeTool = Tool.define("search_code", {
         truncated,
       },
       output: redactInlinePayloads(outputLines.join("\n")),
-      sources: finalMatches.map((match) => fileSource({
+      sources: presentedMatches.map((match) => fileSource({
         path: match.path,
-        range: { startLine: match.lineNum, endLine: match.lineNum },
+        range: {
+          startLine: match.lineNum,
+          endLine: match.lineNum,
+          ...(match.startColumn === undefined ? {} : { startColumn: match.startColumn }),
+        },
+        snippet: match.snippet,
         provider: "opencorvus-search-code",
       })),
     }

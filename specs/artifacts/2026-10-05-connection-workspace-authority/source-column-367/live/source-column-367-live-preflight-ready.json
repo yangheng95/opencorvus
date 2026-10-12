@@ -1,0 +1,22 @@
+{
+  "pid": 65140,
+  "owner": {
+    "pid": 65140,
+    "processInstanceID": "win32:639274423899145677",
+    "occurrenceID": "877f5d77-05e3-4159-bc9b-3fa095478602"
+  },
+  "occurrence": "source-column-367-live-c67c508c-b546-44fe-ad34-b1d3a29a503a",
+  "port": 18368,
+  "preflight": {
+    "sessionID": "ses_h5QOcc1OTjw733QXMwGm",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 12,
+  "qualificationKind": "NativeService",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-manual-conversation",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

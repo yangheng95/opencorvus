@@ -148,14 +148,162 @@ function matchOutput(filename: string, text: string): string {
   } }) + "\n"
 }
 
-function expectedSearchSource(filename: string, line: number) {
+function expectedSearchSource(filename: string, line: number, snippet: string, startColumn?: number) {
   return {
     type: "source-file", sourceId: expect.any(String), path: filename, title: path.basename(filename),
-    range: { startLine: line, endLine: line }, provider: "opencorvus-search-code",
+    range: { startLine: line, endLine: line, ...(startColumn === undefined ? {} : { startColumn }) }, provider: "opencorvus-search-code", snippet,
   }
 }
 
 describe("search_code bounded execution", () => {
+  test.each([
+    { name: "unicode", bytes: Buffer.from("before中😀NEEDLE"), pattern: "NEEDLE", line: 1, column: 10 },
+    { name: "invalid-prefix", bytes: Buffer.concat([Buffer.from([255, 255]), Buffer.from("中😀NEEDLE")]), pattern: "NEEDLE", line: 1, column: 6 },
+    { name: "inside-codepoint", bytes: Buffer.from("beforeé suffix"), pattern: "(?-u:\\xA9)", line: 1, column: 7 },
+    { name: "inside-replacement", bytes: Buffer.concat([Buffer.from("before"), Buffer.from([0xe1, 0x80]), Buffer.from(" suffix")]), pattern: "(?-u:\\x80)", line: 1, column: 7 },
+    { name: "crlf", bytes: Buffer.from("header\r\nbefore中😀NEEDLE\r\n"), pattern: "NEEDLE", line: 2, column: 10 },
+  ])("publishes the displayed character column of a real $name match", async ({ name, bytes, pattern, line, column }) => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, `${name}.md`)
+      await fs.writeFile(filename, bytes)
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Exact source column" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern, path: filename }, context))
+      expect(result.sources).toEqual([{
+        type: "source-file", sourceId: expect.any(String), path: filename, title: path.basename(filename),
+        range: { startLine: line, endLine: line, startColumn: column }, provider: "opencorvus-search-code",
+        snippet: expect.any(String),
+      }])
+    } })
+  })
+
+  test("previews a late real regex match with complete Unicode window boundaries", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "late-unicode-match.md")
+      const contextText = "😀" + "文".repeat(39)
+      await fs.writeFile(filename, "p".repeat(2400) + contextText + "MATCH366" + "后".repeat(1950) + "😀 tail\n")
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Late regex match" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH[0-9]+", path: filename }, context))
+      const preview = "..." + contextText + "MATCH366" + "后".repeat(1950) + "..."
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview, 2442)],
+      })
+    } })
+  })
+
+  test("locates a late match from original invalid UTF-8 bytes before displaying its text", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "late-byte-match.md")
+      const tail = "界".repeat(40) + "MATCH366  after"
+      await fs.writeFile(filename, Buffer.concat([Buffer.alloc(2400, 255), Buffer.from(tail)]))
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Late byte match" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH366", path: filename }, context))
+      const preview = "..." + tail
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview, 2441)],
+      })
+    } })
+  })
+
+  test("preserves bounded line context when a real zero-width search reports no submatch span", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "line-end-match.md")
+      await fs.writeFile(filename, "begin" + "文".repeat(2500))
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Line end match" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "$", path: filename }, context))
+      const preview = "begin" + "文".repeat(1995) + "..."
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview)],
+      })
+    } })
+  })
+
+  test("represents a late match inside a complete inline payload with its omission marker", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "payload-window.md")
+      await fs.writeFile(filename, "data:text/plain;base64," + "A".repeat(3000) + "TUFUQ0gzNjY=")
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Payload match window" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "TUFUQ0gzNjY", path: filename }, context))
+      const preview = "inline_binary_omitted(kind=data_url offset=0 media=text/plain payload_chars=3012)"
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview, 3024)],
+      })
+    } })
+  })
+
+  test("keeps a real late match aligned after an earlier payload is redacted", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "match-after-payload.md")
+      const tail = "文".repeat(40) + "MATCH366末尾"
+      await fs.writeFile(filename, "d".repeat(2300) + " data:text/plain;base64,YQ== " + tail)
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Match after payload" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH366", path: filename }, context))
+      const preview = "..." + tail
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview, 2370)],
+      })
+    } })
+  })
+
+  test("publishes one safe preview when cropping exposes a binary signature in a base64 token", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "cropped-binary-token.md")
+      const header = Buffer.from("%PDF-1.7\n" + "x".repeat(21)).toString("base64")
+      await fs.writeFile(filename, "YWJj".repeat(600) + header + "MATCH366" + "YWFh".repeat(600))
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Safe cropped token" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "MATCH366", path: filename }, context))
+      const preview = "...inline_binary_omitted(kind=raw_base64 offset=3 reason=binary_magic payload_chars=2000)..."
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview, 2441)],
+      })
+    } })
+  })
+
+  test("publishes the same complete-character bounded line in tool output and source preview", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "unicode-preview.md")
+      const marker = "preview-364"
+      const prefix = marker + "文".repeat(1999 - marker.length)
+      await fs.writeFile(filename, `${prefix}😀 tail\n`)
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Unicode source preview" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: marker, path: filename }, context))
+      const preview = `${prefix}...`
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview, 1)],
+      })
+    } })
+  })
+
+  test("publishes the sanitized matching line as the durable source preview", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "payload-preview.md")
+      const marker = "preview-364"
+      await fs.writeFile(filename, `${marker} data:text/plain;base64,YQ== tail\n`)
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Safe source preview" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: marker, path: filename }, context))
+      const preview = `${marker} inline_binary_omitted(kind=data_url offset=12 media=text/plain payload_chars=4) tail`
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Line 1: ${preview}`,
+        sources: [expectedSearchSource(filename, 1, preview, 1)],
+      })
+    } })
+  })
+
   test("preserves Unicode paths and the exact trailing whitespace of a real final matching line", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
@@ -169,7 +317,7 @@ describe("search_code bounded execution", () => {
       expect(result).toEqual({
         title: marker, metadata: { matches: 1, truncated: false },
         output: `Found 1 matches\n${filename}:\n  Line 2: ${line}`,
-        sources: [expectedSearchSource(filename, 2)],
+        sources: [expectedSearchSource(filename, 2, line, 1)],
       })
     } })
   })
@@ -184,7 +332,7 @@ describe("search_code bounded execution", () => {
       const shown = Math.min(count, 100)
       expect({ metadata: result.metadata, sources: result.sources }).toEqual({
         metadata: { matches: count, truncated: count > 100 },
-        sources: Array.from({ length: shown }, (_, index) => expectedSearchSource(filename, 2 + index * 2)),
+        sources: Array.from({ length: shown }, (_, index) => expectedSearchSource(filename, 2 + index * 2, `source-lines-319 ${index}`, 1)),
       })
     } })
   })
@@ -216,7 +364,7 @@ describe("search_code bounded execution", () => {
           title: marker,
           metadata: { matches: 1, truncated: false },
           output: [`Found 1 matches`, `${visible}:`, `  Line 1: ${marker}`].join("\n"),
-          sources: [expectedSearchSource(visible, 1)],
+          sources: [expectedSearchSource(visible, 1, marker, 1)],
         })
       },
     })
@@ -264,13 +412,13 @@ describe("search_code bounded execution", () => {
               `${rootTypeScript}:`,
               `  Line 1: ${marker}`,
             ].join("\n"),
-            sources: [expectedSearchSource(nestedTypeScript, 1), expectedSearchSource(rootTypeScript, 1)],
+            sources: [expectedSearchSource(nestedTypeScript, 1, marker, 1), expectedSearchSource(rootTypeScript, 1, marker, 1)],
           },
           nestedTypeScriptOnly: {
             title: marker,
             metadata: { matches: 1, truncated: false },
             output: [`Found 1 matches`, `${nestedTypeScript}:`, `  Line 1: ${marker}`].join("\n"),
-            sources: [expectedSearchSource(nestedTypeScript, 1)],
+            sources: [expectedSearchSource(nestedTypeScript, 1, marker, 1)],
           },
         })
       },
@@ -340,7 +488,7 @@ describe("search_code bounded execution", () => {
                 "",
                 "(Some paths were inaccessible and skipped)",
               ].join("\n"),
-              sources: [expectedSearchSource(visible, 1)],
+              sources: [expectedSearchSource(visible, 1, marker)],
             },
             multipleContentBatches: true,
             argumentBounds: contentCalls.map(() => true),

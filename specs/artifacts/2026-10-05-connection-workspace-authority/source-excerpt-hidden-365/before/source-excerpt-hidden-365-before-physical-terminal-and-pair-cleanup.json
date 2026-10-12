@@ -1,0 +1,68 @@
+{
+  "pairedCleanupComplete": true,
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "source-excerpt-hidden-365-before-b8420c05-8448-4db8-8be9-870f92f6a0fa",
+    "outcome": "settled",
+    "host": {
+      "pid": 79284,
+      "processInstanceID": "win32:639274387314348454",
+      "occurrenceID": "eb7b2d2b-77ce-4555-a774-a219b04e07c8"
+    },
+    "target": {
+      "pid": 72504,
+      "processInstanceID": "win32:639274387321625957",
+      "occurrenceID": "20317a1a-9b42-4a2f-afbb-aafecbb622c5"
+    },
+    "observedAtUtc": "2026-10-12T21:56:12.84Z",
+    "deadlineAt": 1791842531337,
+    "terminal": {
+      "occurrenceID": "source-excerpt-hidden-365-before-b8420c05-8448-4db8-8be9-870f92f6a0fa",
+      "pid": 72504,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 72504,
+        "processInstanceID": "win32:639274387321625957",
+        "occurrenceID": "20317a1a-9b42-4a2f-afbb-aafecbb622c5"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 79284,
+        "processInstanceID": "win32:639274387314348454",
+        "occurrenceID": "eb7b2d2b-77ce-4555-a774-a219b04e07c8"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-excerpt-hidden-365-before\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-excerpt-hidden-365-before\\runtime\\data\\models.json",
+      "copiedLength": 2001983
+    }
+  ],
+  "observedAtUtc": "2026-10-12T21:56:15.3584185Z",
+  "physicalCompletion": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "occurrence": "source-excerpt-hidden-365-before-b8420c05-8448-4db8-8be9-870f92f6a0fa"
+}

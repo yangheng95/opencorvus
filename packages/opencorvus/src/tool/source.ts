@@ -36,18 +36,22 @@ export function urlSource(input: {
 export function fileSource(input: {
   path: string
   title?: string
+  snippet?: string
   origin?: Message.SourceFilePayload["origin"]
-  range?: { startLine: number; endLine: number }
+  range?: Message.SourceFilePayload["range"]
   symbol?: string
   provider?: string
 }): Message.SourceFilePayload {
   const absolutePath = path.resolve(input.path)
-  const rangeIdentity = input.range ? `${input.range.startLine}:${input.range.endLine}` : ""
+  const rangeIdentity = input.range
+    ? `${input.range.startLine}:${input.range.endLine}${input.range.startColumn === undefined ? "" : `:${input.range.startColumn}`}`
+    : ""
   return {
     type: "source-file",
     sourceId: semanticSourceId("source-file", `${absolutePath}\0${rangeIdentity}\0${input.symbol ?? ""}`),
     path: absolutePath,
     title: input.title?.trim() ? input.title : path.basename(absolutePath),
+    ...(input.snippet !== undefined ? { snippet: input.snippet } : {}),
     ...(input.origin ? { origin: input.origin } : {}),
     ...(input.range ? { range: input.range } : {}),
     ...(input.symbol?.trim() ? { symbol: input.symbol.trim() } : {}),

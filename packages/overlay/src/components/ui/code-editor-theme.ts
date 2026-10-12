@@ -19,11 +19,7 @@ import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { RangeSetBuilder, StateEffect, StateField, type Extension } from "@codemirror/state"
 import { Decoration, EditorView, type DecorationSet } from "@codemirror/view"
 import { tags } from "@lezer/highlight"
-
-export interface CodeEditorLineRange {
-  startLine: number
-  endLine: number
-}
+import type { SourceFileRange } from "@opencorvus-ai/sdk"
 
 /** Where a reveal should land once the document is known. */
 export interface CodeEditorRevealTarget {
@@ -31,12 +27,6 @@ export interface CodeEditorRevealTarget {
   anchorLine: number
   /** 1-based last line of the cited range, clamped to the document. */
   endLine: number
-  /**
-   * Whether the document already contains the cited start line. A reveal
-   * computed against a document that is still loading is deliberately *not*
-   * final, so the caller must re-run it — never latch it — once text arrives.
-   */
-  settled: boolean
 }
 
 // A whole-file citation (a plain `read` of a short file cites lines 1..N) points
@@ -51,7 +41,7 @@ const REVEAL_HIGHLIGHT_LINE_LIMIT = 400
  */
 export function resolveRevealTarget(
   documentLines: number,
-  range: CodeEditorLineRange | undefined,
+  range: SourceFileRange | undefined,
 ): CodeEditorRevealTarget | null {
   if (!range || !Number.isInteger(documentLines) || documentLines < 1) return null
   const { startLine, endLine } = range
@@ -60,7 +50,6 @@ export function resolveRevealTarget(
   return {
     anchorLine: Math.min(startLine, documentLines),
     endLine: Math.min(endLine, documentLines),
-    settled: startLine <= documentLines,
   }
 }
 

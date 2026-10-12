@@ -3154,3 +3154,15 @@ The current connection-workspace authority record also includes metadata selecti
 - [Sources与持续输出362](artifacts/2026-10-05-connection-workspace-authority/source-stream-362/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-stream-plan-362.md)。
 
 - [折叠历史与来源读点363](artifacts/2026-10-05-connection-workspace-authority/closed-history-363/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/closed-history-plan-363.md)。
+
+- [文件来源匹配行预览364](artifacts/2026-10-05-connection-workspace-authority/source-preview-364/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-preview-plan-364.md)。
+
+- [折叠历史与来源摘要365](records/2026-10/2026-10-13-source-excerpt-hidden-365.md)：真实长摘要读点与隔离复核，未证实新缺陷。
+
+- [超长搜索行命中窗口366](records/2026-10/2026-10-13-source-match-window-366.md)：真实匹配位置、完整字符及一致安全片段。
+
+- [文件来源精确列定位367](records/2026-10/2026-10-13-source-column-367.md)：统一列事实、长行打开与真实验收边界。
+
+- [Unicode文件引用368](records/2026-10/2026-10-13-source-unicode-reference-368.md)：中文及组合字符代码引用的真实导航。
+
+- [历史来源与短文件光标369](records/2026-10/2026-10-13-source-shortened-file-369.md)：实页复现并修复越界引用抢回输入光标。

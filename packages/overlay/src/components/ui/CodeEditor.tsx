@@ -1,4 +1,5 @@
 import { Compartment, EditorSelection } from "@codemirror/state"
+import type { SourceFileRange } from "@opencorvus-ai/sdk"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
 import { t } from "../../utils/i18n"
@@ -12,7 +13,6 @@ import {
   resolveRevealTarget,
   revealHighlightLines,
   revealLinesEffect,
-  type CodeEditorLineRange,
 } from "./code-editor-theme"
 
 export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
@@ -20,7 +20,7 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   path: string
   ariaLabel: string
   onValueChange: (value: string) => void
-  lineRange?: CodeEditorLineRange
+  lineRange?: SourceFileRange
   lineRangeRevealRevision?: number
   readOnly?: boolean
   class?: string
@@ -52,7 +52,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
 
   const revealIdentity = () => {
     const range = local.lineRange
-    return [local.path, range?.startLine ?? "", range?.endLine ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
+    return [local.path, range?.startLine ?? "", range?.endLine ?? "", range?.startColumn ?? "", local.lineRangeRevealRevision ?? 0].join("\0")
   }
 
   /**
@@ -62,12 +62,11 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
    * `startLine`..`endLine` turned the common whole-file citation (a plain
    * `read` cites lines 1..N) into "select the entire document", which is
    * indistinguishable from no jump at all, so the cursor lands on the start
-   * line and the range is banded instead.
+   * line (and supplied column) and the range is banded instead.
    *
-   * The reveal is recorded as done only once the document actually holds the
-   * cited line. Latching earlier is what made jumps vanish: a reveal computed
-   * while the file was still loading clamped onto line 1 of an empty document
-   * and then refused to run again when the text finally arrived.
+   * The file pane mounts this editor after content loading completes. An old
+   * citation may exceed a file's current length; its clamped location still
+   * completes this navigation, allowing subsequent input to keep its cursor.
    */
   const revealLineRange = () => {
     const editor = view
@@ -85,7 +84,12 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     // visible. Keep that request unsettled until real layout can scroll and
     // focus it; the host observer retries this same current request.
     if (!host?.clientWidth || !host.clientHeight || host.closest("[inert], [hidden]")) return
-    const anchor = editor.state.doc.line(target.anchorLine).from
+    const line = editor.state.doc.line(target.anchorLine)
+    let column = Math.min((range.startColumn ?? 1) - 1, line.length)
+    const unit = line.text.charCodeAt(column)
+    const previous = line.text.charCodeAt(column - 1)
+    if (unit >= 0xdc00 && unit <= 0xdfff && previous >= 0xd800 && previous <= 0xdbff) column--
+    const anchor = line.from + column
     editor.dispatch({
       selection: EditorSelection.cursor(anchor),
       effects: [
@@ -97,7 +101,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     // scroll effect would otherwise resolve against a zero-height scroller.
     editor.requestMeasure()
     editor.focus()
-    if (target.settled) revealedIdentity = identity
+    revealedIdentity = identity
   }
 
   const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
@@ -200,14 +204,14 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     applyingExternalValue = false
   })
 
-  // Declared after the value effect so a reveal always runs against the text
-  // that effect has already applied — tracking `value` is what lets a citation
-  // that arrived before its file content still land on the cited line.
+  // Apply navigation against the synchronized value. A completed reveal keeps
+  // its identity through later draft edits, so typing owns the cursor again.
   createEffect(() => {
     void local.path
     void local.value
     void local.lineRange?.startLine
     void local.lineRange?.endLine
+    void local.lineRange?.startColumn
     void local.lineRangeRevealRevision
     revealOnLayout.schedule()
   })

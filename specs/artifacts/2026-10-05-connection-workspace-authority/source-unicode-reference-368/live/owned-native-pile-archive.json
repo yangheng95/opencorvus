@@ -1,0 +1,44 @@
+{
+  "targetBirthUtc": "2026-10-12T23:06:37.9234849Z",
+  "files": [
+    {
+      "name": "091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "birthUtc": "2026-10-12T23:06:38.7242497Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-unicode-reference-368\\generated-bun-live\\091d165574530ade.debug.pile"
+    },
+    {
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "birthUtc": "2026-10-12T23:06:38.7001661Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-unicode-reference-368\\generated-bun-live\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "birthUtc": "2026-10-12T23:06:38.6755836Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-unicode-reference-368\\generated-bun-live\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "birthUtc": "2026-10-12T23:06:38.6811027Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-unicode-reference-368\\generated-bun-live\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "name": "f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "birthUtc": "2026-10-12T23:06:38.7418006Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-unicode-reference-368\\generated-bun-live\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0.",
+  "nativeTerminal": {
+    "occurrenceID": "source-unicode-reference-368-live-02f4eea9-a6ff-4ef4-9c35-2e35a9775d20",
+    "pid": 74156,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "observedAtUtc": "2026-10-12T23:10:35.9570054Z"
+}

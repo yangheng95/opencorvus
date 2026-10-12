@@ -1253,6 +1253,31 @@ button.msg-source-chip .msg-source-chip__filename {
   display: none;
 }
 
+.msg-source-tooltip__preview {
+  display: grid;
+  gap: var(--ui-gap-xs);
+  padding-top: var(--ui-gap-xs);
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.msg-source-tooltip__preview > span {
+  color: var(--text-muted);
+}
+
+.msg-source-tooltip__preview > pre {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-soft);
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* ─────────────────────────────────────────────────────────────
    Extracted from styles.css 2026-05-04: chat-message accessory
    chrome (msg-patch chip, msg-tool-* chrome)

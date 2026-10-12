@@ -38,7 +38,7 @@ export type ConversationSourcePart = {
   mediaType?: string
   filename?: string
   origin?: SourceFilePart["origin"]
-  range?: { startLine: number; endLine: number }
+  range?: SourceFilePart["range"]
 }
 
 export function isConversationSourcePart(part: any): part is ConversationSourcePart {
@@ -57,7 +57,7 @@ function sourceDirectory(): string {
 function fileSourceLocation(label: string, range: ConversationSourcePart["range"]): string {
   if (!range) return label
   const lines = range.startLine === range.endLine ? `${range.startLine}` : `${range.startLine}-${range.endLine}`
-  return `${label}:${lines}`
+  return `${label}:${lines}${range.startColumn === undefined ? "" : `:${range.startColumn}`}`
 }
 
 /** Decode visible international URL text without changing encoded ASCII structure. */
@@ -196,6 +196,14 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
       <Show when={sourceDetail(props.source) !== sourceLabel(props.source)}>
         <span>{sourceDetail(props.source)}</span>
       </Show>
+      <Show when={props.source.type === "source-file" && props.source.snippet}>
+        {(snippet) => (
+          <div class="msg-source-tooltip__preview">
+            <span>{t("chat.source_excerpt")}</span>
+            <pre>{snippet()}</pre>
+          </div>
+        )}
+      </Show>
       <span title={[props.source.publishedAt, props.source.provider].filter(Boolean).join(" · ") || undefined}>
         {[props.source.author, sourcePublishedDate(props.source.publishedAt), sourceProviderLabel(props.source.provider)].filter(Boolean).join(" · ")}
       </span>
@@ -209,6 +217,9 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   const fileRange = () => {
     const range = props.source.range
     if (!range) return ""
+    if (range.startColumn !== undefined && range.startColumn > 1) {
+      return t("chat.source_line_column", { line: range.startLine, column: range.startColumn })
+    }
     return range.startLine === range.endLine
       ? t("chat.source_line", { line: range.startLine })
       : t("chat.source_lines", { start: range.startLine, end: range.endLine })
@@ -363,6 +374,7 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
 }
 
 function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
+  const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)
   const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
   const expanded = () => cardExpanded(excerptKey(), false)
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
@@ -382,7 +394,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   })
 
   return (
-    <div class="msg-source-entry" data-has-excerpt={props.source.snippet ? "true" : undefined}>
+    <div class="msg-source-entry" data-has-excerpt={expandableExcerpt() ? "true" : undefined}>
       <div
         class="msg-source-entry__row"
         data-source-identity={sourceIdentity(props.source)}
@@ -414,7 +426,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
       <Show when={clipboard.failure()}>
         {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
       </Show>
-      <Show when={Boolean(props.source.snippet)}>
+      <Show when={expandableExcerpt()}>
         <Disclosure.Root
           class="msg-source-excerpt"
           open={expanded()}

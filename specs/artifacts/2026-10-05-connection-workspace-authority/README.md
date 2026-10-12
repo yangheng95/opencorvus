@@ -799,3 +799,15 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Sources与持续输出362](source-stream-362/README.md) / [Recall](source-stream-plan-362.md)。
 
 - [折叠历史与来源读点363](closed-history-363/README.md) / [Recall](closed-history-plan-363.md)。
+
+- [文件来源匹配行预览364](source-preview-364/README.md) / [Recall](source-preview-plan-364.md)。
+
+- [折叠历史与来源摘要365](source-excerpt-hidden-365/README.md) / [Recall](source-excerpt-hidden-plan-365.md)。
+
+- [超长搜索行命中窗口366](source-match-window-366/README.md) / [Recall](source-match-window-plan-366.md)。
+
+- [文件来源精确列定位367](source-column-367/README.md) / [Recall](source-column-plan-367.md)。
+
+- [Unicode文件引用368](source-unicode-reference-368/README.md) / [Recall](source-unicode-reference-plan-368.md)。
+
+- [历史来源与短文件光标369](source-shortened-file-369/README.md) / [Recall](source-shortened-file-plan-369.md)。

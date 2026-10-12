@@ -14,7 +14,21 @@ test("JSON file identities retain separators, line breaks and Unicode as one pro
     path: { text: "search|目录\nquoted-\"name\".txt" }, lines: { text: "needle | value  \t  \n" }, line_number: 1, absolute_offset: 0,
     submatches: [{ match: { text: "needle" }, start: 0, end: 6 }],
   }
-  expect(Ripgrep.parseSearchOutput(JSON.stringify({ type: "match", data: expected }))).toEqual([expected])
+  expect(Ripgrep.parseSearchOutput(JSON.stringify({ type: "match", data: expected }))).toEqual([
+    { data: expected, lineBytes: Buffer.from(expected.lines.text) },
+  ])
+})
+
+test("decoded content retains the original byte coordinates of a match after invalid UTF-8", () => {
+  const lineBytes = Buffer.concat([Buffer.from([255, 255]), Buffer.from("中😀 needle\n")])
+  const data = {
+    path: { text: "bytes.txt" }, lines: { bytes: lineBytes.toString("base64") }, line_number: 1, absolute_offset: 0,
+    submatches: [{ match: { text: "needle" }, start: 10, end: 16 }],
+  }
+  expect(Ripgrep.parseSearchOutput(JSON.stringify({ type: "match", data }))).toEqual([{
+    data: { ...data, lines: { text: "\uFFFD\uFFFD中😀 needle\n" } },
+    lineBytes,
+  }])
 })
 
 test("actual host search decodes byte-encoded line content while preserving its Unicode file identity", async () => {

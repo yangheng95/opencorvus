@@ -296,10 +296,15 @@ export namespace Message {
     .object({
       startLine: z.number().int().positive(),
       endLine: z.number().int().positive(),
+      startColumn: z.number().int().positive().describe("1-based UTF-16 column within a single-line source").optional(),
     })
     .refine((value) => value.endLine >= value.startLine, {
       message: "source file range endLine must be greater than or equal to startLine",
       path: ["endLine"],
+    })
+    .refine((value) => value.startColumn === undefined || value.startLine === value.endLine, {
+      message: "source file range startColumn requires a single-line range",
+      path: ["startColumn"],
     })
     .meta({ ref: "SourceFileRange" })
 
@@ -309,6 +314,7 @@ export namespace Message {
       sourceId: z.string().trim().min(1),
       path: z.string().min(1),
       title: z.string().min(1),
+      snippet: z.string().optional(),
       origin: z.literal("attachment").optional(),
       range: SourceFileRange.optional(),
       symbol: z.string().trim().min(1).optional(),
@@ -1349,7 +1355,9 @@ export namespace Message {
               type: "text",
               text: `<source-file path=${JSON.stringify(part.path)}${
                 part.range
-                  ? ` start-line=${JSON.stringify(part.range.startLine)} end-line=${JSON.stringify(part.range.endLine)}`
+                  ? ` start-line=${JSON.stringify(part.range.startLine)} end-line=${JSON.stringify(part.range.endLine)}${
+                      part.range.startColumn === undefined ? "" : ` start-column=${JSON.stringify(part.range.startColumn)}`
+                    }`
                   : ""
               } />`,
             })
