@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [334 PDF来源文字选择](pdf-selection-plan-334.md)：复用当前阅读器支持原文选择。
+
 - [333 空文本来源与附件预览](text-preview-empty-plan-333.md)：区分成功空内容和正在加载。
 
 - [332 PDF文件来源阅读](pdf-source-plan-332.md)：复用已有阅读器查看真实PDF来源。

@@ -53,6 +53,15 @@ restores them after the current-width page paint and layout animation settle.
 Changing the document or page resets that local position. PDF and CodeEditor
 share the existing finite ancestor-animation decision through the animation
 utility; no global PDF history or conversation-follow controller is introduced.
+The same page render also owns PDF.js TextLayer from that page's streamed text
+content. Its display viewport shares the canvas page geometry independently of
+canvas pixel density. Local transparent text styles enable native selection and
+copy, including the library's rotation and user-unit dimensions. Only actual
+text runs are selectable; the positioned layer's blank container cannot begin
+a selection through unrelated PDF content-order nodes. Replacing a
+page, zoom, width or source cancels both render tasks and removes the old text
+nodes; read-position restoration waits for both current layers. There is no
+second PDF parser, server text copy or optical character recognition path.
 
 Text file-preview Artifacts use the existing resource's ready state to admit
 CodeEditor. Successfully loaded zero-byte text is valid content and displays the

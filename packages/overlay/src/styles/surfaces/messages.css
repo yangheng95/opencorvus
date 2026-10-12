@@ -1691,11 +1691,75 @@ button.msg-source-chip .msg-source-chip__detail,
   text-align: center;
 }
 
+.msg-artifact-pdf__page {
+  position: relative;
+  width: max-content;
+  margin-inline: auto;
+}
+
 .msg-artifact-pdf canvas {
   display: block;
   max-width: none;
-  margin-inline: auto;
   box-shadow: var(--shadow-md);
+}
+
+/* PDF.js TextLayer positions transparent text over its page canvas. */
+.msg-artifact-pdf__text-layer {
+  --scale-round-x: 1px;
+  --scale-round-y: 1px;
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  line-height: 1;
+  text-align: initial;
+  text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  z-index: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.msg-artifact-pdf__text-layer :is(span, br) {
+  position: absolute;
+  color: transparent;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0 0;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.msg-artifact-pdf__text-layer span.markedContent {
+  top: 0;
+  height: 0;
+}
+
+.msg-artifact-pdf__text-layer > :not(.markedContent),
+.msg-artifact-pdf__text-layer .markedContent span:not(.markedContent) {
+  z-index: 1;
+}
+
+.msg-artifact-pdf__text-layer ::selection {
+  color: transparent;
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.msg-artifact-pdf__text-layer br::selection {
+  background: transparent;
+}
+
+.msg-artifact-pdf__text-layer[data-main-rotation="90"] {
+  transform: rotate(90deg) translateY(-100%);
+}
+
+.msg-artifact-pdf__text-layer[data-main-rotation="180"] {
+  transform: rotate(180deg) translate(-100%, -100%);
+}
+
+.msg-artifact-pdf__text-layer[data-main-rotation="270"] {
+  transform: rotate(270deg) translateX(-100%);
 }
 
 .msg-artifact-map-shell {

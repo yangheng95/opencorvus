@@ -1,0 +1,49 @@
+{
+  "observedAt": "2026-10-12T03:59:34.677Z",
+  "typecheck": {
+    "handle": 20947,
+    "actualExit": 0
+  },
+  "builds": [
+    {
+      "handle": 9385,
+      "actualExit": 0,
+      "bundle": "main-NZiF0CMr.js"
+    },
+    {
+      "handle": 79980,
+      "actualExit": 0,
+      "bundle": "main-oIIjbHrA.js"
+    },
+    {
+      "handle": 56038,
+      "actualExit": 0,
+      "bundle": "main-BHcN3tvx.js"
+    }
+  ],
+  "launches": [
+    {
+      "handle": 85007,
+      "actualExit": 0
+    },
+    {
+      "handle": 57514,
+      "actualExit": 0
+    },
+    {
+      "handle": 16516,
+      "actualExit": 0
+    }
+  ],
+  "actualBackendCheckerExit": 0,
+  "docsCheckExit": 0,
+  "ownedTabsClosed": [
+    "115",
+    "116",
+    "117"
+  ],
+  "manuallyViewedAppScreenshots": 16,
+  "textEvidenceScanned": 113,
+  "credentialMatches": 0,
+  "boundary": "Actual joined handles and data checks. Screenshots include original failures, intermediate failures and final manual results; the count is not a claim that all screenshots passed."
+}

@@ -1,0 +1,50 @@
+{
+  "observedAt": "2026-10-12T03:59:34.110Z",
+  "runs": [
+    {
+      "stage": "01",
+      "providerRequests": 6,
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "artifactID": "art_g0VXnoRMr005dw6XRVfa",
+      "canonicalReferenceEqual": true,
+      "sourceFiles": 1,
+      "sourceTitle": ".opencorvus\\.r\\project\\attachments\\631de3db4d3b1f109604260e3c95f2f6ce28eef5e72f62ea85d23c9e294c395d\\7fb7ff656cdb85971e53920a81c604da203f039008500cf6cc34e38edb6371c5.pdf",
+      "sourceBytesEqualOriginal": true,
+      "nativeExit": 0,
+      "pairedCleanupComplete": true
+    },
+    {
+      "stage": "02",
+      "providerRequests": 6,
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "artifactID": "art_g0VXnq9Gg00GspeUtWa0",
+      "canonicalReferenceEqual": true,
+      "sourceFiles": 1,
+      "sourceTitle": ".opencorvus\\.r\\project\\attachments\\1799d4df25c2db697afbaa22a3243ae7f3eb9ee8681c23c2a1a0e1bc3b73dce6\\7fb7ff656cdb85971e53920a81c604da203f039008500cf6cc34e38edb6371c5.pdf",
+      "sourceBytesEqualOriginal": true,
+      "nativeExit": 0,
+      "pairedCleanupComplete": true
+    },
+    {
+      "stage": "03",
+      "providerRequests": 6,
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true,
+      "providerTerminal": "eof",
+      "artifactID": "art_g0VXnt4Zs00CisAxJASq",
+      "canonicalReferenceEqual": true,
+      "sourceFiles": 1,
+      "sourceTitle": "source-document.pdf",
+      "sourceBytesEqualOriginal": true,
+      "nativeExit": 0,
+      "pairedCleanupComplete": true
+    }
+  ],
+  "pdfBytes": 4472337,
+  "actualInputContract": "passed",
+  "boundary": "Positive checks over actual Provider, canonical publication/request/outcome ownership, original PDF bytes and physical completion. No selection, DOM, screenshot or UI assertions."
+}

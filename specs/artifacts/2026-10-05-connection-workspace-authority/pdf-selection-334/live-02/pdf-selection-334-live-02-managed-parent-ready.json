@@ -1,0 +1,15 @@
+{
+  "pid": 70052,
+  "occurrence": "pdf-selection-334-live-02-71b91783-2a54-478b-ae34-30fef2c9003d",
+  "owner": {
+    "pid": 70052,
+    "processInstanceID": "win32:639273728658775429",
+    "occurrenceID": "1607d188-ce1e-4b18-a40b-f5518adebce2"
+  },
+  "parent": {
+    "pid": 3576,
+    "processInstanceID": "win32:639273728658345482",
+    "occurrenceID": "bc2971b3-d553-4360-8ed4-337350ac258f"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

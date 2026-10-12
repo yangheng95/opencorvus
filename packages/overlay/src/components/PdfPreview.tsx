@@ -12,6 +12,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker
 
 export function PdfPreview(props: { url: string; label: string; class?: string }) {
   let canvas: HTMLCanvasElement | undefined
+  let pageHost: HTMLDivElement | undefined
+  let textHost: HTMLDivElement | undefined
   let viewportHost: HTMLDivElement | undefined
   let resizeObserver: ResizeObserver | undefined
   const [page, setPage] = createSignal(1)
@@ -88,6 +90,7 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
       canvas.width = 0
       canvas.height = 0
     }
+    textHost?.replaceChildren()
     if (!url) return
     const loadingTask = pdfjs.getDocument(url)
     let loadedDocument: pdfjs.PDFDocumentProxy | undefined
@@ -115,17 +118,21 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
   createEffect(() => {
     const loaded = currentDocument()
     const target = canvas
+    const frame = pageHost
+    const textTarget = textHost
     const pageNumber = page()
     const availableWidth = viewportWidth()
     const zoomFactor = zoom()
-    if (!loaded || !target || pageCount() === 0 || availableWidth <= 0) return
+    if (!loaded || !target || !frame || !textTarget || pageCount() === 0 || availableWidth <= 0) return
     paintedWidth = 0
+    textTarget.replaceChildren()
     if (renderedPage !== pageNumber) {
       renderedPage = pageNumber
       readingPosition = { top: 0, left: 0 }
       restorePending = true
     }
     let renderTask: pdfjs.RenderTask | undefined
+    let textLayer: pdfjs.TextLayer | undefined
     let disposed = false
     void loaded
       .getPage(pageNumber)
@@ -134,16 +141,23 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
         const natural = pdfPage.getViewport({ scale: 1 })
         const contentWidth = Math.max(160, availableWidth - 24)
         const displayScale = (contentWidth / natural.width) * zoomFactor
+        const displayViewport = pdfPage.getViewport({ scale: displayScale })
         const outputScale = Math.min(window.devicePixelRatio || 1, 2)
         const viewport = pdfPage.getViewport({ scale: displayScale * outputScale })
         const context = target.getContext("2d")
         if (!context) throw new Error("PDF canvas context is unavailable")
         target.width = Math.ceil(viewport.width)
         target.height = Math.ceil(viewport.height)
-        target.style.width = `${Math.ceil(natural.width * displayScale)}px`
-        target.style.height = `${Math.ceil(natural.height * displayScale)}px`
+        frame.style.width = target.style.width = `${Math.ceil(displayViewport.width)}px`
+        frame.style.height = target.style.height = `${Math.ceil(displayViewport.height)}px`
+        textTarget.style.setProperty("--total-scale-factor", String(displayScale * pdfPage.userUnit))
+        textLayer = new pdfjs.TextLayer({
+          textContentSource: pdfPage.streamTextContent(),
+          container: textTarget,
+          viewport: displayViewport,
+        })
         renderTask = pdfPage.render({ canvas: target, canvasContext: context, viewport })
-        await renderTask.promise
+        await Promise.all([renderTask.promise, textLayer.render()])
         if (disposed || currentDocument() !== loaded || page() !== pageNumber) return
         target.dataset.ready = "true"
         paintedWidth = availableWidth
@@ -151,11 +165,15 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
       })
       .catch((reason: unknown) => {
         if (disposed || (reason instanceof Error && reason.name === "RenderingCancelledException")) return
+        renderTask?.cancel()
+        textLayer?.cancel()
         setError(() => reason)
       })
     onCleanup(() => {
       disposed = true
       renderTask?.cancel()
+      textLayer?.cancel()
+      textTarget.replaceChildren()
     })
   })
 
@@ -226,13 +244,26 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
             bindViewport(element)
           }}
         >
-          <canvas
-            role="img"
-            aria-label={props.label}
+          <div
+            class="msg-artifact-pdf__page"
             ref={(element) => {
-              canvas = element
+              pageHost = element
             }}
-          />
+          >
+            <canvas
+              role="img"
+              aria-label={props.label}
+              ref={(element) => {
+                canvas = element
+              }}
+            />
+            <div
+              class="msg-artifact-pdf__text-layer"
+              ref={(element) => {
+                textHost = element
+              }}
+            />
+          </div>
         </div>
       </div>
     </Show>
