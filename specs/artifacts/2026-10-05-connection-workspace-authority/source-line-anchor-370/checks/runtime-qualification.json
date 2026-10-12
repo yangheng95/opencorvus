@@ -1,0 +1,297 @@
+{
+  "results": [
+    {
+      "name": "before",
+      "handle": 48162,
+      "asset": "main-BR2lLe8z.js",
+      "requests": 5,
+      "messages": [
+        "msg_g0VXsi2Kw00xR4Z0orpu"
+      ],
+      "finals": [
+        "msg_g0VXsi3SL00I73pcJ226"
+      ],
+      "launcherExit": 0,
+      "calls": [
+        {
+          "sourcePartID": "prt_g0VXsi3QB00QFLyM0yah",
+          "sourceID": "ae1e6f307a3406bc90a1599191ec415b03d9f67bf7836b9e1e934c04e06cb5eb",
+          "sessionID": "ses_-zUS7HxwXzzO1uYxo5Kw",
+          "messageID": "msg_g0VXsi2Kw00xR4Z0orpu",
+          "callID": "call_18c4154f068d44999a676b99c4daa9b0",
+          "range": {
+            "startLine": 30,
+            "endLine": 30,
+            "startColumn": 10
+          }
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXsi3SL00I73pcJ226",
+          "sessionID": "ses_-zUS7HxwXzzO1uYxo5Kw",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791848108425,
+            "completed": 1791848111980
+          },
+          "finish": "stop"
+        }
+      ],
+      "modelTexts": [
+        {
+          "id": "prt_g0VXsi40u007qjT4AK9B",
+          "messageID": "msg_g0VXsi3SL00I73pcJ226",
+          "type": "text",
+          "text": "- 行内引用：`资料/行号示例.txt#L30`\n- [行范围](资料/行号示例.txt#L30-L32)\n- [冒号对照](资料/行号示例.txt:30:10)\n- [外部网页](https://github.com/microsoft/vscode/blob/main/README.md#L1-L3)",
+          "textChars": 153,
+          "time": {
+            "start": 1791848110568,
+            "end": 1791848111707
+          }
+        }
+      ],
+      "elapsedMs": 187915,
+      "qualified": {
+        "cancellation": null,
+        "physicalCompletion": true,
+        "qualification": "NativeService",
+        "providerEOFRequests": 5,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "providerUserCancelledRequests": 0
+      },
+      "settled": {
+        "occurrence": "source-line-anchor-370-before-891b75c3-2a5c-4157-b668-3b8156028b89",
+        "outcome": "settled",
+        "host": {
+          "pid": 75524,
+          "processInstanceID": "win32:639274448279282301",
+          "occurrenceID": "7ffef9b5-69d8-4105-a98c-da67bc322b71"
+        },
+        "target": {
+          "pid": 43364,
+          "processInstanceID": "win32:639274448287025866",
+          "occurrenceID": "0782c5a9-91bd-43c2-9cd9-3da14458212c"
+        },
+        "observedAtUtc": "2026-10-12T23:36:56.617Z",
+        "deadlineAt": 1791848627913,
+        "terminal": {
+          "occurrenceID": "source-line-anchor-370-before-891b75c3-2a5c-4157-b668-3b8156028b89",
+          "pid": 43364,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T23:34:53.469Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "a07a2d6f-a570-4918-b02c-79eb56c53982",
+          "method": "GET",
+          "path": "/ui/assets/main-BR2lLe8z.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 9
+        },
+        "message": "request"
+      }
+    },
+    {
+      "name": "after",
+      "handle": 66181,
+      "asset": "main-w4chjmbj.js",
+      "requests": 9,
+      "messages": [
+        "msg_g0VXsjWxz00bq62ftSiZ",
+        "msg_g0VXsjo8C0128PQ5kzbX",
+        "msg_g0VXsjuFV00hd1ObzQEC"
+      ],
+      "finals": [
+        "msg_g0VXsjY7i00JjGbJvMhg",
+        "msg_g0VXsjo8C02Pa1Rg9lv8",
+        "msg_g0VXsjvGW00Yt4oJNrmZ"
+      ],
+      "launcherExit": 0,
+      "calls": [
+        {
+          "sourcePartID": "prt_g0VXsjY5b004kAc54nxl",
+          "sourceID": "667f23777708ad84469387471da4216bad5677e67c45c27eb532c63a47e009a5",
+          "sessionID": "ses_-zUS7GTKUzzpDxM4FG14",
+          "messageID": "msg_g0VXsjWxz00bq62ftSiZ",
+          "callID": "call_50149d0a6bc2484a9986750a24eee616",
+          "range": {
+            "startLine": 30,
+            "endLine": 30,
+            "startColumn": 10
+          }
+        },
+        {
+          "sourcePartID": "prt_g0VXsjo8C03n7T8pfSoX",
+          "sourceID": "667f23777708ad84469387471da4216bad5677e67c45c27eb532c63a47e009a5",
+          "sessionID": "ses_-zUS7GBrozzHeUoDEU8z",
+          "messageID": "msg_g0VXsjo8C0128PQ5kzbX",
+          "callID": "call_50149d0a6bc2484a9986750a24eee616",
+          "range": {
+            "startLine": 30,
+            "endLine": 30,
+            "startColumn": 10
+          }
+        },
+        {
+          "sourcePartID": "prt_g0VXsjvDn00g7I03KZWt",
+          "sourceID": "667f23777708ad84469387471da4216bad5677e67c45c27eb532c63a47e009a5",
+          "sessionID": "ses_-zUS7GBrozzHeUoDEU8z",
+          "messageID": "msg_g0VXsjuFV00hd1ObzQEC",
+          "callID": "call_279bcf7b245a49b49134940277485e47",
+          "range": {
+            "startLine": 30,
+            "endLine": 30,
+            "startColumn": 10
+          }
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXsjY7i00JjGbJvMhg",
+          "sessionID": "ses_-zUS7GTKUzzpDxM4FG14",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791848464638,
+            "completed": 1791848471313
+          },
+          "finish": "stop"
+        },
+        {
+          "id": "msg_g0VXsjo8C02Pa1Rg9lv8",
+          "sessionID": "ses_-zUS7GBrozzHeUoDEU8z",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791848464638,
+            "completed": 1791848471313
+          },
+          "finish": "stop"
+        },
+        {
+          "id": "msg_g0VXsjvGW00Yt4oJNrmZ",
+          "sessionID": "ses_-zUS7GBrozzHeUoDEU8z",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791848553596,
+            "completed": 1791848557147
+          },
+          "finish": "stop"
+        }
+      ],
+      "modelTexts": [
+        {
+          "id": "prt_g0VXsjZJ400IdSIkHYLU",
+          "messageID": "msg_g0VXsjY7i00JjGbJvMhg",
+          "type": "text",
+          "text": "- 行内引用：`资料/行号示例.txt#L30`\n- [行范围](资料/行号示例.txt#L30-L32)\n- [冒号对照](资料/行号示例.txt:30:10)\n- [外部网页](https://github.com/microsoft/vscode/blob/main/README.md#L1-L3)",
+          "textChars": 153,
+          "time": {
+            "start": 1791848469186,
+            "end": 1791848470831
+          }
+        },
+        {
+          "id": "prt_g0VXsjo8C06SQN9IM1XJ",
+          "messageID": "msg_g0VXsjo8C02Pa1Rg9lv8",
+          "type": "text",
+          "text": "- 行内引用：`资料/行号示例.txt#L30`\n- [行范围](资料/行号示例.txt#L30-L32)\n- [冒号对照](资料/行号示例.txt:30:10)\n- [外部网页](https://github.com/microsoft/vscode/blob/main/README.md#L1-L3)",
+          "textChars": 153,
+          "time": {
+            "start": 1791848469186,
+            "end": 1791848470831
+          }
+        },
+        {
+          "id": "prt_g0VXsjw1l00WPQQX7uYt",
+          "messageID": "msg_g0VXsjvGW00Yt4oJNrmZ",
+          "type": "text",
+          "text": "[侧聊范围](资料/行号示例.txt#L30-L32)",
+          "textChars": 27,
+          "time": {
+            "start": 1791848556525,
+            "end": 1791848556834
+          }
+        }
+      ],
+      "elapsedMs": 250691,
+      "qualified": {
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "providerEOFRequests": 9,
+        "providerUserCancelledRequests": 0,
+        "cancellation": null,
+        "physicalCompletion": true,
+        "qualification": "NativeService"
+      },
+      "settled": {
+        "occurrence": "source-line-anchor-370-after-6cb49b0e-0653-40cf-9891-a30d1a9a2259",
+        "outcome": "settled",
+        "host": {
+          "pid": 70892,
+          "processInstanceID": "win32:639274452024820997",
+          "occurrenceID": "c467c01b-aada-4979-b407-af4740b4096d"
+        },
+        "target": {
+          "pid": 64532,
+          "processInstanceID": "win32:639274452032682891",
+          "occurrenceID": "35a5513c-318d-4c28-bcc7-474dd9edbba8"
+        },
+        "observedAtUtc": "2026-10-12T23:44:13.959Z",
+        "deadlineAt": 1791849002465,
+        "terminal": {
+          "occurrenceID": "source-line-anchor-370-after-6cb49b0e-0653-40cf-9891-a30d1a9a2259",
+          "pid": 64532,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T23:40:43.697Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "f9dcf1a7-8760-46dd-81e6-dfec57bdfa05",
+          "method": "GET",
+          "path": "/ui/assets/main-w4chjmbj.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3
+        },
+        "message": "request"
+      }
+    }
+  ],
+  "boundary": "Actual Source/ToolOutcome/completed Message, full authored file bytes and provider/native receipts only. Before UI navigation failure and after manual line/range activation are separate screenshots, without UI assertions. External landing was later manually confirmed in actual new tab 192; see after/07-external-page, without a replacement goto."
+}

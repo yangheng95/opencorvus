@@ -3166,3 +3166,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Unicode文件引用368](records/2026-10/2026-10-13-source-unicode-reference-368.md)：中文及组合字符代码引用的真实导航。
 
 - [历史来源与短文件光标369](records/2026-10/2026-10-13-source-shortened-file-369.md)：实页复现并修复越界引用抢回输入光标。
+
+- [文件行号锚点370](records/2026-10/2026-10-13-source-line-anchor-370.md)：正文单行/范围锚点统一打开，外部页面保留原地址。
