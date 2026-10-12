@@ -1,0 +1,731 @@
+{
+  "taskID": "tsk_g00VXpiXcz00KjYqx3vV",
+  "workerID": "ses_ho9Gh33iZxyYclSMkLkj",
+  "taskElapsedMs": 283988,
+  "workerNarration": [
+    {
+      "id": "prt_g0VXpipwY00mmt0U16ok",
+      "chars": 53,
+      "headings": []
+    },
+    {
+      "id": "prt_g0VXpisbS00yv6FjKKVm",
+      "chars": 2054,
+      "headings": [
+        "## 1. 同名文件的身份不能由标题决定",
+        "## 2. 准确行号来自工具结果，不来自记录编号",
+        "## 3. 长来源列表需要区分“有结果”与“读得稳定”",
+        "## 4. 完整复制位置与短标签承担不同任务"
+      ]
+    },
+    {
+      "id": "prt_g0VXpj6AU00Z3GcgCnCf",
+      "chars": 1917,
+      "headings": [
+        "## 5. 页面参数资料解释的是 URL 构造，不是来源标题",
+        "## 6. URL 各部分不能混同为本地文件行号",
+        "## 7. 构造地址的示意不等于执行导航",
+        "## 8. 解析异常与阅读失败必须分别说明"
+      ]
+    },
+    {
+      "id": "prt_g0VXpjJTY00MeG3tZMU4",
+      "chars": 2200,
+      "headings": [
+        "## 9. 完整读取补足了搜索未覆盖的文件上下文",
+        "## 10. 搜索和完整读取具有不同的证据范围",
+        "## 11. 阅读期间内容更新需要明确时间与版本边界",
+        "## 12. 稳定性结论应止于实际审阅证据",
+        "### 实际读取范围"
+      ]
+    }
+  ],
+  "workerTextChars": 6224,
+  "groups": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project\\资料\\研究记录\\候选方案甲\\来源记录_相同名称与不同行号.md",
+      "count": 32,
+      "ranges": [
+        {
+          "startLine": 2,
+          "endLine": 2
+        },
+        {
+          "startLine": 3,
+          "endLine": 3
+        },
+        {
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "startLine": 5,
+          "endLine": 5
+        },
+        {
+          "startLine": 6,
+          "endLine": 6
+        },
+        {
+          "startLine": 7,
+          "endLine": 7
+        },
+        {
+          "startLine": 8,
+          "endLine": 8
+        },
+        {
+          "startLine": 9,
+          "endLine": 9
+        },
+        {
+          "startLine": 10,
+          "endLine": 10
+        },
+        {
+          "startLine": 11,
+          "endLine": 11
+        },
+        {
+          "startLine": 12,
+          "endLine": 12
+        },
+        {
+          "startLine": 13,
+          "endLine": 13
+        },
+        {
+          "startLine": 14,
+          "endLine": 14
+        },
+        {
+          "startLine": 15,
+          "endLine": 15
+        },
+        {
+          "startLine": 16,
+          "endLine": 16
+        },
+        {
+          "startLine": 17,
+          "endLine": 17
+        },
+        {
+          "startLine": 18,
+          "endLine": 18
+        },
+        {
+          "startLine": 19,
+          "endLine": 19
+        },
+        {
+          "startLine": 20,
+          "endLine": 20
+        },
+        {
+          "startLine": 21,
+          "endLine": 21
+        },
+        {
+          "startLine": 22,
+          "endLine": 22
+        },
+        {
+          "startLine": 23,
+          "endLine": 23
+        },
+        {
+          "startLine": 24,
+          "endLine": 24
+        },
+        {
+          "startLine": 25,
+          "endLine": 25
+        },
+        {
+          "startLine": 26,
+          "endLine": 26
+        },
+        {
+          "startLine": 27,
+          "endLine": 27
+        },
+        {
+          "startLine": 28,
+          "endLine": 28
+        },
+        {
+          "startLine": 29,
+          "endLine": 29
+        },
+        {
+          "startLine": 30,
+          "endLine": 30
+        },
+        {
+          "startLine": 31,
+          "endLine": 31
+        },
+        {
+          "startLine": 32,
+          "endLine": 32
+        },
+        {
+          "startLine": 33,
+          "endLine": 33
+        }
+      ],
+      "sourceIDs": [
+        "498f6c8f1b9240efa0ca24e7eda4eba87ead8342e697c63105551b801c35420f",
+        "4335be854c353916313dd925f3f10ed4428285f4444abbee0882d892d2475753",
+        "76b1fc678f89dc525eec2d4ff3b1822d184987b6a1c446a41c51861c58e40c95",
+        "16ac21851886b76e845c70ab042b3bd9c5aa49da1b52294da5db0c29aeea4463",
+        "2c96d315339a73f3f38857856452f2e87d80ee91af77b5d98d62c7aa11e986a9",
+        "a6372b9b35a35818970ca4d56a58addd064605f762441c31ad26b8ff39ad094b",
+        "a5c8bf18c6b6a32adf7d00a7ab686efb0679bde50db2e86b3d58d7d0904f4135",
+        "825d856f01102bbb2ce9e65149e40ffe621affc7f639d6800150256d79333739",
+        "fd3f49a877469764825229c8b702d1b66fb33ea78ba539a8ed4a19f5c5d15bcd",
+        "36601941a993b34ebf66f1f1544e4736ddd75d8e9987ee27b89452d9688c8b27",
+        "78a22d85991c965807ec8ecc775726a1d2a4dcc426cfa24df13d5b06a9b850aa",
+        "609d76053f5f259f2e878d6a290bb3ccd2378bf9cb4cc452542067933f78e4c2",
+        "f02bce81b078a8cfe8b4c9ea09aee6b1e81c29665818474a5af7c92d501dda93",
+        "89c20ff51c64b2b6ae2635b931bab23cb842a1c13a1280e52ae97566cc001bcd",
+        "63943c4445021b48ac3eaff8782fd22c553198f47c9488098ed0aa4b73a97794",
+        "6d322669b1ed1e820123f24b3efca8ea0382db68f4010969060e9f39c293baac",
+        "b074f92a2941c5ed981083c02e2359c6407f617dca77ba7ad36085eac80bf1ce",
+        "3eeb463c9e8a738d0b3835c2a56a2b80574b4121fec82f4f5e1cd8d0b7814cac",
+        "33e2eb9d3b6a54a6ee1e2c2b9987c137c8beafe5e2e9107af2cf324b6c52fa43",
+        "ed5678c4f23b6c47878a81435ceb7ba7acead1726d46d5752c507e59c9388f28",
+        "40877e167d57d052fe7176cb2806c1ff739a681db157955b922243bcb1e7575f",
+        "22ecd1d6c2cfed61e17958882276efc165389a4708275db615f5d8648282759d",
+        "b2cc12f0e7bc4ea79f7323428c221f5cec516efa0084d361d59970a7c322febe",
+        "7805b372051007be23439cbdcc92a92c5495fc159a409cc2def05bbbc94c7363",
+        "7f46673097d66ef55d77351dc2d6158a5a9421fcd6960992d10d183182e3e873",
+        "c8e217aa319c86469019a87d62b934dc7b3fab69c99c4d20db8fd2f0b862482e",
+        "1f8fc82fce2a1cc288449bbf98b086c1984ac67bf7a9abf6b57629194ba2852a",
+        "729e32f8434ba070e5231be9450a68888fe6c9f08e10ac112b84121f705a0537",
+        "71d6154cd0e5f34e9d9fdbe0bf6a5cc635facfd3f4d71a9a20d434cd0d062530",
+        "a4a313b3ac4aaa7a50dc86417f69c5f219ce8b08326fe64418354c2d3eb19073",
+        "3c2f4378094b92e1676c5d8ce086c9b9e1e242a2c579f145c118630763150d81",
+        "b22ca119679e396ab1f69e01ca8ab12d0608fe5efb3bc4460b8c780e9478263b"
+      ]
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project\\资料\\研究记录\\候选方案乙\\来源记录_相同名称与不同行号.md",
+      "count": 32,
+      "ranges": [
+        {
+          "startLine": 2,
+          "endLine": 2
+        },
+        {
+          "startLine": 3,
+          "endLine": 3
+        },
+        {
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "startLine": 5,
+          "endLine": 5
+        },
+        {
+          "startLine": 6,
+          "endLine": 6
+        },
+        {
+          "startLine": 7,
+          "endLine": 7
+        },
+        {
+          "startLine": 8,
+          "endLine": 8
+        },
+        {
+          "startLine": 9,
+          "endLine": 9
+        },
+        {
+          "startLine": 10,
+          "endLine": 10
+        },
+        {
+          "startLine": 11,
+          "endLine": 11
+        },
+        {
+          "startLine": 12,
+          "endLine": 12
+        },
+        {
+          "startLine": 13,
+          "endLine": 13
+        },
+        {
+          "startLine": 14,
+          "endLine": 14
+        },
+        {
+          "startLine": 15,
+          "endLine": 15
+        },
+        {
+          "startLine": 16,
+          "endLine": 16
+        },
+        {
+          "startLine": 17,
+          "endLine": 17
+        },
+        {
+          "startLine": 18,
+          "endLine": 18
+        },
+        {
+          "startLine": 19,
+          "endLine": 19
+        },
+        {
+          "startLine": 20,
+          "endLine": 20
+        },
+        {
+          "startLine": 21,
+          "endLine": 21
+        },
+        {
+          "startLine": 22,
+          "endLine": 22
+        },
+        {
+          "startLine": 23,
+          "endLine": 23
+        },
+        {
+          "startLine": 24,
+          "endLine": 24
+        },
+        {
+          "startLine": 25,
+          "endLine": 25
+        },
+        {
+          "startLine": 26,
+          "endLine": 26
+        },
+        {
+          "startLine": 27,
+          "endLine": 27
+        },
+        {
+          "startLine": 28,
+          "endLine": 28
+        },
+        {
+          "startLine": 29,
+          "endLine": 29
+        },
+        {
+          "startLine": 30,
+          "endLine": 30
+        },
+        {
+          "startLine": 31,
+          "endLine": 31
+        },
+        {
+          "startLine": 32,
+          "endLine": 32
+        },
+        {
+          "startLine": 33,
+          "endLine": 33
+        }
+      ],
+      "sourceIDs": [
+        "8ecd099f1d58f322481e76b33cda792ff3244996465a8a33f172ea61778c1a6e",
+        "abcef8009902ceb3af46bd14af4f4d614ac23df0b1243fee8561fe8a0f1b1a65",
+        "2ebb789af8fff1d1a0d51762f06d45ee833be207d85e00e9ffd39b0c2fd22352",
+        "5e7fdaa1d3be0afda4a327ec97ce2049ace0121c1cff534d86c7f1a8cb0fff07",
+        "91f777286a9bdd6cee0bae3ee63aea4e909876b70aab26dbc06f96f23138f077",
+        "d9dbaf3005881bfcf61da763afe7c2347f88af12786c6bc1ef27142e68288716",
+        "9c598148f40bc93d19217fbfa843725f73ed10ccad642ab05b379f0a6242849b",
+        "0ad786cca6b0ad03305f842c53394ded2e74feb382e7400deef40c8f3fefb7a1",
+        "21cb645348b0e7d4272d38babe8eaef7fe812c7b4aec2db8fe98db511c383176",
+        "17c8793d2a933cfbd9aa5a6e1aaa863a97e4a7dcc9d0198310bd0a6860ce030b",
+        "c5a76fdb7826d132bf8ce44ea52c133634d73d2a0aa8ddb6b6a97a8402de2c20",
+        "00d4ff7b93a5996ae81667c11726cd9b6ea3c4b19f9ecabad8d064ead1dbc2e4",
+        "7ba63b3b01de8afb35e3ecf32e5bfe37c6434e64cb8d049a715598ebd03b0596",
+        "6a5f0b0a0f6ee1e89664dd6c9fed1b712382ad06ad6ad202c5112c0610fb543c",
+        "13af57132206bdb3fd28abc6a6de74e96ccbfe560cf94b9b3206e4748b891b01",
+        "f9adce4de67b1f5137e759c670c492dd22b4d38da463069465d8578de8cfcf6f",
+        "705676bc71415c777d25ea53a4ca3b593992c399c0ca4530ab8c7e578a3be345",
+        "c302a9c65b35906c1dd548b116b66b417a7a1ccda862e1f2f961a6205161a800",
+        "3fdd8b86c7d3f765e270a2751d9e77f2c14edf6be7b10fa9de7393f5cb191305",
+        "5746ca4d074150e66b55074c299bf9109e332ca73a78e6748cff764bd5d93b53",
+        "ecc062adf1e6016f18e0589ab95c2a79acd60f992573c92267b54aaea4970703",
+        "6527b0127c6c4c323bf73a45e24043ccaaf11ae845323ad405122540c9dc0df1",
+        "03610b656e444596dc12c4f7e5de9a1bc3fe4b403d2ad489c52c79c037f1b421",
+        "2531f1bc47877cf76e5130780a1087c5374017262c61e782c50d2e169a2c4899",
+        "65edc743bf6372a83f9c9e27250aa67b992822f0d4c40925d42cdef6a6e09c0b",
+        "31ad1e95184cdcda73c097ac11259c4e7401dff1f56fb65ba34e8df5efbc7f19",
+        "ccac06133068073b7370cae615656384d728662067087b1ebc0f66f4c1d3bd06",
+        "d4d3d3dffafc172250f54ec5b7dd8369277a149c1c58b84e3938aa76ff8608a9",
+        "85313a86f87f59fb8346bf88e1b21d621fd0ff0c607c18bd7e80e7ace2c53318",
+        "a310de1de69f78bdc6552ca00404ee460433574a89bc5f63d43f2df6e6c13d84",
+        "d51c7d45691c635da83bf562350d59992f47474590a9c383e5e0d2f375efbdda",
+        "23ec1ce6f6118a26d9e663b52c1cf07a8991e4d582f4e0587b6eb4f93da760b5"
+      ]
+    }
+  ],
+  "sourceCount": 66,
+  "sourceStreamEvents": 66,
+  "streamComparisons": [
+    {
+      "sessionID": "ses_-zUSAHRURzzI4ZdcQMX3",
+      "messageID": "msg_heTuqBkMVNIUKw0Bdro6",
+      "partID": "prt_g0VXpia6h00Ot56DmhZl",
+      "field": "text",
+      "events": 56,
+      "wireChars": 77,
+      "canonicalChars": 76,
+      "exact": false,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+      "messageID": "msg_g0VXpipAB00rQYY4ooY9",
+      "partID": "prt_g0VXpipwY00mmt0U16ok",
+      "field": "text",
+      "events": 33,
+      "wireChars": 54,
+      "canonicalChars": 53,
+      "exact": false,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+      "messageID": "msg_g0VXpiqni00xqhluBfMz",
+      "partID": "prt_g0VXpisbS00yv6FjKKVm",
+      "field": "text",
+      "events": 1339,
+      "wireChars": 2054,
+      "canonicalChars": 2054,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+      "messageID": "msg_g0VXpj3db00Z6LK11tCC",
+      "partID": "prt_g0VXpj6AU00Z3GcgCnCf",
+      "field": "text",
+      "events": 1150,
+      "wireChars": 1917,
+      "canonicalChars": 1917,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+      "messageID": "msg_g0VXpjILw00RMnPqVUor",
+      "partID": "prt_g0VXpjJTY00MeG3tZMU4",
+      "field": "text",
+      "events": 1394,
+      "wireChars": 2200,
+      "canonicalChars": 2200,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_-zUSAHRURzzI4ZdcQMX3",
+      "messageID": "msg_hwaolBxNVl7u4fYmxzMM",
+      "partID": "prt_g0VXpjZJX00eUT8RLmNO",
+      "field": "text",
+      "events": 47,
+      "wireChars": 70,
+      "canonicalChars": 70,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    },
+    {
+      "sessionID": "ses_-zUSAHRURzzI4ZdcQMX3",
+      "messageID": "msg_hwaolBxNVl7u4fYmxzMM",
+      "partID": "prt_g0VXpjfov00TVEiS4Px3",
+      "field": "text",
+      "events": 125,
+      "wireChars": 177,
+      "canonicalChars": 177,
+      "exact": true,
+      "canonicalEqualsFinalTrimEnd": true,
+      "discontinuities": []
+    }
+  ],
+  "narrationReadContract": "All three actual narrative blocks equal the complete canonical text returned to the orchestrator",
+  "copies": [
+    {
+      "name": "copied-乙20.json",
+      "file": "乙",
+      "line": 20,
+      "at": "2026-10-12T11:20:02.057Z",
+      "value": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project\\资料\\研究记录\\候选方案乙\\来源记录_相同名称与不同行号.md:20"
+    },
+    {
+      "name": "copied-甲20.json",
+      "file": "甲",
+      "line": 20,
+      "at": "2026-10-12T11:20:25.153Z",
+      "value": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project\\资料\\研究记录\\候选方案甲\\来源记录_相同名称与不同行号.md:20"
+    },
+    {
+      "name": "copied-after-乙20.json",
+      "file": "乙",
+      "line": 20,
+      "at": "2026-10-12T11:24:25.883Z",
+      "value": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project\\资料\\研究记录\\候选方案乙\\来源记录_相同名称与不同行号.md:20"
+    },
+    {
+      "name": "copied-after-甲20.json",
+      "file": "甲",
+      "line": 20,
+      "at": "2026-10-12T11:24:06.929Z",
+      "value": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project\\资料\\研究记录\\候选方案甲\\来源记录_相同名称与不同行号.md:20"
+    }
+  ],
+  "served": [
+    {
+      "path": "/ui/assets/main-DbppdFkA.js",
+      "status": 200
+    },
+    {
+      "path": "/ui/assets/main-enuOTKXR.js",
+      "status": 200
+    }
+  ],
+  "shots": [
+    {
+      "file": "01-expanded-during-first-prose.png",
+      "at": "2026-10-12T11:19:42.455Z",
+      "actualWorkerReaders": [
+        {
+          "request": {
+            "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+            "streamRequest": {
+              "requestID": "msg_g0VXpip6o002zmL4HVa6",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpiqr100QIMF6ZQdx",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpiqni00xqhluBfMz"
+            }
+          },
+          "from": 1791803970916,
+          "to": 1791804017482
+        }
+      ]
+    },
+    {
+      "file": "02-copy-乙20-streaming.png",
+      "at": "2026-10-12T11:20:02.057Z",
+      "actualWorkerReaders": [
+        {
+          "request": {
+            "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+            "streamRequest": {
+              "requestID": "msg_g0VXpip6o002zmL4HVa6",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpiqr100QIMF6ZQdx",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpiqni00xqhluBfMz"
+            }
+          },
+          "from": 1791803970916,
+          "to": 1791804017482
+        }
+      ]
+    },
+    {
+      "file": "03-copy-甲20-streaming.png",
+      "at": "2026-10-12T11:20:25.153Z",
+      "actualWorkerReaders": [
+        {
+          "request": {
+            "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+            "streamRequest": {
+              "requestID": "msg_g0VXpip6o002zmL4HVa6",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpj3hv009K7heWdbd",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpj3db00Z6LK11tCC"
+            }
+          },
+          "from": 1791804020161,
+          "to": 1791804067174
+        }
+      ]
+    },
+    {
+      "file": "04-list-position-after-web-source.png",
+      "at": "2026-10-12T11:21:03.567Z",
+      "actualWorkerReaders": [
+        {
+          "request": {
+            "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+            "streamRequest": {
+              "requestID": "msg_g0VXpip6o002zmL4HVa6",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpj3hv009K7heWdbd",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpj3db00Z6LK11tCC"
+            }
+          },
+          "from": 1791804020161,
+          "to": 1791804067174
+        }
+      ]
+    },
+    {
+      "file": "05-reopened-during-later-prose.png",
+      "at": "2026-10-12T11:21:24.498Z",
+      "actualWorkerReaders": [
+        {
+          "request": {
+            "sessionID": "ses_ho9Gh33iZxyYclSMkLkj",
+            "streamRequest": {
+              "requestID": "msg_g0VXpip6o002zmL4HVa6",
+              "agentID": "base-researcher",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXpjIP600uG2FLlUTp",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXpjILw00RMnPqVUor"
+            }
+          },
+          "from": 1791804076795,
+          "to": 1791804124494
+        }
+      ]
+    },
+    {
+      "file": "06-collapsed-sources-and-body.png",
+      "at": "2026-10-12T11:22:43.386Z",
+      "actualWorkerReaders": []
+    },
+    {
+      "file": "07-after-甲20-focus.png",
+      "at": "2026-10-12T11:24:06.929Z",
+      "actualWorkerReaders": []
+    },
+    {
+      "file": "08-after-乙20-focus.png",
+      "at": "2026-10-12T11:24:25.883Z",
+      "actualWorkerReaders": []
+    },
+    {
+      "file": "09-甲20-editor.png",
+      "at": "2026-10-12T11:24:38.148Z",
+      "actualWorkerReaders": []
+    },
+    {
+      "file": "10-甲20-editor-ready.png",
+      "at": "2026-10-12T11:24:48.300Z",
+      "actualWorkerReaders": []
+    },
+    {
+      "file": "11-file-boundary-return.png",
+      "at": "2026-10-12T11:25:10.385Z",
+      "actualWorkerReaders": []
+    },
+    {
+      "file": "12-file-boundary-clear.png",
+      "at": "2026-10-12T11:25:20.682Z",
+      "actualWorkerReaders": []
+    }
+  ],
+  "providerRequests": 19,
+  "qualification": {
+    "qualification": "Task",
+    "physicalCompletion": true,
+    "epoch": 1,
+    "boundary": "Exact Task lifecycle and native/provider completion; UI remains Root-owned",
+    "taskID": "tsk_g00VXpiXcz00KjYqx3vV",
+    "providerEOFRequests": 19
+  },
+  "nativeElapsedMs": 500438,
+  "native": {
+    "occurrence": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+    "outcome": "settled",
+    "host": {
+      "pid": 52996,
+      "processInstanceID": "win32:639274006345106491",
+      "occurrenceID": "647a88a2-101d-427b-80be-f2979d3e36ba"
+    },
+    "target": {
+      "pid": 78428,
+      "processInstanceID": "win32:639274006353381945",
+      "occurrenceID": "4c157438-536e-48a3-9af4-0c09a8471544"
+    },
+    "observedAtUtc": "2026-10-12T11:25:35.776Z",
+    "deadlineAt": 1791805334494,
+    "terminal": {
+      "occurrenceID": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+      "pid": 78428,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "actualJoins": {
+    "taskCreate": 0,
+    "observer": {
+      "handle": 67376,
+      "exitCode": 0
+    },
+    "launcher": {
+      "handle": 33182,
+      "exitCode": 0
+    },
+    "build": {
+      "handle": 94127,
+      "exitCode": 0
+    },
+    "typecheck": {
+      "handle": 87261,
+      "exitCode": 0
+    }
+  },
+  "boundary": "Actual backend, copied payload and owner checks. No UI assertions. Twelve screenshots require separate manual interpretation; 09 is pending file loading, 10 is the ready file. Initial streamed view uses baseline bundle; copy-label repair reviewed after real-task completion."
+}

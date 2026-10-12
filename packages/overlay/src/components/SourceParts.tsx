@@ -358,7 +358,11 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
       : ""
   const clipboard = createClipboardCopy({
     text: location,
-    label: () => t("chat.source_copy_location", { source: sourceLabel(props.source) }),
+    label: () => t("chat.source_copy_location", {
+      source: props.source.type === "source-file" && props.source.origin !== "attachment"
+        ? sourceDetail(props.source)
+        : sourceLabel(props.source),
+    }),
     diagnosticID: "source-location",
   })
 

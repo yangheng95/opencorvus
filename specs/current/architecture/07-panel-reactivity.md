@@ -315,6 +315,10 @@ and subsequent entries keep their own filename/range and actions. A different
 path starts its own caption even when filenames match. Attachment labels and
 location captions required by custom titles remain per-entry. Full Tooltip
 details, accessible names and copied locations retain each Source's own facts.
+An ordinary file's copy-action name uses that same relative path and line range
+as its open action, so identical filenames in different directories remain
+distinguishable when the copy control receives focus. Attachment titles keep
+their authored display contract; clipboard values retain the complete target.
 Tooltip, accessible name and file navigation use those same facts. Document
 leaves retain their existing actions and metadata, and group summaries retain
 their actual title/count and adjacent timeline position.

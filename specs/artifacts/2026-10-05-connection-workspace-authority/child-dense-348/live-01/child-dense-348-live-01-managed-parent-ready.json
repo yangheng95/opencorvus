@@ -1,0 +1,15 @@
+{
+  "pid": 78428,
+  "occurrence": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+  "owner": {
+    "pid": 78428,
+    "processInstanceID": "win32:639274006353381945",
+    "occurrenceID": "cc9bd949-96cc-4706-a01a-bf9300710bbe"
+  },
+  "parent": {
+    "pid": 73336,
+    "processInstanceID": "win32:639274006352877348",
+    "occurrenceID": "5521d3f3-1e3f-47ac-92a7-a044cbe8555d"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

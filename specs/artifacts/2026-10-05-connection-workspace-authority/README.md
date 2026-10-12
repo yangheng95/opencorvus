@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [348 多来源子侧栏](child-dense-plan-348.md)：66条真实来源、流式阅读位置与同名文件复制区分。
+
 - [347 连续来源目录密度](source-context-plan-347.md)：真实26来源与同名文件边界、复制和定位。
 
 - [346 多来源流式复制反馈](source-dense-live-plan-346.md)：真实流式Source复制状态与独立复核。
