@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-10-12T09:47:33.1464798Z",
+  "occurrence": "source-dense-live-346-live-01-de022fb1-a6b1-4e26-a8c6-3a75063a8f2a",
+  "owner": {
+    "pid": 69216,
+    "processInstanceID": "win32:639273946469833837",
+    "occurrenceID": "b5dba6a6-7c29-41a5-87b4-41eec1b421fe"
+  },
+  "pageClosed": false,
+  "dispatch": false,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "reason": "Original Target occurrence already exited; no shutdown dispatched"
+}

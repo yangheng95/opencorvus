@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [346 多来源流式复制反馈](records/2026-10/2026-10-12-source-dense-live-346.md)：实际文本值稳定时保留复制反馈，真实流式对照。
+
 - [Issue 40：Parallel Search MCP 示例](records/2026-10/2026-10-12-parallel-search-issue-40.md)：中英文可选配置与真实匿名搜索/抓取验收。
 
 - [345 活动执行批次](records/2026-10/2026-10-12-activity-occurrence-345.md)：按真实接收批次修复多余Pending活动。

@@ -1,0 +1,73 @@
+{
+  "boundary": "Actual capture times within exact Session Provider read intervals; independent of visual Working labels, no UI assertion",
+  "samples": [
+    {
+      "sample": "copied-line20.json",
+      "sessionID": "ses_-zUSAgYMNzz8OY7NNUbs",
+      "copiedAt": 1791798048624,
+      "active": [
+        {
+          "requestID": "msg_2af3b196-49dc-4f29-ac55-ce1810a62bea",
+          "agentID": "chat",
+          "firstByte": 1791797956398,
+          "lastByte": 1791798068053,
+          "terminal": {
+            "kind": "eof",
+            "at": 1791798068827
+          }
+        }
+      ]
+    },
+    {
+      "sample": "copied-line20-pointer.json",
+      "sessionID": "ses_-zUSAgYMNzz8OY7NNUbs",
+      "copiedAt": 1791798108865,
+      "active": [
+        {
+          "requestID": "msg_2af3b196-49dc-4f29-ac55-ce1810a62bea",
+          "agentID": "chat",
+          "firstByte": 1791798070502,
+          "lastByte": 1791798119944,
+          "terminal": {
+            "kind": "eof",
+            "at": 1791798120178
+          }
+        }
+      ]
+    },
+    {
+      "sample": "after-copied-line20.json",
+      "sessionID": "ses_-zUSAgYMNzz8OY7NNUbs",
+      "copiedAt": 1791798399844,
+      "active": [
+        {
+          "requestID": "msg_0d297291-a03e-4daf-8200-edcebe21b75d",
+          "agentID": "chat",
+          "firstByte": 1791798374795,
+          "lastByte": 1791798439934,
+          "terminal": {
+            "kind": "eof",
+            "at": 1791798439941
+          }
+        }
+      ]
+    },
+    {
+      "sample": "second-live-copied-line20.json",
+      "sessionID": "ses_-zUSAdcx7zzcZ43IXjZ1",
+      "copiedAt": 1791798811444,
+      "active": [
+        {
+          "requestID": "msg_ddf98ade-8959-4851-a0ce-64b029ff381c",
+          "agentID": "chat",
+          "firstByte": 1791798782882,
+          "lastByte": 1791798838500,
+          "terminal": {
+            "kind": "eof",
+            "at": 1791798838500
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,259 @@
+{
+  "runs": [
+    {
+      "stage": "01",
+      "initialHandle": 3385,
+      "actualLauncherExitCode": 1,
+      "qualification": "OWNED_QUALIFICATION_BOUNDARY_REACHED",
+      "occurrence": "source-dense-live-346-live-01-de022fb1-a6b1-4e26-a8c6-3a75063a8f2a",
+      "elapsedMs": 599273,
+      "providerRequests": 10,
+      "allActualRequests": "openai/gpt-6.1-sol streaming HTTP200 EOF",
+      "groups": [
+        {
+          "messageID": "msg_g0VXpJalQ00BLPiqlCjK",
+          "tool": "search_code",
+          "input": {
+            "pattern": "DENSE346",
+            "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/source-dense-live-346-live-01/project/资料/来源审阅记录_重复标题与准确行号.md"
+          },
+          "lines": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ]
+        },
+        {
+          "messageID": "msg_g0VXpJcER00hZFg1Rvri",
+          "tool": "read",
+          "input": {
+            "filePath": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/source-dense-live-346-live-01/project/资料/来源审阅记录_重复标题与准确行号.md",
+            "offset": 1,
+            "limit": 2000
+          },
+          "lines": [
+            null
+          ]
+        },
+        {
+          "messageID": "msg_g0VXpLKoU00W9kFqWAUK",
+          "tool": "search_code",
+          "input": {
+            "pattern": "DENSE346 记录(1[0-9]|20)",
+            "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/source-dense-live-346-live-01/project/资料/来源审阅记录_重复标题与准确行号.md"
+          },
+          "lines": [
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        }
+      ],
+      "assistantTextParts": [
+        {
+          "messageID": "msg_g0VXpJCjY00ebyHIQE9s",
+          "chars": 2
+        },
+        {
+          "messageID": "msg_g0VXpJRdd01DifEvsokk",
+          "chars": 2
+        },
+        {
+          "messageID": "msg_g0VXpJcER00hZFg1Rvri",
+          "chars": 4403
+        },
+        {
+          "messageID": "msg_g0VXpK5ty00zKNEARCub",
+          "chars": 2088
+        },
+        {
+          "messageID": "msg_g0VXpLMf3007bWQbC6xb",
+          "chars": 1853
+        }
+      ],
+      "served": [
+        {
+          "path": "/ui/assets/main-tuh6dcX2.js",
+          "statusCode": 200
+        },
+        {
+          "path": "/ui/assets/main-COLMTZiU.js",
+          "statusCode": 200
+        }
+      ],
+      "supervisionFiles": 96,
+      "supervisionArchive": "All original credential-redacted file texts retained in gzip entries; exact private originals preserved",
+      "native": {
+        "occurrence": "source-dense-live-346-live-01-de022fb1-a6b1-4e26-a8c6-3a75063a8f2a",
+        "outcome": "settled",
+        "host": {
+          "pid": 26936,
+          "processInstanceID": "win32:639273946461447473",
+          "occurrenceID": "96fe16f2-2ce8-451d-9e35-f9b5dabccdc7"
+        },
+        "target": {
+          "pid": 69216,
+          "processInstanceID": "win32:639273946469833837",
+          "occurrenceID": "b5dba6a6-7c29-41a5-87b4-41eec1b421fe"
+        },
+        "observedAtUtc": "2026-10-12T09:47:26.256Z",
+        "deadlineAt": 1791798446129,
+        "terminal": {
+          "occurrenceID": "source-dense-live-346-live-01-de022fb1-a6b1-4e26-a8c6-3a75063a8f2a",
+          "pid": 69216,
+          "reason": "deadline_exceeded",
+          "exitCode": 1,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "pairedCleanupComplete": true
+    },
+    {
+      "stage": "02",
+      "initialHandle": 54052,
+      "actualLauncherExitCode": 0,
+      "qualification": "NativeService completion qualified",
+      "occurrence": "source-dense-live-346-live-02-ef3842d2-8427-4c00-8e5e-a748f141a031",
+      "elapsedMs": 317738,
+      "providerRequests": 9,
+      "allActualRequests": "openai/gpt-6.1-sol streaming HTTP200 EOF",
+      "groups": [
+        {
+          "messageID": "msg_g0VXpMRkG00yxUXaQOI3",
+          "tool": "search_code",
+          "input": {
+            "pattern": "DENSE346 记录(1[0-9]|20)",
+            "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/source-dense-live-346-live-02/project/资料/来源审阅记录_重复标题与准确行号.md"
+          },
+          "lines": [
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        },
+        {
+          "messageID": "msg_g0VXpN3LT00qPKeKqNaX",
+          "tool": "search_code",
+          "input": {
+            "pattern": "DENSE346 记录(1[0-9]|20)",
+            "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/source-dense-live-346-live-02/project/资料/来源审阅记录_重复标题与准确行号.md"
+          },
+          "lines": [
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        }
+      ],
+      "assistantTextParts": [
+        {
+          "messageID": "msg_g0VXpMDIr000cfvVbjst",
+          "chars": 2
+        },
+        {
+          "messageID": "msg_g0VXpMN2u01mpRAV46js",
+          "chars": 2
+        },
+        {
+          "messageID": "msg_g0VXpMTKv006t8FISqTh",
+          "chars": 1984
+        },
+        {
+          "messageID": "msg_g0VXpN54h009g6LyZRkq",
+          "chars": 2341
+        }
+      ],
+      "served": [
+        {
+          "path": "/ui/assets/main-COLMTZiU.js",
+          "statusCode": 200
+        }
+      ],
+      "supervisionFiles": 50,
+      "supervisionArchive": "All original credential-redacted file texts retained in gzip entries; exact private originals preserved",
+      "native": {
+        "occurrence": "source-dense-live-346-live-02-ef3842d2-8427-4c00-8e5e-a748f141a031",
+        "outcome": "settled",
+        "host": {
+          "pid": 21420,
+          "processInstanceID": "win32:639273953639527149",
+          "occurrenceID": "344e019d-4be4-4d80-816e-ad5b2849fa46"
+        },
+        "target": {
+          "pid": 68868,
+          "processInstanceID": "win32:639273953648554608",
+          "occurrenceID": "ec2a930d-ca72-4087-a3fc-20f696ca04a7"
+        },
+        "observedAtUtc": "2026-10-12T09:54:42.593Z",
+        "deadlineAt": 1791799163938,
+        "terminal": {
+          "occurrenceID": "source-dense-live-346-live-02-ef3842d2-8427-4c00-8e5e-a748f141a031",
+          "pid": 68868,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "pairedCleanupComplete": true
+    }
+  ],
+  "clipboard": "Five actual readbacks equal full source file location and line20. Feedback/reading screenshots manually reviewed, no UI assertions.",
+  "limits": [
+    "First launcher boundary failure retained separately from actual complete requests",
+    "Screenshot08 is static;09 is independent Working-stage evidence",
+    "Side chat only; no new product child agent"
+  ]
+}

@@ -945,6 +945,9 @@ file path with its recorded line range; a display title never replaces that
 location. Sources without a URL or file path remain informational. The shared
 clipboard owner scopes pending/success/error feedback to the mounted control
 and its current value, while source identity and disclosure state remain intact.
+Its value dependency compares the actual text: replacing source metadata with
+an equivalent location during streaming retains the in-flight copy and its
+feedback. A changed text value or retired control still ends that ownership.
 
 Interactive Artifact frames expose a shared copy/download/open strip. Downloads
 name their actual format: original attachments, Markdown, CSV, source code,

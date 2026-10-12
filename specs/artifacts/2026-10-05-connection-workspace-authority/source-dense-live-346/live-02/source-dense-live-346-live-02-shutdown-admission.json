@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-12T09:54:42.1273128Z",
+  "occurrence": "source-dense-live-346-live-02-ef3842d2-8427-4c00-8e5e-a748f141a031",
+  "owner": {
+    "pid": 68868,
+    "processInstanceID": "win32:639273953648554608",
+    "occurrenceID": "ec2a930d-ca72-4087-a3fc-20f696ca04a7"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXpNVSf009Dqz1Pk5J"
+  }
+}

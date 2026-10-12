@@ -1,4 +1,4 @@
-import { createEffect, createSignal, on, onCleanup, type Accessor } from "solid-js"
+import { createEffect, createMemo, createSignal, on, onCleanup, type Accessor } from "solid-js"
 import { copyText } from "../../services/clipboard"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
 import { t } from "../../utils/i18n"
@@ -14,6 +14,7 @@ export function createClipboardCopy(input: {
   label: Accessor<string>
   diagnosticID: string
 }) {
+  const currentText = createMemo(input.text)
   const [state, setState] = createSignal<CopyState>({ kind: "idle" })
   let generation = 0
   let disposed = false
@@ -22,7 +23,7 @@ export function createClipboardCopy(input: {
     if (reset !== undefined) clearTimeout(reset)
     reset = undefined
   }
-  createEffect(on(input.text, () => {
+  createEffect(on(currentText, () => {
     generation++
     clearReset()
     setState({ kind: "idle" })
@@ -34,9 +35,9 @@ export function createClipboardCopy(input: {
   })
   const copy = async () => {
     if (state().kind === "pending") return
-    const text = input.text()
+    const text = currentText()
     const owner = ++generation
-    const current = () => !disposed && generation === owner && input.text() === text
+    const current = () => !disposed && generation === owner && currentText() === text
     clearReset()
     setState({ kind: "pending" })
     try {

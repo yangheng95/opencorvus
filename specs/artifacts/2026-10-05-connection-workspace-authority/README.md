@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [346 多来源流式复制反馈](source-dense-live-plan-346.md)：真实流式Source复制状态与独立复核。
+
 - [345 活动执行批次](activity-occurrence-plan-345.md)：按真实接收批次修复多余Pending活动。
 
 - [344 子侧栏来源复制](source-copy-plan-344.md)：完整位置复制与真实子会话阅读复核。

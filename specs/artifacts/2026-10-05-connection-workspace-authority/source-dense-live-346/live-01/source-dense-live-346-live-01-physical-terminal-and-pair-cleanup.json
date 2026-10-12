@@ -1,0 +1,69 @@
+{
+  "occurrence": "source-dense-live-346-live-01-de022fb1-a6b1-4e26-a8c6-3a75063a8f2a",
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-12T09:47:34.3646396Z",
+  "chain": [
+    {
+      "expected": {
+        "pid": 69216,
+        "processInstanceID": "win32:639273946469833837",
+        "occurrenceID": "b5dba6a6-7c29-41a5-87b4-41eec1b421fe"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 26936,
+        "processInstanceID": "win32:639273946461447473",
+        "occurrenceID": "96fe16f2-2ce8-451d-9e35-f9b5dabccdc7"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "source-dense-live-346-live-01-de022fb1-a6b1-4e26-a8c6-3a75063a8f2a",
+    "outcome": "settled",
+    "host": {
+      "pid": 26936,
+      "processInstanceID": "win32:639273946461447473",
+      "occurrenceID": "96fe16f2-2ce8-451d-9e35-f9b5dabccdc7"
+    },
+    "target": {
+      "pid": 69216,
+      "processInstanceID": "win32:639273946469833837",
+      "occurrenceID": "b5dba6a6-7c29-41a5-87b4-41eec1b421fe"
+    },
+    "observedAtUtc": "2026-10-12T09:47:26.256Z",
+    "deadlineAt": 1791798446129,
+    "terminal": {
+      "occurrenceID": "source-dense-live-346-live-01-de022fb1-a6b1-4e26-a8c6-3a75063a8f2a",
+      "pid": 69216,
+      "reason": "deadline_exceeded",
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-dense-live-346-live-01\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "copiedLength": 2194
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-dense-live-346-live-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "copiedLength": 9155406
+    }
+  ]
+}

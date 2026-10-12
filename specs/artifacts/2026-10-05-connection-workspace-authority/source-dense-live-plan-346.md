@@ -1,0 +1,49 @@
+# 346 多来源与持续正文实际体验
+
+## Recall
+
+用户持续要求自主迭代、UI/功能体验和修复，主要指出Sources显示与子Dock反复Rendering。最新明确只使用单agent；本轮不委托，也不创建产品研究员或Task成员。345已推送e9eeaa2492086b02b5b60ca8ebe751b10e57becb，开始工作区干净，前轮是有效progress。保持完整持续goal，不因局部测试通过宣称完成。
+
+## 已读、现象与影响分析
+
+已读345 Recall、312及321真实流式研究、07-panel-reactivity的Source与Markdown合同，SourceParts/CardParts/TextPart/text-part-model/markdown-render与worker、SubagentConversationPanel resource/live更新和search_code生产来源生成器。全仓搜索Rendering与createMarkdownRenderer调用。当前只有pending且尚无HTML才出现Rendering；已有正文保留、完成缓存、Source身份和展开状态已有实现。312已排除每token引起Match分支必然重建；当前没有新证据支持再次改这些路径。
+
+search_code实际返回前100条命中各自的文件行号Source。此前329子侧栏只有3个搜索命中，344复制也只验过该规模。新增来源复制按钮之后，窄侧聊中同一次搜索较多来源、长文件名、准确行号、展开后的复制及正文后续增长组合尚未验证。本轮使用24条命中和中文长文件名，调查实际密度、操作定位与阅读稳定性。普通Side chat共用Source/Markdown，但不含Subagent专属合并路径，因此不能替代原复杂子Dock/所有帧资格。
+
+当前无新调度/队列异常；若遇到立即按共享机制横审Task/Mission/Session正常与终态、重试重启、串并行与项目隔离。未知触发点仍为未知，不先隐藏加载态或制造假来源。公共API、配置和数据协议暂无改变依据。
+
+## 实际验收方案
+
+沿已验证live-sol-launch-305官方私有Bun1.4.0与native supervisor，在新独立source-dense-live-346-live-01、18323/ui开发模式启动NativeService。固定600000ms原生上限、24次累计Provider预算。用户已授权的OpenAI凭据和完整models成对复制，分别检查凭据usable、目标projected、实际gpt-6.1-sol流式请求。凭据绝不进prompt、日志、spec或提交。只操作本轮自有页面与进程。
+
+创建普通输入文件资料/来源审阅记录_重复标题与准确行号.md：一行说明加24条人工验收记录，DENSE346标记用于search_code实际检索。通过真实Web UI的单个Side chat发出普通请求：搜索此文件，简述真实命中，然后分段持续撰写说明/表格，再read同一文件并继续正文；不得委托、创建Task、写文件或把输入当测得结论。工具和正文均由真实模型自然产生，不注入消息/Source或浏览器fixture。
+
+手动观察来源产生与正文继续增长；展开23 more sources、阅读中段行号、键盘复制并实际读取自己刚复制的剪贴板，关闭/重开Dock复核读位。实际截图人工查看，不做UI自动化、DOM断言、组件测试或像素比较。只有确认真实问题并补齐根因/影响分析后才修生产代码；未复现则保存改变下一步判断的真实证据，不能套用小样本结论。
+
+结束必须真实Provider/Message/工具完成、页面关闭、原启动handle实际join、Host/Native/output/request与凭据配对退休，按出生归档自有native文件。完整实际输入、模型/工具数据和截图保留；更新根/月/目录索引与docs:check，精确commit、fresh fetch/merge、检查全待推送集合并正常push，goal保持active。
+
+## 真实发现与修复方案
+
+实际页面134的search_code返回24条Source，分组展开为23 more sources。正文继续生成时，Space及鼠标两次复制第20行都实际得到完整正确路径，但小于1秒的截图03/04和当前可访问名称仍为普通copy；同一条来源在流结束后复制，截图05立即显示check和Copied。原始来源和读位保持，此样本没有观察到Rendering回退。
+
+直接根因在共享createClipboardCopy：createEffect(on(input.text,...))订阅调用者getter访问的Source对象。Key叶子身份保留但Source元数据对象随会话更新替换，getter返回同一字符串仍触发effect。已阅读本地已安装Solid的on实现，依赖失效后它直接调用callback而不比较返回值；callback递增generation并清掉pending/copied/error。旧处理覆盖了真实值改变和卸载，却把等值对象更新也当作退休。actual clipboard成功+仅活跃更新期反馈失效的前后对照支持该路径，非模型自述。
+
+全仓定义/调用核对共有Sources、ToolPayload和ConversationTurnArtifactSummary三个消费者，均通过一个copyText/host writer。保留此唯一writer和现有2秒反馈、错误展示、pending排重、卸载退休，在primitive内部以createMemo归一实际文本值，再由该memo驱动退休effect与异步current检查。等值对象变化不退休；实际文本变化仍退休。不会增加缓存协议、Source副本、第二反馈状态或新工具。此为纯UI生命周期修复，不新增或运行UI自动测试；未发现相关现存UI测试。
+
+在当前原始600000ms预算内build并只刷新本轮页面，若剩余窗口不足则按真实完成收尾后启动独立新轮，而不能延长原边界。用同一真实侧聊追加独立正文请求，在已有第20行来源处再次真实复制并看反馈，保留变更前后剪贴板与截图。检查overlay typecheck、build和docs；继续精确保存Provider模型/流资格。工作区另有Issue40官网文档和两个spec索引的外部修改，已检查其差异并保留，不混入本轮提交。
+
+## 第一轮边界与独立复核
+
+实际after是在reload后重新search_code产生的11个新Source，避免只验静态旧Source；新第20行Space复制实际正确，截图06在Working时显示Copied/check，截图07关闭重开保留新展开组和同一读位。类型句柄25876与构建67101实际exit0；main-COLMTZiU.js。
+
+01原服务到达600000ms，supervisor按固定边界物理闭合并配对清理，启动3385实际exit1，错误为OWNED_QUALIFICATION_BOUNDARY_REACHED，不能改写为成功。最终Provider审计10次gpt-6.1-sol都200/EOF，末次EOF在原deadline前约6秒；这与父级资格超限是不同事实。调查、修改和构建耗掉了窗口，未及时完成主控收尾。保留失败和全部截图，不扩时、不重启原实例。
+
+02使用全新owned runtime、同一600000ms/24请求预算、同一最终构建和相同25行输入。只复核相同11行search pattern及约1800汉字真实正文，作为修复后复制/读位的独立完成验收；不冒充复跑全部初始9节请求。待01确切物理终态与原handle回收后启动，最终必须正常人工shutdown和join。
+
+## 最终资格
+
+02第一次复制实际已在输出完成后，截图08明确只记静态，不冒充流式。随后在原02预算内发出新的真实相同搜索与约2200字要求，截图09在Working时显示Copied/check；10重开期间恰好完成，11显示最终正文。01文本4403/2088/1853字符、36来源；02文本1984/2341字符、22来源。两轮10/9请求均gpt-6.1-sol流式200/EOF，四次流中复制分别与真实chat reader区间关联，排除并行Memory reader与仅标签推断。
+
+02原启动54052实际join0与正常配对退休；01原3385边界资格exit1保留。两轮Native599273/317738ms，均未扩展初始边界。5次完整复制值符合实际文件第20行，11张人工截图；类型、构建和docs:check通过，未做UI自动测试。96/50份监督链完整原始文本压缩归档并保留私有原件，81份文本/解压扫描0凭据。
+
+外部Issue40已由原任务提交99f7c8b9b并进入upstream；随后工作区出现另一任务的版本、changelog与生成目录更新，保持其原状，本轮仅提交自己的复制primitive、架构说明、spec和实证。原子侧栏专属合并/所有帧Rendering仍不由本轮普通Side样本证明。
