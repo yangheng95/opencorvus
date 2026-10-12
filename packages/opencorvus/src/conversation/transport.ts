@@ -65,7 +65,7 @@ function boundedToolInput(value: unknown): Record<string, unknown> {
 function boundedToolMetadata(value: unknown): Record<string, unknown> {
   return boundedRecord(value, {
     maxBytes: 1024,
-    keys: ["lines", "totalLines", "source", "title", "status", "browser", "computer"],
+    keys: ["readType", "offset", "lines", "totalLines", "source", "title", "status", "browser", "computer"],
   })
 }
 

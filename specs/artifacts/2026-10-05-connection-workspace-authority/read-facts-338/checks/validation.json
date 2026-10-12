@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-10-12T05:34:01.211Z",
+  "backend": {
+    "initialHandle": 98159,
+    "initialExit": 1,
+    "focusedHandle": 64801,
+    "actualExit": 0,
+    "finalReadHandle": 10840,
+    "finalReadExit": 0
+  },
+  "backendTypes": {
+    "handle": 31182,
+    "actualExit": 0
+  },
+  "overlayTypes": {
+    "handle": 63144,
+    "actualExit": 0
+  },
+  "protocolTypes": {
+    "actualExit": 0
+  },
+  "finalBuild": {
+    "handle": 76507,
+    "actualExit": 0,
+    "bundle": "main-HB6Ez6mO.js"
+  },
+  "launch": {
+    "handle": 2659,
+    "actualExit": 0
+  },
+  "actualBackendCheckerExit": 0,
+  "docsCheckExit": 0,
+  "i18nExit": 0,
+  "ownedTabsClosed": [
+    "121"
+  ],
+  "textEvidenceScanned": 38,
+  "credentialMatches": 0,
+  "boundary": "Actual joined handles and backend contracts; Root manually views screenshots and records visual findings separately. No UI automated tests."
+}

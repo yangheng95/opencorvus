@@ -30,6 +30,23 @@ function completedTool(input: { id: string; output: string; metadata?: Record<st
   })
 }
 
+test.each([
+  { readType: "text", offset: 24, lines: 2, totalLines: 30 },
+  { readType: "directory", offset: 2, lines: 2, totalLines: 3 },
+  { readType: "binary", lines: 0, totalLines: 0 },
+])("preserves actual read result facts through bounded transport: %j", (facts) => {
+  const part = completedTool({
+    id: "prt_read_facts",
+    output: "x".repeat(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES),
+    metadata: { ...facts, preview: "large preview".repeat(1024) },
+  })
+  const projected = projectConversationTransportPart(part) as Message.ToolPart
+  expect(projected.state).toMatchObject({ status: "completed", metadata: facts })
+  expect(projected.state.metadata[CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]).toMatchObject({
+    kind: "deferred", outputBytes: CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+  })
+})
+
 test("projects one bounded first-paint transcript while retaining exact persisted identity", () => {
   const largeOutput = "测".repeat(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES)
   const smallOutput = "small exact output"

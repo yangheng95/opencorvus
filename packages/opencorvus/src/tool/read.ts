@@ -1,4 +1,5 @@
 import z from "zod"
+import { ReadToolResultFacts } from "@opencorvus-ai/transport-protocol"
 import * as path from "path"
 import { Tool } from "./tool"
 import { FileTime } from "../file/time"
@@ -55,17 +56,14 @@ export const ReadToolParameters = z.object({
     .describe(
       "A path relative to the current Task directory, or an absolute path when the caller already has that exact native path",
     ),
-  offset: z.coerce.number().describe("The line number to start reading from (1-indexed)").optional(),
-  limit: z.coerce.number().describe("The maximum number of lines to read (defaults to 2000)").optional(),
+  offset: z.coerce.number().int().min(1).describe("The line or directory entry number to start from (1-indexed)").optional(),
+  limit: z.coerce.number().int().min(1).describe("The maximum number of lines or directory entries to read (defaults to 2000)").optional(),
 })
 
 export const ReadTool = Tool.define("read", {
   description: READ_TOOL_DESCRIPTION,
   parameters: ReadToolParameters,
   async execute(params, ctx) {
-    if (params.offset !== undefined && params.offset < 1) {
-      throw new Error("offset must be greater than or equal to 1")
-    }
     let filepath = params.filePath
     const viaAttachment = resolveAttachmentPath(filepath)
     if (viaAttachment !== undefined) {
@@ -148,8 +146,7 @@ export const ReadTool = Tool.define("read", {
           preview: sliced.slice(0, 20).join("\n"),
           truncated,
           loaded: [] as string[],
-          lines: sliced.length,
-          totalLines: entries.length,
+          ...ReadToolResultFacts.parse({ readType: "directory", offset, lines: sliced.length, totalLines: entries.length }),
         },
       }
     }
@@ -179,8 +176,7 @@ export const ReadTool = Tool.define("read", {
           preview: msg,
           truncated: false,
           loaded: instructions.map((i) => i.filepath),
-          lines: 0,
-          totalLines: 0,
+          ...ReadToolResultFacts.parse({ readType: "binary", lines: 0, totalLines: 0 }),
         },
         attachments: [
           {
@@ -222,8 +218,7 @@ export const ReadTool = Tool.define("read", {
         preview,
         truncated: page.truncated,
         loaded: instructions.map((i) => i.filepath),
-        lines: page.lines,
-        totalLines: page.totalLines,
+        ...ReadToolResultFacts.parse({ readType: "text", offset: page.offset, lines: page.lines, totalLines: page.totalLines }),
       },
       sources: [
         fileSource({

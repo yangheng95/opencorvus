@@ -46,6 +46,22 @@ export function renderToolFailureCause(cause: ToolFailureCause): string {
   return `${prefix} at ${cause.originSite}: ${cause.message}${data}`
 }
 
+const readWindowFields = {
+  offset: z.number().int().min(1),
+  lines: z.number().int().min(0),
+  totalLines: z.number().int().min(0),
+}
+
+/** Producer-owned read facts within Tool metadata. Directory counts refer to entries. */
+export const ReadToolResultFacts = z.discriminatedUnion("readType", [
+  z.object({ readType: z.literal("text"), ...readWindowFields }),
+  z.object({ readType: z.literal("directory"), ...readWindowFields }),
+  z.object({ readType: z.literal("binary"), lines: z.literal(0), totalLines: z.literal(0) }),
+]).refine((value) => value.readType === "binary" || (
+  value.lines <= value.totalLines && (value.lines === 0 || value.offset + value.lines - 1 <= value.totalLines)
+), "Read window must fit the actual total")
+export type ReadToolResultFacts = z.infer<typeof ReadToolResultFacts>
+
 export const DEFAULT_COMPOSER_INTENT: ComposerIntent = {
   productPillar: "work",
   conversationTarget: "chat",

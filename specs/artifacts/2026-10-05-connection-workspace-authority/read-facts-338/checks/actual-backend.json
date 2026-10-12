@@ -1,0 +1,83 @@
+{
+  "observedAt": "2026-10-12T05:34:01.106Z",
+  "actualModel": "gpt-6.1-sol",
+  "providerRequests": 9,
+  "streaming": true,
+  "providerTerminal": "eof",
+  "reads": [
+    {
+      "input": {
+        "filePath": "/attachment/prj_h7NqcL69UYe6c8F5xZAl/7fb7ff656cdb85971e53920a81c604da203f039008500cf6cc34e38edb6371c5.pdf",
+        "offset": 1,
+        "limit": 2000
+      },
+      "title": "范围检查（338）.pdf",
+      "facts": {
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      }
+    },
+    {
+      "input": {
+        "filePath": "short.txt",
+        "offset": 1,
+        "limit": 2000
+      },
+      "title": "short.txt",
+      "facts": {
+        "readType": "text",
+        "offset": 1,
+        "lines": 2,
+        "totalLines": 2
+      }
+    },
+    {
+      "input": {
+        "filePath": "tail.txt",
+        "offset": 29,
+        "limit": 2000
+      },
+      "title": "tail.txt",
+      "facts": {
+        "readType": "text",
+        "offset": 29,
+        "lines": 2,
+        "totalLines": 30
+      }
+    },
+    {
+      "input": {
+        "filePath": "items",
+        "offset": 2,
+        "limit": 2000
+      },
+      "title": "items",
+      "facts": {
+        "readType": "directory",
+        "offset": 2,
+        "lines": 2,
+        "totalLines": 3
+      }
+    },
+    {
+      "input": {
+        "filePath": "empty.txt",
+        "offset": 1,
+        "limit": 2000
+      },
+      "title": "empty.txt",
+      "facts": {
+        "readType": "text",
+        "offset": 1,
+        "lines": 0,
+        "totalLines": 0
+      }
+    }
+  ],
+  "sourceFiles": 4,
+  "filesRetainOriginalBytes": true,
+  "nativeExit": 0,
+  "pairedCleanupComplete": true,
+  "boundary": "Positive checks over actual Provider, canonical request/result/source, typed result facts, original bytes and physical completion. No DOM, UI text or screenshot assertions."
+}

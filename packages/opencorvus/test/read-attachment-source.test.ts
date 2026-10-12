@@ -71,6 +71,60 @@ test("binary attachment read results carry the canonical filename and original b
     const returned = AttachmentStore.nameFromUrl(result.attachments![0].url)!
     expect((await AttachmentStore.read(returned.projectID, returned.name)).equals(bytes)).toBe(true)
     expect(result.sources![0]).toMatchObject({ origin: "attachment", title: "研究图.png" })
+    expect(result.metadata).toMatchObject({ readType: "binary", lines: 0, totalLines: 0 })
+  } })
+}, 30_000)
+
+test("read results describe actual text and directory windows, including empty and capped content", async () => {
+  await using project = await memoryProject("read-result-facts")
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const reader = await ReadTool.init(), ctx = await context()
+    const long = Array.from({ length: 100 }, (_, index) => String(index + 1).padStart(3, "0") + "x".repeat(997)).join("\n")
+    await fs.writeFile(path.join(project.path, "short.md"), "one\ntwo\n")
+    await fs.writeFile(path.join(project.path, "empty.md"), "")
+    await fs.writeFile(path.join(project.path, "blank.md"), "\n")
+    await fs.writeFile(path.join(project.path, "long.md"), long)
+    await fs.mkdir(path.join(project.path, "entries"))
+    await fs.mkdir(path.join(project.path, "empty-dir"))
+    for (const name of ["a.txt", "b.txt", "c.txt"]) await fs.writeFile(path.join(project.path, "entries", name), name)
+    for (const [filePath, offset, limit, expected] of [
+      ["short.md", 1, 2000, { readType: "text", offset: 1, lines: 2, totalLines: 2 }],
+      ["empty.md", 1, 2000, { readType: "text", offset: 1, lines: 0, totalLines: 0 }],
+      ["blank.md", 1, 2000, { readType: "text", offset: 1, lines: 1, totalLines: 1 }],
+      ["long.md", 98, 2000, { readType: "text", offset: 98, lines: 3, totalLines: 100 }],
+      ["long.md", 1, 2000, { readType: "text", offset: 1, lines: 51, totalLines: 100 }],
+      ["entries", 2, 2000, { readType: "directory", offset: 2, lines: 2, totalLines: 3 }],
+      ["empty-dir", 1, 2000, { readType: "directory", offset: 1, lines: 0, totalLines: 0 }],
+    ] as const) {
+      const result = await reader.execute({ filePath, offset, limit }, ctx)
+      expect(result.metadata).toMatchObject(expected)
+    }
+    const capped = await reader.execute({ filePath: "long.md", limit: 2000 }, ctx)
+    expect(capped.sources![0]).toMatchObject({ range: { startLine: 1, endLine: 51 } })
+    expect(capped.output).toContain("Use offset=52 to continue.")
+    const empty = await reader.execute({ filePath: "empty.md" }, ctx)
+    expect(empty.output).toContain("End of file - total 0 lines")
+    const entries = await reader.execute({ filePath: "entries", offset: 2 }, ctx)
+    expect(entries.output).toContain("b.txt\nc.txt")
+  } })
+}, 30_000)
+
+test("read rejects non-integer or non-positive windows with the parameter error cause", async () => {
+  await using project = await memoryProject("read-window-parameter-errors")
+  await Instance.provide({ directory: project.path, fn: async () => {
+    await fs.writeFile(path.join(project.path, "file.md"), "one\ntwo\n")
+    const reader = await ReadTool.init(), ctx = await context()
+    for (const [field, value, code] of [
+      ["offset", 0, "too_small"], ["offset", 1.5, "invalid_type"],
+      ["limit", 0, "too_small"], ["limit", 1.5, "invalid_type"],
+    ] as const) {
+      await expect(reader.execute({ filePath: "file.md", [field]: value }, ctx)).rejects.toMatchObject({
+        cause: { name: "ZodError", issues: [{ code, path: [field] }] },
+      })
+    }
+    expect(reader.parameters.parse({ filePath: "file.md", offset: "1", limit: "2" })).toEqual({
+      filePath: "file.md", offset: 1, limit: 2,
+    })
   } })
 }, 30_000)
 

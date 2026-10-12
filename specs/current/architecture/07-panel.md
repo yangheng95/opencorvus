@@ -121,11 +121,18 @@ and the marker count toward that budget; short titles remain exact. Transcript
 and live projections share this owner, while disclosure reads retain the complete
 canonical title, input and result under the original state-integrity marker.
 The shared Tool summary uses a completed read's non-empty result title as its
-resource label, keeping the existing requested range and observed line counts.
-Before completion or without a result title, the actual request path supplies
-the label; errors retain their canonical failure text. Expanded Input still
-shows the exact request locator. Main, child and card summaries share this
-presentation rule without changing any persisted Tool or Source facts.
+resource label. ReadToolResultFacts validates producer-owned readType and the
+existing lines/totalLines counts, with the actual offset for text and directory
+windows. Binary reads have no displayed line window; directory counts label
+entries. Completed text ranges use the returned count, including byte caps and
+end-of-file limits. Empty content has zero lines. Read offset and limit are
+positive integers admitted by the Tool parameter schema. The bounded transport
+retains these same facts, and host file context still uses the sole lines count.
+Pending/running ranges are explicitly requested bounds. A completed record
+without current typed facts retains its name and expandable original details;
+the UI does not infer a result type from paths or older count-only metadata.
+Errors retain their canonical failure text. Expanded Input still shows the exact
+request locator and bounds. Main, child and card summaries share this owner.
 The event
 handler captures its existing Question reader before entering streamGlobalSSE;
 the stream runs outside Instance context and reads explicit Session/Project

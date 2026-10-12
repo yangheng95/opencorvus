@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [338 读取范围与数量](read-facts-plan-338.md)：区分实际文本、目录和二进制结果。
+
 - [337 工具错误正文](error-literal-plan-337.md)：保留路径与多行诊断原文。
 
 - [336 读取工具摘要](read-summary-plan-336.md)：真实结果名称与Sources一致。

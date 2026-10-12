@@ -89,7 +89,7 @@ export function readTextFilePageContent(
 ): TextFilePage {
   const limit = input.limit ?? DEFAULT_TEXT_FILE_LIMIT
   const offset = input.offset ?? 1
-  const lines = content.split(/\r?\n/)
+  const lines = content.length === 0 ? [] : content.split(/\r?\n/)
   if (content.endsWith("\n")) lines.pop()
   if (offset > lines.length && !(lines.length === 0 && offset === 1)) {
     throw new Error(`Offset ${offset} is out of range for this file (${lines.length} lines)`)

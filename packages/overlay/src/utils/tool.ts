@@ -2,9 +2,9 @@
 // toolNameKey, toolInputCommand, shortRelativePath, relativePathFrom, shortPath
 
 import type { IconName } from "../components/ui/Icon"
-import { t } from "./i18n"
+import { t, tc } from "./i18n"
 import { isWindowsPath, pathWithForwardSeparators } from "./server-path"
-import { ToolFailureCause, renderToolFailureCause } from "@opencorvus-ai/transport-protocol"
+import { ReadToolResultFacts, ToolFailureCause, renderToolFailureCause } from "@opencorvus-ai/transport-protocol"
 
 // ── ANSI stripping ──
 
@@ -418,12 +418,21 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
         ? (safeState as any).title
         : ""
     const shortPath = readTitle || shortRelativePath(path, base)
-    // Read calls on the same file can fire multiple times when the file
-    // exceeds the per-call byte cap (50KB) — without slice info every
-    // entry looks identical and the operator cannot tell which range was
-    // fetched. Surface offset/limit when present so the user sees
-    // "@1+2000", "@2001+2000" etc on the inline pill.
+    // Completed windows come from the producer's actual result, including
+    // byte-capped reads. In-flight arguments remain explicitly requested bounds.
     if (n === "read" || n === "readfile") {
+      if ((safeState as any).status === "completed") {
+        const parsed = ReadToolResultFacts.safeParse((safeState as any).metadata)
+        if (!parsed.success || parsed.data.readType === "binary") return shortPath
+        const facts = parsed.data
+        const unit = facts.readType === "text" ? "lines" : "entries"
+        if (facts.lines === 0 || (facts.offset === 1 && facts.lines === facts.totalLines)) {
+          return `${shortPath} · ${tc(`tool.read_${unit}_count`, facts.lines)}`
+        }
+        const end = facts.offset + facts.lines - 1
+        const range = facts.lines === 1 ? String(facts.offset) : `${facts.offset}–${end}`
+        return `${shortPath} · ${tc(`tool.read_${unit}_range`, facts.lines, { range, total: facts.totalLines })}`
+      }
       const startLine = (safeInput as any).startLine
       const endLine = (safeInput as any).endLine
       const hasStartLine = typeof startLine === "number" && Number.isFinite(startLine)
@@ -432,27 +441,14 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
       const limit = (safeInput as any).limit
       const hasOffset = typeof offset === "number" && Number.isFinite(offset)
       const hasLimit = typeof limit === "number" && Number.isFinite(limit)
-      const meta = record((safeState as any).metadata) ? (safeState as any).metadata : {}
-      const readLines = (meta as any).lines
-      const totalLines = (meta as any).totalLines
-      const hasReadLines = typeof readLines === "number" && Number.isFinite(readLines) && readLines > 0
-      const hasTotal = typeof totalLines === "number" && Number.isFinite(totalLines)
-      const linesSuffix = hasReadLines
-        ? hasTotal && totalLines !== readLines
-          ? ` (${readLines}/${totalLines} lines)`
-          : ` (${readLines} lines)`
-        : ""
-      const start = hasOffset ? offset : 1
-      const spanSize = hasLimit ? limit : hasReadLines ? readLines : undefined
-      const hasSpan = typeof spanSize === "number" && Number.isFinite(spanSize) && spanSize > 0
       if (hasStartLine && hasEndLine) {
-        return `${shortPath}:${startLine}-${endLine}${linesSuffix}`
+        return `${shortPath} · ${t("tool.read_requested_range", { range: `${startLine}–${endLine}` })}`
       }
-      if (hasOffset || hasSpan) {
-        const span = hasSpan ? `+${spanSize}` : ""
-        return `${shortPath} @${start}${span}${linesSuffix}`
+      if (hasLimit) {
+        return `${shortPath} · ${t("tool.read_requested_window", { offset: hasOffset ? offset : 1, limit })}`
       }
-      return `${shortPath}${linesSuffix}`
+      if (hasOffset) return `${shortPath} · ${t("tool.read_requested_offset", { offset })}`
+      return shortPath
     }
     return shortPath
   }
