@@ -1,0 +1,10 @@
+2026-10-12T19:51:30.1286564Z [secret-scan] OK — 0 hits across tracked sources
+2026-10-12T19:51:32.5172867Z docs:check ok (345 ops, 25 groups)
+2026-10-12T19:51:32.5754862Z architecture-index ok — 18 current documents indexed, every link live
+2026-10-12T19:52:01.6215080Z ai runtime check passed (ai v7, provider v4, provider-utils v5, OpenRouter v3)
+2026-10-12T19:53:01.5669396Z  Tasks:    8 successful, 8 total
+2026-10-12T19:53:02.4611687Z  22 pass
+2026-10-12T19:53:02.4611914Z  0 fail
+2026-10-12T19:53:02.4612780Z Ran 22 tests across 2 files. [862.00ms]
+2026-10-12T19:53:35.2500705Z {"firstRun":"passed","sessionsCreated":4,"persistedAcrossRestart":2,"realProvider":false}
+2026-10-12T19:53:35.2569670Z [package] opencorvus-linux-x64 first-run conversation check: completed in 5.35s
