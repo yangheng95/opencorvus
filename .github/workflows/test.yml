@@ -207,6 +207,7 @@ jobs:
         run: |
           SELECTED=()
           while IFS= read -r file || [[ -n "$file" ]]; do
+            file="${file%$'\r'}"
             if [[ -n "$file" ]]; then SELECTED+=("$file"); fi
           done <<< "$SELECTED_TEST_FILES"
           bunx turbo run test --filter=opencorvus --log-order=stream -- "${SELECTED[@]}"

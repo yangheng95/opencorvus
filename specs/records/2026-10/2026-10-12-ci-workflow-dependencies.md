@@ -119,3 +119,9 @@ SSE修正已通过正式SDK生成及TypeScript编译，仅生成预期core文件
 作者示例修复经既有revision generator仅将squad-sdk从2026.10.12.1推进到2026.10.12.2，防止公开Registry同版本不同内容冲突；应用仍0.1.25，没有创建Release/tag/安装包。完整script/generate.ts成功，唯一额外生成差异是portable authoring template里的相同depends_on数组，SDK取消修正保持生成固定点。
 
 远端run38267596684精确绑定699538b23：四个重点文件（原生watcher、真实CLI、跨进程Session owner、compaction完整性）在Windows/macOS/Linux均成功，verify/audit/service与Selected CI passed全部成功。它是selected结果，不是完整CI。旧完整03546870c的Linux已跑完，剩余失败恰为本批旧合同及已修正的运行时缺陷；Windows旧67f全量也已结束，没有新增此前Linux/macOS未见的失败文件。下一步提交当前批次并启动最新完整手动CI，保留旧失败事实。
+
+af4512839已正常推送，所有推送钩子通过。原本地46个当前批次文件最终均通过，合计247测试/3710断言。手动完整run38269774883与46文件run38269770174均读回绑定af45128396b2f3f42d71270bde04069c33c0f1e2。67f旧完整运行已在三平台全部完成并保留失败日志，035旧完整Linux也已完成且未发现新增失败类别；为停止重复消耗已过期版本的runner，取消自己的旧手动run38262262133剩余任务。取消不算通过，旧失败证据仍保留，新完整运行才负责最终资格。
+
+run38269770174暴露真实手动入口工具链问题：本机PowerShell写出的46行列表是CRLF（Carriage Return + Line Feed，回车换行），YAML中的Bash read按LF切行却保留CR，导致46个文件名都带末尾回车并在模块导入前失败。日志并无测试断言失败，不能把这一轮计作已验收。test_files公开约定是逐行文件路径，全仓仅test.yml这一个输入消费点，现有合同测试只检查字符串，漏了Windows输入。最小修复在该文本边界去掉每行一个末尾CR，保留路径内空格和原argv引用；正向执行实际workflow步骤的Bash解析（仅记录bunx实参），覆盖LF、CRLF、空列表/空行和带空格路径，再用原CRLF输入运行真实selected CI。完整run test_files为空，因此继续保留，不因这次手动列表问题重跑整套。
+
+两个原workflow checker的精确文件入口22测试/213断言通过，包含实际Bash步骤的四种输入到argv正向合同。文档检查通过；不修改unit runner的通用文件名语义、不忽略缺失模块错误，仅修复公开多行输入的行结束符边界。

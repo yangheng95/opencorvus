@@ -47,6 +47,27 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  for (const { name, input, files } of [
+    { name: "an empty selection", input: "", files: [] },
+    { name: "blank LF and CRLF lines", input: "\r\n\n\r\n", files: [] },
+    { name: "LF paths with spaces", input: "test/one.test.ts\ntest/case with spaces.test.ts", files: ["test/one.test.ts", "test/case with spaces.test.ts"] },
+    { name: "CRLF paths with blank lines", input: "test/one.test.ts\r\n\r\ntest/case with spaces.test.ts\r\n", files: ["test/one.test.ts", "test/case with spaces.test.ts"] },
+  ]) {
+    test(`passes ${name} to the exact selected-test runner argv`, async () => {
+      const workflow = await readWorkflow("test.yml")
+      const step = workflow.jobs?.unit?.steps?.find(({ name }) => name === "Run unit tests")
+      if (!step?.run) throw new Error("CI unit runner step is missing")
+      const bash = process.platform === "win32" ? "C:/Program Files/Git/usr/bin/bash.exe" : "bash"
+      const result = Bun.spawnSync([bash, "-e", "-o", "pipefail", "-c", `bunx() { printf '%s\\0' "$@"; }\n${step.run}`], {
+        env: { ...process.env, SELECTED_TEST_FILES: input }, stdout: "pipe", stderr: "pipe",
+      })
+      expect(result.exitCode, result.stderr.toString()).toBe(0)
+      expect(result.stdout.toString().split("\0").slice(0, -1)).toEqual([
+        "turbo", "run", "test", "--filter=opencorvus", "--log-order=stream", "--", ...files,
+      ])
+    })
+  }
+
   test("shared Bun setup installs the frozen graph and manages the Unix cache before native work", async () => {
     const setup = Bun.YAML.parse(
       await Bun.file(path.join(workflowRoot, "../actions/setup-bun/action.yml")).text(),
@@ -919,9 +940,6 @@ describe("GitHub Actions workflow contract", () => {
     })
     const selectedStep = jobs.unit?.steps?.find(({ name }) => name === "Run unit tests")
     expect(selectedStep?.env).toEqual({ SELECTED_TEST_FILES: "${{ inputs.test_files || '' }}" })
-    expect(selectedStep?.run).toBe(
-      'SELECTED=()\nwhile IFS= read -r file || [[ -n "$file" ]]; do\n  if [[ -n "$file" ]]; then SELECTED+=("$file"); fi\ndone <<< "$SELECTED_TEST_FILES"\nbunx turbo run test --filter=opencorvus --log-order=stream -- "${SELECTED[@]}"\n',
-    )
     expect(releaseWorkflow.on).toEqual({
       push: { tags: ["v*"] },
       workflow_dispatch: {
