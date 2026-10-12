@@ -1,0 +1,54 @@
+{
+  "observedAt": "2026-10-12T06:14:15.133Z",
+  "actualModel": "gpt-6.1-sol",
+  "providerRequests": 9,
+  "streaming": true,
+  "providerTerminal": "eof",
+  "toolInputs": [
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "true"
+      }
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "false"
+      }
+    },
+    {
+      "tool": "write",
+      "input": {
+        "content": "false",
+        "filePath": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/tool-literal-339-live-02/project/literal.txt"
+      }
+    },
+    {
+      "tool": "edit",
+      "input": {
+        "filePath": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/tool-literal-339-live-02/project/literal.txt",
+        "oldString": "false",
+        "newString": "true",
+        "replaceAll": true
+      }
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/tool-literal-339-live-02/project/literal.txt",
+        "offset": 1,
+        "limit": 2000
+      }
+    }
+  ],
+  "editBefore": "false",
+  "editAfter": "true",
+  "finalBytes": "true",
+  "nativeExit": 0,
+  "nativeReason": "exited",
+  "qualification": "passed",
+  "nativeFailures": [],
+  "pairedCleanupComplete": true,
+  "boundary": "Positive checks over real Provider, exact input value types, canonical completed outcomes/source, real edit before/after and filesystem bytes plus physical completion. No DOM, UI text or screenshot assertions."
+}

@@ -1,0 +1,69 @@
+{
+  "listeners": null,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 73192,
+        "processInstanceID": "win32:639273823207050954",
+        "occurrenceID": "9486af5e-d27f-44ec-86f5-45b079bddc97"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 77828,
+        "processInstanceID": "win32:639273823199018141",
+        "occurrenceID": "c8b563d2-268f-467f-9f12-bac615e138fb"
+      }
+    }
+  ],
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\tool-literal-339-live-02\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "copiedLength": 2194,
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\tool-literal-339-live-02\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "copiedLength": 9155406,
+      "presentAfter": false
+    }
+  ],
+  "observedAtUtc": "2026-10-12T06:14:03.7279741Z",
+  "nativeSettlement": {
+    "occurrence": "tool-literal-339-live-02-1d356e98-bf67-432c-94b1-c3f0912dac71",
+    "outcome": "settled",
+    "host": {
+      "pid": 77828,
+      "processInstanceID": "win32:639273823199018141",
+      "occurrenceID": "c8b563d2-268f-467f-9f12-bac615e138fb"
+    },
+    "target": {
+      "pid": 73192,
+      "processInstanceID": "win32:639273823207050954",
+      "occurrenceID": "9486af5e-d27f-44ec-86f5-45b079bddc97"
+    },
+    "observedAtUtc": "2026-10-12T06:14:01.144Z",
+    "deadlineAt": 1791786119886,
+    "terminal": {
+      "occurrenceID": "tool-literal-339-live-02-1d356e98-bf67-432c-94b1-c3f0912dac71",
+      "pid": 73192,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "occurrence": "tool-literal-339-live-02-1d356e98-bf67-432c-94b1-c3f0912dac71",
+  "pairedCleanupComplete": true
+}

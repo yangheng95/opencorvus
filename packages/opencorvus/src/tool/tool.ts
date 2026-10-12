@@ -11,22 +11,6 @@ import { Instance } from "@/project/instance"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import type { ToolExecutionModeDeclaration } from "./execution-mode"
 
-/**
- * Coerce string values that LLMs sometimes produce for non-string fields.
- * Only converts unambiguous cases: "true"/"false" to boolean.
- * Number coercion is intentionally skipped to avoid breaking string IDs.
- */
-function coerceArgs(args: unknown): unknown {
-  if (args === null || args === undefined || typeof args !== "object" || Array.isArray(args)) return args
-  const out: Record<string, unknown> = {}
-  for (const [k, v] of Object.entries(args as Record<string, unknown>)) {
-    if (v === "true") out[k] = true
-    else if (v === "false") out[k] = false
-    else out[k] = v
-  }
-  return out
-}
-
 export namespace Tool {
   export function executionSurface(
     toolIDs: Iterable<string>,
@@ -106,7 +90,9 @@ export namespace Tool {
           }
           let parsed: typeof args
           try {
-            parsed = toolInfo.parameters.parse(coerceArgs(args))
+            // The declared field schemas own conversion; literal strings must
+            // reach them intact, including values such as "true" and "false".
+            parsed = toolInfo.parameters.parse(args)
           } catch (error) {
             if (error instanceof z.ZodError && toolInfo.formatValidationError) {
               throw new Error(toolInfo.formatValidationError(error), { cause: error })

@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-10-12T06:11:41.303Z",
+  "backend": {
+    "initialHandle": 38129,
+    "initialExit": 1,
+    "focusedHandle": 13531,
+    "actualExit": 0,
+    "tests": 17,
+    "assertions": 74
+  },
+  "backendTypes": {
+    "handle": 24073,
+    "actualExit": 0
+  },
+  "frontend": {
+    "reusedUnchangedBatch": 338,
+    "bundle": "main-HB6Ez6mO.js"
+  },
+  "launch": {
+    "handle": 49246,
+    "actualExit": 1
+  },
+  "actualBackendCheckerExit": 1,
+  "qualification": "failed",
+  "nativeFailures": [
+    "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   exit: 1,\n+   reason: 'deadline_exceeded'\n-   exit: 0,\n-   reason: 'exited'\n  }\n"
+  ],
+  "docsCheckExit": 0,
+  "ownedTabsClosed": [
+    "122"
+  ],
+  "textEvidenceScanned": 35,
+  "credentialMatches": 0,
+  "boundary": "Actual joined handles and backend contracts; frontend source unchanged and existing tested build reused. Root manually views screenshots and records visual findings separately. No UI automated tests."
+}

@@ -1,0 +1,38 @@
+{
+  "occurrence": "tool-literal-339-live-02-1d356e98-bf67-432c-94b1-c3f0912dac71",
+  "outcome": "ready",
+  "host": {
+    "pid": 77828,
+    "processInstanceID": "win32:639273823199018141",
+    "occurrenceID": "c8b563d2-268f-467f-9f12-bac615e138fb"
+  },
+  "parent": {
+    "pid": 76992,
+    "processInstanceID": "win32:639273823179395060",
+    "occurrenceID": "e3a1f5d8-871b-40d6-a4ac-f9010005a8be"
+  },
+  "target": {
+    "pid": 73192,
+    "processInstanceID": "win32:639273823207050954",
+    "occurrenceID": "9486af5e-d27f-44ec-86f5-45b079bddc97"
+  },
+  "targetBirthAtMs": 1791785520705,
+  "deadlineAt": 1791786119886,
+  "observedAtUtc": "2026-10-12T06:12:00.723Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\tool-literal-339-live-02\\runtime",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\tool-literal-339-live-02\\project",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\tool-literal-339-live-02\\evidence",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\tool-literal-339-live-02\\startup.json",
+    "18316",
+    "tool-literal-339-live-02-1d356e98-bf67-432c-94b1-c3f0912dac71",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\tool-literal-339-live-02\\task-selection.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-render-312\\builtin.json",
+    "12",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

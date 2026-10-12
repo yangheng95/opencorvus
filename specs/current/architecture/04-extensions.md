@@ -40,6 +40,13 @@ Build 将它映射到私有 `worktreeUsage`，
 Managed worktree 是 dispatch 的物理执行选择，由 Build/runtime 管理并绑定 dispatch
 lineage；Delivery Slice 不记录、复用或回收 workspace。
 
+`Tool.define` 将原始参数直接交给工具声明的 Zod schema 校验，字段的默认值、
+显式 coercion、preprocess 和 transform 均由同一 schema 拥有。字符串 `true`、
+`false` 作为文件名、内容、identifier 或 union 值时保持其原始类型，宿主不按值
+预先改写成 boolean；boolean 字段需要真实布尔值，错误类型通过既有参数错误及
+Zod cause 返回。执行仍使用 schema 解析后的值，原 Tool request、权限 invocation、
+结果物化、取消及生命周期所有者保持不变。
+
 ## Plugin —— 进程内插件
 
 The public `artifact-read-locator-key` entry owns the existing exact locator
