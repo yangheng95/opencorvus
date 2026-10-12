@@ -41,6 +41,7 @@ async function request() {
       title: "Cross-process channel identity",
       request: "Create exactly one Task through the project HTTP surface",
       productPillar: "code",
+      promptProfile: "base",
       source: "test",
       channelBinding,
     }),

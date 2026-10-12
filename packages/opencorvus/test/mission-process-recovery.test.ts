@@ -3,7 +3,7 @@ import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
 import { acquireControlLease, releaseControlLeaseOnErrorPath } from "@/engine/control-lease"
 import { recoverMissionProcessSession } from "@/mission/process-recovery"
-import { ensureMissionSession, listGlobalMissionProcessRecoveryCandidates } from "@/mission/session"
+import { ensureMissionSession, listGlobalMissionProcessRecoveryCandidates, setMissionPendingPrompt } from "@/mission/session"
 import {
   closeMissionExecutionOperation,
   currentMissionExecutionClosure,
@@ -51,6 +51,7 @@ async function missionFixture(label: string) {
     productPillar: "code",
     heldExpertSquadIDs: ["base"],
   })
+  await setMissionPendingPrompt({ session: mission, pendingPrompt: { text: `Open Mission recovery fixture ${label}` } })
   using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
   await openMissionExecutionWithWake({
     missionID: mission.missionID,

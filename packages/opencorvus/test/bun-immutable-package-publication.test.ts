@@ -329,12 +329,12 @@ describe("shared registry packages publish immutable revisions", () => {
         .split(/\r?\n/)
         .filter(Boolean)
         .map((line) => {
-          const entry = JSON.parse(line) as Record<string, unknown>
+          const entry = JSON.parse(line) as { level: string; service: string; data: { pkg: string; version: string }; message: string }
           return {
             level: entry.level,
             service: entry.service,
-            pkg: entry.pkg,
-            version: entry.version,
+            pkg: entry.data.pkg,
+            version: entry.data.version,
             message: entry.message,
           }
         })

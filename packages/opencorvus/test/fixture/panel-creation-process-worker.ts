@@ -81,6 +81,7 @@ async function seed() {
         title: `Process ${action}`,
         request: `Recover ${action} after its target commits`,
         productPillar: "code" as const,
+        promptProfile: "base",
       }
     : {
         action,

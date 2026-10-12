@@ -67,10 +67,10 @@ describe("scheduler message model harness", () => {
       "resolve its requested scheduler action in this wake and send the exact correlated reply",
       "It never closes, suspends, or supplies future progress for a non-terminal Task",
       "A scheduler reply or notification does not itself provide future Task progress",
-      "A Mission acceptance resume always opened a new non-terminal repair occurrence",
-      "both fields belong inside `dispatch.turn`, beside `kind`",
-      "Do not repeat an already exhausted read surface",
-      "send its correlated reply and make that lifecycle decision in the same wake",
+      "A Mission acceptance resume opened a non-terminal repair occurrence with a structured gap and acceptance-ledger revision",
+      "Supply the current `turn.acceptance_gap_id` and exact `turn.criterion_ids` inside `dispatch.turn`",
+      "Do not repeat an exhausted read surface to manufacture a proof channel the interface does not expose",
+      "send its correlated reply and lifecycle decision in the same wake if no independent progress authority remains",
       "bind that evidence with one `session` locator naming the current Orchestrator Session",
       "scheduler Protocol event IDs are not coordination-request evidence",
       "the recipient scheduler independently owns the answer and its reply ingress owns the future wake",
@@ -78,9 +78,9 @@ describe("scheduler message model harness", () => {
       "Each authoritative input starts with its authorized routine tools already callable",
       "Use the callable `scheduler_message` and `no_action` tools",
       "use the callable `scheduler_message` and `manage_task` tools",
-      "Final Tool parts and the paged causal Tool Message/Part inventory expose only bounded, structured-redacted metadata",
-      "use only a necessary `message_id` and `part_id` returned by that final's inventory in this or an earlier call with `evidence_reads`",
-      "select `field=input`, `output`, or `failure`",
+      "Inspect the compact redacted index and bounded Tool Part inventory",
+      "Read selected input/output/failure fields through `evidence_reads` and follow `next_offset` to completion",
+      "A source authorizes only its exact causal Message/Part pairs",
     ]
 
     expect(requiredOrchestratorGuidance.map((clause) => ORCHESTRATOR_CORE.includes(clause))).toEqual(

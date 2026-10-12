@@ -7,6 +7,8 @@ import { stageDiagnosticProvider } from "../script/evolution-diagnostic-provider
 import { CredentialRedactor } from "../script/real-provider-audit"
 import { claimDiagnosticInitialization, DiagnosticInitializationError } from "../script/evolution-diagnostic-initialization"
 import { Database } from "bun:sqlite"
+import { payloadPackageSources } from "../generated/expert-squad-payload"
+import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 
 test("diagnostic paired staging preserves the complete runtime catalog and scoped authority", async () => {
   const root = await Global.createTemporaryDirectory("evolution-diagnostic-provider-")
@@ -42,7 +44,10 @@ test("registered diagnostic prepares the actual package and preserves one initia
   const script = path.resolve(import.meta.dir, "../script/evolution-diagnostic.ts")
   // This local prepare contract is independent of any business observation registration.
   const registration = path.join(parent, "prepare-registration.json")
-  const packageDigest = "196e4f8d7a55a01783f00b4b46074dbaf17b2783b3856b43000c710988dfeb68"
+  const source = payloadPackageSources.find((entry) => entry.namespace === "builtin" && entry.id === "data-analysis")
+  if (!source) throw new Error("The current data-analysis embedded package is required")
+  const target = ExpertSquadRegistry.loadEmbeddedPackage(source)
+  const packageDigest = target.packageDigest
   await writeFile(registration, JSON.stringify({ id: "local-prepare-contract", runRoot: path.join(".tmp", "local-prepare-contract", path.basename(parent)),
     inputRoot: "specs/artifacts/2026-09-27-team-feedback/input", packageDigest,
     model: "openai/gpt-5.6-luna", inactivityMs: 300_000, pollIntervalMs: 2_000 }))
@@ -53,12 +58,12 @@ test("registered diagnostic prepares the actual package and preserves one initia
   }
   try {
     const first = await invoke()
-    expect(first.exit).toBe(0)
+    expect(first.exit, first.stderr).toBe(0)
     const receipt = JSON.parse(await readFile(path.join(root, "result.json"), "utf8"))
     expect(receipt).toMatchObject({ mode: "prepare", outcome: "prepared", model: "openai/gpt-5.6-luna",
       requestCeiling: null, inactivityMs: 300_000, pollIntervalMs: 2_000, businessVerdict: "not_evaluated",
       cleanup: { runtimeDisposed: true, credentialsRemoved: true },
-      target: { id: "data-analysis", version: "2026.09.27.5", packageDigest },
+      target: { id: "data-analysis", version: target.manifest.version, packageDigest },
     })
     expect(receipt.registration).toEqual(JSON.parse(await readFile(registration, "utf8")))
     for (const name of ["request.md", "metrics.json"]) {

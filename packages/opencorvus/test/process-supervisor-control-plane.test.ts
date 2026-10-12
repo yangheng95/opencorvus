@@ -517,7 +517,7 @@ describe("ProcessSupervisor control-plane authority", () => {
     let terminated = false
     const restore = ProcessSupervisor.setCommandFactoryForTest(async () => {
       setTimeout(() => {
-        stdout.write("one.txt\n")
+        stdout.write("one.txt\0")
         stderr.destroy(new Error("deterministic ripgrep stderr abort"))
       }, 0)
       return {

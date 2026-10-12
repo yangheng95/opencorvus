@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto"
 import { describe, expect, test } from "bun:test"
 import { Process } from "../src/util/process"
+import { ProcessExecutionError } from "@opencorvus-ai/util/process"
 
 describe("supervised Process binary input", () => {
   test("streams exact binary chunks through the owned stdin pipe", async () => {
@@ -58,12 +59,12 @@ describe("supervised Process binary input", () => {
 
   test("disposes the supervised child before returning a spawn-observer error", async () => {
     const error = new Error("spawn observer contract")
-    await expect(
-      Process.runHost([process.execPath, "-e", "setInterval(() => undefined, 1000)"], {
-        onSpawned: () => {
-          throw error
-        },
-      }),
-    ).rejects.toBe(error)
+    const failure = await Process.runHost([process.execPath, "-e", "setInterval(() => undefined, 1000)"], {
+      onSpawned: () => {
+        throw error
+      },
+    }).catch((cause: unknown) => cause)
+    expect(failure).toBeInstanceOf(ProcessExecutionError)
+    expect(failure).toMatchObject({ stage: "execution", cause: error })
   })
 })

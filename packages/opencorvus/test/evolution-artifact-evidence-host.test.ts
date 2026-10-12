@@ -6,7 +6,6 @@ import { cp, mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { payloadPackageSources } from "../generated/expert-squad-payload"
 import { generatedExpertSquadRevisions } from "../generated/expert-squad-revisions"
-import { packageContentDigest } from "../script/generate-expert-squad-revisions"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { UsageLedger } from "../src/usage"
@@ -3305,12 +3304,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.20")
-    expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
+    expect(embeddedPackage.manifest).toEqual(sourcePackage.manifest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
-    expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
-      packageContentDigest(path.resolve(import.meta.dir, "../../.."), source),
-    )
   })
 
   test("loads the self-contained package ABI and materializes one exact immutable revision", async () => {

@@ -167,7 +167,7 @@ describe("active directory persistence", () => {
     } as unknown as HostTransport)
     setSettingsStore("directory", NEXT_DIRECTORY)
     setBoardStore({
-      selectedSource: { kind: "task", id: "task_pending", directory: NEXT_DIRECTORY },
+      selectedSource: { kind: "task", id: "task_pending" },
       board: null,
       taskSwitching: true,
     })
@@ -181,11 +181,13 @@ describe("active directory persistence", () => {
       epoch: boardStore.selectEpoch,
       switching: boardStore.taskSwitching,
       failureTask: boardStore.taskSelectionError?.taskID,
+      directory: settingsStore.directory,
     }).toEqual({
-      source: { kind: "task", id: "task_pending", directory: NEXT_DIRECTORY },
+      source: { kind: "task", id: "task_pending" },
       epoch,
       switching: false,
       failureTask: "task_pending",
+      directory: NEXT_DIRECTORY,
     })
   })
 })

@@ -1,5 +1,5 @@
 import { afterAll, expect, test } from "bun:test"
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import { mkdir, readFile, realpath, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { workspaceTreeDigest } from "@opencorvus-ai/plugin"
 import { ensureGitProjectMetadata } from "../src/engine/git-project-metadata"
@@ -78,7 +78,8 @@ test("registered Trial directories preserve complete initial inputs independentl
         const binding = readTaskProcessBinding(taskID)
         expect(binding).toMatchObject({
           protocol: "task-native-process-binding-v2", task_id: taskID, project_id: projectID,
-          workspace_root: directory, initial_tree_sha256: workspaceTreeDigest(frozen),
+          logical_workspace_root: directory,
+          workspace_root: await realpath(directory), initial_tree_sha256: workspaceTreeDigest(frozen),
           package_revision_sha256: installed.after.packageDigest,
         })
         expect({ project: task.project_id, root: taskRootDirectory(task) }).toEqual({ project: projectID, root: directory })

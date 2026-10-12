@@ -286,6 +286,7 @@ describe("Project directory integrity", () => {
         body: JSON.stringify({
           productPillar: "work",
           request: "Persist one queued positive directory-integrity contract Task.",
+          promptProfile: "base",
           model: "openai/gpt-5.6-luna",
         }),
       })
@@ -2508,7 +2509,7 @@ describe("Project directory integrity", () => {
       unrelatedID: expect.any(String),
       targetID: registered.project.id,
     })
-    expect(unrelatedID).not.toBe(registered.project.id)
+    expect(Project.get(unrelatedID)?.worktree).toBe(unrelated.path)
   }, 90_000)
 
   test("rejects durable Task and Session creation after Project deletion admission closes", async () => {
@@ -2713,7 +2714,7 @@ describe("Project directory integrity", () => {
     const oldRevision = await McpAuth.beginCredentialLease(oldAuthKey, "https://old.invalid/mcp", "old-identity")
     await McpAuth.updateTokens(
       oldAuthKey,
-      { accessToken: "old-project-token" },
+      { issuer: "https://old.invalid", accessToken: "old-project-token" },
       "https://old.invalid/mcp",
       oldRevision,
       "old-identity",
@@ -2839,7 +2840,7 @@ describe("Project directory integrity", () => {
     )
     await McpAuth.updateTokens(
       recreatedAuthKey,
-      { accessToken: "recreated-completed-ledger-token" },
+      { issuer: "https://recreated.invalid", accessToken: "recreated-completed-ledger-token" },
       "https://recreated.invalid/mcp",
       recreatedRevision,
       "recreated-identity",
@@ -2877,7 +2878,7 @@ describe("Project directory integrity", () => {
     })
   }, 90_000)
 
-  test("does not restore an old quarantine into a recreated Project with the same deterministic ID", async () => {
+  test("preserves a recreated Project generation while reclaiming its old quarantine", async () => {
     await using project = await memoryProject()
     const registered = await Project.fromDirectory(project.path)
     const source = ProjectRuntimePaths.projectRuntimeRoot(project.path)
@@ -2889,6 +2890,7 @@ describe("Project directory integrity", () => {
     })
     const quarantine = plan.manifest.targets[0]!.quarantine
     await fs.rename(source, quarantine)
+    const recreatedGeneration = crypto.randomUUID()
     Database.use((db) => {
       db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run()
       db.insert(ProjectTable)
@@ -2896,7 +2898,7 @@ describe("Project directory integrity", () => {
           id: registered.project.id,
           worktree: project.path,
           sandboxes: [],
-          generation: crypto.randomUUID(),
+          generation: recreatedGeneration,
           time_created: registered.project.time.created,
           time_updated: registered.project.time.created,
         })
@@ -2912,7 +2914,7 @@ describe("Project directory integrity", () => {
     )
     await McpAuth.updateTokens(
       recreatedAuthKey,
-      { accessToken: "new-generation-token" },
+      { issuer: "https://new-generation.invalid", accessToken: "new-generation-token" },
       "https://new-generation.invalid/mcp",
       recreatedRevision,
       "new-generation-identity",
@@ -2936,7 +2938,7 @@ describe("Project directory integrity", () => {
     }).toEqual({
       source: "new-generation",
       quarantine: "missing",
-      projectGeneration: expect.not.stringMatching(new RegExp(`^${plan.manifest.projectGeneration}$`)),
+      projectGeneration: recreatedGeneration,
       recreatedCredential: "new-generation-token",
     })
   }, 90_000)

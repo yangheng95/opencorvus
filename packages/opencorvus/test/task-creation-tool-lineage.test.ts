@@ -25,6 +25,7 @@ test("Panel UI create_task accepts only the server-owned request occurrence", as
           request: "Create one Panel Task",
           title: "Panel Task",
           productPillar: "code",
+          promptProfile: "base",
         },
         context,
       ),

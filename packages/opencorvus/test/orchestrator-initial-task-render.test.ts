@@ -56,6 +56,7 @@ const expectedRoutineToolIDs = [
   "respond_agent_coordination",
   "scheduler_message",
   "search_code",
+  "skill",
   "todo",
   "wait",
   "webfetch",

@@ -792,7 +792,7 @@ describe("Metric scorer exact evidence runtime", () => {
             throw new Error("observer failed")
           },
         })
-        expect(callbackFailure.failure).toEqual({ kind: "output", message: "stdout callback: observer failed" })
+        expect(callbackFailure.failure).toEqual({ kind: "output", message: "Process output observer failed: observer failed" })
         await execution.close()
       },
     })

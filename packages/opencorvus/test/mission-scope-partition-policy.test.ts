@@ -29,7 +29,7 @@ test("projects scope-first Expert Squad Task partitioning", () => {
     "another participant's already returned text only when those finals omit a decisive original criterion",
     "Always read every Artifact or deliverable that the original request or stage acceptance contract makes a required acceptance input",
     "Reuse the latest successful same-Session Mission-state revision",
-    "sole source for catalog snapshot hashes, revisions, counts, and returned refs",
+    "sole source for catalog snapshot revisions, counts and refs",
   ]
 
   expect(requiredMissionClauses.map((clause) => MISSION_CORE.includes(clause))).toEqual(

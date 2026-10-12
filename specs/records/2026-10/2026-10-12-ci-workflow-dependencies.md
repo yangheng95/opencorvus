@@ -49,3 +49,37 @@ watcher及现有7个原生声明统一升级2.6.0，四个根override分别固�
 相邻五个非界面服务契约（mission-skill-service、project-actions-service、rewind-service、task-rename-service、workspace-discovery-service）经相同原运行器复核，共20测试/66断言通过；这些文件未修改。41f2cbb20的CodeQL运行38253460043也已成功。以上不替代三平台完整unit结论。
 
 等待期间主分支另有f755edc17提交。现有push CI按ref取消旧任务，而workflow_dispatch本来就按run_id隔离；为取得本轮完整结果，MCP修正推送后从现有test.yml手动入口运行全量（test_files留空），读回并绑定实际head_sha。不修改并发策略，不创建新分支或绕过检查。旧run结果按实际终态保留，不能把被取消的unit算通过。
+
+## 完整测试暴露的共享合同漂移：继续实施前分析
+
+67f9469a2完成推送钩子并正常推送；手动run38256988111已启动。旧run38253459893最终failure，三平台unit均因新push取消；取消前Linux完成235/591文件、macOS172/591、Windows102/591，进度不等于全量通过。完成日志揭示此前verify失败掩盖的更多失败，不能以取消或偶发行为略过。
+
+第一组是低层Task创建的promptProfile必填合同：Panel Tool lineage测试、真实HTTP/channel跨进程worker、Panel创建恢复worker和Project初始化HTTP测试没有传入选定专家团。已核对engine/model.ts的必填定义、task-api完整身份和panel透传，以及2026-10-07方案中的有意API调整；修复测试的当前有效输入，不恢复隐式默认选团。
+
+第二组是Mission派发原子消费：旧mission-process-recovery fixture直接以mission.dispatch打开却没有持久化待消费草稿，现行事务因此返回MissionDispatchDraftConflictError。必须横向核对全部4个生产openMissionExecutionWithWake入口、测试入口、dispatch/wake区别、正常/终态、重试/重启和多Project隔离。已有fixture/mission-opened.ts通过setMissionPendingPrompt持久化后再dispatch，生产HTTP读取并传递同一pendingPrompt；Panel创建和恢复使用mission.wake。按当前公开草稿写入入口补齐测试前置事实，不删除事务检查或改生产恢复状态机。其余直接dispatch测试也逐一核对。
+
+第三组待逐项核验：Skill当前直接投影而工具清单期望仍旧；Evolution包版本/诊断入口期望过期；结构化日志字段已进入data；公共ProcessExecutionError/ProcessOutputObserverError替代裸异常；ripgrep测试用桩没有结算。需要以真实定义、输入和执行证据区分过期fixture与产品故障。Project cleanup多项失败、Evolution诊断exit1和进程超时的根因尚未完成分析，暂不修改其行为。
+
+横向补证：全部生产Mission入口仅HTTP dispatch消费pending，其余Panel创建/恢复与HTTP wake使用mission.wake；所有其他直接测试入口均是wake，唯一共享mission-opened辅助已在dispatch前写入pending。此次异常发生在测试fixture的派发事务前置条件，不是恢复扫描/队列/租约路径；原分项目、关闭恢复、原Prompt owner与重启用例完整保留并重跑。ripgrep的Host/Task入口共享`--files --null`与NUL（空字符）解码器，files协议已有实际测试；旧桩写入换行后不会产生一条可交付记录，导致consumer永远到不了break/cleanup。只改桩为实际协议。Skill角色声明明确Mission使用mission_skill，Orchestrator当前拥有skill；调整两份旧清单，不改变权限。进程模块的统一错误类保留cause与输出，日志统一把字段放入data；同步对应测试的当前正向契约。
+
+Project清理日志显示7个失败均在凭据fixture或其后续读取中返回issuer缺失。McpAuth.updateTokens在进入持久化事务前要求issuer，现有auth-durable-revision合同也明确提供它；三个清理测试仍写入旧形态tokens。补齐各自虚构服务的issuer，保留凭据租约、世代、跨Project清理、失败回滚和重启恢复断言；不放宽认证合同。Prompt指导的两处文本测试则使用已删除的旧字段/措辞，修正为当前完整证据分页、repair occurrence和catalog revision指导，不恢复旧图流程约束。
+
+Evolution失败另有明确分层：Windows runner临时目录使用RUNNER~1，生产Task binding按原生realpath保存runneradmin物理根，并另存logical_workspace_root；测试错误地将二者视为相同。补验两种路径语义，保留完整初始文件/独立同伴数据验收。嵌入包测试固定旧发布日期版本且重算可变源码contentDigest，按仓库规则删除这种源码摘要验收，保留manifest投影与现有实际包工具/比较结果验收。诊断准备测试的注册目标则是已退休包的固定身份：本地prepare合同应先从当前不可变嵌入包取得身份，再冻结进测试registration；保留生产登记身份检查及已有旧registration返回明确失败的正向错误合同，不修改历史业务registration或重算其期望摘要。
+
+手动run38256988111的MCP测试通过后，service继续至workspace-directory-persistence暴露下一个旧预期：selectTask只在options显式提供directory时将它放入新BoardSource；该用例按全局Task身份调用，只有selectionEpoch，故当前source是kind/id而已应用设置仍持有目录。BoardSource类型仍支持显式目录，并非整个字段已被删除。按此入口模式更新测试输入与输出，并独立断言settingsStore.directory仍为NEXT_DIRECTORY。该测试只验证服务/状态事务，未操作或断言DOM、组件呈现或截图。
+
+## 第二批聚焦结果
+
+全部使用原生监督和隔离子进程的原`bun run test -- <files>`入口：
+
+- Group A：Task Tool lineage、真实HTTP/channel跨进程竞争、Panel owner死亡恢复、Mission恢复，8测试/50断言通过。
+- Group B：进程监督、二进制输入、实际metric scorer、不可变包发布、Orchestrator初次请求与角色工具面，45测试/136断言通过。
+- Group C：Project目录/清理/GC全部60测试/89断言通过；两个prompt合同文件4测试/9断言通过。诊断首次仍使用旧登记目标失败，保留原日志，随后单独修复并重跑。
+- Group D：独立Trial树、真实诊断prepare/continuation和包Artifact消费，12测试/246断言通过；包含9项完整Evolution包协议和实际工具执行。没有Provider调用、私有凭据使用或界面自动化。
+- Overlay目录选择服务，5测试/11断言通过。
+
+合计134测试/541断言。AST（Abstract Syntax Tree，抽象语法树）只读扫描所有后端测试的直接createTask和HTTP POST创建输入，剩余唯一缺省promptProfile是明确验证ZodError的错误契约，保留原状；没有机械给所有请求补默认值。本地无法模拟GitHub Windows的8.3用户目录，物理/逻辑路径修正还须远端核验；手动完整运行继续用于发现其余未执行文件的失败。
+
+提交审查发现触及的Project测试中另有两条旧负向比较，按仓库约束改为精确正向事实：新Project解析到其真实worktree，以及重建后保留明确生成的generation。保留原清理、凭据和文件内容断言，重跑该完整文件确认。
+
+上述最终Project重跑60测试/89断言全部通过。服务runner在workspace-directory-persistence之后的三个文件（文件定位、workspace条件导出解析、worktree传输权限）另有8测试/18断言通过，均未修改；它们是服务/构建解析合同，不作视觉验收声明。
