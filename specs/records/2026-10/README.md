@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [CI workflow与依赖修复](2026-10-12-ci-workflow-dependencies.md)：当前失败根因、有限依赖升级及远端运行证据。
+
 - [350 长消息重排阅读位置](2026-10-12-main-transition-350.md)：段落锚点、宽度恢复与键盘输入优先。
 
 - [0.1.25 更新日志补全](2026-10-12-release-notes-completeness-0.1.25.md)：完整产品分组、来源证据与公开说明同步。

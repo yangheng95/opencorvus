@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [CI workflow与依赖修复](records/2026-10/2026-10-12-ci-workflow-dependencies.md)：发布步骤契约、五项审计依赖链与真实远端验收。
+
 - [350 长消息重排阅读位置](records/2026-10/2026-10-12-main-transition-350.md)：段落锚点、宽度恢复与键盘输入优先。
 
 - [0.1.25 更新日志补全](records/2026-10/2026-10-12-release-notes-completeness-0.1.25.md)：按上个公开版本核对产品变化，纠正候选差分与单版页面缺失。

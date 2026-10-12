@@ -689,9 +689,14 @@ describe("GitHub Actions workflow contract", () => {
       run: "bun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
     })
     const prepareStepNames = jobs.prepare?.steps?.map(({ name }) => name) ?? []
-    expect(prepareStepNames.slice(-9)).toEqual([
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Verify written release notes")).toEqual({
+      name: "Verify written release notes",
+      run: 'bun script/check-release-notes.ts "${{ steps.meta.outputs.version }}"',
+    })
+    expect(prepareStepNames.slice(prepareStepNames.indexOf("Verify version alignment"))).toEqual([
       "Verify version alignment",
       "Verify remaining release budget",
+      "Verify written release notes",
       "Verify immutable release identity",
       "Verify frozen dependency graph",
       "Build generated Software Development Kit",
