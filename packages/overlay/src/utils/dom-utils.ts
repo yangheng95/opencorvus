@@ -78,6 +78,7 @@ export interface AutoScrollOptions {
 
 export interface AutoScrollController {
   readingPosition: () => { top: number; following: boolean }
+  hasScrollInput: () => boolean
   cleanup: () => void
   contentChanged: () => void
   scrollToBottom: () => void
@@ -329,7 +330,9 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   el.addEventListener("wheel", onWheel, { passive: true })
   el.addEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
   el.addEventListener("focusin", onFocusIn)
-  el.addEventListener("keydown", onKeyDown)
+  // Record reading intent before a caller handles and prevents the key's default
+  // action. Controller recreation must not change that ordering.
+  el.addEventListener("keydown", onKeyDown, true)
   el.addEventListener("pointerdown", onPointerDown)
   el.addEventListener("touchstart", onTouchStart, { passive: true })
   el.addEventListener("touchmove", onTouchMove, { passive: true })
@@ -349,13 +352,14 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   return {
     readingPosition: () => ({ top: restoreTop ?? el.scrollTop, following: opts.isTracking() }),
+    hasScrollInput: () => pointerScrollIntent || Boolean(inputIntent && performance.now() <= inputIntent.expiresAt),
     cleanup: () => {
       disposed = true
       retirePositionRestore()
       el.removeEventListener("wheel", onWheel)
       el.removeEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
       el.removeEventListener("focusin", onFocusIn)
-      el.removeEventListener("keydown", onKeyDown)
+      el.removeEventListener("keydown", onKeyDown, true)
       el.removeEventListener("pointerdown", onPointerDown)
       el.removeEventListener("touchstart", onTouchStart)
       el.removeEventListener("touchmove", onTouchMove)

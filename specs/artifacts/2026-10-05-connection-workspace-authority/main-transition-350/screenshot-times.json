@@ -1,0 +1,82 @@
+[
+  {
+    "file": "01-initial-source-and-main.png",
+    "at": "2026-10-12T12:09:14.890Z"
+  },
+  {
+    "file": "02-before-close-long-input-tail.png",
+    "at": "2026-10-12T12:13:08.206Z"
+  },
+  {
+    "file": "03-closed-long-input-tail.png",
+    "at": "2026-10-12T12:13:32.875Z"
+  },
+  {
+    "file": "04-reopened-long-input-tail.png",
+    "at": "2026-10-12T12:13:52.858Z"
+  },
+  {
+    "file": "05-fixed-long-tail-before-close.png",
+    "at": "2026-10-12T12:21:15.807Z"
+  },
+  {
+    "file": "06-fixed-long-tail-closed.png",
+    "at": "2026-10-12T12:21:35.485Z"
+  },
+  {
+    "file": "07-fixed-long-tail-reopened.png",
+    "at": "2026-10-12T12:21:55.479Z"
+  },
+  {
+    "file": "08-fixed-return-to-task.png",
+    "at": "2026-10-12T12:22:46.574Z"
+  },
+  {
+    "file": "09-fixed-bottom-follow.png",
+    "at": "2026-10-12T12:23:23.308Z"
+  },
+  {
+    "file": "10-online-session-bottom-follow.png",
+    "at": "2026-10-12T12:27:29.446Z"
+  },
+  {
+    "file": "11-online-pageup-during-resize.png",
+    "at": "2026-10-12T12:28:22.095Z"
+  },
+  {
+    "file": "12-input-priority-pageup.png",
+    "at": "2026-10-12T12:33:03.562Z"
+  },
+  {
+    "file": "13-native-pageup-priority.png",
+    "at": "2026-10-12T12:36:12.409Z"
+  },
+  {
+    "file": "14-native-new-reading-position.png",
+    "at": "2026-10-12T12:36:35.188Z"
+  },
+  {
+    "file": "15-final-before-pageup.png",
+    "at": "2026-10-12T12:43:37.723Z"
+  },
+  {
+    "file": "16-final-native-pageup.png",
+    "at": "2026-10-12T12:43:56.571Z"
+  },
+  {
+    "file": "17-final-new-position-retained.png",
+    "at": "2026-10-12T12:44:44.242Z"
+  },
+  {
+    "file": "18-final-immediate-pageup.png",
+    "at": "2026-10-12T12:45:23.955Z"
+  },
+  {
+    "file": "19-final-immediate-reading-retained.png",
+    "at": "2026-10-12T12:45:50.331Z"
+  },
+  {
+    "file": "20-final-explicit-bottom.png",
+    "at": "2026-10-12T12:46:01.541Z"
+  }
+]

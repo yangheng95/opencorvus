@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-10-12T12:36:25.6237261Z",
+  "occurrence": "main-transition-350-live-02-ed31dec3-ad7b-416f-bfe0-e46b5ae326eb",
+  "owner": {
+    "pid": 73568,
+    "processInstanceID": "win32:639274047831630335",
+    "occurrenceID": "f7fd88b2-f8fa-4584-bfa1-ccadd7c97321"
+  },
+  "pageClosed": false,
+  "dispatch": false,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "reason": "Original Target occurrence already exited; no shutdown dispatched"
+}

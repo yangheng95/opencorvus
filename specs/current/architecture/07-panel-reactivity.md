@@ -268,21 +268,39 @@ The primary conversation keeps at most 50 reading positions in that same UI
 store, keyed by captured API authority revision and actual source kind/ID.
 Selection clears transient primary disclosures without clearing this bounded
 view memory. Before replay or projection retirement, its one registered visible
-reader captures the current top/following intent and visible quotation Message
-anchor, text ordinal and viewport offset. Empty, hidden, loading, unhydrated or
+reader captures the current top/following intent, viewport width and visible
+quotation Message anchor, text ordinal, rendered Markdown block ordinal and block
+offset. A long first-visible Message can rewrap internally without changing its
+virtual item index, so its whole-text pixel offset is not a reading anchor.
+Empty, hidden, loading, unhydrated or
 retired owners cannot publish a new position. A returning paused reader uses the
 existing history loader to locate its actual Message and the existing virtualizer
 card-scroll bridge to mount it, then resumes through the same scroll controller.
-The bridge pins the actual item through the existing virtualizer keepMounted
+An already mounted target is pinned directly; an absent historical target uses
+the bridge. Both pin the actual item through the existing virtualizer keepMounted
 ownership for reading restoration. It does not start index or DOM alignment for
 that request: an outstanding index alignment can otherwise overwrite the saved
 Message offset on later item measurement. Explicit card jumps still align through
 the same bridge; restoration retires its temporary pin on completion, reader
 movement or source retirement.
-During that restoration the same scroll controller resolves the actual Message
-offset on each correction frame and includes that resolved target in its existing
-geometry stability check. The original TextPart pending signal is exposed on its
-rendered text box so partially committed Markdown is not treated as ready geometry.
+During that restoration the same scroll controller resolves the actual rendered
+block offset on each correction frame and includes that resolved target in its
+existing geometry stability check. An unavailable target block waits for its real
+layout; an unrelated streaming TextPart does not block a ready earlier anchor.
+The existing measured-content callback also restores this same paused reader
+when viewport width changes. Layout-induced scroll/clamp echoes cannot overwrite
+the pre-resize position; explicit input or a settled restoration adopts the new
+width. The controller's existing scroll-input ownership also prevents layout
+restoration from restarting during an active key, wheel or pointer movement;
+actual scroll events can record that reader's new width and paragraph. This
+keyboard intent is recorded in the capture phase, before a caller's custom key
+handler prevents the default action; cleanup retains the same capture option.
+Recreating a controller cannot invert that order. Existing nested-owner,
+editable-control and modifier boundaries still decide which input it owns. This
+applies to pane and window width changes without a Dock-specific
+scroll path. It preserves the paragraph and pixel offset within it, not a character
+position after rewrapping. Regions without a rendered Markdown anchor retain the
+numeric-position contract.
 The pending reader and pin retire only when the controller settles or owned input
 or cleanup retires it. Numeric position callers retain their existing behavior.
 Initial sources follow the bottom. Explicit reader movement and Scroll to latest
