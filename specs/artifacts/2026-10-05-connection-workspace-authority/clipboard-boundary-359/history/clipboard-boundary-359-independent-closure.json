@@ -1,0 +1,27 @@
+{
+  "occurrence": "clipboard-boundary-359-084d799c-085f-4591-8812-3222c6c2aa1f",
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  },
+  "observedAtUtc": "2026-10-12T19:08:53.7927508Z",
+  "listeners": [],
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 51520,
+        "processInstanceID": "win32:639274283770564227",
+        "occurrenceID": "ad610a04-1989-4b2f-8b21-bdab4b440779"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 78500,
+        "processInstanceID": "win32:639274283781748135",
+        "occurrenceID": "46b8a2da-7349-4a25-bac5-06887b23bdf8"
+      }
+    }
+  ]
+}

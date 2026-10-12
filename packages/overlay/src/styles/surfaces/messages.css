@@ -1140,6 +1140,31 @@ button.msg-source-chip .msg-source-chip__detail,
   white-space: pre-wrap;
 }
 
+.msg-source-chip__file-title {
+  display: flex;
+  align-items: baseline;
+  align-self: stretch;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+}
+
+button.msg-source-chip .msg-source-chip__filename {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.msg-source-chip__range {
+  flex: none;
+  padding: var(--ui-gap-3xs);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .msg-source-chip__location {
   display: -webkit-box;
   overflow: hidden;

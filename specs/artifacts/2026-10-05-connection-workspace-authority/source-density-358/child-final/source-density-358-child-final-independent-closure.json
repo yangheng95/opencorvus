@@ -1,0 +1,27 @@
+{
+  "occurrence": "source-density-358-child-final-10b5b234-e645-4c15-8d03-df0a47556ec4",
+  "states": [
+    {
+      "expected": {
+        "pid": 39524,
+        "processInstanceID": "win32:639274249002024403",
+        "occurrenceID": "f1726ab7-51bc-44a0-b066-fbdcc32fa7f0"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67612,
+        "processInstanceID": "win32:639274249011030392",
+        "occurrenceID": "af56d402-ab87-4e3b-a6ac-db35138bd441"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T18:04:17.1686243Z",
+  "listeners": [],
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  }
+}

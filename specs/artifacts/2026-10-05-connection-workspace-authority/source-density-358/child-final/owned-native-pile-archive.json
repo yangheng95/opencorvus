@@ -1,0 +1,44 @@
+{
+  "targetBirthUtc": "2026-10-12T18:01:41.1030392Z",
+  "observedAtUtc": "2026-10-12T18:04:17.8801741Z",
+  "nativeTerminal": {
+    "occurrenceID": "source-density-358-child-final-10b5b234-e645-4c15-8d03-df0a47556ec4",
+    "pid": 67612,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0.",
+  "files": [
+    {
+      "birthUtc": "2026-10-12T18:01:41.4533464Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-density-358\\generated-bun-child-final\\091d165574530ade.debug.pile",
+      "name": "091d165574530ade.debug.pile",
+      "bytes": 47224
+    },
+    {
+      "birthUtc": "2026-10-12T18:01:41.4304173Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-density-358\\generated-bun-child-final\\69cc5fa7b1dcf631.debug.pile",
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556
+    },
+    {
+      "birthUtc": "2026-10-12T18:01:41.3681830Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-density-358\\generated-bun-child-final\\7a87559fbb4087c4.debug.pile",
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902
+    },
+    {
+      "birthUtc": "2026-10-12T18:01:41.3782514Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-density-358\\generated-bun-child-final\\cf86f20c120ce818.debug.pile",
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408
+    },
+    {
+      "birthUtc": "2026-10-12T18:01:41.4863735Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-density-358\\generated-bun-child-final\\f9ce0c567348c89d.debug.pile",
+      "name": "f9ce0c567348c89d.debug.pile",
+      "bytes": 43530
+    }
+  ]
+}

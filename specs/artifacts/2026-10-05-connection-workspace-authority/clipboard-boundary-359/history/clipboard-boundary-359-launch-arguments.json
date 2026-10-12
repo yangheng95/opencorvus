@@ -1,0 +1,27 @@
+{
+  "occurrence": "clipboard-boundary-359-084d799c-085f-4591-8812-3222c6c2aa1f",
+  "port": 18354,
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\clipboard-boundary-359\\evidence",
+    "clipboard-boundary-359-084d799c-085f-4591-8812-3222c6c2aa1f",
+    "1791832176938",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18354",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\clipboard-boundary-359\\startup.json",
+    "--startup-occurrence",
+    "clipboard-boundary-359-084d799c-085f-4591-8812-3222c6c2aa1f",
+    "--log-level",
+    "INFO"
+  ]
+}

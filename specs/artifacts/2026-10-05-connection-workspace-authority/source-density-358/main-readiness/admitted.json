@@ -1,0 +1,30 @@
+{
+  "observedAtUtc": "2026-10-12T17:48:34.7022380Z",
+  "review": "Fresh358 full source review; counts and identities are in current result-startup/result-task-startup/result-frontier and guard. Original Task terminal/recovery/permissions/Message/Memory/physical ownership must satisfy the checks above. Full copy and actual child UI remain required.",
+  "runtimeLeaseStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 39168,
+        "processInstanceID": "win32:639274195899691838",
+        "occurrenceID": "40fd19ce-b202-49ba-803d-ba3a1a2049fa"
+      },
+      "lease": {
+        "id": "act_g0VXqzr1m004zqIwNhG3",
+        "target": "runtime_process",
+        "target_id": "40fd19ce-b202-49ba-803d-ba3a1a2049fa",
+        "owner_occurrence_id": "{\"pid\":39168,\"processInstanceID\":\"win32:639274195899691838\",\"occurrenceID\":\"40fd19ce-b202-49ba-803d-ba3a1a2049fa\"}",
+        "time_activated": 1791822797881,
+        "expires_at": 9007199254740991
+      }
+    }
+  ],
+  "startupQualified": true,
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-surfaces-356-live-02",
+  "sourceOccurrence": "source-surfaces-356-live-02-8b837179-94d6-4931-ab91-a01068d19367",
+  "selectedSubject": {
+    "id": "ses_-zUS8zzerzzqG425PLRl",
+    "kind": "session",
+    "projectID": "prj_hEWVbkdkqzXiCqYcPTRJ"
+  }
+}

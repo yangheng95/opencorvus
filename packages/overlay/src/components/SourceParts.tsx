@@ -74,15 +74,19 @@ function readableSourceUrlText(value: string): string {
   })
 }
 
+function sourceFileTitle(source: ConversationSourcePart): string | undefined {
+  if (source.origin === "attachment" && source.title) return source.title
+  const title = source.title || ""
+  const filePath = source.filename || source.path || title
+  const syntax = source.path || sourceDirectory()
+  const filename = pathWithForwardSeparators(filePath, syntax).split("/").filter(Boolean).at(-1)
+  return title && !pathWithForwardSeparators(title, syntax).includes("/") ? title : filename
+}
+
 function sourceLabel(source: ConversationSourcePart): string {
   if (source.type === "source-file") {
-    if (source.origin === "attachment" && source.title) return fileSourceLocation(source.title, source.range)
-    const title = source.title || ""
-    const filePath = source.filename || source.path || title
-    const syntax = source.path || sourceDirectory()
-    const filename = pathWithForwardSeparators(filePath, syntax).split("/").filter(Boolean).at(-1)
-    const label = title && !pathWithForwardSeparators(title, syntax).includes("/") ? title : filename
-    if (label) return fileSourceLocation(label, source.range)
+    const title = sourceFileTitle(source)
+    if (title) return fileSourceLocation(title, source.range)
   }
   if (source.type === "source-url" && source.url) {
     const title = source.title?.trim() || ""
@@ -201,6 +205,14 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
 
 function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
   const label = () => sourceLabel(props.source)
+  const fileTitle = () => sourceFileTitle(props.source) || label()
+  const fileRange = () => {
+    const range = props.source.range
+    if (!range) return ""
+    return range.startLine === range.endLine
+      ? t("chat.source_line", { line: range.startLine })
+      : t("chat.source_lines", { start: range.startLine, end: range.endLine })
+  }
   const detail = () => sourceDetail(props.source)
   const fileCaption = () => props.omitDirectoryCaption ? "" : sourceFileCaption(props.source).text
   const icon = () => sourceIcon(props.source)
@@ -254,7 +266,10 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             </Show>
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__content">
-              <span class="msg-source-chip__label">{label()}</span>
+              <span class="msg-source-chip__file-title">
+                <span class="msg-source-chip__label msg-source-chip__filename">{fileTitle()}</span>
+                <Show when={fileRange()}>{(range) => <span class="msg-source-chip__range">{range()}</span>}</Show>
+              </span>
               <Show when={fileCaption()}>
                 <span class="msg-source-chip__detail">{fileCaption()}</span>
               </Show>

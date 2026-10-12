@@ -1,0 +1,16 @@
+{
+  "url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText",
+  "step": "MDN tab172 second native Syntax Copy",
+  "readText": "writeText(newClipText)",
+  "read": [
+    {
+      "entries": [
+        {
+          "mimeType": "text/plain",
+          "text": "writeText(newClipText)"
+        }
+      ],
+      "presentationStyle": "unspecified"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "occurrence": "clipboard-boundary-359-084d799c-085f-4591-8812-3222c6c2aa1f",
+  "outcome": "ready",
+  "host": {
+    "pid": 51520,
+    "processInstanceID": "win32:639274283770564227",
+    "occurrenceID": "ad610a04-1989-4b2f-8b21-bdab4b440779"
+  },
+  "parent": {
+    "pid": 78956,
+    "processInstanceID": "win32:639274283749825400",
+    "occurrenceID": "f202f621-8f35-44d9-8de1-3cdb3b47f3d0"
+  },
+  "target": {
+    "pid": 78500,
+    "processInstanceID": "win32:639274283781748135",
+    "occurrenceID": "46b8a2da-7349-4a25-bac5-06887b23bdf8"
+  },
+  "targetBirthAtMs": 1791831578174,
+  "deadlineAt": 1791832176938,
+  "observedAtUtc": "2026-10-12T18:59:38.202Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18354",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\clipboard-boundary-359\\startup.json",
+    "--startup-occurrence",
+    "clipboard-boundary-359-084d799c-085f-4591-8812-3222c6c2aa1f",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

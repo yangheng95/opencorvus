@@ -1,0 +1,27 @@
+{
+  "occurrence": "source-density-358-clipboard-4d0e36c7-2df0-4481-aece-77c9b75ba8c9",
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  },
+  "states": [
+    {
+      "expected": {
+        "pid": 70148,
+        "processInstanceID": "win32:639274266171787820",
+        "occurrenceID": "6e07dacf-b05c-4430-a0da-4ca48e00bd46"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 56440,
+        "processInstanceID": "win32:639274266180439216",
+        "occurrenceID": "1eac9537-f8e3-4775-9be3-b4ddfd2fc910"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T18:37:16.8959794Z",
+  "listeners": []
+}

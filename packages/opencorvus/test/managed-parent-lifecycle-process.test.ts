@@ -12,15 +12,6 @@ type LifecycleEvent = {
   reason?: string
 }
 
-function processIsAlive(pid: number): boolean {
-  try {
-    process.kill(pid, 0)
-    return true
-  } catch {
-    return false
-  }
-}
-
 async function events(pathname: string): Promise<LifecycleEvent[]> {
   return await fs
     .readFile(pathname, "utf8")
@@ -42,6 +33,7 @@ describe("managed backend follows one launcher-minted parent occurrence", () => 
       { stdout: "pipe", stderr: "pipe", windowsHide: true },
     )
     let childPid: number | undefined
+    let childOccurrence: LifecycleEvent["child"] | undefined
     try {
       const [exitCode, stdout] = await Promise.all([
         launcher.exited,
@@ -60,6 +52,7 @@ describe("managed backend follows one launcher-minted parent occurrence", () => 
       let observed: LifecycleEvent[] = []
       while (Date.now() < deadline) {
         observed = await events(ledger)
+        childOccurrence = observed.find((event) => event.phase === "ready")?.child
         if (observed.some((event) => event.phase === "shutdown")) break
         await Bun.sleep(20)
       }
@@ -87,10 +80,19 @@ describe("managed backend follows one launcher-minted parent occurrence", () => 
         },
       ])
       const exitDeadline = Date.now() + 5_000
-      while (childPid && processIsAlive(childPid) && Date.now() < exitDeadline) await Bun.sleep(20)
-      expect(observeRuntimeProcessOccurrence(observed[0]!.child)).toBe("dead_or_reused")
+      let physicalState = observeRuntimeProcessOccurrence(observed[0]!.child)
+      while (physicalState !== "dead_or_reused" && Date.now() < exitDeadline) {
+        await Bun.sleep(20)
+        physicalState = observeRuntimeProcessOccurrence(observed[0]!.child)
+      }
+      expect(physicalState).toBe("dead_or_reused")
     } finally {
-      if (childPid && processIsAlive(childPid)) process.kill(childPid, "SIGKILL")
+      if (childOccurrence && observeRuntimeProcessOccurrence(childOccurrence) === "exact_live") {
+        process.kill(childOccurrence.pid, "SIGKILL")
+        const cleanupDeadline = Date.now() + 5_000
+        while (observeRuntimeProcessOccurrence(childOccurrence) === "exact_live" && Date.now() < cleanupDeadline)
+          await Bun.sleep(20)
+      }
       await fs.rm(directory, { recursive: true, force: true })
     }
   }, 30_000)
