@@ -476,8 +476,11 @@ and subsequent Tab navigation pauses following for the newly focused control.
 The sub-agent panel owns at most 32 recent reading positions, keyed by the
 canonical target identity including API authority, parent source, session and
 directory. These positions contain viewport geometry, follow intent and the same
-Source/Markdown content anchor used by Main and Side Chat;
-transcript data still comes from the existing projection. The outer panel is
+Source/Markdown content anchor used by Main and Side Chat.
+Anchor capture and restoration exclude the content subtree of closed native
+disclosures, whose layout boxes can remain nonzero. Visible summaries and open
+disclosure content retain the ordinary geometry and identity rules.
+Transcript data still comes from the existing projection. The outer panel is
 force-mounted to retain this UI state across Dock closure. The canonical target
 identity is independent of visibility. Its already presented transcript and
 selected-agent controls remain mounted while the Dock or member-list view hides

@@ -1,6 +1,6 @@
 import { Feedback } from "../ui/Feedback"
 import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
-import { t } from "../../utils/i18n"
+import { localeTag, t, tc } from "../../utils/i18n"
 import {
   executeExpertSquadEvolutionMutation,
   loadExpertSquadEvolutionHistory,
@@ -44,11 +44,11 @@ function evidenceLocator(locator: { source: string }): string {
 }
 
 function number(value: number | null, digits = 3): string {
-  return value === null ? "—" : value.toFixed(digits)
+  return value === null ? "—" : new Intl.NumberFormat(localeTag(), { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)
 }
 
 function rate(value: number): string {
-  return `${(value * 100).toFixed(1)}%`
+  return new Intl.NumberFormat(localeTag(), { style: "percent", minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value)
 }
 
 function recommendationTone(value: ExpertSquadEvolutionHistoryComparison["recommendation"]): BadgeTone {
@@ -532,7 +532,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                   <div class="expert-squad-evolution-facts">
                     <span>{t("expert_squad.evolution_baseline")}: {digest(entry().record.campaign.baseline_revision.package_digest)}</span>
                     <span>{t("expert_squad.evolution_dataset")}: {entry().record.context.dataset_partition} · {digest(entry().record.context.dataset_digest)}</span>
-                    <span>{t("expert_squad.evolution_budget")}: {entry().record.context.budget.max_runs} runs · {entry().record.context.budget.max_cost === null ? t("expert_squad.evolution_cost_ceiling_undeclared") : entry().record.context.budget.max_cost}</span>
+                    <span>{t("expert_squad.evolution_budget")}: {tc("expert_squad.evolution_runs", entry().record.context.budget.max_runs)} · {entry().record.context.budget.max_cost === null ? t("expert_squad.evolution_cost_ceiling_undeclared") : entry().record.context.budget.max_cost}</span>
                   </div>
                   <Show when={[
                     ...entry().record.graph_issues,
@@ -570,7 +570,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                             <span>{t("expert_squad.evolution_confidence")}: {comparison().confidence}</span>
                             <span>{t("expert_squad.evolution_cost_delta")}: {number(comparison().cost_delta)}</span>
                             <span>{t("expert_squad.evolution_token_delta")}: {number(comparison().token_delta, 0)}</span>
-                            <span>{t("expert_squad.evolution_duration_delta")}: {number(comparison().activity_duration_ms_delta, 0)} ms</span>
+                            <span>{t("expert_squad.evolution_duration_delta")}: {t("expert_squad.evolution_milliseconds", { value: number(comparison().activity_duration_ms_delta, 0) })}</span>
                             <span>{t("expert_squad.evolution_failure_rate")}: {rate(comparison().outcome_rates.baseline.failure)} → {rate(comparison().outcome_rates.candidate.failure)}</span>
                             <span>{t("expert_squad.evolution_unavailable_rate")}: {rate(comparison().outcome_rates.baseline.unavailable)} → {rate(comparison().outcome_rates.candidate.unavailable)}</span>
                           </div>
@@ -578,8 +578,8 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                             {(delta) => (
                               <div class="expert-squad-evolution-delta">
                                 <strong>{delta.scorer_id}</strong>
-                                <span>μ {number(delta.mean)} · median {number(delta.median)} · variance {number(delta.variance)}</span>
-                                <span>CI {Math.round(delta.confidence_interval.confidence * 100)}% [{number(delta.confidence_interval.lower)}, {number(delta.confidence_interval.upper)}] · W/T/L {delta.win_tie_loss.wins}/{delta.win_tie_loss.ties}/{delta.win_tie_loss.losses}</span>
+                                <span>{t("expert_squad.evolution_statistics", { mean: number(delta.mean), median: number(delta.median), variance: number(delta.variance) })}</span>
+                                <span>{t("expert_squad.evolution_interval", { confidence: rate(delta.confidence_interval.confidence), lower: number(delta.confidence_interval.lower), upper: number(delta.confidence_interval.upper), wins: delta.win_tie_loss.wins, ties: delta.win_tie_loss.ties, losses: delta.win_tie_loss.losses })}</span>
                               </div>
                             )}
                           </For>

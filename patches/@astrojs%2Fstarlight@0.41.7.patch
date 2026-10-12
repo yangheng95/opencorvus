@@ -1,0 +1,13 @@
+diff --git a/integrations/expressive-code/preprocessor.ts b/integrations/expressive-code/preprocessor.ts
+index 70c9ba93826ad1453ea948cbf7d596398428ef6d..94a088d92840c1c907334ba28562d3afa14b9178 100644
+--- a/integrations/expressive-code/preprocessor.ts
++++ b/integrations/expressive-code/preprocessor.ts
+@@ -106,7 +106,7 @@ export function getStarlightEcConfigPreprocessor({
+ 				...otherStyleOverrides,
+ 			},
+ 			getBlockLocale: ({ file }) => {
+-				if (file.url) {
++				if (file.url && file.url.protocol !== 'file:') {
+ 					const locale = slugToLocale(file.url.pathname.slice(1), starlightConfig);
+ 					return localeToLang(starlightConfig, locale);
+ 				}

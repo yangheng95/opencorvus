@@ -1,7 +1,8 @@
 import { For, Show, createMemo, createSignal } from "solid-js"
-import { parseChangelog, requireReleaseNotes, type ChangelogEntry } from "@opencorvus-ai/util/changelog"
+import { parseChangelog, requireReleaseNotes, standaloneReleaseNotes, type ChangelogEntry } from "@opencorvus-ai/util/changelog"
 import changelog from "../../../../../CHANGELOG.md?raw"
-import { t } from "../../utils/i18n"
+import { appStore } from "../../store/app"
+import { t, tc } from "../../utils/i18n"
 import { inlineMarkdown, renderMarkdown } from "../../utils/markdown"
 import { PROJECT_URL, PROJECT_WEBSITE_URL } from "../../utils/project-links"
 import { OVERLAY_VERSION } from "../../utils/version"
@@ -16,12 +17,15 @@ const history = parseChangelog(changelog)
 const installed = requireReleaseNotes(history, OVERLAY_VERSION)
 
 export default function ReleaseNotesPanel() {
+  const locale = () => appStore.locale as keyof ChangelogEntry["notes"]
+  const markdown = (entry: ChangelogEntry) => standaloneReleaseNotes(entry, locale())
+  const date = (entry: ChangelogEntry) => new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${entry.date}T00:00:00Z`))
   const [selected, setSelected] = createSignal<ChangelogEntry | null>(installed)
   const [query, setQuery] = createSignal("")
   const filteredHistory = createMemo(() => {
     const term = query().trim().toLowerCase()
     return history.filter((entry) =>
-      `${entry.displayVersion} ${entry.version} ${entry.markdown}`.toLowerCase().includes(term),
+      `${entry.displayVersion} ${entry.version} ${markdown(entry)}`.toLowerCase().includes(term),
     )
   })
   let panel: HTMLDivElement | undefined
@@ -30,7 +34,7 @@ export default function ReleaseNotesPanel() {
     panel?.closest(".config-content")?.scrollTo({ top: 0 })
   }
   const summary = (entry: ChangelogEntry) =>
-    entry.markdown
+    markdown(entry)
       .split("\n")
       .find((line) => line.startsWith("- "))
       ?.slice(2) ?? ""
@@ -54,7 +58,7 @@ export default function ReleaseNotesPanel() {
                 {t("releases.installed")} · v{installed.displayVersion}
               </Button>
             </div>
-            <span class="release-notes-count">{t("releases.count", { count: filteredHistory().length })}</span>
+            <span class="release-notes-count">{tc("releases.count", filteredHistory().length)}</span>
             <SettingsSurface>
               <For each={filteredHistory()} fallback={<SettingsEmpty>{t("releases.empty")}</SettingsEmpty>}>
                 {(entry) => (
@@ -73,11 +77,11 @@ export default function ReleaseNotesPanel() {
                     desc={
                       <span
                         class="release-notes-preview"
-                        lang="zh-CN"
+                        lang={locale()}
                         innerHTML={inlineMarkdown(summary(entry)).replace(/<\/?a(?:\s[^>]*)?>/g, "")}
                       />
                     }
-                    meta={<time dateTime={entry.date}>{entry.date}</time>}
+                    meta={<time dateTime={entry.date}>{date(entry)}</time>}
                     onClick={() => select(entry)}
                   />
                 )}
@@ -97,7 +101,7 @@ export default function ReleaseNotesPanel() {
                 variant="outline"
                 size="sm"
                 tone="neutral"
-                href={`${PROJECT_WEBSITE_URL}/zh-cn/changelog/${entry().version}/`}
+                href={`${PROJECT_WEBSITE_URL}${locale() === "zh-CN" ? "/zh-cn" : ""}/changelog/${entry().version}/`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -105,7 +109,7 @@ export default function ReleaseNotesPanel() {
                 {t("releases.website")}
               </LinkButton>
             </div>
-            <article class="release-notes-detail" lang="zh-CN">
+            <article class="release-notes-detail" lang={locale()}>
               <header class="release-notes-heading">
                 <div class="release-notes-version">
                   <h2>v{entry().displayVersion}</h2>
@@ -113,9 +117,9 @@ export default function ReleaseNotesPanel() {
                     <Badge size="sm">{t("releases.installed")}</Badge>
                   </Show>
                 </div>
-                <time dateTime={entry().date}>{entry().date}</time>
+                <time dateTime={entry().date}>{date(entry())}</time>
               </header>
-              <div class="release-notes-markdown md-content" innerHTML={renderMarkdown(entry().markdown)} />
+              <div class="release-notes-markdown md-content" innerHTML={renderMarkdown(markdown(entry()))} />
             </article>
           </>
         )}

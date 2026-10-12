@@ -435,8 +435,8 @@ export function FileChangesView(props: FileChangesViewProps) {
           <span>{tc("files.changed", summary().files)}</span>
           <span class="changes-total">
             <Show when={summaryCommitRef()}>
-              <span class="changes-commit" title={`commit ${summaryCommitRef()}`}>
-                commit {shortCommit(summaryCommitRef())}
+              <span class="changes-commit" title={`${t("chat.git.commit")} ${summaryCommitRef()}`}>
+                {t("chat.git.commit")} {shortCommit(summaryCommitRef())}
               </span>
             </Show>
             <ChangeLineStats additions={summary().additions} deletions={summary().deletions} />

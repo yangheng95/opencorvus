@@ -1,0 +1,63 @@
+---
+import type { PublicLocale } from "../content/public-market"
+
+interface Props {
+  locale: PublicLocale
+  surface: string
+  languageHref: string
+}
+
+const { locale, surface, languageHref } = Astro.props
+---
+
+<script is:inline define:vars={{ locale, surface, languageHref }}>
+  // The URL is authoritative. Every page records its actual language; only the
+  // landing page honours a stored or browser preference before first paint.
+  ;(() => {
+    const preferenceKey = "opencorvus.public-locale"
+    const readPreference = () => {
+      try {
+        const value = localStorage.getItem(preferenceKey)
+        return value === "root" || value === "zh-cn" ? value : null
+      } catch {
+        return null
+      }
+    }
+    const writePreference = (value) => {
+      try {
+        localStorage.setItem(preferenceKey, value)
+      } catch {
+        // The URL locale remains authoritative when storage is unavailable.
+      }
+    }
+
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target instanceof Element ? event.target.closest("[data-public-locale-switch]") : null
+        const targetLocale = target?.dataset.targetLocale
+        if (targetLocale === "root" || targetLocale === "zh-cn") writePreference(targetLocale)
+      },
+      { capture: true },
+    )
+
+    if (locale === "zh-cn") {
+      writePreference("zh-cn")
+      return
+    }
+    if (surface !== "home") {
+      writePreference("root")
+      return
+    }
+
+    const preference = readPreference()
+    const preferredSupportedLanguage = (
+      navigator.languages?.length ? navigator.languages : [navigator.language]
+    ).find((language) => /^(?:en|zh)(?:-|$)/i.test(language))
+    const browserPrefersChinese = /^zh(?:-|$)/i.test(preferredSupportedLanguage ?? "")
+    if ((preference === "zh-cn" || (preference === null && browserPrefersChinese)) && languageHref) {
+      const target = new URL(languageHref, window.location.href)
+      if (target.pathname !== window.location.pathname) window.location.replace(target.href)
+    }
+  })()
+</script>

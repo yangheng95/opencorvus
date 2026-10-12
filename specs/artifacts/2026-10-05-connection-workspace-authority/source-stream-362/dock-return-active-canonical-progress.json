@@ -1,0 +1,124 @@
+{
+  "observedAt": "2026-10-12T20:37:18.989Z",
+  "label": "dock-return-active",
+  "sessions": [
+    {
+      "id": "ses_heER7woGuP8cIV40cfDa",
+      "project_id": "prj_hmSCRMyZX0J5uT8weNDB",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK."
+    },
+    {
+      "id": "ses_-zUS81LMizzUgbOadH4U",
+      "project_id": "prj_hQ2GOABnxoqkeEoyJFvT",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请只回复：侧栏流式检查就绪。不要调用工具。"
+    },
+    {
+      "id": "ses_-zUS81I1YzzCP0HGaA7M",
+      "project_id": "prj_hQ2GOABnxoqkeEoyJFvT",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Side chat · 请只回复：侧栏流式检查就绪。不要调用工具。"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hCsG7vqqoZVJrmvLdRLs",
+      "session_id": "ses_heER7woGuP8cIV40cfDa",
+      "role": "user",
+      "agent": "chat",
+      "completedAt": null,
+      "finish": null,
+      "textChars": 14,
+      "sourceCount": 0
+    },
+    {
+      "id": "msg_g0VXryXpz007JDlRG0gl",
+      "session_id": "ses_heER7woGuP8cIV40cfDa",
+      "role": "assistant",
+      "agent": "chat",
+      "completedAt": 1791837265354,
+      "finish": "stop",
+      "textChars": 2,
+      "sourceCount": 0
+    },
+    {
+      "id": "msg_f54c3c36-f920-40d6-bc7b-f5635536873f",
+      "session_id": "ses_-zUS81LMizzUgbOadH4U",
+      "role": "user",
+      "agent": "work",
+      "completedAt": null,
+      "finish": null,
+      "textChars": 21,
+      "sourceCount": 0
+    },
+    {
+      "id": "msg_g0VXryhyS00cLT9xu7jG",
+      "session_id": "ses_-zUS81I1YzzCP0HGaA7M",
+      "role": "user",
+      "agent": "work",
+      "completedAt": null,
+      "finish": null,
+      "textChars": 21,
+      "sourceCount": 0
+    },
+    {
+      "id": "msg_g0VXryerO00SFMjmqIqe",
+      "session_id": "ses_-zUS81LMizzUgbOadH4U",
+      "role": "assistant",
+      "agent": "work",
+      "completedAt": 1791837292280,
+      "finish": "stop",
+      "textChars": 9,
+      "sourceCount": 0
+    },
+    {
+      "id": "msg_g0VXryhyS01VFWHb45ER",
+      "session_id": "ses_-zUS81I1YzzCP0HGaA7M",
+      "role": "assistant",
+      "agent": "work",
+      "completedAt": 1791837292280,
+      "finish": "stop",
+      "textChars": 9,
+      "sourceCount": 0
+    },
+    {
+      "id": "msg_56568dfd-86dd-4022-8158-7bd8e3f17eb9",
+      "session_id": "ses_-zUS81I1YzzCP0HGaA7M",
+      "role": "user",
+      "agent": "chat",
+      "completedAt": null,
+      "finish": null,
+      "textChars": 342,
+      "sourceCount": 0
+    },
+    {
+      "id": "msg_g0VXrylCv00KevUio22d",
+      "session_id": "ses_-zUS81I1YzzCP0HGaA7M",
+      "role": "assistant",
+      "agent": "chat",
+      "completedAt": 1791837317487,
+      "finish": "tool-calls",
+      "textChars": 0,
+      "sourceCount": 16
+    },
+    {
+      "id": "msg_g0VXrymGD004FprspYlD",
+      "session_id": "ses_-zUS81I1YzzCP0HGaA7M",
+      "role": "assistant",
+      "agent": "chat",
+      "completedAt": null,
+      "finish": null,
+      "textChars": 6338,
+      "sourceCount": 0
+    }
+  ],
+  "provider": {
+    "requests": 4,
+    "pending": 1
+  },
+  "boundary": "Manual observation point; readonly actual canonical database, not a UI assertion or substitute for visible screenshots"
+}

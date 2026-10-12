@@ -804,7 +804,10 @@ the medium spacing token for their inner top inset. This keeps independent
 Source-bearing messages distinct without repeating a large blank band; the
 Source count and grouping remain attached to their actual chronological run.
 Native Markdown tables share one intrinsic-width policy within a bounded local
-horizontal scroll surface. The existing Marked renderer emits focusable native
+horizontal scroll surface. Headers keep Chinese, Japanese and Korean (CJK) character sequences together to
+provide their intrinsic column width, while body cells retain normal wrapping.
+Long headers remain reachable through the same local horizontal scroll surface.
+The existing Marked renderer emits focusable native
 tables and delegates header/body cells and rows to its standard primitives;
 keyboard focus is visible and native horizontal keys reach the remaining cells.
 Table identity, alignment, links and inline rendering remain ordinary Markdown.
@@ -2470,6 +2473,13 @@ existing safe Markdown renderer. It starts at the installed Overlay version;
 searchable descending history and selected details use the same single-column
 list-to-detail pattern. Website and GitHub links supplement the offline reading
 surface rather than providing another content/cache authority.
+
+Every dated entry in that source contains explicit zh-CN and en-US bodies.
+The shared parser requires both authored languages. Details, summaries, search
+content, language attributes, dates and website links follow the current UI
+locale while retaining the selected version. Locale readers subscribe to the
+existing locale-resource sequence so localized formatting also updates without
+requiring unrelated content changes.
 
 ## Current diagnostic log viewer
 

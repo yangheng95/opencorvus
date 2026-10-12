@@ -1,0 +1,42 @@
+{
+  "occurrence": "closed-history-363-before-0e5ae3c2-2a9a-41d9-a7f7-dda555d4496a",
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner",
+  "host": {
+    "pid": 78520,
+    "processInstanceID": "win32:639274349162846093",
+    "occurrenceID": "154a10d7-fac7-42db-ba8c-c5d24770e866"
+  },
+  "target": {
+    "pid": 80604,
+    "processInstanceID": "win32:639274349170267744",
+    "occurrenceID": "4cdc3fd8-ff86-47ab-9435-4e4279ea0db9"
+  },
+  "settlement": {
+    "occurrence": "closed-history-363-before-0e5ae3c2-2a9a-41d9-a7f7-dda555d4496a",
+    "outcome": "settled",
+    "host": {
+      "pid": 78520,
+      "processInstanceID": "win32:639274349162846093",
+      "occurrenceID": "154a10d7-fac7-42db-ba8c-c5d24770e866"
+    },
+    "target": {
+      "pid": 80604,
+      "processInstanceID": "win32:639274349170267744",
+      "occurrenceID": "4cdc3fd8-ff86-47ab-9435-4e4279ea0db9"
+    },
+    "observedAtUtc": "2026-10-12T20:51:45.27Z",
+    "deadlineAt": 1791838716201,
+    "terminal": {
+      "occurrenceID": "closed-history-363-before-0e5ae3c2-2a9a-41d9-a7f7-dda555d4496a",
+      "pid": 80604,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "exitCode": 0
+}

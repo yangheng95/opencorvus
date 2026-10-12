@@ -381,6 +381,7 @@ export default function ProvidersPanel() {
   const [formId, setFormId] = createSignal("")
   const [formName, setFormName] = createSignal("")
   const [formApi, setFormApi] = createSignal("")
+  const apiInvalid = () => Boolean(formApi().trim()) && !/^https?:\/\/.+/i.test(formApi().trim())
   const [formEnvKey, setFormEnvKey] = createSignal("")
   const [formApiKey, setFormApiKey] = createSignal("")
   const [formModels, setFormModels] = createSignal("")
@@ -1233,11 +1234,10 @@ export default function ProvidersPanel() {
               {editing() ? t("provider.form.edit_title", { id: editing() ?? "" }) : t("provider.form.add_title")}
             </h4>
 
-            <TextField.Root as="label">
+            <TextField.Root as="label" invalid={apiInvalid()}>
               <TextField.Label>{t("provider.form.api_label")}</TextField.Label>
               <TextField.Input
                 type="url"
-                pattern="https?://.+"
                 required
                 placeholder={t("provider.form.api_placeholder", { value: "https://my-gateway.com/v1" })}
                 value={formApi()}
@@ -1245,13 +1245,10 @@ export default function ProvidersPanel() {
                   invalidateDiscovery()
                   setFormApi(e.currentTarget.value)
                 }}
-                onBlur={(e) => {
-                  const v = e.currentTarget.value.trim()
-                  e.currentTarget.setCustomValidity(
-                    v && !/^https?:\/\/.+/i.test(v) ? "API base URL must start with http:// or https://" : "",
-                  )
-                }}
               />
+              <Show when={apiInvalid()}>
+                <TextField.ErrorMessage>{t("provider.form.api_invalid")}</TextField.ErrorMessage>
+              </Show>
             </TextField.Root>
 
             <TextField.Root as="label">

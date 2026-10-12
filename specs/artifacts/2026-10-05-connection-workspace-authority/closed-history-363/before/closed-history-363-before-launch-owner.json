@@ -1,0 +1,35 @@
+{
+  "nativeDeadlineAt": 1791838716201,
+  "host": {
+    "pid": 78520,
+    "processInstanceID": "win32:639274349162846093",
+    "occurrenceID": "154a10d7-fac7-42db-ba8c-c5d24770e866"
+  },
+  "occurrence": "closed-history-363-before-0e5ae3c2-2a9a-41d9-a7f7-dda555d4496a",
+  "port": 18361,
+  "owner": {
+    "ProcessId": 80604,
+    "processInstanceID": "win32:639274349170267744"
+  },
+  "authorityStaging": "None; no model Task requested",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\closed-history-363-before\\evidence",
+  "observedProcessChain": [
+    {
+      "pid": 80604,
+      "processInstanceID": "win32:639274349170267744",
+      "occurrenceID": "4cdc3fd8-ff86-47ab-9435-4e4279ea0db9"
+    }
+  ],
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\closed-history-363-before\\runtime",
+  "targetBirthAtMs": 1791838117026,
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\closed-history-363-before",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\closed-history-363\\before",
+  "evidencePrefix": "closed-history-363-before",
+  "nativeTarget": {
+    "pid": 80604,
+    "processInstanceID": "win32:639274349170267744",
+    "occurrenceID": "4cdc3fd8-ff86-47ab-9435-4e4279ea0db9"
+  }
+}

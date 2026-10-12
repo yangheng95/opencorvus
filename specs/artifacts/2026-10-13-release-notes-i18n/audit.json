@@ -1,0 +1,642 @@
+{
+  "files": 174,
+  "rows": [
+    {
+      "file": "packages\\overlay\\src\\components\\ArchitectPanel.tsx",
+      "line": 74,
+      "kind": "jsx-expression",
+      "text": "arch-decision-value md-content"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ArchitectPanel.tsx",
+      "line": 76,
+      "kind": "jsx-expression",
+      "text": "arch-decision-reason md-content"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\Board.tsx",
+      "line": 178,
+      "kind": "jsx-expression",
+      "text": "empty-hint empty-hint--card"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\CommandPalette.tsx",
+      "line": 426,
+      "kind": "jsx-expression",
+      "text": "cmdk-group-label oc-section-heading"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ComposerModelSelector.tsx",
+      "line": 255,
+      "kind": "jsx-expression",
+      "text": "composer-model-usage-message composer-model-usage-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ComposerPermissionControl.tsx",
+      "line": 93,
+      "kind": "jsx-expression",
+      "text": "composer-attachment-menu-item composer-runtime-menu-item"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 426,
+      "kind": "jsx-text",
+      "text": "OpenCorvus"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 430,
+      "kind": "jsx-text",
+      "text": "杨恒"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 435,
+      "kind": "jsx-text",
+      "text": "· v"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 448,
+      "kind": "jsx-expression",
+      "text": "noopener noreferrer"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 505,
+      "kind": "jsx-text",
+      "text": "F12"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 506,
+      "kind": "jsx-text",
+      "text": "Ctrl +"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 507,
+      "kind": "jsx-text",
+      "text": "Ctrl -"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 508,
+      "kind": "jsx-text",
+      "text": "Ctrl 0"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 509,
+      "kind": "jsx-text",
+      "text": "Enter"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 510,
+      "kind": "jsx-text",
+      "text": "Shift+Enter"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 511,
+      "kind": "jsx-text",
+      "text": "Esc"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConfigDialogHost.tsx",
+      "line": 615,
+      "kind": "jsx-expression",
+      "text": "config-nav-group-title oc-section-heading"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\Conversation.tsx",
+      "line": 922,
+      "kind": "jsx-expression",
+      "text": "chat-empty chat-empty--task chat-empty--task-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConversationArtifactInspector.tsx",
+      "line": 204,
+      "kind": "jsx-text",
+      "text": "sha256:"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConversationArtifactInspector.tsx",
+      "line": 368,
+      "kind": "jsx-text",
+      "text": "sha256:"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConversationArtifactSummary.tsx",
+      "line": 106,
+      "kind": "jsx-expression",
+      "text": "conversation-artifact-summary__file oc-file-row"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ConversationTurnArtifactSummary.tsx",
+      "line": 179,
+      "kind": "jsx-expression",
+      "text": "conversation-artifact-summary__artifact conversation-artifact-summary__declared-output"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\FileChangesView.tsx",
+      "line": 533,
+      "kind": "jsx-expression",
+      "text": "empty-hint changes-empty-hint"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\FileChangesView.tsx",
+      "line": 544,
+      "kind": "jsx-expression",
+      "text": "changes-group-header oc-section-heading"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\FileExplorerPanel.tsx",
+      "line": 1704,
+      "kind": "jsx-expression",
+      "text": "empty-hint file-explorer-empty"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\FileExplorerPanel.tsx",
+      "line": 1709,
+      "kind": "jsx-expression",
+      "text": "empty-hint file-explorer-empty"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\FileExplorerPanel.tsx",
+      "line": 1727,
+      "kind": "jsx-expression",
+      "text": "empty-hint file-explorer-empty"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\InlineToolPart.tsx",
+      "line": 573,
+      "kind": "jsx-expression",
+      "text": "msg-tool-code md-content"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\InlineToolPart.tsx",
+      "line": 580,
+      "kind": "jsx-expression",
+      "text": "msg-tool-code md-content"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\interactive-artifact\\Model3dArtifact.tsx",
+      "line": 91,
+      "kind": "jsx-expression",
+      "text": "msg-artifact-state msg-tool-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\interactive-artifact\\SpreadsheetArtifact.tsx",
+      "line": 47,
+      "kind": "jsx-expression",
+      "text": "msg-artifact-state msg-tool-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\InteractiveArtifactPart.tsx",
+      "line": 110,
+      "kind": "jsx-expression",
+      "text": "msg-artifact-state msg-tool-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\InteractiveArtifactPart.tsx",
+      "line": 123,
+      "kind": "jsx-expression",
+      "text": "msg-artifact-state msg-tool-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\InteractiveArtifactPart.tsx",
+      "line": 131,
+      "kind": "jsx-expression",
+      "text": "msg-artifact-state msg-tool-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\MailboxPanel.tsx",
+      "line": 643,
+      "kind": "jsx-expression",
+      "text": "mailbox-project-group__header oc-section-heading"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\MailboxPanel.tsx",
+      "line": 782,
+      "kind": "jsx-expression",
+      "text": "mailbox-item__body mailbox-item__body--expanded"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\RequirementsPanel.tsx",
+      "line": 65,
+      "kind": "jsx-text",
+      "text": "REQ"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ScreenshotBrowserPanel.tsx",
+      "line": 142,
+      "kind": "jsx-expression",
+      "text": "screenshot-browser__thumb-trigger screenshot-browser__thumb-error"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\ScreenshotBrowserPanel.tsx",
+      "line": 155,
+      "kind": "jsx-expression",
+      "text": "screenshot-browser__thumb-trigger screenshot-browser__thumb-placeholder"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ChannelsPanel.tsx",
+      "line": 349,
+      "kind": "placeholder",
+      "text": "https://opencorvus.example.com"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ExpertSquadMarketPanel.tsx",
+      "line": 351,
+      "kind": "jsx-text",
+      "text": "sha256:"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ExpertSquadPanel.tsx",
+      "line": 1474,
+      "kind": "jsx-expression",
+      "text": "expert-squad-master-row expert-squad-installed-row"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ExpertSquadPanel.tsx",
+      "line": 1552,
+      "kind": "jsx-expression",
+      "text": "expert-squad-identity-head expert-squad-installed-identity"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ExpertSquadPanel.tsx",
+      "line": 1559,
+      "kind": "jsx-text",
+      "text": "v"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ExpertSquadPanel.tsx",
+      "line": 1972,
+      "kind": "jsx-expression",
+      "text": "expert-squad-markdown md-content"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ExpertSquadPanel.tsx",
+      "line": 1991,
+      "kind": "jsx-expression",
+      "text": "expert-squad-markdown md-content"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\MissionSkillPanel.tsx",
+      "line": 383,
+      "kind": "jsx-expression",
+      "text": "mission-skill-detail-section mission-skill-invocation"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\NetworkPanel.tsx",
+      "line": 334,
+      "kind": "placeholder",
+      "text": "http://127.0.0.1:7890"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ProvidersPanel.tsx",
+      "line": 1385,
+      "kind": "jsx-expression",
+      "text": "provider-settings-row provider-catalog-row"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ReleaseNotesPanel.tsx",
+      "line": 58,
+      "kind": "jsx-text",
+      "text": "· v"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ReleaseNotesPanel.tsx",
+      "line": 71,
+      "kind": "jsx-text",
+      "text": "v"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ReleaseNotesPanel.tsx",
+      "line": 106,
+      "kind": "jsx-expression",
+      "text": "noopener noreferrer"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ReleaseNotesPanel.tsx",
+      "line": 115,
+      "kind": "jsx-text",
+      "text": "v"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ReleaseNotesPanel.tsx",
+      "line": 122,
+      "kind": "jsx-expression",
+      "text": "release-notes-markdown md-content"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ScheduledAutomationsPanel.tsx",
+      "line": 901,
+      "kind": "jsx-expression",
+      "text": "automation-suggestion oc-action-tile"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\ServerConnectionSettingsGroup.tsx",
+      "line": 95,
+      "kind": "placeholder",
+      "text": "http://127.0.0.1:7878"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\SkillMarketPanel.tsx",
+      "line": 736,
+      "kind": "jsx-text",
+      "text": "skills.sh"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\SkillMarketPanel.tsx",
+      "line": 803,
+      "kind": "jsx-expression",
+      "text": "dialog-actions compact"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\SkillMarketPanel.tsx",
+      "line": 1160,
+      "kind": "placeholder",
+      "text": "exa"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\SkillMarketPanel.tsx",
+      "line": 1191,
+      "kind": "placeholder",
+      "text": "https://example.com/mcp"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\SkillMarketPanel.tsx",
+      "line": 1236,
+      "kind": "placeholder",
+      "text": "npx"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\SkillMarketPanel.tsx",
+      "line": 1246,
+      "kind": "placeholder",
+      "text": "-y @modelcontextprotocol/server-filesystem C:\\repo"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 99,
+      "kind": "jsx-expression",
+      "text": "usage-activity__cell usage-activity__cell--spacer"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 341,
+      "kind": "jsx-text",
+      "text": "OC"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 343,
+      "kind": "jsx-text",
+      "text": "OpenCorvus"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 406,
+      "kind": "jsx-expression",
+      "text": "usage-section usage-section--activity"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 457,
+      "kind": "jsx-expression",
+      "text": "usage-dot usage-dot--priced"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 464,
+      "kind": "jsx-expression",
+      "text": "usage-dot usage-dot--unpriced"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 471,
+      "kind": "jsx-expression",
+      "text": "usage-dot usage-dot--unknown"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 515,
+      "kind": "jsx-expression",
+      "text": "usage-section usage-section--official"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\settings\\UsagePanel.tsx",
+      "line": 532,
+      "kind": "jsx-expression",
+      "text": "usage-section usage-section--models"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\SidebarVersionLabel.tsx",
+      "line": 48,
+      "kind": "jsx-text",
+      "text": "OC"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\SidebarVersionLabel.tsx",
+      "line": 50,
+      "kind": "jsx-text",
+      "text": "OpenCorvus"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\SidebarVersionLabel.tsx",
+      "line": 56,
+      "kind": "jsx-text",
+      "text": "OpenCorvus"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\SourceParts.tsx",
+      "line": 249,
+      "kind": "jsx-expression",
+      "text": "msg-source-chip__detail msg-source-chip__location"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\SubagentConversationPanel.tsx",
+      "line": 393,
+      "kind": "jsx-expression",
+      "text": "oc-navigation-row subagent-conversation-panel__agent-row"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TaskDirBar.tsx",
+      "line": 1567,
+      "kind": "jsx-expression",
+      "text": "project-runtime-panel-title oc-section-heading"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TaskDirBar.tsx",
+      "line": 1688,
+      "kind": "jsx-expression",
+      "text": "project-runtime-tool-shortcut project-runtime-section-title-row oc-navigation-row"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TaskDirBar.tsx",
+      "line": 1694,
+      "kind": "jsx-expression",
+      "text": "project-runtime-tool-shortcut-label project-runtime-section-title oc-section-heading"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TaskDirBar.tsx",
+      "line": 1997,
+      "kind": "jsx-text",
+      "text": "Ctrl+Enter"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TextPart.tsx",
+      "line": 31,
+      "kind": "jsx-expression",
+      "text": "md-frozen-block md-frozen-block--source-file"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\titlebar\\TitlebarBrand.tsx",
+      "line": 15,
+      "kind": "jsx-text",
+      "text": "OpenCorvus"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\titlebar\\TitlebarMenubar.tsx",
+      "line": 521,
+      "kind": "aria-label",
+      "text": "OpenCorvus"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\titlebar\\TitlebarMenubar.tsx",
+      "line": 642,
+      "kind": "jsx-expression",
+      "text": "titlebar-theme-options titlebar-theme-options-menubar"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TodoProgress.tsx",
+      "line": 56,
+      "kind": "jsx-expression",
+      "text": "todo-progress__current todo-progress__current--tooltip"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TracePanel.tsx",
+      "line": 264,
+      "kind": "jsx-expression",
+      "text": "trace-panel-title oc-section-heading"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TracePanel.tsx",
+      "line": 335,
+      "kind": "jsx-text",
+      "text": "OPENCORVUS_AGENT_TRACE=0"
+    },
+    {
+      "file": "packages\\overlay\\src\\components\\TracePanel.tsx",
+      "line": 344,
+      "kind": "jsx-text",
+      "text": "OPENCORVUS_AGENT_TRACE_DIR"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2416,
+      "kind": "jsx-expression",
+      "text": "sidebar workspaceMain"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2621,
+      "kind": "jsx-expression",
+      "text": "Mission submission superseded"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2656,
+      "kind": "jsx-expression",
+      "text": "Conversation submit resolved without a conversation experience"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2674,
+      "kind": "jsx-expression",
+      "text": "Conversation submission superseded"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2716,
+      "kind": "jsx-expression",
+      "text": "Operator stopped the active task from the composer"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2726,
+      "kind": "jsx-expression",
+      "text": "Operator stopped the active Mission from the composer"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2739,
+      "kind": "jsx-expression",
+      "text": "Coding assistant stop failed"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2779,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity sidebar-explorer-panel"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2791,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity sidebar-file-changes-panel"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2806,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity chat-browser-preview-activity"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2840,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity chat-browser-preview-activity"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2871,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity screenshot-browser-activity"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2899,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity subagent-conversation-activity"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2920,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity task-scope-activity"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2932,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity task-scope-activity"
+    },
+    {
+      "file": "packages\\overlay\\src\\main.tsx",
+      "line": 2947,
+      "kind": "jsx-expression",
+      "text": "center-workbench-activity chat-file-editor-activity file-editor-mount"
+    },
+    {
+      "file": "packages\\overlay\\src\\native-menu.tsx",
+      "line": 58,
+      "kind": "jsx-expression",
+      "text": "[native-menu-surface] failed to report measurement"
+    }
+  ],
+  "englishHan": []
+}

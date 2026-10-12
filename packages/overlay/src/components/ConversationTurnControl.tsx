@@ -3,7 +3,7 @@ import { Show, createMemo, createSignal, onCleanup } from "solid-js"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import type { CardModelUsage, CardNode, CardUsage } from "../store/card-tree"
 import { formatDetailedCostUSD, formatTokenCount } from "../utils/format-usage"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { compactDetailStamp, fullStampWithRelative } from "../utils/time"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
@@ -18,7 +18,7 @@ function modelUsageKey(model: Pick<CardModelUsage, "providerID" | "modelID">): s
 }
 
 function formatInteger(value: number): string {
-  return new Intl.NumberFormat().format(value)
+  return new Intl.NumberFormat(localeTag()).format(value)
 }
 
 export interface ConversationTurnControlProps {
@@ -66,7 +66,7 @@ export function ConversationTurnControl(props: ConversationTurnControlProps) {
   const usageTriggerAriaValue = () => {
     const value = usage()
     if (!value) return ""
-    return value.costUSD > 0 ? formatDetailedCostUSD(value.costUSD) : `${usageTriggerValue()} Token`
+    return value.costUSD > 0 ? formatDetailedCostUSD(value.costUSD) : `${usageTriggerValue()} ${t("usage.table_tokens")}`
   }
   const selectedModelLabel = () => {
     const model = selectedModel()
@@ -156,7 +156,7 @@ export function ConversationTurnControl(props: ConversationTurnControlProps) {
                 <div class="conversation-turn-usage-popover__heading">
                   <strong>{t("chat.turn_usage_title")}</strong>
                   <span>
-                    {formatTokenCount(usage()!.totalTokens)} Token · {formatDetailedCostUSD(usage()!.costUSD)}
+                    {formatTokenCount(usage()!.totalTokens)} {t("usage.table_tokens")} · {formatDetailedCostUSD(usage()!.costUSD)}
                   </span>
                 </div>
                 <Show when={models().length > 1}>

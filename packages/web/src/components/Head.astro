@@ -1,11 +1,13 @@
 ---
 import Default from '@astrojs/starlight/components/Head.astro'
 import config from '../../config.mjs'
+import LocaleBoot from './LocaleBoot.astro'
 
 const ogImage = `${config.url}/og.png`
 ---
 
 <Default {...Astro.props}><slot /></Default>
+<LocaleBoot locale={Astro.locals.starlightRoute.lang === 'zh-CN' ? 'zh-cn' : 'root'} surface="docs" languageHref="" />
 
 <meta property="og:image" content={ogImage} />
 <meta property="twitter:image" content={ogImage} />

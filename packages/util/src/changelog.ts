@@ -1,13 +1,16 @@
+export const CHANGELOG_LOCALES = ["zh-CN", "en-US"] as const
+export type ChangelogLocale = (typeof CHANGELOG_LOCALES)[number]
+
 export type ChangelogEntry = {
   version: string
   displayVersion: string
   date: string
-  markdown: string
+  notes: Record<ChangelogLocale, string>
 }
 
 export class ChangelogError extends Error {
   constructor(
-    readonly code: "changelog_invalid" | "changelog_duplicate_version" | "release_notes_missing",
+    readonly code: "changelog_invalid" | "changelog_duplicate_version" | "release_notes_missing" | "release_notes_locale_missing",
     message: string,
   ) {
     super(message)
@@ -42,6 +45,42 @@ export function compareChangelogVersions(a: string, b: string) {
     if (difference) return difference
   }
   return 0
+}
+
+function localizedNotes(body: string, version: string): Record<ChangelogLocale, string> {
+  const sections = new Map<ChangelogLocale, string[]>()
+  let current: string[] | undefined
+  let fence: { marker: string; length: number } | undefined
+  for (const line of body.split("\n")) {
+    const boundary = line.match(/^ {0,3}(`{3,}|~{3,})/)
+    if (boundary) {
+      const marker = boundary[1]![0]!
+      const length = boundary[1]!.length
+      if (!fence) fence = { marker, length }
+      else if (fence.marker === marker && length >= fence.length) fence = undefined
+    } else if (!fence && line.startsWith("### ")) {
+      const locale = line.slice(4).trim() as ChangelogLocale
+      if (!CHANGELOG_LOCALES.includes(locale) || sections.has(locale))
+        throw new ChangelogError("changelog_invalid", `Invalid or duplicate changelog language for ${version}: ${locale}`)
+      current = []
+      sections.set(locale, current)
+      continue
+    }
+    if (current) current.push(line)
+    else if (line.trim())
+      throw new ChangelogError("changelog_invalid", `Changelog ${version} content requires an explicit language section`)
+  }
+  const notes = {} as Record<ChangelogLocale, string>
+  for (const locale of CHANGELOG_LOCALES) {
+    const lines = sections.get(locale)
+    if (!lines)
+      throw new ChangelogError("release_notes_locale_missing", `Written ${locale} release notes are required for ${version}`)
+    const text = lines.join("\n").trim()
+    if (!text.split("\n").some((line) => line.trim() && !line.startsWith("#") && !line.startsWith("<!--")))
+      throw new ChangelogError("changelog_invalid", `Changelog ${version} requires written ${locale} change entries`)
+    notes[locale] = text
+  }
+  return notes
 }
 
 export function parseChangelog(markdown: string): ChangelogEntry[] {
@@ -79,11 +118,7 @@ export function parseChangelog(markdown: string): ChangelogEntry[] {
     if (!Number.isFinite(parsed.valueOf()) || parsed.toISOString().slice(0, 10) !== date) {
       throw new ChangelogError("changelog_invalid", `Invalid changelog date: ${date}`)
     }
-    const body = lines.join("\n").trim()
-    if (!body.split("\n").some((line) => line.trim() && !line.startsWith("#") && !line.startsWith("<!--"))) {
-      throw new ChangelogError("changelog_invalid", `Changelog ${version} requires written change entries`)
-    }
-    return [{ version, displayVersion: match[1]!, date, markdown: body }]
+    return [{ version, displayVersion: match[1]!, date, notes: localizedNotes(lines.join("\n"), version) }]
   })
   return entries.sort((a, b) => compareChangelogVersions(b.version, a.version))
 }
@@ -95,6 +130,22 @@ export function requireReleaseNotes(entries: readonly ChangelogEntry[], version:
   return entry
 }
 
+/** Project the language body beneath a standalone version heading, preserving
+ * literal code examples. The source and bilingual publication keep their full hierarchy. */
+export function standaloneReleaseNotes(entry: ChangelogEntry, locale: ChangelogLocale): string {
+  let fence: { marker: string; length: number } | undefined
+  return entry.notes[locale].split("\n").map((line) => {
+    const boundary = line.match(/^ {0,3}(`{3,}|~{3,})/)
+    if (boundary) {
+      const marker = boundary[1]![0]!
+      const length = boundary[1]!.length
+      if (!fence) fence = { marker, length }
+      else if (fence.marker === marker && length >= fence.length) fence = undefined
+    } else if (!fence && /^#{4,6} /.test(line)) return line.slice(1)
+    return line
+  }).join("\n")
+}
+
 export function renderReleaseNotes(entry: ChangelogEntry): string {
-  return `## ${entry.displayVersion} - ${entry.date}\n\n${entry.markdown}\n\n[完整版本历史 / Version history](https://opencorvus.com/zh-cn/changelog/${entry.version}/)`
+  return `## ${entry.displayVersion} - ${entry.date}\n\n### 简体中文\n\n${entry.notes["zh-CN"]}\n\n[完整版本历史](https://opencorvus.com/zh-cn/changelog/${entry.version}/)\n\n### English\n\n${entry.notes["en-US"]}\n\n[Version history](https://opencorvus.com/changelog/${entry.version}/)`
 }

@@ -1,0 +1,32 @@
+{
+  "observedAtUtc": "2026-10-12T21:04:36.9268098Z",
+  "runtimeLeaseStates": [
+    {
+      "expected": {
+        "pid": 78428,
+        "processInstanceID": "win32:639274006353381945",
+        "occurrenceID": "cc9bd949-96cc-4706-a01a-bf9300710bbe"
+      },
+      "state": "dead_or_reused",
+      "lease": {
+        "id": "act_g0VXpiKQc00DKWdLiIUi",
+        "target": "runtime_process",
+        "target_id": "cc9bd949-96cc-4706-a01a-bf9300710bbe",
+        "owner_occurrence_id": "{\"pid\":78428,\"processInstanceID\":\"win32:639274006353381945\",\"occurrenceID\":\"cc9bd949-96cc-4706-a01a-bf9300710bbe\"}",
+        "time_activated": 1791803844658,
+        "expires_at": 9007199254740991
+      }
+    }
+  ],
+  "review": "Fresh363child full source review; counts and identities are in current result-startup/result-task-startup/result-frontier and guard. Original Task terminal/recovery/permissions/Message/Memory/physical ownership must satisfy the checks above. Full copy and actual child UI remain required.",
+  "sourceOccurrence": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+  "selectedSubject": {
+    "sessionID": "ses_-zUSAHSFWzzbkIpIUGb2",
+    "id": "tsk_g00VXpiXcz00KjYqx3vV",
+    "kind": "task",
+    "projectID": "prj_huEDUxbBCSaPS9pbbBDb",
+    "requestID": "0a6b3493-f917-40a8-a8e5-cece232a67b1"
+  },
+  "startupQualified": true
+}

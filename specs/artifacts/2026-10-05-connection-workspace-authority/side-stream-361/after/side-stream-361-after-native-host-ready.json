@@ -1,0 +1,40 @@
+{
+  "occurrence": "side-stream-361-after-5f9e6ffc-502a-4cd4-87bf-c406057c7399",
+  "outcome": "ready",
+  "host": {
+    "pid": 79532,
+    "processInstanceID": "win32:639274332482816087",
+    "occurrenceID": "6330d9e2-2406-4c37-aeaa-136a6097900e"
+  },
+  "parent": {
+    "pid": 61284,
+    "processInstanceID": "win32:639274332462805763",
+    "occurrenceID": "9912c9bc-f35e-444d-b103-f97389cb96f4"
+  },
+  "target": {
+    "pid": 61472,
+    "processInstanceID": "win32:639274332490830793",
+    "occurrenceID": "760e0b15-e9c0-4f22-bb58-f9395c70d303"
+  },
+  "targetBirthAtMs": 1791836449083,
+  "deadlineAt": 1791837048169,
+  "observedAtUtc": "2026-10-12T20:20:49.100Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18359",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\side-stream-361\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\side-stream-361-after\\startup.json",
+    "--startup-occurrence",
+    "side-stream-361-after-5f9e6ffc-502a-4cd4-87bf-c406057c7399",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

@@ -5,6 +5,8 @@ import { renderedReleaseHistory } from "../lib/changelog"
 
 const { locale, version } = Astro.props as { locale: PublicLocale; version?: string }
 const zh = locale === "zh-cn"
+const language = zh ? "zh-CN" : "en-US"
+const date = (value: string) => new Intl.DateTimeFormat(language, { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${value}T00:00:00Z`))
 const historyHref = publicPath(locale, "/changelog/")
 const entry = version ? renderedReleaseHistory.find((candidate) => candidate.version === version) : undefined
 const entries = entry ? [entry] : renderedReleaseHistory
@@ -20,16 +22,15 @@ const otherLocale = zh ? "root" : "zh-cn"
       {entry && <a class="oc-link back-link" href={historyHref}>← {zh ? "全部版本" : "All versions"}</a>}
       <h1 class="oc-text-hero">{title}</h1>
       <p class="oc-text-body oc-text-description">{zh ? "了解每一次更新带来的变化。历史记录保留原始版本来源，已移除安装包的版本仍可查阅。" : "See what changed with each update. Historical notes retain their original source, including versions whose installers have been removed."}</p>
-      {!zh && <p class="oc-text-caption oc-text-description">Release notes are authored in Chinese.</p>}
       {!entry && <div class="history-actions"><a class="oc-btn oc-btn-primary oc-btn-m" href={`${historyHref}${entries[0]?.version}/`}>{zh ? "查看最新版本" : "Latest release"} · {entries[0]?.displayVersion}</a><span class="oc-text-caption oc-text-description">{entries.length} {zh ? "个版本" : "versions"}</span></div>}
     </header>
     <div class={entry ? "history-grid history-detail" : "history-grid"}>
-      {!entry && <aside aria-label={zh ? "按版本浏览" : "Browse versions"}><p class="oc-eyebrow">{zh ? "从新到旧" : "Newest first"}</p><nav>{entries.map((item) => <a href={`#v${item.version}`}><span>{item.displayVersion}</span><time datetime={item.date}>{item.date}</time></a>)}</nav></aside>}
+      {!entry && <aside aria-label={zh ? "按版本浏览" : "Browse versions"}><p class="oc-eyebrow">{zh ? "从新到旧" : "Newest first"}</p><nav>{entries.map((item) => <a href={`#v${item.version}`}><span>{item.displayVersion}</span><time datetime={item.date}>{date(item.date)}</time></a>)}</nav></aside>}
       <div class="release-list">
         {entries.map((item, index) => <article id={`v${item.version}`} class="release-entry oc-anchor">
-          <div class="release-meta"><time datetime={item.date}>{item.date}</time>{index === 0 && !entry && <span class="latest-label">{zh ? "最新" : "Latest"}</span>}</div>
+          <div class="release-meta"><time datetime={item.date}>{date(item.date)}</time>{index === 0 && !entry && <span class="latest-label">{zh ? "最新" : "Latest"}</span>}</div>
           {!entry && <h2 class="oc-text-subtitle"><a href={`${historyHref}${item.version}/`}>{item.displayVersion}<span aria-hidden="true">↗</span></a></h2>}
-          {entry || index === 0 ? <div class="release-copy" lang="zh-CN" set:html={item.html} /> : <><div class="release-copy release-summary oc-text-description" lang="zh-CN" set:html={item.summaryHtml} /><a class="oc-link release-read" href={`${historyHref}${item.version}/`}>{zh ? "阅读完整更新" : "Read release notes"} →</a></>}
+          {entry || index === 0 ? <div class="release-copy" lang={language} set:html={item.localized[language]!.html} /> : <><div class="release-copy release-summary oc-text-description" lang={language} set:html={item.localized[language]!.summaryHtml} /><a class="oc-link release-read" href={`${historyHref}${item.version}/`}>{zh ? "阅读完整更新" : "Read release notes"} →</a></>}
         </article>)}
       </div>
     </div>

@@ -698,4 +698,12 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [来源复制边界359](2026-10-13-clipboard-boundary-359.md)：真实复制与粘贴边界调查。
 
+- [更新日志与页面国际化](2026-10-13-release-notes-i18n.md)：按界面语言读取版本正文与页面文案审计。
+
 - [来源展开与收起360](2026-10-13-source-toggle-360.md)：顶部动作与状态一致。
+
+- [侧栏长正文与来源361](2026-10-13-side-stream-361.md)：当前版本长正文流式阅读复核。
+
+- [Sources与持续输出362](2026-10-13-source-stream-362.md)：流式更新中来源展开与文件返回。
+
+- [折叠历史与来源读点363](2026-10-13-closed-history-363.md)：共享阅读锚点的可见性调查。

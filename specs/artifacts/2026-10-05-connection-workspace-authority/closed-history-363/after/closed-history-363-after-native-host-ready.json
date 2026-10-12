@@ -1,0 +1,40 @@
+{
+  "occurrence": "closed-history-363-after-c94ea9dd-1c43-456e-bd84-fd4833f6e7fd",
+  "outcome": "ready",
+  "host": {
+    "pid": 50464,
+    "processInstanceID": "win32:639274353551665388",
+    "occurrenceID": "86d5b5db-e3d0-4f62-87df-684502515257"
+  },
+  "parent": {
+    "pid": 69440,
+    "processInstanceID": "win32:639274353532903557",
+    "occurrenceID": "a89e674e-e261-4dca-a170-5f176eac9864"
+  },
+  "target": {
+    "pid": 79076,
+    "processInstanceID": "win32:639274353560313515",
+    "occurrenceID": "2cf43d4f-bafc-4829-a0cb-29a633a71e17"
+  },
+  "targetBirthAtMs": 1791838556031,
+  "deadlineAt": 1791839155081,
+  "observedAtUtc": "2026-10-12T20:55:56.061Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18362",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\closed-history-363-after\\startup.json",
+    "--startup-occurrence",
+    "closed-history-363-after-c94ea9dd-1c43-456e-bd84-fd4833f6e7fd",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

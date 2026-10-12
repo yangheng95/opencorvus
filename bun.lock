@@ -362,12 +362,13 @@
     "tree-sitter-bash",
   ],
   "patchedDependencies": {
-    "@kobalte/core@0.13.11": "patches/@kobalte%2Fcore@0.13.11.patch",
-    "solid-js@1.9.14": "patches/solid-js@1.9.14.patch",
     "rrule@2.8.1": "patches/rrule@2.8.1.patch",
-    "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
+    "solid-js@1.9.14": "patches/solid-js@1.9.14.patch",
+    "@astrojs/starlight@0.41.7": "patches/@astrojs%2Fstarlight@0.41.7.patch",
     "drizzle-orm@1.0.0-beta.20": "patches/drizzle-orm@1.0.0-beta.20.patch",
     "@codemirror/merge@6.12.2": "patches/@codemirror%2Fmerge@6.12.2.patch",
+    "@kobalte/core@0.13.11": "patches/@kobalte%2Fcore@0.13.11.patch",
+    "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
   },
   "overrides": {
     "@ai-sdk/cerebras": "3.0.68",
