@@ -88,6 +88,7 @@ describe("compaction request and continuation contracts", () => {
             },
           })
           const projected = await Message.filterCompacted(MessageStore.stream(session.id))
+          expect(SessionLoop.completedCompactionForSource(projected, next.id)?.info.id).toBe(summary.id)
           expect(projected.map((message) => message.info.id)).toEqual([
             initial.id,
             summary.id,
@@ -108,6 +109,13 @@ describe("compaction request and continuation contracts", () => {
           expect(
             (await Message.filterCompacted(MessageStore.stream(session.id))).map((message) => message.info.id),
           ).toEqual(projected.map((message) => message.info.id))
+          await assistant(session.id, next.id, "New evidence after the persisted checkpoint", true)
+          expect(
+            SessionLoop.hasPostCompactionMaterialForSource(
+              await Message.filterCompacted(MessageStore.stream(session.id)),
+              next.id,
+            ),
+          ).toBe(true)
         },
       })
     },

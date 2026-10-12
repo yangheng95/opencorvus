@@ -503,6 +503,11 @@ the checkpoint's source input satisfies that boundary immediately; reconstructio
 checkpoint's original anchor. Repeated compaction for the same source keeps that checkpoint anchor,
 not the incremental source Message. Worker descriptor/Task authority checks remain strict. Invalid
 historical markers are not rewritten or repaired by a different dispatch or a new Session.
+The relocated summary's position in model history is not a durable chronology boundary.
+Post-checkpoint material is identified by canonical Message timeline order, so an old
+retained tail cannot trigger repeated compaction merely because it follows that summary
+in the Provider projection. A repeated control with the same source binds the existing
+summary receipt until actual newer material is persisted.
 Windows 进程对象即使在退出后仍可能因外部 query handle 而保持可查询；只有持有 `SYNCHRONIZE` 权限的
 process handle 经零时长 `WaitForSingleObject` 返回 `WAIT_TIMEOUT`，才可结合匹配的 creation FILETIME 证明
 `exact_live`。已 signaled 的 process object 必须投影为 `dead_or_reused`；`GetProcessTimes` 在未退出时的 exit

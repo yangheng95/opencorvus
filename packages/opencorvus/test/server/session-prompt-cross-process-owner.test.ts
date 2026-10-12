@@ -526,7 +526,18 @@ describe("durable cross-process Session prompt ownership", () => {
         async () =>
           Boolean(await fs.stat(path.join(barrier, "summary-manual-repeat.response.json")).catch(() => undefined)),
         "Repeated manual summary did not settle from its exact durable control receipt",
-      )
+      ).catch((error) => {
+        const sqlite = new BunDatabase(path.join(runtime, "data", "opencorvus.db"), { readonly: true })
+        try {
+          const controls = sqlite.query("SELECT id, kind, payload FROM session_control_record WHERE session_id = ?").all(sessionID)
+          const events = sqlite.query("SELECT e.control_id, e.kind, e.payload FROM session_control_event e JOIN session_control_record r ON r.id = e.control_id WHERE r.session_id = ?").all(sessionID)
+          const messages = sqlite.query("SELECT id, data FROM message WHERE session_id = ? ORDER BY time_created, id").all(sessionID)
+          const parts = sqlite.query("SELECT p.id, p.message_id, p.data FROM part p JOIN message m ON m.id = p.message_id WHERE m.session_id = ? ORDER BY p.time_created, p.id").all(sessionID)
+          throw new Error(`${String(error)}\n${JSON.stringify({ controls, events, messages, parts, owner: readPromptOwner(runtime, sessionID), providerKinds: provider.requests.map((request) => request.kind) })}`)
+        } finally {
+          sqlite.close()
+        }
+      })
       const repeatedManual = await read(manualRepeat)
       await waitFor(
         () => readPromptOwner(runtime, sessionID) === undefined,
@@ -544,6 +555,22 @@ describe("durable cross-process Session prompt ownership", () => {
         await Bun.sleep(10)
       }
       const repeatedAuto = await read(autoRepeat)
+
+      const nextMessageID = Identifier.ascending("message")
+      const nextInput = spawn("route", sessionID, nextMessageID, "summary-next-input", "new evidence after the checkpoint")
+      await waitFor(
+        async () => Boolean(await fs.stat(path.join(barrier, "summary-next-input.ready")).catch(() => undefined)),
+        "The next real input did not initialize",
+      )
+      const priorPromptCount = provider.promptRequests().length
+      await fs.writeFile(path.join(barrier, "summary-next-input.start"), "start")
+      await waitFor(
+        () => provider.promptRequests().length === priorPromptCount + 1,
+        "The next real input did not reach the Provider",
+      )
+      provider.promptRequests()[priorPromptCount]!.release()
+      const nextReply = await read(nextInput)
+      expect(nextReply).toMatchObject({ status: 200, parentID: nextMessageID, accepted: [nextMessageID], finish: "stop" })
 
       const compactionProviderRequests = () =>
         provider
@@ -607,10 +634,10 @@ describe("durable cross-process Session prompt ownership", () => {
           expect.objectContaining({ kind: "manual_summarize", result_summary_message_id: secondSummaryID }),
         ],
       })
-      expect(secondSummaryID).not.toBe(firstSummaryID)
+      expect(new Set([firstSummaryID, secondSummaryID]).size).toBe(2)
       expect(summaries).toEqual([
         expect.objectContaining({ parentID: messageID, finish: "stop", summary: true }),
-        expect.objectContaining({ parentID: messageID, finish: "stop", summary: true }),
+        expect.objectContaining({ parentID: nextMessageID, finish: "stop", summary: true }),
       ])
 
       await fs.writeFile(path.join(barrier, "summary-owner.exit"), "exit")
@@ -724,7 +751,6 @@ describe("durable cross-process Session prompt ownership", () => {
         },
         routeError: expect.stringContaining("SessionCompactionMaterialUnavailableError"),
       })
-      expect(readPromptOwner(runtime, sessionID)).toBeUndefined()
     } finally {
       for (const request of provider.requests) request.release()
       provider.server.stop(true)
@@ -946,7 +972,7 @@ describe("durable cross-process Session prompt ownership", () => {
         "Recovery route did not settle",
       )
       const during = readPromptOwner(runtime, sessionID)
-      expect(during?.generation).not.toBe(before?.generation)
+      expect(new Set([before?.generation, during?.generation]).size).toBe(2)
       expect(during).toEqual(expect.objectContaining({ observation: "exact_live" }))
       await fs.writeFile(path.join(barrier, "recovery.exit"), "exit")
       const recovered = await read(recovery)

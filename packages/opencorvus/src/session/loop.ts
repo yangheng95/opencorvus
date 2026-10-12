@@ -1634,8 +1634,12 @@ export namespace SessionLoop {
         CompactionHandoff.isValidSummaryMessage(msg.info),
     )
     if (latestSummaryIndex < 0) return false
-    return messages.slice(latestSummaryIndex + 1).some((msg) => {
+    const summaryOrderKey = timelineMessageOrderKey(messages[latestSummaryIndex]!)
+    return messages.some((msg) => {
       if (msg.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(msg.info)) return false
+      // Model history moves the checkpoint beside its original anchor. The
+      // retained tail can follow it there while preceding it in durable time.
+      if (compareTimelineOrderKeys(timelineMessageOrderKey(msg), summaryOrderKey) <= 0) return false
       return msg.parts.some(
         (part) =>
           part.type === "text" ||
