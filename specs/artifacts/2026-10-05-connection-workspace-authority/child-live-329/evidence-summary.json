@@ -1,0 +1,65 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 4328111,
+    "archiveBytes": 142495,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 17,
+    "sessions": [
+      {
+        "id": "ses_hvmrXAuACKTnzP4yyruc",
+        "projectID": "prj_hI6L3TjR2SaeieYvfBRV",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCiSOSzzpr2sGgxF6",
+        "projectID": "prj_hnAe7JXn1mGYEFjYlQiU",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCiReGzz2qlNGQiR7",
+        "projectID": "prj_hnAe7JXn1mGYEFjYlQiU",
+        "parentID": "ses_-zUSCiSOSzzpr2sGgxF6"
+      },
+      {
+        "id": "ses_h2A1pB4lrdxKayuXRM03",
+        "projectID": "prj_hnAe7JXn1mGYEFjYlQiU",
+        "parentID": "ses_-zUSCiReGzz2qlNGQiR7"
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXnHjcn00doPQZyvgM",
+        "sourceId": "2a0721ce0c2bab2a116cdc968d85e6ad625cf99ef9c88b015c806c031117b5d5",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnHjct00oK3gE3GDB",
+        "sourceId": "ce661e65ae79abe9b6bdf88ac97a51315353f25155bcdb11d8be30f1936abe9d",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnHjcw003oESwbx3D",
+        "sourceId": "2fe27b721f20efcd0641cc99c3eae32b3e3ca9b3c5fb41fbe184f8d846e6e8ee",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnHlNt00kHa2tCn5S",
+        "sourceId": "6b527797f04a91edcb3086c6c843dcb10a98a39d4b24208fe5d3b0b8beaf14a2",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnHyBc00iHn8TUVBv",
+        "sourceId": "7d57976d1f413cc15d4e0bf59cf63edc1920d78b9df4eb703e75d62b29e4c86b",
+        "title": "URL() - Web API | MDN",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0"
+      },
+      {
+        "id": "prt_g0VXnI9NN00W5wAwS3FC",
+        "sourceId": "0d6b825cf9bccf8bbf22ea1cd0eadd81ba4e746782cf51931839430c6f8e7aae",
+        "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82"
+      }
+    ]
+  }
+]

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [329 子会话来源后续生成](child-live-plan-329.md)：提前进入来源区观察真实流式正文。
+
 - [328 真实子会话复查](child-render-plan-328.md)：Sources与正文流式渲染的当前证据。
 
 - [327 窄侧聊与分隔条](source-narrow-plan-327.md)：真实来源读位复核与范围、拖动命中修复。

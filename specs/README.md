@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [329 子会话来源后续生成](records/2026-10/2026-10-12-child-live-329.md)：提前进入来源区观察真实流式正文。
+
 - [328 真实子会话复查](records/2026-10/2026-10-12-child-render-328.md)：Sources与正文流式渲染的当前证据。
 
 - [327 窄侧聊与分隔条](records/2026-10/2026-10-12-source-narrow-327.md)：真实来源读位复核与范围、拖动命中修复。

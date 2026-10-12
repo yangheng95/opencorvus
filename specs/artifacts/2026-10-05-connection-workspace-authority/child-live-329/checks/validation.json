@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-10-12T01:26:07.152Z",
+  "backendCheckerActualExit": 0,
+  "docsCheckActualExit": 0,
+  "originalLaunchHandle": {
+    "id": 5414,
+    "actualExit": 0
+  },
+  "originalObserverHandle": {
+    "id": 72855,
+    "actualExit": 0
+  },
+  "ownedTabsClosed": [
+    "107"
+  ],
+  "textEvidenceScanned": 39,
+  "credentialMatches": 0,
+  "boundary": "Only publish after each original checker handle has actually exited. Manual screenshot review is documented separately; backend checks do not assert UI behavior."
+}
