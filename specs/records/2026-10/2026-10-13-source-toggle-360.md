@@ -7,3 +7,5 @@
 history原95647 exit0/232516ms，live原78524 exit0/203967ms，均在固定600000ms内完整收尾；5个真实gpt-6.1-sol流式EOF、NativeService通过、授权复制auth/models配对清除。原90表历史、11 Message/192 Source及新search_code输入/两条匹配/Source文件行号均由实际checker核对，UI仅人工。类型/构建/locale结构/docs检查完成；其他用户任务的标题栏、更新日志、语言键及索引内容不混入提交。
 
 跨网站首次复制的精确宿主/工具根因仍未知；本轮不涉及clipboard，也不宣称持续Rendering和原大历史全部通过。目标继续active。
+
+首次push遇到远端SDK 7并发升级；普通merge为6d3a6c230，阻挡合并的两份其他任务索引追加精确备份后暂存、合并后完整恢复，自有stash已清理。冻结安装、合并后完整8/8类型和正式构建通过。独立integrated/18357/页175完成新的gpt-6.1-sol两来源检索与中英文/键盘/末尾动作图19–23（总23图），5个新流式请求200/EOF、NativeService通过、原40203 exit0/232279ms及配对清除。追加证据独立核对ai7.0.138和当前实际HTTP资产；未以旧SDK回执代替新资格。

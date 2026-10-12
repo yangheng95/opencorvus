@@ -33,3 +33,11 @@ live页174由正常Web UI提交请求，真实search_code返回乙.md:2和甲.md
 构建中发现其他用户任务修改TitlebarBrand、ReleaseNotesPanel、changelog、titlebar.homepage locale键和根/月索引。保留全部；提交locale只选本轮Sources hunk，根/月只选360索引，其他文件不stage。相同构建包含这些独立工作区变更，视觉资格只绑定本轮来源区域。后续提交/同步前继续检查，不能把无关变更混入本轮提交。
 
 当前已达成本轮来源动作文案与真实页面验收；359首次复制未知问题未修复，新持续Rendering/原大历史/附件/child独立视觉未取得本轮资格，原长期goal保持active。
+
+## 远端依赖升级后的集成验收
+
+05ac270c4已完成范围提交；首次push的全部hook通过，但远端先到2ccf6a76d（另一已授权Dependabot升级，AI SDK 7等依赖及当前LLM合同），正常拒绝。fresh fetch后发现仅两份根/月索引的其他任务未提交两行追加挡住merge。先私下完整保存并审查两份原文及diff，再仅stash这两条路径，普通merge为6d3a6c230，随后按确切stash身份apply并逐份确认原追加内容完整恢复；未暂存其他任务、未覆盖其变更、未rebase或force。
+
+原两scope证据绑定升级前依赖，不能冒充升级后真实模型资格。冻结安装已成功。追加fresh source-toggle-360-integrated /18357，以当前SDK 7正式重建结果重新做真实gpt-6.1-sol两文件检索、英文/中文展开收起和键盘/末尾返回；同样12请求预算、NativeService固定600000ms、auth/models配对预检与物理清除，不复用旧模型回执。原18图与两scope资格保持独立。若旧私有验收helper使用被替换的SDK名称，先按当前单一公开合同修复helper并保留原诊断，再启动验收，不给生产增加兼容层。
+
+追加验收已完成：冻结安装66包成功，完整8/8类型任务94424 exit0、正式build8776 exit0，实际资产main-GGpG4cxE.js。公开LLM helper未发现旧SDK调用名，原入口无需兼容改写；实际运行ai7.0.138。页175新会话ses_-zUS8E6JXzzq8naGiv7Z真实search_code返回甲/乙各第2行的两条来源，英文展开/Space收起/Enter重新展开、展开时切中文、末尾收起与焦点返回图19–23均实际查看。当前5请求全部gpt-6.1-sol streaming/200/EOF；原40203实际exit0、232279ms，NativeService合格、复制auth/models清除。新输入、canonical、Provider、HTTP/Native由独立integrated checker验证，未运行UI断言。暂存的两份其他索引内容已完整恢复，确认确切stash身份后删除自有stash，私下原备份仍保留；无其他工作丢失。

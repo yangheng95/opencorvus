@@ -18,7 +18,7 @@
 | [14真实两条来源](14-live-two-sources.png)、[15英文展开](15-live-singular-expanded.png)、[16键盘返回](16-live-singular-keyboard-return.png) | 新实际gpt-6.1-sol检索的两条Source，单数语义与真实数量一致 |
 | [17中文保持展开](17-live-chinese-singular-expanded.png)、[18中文末尾返回](18-live-chinese-collapsed-return.png) | 展开时切换语言仍保持原状态，末尾返回正确显示展开其余1条来源 |
 
-全部18张截图已实际呈现人工查看。01为尚在加载的空视图，02尚未把来源滚入视口，13为请求刚提交时的中间画面，三者不作为完成或来源视觉验收。没有DOM（Document Object Model，文档对象模型）/文案/组件/快照/像素断言，也没有UI自动化测试。
+前两scope的18张截图已实际呈现人工查看。01为尚在加载的空视图，02尚未把来源滚入视口，13为请求刚提交时的中间画面，三者不作为完成或来源视觉验收。没有DOM（Document Object Model，文档对象模型）/文案/组件/快照/像素断言，也没有UI自动化测试。
 
 ## 真实运行与数据边界
 
@@ -29,6 +29,16 @@ live / localhost:18356/ui / 页174：原启动78524实际exit0，Native耗时203
 本次5个Provider请求全部gpt-6.1-sol、streaming true、HTTP 200、reader EOF（End of File，流结束）；NativeService资格通过，复制auth/models成对清除。两个scope均固定600000ms，自建页面先关闭，公共shutdown及原handle join完成，精确Host/Native/端口/输出/request闭合，自有Bun pile按精确出生与路径归档。没有用户应用操作、子agent委托或产品成员派遣。
 
 [实际runtime checker](checks/runtime-qualification.json)仅检查原库/当前SQLite、输入文件、Source/工具结果、实际Provider流、HTTP资产交付及Native事实；两个scope实际交付main-C-GbKPJC.js。它不检查UI文案或剪贴板，不替代人工截图。类型76697、正式构建15046及两locale结构检查通过，docs见[检查日志](checks/docs.log.gz)。[完整归档](checks/archive-receipt.json)及[凭据扫描](checks/credential-scan.json)包含所有文本和解压内容；归档回读只证明压缩字节完整性。
+
+## 上游SDK 7合并后的独立补验
+
+05ac270c4首次push的检查全部通过，远端并发升级到2ccf6a76d导致正常拒绝。fresh fetch后把两份阻挡合并的其他任务索引追加精确备份/暂存，普通merge为6d3a6c230；随后完整恢复原追加内容并清理自有stash，私有备份保留。没有覆盖其他工作、rebase或force push。上游升级本身已在独立用户任务验证；此处补的是当前实际Sources与OpenAI路径，不把旧SDK的回执算作新结果。
+
+冻结安装完成；完整8/8类型检查94424 exit0、正式构建8776 exit0。当前实际依赖ai7.0.138，main-GGpG4cxE.js。fresh integrated /18357 /页175的5个gpt-6.1-sol请求全部流式200/EOF，独立预检usable/projected/actual model通过。新会话ses_-zUS8E6JXzzq8naGiv7Z实际检索[新输入文件](integrated-search-inputs.json)，返回原甲/乙各第2行的两条Source。
+
+[19英文折叠](19-integrated-english-collapsed.png)、[20英文展开](20-integrated-english-expanded.png)、[21 Space收起](21-integrated-keyboard-collapse.png)、[22展开时切中文](22-integrated-chinese-expanded.png)、[23末尾返回](23-integrated-chinese-return.png)均已实际人工查看。合并后新结果与之前18图分别保留，共23图。原启动40203实际exit0，Native耗时232279ms，固定600000ms内关闭，复制auth/models清除；所有自建页面/服务均已关闭。
+
+[独立集成checker](checks/integrated-qualification.json)核对新canonical Source、真实输入/output、5个模型请求、依赖版本、HTTP及Native事实，无UI断言。[追加归档](integrated-checks/archive-receipt.json)、[全证据凭据扫描](integrated-checks/credential-scan.json)、[合并后docs](integrated-checks/docs-integrated.log.gz)。本轮没有改变来源实现以兼容旧SDK，也没有修改其他用户任务的国际化或更新日志。
 
 ## 限制与并行工作区
 
