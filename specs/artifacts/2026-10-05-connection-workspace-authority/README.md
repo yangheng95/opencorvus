@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [337 工具错误正文](error-literal-plan-337.md)：保留路径与多行诊断原文。
+
 - [336 读取工具摘要](read-summary-plan-336.md)：真实结果名称与Sources一致。
 
 - [335 附件来源名称](attachment-source-name-plan-335.md)：保留原名和精确只读定位。

@@ -630,7 +630,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           </Show>
           <Show when={status() === "error" && error()}>
             <Feedback tone="error" details={failure().diagnostic ? stripAnsi(failure().diagnostic!) : undefined}>
-              <StaticTextPart text={error()} />
+              <div class="msg-tool-failure-message">{error()}</div>
             </Feedback>
           </Show>
         </Show>

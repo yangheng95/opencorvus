@@ -317,6 +317,11 @@
   user-select: none;
 }
 
+.msg-tool-failure-message {
+  white-space: pre-wrap;
+  user-select: text;
+}
+
 .msg-tool-error {
   margin: var(--ui-gap-sm) 0 var(--ui-gap-md) 0;
   padding: var(--ui-gap-md) var(--ui-gap-lg);

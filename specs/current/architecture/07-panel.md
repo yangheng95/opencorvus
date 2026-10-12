@@ -659,7 +659,8 @@ projection data as full results or replacing the surrounding message and Sources
 The shared Feedback primitive presents the localized result-load problem and
 close/reopen retry action; its native Details retains the complete read diagnostic.
 Actual tool execution failures use that same Feedback primitive. The canonical
-failure message remains visible and keeps its existing Markdown links; the full
+failure message remains literal, selectable text with its original line breaks;
+diagnostic paths and punctuation do not enter the Markdown renderer. The full
 shared diagnostic, including classification, origin and structured data, belongs
 to the native Details disclosure. The Overlay does not rewrite the failure or
 repeat its diagnostic envelope as the primary message. Unstructured errors keep

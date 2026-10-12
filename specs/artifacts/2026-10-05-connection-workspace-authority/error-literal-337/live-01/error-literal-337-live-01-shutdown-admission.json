@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-12T05:08:42.8586926Z",
+  "occurrence": "error-literal-337-live-01-1a6407b7-d512-4773-a2d5-31463cfe7b3d",
+  "owner": {
+    "pid": 60836,
+    "processInstanceID": "win32:639273783264923416",
+    "occurrenceID": "acc3754e-2ac5-496f-9291-fbd36a30a545"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXoDVY900NDAh9dCuc"
+  }
+}

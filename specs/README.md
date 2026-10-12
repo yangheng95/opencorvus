@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [337 工具错误正文](records/2026-10/2026-10-12-error-literal-337.md)：保留路径与多行诊断原文。
+
 - [336 读取工具摘要](records/2026-10/2026-10-12-read-summary-336.md)：真实结果名称与Sources一致。
 
 - [335 附件来源名称](records/2026-10/2026-10-12-attachment-source-name-335.md)：保留原名和精确只读定位。

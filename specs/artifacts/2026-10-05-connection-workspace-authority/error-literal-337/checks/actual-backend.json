@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-12T05:08:53.618Z",
+  "actualModel": "gpt-6.1-sol",
+  "providerRequests": 6,
+  "streaming": true,
+  "providerTerminal": "eof",
+  "actualFailure": {
+    "kind": "tool-execution",
+    "name": "Error",
+    "message": "File not found: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-literal-337-live-01\\project\\report_[draft]_(v1)\n\nDid you mean one of these?\nC:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-literal-337-live-01\\project\\report_[draft]_(v1).md\nC:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-literal-337-live-01\\project\\report_[draft]_(v1).md.backup",
+    "originSite": "session.processor.tool-error",
+    "classification": "tool-execution",
+    "data": {
+      "toolCallId": "call_OeOUW2eSx8WjoGhnrrPY6vax",
+      "toolName": "read"
+    }
+  },
+  "actualSuccessfulSource": {
+    "id": "prt_g0VXoCy2l00ZZ7WeFwkU",
+    "messageID": "msg_g0VXoCwmP00RZMVcoCzZ",
+    "type": "source-file",
+    "sourceId": "a2e3b562a94b0af1eea27bdcdecca7113e1e114c8fefe2a4a52e9fc670d52e64",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-literal-337-live-01\\project\\report_[draft]_(v1).md",
+    "title": "report_[draft]_(v1).md",
+    "provider": "opencorvus-read"
+  },
+  "filesRetainOriginalBytes": true,
+  "nativeExit": 0,
+  "pairedCleanupComplete": true,
+  "boundary": "Positive checks over actual Provider, canonical request/result/source and real multiline error contract plus original file bytes and physical completion. No DOM, clipboard, presentation or screenshot assertions."
+}
