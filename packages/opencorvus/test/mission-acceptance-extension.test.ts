@@ -5,13 +5,18 @@ import { panelLeafToolID, type PanelActionID } from "@/panel/action-ids"
 import { afterEach, expect, test } from "bun:test"
 import { ArtifactReadInputSchema, type ArtifactReadLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
-import { EngineArtifactTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineControlActivationLeaseTable, EngineTaskRootIngressTable } from "@/engine/engine.sql"
 import { requireTask } from "@/engine/store"
 import { terminalTask } from "@/engine/state"
 import { taskLifecycleProjection } from "@/engine/task-lifecycle"
 import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { currentTaskArtifactObservation } from "@/engine/task-artifact-observation"
-import { TestHooks, readTaskRootIngressEvidence, reconcileTaskControlPlane } from "@/engine/task-root-ingress-delivery"
+import {
+  TestHooks,
+  readTaskRootIngressEvidence,
+  reconcileTaskControlPlane,
+  taskControlDriverSnapshot,
+} from "@/engine/task-root-ingress-delivery"
 import { projectTaskRootIngress } from "@/engine/task-root-fact-store"
 import { Identifier } from "@/id/id"
 import { materializeMissionAcceptanceGap, type MissionAcceptanceGapInput } from "@/mission/acceptance-gap"
@@ -45,61 +50,91 @@ for (const boundary of ["cancelled", "completed"] as const)
       directory: project.path,
       init: InstanceBootstrap,
       fn: async () => {
+        let phase = "setup"
+        const trace = (next: string, details: Record<string, unknown> = {}) => {
+          phase = next
+          console.log("acceptance-extension", JSON.stringify({ responsibilityKind, boundary, phase, ...details }))
+        }
         const initialFinished = Promise.withResolvers<void>()
         const repairStarted = Promise.withResolvers<void>()
         const releaseRepair = Promise.withResolvers<void>()
         const extensionFinished = Promise.withResolvers<void>()
         const applicationObserved = Promise.withResolvers<void>()
+        const runnerFailure = Promise.withResolvers<never>()
+        // The scripted participant owns these receivers; background faults
+        // must reach them instead of becoming an unrelated hook timeout.
+        void runnerFailure.promise.catch(() => undefined)
+        const awaitParticipant = <T>(completion: Promise<T>) => Promise.race([completion, runnerFailure.promise])
         let extensionActivations = 0
         const cancellationStarted = Promise.withResolvers<void>()
         const releaseCancellation = Promise.withResolvers<void>()
         let holdCancellation = false
+        let normalLeaseMilliseconds: number | undefined
         using _loop = TestHooks.replaceTaskIngressRunner({
           runner: async (input) => {
             const { taskID, event, wakeID, activationID, predecessorID } = input
-            if (!wakeID || !activationID || !predecessorID) throw new Error("Expected real ingress identity")
-            if (event.missionAcceptanceResume) {
-              repairStarted.resolve()
-              await releaseRepair.promise
-            }
-            if (holdCancellation && event.rootMessage?.kind === "operator") {
-              cancellationStarted.resolve()
-              await Promise.race([
-                releaseCancellation.promise,
-                new Promise<void>((resolve) =>
-                  input.signal?.addEventListener("abort", () => resolve(), { once: true }),
-                ),
-              ])
-              return {}
-            }
-            if (event.missionAcceptanceExtension) {
-              extensionActivations += 1
-              // Explicit local loss fixture: the first applied input loses its runner before a decision.
-              // Recovery must reload the same immutable application, not append another revision.
-              if (boundary === "completed" && extensionActivations === 1) {
-                applicationObserved.resolve()
+            try {
+              trace("runner:start", {
+                taskID, wakeID, activationID,
+                resume: Boolean(event.missionAcceptanceResume),
+                extension: Boolean(event.missionAcceptanceExtension),
+              })
+              if (!wakeID || !activationID || !predecessorID) throw new Error("Expected real ingress identity")
+              const lease = Database.use((db) => db.select().from(EngineControlActivationLeaseTable)
+                .where(eq(EngineControlActivationLeaseTable.id, activationID)).get())!
+              const leaseDuration = lease.expires_at - lease.time_activated
+              normalLeaseMilliseconds ??= leaseDuration
+              if (event.missionAcceptanceResume) {
+                repairStarted.resolve()
+                await releaseRepair.promise
+              }
+              if (holdCancellation && event.rootMessage?.kind === "operator") {
+                cancellationStarted.resolve()
+                await Promise.race([
+                  releaseCancellation.promise,
+                  new Promise<void>((resolve) =>
+                    input.signal?.addEventListener("abort", () => resolve(), { once: true }),
+                  ),
+                ])
                 return {}
               }
-              const current = readLatestTaskAcceptanceLedger(taskID)!
-              expect({
-                actual: event.missionAcceptanceExtension.acceptanceLedgerRevisionArtifactID,
-                current: current.artifactID,
-              }).toEqual({ actual: current.artifactID, current: current.artifactID })
-              expect(renderWakeProvenanceNotice(event, taskID, wakeID)).toContain(
-                "extension added obligations in the current Task execution",
-              )
+              if (event.missionAcceptanceExtension) {
+                extensionActivations += 1
+                const lostActivation = boundary === "completed" && extensionActivations === 1
+                expect(leaseDuration).toBe(lostActivation ? 1500 : normalLeaseMilliseconds)
+                // The first applied input deliberately loses its runner before a decision.
+                // Recovery reloads the same immutable application with normal lease timing.
+                if (lostActivation) {
+                  applicationObserved.resolve()
+                  return {}
+                }
+                const current = readLatestTaskAcceptanceLedger(taskID)!
+                expect({
+                  actual: event.missionAcceptanceExtension.acceptanceLedgerRevisionArtifactID,
+                  current: current.artifactID,
+                }).toEqual({ actual: current.artifactID, current: current.artifactID })
+                expect(renderWakeProvenanceNotice(event, taskID, wakeID)).toContain(
+                  "extension added obligations in the current Task execution",
+                )
+              }
+              trace("runner:settle", { taskID, wakeID, activationID })
+              const result = await settleScriptedStatusInput({
+                taskID,
+                event,
+                wakeID,
+                activationID,
+                predecessorID,
+                directory: project.path,
+              })
+              trace("runner:settled", { taskID, wakeID, activationID })
+              initialFinished.resolve()
+              if (event.missionAcceptanceExtension) extensionFinished.resolve()
+              return result
+            } catch (error) {
+              console.error("acceptance-extension-runner-failed", { taskID, wakeID, activationID, error })
+              runnerFailure.reject(error)
+              throw error
             }
-            const result = await settleScriptedStatusInput({
-              taskID,
-              event,
-              wakeID,
-              activationID,
-              predecessorID,
-              directory: project.path,
-            })
-            initialFinished.resolve()
-            if (event.missionAcceptanceExtension) extensionFinished.resolve()
-            return result
           },
         })
         const mission = await ensureMissionSession({
@@ -130,8 +165,25 @@ for (const boundary of ["cancelled", "completed"] as const)
             openedOccurrence: { eventID: opened.eventID, operationID: opened.operationID },
           },
         )
+        const diagnostic = setInterval(() => {
+          try {
+            const ingresses = Database.use((db) => db.select({ id: EngineTaskRootIngressTable.id })
+              .from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.task_id, taskID)).all())
+            console.log("acceptance-extension-state", JSON.stringify({
+              responsibilityKind, boundary, phase, taskID,
+              lifecycle: taskLifecycleProjection(taskID), driver: taskControlDriverSnapshot(),
+              ingresses: ingresses.map(({ id }) => ({
+                id, projection: projectTaskRootIngress(id, Date.now(), readTaskRootIngressEvidence),
+              })),
+            }))
+          } catch (error) {
+            console.error("acceptance-extension-diagnostic", error)
+          }
+        }, 10_000)
+        diagnostic.unref()
         try {
-          await initialFinished.promise
+          trace("await:initial")
+          await awaitParticipant(initialFinished.promise)
           await reconcileTaskControlPlane(taskID)
           const locators = new Map<string, ArtifactReadLocator>()
           for (const name of ["A", "A-review", "B", "A-counter", "C"]) {
@@ -219,7 +271,8 @@ for (const boundary of ["cancelled", "completed"] as const)
             acceptanceGap: materialize([a, b], "local-initial"),
             completeEvidenceLocators: [...locators.values()],
           })
-          await repairStarted.promise
+          trace("await:repair")
+          await awaitParticipant(repairStarted.promise)
           const original = readLatestTaskAcceptanceLedger(taskID)!
           const reopened: MissionAcceptanceCriterionInput = {
             ...a,
@@ -393,15 +446,24 @@ for (const boundary of ["cancelled", "completed"] as const)
           expect(
             projectTaskRootIngress(first.ingress_artifact_id, Date.now(), readTaskRootIngressEvidence),
           ).toMatchObject({ state: "leased" })
-          using _leaseTiming = TestHooks.replaceLeaseTiming({ leaseMilliseconds: 1500, renewalMilliseconds: 250 })
-          releaseRepair.resolve()
+          {
+            // Only the deliberately lost activation gets the short recovery
+            // lease. Normal participant execution uses production timing.
+            using _lostActivationLease = boundary === "completed"
+              ? TestHooks.replaceLeaseTiming({ leaseMilliseconds: 1500, renewalMilliseconds: 250 })
+              : undefined
+            trace("release:repair")
+            releaseRepair.resolve()
+            if (boundary === "completed") await awaitParticipant(applicationObserved.promise)
+          }
           if (boundary === "completed") {
-            await applicationObserved.promise
             // A fresh recovery sweep after the lost activation's lease expires.
             await new Promise((resolve) => setTimeout(resolve, 1700))
             await reconcileTaskControlPlane(taskID)
           }
-          await extensionFinished.promise
+          trace("await:extension")
+          await awaitParticipant(extensionFinished.promise)
+          trace("reconcile:extension")
           await reconcileTaskControlPlane(taskID)
           expect(extensionActivations).toBe(boundary === "completed" ? 2 : 1)
           const revised = readLatestTaskAcceptanceLedger(taskID)!
@@ -440,7 +502,8 @@ for (const boundary of ["cancelled", "completed"] as const)
             source: "api",
             text: "LOCAL TEST: hold this input until cancellation",
           })
-          await cancellationStarted.promise
+          trace("await:cancellation")
+          await awaitParticipant(cancellationStarted.promise)
           const c: MissionAcceptanceCriterionInput = {
             ...b,
             criterion_id: "C",
@@ -472,8 +535,11 @@ for (const boundary of ["cancelled", "completed"] as const)
                   { status: "completed", time_started: Date.now(), time_completed: Date.now() },
                   "LOCAL PROTOCOL TEST: prior input completed before extension",
                 )
-          releaseCancellation.resolve()
+          trace("await:boundary")
           await priorBoundary
+          trace("boundary:committed")
+          expect(taskLifecycleProjection(taskID)).toMatchObject({ status: boundary, epoch: 2 })
+          releaseCancellation.resolve()
           expect((await EngineService.extendMissionTaskAcceptance(cancelledRequest)).application).toEqual({
             kind: "inapplicable",
             lifecycle: boundary,
@@ -487,6 +553,8 @@ for (const boundary of ["cancelled", "completed"] as const)
             boundary: boundary === "cancelled" ? "cancelled" : "closed",
           })
         } finally {
+          trace("cleanup")
+          clearInterval(diagnostic)
           releaseRepair.resolve()
           releaseCancellation.resolve()
           if (taskLifecycleProjection(taskID).status === "active")
