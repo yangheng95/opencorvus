@@ -1,0 +1,56 @@
+[
+  {
+    "action": "paused-after-provider-recovery",
+    "at": "2026-10-12T14:09:04.882Z",
+    "geometry": {
+      "client": 576,
+      "following": "false",
+      "height": 2981,
+      "top": 0
+    }
+  },
+  {
+    "action": "before-hidden-growth",
+    "at": "2026-10-12T14:09:55.545Z",
+    "geometry": {
+      "client": 576,
+      "following": "false",
+      "height": 4289,
+      "top": 792
+    }
+  },
+  {
+    "action": "hide-during-real-generation",
+    "at": "2026-10-12T14:09:55.908Z"
+  },
+  {
+    "action": "return-after-hidden-growth",
+    "at": "2026-10-12T14:11:01.185Z"
+  },
+  {
+    "action": "after-hidden-growth-observation",
+    "at": "2026-10-12T14:11:02.280Z",
+    "geometry": {
+      "client": 576,
+      "following": "false",
+      "headings": [
+        "R18 构造器字符串转换",
+        "R19 get和getAll区别",
+        "R20 文本片段的形式",
+        "R21 URL规范化范围"
+      ],
+      "height": 5986,
+      "top": 792
+    }
+  },
+  {
+    "action": "explicit-latest-during-generation",
+    "at": "2026-10-12T14:11:33.365Z",
+    "geometry": {
+      "client": 576,
+      "following": "true",
+      "height": 6788,
+      "top": 6211.2001953125
+    }
+  }
+]

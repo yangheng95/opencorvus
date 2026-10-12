@@ -777,3 +777,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [长来源列表阅读与收起351](source-collapse-351/README.md) / [Recall](source-collapse-plan-351.md)。
 
 - [长子会话 Markdown 生命周期352](markdown-lifetime-352/README.md) / [Recall](markdown-lifetime-plan-352.md)。
+
+- [同目标子会话呈现保留353](child-view-retention-353/README.md) / [Recall](child-view-retention-plan-353.md)。

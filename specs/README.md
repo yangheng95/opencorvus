@@ -3127,3 +3127,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [长来源列表阅读与收起351](artifacts/2026-10-05-connection-workspace-authority/source-collapse-351/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-collapse-plan-351.md) / [月记录](records/2026-10/2026-10-12-source-collapse-351.md)。
 
 - [长子会话 Markdown 生命周期352](artifacts/2026-10-05-connection-workspace-authority/markdown-lifetime-352/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/markdown-lifetime-plan-352.md) / [月记录](records/2026-10/2026-10-12-markdown-lifetime-352.md)。
+
+- [同目标子会话呈现保留353](artifacts/2026-10-05-connection-workspace-authority/child-view-retention-353/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/child-view-retention-plan-353.md) / [月记录](records/2026-10/2026-10-12-child-view-retention-353.md)。

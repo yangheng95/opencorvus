@@ -2061,6 +2061,11 @@
   flex: 1;
   min-width: min(100%, calc(180px * var(--ui-scale)));
 }
+
+.subagent-conversation-panel__agent-selector[hidden],
+.subagent-conversation-panel__selected-agent[hidden] {
+  display: none;
+}
 .subagent-conversation-panel__list {
   display: grid;
   gap: var(--ui-gap-xs);

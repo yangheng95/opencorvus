@@ -1,0 +1,15 @@
+{
+  "pid": 44056,
+  "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+  "owner": {
+    "pid": 44056,
+    "processInstanceID": "win32:639274105657608545",
+    "occurrenceID": "faadeffc-fda7-4d78-b06d-d90e2d46100d"
+  },
+  "parent": {
+    "pid": 49896,
+    "processInstanceID": "win32:639274105657229480",
+    "occurrenceID": "b9aed600-898f-4662-9d5b-8801f6ef70cc"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

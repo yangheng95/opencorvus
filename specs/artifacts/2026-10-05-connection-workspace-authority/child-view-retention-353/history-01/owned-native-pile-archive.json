@@ -1,0 +1,44 @@
+{
+  "targetBirthUtc": "2026-10-12T13:56:46.6717707Z",
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0.",
+  "files": [
+    {
+      "name": "091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-history\\091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-12T13:56:47.0036548Z"
+    },
+    {
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-history\\69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-12T13:56:46.9885911Z"
+    },
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-history\\7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-12T13:56:46.9425214Z"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-history\\cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-12T13:56:46.9504559Z"
+    },
+    {
+      "name": "f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-history\\f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-12T13:56:47.0267318Z"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T14:01:55.9762062Z",
+  "nativeTerminal": {
+    "occurrenceID": "child-view-retention-353-history-01-27771cd6-98f9-4df0-ad38-34cfc0b92cc9",
+    "pid": 36520,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  }
+}

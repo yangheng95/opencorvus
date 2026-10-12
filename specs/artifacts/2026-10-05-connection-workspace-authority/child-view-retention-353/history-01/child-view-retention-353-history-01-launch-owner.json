@@ -1,0 +1,35 @@
+{
+  "authorityStaging": "None; no model Task requested",
+  "targetBirthAtMs": 1791813406671,
+  "nativeDeadlineAt": 1791814005698,
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\history-01",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-history-01\\evidence",
+  "owner": {
+    "processInstanceID": "win32:639274102066717707",
+    "ProcessId": 36520
+  },
+  "nativeTarget": {
+    "pid": 36520,
+    "processInstanceID": "win32:639274102066717707",
+    "occurrenceID": "503201fe-0093-4ab7-90b5-d1f9badff16a"
+  },
+  "occurrence": "child-view-retention-353-history-01-27771cd6-98f9-4df0-ad38-34cfc0b92cc9",
+  "observedProcessChain": [
+    {
+      "pid": 36520,
+      "processInstanceID": "win32:639274102066717707",
+      "occurrenceID": "503201fe-0093-4ab7-90b5-d1f9badff16a"
+    }
+  ],
+  "host": {
+    "pid": 74924,
+    "processInstanceID": "win32:639274102057973226",
+    "occurrenceID": "d5689725-51de-4b1e-992a-af4ebb7dfc21"
+  },
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-history-01",
+  "evidencePrefix": "child-view-retention-353-history-01",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-history-349-live-01\\project",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-history-01\\runtime",
+  "port": 18333
+}

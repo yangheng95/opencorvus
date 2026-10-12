@@ -1,0 +1,1694 @@
+{
+  "history": {
+    "launcherHandle": 66890,
+    "launcherActualExit": 0,
+    "settled": {
+      "occurrence": "child-view-retention-353-history-01-27771cd6-98f9-4df0-ad38-34cfc0b92cc9",
+      "outcome": "settled",
+      "host": {
+        "pid": 74924,
+        "processInstanceID": "win32:639274102057973226",
+        "occurrenceID": "d5689725-51de-4b1e-992a-af4ebb7dfc21"
+      },
+      "target": {
+        "pid": 36520,
+        "processInstanceID": "win32:639274102066717707",
+        "occurrenceID": "503201fe-0093-4ab7-90b5-d1f9badff16a"
+      },
+      "observedAtUtc": "2026-10-12T14:01:07.981Z",
+      "deadlineAt": 1791814005698,
+      "terminal": {
+        "occurrenceID": "child-view-retention-353-history-01-27771cd6-98f9-4df0-ad38-34cfc0b92cc9",
+        "pid": 36520,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "elapsedMs": 261310,
+    "served": [
+      {
+        "level": "info",
+        "time": "2026-10-12T13:56:58.366Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "f4764104-91b4-4a55-80b3-a78d8da07cd9",
+          "method": "GET",
+          "path": "/ui/assets/main-6e97UgE-.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      }
+    ],
+    "messages": 45,
+    "sources": 36,
+    "providerIDs": 45,
+    "identity": "Complete stored rows and request identities equal closed349 original"
+  },
+  "live": {
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "workerID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+    "qualification": "failed",
+    "unmet": [
+      "Task completed",
+      "Orchestrator verified all 36 original narrative texts"
+    ],
+    "terminal": {
+      "type": "task.failed",
+      "eventID": "pev_g0VXqR1Hl00rlGobCLYi",
+      "at": "2026-10-12T14:14:55.847Z"
+    },
+    "launcher": {
+      "handle": 67543,
+      "actualExit": 1
+    },
+    "observer": {
+      "handle": 81908,
+      "actualExit": 0
+    },
+    "taskCreateActualExit": 0,
+    "workerTextParts": 37,
+    "workerChars": 5499,
+    "answers": [
+      {
+        "id": "prt_g0VXqP6pU00TWFETu8FJ",
+        "question": "URL接口用途",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 129,
+        "headings": [
+          "### R01 URL接口用途"
+        ],
+        "messageID": "msg_g0VXqP5ie006lykDACDD"
+      },
+      {
+        "id": "prt_g0VXqP9DA00gfqQQLhbg",
+        "question": "相对地址与base",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 129,
+        "headings": [
+          "### R02 相对地址与base"
+        ],
+        "messageID": "msg_g0VXqP7tb00BVa3Iptls"
+      },
+      {
+        "id": "prt_g0VXqPChR00l0l9JtVf6",
+        "question": "查询参数基本读取",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 134,
+        "headings": [
+          "### R03 查询参数基本读取"
+        ],
+        "messageID": "msg_g0VXqPAEq00oPQltLBJm"
+      },
+      {
+        "id": "prt_g0VXqPGf30042xKCoKWP",
+        "question": "fragment的用途",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 136,
+        "headings": [
+          "### R04 fragment的用途"
+        ],
+        "messageID": "msg_g0VXqPEiX00LsFJW2st5"
+      },
+      {
+        "id": "prt_g0VXqPIzG003OpHsRtML",
+        "question": "hostname与host区别",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 142,
+        "headings": [
+          "### R05 hostname与host区别"
+        ],
+        "messageID": "msg_g0VXqPHYU00hgNFVIUdm"
+      },
+      {
+        "id": "prt_g0VXqPMGr002Ylz4v7ts",
+        "question": "无效构造输入",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 201,
+        "headings": [
+          "### R06 无效构造输入"
+        ],
+        "messageID": "msg_g0VXqPKfG00Z0Mz5f37J"
+      },
+      {
+        "id": "prt_g0VXqPPR800z5Mbxzxy0",
+        "question": "重复查询键",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 127,
+        "headings": [
+          "### R07 重复查询键"
+        ],
+        "messageID": "msg_g0VXqPOFI000o1VmzB8V"
+      },
+      {
+        "id": "prt_g0VXqPRww00NcGLv75iC",
+        "question": "fragment与网络请求",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 138,
+        "headings": [
+          "### R08 fragment与网络请求"
+        ],
+        "messageID": "msg_g0VXqPQUx001MQd8CxBa"
+      },
+      {
+        "id": "prt_g0VXqPU4k00cg2lQkIbd",
+        "question": "href与origin区别",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 142,
+        "headings": [
+          "### R09 href与origin区别"
+        ],
+        "messageID": "msg_g0VXqPSvu00I3i1kvRm0"
+      },
+      {
+        "id": "prt_g0VXqPWk600NeIMzY7qf",
+        "question": "base路径末尾斜杠",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 139,
+        "headings": [
+          "### R10 base路径末尾斜杠"
+        ],
+        "messageID": "msg_g0VXqPV8100gBolg7vbY"
+      },
+      {
+        "id": "prt_g0VXqPZu100JUcvcz3yo",
+        "question": "参数遍历顺序",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 128,
+        "headings": [
+          "### R11 参数遍历顺序"
+        ],
+        "messageID": "msg_g0VXqPYWW00m3fufsisZ"
+      },
+      {
+        "id": "prt_g0VXqPcVk004t4OntX3O",
+        "question": "文档元素定位",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 190,
+        "headings": [
+          "### R12 文档元素定位"
+        ],
+        "messageID": "msg_g0VXqPbZ600LMTJukEJ3"
+      },
+      {
+        "id": "prt_g0VXqPeyT00sn1dOdkdh",
+        "question": "pathname与search区别",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 154,
+        "headings": [
+          "### R13 pathname与search区别"
+        ],
+        "messageID": "msg_g0VXqPdoG00yiKwTbeQO"
+      },
+      {
+        "id": "prt_g0VXqPhjZ00tdPECQZ4Q",
+        "question": "绝对URL与base",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 138,
+        "headings": [
+          "### R14 绝对URL与base"
+        ],
+        "messageID": "msg_g0VXqPg4F00zP40o2TxK"
+      },
+      {
+        "id": "prt_g0VXqPkZU00Fa6uuqB8Z",
+        "question": "append和set区别",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 144,
+        "headings": [
+          "### R15 append和set区别"
+        ],
+        "messageID": "msg_g0VXqPjNF000Szror45D"
+      },
+      {
+        "id": "prt_g0VXqPn4A00Ex2wxJ4B3",
+        "question": "媒体片段示例",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 135,
+        "headings": [
+          "### R16 媒体片段示例"
+        ],
+        "messageID": "msg_g0VXqPlaa00jZr9Hjv2J"
+      },
+      {
+        "id": "prt_g0VXqPpKk00a2tRzBJiO",
+        "question": "hash属性边界",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 142,
+        "headings": [
+          "### R17 hash属性边界"
+        ],
+        "messageID": "msg_g0VXqPoEW0009swiphZT"
+      },
+      {
+        "id": "prt_g0VXqPrg200leMIe7hhT",
+        "question": "构造器字符串转换",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 196,
+        "headings": [
+          "### R18 构造器字符串转换"
+        ],
+        "messageID": "msg_g0VXqPqQy00vd0riFYBz"
+      },
+      {
+        "id": "prt_g0VXqPuSq00ymcjTRSDo",
+        "question": "get和getAll区别",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 145,
+        "headings": [
+          "### R19 get和getAll区别"
+        ],
+        "messageID": "msg_g0VXqPt5n00xgUb24sE0"
+      },
+      {
+        "id": "prt_g0VXqPxUS00mPKLSvwS1",
+        "question": "文本片段的形式",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 142,
+        "headings": [
+          "### R20 文本片段的形式"
+        ],
+        "messageID": "msg_g0VXqPvbh00UHUQewuDC"
+      },
+      {
+        "id": "prt_g0VXqQ0Kz005kTHXHR1U",
+        "question": "URL规范化范围",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 138,
+        "headings": [
+          "### R21 URL规范化范围"
+        ],
+        "messageID": "msg_g0VXqPyYY005vppmRHvZ"
+      },
+      {
+        "id": "prt_g0VXqQ2lZ00kJj0SealN",
+        "question": "相对路径解析示例",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 136,
+        "headings": [
+          "### R22 相对路径解析示例"
+        ],
+        "messageID": "msg_g0VXqQ1L000qAzkgeOpA"
+      },
+      {
+        "id": "prt_g0VXqQ5ar00uPZuYVmPa",
+        "question": "删除查询参数",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 137,
+        "headings": [
+          "### R23 删除查询参数"
+        ],
+        "messageID": "msg_g0VXqQ4HN00XwLTByO71"
+      },
+      {
+        "id": "prt_g0VXqQ83T00dDefUTIjL",
+        "question": "fragment与查询的顺序",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 197,
+        "headings": [
+          "### R24 fragment与查询的顺序"
+        ],
+        "messageID": "msg_g0VXqQ6g600wP0R6b2tt"
+      },
+      {
+        "id": "prt_g0VXqQB7k00LT0jK2J55",
+        "question": "属性修改与序列化",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 137,
+        "headings": [
+          "### R25 属性修改与序列化"
+        ],
+        "messageID": "msg_g0VXqQ9h300wQkFamqxO"
+      },
+      {
+        "id": "prt_g0VXqQM5w002F7bNgAcr",
+        "question": "构造异常与try/catch",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 143,
+        "headings": [
+          "### R26 构造异常与try/catch"
+        ],
+        "messageID": "msg_g0VXqQJCU00H5HulMfAu"
+      },
+      {
+        "id": "prt_g0VXqQPL800IrNxUDrzq",
+        "question": "百分号编码注意点",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 137,
+        "headings": [
+          "### R27 百分号编码注意点"
+        ],
+        "messageID": "msg_g0VXqQN8e00wtLYK5noh"
+      },
+      {
+        "id": "prt_g0VXqQYNs00eQEwEfYyh",
+        "question": "fragment编码边界",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 145,
+        "headings": [
+          "### R28 fragment编码边界"
+        ],
+        "messageID": "msg_g0VXqQWjD000HcQ2uAfP"
+      },
+      {
+        "id": "prt_g0VXqQaoU00GUqs6QGpw",
+        "question": "toString与toJSON",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 156,
+        "headings": [
+          "### R29 toString与toJSON"
+        ],
+        "messageID": "msg_g0VXqQZLy00ll0KRY6Gy"
+      },
+      {
+        "id": "prt_g0VXqQe0300vqvkll7SI",
+        "question": "有效base与错误base",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 235,
+        "headings": [
+          "### R30 有效base与错误base"
+        ],
+        "messageID": "msg_g0VXqQboR003Eejq8nhT"
+      },
+      {
+        "id": "prt_g0VXqQhJ900g6p0NZ2LH",
+        "question": "空格与加号",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 133,
+        "headings": [
+          "### R31 空格与加号"
+        ],
+        "messageID": "msg_g0VXqQfO6002hM66uuvq"
+      },
+      {
+        "id": "prt_g0VXqQjsn00rim4Z263A",
+        "question": "fragment与页面标题区别",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 142,
+        "headings": [
+          "### R32 fragment与页面标题区别"
+        ],
+        "messageID": "msg_g0VXqQiBJ00MmIEOR1te"
+      },
+      {
+        "id": "prt_g0VXqQnOk00Ack4Ne8NR",
+        "question": "静态方法与实例方法",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "chars": 142,
+        "headings": [
+          "### R33 静态方法与实例方法"
+        ],
+        "messageID": "msg_g0VXqQkop00kxXNAfGBP"
+      },
+      {
+        "id": "prt_g0VXqQs3o00qvKHvStoL",
+        "question": "构造器示例的适用范围",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "chars": 142,
+        "headings": [
+          "### R34 构造器示例的适用范围"
+        ],
+        "messageID": "msg_g0VXqQpAj00mR7Sp1I7R"
+      },
+      {
+        "id": "prt_g0VXqQvTB00M2RGI0Eyh",
+        "question": "排序与serialization",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "chars": 151,
+        "headings": [
+          "### R35 排序与serialization"
+        ],
+        "messageID": "msg_g0VXqQt7S00tW3gTdKEf"
+      },
+      {
+        "id": "prt_g0VXqQyih00Fx5GZtyrL",
+        "question": "资料证据与真实导航验收区别",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "chars": 247,
+        "headings": [
+          "### R36 资料证据与真实导航验收区别"
+        ],
+        "messageID": "msg_g0VXqQx7r00SlwkslaCe"
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXqP5h400M5pnc0Ht8",
+        "messageID": "msg_g0VXqP3PX008ac3hC77t",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqP7qE00EXK1LisNa",
+        "messageID": "msg_g0VXqP5ie006lykDACDD",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPAAp004Gf5I7ptE",
+        "messageID": "msg_g0VXqP7tb00BVa3Iptls",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPEUV0076dxX6JqA",
+        "messageID": "msg_g0VXqPAEq00oPQltLBJm",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPHUG005BUbi29ic",
+        "messageID": "msg_g0VXqPEiX00LsFJW2st5",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPKaX00rgOa4EY43",
+        "messageID": "msg_g0VXqPHYU00hgNFVIUdm",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPODB00ZPl1LQvtu",
+        "messageID": "msg_g0VXqPKfG00Z0Mz5f37J",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPQR700yilVsvsNp",
+        "messageID": "msg_g0VXqPOFI000o1VmzB8V",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPStS00SEODLE3rc",
+        "messageID": "msg_g0VXqPQUx001MQd8CxBa",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPV2n00u7QEwpqnU",
+        "messageID": "msg_g0VXqPSvu00I3i1kvRm0",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPYT700gQmUBQQM9",
+        "messageID": "msg_g0VXqPV8100gBolg7vbY",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPbW700UkrLJMO2u",
+        "messageID": "msg_g0VXqPYWW00m3fufsisZ",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPdko00uSukwIFer",
+        "messageID": "msg_g0VXqPbZ600LMTJukEJ3",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPfwY00YVmzW001k",
+        "messageID": "msg_g0VXqPdoG00yiKwTbeQO",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPjJn001ua1NOb3c",
+        "messageID": "msg_g0VXqPg4F00zP40o2TxK",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPlWq00qpzMJlsJa",
+        "messageID": "msg_g0VXqPjNF000Szror45D",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPo3u00J871VAh6T",
+        "messageID": "msg_g0VXqPlaa00jZr9Hjv2J",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPqMf005EPmC2V4p",
+        "messageID": "msg_g0VXqPoEW0009swiphZT",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPt160097HsA25MD",
+        "messageID": "msg_g0VXqPqQy00vd0riFYBz",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPvWJ00h6Eyv93Oz",
+        "messageID": "msg_g0VXqPt5n00xgUb24sE0",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqPyTn003V5OdL2nZ",
+        "messageID": "msg_g0VXqPvbh00UHUQewuDC",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQ1EA002xuwZqNnL",
+        "messageID": "msg_g0VXqPyYY005vppmRHvZ",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQ47n00ooBuRrloG",
+        "messageID": "msg_g0VXqQ1L000qAzkgeOpA",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQ6aE00N5V12dCWe",
+        "messageID": "msg_g0VXqQ4HN00XwLTByO71",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQ9aQ00yV1UzirUB",
+        "messageID": "msg_g0VXqQ6g600wP0R6b2tt",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQBv500sCt6Nnx59",
+        "messageID": "msg_g0VXqQ9h300wQkFamqxO",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQN3300R151AqVhI",
+        "messageID": "msg_g0VXqQJCU00H5HulMfAu",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQQOX00jnkuIbYNC",
+        "messageID": "msg_g0VXqQN8e00wtLYK5noh",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQZGW00K3qEj2ufd",
+        "messageID": "msg_g0VXqQWjD000HcQ2uAfP",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQbhR00A8odnKCMx",
+        "messageID": "msg_g0VXqQZLy00ll0KRY6Gy",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQfEA002LUQ4qYy4",
+        "messageID": "msg_g0VXqQboR003Eejq8nhT",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQi8t00Wi4e7NwgU",
+        "messageID": "msg_g0VXqQfO6002hM66uuvq",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQkjT00rVi5Upeug",
+        "messageID": "msg_g0VXqQiBJ00MmIEOR1te",
+        "type": "source-url",
+        "sourceId": "f224a94e6d42892c231016c43dde41d0086dfd48c689397d552a8a4d8056b029",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL",
+        "title": "URL - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQp7n00i6xpqa3nj",
+        "messageID": "msg_g0VXqQkop00kxXNAfGBP",
+        "type": "source-url",
+        "sourceId": "02f0d83e035f213939c5bf236e67ae4abf787bb41ae6b083980446c779fabca8",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL/URL",
+        "title": "URL: URL() constructor - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQt2h00Q2S5iG0ic",
+        "messageID": "msg_g0VXqQpAj00mR7Sp1I7R",
+        "type": "source-url",
+        "sourceId": "107f0aa7f04639009100f91b83923d792f2ae3744a052106a296551afe5624b4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+        "title": "URLSearchParams - Web APIs | MDN",
+        "provider": "opencorvus-webfetch"
+      },
+      {
+        "id": "prt_g0VXqQwzO0035ITJwNxe",
+        "messageID": "msg_g0VXqQt7S00tW3gTdKEf",
+        "type": "source-url",
+        "sourceId": "dbf0b62fb081d6521282184299bb3c686c1d72537fb16cbb661e0fd75ea39dce",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment",
+        "title": "URI fragment - URIs | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    ],
+    "sourceStreamEvents": 36,
+    "streamComparisons": [
+      {
+        "sessionID": "ses_-zUS9br8Fzz7F6QUJjdU",
+        "messageID": "msg_heA2wQquFt2ftkEkaGM3",
+        "partID": "prt_g0VXqORZQ00GrcZ0TIkR",
+        "field": "text",
+        "events": 42,
+        "wireChars": 58,
+        "canonicalChars": 58,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_-zUS9br8Fzz7F6QUJjdU",
+        "messageID": "msg_hhfUDVPJhKiPDmYJIcQz",
+        "partID": "prt_g0VXqOalP00hBbKP1T5l",
+        "field": "text",
+        "events": 39,
+        "wireChars": 56,
+        "canonicalChars": 56,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_-zUS9br8Fzz7F6QUJjdU",
+        "messageID": "msg_hKOvOrFwKy0tDhfKfwxQ",
+        "partID": "prt_g0VXqOixb00SlT8nTXZE",
+        "field": "text",
+        "events": 51,
+        "wireChars": 74,
+        "canonicalChars": 74,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqP3PX008ac3hC77t",
+        "partID": "prt_g0VXqP51x001BE7hLk8E",
+        "field": "text",
+        "events": 32,
+        "wireChars": 51,
+        "canonicalChars": 50,
+        "exact": false,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqP5ie006lykDACDD",
+        "partID": "prt_g0VXqP6pU00TWFETu8FJ",
+        "field": "text",
+        "events": 78,
+        "wireChars": 130,
+        "canonicalChars": 129,
+        "exact": false,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqP7tb00BVa3Iptls",
+        "partID": "prt_g0VXqP9DA00gfqQQLhbg",
+        "field": "text",
+        "events": 80,
+        "wireChars": 129,
+        "canonicalChars": 129,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPAEq00oPQltLBJm",
+        "partID": "prt_g0VXqPChR00l0l9JtVf6",
+        "field": "text",
+        "events": 79,
+        "wireChars": 134,
+        "canonicalChars": 134,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPEiX00LsFJW2st5",
+        "partID": "prt_g0VXqPGf30042xKCoKWP",
+        "field": "text",
+        "events": 87,
+        "wireChars": 136,
+        "canonicalChars": 136,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPHYU00hgNFVIUdm",
+        "partID": "prt_g0VXqPIzG003OpHsRtML",
+        "field": "text",
+        "events": 86,
+        "wireChars": 142,
+        "canonicalChars": 142,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPKfG00Z0Mz5f37J",
+        "partID": "prt_g0VXqPMGr002Ylz4v7ts",
+        "field": "text",
+        "events": 113,
+        "wireChars": 201,
+        "canonicalChars": 201,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPOFI000o1VmzB8V",
+        "partID": "prt_g0VXqPPR800z5Mbxzxy0",
+        "field": "text",
+        "events": 85,
+        "wireChars": 127,
+        "canonicalChars": 127,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPQUx001MQd8CxBa",
+        "partID": "prt_g0VXqPRww00NcGLv75iC",
+        "field": "text",
+        "events": 81,
+        "wireChars": 138,
+        "canonicalChars": 138,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPSvu00I3i1kvRm0",
+        "partID": "prt_g0VXqPU4k00cg2lQkIbd",
+        "field": "text",
+        "events": 83,
+        "wireChars": 142,
+        "canonicalChars": 142,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPV8100gBolg7vbY",
+        "partID": "prt_g0VXqPWk600NeIMzY7qf",
+        "field": "text",
+        "events": 92,
+        "wireChars": 139,
+        "canonicalChars": 139,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPYWW00m3fufsisZ",
+        "partID": "prt_g0VXqPZu100JUcvcz3yo",
+        "field": "text",
+        "events": 86,
+        "wireChars": 128,
+        "canonicalChars": 128,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPbZ600LMTJukEJ3",
+        "partID": "prt_g0VXqPcVk004t4OntX3O",
+        "field": "text",
+        "events": 116,
+        "wireChars": 190,
+        "canonicalChars": 190,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPdoG00yiKwTbeQO",
+        "partID": "prt_g0VXqPeyT00sn1dOdkdh",
+        "field": "text",
+        "events": 83,
+        "wireChars": 154,
+        "canonicalChars": 154,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPg4F00zP40o2TxK",
+        "partID": "prt_g0VXqPhjZ00tdPECQZ4Q",
+        "field": "text",
+        "events": 87,
+        "wireChars": 138,
+        "canonicalChars": 138,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPjNF000Szror45D",
+        "partID": "prt_g0VXqPkZU00Fa6uuqB8Z",
+        "field": "text",
+        "events": 89,
+        "wireChars": 144,
+        "canonicalChars": 144,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPlaa00jZr9Hjv2J",
+        "partID": "prt_g0VXqPn4A00Ex2wxJ4B3",
+        "field": "text",
+        "events": 89,
+        "wireChars": 135,
+        "canonicalChars": 135,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPoEW0009swiphZT",
+        "partID": "prt_g0VXqPpKk00a2tRzBJiO",
+        "field": "text",
+        "events": 89,
+        "wireChars": 142,
+        "canonicalChars": 142,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPqQy00vd0riFYBz",
+        "partID": "prt_g0VXqPrg200leMIe7hhT",
+        "field": "text",
+        "events": 111,
+        "wireChars": 196,
+        "canonicalChars": 196,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPt5n00xgUb24sE0",
+        "partID": "prt_g0VXqPuSq00ymcjTRSDo",
+        "field": "text",
+        "events": 92,
+        "wireChars": 145,
+        "canonicalChars": 145,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPvbh00UHUQewuDC",
+        "partID": "prt_g0VXqPxUS00mPKLSvwS1",
+        "field": "text",
+        "events": 91,
+        "wireChars": 142,
+        "canonicalChars": 142,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqPyYY005vppmRHvZ",
+        "partID": "prt_g0VXqQ0Kz005kTHXHR1U",
+        "field": "text",
+        "events": 91,
+        "wireChars": 138,
+        "canonicalChars": 138,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQ1L000qAzkgeOpA",
+        "partID": "prt_g0VXqQ2lZ00kJj0SealN",
+        "field": "text",
+        "events": 94,
+        "wireChars": 136,
+        "canonicalChars": 136,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQ4HN00XwLTByO71",
+        "partID": "prt_g0VXqQ5ar00uPZuYVmPa",
+        "field": "text",
+        "events": 87,
+        "wireChars": 137,
+        "canonicalChars": 137,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQ6g600wP0R6b2tt",
+        "partID": "prt_g0VXqQ83T00dDefUTIjL",
+        "field": "text",
+        "events": 118,
+        "wireChars": 197,
+        "canonicalChars": 197,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQ9h300wQkFamqxO",
+        "partID": "prt_g0VXqQB7k00LT0jK2J55",
+        "field": "text",
+        "events": 83,
+        "wireChars": 137,
+        "canonicalChars": 137,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_-zUS9br8Fzz7F6QUJjdU",
+        "messageID": "msg_hS8kxwbnnrcNUSbeau1p",
+        "partID": "prt_g0VXqQGIp00Ds3Q7WgaY",
+        "field": "text",
+        "events": 72,
+        "wireChars": 99,
+        "canonicalChars": 99,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQJCU00H5HulMfAu",
+        "partID": "prt_g0VXqQM5w002F7bNgAcr",
+        "field": "text",
+        "events": 87,
+        "wireChars": 143,
+        "canonicalChars": 143,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQN8e00wtLYK5noh",
+        "partID": "prt_g0VXqQPL800IrNxUDrzq",
+        "field": "text",
+        "events": 87,
+        "wireChars": 137,
+        "canonicalChars": 137,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_-zUS9br8Fzz7F6QUJjdU",
+        "messageID": "msg_hJ3WgN9FjcP7u8yQHsr9",
+        "partID": "prt_g0VXqQUCS00aBBPUEFWW",
+        "field": "text",
+        "events": 56,
+        "wireChars": 75,
+        "canonicalChars": 75,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQWjD000HcQ2uAfP",
+        "partID": "prt_g0VXqQYNs00eQEwEfYyh",
+        "field": "text",
+        "events": 91,
+        "wireChars": 145,
+        "canonicalChars": 145,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQZLy00ll0KRY6Gy",
+        "partID": "prt_g0VXqQaoU00GUqs6QGpw",
+        "field": "text",
+        "events": 86,
+        "wireChars": 156,
+        "canonicalChars": 156,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQboR003Eejq8nhT",
+        "partID": "prt_g0VXqQe0300vqvkll7SI",
+        "field": "text",
+        "events": 124,
+        "wireChars": 235,
+        "canonicalChars": 235,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQfO6002hM66uuvq",
+        "partID": "prt_g0VXqQhJ900g6p0NZ2LH",
+        "field": "text",
+        "events": 96,
+        "wireChars": 133,
+        "canonicalChars": 133,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQiBJ00MmIEOR1te",
+        "partID": "prt_g0VXqQjsn00rim4Z263A",
+        "field": "text",
+        "events": 83,
+        "wireChars": 142,
+        "canonicalChars": 142,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQkop00kxXNAfGBP",
+        "partID": "prt_g0VXqQnOk00Ack4Ne8NR",
+        "field": "text",
+        "events": 90,
+        "wireChars": 142,
+        "canonicalChars": 142,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQpAj00mR7Sp1I7R",
+        "partID": "prt_g0VXqQs3o00qvKHvStoL",
+        "field": "text",
+        "events": 96,
+        "wireChars": 142,
+        "canonicalChars": 142,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQt7S00tW3gTdKEf",
+        "partID": "prt_g0VXqQvTB00M2RGI0Eyh",
+        "field": "text",
+        "events": 93,
+        "wireChars": 151,
+        "canonicalChars": 151,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      },
+      {
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "messageID": "msg_g0VXqQx7r00SlwkslaCe",
+        "partID": "prt_g0VXqQyih00Fx5GZtyrL",
+        "field": "text",
+        "events": 157,
+        "wireChars": 247,
+        "canonicalChars": 247,
+        "exact": true,
+        "canonicalEqualsFinalTrimEnd": true,
+        "discontinuities": []
+      }
+    ],
+    "actualReadOutcomes": [
+      {
+        "requestPartID": "prt_g0VXqQERM00qA3pmYkek",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VXqQC0W0050QAGAr8f"
+            }
+          ]
+        },
+        "outcome": "completed",
+        "returnedMessages": [
+          {
+            "messageID": "msg_g0VXqQC0W0050QAGAr8f",
+            "textChars": 0
+          }
+        ],
+        "inventoryMessageIDs": [
+          "msg_g0VXqPqQy00vd0riFYBz",
+          "msg_g0VXqPt5n00xgUb24sE0",
+          "msg_g0VXqPvbh00UHUQewuDC",
+          "msg_g0VXqPyYY005vppmRHvZ",
+          "msg_g0VXqQ1L000qAzkgeOpA",
+          "msg_g0VXqQ4HN00XwLTByO71",
+          "msg_g0VXqQ6g600wP0R6b2tt",
+          "msg_g0VXqQ9h300wQkFamqxO"
+        ],
+        "returnedEvidenceFields": []
+      },
+      {
+        "requestPartID": "prt_g0VXqQSbV007yhSULAaA",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VXqQQRW00H2WQImazc"
+            }
+          ]
+        },
+        "outcome": "completed",
+        "returnedMessages": [
+          {
+            "messageID": "msg_g0VXqQQRW00H2WQImazc",
+            "textChars": 0
+          }
+        ],
+        "inventoryMessageIDs": [
+          "msg_g0VXqQJCU00H5HulMfAu",
+          "msg_g0VXqQN8e00wtLYK5noh"
+        ],
+        "returnedEvidenceFields": []
+      }
+    ],
+    "providerRequests": 62,
+    "requestLimit": 64,
+    "requestLimitExhausted": false,
+    "errors": [
+      {
+        "id": "msg_g0VXqOIdt00gsI3Q5AYm",
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "agent": "base-researcher",
+        "time": {
+          "created": 1791813847569,
+          "completed": 1791813849466
+        },
+        "finish": "error",
+        "error": {
+          "name": "APIError",
+          "data": {
+            "message": "Our servers are currently overloaded. Please try again later.",
+            "isRetryable": false,
+            "responseBody": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+          }
+        }
+      },
+      {
+        "id": "msg_g0VXqOU0A00dVl8Lp1mf",
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "agent": "base-researcher",
+        "time": {
+          "created": 1791813891234,
+          "completed": 1791813893124
+        },
+        "finish": "error",
+        "error": {
+          "name": "APIError",
+          "data": {
+            "message": "Our servers are currently overloaded. Please try again later.",
+            "isRetryable": false,
+            "responseBody": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+          }
+        }
+      },
+      {
+        "id": "msg_g0VXqOcxq00ylb6VLAbA",
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "agent": "base-researcher",
+        "time": {
+          "created": 1791813925687,
+          "completed": 1791813928485
+        },
+        "finish": "error",
+        "error": {
+          "name": "APIError",
+          "data": {
+            "message": "Our servers are currently overloaded. Please try again later.",
+            "isRetryable": false,
+            "responseBody": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+          }
+        }
+      },
+      {
+        "id": "msg_g0VXqQC0W0050QAGAr8f",
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "agent": "base-researcher",
+        "time": {
+          "created": 1791814298720,
+          "completed": 1791814300925
+        },
+        "finish": "error",
+        "error": {
+          "name": "APIError",
+          "data": {
+            "message": "Our servers are currently overloaded. Please try again later.",
+            "isRetryable": false,
+            "responseBody": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+          }
+        }
+      },
+      {
+        "id": "msg_g0VXqQQRW00H2WQImazc",
+        "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+        "agent": "base-researcher",
+        "time": {
+          "created": 1791814354210,
+          "completed": 1791814356744
+        },
+        "finish": "error",
+        "error": {
+          "name": "APIError",
+          "data": {
+            "message": "Our servers are currently overloaded. Please try again later.",
+            "isRetryable": false,
+            "responseBody": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+          }
+        }
+      },
+      {
+        "id": "msg_hRwBDseU6NzilylD7Goc",
+        "sessionID": "ses_-zUS9br8Fzz7F6QUJjdU",
+        "agent": "orchestrator",
+        "time": {
+          "created": 1791814491303,
+          "completed": 1791814493970
+        },
+        "finish": "error",
+        "error": {
+          "name": "APIError",
+          "data": {
+            "message": "Our servers are currently overloaded. Please try again later.",
+            "isRetryable": false,
+            "responseBody": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+          }
+        }
+      }
+    ],
+    "rootError": {
+      "id": "msg_hRwBDseU6NzilylD7Goc",
+      "sessionID": "ses_-zUS9br8Fzz7F6QUJjdU",
+      "agent": "orchestrator",
+      "time": {
+        "created": 1791814491303,
+        "completed": 1791814493970
+      },
+      "finish": "error",
+      "error": {
+        "name": "APIError",
+        "data": {
+          "message": "Our servers are currently overloaded. Please try again later.",
+          "isRetryable": false,
+          "responseBody": "{\"type\":\"error\",\"sequence_number\":2,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}"
+        }
+      }
+    },
+    "native": {
+      "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+      "outcome": "settled",
+      "host": {
+        "pid": 68428,
+        "processInstanceID": "win32:639274105647665526",
+        "occurrenceID": "e68c6760-3576-4be1-b084-43aaa3082a22"
+      },
+      "target": {
+        "pid": 44056,
+        "processInstanceID": "win32:639274105657608545",
+        "occurrenceID": "2b273017-39b7-4393-ae53-3f0e6f922d38"
+      },
+      "observedAtUtc": "2026-10-12T14:15:01.447Z",
+      "deadlineAt": 1791815264750,
+      "terminal": {
+        "occurrenceID": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+        "pid": 44056,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "nativeElapsedMs": 735687,
+    "pairedCleanupComplete": true,
+    "served": [
+      {
+        "level": "info",
+        "time": "2026-10-12T14:03:09.473Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "aaa182cc-1a67-4992-ab4c-5f4e754a2d75",
+          "method": "GET",
+          "path": "/ui/assets/main-sRwPZ07h.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      }
+    ],
+    "shots": [
+      {
+        "file": "01-history-before-hide.png",
+        "at": "2026-10-12T13:57:36.439Z",
+        "tab": "146",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "02-history-paused-prose.png",
+        "at": "2026-10-12T13:57:50.472Z",
+        "tab": "146",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "03-history-dock-return.png",
+        "at": "2026-10-12T13:58:10.899Z",
+        "tab": "146",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "04-history-agent-return.png",
+        "at": "2026-10-12T13:58:30.490Z",
+        "tab": "146",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "05-history-menu-return.png",
+        "at": "2026-10-12T13:58:51.750Z",
+        "tab": "146",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "06-history-other-session.png",
+        "at": "2026-10-12T13:59:44.882Z",
+        "tab": "146",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "07-history-task-return.png",
+        "at": "2026-10-12T14:00:21.746Z",
+        "tab": "146",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "08-live-provider-error.png",
+        "at": "2026-10-12T14:05:13.308Z",
+        "tab": "147",
+        "withinLiveNativeWindow": true,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 0
+      },
+      {
+        "file": "09-live-resumed-early-prose.png",
+        "at": "2026-10-12T14:09:04.881Z",
+        "tab": "147",
+        "withinLiveNativeWindow": true,
+        "actualWorkerReaders": [
+          {
+            "context": {
+              "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+              "streamRequest": {
+                "requestID": "msg_g0VXqP3OD00x31V1v90R",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXqPVCv00UyYMMnJ62",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VXqPV8100gBolg7vbY"
+              }
+            },
+            "from": 1791814136026,
+            "to": 1791814146834
+          }
+        ],
+        "workerPartsObservedByThisTime": 11
+      },
+      {
+        "file": "10-live-before-hidden-growth.png",
+        "at": "2026-10-12T14:09:55.545Z",
+        "tab": "147",
+        "withinLiveNativeWindow": true,
+        "actualWorkerReaders": [
+          {
+            "context": {
+              "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+              "streamRequest": {
+                "requestID": "msg_g0VXqP3OD00x31V1v90R",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXqPjQi00ZWCQA7QLf",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VXqPjNF000Szror45D"
+              }
+            },
+            "from": 1791814190686,
+            "to": 1791814196959
+          }
+        ],
+        "workerPartsObservedByThisTime": 16
+      },
+      {
+        "file": "11-live-after-hidden-growth.png",
+        "at": "2026-10-12T14:11:01.696Z",
+        "tab": "147",
+        "withinLiveNativeWindow": true,
+        "actualWorkerReaders": [
+          {
+            "context": {
+              "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+              "streamRequest": {
+                "requestID": "msg_g0VXqP3OD00x31V1v90R",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXqQ1P700QK13N3qVk",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VXqQ1L000qAzkgeOpA"
+              }
+            },
+            "from": 1791814259849,
+            "to": 1791814268724
+          }
+        ],
+        "workerPartsObservedByThisTime": 22
+      },
+      {
+        "file": "12-live-latest-after-catchup.png",
+        "at": "2026-10-12T14:11:33.365Z",
+        "tab": "147",
+        "withinLiveNativeWindow": true,
+        "actualWorkerReaders": [
+          {
+            "context": {
+              "sessionID": "ses_h9aQ1aKN0qHWqIOhZfo7",
+              "streamRequest": {
+                "requestID": "msg_g0VXqP3OD00x31V1v90R",
+                "agentID": "base-researcher",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VXqQ9kd00bowtDuldG",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VXqQ9h300wQkFamqxO"
+              }
+            },
+            "from": 1791814291408,
+            "to": 1791814298524
+          }
+        ],
+        "workerPartsObservedByThisTime": 25
+      },
+      {
+        "file": "13-live-01-terminal-offline.png",
+        "at": "2026-10-12T14:17:48.969Z",
+        "tab": "147",
+        "boundary": "After native failure shutdown; not online qualification",
+        "withinLiveNativeWindow": false,
+        "actualWorkerReaders": [],
+        "workerPartsObservedByThisTime": 37
+      }
+    ]
+  },
+  "boundary": "Backend identity, stream, source and exact structured error facts only. No UI assertions. Historical and live UI observations do not convert the failed Task qualification into success."
+}

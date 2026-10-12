@@ -1,0 +1,27 @@
+{
+  "evidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01",
+  "reason": "immutable-wrapper-failure",
+  "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+  "supervision": {
+    "preparationDeadlineMs": 1791814365760,
+    "totalDeadlineMs": 1791814706436,
+    "firstFailedPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\evidence\\failed.json",
+    "boundary": "Winning immutable settlement owner publishes this stop request; actual physical settlement remains distinct",
+    "pinned": {
+      "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+      "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+      "rootSessionID": "ses_-zUS9brvvzz1xttAGr9D",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXqO84c00C729e0WYn",
+      "openedAt": 1791813806436
+    },
+    "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+    "observedAtUtc": "2026-10-12T14:15:00.0008748Z",
+    "pid": 44056,
+    "reason": "immutable-wrapper-failure"
+  },
+  "evidencePrefix": "child-view-retention-353-live-01",
+  "ownerPID": 75276,
+  "admittedAt": "2026-10-12T14:15:00.0285063Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01"
+}

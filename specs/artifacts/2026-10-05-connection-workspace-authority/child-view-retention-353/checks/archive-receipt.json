@@ -1,0 +1,478 @@
+{
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\diagnostic-observations.json",
+      "archive": "diagnostic-observations.json.gz",
+      "originalBytes": 264495,
+      "compressedBytes": 29418,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\task-create.log",
+      "archive": "task-create.log.gz",
+      "originalBytes": 221,
+      "compressedBytes": 201,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\history-01\\child-view-retention-353-history-01-http-summary.json",
+      "archive": "history-01/child-view-retention-353-history-01-http-summary.json.gz",
+      "originalBytes": 114698,
+      "compressedBytes": 7568,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\history-01\\child-view-retention-353-history-01-runtime.log",
+      "archive": "history-01/child-view-retention-353-history-01-runtime.log.gz",
+      "originalBytes": 366104,
+      "compressedBytes": 42287,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\history-01\\child-view-retention-353-history-01-unknown-timestamp.log",
+      "archive": "history-01/child-view-retention-353-history-01-unknown-timestamp.log.gz",
+      "originalBytes": 0,
+      "compressedBytes": 20,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\history-readiness\\result-frontier.json",
+      "archive": "history-readiness/result-frontier.json.gz",
+      "originalBytes": 801748,
+      "compressedBytes": 61590,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\history-readiness\\result-startup.json",
+      "archive": "history-readiness/result-startup.json.gz",
+      "originalBytes": 919755,
+      "compressedBytes": 75069,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01\\canonical-current-conversations.json",
+      "archive": "live-01/canonical-current-conversations.json.gz",
+      "originalBytes": 938318,
+      "compressedBytes": 133047,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01\\child-view-retention-353-live-01-final-provider-audit.json",
+      "archive": "live-01/child-view-retention-353-live-01-final-provider-audit.json.gz",
+      "originalBytes": 1077662,
+      "compressedBytes": 16655,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01\\child-view-retention-353-live-01-http-summary.json",
+      "archive": "live-01/child-view-retention-353-live-01-http-summary.json.gz",
+      "originalBytes": 868484,
+      "compressedBytes": 45000,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01\\child-view-retention-353-live-01-runtime.log",
+      "archive": "live-01/child-view-retention-353-live-01-runtime.log.gz",
+      "originalBytes": 9200839,
+      "compressedBytes": 328457,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01\\child-view-retention-353-live-01-stderr.log",
+      "archive": "live-01/child-view-retention-353-live-01-stderr.log.gz",
+      "originalBytes": 8012,
+      "compressedBytes": 806,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01\\child-view-retention-353-live-01-stdout.log",
+      "archive": "live-01/child-view-retention-353-live-01-stdout.log.gz",
+      "originalBytes": 551,
+      "compressedBytes": 371,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-view-retention-353\\live-01\\child-view-retention-353-live-01-unknown-timestamp.log",
+      "archive": "live-01/child-view-retention-353-live-01-unknown-timestamp.log.gz",
+      "originalBytes": 0,
+      "compressedBytes": 20,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\admit.log",
+      "archive": "checks/admit.log.gz",
+      "originalBytes": 73,
+      "compressedBytes": 87,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\admit.ps1",
+      "archive": "checks/admit.ps1.gz",
+      "originalBytes": 4818,
+      "compressedBytes": 1756,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\analyze-live-01.log",
+      "archive": "checks/analyze-live-01.log.gz",
+      "originalBytes": 23025,
+      "compressedBytes": 3823,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\analyze.ts",
+      "archive": "checks/analyze.ts.gz",
+      "originalBytes": 5025,
+      "compressedBytes": 1899,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\archive-01.ts",
+      "archive": "checks/archive-01.ts.gz",
+      "originalBytes": 5525,
+      "compressedBytes": 1988,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\archive-history.log",
+      "archive": "checks/archive-history.log.gz",
+      "originalBytes": 99,
+      "compressedBytes": 115,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\archive-live-01.log",
+      "archive": "checks/archive-live-01.log.gz",
+      "originalBytes": 61,
+      "compressedBytes": 74,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\archive-piles-01.ps1",
+      "archive": "checks/archive-piles-01.ps1.gz",
+      "originalBytes": 2716,
+      "compressedBytes": 1228,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\archive-piles-before.ps1",
+      "archive": "checks/archive-piles-before.ps1.gz",
+      "originalBytes": 2722,
+      "compressedBytes": 1231,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\archive.ts",
+      "archive": "checks/archive.ts.gz",
+      "originalBytes": 3753,
+      "compressedBytes": 1496,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\build-diagnostic.log",
+      "archive": "checks/build-diagnostic.log.gz",
+      "originalBytes": 51948,
+      "compressedBytes": 10778,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\build-final.log",
+      "archive": "checks/build-final.log.gz",
+      "originalBytes": 51948,
+      "compressedBytes": 10772,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\builtin.json",
+      "archive": "checks/builtin.json.gz",
+      "originalBytes": 52,
+      "compressedBytes": 58,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\complete-readiness.log",
+      "archive": "checks/complete-readiness.log.gz",
+      "originalBytes": 864240,
+      "compressedBytes": 69515,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\complete-readiness.ts",
+      "archive": "checks/complete-readiness.ts.gz",
+      "originalBytes": 8978,
+      "compressedBytes": 3087,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\copy-before.log",
+      "archive": "checks/copy-before.log.gz",
+      "originalBytes": 407,
+      "compressedBytes": 309,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\create-task.ps1",
+      "archive": "checks/create-task.ps1.gz",
+      "originalBytes": 2978,
+      "compressedBytes": 1200,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\css.log",
+      "archive": "checks/css.log.gz",
+      "originalBytes": 398,
+      "compressedBytes": 285,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\current-diagnostic.patch",
+      "archive": "checks/current-diagnostic.patch.gz",
+      "originalBytes": 3139,
+      "compressedBytes": 1143,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\diagnostic.patch",
+      "archive": "checks/diagnostic.patch.gz",
+      "originalBytes": 3139,
+      "compressedBytes": 1143,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\docs-final.log",
+      "archive": "checks/docs-final.log.gz",
+      "originalBytes": 106,
+      "compressedBytes": 115,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\finalize-final.log",
+      "archive": "checks/finalize-final.log.gz",
+      "originalBytes": 234,
+      "compressedBytes": 183,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\finalize.log",
+      "archive": "checks/finalize.log.gz",
+      "originalBytes": 234,
+      "compressedBytes": 183,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\finalize.ts",
+      "archive": "checks/finalize.ts.gz",
+      "originalBytes": 8579,
+      "compressedBytes": 3064,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\frontier.log",
+      "archive": "checks/frontier.log.gz",
+      "originalBytes": 9314,
+      "compressedBytes": 2383,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\frontier.ts",
+      "archive": "checks/frontier.ts.gz",
+      "originalBytes": 6993,
+      "compressedBytes": 2583,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\guard.log",
+      "archive": "checks/guard.log.gz",
+      "originalBytes": 81,
+      "compressedBytes": 92,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\guard.ps1",
+      "archive": "checks/guard.ps1.gz",
+      "originalBytes": 3531,
+      "compressedBytes": 1311,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\history-manifest.json",
+      "archive": "checks/history-manifest.json.gz",
+      "originalBytes": 1595,
+      "compressedBytes": 712,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\initial-actual-evidence.json",
+      "archive": "checks/initial-actual-evidence.json.gz",
+      "originalBytes": 58247,
+      "compressedBytes": 7830,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\initial-diagnostic-summary.json",
+      "archive": "checks/initial-diagnostic-summary.json.gz",
+      "originalBytes": 79096,
+      "compressedBytes": 12214,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\inspect-history-final.log",
+      "archive": "checks/inspect-history-final.log.gz",
+      "originalBytes": 7052,
+      "compressedBytes": 2111,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\inspect-history.log",
+      "archive": "checks/inspect-history.log.gz",
+      "originalBytes": 4726,
+      "compressedBytes": 1633,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\inspect-live.ts",
+      "archive": "checks/inspect-live.ts.gz",
+      "originalBytes": 1989,
+      "compressedBytes": 936,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\inspect.ts",
+      "archive": "checks/inspect.ts.gz",
+      "originalBytes": 2020,
+      "compressedBytes": 1022,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\launch-history.log",
+      "archive": "checks/launch-history.log.gz",
+      "originalBytes": 1658,
+      "compressedBytes": 629,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\launch-live.log",
+      "archive": "checks/launch-live.log.gz",
+      "originalBytes": 392,
+      "compressedBytes": 284,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\launch-live.ps1",
+      "archive": "checks/launch-live.ps1.gz",
+      "originalBytes": 822,
+      "compressedBytes": 409,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\launch.ps1",
+      "archive": "checks/launch.ps1.gz",
+      "originalBytes": 8989,
+      "compressedBytes": 2890,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\live-inspections.jsonl",
+      "archive": "checks/live-inspections.jsonl.gz",
+      "originalBytes": 2253,
+      "compressedBytes": 759,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\live-source-observation.json",
+      "archive": "checks/live-source-observation.json.gz",
+      "originalBytes": 57159,
+      "compressedBytes": 11791,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\observe.log",
+      "archive": "checks/observe.log.gz",
+      "originalBytes": 202,
+      "compressedBytes": 185,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\observe.ts",
+      "archive": "checks/observe.ts.gz",
+      "originalBytes": 3897,
+      "compressedBytes": 1674,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\piles-history.log",
+      "archive": "checks/piles-history.log.gz",
+      "originalBytes": 0,
+      "compressedBytes": 20,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\piles-live-01.log",
+      "archive": "checks/piles-live-01.log.gz",
+      "originalBytes": 0,
+      "compressedBytes": 20,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\sent.json",
+      "archive": "checks/sent.json.gz",
+      "originalBytes": 113,
+      "compressedBytes": 119,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\shutdown-history.log",
+      "archive": "checks/shutdown-history.log.gz",
+      "originalBytes": 82,
+      "compressedBytes": 90,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\shutdown-live-01.log",
+      "archive": "checks/shutdown-live-01.log.gz",
+      "originalBytes": 62,
+      "compressedBytes": 80,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\task-create.log",
+      "archive": "checks/task-create.log.gz",
+      "originalBytes": 221,
+      "compressedBytes": 201,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\task-readiness.log",
+      "archive": "checks/task-readiness.log.gz",
+      "originalBytes": 3457,
+      "compressedBytes": 1030,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\task-readiness.ts",
+      "archive": "checks/task-readiness.ts.gz",
+      "originalBytes": 10096,
+      "compressedBytes": 3519,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\types-diagnostic.log",
+      "archive": "checks/types-diagnostic.log.gz",
+      "originalBytes": 16,
+      "compressedBytes": 36,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\types-final.log",
+      "archive": "checks/types-final.log.gz",
+      "originalBytes": 16,
+      "compressedBytes": 36,
+      "integrity": "Full decompressed bytes equal actual credential-redacted original"
+    }
+  ],
+  "supervision": {
+    "count": 118,
+    "archive": "live-01/supervision-chain.json.gz",
+    "integrity": "Every actual redacted supervision text retained; exact originals preserved privately"
+  }
+}

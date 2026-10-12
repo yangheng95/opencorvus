@@ -1,0 +1,44 @@
+{
+  "targetBirthUtc": "2026-10-12T14:02:45.7608545Z",
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0.",
+  "files": [
+    {
+      "bytes": 47224,
+      "name": "091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-12T14:02:46.7829547Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-live01\\091d165574530ade.debug.pile"
+    },
+    {
+      "bytes": 169556,
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-12T14:02:46.7627493Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-live01\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "bytes": 59902,
+      "name": "7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-12T14:02:46.7195079Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-live01\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "bytes": 88408,
+      "name": "cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-12T14:02:46.7250339Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-live01\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "bytes": 43530,
+      "name": "f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-12T14:02:46.8055437Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-view-retention-353\\generated-bun-live01\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T14:24:59.7199093Z",
+  "nativeTerminal": {
+    "occurrenceID": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+    "pid": 44056,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  }
+}

@@ -7,7 +7,6 @@ import {
   createSignal,
   on,
   onCleanup,
-  onMount,
   untrack,
   type Accessor,
 } from "solid-js"
@@ -61,13 +60,13 @@ const MAX_REMEMBERED_READING_POSITIONS = 32
 function SubagentConversationScroll(props: {
   conversation: Accessor<SubagentConversationTranscript>
   active: Accessor<boolean>
-  initialReadingPosition: SubagentReadingPosition | undefined
+  readingPosition: Accessor<SubagentReadingPosition | undefined>
   saveReadingPosition: (position: SubagentReadingPosition) => void
   activity: Accessor<AgentActivityRecord | undefined>
 }) {
   let scrollElement: HTMLDivElement | undefined
   let scrollController: AutoScrollController | undefined
-  const [tracking, setTracking] = createSignal(props.initialReadingPosition?.following ?? true)
+  const [tracking, setTracking] = createSignal(props.readingPosition()?.following ?? true)
   const card = createMemo(() => {
     const activity = props.activity()
     const conversation = props.conversation()
@@ -83,27 +82,34 @@ function SubagentConversationScroll(props: {
   const saveReadingPosition = () => {
     // Hiding the pane can clamp its geometry before Solid retires this owner.
     // The last visible observation remains the reader's intended position.
-    if (props.active() && scrollElement && scrollElement.clientHeight > 0)
-      props.saveReadingPosition({ top: scrollElement.scrollTop, following: tracking() })
+    if (props.active() && scrollController && scrollElement && scrollElement.clientHeight > 0)
+      props.saveReadingPosition(scrollController.readingPosition())
   }
   const changeTracking = (value: boolean) => {
     setTracking(value)
     saveReadingPosition()
   }
 
-  onMount(() => {
+  createEffect(on(props.active, (active) => {
+    if (!active) return
     if (!scrollElement) throw new Error("Sub-agent conversation scroll container is missing")
     const layoutRoot = scrollElement.closest<HTMLElement>(".right-dock")
     if (!layoutRoot) throw new Error("Sub-agent conversation requires its right dock layout owner")
+    const position = props.readingPosition()
+    setTracking(position?.following ?? true)
     scrollController = setupAutoScroll(scrollElement, {
-      initialPosition: props.initialReadingPosition && !props.initialReadingPosition.following
-        ? { kind: "position", top: props.initialReadingPosition.top, layoutRoot }
+      initialPosition: position && !position.following
+        ? { kind: "position", top: position.top, layoutRoot }
         : { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => changeTracking(false),
       onFollowRequested: () => changeTracking(true),
     })
-  })
+    onCleanup(() => {
+      scrollController?.cleanup()
+      scrollController = undefined
+    })
+  }))
 
   createEffect(
     on(
@@ -115,11 +121,7 @@ function SubagentConversationScroll(props: {
     ),
   )
 
-  onCleanup(() => {
-    saveReadingPosition()
-    scrollController?.cleanup()
-    scrollController = undefined
-  })
+  onCleanup(saveReadingPosition)
 
   return (
     <div ref={scrollElement} class="subagent-conversation-panel__scroll" data-ui="subagent-conversation-scroll" onScroll={saveReadingPosition}>
@@ -175,13 +177,14 @@ export function SubagentConversationPanel(props: {
     return recordForSession(sessionID)
   })
   const [showAgentList, setShowAgentList] = createSignal(false)
+  const showingList = createMemo(() => showAgentList() || !selectedRecord())
+  const readingActive = () => props.active() && !showingList()
   createEffect(on(props.sessionID, () => setShowAgentList(false), { defer: true }))
   const selectAgent = (sessionID: string) => {
     props.onSessionSelect(sessionID)
     setShowAgentList(false)
   }
-  const requestKey = createMemo(() => {
-    if (!props.active()) return null
+  const targetKey = createMemo(() => {
     const source = boardStore.selectedSource
     const sessionID = props.sessionID().trim()
     const directory = selectedConversationDirectory()
@@ -195,9 +198,10 @@ export function SubagentConversationPanel(props: {
       directory,
     })
   })
+  const requestKey = createMemo(() => readingActive() ? targetKey() : null)
   let transcriptAbort: AbortController | undefined
   createEffect(() => {
-    if (props.active()) return
+    if (requestKey()) return
     transcriptAbort?.abort()
   })
   const [liveProjection, setLiveProjection] = createSignal(createSubagentConversationLiveProjection(props.sessionID()))
@@ -238,7 +242,7 @@ export function SubagentConversationPanel(props: {
     },
   )
   createEffect(
-    on(requestKey, (target) => {
+    on(targetKey, (target) => {
       flushLiveProjection.cancel()
       pendingLiveProjection = undefined
       const sessionID = target ? (JSON.parse(target) as { sessionID: string }).sessionID : ""
@@ -254,7 +258,7 @@ export function SubagentConversationPanel(props: {
     flushLiveProjection.schedule()
   })
   const displayedConversation = createMemo(() => {
-    const target = requestKey()
+    const target = targetKey()
     const read = conversation()
     if (!target || !read || read.transcript.targetKey !== target) return undefined
     const flushedLive = liveProjection()
@@ -265,7 +269,7 @@ export function SubagentConversationPanel(props: {
   })
   createEffect(() => {
     const read = conversation()
-    if (!read || read.transcript.targetKey !== requestKey()) return
+    if (!read || read.transcript.targetKey !== targetKey()) return
     const current = untrack(() => pendingLiveProjection ?? liveProjection())
     const next = reconcileSubagentConversationLive(read.received, read.observedLive, current)
     if (next === current) return
@@ -295,80 +299,74 @@ export function SubagentConversationPanel(props: {
 
   return (
     <section class="subagent-conversation-panel" data-session-id={props.sessionID()}>
-      <Show
-        when={showAgentList() || !selectedRecord()}
-        fallback={
-          <>
-            <div class="subagent-conversation-panel__agent-selector">
-              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setShowAgentList(true)}>
-                <Icon name="nav-back" size="compact" />
-                {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
-              </Button>
-              <SelectControl
-                options={agentOptions()}
-                value={selectedOption()}
-                optionValue="sessionID"
-                optionTextValue="agentID"
-                ariaLabel={t("right_dock.tool.subagent")}
-                triggerTitle={selectedOption()?.agentID}
-                class="subagent-conversation-panel__select"
-                onChange={(record) => {
-                  if (record) selectAgent(record.sessionID)
-                }}
-                renderValue={(record) => record?.agentID ?? ""}
-                renderOptionLabel={(record) => record.agentID}
-                renderOptionDescription={(option) =>
-                  t(`agent_rail.status.${recordForSession(option.sessionID)?.status ?? "pending"}`)
-                }
-              />
-            </div>
-            <div class="subagent-conversation-panel__selected-agent" data-ui="subagent-selected-agent">
-              <Show
-                when={requestKey()}
-                fallback={
-                  <div class="subagent-conversation-panel__empty">{t("subagent.conversation.no_selection")}</div>
+      <div class="subagent-conversation-panel__agent-selector" hidden={showingList()}>
+        <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setShowAgentList(true)}>
+          <Icon name="nav-back" size="compact" />
+          {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
+        </Button>
+        <SelectControl
+          options={agentOptions()}
+          value={selectedOption()}
+          optionValue="sessionID"
+          optionTextValue="agentID"
+          ariaLabel={t("right_dock.tool.subagent")}
+          triggerTitle={selectedOption()?.agentID}
+          class="subagent-conversation-panel__select"
+          onChange={(record) => {
+            if (record) selectAgent(record.sessionID)
+          }}
+          renderValue={(record) => record?.agentID ?? ""}
+          renderOptionLabel={(record) => record.agentID}
+          renderOptionDescription={(option) =>
+            t(`agent_rail.status.${recordForSession(option.sessionID)?.status ?? "pending"}`)
+          }
+        />
+      </div>
+      <div class="subagent-conversation-panel__selected-agent" data-ui="subagent-selected-agent" hidden={showingList()}>
+        <Show
+          when={targetKey()}
+          fallback={
+            <div class="subagent-conversation-panel__empty">{t("subagent.conversation.no_selection")}</div>
+          }
+        >
+          <Show
+            when={!conversation.error}
+            fallback={
+              <Feedback
+                tone="error"
+                title={t("subagent.conversation.load_failed")}
+                details={formatErrorDetails(conversation.error)}
+                actions={
+                  <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void refetch()}>
+                    {t("common.retry")}
+                  </Button>
                 }
               >
-                <Show
-                  when={!conversation.error}
-                  fallback={
-                    <Feedback
-                      tone="error"
-                      title={t("subagent.conversation.load_failed")}
-                      details={formatErrorDetails(conversation.error)}
-                      actions={
-                        <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void refetch()}>
-                          {t("common.retry")}
-                        </Button>
-                      }
-                    >
-                      {t("subagent.conversation.no_selection")}
-                    </Feedback>
-                  }
-                >
-                  <Show
-                    when={displayedConversation()?.targetKey}
-                    keyed
-                    fallback={
-                      <div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>
-                    }
-                  >
-                    {(targetKey) => (
-                      <SubagentConversationScroll
-                        conversation={() => displayedConversation()!}
-                        active={() => props.active() && !showAgentList() && requestKey() === targetKey}
-                        initialReadingPosition={readingPositions.get(targetKey)}
-                        saveReadingPosition={(position) => saveReadingPosition(targetKey, position)}
-                        activity={selectedRecord}
-                      />
-                    )}
-                  </Show>
-                </Show>
-              </Show>
-            </div>
-          </>
-        }
-      >
+                {t("subagent.conversation.no_selection")}
+              </Feedback>
+            }
+          >
+            <Show
+              when={displayedConversation()?.targetKey}
+              keyed
+              fallback={
+                <div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>
+              }
+            >
+              {(target) => (
+                <SubagentConversationScroll
+                  conversation={() => displayedConversation()!}
+                  active={() => readingActive() && requestKey() === target}
+                  readingPosition={() => readingPositions.get(target)}
+                  saveReadingPosition={(position) => saveReadingPosition(target, position)}
+                  activity={selectedRecord}
+                />
+              )}
+            </Show>
+          </Show>
+        </Show>
+      </div>
+      <Show when={showingList()}>
         <div class="subagent-conversation-panel__list" aria-label={t("right_dock.tool.subagent")}>
           <div class="subagent-conversation-panel__list-heading">
             {t("subagent.conversation.all_agents", { count: sessionRecords().length })}

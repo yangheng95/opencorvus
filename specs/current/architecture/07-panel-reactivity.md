@@ -460,9 +460,19 @@ The sub-agent panel owns at most 32 recent reading positions, keyed by the
 canonical target identity including API authority, parent source, session and
 directory. These positions contain only viewport geometry and follow intent;
 transcript data still comes from the existing projection. The outer panel is
-force-mounted to retain this UI state across Dock closure, while its inactive
-request scope aborts loads and retires the transcript scroll owner. Only visible,
-active observations update a remembered position. Parent disposal clears it.
+force-mounted to retain this UI state across Dock closure. The canonical target
+identity is independent of visibility. Its already presented transcript and
+selected-agent controls remain mounted while the Dock or member-list view hides
+them; changing authority, parent source, child Session or directory still retires
+the prior target. Only one current target is retained, without another transcript
+cache. The inactive request scope aborts loads and pauses live/refresh admission;
+reactivation catches up through the existing resource and cursor. Live projection
+resets on actual target replacement, not on hiding the current target.
+The scroll controller follows visible activity: cleanup retires its listeners and
+observers while hidden, and reactivation restores from the same reading-position
+Map. Only visible active observations save the controller's reading intent,
+including its pending restore position instead of a transient layout clamp.
+Parent disposal clears the Map and retires the retained presentation.
 
 Each shared scroll-controller caller supplies an explicit initial bottom or
 position intent. A restored position remains owned by that controller until
