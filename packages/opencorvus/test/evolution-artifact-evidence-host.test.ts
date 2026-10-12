@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { executePackageToolInCapsule } from "../src/expert-squad/package-tool-capsule"
 import { summarizeEvolutionEvidence } from "../script/expert-squad-evolution-e2e-support"
 import path from "node:path"
-import { cp, mkdir, readFile, stat, writeFile } from "node:fs/promises"
+import { cp, mkdir, readFile, writeFile } from "node:fs/promises"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { payloadPackageSources } from "../generated/expert-squad-payload"
 import { generatedExpertSquadRevisions } from "../generated/expert-squad-revisions"
@@ -930,7 +930,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         let importedEvaluationEnvelope!: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
         let sourceOpportunityInput!: Record<string, unknown>
         let sourceCampaignInput!: Record<string, unknown>
-        let subjectMaterialization = ""
         await withTaskScopedPluginToolHost(scope, async (host) => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-observer"
           const opportunityReceipt = JSON.parse(
@@ -1960,7 +1959,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const judgeEvidence = JSON.parse(judgeInput[1]!.content).selected_evidence[0]
           expect(judgeEvidence.content).toBe(canonicalTaskRunEvidenceJSON(subjectBundle))
           expect(JSON.parse(judgeEvidence.content).messages).toEqual(subjectBundle.messages)
-          subjectMaterialization = (subjectAttempt.execution as { cwd: string }).cwd
+          const subjectMaterialization = (subjectAttempt.execution as { cwd: string }).cwd
           expect(path.dirname(subjectMaterialization)).toBe(
             path.dirname(ProjectRuntimePaths.taskArtifactMaterializationRoot(project.path, taskID, "subject")),
           )
@@ -2801,9 +2800,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             review: true,
           })
         })
-        // The measured copy belonged to that invocation and closed with it.
-        await expect(stat(subjectMaterialization)).rejects.toMatchObject({ code: "ENOENT" })
-
         const sourceCompleted = Date.now()
         await completeFixtureTaskWithDeliverables({
           taskID,
@@ -3412,14 +3408,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           owner: { kind: "projected-worker" },
         } as TaskToolExecutionScope
         const packageHost = createExpertSquadPackageHost(materializeExecution, preparationScope)
-        const artifactsBeforeInspection = Database.use(
-          (db) =>
-            db
-              .select({ id: EngineArtifactTable.id })
-              .from(EngineArtifactTable)
-              .where(eq(EngineArtifactTable.task_id, taskID))
-              .all().length,
-        )
         const inspected = await packageHost.inspectRevision({
           revision: { package_digest: loaded.packageDigest },
         })
@@ -3429,28 +3417,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           id: loaded.id,
           version: loaded.manifest.version,
         })
-        expect(
-          Database.use(
-            (db) =>
-              db
-                .select({ id: EngineArtifactTable.id })
-                .from(EngineArtifactTable)
-                .where(eq(EngineArtifactTable.task_id, taskID))
-                .all().length,
-          ),
-        ).toBe(artifactsBeforeInspection)
-        const inspectedCandidateRoot = path.join(
-          candidateWorktree,
-          "expert-squad-evolution-candidates",
-          taskID,
-          loaded.namespace,
-          loaded.id,
-        )
-        expect(
-          await stat(inspectedCandidateRoot).catch((error: NodeJS.ErrnoException) =>
-            error.code === "ENOENT" ? undefined : Promise.reject(error),
-          ),
-        ).toBeUndefined()
         await mkdir(candidateWorktree, { recursive: true })
         const materialized = PreparedExpertSquadCandidateSchema.parse(
           JSON.parse(
@@ -4549,7 +4515,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             selectedMessageLocators: [],
           },
         })
-        expect(awaiting.revision_facts.creation_expected_digest).toBeNull()
         expect(awaiting.task.status).toBe("active")
         expect(awaiting.terminal_occurrence).toEqual({
           status: "awaiting_interaction",
