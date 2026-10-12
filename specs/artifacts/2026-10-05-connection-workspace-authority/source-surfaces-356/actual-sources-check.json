@@ -1,0 +1,98 @@
+{
+  "observedAtUtc": "2026-10-12T17:08:08.607Z",
+  "result": "passed",
+  "boundary": "Actual canonical completed tool outcomes and Source Parts, original authored disk inputs, native clipboard receipts, actual streaming provider and physical settlement. UI layout was manually observed separately; this checker makes no UI assertions.",
+  "mainAndSide": [
+    {
+      "surface": "main",
+      "sessionID": "ses_-zUS8zzerzzqG425PLRl",
+      "projectID": "prj_hEWVbkdkqzXiCqYcPTRJ",
+      "toolID": "prt_g0VXr04eN00xdfWRnt5H",
+      "sourceMessageID": "msg_g0VXr00a000ayWs626pg",
+      "finalMessageID": "msg_g0VXr050D00YReL7dCiK",
+      "sourceCount": 64,
+      "files": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案甲\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md",
+          "sourceCount": 32,
+          "range": {
+            "startLine": 2,
+            "endLine": 33
+          },
+          "clipboard": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案甲\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md:20",
+          "line20": "SOURCE356 甲记录19：同名来源须区分目录，本条原始内容位于第20行；复制位置后仍应保持这一范围。"
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案乙\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md",
+          "sourceCount": 32,
+          "range": {
+            "startLine": 2,
+            "endLine": 33
+          },
+          "clipboard": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案乙\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md:20",
+          "line20": "SOURCE356 乙记录19：同名来源须区分目录，本条原始内容位于第20行；复制位置后仍应保持这一范围。"
+        }
+      ],
+      "assistantRequestCount": 2
+    },
+    {
+      "surface": "side",
+      "sessionID": "ses_-zUS8zD0VzzphcUQjhbC",
+      "projectID": "prj_hEWVbkdkqzXiCqYcPTRJ",
+      "toolID": "prt_g0VXr0uLd00bkTRmqq2J",
+      "sourceMessageID": "msg_g0VXr0t7800mDnbQL22P",
+      "finalMessageID": "msg_g0VXr0uaY00dJpvLU7ii",
+      "sourceCount": 64,
+      "files": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案甲\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md",
+          "sourceCount": 32,
+          "range": {
+            "startLine": 2,
+            "endLine": 33
+          },
+          "clipboard": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案甲\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md:20",
+          "line20": "SOURCE356 甲记录19：同名来源须区分目录，本条原始内容位于第20行；复制位置后仍应保持这一范围。"
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案乙\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md",
+          "sourceCount": 32,
+          "range": {
+            "startLine": 2,
+            "endLine": 33
+          },
+          "clipboard": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project\\资料\\研究记录\\候选方案乙\\来源记录_同名文件的行号定位_读取范围与复制操作核对_实际来源说明.md:20",
+          "line20": "SOURCE356 乙记录19：同名来源须区分目录，本条原始内容位于第20行；复制位置后仍应保持这一范围。"
+        }
+      ],
+      "assistantRequestCount": 2
+    }
+  ],
+  "sideInheritance": {
+    "sourceSessionID": "ses_-zUS8zzerzzqG425PLRl",
+    "inheritedMessageIDs": [
+      "msg_g0VXr0mzY00mOYaWTeOV",
+      "msg_g0VXr0mzY01832d0dpL5",
+      "msg_g0VXr0mzZ00ylKSKv4cV"
+    ],
+    "qualification": "Inherited context remains canonical; fresh Side sources are qualified by its own actual search request and assistant Message."
+  },
+  "providerRequestCount": 9,
+  "preflight": {
+    "sessionID": "ses_hZHFq7t60BvtxAtXtrL9",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "qualification": {
+    "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+    "providerEOFRequests": 9,
+    "physicalCompletion": true,
+    "qualification": "NativeService",
+    "providerUserCancelledRequests": 0,
+    "cancellation": null
+  },
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true
+}

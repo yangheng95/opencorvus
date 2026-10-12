@@ -13,7 +13,10 @@ export type ToolPayloadDisplayState = {
 }
 export type MainConversationReadingPosition = ConversationReadingPosition & {
   viewportWidth: number
-  anchor?: { messageID: string; textIndex: number; blockIndex: number; offset: number }
+  anchor?: { messageID: string; offset: number } & (
+    | { kind: "text"; textIndex: number; blockIndex: number }
+    | { kind: "source"; sourceIdentity: string }
+  )
 }
 
 type ConversationUiState = {

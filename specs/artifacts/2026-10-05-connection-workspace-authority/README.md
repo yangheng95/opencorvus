@@ -783,3 +783,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [历史错误的消息归属354](message-failure-354/README.md) / [Recall](message-failure-plan-354.md)。
 
 - [原失败任务恢复355](task-recovery-355/README.md) / [Recall](task-recovery-plan-355.md)。
+
+- [主聊天与Side chat多来源356](source-surfaces-356/README.md) / [Recall](source-surfaces-plan-356.md)。

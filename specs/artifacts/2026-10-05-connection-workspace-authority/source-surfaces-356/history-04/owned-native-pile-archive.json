@@ -1,0 +1,44 @@
+{
+  "nativeTerminal": {
+    "occurrenceID": "source-surfaces-356-history-04-65a51a6c-10cd-4017-8da7-ec5d867b50e4",
+    "pid": 50168,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "files": [
+    {
+      "name": "091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-surfaces-356\\generated-bun-history04\\091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-12T16:58:52.8608148Z"
+    },
+    {
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-surfaces-356\\generated-bun-history04\\69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-12T16:58:52.8265328Z"
+    },
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-surfaces-356\\generated-bun-history04\\7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-12T16:58:52.7812448Z"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-surfaces-356\\generated-bun-history04\\cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-12T16:58:52.7910811Z"
+    },
+    {
+      "name": "f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-surfaces-356\\generated-bun-history04\\f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-12T16:58:52.8869978Z"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T17:06:31.8925568Z",
+  "targetBirthUtc": "2026-10-12T16:58:52.4054804Z",
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0."
+}

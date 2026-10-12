@@ -368,7 +368,11 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
 
   return (
     <div class="msg-source-entry" data-has-excerpt={props.source.snippet ? "true" : undefined}>
-      <div class="msg-source-entry__row">
+      <div
+        class="msg-source-entry__row"
+        data-source-identity={sourceIdentity(props.source)}
+        data-source-message-id={props.source.messageID}
+      >
         <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} omitDirectoryCaption={props.omitDirectoryCaption} />
         <Show when={location()}>
           <Button

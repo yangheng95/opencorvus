@@ -268,9 +268,13 @@ The primary conversation keeps at most 50 reading positions in that same UI
 store, keyed by captured API authority revision and actual source kind/ID.
 Selection clears transient primary disclosures without clearing this bounded
 view memory. Before replay or projection retirement, its one registered visible
-reader captures the current top/following intent, viewport width and visible
-quotation Message anchor, text ordinal, rendered Markdown block ordinal and block
-offset. A long first-visible Message can rewrap internally without changing its
+reader captures the current top/following intent, viewport width and first visible
+content anchor in transcript order. Text anchors carry the quotation Message,
+text ordinal, rendered Markdown block ordinal and block offset. Source anchors
+carry the original Message and stable type/Session/Message/source identity of the
+visible source row, plus its viewport offset. Source rows remain citations rather
+than quotation text. Both anchor kinds use the same bounded reading-position
+store and restoration owner. A long first-visible Message can rewrap internally without changing its
 virtual item index, so its whole-text pixel offset is not a reading anchor.
 Empty, hidden, loading, unhydrated or
 retired owners cannot publish a new position. A returning paused reader uses the
@@ -284,8 +288,8 @@ Message offset on later item measurement. Explicit card jumps still align throug
 the same bridge; restoration retires its temporary pin on completion, reader
 movement or source retirement.
 During that restoration the same scroll controller resolves the actual rendered
-block offset on each correction frame and includes that resolved target in its
-existing geometry stability check. An unavailable target block waits for its real
+block or source-row offset on each correction frame and includes that resolved target in its
+existing geometry stability check. An unavailable target element waits for its real
 layout; an unrelated streaming TextPart does not block a ready earlier anchor.
 The existing measured-content callback also restores this same paused reader
 when viewport width changes. Layout-induced scroll/clamp echoes cannot overwrite

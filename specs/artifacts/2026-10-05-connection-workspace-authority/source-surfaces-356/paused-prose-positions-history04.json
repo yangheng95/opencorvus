@@ -1,0 +1,88 @@
+[
+  {
+    "stage": "narrow-paused",
+    "at": "2026-10-12T17:05:12.401Z",
+    "data": {
+      "blocks": [
+        {
+          "bottom": 184.8500061035156,
+          "i": 0,
+          "offset": 90.8000030517578,
+          "text": "请用 search_code 在当前项目的“资料/研究记录”目录检索字面量 SOURCE356，Markdown 文件，最多返回100条命中"
+        },
+        {
+          "bottom": 331.92498779296875,
+          "i": 1,
+          "offset": 190.84999084472656,
+          "text": "搜索后在正常消息里写一段600至800字的说明，解释如何区分两目录的同名文件、如何核对行号和读取范围，并说明搜索结果不能代替实际点击、复制或"
+        },
+        {
+          "bottom": 504.849983215332,
+          "i": 2,
+          "offset": 434.31248474121094,
+          "text": "我会先用 search_code 在指定目录的 Markdown 文件中检索 SOURCE356，保留工具返回的真实来源；随后说明同名文件的"
+        }
+      ],
+      "followLock": "false",
+      "max": 777,
+      "top": 0,
+      "width": 561.2000122070312
+    }
+  },
+  {
+    "stage": "narrow-prose-paused",
+    "at": "2026-10-12T17:05:21.163Z",
+    "data": {
+      "blocks": [
+        {
+          "bottom": 519.5875244140625,
+          "i": 3,
+          "offset": 72.85000610351562,
+          "text": "本次已用 search_code 在“资料/研究记录”目录的 Markdown 文件中检索字面量 SOURCE356，工具共返回64条命中，"
+        }
+      ],
+      "followLock": "false",
+      "max": 777,
+      "top": 576,
+      "width": 561.2000122070312
+    }
+  },
+  {
+    "stage": "narrow-final-paused",
+    "at": "2026-10-12T17:05:33.838Z",
+    "data": {
+      "followLock": "false",
+      "max": 777,
+      "top": 612,
+      "visible": [
+        {
+          "bottom": 483.587516784668,
+          "i": 4,
+          "offset": 36.849998474121094,
+          "source": null,
+          "text": "本次已用 search_code 在“资料/研究记录”目录的 Markdown 文件中检索字面量 SOURCE356，工具共返回64条命中，"
+        }
+      ],
+      "width": 561.2000122070312
+    }
+  },
+  {
+    "stage": "wide-after-close",
+    "at": "2026-10-12T17:05:48.961Z",
+    "data": {
+      "followLock": "false",
+      "max": 502,
+      "top": 499.2000122070313,
+      "visible": [
+        {
+          "bottom": 342.3625030517578,
+          "i": 4,
+          "offset": 36.69999694824219,
+          "source": null,
+          "text": "本次已用 search_code 在“资料/研究记录”目录的 Markdown 文件中检索字面量 SOURCE356，工具共返回64条命中，"
+        }
+      ],
+      "width": 942.2000122070312
+    }
+  }
+]

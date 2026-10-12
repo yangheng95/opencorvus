@@ -439,10 +439,14 @@ export function Conversation(props: {
   }
   const ownsReader = (owner: NonNullable<typeof reader>) => reader === owner &&
     isApiAuthorityCurrent(owner.authority) && readingKey() === owner.key
-  const readingTextElement = (anchor: NonNullable<MainConversationReadingPosition["anchor"]>) =>
-    el.querySelectorAll<HTMLElement>(`[data-quotation-message="${CSS.escape(anchor.messageID)}"]`)[anchor.textIndex]
+  const readingAnchorOwner = (anchor: NonNullable<MainConversationReadingPosition["anchor"]>) =>
+    anchor.kind === "source"
+      ? el.querySelector<HTMLElement>(`[data-source-identity="${CSS.escape(anchor.sourceIdentity)}"]`)
+      : el.querySelectorAll<HTMLElement>(`[data-quotation-message="${CSS.escape(anchor.messageID)}"]`)[anchor.textIndex]
   const readingAnchorElement = (anchor: NonNullable<MainConversationReadingPosition["anchor"]>) =>
-    readingTextElement(anchor)?.querySelectorAll<HTMLElement>(".md-frozen-block")[anchor.blockIndex]
+    anchor.kind === "source"
+      ? readingAnchorOwner(anchor)
+      : readingAnchorOwner(anchor)?.querySelectorAll<HTMLElement>(".md-frozen-block")[anchor.blockIndex]
   const rememberReadingPosition = (currentLayout = false) => {
     const owner = reader
     if (!owner || !ownsReader(owner) || owner.pending || !scrollController || boardStore.taskSwitching ||
@@ -455,10 +459,20 @@ export function Conversation(props: {
     if (!currentLayout && remembered && !remembered.following && remembered.viewportWidth !== el.clientWidth && !scrollController.hasScrollInput()) return
     const viewport = el.getBoundingClientRect()
     const quotes = Array.from(el.querySelectorAll<HTMLElement>("[data-quotation-message]"))
+    const candidates = el.querySelectorAll<HTMLElement>("[data-quotation-message], [data-source-identity][data-source-message-id]")
     let anchor: MainConversationReadingPosition["anchor"]
-    for (const quote of quotes) {
+    for (const quote of candidates) {
       const rect = quote.getBoundingClientRect()
       if (rect.height <= 0 || rect.bottom <= viewport.top || rect.top >= viewport.bottom) continue
+      if (quote.dataset.sourceIdentity && quote.dataset.sourceMessageId) {
+        anchor = {
+          kind: "source",
+          sourceIdentity: quote.dataset.sourceIdentity,
+          messageID: quote.dataset.sourceMessageId,
+          offset: rect.top - viewport.top,
+        }
+        break
+      }
       const blocks = Array.from(quote.querySelectorAll<HTMLElement>(".md-frozen-block"))
       const blockIndex = blocks.findIndex(block => {
         const rect = block.getBoundingClientRect()
@@ -467,6 +481,7 @@ export function Conversation(props: {
       const messageID = quote.dataset.quotationMessage
       if (blockIndex < 0 || !messageID) continue
       anchor = {
+        kind: "text",
         messageID,
         textIndex: quotes.filter(node => node.dataset.quotationMessage === messageID).indexOf(quote),
         blockIndex,
@@ -535,17 +550,17 @@ export function Conversation(props: {
         if (!ownsReader(owner) || owner.pending !== position) return
         const cardID = targetCard()
         if (!cardID) throw new Error(`Main reading message ${anchor.messageID} is outside current conversation history`)
-        if (readingTextElement(anchor)) setHistoryAnchorPinID(cardID)
+        if (readingAnchorOwner(anchor)) setHistoryAnchorPinID(cardID)
         else if (!await requestConversationCardScroll({ cardID, block: "start", readingRestore: true }))
           throw new Error(`Main reading card ${cardID} could not be mounted`)
         if (!ownsReader(owner) || owner.pending !== position) return
-        let element = readingTextElement(anchor)
+        let element = readingAnchorOwner(anchor)
         for (let frame = 0; (!element || element.getBoundingClientRect().height <= 0) && frame < CARD_SCROLL_TARGET_MAX_FRAMES; frame++) {
           await waitForAnimationFrame()
           if (!ownsReader(owner) || owner.pending !== position) return
-          element = readingTextElement(anchor)
+          element = readingAnchorOwner(anchor)
         }
-        if (!element) throw new Error(`Main reading message ${anchor.messageID} has no visible text anchor`)
+        if (!element) throw new Error(`Main reading message ${anchor.messageID} has no visible ${anchor.kind} anchor`)
         createReaderController(position, {
           resolveTop: () => {
             if (!ownsReader(owner) || owner.pending !== position) return null

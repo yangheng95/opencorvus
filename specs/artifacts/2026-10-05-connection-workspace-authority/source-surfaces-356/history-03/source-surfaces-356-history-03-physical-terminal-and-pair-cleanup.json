@@ -1,0 +1,68 @@
+{
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 76096,
+        "processInstanceID": "win32:639274205482304173",
+        "occurrenceID": "5d31ee9b-24c4-4667-8900-34121e083447"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 23640,
+        "processInstanceID": "win32:639274205474736502",
+        "occurrenceID": "bd8716cf-b2a2-4142-a186-e2e096b9316c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "source-surfaces-356-history-03-6f6a381e-d8ac-4d8f-ac52-681a69e5c8a8",
+    "outcome": "settled",
+    "host": {
+      "pid": 23640,
+      "processInstanceID": "win32:639274205474736502",
+      "occurrenceID": "bd8716cf-b2a2-4142-a186-e2e096b9316c"
+    },
+    "target": {
+      "pid": 76096,
+      "processInstanceID": "win32:639274205482304173",
+      "occurrenceID": "5d31ee9b-24c4-4667-8900-34121e083447"
+    },
+    "observedAtUtc": "2026-10-12T16:57:42.583Z",
+    "deadlineAt": 1791824347379,
+    "terminal": {
+      "occurrenceID": "source-surfaces-356-history-03-6f6a381e-d8ac-4d8f-ac52-681a69e5c8a8",
+      "pid": 76096,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "occurrence": "source-surfaces-356-history-03-6f6a381e-d8ac-4d8f-ac52-681a69e5c8a8",
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-history-03\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "removed",
+      "copiedLength": 2001983,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-history-03\\runtime\\data\\models.json",
+      "presentAfter": false
+    }
+  ],
+  "listeners": null,
+  "observedAtUtc": "2026-10-12T16:57:45.1302877Z"
+}

@@ -1,0 +1,15 @@
+{
+  "pid": 39168,
+  "occurrence": "source-surfaces-356-live-02-8b837179-94d6-4931-ab91-a01068d19367",
+  "owner": {
+    "pid": 39168,
+    "processInstanceID": "win32:639274195899691838",
+    "occurrenceID": "40fd19ce-b202-49ba-803d-ba3a1a2049fa"
+  },
+  "parent": {
+    "pid": 65380,
+    "processInstanceID": "win32:639274195899305097",
+    "occurrenceID": "dea5a499-514d-4296-bccb-baae949e07cb"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

@@ -686,3 +686,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [历史错误的消息归属354](2026-10-12-message-failure-354.md)：原消息失败与最新执行状态的真实历史复核。
 
 - [原失败任务恢复355](2026-10-12-task-recovery-355.md)：同一Task用户消息恢复与真实收尾。
+
+- [主聊天与Side chat多来源356](2026-10-13-source-surfaces-356.md)：实际多来源入口与文件定位。
