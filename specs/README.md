@@ -3152,3 +3152,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [侧栏长正文与来源361](artifacts/2026-10-05-connection-workspace-authority/side-stream-361/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/side-stream-plan-361.md)。
 
 - [Sources与持续输出362](artifacts/2026-10-05-connection-workspace-authority/source-stream-362/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-stream-plan-362.md)。
+
+- [折叠历史与来源读点363](artifacts/2026-10-05-connection-workspace-authority/closed-history-363/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/closed-history-plan-363.md)。

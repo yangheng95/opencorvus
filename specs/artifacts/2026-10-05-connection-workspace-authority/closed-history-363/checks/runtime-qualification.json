@@ -1,0 +1,177 @@
+{
+  "checkedAt": "2026-10-12T21:10:07.103Z",
+  "runs": [
+    {
+      "scope": "before",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-surfaces-356-live-02",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/closed-history-363-before",
+      "initialHandle": 26239,
+      "launcherExitCode": 0,
+      "settled": {
+        "occurrence": "closed-history-363-before-0e5ae3c2-2a9a-41d9-a7f7-dda555d4496a",
+        "outcome": "settled",
+        "host": {
+          "pid": 78520,
+          "processInstanceID": "win32:639274349162846093",
+          "occurrenceID": "154a10d7-fac7-42db-ba8c-c5d24770e866"
+        },
+        "target": {
+          "pid": 80604,
+          "processInstanceID": "win32:639274349170267744",
+          "occurrenceID": "4cdc3fd8-ff86-47ab-9435-4e4279ea0db9"
+        },
+        "observedAtUtc": "2026-10-12T20:51:45.270Z",
+        "deadlineAt": 1791838716201,
+        "terminal": {
+          "occurrenceID": "closed-history-363-before-0e5ae3c2-2a9a-41d9-a7f7-dda555d4496a",
+          "pid": 80604,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 188244,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T20:48:56.615Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "a3d2f438-a2ac-4d00-9d2c-e312d1a5c1c1",
+          "method": "GET",
+          "path": "/ui/assets/main-Fa0QkExU.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "canonicalMessageCount": 11,
+      "canonicalSourceCount": 192,
+      "providerAudit": {
+        "boundary": "No model receipt observed; physical settlement precedes this final snapshot; not model acceptance",
+        "available": false
+      },
+      "qualification": "Complete canonical Message and Source rows match the closed original by full actual content; actual UI asset HTTP200 and production Native/output/request closure verified. Visual layout remains separate manual evidence. The credentialless history audit does not assert new model acceptance."
+    },
+    {
+      "scope": "after",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-surfaces-356-live-02",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/closed-history-363-after",
+      "initialHandle": 96378,
+      "launcherExitCode": 0,
+      "settled": {
+        "occurrence": "closed-history-363-after-c94ea9dd-1c43-456e-bd84-fd4833f6e7fd",
+        "outcome": "settled",
+        "host": {
+          "pid": 50464,
+          "processInstanceID": "win32:639274353551665388",
+          "occurrenceID": "86d5b5db-e3d0-4f62-87df-684502515257"
+        },
+        "target": {
+          "pid": 79076,
+          "processInstanceID": "win32:639274353560313515",
+          "occurrenceID": "2cf43d4f-bafc-4829-a0cb-29a633a71e17"
+        },
+        "observedAtUtc": "2026-10-12T21:02:46.491Z",
+        "deadlineAt": 1791839155081,
+        "terminal": {
+          "occurrenceID": "closed-history-363-after-c94ea9dd-1c43-456e-bd84-fd4833f6e7fd",
+          "pid": 79076,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 410460,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T20:56:16.925Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "f7aa5821-50ca-428e-b57c-0ebfb0775144",
+          "method": "GET",
+          "path": "/ui/assets/main-DuDwFuGN.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3
+        },
+        "message": "request"
+      },
+      "canonicalMessageCount": 11,
+      "canonicalSourceCount": 192,
+      "providerAudit": {
+        "available": false,
+        "boundary": "No model receipt observed; physical settlement precedes this final snapshot; not model acceptance"
+      },
+      "qualification": "Complete canonical Message and Source rows match the closed original by full actual content; actual UI asset HTTP200 and production Native/output/request closure verified. Visual layout remains separate manual evidence. The credentialless history audit does not assert new model acceptance."
+    },
+    {
+      "scope": "child",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/closed-history-363-child",
+      "initialHandle": 31168,
+      "launcherExitCode": 0,
+      "settled": {
+        "occurrence": "closed-history-363-child-65966760-1b8b-489b-883e-5ef1ede57dc3",
+        "outcome": "settled",
+        "host": {
+          "pid": 52872,
+          "processInstanceID": "win32:639274358959651279",
+          "occurrenceID": "b4c1f86f-4e91-488e-9e75-8bcbbe08a3fa"
+        },
+        "target": {
+          "pid": 79944,
+          "processInstanceID": "win32:639274358967122476",
+          "occurrenceID": "ad5fd923-558c-4bd3-8900-9d174c28a094"
+        },
+        "observedAtUtc": "2026-10-12T21:08:49.932Z",
+        "deadlineAt": 1791839695892,
+        "terminal": {
+          "occurrenceID": "closed-history-363-child-65966760-1b8b-489b-883e-5ef1ede57dc3",
+          "pid": 79944,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 233220,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T21:05:20.706Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "73a5b648-a0a0-445f-b0d9-3137e53b108b",
+          "method": "GET",
+          "path": "/ui/assets/main-DuDwFuGN.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "canonicalMessageCount": 13,
+      "canonicalSourceCount": 66,
+      "providerAudit": {
+        "boundary": "No model receipt observed; physical settlement precedes this final snapshot; not model acceptance",
+        "available": false
+      },
+      "qualification": "Complete canonical Message and Source rows match the closed original by full actual content; actual UI asset HTTP200 and production Native/output/request closure verified. Visual layout remains separate manual evidence. The credentialless history audit does not assert new model acceptance."
+    }
+  ],
+  "boundary": "Actual readonly SQLite transactions and current production HTTP/native receipts. No DOM, source-text, component or screenshot assertions."
+}

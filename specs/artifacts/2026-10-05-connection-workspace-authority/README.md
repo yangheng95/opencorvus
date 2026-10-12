@@ -797,3 +797,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [侧栏长正文与来源361](side-stream-361/README.md) / [Recall](side-stream-plan-361.md)。
 
 - [Sources与持续输出362](source-stream-362/README.md) / [Recall](source-stream-plan-362.md)。
+
+- [折叠历史与来源读点363](closed-history-363/README.md) / [Recall](closed-history-plan-363.md)。

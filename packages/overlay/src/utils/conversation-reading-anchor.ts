@@ -3,6 +3,14 @@ export type ConversationReadingAnchor = { messageID: string; offset: number } & 
   | { kind: "source"; sourceIdentity: string }
 )
 
+function readingRect(element: HTMLElement): DOMRect | undefined {
+  // Closed native details can retain layout boxes for their hidden content.
+  // The summary remains visible, so exclude only the content subtree.
+  if (element.closest("details:not([open]) > :not(summary)")) return undefined
+  const rect = element.getBoundingClientRect()
+  return rect.height > 0 ? rect : undefined
+}
+
 export function conversationReadingAnchorOwner(container: HTMLElement, anchor: ConversationReadingAnchor): HTMLElement | undefined {
   return anchor.kind === "source"
     ? container.querySelector<HTMLElement>(`[data-source-identity="${CSS.escape(anchor.sourceIdentity)}"]`) ?? undefined
@@ -14,8 +22,8 @@ export function captureConversationReadingAnchor(container: HTMLElement): Conver
   const quotes = Array.from(container.querySelectorAll<HTMLElement>("[data-quotation-message]"))
   const candidates = container.querySelectorAll<HTMLElement>("[data-quotation-message], [data-source-identity][data-source-message-id]")
   for (const candidate of candidates) {
-    const rect = candidate.getBoundingClientRect()
-    if (rect.height <= 0 || rect.bottom <= viewport.top || rect.top >= viewport.bottom) continue
+    const rect = readingRect(candidate)
+    if (!rect || rect.bottom <= viewport.top || rect.top >= viewport.bottom) continue
     if (candidate.dataset.sourceIdentity && candidate.dataset.sourceMessageId) {
       return {
         kind: "source",
@@ -26,8 +34,8 @@ export function captureConversationReadingAnchor(container: HTMLElement): Conver
     }
     const blocks = Array.from(candidate.querySelectorAll<HTMLElement>(".md-frozen-block"))
     const blockIndex = blocks.findIndex(block => {
-      const rect = block.getBoundingClientRect()
-      return rect.height > 0 && rect.bottom > viewport.top && rect.top < viewport.bottom
+      const rect = readingRect(block)
+      return rect && rect.bottom > viewport.top && rect.top < viewport.bottom
     })
     const messageID = candidate.dataset.quotationMessage
     if (blockIndex < 0 || !messageID) continue
@@ -44,6 +52,7 @@ export function captureConversationReadingAnchor(container: HTMLElement): Conver
 export function resolveConversationReadingTop(container: HTMLElement, anchor: ConversationReadingAnchor): number | null {
   const owner = conversationReadingAnchorOwner(container, anchor)
   const element = anchor.kind === "source" ? owner : owner?.querySelectorAll<HTMLElement>(".md-frozen-block")[anchor.blockIndex]
-  if (!element || element.getBoundingClientRect().height <= 0) return null
-  return Math.max(0, container.scrollTop + element.getBoundingClientRect().top - container.getBoundingClientRect().top - anchor.offset)
+  const rect = element && readingRect(element)
+  if (!rect) return null
+  return Math.max(0, container.scrollTop + rect.top - container.getBoundingClientRect().top - anchor.offset)
 }

@@ -1,0 +1,140 @@
+{
+  "listenerCount": 0,
+  "observedAtUtc": "2026-10-12T21:04:33.3211452Z",
+  "originalTask": {
+    "taskID": "tsk_g00VXpiXcz00KjYqx3vV",
+    "projectID": "prj_huEDUxbBCSaPS9pbbBDb",
+    "rootSessionID": "ses_-zUSAHSFWzzbkIpIUGb2",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXpiXl100KdnE2TRMA",
+    "openedAt": 1791803895397
+  },
+  "occurrence": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+  "native": {
+    "occurrence": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+    "outcome": "settled",
+    "host": {
+      "pid": 52996,
+      "processInstanceID": "win32:639274006345106491",
+      "occurrenceID": "647a88a2-101d-427b-80be-f2979d3e36ba"
+    },
+    "target": {
+      "pid": 78428,
+      "processInstanceID": "win32:639274006353381945",
+      "occurrenceID": "4c157438-536e-48a3-9af4-0c09a8471544"
+    },
+    "observedAtUtc": "2026-10-12T11:25:35.776Z",
+    "deadlineAt": 1791805334494,
+    "terminal": {
+      "occurrenceID": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+      "pid": 78428,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+  "states": [
+    {
+      "expected": {
+        "pid": 52996,
+        "processInstanceID": "win32:639274006345106491",
+        "occurrenceID": "647a88a2-101d-427b-80be-f2979d3e36ba"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 78428,
+        "processInstanceID": "win32:639274006353381945",
+        "occurrenceID": "4c157438-536e-48a3-9af4-0c09a8471544"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "readQualified": true,
+  "originalQualification": {
+    "pairedCleanupComplete": true,
+    "occurrence": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "copiedPair": [
+      {
+        "copiedLength": 2194,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\runtime\\data\\auth.json",
+        "presentAfter": false
+      },
+      {
+        "copiedLength": 9155406,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\runtime\\data\\models.json",
+        "presentAfter": false
+      }
+    ],
+    "physicalCompletion": true,
+    "observedAtUtc": "2026-10-12T11:25:38.4653089Z",
+    "chain": [
+      {
+        "expected": {
+          "pid": 78428,
+          "processInstanceID": "win32:639274006353381945",
+          "occurrenceID": "4c157438-536e-48a3-9af4-0c09a8471544"
+        },
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused"
+      },
+      {
+        "expected": {
+          "pid": 52996,
+          "processInstanceID": "win32:639274006345106491",
+          "occurrenceID": "647a88a2-101d-427b-80be-f2979d3e36ba"
+        },
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused"
+      }
+    ],
+    "nativeSettlement": {
+      "occurrence": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+      "outcome": "settled",
+      "host": {
+        "pid": 52996,
+        "processInstanceID": "win32:639274006345106491",
+        "occurrenceID": "647a88a2-101d-427b-80be-f2979d3e36ba"
+      },
+      "target": {
+        "pid": 78428,
+        "processInstanceID": "win32:639274006353381945",
+        "occurrenceID": "4c157438-536e-48a3-9af4-0c09a8471544"
+      },
+      "observedAtUtc": "2026-10-12T11:25:35.776Z",
+      "deadlineAt": 1791805334494,
+      "terminal": {
+        "occurrenceID": "child-dense-348-live-01-dd4a5b9e-8d8a-41dc-9fa3-92e0da06b76c",
+        "pid": 78428,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "listeners": null
+  },
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "boundary": "Fresh exact original Native/Host, port, pair and actual physical/output/request settled receipt; original Task qualification retained. Parent33182 actual exit0 was observed in batch348; no new parent execution claimed."
+}
