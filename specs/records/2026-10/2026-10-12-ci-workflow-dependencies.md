@@ -39,3 +39,13 @@ watcher及现有7个原生声明统一升级2.6.0，四个根override分别固�
 隔离目录只复制当前manifests、patches和完整锁图，以Bun1.4.0执行frozen安装，1645包成功安装；共享node_modules仍保持旧版本，未刷新或关闭用户应用。新增dependency-ci-contract.test.ts通过真实父包解析依赖，五个正向行为验证实际原生snapshot/事件、带brace的忽略规则、缓存命中/用户变化重验证、CSS转译、SQL参数和GUID错误契约，5通过/10断言。SQL首次冷加载驱动及Azure依赖耗时11秒超过测试默认5秒，故为该真实依赖初始化设置30秒上限后原测试通过；未修改产品超时。测试文件仅复制到隔离安装目录执行，同一文件也进入原CI后端unit入口。没有浏览器或界面自动化断言，数学展示尚未做视觉验收，SQL Server网络连接也不作完成声明。
 
 原始bun audit无ignore或等级过滤，实际检查1731包返回“无漏洞”；Bun frozen lockfile-only验证、package-topology（10工作区）、其聚焦测试（1通过/3断言）、docs:check（345操作/25组）与diff检查通过。新的真实GitHub构建、三平台unit与service结果待推送后核验。
+
+## 远端后续契约修复
+
+41f2cbb20已正常推送，原失败两处在run38253459893实际通过，verify包括critical build也成功；官网run38253459856完成成功。原先被verify失败挡住的service tests现真实执行，暴露mcp-service.test.ts第55行旧断言：生产apiJson已按统一HostTransport契约附加当前ApiAuthority，而此完整请求断言遗漏authority字段。已核对api.ts的captureApiAuthority、请求构造和host-transport定义及其他authority测试，这是历史测试未更新，非本轮依赖升级引入。修复限于从真实当前连接捕获authority并在完整预期中验证，保持生产控制流不变。此测试是传输请求契约，未渲染组件、DOM或页面；不属于界面自动化，也不冒充真实MCP服务端端到端验收。
+
+本地使用原Overlay测试入口`bun run test -- test/mcp-service.test.ts`，5测试/8断言通过，原生监督与隔离测试运行器正常返回0。其他三平台unit仍运行中，等待完整结果后集中处理后续失败，避免反复推送取消正在取得的证据。
+
+相邻五个非界面服务契约（mission-skill-service、project-actions-service、rewind-service、task-rename-service、workspace-discovery-service）经相同原运行器复核，共20测试/66断言通过；这些文件未修改。41f2cbb20的CodeQL运行38253460043也已成功。以上不替代三平台完整unit结论。
+
+等待期间主分支另有f755edc17提交。现有push CI按ref取消旧任务，而workflow_dispatch本来就按run_id隔离；为取得本轮完整结果，MCP修正推送后从现有test.yml手动入口运行全量（test_files留空），读回并绑定实际head_sha。不修改并发策略，不创建新分支或绕过检查。旧run结果按实际终态保留，不能把被取消的unit算通过。

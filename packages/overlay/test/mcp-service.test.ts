@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { configure } from "../src/services/api"
+import { captureApiAuthority, configure } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import {
@@ -41,6 +41,7 @@ describe("MCP overlay service", () => {
   test("adds a project-scoped remote MCP server through the canonical route", async () => {
     const requests: TransportRequest[] = []
     __setHostTransportForTest(fakeTransport((req) => requests.push(req)))
+    const authority = captureApiAuthority()
 
     await addMcpServer(
       {
@@ -54,6 +55,7 @@ describe("MCP overlay service", () => {
 
     expect(requests).toEqual([
       {
+        authority,
         method: "POST",
         path: "mcp",
         query: { directory: PROJECT_DIR },
