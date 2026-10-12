@@ -1,0 +1,30 @@
+[
+  {
+    "source": "build.log",
+    "archive": "build.log.gz",
+    "originalBytes": 52127,
+    "compressedBytes": 10898,
+    "verification": "Decompressed complete bytes equal actual original; originals retained privately"
+  },
+  {
+    "source": "build-final.log",
+    "archive": "build-final.log.gz",
+    "originalBytes": 52127,
+    "compressedBytes": 10917,
+    "verification": "Decompressed complete bytes equal actual original; originals retained privately"
+  },
+  {
+    "source": "launch-before.ps1",
+    "archive": "launch-before.ps1.gz",
+    "originalBytes": 7313,
+    "compressedBytes": 2612,
+    "verification": "Decompressed complete bytes equal actual original; originals retained privately"
+  },
+  {
+    "source": "launch-after.ps1",
+    "archive": "launch-after.ps1.gz",
+    "originalBytes": 7310,
+    "compressedBytes": 2613,
+    "verification": "Decompressed complete bytes equal actual original; originals retained privately"
+  }
+]

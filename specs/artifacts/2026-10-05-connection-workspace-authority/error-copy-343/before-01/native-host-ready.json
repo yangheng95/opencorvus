@@ -1,0 +1,40 @@
+{
+  "occurrence": "error-copy-343-before-01-eb947667-9365-4df4-84f8-927d76ab38da",
+  "outcome": "ready",
+  "host": {
+    "pid": 40560,
+    "processInstanceID": "win32:639273892293241548",
+    "occurrenceID": "5ff08ed2-8f59-46c6-846f-41a88c41a352"
+  },
+  "parent": {
+    "pid": 70576,
+    "processInstanceID": "win32:639273892272375589",
+    "occurrenceID": "22d889b1-f362-4877-8322-ece1a17f114d"
+  },
+  "target": {
+    "pid": 4340,
+    "processInstanceID": "win32:639273892301392356",
+    "occurrenceID": "34a66bc2-7952-4b02-b275-4a802a074d42"
+  },
+  "targetBirthAtMs": 1791792430139,
+  "deadlineAt": 1791793029214,
+  "observedAtUtc": "2026-10-12T08:07:10.172Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18320",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\startup.json",
+    "--startup-occurrence",
+    "error-copy-343-before-01-eb947667-9365-4df4-84f8-927d76ab38da",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

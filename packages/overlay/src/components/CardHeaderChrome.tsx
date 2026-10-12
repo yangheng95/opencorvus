@@ -7,19 +7,13 @@ import { cardDurationMs } from "../utils/card-timing"
 import { formatCostUSD, formatTokenCount } from "../utils/format-usage"
 import { t } from "../utils/i18n"
 import { formatDuration, stamp } from "../utils/time"
-import { writeDebugClipboard } from "../utils/debug-info"
+import { copyText } from "../services/clipboard"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { CardOverflowMenu } from "./CardOverflowMenu"
 
 function stopMetaClick(event: MouseEvent): void {
   event.stopPropagation()
-}
-
-async function writeClipboard(text: string): Promise<boolean> {
-  if (!text) return false
-  await writeDebugClipboard(text)
-  return true
 }
 
 export function CardErrorReasonIndicator(props: { reason: string; details?: string }) {
@@ -33,8 +27,8 @@ export function CardErrorReasonIndicator(props: { reason: string; details?: stri
   async function copyReason(): Promise<void> {
     if (copyFeedbackTimer !== undefined) window.clearTimeout(copyFeedbackTimer)
     try {
-      const copied = await writeClipboard([props.reason, props.details].filter(Boolean).join("\n\n"))
-      setCopyFeedback(copied ? "copied" : "failed")
+      await copyText([props.reason, props.details].filter(Boolean).join("\n\n"))
+      setCopyFeedback("copied")
     } catch {
       setCopyFeedback("failed")
     }
@@ -62,15 +56,13 @@ export function CardErrorReasonIndicator(props: { reason: string; details?: stri
         data-chrome="icon-action"
         data-ui="card-error-reason"
         data-copy-feedback={copyFeedback() ?? undefined}
-        aria-label={t("card.error_reason_title")}
-        onClick={stopMetaClick}
-        onDblClick={(event: MouseEvent) => {
-          event.preventDefault()
+        aria-label={copyFeedback() ? feedbackText() : t("card.error_reason_copy_hint")}
+        onClick={(event: MouseEvent) => {
           event.stopPropagation()
           void copyReason()
         }}
       >
-        <Icon name="error-reason" size="medium" />
+        <Icon name={copyFeedback() === "copied" ? "check" : "error-reason"} size="medium" />
       </Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.Content class="card-error-reason-tooltip" data-ui="card-error-reason-tooltip">

@@ -1,0 +1,42 @@
+{
+  "host": {
+    "pid": 40560,
+    "processInstanceID": "win32:639273892293241548",
+    "occurrenceID": "5ff08ed2-8f59-46c6-846f-41a88c41a352"
+  },
+  "exitCode": 0,
+  "occurrence": "error-copy-343-before-01-eb947667-9365-4df4-84f8-927d76ab38da",
+  "target": {
+    "pid": 4340,
+    "processInstanceID": "win32:639273892301392356",
+    "occurrenceID": "34a66bc2-7952-4b02-b275-4a802a074d42"
+  },
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner",
+  "settlement": {
+    "occurrence": "error-copy-343-before-01-eb947667-9365-4df4-84f8-927d76ab38da",
+    "outcome": "settled",
+    "host": {
+      "pid": 40560,
+      "processInstanceID": "win32:639273892293241548",
+      "occurrenceID": "5ff08ed2-8f59-46c6-846f-41a88c41a352"
+    },
+    "target": {
+      "pid": 4340,
+      "processInstanceID": "win32:639273892301392356",
+      "occurrenceID": "34a66bc2-7952-4b02-b275-4a802a074d42"
+    },
+    "observedAtUtc": "2026-10-12T08:08:41.626Z",
+    "deadlineAt": 1791793029214,
+    "terminal": {
+      "occurrenceID": "error-copy-343-before-01-eb947667-9365-4df4-84f8-927d76ab38da",
+      "pid": 4340,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

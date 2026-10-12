@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [343 错误详情复制](error-copy-plan-343.md)：原生按钮单击与键盘激活，真实页面对照。
+
 - [342 流式错误展示](provider-stream-error-plan-342.md)：真实过载包的可读摘要、诊断详情与非重放终态。
 
 - [341 Skill调用入口](skill-loader-plan-341.md)：通用loader直接可用，精确Skill范围由轮次授权持有。

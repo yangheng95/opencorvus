@@ -1,0 +1,1079 @@
+{
+  "observedAtUtc": "2026-10-12T08:06:54.559Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/error-copy-343-before-01",
+  "access": "Original full canonical readonly BEGIN/ROLLBACK and explicit drizzle client; current schema/lease/config and recovery frontiers; lstat inventory only",
+  "schemaDrift": null,
+  "projects": [
+    {
+      "id": "prj_hzFmYE2g0r98G6gaV0zz",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project",
+      "sandboxes": "[]",
+      "config": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "full_access",
+        "$schema": "https://opencorvus.ai/config.json",
+        "model": "openai/gpt-6.1-sol",
+        "small_model": "openai/gpt-6.1-sol",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "primary_assistant_capabilities": {
+          "work": {
+            "skill_refs": [
+              "page-probe-340"
+            ],
+            "mcp_server_refs": []
+          }
+        },
+        "terminal": {
+          "default_profile_id": "powershell",
+          "profiles": {
+            "powershell": {
+              "label": "Windows PowerShell",
+              "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "pwsh": {
+              "label": "PowerShell",
+              "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "cmd": {
+              "label": "Command Prompt",
+              "command": "C:\\WINDOWS\\system32\\cmd.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "command-prompt"
+            },
+            "git-bash": {
+              "label": "Git Bash",
+              "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "bash"
+            }
+          }
+        },
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        }
+      },
+      "inventory": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project",
+          "type": "directory",
+          "mtimeMs": 1791788302323.0159
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git",
+          "type": "directory",
+          "mtimeMs": 1791791779154.8777
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\COMMIT_EDITMSG",
+          "type": "file",
+          "bytes": 40,
+          "mtimeMs": 1791788301906.6433
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\HEAD",
+          "type": "file",
+          "bytes": 21,
+          "mtimeMs": 1791788301684.5618
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\config",
+          "type": "file",
+          "bytes": 206,
+          "mtimeMs": 1791788301777.832
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791788301656.4631
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791788301666.4966
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791788301657.4692
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791788301657.4692
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791788301658.9753
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791788301659.983
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791788301659.983
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791788301660.9897
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791788301661.991
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791788301662.9885
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791788301662.9885
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791788301663.9878
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791788301664.9922
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791788301664.9922
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791788301666.4966
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791788301666.4966
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\index",
+          "type": "file",
+          "bytes": 297,
+          "mtimeMs": 1791788302077.0652
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791788301667.5051
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791788301667.5051
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\logs",
+          "type": "directory",
+          "mtimeMs": 1791788301916.6729
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\logs\\HEAD",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791788301916.6729
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\logs\\refs",
+          "type": "directory",
+          "mtimeMs": 1791788301916.6729
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\logs\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791788301918.1948
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\logs\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791788301918.1948
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791788301941.1438
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\34",
+          "type": "directory",
+          "mtimeMs": 1791788301845.4883
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\34\\fb713629ac11020fd44a4449d7b5e1799ae646",
+          "type": "file",
+          "bytes": 62,
+          "mtimeMs": 1791788301840.9707
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\35",
+          "type": "directory",
+          "mtimeMs": 1791788301903.6426
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\35\\39e7d5e7cdfb5254fc9114dd5f59cf92c760fa",
+          "type": "file",
+          "bytes": 124,
+          "mtimeMs": 1791788301899.1301
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\42",
+          "type": "directory",
+          "mtimeMs": 1791788301833.4536
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\42\\fdeb2f52db9d1845188ac151e4991bd66f5d92",
+          "type": "file",
+          "bytes": 67,
+          "mtimeMs": 1791788301828.933
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\d6",
+          "type": "directory",
+          "mtimeMs": 1791788301839.4583
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\d6\\e3f6bd7bf1c1af01941aedb4babbdd0a87eafd",
+          "type": "file",
+          "bytes": 32,
+          "mtimeMs": 1791788301835.451
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\e5",
+          "type": "directory",
+          "mtimeMs": 1791788301913.16
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\e5\\b27c82b04cc7ef686e75b875ef7929fb7dff8d",
+          "type": "file",
+          "bytes": 163,
+          "mtimeMs": 1791788301907.6428
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791788301685.5632
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791788301685.5632
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791788304573.1714
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791788301682.5457
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791788301918.1948
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 41,
+          "mtimeMs": 1791788301915.1643
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791788301682.5457
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791788301791.1348
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791788301789.6165
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791788346679.5117
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791788346680.051
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791788358736.0083
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791788346680.5818
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\attachments\\9a08c981138bea26ea4840d1d9fa5d08224153cfac4a0a18d46140f2771f76d2",
+          "type": "directory",
+          "mtimeMs": 1791788479058.1062
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\attachments\\9a08c981138bea26ea4840d1d9fa5d08224153cfac4a0a18d46140f2771f76d2\\4521d674af0aad85a5c6076f786fa781b1d70700521044dde56adc403f8fdffd.json",
+          "type": "file",
+          "bytes": 91139,
+          "mtimeMs": 1791788438307
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\attachments\\9a08c981138bea26ea4840d1d9fa5d08224153cfac4a0a18d46140f2771f76d2\\4521d674af0aad85a5c6076f786fa781b1d70700521044dde56adc403f8fdffd.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791788438307
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791788346951.252
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791788346951.7615
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hzFmYE2g0r98G6gaV0zz",
+          "type": "directory",
+          "mtimeMs": 1791788494504.677
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hzFmYE2g0r98G6gaV0zz\\HhZ4rBhU.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791788494502.672
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791788630440.8147
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1551,
+          "mtimeMs": 1791788337241.7234
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\skills",
+          "type": "directory",
+          "mtimeMs": 1791788324357.379
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\skills\\page-probe-340",
+          "type": "directory",
+          "mtimeMs": 1791788324359.385
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\skills\\page-probe-340\\SKILL.md",
+          "type": "file",
+          "bytes": 276,
+          "mtimeMs": 1791788324358.3845
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\.opencorvus\\skills\\page-probe-340\\support.txt",
+          "type": "file",
+          "bytes": 598406,
+          "mtimeMs": 1791788324359.385
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project\\README.md",
+          "type": "file",
+          "bytes": 46,
+          "mtimeMs": 1791788301784.3484
+        }
+      ]
+    }
+  ],
+  "tasks": [],
+  "leases": [],
+  "capacity": [],
+  "controls": [],
+  "permissions": [],
+  "permissionRequests": [],
+  "checkpoints": [],
+  "messages": [
+    {
+      "id": "msg_cb5da2ac-d9bc-46c4-b701-52047aabcdd2",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "user",
+      "completed_at": null,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofIdr00lhbGCgeF4",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788355529,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofL0v00voJgQANZ1",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788358707,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_fb07ad69-1073-412d-b001-d8dd99937b83",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "user",
+      "completed_at": null,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofgUi00MjFu0741U",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788447249,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofire00CrwNmPJEt",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788458224,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXoflii001yfD73e0Z",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788469211,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofoZs00jYvhI6ClU",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788478945,
+      "pending_delivery": null
+    },
+    {
+      "id": "msg_g0VXofr6t00gOBoR3ZCk",
+      "session_id": "ses_-zUSBKhbizzj0BUgz0kf",
+      "role": "assistant",
+      "completed_at": 1791788494509,
+      "pending_delivery": null
+    }
+  ],
+  "memory": [],
+  "memoryDocuments": [
+    {
+      "projectID": "prj_hzFmYE2g0r98G6gaV0zz",
+      "fileID": "mem_h1D6dP5wOk1Hz0M0ZUe7",
+      "chunkID": "mck_h1BKgV6o06OrYxwVDSEn",
+      "state": "fresh-import-without-memory-document"
+    }
+  ],
+  "recoveryTableCounts": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "providerPending": [],
+  "toolPending": [],
+  "unsettledPublications": [],
+  "unsettledDeliveries": [],
+  "tableCounts": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_definition_tombstone",
+      "rows": 0
+    },
+    {
+      "name": "automation_delay_settlement",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_attempt",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_attempt_receipt",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "automation_project_target",
+      "rows": 0
+    },
+    {
+      "name": "automation_run",
+      "rows": 0
+    },
+    {
+      "name": "automation_run_receipt",
+      "rows": 0
+    },
+    {
+      "name": "bus_publication_attempt_receipt",
+      "rows": 0
+    },
+    {
+      "name": "bus_publication_delivery",
+      "rows": 0
+    },
+    {
+      "name": "bus_publication_delivery_receipt",
+      "rows": 0
+    },
+    {
+      "name": "bus_publication_outbox",
+      "rows": 0
+    },
+    {
+      "name": "bus_publication_phase_receipt",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_outcome",
+      "rows": 0
+    },
+    {
+      "name": "control_account",
+      "rows": 0
+    },
+    {
+      "name": "database_authority",
+      "rows": 0
+    },
+    {
+      "name": "decision_log",
+      "rows": 0
+    },
+    {
+      "name": "engine_artifact",
+      "rows": 0
+    },
+    {
+      "name": "engine_artifact_catalog_revision",
+      "rows": 0
+    },
+    {
+      "name": "engine_artifact_version",
+      "rows": 0
+    },
+    {
+      "name": "engine_browser_preview_target_identity",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup_receipt",
+      "rows": 0
+    },
+    {
+      "name": "engine_channel_binding",
+      "rows": 0
+    },
+    {
+      "name": "engine_control_activation_lease",
+      "rows": 0
+    },
+    {
+      "name": "engine_control_activation_lease_grant",
+      "rows": 0
+    },
+    {
+      "name": "engine_git_checkpoint_outcome",
+      "rows": 0
+    },
+    {
+      "name": "engine_git_checkpoint_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_goal",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_outcome",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_metric_result",
+      "rows": 0
+    },
+    {
+      "name": "engine_metric_spec",
+      "rows": 0
+    },
+    {
+      "name": "engine_progress_snapshot",
+      "rows": 0
+    },
+    {
+      "name": "engine_task",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_creation_contract",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_root_ingress",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_root_ingress_policy",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_settlement",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_definition_tombstone",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire_receipt",
+      "rows": 0
+    },
+    {
+      "name": "event_occurrence",
+      "rows": 0
+    },
+    {
+      "name": "global_creation_allocation",
+      "rows": 0
+    },
+    {
+      "name": "interactive_artifact",
+      "rows": 0
+    },
+    {
+      "name": "memory_chunk",
+      "rows": 0
+    },
+    {
+      "name": "memory_embedding",
+      "rows": 0
+    },
+    {
+      "name": "memory_file",
+      "rows": 0
+    },
+    {
+      "name": "memory_fts",
+      "rows": 0
+    },
+    {
+      "name": "memory_fts_config",
+      "rows": 1
+    },
+    {
+      "name": "memory_fts_content",
+      "rows": 0
+    },
+    {
+      "name": "memory_fts_data",
+      "rows": 2
+    },
+    {
+      "name": "memory_fts_docsize",
+      "rows": 0
+    },
+    {
+      "name": "memory_fts_idx",
+      "rows": 0
+    },
+    {
+      "name": "message",
+      "rows": 9
+    },
+    {
+      "name": "part",
+      "rows": 16
+    },
+    {
+      "name": "permission_execution_result",
+      "rows": 0
+    },
+    {
+      "name": "permission_ledger",
+      "rows": 0
+    },
+    {
+      "name": "permission_policy",
+      "rows": 0
+    },
+    {
+      "name": "project",
+      "rows": 1
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "protocol_delivery_receipt",
+      "rows": 0
+    },
+    {
+      "name": "protocol_event",
+      "rows": 0
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "provider_activity_outcome",
+      "rows": 0
+    },
+    {
+      "name": "provider_activity_request",
+      "rows": 0
+    },
+    {
+      "name": "provider_usage_event",
+      "rows": 0
+    },
+    {
+      "name": "quick_note",
+      "rows": 0
+    },
+    {
+      "name": "runtime_execution_capacity_lease",
+      "rows": 0
+    },
+    {
+      "name": "session",
+      "rows": 1
+    },
+    {
+      "name": "session_control_event",
+      "rows": 0
+    },
+    {
+      "name": "session_control_record",
+      "rows": 0
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "session_share",
+      "rows": 0
+    },
+    {
+      "name": "task_plan",
+      "rows": 0
+    },
+    {
+      "name": "todo",
+      "rows": 0
+    },
+    {
+      "name": "todo_snapshot",
+      "rows": 0
+    },
+    {
+      "name": "tool_part_outcome",
+      "rows": 5
+    },
+    {
+      "name": "tool_part_progress",
+      "rows": 0
+    },
+    {
+      "name": "tool_part_request",
+      "rows": 5
+    },
+    {
+      "name": "workbench_brief_snapshot",
+      "rows": 0
+    },
+    {
+      "name": "worker_turn_descriptor",
+      "rows": 0
+    },
+    {
+      "name": "workspace",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "runtimeInventory": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime",
+      "type": "directory",
+      "mtimeMs": 1791792411237.709
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\bin",
+      "type": "directory",
+      "mtimeMs": 1791792411237.709
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\cache",
+      "type": "directory",
+      "mtimeMs": 1791792411410.5083
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\cache\\version",
+      "type": "file",
+      "bytes": 2,
+      "mtimeMs": 1791792411410.5083
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\config",
+      "type": "directory",
+      "mtimeMs": 1791792410946.2837
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\config\\opencorvus.jsonc",
+      "type": "file",
+      "bytes": 173,
+      "mtimeMs": 1791788305147.3633
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\data",
+      "type": "directory",
+      "mtimeMs": 1791792414371.0513
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\data\\opencorvus.db",
+      "type": "file",
+      "bytes": 2088960,
+      "mtimeMs": 1791792413667.3225
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\data\\opencorvus.db-shm",
+      "type": "file",
+      "bytes": 32768,
+      "mtimeMs": 1791792414371.0513
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\data\\opencorvus.db-wal",
+      "type": "file",
+      "bytes": 0,
+      "mtimeMs": 1791792414371.0513
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\data\\project-directory-admission.json",
+      "type": "file",
+      "bytes": 2,
+      "mtimeMs": 1791792413261.2617
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\log",
+      "type": "directory",
+      "mtimeMs": 1791792411237.709
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\overlay",
+      "type": "directory",
+      "mtimeMs": 1791792411239.2131
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\overlay\\embedded",
+      "type": "directory",
+      "mtimeMs": 1791792411239.2131
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\overlay\\webview",
+      "type": "directory",
+      "mtimeMs": 1791792411239.2131
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\state",
+      "type": "directory",
+      "mtimeMs": 1791792411236.701
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-before-01\\runtime\\tmp",
+      "type": "directory",
+      "mtimeMs": 1791792413570.063
+    }
+  ],
+  "boundary": "Fresh original pre-start observations; exact closure/ports/pair and complete copied row custody remain required before history start"
+}

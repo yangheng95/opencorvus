@@ -1,0 +1,35 @@
+{
+  "settlementEvidenceRoot": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/error-copy-343/after-01",
+  "port": 18320,
+  "purpose": "Current credentialless complete original ordinary Session history; no Provider or Task rearm",
+  "host": {
+    "pid": 65720,
+    "processInstanceID": "win32:639273894388077488",
+    "occurrenceID": "d4fd5b87-97a2-4e62-a243-6ab5fd86b252"
+  },
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\project",
+  "runRoot": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/error-copy-343-after-01",
+  "nativeTarget": {
+    "pid": 64404,
+    "processInstanceID": "win32:639273894395549796",
+    "occurrenceID": "9e820f86-d2be-4f96-923c-24e32495b543"
+  },
+  "targetBirthAtMs": 1791792639554,
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-after-01\\runtime",
+  "authorityStaging": "None; no model Task requested",
+  "observedProcessChain": [
+    {
+      "pid": 64404,
+      "processInstanceID": "win32:639273894395549796",
+      "occurrenceID": "9e820f86-d2be-4f96-923c-24e32495b543"
+    }
+  ],
+  "owner": {
+    "processInstanceID": "win32:639273894395549796",
+    "ProcessId": 64404
+  },
+  "evidencePrefix": "error-copy-343-after-01",
+  "nativeDeadlineAt": 1791793238714,
+  "occurrence": "error-copy-343-after-01-ac3c152f-e6f3-46e5-b70b-61949f4f6ca8",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\error-copy-343-after-01\\evidence"
+}

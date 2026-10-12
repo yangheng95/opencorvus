@@ -389,6 +389,7 @@ body {
   color: var(--text-muted);
 }
 
+.card-error-reason-indicator.oc-button[data-copy-feedback="copied"],
 .card-error-reason-tooltip > span[data-copy-feedback="copied"] {
   color: var(--good);
 }

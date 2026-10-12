@@ -16,7 +16,7 @@
 
 ## 限制与后续
 
-浏览器虚拟clipboard读取返回旧303记录，不能用作本次复制内容证明；无关原文已从公开证据移入私有诊断，没有提交。当前源码writeDebugClipboard通过Host native clipboard，故该接口与浏览器虚拟读回不对应。已确认Copied反馈，实际剪贴板内容仍未验。
+浏览器clipboard读取返回旧303记录，不能用作本次复制内容证明；无关原文已从公开证据移入私有诊断，没有提交。343继续检查发现：writeDebugClipboard通过公共HostTransport facade，browser分支实际调用navigator.clipboard，只有desktop才调用Tauri native clipboard；不能仅凭.native方法名推断读回不一致原因。342已确认Copied反馈，实际剪贴板内容仍未验，读回差异原因未知。原checker中的推断由本段纠正，参见[343 Recall](../error-copy-plan-343.md)。
 
 本轮没有重新制造上游过载，没有子Dock/Side Chat的实际错误发生场景，未声称这两处完成独立视觉复核。原341项目Memory状态retry_wait/pending1完整保留，整体源库没有重启。持续产品goal保持active，下一轮继续单agent。
 
@@ -25,3 +25,5 @@
 最终代码进一步保留同一Session/inputMessageID最新真实消息的完整错误，生命周期通知继续拥有状态，不能用只有摘要的字符串清空诊断。聚合重建遵守同一选择规则。overlay类型与build重新通过，最终bundle为main-DrobkXyT.js，前述main-B6ejkKmg.js属于前一版验收。
 
 全新history-04正式导入原9消息/21 Parts，页面127由Root查看[05最终摘要](05-authority-summary.png)、[06最终详情](06-authority-details.png)，鼠标展开与Return折叠正常；这两张是当前代码最终视觉证据。实际GET bundle200、0 Provider请求，原启动57394实际join exit0，Native/Host完整结算71982ms，页面127关闭，5份本轮pile精确归档。见[最终实例checker](checks/actual-history-final.json)。实时Provider错误与生命周期事件交错没有在该历史实例中重新发生，当前验收不冒充流式交错复现；API语义/写入终态由11项后端正向检查覆盖。
+
+343后续已在最终浏览器页面实际核验单击/Enter/Space三种复制及Ctrl+V粘贴，均为261字符摘要与完整错误包；见[343证据](../error-copy-343/README.md)。这补齐当前复制内容资格，342当时读回旧内容的原因仍未知。
