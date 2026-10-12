@@ -1,0 +1,1473 @@
+{
+  "checkedAt": "2026-10-12T18:42:12.926Z",
+  "runtimeAndCanonical": "passed",
+  "runs": [
+    {
+      "scope": "main",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-surfaces-356-live-02",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-density-358-main",
+      "initialHandle": 28889,
+      "launcherExitCode": 0,
+      "canonicalMessageCount": 11,
+      "canonicalSourceCount": 192,
+      "native": {
+        "occurrence": "source-density-358-main-d1ed5e8d-0f6d-4a03-bae3-7a6ba76d7dbf",
+        "outcome": "settled",
+        "host": {
+          "pid": 78232,
+          "processInstanceID": "win32:639274241300057247",
+          "occurrenceID": "b1037a28-4932-4e3a-b169-a358c06e419c"
+        },
+        "target": {
+          "pid": 40508,
+          "processInstanceID": "win32:639274241308697872",
+          "occurrenceID": "2d18e4ac-9e3e-4117-bdbf-d2438197d420"
+        },
+        "observedAtUtc": "2026-10-12T17:53:47.618Z",
+        "deadlineAt": 1791827929918,
+        "terminal": {
+          "occurrenceID": "source-density-358-main-d1ed5e8d-0f6d-4a03-bae3-7a6ba76d7dbf",
+          "pid": 40508,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 296749,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T17:49:03.367Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "aec70fca-d630-4864-b1b4-6b04772c87eb",
+          "method": "GET",
+          "path": "/ui/assets/main-CjPpEVA4.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "assets": [
+        {
+          "path": "/ui/assets/main-CjPpEVA4.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/main-CxCiDi5v.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/en-US.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CodeEditor-DEktN-3H.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-4DZCxYZh.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-DPPonZPw.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-BwMBzE9r.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-cu25EUjf.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-BOlRmY0U.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-90-wght-normal-BWcrRNoG.woff2",
+          "status": 200
+        }
+      ],
+      "qualification": "Complete original canonical Message/Source values and actual delivered UI resources/Native settlement. Visual and clipboard outcomes are separately recorded; an intermediate asset is not final visual acceptance."
+    },
+    {
+      "scope": "child",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-density-358-child",
+      "initialHandle": 84255,
+      "launcherExitCode": 0,
+      "canonicalMessageCount": 13,
+      "canonicalSourceCount": 66,
+      "native": {
+        "occurrence": "source-density-358-child-155e9676-6a99-4f2c-a5a1-4dafaf09b844",
+        "outcome": "settled",
+        "host": {
+          "pid": 45808,
+          "processInstanceID": "win32:639274244342623722",
+          "occurrenceID": "17ac41ae-b56d-4f95-a0a5-a5cbb77ea046"
+        },
+        "target": {
+          "pid": 48768,
+          "processInstanceID": "win32:639274244350839058",
+          "occurrenceID": "a8cfc0c9-3b3a-4103-85a2-6b10a6a6b0d3"
+        },
+        "observedAtUtc": "2026-10-12T17:58:38.693Z",
+        "deadlineAt": 1791828234166,
+        "terminal": {
+          "occurrenceID": "source-density-358-child-155e9676-6a99-4f2c-a5a1-4dafaf09b844",
+          "pid": 48768,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 283610,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T17:54:24.466Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "921694ab-78b5-4404-a2e4-d32c2226945b",
+          "method": "GET",
+          "path": "/ui/assets/main-CjPpEVA4.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "assets": [
+        {
+          "path": "/ui/assets/main-CjPpEVA4.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/main-CxCiDi5v.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/en-US.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-28-wght-normal-BWPKDbtH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2",
+          "status": 200
+        }
+      ],
+      "qualification": "Complete original canonical Message/Source values and actual delivered UI resources/Native settlement. Visual and clipboard outcomes are separately recorded; an intermediate asset is not final visual acceptance."
+    },
+    {
+      "scope": "child-final",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-density-358-child-final",
+      "initialHandle": 26045,
+      "launcherExitCode": 0,
+      "canonicalMessageCount": 13,
+      "canonicalSourceCount": 66,
+      "native": {
+        "occurrence": "source-density-358-child-final-10b5b234-e645-4c15-8d03-df0a47556ec4",
+        "outcome": "settled",
+        "host": {
+          "pid": 39524,
+          "processInstanceID": "win32:639274249002024403",
+          "occurrenceID": "f1726ab7-51bc-44a0-b066-fbdcc32fa7f0"
+        },
+        "target": {
+          "pid": 67612,
+          "processInstanceID": "win32:639274249011030392",
+          "occurrenceID": "af56d402-ab87-4e3b-a6ac-db35138bd441"
+        },
+        "observedAtUtc": "2026-10-12T18:04:12.411Z",
+        "deadlineAt": 1791828700105,
+        "terminal": {
+          "occurrenceID": "source-density-358-child-final-10b5b234-e645-4c15-8d03-df0a47556ec4",
+          "pid": 67612,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 151308,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T18:01:53.853Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "9e51552e-885c-4e9e-b091-e20e73108022",
+          "method": "GET",
+          "path": "/ui/assets/main-CjPpEVA4.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "assets": [
+        {
+          "path": "/ui/assets/main-CjPpEVA4.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/main-CxCiDi5v.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/en-US.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-28-wght-normal-BWPKDbtH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/GeneralPanel-D6toKBP5.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/Switch-geg_0yPo.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/AppearancePanel-DamSLagg.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/SelectField-xmvTQibK.js",
+          "status": 200
+        }
+      ],
+      "qualification": "Complete original canonical Message/Source values and actual delivered UI resources/Native settlement. Visual and clipboard outcomes are separately recorded; an intermediate asset is not final visual acceptance."
+    },
+    {
+      "scope": "child-final2",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-density-358-child-final2",
+      "initialHandle": 18883,
+      "launcherExitCode": 0,
+      "canonicalMessageCount": 13,
+      "canonicalSourceCount": 66,
+      "native": {
+        "occurrence": "source-density-358-child-final2-745e55ad-3875-428d-9c01-83a191b6eb5c",
+        "outcome": "settled",
+        "host": {
+          "pid": 6684,
+          "processInstanceID": "win32:639274252055152089",
+          "occurrenceID": "5738bdd2-90dd-4971-8679-06f319f59ba9"
+        },
+        "target": {
+          "pid": 73108,
+          "processInstanceID": "win32:639274252063656291",
+          "occurrenceID": "96847231-1cb7-4cd8-872d-e26d1f171fb7"
+        },
+        "observedAtUtc": "2026-10-12T18:09:21.819Z",
+        "deadlineAt": 1791829005419,
+        "terminal": {
+          "occurrenceID": "source-density-358-child-final2-745e55ad-3875-428d-9c01-83a191b6eb5c",
+          "pid": 73108,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 155454,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T18:07:02.899Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "1813d3c4-6d55-495f-a457-bc59990cd988",
+          "method": "GET",
+          "path": "/ui/assets/main-CZ9bd5n2.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      },
+      "assets": [
+        {
+          "path": "/ui/assets/main-CZ9bd5n2.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/main-Bg_XFv2H.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/en-US.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-28-wght-normal-BWPKDbtH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/GeneralPanel-CJHobeKu.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/Switch-BzDirgvy.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/AppearancePanel-B5BT4rnL.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/SelectField-gwAqGE6d.js",
+          "status": 200
+        }
+      ],
+      "qualification": "Complete original canonical Message/Source values and actual delivered UI resources/Native settlement. Visual and clipboard outcomes are separately recorded; an intermediate asset is not final visual acceptance."
+    },
+    {
+      "scope": "child-final3",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-density-358-child-final3",
+      "initialHandle": 38447,
+      "launcherExitCode": 0,
+      "canonicalMessageCount": 13,
+      "canonicalSourceCount": 66,
+      "native": {
+        "occurrence": "source-density-358-child-final3-82933927-5eee-4abc-8861-b59a9272523a",
+        "outcome": "settled",
+        "host": {
+          "pid": 68104,
+          "processInstanceID": "win32:639274255375215650",
+          "occurrenceID": "446978e3-fa10-4184-a5b9-24ec8241b904"
+        },
+        "target": {
+          "pid": 4272,
+          "processInstanceID": "win32:639274255395891083",
+          "occurrenceID": "f1009298-81c3-43a0-94a5-183b8e3e620e"
+        },
+        "observedAtUtc": "2026-10-12T18:14:22.853Z",
+        "deadlineAt": 1791829337351,
+        "terminal": {
+          "occurrenceID": "source-density-358-child-final3-82933927-5eee-4abc-8861-b59a9272523a",
+          "pid": 4272,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 123264,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T18:12:28.877Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "6e7248bb-660c-4773-b98b-f3e2408d24a8",
+          "method": "GET",
+          "path": "/ui/assets/main-CrFGPI-s.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 4
+        },
+        "message": "request"
+      },
+      "assets": [
+        {
+          "path": "/ui/assets/main-CrFGPI-s.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/main-B1hrV_E-.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/en-US.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-28-wght-normal-BWPKDbtH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/GeneralPanel-CqOn5SdS.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/Switch-htsONKO_.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/AppearancePanel-Cb0_qR4z.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/SelectField-Bea-y0-n.js",
+          "status": 200
+        }
+      ],
+      "qualification": "Complete original canonical Message/Source values and actual delivered UI resources/Native settlement. Visual and clipboard outcomes are separately recorded; an intermediate asset is not final visual acceptance."
+    },
+    {
+      "scope": "final-main",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-surfaces-356-live-02",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-density-358-final-main",
+      "initialHandle": 20436,
+      "launcherExitCode": 0,
+      "canonicalMessageCount": 11,
+      "canonicalSourceCount": 192,
+      "native": {
+        "occurrence": "source-density-358-final-main-7ffbaaa9-02da-4121-8df7-83b9c6971db8",
+        "outcome": "settled",
+        "host": {
+          "pid": 78972,
+          "processInstanceID": "win32:639274260683571728",
+          "occurrenceID": "b50cc7f9-f0d6-4d10-998f-05b7562444eb"
+        },
+        "target": {
+          "pid": 72760,
+          "processInstanceID": "win32:639274260692269616",
+          "occurrenceID": "29cff0fd-c97a-4346-9a70-5db64fe84e34"
+        },
+        "observedAtUtc": "2026-10-12T18:26:23.393Z",
+        "deadlineAt": 1791829868302,
+        "terminal": {
+          "occurrenceID": "source-density-358-final-main-7ffbaaa9-02da-4121-8df7-83b9c6971db8",
+          "pid": 72760,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 314167,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T18:21:18.620Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "43d00ec1-612a-4825-ac0c-340df1308115",
+          "method": "GET",
+          "path": "/ui/assets/main-CrFGPI-s.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3
+        },
+        "message": "request"
+      },
+      "assets": [
+        {
+          "path": "/ui/assets/main-CrFGPI-s.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/main-B1hrV_E-.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/en-US.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CodeEditor-WIxWwfYB.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-q4ZU99b4.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-CbWCehfC.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-Cu23C5ec.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-Dki4hti0.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/index-DKwLx8Vz.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-90-wght-normal-BWcrRNoG.woff2",
+          "status": 200
+        }
+      ],
+      "qualification": "Complete original canonical Message/Source values and actual delivered UI resources/Native settlement. Visual and clipboard outcomes are separately recorded; an intermediate asset is not final visual acceptance."
+    },
+    {
+      "scope": "clipboard",
+      "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-surfaces-356-live-02",
+      "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-density-358-clipboard",
+      "initialHandle": 53710,
+      "launcherExitCode": 0,
+      "canonicalMessageCount": 11,
+      "canonicalSourceCount": 192,
+      "native": {
+        "occurrence": "source-density-358-clipboard-4d0e36c7-2df0-4481-aece-77c9b75ba8c9",
+        "outcome": "settled",
+        "host": {
+          "pid": 70148,
+          "processInstanceID": "win32:639274266171787820",
+          "occurrenceID": "6e07dacf-b05c-4430-a0da-4ca48e00bd46"
+        },
+        "target": {
+          "pid": 56440,
+          "processInstanceID": "win32:639274266180439216",
+          "occurrenceID": "1eac9537-f8e3-4775-9be3-b4ddfd2fc910"
+        },
+        "observedAtUtc": "2026-10-12T18:37:11.433Z",
+        "deadlineAt": 1791830417134,
+        "terminal": {
+          "occurrenceID": "source-density-358-clipboard-4d0e36c7-2df0-4481-aece-77c9b75ba8c9",
+          "pid": 56440,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 413390,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T18:30:49.052Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "c548f1a2-2060-4186-9b96-92024207732f",
+          "method": "GET",
+          "path": "/ui/assets/main-CrFGPI-s.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 4
+        },
+        "message": "request"
+      },
+      "assets": [
+        {
+          "path": "/ui/assets/main-CrFGPI-s.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/main-B1hrV_E-.css",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/zh-CN.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/i18n/en-US.json",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+          "status": 200
+        },
+        {
+          "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+          "status": 200
+        }
+      ],
+      "qualification": "Complete original canonical Message/Source values and actual delivered UI resources/Native settlement. Visual and clipboard outcomes are separately recorded; an intermediate asset is not final visual acceptance."
+    }
+  ],
+  "live": {
+    "scope": "live",
+    "initialHandle": 55186,
+    "launcherExitCode": 0,
+    "source": {
+      "id": "prt_g0VXrPdXB00kACFZTu8t",
+      "messageID": "msg_g0VXrPcJj00s1j3TFweb",
+      "type": "source-file",
+      "sourceId": "0cae078bd74e05c6d89cc816088ddbc448f7ee077799716704d9583f7da9279d",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-live\\project\\资料\\范围核对\\  来源范围核对_保留文件名空白_长标题与行号显示_实际读取验证记录.md",
+      "title": "资料\\范围核对\\  来源范围核对_保留文件名空白_长标题与行号显示_实际读取验证记录.md",
+      "range": {
+        "startLine": 10,
+        "endLine": 12
+      },
+      "provider": "opencorvus-read"
+    },
+    "toolID": "prt_g0VXrPdC800smOxuqKdW",
+    "sessionID": "ses_-zUS8aNxMzzRJWlwLCXj",
+    "finalMessageID": "msg_g0VXrPdbf007wTaFAHmP",
+    "range": {
+      "startLine": 10,
+      "endLine": 12
+    },
+    "outputPreview": "RANGE358 原始第10行；记录09。行号、文件名空白和来源范围分别核对。\nRANGE358 原始第11行；记录10。行号、文件名空白和来源范围分别核对。\nRANGE358 原始第12行；记录11。行号、文件名空白和来源范围分别核对。",
+    "preflight": {
+      "sessionID": "ses_hHZBY09phV9DA4iVRvjI",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "providerRequestCount": 5,
+    "qualification": {
+      "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+      "providerEOFRequests": 5,
+      "physicalCompletion": true,
+      "providerUserCancelledRequests": 0,
+      "qualification": "NativeService",
+      "cancellation": null
+    },
+    "pairedCleanupComplete": true,
+    "native": {
+      "occurrence": "source-density-358-live-a830b04e-5da5-4197-ab62-27521200d91d",
+      "outcome": "settled",
+      "host": {
+        "pid": 65064,
+        "processInstanceID": "win32:639274256712722932",
+        "occurrenceID": "48254d88-5b41-4cd6-91c9-dd6028090764"
+      },
+      "target": {
+        "pid": 77112,
+        "processInstanceID": "win32:639274256722434956",
+        "occurrenceID": "a7798731-5258-480f-b4e2-38351c66adc2"
+      },
+      "observedAtUtc": "2026-10-12T18:18:04.279Z",
+      "deadlineAt": 1791829471252,
+      "terminal": {
+        "occurrenceID": "source-density-358-live-a830b04e-5da5-4197-ab62-27521200d91d",
+        "pid": 77112,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "elapsedMs": 212036,
+    "served": {
+      "level": "info",
+      "time": "2026-10-12T18:15:00.611Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e9106965-d4b4-4270-95fe-a288e0e11d1a",
+        "method": "GET",
+        "path": "/ui/assets/main-CrFGPI-s.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    "assets": [
+      {
+        "path": "/ui/assets/main-CrFGPI-s.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/CommandMenuSurface-xZ-shk3b.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/CommandMenuSurface-9Ez69chO.css",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/main-B1hrV_E-.css",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/i18n/zh-CN.json",
+        "status": 200
+      },
+      {
+        "path": "/ui/i18n/en-US.json",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/markdown-render.worker-DGRXEZRD.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/CodeEditor-WIxWwfYB.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/index-CbWCehfC.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/index-q4ZU99b4.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/index-Cu23C5ec.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/index-Dki4hti0.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/index-DKwLx8Vz.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-90-wght-normal-BWcrRNoG.woff2",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/GeneralPanel-CqOn5SdS.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/Switch-htsONKO_.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/AppearancePanel-Cb0_qR4z.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/SelectField-Bea-y0-n.js",
+        "status": 200
+      },
+      {
+        "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+        "status": 200
+      }
+    ]
+  },
+  "clipboard": {
+    "review": "Manual review only; clipboard receipts are not automated UI assertions.",
+    "observedMatchingSamples": [
+      "Initial four Main/Side :20 native copy observations",
+      "Live partial-range full path and :10-12",
+      "Diagnostic source :2 and :3, including final text/plain and text reads"
+    ],
+    "unresolved": "final-main initially read/pasted the previous live value despite fulfilled UI feedback. The diagnostic initially reproduced it; after an owned native-copy control and later application copies, :2 and :3 matched. Exact browser/tool versus application cause remains unproven. Original mismatches are retained; no clipboard reliability success or production fix is claimed."
+  },
+  "boundary": "Actual readonly SQLite, authored input, canonical read output, real Provider streams and current HTTP/Native facts. No UI/DOM/source-text/screenshot assertions. Manual visual qualifications remain in README."
+}

@@ -338,8 +338,13 @@ An expanded web-source leaf shows its full wrapping title and a secondary host
 derived directly from that same canonical URL, including any port. The URL
 remains the link target and full Tooltip detail; a title/provider is never used
 to infer its host. An unparseable URL has no host presentation. An expanded
-file-source leaf shows its existing title/range and a secondary path/range
-from the same canonical source. The existing selected directory makes an
+file-source leaf presents its existing filename/title on one ellipsized line
+and, when the canonical Source has a range, a separate compact localized line
+label. The line label does not shrink with the filename; full title, path and
+range remain available through the same focusable Tooltip and accessible name.
+Filename whitespace is preserved rather than normalized for this layout. A
+whole-file Source without a range has no invented line label. Secondary path/range
+metadata still comes from the same canonical source. The existing selected directory makes an
 in-project path relative; an external path retains its absolute identity.
 An identical title/range and path/range needs only one visible line.
 Within one adjacent Source group, consecutive ordinary file entries for the

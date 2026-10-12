@@ -1,0 +1,42 @@
+{
+  "occurrence": "source-density-358-final-main-7ffbaaa9-02da-4121-8df7-83b9c6971db8",
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner",
+  "host": {
+    "pid": 78972,
+    "processInstanceID": "win32:639274260683571728",
+    "occurrenceID": "b50cc7f9-f0d6-4d10-998f-05b7562444eb"
+  },
+  "settlement": {
+    "occurrence": "source-density-358-final-main-7ffbaaa9-02da-4121-8df7-83b9c6971db8",
+    "outcome": "settled",
+    "host": {
+      "pid": 78972,
+      "processInstanceID": "win32:639274260683571728",
+      "occurrenceID": "b50cc7f9-f0d6-4d10-998f-05b7562444eb"
+    },
+    "target": {
+      "pid": 72760,
+      "processInstanceID": "win32:639274260692269616",
+      "occurrenceID": "29cff0fd-c97a-4346-9a70-5db64fe84e34"
+    },
+    "observedAtUtc": "2026-10-12T18:26:23.393Z",
+    "deadlineAt": 1791829868302,
+    "terminal": {
+      "occurrenceID": "source-density-358-final-main-7ffbaaa9-02da-4121-8df7-83b9c6971db8",
+      "pid": 72760,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "exitCode": 0,
+  "target": {
+    "pid": 72760,
+    "processInstanceID": "win32:639274260692269616",
+    "occurrenceID": "29cff0fd-c97a-4346-9a70-5db64fe84e34"
+  }
+}

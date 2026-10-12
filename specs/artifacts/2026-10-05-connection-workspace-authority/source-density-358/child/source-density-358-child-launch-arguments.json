@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-child\\evidence",
+    "source-density-358-child-155e9676-6a99-4f2c-a5a1-4dafaf09b844",
+    "1791828234166",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18347",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-child\\startup.json",
+    "--startup-occurrence",
+    "source-density-358-child-155e9676-6a99-4f2c-a5a1-4dafaf09b844",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18347,
+  "occurrence": "source-density-358-child-155e9676-6a99-4f2c-a5a1-4dafaf09b844"
+}

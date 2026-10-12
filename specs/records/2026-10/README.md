@@ -690,3 +690,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [主聊天与Side chat多来源356](2026-10-13-source-surfaces-356.md)：实际多来源入口与文件定位。
 
 - [来源窄侧栏阅读357](2026-10-13-side-width-357.md)：Side来源宽度、阅读位置与显示密度。
+
+- [文件来源视觉层级358](2026-10-13-source-density-358.md)：长文件名与行号的显示层级。

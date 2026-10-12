@@ -1,0 +1,68 @@
+{
+  "occurrence": "source-density-358-child-final2-745e55ad-3875-428d-9c01-83a191b6eb5c",
+  "pairedCleanupComplete": true,
+  "listeners": null,
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 73108,
+        "processInstanceID": "win32:639274252063656291",
+        "occurrenceID": "96847231-1cb7-4cd8-872d-e26d1f171fb7"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 6684,
+        "processInstanceID": "win32:639274252055152089",
+        "occurrenceID": "5738bdd2-90dd-4971-8679-06f319f59ba9"
+      }
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "source-density-358-child-final2-745e55ad-3875-428d-9c01-83a191b6eb5c",
+    "outcome": "settled",
+    "host": {
+      "pid": 6684,
+      "processInstanceID": "win32:639274252055152089",
+      "occurrenceID": "5738bdd2-90dd-4971-8679-06f319f59ba9"
+    },
+    "target": {
+      "pid": 73108,
+      "processInstanceID": "win32:639274252063656291",
+      "occurrenceID": "96847231-1cb7-4cd8-872d-e26d1f171fb7"
+    },
+    "observedAtUtc": "2026-10-12T18:09:21.819Z",
+    "deadlineAt": 1791829005419,
+    "terminal": {
+      "occurrenceID": "source-density-358-child-final2-745e55ad-3875-428d-9c01-83a191b6eb5c",
+      "pid": 73108,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-12T18:09:26.0734925Z",
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-child-final2\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-child-final2\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "presentAfter": false
+    }
+  ]
+}

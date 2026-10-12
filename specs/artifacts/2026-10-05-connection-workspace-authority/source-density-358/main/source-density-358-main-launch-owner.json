@@ -1,0 +1,35 @@
+{
+  "nativeDeadlineAt": 1791827929918,
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-main\\runtime",
+  "occurrence": "source-density-358-main-d1ed5e8d-0f6d-4a03-bae3-7a6ba76d7dbf",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-density-358\\main",
+  "host": {
+    "pid": 78232,
+    "processInstanceID": "win32:639274241300057247",
+    "occurrenceID": "b1037a28-4932-4e3a-b169-a358c06e419c"
+  },
+  "evidencePrefix": "source-density-358-main",
+  "port": 18346,
+  "observedProcessChain": [
+    {
+      "pid": 40508,
+      "processInstanceID": "win32:639274241308697872",
+      "occurrenceID": "2d18e4ac-9e3e-4117-bdbf-d2438197d420"
+    }
+  ],
+  "owner": {
+    "processInstanceID": "win32:639274241308697872",
+    "ProcessId": 40508
+  },
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-surfaces-356-live-02\\project",
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "targetBirthAtMs": 1791827330869,
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-main\\evidence",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-density-358-main",
+  "authorityStaging": "None; no model Task requested",
+  "nativeTarget": {
+    "pid": 40508,
+    "processInstanceID": "win32:639274241308697872",
+    "occurrenceID": "2d18e4ac-9e3e-4117-bdbf-d2438197d420"
+  }
+}

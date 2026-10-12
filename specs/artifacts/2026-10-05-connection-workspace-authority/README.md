@@ -787,3 +787,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [主聊天与Side chat多来源356](source-surfaces-356/README.md) / [Recall](source-surfaces-plan-356.md)。
 
 - [来源窄侧栏阅读357](side-width-357/README.md) / [Recall](side-width-plan-357.md)。
+
+- [文件来源视觉层级358](source-density-358/README.md) / [Recall](source-density-plan-358.md)。
