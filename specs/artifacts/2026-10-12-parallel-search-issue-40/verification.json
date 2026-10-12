@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-10-12T09:50:23.551Z",
+  "runtimeRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-issue40-w4Kul5",
+  "projectID": "prj_hfneK2MQkccXIl7GtOty",
+  "sessionID": "ses_-zUSAfQiczzpKNHMpSvz",
+  "searchResults": 10,
+  "selectedURL": "https://developer.mozilla.org/en-US/docs/Web/API/URL_API/Resolving_relative_references",
+  "title": "Resolving relative references to a URL - Web APIs | MDN",
+  "fetchExcerptChars": 3738,
+  "permissions": [
+    {
+      "requestID": "per_h0JzZ1ivOJGBNdHYaWsf",
+      "toolName": "parallel_web_fetch",
+      "event": "execution_succeeded"
+    },
+    {
+      "requestID": "per_hhnM35SfKAGtFQ1rQAfs",
+      "toolName": "parallel_web_search",
+      "event": "execution_succeeded"
+    }
+  ],
+  "credentialInventory": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    },
+    {
+      "name": "mcp-auth.json",
+      "present": false
+    }
+  ],
+  "ownerClosed": {
+    "closedAt": "2026-10-12T09:43:07.399Z"
+  },
+  "processExitCode": 0,
+  "limits": [
+    "Real production config, discovery, exact MCP materialization and permission authority; no model call",
+    "Anonymous provider quotas may change",
+    "Documentation preview is local, not a website deployment"
+  ]
+}

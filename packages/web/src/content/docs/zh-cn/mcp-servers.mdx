@@ -147,6 +147,37 @@ opencorvus mcp logout <server-name>
 { "mcp": { "github": { "type": "remote", "transport": "streamable-http", "url": "...", "enabled": false } } }
 ```
 
+### Parallel Search（可选，无需 API 密钥）
+
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp) 提供
+用于网页搜索的 `web_search` 和提取网页内容的 `web_fetch`。需要时，将下面的条目
+合并到项目 `.opencorvus/opencorvus.jsonc` 的 `mcp` 对象中，保留其他已有条目：
+
+```jsonc
+{
+  "mcp": {
+    "parallel": {
+      "type": "remote",
+      "transport": "streamable-http",
+      "url": "https://search.parallel.ai/mcp",
+      "oauth": false,
+      "enabled": true,
+    },
+  },
+}
+```
+
+该端点支持匿名访问，无需 Parallel 账户或 API（Application Programming Interface，应用程序接口）密钥。
+`oauth: false` 关闭此连接的 OAuth 探测。匿名搜索使用 Fast 模式，限流比认证访问更严格；
+具体限制和认证方式以[服务商当前说明](https://docs.parallel.ai/integrations/mcp/search-mcp)为准。
+若服务提示免费档限流，请等待后再试，避免反复重连；更高额度需要向 Parallel 认证。
+添加此服务不会替换内置搜索工具或其他已配置的服务器。
+
+在该项目目录运行 `opencorvus mcp list`，确认 `parallel` 已连接。然后在新会话中，
+要求 agent 使用 Parallel 的 `web_search` 搜索一个公开主题，再用 `web_fetch` 读取
+搜索结果中的一个 URL。检查两个工具是否都返回有用内容；仅显示已连接不能证明搜索与
+网页抓取均可用。不需要此服务时不添加该配置，或将其 `enabled` 设为 `false`。
+
 ## 6. 连接状态
 
 | 状态                        | 含义                                    |

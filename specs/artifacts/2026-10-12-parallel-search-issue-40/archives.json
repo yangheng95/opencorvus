@@ -1,0 +1,152 @@
+[
+  {
+    "source": "check.ts",
+    "archive": "raw/check.ts.gz",
+    "bytes": 6276,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "check-attempt-1.ts",
+    "archive": "raw/check-attempt-1.ts.gz",
+    "bytes": 4646,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "check-attempt-2.ts",
+    "archive": "raw/check-attempt-2.ts.gz",
+    "bytes": 4871,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "check-before-owner.ts",
+    "archive": "raw/check-before-owner.ts.gz",
+    "bytes": 5629,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "verify-and-archive.ts",
+    "archive": "raw/verify-and-archive.ts.gz",
+    "bytes": 3143,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2.log",
+    "archive": "raw/all2.log.gz",
+    "bytes": 11500,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "search3.log",
+    "archive": "raw/search3.log.gz",
+    "bytes": 16838,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "fetch.log",
+    "archive": "raw/fetch.log.gz",
+    "bytes": 7164,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all.log",
+    "archive": "raw/all.log.gz",
+    "bytes": 7006,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "docs-check.log",
+    "archive": "raw/docs-check.log.gz",
+    "bytes": 106,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "astro-node-owner.json",
+    "archive": "raw/astro-node-owner.json.gz",
+    "bytes": 331,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/admission.json",
+    "archive": "raw/all2-run--admission.json.gz",
+    "bytes": 596,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/discovered-tools.json",
+    "archive": "raw/all2-run--discovered-tools.json.gz",
+    "bytes": 21433,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/fetch-input.json",
+    "archive": "raw/all2-run--fetch-input.json.gz",
+    "bytes": 398,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/fetch-result.json",
+    "archive": "raw/all2-run--fetch-result.json.gz",
+    "bytes": 9156,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/loaded-config.json",
+    "archive": "raw/all2-run--loaded-config.json.gz",
+    "bytes": 167,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/owner-closed.json",
+    "archive": "raw/all2-run--owner-closed.json.gz",
+    "bytes": 45,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/permission-history.json",
+    "archive": "raw/all2-run--permission-history.json.gz",
+    "bytes": 10342,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/result.json",
+    "archive": "raw/all2-run--result.json.gz",
+    "bytes": 4952,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/search-input.json",
+    "archive": "raw/all2-run--search-input.json.gz",
+    "bytes": 239,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all2-run/search-result.json",
+    "archive": "raw/all2-run--search-result.json.gz",
+    "bytes": 18495,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "search-run/failure.json",
+    "archive": "raw/search-run--failure.json.gz",
+    "bytes": 97,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "search2-run/failure.json",
+    "archive": "raw/search2-run--failure.json.gz",
+    "bytes": 103,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "fetch-run/failure.json",
+    "archive": "raw/fetch-run--failure.json.gz",
+    "bytes": 331,
+    "integrity": "Full decompressed bytes equal actual input"
+  },
+  {
+    "source": "all-run/failure.json",
+    "archive": "raw/all-run--failure.json.gz",
+    "bytes": 106,
+    "integrity": "Full decompressed bytes equal actual input"
+  }
+]

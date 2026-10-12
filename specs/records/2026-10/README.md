@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Issue 40：Parallel Search MCP 示例](2026-10-12-parallel-search-issue-40.md)：中英文可选配置与真实匿名搜索/抓取验收。
+
 - [345 活动执行批次](2026-10-12-activity-occurrence-345.md)：按真实接收批次修复多余Pending活动。
 
 - [344 子侧栏来源复制](2026-10-12-source-copy-344.md)：完整位置复制与真实子会话阅读复核。

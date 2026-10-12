@@ -110,6 +110,42 @@ Status: `opencorvus mcp list`. Remove credentials: `opencorvus mcp logout <serve
 { "mcp": { "github": { "type": "remote", "transport": "streamable-http", "url": "...", "enabled": false } } }
 ```
 
+### Parallel Search (optional, no API key)
+
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp) provides
+`web_search` for web search and `web_fetch` for extracting page content. To opt in,
+merge this entry into the `mcp` object in your project's
+`.opencorvus/opencorvus.jsonc`, keeping your other entries:
+
+```jsonc
+{
+  "mcp": {
+    "parallel": {
+      "type": "remote",
+      "transport": "streamable-http",
+      "url": "https://search.parallel.ai/mcp",
+      "oauth": false,
+      "enabled": true,
+    },
+  },
+}
+```
+
+This endpoint supports anonymous access without a Parallel account or API key.
+`oauth: false` disables OAuth discovery for this connection. Anonymous searches
+use Fast mode and have lower rate limits than authenticated access; see the
+[provider's current limits and authentication options](https://docs.parallel.ai/integrations/mcp/search-mcp).
+If the service reports a free-tier rate limit, wait before retrying rather than
+repeatedly reconnecting. Higher limits require authentication with Parallel.
+Adding this server does not replace the built-in search tools or other configured servers.
+
+From that project, run `opencorvus mcp list` and check that `parallel` is connected.
+In a new conversation, ask the agent to search for a public topic with the
+Parallel `web_search` tool, then use `web_fetch` to read a URL returned by that
+search. Check both tool results for useful content; a connected status alone
+does not verify search and page fetching. Keep this server unconfigured when
+you do not want to use it, or set its `enabled` field to `false`.
+
 ## Connection status
 
 | Status                      | Meaning                                     |
