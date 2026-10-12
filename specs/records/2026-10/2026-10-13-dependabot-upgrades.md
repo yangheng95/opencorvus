@@ -69,3 +69,32 @@ critical-build.log结束码0：Windows x64原生后端包构建并执行真正�
 runtime-leaf-verified.log最后6测试/30断言通过，含GitLab本地direct-access与proxy实际HTTP流、Gateway的Fireworks helper与ACP typed invalidParams。最终frozen-leaf-final.log安装成功、audit-leaf-final.log检查1732包无漏洞。删除最后三项触及的负向空数组断言后，原LLM activity/Project Memory两文件38测试通过，当前typed credential终态、受保护Memory错误等正向合同保留。人工/后端范围与原始runner逐文件结果已保存到artifacts，后续不会依赖未跟踪scratch日志才能复核。
 
 typecheck-leaf-final.log：当前最终依赖图与schema参数修正后8/8任务成功；API生成器固定点和根docs/architecture checker已通过。下一步提交、fresh merge origin/main及正式pre-push hooks；远端结果仍待核实。
+
+## 交付与远端验证
+
+实现提交`1fbad2847`，fresh fetch后普通merge最新main为`2ccf6a76d`；没有冲突，没有rebase或force。全部待推送提交只有本任务实现与该merge，其他4项交付已在upstream。正式pre-push的8任务类型检查、路由、文档、18控制owner/22获取点、18架构文档、10package拓扑、发布变更拓扑、1140模块/5813边/4真实导入、凭据扫描0命中全部通过。`git push origin HEAD:main`成功，远端CI（Continuous Integration，持续集成）[38298767867](https://github.com/yangheng95/opencorvus/actions/runs/38298767867)开始运行，尚未声明成功。最后公共合同检索补齐中英文models页的旧ACP setter引用。
+
+push提示的4条GitHub Dependabot漏洞已读取真实alert metadata：rand/glib的两条位于`packages/overlay/src-tauri/Cargo.lock`，另两条属于历史before/Cargo.lock证据副本，全部Rust生态；不是本轮10个Bun/Actions升级，也不由bun audit覆盖。没有修改这些既有Rust公共图或历史证据，不能把Bun审计0漏洞表述为全部GitHub告警清零。
+
+### 同一PR目标刷新 Recall
+
+主交付后Dependabot在2026-10-12 19:39 UTC刷新同一PR37/34为CodeMirror6.43.14和TogetherAI3.0.68，base=2ccf6a76d。实际PR差异仅各自manifest/lock版本；npm元数据确认CodeMirror仍依赖state^6.7.0，TogetherAI依赖Provider4.0.26/utils5.0.58/openai-compatible3.0.67，当前统一override已满足。同批其他PR原目标不变，38/36/35已由Dependabot自动关闭。用户范围是全部十个PR，故在同一工作树处理这两项刷新，不增加新PR或另建事实源。修改前已读取两份真实PR diff与正式npm依赖：更新精确版本与锁图，frozen安装/audit；原六项传输检查、Overlay构建及新版CodeMirror真实编辑保存截图；提交、fresh merge、正式hooks后推送并以新code CI为准，原CI结果不冒充最终版本结果。
+
+最终升级目标（以manifest和冻结锁图为准）：
+
+| PR | 依赖 | 最终版本 |
+| --- | --- | --- |
+| 38 | actions/setup-python | 7 |
+| 37 | @codemirror/view | 6.43.14 |
+| 36 | @ai-sdk/provider-utils | 5.0.59 |
+| 35 | gitlab-ai-provider | 6.20.1 |
+| 34 | @ai-sdk/togetherai | 3.0.68 |
+| 32 | @tauri-apps/plugin-notification | 2.5.1 |
+| 28 | @astrojs/check | 0.9.10 |
+| 25 | @agentclientprotocol/sdk | 1.4.0 |
+| 24 | @fontsource-variable/geist | 5.3.0 |
+| 20 | vis-timeline | 8.5.4 |
+
+runtime-refreshed.log六项/30断言通过；frozen-refreshed.log与audit-refreshed.log结束码0、1732包无漏洞。首轮远端38298767867的verify及audit成功，包含真实Linux原生首次启动；三系统完整unit及service尚未完成，最终刷新版本必须单独跟踪。
+
+overlay-refreshed.log实际构建1m22s、renderer surface checker通过；重新启动本任务独有19633开发服务后，真实CodeMirror6.43.14键盘编辑并点击Save，unsaved标记消失且保存截图人工确认，截图已收入同一artifact目录和索引。仅关闭自己的临时页面及服务。最终三系统完整unit尚未确认完成。

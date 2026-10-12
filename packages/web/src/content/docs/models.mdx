@@ -56,7 +56,7 @@ This lists models from configured providers. Passing a provider ID restricts out
 
 ## Model variants
 
-Some providers expose model variants (e.g. with/without extended context). ACP's `unstable_setSessionModel` supports variants directly.
+Some providers expose model variants (e.g. with/without extended context). ACP exposes the available model and variant values in the session's `configOptions`; select an advertised value through `setSessionConfigOption` with `configId: "model"`.
 
 ## Choosing a model
 

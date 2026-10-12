@@ -1,12 +1,12 @@
 [1/1] START test/dependabot-runtime-contract.test.ts
-(pass) @ai-sdk/togetherai streams the configured model and its declared input contract [2194.92ms]
-(pass) @ai-sdk/github-copilot streams the configured model and its declared input contract [1648.09ms]
-(pass) venice-ai-sdk-provider streams the configured model and its declared input contract [1692.92ms]
-(pass) gitlab-ai-provider streams the configured model and its declared input contract [1709.30ms]
-(pass) ai-gateway-provider/providers/fireworks streams the configured model and its declared input contract [1696.13ms]
-(pass) ACP 1.4 routes session configuration, listing, fork and resume in a declared MCP-free project [3216.54ms]
+(pass) @ai-sdk/togetherai streams the configured model and its declared input contract [2895.34ms]
+(pass) @ai-sdk/github-copilot streams the configured model and its declared input contract [2427.16ms]
+(pass) venice-ai-sdk-provider streams the configured model and its declared input contract [3820.00ms]
+(pass) gitlab-ai-provider streams the configured model and its declared input contract [2499.05ms]
+(pass) ai-gateway-provider/providers/fireworks streams the configured model and its declared input contract [2141.56ms]
+(pass) ACP 1.4 routes session configuration, listing, fork and resume in a declared MCP-free project [3844.91ms]
  6 pass
  0 fail
  30 expect() calls
-Ran 6 tests across 1 file. [17.61s]
-[1/1] DONE test/dependabot-runtime-contract.test.ts exit=0 duration=18.46s
+Ran 6 tests across 1 file. [25.16s]
+[1/1] DONE test/dependabot-runtime-contract.test.ts exit=0 duration=26.09s
