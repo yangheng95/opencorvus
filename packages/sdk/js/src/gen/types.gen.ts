@@ -5060,6 +5060,7 @@ export type SourceFilePart = {
   }
   range?: SourceFileRange
   sessionID: string
+  snippet?: string
   sourceId: string
   symbol?: string
   title: string
@@ -5786,6 +5787,7 @@ export type VisibleMessagePart =
       }
       range?: SourceFileRange
       sessionID: string
+      snippet?: string
       sourceId: string
       symbol?: string
       title: string

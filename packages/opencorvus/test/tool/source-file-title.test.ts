@@ -21,3 +21,10 @@ test("source validation retains exact path and title characters", () => {
   const source = { type: "source-file", sourceId: "actual-file-source", path: "/repo/file\\name.md ", title: " file\\name.md " }
   expect(Message.SourcePayload.parse(source)).toEqual(source)
 })
+
+test.each(["  const value = '中文😀'\t  ", "", " \t "])(
+  "file source validation retains the supplied preview %j", (snippet) => {
+    const source = fileSource({ path: path.resolve("preview.md"), snippet })
+    expect(Message.SourcePayload.parse(source)).toEqual({ ...source, snippet })
+  },
+)

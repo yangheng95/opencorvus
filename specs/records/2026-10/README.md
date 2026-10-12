@@ -707,3 +707,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Sources与持续输出362](2026-10-13-source-stream-362.md)：流式更新中来源展开与文件返回。
 
 - [折叠历史与来源读点363](2026-10-13-closed-history-363.md)：共享阅读锚点的可见性调查。
+
+- [文件来源匹配行预览364](2026-10-13-source-preview-364.md)：真实搜索来源内容辨认。

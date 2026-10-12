@@ -835,7 +835,18 @@ retain their original recorded values.
 The shared Message source schema validates HTTP and HTTPS URLs with the native
 URL validator. Malformed and other-protocol inputs produce a URL-format schema
 error; accepted URL strings and source metadata retain their recorded values.
-Source snippets belong to a separate native disclosure within each source
+Local search file sources retain the same bounded, inline-payload-redacted
+matching-line preview that appears in the Tool output. The existing 2000 UTF-16
+code-unit limit ends at a complete character, with the ordinary omission marker.
+The optional file snippet preserves its indentation and trailing whitespace
+through the canonical Source schema and persistence; source identity remains
+path/range/symbol based. Other file producers and historical Parts only carry
+the facts they actually supplied, without a presentation-time file read.
+File tooltips expose this preview on pointer hover or keyboard focus, with a
+localized excerpt label and four-line visual limit. Exact file/range activation
+provides the full original content. This preview keeps the compact citation row;
+it does not add a separate excerpt action to every file match.
+Web source snippets belong to a separate native disclosure within each source
 entry. Its normal page reading region retains the complete text and
 supports native keyboard and pointer scrolling.
 Its text uses the body typography role, while the excerpt action and source

@@ -309,6 +309,7 @@ export namespace Message {
       sourceId: z.string().trim().min(1),
       path: z.string().min(1),
       title: z.string().min(1),
+      snippet: z.string().optional(),
       origin: z.literal("attachment").optional(),
       range: SourceFileRange.optional(),
       symbol: z.string().trim().min(1).optional(),

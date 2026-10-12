@@ -17393,6 +17393,9 @@
           "sessionID": {
             "type": "string"
           },
+          "snippet": {
+            "type": "string"
+          },
           "sourceId": {
             "minLength": 1,
             "type": "string"
@@ -19805,6 +19808,9 @@
                 "$ref": "#/components/schemas/SourceFileRange"
               },
               "sessionID": {
+                "type": "string"
+              },
+              "snippet": {
                 "type": "string"
               },
               "sourceId": {

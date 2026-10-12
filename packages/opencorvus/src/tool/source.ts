@@ -36,6 +36,7 @@ export function urlSource(input: {
 export function fileSource(input: {
   path: string
   title?: string
+  snippet?: string
   origin?: Message.SourceFilePayload["origin"]
   range?: { startLine: number; endLine: number }
   symbol?: string
@@ -48,6 +49,7 @@ export function fileSource(input: {
     sourceId: semanticSourceId("source-file", `${absolutePath}\0${rangeIdentity}\0${input.symbol ?? ""}`),
     path: absolutePath,
     title: input.title?.trim() ? input.title : path.basename(absolutePath),
+    ...(input.snippet !== undefined ? { snippet: input.snippet } : {}),
     ...(input.origin ? { origin: input.origin } : {}),
     ...(input.range ? { range: input.range } : {}),
     ...(input.symbol?.trim() ? { symbol: input.symbol.trim() } : {}),

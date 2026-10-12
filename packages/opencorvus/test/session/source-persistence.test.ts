@@ -36,11 +36,13 @@ describe("message source persistence", () => {
         if (message.role !== "assistant")
           throw new Error("Source persistence fixture requires its actual assistant message")
         const citedPath = path.join(project.path, "src", " example.ts ")
+        const snippet = "  original matching line 中文😀\t  "
         const sources = [
           urlSource({ url: "https://example.com/source#fragment", title: "Web source", provider: "exa" }),
           fileSource({
             path: citedPath,
             title: "src/ example.ts ",
+            snippet,
             origin: "attachment",
             range: { startLine: 4, endLine: 12 },
             provider: "opencorvus-read",
@@ -67,6 +69,7 @@ describe("message source persistence", () => {
         expect(persisted.find((part) => part.type === "source-file")).toMatchObject({
           path: citedPath,
           title: "src/ example.ts ",
+          snippet,
           origin: "attachment",
           range: { startLine: 4, endLine: 12 },
         })

@@ -291,9 +291,17 @@ export const SearchCodeTool = Tool.define("search_code", {
 
     const totalMatches = matches.length
     const outputLines: string[] = [`Found ${totalMatches} matches${truncated ? ` (showing first ${limit})` : ""}`]
+    const presentedMatches = finalMatches.map((match) => {
+      let end = Math.min(match.lineText.length, MAX_LINE_LENGTH)
+      const last = match.lineText.charCodeAt(end - 1)
+      const next = match.lineText.charCodeAt(end)
+      if (last >= 0xd800 && last <= 0xdbff && next >= 0xdc00 && next <= 0xdfff) end--
+      const text = match.lineText.slice(0, end) + (end < match.lineText.length ? "..." : "")
+      return { ...match, snippet: redactInlinePayloads(text) }
+    })
 
     let currentFile = ""
-    for (const match of finalMatches) {
+    for (const match of presentedMatches) {
       if (currentFile !== match.path) {
         if (currentFile !== "") {
           outputLines.push("")
@@ -301,9 +309,7 @@ export const SearchCodeTool = Tool.define("search_code", {
         currentFile = match.path
         outputLines.push(`${match.path}:`)
       }
-      const truncatedLineText =
-        match.lineText.length > MAX_LINE_LENGTH ? match.lineText.substring(0, MAX_LINE_LENGTH) + "..." : match.lineText
-      outputLines.push(`  Line ${match.lineNum}: ${truncatedLineText}`)
+      outputLines.push(`  Line ${match.lineNum}: ${match.snippet}`)
     }
 
     if (truncated) {
@@ -325,9 +331,10 @@ export const SearchCodeTool = Tool.define("search_code", {
         truncated,
       },
       output: redactInlinePayloads(outputLines.join("\n")),
-      sources: finalMatches.map((match) => fileSource({
+      sources: presentedMatches.map((match) => fileSource({
         path: match.path,
         range: { startLine: match.lineNum, endLine: match.lineNum },
+        snippet: match.snippet,
         provider: "opencorvus-search-code",
       })),
     }

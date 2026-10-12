@@ -196,6 +196,14 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
       <Show when={sourceDetail(props.source) !== sourceLabel(props.source)}>
         <span>{sourceDetail(props.source)}</span>
       </Show>
+      <Show when={props.source.type === "source-file" && props.source.snippet}>
+        {(snippet) => (
+          <div class="msg-source-tooltip__preview">
+            <span>{t("chat.source_excerpt")}</span>
+            <pre>{snippet()}</pre>
+          </div>
+        )}
+      </Show>
       <span title={[props.source.publishedAt, props.source.provider].filter(Boolean).join(" · ") || undefined}>
         {[props.source.author, sourcePublishedDate(props.source.publishedAt), sourceProviderLabel(props.source.provider)].filter(Boolean).join(" · ")}
       </span>
@@ -363,6 +371,7 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
 }
 
 function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
+  const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)
   const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
   const expanded = () => cardExpanded(excerptKey(), false)
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
@@ -382,7 +391,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   })
 
   return (
-    <div class="msg-source-entry" data-has-excerpt={props.source.snippet ? "true" : undefined}>
+    <div class="msg-source-entry" data-has-excerpt={expandableExcerpt() ? "true" : undefined}>
       <div
         class="msg-source-entry__row"
         data-source-identity={sourceIdentity(props.source)}
@@ -414,7 +423,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
       <Show when={clipboard.failure()}>
         {(failure) => <Feedback tone="error" title={t("clipboard.copy_failed")} details={failure().details}>{failure().message}</Feedback>}
       </Show>
-      <Show when={Boolean(props.source.snippet)}>
+      <Show when={expandableExcerpt()}>
         <Disclosure.Root
           class="msg-source-excerpt"
           open={expanded()}
