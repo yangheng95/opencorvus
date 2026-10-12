@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-12T15:57:39.395Z",
+  "projections": [
+    {
+      "id": "atm_hbI9UTh5Ha9IZ2lLoeBW",
+      "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+      "executionEpoch": 1,
+      "dueAt": 1791814016245,
+      "reason": "同一只读研究员连续三次在模型服务返回“Our servers are currently overloaded. Please try again later.”时中断，尚不能开始资料读取。外部阻塞是提供方服务容量恢复；给予一次60秒冷却后恢复最新已接纳研究员调用art_hXdTBf1SbWQcPNyz5I8Q，不轮询子任务、不另派成员。",
+      "status": "due_ingress_accepted",
+      "ingressID": "art_hDNgbmH9Gey3cq1u7oG1",
+      "timeCreated": 1791813956245
+    }
+  ],
+  "settlements": [
+    {
+      "wait_id": "atm_hbI9UTh5Ha9IZ2lLoeBW",
+      "ingress_id": "art_hDNgbmH9Gey3cq1u7oG1",
+      "disposition": "due_ingress_accepted",
+      "time_created": 1791814016250
+    }
+  ],
+  "due": [],
+  "access": "Original readonly BEGIN/ROLLBACK, canonical current wait projection and due reader"
+}

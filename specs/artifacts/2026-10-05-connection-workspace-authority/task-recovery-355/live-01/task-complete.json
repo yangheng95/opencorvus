@@ -1,0 +1,172 @@
+{
+  "pid": 63268,
+  "occurrence": "task-recovery-355-live-01-b1a60170-bfc6-4c5d-a305-ce428e298b2c",
+  "selected": {
+    "occurrence": "task-recovery-355-live-01-b1a60170-bfc6-4c5d-a305-ce428e298b2c",
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\project",
+    "productPillar": "work",
+    "requestID": "c0306f61-3dec-4c30-a6fa-3230a75b0bf4",
+    "requestSentAt": "2026-10-12T15:47:19.310Z",
+    "acceptedObservedAt": "2026-10-12T15:47:28.895Z",
+    "operatorMessageID": "msg_g0VXqoHPx00EXTBTU6md",
+    "operatorIngressID": "art_hQ9yMI5Z9R55Fszp2Xvq"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+    "rootSessionID": "ses_-zUS9brvvzz1xttAGr9D",
+    "epoch": 2,
+    "openedEventID": "pev_g0VXqoHQA00IcDkJcaLi",
+    "openedAt": 1791820039402
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "epoch": 2,
+    "openedEventID": "pev_g0VXqoHQA00IcDkJcaLi",
+    "openedAt": 1791820039402,
+    "previousTerminal": {
+      "epoch": 1,
+      "status": "failed",
+      "terminalEventID": "pev_g0VXqR1Hl00rlGobCLYi",
+      "terminalAt": 1791814495832,
+      "terminalError": "Orchestrator error: Our servers are currently overloaded. Please try again later.",
+      "terminalReason": "interrupted"
+    },
+    "status": "completed",
+    "terminalEventID": "pev_g0VXqotpq00fY1Lp8jUs",
+    "terminalAt": 1791820185355
+  },
+  "ownedPromptSessions": [],
+  "sessionIDs": [
+    "ses_-zUS9brvvzz1xttAGr9D",
+    "ses_-zUS9br8Fzz7F6QUJjdU",
+    "ses_h9aQ1aKN0qHWqIOhZfo7"
+  ],
+  "artifactIDs": [
+    {
+      "id": "art_g0VXqO84B00P0Ho6AeVo",
+      "kind": "task_package_revision_binding"
+    },
+    {
+      "id": "art_g0VXqO84R00fxOtHRJFb",
+      "kind": "task_execution_capsule_binding"
+    },
+    {
+      "id": "art_g0VXqOIZV00arR4AyLdj",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_hCkHcSzPxdR99hqAjikC",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqOJA200fE662XdJ6",
+      "kind": "task-infrastructure-error"
+    },
+    {
+      "id": "art_g0VXqOJAP00PAT8IvwmA",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_g0VXqOTwq00FFNPAztg2",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_hVPMAF88cY5ggvM5KBck",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqOUVh00KouKKYCuG",
+      "kind": "task-infrastructure-error"
+    },
+    {
+      "id": "art_g0VXqOUVz008H2cNz6Tm",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_g0VXqOcu200XQBRl6U0s",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_hcDToFcP5KbRTi25fu5T",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqOdi600xPB0M1O2I",
+      "kind": "task-infrastructure-error"
+    },
+    {
+      "id": "art_g0VXqOdiO00itRcQ8cio",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_htIHu4xrUKn2Gs7uyKvr",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqP3Mu00bZjtrIRt1",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_hQLqGguKtIjBv6xT7Pu0",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqQCcB00cHLqOhPlz",
+      "kind": "task-infrastructure-error"
+    },
+    {
+      "id": "art_g0VXqQCcV0054PugmyPJ",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_g0VXqQJ8n00vqr7kOb4p",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_htqeQ0TxHgE7Vh2nXMpg",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqQR7r00hvXvfShh3",
+      "kind": "task-infrastructure-error"
+    },
+    {
+      "id": "art_g0VXqQR8G00Nlqm8f9O4",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_g0VXqQWdT00FtpNXAOFC",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_hTROtJscw9OeEyJCu3b9",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqR01000SuWQWYLhm",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_g0VXqR0pN00X37i4rvf9",
+      "kind": "orchestrator-stream-error"
+    },
+    {
+      "id": "art_h6kt4ipLaSFYRPVeY496",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXqotOK001MbcfaKiC",
+      "kind": "task_completion_decision"
+    },
+    {
+      "id": "art_hFhz0oo6s1EuIRmLaujK",
+      "kind": "task_root_ingress_disposition"
+    }
+  ],
+  "observedAt": "2026-10-12T15:49:48.298Z",
+  "requests": 10,
+  "qualification": "Exact durable Task completed and its physical prompt owners unwound; Root separately qualifies declared resource, real UI/native download and whole service chain"
+}

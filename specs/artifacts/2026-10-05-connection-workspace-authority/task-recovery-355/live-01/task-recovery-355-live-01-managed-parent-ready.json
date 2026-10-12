@@ -1,0 +1,15 @@
+{
+  "pid": 63268,
+  "occurrence": "task-recovery-355-live-01-b1a60170-bfc6-4c5d-a305-ce428e298b2c",
+  "owner": {
+    "pid": 63268,
+    "processInstanceID": "win32:639274167302197848",
+    "occurrenceID": "6d232670-171b-45c0-8a7b-dc16c7c10263"
+  },
+  "parent": {
+    "pid": 74640,
+    "processInstanceID": "win32:639274167301821944",
+    "occurrenceID": "646facbb-e642-43d4-bde7-5008b01232c8"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

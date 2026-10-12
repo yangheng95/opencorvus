@@ -1,0 +1,150 @@
+{
+  "observedAtUtc": "2026-10-12T15:41:45.3229160Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-view-retention-353-live-01",
+  "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+  "readQualified": true,
+  "boundary": "Fresh exact original Native/Host, port, pair and actual physical/output/request settled receipt; original Task qualification retained. Original launcher67543 actual exit1 (Task failed), Native exit0 and closure were observed in batch353; failure is retained.",
+  "originalFailure": {
+    "pid": 44056,
+    "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+    "error": {
+      "name": "Error",
+      "message": "TASK_TERMINAL_FAILED: Orchestrator error: Our servers are currently overloaded. Please try again later."
+    },
+    "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+    "credentialCleanup": "unverified-parent-owned"
+  },
+  "listenerCount": 0,
+  "originalQualification": {
+    "nativeSettlement": {
+      "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+      "outcome": "settled",
+      "host": {
+        "pid": 68428,
+        "processInstanceID": "win32:639274105647665526",
+        "occurrenceID": "e68c6760-3576-4be1-b084-43aaa3082a22"
+      },
+      "target": {
+        "pid": 44056,
+        "processInstanceID": "win32:639274105657608545",
+        "occurrenceID": "2b273017-39b7-4393-ae53-3f0e6f922d38"
+      },
+      "observedAtUtc": "2026-10-12T14:15:01.447Z",
+      "deadlineAt": 1791815264750,
+      "terminal": {
+        "occurrenceID": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+        "pid": 44056,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "physicalCompletion": true,
+    "copiedPair": [
+      {
+        "presentAfter": false,
+        "copiedLength": 2194,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\runtime\\data\\auth.json"
+      },
+      {
+        "presentAfter": false,
+        "copiedLength": 9155406,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\runtime\\data\\models.json"
+      }
+    ],
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 44056,
+          "processInstanceID": "win32:639274105657608545",
+          "occurrenceID": "2b273017-39b7-4393-ae53-3f0e6f922d38"
+        }
+      },
+      {
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 68428,
+          "processInstanceID": "win32:639274105647665526",
+          "occurrenceID": "e68c6760-3576-4be1-b084-43aaa3082a22"
+        }
+      }
+    ],
+    "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "observedAtUtc": "2026-10-12T14:15:03.8761922Z",
+    "pairedCleanupComplete": true,
+    "listeners": null
+  },
+  "originalTask": {
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+    "rootSessionID": "ses_-zUS9brvvzz1xttAGr9D",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXqO84c00C729e0WYn",
+    "openedAt": 1791813806436
+  },
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "native": {
+    "occurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+    "outcome": "settled",
+    "host": {
+      "pid": 68428,
+      "processInstanceID": "win32:639274105647665526",
+      "occurrenceID": "e68c6760-3576-4be1-b084-43aaa3082a22"
+    },
+    "target": {
+      "pid": 44056,
+      "processInstanceID": "win32:639274105657608545",
+      "occurrenceID": "2b273017-39b7-4393-ae53-3f0e6f922d38"
+    },
+    "observedAtUtc": "2026-10-12T14:15:01.447Z",
+    "deadlineAt": 1791815264750,
+    "terminal": {
+      "occurrenceID": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+      "pid": 44056,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "states": [
+    {
+      "expected": {
+        "pid": 68428,
+        "processInstanceID": "win32:639274105647665526",
+        "occurrenceID": "e68c6760-3576-4be1-b084-43aaa3082a22"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 44056,
+        "processInstanceID": "win32:639274105657608545",
+        "occurrenceID": "2b273017-39b7-4393-ae53-3f0e6f922d38"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

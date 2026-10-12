@@ -3131,3 +3131,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [同目标子会话呈现保留353](artifacts/2026-10-05-connection-workspace-authority/child-view-retention-353/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/child-view-retention-plan-353.md) / [月记录](records/2026-10/2026-10-12-child-view-retention-353.md)。
 
 - [历史错误的消息归属354](artifacts/2026-10-05-connection-workspace-authority/message-failure-354/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/message-failure-plan-354.md) / [月记录](records/2026-10/2026-10-12-message-failure-354.md)。
+
+- [原失败任务恢复355](artifacts/2026-10-05-connection-workspace-authority/task-recovery-355/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/task-recovery-plan-355.md) / [月记录](records/2026-10/2026-10-12-task-recovery-355.md)。

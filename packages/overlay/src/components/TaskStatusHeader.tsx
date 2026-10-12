@@ -125,6 +125,7 @@ export function TaskStatusHeader() {
   })
 
   const labelText = createMemo(() => {
+    if (TERMINAL_STATUSES.has(lifecycleStatus()) && !isActive()) return ""
     const current = execution()
     return current ? workLedgerPresentationLabel(current) : ""
   })
@@ -137,12 +138,13 @@ export function TaskStatusHeader() {
         id="taskStatus"
         title={statusTitle()}
         aria-label={statusTitle()}
-        data-terminal-settled={TERMINAL_STATUSES.has(lifecycleStatus()) && !isActive()}
       >
         <span class="status-copy">
-          <span class="status-label" id="statusLabel">
-            {labelText()}
-          </span>
+          <Show when={labelText()}>
+            <span class="status-label" id="statusLabel">
+              {labelText()}
+            </span>
+          </Show>
           <span class="elapsed" id="taskElapsed">
             {elapsedText()}
           </span>

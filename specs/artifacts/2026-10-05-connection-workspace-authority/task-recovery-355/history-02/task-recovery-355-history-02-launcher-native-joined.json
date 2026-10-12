@@ -1,0 +1,42 @@
+{
+  "host": {
+    "pid": 78416,
+    "processInstanceID": "win32:639274175756118229",
+    "occurrenceID": "c042b8cb-3832-429e-ade8-05753c2720d0"
+  },
+  "exitCode": 0,
+  "settlement": {
+    "occurrence": "task-recovery-355-history-02-dc0e78ae-8263-4cb4-97a8-135da10b7ee7",
+    "outcome": "settled",
+    "host": {
+      "pid": 78416,
+      "processInstanceID": "win32:639274175756118229",
+      "occurrenceID": "c042b8cb-3832-429e-ade8-05753c2720d0"
+    },
+    "target": {
+      "pid": 78772,
+      "processInstanceID": "win32:639274175763651636",
+      "occurrenceID": "84160578-d310-47a8-9bb7-33580e426487"
+    },
+    "observedAtUtc": "2026-10-12T16:01:52.97Z",
+    "deadlineAt": 1791821375530,
+    "terminal": {
+      "occurrenceID": "task-recovery-355-history-02-dc0e78ae-8263-4cb4-97a8-135da10b7ee7",
+      "pid": 78772,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "task-recovery-355-history-02-dc0e78ae-8263-4cb4-97a8-135da10b7ee7",
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner",
+  "target": {
+    "pid": 78772,
+    "processInstanceID": "win32:639274175763651636",
+    "occurrenceID": "84160578-d310-47a8-9bb7-33580e426487"
+  }
+}

@@ -1430,10 +1430,6 @@
   gap: var(--ui-gap-sm);
 }
 
-.chat-task-status[data-terminal-settled="true"] .status-label {
-  display: none;
-}
-
 .chat-task-status .status-label {
   font-size: var(--ui-font-caption);
   text-transform: none;

@@ -1669,8 +1669,10 @@ Task lifecycle remains available for diagnostics, timestamp validation,
 recovery, explicit operator cancellation and the separate execution outcome.
 The Conversation header visibly presents the existing activity caption and
 elapsed time beside its title. A physically inactive terminal Task retains its
-elapsed time beside the separate outcome indicator; its full activity caption
-remains available through the same header's accessible label and tooltip.
+elapsed time beside the separate outcome indicator. The activity caption's
+visibility is derived once in TaskStatusHeader and shared by its rendered text,
+accessible label and tooltip. A settled terminal header exposes its elapsed time
+beside the outcome indicator without an additional hidden activity caption.
 That outcome does not establish business deliverable acceptance; Mission
 acceptance remains an evidence judgment outside the activity projection.
 The active Composer context identifies an actual selected Task as `Task`,

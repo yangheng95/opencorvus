@@ -1,0 +1,28 @@
+{
+  "pid": 63268,
+  "occurrence": "task-recovery-355-live-01-b1a60170-bfc6-4c5d-a305-ce428e298b2c",
+  "selected": {
+    "occurrence": "task-recovery-355-live-01-b1a60170-bfc6-4c5d-a305-ce428e298b2c",
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\project",
+    "productPillar": "work",
+    "requestID": "c0306f61-3dec-4c30-a6fa-3230a75b0bf4",
+    "requestSentAt": "2026-10-12T15:47:19.310Z",
+    "acceptedObservedAt": "2026-10-12T15:47:28.895Z",
+    "operatorMessageID": "msg_g0VXqoHPx00EXTBTU6md",
+    "operatorIngressID": "art_hQ9yMI5Z9R55Fszp2Xvq"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+    "rootSessionID": "ses_-zUS9brvvzz1xttAGr9D",
+    "epoch": 2,
+    "openedEventID": "pev_g0VXqoHQA00IcDkJcaLi",
+    "openedAt": 1791820039402
+  },
+  "totalDeadlineMs": 1791820939402,
+  "maximumMilliseconds": 900000,
+  "inactivityMilliseconds": 180000,
+  "boundary": "Fixed actual Task opening boundary survives monitor failure; parent supervision owns settlement"
+}

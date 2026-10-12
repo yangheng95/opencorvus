@@ -1,0 +1,23 @@
+{
+  "originalEvents": [
+    {
+      "id": "pev_g0VXqO84c00C729e0WYn",
+      "type": "task.execution.opened",
+      "payload": "{\"execution_epoch\":1}"
+    },
+    {
+      "id": "pev_g0VXqR1Hl00rlGobCLYi",
+      "type": "task.failed",
+      "payload": "{\"execution_epoch\":1,\"summary\":\"Orchestrator execution interrupted: Our servers are currently overloaded. Please try again later.\",\"error\":\"Orchestrator error: Our servers are currently overloaded. Please try again later.\",\"terminalReason\":\"interrupted\"}"
+    }
+  ],
+  "subject": {
+    "kind": "task",
+    "id": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+    "sessionID": "ses_-zUS9brvvzz1xttAGr9D",
+    "requestID": "c0306f61-3dec-4c30-a6fa-3230a75b0bf4"
+  },
+  "sourceOccurrence": "child-view-retention-353-live-01-2718db6e-c014-483b-a884-57af1f115fcf",
+  "qualification": "Full original history with failed epoch1; current user Message must independently open epoch2"
+}

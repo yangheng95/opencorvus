@@ -1,0 +1,41 @@
+# 355 原失败任务的用户消息恢复验收
+
+## Recall
+
+用户要求持续自主迭代体验、Sources与子Dock，最新明确只用单agent；旧goal里的Astra授权不再执行。用户已授权真实OpenAI凭据与gpt-6.1-sol测试。上一轮354是progress：ea2c297d3已推送，真实五条历史错误与最新Completed分离，37正文5499字符/36Source及原Task.failed保留。开始HEAD4f3f1947a，git status为空。继续验证功能完整度，不能用前端通过代替原353 Task收尾失败。
+
+已读354 Recall/证据、task-control-plane生命周期合同、07-panel、task-api.handleTaskMessage、task-root-ingress-delivery、task-intent-open、task-lifecycle、HTTP task.message路由与overlay chat派发。全仓搜索reopen定义与调用：operator Message和Mission acceptance resume是两个允许开启epoch+1的authority；Scheduler/恢复/迟到Tool不持有reopen权。新Message、配置overlay、附件、epoch与ingress在同一事务提交。前端所有Task状态都使用同一POST /task/:taskID/message。旧失败原因是原负责人流内结构化过载；354已核对共享Provider错误策略，本轮不增加自动重放。
+
+已复用并重新审阅benchmark-debug-template流程与现有真实Provider审计/物理监督器。当前两项reopen单元测试只提供局部合同，含直接test hook、夹具及旧负向描述，本轮不以其作为真实恢复验收，也不改动这些未进入实现范围的文件。EngineGit当前仅在第一次执行比较不可变creation capsule与执行工作区，新的epoch使用其自身checkpoint；本轮不把源码摘要或校验和当作验收标准。若真实恢复发现异常，立即横向审计Task/Mission/Session轮次、所有生产入口、正常/终态、重启重试、串并行、多项目后再修改。
+
+## 验收和隔离方案
+
+使用353原Task tsk_g00VXqO7wS00Jmf0HdZh、Project prj_hlWbZXzl9PZEG6Fs17DG、root ses_-zUS9brvvzz1xttAGr9D、worker ses_h9aQ1aKN0qHWqIOhZfo7。原failed epoch1终态pev_g0VXqR1Hl00rlGobCLYi与全部闭合事实保持原样。先重新执行原只读schema/config/lease/recovery/Task/Memory/Message检查，完整runtime复制并核对90表逐行内容，保留原路径/身份。新副本为task-recovery-355-live-01，端口18337/ui；原353服务和354两个副本均已物理关闭。仅操作这些本人创建的隔离资源。
+
+为既有真实Task恢复，私有mature launcher只调整初始化准入：接受当前完整历史manifest，复用原项目而非创建/伪造新Task，禁止重写原配置/DB/历史终态。其模型审计、请求限额、native foreground Host、原始句柄join、deadline、失败保留和paired cleanup继续使用同一实现。复制现有OpenAI entry与完整相邻models.json；分别验证凭据、catalog投影、真实流式preflight以及Task绑定请求模型gpt-6.1-sol。凭据不写日志/spec/提交。预算32次累计Provider请求（启动前按37条正文的分页读取预算确定）；固定Task最大900000ms从实际epoch2 openedAt开始，无活动180000ms；外层native1500000ms不延长Task/UI期限。
+
+通过实际Web UI发送明确operator续行消息：负责人使用原worker完整消息读取已有R01至R36正文，逐项简短核对并说明来源读取与产品实际交互证据的区别，然后按真实证据收尾。模型必须自己选择现有工具，不使用host关键词gate；请求不另派研究员、不重新抓取、不改项目文件。以实际响应/持久化Message和epoch2 reopened事实钉住本次输入；原Task creation requestID只用于原Task身份校验，不能伪称是本次operator消息ID。
+
+成功必须有：真实页面可见原失败与新输入；同一Task新epoch2完整终态及原epoch1失败保留；实际read_agent_message工具结果覆盖原37条assistant正文（逐Message ID与实际内容检查），负责人R01–R36报告可见；原36Source和worker正文保持可读，侧栏关闭/打开阅读状态正常；实际模型为gpt-6.1-sol且流式、全部相关Provider/Tool/owner结算；原launch/observer实际退出、页面/端口/Host/Native/output/request与auth/models配对收尾。若未达，保留精确原因和原失败资格，不延长同一scope或把Native exit0当Task通过。
+
+## 影响与交付
+
+目前没有生产修改结论；先完成真实验收。测试帮助器需要接受已终态历史与epoch2，而不是硬要求全新项目。可能风险：启动副本触发旧恢复、错误身份归属、历史工具结果被误当新结果、模型重复研究、原终态被覆盖、配置模型漂移、UI新旧状态混淆。每项以当前读取及实际运行证据核验，不靠标题或模型自述。采用真实截图人工复核，不创建或运行UI自动化测试；数据checker只证明真实协议/存储/工具输出。结束前更新根/月/目录索引、docs检查、范围提交、fresh fetch/merge和正常push，持续goal保持active。
+
+## 实测与修复补充
+
+真实UI用户消息msg_g0VXqoHPx00EXTBTU6md于15:47:19Z发送，同事务开启epoch2/pev_g0VXqoHQA00IcDkJcaLi，causation保持原epoch1失败。15:49:45Z追加task.completed/pev_g0VXqotpq00fY1Lp8jUs；负责人实际4次read_agent_message，逐题报告和manage_task结果已出现。不能仅凭模型声称完整阅读就验收，后续按原37正文的实际完整文本与工具返回逐条核对。真实页面显示Completed，原36Source及研究员R36可读，关闭重开Dock保持位置。页面150已关闭，原launch99677待实际join。
+
+在真实恢复页面发现隐藏活动文字仍进入可访问性名称：TaskOutcomeBadge可见Completed且具备相同aria-label；旁边TaskStatusHeader可见仅2m25s，其title/aria-label却是Not running · 2m25s。根因是旧CSS仅隐藏.status-label，statusTitle仍无条件加入物理活动label。物理activity与生命周期本来是两个不同合同，不能修改共享workLedgerPresentationLabel使inactive变成completed。已全仓检索data-terminal-settled、TaskStatusHeader、TaskOutcomeBadge与workLedgerPresentationLabel：属性仅该组件/隐藏CSS使用，App同时呈现独立结果徽标，WorkLedger仅在运行时用共享activity文字。相关路径没有UI自动化测试。
+
+修复限于当前TaskStatusHeader：对已经terminal且物理inactive的执行，其活动文字投影为空，DOM展示、title与aria-label均使用同一可见文字；结果仍由原TaskOutcomeBadge呈现，时长来源不变。移除只服务旧隐藏路径的data属性与CSS规则，避免两个可见性来源。正在运行/终态收尾中的Running、非Task Session活动、错误时间诊断保持原合同。风险是误隐运行标签或重复结果标签，需在正式构建的实际历史页人工核对完整header可见文字与AX（Accessibility，可访问性）描述。纯UI改动只做类型/构建/CSS与真实截图，不新增UI自动化测试。
+
+正式复核使用已物理闭合的355-live-01完整runtime的新凭据空副本task-recovery-355-history-02，端口18338/ui、固定600000ms。重新核对schema/config/恢复前沿和全部行，再启动；原epoch1失败和epoch2完成均保留。
+
+进一步核对07-panel原明文合同确认：旧设计刻意在tooltip/aria保留完整活动说明。本次是可访问性体验调整，不是生命周期或物理状态归约错误。保留独立TaskOutcomeBadge的终态信息、共享binary activity合同与运行时标签，仅让terminal且inactive时的邻接时长区域按可见信息命名，减少隐藏的重复状态说明；同步更新07-panel这项呈现合同。原数据源与调度语义完全不变。原launch99677现已实际exit0，现有监督器确认Task/epoch2、10条Provider EOF、Native物理与配对收尾。
+
+## 已完成与交付边界
+
+实际check-actual通过：四次真实read_agent_message返回覆盖原37正文5499字符。初版checker遗漏inventory中的完整文本字段；按实际read-agent-message合同增加精确ID/长度/全文相等的完整inventory证据，重跑通过。36Source保留、新工具序列六项全部完成、36条报告逐项存在。人工通读36项报告及限制说明。真实运行UI截图01–07与正式构建历史复核截图08–09均实际查看，后一轮完成标题AX为Completed+2m25s独立区域，普通Chat仍Not running。
+
+正式main-WAUr09QC.js；typecheck16644/build51402 exit0，CSS、docs通过。history-02原launch77370已实际exit0，Native/Host/端口/输出/request闭合、页面151先关闭；live页面150和launch99677亦闭合。没有UI自动化测试或生产恢复代码变更。交付跨2026-10-13，保留开始日期记录；goal active，后续继续真实产品迭代，不能以本轮36Source覆盖更大原工作区数据集。

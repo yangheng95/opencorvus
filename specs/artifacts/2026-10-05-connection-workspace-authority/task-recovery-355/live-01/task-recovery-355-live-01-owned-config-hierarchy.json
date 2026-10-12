@@ -1,0 +1,72 @@
+{
+  "global": {
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\task-recovery-355-live-01\\runtime\\config\\opencorvus.jsonc",
+    "config": {
+      "$schema": "https://opencorvus.ai/config.json",
+      "model": "openai/gpt-6.1-sol",
+      "small_model": "openai/gpt-6.1-sol",
+      "prompt_profile": {
+        "active": "base"
+      }
+    }
+  },
+  "project": {
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-view-retention-353-live-01\\project\\.opencorvus\\opencorvus.jsonc",
+    "config": {
+      "$schema": "https://opencorvus.ai/config.json",
+      "prompt_profile": {
+        "active": "base"
+      },
+      "terminal": {
+        "default_profile_id": "powershell",
+        "profiles": {
+          "powershell": {
+            "label": "Windows PowerShell",
+            "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "pwsh": {
+            "label": "PowerShell",
+            "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "cmd": {
+            "label": "Command Prompt",
+            "command": "C:\\WINDOWS\\system32\\cmd.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "command-prompt"
+          },
+          "git-bash": {
+            "label": "Git Bash",
+            "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "bash"
+          }
+        }
+      }
+    }
+  },
+  "boundary": "Existing complete original canonical configuration retained; recovery does not rewrite configuration"
+}

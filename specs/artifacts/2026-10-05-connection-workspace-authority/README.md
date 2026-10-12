@@ -781,3 +781,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [同目标子会话呈现保留353](child-view-retention-353/README.md) / [Recall](child-view-retention-plan-353.md)。
 
 - [历史错误的消息归属354](message-failure-354/README.md) / [Recall](message-failure-plan-354.md)。
+
+- [原失败任务恢复355](task-recovery-355/README.md) / [Recall](task-recovery-plan-355.md)。

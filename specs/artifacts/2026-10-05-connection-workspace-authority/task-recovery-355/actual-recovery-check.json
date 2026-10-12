@@ -1,0 +1,1202 @@
+{
+  "observedAtUtc": "2026-10-12T15:59:33.760Z",
+  "scope": "Actual completed epoch2, original worker Part full content compared with real read_agent_message tool returns; this data checker does not assert UI rendering",
+  "task": {
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "projectID": "prj_hlWbZXzl9PZEG6Fs17DG",
+    "rootSessionID": "ses_-zUS9brvvzz1xttAGr9D",
+    "epoch": 2,
+    "openedEventID": "pev_g0VXqoHQA00IcDkJcaLi",
+    "openedAt": 1791820039402
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXqO7wS00Jmf0HdZh",
+    "epoch": 2,
+    "openedEventID": "pev_g0VXqoHQA00IcDkJcaLi",
+    "openedAt": 1791820039402,
+    "previousTerminal": {
+      "epoch": 1,
+      "status": "failed",
+      "terminalEventID": "pev_g0VXqR1Hl00rlGobCLYi",
+      "terminalAt": 1791814495832,
+      "terminalError": "Orchestrator error: Our servers are currently overloaded. Please try again later.",
+      "terminalReason": "interrupted"
+    },
+    "status": "completed",
+    "terminalEventID": "pev_g0VXqotpq00fY1Lp8jUs",
+    "terminalAt": 1791820185355
+  },
+  "operatorMessageID": "msg_g0VXqoHPx00EXTBTU6md",
+  "coverage": [
+    {
+      "messageID": "msg_g0VXqP3PX008ac3hC77t",
+      "partID": "prt_g0VXqP51x001BE7hLk8E",
+      "chars": 50,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 50
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 50
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 50
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 50
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete inventory text",
+          "chars": 50
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqP5ie006lykDACDD",
+      "partID": "prt_g0VXqP6pU00TWFETu8FJ",
+      "chars": 129,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete inventory text",
+          "chars": 129
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqP7tb00BVa3Iptls",
+      "partID": "prt_g0VXqP9DA00gfqQQLhbg",
+      "chars": 129,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 129
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 129
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPAEq00oPQltLBJm",
+      "partID": "prt_g0VXqPChR00l0l9JtVf6",
+      "chars": 134,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 134
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 134
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 134
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 134
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 134
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPEiX00LsFJW2st5",
+      "partID": "prt_g0VXqPGf30042xKCoKWP",
+      "chars": 136,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 136
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPHYU00hgNFVIUdm",
+      "partID": "prt_g0VXqPIzG003OpHsRtML",
+      "chars": 142,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 142
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPKfG00Z0Mz5f37J",
+      "partID": "prt_g0VXqPMGr002Ylz4v7ts",
+      "chars": 201,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete evidence text",
+          "chars": 201
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 201
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPOFI000o1VmzB8V",
+      "partID": "prt_g0VXqPPR800z5Mbxzxy0",
+      "chars": 127,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 127
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 127
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 127
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 127
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 127
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPQUx001MQd8CxBa",
+      "partID": "prt_g0VXqPRww00NcGLv75iC",
+      "chars": 138,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 138
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPSvu00I3i1kvRm0",
+      "partID": "prt_g0VXqPU4k00cg2lQkIbd",
+      "chars": 142,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete inventory text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 142
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPV8100gBolg7vbY",
+      "partID": "prt_g0VXqPWk600NeIMzY7qf",
+      "chars": 139,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 139
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 139
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 139
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 139
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 139
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPYWW00m3fufsisZ",
+      "partID": "prt_g0VXqPZu100JUcvcz3yo",
+      "chars": 128,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 128
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 128
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 128
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 128
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 128
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPbZ600LMTJukEJ3",
+      "partID": "prt_g0VXqPcVk004t4OntX3O",
+      "chars": 190,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 190
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete evidence text",
+          "chars": 190
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPdoG00yiKwTbeQO",
+      "partID": "prt_g0VXqPeyT00sn1dOdkdh",
+      "chars": 154,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 154
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 154
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 154
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 154
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 154
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPg4F00zP40o2TxK",
+      "partID": "prt_g0VXqPhjZ00tdPECQZ4Q",
+      "chars": 138,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 138
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPjNF000Szror45D",
+      "partID": "prt_g0VXqPkZU00Fa6uuqB8Z",
+      "chars": 144,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 144
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 144
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 144
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 144
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 144
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPlaa00jZr9Hjv2J",
+      "partID": "prt_g0VXqPn4A00Ex2wxJ4B3",
+      "chars": 135,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 135
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 135
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 135
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 135
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 135
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPoEW0009swiphZT",
+      "partID": "prt_g0VXqPpKk00a2tRzBJiO",
+      "chars": 142,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 142
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPqQy00vd0riFYBz",
+      "partID": "prt_g0VXqPrg200leMIe7hhT",
+      "chars": 196,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 196
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPt5n00xgUb24sE0",
+      "partID": "prt_g0VXqPuSq00ymcjTRSDo",
+      "chars": 145,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 145
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 145
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 145
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 145
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 145
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPvbh00UHUQewuDC",
+      "partID": "prt_g0VXqPxUS00mPKLSvwS1",
+      "chars": 142,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 142
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqPyYY005vppmRHvZ",
+      "partID": "prt_g0VXqQ0Kz005kTHXHR1U",
+      "chars": 138,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 138
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 138
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQ1L000qAzkgeOpA",
+      "partID": "prt_g0VXqQ2lZ00kJj0SealN",
+      "chars": 136,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 136
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 136
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQ4HN00XwLTByO71",
+      "partID": "prt_g0VXqQ5ar00uPZuYVmPa",
+      "chars": 137,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 137
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQ6g600wP0R6b2tt",
+      "partID": "prt_g0VXqQ83T00dDefUTIjL",
+      "chars": 197,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 197
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQ9h300wQkFamqxO",
+      "partID": "prt_g0VXqQB7k00LT0jK2J55",
+      "chars": 137,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoUEE007zCsxRYbZ",
+          "channel": "complete reference text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoXrb00aLch2faLz",
+          "channel": "complete reference text",
+          "chars": 137
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQJCU00H5HulMfAu",
+      "partID": "prt_g0VXqQM5w002F7bNgAcr",
+      "chars": 143,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 143
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 143
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQN8e00wtLYK5noh",
+      "partID": "prt_g0VXqQPL800IrNxUDrzq",
+      "chars": 137,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 137
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 137
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQWjD000HcQ2uAfP",
+      "partID": "prt_g0VXqQYNs00eQEwEfYyh",
+      "chars": 145,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 145
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 145
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete inventory text",
+          "chars": 145
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete evidence text",
+          "chars": 145
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQZLy00ll0KRY6Gy",
+      "partID": "prt_g0VXqQaoU00GUqs6QGpw",
+      "chars": 156,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 156
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 156
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 156
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQboR003Eejq8nhT",
+      "partID": "prt_g0VXqQe0300vqvkll7SI",
+      "chars": 235,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 235
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQfO6002hM66uuvq",
+      "partID": "prt_g0VXqQhJ900g6p0NZ2LH",
+      "chars": 133,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 133
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 133
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 133
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQiBJ00MmIEOR1te",
+      "partID": "prt_g0VXqQjsn00rim4Z263A",
+      "chars": 142,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 142
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQkop00kxXNAfGBP",
+      "partID": "prt_g0VXqQnOk00Ack4Ne8NR",
+      "chars": 142,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 142
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQpAj00mR7Sp1I7R",
+      "partID": "prt_g0VXqQs3o00qvKHvStoL",
+      "chars": 142,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 142
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 142
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQt7S00tW3gTdKEf",
+      "partID": "prt_g0VXqQvTB00M2RGI0Eyh",
+      "chars": 151,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete reference text",
+          "chars": 151
+        },
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete inventory text",
+          "chars": 151
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete reference text",
+          "chars": 151
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXqQx7r00SlwkslaCe",
+      "partID": "prt_g0VXqQyih00Fx5GZtyrL",
+      "chars": 247,
+      "fullReads": [
+        {
+          "toolPartID": "prt_g0VXqoMfK00jvsp3YqC8",
+          "channel": "complete settled message text",
+          "chars": 247
+        },
+        {
+          "toolPartID": "prt_g0VXqoP4j00nMr1sI2mw",
+          "channel": "complete settled message text",
+          "chars": 247
+        }
+      ]
+    }
+  ],
+  "coverageParts": 37,
+  "coverageChars": 5499,
+  "sourceCount": 36,
+  "newToolSequence": [
+    {
+      "id": "prt_g0VXqoK8e00nxqpM3CcG",
+      "tool": "read_task_message"
+    },
+    {
+      "id": "prt_g0VXqoMfK00jvsp3YqC8",
+      "tool": "read_agent_message"
+    },
+    {
+      "id": "prt_g0VXqoP4j00nMr1sI2mw",
+      "tool": "read_agent_message"
+    },
+    {
+      "id": "prt_g0VXqoUEE007zCsxRYbZ",
+      "tool": "read_agent_message"
+    },
+    {
+      "id": "prt_g0VXqoXrb00aLch2faLz",
+      "tool": "read_agent_message"
+    },
+    {
+      "id": "prt_g0VXqooMb00Sd9DsemsG",
+      "tool": "manage_task"
+    }
+  ],
+  "provider": {
+    "requests": 10,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "settlement": "Every provider-source reader settled; exact Task/native qualification also retained"
+  },
+  "report": {
+    "messageID": "msg_h74Vu2AFfyLc0SOagTgr",
+    "partID": "prt_g0VXqodBt00eX96ydDyk",
+    "items": [
+      {
+        "id": "R01",
+        "text": "URL接口的解析、构造、规范化与编码用途有资料支持；未将接口能力当作实际导航成功。"
+      },
+      {
+        "id": "R02",
+        "text": "相对地址依赖base，解析不是简单拼接；保留了产品基准配置与资源存在性边界。"
+      },
+      {
+        "id": "R03",
+        "text": "查询首值读取与完整URL不直接解析的说明有依据；原文“空值”应理解为`null`，不是空字符串。"
+      },
+      {
+        "id": "R04",
+        "text": "fragment用于资源内部位置的说明有依据；未声称目标存在或定位已经执行。"
+      },
+      {
+        "id": "R05",
+        "text": "hostname与包含端口的host区别有依据；未推断产品白名单判断或连接结果正确。"
+      },
+      {
+        "id": "R06",
+        "text": "无效输入抛出`TypeError`及空base示例有依据，附表完整；异常处理效果未被证明。"
+      },
+      {
+        "id": "R07",
+        "text": "重复查询键可保留多个值的说明有依据；未假定后端采用相同解释规则。"
+      },
+      {
+        "id": "R08",
+        "text": "fragment不随资源请求发送给服务器有依据；正确保留应用脚本可能另发请求的边界。"
+      },
+      {
+        "id": "R09",
+        "text": "href与origin的范围区别有依据；未将来源描述等同于跨来源访问获准。"
+      },
+      {
+        "id": "R10",
+        "text": "base末尾斜杠影响相对路径解析有依据；未推断部署目录或重定向行为。"
+      },
+      {
+        "id": "R11",
+        "text": "遍历遵循查询字符串出现顺序有依据；未保证其他数据结构、界面或服务器仍保序。"
+      },
+      {
+        "id": "R12",
+        "text": "`#syntax`对应`id=\"syntax\"`元素的例子有依据，附表完整；真实滚动位置未被验证。"
+      },
+      {
+        "id": "R13",
+        "text": "pathname不含查询与片段、search表示查询部分有依据；未证明产品筛选同步更新。"
+      },
+      {
+        "id": "R14",
+        "text": "绝对URL不借base组成结果的说明有依据；未将base误当作本站跳转限制。"
+      },
+      {
+        "id": "R15",
+        "text": "append追加、set覆盖并删除其他同名值的区别有依据；未替业务决定应追加还是覆盖。"
+      },
+      {
+        "id": "R16",
+        "text": "媒体片段从第十秒开始的例子有依据；原文明确未展开完整终点规则，也未保证播放器行为。"
+      },
+      {
+        "id": "R17",
+        "text": "hash表示井号及片段、可修改地址对象有依据；未将对象修改等同于当前窗口导航。"
+      },
+      {
+        "id": "R18",
+        "text": "参数字符串转换及URL对象使用href有依据，附表完整；未混同链接文本与实际目标。"
+      },
+      {
+        "id": "R19",
+        "text": "get取首值、getAll取全部值有依据；未证明实际多选条件完整传递。"
+      },
+      {
+        "id": "R20",
+        "text": "`#:~:text=fragment`形式有依据；已说明完整匹配语法与兼容条件未在本页展开。"
+      },
+      {
+        "id": "R21",
+        "text": "规范化及特殊字符编码示例有依据；未推导任意地址等价、资源相同或缓存逻辑正确。"
+      },
+      {
+        "id": "R22",
+        "text": "根路径和双斜杠主机引用的解析示例有依据；未将解析结果当作资源可访问证据。"
+      },
+      {
+        "id": "R23",
+        "text": "delete按名称及可选值匹配的说明有依据；未证明按钮、历史状态或后端筛选同步取消。"
+      },
+      {
+        "id": "R24",
+        "text": "查询在井号前、fragment位于末尾有依据，附表完整；未将片段内文本当作服务器查询。"
+      },
+      {
+        "id": "R25",
+        "text": "属性修改与完整地址序列化示例有依据；未证明结果已写入实际链接或当前窗口。"
+      },
+      {
+        "id": "R26",
+        "text": "无效构造抛异常有依据；正确注明指定构造器页面未直接提供try/catch代码示例。"
+      },
+      {
+        "id": "R27",
+        "text": "解析解码、序列化编码及重复编码风险有依据；未证明产品特殊字符往返正确。"
+      },
+      {
+        "id": "R28",
+        "text": "明确指出指定Fragment页面未覆盖编码、解码细则；没有借查询参数规则填补空白。"
+      },
+      {
+        "id": "R29",
+        "text": "toString与toJSON返回相同完整地址字符串有依据；未证明保存、传输与恢复行为。"
+      },
+      {
+        "id": "R30",
+        "text": "有效base与空base的示例有依据，附表完整；语法有效未被等同于服务器在线或加载成功。"
+      },
+      {
+        "id": "R31",
+        "text": "加号与空格转换、通过append保留字面加号有依据；未保证客户端与后端往返一致。"
+      },
+      {
+        "id": "R32",
+        "text": "资源内部定位说明有依据；明确保留页面标题定义与更新机制未被指定页面直接覆盖的限制。"
+      },
+      {
+        "id": "R33",
+        "text": "静态解析、可解析检查与实例字符串化的区分有依据；未保证产品环境支持每个方法。"
+      },
+      {
+        "id": "R34",
+        "text": "构造示例及早期Edge查询保留差异有依据；未把示例注释当作真实产品测试记录。"
+      },
+      {
+        "id": "R35",
+        "text": "按键排序及重新序列化改变空格、波浪号表示有依据；未保证缓存、签名或服务器等价判断。"
+      },
+      {
+        "id": "R36",
+        "text": "明确区分资料语义与真实交互证据，附表完整；没有声称浏览器或界面验收通过。"
+      }
+    ],
+    "text": "已完整读完R01–R36原正文及六处附表，并核对36次实际读取的地址、格式和前后顺序；没有缺失或未读的题目正文。以下是逐项核对，不替换或重写原答案。\n\n## R01–R36逐项核对\n\n- **R01**：URL接口的解析、构造、规范化与编码用途有资料支持；未将接口能力当作实际导航成功。\n- **R02**：相对地址依赖base，解析不是简单拼接；保留了产品基准配置与资源存在性边界。\n- **R03**：查询首值读取与完整URL不直接解析的说明有依据；原文“空值”应理解为`null`，不是空字符串。\n- **R04**：fragment用于资源内部位置的说明有依据；未声称目标存在或定位已经执行。\n- **R05**：hostname与包含端口的host区别有依据；未推断产品白名单判断或连接结果正确。\n- **R06**：无效输入抛出`TypeError`及空base示例有依据，附表完整；异常处理效果未被证明。\n- **R07**：重复查询键可保留多个值的说明有依据；未假定后端采用相同解释规则。\n- **R08**：fragment不随资源请求发送给服务器有依据；正确保留应用脚本可能另发请求的边界。\n- **R09**：href与origin的范围区别有依据；未将来源描述等同于跨来源访问获准。\n- **R10**：base末尾斜杠影响相对路径解析有依据；未推断部署目录或重定向行为。\n- **R11**：遍历遵循查询字符串出现顺序有依据；未保证其他数据结构、界面或服务器仍保序。\n- **R12**：`#syntax`对应`id=\"syntax\"`元素的例子有依据，附表完整；真实滚动位置未被验证。\n- **R13**：pathname不含查询与片段、search表示查询部分有依据；未证明产品筛选同步更新。\n- **R14**：绝对URL不借base组成结果的说明有依据；未将base误当作本站跳转限制。\n- **R15**：append追加、set覆盖并删除其他同名值的区别有依据；未替业务决定应追加还是覆盖。\n- **R16**：媒体片段从第十秒开始的例子有依据；原文明确未展开完整终点规则，也未保证播放器行为。\n- **R17**：hash表示井号及片段、可修改地址对象有依据；未将对象修改等同于当前窗口导航。\n- **R18**：参数字符串转换及URL对象使用href有依据，附表完整；未混同链接文本与实际目标。\n- **R19**：get取首值、getAll取全部值有依据；未证明实际多选条件完整传递。\n- **R20**：`#:~:text=fragment`形式有依据；已说明完整匹配语法与兼容条件未在本页展开。\n- **R21**：规范化及特殊字符编码示例有依据；未推导任意地址等价、资源相同或缓存逻辑正确。\n- **R22**：根路径和双斜杠主机引用的解析示例有依据；未将解析结果当作资源可访问证据。\n- **R23**：delete按名称及可选值匹配的说明有依据；未证明按钮、历史状态或后端筛选同步取消。\n- **R24**：查询在井号前、fragment位于末尾有依据，附表完整；未将片段内文本当作服务器查询。\n- **R25**：属性修改与完整地址序列化示例有依据；未证明结果已写入实际链接或当前窗口。\n- **R26**：无效构造抛异常有依据；正确注明指定构造器页面未直接提供try/catch代码示例。\n- **R27**：解析解码、序列化编码及重复编码风险有依据；未证明产品特殊字符往返正确。\n- **R28**：明确指出指定Fragment页面未覆盖编码、解码细则；没有借查询参数规则填补空白。\n- **R29**：toString与toJSON返回相同完整地址字符串有依据；未证明保存、传输与恢复行为。\n- **R30**：有效base与空base的示例有依据，附表完整；语法有效未被等同于服务器在线或加载成功。\n- **R31**：加号与空格转换、通过append保留字面加号有依据；未保证客户端与后端往返一致。\n- **R32**：资源内部定位说明有依据；明确保留页面标题定义与更新机制未被指定页面直接覆盖的限制。\n- **R33**：静态解析、可解析检查与实例字符串化的区分有依据；未保证产品环境支持每个方法。\n- **R34**：构造示例及早期Edge查询保留差异有依据；未把示例注释当作真实产品测试记录。\n- **R35**：按键排序及重新序列化改变空格、波浪号表示有依据；未保证缓存、签名或服务器等价判断。\n- **R36**：明确区分资料语义与真实交互证据，附表完整；没有声称浏览器或界面验收通过。\n\n## 读取与恢复情况\n\n实际网页读取为**36次，成功36次，失败0次**，四个指定URL各读取9次，均使用Markdown格式。记录显示按题号逐次读取并输出正文，重复URL也分别调用；未出现并行读取、脚本循环、额外搜索、本地目录或凭据读取、文件修改或新增成员。\n\n历史上研究员遭遇**5次模型服务过载中断**：前三次尚未开始网页读取，后两次分别发生在R26、R28页面已返回但正文尚未输出时。均由同一名研究员接续，保留已有正文，R26与R28没有重复抓取。研究员完成R36后，负责人收尾又因服务过载中断；本次仅复用既有结果完成核对，没有重新抓取或恢复研究员。\n\n本次公开资料审阅与逐项核对已完成；**这些资料不能直接证明产品真实点击、导航、滚动、高亮、播放或其他界面交互已经通过测试**。"
+  }
+}
