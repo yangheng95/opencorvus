@@ -3145,6 +3145,8 @@ The current connection-workspace authority record also includes metadata selecti
 
 - [来源复制边界359](artifacts/2026-10-05-connection-workspace-authority/clipboard-boundary-359/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/clipboard-boundary-plan-359.md)。
 
+- [更新日志与页面国际化](records/2026-10/2026-10-13-release-notes-i18n.md) / [验证证据](artifacts/2026-10-13-release-notes-i18n/README.md)。
+
 - [来源展开与收起360](artifacts/2026-10-05-connection-workspace-authority/source-toggle-360/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-toggle-plan-360.md)。
 
 - [侧栏长正文与来源361](artifacts/2026-10-05-connection-workspace-authority/side-stream-361/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/side-stream-plan-361.md)。

@@ -126,10 +126,11 @@ export function tc(key: string, count: number, vars?: Record<string, any>): stri
 }
 
 export function localeTag(): string {
-  return currentLocale
+  return getLocale()
 }
 
 export function getLocale(): string {
+  appStore.localeSeq
   return currentLocale
 }
 

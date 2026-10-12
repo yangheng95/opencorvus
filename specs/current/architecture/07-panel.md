@@ -2474,6 +2474,13 @@ searchable descending history and selected details use the same single-column
 list-to-detail pattern. Website and GitHub links supplement the offline reading
 surface rather than providing another content/cache authority.
 
+Every dated entry in that source contains explicit zh-CN and en-US bodies.
+The shared parser requires both authored languages. Details, summaries, search
+content, language attributes, dates and website links follow the current UI
+locale while retaining the selected version. Locale readers subscribe to the
+existing locale-resource sequence so localized formatting also updates without
+requiring unrelated content changes.
+
 ## Current diagnostic log viewer
 
 LogViewer reads the current backend event envelope and preserves nested subject `data`, actual ambient bindings and original raw record in Details. Elapsed duration comes from `data.duration`; subject time/level/service do not change the row header. Historical non-string event time has unknown chronology and its original value remains in details/raw. Unparsed output remains the actual raw diagnostic line without a parallel plaintext interpretation. The live component owns current aggregation/copy behavior; unused duplicate utility aggregation is retired.

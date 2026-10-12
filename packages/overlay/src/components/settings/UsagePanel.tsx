@@ -102,7 +102,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
           {(bucket) => (
             <span class={`usage-activity__cell usage-activity__cell--${level(bucket.tokens.total)}`}>
               <span class="sr-only">
-                {bucketLabel(props.data, bucket.start)} · {exactNumber(bucket.tokens.total)} Token
+                {bucketLabel(props.data, bucket.start)} · {exactNumber(bucket.tokens.total)} {t("usage.table_tokens")}
               </span>
               <span class="usage-activity__tooltip" aria-hidden="true">
                 <strong>{exactNumber(bucket.tokens.total)}</strong>
@@ -273,7 +273,7 @@ function OfficialSourceCard(props: { source: OfficialUsageSource }) {
             <span>{t("usage.reconciliation_delta")}</span>
             <strong>
               {comparison().tokenDelta > 0 ? "+" : ""}
-              {exactNumber(comparison().tokenDelta)} Token
+              {exactNumber(comparison().tokenDelta)} {t("usage.table_tokens")}
             </strong>
             <small>{t("usage.never_summed")}</small>
           </div>
@@ -493,7 +493,7 @@ export default function UsagePanel() {
                           <span>{t("usage.models_count", { value: String(provider.modelCount) })}</span>
                         </div>
                         <div class="usage-provider-row__measure">
-                          <span>{exactNumber(provider.summary.tokens.total)} Token</span>
+                          <span>{exactNumber(provider.summary.tokens.total)} {t("usage.table_tokens")}</span>
                           <span>{formatDetailedCostUSD(provider.summary.costUSD)}</span>
                         </div>
                         <div class="usage-provider-row__bar" aria-hidden="true">

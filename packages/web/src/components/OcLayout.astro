@@ -58,7 +58,7 @@ const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
     <title>{title}</title>
-    <OcHeadBoot />
+    <OcHeadBoot {locale} surface={current} {languageHref} />
   </head>
   <body class="oc-surface">
     <OcHeader {locale} {current} {languageHref} />

@@ -45,7 +45,11 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
 
 ## Product entry points
 
-- Root `CHANGELOG.md` is the sole authored release-history source. The shared util parser normalizes compact/numbered beta identities and validates dated written entries; canonical GitHub publication and static `/changelog/` plus localized history/detail pages consume those same entries. Deleted Release history stays source-linked. Changelog edits trigger the signed website workflow; no separate website history database or copied Markdown authority exists.
+- Root `CHANGELOG.md` is the sole authored release-history source. Each dated version contains explicit zh-CN and en-US bodies, both required by the shared util parser alongside normalized compact/numbered beta identities. GitHub publication includes both language sections; `/changelog/` and `/zh-cn/changelog/` select the corresponding body, summary, language and calendar date. Deleted Release history stays source-linked. Changelog edits trigger the signed website workflow; no separate website history database or copied Markdown authority exists.
+
+- Public and documentation pages use one `LocaleBoot` and one `opencorvus.public-locale` preference. Explicit page URLs establish the language; only the root homepage applies the saved/browser preference before first paint. The existing Starlight language selector opens the same document in the chosen language, whose head records that choice before a return to the homepage. Language selection has no separate documentation preference or theme policy.
+
+- Documentation code frames load their terminal title and copy feedback from the existing website i18n catalogs. The Starlight dependency patch distinguishes filesystem document URLs from HTTP route URLs in its locale callback; filesystem documents use the existing collection-path resolver, including Windows paths.
 
 - Both homepage locales retain the established hero/terminal and long-horizon visuals,
   with the case gallery beneath the hero, followed by concise start and blog entry. `landing-copy.ts` supplies shared visual copy.

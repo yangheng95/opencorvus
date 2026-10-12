@@ -3,6 +3,7 @@ import { todoStatusIconName } from "../utils/status-mapping"
 import { extractTodos, summarizeTodos, type TodoItem } from "../utils/todos"
 import { Icon } from "./ui/Icon"
 import { TodoProgress } from "./TodoProgress"
+import { t, tc } from "../utils/i18n"
 
 export { extractTodos, type TodoItem }
 
@@ -20,7 +21,7 @@ function TodoItems(props: { todos: TodoItem[]; listClass: string }) {
             </span>
             <Show when={todo.priority}>
               <span class="msg-todo-priority" data-priority={todo.priority}>
-                {todo.priority}
+                {t(`todo.priority.${todo.priority}`)}
               </span>
             </Show>
           </li>
@@ -43,10 +44,10 @@ export function TodoListPart(props: { todos: TodoItem[]; variant?: "inline" | "c
       <div class="msg-todo-card__summary">
         <div class="msg-todo-card__headline">
           <span class="msg-todo-card__count">{counts().remaining}</span>
-          <span class="msg-todo-card__label">{counts().remaining === 1 ? "item left" : "items left"}</span>
+          <span class="msg-todo-card__label">{tc("todo.items_left", counts().remaining)}</span>
         </div>
         <div class="msg-todo-card__meta">
-          {counts().completed}/{counts().total} done
+          {t("todo.progress_value", { completed: counts().completed, total: counts().total })}
         </div>
       </div>
 
@@ -55,22 +56,22 @@ export function TodoListPart(props: { todos: TodoItem[]; variant?: "inline" | "c
       <div class="msg-todo-card__stats">
         <Show when={counts().inProgress > 0}>
           <span class="msg-todo-card__stat" data-status="in_progress">
-            In progress {counts().inProgress}
+            {t("todo.status.in_progress")} {counts().inProgress}
           </span>
         </Show>
         <Show when={counts().pending > 0}>
           <span class="msg-todo-card__stat" data-status="pending">
-            Pending {counts().pending}
+            {t("todo.status.pending")} {counts().pending}
           </span>
         </Show>
         <Show when={counts().completed > 0}>
           <span class="msg-todo-card__stat" data-status="completed">
-            Completed {counts().completed}
+            {t("todo.status.completed")} {counts().completed}
           </span>
         </Show>
         <Show when={counts().cancelled > 0}>
           <span class="msg-todo-card__stat" data-status="cancelled">
-            Cancelled {counts().cancelled}
+            {t("todo.status.cancelled")} {counts().cancelled}
           </span>
         </Show>
       </div>
