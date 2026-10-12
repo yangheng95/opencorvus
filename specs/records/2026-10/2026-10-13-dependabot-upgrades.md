@@ -98,3 +98,11 @@ push提示的4条GitHub Dependabot漏洞已读取真实alert metadata：rand/gli
 runtime-refreshed.log六项/30断言通过；frozen-refreshed.log与audit-refreshed.log结束码0、1732包无漏洞。首轮远端38298767867的verify及audit成功，包含真实Linux原生首次启动；三系统完整unit及service尚未完成，最终刷新版本必须单独跟踪。
 
 overlay-refreshed.log实际构建1m22s、renderer surface checker通过；重新启动本任务独有19633开发服务后，真实CodeMirror6.43.14键盘编辑并点击Save，unsaved标记消失且保存截图人工确认，截图已收入同一artifact目录和索引。仅关闭自己的临时页面及服务。最终三系统完整unit尚未确认完成。
+
+### 最终交付状态
+
+刷新版本提交`3897754c8`已正常push到main（正式hooks再次全部通过），本任务分支相对其upstream没有待推送实现提交。最终版本CI为[38300113046](https://github.com/yangheng95/opencorvus/actions/runs/38300113046)，verify、dependency audit与service tests实际成功；verify包含全部生成固定点、8项类型任务、22个workflow合同测试及Linux x64真实首次启动（4个Session、2个重启持久化、realProvider=false）。日志摘录和正式push结果已收入[同一证据目录](../../artifacts/2026-10-13-dependabot-upgrades/README.md)。初轮38298767867后被新code run取消，不作为完整全量成功。
+
+已完成十项升级内容的统一manifest/lock、SDK7/ACP迁移、原失败工具夹具根因修正、聚焦正向验收、手工截图、提交与主交付推送。未确认的要求：最终Linux/macOS/Windows全量unit仍在GitHub后台执行；没有最终失败日志或失败根因，不能宣称三平台全量测试通过。用户原工作区已有SourceParts/日志/说明等并行改动全部保留，不在其中覆盖文件；期间main再次收到已授权的SourceParts披露动作与QA交付，最终证据提交前按同一fresh merge规则收敛。工作树保留为干净可审查checkout，其交付事实来源为origin/main。未创建Release/tag/新PR，也未手动写入原PR的状态；Dependabot已自动关闭38/36/35/34/37，剩余旧PR的目标版本均已包含在main。
+
+最终状态更正：38300113046的三平台unit后因后续main更新取消，aggregate因此失败，不是已经获得单元测试通过；verify/audit/service已完成成功的事实保持。并行SourceParts更新已收敛，证据合并提交`31d2cea1e`已push，最新main运行[38301349049](https://github.com/yangheng95/opencorvus/actions/runs/38301349049)继续执行。既有CI scope只将spec/docs的`.md`当作docs；本任务保存的真实`.txt`检查日志也触发code scope，故证据push启动新的完整运行。这是实际配置的cancel-in-progress行为，不是生产Task/Mission调度故障，也不修改scope来绕过验收。尚未满足的三平台全量结果明确保持未确认；其原因是后台运行与后续main并发更新，并无可据此定位的新测试失败根因。

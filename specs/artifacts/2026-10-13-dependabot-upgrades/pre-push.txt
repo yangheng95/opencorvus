@@ -1,0 +1,14 @@
+sdk import check passed (OpenCorvusClient)
+ai runtime check passed (ai v7, provider v4, provider-utils v5, OpenRouter v3)
+ Tasks:    8 successful, 8 total
+Cached:    6 cached, 8 total
+  Time:    43.203s 
+api:routes-check ok — 6 rules and route inventory clean across 34 files
+docs:check ok (345 ops, 25 groups)
+control lease owner check passed (18 owners, 22 acquire sites, all declared)
+architecture-index ok — 18 current documents indexed, every link live
+package-topology ok — 10 workspace packages, no dependency or generation cycle, bun.lock inputs aligned
+release-mutation-topology ok (41eca3be14da) — 5 canonical authorities
+module-topology ok (treeish:3897754c8f16) — 1140 modules, 5813 runtime edges, retained SCC sizes ; 4 clean imports passed
+[secret-scan] OK — 0 hits across tracked sources
+   d0a1aaac2..3897754c8  HEAD -> main
