@@ -1,0 +1,170 @@
+{
+  "observations": [
+    {
+      "label": "opened",
+      "at": "2026-10-12T00:44:30.877Z",
+      "dockWidth": 380,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "380",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "keyboard-minimum",
+      "at": "2026-10-12T00:44:31.192Z",
+      "dockWidth": 280,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "280",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "keyboard-step",
+      "at": "2026-10-12T00:44:44.636Z",
+      "dockWidth": 304,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "304",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "keyboard-maximum",
+      "at": "2026-10-12T00:44:44.873Z",
+      "dockWidth": 441,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "441",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "pointer-resize",
+      "at": "2026-10-12T00:45:01.400Z",
+      "dockWidth": 441,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "441",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "navigation-collapsed",
+      "at": "2026-10-12T00:45:01.668Z",
+      "dockWidth": 441,
+      "hidden": "false",
+      "max": "722",
+      "min": "280",
+      "now": "441",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "pointer-resize-at-handle",
+      "at": "2026-10-12T00:45:31.697Z",
+      "dockWidth": 330,
+      "hidden": "false",
+      "max": "722",
+      "min": "280",
+      "now": "330",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "closed",
+      "at": "2026-10-12T00:46:20.810Z",
+      "dockWidth": 1.28125,
+      "hidden": "true",
+      "max": null,
+      "min": null,
+      "now": null,
+      "open": "false",
+      "tabIndex": -1
+    },
+    {
+      "label": "reopened",
+      "at": "2026-10-12T00:46:26.417Z",
+      "dockWidth": 330,
+      "hidden": "false",
+      "max": "722",
+      "min": "280",
+      "now": "330",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "navigation-restored",
+      "at": "2026-10-12T00:46:26.670Z",
+      "dockWidth": 330,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "330",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "minimum-with-real-source",
+      "at": "2026-10-12T00:46:36.254Z",
+      "dockWidth": 280,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "280",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "new-css-reopened",
+      "at": "2026-10-12T00:50:00.759Z",
+      "dockWidth": 280,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "280",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "right-hit-region-drag",
+      "at": "2026-10-12T00:50:10.244Z",
+      "dockWidth": 337,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "337",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "left-hit-region-drag",
+      "at": "2026-10-12T00:50:20.248Z",
+      "dockWidth": 380,
+      "hidden": "false",
+      "max": "441",
+      "min": "280",
+      "now": "380",
+      "open": "true",
+      "tabIndex": 0
+    },
+    {
+      "label": "new-css-closed",
+      "at": "2026-10-12T00:50:20.558Z",
+      "dockWidth": 0,
+      "hidden": "true",
+      "max": null,
+      "min": null,
+      "now": null,
+      "open": "false",
+      "tabIndex": -1
+    }
+  ],
+  "method": "Manual keyboard, pointer (including both existing five-pixel hit regions), sidebar-toggle and dock-toggle interactions; read-only geometry/ARIA with visual review; no assertions"
+}

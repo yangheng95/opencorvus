@@ -1729,7 +1729,27 @@ function renderRightDockWidth(): void {
   const raw = Number(settingsStore.rightDockWidth)
   if (Number.isFinite(raw) && raw > 0) dock.style.setProperty("--right-dock-width", `${clampRightDockWidth(raw)}px`)
   else dock.style.removeProperty("--right-dock-width")
+  renderRightDockHandleSemanticsOnFrame.schedule()
 }
+
+function renderRightDockHandleSemantics(): void {
+  const dock = document.getElementById("rightDock")
+  const handle = document.getElementById("rightDockResizer")
+  if (!dock || !handle) return
+  if (dock.dataset.open !== "true") {
+    handle.removeAttribute("aria-valuemin")
+    handle.removeAttribute("aria-valuemax")
+    handle.removeAttribute("aria-valuenow")
+    return
+  }
+  const bounds = rightDockResizeBounds()
+  handle.setAttribute("aria-valuemin", String(Math.round(bounds.min)))
+  handle.setAttribute("aria-valuemax", String(Math.round(bounds.max)))
+  handle.setAttribute("aria-valuenow", String(Math.round(clampRightDockWidth(dock.getBoundingClientRect().width))))
+}
+
+const renderRightDockHandleSemanticsOnFrame = createAnimationFrameScheduler(renderRightDockHandleSemantics)
+disposers.push(() => renderRightDockHandleSemanticsOnFrame.cancel())
 
 const revealPendingCenterWorkbenchPanelOnFrame = createAnimationFrameScheduler(revealPendingCenterWorkbenchPanel)
 disposers.push(() => {
@@ -2987,7 +3007,7 @@ disposers.push(() => clipboardApiKeyPrompt.dispose())
 let rightDockResizeActive = false
 let pendingRightDockResizeClientX: number | null = null
 
-function clampRightDockWidth(raw: number): number {
+function rightDockResizeBounds(): { min: number; max: number } {
   const workspace = document.getElementById("workspaceMain")
   const min = layoutTokenPx("--ui-workbench-panel-min-width")
   const configuredMax = layoutTokenPx("--ui-right-dock-max-width")
@@ -2996,7 +3016,12 @@ function clampRightDockWidth(raw: number): number {
   const max = workspace
     ? Math.min(configuredMax, workspace.clientWidth - conversationMin - resizerWidth)
     : configuredMax
-  return Math.max(min, Math.min(Math.max(max, min), raw))
+  return { min, max: Math.max(max, min) }
+}
+
+function clampRightDockWidth(raw: number): number {
+  const { min, max } = rightDockResizeBounds()
+  return Math.max(min, Math.min(max, raw))
 }
 
 function applyPendingRightDockResize(): void {
@@ -3060,6 +3085,12 @@ function resizeRightDockByKeyboard(event: KeyboardEvent): void {
 }
 
 {
+  const observer = new ResizeObserver(() => renderRightDockHandleSemanticsOnFrame.schedule())
+  for (const id of ["rightDock", "workspaceMain"]) {
+    const element = document.getElementById(id)
+    if (element) observer.observe(element)
+  }
+  disposers.push(() => observer.disconnect())
   const resizer = document.getElementById("rightDockResizer")
   if (resizer) {
     resizer.addEventListener(

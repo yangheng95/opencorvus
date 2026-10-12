@@ -1997,6 +1997,16 @@ minimum, never exceeds the shared Dock maximum, and always leaves the canonical
 `--ui-chat-min-width` plus the separator for Conversation. Restoring an older
 wide value or resizing the desktop window therefore cannot squeeze the
 transcript below its supported layout boundary.
+The Dock separator exposes its current constrained rendered width and the same
+minimum/maximum through ARIA range properties. One resize observer follows the
+Dock and workspace geometry, coalesced by the existing animation-frame scheduler;
+open/close and width rendering use that same semantics projection. Closed handles
+retain their existing hidden/focus behavior and omit the active range. Observation
+and pending frames end with the main application lifetime. The stored width,
+pointer/keyboard behavior and layout bounds remain the original owners.
+The separator's existing five-pixel pointer reach on either side of its visible
+line stays unclipped by its own box. It does not consume additional layout width;
+the closed separator keeps pointer events disabled.
 
 ## Inline Interactive Artifacts
 

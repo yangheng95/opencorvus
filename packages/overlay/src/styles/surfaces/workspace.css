@@ -579,7 +579,6 @@ body[data-resizing="true"] .pane-resizer::after {
   background: color-mix(in srgb, var(--divider-soft) 84%, transparent);
   z-index: calc(var(--ui-z-raised) + 2);
   opacity: var(--ui-opacity-full);
-  overflow: hidden;
   transition:
     flex-basis var(--ui-duration-slow) var(--ui-timing-standard),
     width var(--ui-duration-slow) var(--ui-timing-standard),

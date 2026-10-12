@@ -1,0 +1,68 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 4380075,
+    "archiveBytes": 113915,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 10,
+    "sessions": [
+      {
+        "id": "ses_hS391yPtyHTrIPQAvIH8",
+        "projectID": "prj_hk9ks9kJJ0VpebO5KPwM",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCtyO1zzCnSrB0nnt",
+        "projectID": "prj_hk9ks9kJJ0VpebO5KPwM",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXn6IXW00sfwz3DYb1",
+        "sourceId": "0d6b825cf9bccf8bbf22ea1cd0eadd81ba4e746782cf51931839430c6f8e7aae",
+        "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82"
+      },
+      {
+        "id": "prt_g0VXn6K5T001ZBTCziTs",
+        "sourceId": "a2e1a10cc5697e3529b164e2226e60e8381d9da6e2a81a5b1e4a7b643fb21606",
+        "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&exlimit=2&titles=%E5%8C%97%E4%BA%AC%E5%B8%82%7C%E4%B8%8A%E6%B5%B7%E5%B8%82"
+      },
+      {
+        "id": "prt_g0VXn6LKR00W2Se7YldN",
+        "sourceId": "7d57976d1f413cc15d4e0bf59cf63edc1920d78b9df4eb703e75d62b29e4c86b",
+        "title": "URL() - Web API | MDN",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0"
+      }
+    ]
+  },
+  {
+    "stage": "02",
+    "originalBytes": 3678562,
+    "archiveBytes": 97235,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 6,
+    "sessions": [
+      {
+        "id": "ses_hloGEgn4389ecRJQIDst",
+        "projectID": "prj_h4VO78J58TTlLCTsdwjS",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCr595zzsxweTiHpm",
+        "projectID": "prj_h4VO78J58TTlLCTsdwjS",
+        "parentID": null
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXn9Psg004Q7zXrH7k",
+        "sourceId": "7d57976d1f413cc15d4e0bf59cf63edc1920d78b9df4eb703e75d62b29e4c86b",
+        "title": "URL() - Web API | MDN",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0"
+      }
+    ]
+  }
+]

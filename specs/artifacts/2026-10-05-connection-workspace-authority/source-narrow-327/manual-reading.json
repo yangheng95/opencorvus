@@ -1,0 +1,35 @@
+{
+  "observations": [
+    {
+      "at": "2026-10-12T00:36:11.185Z",
+      "height": 448,
+      "scrollHeight": 1910,
+      "top": 39.33333206176758
+    },
+    {
+      "at": "2026-10-12T00:36:28.951Z",
+      "height": 448,
+      "scrollHeight": 3242,
+      "top": 543.3333129882812
+    },
+    {
+      "at": "2026-10-12T00:37:07.403Z",
+      "height": 448,
+      "scrollHeight": 6051,
+      "top": 543.3333129882812
+    },
+    {
+      "at": "2026-10-12T00:39:04.521Z",
+      "dockWidth": 280,
+      "height": 366,
+      "scrollHeight": 6573,
+      "separator": {
+        "max": null,
+        "min": null,
+        "now": null
+      },
+      "top": 543.3333129882812
+    }
+  ],
+  "method": "Read-only geometry adjacent to actual user-like scrolling and close/reopen interactions; screenshots reviewed manually; no DOM assertions"
+}

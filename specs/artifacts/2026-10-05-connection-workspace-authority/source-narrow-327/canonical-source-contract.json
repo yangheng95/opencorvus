@@ -1,0 +1,122 @@
+{
+  "observedAtUtc": "2026-10-12T00:52:24.569Z",
+  "stages": [
+    {
+      "stage": "01",
+      "providerRequests": 10,
+      "canonicalTools": [
+        {
+          "id": "prt_g0VXn6Hyy00V0MRJWIvn",
+          "input": {
+            "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82",
+            "format": "text",
+            "timeout": 120
+          }
+        },
+        {
+          "id": "prt_g0VXn6JWt00HdgxCYqrx",
+          "input": {
+            "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&exlimit=2&titles=%E5%8C%97%E4%BA%AC%E5%B8%82%7C%E4%B8%8A%E6%B5%B7%E5%B8%82",
+            "format": "text",
+            "timeout": 120
+          }
+        },
+        {
+          "id": "prt_g0VXn6L0800OSvCk86yN",
+          "input": {
+            "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0",
+            "format": "text",
+            "timeout": 120
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "prt_g0VXn6IXW00sfwz3DYb1",
+          "messageID": "msg_g0VXn6H4f00bAEnmC5WM",
+          "type": "source-url",
+          "sourceId": "0d6b825cf9bccf8bbf22ea1cd0eadd81ba4e746782cf51931839430c6f8e7aae",
+          "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82",
+          "provider": "opencorvus-webfetch"
+        },
+        {
+          "id": "prt_g0VXn6K5T001ZBTCziTs",
+          "messageID": "msg_g0VXn6IZA00h5DxIXgM0",
+          "type": "source-url",
+          "sourceId": "a2e1a10cc5697e3529b164e2226e60e8381d9da6e2a81a5b1e4a7b643fb21606",
+          "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&exlimit=2&titles=%E5%8C%97%E4%BA%AC%E5%B8%82%7C%E4%B8%8A%E6%B5%B7%E5%B8%82",
+          "provider": "opencorvus-webfetch"
+        },
+        {
+          "id": "prt_g0VXn6LKR00W2Se7YldN",
+          "messageID": "msg_g0VXn6K7700dNSXpWhOc",
+          "type": "source-url",
+          "sourceId": "7d57976d1f413cc15d4e0bf59cf63edc1920d78b9df4eb703e75d62b29e4c86b",
+          "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0",
+          "title": "URL() - Web API | MDN",
+          "provider": "opencorvus-webfetch"
+        }
+      ],
+      "textParts": [
+        {
+          "id": "prt_g0VXn6uOU00zQvpAD3ej",
+          "messageID": "msg_g0VXn6tbd00hw8Im2Lc5",
+          "characters": 3161,
+          "start": "2026-10-12T00:36:13.774Z",
+          "end": "2026-10-12T00:37:14.327Z"
+        }
+      ],
+      "sessions": [
+        {
+          "id": "ses_hS391yPtyHTrIPQAvIH8",
+          "kind": "assistant",
+          "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"625a1456-df61-4ab6-a48f-2c8bb6c106cf\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hH1kTi3ZaO7dVJurrqy4\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+        },
+        {
+          "id": "ses_-zUSCtyO1zzCnSrB0nnt",
+          "kind": "assistant",
+          "metadata": "{\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}},\"sideChat\":{\"sourceSessionID\":\"ses_hS391yPtyHTrIPQAvIH8\",\"inheritedMessageIDs\":[\"msg_g0VXn61bz00x3fPovuAO\",\"msg_g0VXn61c000jzJ5p0TA6\"]}}"
+        }
+      ]
+    },
+    {
+      "stage": "02",
+      "providerRequests": 6,
+      "canonicalTools": [
+        {
+          "id": "prt_g0VXn9PWg00IIKe4s62B",
+          "input": {
+            "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0",
+            "format": "text",
+            "timeout": 120
+          }
+        }
+      ],
+      "sources": [
+        {
+          "id": "prt_g0VXn9Psg004Q7zXrH7k",
+          "messageID": "msg_g0VXn9OHa00Yq33PrNzq",
+          "type": "source-url",
+          "sourceId": "7d57976d1f413cc15d4e0bf59cf63edc1920d78b9df4eb703e75d62b29e4c86b",
+          "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0",
+          "title": "URL() - Web API | MDN",
+          "provider": "opencorvus-webfetch"
+        }
+      ],
+      "textParts": [],
+      "sessions": [
+        {
+          "id": "ses_hloGEgn4389ecRJQIDst",
+          "kind": "assistant",
+          "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"867312c6-98c9-435f-aa25-13abfa148487\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hTPRICLQKLrpl4MaUDsX\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+        },
+        {
+          "id": "ses_-zUSCr595zzsxweTiHpm",
+          "kind": "assistant",
+          "metadata": "{\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}},\"sideChat\":{\"sourceSessionID\":\"ses_hloGEgn4389ecRJQIDst\",\"inheritedMessageIDs\":[\"msg_g0VXn8uqv00bdS8acuXr\",\"msg_g0VXn8uqv01DOEIXxjIm\"]}}"
+        }
+      ]
+    }
+  ],
+  "boundary": "Canonical backend inputs, actual Source payload, long text-Part times and Provider terminal facts only. UI reading positions, ARIA attributes, pointer hit regions and screenshots are manual observations, not assertions in this checker."
+}

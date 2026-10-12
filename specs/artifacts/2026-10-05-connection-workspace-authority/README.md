@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [327 窄侧聊与分隔条](source-narrow-plan-327.md)：真实来源读位复核与范围、拖动命中修复。
+
 - [326 来源 URL 可读文字](source-url-display-plan-326.md)：保留真实导航的显示层改进。
 
 - [325 来源与附件字节边界](source-utf8-plan-325.md)：完整 UTF-8 前缀的统一解码。
