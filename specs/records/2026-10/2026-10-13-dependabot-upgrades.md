@@ -2,6 +2,8 @@
 
 ## Recall
 
+最新用户要求：“测试没问题再合并到main worktree”。本轮先完成最终升级版本的三平台完整测试，成功后才由本任务推进本地main；测试尚未确认时不再向main交付新修复。核对当前本地main=c77213c22，已由并行合并包含3897754c8升级实现；本任务工作树c6514efff与它仅差后续验收证据。已有自动run38301349049仍在执行；38301773020只是docs scope成功，不能替代完整unit。此前多轮自动run确实被后续main push的cancel-in-progress取消，故采用现有workflow_dispatch入口固定实际head的新完整运行，其concurrency按run_id隔离，不修改CI范围、超时或测试集合。启动后读回head与空test_files输入并保存run身份；后续main变化不改变这轮测试对象。通过后先保存、审查main现有未提交差异，再仅合并已验证提交；不覆盖并行工作，不把docs成功、取消或聚焦测试当作全量通过。
+
 用户原始要求：“在新的worktree升级dependbot给出的pr，测试问题被修复”。范围确认：处理全部10个开放PR（38、37、36、35、34、32、28、25、24、20）。不委托、不发布版本、不创建Release/tag或新PR。起点origin/main=c4b8d5e58，独立工作树`C:/Users/hengu/.codex/worktrees/dependabot-upgrades/opencorvus`，分支`codex/dependabot-upgrades`跟踪origin/main。主工作区的SourceParts/i18n/CSS及spec索引和CI调查存在其他未提交修改，必须保留；独立安装依赖，禁止操作用户应用或共享node_modules。
 
 验收：十项升级在当前单一manifest/lock图中实际生效；真实安装、当前AI runtime checker、类型检查、生成固定点、无过滤依赖审计及聚焦非UI正向行为验收通过；界面依赖在隔离开发页面截图人工检查，不新增或运行UI自动化测试。记录原PR失败日志与当前结果差别。修改必须提交，fresh fetch/merge及审查全部待推送提交后推送到主交付来源；远端完整结果与本地聚焦结果分别报告。
