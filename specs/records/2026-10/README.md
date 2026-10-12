@@ -678,3 +678,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [来源提示焦点与点击穿透282](2026-10-11-source-tooltip-282.md)：真实关闭栈与命中定位，两项公共修复和四轮人工验收。
 
 - [长来源列表阅读与收起351](2026-10-12-source-collapse-351.md)：密集来源末尾操作与真实历史阅读返回。
+
+- [长子会话 Markdown 生命周期352](2026-10-12-markdown-lifetime-352.md)：真实历史的组件卸载、缓存与占位时序。

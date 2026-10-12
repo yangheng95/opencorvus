@@ -1,0 +1,30 @@
+[
+  {
+    "file": "diagnostic-observations.json",
+    "archive": "diagnostic-observations.json.gz",
+    "bytes": 432823,
+    "compressedBytes": 54907,
+    "integrity": "Entire decompressed bytes equal actual redacted original; exact original preserved privately"
+  },
+  {
+    "file": "history-01/markdown-lifetime-352-history-01-runtime.log",
+    "archive": "history-01/markdown-lifetime-352-history-01-runtime.log.gz",
+    "bytes": 547848,
+    "compressedBytes": 66972,
+    "integrity": "Entire decompressed bytes equal actual redacted original; exact original preserved privately"
+  },
+  {
+    "file": "history-readiness/result-frontier.json",
+    "archive": "history-readiness/result-frontier.json.gz",
+    "bytes": 801748,
+    "compressedBytes": 63554,
+    "integrity": "Entire decompressed bytes equal actual redacted original; exact original preserved privately"
+  },
+  {
+    "file": "history-readiness/result-startup.json",
+    "archive": "history-readiness/result-startup.json.gz",
+    "bytes": 919756,
+    "compressedBytes": 77421,
+    "integrity": "Entire decompressed bytes equal actual redacted original; exact original preserved privately"
+  }
+]

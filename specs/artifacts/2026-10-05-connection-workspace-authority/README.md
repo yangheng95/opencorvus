@@ -775,3 +775,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [来源提示焦点与点击穿透282](source-tooltip-282/README.md) / [Recall](source-tooltip-plan-282.md)：聚焦滚动误关闭与定位层拦截根因、最终一次鼠标点击及首次返回提示实证。
 
 - [长来源列表阅读与收起351](source-collapse-351/README.md) / [Recall](source-collapse-plan-351.md)。
+
+- [长子会话 Markdown 生命周期352](markdown-lifetime-352/README.md) / [Recall](markdown-lifetime-plan-352.md)。

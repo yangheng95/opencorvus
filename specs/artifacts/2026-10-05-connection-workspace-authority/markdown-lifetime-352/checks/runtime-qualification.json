@@ -1,0 +1,60 @@
+{
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-history-349-live-01",
+  "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/markdown-lifetime-352-history-01",
+  "launcherHandle": 85478,
+  "launcherActualExit": 0,
+  "settled": {
+    "occurrence": "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+    "outcome": "settled",
+    "host": {
+      "pid": 63320,
+      "processInstanceID": "win32:639274088048188450",
+      "occurrenceID": "d445cea5-07a2-4156-a1cb-186b0a6b9cac"
+    },
+    "target": {
+      "pid": 61640,
+      "processInstanceID": "win32:639274088056237771",
+      "occurrenceID": "57b4cdd4-6a3a-4754-92ec-2097c0c3deeb"
+    },
+    "observedAtUtc": "2026-10-12T13:40:51.033Z",
+    "deadlineAt": 1791812604734,
+    "terminal": {
+      "occurrenceID": "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+      "pid": 61640,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "elapsedMs": 445410,
+  "served": [
+    {
+      "level": "info",
+      "time": "2026-10-12T13:33:37.927Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5d52424f-9f98-4697-97df-13f0e0a5588b",
+        "method": "GET",
+        "path": "/ui/assets/main-BeV-vxc6.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    }
+  ],
+  "messages": 45,
+  "sources": 36,
+  "persistedProviderRequests": 45,
+  "identity": "All complete Message and Source rows and Provider request identities equal the original after real page use",
+  "boundaries": [
+    "Actual screenshots are separate; runtime and diagnostic data are not a visual assertion",
+    "Historical completed Task, no new streaming generation",
+    "Temporary instrumentation affects timing; no causal claim for continuous in-place rendering"
+  ]
+}

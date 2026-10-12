@@ -1,0 +1,35 @@
+{
+  "port": 18332,
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\markdown-lifetime-352-history-01\\evidence",
+  "nativeDeadlineAt": 1791812604734,
+  "observedProcessChain": [
+    {
+      "pid": 61640,
+      "processInstanceID": "win32:639274088056237771",
+      "occurrenceID": "57b4cdd4-6a3a-4754-92ec-2097c0c3deeb"
+    }
+  ],
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "owner": {
+    "processInstanceID": "win32:639274088056237771",
+    "ProcessId": 61640
+  },
+  "occurrence": "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+  "targetBirthAtMs": 1791812005623,
+  "authorityStaging": "None; no model Task requested",
+  "evidencePrefix": "markdown-lifetime-352-history-01",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\markdown-lifetime-352\\history-01",
+  "host": {
+    "pid": 63320,
+    "processInstanceID": "win32:639274088048188450",
+    "occurrenceID": "d445cea5-07a2-4156-a1cb-186b0a6b9cac"
+  },
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\markdown-lifetime-352-history-01\\runtime",
+  "nativeTarget": {
+    "pid": 61640,
+    "processInstanceID": "win32:639274088056237771",
+    "occurrenceID": "57b4cdd4-6a3a-4754-92ec-2097c0c3deeb"
+  },
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\markdown-lifetime-352-history-01",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-history-349-live-01\\project"
+}

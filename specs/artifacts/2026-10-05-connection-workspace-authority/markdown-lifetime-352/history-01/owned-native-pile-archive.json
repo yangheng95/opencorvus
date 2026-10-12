@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "name": "091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-12T13:33:26.0244560Z",
+      "bytes": 47224,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\markdown-lifetime-352\\generated-bun-diagnostic\\091d165574530ade.debug.pile"
+    },
+    {
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-12T13:33:26.0049769Z",
+      "bytes": 169556,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\markdown-lifetime-352\\generated-bun-diagnostic\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-12T13:33:25.9291264Z",
+      "bytes": 59902,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\markdown-lifetime-352\\generated-bun-diagnostic\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-12T13:33:25.9572280Z",
+      "bytes": 88408,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\markdown-lifetime-352\\generated-bun-diagnostic\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "name": "f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-12T13:33:26.0488000Z",
+      "bytes": 43530,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\markdown-lifetime-352\\generated-bun-diagnostic\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "observedAtUtc": "2026-10-12T13:41:52.4920284Z",
+  "targetBirthUtc": "2026-10-12T13:33:25.6237771Z",
+  "nativeTerminal": {
+    "occurrenceID": "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+    "pid": 61640,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "qualification": "Exact owned Host/Native terminal state and bounded single-file birth/path checks verified. Caller UI/checker joins require their original receipts and are not inferred by this helper. Native outcome retained, not converted into exit0."
+}

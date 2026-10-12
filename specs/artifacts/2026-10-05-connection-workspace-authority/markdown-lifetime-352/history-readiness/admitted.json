@@ -1,0 +1,32 @@
+{
+  "startupQualified": true,
+  "selectedSubject": {
+    "projectID": "prj_hLn27Mmf1VOOwWNVfnMK",
+    "kind": "task",
+    "requestID": "0772bae2-8366-4adc-a5bb-01aab1d77924",
+    "id": "tsk_g00VXpnbRn00L81V59Oh",
+    "sessionID": "ses_-zUSACORuzzuf2pKxeD5"
+  },
+  "sourceOccurrence": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+  "runtimeLeaseStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 77744,
+        "processInstanceID": "win32:639274018483944714",
+        "occurrenceID": "55471d6f-ae50-41f4-84f2-298625f2a2ad"
+      },
+      "lease": {
+        "id": "act_g0VXpnPhI00VhIs92EUv",
+        "target": "runtime_process",
+        "target_id": "55471d6f-ae50-41f4-84f2-298625f2a2ad",
+        "owner_occurrence_id": "{\"pid\":77744,\"processInstanceID\":\"win32:639274018483944714\",\"occurrenceID\":\"55471d6f-ae50-41f4-84f2-298625f2a2ad\"}",
+        "time_activated": 1791805056551,
+        "expires_at": 9007199254740991
+      }
+    }
+  ],
+  "review": "Fresh352 full source review; counts and identities are in current result-startup/result-task-startup/result-frontier and guard. Original Task terminal/recovery/permissions/Message/Memory/physical ownership must satisfy the checks above. Full copy and actual child UI remain required.",
+  "observedAtUtc": "2026-10-12T13:32:32.9578202Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-history-349-live-01"
+}

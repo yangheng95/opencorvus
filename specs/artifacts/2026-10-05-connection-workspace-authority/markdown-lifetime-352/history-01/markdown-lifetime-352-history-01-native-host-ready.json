@@ -1,0 +1,40 @@
+{
+  "occurrence": "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+  "outcome": "ready",
+  "host": {
+    "pid": 63320,
+    "processInstanceID": "win32:639274088048188450",
+    "occurrenceID": "d445cea5-07a2-4156-a1cb-186b0a6b9cac"
+  },
+  "parent": {
+    "pid": 37988,
+    "processInstanceID": "win32:639274088029709172",
+    "occurrenceID": "5ac372bc-ae22-403c-9e5c-5ae0308b43e1"
+  },
+  "target": {
+    "pid": 61640,
+    "processInstanceID": "win32:639274088056237771",
+    "occurrenceID": "57b4cdd4-6a3a-4754-92ec-2097c0c3deeb"
+  },
+  "targetBirthAtMs": 1791812005623,
+  "deadlineAt": 1791812604734,
+  "observedAtUtc": "2026-10-12T13:33:25.658Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18332",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-history-349-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\markdown-lifetime-352-history-01\\startup.json",
+    "--startup-occurrence",
+    "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

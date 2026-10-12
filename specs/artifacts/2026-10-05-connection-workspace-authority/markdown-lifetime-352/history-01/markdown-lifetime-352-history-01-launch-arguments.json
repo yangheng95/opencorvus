@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\markdown-lifetime-352-history-01\\evidence",
+    "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+    "1791812604734",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18332",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-history-349-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\markdown-lifetime-352-history-01\\startup.json",
+    "--startup-occurrence",
+    "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18332,
+  "occurrence": "markdown-lifetime-352-history-01-8d13f584-b0ee-4c56-82c3-9e5b63de752d"
+}

@@ -1,0 +1,140 @@
+{
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-history-349-live-01",
+  "readQualified": true,
+  "observedAtUtc": "2026-10-12T13:31:53.8282929Z",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 14344,
+        "processInstanceID": "win32:639274018476231346",
+        "occurrenceID": "74e6e821-6046-4b82-8c71-4a1f5f1a8640"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 77744,
+        "processInstanceID": "win32:639274018483944714",
+        "occurrenceID": "11154154-74b3-425d-8cfe-3b9607d5ab12"
+      }
+    }
+  ],
+  "originalTask": {
+    "taskID": "tsk_g00VXpnbRn00L81V59Oh",
+    "projectID": "prj_hLn27Mmf1VOOwWNVfnMK",
+    "rootSessionID": "ses_-zUSACORuzzuf2pKxeD5",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXpnbYf000Qiw8TG31",
+    "openedAt": 1791805101719
+  },
+  "originalQualification": {
+    "observedAtUtc": "2026-10-12T11:50:24.7850252Z",
+    "pairedCleanupComplete": true,
+    "occurrence": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 77744,
+          "processInstanceID": "win32:639274018483944714",
+          "occurrenceID": "11154154-74b3-425d-8cfe-3b9607d5ab12"
+        },
+        "originalOccurrencePresent": false
+      },
+      {
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 14344,
+          "processInstanceID": "win32:639274018476231346",
+          "occurrenceID": "74e6e821-6046-4b82-8c71-4a1f5f1a8640"
+        },
+        "originalOccurrencePresent": false
+      }
+    ],
+    "copiedPair": [
+      {
+        "presentAfter": false,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-history-349-live-01\\runtime\\data\\auth.json",
+        "copiedLength": 2194
+      },
+      {
+        "presentAfter": false,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-history-349-live-01\\runtime\\data\\models.json",
+        "copiedLength": 9155406
+      }
+    ],
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "nativeSettlement": {
+      "occurrence": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+      "outcome": "settled",
+      "host": {
+        "pid": 14344,
+        "processInstanceID": "win32:639274018476231346",
+        "occurrenceID": "74e6e821-6046-4b82-8c71-4a1f5f1a8640"
+      },
+      "target": {
+        "pid": 77744,
+        "processInstanceID": "win32:639274018483944714",
+        "occurrenceID": "11154154-74b3-425d-8cfe-3b9607d5ab12"
+      },
+      "observedAtUtc": "2026-10-12T11:50:21.806Z",
+      "deadlineAt": 1791806547607,
+      "terminal": {
+        "occurrenceID": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+        "pid": 77744,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "listeners": null,
+    "physicalCompletion": true
+  },
+  "boundary": "Fresh exact original Native/Host, port, pair and actual physical/output/request settled receipt; original Task qualification retained. Parent15819 actual exit0 was observed in batch349; no new parent execution claimed.",
+  "listenerCount": 0,
+  "native": {
+    "occurrence": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+    "outcome": "settled",
+    "host": {
+      "pid": 14344,
+      "processInstanceID": "win32:639274018476231346",
+      "occurrenceID": "74e6e821-6046-4b82-8c71-4a1f5f1a8640"
+    },
+    "target": {
+      "pid": 77744,
+      "processInstanceID": "win32:639274018483944714",
+      "occurrenceID": "11154154-74b3-425d-8cfe-3b9607d5ab12"
+    },
+    "observedAtUtc": "2026-10-12T11:50:21.806Z",
+    "deadlineAt": 1791806547607,
+    "terminal": {
+      "occurrenceID": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2",
+      "pid": 77744,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "occurrence": "child-history-349-live-01-6d3ba89c-02dd-4b11-be10-fae6b679dfd2"
+}

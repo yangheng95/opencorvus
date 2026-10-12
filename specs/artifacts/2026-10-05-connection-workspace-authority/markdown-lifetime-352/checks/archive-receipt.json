@@ -1,0 +1,116 @@
+[
+  {
+    "file": "checks/guard.log.gz",
+    "bytes": 81,
+    "compressedBytes": 91,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/complete-readiness.log.gz",
+    "bytes": 864240,
+    "compressedBytes": 71895,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/task-readiness.log.gz",
+    "bytes": 3457,
+    "compressedBytes": 1036,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/frontier.log.gz",
+    "bytes": 9314,
+    "compressedBytes": 2368,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/admit.log.gz",
+    "bytes": 73,
+    "compressedBytes": 86,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/copy-before.log.gz",
+    "bytes": 404,
+    "compressedBytes": 312,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/launch-before.log.gz",
+    "bytes": 1640,
+    "compressedBytes": 642,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/shutdown-before.log.gz",
+    "bytes": 82,
+    "compressedBytes": 91,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/archive-before.log.gz",
+    "bytes": 96,
+    "compressedBytes": 113,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/piles-before.log.gz",
+    "bytes": 0,
+    "compressedBytes": 20,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/build-diagnostic.log.gz",
+    "bytes": 51948,
+    "compressedBytes": 10790,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/types-diagnostic.log.gz",
+    "bytes": 16,
+    "compressedBytes": 36,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/build-final.log.gz",
+    "bytes": 51948,
+    "compressedBytes": 10796,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/types-final.log.gz",
+    "bytes": 16,
+    "compressedBytes": 36,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/inspect.log.gz",
+    "bytes": 7914,
+    "compressedBytes": 2314,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "checks/inspect-final.log.gz",
+    "bytes": 7914,
+    "compressedBytes": 2314,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "history-01/stdout.log.gz",
+    "bytes": 544,
+    "compressedBytes": 366,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "history-01/stderr.log.gz",
+    "bytes": 0,
+    "compressedBytes": 20,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  },
+  {
+    "file": "history-01/dev.log.gz",
+    "bytes": 546652,
+    "compressedBytes": 66884,
+    "integrity": "Full decompressed bytes equal actual redacted original"
+  }
+]

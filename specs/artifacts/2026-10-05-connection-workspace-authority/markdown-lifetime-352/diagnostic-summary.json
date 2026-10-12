@@ -1,0 +1,687 @@
+{
+  "observedAt": "2026-10-12T13:41:52.547Z",
+  "records": 787,
+  "firstSequence": 1,
+  "lastSequence": 787,
+  "summaries": [
+    {
+      "action": "first-child-open",
+      "at": "2026-10-12T13:34:00.196Z",
+      "counts": {
+        "create": 39,
+        "render": 39,
+        "cache-hit": 2,
+        "scheduled": 37,
+        "reply": 37,
+        "mount": 37,
+        "dispose": 2
+      },
+      "emptyScheduledOwners": [
+        {
+          "owner": 9,
+          "textStart": "我只按顺序读取指定的四个公开网页，将资料作为只读证据逐题说明，不读取本地文件、不修改项目、不调用其他成员，也不进行浏览器或界面验收。",
+          "chars": 66,
+          "scheduledAt": "2026-10-12T13:34:00.647Z",
+          "firstMountedAt": "2026-10-12T13:34:00.743Z",
+          "elapsedMs": 96
+        },
+        {
+          "owner": 10,
+          "textStart": "### R01 URL接口用途\\x0a本次读取的MDN接口页说明，URL用于解析、构造、规范化和编码地址，并通过属性读取或修改组成部分；既可接受完整地址，也可结合相对地址与基准地址。但这属于接口资料，不能直接证明实际产品已正确接入该接口，或用户点",
+          "chars": 130,
+          "scheduledAt": "2026-10-12T13:34:00.648Z",
+          "firstMountedAt": "2026-10-12T13:34:00.755Z",
+          "elapsedMs": 107
+        },
+        {
+          "owner": 11,
+          "textStart": "### R02 相对地址与base\\x0a本次构造器页明确，相对地址需要提供base，解析并非简单拼接；当前目录取基准路径最后一个斜杠之前的部分，根相对路径则依据基准源解析。但资料不能证明产品选取的基准地址符合部署环境，也不能证明子目录部署时的实",
+          "chars": 128,
+          "scheduledAt": "2026-10-12T13:34:00.649Z",
+          "firstMountedAt": "2026-10-12T13:34:00.769Z",
+          "elapsedMs": 120
+        },
+        {
+          "owner": 12,
+          "textStart": "### R03 查询参数基本读取\\x0a本次参数接口页说明，可用URLSearchParams解析查询字符串，通过has判断键是否存在，通过get取得首个值；示例还显示不存在的键返回null。构造器不解析完整网址，因此资料不能证明产品传入的内容正",
+          "chars": 145,
+          "scheduledAt": "2026-10-12T13:34:00.649Z",
+          "firstMountedAt": "2026-10-12T13:34:00.784Z",
+          "elapsedMs": 135
+        },
+        {
+          "owner": 13,
+          "textStart": "### R04 fragment的用途\\x0a本次片段页说明，fragment是以井号开始的地址末尾部分，用于标识资源内部的位置，例如文档章节或视频时间；其具体格式由资源决定，并由客户端处理。但资料不能证明实际页面具有对应目标，也不能证明产品中的",
+          "chars": 137,
+          "scheduledAt": "2026-10-12T13:34:00.650Z",
+          "firstMountedAt": "2026-10-12T13:34:00.799Z",
+          "elapsedMs": 149
+        },
+        {
+          "owner": 14,
+          "textStart": "### R05 hostname与host区别\\x0a本次接口页将hostname定义为域名，而host在域名之外还可包含冒号及端口，因此二者不能在需要区分端口的逻辑中随意替换。该页提供的是属性语义，不能直接证明产品的域名白名单、跨源判断或端口处",
+          "chars": 139,
+          "scheduledAt": "2026-10-12T13:34:00.651Z",
+          "firstMountedAt": "2026-10-12T13:34:00.813Z",
+          "elapsedMs": 162
+        },
+        {
+          "owner": 15,
+          "textStart": "### R06 无效构造输入\\x0a本次构造器页明确，不能形成有效地址的输入会抛出TypeError，并举出相对路径搭配空基准地址、以及相对路径缺少基准地址的失败示例。这些是文档中的异常规则，不能证明产品已经捕获异常、保留用户输入或显示友好提示，",
+          "chars": 214,
+          "scheduledAt": "2026-10-12T13:34:00.651Z",
+          "firstMountedAt": "2026-10-12T13:34:00.827Z",
+          "elapsedMs": 176
+        },
+        {
+          "owner": 16,
+          "textStart": "### R07 重复查询键\\x0a本次参数页以同一foo键对应bar和baz为例，说明重复键会保留在查询序列中，get只返回第一个值，getAll取得全部值。因此不能默认一个键只有一个值；但资料不能证明产品或后端如何解释重复参数，也不能证明多选筛",
+          "chars": 134,
+          "scheduledAt": "2026-10-12T13:34:00.652Z",
+          "firstMountedAt": "2026-10-12T13:34:00.923Z",
+          "elapsedMs": 271
+        },
+        {
+          "owner": 17,
+          "textStart": "### R08 fragment与网络请求\\x0a本次片段页明确，请求资源时fragment不会发送给服务器，而是在资源取回后由客户端处理，所以不能把片段当作服务器直接接收的查询字段。但资料并未观测产品的真实网络流量，不能证明其脚本没有另行上报片",
+          "chars": 145,
+          "scheduledAt": "2026-10-12T13:34:00.653Z",
+          "firstMountedAt": "2026-10-12T13:34:00.944Z",
+          "elapsedMs": 291
+        },
+        {
+          "owner": 18,
+          "textStart": "### R09 href与origin区别\\x0a本次接口页说明，href返回完整地址，origin则是只读的源信息，包含协议、域名和端口；二者承担完整资源标识与源标识的不同职责。资料不能证明产品已经正确区分这两者，也不能证明以源信息进行的访问控",
+          "chars": 142,
+          "scheduledAt": "2026-10-12T13:34:00.654Z",
+          "firstMountedAt": "2026-10-12T13:34:00.957Z",
+          "elapsedMs": 303
+        },
+        {
+          "owner": 19,
+          "textStart": "### R10 base路径末尾斜杠\\x0a本次构造器页说明，基准地址的当前目录包含最后一个斜杠之前的路径，不包含其后的段；据此可知末尾斜杠会影响相对地址所依据的目录，而非只改变外观。但该规则不能证明产品传入的base正确，也不能证明部署服务器对",
+          "chars": 138,
+          "scheduledAt": "2026-10-12T13:34:00.655Z",
+          "firstMountedAt": "2026-10-12T13:34:00.972Z",
+          "elapsedMs": 317
+        },
+        {
+          "owner": 20,
+          "textStart": "### R11 参数遍历顺序\\x0a本次参数页明确，对URLSearchParams直接使用遍历结构，或调用entries遍历键值对，顺序均与查询字符串中的出现顺序一致，并不默认按键排序。但资料不能证明产品后续转换为其他数据结构时仍保留顺序，也不",
+          "chars": 144,
+          "scheduledAt": "2026-10-12T13:34:00.656Z",
+          "firstMountedAt": "2026-10-12T13:34:00.986Z",
+          "elapsedMs": 330
+        },
+        {
+          "owner": 21,
+          "textStart": "### R12 文档元素定位\\x0a本次片段页说明，HTML中的片段可对应元素的id，示例中的井号syntax会使浏览器滚动到对应元素，体现资源内部定位的用途。但文档示例不能证明产品页面存在该标识，也不能证明动态加载、固定页头或自定义滚动逻辑不会",
+          "chars": 194,
+          "scheduledAt": "2026-10-12T13:34:00.657Z",
+          "firstMountedAt": "2026-10-12T13:34:01.000Z",
+          "elapsedMs": 343
+        },
+        {
+          "owner": 22,
+          "textStart": "### R13 pathname与search区别\\x0a本次接口页将pathname描述为路径部分，不包括查询和片段；search则表示查询参数字符串，有参数时包含前导问号，具体参数还可通过searchParams访问。但资料不能证明产品已分别",
+          "chars": 155,
+          "scheduledAt": "2026-10-12T13:34:00.658Z",
+          "firstMountedAt": "2026-10-12T13:34:01.019Z",
+          "elapsedMs": 361
+        },
+        {
+          "owner": 23,
+          "textStart": "### R14 绝对URL与base\\x0a本次构造器页明确，当url参数是绝对地址时，提供的base不会用于生成最终地址；base主要用于解析相对引用。因此不能靠传入基准地址把任意绝对地址限制在本站，但资料不能证明产品已执行目标源校验，也不能证",
+          "chars": 141,
+          "scheduledAt": "2026-10-12T13:34:00.658Z",
+          "firstMountedAt": "2026-10-12T13:34:01.032Z",
+          "elapsedMs": 374
+        },
+        {
+          "owner": 24,
+          "textStart": "### R15 append和set区别\\x0a本次参数页说明，append把指定键值作为新条目追加，允许同名键继续存在；set设置该键的值，并删除同名键的其他值，示例展示了多值变单值的结果。但文档不能证明产品选择的方法符合多选或单选业务，也不能",
+          "chars": 143,
+          "scheduledAt": "2026-10-12T13:34:00.659Z",
+          "firstMountedAt": "2026-10-12T13:34:01.049Z",
+          "elapsedMs": 390
+        },
+        {
+          "owner": 25,
+          "textStart": "### R16 媒体片段示例\\x0a本次片段页给出井号t等于10逗号20的媒体示例，明确说明音视频从第十秒开始播放，但本页未进一步解释终点处理或完整媒体片段语法。资料不能证明产品播放器支持此形式，也不能证明自动播放策略、媒体加载状态及实际定位精度",
+          "chars": 127,
+          "scheduledAt": "2026-10-12T13:34:00.660Z",
+          "firstMountedAt": "2026-10-12T13:34:01.063Z",
+          "elapsedMs": 403
+        },
+        {
+          "owner": 26,
+          "textStart": "### R17 hash属性边界\\x0a本次接口页将hash描述为井号加片段标识符的字符串，并展示设置hash后完整地址出现片段的例子；这说明它属于地址对象的组成部分。页面未覆盖全部片段编码细节，也不能直接证明修改独立URL对象会改变浏览器地址栏",
+          "chars": 134,
+          "scheduledAt": "2026-10-12T13:34:00.661Z",
+          "firstMountedAt": "2026-10-12T13:34:01.078Z",
+          "elapsedMs": 417
+        },
+        {
+          "owner": 27,
+          "textStart": "### R18 构造器字符串转换\\x0a本次构造器页说明，url和base参数都会进行字符串转换，已有URL对象会通过href提供字符串，带字符串化能力的链接元素也可作为参数。资料说明了输入转换机制，不能证明产品传入对象的实际字符串结果符合预期，",
+          "chars": 214,
+          "scheduledAt": "2026-10-12T13:34:00.662Z",
+          "firstMountedAt": "2026-10-12T13:34:01.091Z",
+          "elapsedMs": 429
+        },
+        {
+          "owner": 28,
+          "textStart": "### R19 get和getAll区别\\x0a本次参数页明确，get返回指定键关联的首个值，getAll返回该键的全部值；重复foo示例分别得到bar和包含bar、baz的数组。资料能说明读取方法的差异，不能证明产品已按业务需要选用它们，也不能",
+          "chars": 146,
+          "scheduledAt": "2026-10-12T13:34:00.663Z",
+          "firstMountedAt": "2026-10-12T13:34:01.105Z",
+          "elapsedMs": 442
+        },
+        {
+          "owner": 29,
+          "textStart": "### R20 文本片段的形式\\x0a本次片段页给出`#:~:text=fragment`形式，说明浏览器可高亮文档中对应的文本，并以文本内容定位页面的一部分；本页未覆盖完整匹配语法及全部限制。资料不能证明实际产品页面存在匹配文本，也不能证明目标",
+          "chars": 141,
+          "scheduledAt": "2026-10-12T13:34:00.664Z",
+          "firstMountedAt": "2026-10-12T13:34:01.118Z",
+          "elapsedMs": 454
+        },
+        {
+          "owner": 30,
+          "textStart": "### R21 URL规范化范围\\x0a本次接口页说明，构造器可结合字符串化对地址进行规范化和编码，并展示非ASCII路径字符转为百分号编码的例子；但本页未列出所有协议的完整规范化规则。资料不能证明规范化后地址满足产品业务校验，更不能证明该地址对",
+          "chars": 135,
+          "scheduledAt": "2026-10-12T13:34:00.665Z",
+          "firstMountedAt": "2026-10-12T13:34:01.131Z",
+          "elapsedMs": 466
+        },
+        {
+          "owner": 31,
+          "textStart": "### R22 相对路径解析示例\\x0a本次构造器页示例显示，以斜杠开始的文档路径，即使基准地址包含法语目录和文件段，仍解析到该源根目录下的英语文档路径；另有双斜杠地址继承协议的例子。但资料不能证明产品路由存在相应资源，也不能证明解析所得地址与部",
+          "chars": 132,
+          "scheduledAt": "2026-10-12T13:34:00.666Z",
+          "firstMountedAt": "2026-10-12T13:34:01.143Z",
+          "elapsedMs": 477
+        },
+        {
+          "owner": 32,
+          "textStart": "### R23 删除查询参数\\x0a本次参数页说明，delete可删除匹配名称的查询条目，也可按名称及可选值匹配；示例删除topic后只剩另一参数，关联URL的查询还可能重新序列化。但资料不能证明产品删除操作已经同步到地址栏和界面，也不能证明保留",
+          "chars": 141,
+          "scheduledAt": "2026-10-12T13:34:00.667Z",
+          "firstMountedAt": "2026-10-12T13:34:01.155Z",
+          "elapsedMs": 488
+        },
+        {
+          "owner": 33,
+          "textStart": "### R24 fragment与查询的顺序\\x0a本次片段页将fragment定义为地址最后一部分，完整示例中查询参数位于问号之后、井号片段之前，支持路径、查询、片段的排列关系。但资料不能证明产品手动拼接时遵守该顺序，也不能证明其生成链接中的参",
+          "chars": 242,
+          "scheduledAt": "2026-10-12T13:34:00.668Z",
+          "firstMountedAt": "2026-10-12T13:34:01.167Z",
+          "elapsedMs": 499
+        },
+        {
+          "owner": 34,
+          "textStart": "### R25 属性修改与序列化\\x0a本次接口页展示，通过修改hash可让href包含对应片段，修改pathname中的非ASCII字符则会得到编码后的完整地址；toString返回当前href值。资料能支持地址对象的修改与序列化关系，不能证明",
+          "chars": 157,
+          "scheduledAt": "2026-10-12T13:34:00.669Z",
+          "firstMountedAt": "2026-10-12T13:34:01.181Z",
+          "elapsedMs": 512
+        },
+        {
+          "owner": 35,
+          "textStart": "### R26 构造异常与try/catch\\x0a本次构造器页明确，无效地址会抛出TypeError，并列出失败输入；但指定页没有直接展示try/catch代码或异常恢复流程，因此只能据异常说明提出捕获需求。资料不能证明产品已设置异常处理，也不",
+          "chars": 150,
+          "scheduledAt": "2026-10-12T13:34:00.670Z",
+          "firstMountedAt": "2026-10-12T13:34:01.192Z",
+          "elapsedMs": 522
+        },
+        {
+          "owner": 36,
+          "textStart": "### R27 百分号编码注意点\\x0a本次参数页说明，解析查询字符串时会解码，操作单个键值时应使用未编码内容，序列化时才编码；把已编码的键再次追加会产生重复编码。资料不能证明产品在各处理环节只编码一次，也不能证明包含百分号、分隔符或非ASCII",
+          "chars": 141,
+          "scheduledAt": "2026-10-12T13:34:00.671Z",
+          "firstMountedAt": "2026-10-12T13:34:01.205Z",
+          "elapsedMs": 534
+        },
+        {
+          "owner": 37,
+          "textStart": "### R28 fragment编码边界\\x0a本次片段页说明，片段是井号后的字符序列，具体格式由资源本身定义；但页面未覆盖百分号编码字符集、设置与读取时的编码差异，不能据此编造完整编码规则。资料也不能证明产品的中文锚点、特殊字符或文本片段在实际",
+          "chars": 135,
+          "scheduledAt": "2026-10-12T13:34:00.672Z",
+          "firstMountedAt": "2026-10-12T13:34:01.225Z",
+          "elapsedMs": 553
+        },
+        {
+          "owner": 38,
+          "textStart": "### R29 toString与toJSON\\x0a本次接口页说明，toString返回完整地址且与href值一致，toJSON返回相同字符串，并由JSON.stringify自动调用；二者不是把地址拆成属性对象。资料不能证明产品保存格式符合消",
+          "chars": 161,
+          "scheduledAt": "2026-10-12T13:34:00.673Z",
+          "firstMountedAt": "2026-10-12T13:34:01.243Z",
+          "elapsedMs": 570
+        },
+        {
+          "owner": 39,
+          "textStart": "### R30 有效base与错误base\\x0a本次构造器页示例说明，相对路径配有效的完整基准地址可得到绝对地址，配空字符串基准则抛出TypeError，缺少基准同样失败。这里的有效只涉及地址解析，不表示基准符合业务目的；资料不能证明产品部署配",
+          "chars": 224,
+          "scheduledAt": "2026-10-12T13:34:00.674Z",
+          "firstMountedAt": "2026-10-12T13:34:01.255Z",
+          "elapsedMs": 581
+        },
+        {
+          "owner": 40,
+          "textStart": "### R31 空格与加号\\x0a本次参数页说明，查询序列化把空格编码为加号，构造器解析字符串时则把加号解释为空格；若要保留原始加号，可追加未编码值，使其序列化为百分号编码。资料不能证明产品在动态拼接时避免了字符混淆，也不能证明含加号的搜索词或数",
+          "chars": 134,
+          "scheduledAt": "2026-10-12T13:34:00.675Z",
+          "firstMountedAt": "2026-10-12T13:34:01.269Z",
+          "elapsedMs": 594
+        },
+        {
+          "owner": 41,
+          "textStart": "### R32 fragment与页面标题区别\\x0a本次片段页说明，fragment用于资源内部定位，HTML例子依据元素id而非页面标题；但指定页未直接讨论标题的定义或标题更新机制，不能把二者关系扩写成未提供的规则。资料不能证明产品标题与锚点",
+          "chars": 147,
+          "scheduledAt": "2026-10-12T13:34:00.676Z",
+          "firstMountedAt": "2026-10-12T13:34:01.282Z",
+          "elapsedMs": 606
+        },
+        {
+          "owner": 42,
+          "textStart": "### R33 静态方法与实例方法\\x0a本次接口页把canParse、parse及对象地址创建和撤销列为静态方法，把toString和toJSON列为实例方法，分别用于解析判断、对象地址管理及已有地址序列化。资料不能证明产品调用位置正确，也不能",
+          "chars": 154,
+          "scheduledAt": "2026-10-12T13:34:00.677Z",
+          "firstMountedAt": "2026-10-12T13:34:01.295Z",
+          "elapsedMs": 618
+        },
+        {
+          "owner": 43,
+          "textStart": "### R34 构造器示例的适用范围\\x0a本次构造器页的示例用于说明绝对地址、相对路径、空输入及错误基准的解析结果，并注明旧版Edge对空引用查询参数存在差异，因此示例不能代替全部环境测试。资料不能证明产品的目标浏览器和部署路径符合示例前提，也",
+          "chars": 143,
+          "scheduledAt": "2026-10-12T13:34:00.678Z",
+          "firstMountedAt": "2026-10-12T13:34:01.308Z",
+          "elapsedMs": 630
+        },
+        {
+          "owner": 44,
+          "textStart": "### R35 排序与serialization\\x0a本次参数页说明，sort按键排序，toString生成可用于地址的查询字符串；关联URL的示例还显示，即使参数值不变，排序也可能让空格和波浪号的编码形式改变。资料不能证明产品依赖的签名、缓存",
+          "chars": 154,
+          "scheduledAt": "2026-10-12T13:34:00.680Z",
+          "firstMountedAt": "2026-10-12T13:34:01.320Z",
+          "elapsedMs": 640
+        },
+        {
+          "owner": 45,
+          "textStart": "### R36 资料证据与真实导航验收区别\\x0a本次片段页说明，片段由客户端在资源取回后处理，可用于元素滚动、文本高亮或媒体时间定位；这些是文档描述的机制，不是本产品的操作记录。资料不能直接证明真实点击后的地址、目标位置和可见内容正确，本次也未",
+          "chars": 275,
+          "scheduledAt": "2026-10-12T13:34:00.681Z",
+          "firstMountedAt": "2026-10-12T13:34:01.333Z",
+          "elapsedMs": 652
+        }
+      ],
+      "sequenceStart": 41,
+      "sequenceEnd": 233
+    },
+    {
+      "action": "close-dock",
+      "at": "2026-10-12T13:34:37.678Z",
+      "counts": {
+        "create": 0,
+        "render": 0,
+        "cache-hit": 0,
+        "scheduled": 0,
+        "reply": 0,
+        "mount": 0,
+        "dispose": 37
+      },
+      "emptyScheduledOwners": [],
+      "sequenceStart": 234,
+      "sequenceEnd": 270
+    },
+    {
+      "action": "reopen-dock-1",
+      "at": "2026-10-12T13:34:47.054Z",
+      "counts": {
+        "create": 39,
+        "render": 39,
+        "cache-hit": 32,
+        "scheduled": 7,
+        "reply": 7,
+        "mount": 7,
+        "dispose": 2
+      },
+      "emptyScheduledOwners": [
+        {
+          "owner": 48,
+          "textStart": "我只按顺序读取指定的四个公开网页，将资料作为只读证据逐题说明，不读取本地文件、不修改项目、不调用其他成员，也不进行浏览器或界面验收。",
+          "chars": 66,
+          "scheduledAt": "2026-10-12T13:34:47.231Z",
+          "firstMountedAt": "2026-10-12T13:34:47.424Z",
+          "elapsedMs": 193
+        },
+        {
+          "owner": 49,
+          "textStart": "### R01 URL接口用途\\x0a本次读取的MDN接口页说明，URL用于解析、构造、规范化和编码地址，并通过属性读取或修改组成部分；既可接受完整地址，也可结合相对地址与基准地址。但这属于接口资料，不能直接证明实际产品已正确接入该接口，或用户点",
+          "chars": 130,
+          "scheduledAt": "2026-10-12T13:34:47.234Z",
+          "firstMountedAt": "2026-10-12T13:34:47.441Z",
+          "elapsedMs": 207
+        },
+        {
+          "owner": 50,
+          "textStart": "### R02 相对地址与base\\x0a本次构造器页明确，相对地址需要提供base，解析并非简单拼接；当前目录取基准路径最后一个斜杠之前的部分，根相对路径则依据基准源解析。但资料不能证明产品选取的基准地址符合部署环境，也不能证明子目录部署时的实",
+          "chars": 128,
+          "scheduledAt": "2026-10-12T13:34:47.236Z",
+          "firstMountedAt": "2026-10-12T13:34:47.462Z",
+          "elapsedMs": 226
+        },
+        {
+          "owner": 51,
+          "textStart": "### R03 查询参数基本读取\\x0a本次参数接口页说明，可用URLSearchParams解析查询字符串，通过has判断键是否存在，通过get取得首个值；示例还显示不存在的键返回null。构造器不解析完整网址，因此资料不能证明产品传入的内容正",
+          "chars": 145,
+          "scheduledAt": "2026-10-12T13:34:47.239Z",
+          "firstMountedAt": "2026-10-12T13:34:47.487Z",
+          "elapsedMs": 248
+        },
+        {
+          "owner": 52,
+          "textStart": "### R04 fragment的用途\\x0a本次片段页说明，fragment是以井号开始的地址末尾部分，用于标识资源内部的位置，例如文档章节或视频时间；其具体格式由资源决定，并由客户端处理。但资料不能证明实际页面具有对应目标，也不能证明产品中的",
+          "chars": 137,
+          "scheduledAt": "2026-10-12T13:34:47.241Z",
+          "firstMountedAt": "2026-10-12T13:34:47.502Z",
+          "elapsedMs": 261
+        },
+        {
+          "owner": 85,
+          "textStart": "研究员已逐题输出36段正文。接下来我只核对这些原文和已有读取记录，确认每题先读取、后回答，以及访问范围和失败数量，不重新整理答案。",
+          "chars": 65,
+          "scheduledAt": "2026-10-12T13:34:47.820Z",
+          "firstMountedAt": "2026-10-12T13:34:47.858Z",
+          "elapsedMs": 38
+        },
+        {
+          "owner": 86,
+          "textStart": "已核对全部36段原正文及实际调用记录：R01—R36均按“先读取、后回答”顺序完成，36次独立读取仅访问指定四个URL，均使用Markdown格式，读取失败0题；每第6题均附短表格。未覆盖内容和产品行为边界已在原文中说明，未增加成员、创建额",
+          "chars": 144,
+          "scheduledAt": "2026-10-12T13:34:47.824Z",
+          "firstMountedAt": "2026-10-12T13:34:47.862Z",
+          "elapsedMs": 38
+        }
+      ],
+      "sequenceStart": 271,
+      "sequenceEnd": 403
+    },
+    {
+      "action": "show-all-agents",
+      "at": "2026-10-12T13:35:16.545Z",
+      "counts": {
+        "create": 0,
+        "render": 0,
+        "cache-hit": 0,
+        "scheduled": 0,
+        "reply": 0,
+        "mount": 0,
+        "dispose": 37
+      },
+      "emptyScheduledOwners": [],
+      "sequenceStart": 404,
+      "sequenceEnd": 440
+    },
+    {
+      "action": "return-from-agent-list",
+      "at": "2026-10-12T13:35:23.254Z",
+      "counts": {
+        "create": 37,
+        "render": 37,
+        "cache-hit": 30,
+        "scheduled": 7,
+        "reply": 7,
+        "mount": 7,
+        "dispose": 0
+      },
+      "emptyScheduledOwners": [
+        {
+          "owner": 92,
+          "textStart": "### R05 hostname与host区别\\x0a本次接口页将hostname定义为域名，而host在域名之外还可包含冒号及端口，因此二者不能在需要区分端口的逻辑中随意替换。该页提供的是属性语义，不能直接证明产品的域名白名单、跨源判断或端口处",
+          "chars": 139,
+          "scheduledAt": "2026-10-12T13:35:23.481Z",
+          "firstMountedAt": "2026-10-12T13:35:23.686Z",
+          "elapsedMs": 205
+        },
+        {
+          "owner": 93,
+          "textStart": "### R06 无效构造输入\\x0a本次构造器页明确，不能形成有效地址的输入会抛出TypeError，并举出相对路径搭配空基准地址、以及相对路径缺少基准地址的失败示例。这些是文档中的异常规则，不能证明产品已经捕获异常、保留用户输入或显示友好提示，",
+          "chars": 214,
+          "scheduledAt": "2026-10-12T13:35:23.485Z",
+          "firstMountedAt": "2026-10-12T13:35:23.707Z",
+          "elapsedMs": 222
+        },
+        {
+          "owner": 94,
+          "textStart": "### R07 重复查询键\\x0a本次参数页以同一foo键对应bar和baz为例，说明重复键会保留在查询序列中，get只返回第一个值，getAll取得全部值。因此不能默认一个键只有一个值；但资料不能证明产品或后端如何解释重复参数，也不能证明多选筛",
+          "chars": 134,
+          "scheduledAt": "2026-10-12T13:35:23.489Z",
+          "firstMountedAt": "2026-10-12T13:35:23.740Z",
+          "elapsedMs": 251
+        },
+        {
+          "owner": 95,
+          "textStart": "### R08 fragment与网络请求\\x0a本次片段页明确，请求资源时fragment不会发送给服务器，而是在资源取回后由客户端处理，所以不能把片段当作服务器直接接收的查询字段。但资料并未观测产品的真实网络流量，不能证明其脚本没有另行上报片",
+          "chars": 145,
+          "scheduledAt": "2026-10-12T13:35:23.493Z",
+          "firstMountedAt": "2026-10-12T13:35:23.756Z",
+          "elapsedMs": 263
+        },
+        {
+          "owner": 96,
+          "textStart": "### R09 href与origin区别\\x0a本次接口页说明，href返回完整地址，origin则是只读的源信息，包含协议、域名和端口；二者承担完整资源标识与源标识的不同职责。资料不能证明产品已经正确区分这两者，也不能证明以源信息进行的访问控",
+          "chars": 142,
+          "scheduledAt": "2026-10-12T13:35:23.497Z",
+          "firstMountedAt": "2026-10-12T13:35:23.773Z",
+          "elapsedMs": 276
+        },
+        {
+          "owner": 97,
+          "textStart": "### R10 base路径末尾斜杠\\x0a本次构造器页说明，基准地址的当前目录包含最后一个斜杠之前的路径，不包含其后的段；据此可知末尾斜杠会影响相对地址所依据的目录，而非只改变外观。但该规则不能证明产品传入的base正确，也不能证明部署服务器对",
+          "chars": 138,
+          "scheduledAt": "2026-10-12T13:35:23.501Z",
+          "firstMountedAt": "2026-10-12T13:35:23.788Z",
+          "elapsedMs": 287
+        },
+        {
+          "owner": 98,
+          "textStart": "### R11 参数遍历顺序\\x0a本次参数页明确，对URLSearchParams直接使用遍历结构，或调用entries遍历键值对，顺序均与查询字符串中的出现顺序一致，并不默认按键排序。但资料不能证明产品后续转换为其他数据结构时仍保留顺序，也不",
+          "chars": 144,
+          "scheduledAt": "2026-10-12T13:35:23.504Z",
+          "firstMountedAt": "2026-10-12T13:35:23.805Z",
+          "elapsedMs": 301
+        }
+      ],
+      "sequenceStart": 441,
+      "sequenceEnd": 565
+    },
+    {
+      "action": "switch-to-preflight-session",
+      "at": "2026-10-12T13:36:12.211Z",
+      "counts": {
+        "create": 2,
+        "render": 2,
+        "cache-hit": 0,
+        "scheduled": 2,
+        "reply": 2,
+        "mount": 2,
+        "dispose": 41
+      },
+      "emptyScheduledOwners": [
+        {
+          "owner": 124,
+          "textStart": "Reply with OK.",
+          "chars": 14,
+          "scheduledAt": "2026-10-12T13:36:13.714Z",
+          "firstMountedAt": "2026-10-12T13:36:13.825Z",
+          "elapsedMs": 111
+        },
+        {
+          "owner": 125,
+          "textStart": "OK",
+          "chars": 2,
+          "scheduledAt": "2026-10-12T13:36:13.719Z",
+          "firstMountedAt": "2026-10-12T13:36:13.831Z",
+          "elapsedMs": 112
+        }
+      ],
+      "sequenceStart": 566,
+      "sequenceEnd": 616
+    },
+    {
+      "action": "return-to-original-task",
+      "at": "2026-10-12T13:36:18.273Z",
+      "counts": {
+        "create": 7,
+        "render": 7,
+        "cache-hit": 3,
+        "scheduled": 4,
+        "reply": 6,
+        "mount": 6,
+        "dispose": 5
+      },
+      "emptyScheduledOwners": [
+        {
+          "owner": 126,
+          "textStart": "我会只安排一名只读研究员，原样转交全部要求和36题；完成后逐段核对可见正文、实际读取顺序与访问范围，简短收尾，不创建额外报告或修改项目文件。",
+          "chars": 70,
+          "scheduledAt": "2026-10-12T13:36:19.407Z",
+          "firstMountedAt": "2026-10-12T13:36:19.590Z",
+          "elapsedMs": 183
+        },
+        {
+          "owner": 127,
+          "textStart": "请只安排一名只读研究员，按下面36题逐题完成公开资料审阅。所有内容放在正常可见消息中；负责人核对全部36段原正文、真实调用顺序与读取范围后简短收尾，不要求合并重写。系统必需的输入记录允许保留，不创建额外报告、不修改项目文件。\\x0a\\x0a这是长资料阅",
+          "chars": 3451,
+          "scheduledAt": "2026-10-12T13:36:19.444Z",
+          "firstMountedAt": "2026-10-12T13:36:19.595Z",
+          "elapsedMs": 151
+        },
+        {
+          "owner": 128,
+          "textStart": "研究员已逐题输出36段正文。接下来我只核对这些原文和已有读取记录，确认每题先读取、后回答，以及访问范围和失败数量，不重新整理答案。",
+          "chars": 65,
+          "scheduledAt": "2026-10-12T13:36:19.451Z",
+          "firstMountedAt": "2026-10-12T13:36:19.600Z",
+          "elapsedMs": 149
+        },
+        {
+          "owner": 129,
+          "textStart": "已核对全部36段原正文及实际调用记录：R01—R36均按“先读取、后回答”顺序完成，36次独立读取仅访问指定四个URL，均使用Markdown格式，读取失败0题；每第6题均附短表格。未覆盖内容和产品行为边界已在原文中说明，未增加成员、创建额",
+          "chars": 144,
+          "scheduledAt": "2026-10-12T13:36:19.458Z",
+          "firstMountedAt": "2026-10-12T13:36:19.604Z",
+          "elapsedMs": 146
+        }
+      ],
+      "sequenceStart": 617,
+      "sequenceEnd": 654
+    },
+    {
+      "action": "child-open-after-task-return",
+      "at": "2026-10-12T13:36:36.939Z",
+      "counts": {
+        "create": 37,
+        "render": 37,
+        "cache-hit": 26,
+        "scheduled": 11,
+        "reply": 11,
+        "mount": 11,
+        "dispose": 0
+      },
+      "emptyScheduledOwners": [
+        {
+          "owner": 133,
+          "textStart": "我只按顺序读取指定的四个公开网页，将资料作为只读证据逐题说明，不读取本地文件、不修改项目、不调用其他成员，也不进行浏览器或界面验收。",
+          "chars": 66,
+          "scheduledAt": "2026-10-12T13:36:37.208Z",
+          "firstMountedAt": "2026-10-12T13:36:37.523Z",
+          "elapsedMs": 315
+        },
+        {
+          "owner": 134,
+          "textStart": "### R01 URL接口用途\\x0a本次读取的MDN接口页说明，URL用于解析、构造、规范化和编码地址，并通过属性读取或修改组成部分；既可接受完整地址，也可结合相对地址与基准地址。但这属于接口资料，不能直接证明实际产品已正确接入该接口，或用户点",
+          "chars": 130,
+          "scheduledAt": "2026-10-12T13:36:37.215Z",
+          "firstMountedAt": "2026-10-12T13:36:37.545Z",
+          "elapsedMs": 330
+        },
+        {
+          "owner": 135,
+          "textStart": "### R02 相对地址与base\\x0a本次构造器页明确，相对地址需要提供base，解析并非简单拼接；当前目录取基准路径最后一个斜杠之前的部分，根相对路径则依据基准源解析。但资料不能证明产品选取的基准地址符合部署环境，也不能证明子目录部署时的实",
+          "chars": 128,
+          "scheduledAt": "2026-10-12T13:36:37.220Z",
+          "firstMountedAt": "2026-10-12T13:36:37.564Z",
+          "elapsedMs": 344
+        },
+        {
+          "owner": 136,
+          "textStart": "### R03 查询参数基本读取\\x0a本次参数接口页说明，可用URLSearchParams解析查询字符串，通过has判断键是否存在，通过get取得首个值；示例还显示不存在的键返回null。构造器不解析完整网址，因此资料不能证明产品传入的内容正",
+          "chars": 145,
+          "scheduledAt": "2026-10-12T13:36:37.226Z",
+          "firstMountedAt": "2026-10-12T13:36:37.579Z",
+          "elapsedMs": 353
+        },
+        {
+          "owner": 137,
+          "textStart": "### R04 fragment的用途\\x0a本次片段页说明，fragment是以井号开始的地址末尾部分，用于标识资源内部的位置，例如文档章节或视频时间；其具体格式由资源决定，并由客户端处理。但资料不能证明实际页面具有对应目标，也不能证明产品中的",
+          "chars": 137,
+          "scheduledAt": "2026-10-12T13:36:37.231Z",
+          "firstMountedAt": "2026-10-12T13:36:37.595Z",
+          "elapsedMs": 364
+        },
+        {
+          "owner": 145,
+          "textStart": "### R12 文档元素定位\\x0a本次片段页说明，HTML中的片段可对应元素的id，示例中的井号syntax会使浏览器滚动到对应元素，体现资源内部定位的用途。但文档示例不能证明产品页面存在该标识，也不能证明动态加载、固定页头或自定义滚动逻辑不会",
+          "chars": 194,
+          "scheduledAt": "2026-10-12T13:36:37.279Z",
+          "firstMountedAt": "2026-10-12T13:36:37.612Z",
+          "elapsedMs": 333
+        },
+        {
+          "owner": 146,
+          "textStart": "### R13 pathname与search区别\\x0a本次接口页将pathname描述为路径部分，不包括查询和片段；search则表示查询参数字符串，有参数时包含前导问号，具体参数还可通过searchParams访问。但资料不能证明产品已分别",
+          "chars": 155,
+          "scheduledAt": "2026-10-12T13:36:37.284Z",
+          "firstMountedAt": "2026-10-12T13:36:37.628Z",
+          "elapsedMs": 344
+        },
+        {
+          "owner": 147,
+          "textStart": "### R14 绝对URL与base\\x0a本次构造器页明确，当url参数是绝对地址时，提供的base不会用于生成最终地址；base主要用于解析相对引用。因此不能靠传入基准地址把任意绝对地址限制在本站，但资料不能证明产品已执行目标源校验，也不能证",
+          "chars": 141,
+          "scheduledAt": "2026-10-12T13:36:37.290Z",
+          "firstMountedAt": "2026-10-12T13:36:37.679Z",
+          "elapsedMs": 389
+        },
+        {
+          "owner": 148,
+          "textStart": "### R15 append和set区别\\x0a本次参数页说明，append把指定键值作为新条目追加，允许同名键继续存在；set设置该键的值，并删除同名键的其他值，示例展示了多值变单值的结果。但文档不能证明产品选择的方法符合多选或单选业务，也不能",
+          "chars": 143,
+          "scheduledAt": "2026-10-12T13:36:37.296Z",
+          "firstMountedAt": "2026-10-12T13:36:37.695Z",
+          "elapsedMs": 399
+        },
+        {
+          "owner": 149,
+          "textStart": "### R16 媒体片段示例\\x0a本次片段页给出井号t等于10逗号20的媒体示例，明确说明音视频从第十秒开始播放，但本页未进一步解释终点处理或完整媒体片段语法。资料不能证明产品播放器支持此形式，也不能证明自动播放策略、媒体加载状态及实际定位精度",
+          "chars": 127,
+          "scheduledAt": "2026-10-12T13:36:37.302Z",
+          "firstMountedAt": "2026-10-12T13:36:37.711Z",
+          "elapsedMs": 409
+        },
+        {
+          "owner": 150,
+          "textStart": "### R17 hash属性边界\\x0a本次接口页将hash描述为井号加片段标识符的字符串，并展示设置hash后完整地址出现片段的例子；这说明它属于地址对象的组成部分。页面未覆盖全部片段编码细节，也不能直接证明修改独立URL对象会改变浏览器地址栏",
+          "chars": 134,
+          "scheduledAt": "2026-10-12T13:36:37.307Z",
+          "firstMountedAt": "2026-10-12T13:36:37.729Z",
+          "elapsedMs": 422
+        }
+      ],
+      "sequenceStart": 655,
+      "sequenceEnd": 787
+    }
+  ],
+  "qualification": "Actual AppLog records only; pending or a scheduled empty model does not prove a painted placeholder. See the actual screenshots separately."
+}
