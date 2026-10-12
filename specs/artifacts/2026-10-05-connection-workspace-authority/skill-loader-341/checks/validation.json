@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-10-12T07:05:22.115Z",
+  "backend": {
+    "initialHandle": 70756,
+    "initialExit": 1,
+    "focusedHandle": 95057,
+    "actualExit": 0,
+    "tests": 52,
+    "assertions": 213
+  },
+  "backendTypes": {
+    "handle": 34638,
+    "actualExit": 0
+  },
+  "frontend": {
+    "reusedUnchangedBatch": 338,
+    "bundle": "main-HB6Ez6mO.js"
+  },
+  "launch": {
+    "handle": 17850,
+    "actualExit": 0,
+    "tabID": "125"
+  },
+  "actualBackendCheckerExit": 0,
+  "docsCheckExit": 0,
+  "ownedTabClosed": "125",
+  "textEvidenceScanned": 37,
+  "credentialMatches": 0,
+  "boundary": "Actual joined handles and backend contracts; unchanged frontend reuses existing build. Root manually views screenshots."
+}

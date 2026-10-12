@@ -19,6 +19,7 @@ import type { ProviderToolNameOwner } from "../../src/tool/provider-name-authori
 import { jsonSchema, tool, type Tool as AITool } from "ai"
 import { capabilityRevealOccurrenceParts, normalizedProviderToolDefinition } from "../../src/capability/reveal-owner"
 import { capabilityRevealBaseDefinitions, foldCapabilityRevealReceipts } from "../../src/capability/reveal-receipt"
+import { routineToolRefs } from "../../src/capability/routine-tools"
 
 export async function bindTestCapabilityOccurrence(input: {
   config: Config.Info
@@ -89,17 +90,15 @@ export async function bindTestCapabilityOccurrence(input: {
     await Session.beginAssistantReply(occurrenceAssistant)
   } else {
     const explicitSkillNames = visibleChatSkillNames(input.messages)
-    const permanentRefs = SessionLoop.occurrencePermanentToolRefs({
+    const permanentRefs = routineToolRefs({
       harness: grants,
       visibleToolIDs: executionToolIDs,
-      explicitSkillNames,
-      productionSkillContext:
-        runtimeContract?.identity !== undefined || input.agentID === "chat" || input.agentID === "work",
     })
     const permanentProviderBaseDefinition = await SessionLoop.resolvePermanentProviderBaseDefinition({
       model: input.model,
       agent: { ...input.agent, permission },
       agentID: input.agentID,
+      sessionKind: input.session.kind,
       config: input.config,
       toolRefs: permanentRefs,
       availableToolNames: executionToolIDs,

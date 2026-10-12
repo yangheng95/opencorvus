@@ -29,12 +29,14 @@ import { Tool } from "../../src/tool/tool"
 import { ToolRegistry } from "../../src/tool/registry"
 
 const missionRoutineNames = [
+  "apply_patch",
   "bash",
   "capability_search",
   "edit",
   "external_code_search",
   "glob",
   "memory",
+  "mission_skill",
   "mission_state",
   "panel_block_mission",
   "panel_cancel_task",
@@ -278,7 +280,7 @@ describe("native Mission transport base", () => {
       directory: project.path,
       fn: async () => {
         const { common, processor } = await createMissionOccurrence(project.path, "mission-skill-reconstruction")
-        const revealed = await resolveTestCapabilityTools({ ...common, activeLocalRefs: ["general"] })
+        const revealed = await resolveTestCapabilityTools(common)
         const descriptor = revealed.occurrence.payload.descriptors.find(
           (item) => item.ref.kind === "mission_skill" && item.ref.local_ref === "general",
         )
@@ -355,7 +357,7 @@ describe("native Mission transport base", () => {
             firstStepCalls: 2,
             continuationCalls: 1,
           })
-          expect(requestedNonemptySets.at(-1)?.sort()).toEqual(missionRoutineNames)
+          expect(requestedNonemptySets.at(-1)?.sort()).toEqual(missionRoutineNames.filter((name) => name !== "mission_skill"))
         } finally {
           registry.mockRestore()
         }

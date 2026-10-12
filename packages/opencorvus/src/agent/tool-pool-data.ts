@@ -175,8 +175,8 @@ const primaryExecutionGlobal = [
   "mission_state",
 ] as const
 
-const primaryExecutionGlobalWithoutNativeMissionTransport = primaryExecutionGlobal.filter(
-  (toolID) => !NATIVE_MISSION_TRANSPORT_TOOL_IDS.some((transportToolID) => transportToolID === toolID),
+const missionExecutionGlobal = primaryExecutionGlobal.filter(
+  (toolID) => toolID !== "skill" && !NATIVE_MISSION_TRANSPORT_TOOL_IDS.some((transportToolID) => transportToolID === toolID),
 )
 
 const codingGlobal = ["delegate_agent", SKILL_MARKET_TOOL_ID, ...primaryExecutionGlobal] as const
@@ -317,7 +317,7 @@ export const roleAssignments = Object.freeze({
   mission: createToolPool({
     global: [
       SKILL_MARKET_TOOL_ID,
-      ...primaryExecutionGlobalWithoutNativeMissionTransport,
+      ...missionExecutionGlobal,
       "mission_skill",
       ...MISSION_PANEL_LEAF_TOOL_IDS,
       ...NATIVE_MISSION_TRANSPORT_TOOL_IDS,

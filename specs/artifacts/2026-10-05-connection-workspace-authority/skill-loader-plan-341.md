@@ -1,0 +1,49 @@
+# 341 已授权 Skill loader 的常驻投影
+
+## Recall
+
+持续产品迭代，最新用户要求单agent。340分页修复7be6b8db1e27cf843332481a9d56538a1740c1a6已正常推送；19项测试通过但真实网页未执行4次目标skill调用，不能当作端到端通过。上一轮属于progress，当前git status干净。先读340 Recall与实际Provider/配置/canonical证据，再继续共享路径，不替换普通用户请求为@skill绕过。沿用benchmark-debug-template；UI（User Interface，用户界面）只做真实页面交互、截图人工查看，禁止UI自动测试。goal中的Astra委托已被用户单agent要求覆盖。
+
+## 现象、根因、影响与旧决策
+
+340项目primary_assistant_capabilities.work.skill_refs包含page-probe-340，/work/capability声明skill，Skill policy=allow；实际Provider的37个声明没有skill。唯一调用是capability_search(kinds=tool, query=skill)，结果只有skill_market，四个分页调用均未执行。
+
+全仓搜索和阅读：routineToolRefs、occurrencePermanentToolRefs全部定义/调用、permanent Provider定义绑定与比对、SessionLoop初始与reveal finalizer、Harness grants/access、Skill/Conversation/Mission surfaces、ToolRegistry、reveal receipt重建、测试fixture及task-routine-tools/skill-reveal/native-mission-transport-base/advanced-package，当前capability-search-runtime架构。旧架构明确规定loader在revision0缺省隐藏，只在@skill显式标记或Skill reveal后提供；这与用户当前“角色已授权的预置通用工具直接提供，专业能力按需加载”的要求冲突。loader是通用调用入口，Skill正文仍需真实工具调用按需加载；不能继续用标记文本决定通用工具可见性。
+
+直接触发是routineToolRefs排除skill/mission_skill，occurrencePermanentToolRefs仅凭explicitSkillNames.length补回生产skill。Provider基础定义重复相同条件；finalizer又以revealState.active空集合覆盖已配置Skill集合。Chat/Work、Task scheduler/worker和Mission都经过该共享机制，不能只修Work或只改prompt。已绑定occurrence（执行轮次）必须保持原不可变Provider基础定义，变更后旧定义按既有StaleCatalogOccurrenceError退休，新权威输入才能绑定新定义，不能添加旧协议兼容层。
+
+## 实现方案
+
+routineToolRefs只依据角色真实grant和当前visibility投影全部平台通用工具，包含已授权Skill-family loader；删除occurrencePermanentToolRefs条件包装和相应参数/调用。loader仍execute-only、Skill叶子仍discover/execute；不把loader当目录搜索结果，也不自动读取专业Skill正文。
+
+将生产Skill和Mission Skill的定义初始化、plugin hook与实际绑定合并在同一按真实owner解析的辅助函数，供基础定义和finalizer共用。generic Registry/runtime构建排除两种需要surface的loader，由专门初始化持有唯一当前实现。Mission初始化必须传真实session.kind=mission；Task保持runtime identity/project目录/skill projection校验。无Skill目录owner的原生角色仍仅拥有空loader范围，不借用Chat/Work配置或Mission catalog；如果该角色出现无法解释的Skill叶子则明确拒绝，不能退回其他目录。
+
+实际loader的允许名字来自当前occurrence冻结的Harness执行Skill叶子，通过精确descriptor的open_skill.name/open_mission_skill.name解析，传给既有surface资格检查；不是reveal状态空集合，也不是随意取当前live catalog全部条目。配置的默认Skill在首次调用与后续reveal/恢复中保留；权限/消息switch变化继续校验并退休失效轮次。精确reveal仍验证冻结身份、生成真实receipt并重建，但不再决定通用loader是否出现。不得以现存测试通过为由保留旧隐藏行为。
+
+不改变Provider流式协议、消息真实性、工具调用权限、Skill物化目录、Task/Mission调度、队列或终态所有权。当前是可用工具投影与配置语义不一致，未发生调度/恢复收敛异常；一旦出现则立即横向审计共享机制。旧公共Helper只在当前仓库内部调用，没有外部SDK字段；删除后全仓复查。实际Task/Mission覆盖由聚焦后端真实契约证明，不能把它们冒充网页路径。
+
+## 验收
+
+先改现有正向角色工具集合与Skill reveal用例：普通输入不带@skill，首次loader可调用且能加载配置Skill；恢复与新增reveal仍保留默认名字，权限/switch映射明确StaleCatalog错误；Mission首次输入直接加载其真实Skill；Task角色集合按真实grant包含loader。保留原失败后实施，再运行直接相关文件，修正触及的过期契约，后端typecheck/docs。纯源码或fixture测试不代替真实Sol/网页。
+
+新隔离NativeService skill-loader-341-live-01、localhost:18318/ui，继续使用340相同普通提示和page-probe-340/301行文件，先写Skill、正式刷新/mount和/config（无尾斜杠）PATCH。最多12个实际gpt-6.1-sol流式请求，600000ms固定上限/180000ms无活动观察；成对auth/models预检，原启动句柄实际join。预先准备归档，在第5分钟内截图关闭；主验收必须发生4个真实skill调用并证实first25/total301、offset26和末页301。前端无改动则复用338构建main-HB6Ez6mO.js。模型工具声明必须实际包含skill，不通过关键字prompt绕过。
+
+最后更新当前架构与根/月/目录索引，保存脱敏证据和任何失败事实；精确提交，fresh fetch+merge、完整upstream..HEAD复核与正常hook push。持续goal仍active，不发布版本。
+
+## 失败准入
+
+70756原checker实际exit1：task-routine-tools中16个角色集合失败、3通过，普通Work Skill首次投影缺skill失败；总计17失败/3通过。原日志完整保留。实现沿用既有activeSkillNames过滤器，但输入改为当前冻结Harness中全部已授权Skill descriptor真实名字，而不是reveal活动子集；不扩大到live catalog中后来新出现的项目Skill。这样基础挂载和reveal恢复只有一个授权事实来源。
+
+## Mission 角色声明的补充审计
+
+25185修复后检查中Work和Task真实执行通过，Mission暴露旧apply_patch测试集合与一个实际switch契约问题。修正旧集合后91496仍有1失败；短暂诊断记录证明关闭mission_skill时，canonical Mission role却仍通过primaryExecutionGlobal继承生产skill。基础定义初始化按agent=mission把这项不属于Mission目录的skill映射回mission_skill，掩盖基础定义变化，最后实际工具删除后fixture才收到TypeError。这是同一共享投影改动揭示的旧角色双声明，不能放宽StaleCatalog错误期望。
+
+全仓primaryExecutionGlobalWithoutNativeMissionTransport只供Mission role使用；当前Mission架构明确只持有Mission Skill目录。准入在唯一tool-pool-data中把该数组命名为missionExecutionGlobal，并从Mission继承集合排除生产skill，保留mission_skill；公共定义构建/运行均校验唯一loader ref与实际family身份，不允许按角色把另一个loader ID静默改名。删除临时诊断日志后重跑完整Mission正常、switch、permission、reveal/deactivate、进程恢复及旧轮次退休契约。共享适用范围覆盖原生角色与Task runtime、首次/续步、真实跨进程恢复、并发state提交和隔离project fixture，不能据此声称网页运行了Mission。
+
+## 最终局部检查与真实重试
+
+95057实际exit0，五个文件52 tests/213 assertions；34638最终后端typecheck实际exit0，docs通过。新增Chat/Work/原生Coding首次调用与恢复三个正向契约通过，Coding无目录owner时只返回空范围。Mission恢复、权限收紧和旧轮次退休21项均通过；Task scheduler projected/registry Core实际Skill执行8项通过。临时scope诊断已从生产代码移除，诊断日志保留。
+
+live-01原启动17850、Native75924/Host76240、页面125。目录刷新与项目配置一次成功，实际提供skill声明。首次模型把名字发为page-probe-340 gen，真实工具明确拒绝；随后Provider在HTTP200流中返回service_unavailable_error/server_is_overloaded，Message持久化为UnknownError。EOF与HTTP200不能据此宣称模型成功。Root截图保留失败，在同一会话发送可见原验收重试，不使用@skill、不重启、不增加12请求预算或600000ms时限。第二次输入实际完成四次skill调用，结果first25/total301、offset26 limit2、末页301及END-OF-SUPPORT正确。原17850实际join exit0，11次流EOF、物理链/请求/输出与配对凭据清理完成。完整checker应分别记录首轮失败与同实例重试成功，而不是删除失败或断言只有四个总请求。
+
+下一项实际体验线索：Provider的结构化overload错误在会话中显示完整JSON字符串。需要追查错误类型/标准化与详情渲染边界，保留可展开原始诊断并提供易读主提示；当前未修改或验收这项后续改进。

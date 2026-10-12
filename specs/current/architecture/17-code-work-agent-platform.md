@@ -8,8 +8,8 @@ exact Tool/MCP/Skill materialization, and append-only `capability_search`
 reveal receipts are live. Revision zero exposes every authorized general
 built-in tool after model compatibility, permission and Message switches.
 Specialist and extension leaves are added through exact reveal receipts;
-eligible explicitly named production Skills follow the same permanent-base
-selection contract. Conditional `StructuredOutput` remains outside the Harness but
+authorized Skill-family loaders belong to that permanent base, while Skill
+content is read on demand through the loader. Conditional `StructuredOutput` remains outside the Harness but
 inside the immutable Provider base and total definition budget. The
 complete current execution contract is
 [`capability-search-runtime.md`](capability-search-runtime.md). The evidence,
@@ -689,8 +689,9 @@ within owning Harness grants and runtime-template upper bounds
 after model compatibility, explicit switches and permission narrowing
 ```
 
-The permanent base includes declared platform-required transport Tools and any
-eligible explicitly named production Skill loader. It is resolved before
+The permanent base includes declared platform-required transport Tools and the
+role's authorized Skill-family loader. Its exact permitted Skill names come from
+the occurrence's frozen Harness and Catalog descriptors. It is resolved before
 extension selection and remains available across reveal steps. Exact reveal
 does not expand Harness authority or turn an ungranted catalog entry into a tool.
 

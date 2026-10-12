@@ -1,0 +1,80 @@
+{
+  "observedAt": "2026-10-12T07:05:22.026Z",
+  "actualModel": "gpt-6.1-sol",
+  "providerRequests": 11,
+  "streaming": true,
+  "providerTerminal": "eof",
+  "initialFailure": {
+    "toolInput": {
+      "name": "page-probe-340 gen"
+    },
+    "outcome": {
+      "requestPartID": "prt_g0VXofKcB00J4Pj34GRH",
+      "outcome": "failed",
+      "time": {
+        "end": 1791788355222
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "Skill \"page-probe-340 gen\" not found or not allowed. Compatible skills: page-probe-340",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_0822993f1a1b435b85d9ff63629e03e7",
+          "toolName": "skill"
+        }
+      }
+    },
+    "providerError": {
+      "type": "error",
+      "sequence_number": 2,
+      "error": {
+        "type": "service_unavailable_error",
+        "code": "server_is_overloaded",
+        "message": "Our servers are currently overloaded. Please try again later.",
+        "param": null
+      }
+    },
+    "assistantMessageID": "msg_g0VXofL0v00voJgQANZ1"
+  },
+  "recovery": "Second visible user request in the same service/conversation and original 12-request budget",
+  "pages": [
+    {
+      "input": {
+        "name": "page-probe-340",
+        "file": "support.txt"
+      },
+      "lines": 25,
+      "totalLines": 301,
+      "truncated": true,
+      "footer": "(Output capped at 50 KB. Showing lines 1-25. Use offset=26 to continue.)"
+    },
+    {
+      "input": {
+        "name": "page-probe-340",
+        "file": "support.txt",
+        "offset": 26,
+        "limit": 2
+      },
+      "lines": 2,
+      "totalLines": 301,
+      "truncated": true,
+      "footer": "(Showing lines 26-27 of 301. Use offset=28 to continue.)"
+    },
+    {
+      "input": {
+        "name": "page-probe-340",
+        "file": "support.txt",
+        "offset": 301
+      },
+      "lines": 1,
+      "totalLines": 301,
+      "truncated": false,
+      "footer": "(End of file - total 301 lines)"
+    }
+  ],
+  "nativeExit": 0,
+  "pairedCleanupComplete": true,
+  "boundary": "Actual canonical Skill requests/outcomes, persisted counts, page footer and real filesystem. First Tool failure and Provider semantic error are retained; HTTP200/EOF alone is not model success. Manual visual review is separate; no UI automated assertions."
+}

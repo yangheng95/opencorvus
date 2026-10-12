@@ -282,23 +282,31 @@ enforces the identical rule.
   shared context/codebase, and every stage output owner expose real per-leaf
   constructors over their occurrence-local shared collector; a lazy function
   that first constructs a complete Tool record is not an exact factory.
-- Skill and Mission Skill loaders are absent at revision zero unless the
-  authoritative visible input explicitly names an already projected production
-  Skill. That exact production loader is frozen into the permanent base without
-  a search receipt; its content is still loaded only by the model's visible
-  Tool call. A later exact Skill reveal expands that same loader through a
-  normal receipt, keeps the base definition and payload unchanged, and is
-  reconstructed and permission-checked from every active Skill ref. Revealing
-  one exact Skill mounts only that Skill; supporting files remain exact loader
-  reads. The loader's Provider definition is stable across an empty, denied, or
+- Skill and Mission Skill loaders are permanent whenever the role's exact Tool
+  grant and current execution visibility authorize them. Their availability
+  does not depend on an `@skill` marker or a discovery receipt. The immutable
+  Provider base and the executable loader use the same specialized initializer;
+  Skill content is still read only by a real model-authored loader Tool call.
+  The complete permitted Skill-name set comes from the occurrence's frozen
+  Harness execute leaves and exact Catalog descriptors, not the active reveal
+  subset or a replacement live catalog. Configured names therefore remain
+  available before discovery and after a later reveal or reconstruction.
+  Reveal receipts retain their exact identity and permission checks without
+  changing the permanent base. Supporting files remain exact loader reads.
+  Native roles without a Skill catalog owner expose an empty permitted scope;
+  they never borrow another role's assignments or catalog.
+  Native Mission declares only `mission_skill` for this family. Both definition
+  construction and execution verify one exact loader owner, so a disabled
+  Mission loader cannot be recreated through a production `skill` alias.
+  The loader's Provider definition is stable across an empty, denied, or
   expanded compatible Skill set; current names and availability appear only in
   its Tool result. Capability identity (`ref.local_ref`) and executable Skill `name` are
   distinct: initial reveal and receipt reconstruction resolve the exact frozen
   descriptor's `open_skill.name` or `open_mission_skill.name` before applying
   the existing mount eligibility checks. They never treat a package ref as a
   loader-name alias or consult a replacement live catalog. Selecting another
-  Skill rebuilds the loader from the selected identities even when that loader
-  already exists; its existence does not imply the new Skill is active.
+  Skill validates it against the same frozen permitted scope even when that
+  loader already exists; a callable loader does not authorize arbitrary names.
   Projected loader availability comes from the same resolved Skill surface for
   schedulers and workers. A scheduler's runtime-owned loader placeholder is
   finalized by the specialized Registry loader; the Registry-only subset of

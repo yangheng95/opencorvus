@@ -5,6 +5,8 @@ import { capabilityRecoveryGuidance } from "./recovery-guidance"
 // Guidance describes tools; role grants and execution visibility own availability.
 const guidance: Readonly<Record<string, string>> = {
   capability_search: "Discover and load specialist or extension capabilities that are not already callable.",
+  skill: "Load an authorized Skill or its supporting file by exact name; content is read on demand.",
+  mission_skill: "Load an authorized Mission Skill or its supporting file by exact name.",
   read: "Read project files and exact file ranges.",
   list: "Inspect directory contents.",
   glob: "Find files by path pattern.",
@@ -60,9 +62,8 @@ export function routineToolRefs(input: {
       ref.source === "platform" &&
       visible.has(ref.local_ref) &&
       (ref.owner_ref.startsWith("dispatch-stage:") ||
-        ((ref.owner_ref === "tool-registry" || ref.owner_ref.startsWith("runtime-projection:")) &&
-          ref.local_ref !== "skill" &&
-          ref.local_ref !== "mission_skill")),
+        ref.owner_ref === "tool-registry" ||
+        ref.owner_ref.startsWith("runtime-projection:")),
   )
 }
 

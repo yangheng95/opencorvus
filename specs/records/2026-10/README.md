@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [341 Skill调用入口](2026-10-12-skill-loader-341.md)：通用loader直接可用，精确Skill范围由轮次授权持有。
+
 - [340 Skill文件分页](2026-10-12-skill-page-340.md)：统一分页计数、字节上限与续读事实。
 
 - [339 工具参数保真](2026-10-12-tool-literal-339.md)：由字段schema决定原始类型与转换。

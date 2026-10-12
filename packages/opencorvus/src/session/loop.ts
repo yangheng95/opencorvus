@@ -66,6 +66,7 @@ import {
 import { withTaskToolInvocation } from "@/tool/task-tool-invocation"
 import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
 import type { ResolvedSkillSurface } from "@/skill/surface"
+import { skillLoaderAvailable } from "@/skill/eligibility"
 import { AgentToolPool } from "@/agent/tool-pool-contract"
 import { CapabilityRules } from "@/capability/rules"
 import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
@@ -1008,9 +1009,14 @@ export namespace SessionLoop {
     return prepared
   }
 
-  async function resolveProductionSkillTool(input: {
+  function isSkillLoader(id: string) {
+    return id === SkillTool.id || id === MissionSkillTool.id
+  }
+
+  async function resolveSkillTool(input: {
     agent: SessionAgentRuntime
     agentID: string
+    sessionKind: string
     config: Config.Info
     runtimeContract?: RuntimeContract
     availableToolNames: Iterable<string>
@@ -1018,7 +1024,7 @@ export namespace SessionLoop {
     activeSkillNames?: Iterable<string>
   }) {
     const skillRuntime = input.agent
-    let surface: Extract<ResolvedSkillSurface, { family: "production" }> | undefined
+    let surface: ResolvedSkillSurface
     const runtimeIdentity = input.runtimeContract?.identity
     if (runtimeIdentity) {
       const { SkillMount } = await import("@/skill/mounts")
@@ -1040,6 +1046,16 @@ export namespace SessionLoop {
         explicitSkillNames: input.explicitSkillNames,
         activeSkillNames: input.activeSkillNames,
       })
+    } else if (input.agentID === "mission") {
+      const { MissionSkillRuntime } = await import("@/mission-skill/runtime")
+      surface = await MissionSkillRuntime.resolve({
+        agentID: input.agentID,
+        sessionKind: input.sessionKind,
+        runtime: skillRuntime,
+        scope: "session",
+        availableToolNames: input.availableToolNames,
+        activeSkillNames: input.activeSkillNames,
+      })
     } else if (ConversationCapability.isAgentID(input.agentID)) {
       surface = await ConversationCapability.resolveSkillSurface({
         agentID: input.agentID,
@@ -1050,18 +1066,39 @@ export namespace SessionLoop {
         explicitSkillNames: input.explicitSkillNames,
         activeSkillNames: input.activeSkillNames,
       })
+    } else {
+      // These native roles own no Skill catalog. Their granted loader can list
+      // that empty scope, but cannot borrow another role's configured Skills.
+      if ([...(input.activeSkillNames ?? []), ...(input.explicitSkillNames ?? [])].length) {
+        throw new Error(`Native ${input.agentID} has no Skill catalog owner for the requested Skill scope.`)
+      }
+      surface = {
+        family: "production",
+        tool_id: "skill",
+        agent: input.agentID,
+        base_role: input.agentID,
+        scope: "session",
+        unmounted_pool_count: 0,
+        skills: [],
+        tool_available: skillLoaderAvailable({
+          runtime: skillRuntime,
+          toolID: "skill",
+          allowedToolIDs: AgentToolPool.visibleToolIDs(skillRuntime.tools),
+          availableToolNames: new Set(input.availableToolNames),
+        }),
+      }
     }
-    if (!surface) return undefined
-    const skillTool = await SkillTool.init({ config: input.config, skillSurface: surface })
+    const loader = surface.family === "mission" ? MissionSkillTool : SkillTool
+    const skillTool = await loader.init({ config: input.config, skillSurface: surface })
     const output = {
       description: skillTool.description,
       parameters: skillTool.parameters,
     }
-    await Plugin.trigger("tool.definition", { toolID: SkillTool.id }, output)
+    await Plugin.trigger("tool.definition", { toolID: loader.id }, output)
     return {
       surface,
       tool: {
-        id: SkillTool.id,
+        id: loader.id,
         ...skillTool,
         description: output.description,
         parameters: output.parameters,
@@ -1073,6 +1110,7 @@ export namespace SessionLoop {
     model: Provider.Model
     agent: SessionAgentRuntime
     agentID: string
+    sessionKind: string
     config: Config.Info
     toolRefs: readonly CapabilityRef[]
     availableToolNames: readonly string[]
@@ -1103,7 +1141,7 @@ export namespace SessionLoop {
       input.agentID,
       input.config,
       input.toolRefs
-        .filter((ref) => ref.owner_ref === "tool-registry" && ref.local_ref !== SkillTool.id)
+        .filter((ref) => ref.owner_ref === "tool-registry" && !isSkillLoader(ref.local_ref))
         .map((ref) => ref.local_ref),
       { artifactSnapshotSource: input.artifactSnapshotSource },
     )
@@ -1123,7 +1161,7 @@ export namespace SessionLoop {
       )
     })
     for (const ref of input.toolRefs.filter(
-      (ref) => ref.owner_ref !== "tool-registry" && ref.local_ref !== SkillTool.id,
+      (ref) => ref.owner_ref !== "tool-registry" && !isSkillLoader(ref.local_ref),
     )) {
       const owned = await sessionRuntimeToolOwner(input.runtimeContract)?.exact(ref.local_ref)
       if (!owned) throw new StaleCatalogOccurrenceError([`permanent_provider_tool.${ref.local_ref}`])
@@ -1153,23 +1191,29 @@ export namespace SessionLoop {
       )
     }
     const explicitSkillNames = input.explicitSkillNames ?? []
-    if (explicitSkillNames.length > 0 && input.toolRefs.some((ref) => ref.local_ref === SkillTool.id)) {
-      const resolved = await resolveProductionSkillTool({
+    const loaderRefs = input.toolRefs.filter((ref) => isSkillLoader(ref.local_ref))
+    if (loaderRefs.length > 1) throw new StaleCatalogOccurrenceError(["skill_loader_owner"])
+    const loaderRef = loaderRefs[0]
+    if (loaderRef) {
+      const resolved = await resolveSkillTool({
         agent: input.agent,
         agentID: input.agentID,
+        sessionKind: input.sessionKind,
         config: input.config,
         runtimeContract: input.runtimeContract,
         availableToolNames: input.availableToolNames,
         explicitSkillNames,
         activeSkillNames: [],
       })
-      if (!resolved?.surface.tool_available) {
-        throw new Error(`Explicit Skill loader for ${input.agentID} is absent from its permitted occurrence surface.`)
+      if (!resolved.surface.tool_available || resolved.tool.id !== loaderRef.local_ref) {
+        throw new Error(
+          `Skill loader ${loaderRef.local_ref} for ${input.agentID} is absent from its permitted occurrence surface.`,
+        )
       }
       const definition = normalizedProviderToolDefinition(
-        SkillTool.id,
+        resolved.tool.id,
         prepareProviderTool({
-          name: SkillTool.id,
+          name: resolved.tool.id,
           source: "registry",
           model: input.model,
           tool: tool({ description: resolved.tool.description, inputSchema: resolved.tool.parameters as never }),
@@ -1178,30 +1222,6 @@ export namespace SessionLoop {
       definitions.push(definition)
     }
     return capabilityRevealBaseDefinitions(definitions)
-  }
-
-  export function occurrencePermanentToolRefs(input: {
-    harness: HarnessGrantSet | HarnessProjection
-    visibleToolIDs: Iterable<string>
-    explicitSkillNames: readonly string[]
-    productionSkillContext: boolean
-  }): CapabilityRef[] {
-    const visibleToolIDs = [...new Set(input.visibleToolIDs)]
-    const permanent = routineToolRefs({ harness: input.harness, visibleToolIDs })
-    if (
-      !input.productionSkillContext ||
-      input.explicitSkillNames.length === 0 ||
-      !visibleToolIDs.includes(SkillTool.id)
-    ) {
-      return permanent
-    }
-    const loaderRefs = harnessGrantedRefs(input.harness, "execute").filter(
-      (ref) => ref.kind === "tool" && ref.local_ref === SkillTool.id,
-    )
-    if (loaderRefs.length !== 1) {
-      throw new Error(`Explicit Skill occurrence requires one exact loader grant; found ${loaderRefs.length}.`)
-    }
-    return [...permanent, loaderRefs[0]!]
   }
 
   async function materializeProviderToolExecutionInput(input: {
@@ -2002,16 +2022,15 @@ export namespace SessionLoop {
         )
       }
       const explicitSkillNames = visibleChatSkillNames(input.msgs)
-      const permanentToolRefs = occurrencePermanentToolRefs({
+      const permanentToolRefs = routineToolRefs({
         harness: occurrenceGrants,
         visibleToolIDs: policyProviderToolIDs,
-        explicitSkillNames,
-        productionSkillContext: runtimeContract?.identity !== undefined || ConversationCapability.isAgentID(agentID),
       })
       const permanentProviderBaseDefinition = await resolvePermanentProviderBaseDefinition({
         model: input.model,
         agent: { ...agent, permission: CapabilityRules.merge(agent.permission, input.session.permission) },
         agentID,
+        sessionKind: input.session.kind,
         config,
         toolRefs: permanentToolRefs,
         availableToolNames: policyProviderToolIDs,
@@ -3914,15 +3933,12 @@ export namespace SessionLoop {
       switches: input.tools,
     })
     const explicitProductionSkillNames = visibleChatSkillNames(input.messages)
-    const permanentRefs = occurrencePermanentToolRefs({
+    const permanentRefs = routineToolRefs({
       harness: executionHarnessProjection,
       visibleToolIDs: visibleOccurrenceToolIDs,
-      explicitSkillNames: explicitProductionSkillNames,
-      productionSkillContext:
-        runtimeContract?.identity !== undefined || ConversationCapability.isAgentID(input.agentID),
     })
     const baseRegistryToolIDs = permanentRefs
-      .filter((ref) => ref.owner_ref === "tool-registry" && ref.local_ref !== SkillTool.id)
+      .filter((ref) => ref.owner_ref === "tool-registry" && !isSkillLoader(ref.local_ref))
       .map((ref) => ref.local_ref)
     const baseRegistryExecutionGrantIDs = new Set(
       harnessGrantedRefs(executionHarnessProjection, "execute")
@@ -3978,7 +3994,7 @@ export namespace SessionLoop {
     })
     const routineProjectedDefinitions: ReturnType<typeof normalizedProviderToolDefinition>[] = []
     for (const ref of permanentRefs.filter(
-      (ref) => ref.owner_ref !== "tool-registry" && ref.local_ref !== SkillTool.id,
+      (ref) => ref.owner_ref !== "tool-registry" && !isSkillLoader(ref.local_ref),
     )) {
       const owned = await runtimeToolOwner?.exact(ref.local_ref)
       if (!owned) throw new StaleCatalogOccurrenceError([`permanent_provider_tool.${ref.local_ref}`])
@@ -3995,35 +4011,43 @@ export namespace SessionLoop {
         ),
       )
     }
-    const explicitSkillDefinition = permanentRefs.some((ref) => ref.local_ref === SkillTool.id)
-      ? await resolveProductionSkillTool({
+    const permanentSkillDefinition = permanentRefs.some((ref) => isSkillLoader(ref.local_ref))
+      ? await resolveSkillTool({
           agent: { ...input.agent, permission: executionPermission },
           agentID: input.agentID,
+          sessionKind: input.session.kind,
           config: input.config,
           runtimeContract,
           availableToolNames: visibleOccurrenceToolIDs,
           explicitSkillNames: explicitProductionSkillNames,
         })
       : undefined
-    const explicitSkillNormalizedDefinition = explicitSkillDefinition
+    const permanentSkillNormalizedDefinition = permanentSkillDefinition
       ? normalizedProviderToolDefinition(
-          SkillTool.id,
+          permanentSkillDefinition.tool.id,
           prepareProviderTool({
-            name: SkillTool.id,
+            name: permanentSkillDefinition.tool.id,
             source: "registry",
             model: input.model,
             tool: tool({
-              description: explicitSkillDefinition.tool.description,
-              inputSchema: explicitSkillDefinition.tool.parameters as never,
+              description: permanentSkillDefinition.tool.description,
+              inputSchema: permanentSkillDefinition.tool.parameters as never,
             }),
           }),
         )
       : undefined
+    const permanentLoaderRefs = permanentRefs.filter((ref) => isSkillLoader(ref.local_ref))
+    if (
+      permanentLoaderRefs.length > 1 ||
+      (permanentSkillDefinition && permanentLoaderRefs[0]?.local_ref !== permanentSkillDefinition.tool.id)
+    ) {
+      throw new StaleCatalogOccurrenceError(["skill_loader_owner"])
+    }
     const searchBaseDefinition = capabilityRevealBaseDefinitions([
       searchDefinition,
       ...routineRegistryTools.map(({ toolID, tool }) => normalizedProviderToolDefinition(toolID, tool)),
       ...routineProjectedDefinitions,
-      ...(explicitSkillNormalizedDefinition ? [explicitSkillNormalizedDefinition] : []),
+      ...(permanentSkillNormalizedDefinition ? [permanentSkillNormalizedDefinition] : []),
       ...(input.reservedProviderTools ?? []).map((reservation) =>
         normalizedProviderToolDefinition(reservation.name, reservation.tool),
       ),
@@ -4065,12 +4089,11 @@ export namespace SessionLoop {
       }
       throw new Error(`Skill capability ${CapabilityRefCodec.encode(ref)} has no exact matching loader behavior.`)
     }
-    const activeProductionSkillNames = [...revealState.active.values()]
-      .filter((activation) => activation.requested_ref.kind === "skill")
-      .map((activation) => exactSkillName(activation.requested_ref))
-    const activeMissionSkillNames = [...revealState.active.values()]
-      .filter((activation) => activation.requested_ref.kind === "mission_skill")
-      .map((activation) => exactSkillName(activation.requested_ref))
+    // The frozen occurrence grants own the loader's complete authorized scope.
+    // Reveal receipts do not replace the role's configured Skill scope.
+    const permittedSkillRefs = harnessGrantedRefs(executionHarnessProjection, "execute")
+    const permittedProductionSkillNames = permittedSkillRefs.filter((ref) => ref.kind === "skill").map(exactSkillName)
+    const permittedMissionSkillNames = permittedSkillRefs.filter((ref) => ref.kind === "mission_skill").map(exactSkillName)
     const activeRegistryToolIDs = [
       ...revealState.definitions.flatMap((activation) =>
         activation.executable_ref.kind === "tool" && activation.executable_ref.owner_ref === "tool-registry"
@@ -4427,10 +4450,7 @@ export namespace SessionLoop {
       permission: executionPermission,
       switches: input.tools,
     })
-    const finalizeSkillSurface = async (
-      availableToolNames: Iterable<string>,
-      activation?: { productionSkillNames?: readonly string[]; missionSkillNames?: readonly string[] },
-    ) => {
+    const finalizeSkillSurface = async (availableToolNames: Iterable<string>) => {
       const providerToolNameSet = new Set(
         visibleExecutionToolIDs({
           toolIDs: [...availableToolNames],
@@ -4449,73 +4469,31 @@ export namespace SessionLoop {
       )
       for (const name of providerToolNameSet) eligibilityToolNameSet.add(name)
       const skillRuntime = { ...input.agent, permission: executionPermission }
-      const runtimeIdentity = runtimeContract?.identity
-      if (!runtimeIdentity) {
-        const nativeMissionSurface = input.agentID === "mission" && input.session.kind === "mission"
-        if (nativeMissionSurface) {
-          const { MissionSkillRuntime } = await import("@/mission-skill/runtime")
-          const surface = await MissionSkillRuntime.resolve({
-            agentID: input.agentID,
-            sessionKind: input.session.kind,
-            runtime: skillRuntime,
-            scope: "session",
-            availableToolNames: eligibilityToolNameSet,
-            activeSkillNames: activation?.missionSkillNames ?? activeMissionSkillNames,
-          })
-          resolvedToolSkillSurfaces.set(tools, surface)
-          const exposeMissionSkillTool = surface.tool_available && providerToolNameSet.has(MissionSkillTool.id)
-          if (!exposeMissionSkillTool) {
-            delete tools[MissionSkillTool.id]
-            return surface
-          }
-          const missionSkillTool = await MissionSkillTool.init({
-            config: input.config,
-            skillSurface: surface,
-          })
-          const output = {
-            description: missionSkillTool.description,
-            parameters: missionSkillTool.parameters,
-          }
-          await Plugin.trigger("tool.definition", { toolID: MissionSkillTool.id }, output)
-          bindRegistryTool({
-            id: MissionSkillTool.id,
-            ...missionSkillTool,
-            description: output.description,
-            parameters: output.parameters,
-          })
-          return surface
-        }
-      }
-      delete tools[MissionSkillTool.id]
-      const resolved = await resolveProductionSkillTool({
+      const nativeMissionSurface = !runtimeContract?.identity && input.agentID === "mission"
+      const resolved = await resolveSkillTool({
         agent: skillRuntime,
         agentID: input.agentID,
+        sessionKind: input.session.kind,
         config: input.config,
         runtimeContract,
         availableToolNames: eligibilityToolNameSet,
         explicitSkillNames: explicitProductionSkillNames,
-        activeSkillNames: activation?.productionSkillNames ?? activeProductionSkillNames,
+        activeSkillNames: nativeMissionSurface ? permittedMissionSkillNames : permittedProductionSkillNames,
       })
-      if (!resolved) {
-        delete tools[SkillTool.id]
-        resolvedToolSkillSurfaces.delete(tools)
-        return undefined
-      }
       const { surface, tool: resolvedSkillTool } = resolved
       resolvedToolSkillSurfaces.set(tools, surface)
-      const exposeSkillTool = surface.tool_available && providerToolNameSet.has(SkillTool.id)
-      if (!exposeSkillTool) delete tools[SkillTool.id]
-      if (exposeSkillTool) {
-        bindRegistryTool(resolvedSkillTool, runtimeIdentity ? { declaredRuntimeFinalization: true } : {})
+      const loaderID = resolvedSkillTool.id
+      delete tools[loaderID === SkillTool.id ? MissionSkillTool.id : SkillTool.id]
+      if (surface.tool_available && providerToolNameSet.has(loaderID)) {
+        bindRegistryTool(resolvedSkillTool, runtimeContract?.identity ? { declaredRuntimeFinalization: true } : {})
+      } else {
+        delete tools[loaderID]
       }
       return surface
     }
     resolvedToolSkillFinalizers.set(tools, finalizeSkillSurface)
     const initialToolNames = new Set(Object.keys(tools))
-    if (activeProductionSkillNames.length > 0 || permanentRefs.some((ref) => ref.local_ref === SkillTool.id)) {
-      initialToolNames.add(SkillTool.id)
-    }
-    if (activeMissionSkillNames.length > 0) initialToolNames.add(MissionSkillTool.id)
+    for (const ref of permanentRefs) if (isSkillLoader(ref.local_ref)) initialToolNames.add(ref.local_ref)
     await finalizeSkillSurface(initialToolNames)
     const materializedCandidates = { ...tools }
     const materializeRevealCandidate = async (requestedRef: CapabilityRef, executableRef: CapabilityRef) => {
@@ -4539,11 +4517,7 @@ export namespace SessionLoop {
         const candidateNames = new Set(Object.keys(tools))
         candidateNames.add(providerName)
         const selectedName = exactSkillName(requestedRef)
-        const surface = await finalizeSkillSurface(candidateNames, {
-          ...(requestedRef.kind === "skill"
-            ? { productionSkillNames: [...new Set([...activeProductionSkillNames, selectedName])] }
-            : { missionSkillNames: [...new Set([...activeMissionSkillNames, selectedName])] }),
-        })
+        const surface = await finalizeSkillSurface(candidateNames)
         if (!surface?.tool_available || !surface.skills.some((skill) => skill.name === selectedName && skill.enabled)) {
           throw new CapabilityRevealAuthorizationError(
             "execution_not_granted",

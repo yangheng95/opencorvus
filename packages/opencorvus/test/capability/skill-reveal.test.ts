@@ -59,7 +59,7 @@ describe("search-native Skill reveal", () => {
           sessionID: session.id,
           messageID: user.id,
           type: "text",
-          text: '@skill("work-artifacts") Prepare the report.',
+          text: 'Use the configured work-artifacts Skill to prepare the report.',
           source: "user",
           kind: "user_content",
         })
@@ -96,6 +96,7 @@ describe("search-native Skill reveal", () => {
         const initial = await resolveTestCapabilityTools(common)
         const routineNames = [
           "capability_search",
+          "apply_patch",
           "bash",
           "delegate_agent",
           "edit",
@@ -106,6 +107,7 @@ describe("search-native Skill reveal", () => {
           "panel_cancel_task",
           "panel_create_task",
           "panel_delete_goal",
+          "panel_expert_squad_inspect",
           "panel_query_task",
           "panel_query_task_artifacts",
           "panel_respond_interaction",
@@ -219,7 +221,7 @@ describe("search-native Skill reveal", () => {
           sessionID: deniedSession.id,
           messageID: deniedUser.id,
           type: "text",
-          text: '@skill("work-artifacts") Find another applicable Skill.',
+          text: 'Use the configured work-artifacts Skill, or another applicable configured Skill.',
           source: "user",
           kind: "user_content",
         })
@@ -251,7 +253,7 @@ describe("search-native Skill reveal", () => {
         }
         expect({ description: deniedInitial.tools.skill!.description, names: deniedList.metadata.names }).toEqual({
           description: expect.stringContaining("Current agent: work"),
-          names: [],
+          names: ["research-report"],
         })
         await deniedProcessor.completeRecoveredToolPart({
           toolCallID: "call_list_denied_explicit_skill",

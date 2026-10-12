@@ -1,0 +1,15 @@
+{
+  "pid": 75924,
+  "occurrence": "skill-loader-341-live-01-56d9df1f-7910-4388-b7f9-06c2ff87a6a1",
+  "owner": {
+    "pid": 75924,
+    "processInstanceID": "win32:639273851014217557",
+    "occurrenceID": "56a80dd9-b6ac-4f9d-b85c-ebe7750241c1"
+  },
+  "parent": {
+    "pid": 76816,
+    "processInstanceID": "win32:639273851013822020",
+    "occurrenceID": "f64aa2ed-fc19-474c-a474-341940b5e326"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

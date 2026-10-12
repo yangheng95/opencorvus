@@ -1,0 +1,69 @@
+{
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2194
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\skill-loader-341-live-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 9155406
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "skill-loader-341-live-01-56d9df1f-7910-4388-b7f9-06c2ff87a6a1",
+    "outcome": "settled",
+    "host": {
+      "pid": 76240,
+      "processInstanceID": "win32:639273851006282790",
+      "occurrenceID": "8b7ffc74-e9f6-4fc3-b7c9-c6c647ed3cb0"
+    },
+    "target": {
+      "pid": 75924,
+      "processInstanceID": "win32:639273851014217557",
+      "occurrenceID": "87f01c5b-03d2-4f3e-a710-e06a31e69162"
+    },
+    "observedAtUtc": "2026-10-12T07:03:50.58Z",
+    "deadlineAt": 1791788900613,
+    "terminal": {
+      "occurrenceID": "skill-loader-341-live-01-56d9df1f-7910-4388-b7f9-06c2ff87a6a1",
+      "pid": 75924,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "listeners": null,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 75924,
+        "processInstanceID": "win32:639273851014217557",
+        "occurrenceID": "87f01c5b-03d2-4f3e-a710-e06a31e69162"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 76240,
+        "processInstanceID": "win32:639273851006282790",
+        "occurrenceID": "8b7ffc74-e9f6-4fc3-b7c9-c6c647ed3cb0"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "occurrence": "skill-loader-341-live-01-56d9df1f-7910-4388-b7f9-06c2ff87a6a1",
+  "observedAtUtc": "2026-10-12T07:03:53.1503564Z",
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true
+}

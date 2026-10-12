@@ -4,7 +4,6 @@ import { PlatformCapabilitySetRegistry } from "../../src/agent/platform-capabili
 import { RuntimeTemplateID } from "../../src/agent/runtime-template-id"
 import { bindHarnessProjection, createHarnessGrantSet } from "../../src/capability/harness-projection"
 import { routineToolRefs } from "../../src/capability/routine-tools"
-import { SessionLoop } from "../../src/session/loop"
 import { AgentToolPool } from "../../src/agent/tool-pool-contract"
 
 describe("Task role routine authority", () => {
@@ -19,7 +18,7 @@ describe("Task role routine authority", () => {
           access: "execute",
         })),
       })
-      const expected = ids.filter((id) => !["skill", "mission_skill"].includes(id)).sort()
+      const expected = ids.toSorted()
       for (const harness of [
         grants,
         bindHarnessProjection(grants, {
@@ -27,19 +26,15 @@ describe("Task role routine authority", () => {
           snapshot_hash: "a".repeat(64),
         }),
       ]) {
-        const actual = SessionLoop.occurrencePermanentToolRefs({
+        const actual = routineToolRefs({
           harness,
           visibleToolIDs: ids,
-          explicitSkillNames: [],
-          productionSkillContext: role !== "mission",
         })
         expect(actual.map((ref) => ref.local_ref).sort()).toEqual(expected)
       }
-      const restricted = SessionLoop.occurrencePermanentToolRefs({
+      const restricted = routineToolRefs({
         harness: grants,
         visibleToolIDs: ["capability_search"],
-        explicitSkillNames: [],
-        productionSkillContext: false,
       })
       expect(restricted.map((ref) => ref.local_ref)).toEqual(["capability_search"])
     })
@@ -56,7 +51,6 @@ describe("Task role routine authority", () => {
         grants: refs.map((ref) => ({ ref, access: "discover_execute" })),
       })
       const expected = refs
-        .filter((ref) => !["skill", "mission_skill"].includes(ref.local_ref))
         .map((ref) => ref.local_ref)
         .sort()
       for (const harness of [
@@ -66,11 +60,9 @@ describe("Task role routine authority", () => {
           snapshot_hash: "a".repeat(64),
         }),
       ]) {
-        const actual = SessionLoop.occurrencePermanentToolRefs({
+        const actual = routineToolRefs({
           harness,
           visibleToolIDs: refs.map((ref) => ref.local_ref),
-          explicitSkillNames: [],
-          productionSkillContext: true,
         })
         expect(actual.map((ref) => ref.local_ref).sort()).toEqual(expected)
       }
