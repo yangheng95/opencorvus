@@ -9,7 +9,7 @@ const web = createRequire(new URL("../../web/package.json", import.meta.url))
 
 test("the native file watcher reports the exact snapshot changes with configured brace ignores", async () => {
   const watcher: typeof import("@parcel/watcher") = backend("@parcel/watcher")
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "ci-watcher-snapshot-"))
+  const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "ci-watcher-snapshot-")))
   const directory = path.join(root, "project")
   const snapshot = path.join(root, "before.snapshot")
   const options = { ignore: ["**/{cache,temp}/**"] }
@@ -36,7 +36,7 @@ test("the native file watcher reports the exact snapshot changes with configured
 
 test("the native file subscription delivers a real created file and settles its owner", async () => {
   const watcher: typeof import("@parcel/watcher") = backend("@parcel/watcher")
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "ci-watcher-subscription-"))
+  const directory = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "ci-watcher-subscription-")))
   const filename = path.join(directory, "created.txt")
   const delivery = Promise.withResolvers<{ type: string; path: string }>()
   const timeout = setTimeout(() => delivery.reject(new Error("Native watcher delivery timed out")), 10_000)

@@ -83,3 +83,7 @@ Evolution失败另有明确分层：Windows runner临时目录使用RUNNER~1，�
 提交审查发现触及的Project测试中另有两条旧负向比较，按仓库约束改为精确正向事实：新Project解析到其真实worktree，以及重建后保留明确生成的generation。保留原清理、凭据和文件内容断言，重跑该完整文件确认。
 
 上述最终Project重跑60测试/89断言全部通过。服务runner在workspace-directory-persistence之后的三个文件（文件定位、workspace条件导出解析、worktree传输权限）另有8测试/18断言通过，均未修改；它们是服务/构建解析合同，不作视觉验收声明。
+
+## 三平台聚焦回归
+
+5b3584215正常推送并通过所有钩子。手动selected run38259887245绑定该精确提交与17个后端文件；audit、verify和全部service tests通过，Linux selected unit成功。macOS仅新增watcher两个测试失败：快照事件为/private/tmp物理路径，而测试用/tmp逻辑别名比较，订阅也用逻辑绝对路径过滤，导致实际事件无法结算测试Promise。原生日志显示真实事件已产生，Linux同样测试通过；测试setup应在创建临时目录后用标准realpath取得同一物理目录身份，再供snapshot、subscribe与断言共同使用。修复测试输入身份，不延长事件超时、不过滤额外结果、不修改产品文件监控或取消规则。Windows同类8.3别名也使用相同处理。
