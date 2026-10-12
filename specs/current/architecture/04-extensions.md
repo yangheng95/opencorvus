@@ -578,6 +578,10 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   turn-resolved surface 精确加载名字，并在首次精确加载时物化 supporting files；加载后的相对
   supporting-file 路径仍由同一个 Skill-family tool 以精确 `name + file` 读取，并经过相对路径与
   realpath 包含校验。通用 project `read` 不获得 `projected-skills` cache bypass；
+- Skill supporting-file 与 project Read 的文本分页共用计数和裁剪策略。输出达到50KB时，
+  当前连续窗口冻结，仍遍历剩余行取得真实totalLines；nextOffset指向最后返回行的下一行，
+  不能跳过超限行后把后续短行拼入同一页。文件流和已加载内容均按CR、LF、CRLF解释换行，
+  空文件为0行，末尾换行不增加虚构行；Skill/Mission Skill复用同一结果事实。
 - command registry 不把 `Skill.all()` 自动注册成 slash command，因此不存在绕过 active profile
   或 agent grant 的第二条执行路径；
 - built-in risk 根据描述符中的真实 script、agent、reference、template 和 asset 文件计算，不能把

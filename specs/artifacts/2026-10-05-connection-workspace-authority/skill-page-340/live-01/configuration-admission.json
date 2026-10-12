@@ -1,0 +1,13 @@
+{
+  "status": 400,
+  "patch": {
+    "primary_assistant_capabilities": {
+      "work": {
+        "skill_refs": [
+          "page-probe-340"
+        ],
+        "mcp_server_refs": []
+      }
+    }
+  }
+}

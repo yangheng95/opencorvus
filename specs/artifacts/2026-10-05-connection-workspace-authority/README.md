@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [340 Skill文件分页](skill-page-plan-340.md)：统一分页计数、字节上限与续读事实。
+
 - [339 工具参数保真](tool-literal-plan-339.md)：由字段schema决定原始类型与转换。
 
 - [338 读取范围与数量](read-facts-plan-338.md)：区分实际文本、目录和二进制结果。

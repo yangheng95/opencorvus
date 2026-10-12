@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [340 Skill文件分页](records/2026-10/2026-10-12-skill-page-340.md)：统一分页计数、字节上限与续读事实。
+
 - [339 工具参数保真](records/2026-10/2026-10-12-tool-literal-339.md)：由字段schema决定原始类型与转换。
 
 - [338 读取范围与数量](records/2026-10/2026-10-12-read-facts-338.md)：区分实际文本、目录和二进制结果。

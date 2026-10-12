@@ -21,10 +21,7 @@ export type TextFilePage = {
   truncatedByBytes: boolean
 }
 
-export async function readTextFilePage(
-  filepath: string,
-  input: { offset?: number; limit?: number },
-): Promise<TextFilePage> {
+function textFilePageCollector(input: { offset?: number; limit?: number }) {
   const limit = input.limit ?? DEFAULT_TEXT_FILE_LIMIT
   const offset = input.offset ?? 1
   const start = offset - 1
@@ -32,7 +29,46 @@ export async function readTextFilePage(
   let bytes = 0
   let lines = 0
   let truncatedByBytes = false
-  let hasMoreLines = false
+  return {
+    add(text: string) {
+      lines += 1
+      // Count the whole input while keeping one contiguous, bounded page.
+      if (lines <= start || raw.length >= limit || truncatedByBytes) return
+      const line = text.length > MAX_LINE_LENGTH ? text.substring(0, MAX_LINE_LENGTH) + MAX_LINE_SUFFIX : text
+      const size = Buffer.byteLength(line, "utf8") + (raw.length > 0 ? 1 : 0)
+      if (bytes + size > MAX_BYTES) {
+        truncatedByBytes = true
+        return
+      }
+
+      raw.push(line)
+      bytes += size
+    },
+    finish(): TextFilePage {
+      if (lines < offset && !(lines === 0 && offset === 1)) {
+        throw new Error(`Offset ${offset} is out of range for this file (${lines} lines)`)
+      }
+      const lastReadLine = offset + raw.length - 1
+      return {
+        raw,
+        numbered: raw.map((line, index) => `${index + offset}: ${line}`),
+        offset,
+        lines: raw.length,
+        totalLines: lines,
+        lastReadLine,
+        nextOffset: lastReadLine + 1,
+        truncated: lastReadLine < lines,
+        truncatedByBytes,
+      }
+    },
+  }
+}
+
+export async function readTextFilePage(
+  filepath: string,
+  input: { offset?: number; limit?: number },
+): Promise<TextFilePage> {
+  const page = textFilePageCollector(input)
   const stream = createReadStream(filepath, { encoding: "utf8" })
   const reader = createInterface({
     input: stream,
@@ -40,85 +76,23 @@ export async function readTextFilePage(
     crlfDelay: Infinity,
   })
   try {
-    for await (const text of reader) {
-      lines += 1
-      if (lines <= start) continue
-
-      if (raw.length >= limit) {
-        hasMoreLines = true
-        continue
-      }
-
-      const line = text.length > MAX_LINE_LENGTH ? text.substring(0, MAX_LINE_LENGTH) + MAX_LINE_SUFFIX : text
-      const size = Buffer.byteLength(line, "utf8") + (raw.length > 0 ? 1 : 0)
-      if (bytes + size > MAX_BYTES) {
-        truncatedByBytes = true
-        hasMoreLines = true
-        break
-      }
-
-      raw.push(line)
-      bytes += size
-    }
+    for await (const text of reader) page.add(text)
   } finally {
     reader.close()
     stream.destroy()
   }
-
-  if (lines < offset && !(lines === 0 && offset === 1)) {
-    throw new Error(`Offset ${offset} is out of range for this file (${lines} lines)`)
-  }
-
-  const lastReadLine = offset + raw.length - 1
-  return {
-    raw,
-    numbered: raw.map((line, index) => `${index + offset}: ${line}`),
-    offset,
-    lines: raw.length,
-    totalLines: lines,
-    lastReadLine,
-    nextOffset: lastReadLine + 1,
-    truncated: hasMoreLines || truncatedByBytes,
-    truncatedByBytes,
-  }
+  return page.finish()
 }
 
 export function readTextFilePageContent(
   content: string,
   input: { offset?: number; limit?: number },
 ): TextFilePage {
-  const limit = input.limit ?? DEFAULT_TEXT_FILE_LIMIT
-  const offset = input.offset ?? 1
-  const lines = content.length === 0 ? [] : content.split(/\r?\n/)
-  if (content.endsWith("\n")) lines.pop()
-  if (offset > lines.length && !(lines.length === 0 && offset === 1)) {
-    throw new Error(`Offset ${offset} is out of range for this file (${lines.length} lines)`)
-  }
-  const raw: string[] = []
-  let bytes = 0
-  let truncatedByBytes = false
-  for (const text of lines.slice(offset - 1, offset - 1 + limit)) {
-    const line = text.length > MAX_LINE_LENGTH ? text.substring(0, MAX_LINE_LENGTH) + MAX_LINE_SUFFIX : text
-    const size = Buffer.byteLength(line, "utf8") + (raw.length > 0 ? 1 : 0)
-    if (bytes + size > MAX_BYTES) {
-      truncatedByBytes = true
-      break
-    }
-    raw.push(line)
-    bytes += size
-  }
-  const lastReadLine = offset + raw.length - 1
-  return {
-    raw,
-    numbered: raw.map((line, index) => `${index + offset}: ${line}`),
-    offset,
-    lines: raw.length,
-    totalLines: lines.length,
-    lastReadLine,
-    nextOffset: lastReadLine + 1,
-    truncated: truncatedByBytes || offset - 1 + raw.length < lines.length,
-    truncatedByBytes,
-  }
+  const page = textFilePageCollector(input)
+  const lines = content.length === 0 ? [] : content.split(/\r\n|[\r\n]/)
+  if (/[\r\n]$/.test(content)) lines.pop()
+  for (const line of lines) page.add(line)
+  return page.finish()
 }
 
 export function renderTextFilePage(page: TextFilePage) {

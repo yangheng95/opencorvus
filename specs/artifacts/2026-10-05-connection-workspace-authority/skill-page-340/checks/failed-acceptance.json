@@ -1,0 +1,216 @@
+{
+  "observedAt": "2026-10-12T06:35:30.407Z",
+  "status": "failed",
+  "failure": "Actual Skill tool is unavailable in Provider declarations; four required tool calls not executed",
+  "actualToolCalls": [
+    {
+      "type": "tool-request",
+      "callID": "call_d4551b9c74dc47f18808ab6854ad997c",
+      "tool": "capability_search",
+      "input": {
+        "queries": [
+          "skill"
+        ],
+        "kinds": [
+          "tool"
+        ],
+        "next_owner_kinds": [
+          "call_tool"
+        ],
+        "exact_refs": [],
+        "deactivate_refs": [],
+        "limit": 5
+      },
+      "time": {
+        "start": 1791786601101
+      }
+    }
+  ],
+  "declarations": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "tools": []
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "webfetch",
+        "websearch",
+        "write"
+      ]
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "tools": []
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "webfetch",
+        "websearch",
+        "work_artifact_author",
+        "work_artifact_deliver",
+        "work_artifact_inspect",
+        "work_artifact_validate",
+        "write"
+      ]
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof",
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "webfetch",
+        "websearch",
+        "work_artifact_author",
+        "work_artifact_deliver",
+        "work_artifact_inspect",
+        "work_artifact_validate",
+        "write"
+      ]
+    }
+  ],
+  "expected": "Four skill calls: root, first page, offset26 limit2, offset301",
+  "native": {
+    "launchHandle": 30441,
+    "launchExit": 0,
+    "terminal": {
+      "occurrenceID": "skill-page-340-live-01-7823b145-74b2-4b60-b4c0-8194351d13e9",
+      "pid": 68936,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "pairedCleanupComplete": true
+  },
+  "localChecks": {
+    "before": {
+      "handle": 9212,
+      "exit": 1,
+      "passed": 5,
+      "failed": 6
+    },
+    "after": {
+      "handle": 42076,
+      "exit": 0,
+      "tests": 19,
+      "assertions": 82
+    },
+    "backendTypes": {
+      "handle": 32153,
+      "exit": 0
+    },
+    "docsExit": 0
+  },
+  "actualBackendCheckerExit": 1,
+  "ownedTabClosed": "124",
+  "boundary": "Failure preserved; native lifecycle success and fixture tool tests do not certify model/UI acceptance"
+}
