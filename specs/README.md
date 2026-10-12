@@ -3141,3 +3141,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [文件来源视觉层级358](artifacts/2026-10-05-connection-workspace-authority/source-density-358/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-density-plan-358.md) / [月记录](records/2026-10/2026-10-13-source-density-358.md)。
 
 - [来源复制边界359](artifacts/2026-10-05-connection-workspace-authority/clipboard-boundary-359/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/clipboard-boundary-plan-359.md)。
+
+- [来源展开与收起360](artifacts/2026-10-05-connection-workspace-authority/source-toggle-360/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/source-toggle-plan-360.md)。

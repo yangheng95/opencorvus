@@ -446,6 +446,13 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
     return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
   }
   const expanded = () => cardExpanded(key(), false)
+  const toggleLabel = () => {
+    const singular = props.sources.length === 2
+    const label = expanded()
+      ? singular ? "chat.collapse_source_count" : "chat.collapse_sources_count"
+      : singular ? "chat.more_source" : "chat.more_sources"
+    return t(label, { count: props.sources.length - 1 })
+  }
   return (
     <div ref={group} class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
       <Key each={props.sources.slice(0, 1)} by={sourceIdentity}>
@@ -465,7 +472,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
             }}
             indicatorPosition="end"
           >
-            {t(props.sources.length === 2 ? "chat.more_source" : "chat.more_sources", { count: props.sources.length - 1 })}
+            {toggleLabel()}
           </Disclosure.Trigger>
           <Show when={expanded()}>
             <Disclosure.Content class="msg-sources__list">

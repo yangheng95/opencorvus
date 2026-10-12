@@ -1,0 +1,290 @@
+{
+  "checkedAt": "2026-10-12T19:29:48.551Z",
+  "history": {
+    "initialHandle": 95647,
+    "launcherExitCode": 0,
+    "messages": 11,
+    "sources": 192,
+    "copiedTables": 90,
+    "native": {
+      "occurrence": "source-toggle-360-history-cf779a4b-5dfc-4558-ab25-536de81761aa",
+      "outcome": "settled",
+      "host": {
+        "pid": 67928,
+        "processInstanceID": "win32:639274296065144292",
+        "occurrenceID": "7bf24cb4-931b-496e-bb33-2f74f5c7c5f5"
+      },
+      "target": {
+        "pid": 80016,
+        "processInstanceID": "win32:639274296081452975",
+        "occurrenceID": "0d585a41-f1d6-440c-a20f-a59649c1325f"
+      },
+      "observedAtUtc": "2026-10-12T19:24:00.661Z",
+      "deadlineAt": 1791833406383,
+      "terminal": {
+        "occurrenceID": "source-toggle-360-history-cf779a4b-5dfc-4558-ab25-536de81761aa",
+        "pid": 80016,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "physical": {
+      "nativeSettlement": {
+        "occurrence": "source-toggle-360-history-cf779a4b-5dfc-4558-ab25-536de81761aa",
+        "outcome": "settled",
+        "host": {
+          "pid": 67928,
+          "processInstanceID": "win32:639274296065144292",
+          "occurrenceID": "7bf24cb4-931b-496e-bb33-2f74f5c7c5f5"
+        },
+        "target": {
+          "pid": 80016,
+          "processInstanceID": "win32:639274296081452975",
+          "occurrenceID": "0d585a41-f1d6-440c-a20f-a59649c1325f"
+        },
+        "observedAtUtc": "2026-10-12T19:24:00.661Z",
+        "deadlineAt": 1791833406383,
+        "terminal": {
+          "occurrenceID": "source-toggle-360-history-cf779a4b-5dfc-4558-ab25-536de81761aa",
+          "pid": 80016,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "occurrence": "source-toggle-360-history-cf779a4b-5dfc-4558-ab25-536de81761aa",
+      "chain": [
+        {
+          "originalOccurrencePresent": false,
+          "state": "dead_or_reused",
+          "expected": {
+            "pid": 80016,
+            "processInstanceID": "win32:639274296081452975",
+            "occurrenceID": "0d585a41-f1d6-440c-a20f-a59649c1325f"
+          }
+        },
+        {
+          "originalOccurrencePresent": false,
+          "state": "dead_or_reused",
+          "expected": {
+            "pid": 67928,
+            "processInstanceID": "win32:639274296065144292",
+            "occurrenceID": "7bf24cb4-931b-496e-bb33-2f74f5c7c5f5"
+          }
+        }
+      ],
+      "pairedCleanupComplete": true,
+      "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+      "listeners": null,
+      "copiedPair": [
+        {
+          "presentAfter": false,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-history\\runtime\\data\\auth.json",
+          "outcome": "already_absent"
+        },
+        {
+          "presentAfter": false,
+          "copiedLength": 2001983,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-history\\runtime\\data\\models.json",
+          "outcome": "removed"
+        }
+      ],
+      "physicalCompletion": true,
+      "observedAtUtc": "2026-10-12T19:24:04.6319961Z"
+    },
+    "elapsedMs": 232516,
+    "served": [
+      {
+        "level": "info",
+        "time": "2026-10-12T19:20:27.193Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "9ac40b8a-88a2-47d6-908a-0c215a86c8cd",
+          "method": "GET",
+          "path": "/ui/assets/main-C-GbKPJC.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3
+        },
+        "message": "request"
+      }
+    ]
+  },
+  "live": {
+    "initialHandle": 78524,
+    "launcherExitCode": 0,
+    "session": "ses_-zUS8Ihb7zz9s4WDV7x3",
+    "sourceMessageID": "msg_g0VXrhIeY00RMOd2jIwU",
+    "toolID": "prt_g0VXrhJno004aifLNOVF",
+    "sources": [
+      {
+        "id": "prt_g0VXrhJzC00vcy6tgk0Y",
+        "messageID": "msg_g0VXrhIeY00RMOd2jIwU",
+        "type": "source-file",
+        "sourceId": "704a41edb324bf6b7652fbe6d55dc5455158ff10d07ccc174b3a26e07535de35",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-live\\project\\资料\\展开核对\\乙.md",
+        "title": "乙.md",
+        "range": {
+          "startLine": 2,
+          "endLine": 2
+        },
+        "provider": "opencorvus-search-code"
+      },
+      {
+        "id": "prt_g0VXrhJzJ00AKAERlbIj",
+        "messageID": "msg_g0VXrhIeY00RMOd2jIwU",
+        "type": "source-file",
+        "sourceId": "0a8a5dc9e100ce73de42a3efce10850dfbe87c0ede95c5f9a7c7d4b81516676c",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-live\\project\\资料\\展开核对\\甲.md",
+        "title": "甲.md",
+        "range": {
+          "startLine": 2,
+          "endLine": 2
+        },
+        "provider": "opencorvus-search-code"
+      }
+    ],
+    "finalMessageID": "msg_g0VXrhK1P00I1V1c2lCB",
+    "preflight": {
+      "sessionID": "ses_hcZe9ARQYTpZ4RM6SSyI",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "providerRequests": 5,
+    "qualification": {
+      "qualification": "NativeService",
+      "cancellation": null,
+      "providerEOFRequests": 5,
+      "providerUserCancelledRequests": 0,
+      "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+      "physicalCompletion": true
+    },
+    "native": {
+      "occurrence": "source-toggle-360-live-a7f9a119-b389-42eb-95ee-cd5a31c1896b",
+      "outcome": "settled",
+      "host": {
+        "pid": 9968,
+        "processInstanceID": "win32:639274298609748825",
+        "occurrenceID": "b4eaa24c-b574-42c6-91f7-cccdfac93eba"
+      },
+      "target": {
+        "pid": 71996,
+        "processInstanceID": "win32:639274298658005945",
+        "occurrenceID": "50f7a8c6-faac-453b-a4a4-532c4fa5dfa7"
+      },
+      "observedAtUtc": "2026-10-12T19:27:49.767Z",
+      "deadlineAt": 1791833660958,
+      "terminal": {
+        "occurrenceID": "source-toggle-360-live-a7f9a119-b389-42eb-95ee-cd5a31c1896b",
+        "pid": 71996,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "physical": {
+      "listeners": null,
+      "occurrence": "source-toggle-360-live-a7f9a119-b389-42eb-95ee-cd5a31c1896b",
+      "nativeSettlement": {
+        "occurrence": "source-toggle-360-live-a7f9a119-b389-42eb-95ee-cd5a31c1896b",
+        "outcome": "settled",
+        "host": {
+          "pid": 9968,
+          "processInstanceID": "win32:639274298609748825",
+          "occurrenceID": "b4eaa24c-b574-42c6-91f7-cccdfac93eba"
+        },
+        "target": {
+          "pid": 71996,
+          "processInstanceID": "win32:639274298658005945",
+          "occurrenceID": "50f7a8c6-faac-453b-a4a4-532c4fa5dfa7"
+        },
+        "observedAtUtc": "2026-10-12T19:27:49.767Z",
+        "deadlineAt": 1791833660958,
+        "terminal": {
+          "occurrenceID": "source-toggle-360-live-a7f9a119-b389-42eb-95ee-cd5a31c1896b",
+          "pid": 71996,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "copiedPair": [
+        {
+          "outcome": "removed",
+          "presentAfter": false,
+          "copiedLength": 2194,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-live\\runtime\\data\\auth.json"
+        },
+        {
+          "outcome": "removed",
+          "presentAfter": false,
+          "copiedLength": 9155406,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-toggle-360-live\\runtime\\data\\models.json"
+        }
+      ],
+      "physicalCompletion": true,
+      "chain": [
+        {
+          "originalOccurrencePresent": false,
+          "state": "dead_or_reused",
+          "expected": {
+            "pid": 71996,
+            "processInstanceID": "win32:639274298658005945",
+            "occurrenceID": "50f7a8c6-faac-453b-a4a4-532c4fa5dfa7"
+          }
+        },
+        {
+          "originalOccurrencePresent": false,
+          "state": "dead_or_reused",
+          "expected": {
+            "pid": 9968,
+            "processInstanceID": "win32:639274298609748825",
+            "occurrenceID": "b4eaa24c-b574-42c6-91f7-cccdfac93eba"
+          }
+        }
+      ],
+      "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+      "pairedCleanupComplete": true,
+      "observedAtUtc": "2026-10-12T19:27:53.2064560Z"
+    },
+    "elapsedMs": 203967,
+    "served": [
+      {
+        "level": "info",
+        "time": "2026-10-12T19:25:30.232Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "34ace61c-88b6-4b72-81b6-7e495398551e",
+          "method": "GET",
+          "path": "/ui/assets/main-C-GbKPJC.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        },
+        "message": "request"
+      }
+    ]
+  },
+  "boundary": "Actual SQLite, authored inputs, canonical search output, five Provider streams, HTTP delivery and Native facts. Visual states/keyboard outcomes are manual only; no UI assertions or clipboard acceptance."
+}

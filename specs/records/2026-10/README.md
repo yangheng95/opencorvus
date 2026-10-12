@@ -694,3 +694,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [文件来源视觉层级358](2026-10-13-source-density-358.md)：长文件名与行号的显示层级。
 
 - [来源复制边界359](2026-10-13-clipboard-boundary-359.md)：真实复制与粘贴边界调查。
+
+- [来源展开与收起360](2026-10-13-source-toggle-360.md)：顶部动作与状态一致。
