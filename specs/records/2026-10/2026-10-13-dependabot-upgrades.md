@@ -2,6 +2,8 @@
 
 ## Recall
 
+本地main同步已完成：main从a7575c5fc安全fast-forward到e1dc4ea01，十项升级与3b0562c97恢复修复均已包含。同步前后分别保存并直接比较staged/unstaged binary patch，二者完全一致；最初6份并行未提交修改期间已由原任务独立提交为a7575c5fc，其23项数据/service测试及真实页面证据已审查并保留。集成的11个后端原checker文件共76测试全部通过，含更新后的来源/搜索/持久化合同和本任务Provider/恢复回归；8项类型检查、文档与架构索引通过。合并后本任务10个实现/测试文件相对完整CI的dced22e42实际diff为空，依赖manifest/lock也未变；其余代码差异仅为已经授权并有独立验收的来源/编辑器并行交付。最终记录提交随正常hooks推送main与同名工作分支，成功后停用dependabot-main。以下按阶段保留调查和历史运行，不把先前进行中/失败状态当作当前资格。
+
 2026-10-13 07:49（Asia/Shanghai）完整资格确认：run38312512597已success，verify、dependency audit、service tests、Linux/macOS/Windows完整unit和最终CI passed全部success。三个真实job日志各592条文件级DONE，全部exit=0；日志位于.scratch/dependabot-upgrades/full-{linux,macos,windows}-38312512597.log，公开运行与job身份见artifact README。旧run38302496808的Windows也已跑完592文件，其5个失败与旧Linux/macOS完全相同，没有新增类别；不混入新轮成功证据。当前隔离HEAD=09592d963相对已测dced22e42只有本记录文档差异。
 
 合并前分析/计划：main=524de3220，期间6个已推送并行提交修改来源预览、搜索行列及编辑器定位；其实现路径与3b0562c97修复路径交集为空，依赖图未变。已读取366/367/369交付证据，保留其各自验收范围（不把别的任务部分scope升级为完整成功）。main另有6个未提交文件，涉及file-reference映射和相关spec索引/07-panel，已保存完整unstaged/staged binary patch、status和HEAD到.scratch/dependabot-upgrades/main-before-sync-20261013并逐项审查，与本任务交付文件不重合。先在现有隔离分支合入最新origin/main，跑共同会话/Provider及新增source数据合同聚焦回归和正式hooks；再刷新main状态，普通合并或fast-forward仅引入本任务已验证差异，保留全部并行内容。完整待推送集合只允许本任务提交/合并，fresh fetch/merge后推送main。确认本地main和origin/main都包含交付、记录提交且无本任务未提交修改后停用自动跟进。
