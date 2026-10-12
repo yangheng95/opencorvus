@@ -312,6 +312,7 @@
 }
 .md-content th,
 .msg-text th {
+  word-break: keep-all;
   background: var(--surface-strong);
   font-weight: var(--ui-font-weight-strong);
 }

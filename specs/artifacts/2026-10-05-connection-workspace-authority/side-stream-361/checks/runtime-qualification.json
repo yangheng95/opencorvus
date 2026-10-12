@@ -1,0 +1,155 @@
+{
+  "scopes": [
+    {
+      "occurrence": "side-stream-361-live-af0ffb85-c138-4491-8ff8-daa91a430258",
+      "budgetMs": 600000,
+      "scope": "live",
+      "outputDrainComplete": true,
+      "originalHandleExitCode": 0,
+      "originalHandle": 49515,
+      "native": {
+        "occurrenceID": "side-stream-361-live-af0ffb85-c138-4491-8ff8-daa91a430258",
+        "pid": 69424,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "requestCleanupComplete": true,
+      "elapsedMs": 462383
+    },
+    {
+      "occurrence": "side-stream-361-after-5f9e6ffc-502a-4cd4-87bf-c406057c7399",
+      "budgetMs": 600000,
+      "scope": "after",
+      "outputDrainComplete": true,
+      "originalHandleExitCode": 0,
+      "originalHandle": 33553,
+      "native": {
+        "occurrenceID": "side-stream-361-after-5f9e6ffc-502a-4cd4-87bf-c406057c7399",
+        "pid": 61472,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "requestCleanupComplete": true,
+      "elapsedMs": 195109
+    }
+  ],
+  "requestBudget": 12,
+  "limits": "Discrete streaming frames do not establish every frame or Research Studio child parity. Sources expanded after completion. Inherited Reference history DOM geometry in initial samples is not painted evidence. Clipboard359 unresolved.",
+  "canonical": {
+    "finalTextChars": 5223,
+    "messageCount": 9,
+    "sessionCount": 3,
+    "sourceCount": 16,
+    "finalMessageID": "msg_g0VXrs5pl00f3VLP3mOB",
+    "HanCharacters": 3646
+  },
+  "verification": {
+    "cssTokens": "exit0",
+    "typecheck": "98113 actual exit0",
+    "build": "92431 actual exit0",
+    "afterBundle": "main-1Vm28pXW.js",
+    "visual": "Root manually viewed 21 real page screenshots; no UI automated tests",
+    "beforeBundle": "main-LvnQ77kF.js"
+  },
+  "requests": [
+    {
+      "sessionID": "ses_hzL77aj6joBEl0q3o2ga",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835554970
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 22
+    },
+    {
+      "sessionID": "ses_hzL77aj6joBEl0q3o2ga",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835553593
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 42
+    },
+    {
+      "sessionID": "ses_-zUS88KDXzzg9EB50qNf",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835630826
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 24
+    },
+    {
+      "sessionID": "ses_-zUS88KDXzzg9EB50qNf",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835629046
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 65
+    },
+    {
+      "sessionID": "ses_-zUS883zAzzXl6fDOjB0",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835695545
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 108
+    },
+    {
+      "sessionID": "ses_-zUS883zAzzXl6fDOjB0",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835739407
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 79
+    },
+    {
+      "sessionID": "ses_-zUS883zAzzXl6fDOjB0",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835724070
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 43
+    },
+    {
+      "sessionID": "ses_-zUS883zAzzXl6fDOjB0",
+      "state": "settled",
+      "streaming": true,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791835827950
+      },
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "chunkCount": 2889
+    }
+  ],
+  "exhausted": false
+}

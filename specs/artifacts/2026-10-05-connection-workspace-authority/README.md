@@ -793,3 +793,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [来源复制边界359](clipboard-boundary-359/README.md) / [Recall](clipboard-boundary-plan-359.md)。
 
 - [来源展开与收起360](source-toggle-360/README.md) / [Recall](source-toggle-plan-360.md)。
+
+- [侧栏长正文与来源361](side-stream-361/README.md) / [Recall](side-stream-plan-361.md)。

@@ -1,0 +1,39 @@
+{
+  "headers": [
+    {
+      "height": 113.5500030517578,
+      "text": "比较项目",
+      "width": 44.38750076293945
+    },
+    {
+      "height": 113.5500030517578,
+      "text": "甲目录中的事实",
+      "width": 122.7249984741211
+    },
+    {
+      "height": 113.5500030517578,
+      "text": "乙目录中的事实",
+      "width": 122.7249984741211
+    },
+    {
+      "height": 113.5500030517578,
+      "text": "核对解释或待验事项",
+      "width": 55.76250076293945
+    }
+  ],
+  "htmlPrefix": "<table tabindex=\"0\">\n<thead>\n<tr>\n<th>比较项目</th>\n<th>甲目录中的事实</th>\n<th>乙目录中的事实</th>\n<th>核对解释或待验事项</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>所在目录</td>\n<td><code>候选方案甲</code></td>\n<td><code>候选方案乙</code></td>\n<td>同名文件必须靠目录区分</td>\n</tr>\n<tr>\n<td>末级文件名</td>\n<td><code>来源记录_流式正文与阅读位置核对.md</code></td>\n<td><code>来源记录_流式正文与阅读位置核对.md</code></td>\n<td>文件名相同不等于来源相同</td>\n</tr>\n<tr>\n<td>本次匹配数</td>\n<td>八条</td>\n<td>八条</td>\n<td>合计十六条真实匹配</td>\n",
+  "parent": {
+    "className": "md-frozen-block",
+    "clientWidth": 348,
+    "scrollWidth": 348,
+    "tag": "DIV"
+  },
+  "rows": 11,
+  "table": {
+    "className": "",
+    "clientWidth": 346,
+    "height": 1493.25,
+    "scrollWidth": 346,
+    "width": 348
+  }
+}
