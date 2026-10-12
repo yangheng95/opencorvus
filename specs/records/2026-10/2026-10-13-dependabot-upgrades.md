@@ -2,6 +2,10 @@
 
 ## Recall
 
+2026-10-13 07:49（Asia/Shanghai）完整资格确认：run38312512597已success，verify、dependency audit、service tests、Linux/macOS/Windows完整unit和最终CI passed全部success。三个真实job日志各592条文件级DONE，全部exit=0；日志位于.scratch/dependabot-upgrades/full-{linux,macos,windows}-38312512597.log，公开运行与job身份见artifact README。旧run38302496808的Windows也已跑完592文件，其5个失败与旧Linux/macOS完全相同，没有新增类别；不混入新轮成功证据。当前隔离HEAD=09592d963相对已测dced22e42只有本记录文档差异。
+
+合并前分析/计划：main=524de3220，期间6个已推送并行提交修改来源预览、搜索行列及编辑器定位；其实现路径与3b0562c97修复路径交集为空，依赖图未变。已读取366/367/369交付证据，保留其各自验收范围（不把别的任务部分scope升级为完整成功）。main另有6个未提交文件，涉及file-reference映射和相关spec索引/07-panel，已保存完整unstaged/staged binary patch、status和HEAD到.scratch/dependabot-upgrades/main-before-sync-20261013并逐项审查，与本任务交付文件不重合。先在现有隔离分支合入最新origin/main，跑共同会话/Provider及新增source数据合同聚焦回归和正式hooks；再刷新main状态，普通合并或fast-forward仅引入本任务已验证差异，保留全部并行内容。完整待推送集合只允许本任务提交/合并，fresh fetch/merge后推送main。确认本地main和origin/main都包含交付、记录提交且无本任务未提交修改后停用自动跟进。
+
 最新远端验收对象已更新为[完整run38312512597](https://github.com/yangheng95/opencorvus/actions/runs/38312512597)：workflow_dispatch、codex/dependabot-upgrades、实际head=dced22e425cc9ae81866778daac370b5e1efc715、test_files为空；读回title=CI而非selected，状态in_progress。修复提交3b0562c97已与最新origin/main普通合并为dced22e42，合并未改变packages/opencorvus任何文件；冻结安装、1732包无漏洞及全部正式push hooks通过，已正常推送同名远端分支，upstream改为origin/codex/dependabot-upgrades。自动跟进dependabot-main已更新为这轮身份和相同完整成功条件；旧38302496808的失败仍为历史证据。main工作树未由本任务推进，新恢复修复尚待完整三平台资格。本条记录在测试head之后只增加文档，最终合并时必须检查实际差异，不能把文档推送当作新的代码验收。
 
 本地修复验收已完成：同一原runner的ci-fixes-final.log六文件51测试全部通过，覆盖本轮五个失败文件和SDK错误分类；其中staggered dispatch完整18测试/286断言，四个原超时分支分别约4–5秒并核对重开数据库的同一Turn决策。shared-recovery-regression.log八文件59测试全部通过（LLM activity与前组重叠，不能相加称为一次完整运行），包含真实副作用拒绝重放、Host fault、Provider semantic error、跨进程活性/恢复、Mission extension和交互产物schema。根8项typecheck、docs:check与architecture-index通过。早期诊断及第一次不完整修正的failure日志保留，最终各文件exit=0为本地依据；远端三平台完整资格仍未满足。下一步提交修复、在隔离分支merge最新origin/main、冻结安装及正式hooks后推送同一codex分支并启动新的完整CI；main工作树尚未由本任务推进。

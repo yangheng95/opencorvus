@@ -11,3 +11,15 @@ Manual desktop review at http://127.0.0.1:19633/ui/ using an isolated runtime. T
 - [Remote verify](remote-verify.txt) and [remote service tests](remote-service.txt): actual completed GitHub job log excerpts from [38300113046](https://github.com/yangheng95/opencorvus/actions/runs/38300113046). Cross-platform full unit results are separate and were still running at capture time.
 
 [Plan and full verification record](../../records/2026-10/2026-10-13-dependabot-upgrades.md).
+
+## Complete SDK recovery verification
+
+[Full CI 38312512597](https://github.com/yangheng95/opencorvus/actions/runs/38312512597) succeeded at commit `dced22e425cc9ae81866778daac370b5e1efc715`. This was `workflow_dispatch` on `codex/dependabot-upgrades` with empty `test_files`, not a selected or documentation-only run. Verify, dependency audit, service tests and the final CI passed job all succeeded.
+
+| Full unit job | File completion evidence |
+| --- | --- |
+| [Linux 115022897599](https://github.com/yangheng95/opencorvus/actions/runs/38312512597/job/115022897599) | 592 DONE records, all exit 0 |
+| [macOS 115022897467](https://github.com/yangheng95/opencorvus/actions/runs/38312512597/job/115022897467) | 592 DONE records, all exit 0 |
+| [Windows 115022897420](https://github.com/yangheng95/opencorvus/actions/runs/38312512597/job/115022897420) | 592 DONE records, all exit 0 |
+
+The earlier full run 38302496808 failed on the same five files on all three platforms. Commit `3b0562c97` fixes SDK response-error cause classification, current model completion ordering in recovery/dispatch fixtures, open-map schema serialization and the real Mission tool-definition budget. Local final focused verification passed six files / 51 tests; shared recovery verification passed eight files / 59 tests, with the LLM activity file present in both groups. Those local groups are separate from the successful full CI above. Subsequent validation-record changes are Markdown only and do not change this tested implementation.
