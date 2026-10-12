@@ -120,6 +120,12 @@ prefix with an ellipsis within the existing 256-byte JSON title budget. Escapes
 and the marker count toward that budget; short titles remain exact. Transcript
 and live projections share this owner, while disclosure reads retain the complete
 canonical title, input and result under the original state-integrity marker.
+The shared Tool summary uses a completed read's non-empty result title as its
+resource label, keeping the existing requested range and observed line counts.
+Before completion or without a result title, the actual request path supplies
+the label; errors retain their canonical failure text. Expanded Input still
+shows the exact request locator. Main, child and card summaries share this
+presentation rule without changing any persisted Tool or Source facts.
 The event
 handler captures its existing Question reader before entering streamGlobalSSE;
 the stream runs outside Instance context and reads explicit Session/Project

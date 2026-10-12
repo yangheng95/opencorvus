@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [336 读取工具摘要](records/2026-10/2026-10-12-read-summary-336.md)：真实结果名称与Sources一致。
+
 - [335 附件来源名称](records/2026-10/2026-10-12-attachment-source-name-335.md)：保留原名和精确只读定位。
 
 - [334 PDF来源文字选择](records/2026-10/2026-10-12-pdf-selection-334.md)：复用当前阅读器支持原文选择。

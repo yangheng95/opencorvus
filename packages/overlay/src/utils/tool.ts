@@ -408,7 +408,16 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
     (safeInput as any).filename ||
     ""
   if (path) {
-    const shortPath = shortRelativePath(path, base)
+    // A completed read owns its resolved resource name. Keep the exact request
+    // path in the disclosure, and use it here until a result supplies a title.
+    const readTitle =
+      (n === "read" || n === "readfile") &&
+      (safeState as any).status === "completed" &&
+      typeof (safeState as any).title === "string" &&
+      (safeState as any).title.trim()
+        ? (safeState as any).title
+        : ""
+    const shortPath = readTitle || shortRelativePath(path, base)
     // Read calls on the same file can fire multiple times when the file
     // exceeds the per-call byte cap (50KB) — without slice info every
     // entry looks identical and the operator cannot tell which range was

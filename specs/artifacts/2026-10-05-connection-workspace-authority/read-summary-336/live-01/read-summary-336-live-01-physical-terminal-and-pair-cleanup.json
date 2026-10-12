@@ -1,0 +1,69 @@
+{
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "read-summary-336-live-01-6814e348-00db-489f-ab1f-201b9dce8f8e",
+    "outcome": "settled",
+    "host": {
+      "pid": 57004,
+      "processInstanceID": "win32:639273775750719612",
+      "occurrenceID": "5ac86849-f915-45e9-abb9-0e935a044881"
+    },
+    "target": {
+      "pid": 58264,
+      "processInstanceID": "win32:639273775759025804",
+      "occurrenceID": "00dcac6a-367d-46f0-8131-62d4d4454db4"
+    },
+    "observedAtUtc": "2026-10-12T04:56:29.931Z",
+    "deadlineAt": 1791781375057,
+    "terminal": {
+      "occurrenceID": "read-summary-336-live-01-6814e348-00db-489f-ab1f-201b9dce8f8e",
+      "pid": 58264,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 58264,
+        "processInstanceID": "win32:639273775759025804",
+        "occurrenceID": "00dcac6a-367d-46f0-8131-62d4d4454db4"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 57004,
+        "processInstanceID": "win32:639273775750719612",
+        "occurrenceID": "5ac86849-f915-45e9-abb9-0e935a044881"
+      }
+    }
+  ],
+  "listeners": null,
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-12T04:56:32.3639496Z",
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\read-summary-336-live-01\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "outcome": "removed",
+      "copiedLength": 2194
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\read-summary-336-live-01\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "outcome": "removed",
+      "copiedLength": 9155406
+    }
+  ],
+  "occurrence": "read-summary-336-live-01-6814e348-00db-489f-ab1f-201b9dce8f8e"
+}

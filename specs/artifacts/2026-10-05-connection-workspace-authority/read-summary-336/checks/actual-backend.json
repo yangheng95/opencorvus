@@ -1,0 +1,42 @@
+{
+  "observedAt": "2026-10-12T04:56:57.426Z",
+  "actualModel": "gpt-6.1-sol",
+  "providerRequests": 8,
+  "streaming": true,
+  "providerTerminal": "eof",
+  "attachments": [
+    {
+      "filename": "研究材料（终版）336.pdf",
+      "origin": "attachment",
+      "bytes": 4472337,
+      "unchangedOriginalBytes": true,
+      "actualCanonicalRead": true
+    },
+    {
+      "filename": "Résumé（记录）336.md",
+      "origin": "attachment",
+      "range": {
+        "startLine": 24,
+        "endLine": 25
+      },
+      "bytes": 493,
+      "unchangedOriginalBytes": true,
+      "actualCanonicalRead": true
+    }
+  ],
+  "projectFileOriginalText": "# Ordinary project note\nEDITABLE-SOURCE-336\n",
+  "actualFailure": {
+    "kind": "tool-execution",
+    "name": "Error",
+    "message": "File not found: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\read-summary-336-live-01\\project\\missing-observation-336.md",
+    "originSite": "session.processor.tool-error",
+    "classification": "tool-execution",
+    "data": {
+      "toolCallId": "call_5pmsXwAZTvlPf4HC1vcvhtaO",
+      "toolName": "read"
+    }
+  },
+  "nativeExit": 0,
+  "pairedCleanupComplete": true,
+  "boundary": "Positive checks over actual Provider, canonical source/request/outcome ownership, original attachment bytes and physical completion. No DOM, presentation or screenshot assertions."
+}
