@@ -4,7 +4,7 @@ import { Log } from "@/util/log"
 import { Bus } from "@/bus"
 import type { ModelMessage, PrepareStepFunction, StopCondition, Tool, ToolSet } from "ai"
 // Use the wrapped streamText from @/llm/api — its Proxy returns
-// `abortableIterable(fullStream, composed)`, which is the only thing that
+// `abortableIterable(stream, composed)`, which is the only thing that
 // rescues a Bun-fetch-backed reader.read() from parking forever when the
 // LLM-activity gate fires its abort signal. Importing the raw "ai" form
 // bypassed the Proxy and silently parked sub-agents (architect, requirements,
@@ -356,11 +356,11 @@ export namespace LLM {
           ? Object.fromEntries(prepared.activeTools.map((name) => [name, tools[name]!]))
           : tools
         const stepSystem =
-          prepared?.system === undefined
+          prepared?.instructions === undefined
             ? system
-            : typeof prepared.system === "string"
-              ? [prepared.system]
-              : (Array.isArray(prepared.system) ? prepared.system : [prepared.system]).map((message) => message.content)
+            : typeof prepared.instructions === "string"
+              ? [prepared.instructions]
+              : (Array.isArray(prepared.instructions) ? prepared.instructions : [prepared.instructions]).map((message) => message.content)
         checkCapacity(prepared?.messages ?? step.messages, activeTools, stepSystem)
         return prepared
       },
@@ -388,7 +388,7 @@ export namespace LLM {
       activeTools: Object.keys(tools),
       tools,
       toolChoice,
-      ...(isOpenaiOauth ? {} : { system: systemText }),
+      ...(isOpenaiOauth ? {} : { instructions: systemText }),
       maxOutputTokens: params.maxOutputTokens,
       abortSignal: input.abort,
       // Disable the wrapper's 5 s default soft timeout — every production
@@ -403,7 +403,7 @@ export namespace LLM {
       stopWhen: input.stopWhen,
       messages: requestMessages,
       model: ProviderLLM.wrapModel(language, input.model, options),
-      experimental_telemetry: telemetryConfig({
+      telemetry: telemetryConfig({
         enabled: cfg.experimental?.openTelemetry,
         username: cfg.username,
         sessionID: input.sessionID,

@@ -1,4 +1,4 @@
-﻿import { Message } from "./message"
+import { Message } from "./message"
 import { Log } from "@/util/log"
 import { NotFoundError } from "@/storage/db"
 import { MessageStore } from "./message-store"
@@ -958,7 +958,7 @@ export namespace SessionProcessor {
                           ...definition,
                           execute: (...args: Parameters<typeof execute>) => {
                             run.signal.throwIfAborted()
-                            // The SDK executes tools independently of fullStream consumption.
+                            // The SDK can execute a Tool before the consumer admits its Tool-call event.
                             markToolExecutionStarted(run.attempt)
                             return execute(...args)
                           },
@@ -989,7 +989,7 @@ export namespace SessionProcessor {
 
                 // LLM.stream returns the canonical @/llm/api wrapped stream.
                 observation.start()
-                for await (const value of stream.fullStream) {
+                for await (const value of stream.stream) {
                   observation.received(value)
                   let semanticChunkAccepted = false
                   let heartbeatEligible = false
@@ -1508,7 +1508,7 @@ export namespace SessionProcessor {
 
                       case "finish":
                         observation.reject("control")
-                        await streamInput.stream?.onFinish?.(value as never)
+                        await streamInput.stream?.onEnd?.(value as never)
                         break
 
                       default:

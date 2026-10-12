@@ -48,7 +48,7 @@ test("a real structured turn admits StructuredOutput into the immutable revision
         const names = Object.keys(input.tools).sort()
         if (!names.includes("StructuredOutput")) {
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield {
                 type: "finish-step",
@@ -72,7 +72,7 @@ test("a real structured turn admits StructuredOutput into the immutable revision
         if (!structured.execute) throw new Error("StructuredOutput is not executable.")
         const args = { answer: "ok" }
         return {
-          fullStream: (async function* () {
+          stream: (async function* () {
             yield { type: "start" }
             yield { type: "tool-call", toolCallId: "call_structured_output", toolName: "StructuredOutput", input: args }
             const output = await structured.execute!(args, {
@@ -148,7 +148,7 @@ test("a streamed Conversation reads its project file directly on the first model
         if (executeRead)
           expect(input.system.join("\n")).toContain("Use them directly; do not search for or reveal them first.")
         return {
-          fullStream: (async function* () {
+          stream: (async function* () {
             yield { type: "start" }
             if (executeRead) {
               const args = { filePath }

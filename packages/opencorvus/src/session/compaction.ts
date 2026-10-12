@@ -26,7 +26,7 @@ import { InstructionPrompt } from "./instruction"
 import { TaskPlan } from "@/memory/task-plan"
 import { SessionMemory } from "@/memory/session-memory"
 import { Snapshot } from "@/snapshot"
-import { stepCountIs, type ModelMessage, type Tool as AITool } from "ai"
+import { isStepCount, type ModelMessage, type Tool as AITool } from "ai"
 import { TodoStore } from "./todo-store"
 import { SessionControl } from "./control"
 import { createHash } from "node:crypto"
@@ -1016,7 +1016,7 @@ export namespace SessionCompaction {
       system: [],
       messages: providerMessages,
       model,
-      stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", stepCountIs(agent.steps)],
+      stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", isStepCount(agent.steps)],
     })
 
     if (result === "compact") {

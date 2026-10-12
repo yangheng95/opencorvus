@@ -63,6 +63,32 @@ export function createOrchestratorInteractionTools(input: {
     expectedSource?: string
   }[]
 }) {
+  const askUserInputSchema = z.object({
+    questions: z
+      .array(
+        z.object({
+          question: z.string().describe("The complete question text to show the user."),
+          header: z.string().describe("Short label (≤30 chars) used as a chip/title."),
+          options: z
+            .array(
+              z.object({
+                value: z.string().describe("Stable machine-facing value returned when selected."),
+                label: z.string().describe("Display text (1-5 words)."),
+                description: z.string().describe("Explanation of this choice."),
+              }),
+            )
+            .default([])
+            .describe("Click-selectable options. Leave empty for free-text-only answers."),
+          multiple: z.boolean().optional().describe("Allow multi-select (default false)."),
+          custom: z.boolean().optional().describe("Allow a custom typed answer (default true)."),
+        }),
+      )
+      .min(1)
+      .max(4)
+      .describe("1-4 questions to ask in a single turn."),
+    reason: z.string().optional().describe("Why you're asking (short, shown in logs — not to the user)."),
+  })
+
   return {
     read_task_message: tool({
       description:
@@ -128,32 +154,8 @@ export function createOrchestratorInteractionTools(input: {
 
     question: tool({
       description: ORCHESTRATOR_QUESTION_DESCRIPTION,
-      inputSchema: z.object({
-        questions: z
-          .array(
-            z.object({
-              question: z.string().describe("The complete question text to show the user."),
-              header: z.string().describe("Short label (≤30 chars) used as a chip/title."),
-              options: z
-                .array(
-                  z.object({
-                    value: z.string().describe("Stable machine-facing value returned when selected."),
-                    label: z.string().describe("Display text (1-5 words)."),
-                    description: z.string().describe("Explanation of this choice."),
-                  }),
-                )
-                .default([])
-                .describe("Click-selectable options. Leave empty for free-text-only answers."),
-              multiple: z.boolean().optional().describe("Allow multi-select (default false)."),
-              custom: z.boolean().optional().describe("Allow a custom typed answer (default true)."),
-            }),
-          )
-          .min(1)
-          .max(4)
-          .describe("1-4 questions to ask in a single turn."),
-        reason: z.string().optional().describe("Why you're asking (short, shown in logs — not to the user)."),
-      }),
-      execute: async ({ questions, reason }, options) => {
+      inputSchema: askUserInputSchema,
+      execute: async ({ questions, reason }: z.infer<typeof askUserInputSchema>, options) => {
         log.info("question", { taskID: input.taskID, count: questions.length, reason })
         const execution = await requireTaskOrchestratorToolExecutionContext(options, "question", {
           taskID: input.taskID,

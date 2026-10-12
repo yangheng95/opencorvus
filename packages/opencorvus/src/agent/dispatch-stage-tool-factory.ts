@@ -124,6 +124,7 @@ export function createRecoveredDispatchStageToolFactory(input: {
       const replayed = await execute(part.state.input, {
         toolCallId: part.callID,
         messages: [],
+        context: {},
         abortSignal: new AbortController().signal,
       })
       const output = normalizeToolResult(replayed)

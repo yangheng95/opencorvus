@@ -2,7 +2,7 @@
  * Single-source chunk-driven activity monitor.
  *
  * Purpose: detect "no byte moved in N ms" on any streaming surface
- * (LLM stream.fullStream, executor event queue, SSE bridge) without
+ * (LLM stream.stream, executor event queue, SSE bridge) without
  * each layer inventing its own setTimeout/reset dance.
  *
  * Semantics (physical-liveness probe, NOT a state machine):

@@ -89,14 +89,14 @@ describe("SessionProcessor semantic LLM activity retry", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async () => {
           attempts += 1
           if (attempts === 1) return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: `${partType}-start`, id: "abandoned" }
             })(),
           } as Awaited<ReturnType<typeof LLM.stream>>
           order.push("successor-started")
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "recovered" }
               yield { type: "text-delta", id: "recovered", text: "Recovered complete answer." }
@@ -172,7 +172,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (streamInput) => {
           attempts += 1
           if (attempts === 1) {
-            const fullStream = (async function* () {
+            const stream = (async function* () {
               yield { type: "start" }
               yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
               while (!streamInput.abort.aborted) {
@@ -180,12 +180,12 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               }
             })()
             return {
-              fullStream: abortableIterable(fullStream, streamInput.abort),
+              stream: abortableIterable(stream, streamInput.abort),
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           if (attempts === 2) {
             return {
-              fullStream: (async function* () {
+              stream: (async function* () {
                 yield { type: "start" }
                 yield { type: "text-start", id: "network-draft" }
                 yield { type: "text-delta", id: "network-draft", text: "Abandoned before network failure." }
@@ -194,7 +194,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           if (attempts === 3) {
-            const fullStream = (async function* () {
+            const stream = (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "second-idle-draft" }
               yield { type: "text-delta", id: "second-idle-draft", text: "Abandoned before a second idle." }
@@ -204,11 +204,11 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               }
             })()
             return {
-              fullStream: abortableIterable(fullStream, streamInput.abort),
+              stream: abortableIterable(stream, streamInput.abort),
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "recovered" }
               yield { type: "text-delta", id: "recovered", text: "Recovered after repeated transient stalls." }
@@ -324,7 +324,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (streamInput) => {
           attempts += 1
           if (attempts === 1) {
-            const fullStream = (async function* () {
+            const stream = (async function* () {
               yield { type: "start" }
               yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
               yield { type: "text-start", id: "text_owned_by_the_attempt" }
@@ -344,11 +344,11 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               }
             })()
             return {
-              fullStream: abortableIterable(fullStream, streamInput.abort),
+              stream: abortableIterable(stream, streamInput.abort),
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "recovered" }
               yield { type: "text-end", id: "text_not_owned_by_the_recovered_attempt" }
@@ -458,7 +458,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
           attempts += 1
           if (attempts === 1) {
             firstAttemptSignal = streamInput.abort
-            const fullStream = (async function* () {
+            const stream = (async function* () {
               yield { type: "start" }
               yield { type: "reasoning-start", id: "parked-reasoning" }
               yield { type: "reasoning-delta", id: "parked-reasoning", text: "Reasoning before the parked read." }
@@ -474,12 +474,12 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               yield { type: "reasoning-end", id: "late-reasoning" }
             })()
             return {
-              fullStream: abortableIterable(fullStream, streamInput.abort),
+              stream: abortableIterable(stream, streamInput.abort),
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           resolveSecondAttemptStarted(Date.now())
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "recovered" }
               yield { type: "text-delta", id: "recovered", text: "Recovered after the reasoning-end idle." }
@@ -621,7 +621,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
           const streamSpy = spyOn(LLM, "stream").mockImplementation(
             async () =>
               ({
-                fullStream: (async function* () {
+                stream: (async function* () {
                   yield { type: "start" }
                   yield { type: "reasoning-start", id: "reasoning-abort" }
                   setTimeout(

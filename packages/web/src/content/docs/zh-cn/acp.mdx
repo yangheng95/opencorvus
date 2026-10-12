@@ -5,7 +5,7 @@ description: 在任意兼容 ACP 的编辑器（如 Zed）中通过 stdin/stdout
 
 ACP 是**标准化的 AI 代理-编辑器通信协议**，通过统一接口把代理与客户端（编辑器）解耦。
 
-源码：`packages/opencorvus/src/acp/`，SDK：`@agentclientprotocol/sdk@0.14.1`。
+源码：`packages/opencorvus/src/acp/`，SDK：`@agentclientprotocol/sdk@1.4.0`。
 
 ## `opencorvus acp` 命令
 
@@ -59,10 +59,10 @@ Zed 按需 spawn `opencorvus acp`，通过 stdin/stdout 通信（`src/acp/README
 | -------------------------- | ----------------------------------------- |
 | `session/new`              | 新建会话，映射到内部 opencorvus session   |
 | `session/load`             | 加载会话，回放消息历史，恢复模型与 mode   |
-| `unstable_listSessions`    | 按更新时间倒序列出，cursor 分页（100/页） |
+| `listSessions`    | 按更新时间倒序列出，cursor 分页（100/页） |
 | `unstable_forkSession`     | Fork 会话，回放历史                       |
-| `unstable_resumeSession`   | 恢复会话（不回放历史）                    |
-| `unstable_setSessionModel` | 切换当前模型，支持 variant                |
+| `resumeSession`   | 恢复会话（不回放历史）                    |
+| `setSessionConfigOption` | 切换当前模型，支持 variant                |
 | `setSessionMode`           | 切换当前 agent（仅 primary）              |
 
 ### 对话

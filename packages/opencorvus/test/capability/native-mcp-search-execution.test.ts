@@ -163,7 +163,7 @@ describe("native Session MCP search lifecycle", () => {
               limit: 5,
             }
             return {
-              fullStream: (async function* () {
+              stream: (async function* () {
                 yield { type: "start" }
                 yield {
                   type: "tool-call",
@@ -191,7 +191,7 @@ describe("native Session MCP search lifecycle", () => {
             expect(Object.keys(input.tools).sort()).toEqual([...workRoutineNames, TOOL_ID].sort())
             const args = { value: "ping" }
             return {
-              fullStream: (async function* () {
+              stream: (async function* () {
                 yield { type: "start" }
                 yield { type: "tool-call", toolCallId: "call_exact_echo", toolName: TOOL_ID, input: args }
                 const output = await input.tools[TOOL_ID]!.execute!(args, {
@@ -205,7 +205,7 @@ describe("native Session MCP search lifecycle", () => {
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "final" }
               yield { type: "text-delta", id: "final", text: "Exact MCP execution complete." }
@@ -314,7 +314,7 @@ describe("native Session MCP search lifecycle", () => {
                 limit: 5,
               }
               return {
-                fullStream: (async function* () {
+                stream: (async function* () {
                   yield { type: "start" }
                   yield {
                     type: "tool-call",
@@ -342,7 +342,7 @@ describe("native Session MCP search lifecycle", () => {
             const toolCallID = `call_stale_echo_${scenario.partialInput}`
             const toolInput = { value: "ping" }
             return {
-              fullStream: (async function* () {
+              stream: (async function* () {
                 yield { type: "start" }
                 if (scenario.partialInput) {
                   yield { type: "tool-input-start", id: toolCallID, toolCallId: toolCallID, toolName: TOOL_ID }
@@ -471,7 +471,7 @@ describe("native Session MCP search lifecycle", () => {
         const stream = spyOn(LLM, "stream").mockImplementation(async (input) => {
           initialDefinitions.push(Object.keys(input.tools))
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "policy" }
               yield { type: "text-delta", id: "policy", text: "Policy-composed Catalog inspected." }

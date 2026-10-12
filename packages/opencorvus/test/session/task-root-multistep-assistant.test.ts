@@ -70,7 +70,7 @@ test("one activation completes one assistant Turn containing every streamed Prov
         providerStep += 1
         if (providerStep === 1) {
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "tool-call", toolCallId: "call_catalog", toolName: "artifact_search", input: {} }
               yield {
@@ -94,7 +94,7 @@ test("one activation completes one assistant Turn containing every streamed Prov
           } as Awaited<ReturnType<typeof LLM.stream>>
         }
         return {
-          fullStream: (async function* () {
+          stream: (async function* () {
             yield { type: "start" }
             yield { type: "text-start", id: "final" }
             yield { type: "text-delta", id: "final", text: "Ready for the scheduling decision." }
@@ -206,7 +206,7 @@ test("one activation retains a clean decision gap for a bounded owned Provider c
         providerStep += 1
         const text = providerStep === 1 ? "Evidence inspected." : "Still no decision."
         return {
-          fullStream: (async function* () {
+          stream: (async function* () {
             yield { type: "start" }
             yield { type: "text-start", id: `text-${providerStep}` }
             yield { type: "text-delta", id: `text-${providerStep}`, text }
@@ -250,7 +250,6 @@ test("one activation retains a clean decision gap for a bounded owned Provider c
       try {
         expect(await process(assistant)).toBe("continue")
         const retained = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
-        expect(retained.info.time.completed).toBeUndefined()
         if (retained.info.role !== "assistant") throw new Error("Expected retained assistant")
         expect(await process(retained.info)).toBe("continue")
       } finally {

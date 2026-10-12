@@ -49,6 +49,30 @@ function detectBinaryKind(buf: Buffer, filePath: string): string | null {
 }
 
 export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (toolID: string) => void) {
+  const readInputSchema = z.object({
+    filePath: z.string().describe("File path relative to the scoped project root"),
+    offset: z
+      .number()
+      .int()
+      .positive()
+      .optional()
+      .describe("1-based line number to start reading from (default 1). Use to page through large files."),
+    limit: z.number().int().positive().optional().describe("Maximum lines to read (default 300)."),
+  })
+  const globInputSchema = z.object({
+    pattern: z.string().describe("Glob pattern (e.g., 'src/**/*.ts', '*.json', 'test/**/*.test.ts')"),
+    path: z.string().optional().describe("Directory path relative to the scoped project root"),
+  })
+  const codeSearchInputSchema = z.object({
+    pattern: z.string().describe('Required regex pattern to search for. Field name is "pattern", not "query".'),
+    path: z.string().optional().describe("Subdirectory or file to search in (default: project root)"),
+    max_results: z.number().optional().describe("Maximum matching lines (default 30)"),
+  })
+  const listInputSchema = z.object({
+    path: z.string().optional().describe("Directory path relative to project root (default: project root)"),
+    ignore: z.array(z.string()).optional().describe("Directory entry names to omit from the listing"),
+  })
+
   const dir = projectDir ?? Instance.directory
 
   function sessionIDFromOptions(options: unknown): string | undefined {
@@ -84,17 +108,8 @@ export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (
         "Read the contents of a file. Returns the file contents with line numbers. " +
         "Use this to understand code structure, conventions, and existing patterns. " +
         "For large files, set offset to continue from the next unread line instead of re-reading from line 1.",
-      inputSchema: z.object({
-        filePath: z.string().describe("File path relative to the scoped project root"),
-        offset: z
-          .number()
-          .int()
-          .positive()
-          .optional()
-          .describe("1-based line number to start reading from (default 1). Use to page through large files."),
-        limit: z.number().int().positive().optional().describe("Maximum lines to read (default 300)."),
-      }),
-      execute: async ({ filePath, offset, limit }, options) => {
+      inputSchema: readInputSchema,
+      execute: async ({ filePath, offset, limit }: z.infer<typeof readInputSchema>, options) => {
         const abs = safePath(filePath)
         if (!abs) return "Error: path is outside the project boundary."
         try {
@@ -146,11 +161,8 @@ export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (
       description:
         "Find files matching a glob pattern. Returns file paths relative to project root. " +
         "Use this to discover project structure and find relevant source files.",
-      inputSchema: z.object({
-        pattern: z.string().describe("Glob pattern (e.g., 'src/**/*.ts', '*.json', 'test/**/*.test.ts')"),
-        path: z.string().optional().describe("Directory path relative to the scoped project root"),
-      }),
-      execute: async ({ pattern, path: searchPath }, options) => {
+      inputSchema: globInputSchema,
+      execute: async ({ pattern, path: searchPath }: z.infer<typeof globInputSchema>, options) => {
         const limit = 80
         const root = path.resolve(dir)
         const cwd = searchPath ? safePath(searchPath) : root
@@ -178,12 +190,8 @@ export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (
         'Required input shape: {"pattern":"<regex>"}. The search string field is named "pattern"; do not use "query". ' +
         "Returns matching lines with file paths and line numbers. " +
         "Use this to find specific code patterns, function definitions, imports, etc.",
-      inputSchema: z.object({
-        pattern: z.string().describe('Required regex pattern to search for. Field name is "pattern", not "query".'),
-        path: z.string().optional().describe("Subdirectory or file to search in (default: project root)"),
-        max_results: z.number().optional().describe("Maximum matching lines (default 30)"),
-      }),
-      execute: async ({ pattern, path: searchPath, max_results }, options) => {
+      inputSchema: codeSearchInputSchema,
+      execute: async ({ pattern, path: searchPath, max_results }: z.infer<typeof codeSearchInputSchema>, options) => {
         const limit = Math.max(1, Math.floor(max_results ?? 30))
         const target = searchPath ? safePath(searchPath) : dir
         if (!target) return "Error: search path is outside the project boundary."
@@ -226,11 +234,8 @@ export function createCodebaseToolFactory(projectDir?: string, onMaterialize?: (
       description:
         "List files and directories at a given path. " +
         "Use this to understand project layout and find relevant directories.",
-      inputSchema: z.object({
-        path: z.string().optional().describe("Directory path relative to project root (default: project root)"),
-        ignore: z.array(z.string()).optional().describe("Directory entry names to omit from the listing"),
-      }),
-      execute: async ({ path: dirPath, ignore }, options) => {
+      inputSchema: listInputSchema,
+      execute: async ({ path: dirPath, ignore }: z.infer<typeof listInputSchema>, options) => {
         const abs = dirPath ? safePath(dirPath) : dir
         if (!abs) return "Error: path is outside the project boundary."
         try {

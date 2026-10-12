@@ -15,7 +15,7 @@
  *
  * What this module still owns:
  *
- *   - `wrapModel(language, model, options)` — wraps a `LanguageModelV3`
+ *   - `wrapModel(language, model, options)` — wraps a `LanguageModelV4`
  *     with the message-transform middleware that normalises messages for
  *     the target provider (Anthropic empty-content filtering, modality
  *     pruning, cache markers, …). Used by `session/llm.ts:241`.
@@ -25,12 +25,11 @@
  */
 import { wrapLanguageModel } from "ai"
 import type {
-  LanguageModelV3,
-  LanguageModelV3CallOptions,
-  LanguageModelV3Content,
-  LanguageModelV3GenerateResult,
-  LanguageModelV3StreamPart,
-  LanguageModelV3StreamResult,
+  LanguageModelV4CallOptions,
+  LanguageModelV4Content,
+  LanguageModelV4GenerateResult,
+  LanguageModelV4StreamPart,
+  LanguageModelV4StreamResult,
 } from "@ai-sdk/provider"
 import { Provider } from "./provider"
 import { ProviderTransform } from "./transform"
@@ -53,7 +52,7 @@ export namespace ProviderLLM {
   }
 
   /**
-   * Wrap a LanguageModelV3 with the message-transform middleware that
+   * Wrap a LanguageModelV4 with the message-transform middleware that
    * normalizes messages for the target provider (Anthropic empty-content
    * filtering, unsupported modality removal, cache markers, etc.).
    */
@@ -62,45 +61,44 @@ export namespace ProviderLLM {
     model: Provider.Model,
     options: Record<string, any>,
   ) {
-    if (!isLanguageModelV3(language)) return retainModelMetadata(language, model)
-    return retainModelMetadata(wrapLanguageModel({
-      model: language,
-      middleware: [
-        {
-          specificationVersion: "v3",
-          async transformParams(args: any) {
-            if (args.type === "stream") {
-              args.params.prompt = await ProviderTransform.message(args.params.prompt, model, options)
-            }
-            return args.params
+    if (typeof language === "string") return retainModelMetadata(language, model)
+    return retainModelMetadata(
+      wrapLanguageModel({
+        model: language,
+        middleware: [
+          {
+            specificationVersion: "v4",
+            async transformParams(args: any) {
+              if (args.type === "stream") {
+                args.params.prompt = await ProviderTransform.message(args.params.prompt, model, options)
+              }
+              return args.params
+            },
+            async wrapGenerate({ doGenerate, params }) {
+              return normalizeGeneratedLocalToolCalls(await doGenerate(), params)
+            },
+            async wrapStream({ doStream, params }) {
+              const result = await doStream()
+              return {
+                ...result,
+                stream: normalizeLocalToolCallStream(result.stream, params),
+              }
+            },
           },
-          async wrapGenerate({ doGenerate, params }) {
-            return normalizeGeneratedLocalToolCalls(await doGenerate(), params)
-          },
-          async wrapStream({ doStream, params }) {
-            const result = await doStream()
-            return {
-              ...result,
-              stream: normalizeLocalToolCallStream(result.stream, params),
-            }
-          },
-        },
-      ],
-    }), model)
+        ],
+      }),
+      model,
+    )
   }
 
-  function isLanguageModelV3(language: Awaited<ReturnType<typeof Provider.getLanguage>>): language is LanguageModelV3 {
-    return typeof language === "object" && language !== null && language.specificationVersion === "v3"
-  }
-
-  function localFunctionToolNames(params: LanguageModelV3CallOptions): Set<string> {
+  function localFunctionToolNames(params: LanguageModelV4CallOptions): Set<string> {
     return new Set((params.tools ?? []).filter((tool) => tool.type === "function").map((tool) => tool.name))
   }
 
   function normalizeGeneratedLocalToolCalls(
-    result: LanguageModelV3GenerateResult,
-    params: LanguageModelV3CallOptions,
-  ): LanguageModelV3GenerateResult {
+    result: LanguageModelV4GenerateResult,
+    params: LanguageModelV4CallOptions,
+  ): LanguageModelV4GenerateResult {
     const localTools = localFunctionToolNames(params)
     if (localTools.size === 0) return result
     const content = result.content.map((part) => normalizeLocalToolCallPart(part, localTools))
@@ -109,13 +107,13 @@ export namespace ProviderLLM {
   }
 
   function normalizeLocalToolCallStream(
-    stream: LanguageModelV3StreamResult["stream"],
-    params: LanguageModelV3CallOptions,
-  ): LanguageModelV3StreamResult["stream"] {
+    stream: LanguageModelV4StreamResult["stream"],
+    params: LanguageModelV4CallOptions,
+  ): LanguageModelV4StreamResult["stream"] {
     const localTools = localFunctionToolNames(params)
     if (localTools.size === 0) return stream
     return stream.pipeThrough(
-      new TransformStream<LanguageModelV3StreamPart, LanguageModelV3StreamPart>({
+      new TransformStream<LanguageModelV4StreamPart, LanguageModelV4StreamPart>({
         transform(chunk, controller) {
           controller.enqueue(normalizeLocalToolCallPart(chunk, localTools))
         },
@@ -123,7 +121,7 @@ export namespace ProviderLLM {
     )
   }
 
-  function normalizeLocalToolCallPart<T extends LanguageModelV3Content | LanguageModelV3StreamPart>(
+  function normalizeLocalToolCallPart<T extends LanguageModelV4Content | LanguageModelV4StreamPart>(
     part: T,
     localTools: Set<string>,
   ): T {

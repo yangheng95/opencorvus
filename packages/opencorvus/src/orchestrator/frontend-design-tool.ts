@@ -137,7 +137,7 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
         "This adapter has no applicable design work when the task is purely backend/API/infrastructure or when neither declared textual design resources nor visual reference resources are available.",
       ].join("\n"),
       inputSchema: dependencies.inputSchema,
-      execute: async ({ mode, reason, attachment_bindings, materials, goal_ids }, executionInput) => {
+      execute: async ({ mode, reason, attachment_bindings, materials, goal_ids }: z.infer<typeof dependencies.inputSchema>, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
         const options = execution.toolOptions
         const task = await requireCurrentTaskAndAgentSessionLineage()

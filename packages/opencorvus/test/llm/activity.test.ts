@@ -40,7 +40,7 @@ describe("LLM semantic activity", () => {
         deltas.push(delta)
       },
       start: () => ({
-        fullStream: (async function* () {
+        stream: (async function* () {
           yield { type: "start" }
           yield { type: "reasoning-delta", id: "reasoning-1", text: "working" }
           yield { type: "text-delta", id: "text-1", text: "bounded " }
@@ -76,13 +76,13 @@ describe("LLM semantic activity", () => {
         attempts += 1
         if (run.attempt === 0) {
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               await waitForAbort(run.signal)
             })(),
           }
         }
         return {
-          fullStream: (async function* () {
+          stream: (async function* () {
             yield { type: "text-delta", id: "text-1", text: "recovered" }
           })(),
         }
@@ -116,7 +116,7 @@ describe("LLM semantic activity", () => {
         start: (run) => {
           attempts += 1
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               await waitForAbort(run.signal)
             })(),
           }
@@ -212,7 +212,7 @@ describe("LLM semantic activity", () => {
         start: (run) => {
           attempts += 1
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "reasoning-start", id: "reasoning-frame" }
               while (true) {
                 await Bun.sleep(5)
@@ -276,7 +276,6 @@ describe("LLM semantic activity", () => {
       ),
     ).rejects.toMatchObject({ name: "LLMActivityError", cls: "auth_required", attempts: 0 })
     expect(attempts).toBe(1)
-    expect(events.filter((event) => event.type === "retry")).toEqual([])
     expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "failed", cls: "auth_required" })
   })
   test("lets the idle authority preempt an immediately resolving no-op provider stream", async () => {

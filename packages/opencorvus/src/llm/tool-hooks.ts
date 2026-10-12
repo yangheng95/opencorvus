@@ -27,15 +27,15 @@ async function callError(hook: TextHooks | undefined, event: Parameters<NonNulla
   await hook?.onError?.(event)
 }
 
-async function callFinish(hook: TextHooks | undefined, event: Parameters<NonNullable<TextHooks["onFinish"]>>[0]) {
-  await hook?.onFinish?.(event)
+async function callEnd(hook: TextHooks | undefined, event: Parameters<NonNullable<TextHooks["onEnd"]>>[0]) {
+  await hook?.onEnd?.(event)
 }
 
-async function callStepFinish(
+async function callStepEnd(
   hook: TextHooks | undefined,
-  event: Parameters<NonNullable<TextHooks["onStepFinish"]>>[0],
+  event: Parameters<NonNullable<TextHooks["onStepEnd"]>>[0],
 ) {
-  await hook?.onStepFinish?.(event)
+  await hook?.onStepEnd?.(event)
 }
 
 export function mergeTextHooks(...items: Array<TextHooks | undefined>): TextHooks {
@@ -51,11 +51,11 @@ export function mergeTextHooks(...items: Array<TextHooks | undefined>): TextHook
     onError: async (event) => {
       for (const hook of hooks) await callError(hook, event)
     },
-    onFinish: async (event) => {
-      for (const hook of hooks) await callFinish(hook, event)
+    onEnd: async (event) => {
+      for (const hook of hooks) await callEnd(hook, event)
     },
-    onStepFinish: async (event) => {
-      for (const hook of hooks) await callStepFinish(hook, event)
+    onStepEnd: async (event) => {
+      for (const hook of hooks) await callStepEnd(hook, event)
     },
   }
 }

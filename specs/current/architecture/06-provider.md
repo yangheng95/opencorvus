@@ -222,12 +222,17 @@ Provider 在首次异步边界前冻结复制该上下文；携带上下文的�
 ## Token 与计费统计单一链路
 
 所有 bundled 与动态安装的语言模型 Provider 都必须通过 `llm/api.ts` 的共享流式
-`streamText` wrapper。该 wrapper 的 `onStepFinish` 是每次真实上游 step 的唯一用量
+`streamText` wrapper。该 wrapper 的 `onStepEnd` 是每次真实上游 step 的唯一用量
 落账点；Session、Provider 连通性、提交信息生成、Metric Judge 和验收翻译不得各自维护
-统计旁路。统计层不得新增 Provider 分支或本地 Tokenizer 估算。当前归一化优先读取 AI SDK 6 的
+统计旁路。统计层不得新增 Provider 分支或本地 Tokenizer 估算。当前归一化读取 AI SDK 7 的
 `inputTokenDetails.{noCacheTokens,cacheReadTokens,cacheWriteTokens}` 与
-`outputTokenDetails.{textTokens,reasoningTokens}`。旧 flat aliases 只用于读取仍由
-SDK 暴露的兼容字段，不构成另一套统计实现。
+`outputTokenDetails.{textTokens,reasoningTokens}`，以 SDK 的输入/输出总量为权威。
+
+当前运行时图为 AI SDK 7、Provider 4 和 provider-utils 5；官方 Provider 与公共 override
+一起升级，由 `check-ai-runtime.ts` 检查实际安装图。共享入口消费 `stream`，使用
+`instructions`、`onEnd` / `onStepEnd`、`telemetry` 和 `repairToolCall` 当前契约。
+ProviderLLM 中间件使用 V4。SDK 官方原生接收 V3 模型，因此现有 Copilot/Venice
+适配器仍通过这一入口，不新增 host 兼容实现或第二套依赖图。
 
 `outputTokens` 是包含 reasoning 的输出总量。持久化的 `tokens.output` 只保存 text
 output，`tokens.reasoning` 单独保存 reasoning，因此成本与总量都只能各计一次。

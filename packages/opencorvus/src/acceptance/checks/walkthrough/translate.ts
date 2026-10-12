@@ -92,7 +92,7 @@ export async function translateScenarioToStepsWithDependencies(
     timeoutMs: 60_000,
   })
   let finalText = ""
-  for await (const part of result.fullStream) {
+  for await (const part of result.stream) {
     if (isErrorPart(part)) throw new Error(`scenario walkthrough translation failed: ${String(part.error)}`)
     if (isTextDeltaPart(part)) finalText += part.text
   }

@@ -1713,7 +1713,7 @@ export namespace Config {
           openTelemetry: z
             .boolean()
             .optional()
-            .describe("Enable OpenTelemetry spans for AI SDK calls (using the 'experimental_telemetry' flag)"),
+            .describe("Enable OpenTelemetry spans for AI SDK calls (using the 'telemetry' flag)"),
           primary_tools: z
             .array(z.string())
             .optional()

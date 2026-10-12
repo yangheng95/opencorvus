@@ -114,7 +114,7 @@ export async function collectTaskRunEvidence(input: {
         const interactions = durableActivity.interactions.map((row) => projectInteractionRowInTransaction(db, row))
         const sessionIDs = sessions.map((session) => session.id)
         // One DB snapshot owns lifecycle, transcript and recorded usage. A
-        // terminal Tool may precede its request's onStepFinish ledger write;
+        // terminal Tool may precede its request's onStepEnd ledger write;
         // later recorded steps therefore produce a different collector resource.
         const usageEvents = sessionIDs.length === 0 ? [] : db.select().from(ProviderUsageEventTable)
           .where(inArray(ProviderUsageEventTable.session_id, sessionIDs))

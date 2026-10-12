@@ -54,7 +54,7 @@ await Instance.provide({
     LLM.stream = (async (input: any) => {
       const search = input.tools.capability_search
       return {
-        fullStream: (async function* () {
+        stream: (async function* () {
           yield { type: "start" }
           yield { type: "tool-call", toolCallId: state.callID, toolName: "capability_search", input: state.params }
           const output = await search.execute(state.params, {

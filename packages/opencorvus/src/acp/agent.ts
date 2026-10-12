@@ -19,7 +19,8 @@ import {
   type ResumeSessionRequest,
   type ResumeSessionResponse,
   type SessionInfo,
-  type SetSessionModelRequest,
+  type SetSessionConfigOptionRequest,
+  type SessionConfigOption,
   type SetSessionModeRequest,
   type SetSessionModeResponse,
   type ToolCallContent,
@@ -112,7 +113,7 @@ type AcpSessionListItem = {
 function invalidAcpSessionListCursor(cursor: string): RequestError {
   return RequestError.invalidParams(
     { cursor },
-    "ACP session list cursor must be the nextCursor token returned by unstable_listSessions",
+    "ACP session list cursor must be the nextCursor token returned by listSessions",
   )
 }
 
@@ -448,7 +449,10 @@ export namespace ACP {
                   })
                 }
 
-                if (part.tool === "todo" && z.object({ action: z.literal("write") }).safeParse(part.state.input).success) {
+                if (
+                  part.tool === "todo" &&
+                  z.object({ action: z.literal("write") }).safeParse(part.state.input).success
+                ) {
                   const parsedTodos = z.array(Todo.Info).safeParse(JSON.parse(part.state.output))
                   if (parsedTodos.success) {
                     await this.connection
@@ -752,7 +756,7 @@ export namespace ACP {
 
         return {
           sessionId,
-          models: load.models,
+          configOptions: load.configOptions,
           modes: load.modes,
           _meta: load._meta,
         }
@@ -815,7 +819,7 @@ export namespace ACP {
       }
     }
 
-    async unstable_listSessions(params: ListSessionsRequest): Promise<ListSessionsResponse> {
+    async listSessions(params: ListSessionsRequest): Promise<ListSessionsResponse> {
       try {
         const cursor =
           params.cursor === undefined || params.cursor === null ? undefined : decodeAcpSessionListCursor(params.cursor)
@@ -924,7 +928,7 @@ export namespace ACP {
       }
     }
 
-    async unstable_resumeSession(params: ResumeSessionRequest): Promise<ResumeSessionResponse> {
+    async resumeSession(params: ResumeSessionRequest): Promise<ResumeSessionResponse> {
       const directory = params.cwd
       const sessionId = params.sessionId
       const mcpServers = params.mcpServers ?? []
@@ -1048,7 +1052,10 @@ export namespace ACP {
                 })
               }
 
-              if (toolPart.tool === "todo" && z.object({ action: z.literal("write") }).safeParse(toolPart.state.input).success) {
+              if (
+                toolPart.tool === "todo" &&
+                z.object({ action: z.literal("write") }).safeParse(toolPart.state.input).success
+              ) {
                 const parsedTodos = z.array(Todo.Info).safeParse(JSON.parse(toolPart.state.output))
                 if (parsedTodos.success) {
                   await this.connection
@@ -1366,6 +1373,13 @@ export namespace ACP {
 
       const mcpServers: Record<string, Config.Mcp> = {}
       for (const server of params.mcpServers) {
+        if ("type" in server && server.type === "acp") {
+          throw RequestError.invalidParams({
+            name: server.name,
+            type: server.type,
+            message: "MCP-over-ACP transport is not supported",
+          })
+        }
         if ("type" in server) {
           mcpServers[server.name] = {
             url: server.url,
@@ -1414,10 +1428,10 @@ export namespace ACP {
 
       return {
         sessionId,
-        models: {
-          currentModelId: formatModelIdWithVariant(model, currentVariant, availableVariants, true),
+        configOptions: modelConfigOptions(
+          formatModelIdWithVariant(model, currentVariant, availableVariants, true),
           availableModels,
-        },
+        ),
         modes,
         _meta: buildVariantMeta({
           model,
@@ -1473,20 +1487,31 @@ export namespace ACP {
       throw errorValue
     }
 
-    async unstable_setSessionModel(params: SetSessionModelRequest) {
+    async setSessionConfigOption(params: SetSessionConfigOptionRequest) {
+      if (params.configId !== "model" || typeof params.value !== "string") {
+        throw RequestError.invalidParams({ configId: params.configId, value: params.value })
+      }
       const session = this.sessionManager.get(params.sessionId)
       const providers = await this.sdk.config
         .providers({ directory: session.cwd }, { throwOnError: true })
         .then((x) => x.data!.providers)
 
-      const selection = parseModelSelection(params.modelId, providers)
+      const entries = sortProvidersByName(providers)
+      const availableModels = buildAvailableModels(entries, { includeVariants: true })
+      if (!availableModels.some((model) => model.modelId === params.value)) {
+        throw RequestError.invalidParams({ configId: params.configId, value: params.value })
+      }
+      const selection = parseModelSelection(params.value, providers)
       this.sessionManager.setModel(session.id, selection.model)
       this.sessionManager.setVariant(session.id, selection.variant)
 
-      const entries = sortProvidersByName(providers)
       const availableVariants = modelVariantsFromProviders(entries, selection.model)
 
       return {
+        configOptions: modelConfigOptions(
+          formatModelIdWithVariant(selection.model, selection.variant, availableVariants, true),
+          availableModels,
+        ),
         _meta: buildVariantMeta({
           model: selection.model,
           variant: selection.variant,
@@ -1838,6 +1863,19 @@ export namespace ACP {
       if (nameA > nameB) return 1
       return 0
     })
+  }
+
+  function modelConfigOptions(currentModelId: string, availableModels: ModelOption[]): SessionConfigOption[] {
+    return [
+      {
+        id: "model",
+        name: "Model",
+        category: "model",
+        type: "select",
+        currentValue: currentModelId,
+        options: availableModels.map((model) => ({ value: model.modelId, name: model.name })),
+      },
+    ]
   }
 
   function modelVariantsFromProviders(

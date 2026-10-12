@@ -62,7 +62,7 @@ async function processSearch(input: {
     const search = streamInput.tools.capability_search
     if (!search?.execute) throw new Error("Processor test has no capability_search Tool.")
     return {
-      fullStream: (async function* () {
+      stream: (async function* () {
         yield { type: "start" }
         for (const call of input.calls) {
           yield { type: "tool-call", toolCallId: call.callID, toolName: "capability_search", input: call.params }

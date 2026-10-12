@@ -5,7 +5,7 @@ description: Use OpenCorvus in any ACP-compatible editor (e.g. Zed) over stdin/s
 
 ACP is a **standardized communication protocol that decouples AI coding agents from editors**, letting both sides evolve independently.
 
-Source: `packages/opencorvus/src/acp/`. SDK: `@agentclientprotocol/sdk@0.14.1`.
+Source: `packages/opencorvus/src/acp/`. SDK: `@agentclientprotocol/sdk@1.4.0`.
 
 ## `opencorvus acp`
 
@@ -59,10 +59,10 @@ Advertised (`src/acp/agent.ts`): `loadSession: true`; MCP `http`, `sse`; prompt 
 | -------------------------- | ------------------------------------------------------- |
 | `session/new`              | Creates new session                                     |
 | `session/load`             | Loads session, replays history, restores model and mode |
-| `unstable_listSessions`    | Lists sessions newest first, 100/page cursor            |
+| `listSessions`    | Lists sessions newest first, 100/page cursor            |
 | `unstable_forkSession`     | Forks a session, replays history                        |
-| `unstable_resumeSession`   | Resumes without replay                                  |
-| `unstable_setSessionModel` | Switches model, supports variants                       |
+| `resumeSession`   | Resumes without replay                                  |
+| `setSessionConfigOption` | Switches model, supports variants                       |
 | `setSessionMode`           | Switches primary agent                                  |
 
 ### Prompting

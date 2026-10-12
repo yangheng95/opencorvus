@@ -52,7 +52,7 @@ describe("Session title LLM activity", () => {
     const { session, history } = titleFixture()
     const streamSpy = track(
       spyOn(LLM, "stream").mockResolvedValue({
-        fullStream: (async function* () {
+        stream: (async function* () {
           yield { type: "start" as const }
           yield { type: "text-delta" as const, id: "text-1", text: "  Bounded title  \nignored" }
           yield { type: "finish" as const }
@@ -79,7 +79,7 @@ describe("Session title LLM activity", () => {
     track(spyOn(LLM, "stream").mockImplementation(async (input) => {
       inputs.push(input)
       const first = inputs.length === 1
-      return { fullStream: (async function* () {
+      return { stream: (async function* () {
         if (first) yield { type: "error" as const, error: original }
         else yield { type: "text-delta" as const, id: "title", text: "Retry title" }
       })() } as never
@@ -107,7 +107,7 @@ describe("Session title LLM activity", () => {
         activitySignal = input.abort
         started()
         return {
-          fullStream: (async function* () {
+          stream: (async function* () {
             await new Promise((_, reject) => {
               if (activitySignal.aborted) reject(activitySignal.reason)
               else activitySignal.addEventListener("abort", () => reject(activitySignal.reason), { once: true })

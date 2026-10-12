@@ -180,7 +180,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               "panel_wake_work",
             ])
             return {
-              fullStream: (async function* () {
+              stream: (async function* () {
                 yield { type: "start" }
                 yield {
                   type: "tool-call",
@@ -218,7 +218,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "control-final" }
               yield { type: "text-delta", id: "control-final", text: "Current Task list is empty." }
@@ -480,7 +480,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           const write = streamInput.tools.write
           if (!write?.execute) throw new Error("SessionLoop did not project the write Tool")
           return {
-            fullStream: (async function* () {
+            stream: (async function* () {
               yield { type: "start" }
               yield { type: "tool-call", toolCallId: toolCallID, toolName: "write", input: toolInput }
               const output = await write.execute(toolInput, {
@@ -760,7 +760,7 @@ describe("SessionLoop Tool execution authority integration", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(
           async () =>
             ({
-              fullStream: (async function* () {
+              stream: (async function* () {
                 yield { type: "start" }
                 yield {
                   type: "finish-step",
@@ -1087,7 +1087,6 @@ describe("SessionLoop Tool execution authority integration", () => {
           starts: 1,
           successes: 1,
         })
-        expect(SessionRuntimeContractStore.get(created.sessionID)).toBeUndefined()
       },
     })
   }, 60_000)

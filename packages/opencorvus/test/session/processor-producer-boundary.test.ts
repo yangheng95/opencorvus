@@ -29,7 +29,7 @@ import { EngineTaskTable } from "@/engine/engine.sql"
 import { AgentTrace } from "@/trace"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 
-// These producer-boundary spies intentionally expose only fullStream. The unknown
+// These producer-boundary spies intentionally expose only stream. The unknown
 // intermediate marks that partial fixture boundary, not a complete SDK result.
 afterEach(async () => {
   await Instance.disposeAll()
@@ -53,7 +53,7 @@ test("real idle retry scopes pending JSON observations to each actual attempt be
     })
     using backoff = spyOn(DefaultLLMActivityPolicy, "backoffMs").mockReturnValue(0)
     using stream = spyOn(LLM, "stream").mockImplementation(async (input) => ({
-      fullStream: (async function* () {
+      stream: (async function* () {
         const attempt = input.activity?.attempt
         if (attempt !== 0 && attempt !== 1) throw new Error("Expected actual initial or retry attempt")
         const id = attempt === 0 ? "first-draft" : "retry-draft"
@@ -210,8 +210,8 @@ async function processorFixture(
   })
 }
 
-test("a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call", async () => {
-  await processorFixture(async ({ directory, processor, process }) => {
+test("a committed producer operation yields unsafe retry before consumer Tool admission", async () => {
+  await processorFixture(async ({ directory, processor, process, controller }) => {
     const effect = Promise.withResolvers<void>()
     const file = path.join(directory, "effect.txt")
     const language = new MockLanguageModelV3({
@@ -220,6 +220,14 @@ test("a producer-side committed operation yields unsafe retry when its consumer 
           chunks: [
             { type: "stream-start", warnings: [] },
             { type: "tool-call", toolCallId: "commit-once", toolName: "commit", input: "{}" },
+            {
+              type: "finish",
+              finishReason: { unified: "tool-calls", raw: "tool_calls" },
+              usage: {
+                inputTokens: { total: 10, noCache: 10, cacheRead: 0, cacheWrite: 0 },
+                outputTokens: { total: 1, text: 1, reasoning: 0 },
+              },
+            },
           ],
         }),
       }),
@@ -244,7 +252,7 @@ test("a producer-side committed operation yields unsafe retry when its consumer 
         },
         {
           onChunk: async ({ chunk }: any) => {
-            if (chunk.type === "start-step") {
+            if (chunk.type === "tool-call") {
               await effect.promise
               await Bun.sleep(250)
             }
@@ -257,6 +265,8 @@ test("a producer-side committed operation yields unsafe retry when its consumer 
         error: { name: "UnknownError", data: { message: expect.stringContaining("ProcessorUnsafeRetryError") } },
       })
     } finally {
+      controller.abort(new DOMException("Release the owned producer fixture", "AbortError"))
+      effect.resolve()
       provider.mockRestore()
       engine.mockRestore()
       backoff.mockRestore()
@@ -272,7 +282,7 @@ test("processor observation records accepted and rejected current event identiti
     const recorder = spyOn(AgentTrace, "recordLLMStreamObservation").mockImplementation((input) => {
       recorded.push(structuredClone(input)); originalRecord(input)
     })
-    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ stream: (async function* () {
       yield { type: "start" }
       yield { type: "reasoning-start", id: "reasoning-one" }
       yield { type: "reasoning-start", id: "reasoning-one" }
@@ -320,7 +330,7 @@ test("abort during an awaited caller hook publishes its immediate hook phase and
       recorded.push(structuredClone(input)); originalRecord(input)
       if (input.phase === "aborted") abortRecorded.resolve()
     })
-    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ stream: (async function* () {
       yield { type: "start" }
     })() }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
     const running = process({}, { onChunk: async () => { hookEntered.resolve(); await hookRelease.promise } })
@@ -352,7 +362,7 @@ test("an aborted current attempt records its exact pending JSON structure throug
       recorded.push(structuredClone(input))
       original(input)
     })
-    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ stream: (async function* () {
       yield { type: "start" }
       yield { type: "tool-input-start", id: "complete-input", toolName: "echo" }
       yield { type: "tool-input-delta", id: "complete-input", delta: '{"n":null} \n' }
@@ -386,7 +396,7 @@ test("an aborted current attempt records its exact pending JSON structure throug
 test("a throwing diagnostic trace recorder preserves the original successful processor output", async () => {
   await processorFixture(async ({ process, processor }) => {
     const recorder = spyOn(AgentTrace, "recordLLMStreamObservation").mockImplementation(() => { throw new Error("Owned diagnostic writer failed") })
-    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ stream: (async function* () {
       yield { type: "start" }
       yield { type: "text-start", id: "answer" }
       yield { type: "text-delta", id: "answer", text: "Original successful output" }
@@ -421,7 +431,7 @@ for (const boundary of ["complete", "cancel"] as const) {
         if (properties.sessionID === sessionID) events.push({ type: "removed", partID: properties.partID })
       })
       const stream = spyOn(LLM, "stream").mockImplementation(async (input) => ({
-        fullStream: (async function* () {
+        stream: (async function* () {
           yield { type: "start" }
           yield { type: "tool-input-start", id: "partial-input", toolName: "echo" }
           yield { type: "tool-input-delta", id: "partial-input", delta: '{"value":"visible' }
@@ -432,7 +442,7 @@ for (const boundary of ["complete", "cancel"] as const) {
           input.abort.throwIfAborted()
           yield { type: "tool-input-delta", id: "partial-input", delta: '"}' }
           yield { type: "tool-input-end", id: "partial-input" }
-          // The SDK execution callback may admit input before fullStream's
+          // The SDK execution callback may admit input before stream's
           // consumer receives tool-call; both paths share one per-call lock.
           await processor.ensureToolPart("partial-input", "echo", { value: "visible" })
           yield { type: "tool-call", toolCallId: "partial-input", toolName: "echo", input: { value: "visible" } }
@@ -516,7 +526,7 @@ test("a delta received during slow draft publication produces a complete latest 
       if (part.state.raw === '{"value":"first-last') latest.resolve()
     })
     const stream = spyOn(LLM, "stream").mockImplementation(async (input) => ({
-      fullStream: (async function* () {
+      stream: (async function* () {
         yield { type: "start" }
         yield { type: "tool-input-start", id: "slow-publication", toolName: "echo" }
         yield { type: "tool-input-delta", id: "slow-publication", delta: '{"value":"first' }
