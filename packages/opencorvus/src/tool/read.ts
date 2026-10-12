@@ -69,11 +69,11 @@ export const ReadTool = Tool.define("read", {
     let filepath = params.filePath
     const viaAttachment = resolveAttachmentPath(filepath)
     if (viaAttachment !== undefined) {
-      filepath = viaAttachment
+      filepath = viaAttachment.path
     } else if (!path.isAbsolute(filepath)) {
       filepath = path.resolve(Instance.directory, filepath)
     }
-    const title = path.relative(Instance.worktree, filepath)
+    let title = path.relative(Instance.worktree, filepath)
 
     const files = executionFiles(ctx)
     const stat = await taskFileStatOrMissing(() => files.stat(filepath))
@@ -154,6 +154,16 @@ export const ReadTool = Tool.define("read", {
       }
     }
 
+    if (viaAttachment) {
+      const reference = await AttachmentStore.readReference(viaAttachment.projectID, viaAttachment.name)
+      title = reference.filename ?? AttachmentStore.displayFilename(reference)
+    }
+    const source = {
+      path: filepath,
+      title,
+      provider: "opencorvus-read",
+      ...(viaAttachment ? { origin: "attachment" as const } : {}),
+    }
     const instructions = await InstructionPrompt.resolve(ctx.messages, filepath, ctx.messageID)
 
     // Exclude SVG (XML-based) and vnd.fastbidsheet (.fbs extension, commonly FlatBuffers schema files)
@@ -176,10 +186,11 @@ export const ReadTool = Tool.define("read", {
           {
             type: "file",
             mime,
+            filename: viaAttachment ? title : path.basename(filepath),
             url: `data:${mime};base64,${Buffer.from(await files.readFile(filepath)).toString("base64")}`,
           },
         ],
-        sources: [fileSource({ path: filepath, title, provider: "opencorvus-read" })],
+        sources: [fileSource(source)],
       }
     }
 
@@ -216,10 +227,8 @@ export const ReadTool = Tool.define("read", {
       },
       sources: [
         fileSource({
-          path: filepath,
-          title,
+          ...source,
           ...(citedReadRange(page) ?? {}),
-          provider: "opencorvus-read",
         }),
       ],
     }
@@ -227,8 +236,8 @@ export const ReadTool = Tool.define("read", {
 })
 
 /**
- * Map an attachment reference to its on-disk filesystem path so the read tool
- * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ * Resolve the attachment locator and physical path together. The caller reads
+ * canonical metadata only after admitting the physical path's permissions.
  *
  * Accepted forms:
  *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
@@ -236,17 +245,18 @@ export const ReadTool = Tool.define("read", {
  *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
  *     resolves inside the current project, useful when agents synthesize URLs
  *     from references without carrying the project ID.
+ *   - The current Project store's exact absolute or project-relative blob path.
  *
  * Returns undefined when the input is a plain file path.
  */
-function resolveAttachmentPath(raw: string): string | undefined {
+function resolveAttachmentPath(raw: string): { path: string; projectID: string; name: string } | undefined {
   if (!raw) return undefined
   const trimmed = raw.trim()
   const located = AttachmentStore.nameFromUrl(trimmed)
   if (located) {
     const abs = AttachmentStore.resolveAbsolute(located.projectID, located.name)
     if (!abs) throw new Error(`attachment ${trimmed} not found in project ${located.projectID}`)
-    return abs
+    return { path: abs, projectID: located.projectID, name: located.name }
   }
   const schemeMatch = trimmed.match(/^attachment:(?:\/\/)?(.+)$/i)
   if (schemeMatch) {
@@ -256,7 +266,11 @@ function resolveAttachmentPath(raw: string): string | undefined {
     }
     const abs = AttachmentStore.resolveAbsolute(Instance.project.id, name)
     if (!abs) throw new Error(`attachment ${name} not resolvable in current project`)
-    return abs
+    return { path: abs, projectID: Instance.project.id, name }
   }
-  return undefined
+  const absolute = path.isAbsolute(raw) ? raw : path.resolve(Instance.directory, raw)
+  const stored = AttachmentStore.nameFromAbsolutePath(Instance.project.id, absolute)
+  if (!stored) return undefined
+  const canonical = AttachmentStore.resolveAbsolute(stored.projectID, stored.name)
+  return canonical ? { path: canonical, ...stored } : undefined
 }

@@ -129,6 +129,7 @@ export function FileEditorPane() {
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
   const path = createMemo(() => target()?.path ?? "")
+  const displayName = createMemo(() => target()?.displayName)
   const textContent = createMemo(() => canEdit(content()))
   const imageSource = createMemo(() => {
     const file = content()
@@ -348,8 +349,8 @@ export function FileEditorPane() {
         }
       >
         <header class="file-editor-header">
-          <div class="file-editor-title" title={path()}>
-            <span class="file-editor-title-name">{shortWorkbenchPath(path(), target()?.sourceAbsolutePath || target()?.directory || "")}</span>
+          <div class="file-editor-title" title={displayName() ?? path()}>
+            <span class="file-editor-title-name">{displayName() ?? shortWorkbenchPath(path(), target()?.sourceAbsolutePath || target()?.directory || "")}</span>
             <Show when={dirty()}>
               <span class="file-editor-dirty" aria-label={t("file_editor.unsaved")}>
                 *
@@ -447,10 +448,10 @@ export function FileEditorPane() {
                 </div>
               }>
                 <Match when={imageSource()}>
-                  {(src) => <div class="file-editor-image"><PreviewableImage src={src()} alt={path()} /></div>}
+                  {(src) => <div class="file-editor-image"><PreviewableImage src={src()} alt={displayName() ?? path()} /></div>}
                 </Match>
                 <Match when={pdfSource()}>
-                  {(url) => <PdfPreview url={url()} label={path()} class="file-editor-pdf" />}
+                  {(url) => <PdfPreview url={url()} label={displayName() ?? path()} class="file-editor-pdf" />}
                 </Match>
                 <Match when={textContent()}>
                   <CodeEditor
@@ -458,7 +459,7 @@ export function FileEditorPane() {
                     path={path()}
                     lineRange={target()?.range}
                     lineRangeRevealRevision={fileEditorRevealRevision()}
-                    ariaLabel={t("file_editor.title")}
+                    ariaLabel={displayName() ?? t("file_editor.title")}
                     onValueChange={updateDraft}
                     readOnly={!!target()?.sourceAbsolutePath || fileEditorReserved()}
                   />

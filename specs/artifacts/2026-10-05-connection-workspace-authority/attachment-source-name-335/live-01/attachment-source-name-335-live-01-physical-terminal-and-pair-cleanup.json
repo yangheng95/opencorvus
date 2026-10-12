@@ -1,0 +1,69 @@
+{
+  "listeners": null,
+  "occurrence": "attachment-source-name-335-live-01-17333ac6-1fe9-48a0-810d-b591244226ba",
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\attachment-source-name-335-live-01\\runtime\\data\\auth.json",
+      "copiedLength": 2194,
+      "presentAfter": false,
+      "outcome": "removed"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\attachment-source-name-335-live-01\\runtime\\data\\models.json",
+      "copiedLength": 9155406,
+      "presentAfter": false,
+      "outcome": "removed"
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "attachment-source-name-335-live-01-17333ac6-1fe9-48a0-810d-b591244226ba",
+    "outcome": "settled",
+    "host": {
+      "pid": 43632,
+      "processInstanceID": "win32:639273768389416651",
+      "occurrenceID": "a27ebcbf-7fa4-4fd3-8b7c-a3aa910bda98"
+    },
+    "target": {
+      "pid": 60452,
+      "processInstanceID": "win32:639273768396941931",
+      "occurrenceID": "5cef0e1e-15d2-4c5f-b685-1023b1448155"
+    },
+    "observedAtUtc": "2026-10-12T04:43:27.29Z",
+    "deadlineAt": 1791780638926,
+    "terminal": {
+      "occurrenceID": "attachment-source-name-335-live-01-17333ac6-1fe9-48a0-810d-b591244226ba",
+      "pid": 60452,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 60452,
+        "processInstanceID": "win32:639273768396941931",
+        "occurrenceID": "5cef0e1e-15d2-4c5f-b685-1023b1448155"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 43632,
+        "processInstanceID": "win32:639273768389416651",
+        "occurrenceID": "a27ebcbf-7fa4-4fd3-8b7c-a3aa910bda98"
+      }
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-12T04:43:29.8122522Z"
+}

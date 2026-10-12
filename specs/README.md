@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [335 附件来源名称](records/2026-10/2026-10-12-attachment-source-name-335.md)：保留原名和精确只读定位。
+
 - [334 PDF来源文字选择](records/2026-10/2026-10-12-pdf-selection-334.md)：复用当前阅读器支持原文选择。
 
 - [333 空文本来源与附件预览](records/2026-10/2026-10-12-text-preview-empty-333.md)：区分成功空内容和正在加载。

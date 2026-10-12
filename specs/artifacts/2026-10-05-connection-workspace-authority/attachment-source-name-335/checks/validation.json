@@ -1,0 +1,45 @@
+{
+  "observedAt": "2026-10-12T04:44:28.232Z",
+  "backend": {
+    "handle": 52010,
+    "actualExit": 0
+  },
+  "targetContract": {
+    "actualExit": 0,
+    "tests": 10,
+    "assertions": 28
+  },
+  "backendTypes": {
+    "handle": 50446,
+    "actualExit": 0
+  },
+  "overlayTypes": {
+    "initialHandle": 11145,
+    "initialExit": 2,
+    "finalHandle": 7628,
+    "actualExit": 0
+  },
+  "sdkBuild": {
+    "handle": 54720,
+    "actualExit": 0
+  },
+  "finalBuild": {
+    "handle": 52381,
+    "actualExit": 0,
+    "bundle": "main-CehUoqfl.js"
+  },
+  "launch": {
+    "handle": 70024,
+    "actualExit": 0
+  },
+  "actualBackendCheckerExit": 0,
+  "docsCheckExit": 0,
+  "i18nExit": 0,
+  "ownedTabsClosed": [
+    "118"
+  ],
+  "manuallyViewedAppScreenshots": 7,
+  "textEvidenceScanned": 48,
+  "credentialMatches": 0,
+  "boundary": "Actual joined handles and backend contracts; visual findings are separately recorded by Root after real interactions and viewing each screenshot. No UI automated tests."
+}

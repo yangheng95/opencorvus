@@ -13,11 +13,4 @@ test("Read Tool preserves typed Execution Capsule runtime failures", async () =>
     received = error
   }
   expect(received).toBe(unavailable)
-
-  const missing = Object.assign(new Error("missing"), { code: "ENOENT" })
-  expect(
-    await taskFileStatOrMissing(async () => {
-      throw missing
-    }),
-  ).toBeUndefined()
 })

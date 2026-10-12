@@ -41,6 +41,7 @@ describe("message source persistence", () => {
           fileSource({
             path: citedPath,
             title: "src/ example.ts ",
+            origin: "attachment",
             range: { startLine: 4, endLine: 12 },
             provider: "opencorvus-read",
           }),
@@ -66,6 +67,7 @@ describe("message source persistence", () => {
         expect(persisted.find((part) => part.type === "source-file")).toMatchObject({
           path: citedPath,
           title: "src/ example.ts ",
+          origin: "attachment",
           range: { startLine: 4, endLine: 12 },
         })
       },

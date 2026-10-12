@@ -1,0 +1,59 @@
+# 335 附件来源名称与只读打开
+
+## Recall
+
+用户要求持续自主修复UI/UX（User Interface/User Experience，界面与体验）和功能问题，重点Sources；最新只允许单agent开发，覆盖旧goal中的多agent描述。334已提交推送256c14e55a44d4911057bd42d6cb8c6a450c7301，开始时工作区干净；上一目标轮属于实质进展。继续当前benchmark-debug-template的分析/实证/修复/复核流程；用户禁止UI自动化，页面验收只用真实交互与截图人工查看。
+
+334的01/02真实模型read canonical附件URL，Sources及文件预览标题显示64字符摘要和内部存储目录。对应canonical源记录、截图01/02和实际侧车元数据证明filename=source-document.pdf，4472337字节；不是猜测文件名。334的03模型改读项目根路径，不能当作附件名称问题已修复。该基线代码至今未改，本轮引用原证据而不重复付费生成相同失败。
+
+已读read.ts、fileSource、Message.SourceFilePayload/SourcePart及其SDK生成类型、来源持久化去重、模型/compaction源投影、AttachmentStore的路径解析/readReference/命名策略/元数据原件、SourceParts、FileEditorPane与file-workbench目标/资源/显示身份。全仓检索fileSource只有read/search_code两个生产调用；openSourceFileEditor有SourceParts与workspace通用入口；文件目标的实际资源身份由directory/path/sourceAbsolutePath组成，显示名称不应进入内容加载或保存身份。
+
+已读相关后端read范围/错误、source-title/source-persistence、真实Conversation工具权限测试，以及前端file-workbench-revision数据服务测试。检索到的读取范围和错误测试包含以undefined为核心的旧负向断言，应移除这些用例/片段，保留明确范围和错误类型正向契约。导航服务测试中的shortWorkbenchPath显示断言不用于UI验收，删除这些断言，服务目标/修订状态的正向断言保留。未发现本次组件的DOM/截图自动测试，不运行UI自动化。
+
+## 修改前根因与影响
+
+read的resolveAttachmentPath只返回物理路径，随后统一path.relative作为title，丢掉了canonical元数据中的filename。fileSource按同一个物理路径产生稳定语义身份，Sources正确打开原字节但把内部位置当作名称。旧AttachmentStore.displayFilename只被上传清单和暂存路径使用，read来源未接入它，因此此前名称修复没有覆盖这一入口。
+
+SourceParts还把当前项目内的所有source-file都交给可写项目编辑器。对文本附件而言，这会把不可变附件blob当作普通项目文件开放编辑。必须明确区分已解析的附件来源，不能在UI按路径关键词/摘要长度猜测，也不能仅换显示文字而保留可写入口。
+
+准入在当前SourceFilePayload增加可选origin="attachment"语义字段，由真实read附件解析设置；普通文件/search_code保持当前语义。身份仍是精确物理路径/范围/符号，不改sourceId或创建新来源类型。metadata侧车是原名称的唯一事实；物理路径权限检查通过后才readReference，再复用既有displayFilename得到标题。缺失/损坏元数据按真实错误失败，禁止静默退回摘要路径当成功。原始filename不可用时沿用已有明确生成名称策略，不再新造命名规则。
+
+read图片/PDF结果附件同时带该可读filename，使自然工具结果完整保留名称；文本范围仍取真实read页。SourceParts据明确origin显示名称和本地化“附件”，使用既有绝对Source只读读取路径。FileEditorTarget可携带displayName，仅影响标题/无障碍名称，不改变路径、API authority、range、内容身份或导航守卫。同一资源显示名称更新经原目标提交和reveal处理，不能重载/丢弃草稿。
+
+SourcePayload严格解析和SDK由当前生成脚本更新，不能手改生成文件。持久化仍保存真实来源事实，旧记录不被静默改写；缺少新origin的历史记录保留原快照，这一范围限制须明确，不能宣称历史对话已批量修复。模型/compaction的物理路径定位保留，已有compaction会使用title；不增加合成消息或第二套模型/界面消息。
+
+当前不是调度/唤醒/并发/终态异常；若测试实际出现此类异常立即横向审计共享机制。风险包含canonical和两种shorthand、缺失元数据、同名不同字节附件、普通文件编辑语义、中文/空格名称、文本范围、图片/PDF结果文件名、SDK和保存/导航身份。只改本任务范围，保留无关工作区内容。
+
+## 实施与验收
+
+先新增正向后端测试，通过实际AttachmentStore写入和真实Conversation执行authority调用ReadTool，检查canonical/两种shorthand的标题、origin、实际路径、范围和结果附件名；同名不同字节保留两个身份，元数据缺失返回明确ENOENT错误。先记录原实现失败，再实施并重跑聚焦文件。来源持久化和目标服务增加明确数据契约；这些不是UI测试，也不代表网页验收。
+
+生成SDK、类型检查、前端构建、i18n和docs:check。真实验收使用fresh NativeService `/ui`18311、已授权OpenAI auth与完整models成对复制，分别验证usable/projected/实际gpt-6.1-sol streaming。普通单人Work/Chat按提供的真实canonical URL读取中文名PDF和带第24行标记的Markdown附件，同时读取普通项目控制文件。不能换成项目根副本而错验附件入口。
+
+root实际点击Sources检查原名称、附件标识、PDF阅读/复制、文本第24行定位和只读；普通项目来源仍可编辑并保存到自己的隔离文件。关闭重开及从历史重新进入继续正确显示。每轮累计12请求，Native出生起600000ms固定成本上限与180秒无活动观察分别保留，不以观察超时当终态、不续租进程。只操作自己的页面/服务，不重启用户窗口。
+
+归档实际输入/Provider/来源/文件响应/原件完整性/物理结束证据，所有自有Native/Host/输出/请求/端口和复制配对收敛。同步根/月/目录索引，范围提交后fresh fetch/merge、审查完整待推送集合并正常push；goal仍active，继续单agent迭代。
+
+## 修改准入
+
+新增真实读取契约在原实现得到0 pass/4 fail（原checker实际exit1）：名称均为内部存储路径，来源缺少附件语义，缺失metadata仍作为成功文件读取。是预期产品契约失败，不是运行器故障。复核Tool.define确认二进制data URL会在真实工具包装边界转成canonical URL，测试原字节验收应通过返回引用读取，不把包装后URL误当base64；该测试细节在实施时一并更正。
+
+首轮修复的13项后端测试/33断言通过，SDK生成54720实际exit0，仅生成类型和OpenAPI新增origin字段。继续检索发现模型的source-file上下文会携带物理路径，因此只标记URL/shorthand不完整。把同一真实blob的绝对/项目相对路径加入测试后得到3 pass/1 fail，名称再次退回内部路径。准入AttachmentStore按当前Project与当前数据库的权威storageDir做反向定位，限定直接子blob及既有内容寻址文件格式，排除存储层自己的metadata侧车；不在UI按摘要或.opencorvus关键词猜测。read的同一解析函数复用此定位，权限检查后仍只读同一canonical元数据。另验收同名blob副本位于普通项目目录、以及存储侧车作为普通文件读取的正确行为。
+
+补齐物理路径后的原71120实际exit0，后端13测试/41断言通过；文件目标服务10测试/28断言通过，后端类型15849 exit0。前端类型11145捕获新增ariaLabel与已有属性重复，已合并为一个由displayName或原本地化名称派生的属性；该失败保留，不作为通过验收，需重跑。未运行UI自动化。
+
+扩展原始名称测试到重音字符与全角括号后，实际 checker exit1（3 pass/1 fail）：canonical filename为“ Résumé（终版）.md”，read却返回attachment-1-bd730ce8.md。根因是displayFilename同时承担可安全落盘的暂存命名，不能用其字符白名单过滤展示标签。准入read直接使用存在的canonical filename，仅真正未命名时使用既有生成策略；不放松共享暂存文件安全策略。二进制结果及Sources的附件分支同样把名称当展示数据，不再用basename/路径规则裁剪。当前Windows物理别名还须按存储层小写内容寻址格式归一名称，再从resolveAbsolute取得同一权威物理路径，保证大写别名重读仍具相同sourceId。新正向测试同时覆盖此入口；不改变普通文件大小写或路径语义。
+
+67838前端类型与29717构建均已从原句柄取得实际exit0；上面新增名称修复后需重新检查并构建，不能以旧成功代替最终版本。
+
+## 最终实施与证据
+
+附件URL、两种shorthand、当前项目内精确blob的绝对/相对路径和Windows大写别名均读取同一canonical元数据，原名用于来源与二进制结果；fileSource保持路径/范围/符号身份。SourceFilePayload增加可选origin=attachment，SDK由原生成器更新。Sources以原名和“附件/Attachment”显示，并用既有只读绝对来源入口打开；编辑器的displayName仅注释目标，不改变资源、权限或保存身份。普通项目文件仍可编辑。
+
+最终聚焦后端52010实际exit0（13 tests/44 assertions），文件目标服务10 tests/28 assertions。后端类型50446、前端类型7628、最终构建52381均实际exit0；SDK54720、i18n与docs检查通过。前端首次类型错误11145（重复ariaLabel）和原名规则/物理别名的失败日志均保留。服务实际提供main-CehUoqfl.js，不是前一轮bundle。
+
+真实NativeService 18311、Native60452/Host43632，从已授权配对凭据/完整目录预检到真实Work/Chat，共7次gpt-6.1-sol流式请求全部HTTP200/reader EOF。模型真实read两个canonical附件URL和project-note.md；持久化Source保留原名、origin与Markdown24-25范围。PDF4472337字节与仓库原件相同，Markdown493字节与输入相同；实际UI输入后原字节仍相同。普通文件实际保存新增SAVED-FROM-REAL-UI-335，与磁盘正文一致。
+
+Root逐张人工查看7张真实截图：01原名PDF16页预览，02鼠标选择/复制标题（选区结束于WO，复制真实选区原文；不宣称复制完整标题），03引用24-25行高亮，04只读输入后内容保持，05普通文件保存，06关闭重开，07离开到另一段真实历史后返回并再次打开。来源行不再以存储摘要充当名字。浏览器118已关闭。关闭helper实际exit0，原启动70024已join实际exit0，Native/Host输出/请求/物理进程与凭据配对清理收敛；没有重启或操纵用户窗口。
+
+[证据索引](attachment-source-name-335/README.md)及后端checker确认真实名称、原字节、范围、工具请求/结果归属和终止事实；这些不代替人工视觉判断。48份文本/解压证据凭据扫描0匹配，原日志私有保留。历史缺少origin的既有来源快照不批量改写。本轮没有发布版本、Release或tag；goal继续active、单agent迭代。

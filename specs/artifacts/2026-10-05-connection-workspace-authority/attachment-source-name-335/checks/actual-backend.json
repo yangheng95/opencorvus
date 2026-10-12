@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-12T04:44:28.131Z",
+  "actualModel": "gpt-6.1-sol",
+  "providerRequests": 7,
+  "streaming": true,
+  "providerTerminal": "eof",
+  "attachments": [
+    {
+      "filename": "研究材料（终版）335.pdf",
+      "origin": "attachment",
+      "bytes": 4472337,
+      "unchangedOriginalBytes": true,
+      "actualCanonicalRead": true
+    },
+    {
+      "filename": "Résumé（记录）335.md",
+      "origin": "attachment",
+      "range": {
+        "startLine": 24,
+        "endLine": 25
+      },
+      "bytes": 493,
+      "unchangedOriginalBytes": true,
+      "actualCanonicalRead": true
+    }
+  ],
+  "projectFileSavedText": "# Ordinary project note\nEDITABLE-SOURCE-335\nSAVED-FROM-REAL-UI-335",
+  "nativeExit": 0,
+  "pairedCleanupComplete": true,
+  "boundary": "Positive checks over actual Provider, canonical source/request/outcome ownership, original attachment bytes and physical completion. No DOM, presentation or screenshot assertions."
+}

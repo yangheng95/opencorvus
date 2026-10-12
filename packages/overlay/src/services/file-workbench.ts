@@ -63,6 +63,7 @@ export interface FileEditorTarget extends FileOperationScope {
   path: string
   range?: FileEditorLineRange
   sourceAbsolutePath?: string
+  displayName?: string
 }
 
 const [selectedFileTarget, setSelectedFileTarget] = createSignal<FileEditorTarget | null>(null)
@@ -162,6 +163,7 @@ function normalizeSourceFileEditorTarget(
   absolutePath: string,
   scope: FileOperationScope,
   range?: FileEditorLineRange,
+  displayName?: string,
 ): FileEditorTarget {
   const sourceAbsolutePath = String(absolutePath || "")
   const directory = scope.directory.trim()
@@ -175,6 +177,7 @@ function normalizeSourceFileEditorTarget(
     path: sourceAbsolutePath,
     directory,
     sourceAbsolutePath,
+    ...(displayName === undefined ? {} : { displayName }),
     ...(range ? { range: normalizeFileEditorRange(range) } : {}),
   }
 }
@@ -190,6 +193,7 @@ function sameFileEditorResource(left: FileEditorTarget | null, right: FileEditor
 function sameFileEditorTarget(left: FileEditorTarget | null, right: FileEditorTarget | null): boolean {
   return (
     sameFileEditorResource(left, right) &&
+    left?.displayName === right?.displayName &&
     left?.range?.startLine === right?.range?.startLine &&
     left?.range?.endLine === right?.range?.endLine
   )
@@ -296,9 +300,10 @@ export function openSourceFileEditor(
   absolutePath: string,
   scope: FileOperationScope,
   range?: FileEditorLineRange,
+  displayName?: string,
 ): Promise<boolean> {
   const authority = scope.authority ?? captureApiAuthority()
-  return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, range), authority)
+  return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, range, displayName), authority)
 }
 
 export function closeFileEditor(boundary?: FileEditorCommitBoundary): Promise<boolean> {

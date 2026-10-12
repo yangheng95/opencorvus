@@ -1,4 +1,5 @@
 import { Key } from "@solid-primitives/keyed"
+import type { SourceFilePart } from "@opencorvus-ai/sdk"
 import { Match, Show, Switch, onCleanup, onMount, untrack } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
@@ -33,6 +34,7 @@ export type ConversationSourcePart = {
   path?: string
   mediaType?: string
   filename?: string
+  origin?: SourceFilePart["origin"]
   range?: { startLine: number; endLine: number }
 }
 
@@ -71,6 +73,7 @@ function readableSourceUrlText(value: string): string {
 
 function sourceLabel(source: ConversationSourcePart): string {
   if (source.type === "source-file") {
+    if (source.origin === "attachment" && source.title) return fileSourceLocation(source.title, source.range)
     const title = source.title || ""
     const filePath = source.filename || source.path || title
     const syntax = source.path || sourceDirectory()
@@ -101,6 +104,7 @@ function sourceLabel(source: ConversationSourcePart): string {
 function sourceDetail(source: ConversationSourcePart): string {
   if (source.type === "source-url") return source.url || ""
   if (source.type === "source-file") {
+    if (source.origin === "attachment") return sourceLabel(source)
     const path = shortRelativePath(source.path || "", sourceDirectory())
     return fileSourceLocation(path, source.range)
   }
@@ -108,6 +112,7 @@ function sourceDetail(source: ConversationSourcePart): string {
 }
 
 function sourceFileCaption(source: ConversationSourcePart): string {
+  if (source.origin === "attachment") return t("chat.source_attachment")
   const relative = shortRelativePath(source.path || "", sourceDirectory())
   const location = pathWithForwardSeparators(relative, source.path || sourceDirectory())
   const separator = location.lastIndexOf("/")
@@ -129,6 +134,10 @@ async function openSourceFile(source: ConversationSourcePart): Promise<void> {
   if (!directory || !path) return
   const projectPath = relativePathFrom(directory, path)
   try {
+    if (source.origin === "attachment") {
+      await openSourceFileEditor(path, { directory, authority }, source.range, source.title)
+      return
+    }
     if (projectPath) {
       await openFileEditor(projectPath, { directory, authority }, source.range)
       return

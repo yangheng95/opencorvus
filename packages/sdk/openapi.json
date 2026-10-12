@@ -17368,6 +17368,10 @@
           "orderKey": {
             "type": "string"
           },
+          "origin": {
+            "const": "attachment",
+            "type": "string"
+          },
           "path": {
             "minLength": 1,
             "type": "string"
@@ -19776,6 +19780,10 @@
               },
               "orderKey": {
                 "minLength": 1,
+                "type": "string"
+              },
+              "origin": {
+                "const": "attachment",
                 "type": "string"
               },
               "path": {

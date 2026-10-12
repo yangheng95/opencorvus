@@ -5052,6 +5052,7 @@ export type SourceFilePart = {
   id: string
   messageID: string
   orderKey?: string
+  origin?: "attachment"
   path: string
   provider?: string
   providerMetadata?: {
@@ -5777,6 +5778,7 @@ export type VisibleMessagePart =
       id: string
       messageID: string
       orderKey: string
+      origin?: "attachment"
       path: string
       provider?: string
       providerMetadata?: {

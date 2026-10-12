@@ -9,7 +9,6 @@ import {
   openFileEditor,
   openSourceFileEditor,
   selectedFileTarget,
-  shortWorkbenchPath,
 } from "../src/services/file-workbench"
 
 afterEach(async () => {
@@ -25,7 +24,6 @@ test.each([
 ])("editor target retains filename identity for %s / %s", async (directory, path, expected) => {
   expect(await openFileEditor(path, { directory }, { startLine: 1, endLine: 2 })).toBe(true)
   expect(selectedFileTarget()).toEqual({ directory, path: expected, range: { startLine: 1, endLine: 2 } })
-  expect(shortWorkbenchPath(expected, directory)).toBe(expected)
 })
 
 test("read-only source target preserves a POSIX filename suffix", async () => {
@@ -33,7 +31,6 @@ test("read-only source target preserves a POSIX filename suffix", async () => {
   expect(selectedFileTarget()).toEqual({
     directory: "/repo", path: "/outside/file\\name.md ", sourceAbsolutePath: "/outside/file\\name.md ",
   })
-  expect(shortWorkbenchPath("/outside/file\\name.md ", "/outside/file\\name.md ")).toBe("/outside/file\\name.md ")
 })
 
 test("every accepted range-free open emits a reveal revision with its exact resource target", async () => {
@@ -53,6 +50,21 @@ test("every accepted range-free open emits a reveal revision with its exact reso
   expect({ target: selectedFileTarget(), revision: fileEditorRevealRevision() }).toEqual({
     target: { directory: "/repo", path: "next-note.md" },
     revision: beforeOpen + 3,
+  })
+})
+
+test("source display names update the selected target while retaining the exact resource path", async () => {
+  const source = "/owned/attachments/content.md"
+  const scope = { directory: "/owned" }
+  const before = fileEditorRevealRevision()
+  expect(await openSourceFileEditor(source, scope, { startLine: 24, endLine: 24 }, "研究记录.md")).toBe(true)
+  expect(selectedFileTarget()).toEqual({
+    ...scope, path: source, sourceAbsolutePath: source, displayName: "研究记录.md", range: { startLine: 24, endLine: 24 },
+  })
+  expect(await openSourceFileEditor(source, scope, { startLine: 24, endLine: 24 }, "原始名称.md")).toBe(true)
+  expect({ target: selectedFileTarget(), reveal: fileEditorRevealRevision() }).toEqual({
+    target: { ...scope, path: source, sourceAbsolutePath: source, displayName: "原始名称.md", range: { startLine: 24, endLine: 24 } },
+    reveal: before + 2,
   })
 })
 

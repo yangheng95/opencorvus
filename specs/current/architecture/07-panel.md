@@ -38,6 +38,24 @@ content keeps the existing non-editable description. The file-image container
 owns its bounded layout and scrolling; there is no additional fetch, image
 cache, file mutation or parallel preview implementation.
 
+Read sources resolved from canonical attachments carry origin=attachment and
+the exact original filename from AttachmentStore metadata, including Unicode and
+punctuation. Only unnamed uploads use the existing generated-name policy;
+staging-filename safety rules do not filter display labels. URL,
+shorthand and the current Project store's physical blob paths use that same
+authority; metadata is read after physical-path permission admission. The store
+recognizes its own database-scoped directory and blob names, not arbitrary hash
+filenames elsewhere. Windows blob aliases resolve to the canonical stored name
+and path. Metadata sidecars remain ordinary files. Missing canonical
+metadata keeps its actual failure instead of silently presenting a storage name.
+Source path/range/symbol identity is unchanged. Sources shows the attachment name
+and localized attachment caption, and opens its exact absolute path through the
+existing read-only source reader. The file target's optional displayName is a
+presentation annotation; content loading, write admission and navigation resource
+identity still use directory/path/sourceAbsolutePath. A display-name change can
+update the target/reveal without reloading its file content. Ordinary project
+file sources retain editing. Existing persisted source snapshots are not rewritten.
+
 Project and absolute-source file reads also return PDF bytes through the same
 FileContent base64/mimeType contract. Encoded PDFs remain read-only under the
 existing write admission. File Editor lazily loads the shared PdfPreview used

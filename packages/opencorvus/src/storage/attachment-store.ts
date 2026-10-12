@@ -439,6 +439,18 @@ export namespace AttachmentStore {
     return abs
   }
 
+  /** Identify a blob path in this Project's actual database-scoped store. */
+  export function nameFromAbsolutePath(projectID: string, absolutePath: string): { projectID: string; name: string } | undefined {
+    const project = Project.get(projectID)
+    if (!project) return undefined
+    const relative = path.relative(storageDir(project.worktree), path.resolve(absolutePath))
+    const name = process.platform === "win32" ? relative.toLowerCase() : relative
+    if (path.basename(name) !== name || !/^[a-f0-9]{64}\.[^/\\]+$/.test(name) || name.endsWith(".metadata.json")) {
+      return undefined
+    }
+    return { projectID, name }
+  }
+
   /** Read an attachment's raw bytes for LLM multimodal acceptance. */
   export async function read(projectID: string, name: string): Promise<Buffer> {
     const abs = resolveAbsolute(projectID, name)
