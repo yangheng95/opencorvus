@@ -66,18 +66,18 @@ Merge roles when their required inputs, judgment, and output are materially iden
 
 Give the final delivery owner the responsibility to read all mandatory predecessor evidence, resolve explicit conflicts without hiding them, preserve safety boundaries, and produce the accepted user-facing artifact. A reviewer must have a concrete object and rubric to review; “improve quality” is not an independent responsibility.
 
-## 4. Derive the workflow from evidence dependencies
+## 4. Add optional scheduling guidance when useful
 
-Start from the accepted output and work backward:
+Identity, capability and evidence contracts are the primary definition. Omit virtual_workflows when they add no useful reference. For an optional reference, start from the accepted output and work backward:
 
 1. List the evidence required by the final delivery owner.
 2. Assign one owner to each independently producible evidence set.
 3. Add an edge only when the downstream role cannot begin correctly without the predecessor's output.
-4. Keep independent evidence producers as source nodes so the runtime can execute them in the same frontier.
+4. Keep independent evidence producers as source nodes so the scheduler can recognize their independent inputs.
 5. Use an explicit join only when the downstream judgment requires every named predecessor.
 6. Keep direct dispatch when no mandatory evidence order exists.
 
-The graph must express semantic dependency, not preferred narration order or a desired parallelism metric. Reject accidental serialization, disconnected Agents, joins that ignore a mandatory producer, cycles, duplicated review, and a parallel claim unsupported by independent inputs. Treat `workflowTopology` as post-definition analysis, not as runtime state or a target to game.
+The graph must express semantic dependency, not preferred narration order or a desired parallelism metric. Avoid accidental serialization and duplicated judgment. Describe conditional choices and useful local loops when evidence warrants them; only an explicitly declared DAG strategy requires acyclicity. Nodes remain suggestions and need not cover every declared Agent. Treat `workflowTopology` as post-definition analysis, not as runtime state or a target to game.
 
 ## 5. Publish one authoring decision
 

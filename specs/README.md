@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.24 发布与 Issue 40](records/2026-10/2026-10-12-release-0.1.24.md)：版本日志、原生与网站联合发布、Issue回复。
+
 - [346 多来源流式复制反馈](records/2026-10/2026-10-12-source-dense-live-346.md)：实际文本值稳定时保留复制反馈，真实流式对照。
 
 - [Issue 40：Parallel Search MCP 示例](records/2026-10/2026-10-12-parallel-search-issue-40.md)：中英文可选配置与真实匿名搜索/抓取验收。
