@@ -1,4 +1,4 @@
-// ── Cited file locations (`path:line[:column]`) ──
+// ── Cited file locations (`path:line[:column]`, `path#Lline[-Lend]`) ──
 //
 // Agents cite source locations the way every terminal and compiler does:
 // `src/engine/pipeline.ts:42`. The renderer used to throw the location half
@@ -14,15 +14,17 @@ export const FILE_REFERENCE_PATH_ATTRIBUTE = "data-file-path"
 /** Attribute carrying the cited path on a rendered markdown link. */
 export const PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE = "data-project-file-path"
 const FILE_REFERENCE_LINE_ATTRIBUTE = "data-file-line"
+const FILE_REFERENCE_END_LINE_ATTRIBUTE = "data-file-end-line"
 const FILE_REFERENCE_COLUMN_ATTRIBUTE = "data-file-column"
 
 // Lazy path half plus an anchored numeric tail, so a Windows drive letter
 // (`C:\repo\a.ts`) is never mistaken for a location separator: the tail must
 // run to the end of the string as digits.
-const LOCATION_SUFFIX_RE = /^(.+?):(\d+)(?::(\d+))?$/
+const LOCATION_SUFFIX_RE = /^(.+?)(?::(\d+)(?::(\d+))?|#L(\d+)(?:-L(\d+))?)$/
 
 export interface FileReferenceLocation {
   line: number
+  endLine?: number
   column?: number
 }
 
@@ -45,26 +47,35 @@ export function parseFileReference(raw: string): FileReference {
   const text = String(raw ?? "").trim()
   const match = text.match(LOCATION_SUFFIX_RE)
   if (!match) return { path: text }
-  const line = positiveLineNumber(match[2])
+  const line = positiveLineNumber(match[2] ?? match[4])
   if (line === undefined) return { path: text }
   const column = positiveLineNumber(match[3])
   if (match[3] !== undefined && column === undefined) return { path: text }
-  return { path: match[1]!, line, ...(column === undefined ? {} : { column }) }
+  const endLine = positiveLineNumber(match[5])
+  if (match[5] !== undefined && (endLine === undefined || endLine < line)) return { path: text }
+  return {
+    path: match[1]!,
+    line,
+    ...(endLine === undefined ? {} : { endLine }),
+    ...(column === undefined ? {} : { column }),
+  }
 }
 
 /**
- * The inclusive editor range for a cited location. A citation names a single
- * line, so the range collapses onto it; callers that already carry a multi-line
- * range (source-file parts) pass their own.
+ * Convert a cited location into the canonical inclusive editor range. A single
+ * line collapses onto itself; a line anchor range retains its supplied end.
  */
 export function fileReferenceRange(
   reference: Partial<FileReferenceLocation> | undefined,
 ): SourceFileRange | undefined {
   const line = reference?.line
   if (line === undefined || !Number.isSafeInteger(line) || line < 1) return undefined
+  const endLine = reference?.endLine ?? line
+  if (!Number.isSafeInteger(endLine) || endLine < line) return undefined
+  if (reference?.column !== undefined && endLine !== line) return undefined
   return {
     startLine: line,
-    endLine: line,
+    endLine,
     ...(reference?.column === undefined ? {} : { startColumn: reference.column }),
   }
 }
@@ -77,6 +88,7 @@ export function fileReferenceHtmlAttributes(
 ): string {
   const attributes = [`${pathAttribute}="${escape(reference.path)}"`]
   if (reference.line !== undefined) attributes.push(`${FILE_REFERENCE_LINE_ATTRIBUTE}="${reference.line}"`)
+  if (reference.endLine !== undefined) attributes.push(`${FILE_REFERENCE_END_LINE_ATTRIBUTE}="${reference.endLine}"`)
   if (reference.column !== undefined) attributes.push(`${FILE_REFERENCE_COLUMN_ATTRIBUTE}="${reference.column}"`)
   return ` ${attributes.join(" ")}`
 }
@@ -86,10 +98,15 @@ export function elementFileReference(element: Element, pathAttribute: string): F
   const path = element.getAttribute(pathAttribute)?.trim()
   if (!path) return null
   const line = positiveLineNumber(element.getAttribute(FILE_REFERENCE_LINE_ATTRIBUTE) ?? undefined)
+  const rawEndLine = element.getAttribute(FILE_REFERENCE_END_LINE_ATTRIBUTE)
+  const endLine = positiveLineNumber(rawEndLine ?? undefined)
   const column = positiveLineNumber(element.getAttribute(FILE_REFERENCE_COLUMN_ATTRIBUTE) ?? undefined)
+  if (rawEndLine !== null && (line === undefined || endLine === undefined || endLine < line)) return null
+  if (column !== undefined && endLine !== undefined && endLine !== line) return null
   return {
     path,
     ...(line === undefined ? {} : { line }),
+    ...(endLine === undefined ? {} : { endLine }),
     ...(line === undefined || column === undefined ? {} : { column }),
   }
 }

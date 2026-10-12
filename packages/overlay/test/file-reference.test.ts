@@ -30,3 +30,22 @@ test("a cited line becomes an editor range", () => {
 test("a cited column survives the location-to-range data mapping", () => {
   expect(fileReferenceRange(parseFileReference("src/a.ts:42:7"))).toEqual({ startLine: 42, endLine: 42, startColumn: 7 })
 })
+
+test.each([
+  ["src/example.ts#L30", { path: "src/example.ts", line: 30 }],
+  ["资料/例子.md#L30-L32", { path: "资料/例子.md", line: 30, endLine: 32 }],
+  ["C:\\repo\\example.ts#L30-L30", { path: "C:\\repo\\example.ts", line: 30, endLine: 30 }],
+])("a file line anchor retains its exact location: %s", (raw, expected) => {
+  expect(parseFileReference(raw as string)).toEqual(expected)
+})
+
+test("an anchored line range becomes the inclusive editor range", () => {
+  expect(fileReferenceRange(parseFileReference("src/example.ts#L30-L32"))).toEqual({ startLine: 30, endLine: 32 })
+  expect(fileReferenceRange(parseFileReference("src/example.ts#L30"))).toEqual({ startLine: 30, endLine: 30 })
+})
+
+test.each(["src/example.ts#section", "src/example.ts#L0", "src/example.ts#L30-L12", "src/example.ts#L9007199254740992"])(
+  "an uninterpreted fragment retains the complete original reference: %s", (raw) => {
+    expect(parseFileReference(raw)).toEqual({ path: raw })
+  },
+)
