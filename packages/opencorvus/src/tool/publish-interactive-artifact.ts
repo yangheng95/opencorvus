@@ -11,7 +11,7 @@ import { Tool } from "./tool"
 export const PublishInteractiveArtifactParameters = z
   .object({
     artifact: PublishableInteractiveArtifactToolPayload.describe(
-      "A strictly versioned document, data view, code view, attachment-backed preview, or notebook to render inside the assistant message card. MCP Apps are produced automatically from real MCP tool UI resources and cannot be authored through this tool.",
+      "Versioned inline content. MCP Apps come from real MCP tool UI resources; use those tools to produce them.",
     ),
   })
   .strict()

@@ -180,8 +180,8 @@ Agent.run()                                     agent 发起 LLM 调用
 `providerOptions()` 命名空间封装前设置 `parallelToolCalls: false`。这是 `tool-call-policy.ts` 拥有的
 Provider 执行策略，不是 Structured Outputs 或 `tools[].strict` 声明；Provider-bound schema 继续作为
 best-effort function definition，并由 canonical Zod schema 在执行前完成最终校验与默认值 materialization。
-Zod 开放 record 的 provider projection 必须保留可接受非空 JSON map 的语义，不得因生成器用
-`propertyNames + additionalProperties:false` 表示不可投影值而把它静默收窄为空对象。该策略只串行化
+Zod 开放 record 的 provider projection 必须保留可接受非空 JSON map 的语义。当前 SDK 7 保留
+`additionalProperties` 的真实值 schema；未知值采用空 schema `{}`，不再修补旧 SDK 的 `false` 投影。该策略只串行化
 单个 Provider step 内的 Tool calls，不得串行化不同 Session、Task、Agent、Project 或 scheduler
 delivery，也不得通过兼容输入、Host 重试或 prompt 顺序指令另建协议。`@ai-sdk/openai-compatible`
 不暴露 parallel-call request option，不能伪装为已约束；其他 Provider 保留其显式配置的并行策略。
@@ -519,6 +519,8 @@ CUSTOM_LOADERS["new-provider"] = {
 4. **新增 provider 只改 `provider/`** — agent 代码零变更
 
 Session processor 通过统一流式调用的 `prepareStep` 在每个 Provider 请求前提交步骤快照与 `step-start`。SDK 只有在该异步准备成功后才能调用 Provider 和执行其工具；步骤消费者只观察 `start-step`，不重复创建事实。所有 Mission、Task Orchestrator 和 Worker 共用此顺序。步骤准备失败或取消会中止请求，重试清理由原 attempt 的持久化记录负责。不能用吞掉回调异常的 telemetry hook 代替该数据完整性边界。
+
+SDK 7 在 Provider `finish` 转换为 `model-call-end` 后执行本次已收集的 Tool；流式测试参与者必须先交付该事件，再观察或等待实际副作用。HTTP 成功响应正文的物理读取错误由 SDK 包装在 `APICallError.cause` 中，统一 LLMActivity 分类器在保留明确 HTTP/Host/取消优先级后沿该 typed cause 分类，并终止循环 cause。只有原有可重试类别能进入同一 attempt cleanup；未知/语义错误仍按明确终态结算，已开始工具执行的 attempt 继续由原保护拒绝重放。
 
 Provider 流式正文 TextPart 的 `time.start` 是该 Part 实际接受 `text-start` 时记录的时间；前缀持久化、正常 `text-end` 与中止闭合都保留这个值，只在实际完成时追加 `time.end`。正常结束时点仍位于前缀队列等待和 `experimental.text.complete` 插件完成之后。重试成功 Part 使用自身尝试的开始事实，不继承失败尝试的时间。持久 Part 和 `PartUpdated` 事件使用同一组数值，没有估算、界面计时来源、历史回填或第二组时钟。用户/控制正文的可选时间定义保持原契约。
 

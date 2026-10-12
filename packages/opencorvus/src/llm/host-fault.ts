@@ -3,9 +3,8 @@
  *
  * `withLLMActivity` owns retry for one provider call, and its classifier only
  * understands provider-shaped failures: HTTP status, transport wording, abort
- * cause. Anything else falls through to `"unknown"`, which is retryable. That
- * default is right for an unrecognized *provider* error and wrong for a Host
- * one: an invariant violation raised while the processor persists a streamed
+ * cause. Unknown errors are terminal; recognized Host faults retain their own
+ * diagnostic class. An invariant violation raised while the processor persists a streamed
  * chunk is deterministic, so a retry cannot change its outcome, and once the
  * attempt has already started executing tools the retry is not merely useless
  * but structurally impossible — the processor's rollback boundary refuses it

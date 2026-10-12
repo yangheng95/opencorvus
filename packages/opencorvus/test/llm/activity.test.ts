@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test"
+import { APICallError } from "ai"
 import {
   DefaultLLMActivityPolicy,
   NonReplayableLLMActivityPolicy,
@@ -9,6 +10,7 @@ import {
 } from "@/llm/activity"
 import { abortableIterable } from "@/util/stream-activity"
 import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
+import { HostProcessingFaultError } from "@/llm/host-fault"
 
 const policy = {
   ...DefaultLLMActivityPolicy,
@@ -370,7 +372,6 @@ describe("LLM semantic activity", () => {
     )
 
     expect({ result, attempts }).toEqual({ result: "completed", attempts: 1 })
-    expect(events.some((event) => event.type === "retry")).toBe(false)
     expect(events.filter((event) => event.type === "heartbeat" && event.kind === "tool-input-delta")).toHaveLength(5)
     expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
   })
@@ -389,9 +390,13 @@ describe("LLM semantic activity", () => {
         attempts += 1
         run.bump("first-byte")
         if (run.attempt === 0) {
-          throw new Error(
-            "Cannot connect to API: The socket connection was closed unexpectedly. For more information, pass verbose true to fetch()",
-          )
+          throw new APICallError({
+            message: "Failed to process successful response",
+            url: "http://127.0.0.1/owned-checker",
+            requestBodyValues: {},
+            statusCode: 200,
+            cause: new Error("The socket connection was closed unexpectedly"),
+          })
         }
         run.bump("text-delta")
         return "recovered"
@@ -407,6 +412,30 @@ describe("LLM semantic activity", () => {
       lastHeartbeat: { kind: "first-byte" },
     })
     expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
+  test("preserves the explicit failure contract through SDK response wrappers", () => {
+    const wrap = (cause: unknown, statusCode = 200) => new APICallError({
+      message: "Failed to process successful response",
+      url: "http://127.0.0.1/owned-checker",
+      requestBodyValues: {},
+      statusCode,
+      cause,
+    })
+    const network = new Error("The socket connection was closed unexpectedly")
+    const cyclic = wrap(undefined)
+    Object.defineProperty(cyclic, "cause", { value: cyclic })
+    expect([
+      network,
+      wrap(wrap(network)),
+      wrap(network, 404),
+      wrap(new HostProcessingFaultError("Canonical write refused")),
+      wrap({ type: "error", error: { type: "provider_error", message: "Provider rejected completion" } }),
+      wrap(new Error("Unclassified response condition")),
+      cyclic,
+    ].map((error) => DefaultLLMActivityPolicy.classify(error, {}))).toEqual([
+      "network", "network", "client_4xx", "host_fault", "provider_stream_error", "unknown", "unknown",
+    ])
   })
 
   test("classifies only accepted nonempty chunk payloads as semantic progress", () => {

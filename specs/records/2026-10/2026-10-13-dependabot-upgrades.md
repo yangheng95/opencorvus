@@ -2,6 +2,12 @@
 
 ## Recall
 
+本地修复验收已完成：同一原runner的ci-fixes-final.log六文件51测试全部通过，覆盖本轮五个失败文件和SDK错误分类；其中staggered dispatch完整18测试/286断言，四个原超时分支分别约4–5秒并核对重开数据库的同一Turn决策。shared-recovery-regression.log八文件59测试全部通过（LLM activity与前组重叠，不能相加称为一次完整运行），包含真实副作用拒绝重放、Host fault、Provider semantic error、跨进程活性/恢复、Mission extension和交互产物schema。根8项typecheck、docs:check与architecture-index通过。早期诊断及第一次不完整修正的failure日志保留，最终各文件exit=0为本地依据；远端三平台完整资格仍未满足。下一步提交修复、在隔离分支merge最新origin/main、冻结安装及正式hooks后推送同一codex分支并启动新的完整CI；main工作树尚未由本任务推进。
+
+2026-10-13 05:25（Asia/Shanghai）最新：固定完整run38302496808的Linux/macOS均592文件结束，587通过、5文件失败；Windows仍运行。失败文件为session-loop-provider-tool-input、mission-streamed-recovery、orchestrator-streamed-dispatch-settlement、session/streaming-text-prefix和capability/tool-definition-budget。不满足main同步条件，隔离分支8ee20326d继续调查，main现有并行改动保持原样。原日志保存在隔离工作树.scratch/dependabot-upgrades/full-{linux,macos}-38302496808.log；旧成功聚焦结果不能替代本轮失败。后续修复仅推送已授权codex/dependabot-upgrades供CI验证，完整通过后才收敛main。
+
+本轮实施前分析及计划：两平台同一OpenAI请求中的自由参数schema由propertyNames/string+additionalProperties:true变为additionalProperties:{}，须核对SDK7官方序列化的语义并以实际流式请求和输入验证证明，而非保留旧结构字符串；Mission定义预算32257超过既有32000，需查明具体定义增量和当前公开schema，不能直接放宽预算。网络中断真实HTTP用例返回stop，实际错误/请求及持久化状态尚未知；Mission最终assistant unhealthy/inactive，具体原因尚未知；派发四例等待claim再发送finish，与SDK7在model-call-end后执行tool的时序构成直接环，但还需实际状态证据。先增加聚焦诊断，横向审计共同LLMActivity/SessionProcessor及Task/Mission/普通Session的正常、终态、重试重启、串并行和Project隔离，再决定生产或夹具修复。保持原预算、共享调度、单一状态与所有有效正向合同，不增绕行；五文件及共享相关原checker通过后，对最终提交重新运行空test_files的三平台完整CI。文档、调用点、持久化、工具投影及交付风险随实际根因更新。
+
 最新用户要求：“测试没问题再合并到main worktree”。本轮先完成最终升级版本的三平台完整测试，成功后才由本任务推进本地main；测试尚未确认时不再向main交付新修复。核对当前本地main=c77213c22，已由并行合并包含3897754c8升级实现；本任务工作树c6514efff与它仅差后续验收证据。已有自动run38301349049仍在执行；38301773020只是docs scope成功，不能替代完整unit。此前多轮自动run确实被后续main push的cancel-in-progress取消，故采用现有workflow_dispatch入口固定实际head的新完整运行，其concurrency按run_id隔离，不修改CI范围、超时或测试集合。启动后读回head与空test_files输入并保存run身份；后续main变化不改变这轮测试对象。通过后先保存、审查main现有未提交差异，再仅合并已验证提交；不覆盖并行工作，不把docs成功、取消或聚焦测试当作全量通过。
 
 已启动独立完整运行[38302496808](https://github.com/yangheng95/opencorvus/actions/runs/38302496808)：workflow_dispatch、head=c6514efff587a4185a3d7383abc473e19da75b6e、test_files为空，读回身份一致。已在本对话创建自动跟进`dependabot-main`，每10分钟核对这轮真实结果，完整成功后才安全同步本地main并停止跟进；进行中无重要变化时不重复汇报，失败留在隔离工作树分析修复。计划/跟进记录提交暂保留本地，待用户要求的测试条件满足后再按规范收敛推送，不在等待期间继续推进main。自动跟进需要本机与Codex桌面应用运行。
@@ -13,6 +19,14 @@
 已读：AGENTS.md、根及后端/Overlay/Web manifests、test.yml、Dependabot配置、pre-push、check-ai-runtime.ts、generate.ts、后端isolated test runner、Provider bundled/LLM wrapper/repair/session调用、ACP入口、06-provider架构及2026-10-12-ci-workflow-dependencies调查。已全仓检索十项依赖定义、调用点、同语义实现、锁图、架构和历史决定。官方资料：AI SDK 7迁移说明及实际LanguageModel类型/SDK适配实现、ACP官方CHANGELOG、setup-python v7说明和npm精确版本依赖元数据。没有委托反馈。
 
 ## 分析与影响面
+
+### 完整CI失败的修改前证据（2026-10-13）
+
+本地三文件原runner复现全部三类失败。HTTP真实断流后assistant持久化APIError(statusCode=200,message=Failed to process successful response)，只有一次请求及已接收前缀；SDK5.0.59的response-handler.ts将reader.read错误保存到APICallError.cause，旧分类器只读外层message，所以已知network被归unknown终态。修复在共享classify中沿SDK typed cause继续分类，仍先尊重明确HTTP错误、外部取消与Host fault，不以isRetryable布尔值泛化重试，并防cause环。真实HTTP原回归验证两次请求、一份完整答案；聚焦合同覆盖包装network、Host错误、semantic错误及HTTP优先级。Task/Mission/Session共用SessionProcessor→withLLMActivity；retry cleanup仍由原attempt scope区分已开始tool、causal message与普通message，已提交tool继续禁止重放。没有新调度队列或唤醒实现。
+
+Mission真实数据库/HTTP transcript表明calls止于panel_query_task_artifacts，目标artifact无匹配，末条assistant的UnknownError明确Missing real catalog reference，producer只到developerStep=1。原fixture刻意丢弃finish再等待artifact；SDK7仅在model-call-end执行tool，所以artifact尚未产生。发送真实finish后再等实际持久化commit并注入断流；保持一次原始产物、continuation和独立tester的后续验收。四个staggered dispatch fixture也在finish之前await firstClaimed，形成同类环；将完整模型调用先交付，claim/release故障协调放到测试参与者，成功派发分支的no_action与dispatch在同次完成的模型调用中声明，验证实际并行冲突；全部派发失败分支在读取失败结果后的下个Provider step重新决策。Task-root相同assistant Message跨step从持久化decision重建唯一ToolTurnExecutionCoordinator，故仍验证同一Turn/ingress的成功兄弟保留与失败claim释放、重开数据库后同一决策。原Task/Session跨进程恢复、Mission/Project隔离检查保留并回归。
+
+从npm正式4.0.38源码和安装5.0.59对比发现旧addAdditionalPropertiesToJsonSchema无条件把map值schema改成false；新版保留真实map值schema，包含交互产物多个JsonScalar map，因此定义体积增加。新版输出与当前Zod经典toJSONSchema实际一致，不能回退生成器丢失map合同。保留所有字段/值域和32000预算，压缩唯一交互产物工具描述中重复措辞，保留19种renderer选择语义；用原真实definition checker及artifact正向schema/materialization验收。旧propertyNames+false修补分支是修复旧SDK丢失unknown map的兼容逻辑，现在去除，序列化测试改为SDK7准确schema与实际非空map校验。两条既有非流式序列化测试同时改为真实流式SDK入口，保留实际wire参数检查。
 
 1. PR基于不同旧main，失败不能直接归因升级。36的实际verify日志为生成的expert-squad版本未收敛，audit为此前五项漏洞；当前main已有对应修复。34的实际typecheck日志明确为TogetherAI新包依赖的`serializeModelOptions`在根override固定的provider-utils4.0.38缺失。必须审查当前图并重跑真实checker，不能照搬旧lock文件。
 2. TogetherAI3.0.48要求Provider4/provider-utils5/openai-compatible3，provider-utils5.0.56要求Provider4.0.24；当前应用ai6、Provider3、utils4以及check-ai-runtime固定旧主版本。数据流根因为只升级叶包同时将根公共依赖强制到旧主版本。解决需要同一AI SDK 7依赖图和当前调用契约迁移，不能保留旧override或另建host兼容层。SDK官方本身接收V3模型的能力属于成熟工具链；本项目不新增平行实现。社区Provider的实际peer/API支持尚须安装与流式行为证据确认。

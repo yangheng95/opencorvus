@@ -274,16 +274,23 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
                       while (true) {
                         const next = await reader.read()
                         if (next.done) break
-                        if (next.value.type !== "finish") controller.enqueue(next.value)
+                        // SDK 7 admits Tool execution at model-call-end. Publish
+                        // that event before waiting for the real side effect.
+                        controller.enqueue(next.value)
                       }
                       const until = Date.now() + 15_000
+                      let committed = false
                       while (Date.now() < until) {
                         const rows = Database.use((db) =>
                           db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.task_id, taskID)).all(),
                         )
-                        if (rows.some((r) => r.label === "developer-committed-before-disconnect")) break
+                        if (rows.some((r) => r.label === "developer-committed-before-disconnect")) {
+                          committed = true
+                          break
+                        }
                         await Bun.sleep(10)
                       }
+                      if (!committed) throw new Error("Recovery fixture did not reach its durable publication boundary")
                       controller.error(new Error("socket connection was closed unexpectedly"))
                     } catch (e) {
                       controller.error(e)

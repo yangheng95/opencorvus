@@ -144,7 +144,9 @@ describe("search-native Tool definition budgets", () => {
           }
         }
         measurements.sort((left, right) => right.chars - left.chars)
-        expect(measurements.filter((measurement) => measurement.chars > CAPABILITY_REVEAL_MAX_ACTIVE_CHARS)).toEqual([])
+        for (const measurement of measurements) {
+          expect(measurement.chars).toBeLessThanOrEqual(CAPABILITY_REVEAL_MAX_ACTIVE_CHARS)
+        }
         const search = measurements.find((measurement) => measurement.id === "capability_search")
         expect(search).toEqual({
           id: "capability_search",

@@ -889,6 +889,7 @@ for (const secondFails of [false, true]) {
           let rootSessionID = ""
           let secondDispatch: { dispatchID: string; childSessionID: string } | undefined
           let dispatchStreamStarted = false
+          let decisionEmitted = false
           let rootAssistantID = ""
           const waitForPart = async (callID: string, status: "completed" | "error") => {
             const deadline = Date.now() + 15_000
@@ -916,6 +917,7 @@ for (const secondFails of [false, true]) {
                 : lineage.payload.tool_call_id
               if (callID !== "call_stagger_a" && callID !== "call_stagger_b") return
               rootSessionID = lineage.payload.orchestrator_session_id
+              if (callID === "call_stagger_b") await firstClaimed.promise
               order.push(`${callID}:claimed`)
               if (callID === "call_stagger_a") {
                 firstClaimed.resolve()
@@ -992,74 +994,42 @@ for (const secondFails of [false, true]) {
               }
               if (toolNames.includes(dispatchToolName) && !dispatchStreamStarted) {
                 dispatchStreamStarted = true
+                decisionEmitted = !secondFails
                 return {
-                  stream: new ReadableStream({
-                    async start(controller) {
-                      try {
-                        controller.enqueue({ type: "stream-start", warnings: [] })
-                        if (collection) {
-                          controller.enqueue(toolCall("call_stagger_collection", dispatchToolName, {
+                  stream: simulateReadableStream({
+                    chunks: [
+                      { type: "stream-start", warnings: [] },
+                      ...(collection
+                        ? [toolCall("call_stagger_collection", dispatchToolName, {
                             team: ["A", "B"].map((name) => ({
                               name, target: "light-planner", responsibility: `Evidence partition ${name}`,
                               boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [],
                             })),
                             dispatches: [dispatchInput("A"), dispatchInput("B")],
-                          }))
-                          await firstClaimed.promise
-                        } else {
-                          controller.enqueue(toolCall("call_stagger_a", dispatchToolName, dispatchInput("A")))
-                          await firstClaimed.promise
-                          controller.enqueue(toolCall("call_stagger_b", dispatchToolName, dispatchInput("B")))
-                        }
-                        await secondClaimed.promise
-                        if (!secondFails) {
-                          if (collection) {
-                            const deadline = Date.now() + 15_000
-                            while (!WorkerTurnDescriptor.findForDispatch({ sessionID: secondDispatch!.childSessionID, dispatchID: secondDispatch!.dispatchID })) {
-                              if (Date.now() >= deadline) throw new Error("Collection survivor descriptor was not committed")
-                              await Bun.sleep(10)
-                            }
-                            order.push("call_stagger_b:descriptor_committed")
-                          } else {
-                            await waitForPart("call_stagger_b", "completed")
-                            order.push("call_stagger_b:durable_completed")
-                          }
-                        }
-                        firstFailure.resolve()
-                        if (collection) {
-                          secondFailure.resolve()
-                          await waitForPart("call_stagger_collection", "completed")
-                          order.push("collection:durable_completed")
-                        } else {
-                          await waitForPart("call_stagger_a", "error")
-                          order.push("call_stagger_a:durable_error")
-                          if (secondFails) {
-                            secondFailure.resolve()
-                            await waitForPart("call_stagger_b", "error")
-                            order.push("call_stagger_b:durable_error")
-                          }
-                        }
-                        controller.enqueue(
-                          toolCall("call_stagger_c", "no_action", {
-                            observed_task: observedTask(),
-                            reason: "Reconcile the observed dispatch outcomes in this exact ingress.",
-                          }),
-                        )
-                        controller.enqueue(finish)
-                        controller.close()
-                      } catch (error) {
-                        controller.error(error)
-                      }
-                    },
+                          })]
+                        : [
+                            toolCall("call_stagger_a", dispatchToolName, dispatchInput("A")),
+                            toolCall("call_stagger_b", dispatchToolName, dispatchInput("B")),
+                          ]),
+                      ...(!secondFails ? [toolCall("call_stagger_c", "no_action", {
+                        observed_task: observedTask(),
+                        reason: "Reconcile the current lifecycle alongside the declared dispatches.",
+                      })] : []),
+                      finish,
+                    ],
                   }),
                 }
               }
               if (toolNames.includes("no_action")) {
+                // Failed calls permit the next Provider step to choose again;
+                // the Task-root assistant Turn keeps its identity.
+                const callID = decisionEmitted ? `call_stagger_lifecycle_${Identifier.ascending("call")}` : "call_stagger_c"
+                decisionEmitted = true
                 return {
                   stream: simulateReadableStream({
                     chunks: [
                       { type: "stream-start", warnings: [] },
-                      toolCall(`call_stagger_lifecycle_${Identifier.ascending("call")}`, "no_action", {
+                      toolCall(callID, "no_action", {
                         observed_task: observedTask(),
                         reason: "The current lifecycle fact has been reconciled.",
                       }),
@@ -1112,6 +1082,36 @@ for (const secondFails of [false, true]) {
               },
               { actor: "user" },
             )
+            // Coordinate admissions after the model has finished declaring
+            // its calls, so Tool execution can reach the real claim boundary.
+            await Promise.all([firstClaimed.promise, secondClaimed.promise])
+            if (!secondFails) {
+              if (collection) {
+                const deadline = Date.now() + 15_000
+                while (!WorkerTurnDescriptor.findForDispatch({ sessionID: secondDispatch!.childSessionID, dispatchID: secondDispatch!.dispatchID })) {
+                  if (Date.now() >= deadline) throw new Error("Collection survivor descriptor was not committed")
+                  await Bun.sleep(10)
+                }
+                order.push("call_stagger_b:descriptor_committed")
+              } else {
+                await waitForPart("call_stagger_b", "completed")
+                order.push("call_stagger_b:durable_completed")
+              }
+            }
+            firstFailure.resolve()
+            if (collection) {
+              secondFailure.resolve()
+              await waitForPart("call_stagger_collection", "completed")
+              order.push("collection:durable_completed")
+            } else {
+              await waitForPart("call_stagger_a", "error")
+              order.push("call_stagger_a:durable_error")
+              if (secondFails) {
+                secondFailure.resolve()
+                await waitForPart("call_stagger_b", "error")
+                order.push("call_stagger_b:durable_error")
+              }
+            }
             await waitForIngressDeliveryHooksForTest()
             const finalPart = await waitForPart("call_stagger_c", secondFails ? "completed" : "error")
             const assistant = await MessageStore.get({ sessionID: rootSessionID, messageID: rootAssistantID })

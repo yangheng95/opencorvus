@@ -1416,20 +1416,6 @@ export namespace ProviderTransform {
       output[key] = strictifyOpenAISchemaNode(value, false)
     }
 
-    if (
-      input.type === "object" &&
-      input.properties === undefined &&
-      input.propertyNames !== undefined &&
-      input.additionalProperties === false
-    ) {
-      // Zod emits `propertyNames + additionalProperties:false` for
-      // `z.record(..., z.unknown())`, even though the canonical validator
-      // accepts arbitrary JSON values. This provider surface is not declared
-      // strict; preserve the open-record meaning and let the canonical Zod
-      // schema validate/materialize the executed value.
-      output.additionalProperties = true
-    }
-
     const properties = input.properties
     if (properties && typeof properties === "object" && !Array.isArray(properties)) {
       const required = new Set(

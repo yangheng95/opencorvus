@@ -287,7 +287,9 @@ export interface LLMActivityOptions {
 
 // ---- Default policy --------------------------------------------------------
 
-function classify(err: unknown, ctx: ClassifyContext): ErrorClass {
+function classify(err: unknown, ctx: ClassifyContext, seen = new Set<unknown>()): ErrorClass {
+  if (seen.has(err)) return "unknown"
+  seen.add(err)
   // Highest priority — the abort reason carries an explicit cause marker
   // we set ourselves (no string-matching).
   const reason = ctx.abortReason
@@ -364,6 +366,12 @@ function classify(err: unknown, ctx: ClassifyContext): ErrorClass {
     )
   ) {
     return "network"
+  }
+  // SDK response readers retain transport failures as the typed API error's
+  // cause, including after HTTP 200 headers. Classify that cause with the same
+  // policy; the wrapper's retry hint alone does not establish replay safety.
+  if (APICallError.isInstance(err) && err.cause !== undefined) {
+    return classify(err.cause, { abortReason: ctx.abortReason }, seen)
   }
   return "unknown"
 }

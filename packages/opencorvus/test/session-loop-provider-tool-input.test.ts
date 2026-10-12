@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
-import { asSchema, generateText, InvalidToolInputError, tool, type ToolExecutionOptions } from "ai"
+import { asSchema, streamText, InvalidToolInputError, tool, type ToolExecutionOptions } from "ai"
+import Ajv from "ajv"
 import { createAzure } from "@ai-sdk/azure"
 import { createOpenAI } from "@ai-sdk/openai"
 import { panelLeafActionSchemaForAgent } from "@/panel/capability"
@@ -54,7 +55,7 @@ function azureModel(): Provider.Model {
 function successfulResponsesFetch(capture: { body?: Record<string, any> }) {
   return (async (_input: RequestInfo | URL, init?: RequestInit) => {
     capture.body = JSON.parse(String(init?.body)) as Record<string, any>
-    return Response.json({
+    const response = {
       id: "resp_serialized_tool_contract",
       created_at: 1,
       model: "gpt-5.6-terra",
@@ -72,6 +73,17 @@ function successfulResponsesFetch(capture: { body?: Record<string, any> }) {
         output_tokens: 1,
         output_tokens_details: { reasoning_tokens: 0 },
       },
+    }
+    const item = response.output[0]
+    const events = [
+      { type: "response.created", response: { ...response, status: "in_progress", output: [] } },
+      { type: "response.output_item.added", output_index: 0, item: { ...item, content: [], status: "in_progress" } },
+      { type: "response.output_text.delta", item_id: item.id, output_index: 0, content_index: 0, delta: "done" },
+      { type: "response.output_item.done", output_index: 0, item },
+      { type: "response.completed", response: { ...response, status: "completed" } },
+    ]
+    return new Response(events.map((event, sequence_number) => `data: ${JSON.stringify({ ...event, sequence_number })}\n\n`).join(""), {
+      headers: { "content-type": "text/event-stream" },
     })
   }) as typeof fetch
 }
@@ -91,6 +103,7 @@ const executionOptions = {
   toolCallId: "call_panel_provider_union",
   messages: [],
   abortSignal: new AbortController().signal,
+  context: {},
 } as ToolExecutionOptions
 
 function acceptanceGap(
@@ -177,16 +190,18 @@ describe("SessionLoop provider Tool execution input", () => {
     const model = openAIModel()
     const openAI = createOpenAI({ apiKey: "fixture", fetch: successfulResponsesFetch(capture) })
 
-    await generateText({
+    const result = streamText({
       model: openAI.responses("gpt-5.6-terra"),
       prompt: "Finish without calling a Tool.",
       tools: { panel_resume_task: preparedMissionPanelTool() as any },
       providerOptions: serializedToolRequestOptions(model),
     })
+    expect(await result.text).toBe("done")
 
     expect(capture.body).toEqual(
       expect.objectContaining({
         parallel_tool_calls: false,
+        stream: true,
         tools: [expect.objectContaining({ type: "function", name: "panel_resume_task", parameters: expect.any(Object) })],
       }),
     )
@@ -195,9 +210,10 @@ describe("SessionLoop provider Tool execution input", () => {
       parameters.properties.acceptance_gap.properties.criteria.items.oneOf).find(
       (variant: Record<string, any>) => variant.properties?.state?.const === "open",
     )
-    expect(openCriterion.properties.repair_action.properties.parameters).toEqual(
-      expect.objectContaining({ type: "object", propertyNames: { type: "string" }, additionalProperties: true }),
-    )
+    const mapSchema = openCriterion.properties.repair_action.properties.parameters
+    expect(mapSchema).toEqual({ type: "object", additionalProperties: {} })
+    const validate = new Ajv({ strict: false }).compile(mapSchema)
+    expect(validate({ artifact_kind: "corrected-audit-receipt", retry_limit: 1, nested: { accepted: true }, evidence: [null, "receipt"] })).toBe(true)
   })
 
   test("sends the prepared Tool through Azure's serialized production Responses namespace", async () => {
@@ -214,7 +230,7 @@ describe("SessionLoop provider Tool execution input", () => {
       openai: { store: false, parallelToolCalls: false },
       azure: { store: false, parallelToolCalls: false },
     })
-    await generateText({
+    const result = streamText({
       model: azure.responses("gpt-5.6-terra"),
       prompt: "Finish without calling a Tool.",
       tools: {
@@ -230,10 +246,12 @@ describe("SessionLoop provider Tool execution input", () => {
       },
       providerOptions: options,
     })
+    expect(await result.text).toBe("done")
 
     expect(capture.body).toEqual(
       expect.objectContaining({
         parallel_tool_calls: false,
+        stream: true,
         tools: [expect.objectContaining({ type: "function", name: "panel_resume_task", parameters: expect.any(Object) })],
       }),
     )
