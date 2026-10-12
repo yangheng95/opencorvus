@@ -24,4 +24,24 @@
 
 最终英文、中文页面均HTTP200，人工查看配置代码、段落和章节顺序；最终截图为[english-final.png](english-final.png)和[chinese-final.png](chinese-final.png)。其他截图记录此前阅读位置与调整前顺序，不作为最终画面。浏览器页面已关闭；本次前台服务以Ctrl+C结束，原句柄50283实际返回1（人为中止），不是构建失败，也不伪称exit0。
 
-根docs:check通过345 ops/25 groups。本轮没有UI自动化测试，没有网站部署或GitHub Issue关闭操作。主线程的clipboard-copy.ts与非本任务生成文件未纳入提交。
+根docs:check通过345 ops/25 groups。上述初次修复阶段没有UI自动化测试、网站部署或GitHub Issue关闭操作。主线程的clipboard-copy.ts与非本任务生成文件未纳入提交。
+
+## 用户随后授权发布和回复
+
+用户随后明确要求“发布新版，回复issue”。[发布记录](../../records/2026-10/2026-10-12-release-0.1.24.md)保留0.1.24官网失败、停止发布及0.1.25修复过程。源码89ec8c2ad的官网run38236988822成功部署后，通过独立浏览器页实际核对了英文、中文章节锚点、配置代码与限流说明：
+
+- [官网英文指南](parallel-search-published-en.jpg)
+- [官网中文指南](parallel-search-published-zh.jpg)
+- [官网0.1.25日志](release-0.1.25-notes.jpg)
+
+三个截图均为生产网站实际页面，非自动断言或截图基线；本次独立浏览器页已关闭。GitHub v0.1.25于11:07:15 UTC公开，29项产物；[Issue回复](https://github.com/yangheng95/opencorvus/issues/40#issuecomment-6123047685)于11:08:07 UTC发送并通过API读回完整正文，Issue仍为OPEN。回复只陈述已完成的文档、匿名搜索/抓取和公开版本事实。
+
+发布回执：
+
+- [公开产物、根日志一致性、更新通道与下载清单验收](release-public-readback.json)，checker实际退出0；[官网原始下载JSON](website-public-downloads.json)保留18个用户下载入口。
+- [原生联合run](native-release-run.json)与[全部job结论](native-release-jobs.json)：原生矩阵通过，最终联合结论为cancelled。
+- [原联动官网run](linked-website-run.json)及[Windows取消日志摘录](linked-website-windows-cancelled.txt)：40分钟父预算耗尽，不能记为联合发布成功。
+- [后续独立官网run](website-followup-run.json)：11:16:04至11:22:40 UTC，完整验证和生产切换成功。
+- [Issue状态与评论原始回读](issue-reply.json)：已回复，保留OPEN。
+
+公开交付已到位，原40分钟联合成功指标仍未满足。官网补部署没有改变原生源码tag、原始run或其时钟，也没有覆盖失败记录。

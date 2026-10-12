@@ -1,6 +1,6 @@
 # Artifact entry points
 
-- [Issue 40：Parallel Search MCP](2026-10-12-parallel-search-issue-40/README.md)：真实匿名搜索、结果网页抓取与中英文文档截图。
+- [Issue 40：Parallel Search MCP](2026-10-12-parallel-search-issue-40/README.md)：真实匿名搜索、公开双语指南、0.1.25发布及Issue回复回执。
 
 - [Live Tool payload viewport119](2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/README.md): one-selector live viewport change; genuine11901 Sources/answer complete while long-input after remains unmet.
 

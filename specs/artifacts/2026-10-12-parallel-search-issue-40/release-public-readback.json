@@ -1,0 +1,137 @@
+{
+  "verified_at": "2026-10-12T11:23:33.520Z",
+  "version": "0.1.25",
+  "source": "89ec8c2ad03ece0b9439b9f4a96c5ecb9ea7902a",
+  "runID": 38237026257,
+  "publishedAt": "2026-10-12T11:07:15Z",
+  "releaseUrl": "https://github.com/yangheng95/opencorvus/releases/tag/v0.1.25",
+  "authoredNotesMatch": true,
+  "releaseAssets": [
+    {
+      "name": "latest.json",
+      "size": 3042
+    },
+    {
+      "name": "LICENSE",
+      "size": 1066
+    },
+    {
+      "name": "OpenCorvus-0.1.25-1.aarch64.rpm",
+      "size": 205589451
+    },
+    {
+      "name": "OpenCorvus-0.1.25-1.x86_64.rpm",
+      "size": 207380522
+    },
+    {
+      "name": "opencorvus-darwin-arm64.tar.gz",
+      "size": 137791753
+    },
+    {
+      "name": "opencorvus-darwin-x64-baseline.tar.gz",
+      "size": 144835316
+    },
+    {
+      "name": "opencorvus-darwin-x64.tar.gz",
+      "size": 144833559
+    },
+    {
+      "name": "opencorvus-linux-arm64.tar.gz",
+      "size": 153827817
+    },
+    {
+      "name": "opencorvus-linux-x64-baseline.tar.gz",
+      "size": 154441229
+    },
+    {
+      "name": "opencorvus-linux-x64.tar.gz",
+      "size": 154439681
+    },
+    {
+      "name": "opencorvus-windows-x64-baseline.tar.gz",
+      "size": 145058449
+    },
+    {
+      "name": "opencorvus-windows-x64.tar.gz",
+      "size": 145056841
+    },
+    {
+      "name": "OpenCorvus_0.1.25_aarch64.app.tar.gz",
+      "size": 186514888
+    },
+    {
+      "name": "OpenCorvus_0.1.25_aarch64.app.tar.gz.sig",
+      "size": 408
+    },
+    {
+      "name": "OpenCorvus_0.1.25_aarch64.AppImage",
+      "size": 279517704
+    },
+    {
+      "name": "OpenCorvus_0.1.25_aarch64.AppImage.sig",
+      "size": 428
+    },
+    {
+      "name": "OpenCorvus_0.1.25_aarch64.dmg",
+      "size": 186966487
+    },
+    {
+      "name": "OpenCorvus_0.1.25_amd64.AppImage",
+      "size": 283027960
+    },
+    {
+      "name": "OpenCorvus_0.1.25_amd64.AppImage.sig",
+      "size": 424
+    },
+    {
+      "name": "OpenCorvus_0.1.25_amd64.deb",
+      "size": 207383714
+    },
+    {
+      "name": "OpenCorvus_0.1.25_arm64.deb",
+      "size": 205587178
+    },
+    {
+      "name": "OpenCorvus_0.1.25_x64-setup.exe",
+      "size": 196627295
+    },
+    {
+      "name": "OpenCorvus_0.1.25_x64-setup.exe.sig",
+      "size": 424
+    },
+    {
+      "name": "OpenCorvus_0.1.25_x64.app.tar.gz",
+      "size": 196527193
+    },
+    {
+      "name": "OpenCorvus_0.1.25_x64.app.tar.gz.sig",
+      "size": 408
+    },
+    {
+      "name": "OpenCorvus_0.1.25_x64.dmg",
+      "size": 197070005
+    },
+    {
+      "name": "OpenCorvus_0.1.25_x64_en-US.msi",
+      "size": 197156864
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 2720
+    },
+    {
+      "name": "THIRD_PARTY_NOTICES.md",
+      "size": 3523
+    }
+  ],
+  "updaterVersion": "0.1.25",
+  "updaterTargets": [
+    "linux-x86_64",
+    "linux-aarch64",
+    "darwin-x86_64",
+    "darwin-aarch64",
+    "windows-x86_64"
+  ],
+  "websiteVersion": "0.1.25",
+  "websiteAssets": 18
+}
