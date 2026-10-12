@@ -1,0 +1,23 @@
+{
+  "phase": "spawn-admission",
+  "state": "dead_or_reused",
+  "host": {
+    "pid": 51816,
+    "processInstanceID": "win32:639273971780055316",
+    "occurrenceID": "e1cd7b6e-e0eb-422f-bf94-0f7b144a51b5"
+  },
+  "observedAtUtc": "2026-10-12T10:24:47.7168167Z",
+  "boundary": "Original exec completed exit1; failure before Native Target handle and model preflight. No successful native/model completion claimed.",
+  "callerExitCode": 1,
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "listeners": []
+}

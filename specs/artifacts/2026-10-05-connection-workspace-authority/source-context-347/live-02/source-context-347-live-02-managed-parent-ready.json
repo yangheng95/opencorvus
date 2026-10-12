@@ -1,0 +1,15 @@
+{
+  "pid": 70332,
+  "occurrence": "source-context-347-live-02-50fa07f1-395f-42d3-ac3f-aff17f5f2936",
+  "owner": {
+    "pid": 70332,
+    "processInstanceID": "win32:639273974895547574",
+    "occurrenceID": "44ae32cb-10c4-450d-bcb3-444e5ddb15b9"
+  },
+  "parent": {
+    "pid": 7848,
+    "processInstanceID": "win32:639273974895107191",
+    "occurrenceID": "aa7679b0-9d23-4959-9ddf-20cb291016d7"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

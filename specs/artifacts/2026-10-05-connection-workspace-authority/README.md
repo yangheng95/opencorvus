@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [347 连续来源目录密度](source-context-plan-347.md)：真实26来源与同名文件边界、复制和定位。
+
 - [346 多来源流式复制反馈](source-dense-live-plan-346.md)：真实流式Source复制状态与独立复核。
 
 - [345 活动执行批次](activity-occurrence-plan-345.md)：按真实接收批次修复多余Pending活动。

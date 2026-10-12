@@ -1,0 +1,69 @@
+{
+  "observedAtUtc": "2026-10-12T10:34:29.6073814Z",
+  "physicalCompletion": true,
+  "occurrence": "source-context-347-live-02-50fa07f1-395f-42d3-ac3f-aff17f5f2936",
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-context-347-live-02\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2194
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-context-347-live-02\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 9155406
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 70332,
+        "processInstanceID": "win32:639273974895547574",
+        "occurrenceID": "ad9c5097-46d8-4817-9f31-d11cae08707f"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67232,
+        "processInstanceID": "win32:639273974887167911",
+        "occurrenceID": "c28f32e8-0658-4f30-8862-abdadf23d038"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "source-context-347-live-02-50fa07f1-395f-42d3-ac3f-aff17f5f2936",
+    "outcome": "settled",
+    "host": {
+      "pid": 67232,
+      "processInstanceID": "win32:639273974887167911",
+      "occurrenceID": "c28f32e8-0658-4f30-8862-abdadf23d038"
+    },
+    "target": {
+      "pid": 70332,
+      "processInstanceID": "win32:639273974895547574",
+      "occurrenceID": "ad9c5097-46d8-4817-9f31-d11cae08707f"
+    },
+    "observedAtUtc": "2026-10-12T10:34:27.28Z",
+    "deadlineAt": 1791801288702,
+    "terminal": {
+      "occurrenceID": "source-context-347-live-02-50fa07f1-395f-42d3-ac3f-aff17f5f2936",
+      "pid": 70332,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

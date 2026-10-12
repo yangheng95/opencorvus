@@ -114,15 +114,26 @@ function sourceDetail(source: ConversationSourcePart): string {
   return source.filename || source.mediaType || ""
 }
 
-function sourceFileCaption(source: ConversationSourcePart): string {
-  if (source.origin === "attachment") return t("chat.source_attachment")
+function sourceFileCaption(source: ConversationSourcePart): { kind: "attachment" | "location" | "directory"; text: string } {
+  if (source.origin === "attachment") return { kind: "attachment", text: t("chat.source_attachment") }
   const relative = shortRelativePath(source.path || "", sourceDirectory())
   const location = pathWithForwardSeparators(relative, source.path || sourceDirectory())
   const separator = location.lastIndexOf("/")
   const filename = location.slice(separator + 1)
   // Keep the actual filename visible when a publisher supplies a custom title.
-  if (fileSourceLocation(filename, source.range) !== sourceLabel(source)) return sourceDetail(source)
-  return location.slice(0, separator + 1)
+  if (fileSourceLocation(filename, source.range) !== sourceLabel(source)) {
+    return { kind: "location", text: sourceDetail(source) }
+  }
+  return { kind: "directory", text: location.slice(0, separator + 1) }
+}
+
+function repeatsFileDirectory(source: ConversationSourcePart, previous: ConversationSourcePart | undefined): boolean {
+  if (source.type !== "source-file" || previous?.type !== "source-file" || !source.path || source.path !== previous.path) {
+    return false
+  }
+  const caption = sourceFileCaption(source)
+  const previousCaption = sourceFileCaption(previous)
+  return caption.kind === "directory" && previousCaption.kind === "directory" && caption.text === previousCaption.text
 }
 
 function sourceIcon(source: ConversationSourcePart): IconName {
@@ -188,10 +199,10 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
   )
 }
 
-function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean }) {
+function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
   const label = () => sourceLabel(props.source)
   const detail = () => sourceDetail(props.source)
-  const fileCaption = () => sourceFileCaption(props.source)
+  const fileCaption = () => props.omitDirectoryCaption ? "" : sourceFileCaption(props.source).text
   const icon = () => sourceIcon(props.source)
   const location = () => {
     if (props.source.type !== "source-url" || !props.source.url) return ""
@@ -336,7 +347,7 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
   )
 }
 
-function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean }) {
+function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
   const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
   const expanded = () => cardExpanded(excerptKey(), false)
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
@@ -354,7 +365,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   return (
     <div class="msg-source-entry" data-has-excerpt={props.source.snippet ? "true" : undefined}>
       <div class="msg-source-entry__row">
-        <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} />
+        <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} omitDirectoryCaption={props.omitDirectoryCaption} />
         <Show when={location()}>
           <Button
             type="button"
@@ -413,7 +424,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
   return (
     <div class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
       <Key each={props.sources.slice(0, 1)} by={sourceIdentity}>
-        {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} />}
+        {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} omitDirectoryCaption={false} />}
       </Key>
       <Show when={props.sources.length > 1}>
         <Disclosure.Root
@@ -433,7 +444,14 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
           <Show when={expanded()}>
             <Disclosure.Content class="msg-sources__list">
               <Key each={props.sources.slice(1)} by={sourceIdentity}>
-                {(source, index) => <SourceEntry source={source()} index={index() + 1} showIndex />}
+                {(source, index) => (
+                  <SourceEntry
+                    source={source()}
+                    index={index() + 1}
+                    showIndex
+                    omitDirectoryCaption={repeatsFileDirectory(source(), props.sources[index()])}
+                  />
+                )}
               </Key>
             </Disclosure.Content>
           </Show>

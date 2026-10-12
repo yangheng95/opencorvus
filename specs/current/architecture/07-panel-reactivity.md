@@ -309,6 +309,12 @@ file-source leaf shows its existing title/range and a secondary path/range
 from the same canonical source. The existing selected directory makes an
 in-project path relative; an external path retains its absolute identity.
 An identical title/range and path/range needs only one visible line.
+Within one adjacent Source group, consecutive ordinary file entries for the
+same exact path share an identical directory caption: the first retains it,
+and subsequent entries keep their own filename/range and actions. A different
+path starts its own caption even when filenames match. Attachment labels and
+location captions required by custom titles remain per-entry. Full Tooltip
+details, accessible names and copied locations retain each Source's own facts.
 Tooltip, accessible name and file navigation use those same facts. Document
 leaves retain their existing actions and metadata, and group summaries retain
 their actual title/count and adjacent timeline position.

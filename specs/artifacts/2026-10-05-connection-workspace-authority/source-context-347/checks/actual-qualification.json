@@ -1,0 +1,380 @@
+{
+  "firstAdmission": {
+    "outcome": "failed",
+    "phase": "spawn-admission",
+    "callerExit": 1,
+    "host": {
+      "pid": 51816,
+      "processInstanceID": "win32:639273971780055316",
+      "occurrenceID": "e1cd7b6e-e0eb-422f-bf94-0f7b144a51b5"
+    },
+    "state": "dead_or_reused",
+    "boundary": "No Native Target or Provider qualification; initial error retained"
+  },
+  "successfulRun": {
+    "initialHandle": 15764,
+    "actualLauncherExit": 0,
+    "qualification": {
+      "qualification": "NativeService",
+      "physicalCompletion": true,
+      "cancellation": null,
+      "providerUserCancelledRequests": 0,
+      "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+      "providerEOFRequests": 6
+    },
+    "elapsedMs": 577726,
+    "providerRequests": 6,
+    "model": "openai/gpt-6.1-sol streaming HTTP200 EOF",
+    "native": {
+      "occurrence": "source-context-347-live-02-50fa07f1-395f-42d3-ac3f-aff17f5f2936",
+      "outcome": "settled",
+      "host": {
+        "pid": 67232,
+        "processInstanceID": "win32:639273974887167911",
+        "occurrenceID": "c28f32e8-0658-4f30-8862-abdadf23d038"
+      },
+      "target": {
+        "pid": 70332,
+        "processInstanceID": "win32:639273974895547574",
+        "occurrenceID": "ad9c5097-46d8-4817-9f31-d11cae08707f"
+      },
+      "observedAtUtc": "2026-10-12T10:34:27.280Z",
+      "deadlineAt": 1791801288702,
+      "terminal": {
+        "occurrenceID": "source-context-347-live-02-50fa07f1-395f-42d3-ac3f-aff17f5f2936",
+        "pid": 70332,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "pairedCleanupComplete": true
+  },
+  "actualTools": [
+    {
+      "id": "prt_g0VXpVTSS005DKSGMABR",
+      "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+      "type": "tool-request",
+      "callID": "call_d47a3c4b2b024c649fd414f201fef498",
+      "tool": "search_code",
+      "input": {
+        "pattern": "SHARED347",
+        "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/source-context-347-live-02/project/资料",
+        "include": "来源审阅记录_相同名称与不同行号.md"
+      },
+      "time": {
+        "start": 1791800781104
+      }
+    }
+  ],
+  "groups": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-context-347-live-02\\project\\资料\\实验方案甲\\来源审阅记录_相同名称与不同行号.md",
+      "expectedMatches": 24,
+      "parts": [
+        {
+          "id": "prt_g0VXpVU5N00j1fvT04GW",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "1d3f7af55165bc3cd262037bd0f481745be5a247f39128473fd67f70b3c50808",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5T00mvUfFLL2L",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "0ebe93ad3f4845ec22a95a4cd55d9a85f0ef058562b4f977d36c96c6c3565b66",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5Y00oDp4he4nx",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "1ba13043bf4436bca4b925405f2f069c342744e68a761d1732ae8f5fa4ebeaf7",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 4,
+            "endLine": 4
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5d00zLw8PIqLg",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "f2ef270d4c670d44215a42709b8362ae02fab9d9b526ec35982ae0d1ee3437f4",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 5,
+            "endLine": 5
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5j00D5E6X7J1A",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "a3cbff5c661b8bac4b98c824133d98cdde79852bac864280becbfac7c76d6e10",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 6,
+            "endLine": 6
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5o007Rwxzb4Zn",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "a373298f658facb033ebc5b867c3acded93acbefefcf991f291b56fd0d5ff19d",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 7,
+            "endLine": 7
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5t00dEs7NJWKU",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "b1771ac64e1d88ae058da879b8b4c61bfba661db4db4d91cb8f53261fdc769bb",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 8,
+            "endLine": 8
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5z00GvscjdR4N",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "6c2b797e18b361f2d990cfcf0dd05ef81c75db8cb39d3040a250b32c6bac5195",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 9,
+            "endLine": 9
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6300d1tS5K51v",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "6e863096af196004d57b479602d3935c675e11f93b6b0c9b044106a25430ac79",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6A00BV9LauI1e",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "be4d99cbaeef73dfa0b39545f9b7d96322c32f34ef62abac2ff687dfaf9a170f",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6F00AtUyJo1m6",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "3ba6cc09ffbf5ffd9352ce69be6faaa0bb99e658e5ca05b004ff51ac65158e8a",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6N00JyblfuElf",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "0fa35d5915e64662f5c9d8c8861d2ea4b329e3e2463aa89decc4cc6dc5ae8ea6",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6U00vP6j3DKG3",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "83a20e4029b170cdb6fca20e59d4abe6a9b030b22c44b75b8dc38adfe6b8ae26",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6a00nBP5AIh3T",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "5abffcf36c214309120a9fb87787a1a483748702c39208aecf1868b69ce3c259",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 15,
+            "endLine": 15
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6g007HPQxTiq0",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "91c71191a4aa33150daaf49da2a9a27e344bc45240e7dbee8bac36d3dae88b13",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 16,
+            "endLine": 16
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6m00PHqPyYeJU",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "e279fa49f7ed42434d42a475de5b1f506ccbb9ee9e3df8762f2c260616b23b24",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 17,
+            "endLine": 17
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6t00BrTT1VoWJ",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "707e8082ed28db8c6c4f13a3e22430691deec9e96b4433517f8d065d18150293",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        },
+        {
+          "id": "prt_g0VXpVU6z00q9EytGRCe",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "629dbefa3596a543ae0c916547ec6aea9170573291a12d7bfe7b63c8fa1f9e76",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 19,
+            "endLine": 19
+          }
+        },
+        {
+          "id": "prt_g0VXpVU7800xYNtR7tuR",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "44b1ff9e845b901ee6a74c0d3dff220e01a93631a4d48b3726af01fc1890b613",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        {
+          "id": "prt_g0VXpVU7L004jLGZ6Ahe",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "806234ea8709cd99b1efbfc87952ba5d0ea6d0cdda99a911ab4c56ad59056184",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 21,
+            "endLine": 21
+          }
+        },
+        {
+          "id": "prt_g0VXpVU7e00jS5Ao8WbK",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "049ca17c27170530c56242b05926310b6dc962ca6e22cfac04d4fad4f9136546",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        {
+          "id": "prt_g0VXpVU7q00B7UKV3A6A",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "6b3d07ebda7c1ca9d07721a5e0f7c5e01ec9cd9fe8fb5f3ecc0830336ab34cf6",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 23,
+            "endLine": 23
+          }
+        },
+        {
+          "id": "prt_g0VXpVU8M00bMrcbsUIO",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "fb352640e451a73b25f5cffd09c450f617f32d839a3870e49e792ea7459b5613",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        {
+          "id": "prt_g0VXpVU8T001Zd1QCAAM",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "364b7d330d80b4c45853efa6bb6be5b2f746fa467c75afe45774de58adea9cbf",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-context-347-live-02\\project\\资料\\实验方案乙\\来源审阅记录_相同名称与不同行号.md",
+      "expectedMatches": 2,
+      "parts": [
+        {
+          "id": "prt_g0VXpVU5900dxByKa312",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "b755e10137f538a45e579369f06aab1b7a70dc1b945ab12ec8398d0802f6b6c7",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        },
+        {
+          "id": "prt_g0VXpVU5I00Lsl8enyyk",
+          "messageID": "msg_g0VXpVSHg00NGMNaBl70",
+          "sourceId": "b2d97372e781cfb1d74d908d7968d3962257f0fdd876045c8d0bcbd279c0e386",
+          "title": "来源审阅记录_相同名称与不同行号.md",
+          "range": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ]
+    }
+  ],
+  "sourceCount": 26,
+  "clipboard": {
+    "actual": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-context-347-live-02\\project\\资料\\实验方案甲\\来源审阅记录_相同名称与不同行号.md:20",
+    "expectedFile": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-context-347-live-02\\project\\资料\\实验方案甲\\来源审阅记录_相同名称与不同行号.md",
+    "line": 20
+  },
+  "served": [
+    {
+      "path": "/ui/assets/main-Cm-evkKa.js",
+      "status": 200
+    },
+    {
+      "path": "/ui/assets/main-DbppdFkA.js",
+      "status": 200
+    }
+  ],
+  "fileHttp": [
+    {
+      "path": "/file/source-content",
+      "status": 200
+    },
+    {
+      "path": "/file/source-content",
+      "status": 200
+    }
+  ],
+  "ui": "Eight actual screenshots manually reviewed; no UI assertions",
+  "limits": [
+    "Current Side chat completed Source group",
+    "No attachment/custom-title/POSIX visual sample",
+    "No full-frame subagent Rendering claim"
+  ]
+}

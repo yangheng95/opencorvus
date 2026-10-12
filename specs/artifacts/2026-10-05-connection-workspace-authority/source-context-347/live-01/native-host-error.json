@@ -1,0 +1,14 @@
+{
+  "occurrence": "source-context-347-live-01-07eddb80-395e-41d8-be70-371e7fb1bec9",
+  "outcome": "failed",
+  "host": {
+    "pid": 51816,
+    "processInstanceID": "win32:639273971780055316",
+    "occurrenceID": "e1cd7b6e-e0eb-422f-bf94-0f7b144a51b5"
+  },
+  "phase": "spawn-admission",
+  "observedAtUtc": "2026-10-12T10:19:39.140Z",
+  "errorType": "Error",
+  "message": "Cargo failed to build the Windows process supervisor helper (exit=1, signal=null)\nerror: rustup could not choose a version of cargo to run, because one wasn't specified explicitly, and no default is configured.\nhelp: run 'rustup default stable' to download the latest stable release of Rust and set it as your default toolchain.",
+  "authority": "Failed Host observation/admission/settlement; no physical completion claim"
+}
