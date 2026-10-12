@@ -1,0 +1,60 @@
+[
+  {
+    "stage": "01",
+    "originalBytes": 4635338,
+    "archiveBytes": 130367,
+    "expandedBytesEqualOriginal": true,
+    "credentialMatches": 0,
+    "providerRequests": 12,
+    "sessions": [
+      {
+        "id": "ses_hMrHxCQwogPlTUzkfSxs",
+        "projectID": "prj_h7WOLtoTI9F1GWWCu9eU",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSClm1rzzDPRXSERj4",
+        "projectID": "prj_h4CyP8NMUIKuoeb8FVSw",
+        "parentID": null
+      },
+      {
+        "id": "ses_-zUSCllEszz7Du3ZFFqc",
+        "projectID": "prj_h4CyP8NMUIKuoeb8FVSw",
+        "parentID": "ses_-zUSClm1rzzDPRXSERj4"
+      },
+      {
+        "id": "ses_hWhhXEgXRTv0CaPIXuDr",
+        "projectID": "prj_h4CyP8NMUIKuoeb8FVSw",
+        "parentID": "ses_-zUSCllEszz7Du3ZFFqc"
+      }
+    ],
+    "sources": [
+      {
+        "id": "prt_g0VXnEOKh00sbOwz4Nuf",
+        "sourceId": "88f9b4b8d22a5b83cf9031b3eeaff8f13d0a468da93e0e87e1f89110a2bf15e7",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnEOKm00EnUAiiii9",
+        "sourceId": "cc8ea7cd11e787b5dcf1ab70e0d45e8af531ee983988bdeed5f4617f2d3db652",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnEOKo00VNGQPaTw7",
+        "sourceId": "079467d3746d44417944a7b650b0c196b466267add3191e0975dde5f59cb61c3",
+        "title": "source-review.md"
+      },
+      {
+        "id": "prt_g0VXnEaAJ00C1FxTuZRR",
+        "sourceId": "7d57976d1f413cc15d4e0bf59cf63edc1920d78b9df4eb703e75d62b29e4c86b",
+        "title": "URL() - Web API | MDN",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/URL/URL#%E5%8F%82%E6%95%B0"
+      },
+      {
+        "id": "prt_g0VXnEluL00SxS5h6mjl",
+        "sourceId": "0d6b825cf9bccf8bbf22ea1cd0eadd81ba4e746782cf51931839430c6f8e7aae",
+        "url": "https://zh.wikipedia.org/w/api.php?action=query&format=json&utf8=1&prop=extracts&explaintext=1&titles=%E5%8C%97%E4%BA%AC%E5%B8%82"
+      }
+    ]
+  }
+]
