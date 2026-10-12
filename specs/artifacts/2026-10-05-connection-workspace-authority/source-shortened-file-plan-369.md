@@ -1,0 +1,39 @@
+# 369 历史来源与已缩短文件的编辑定位
+
+## Recall
+
+用户要求持续自主改善Sources/UI/功能，最新只用单agent。368已提交并正常push318438947a11395bb4e74ca67c22cbc17ba7170f，原8560 exit0，当前HEAD/upstream0/0、工作区clean。Unicode代码引用真实Main/Side、11图、9Source/9Sol流式EOF、18369原91532exit0、221188ms Native/output/request/配对清除全部完成。367列导航f51c1ba9d的原12请求预算失败单独保留，359首次复制未知未宣称修复。所有367/368运行者与页面已闭合，无新开发agent。
+
+后续代码检查发现候选：当前resolveRevealTarget用`startLine <= documentLines`判断settled；当历史Source行数超出后来缩短的真实文件时，它会一直返回false。CodeEditor因此不保存revealedIdentity，而本地value变化和ResizeObserver又请求reveal，将光标重设到夹取的末行。该问题尚无实页复现，不从代码候选提前宣布用户可观察失败或修改生产。
+
+已读CodeEditor完整输入/reveal/值应用/observer/销毁，code-editor-theme位置与band合同，FileEditorPane读取/加载/错误/渲染及内容/dirty归属，所有四处CodeEditor生产调用（其余CodeArtifact/FilePreviewArtifact/NotebookArtifact不传lineRange）、animation-frame唯一frame/coalesce/cancel实现，SourceParts打开及file-workbench范围/revision，367/368Recall、当前07-panel架构与源码搜索结果。全仓搜resolveRevealTarget/CodeEditorRevealTarget/revealHighlightLines只有当前实现和一个调用；当前检索没有相关UI自动化测试，禁止新增或运行。
+
+## 深度与影响分析
+
+当前可观察证据只限代码：唯一传递lineRange的FileEditorPane在`!loading()`和成功textContent时才挂CodeEditor，输入已经是真实内容；长度不足并不是加载状态。旧代码为异步加载早定位设计的settled推断如今与真实加载owner重复，可能把合法短文件永久当成等待。新内容到达和本地draft更新都经过同一value effect，引用身份未结束就会抢回光标。直接触发为“旧来源越界＋真实短文件＋第一次打开后的本地输入或布局变更”。缺少实页光标和实际文件变化时间线证据，先验证。
+
+候选影响限同一UI CodeEditor引用定位：Main/Side/子会话Source与正文入口均经唯一workbench；只读文件可能受布局重定位影响，普通可编辑文件可能打断输入。Markdown代码/Notebook/文本artifact未传range，按代码排除本候选。数据库历史Source应保留原行，不得篡改；文件磁盘变化只发生在本轮自建隔离项目，原作者文件和变化后文件都归档，绝不改历史367/368项目。没有Task/Mission/Session调度/队列/恢复控制流改变；本地requestAnimationFrame只有既有浏览器布局coalesce/cancel，不引入运行时调度修复。若出现后端调度异常，立即全入口/轮次/终态/重试恢复/串并行/多项目审计。
+
+如果真实复现，修复候选为让已提供真实文档的引用一次性定位到夹取位置后完成当前reveal身份；加载由现FileEditorPane唯一owner承担，删除长度作为loading代理的settled字段/注释，保留现可见性与布局稳定等待、revealRevision重复打开、列边界和行band。需先以实页确认输入被抢，再落盘最终决定，不能仅删除条件碰运气。若不能复现，不改生产，记录未知继续调查。无API/SDK/配置/DB迁移。
+
+## 两阶段真实验收
+
+第一阶段scope source-shortened-file-369-before/18370：固定600000ms NativeService、12累计请求，完整auth/models配对与独立usable/projected/actual gpt-6.1-sol streaming验证。准备40行真实文件，第40行含MATCH369，Main实际search_code产生40行Source并自然结束。工具完成后，仅将同一已核实owned路径更新为两行短文件，保存修改前后完整字节与时间；canonical Source不改。通过真实Sources首次打开，确认末行夹取。手动Ctrl+Home输入单字符、截图与只读DOM选择位置辅助，继续单字符观察实际插入位置；不注入页面状态，不保存无关文件。保存全部失败和截图。
+
+先关闭自己的页面/唯一shutdown/原launcher实际join并完成Native/output/request/port/pair清除，再决定实施。若需修复，先build/type，第二阶段使用另一个事先声明的独立after scope/18371，同样固定600000ms和12请求、独立真实新来源重复上述路径；不重开或延长before，不覆盖其失败证据。除此需实际普通有效引用、重复打开与隐藏返回对照，所有UI结果亲自看图；不以DOM/类型/数据checker代替视觉，不添加UI自动化。纯UI定位逻辑不增加renderer测试。
+
+全部原运行闭合后归档规范Source/生产ToolOutcome/Provider/HTTP/文件与人工截图；同步spec根/目录/月索引并跑当前docs检查；范围提交、fresh fetch/merge和完整待推审查、正常push。不可发布/tag/新branch/worktree，goal持续active。
+
+## 改前实页证实与最终方案
+
+before18370/page188原11707：真实search_code完成并持久化40:10来源后，经SQLite确认同一source与会话stop才修改隔离自建文件为两行，修改前后完整字节/原Source时间身份存owned-file-change。01原Source、02首次打开夹取末行，03 Ctrl+Home在首行offset0，04输入x后首行文字x顶部可编辑。但DOM实际选择位置已末行offset5；05随后输入y实际成为末尾记录。y。五截图全部亲自查看，完整UI失败已证实，未保存草稿到磁盘或变更canonical历史。
+
+最终执行既有候选：删除CodeEditorRevealTarget.settled（无外部调用、仅一个内部消费者），所有有效且可见已加载文档完成当前reveal身份；现FileEditorPane loading/textContent唯一owner已保证载入资格。重写旧注释，保留value effect在真实新值/范围身份变动时调度，但已完成身份不会抢回输入。隐藏/布局等待和revision重复打开保留。没有修浏览器frame调度实现，更没有Task/Mission/Session控制改变；本故障来源是UI状态代理错误，证据链由value→CodeEditor reveal→selection dispatch闭合。
+
+改前页面关闭、唯一shutdown及原11707 join实际exit0，NativeService实际5EOF闭合通过；该资格仅运行边界，UI失败05保留。正式修改已删除长度settled代理，原5785类型exit0、原78183build exit0 53.12s（main-BR2lLe8z.js）。after普通有效引用对照将于短文件输入/重复导航完成后撤销本地草稿、关闭当前文件，再将自己同一磁盘文件从已核实shortened字节恢复原40行，保存恢复事实并通过原Source重新加载40:10；不新增模型轮次或修改Source。恢复前后的两份全文及原输入序列均保留。
+
+## 改后实页与闭合
+
+after03在首行输入x后光标offset1，04输入y后首行xy且offset2；05重复Source回末行，06隐藏重开保持草稿并按显式请求回末行；两个Undo恢复短文件无dirty，关闭文件并经精确shortened字节检查恢复自己原40行，再用原Source加载，07在40行offset9。共before5+after7=12图均亲自查看，无UI断言/自动化。未保存局部xy草稿；after原文件恢复全字节、before短文件全字节与变化事实分别保留。
+
+before11707/after17567原launcher实际join均exit0；各5实际Sol流式EOF，Native分别147137/187296ms，两个页面188/189均关闭，独立固定deadline不变、物理/output/request/端口/配对清除通过。两个实际Source从生成、模型stop、磁盘缩短到最终SQLite整条记录保持一致，生产ToolOutcome与原40行全文对应，真实checker exit0。Native资格不替代before UI失败。文档索引、docs/architecture检查和范围Git交付继续；goal active，未新增agent。

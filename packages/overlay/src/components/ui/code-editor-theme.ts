@@ -27,12 +27,6 @@ export interface CodeEditorRevealTarget {
   anchorLine: number
   /** 1-based last line of the cited range, clamped to the document. */
   endLine: number
-  /**
-   * Whether the document already contains the cited start line. A reveal
-   * computed against a document that is still loading is deliberately *not*
-   * final, so the caller must re-run it — never latch it — once text arrives.
-   */
-  settled: boolean
 }
 
 // A whole-file citation (a plain `read` of a short file cites lines 1..N) points
@@ -56,7 +50,6 @@ export function resolveRevealTarget(
   return {
     anchorLine: Math.min(startLine, documentLines),
     endLine: Math.min(endLine, documentLines),
-    settled: startLine <= documentLines,
   }
 }
 

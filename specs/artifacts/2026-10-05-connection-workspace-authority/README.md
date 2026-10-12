@@ -809,3 +809,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [文件来源精确列定位367](source-column-367/README.md) / [Recall](source-column-plan-367.md)。
 
 - [Unicode文件引用368](source-unicode-reference-368/README.md) / [Recall](source-unicode-reference-plan-368.md)。
+
+- [历史来源与短文件光标369](source-shortened-file-369/README.md) / [Recall](source-shortened-file-plan-369.md)。

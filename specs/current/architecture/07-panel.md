@@ -860,8 +860,11 @@ Source range is also the SDK, workbench and editor range contract; Markdown
 `path:line:column` references retain their parsed column through that same path.
 Navigation retains the column through repeated and hidden-editor reveals,
 clamping to current line content and complete surrogate boundaries. Line-only
-and multiline sources retain their existing line reveal semantics. Full source
-locations include a supplied column; compact badges show columns beyond one.
+and multiline sources retain their existing line reveal semantics. Source
+navigation completes at the clamped location when a file has become shorter;
+the file pane owns content-loading readiness, while later draft edits retain
+the user's cursor. An out-of-range historical line is not a loading signal.
+Full source locations include a supplied column; compact badges show columns beyond one.
 File tooltips expose this preview on pointer hover or keyboard focus, with a
 localized excerpt label and four-line visual limit. Exact file/range activation
 provides the full original content. This preview keeps the compact citation row;

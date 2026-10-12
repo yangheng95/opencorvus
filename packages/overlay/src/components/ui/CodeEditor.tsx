@@ -62,12 +62,11 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
    * `startLine`..`endLine` turned the common whole-file citation (a plain
    * `read` cites lines 1..N) into "select the entire document", which is
    * indistinguishable from no jump at all, so the cursor lands on the start
-   * line and the range is banded instead.
+   * line (and supplied column) and the range is banded instead.
    *
-   * The reveal is recorded as done only once the document actually holds the
-   * cited line. Latching earlier is what made jumps vanish: a reveal computed
-   * while the file was still loading clamped onto line 1 of an empty document
-   * and then refused to run again when the text finally arrived.
+   * The file pane mounts this editor after content loading completes. An old
+   * citation may exceed a file's current length; its clamped location still
+   * completes this navigation, allowing subsequent input to keep its cursor.
    */
   const revealLineRange = () => {
     const editor = view
@@ -102,7 +101,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     // scroll effect would otherwise resolve against a zero-height scroller.
     editor.requestMeasure()
     editor.focus()
-    if (target.settled) revealedIdentity = identity
+    revealedIdentity = identity
   }
 
   const revealAfterMeasure = createAnimationFrameScheduler(revealLineRange)
@@ -205,9 +204,8 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     applyingExternalValue = false
   })
 
-  // Declared after the value effect so a reveal always runs against the text
-  // that effect has already applied — tracking `value` is what lets a citation
-  // that arrived before its file content still land on the cited line.
+  // Apply navigation against the synchronized value. A completed reveal keeps
+  // its identity through later draft edits, so typing owns the cursor again.
   createEffect(() => {
     void local.path
     void local.value

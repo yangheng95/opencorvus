@@ -1,0 +1,143 @@
+{
+  "results": [
+    {
+      "stage": "before",
+      "handle": 11707,
+      "launcherExit": 0,
+      "sourceID": "9578ac924023bc311241fbb1514148c53fa9de96246c8ec8d968f981b64855f8",
+      "sourcePartID": "prt_g0VXsduMF00f9b6FxFy5",
+      "sessionID": "ses_-zUS7M6yNzzkR6fL16rf",
+      "range": {
+        "startLine": 40,
+        "endLine": 40,
+        "startColumn": 10
+      },
+      "originalFileChars": 286,
+      "finalFileChars": 12,
+      "fileChangeAt": "2026-10-12T23:19:07.034Z",
+      "completedReplyAt": 1791847123588,
+      "providerRequests": 5,
+      "elapsedMs": 147137,
+      "qualified": {
+        "physicalCompletion": true,
+        "providerEOFRequests": 5,
+        "providerUserCancelledRequests": 0,
+        "cancellation": null,
+        "qualification": "NativeService",
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned"
+      },
+      "settled": {
+        "occurrence": "source-shortened-file-369-before-e40910ef-d0f3-4007-8979-b7889421e0df",
+        "outcome": "settled",
+        "host": {
+          "pid": 17800,
+          "processInstanceID": "win32:639274438653877336",
+          "occurrenceID": "3c732e11-fcca-4fef-a2d4-0b4edd863c8a"
+        },
+        "target": {
+          "pid": 80364,
+          "processInstanceID": "win32:639274438661626599",
+          "occurrenceID": "9874bcd8-85b0-43c4-aee1-71f9b393f67b"
+        },
+        "observedAtUtc": "2026-10-12T23:20:13.299Z",
+        "deadlineAt": 1791847665371,
+        "terminal": {
+          "occurrenceID": "source-shortened-file-369-before-e40910ef-d0f3-4007-8979-b7889421e0df",
+          "pid": 80364,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T23:18:26.420Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "85053756-0d6c-4997-ad74-7a4515c026ee",
+          "method": "GET",
+          "path": "/ui/assets/main-aBfB0VSj.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 8
+        },
+        "message": "request"
+      }
+    },
+    {
+      "stage": "after",
+      "handle": 17567,
+      "launcherExit": 0,
+      "sourceID": "ed8a59ecf866f04711b52b1fcb974d233e3501a31dfdd48cf72fba89e225a0da",
+      "sourcePartID": "prt_g0VXsf1aO00D6INh19LC",
+      "sessionID": "ses_-zUS7L001zz3PUa1izIu",
+      "range": {
+        "startLine": 40,
+        "endLine": 40,
+        "startColumn": 10
+      },
+      "originalFileChars": 286,
+      "finalFileChars": 286,
+      "fileChangeAt": "2026-10-12T23:23:31.778Z",
+      "completedReplyAt": 1791847390262,
+      "providerRequests": 5,
+      "elapsedMs": 187296,
+      "qualified": {
+        "physicalCompletion": true,
+        "qualification": "NativeService",
+        "cancellation": null,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "providerUserCancelledRequests": 0,
+        "providerEOFRequests": 5
+      },
+      "settled": {
+        "occurrence": "source-shortened-file-369-after-46da7ecf-6959-4d43-b33e-c35bc4462326",
+        "outcome": "settled",
+        "host": {
+          "pid": 80872,
+          "processInstanceID": "win32:639274441338921091",
+          "occurrenceID": "d95ea7bb-61fd-41dc-ab97-eaf43bbffcbd"
+        },
+        "target": {
+          "pid": 73212,
+          "processInstanceID": "win32:639274441346785233",
+          "occurrenceID": "79df80f8-3cdc-4fb8-926d-0f0a5d1e2780"
+        },
+        "observedAtUtc": "2026-10-12T23:25:21.974Z",
+        "deadlineAt": 1791847933877,
+        "terminal": {
+          "occurrenceID": "source-shortened-file-369-after-46da7ecf-6959-4d43-b33e-c35bc4462326",
+          "pid": 73212,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T23:22:51.773Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "8cc7346c-08c9-468f-b0d6-0d2ce008d841",
+          "method": "GET",
+          "path": "/ui/assets/main-BR2lLe8z.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5
+        },
+        "message": "request"
+      }
+    }
+  ],
+  "boundary": "Real canonical Source, completed ToolOutcome and reply precede owned file mutation; exact original Source remains after file mutation. Before disk remains shortened, after restored original for ordinary-reference control. Native qualification is separate from manual UI failure before and success after. No DOM/render/pixel assertions."
+}

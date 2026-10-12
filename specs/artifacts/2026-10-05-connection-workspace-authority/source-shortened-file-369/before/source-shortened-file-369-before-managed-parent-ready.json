@@ -1,0 +1,15 @@
+{
+  "pid": 80364,
+  "occurrence": "source-shortened-file-369-before-e40910ef-d0f3-4007-8979-b7889421e0df",
+  "owner": {
+    "pid": 80364,
+    "processInstanceID": "win32:639274438661626599",
+    "occurrenceID": "b33d93a7-6a84-4a23-a878-fa57f57b971a"
+  },
+  "parent": {
+    "pid": 75272,
+    "processInstanceID": "win32:639274438661202028",
+    "occurrenceID": "293586d1-b212-4acb-8477-30225720ab9f"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
