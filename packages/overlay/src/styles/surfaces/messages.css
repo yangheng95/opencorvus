@@ -1052,6 +1052,11 @@
   padding-block-start: var(--ui-gap-sm);
 }
 
+.msg-sources__collapse.oc-button {
+  --oc-button-color: var(--text-muted);
+  margin-block-start: var(--ui-gap-sm);
+}
+
 .msg-source-chip {
   appearance: none;
   display: inline-flex;
@@ -1757,7 +1762,7 @@ button.msg-source-chip .msg-source-chip__detail,
   position: absolute;
   inset: 0;
   overflow: clip;
-  line-height: 1;
+  line-height: var(--ui-line-height-flat);
   text-align: initial;
   text-size-adjust: none;
   -webkit-text-size-adjust: none;

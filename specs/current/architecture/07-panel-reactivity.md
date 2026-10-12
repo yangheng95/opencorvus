@@ -319,6 +319,12 @@ existing nearest transcript owner, releasing automatic following. Native Tooltip
 and source actions retain their keyboard behavior; an explicit return to the
 bottom can resume following through the existing scroll policy.
 
+An expanded group also exposes a compact collapse action after its last leaf.
+It closes the same disclosure state, declares reading intent, returns focus to
+the original summary and brings the collapsed source group into view. The native
+details keeps one summary; the trailing action is an ordinary Button, without a
+second expansion authority or asynchronous scroll restoration.
+
 An expanded web-source leaf shows its full wrapping title and a secondary host
 derived directly from that same canonical URL, including any port. The URL
 remains the link target and full Tooltip detail; a title/provider is never used

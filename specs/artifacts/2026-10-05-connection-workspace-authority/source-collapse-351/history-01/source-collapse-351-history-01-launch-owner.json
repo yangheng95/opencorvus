@@ -1,0 +1,35 @@
+{
+  "targetBirthAtMs": 1791810583436,
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-collapse-351\\history-01",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-collapse-351-history-01\\runtime",
+  "nativeDeadlineAt": 1791811182463,
+  "nativeTarget": {
+    "pid": 77072,
+    "processInstanceID": "win32:639274073834363019",
+    "occurrenceID": "97a0d781-7e05-47a6-9a14-b7f4f0070871"
+  },
+  "evidencePrefix": "source-collapse-351-history-01",
+  "port": 18330,
+  "owner": {
+    "ProcessId": 77072,
+    "processInstanceID": "win32:639274073834363019"
+  },
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\child-dense-348-live-01\\project",
+  "host": {
+    "pid": 64356,
+    "processInstanceID": "win32:639274073825695549",
+    "occurrenceID": "fed357c7-a93b-4c62-ab1d-ccbec9d39638"
+  },
+  "observedProcessChain": [
+    {
+      "pid": 77072,
+      "processInstanceID": "win32:639274073834363019",
+      "occurrenceID": "97a0d781-7e05-47a6-9a14-b7f4f0070871"
+    }
+  ],
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-collapse-351-history-01\\evidence",
+  "occurrence": "source-collapse-351-history-01-10166fc3-60fd-4bbb-83e5-72342847cd47",
+  "authorityStaging": "None; no model Task requested",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-12\\source-collapse-351-history-01"
+}

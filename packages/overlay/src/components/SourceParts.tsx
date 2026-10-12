@@ -420,13 +420,15 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
 }
 
 export function SourceParts(props: { sources: ConversationSourcePart[] }) {
+  let group!: HTMLDivElement
+  let trigger!: HTMLElement
   const key = () => {
     const first = props.sources[0]
     return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
   }
   const expanded = () => cardExpanded(key(), false)
   return (
-    <div class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
+    <div ref={group} class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
       <Key each={props.sources.slice(0, 1)} by={sourceIdentity}>
         {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} omitDirectoryCaption={false} />}
       </Key>
@@ -437,6 +439,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
           onOpenChange={(open) => setCardExpanded(key(), open)}
         >
           <Disclosure.Trigger
+            ref={trigger}
             class="msg-sources__heading"
             onClick={(event) => {
               if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
@@ -458,6 +461,22 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
                 )}
               </Key>
             </Disclosure.Content>
+            <Button
+              type="button"
+              class="msg-sources__collapse"
+              variant="ghost"
+              size="mini"
+              tone="neutral"
+              onClick={(event) => {
+                pauseAutoScrollForReading(event.currentTarget)
+                setCardExpanded(key(), false)
+                trigger.focus({ preventScroll: true })
+                group.scrollIntoView({ block: "nearest", inline: "nearest" })
+              }}
+            >
+              <Icon name="chevron-up" size="compact" />
+              {t("chat.collapse_sources")}
+            </Button>
           </Show>
         </Disclosure.Root>
       </Show>

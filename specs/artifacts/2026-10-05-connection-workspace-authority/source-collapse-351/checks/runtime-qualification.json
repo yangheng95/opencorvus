@@ -1,0 +1,120 @@
+{
+  "checkedAt": "2026-10-12T13:21:11.653Z",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-12/child-dense-348-live-01",
+  "runs": [
+    {
+      "suffix": "01",
+      "initialHandle": 55760,
+      "launcherExitCode": 0,
+      "settled": {
+        "occurrence": "source-collapse-351-history-01-10166fc3-60fd-4bbb-83e5-72342847cd47",
+        "outcome": "settled",
+        "host": {
+          "pid": 64356,
+          "processInstanceID": "win32:639274073825695549",
+          "occurrenceID": "fed357c7-a93b-4c62-ab1d-ccbec9d39638"
+        },
+        "target": {
+          "pid": 77072,
+          "processInstanceID": "win32:639274073834363019",
+          "occurrenceID": "97a0d781-7e05-47a6-9a14-b7f4f0070871"
+        },
+        "observedAtUtc": "2026-10-12T13:11:12.084Z",
+        "deadlineAt": 1791811182463,
+        "terminal": {
+          "occurrenceID": "source-collapse-351-history-01-10166fc3-60fd-4bbb-83e5-72342847cd47",
+          "pid": 77072,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 88648,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T13:09:55.190Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "523f7096-b2d0-42ec-9c46-6dacb416bc10",
+          "method": "GET",
+          "path": "/ui/assets/main-Byx48Ve-.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3
+        },
+        "message": "request"
+      },
+      "sourceMessages": 13,
+      "sourceProviderRequests": 17,
+      "newProviderRequests": 0,
+      "sources": 66,
+      "identity": "Complete Message rows, Provider request identities and Source rows equal closed original after actual UI interaction"
+    },
+    {
+      "suffix": "02",
+      "initialHandle": 68603,
+      "launcherExitCode": 0,
+      "settled": {
+        "occurrence": "source-collapse-351-history-02-25a0c85a-a456-4d15-8caa-37e107cf2439",
+        "outcome": "settled",
+        "host": {
+          "pid": 38304,
+          "processInstanceID": "win32:639274078504975042",
+          "occurrenceID": "726a1671-c80f-49cc-87e8-288c39be1254"
+        },
+        "target": {
+          "pid": 73416,
+          "processInstanceID": "win32:639274078514205565",
+          "occurrenceID": "caf12981-81b6-4121-8944-ba624ce4aec5"
+        },
+        "observedAtUtc": "2026-10-12T13:19:50.421Z",
+        "deadlineAt": 1791811650396,
+        "terminal": {
+          "occurrenceID": "source-collapse-351-history-02-25a0c85a-a456-4d15-8caa-37e107cf2439",
+          "pid": 73416,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "elapsedMs": 139001,
+      "served": {
+        "level": "info",
+        "time": "2026-10-12T13:17:45.687Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "e2ed95e4-88fb-47dc-ac82-5df4757f2c62",
+          "method": "GET",
+          "path": "/ui/assets/main-qcEW9nAj.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 4
+        },
+        "message": "request"
+      },
+      "sourceMessages": 13,
+      "sourceProviderRequests": 17,
+      "newProviderRequests": 0,
+      "sources": 66,
+      "identity": "Complete Message rows, Provider request identities and Source rows equal closed original after actual UI interaction"
+    }
+  ],
+  "visualQualification": "Root manually reviewed eight actual screenshots, mouse collapse, native Space reopen, Tab focus and Return collapse, and dock return. Readonly geometry is explanatory only; no UI automation assertions.",
+  "limits": [
+    "Historical current Task, no new continuous generation sample",
+    "No new original Research Studio209-source history",
+    "Main/Side, single remaining Source and source snippets not independently visually sampled",
+    "PDF equivalent line-height token has no independent PDF screenshot",
+    "No Tauri window interaction"
+  ]
+}
