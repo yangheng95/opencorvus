@@ -5,7 +5,7 @@ import { Feedback } from "../ui/Feedback"
 // via the opencorvus config system (PATCH /config → provider field).
 
 import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
-import { t } from "../../utils/i18n"
+import { t, tc } from "../../utils/i18n"
 import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
 import { updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
@@ -120,7 +120,7 @@ export default function ProvidersPanel() {
   const [providerSearch, setProviderSearch] = createSignal("")
   const [expandedCatalogProviderID, setExpandedCatalogProviderID] = createSignal("")
   const [discoveringModels, setDiscoveringModels] = createSignal(false)
-  const [formNotice, setFormNotice] = createSignal<string | null>(null)
+  const [discoveredModelCount, setDiscoveredModelCount] = createSignal<number | null>(null)
 
   function providerLoadOptions(directory = activeDirectory().trim(), authority = captureApiAuthority()) {
     const selectionEpoch = boardStore.selectEpoch
@@ -407,7 +407,7 @@ export default function ProvidersPanel() {
   function invalidateDiscovery() {
     discoveryRevision += 1
     setDiscoveringModels(false)
-    setFormNotice(null)
+    setDiscoveredModelCount(null)
   }
 
   function currentFormValues(): ProviderFormValues {
@@ -489,7 +489,7 @@ export default function ProvidersPanel() {
     setFormDirectory(null)
     setFormInitialValues(null)
     setFormError(null)
-    setFormNotice(null)
+    setDiscoveredModelCount(null)
   }
 
   function startAdd() {
@@ -514,7 +514,7 @@ export default function ProvidersPanel() {
     setEditing(id)
     setShowAdd(true)
     setFormError(null)
-    setFormNotice(null)
+    setDiscoveredModelCount(null)
   }
 
   function sanitizeProviderId(value: string): string {
@@ -544,7 +544,7 @@ export default function ProvidersPanel() {
   async function handleDiscoverModels() {
     if (discoveringModels()) return
     setFormError(null)
-    setFormNotice(null)
+    setDiscoveredModelCount(null)
     const directory = formDirectory()
     if (directory === null) {
       setFormError(t("provider.form.error.scope_missing"))
@@ -588,7 +588,7 @@ export default function ProvidersPanel() {
         return
       }
       setFormModels(result.models.join("\n"))
-      setFormNotice(t("provider.form.discover.success", { count: result.count }))
+      setDiscoveredModelCount(result.count)
     } catch (e) {
       if (ownsResponse()) setFormError(t("provider.form.discover.failed", { reason: describeFailure(e) }))
     } finally {
@@ -599,7 +599,7 @@ export default function ProvidersPanel() {
   async function handleSave() {
     if (saving()) return
     setFormError(null)
-    setFormNotice(null)
+    setDiscoveredModelCount(null)
     const directory = formDirectory()
     const initial = formInitialValues()
     if (directory === null) {
@@ -912,48 +912,49 @@ export default function ProvidersPanel() {
     setEditing(null)
   }
 
-  const providerEntries = createMemo(() =>
-    Object.entries(configProviders())
-      .map(([id, provider]) => {
-        const modelIds = providerModelIds(provider.models)
-        const canAuthenticate = providerAuthMethods(id).length > 0
-        const status = canAuthenticate ? providerState(id) : null
-        const statusText = status
-          ? status.label === status.detail
-            ? status.label
-            : `${status.label}: ${status.detail}`
-          : ""
-        const modelOverflowText = hasMoreModels(modelIds)
-          ? t("provider.models.more", { count: modelIds.length - VISIBLE_MODEL_SUMMARY_LIMIT })
-          : ""
-        return {
-          id,
-          provider,
-          name: provider.name || id,
-          envText: provider.env?.join(", ") || "",
-          modelIds,
-          modelCountText: t("provider.models.count", { count: modelIds.length }),
-          modelSummaryText: modelSummary(modelIds),
-          modelOverflowText,
-          canAuthenticate,
-          status,
-          statusText,
-        }
-      })
-      .filter((row) =>
-        providerMatchesSearch([
-          row.id,
-          row.name,
-          row.provider.api,
-          row.envText,
-          row.modelCountText,
-          row.modelSummaryText,
-          row.modelOverflowText,
-          row.statusText,
-        ]),
-      ),
+  const unfilteredProviderEntries = createMemo(() =>
+    Object.entries(configProviders()).map(([id, provider]) => {
+      const modelIds = providerModelIds(provider.models)
+      const canAuthenticate = providerAuthMethods(id).length > 0
+      const status = canAuthenticate ? providerState(id) : null
+      const statusText = status
+        ? status.label === status.detail
+          ? status.label
+          : `${status.label}: ${status.detail}`
+        : ""
+      const modelOverflowText = hasMoreModels(modelIds)
+        ? t("provider.models.more", { count: modelIds.length - VISIBLE_MODEL_SUMMARY_LIMIT })
+        : ""
+      return {
+        id,
+        provider,
+        name: provider.name || id,
+        envText: provider.env?.join(", ") || "",
+        modelIds,
+        modelCountText: tc("provider.models.count", modelIds.length),
+        modelSummaryText: modelSummary(modelIds),
+        modelOverflowText,
+        canAuthenticate,
+        status,
+        statusText,
+      }
+    }),
   )
-  const catalogEntries = createMemo(() => {
+  const providerEntries = createMemo(() =>
+    unfilteredProviderEntries().filter((row) =>
+      providerMatchesSearch([
+        row.id,
+        row.name,
+        row.provider.api,
+        row.envText,
+        row.modelCountText,
+        row.modelSummaryText,
+        row.modelOverflowText,
+        row.statusText,
+      ]),
+    ),
+  )
+  const unfilteredCatalogEntries = createMemo(() => {
     const custom = new Set(Object.keys(configProviders()))
     return catalogProviders()
       .filter((p: any) => p && typeof p.id === "string" && !custom.has(p.id))
@@ -964,7 +965,7 @@ export default function ProvidersPanel() {
         return {
           id: p.id,
           name: p.name || p.id,
-          modelCountText: t("provider.models.count", { count: modelCount }),
+          modelCountText: tc("provider.models.count", modelCount),
           authMethods: providerAuthMethods(p.id).length,
           status,
           statusText: status
@@ -974,13 +975,17 @@ export default function ProvidersPanel() {
             : "",
         }
       })
-      .filter((row) => providerMatchesSearch([row.id, row.name, row.modelCountText, row.statusText]))
       .sort(
         (left, right) =>
           Number(Boolean(right.status)) - Number(Boolean(left.status)) || left.name.localeCompare(right.name),
       )
   })
-  const totalProviderCount = createMemo(() => Object.keys(configProviders()).length + catalogProviders().length)
+  const catalogEntries = createMemo(() =>
+    unfilteredCatalogEntries().filter((row) =>
+      providerMatchesSearch([row.id, row.name, row.modelCountText, row.statusText]),
+    ),
+  )
+  const totalProviderCount = createMemo(() => unfilteredProviderEntries().length + unfilteredCatalogEntries().length)
   const visibleProviderCount = createMemo(() => providerEntries().length + catalogEntries().length)
   const hasProviderSearch = createMemo(() => providerSearch().trim().length > 0)
   const configuredProviderCount = createMemo(() => {
@@ -1393,7 +1398,9 @@ export default function ProvidersPanel() {
               />
             </TextField.Root>
 
-            <Show when={formNotice()}>{(msg) => <Feedback tone="success">{msg()}</Feedback>}</Show>
+            <Show when={discoveredModelCount() !== null}>
+              <Feedback tone="success">{tc("provider.form.discover.success", discoveredModelCount()!)}</Feedback>
+            </Show>
 
             <Show when={formError()}>{(msg) => <Feedback tone="error">{msg()}</Feedback>}</Show>
 

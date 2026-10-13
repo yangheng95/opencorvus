@@ -515,7 +515,10 @@
   "provider.form.advanced_id_pending": "auto",
   "provider.form.discover.button": "Discover models",
   "provider.form.discover.running": "Discovering…",
-  "provider.form.discover.success": "Discovered {{count}} models.",
+  "provider.form.discover.success": {
+    "one": "Discovered {{count}} model.",
+    "other": "Discovered {{count}} models."
+  },
   "provider.form.discover.failed": "Model discovery failed: {{reason}}",
   "provider.catalog_refresh.button": "Refresh providers",
   "provider.catalog_refresh.title": "Refresh the provider registry from models.dev.",
@@ -550,7 +553,10 @@
   "provider.label.api": "API",
   "provider.label.env": "Env",
   "provider.label.no_models": "none",
-  "provider.models.count": "{{count}} models",
+  "provider.models.count": {
+    "one": "{{count}} model",
+    "other": "{{count}} models"
+  },
   "provider.models.more": "+{{count}} more",
   "chat.git.commit": "Commit",
   "chat.git.message": "Message",
@@ -2175,7 +2181,10 @@
   "usage.empty_body": "Completed streamed API calls will appear here at their actual event time.",
   "usage.providers_title": "Providers",
   "usage.providers_description": "Measured Token share by Provider.",
-  "usage.models_count": "{{value}} models",
+  "usage.models_count": {
+    "one": "{{count}} model",
+    "other": "{{count}} models"
+  },
   "usage.no_provider_data": "No Provider usage for this period.",
   "usage.coverage_priced": "Priced Token",
   "usage.coverage_unpriced": "Unpriced Token",
@@ -2223,6 +2232,5 @@
   "project_runtime.interactive_delivery": "Interactive artifact",
   "settings.git_preferences": "Git",
   "settings.offer_git_init": "Offer Git initialization",
-  "settings.offer_git_init_hint": "When explicitly opening a non-Git directory, ask before creating a repository. Startup only reads existing state.",
-  "provider.models.count_one": "{{count}} model"
+  "settings.offer_git_init_hint": "When explicitly opening a non-Git directory, ask before creating a repository. Startup only reads existing state."
 }

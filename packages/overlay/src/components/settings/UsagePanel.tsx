@@ -9,7 +9,7 @@ import { useTooltipContext } from "@kobalte/core/tooltip"
 
 import { UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
 import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
-import { localeTag, t } from "../../utils/i18n"
+import { localeTag, t, tc } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { ListboxItem, ListboxItemDescription, ListboxRoot } from "../ui/Listbox"
@@ -606,7 +606,7 @@ export default function UsagePanel() {
                       <div class="usage-provider-row">
                         <div class="usage-provider-row__identity">
                           <strong>{provider.providerID}</strong>
-                          <span>{t("usage.models_count", { value: String(provider.modelCount) })}</span>
+                          <span>{tc("usage.models_count", provider.modelCount)}</span>
                         </div>
                         <div class="usage-provider-row__measure">
                           <span>

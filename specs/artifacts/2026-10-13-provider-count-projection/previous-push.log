@@ -1,0 +1,55 @@
+$ bun run check:sdk-imports && bun run check:ai-runtime && bun run check:expert-squad-types && bunx turbo run typecheck
+$ bun run ./script/check-sdk-imports.ts
+sdk import check passed (OpenCorvusClient)
+$ bun run ./script/check-ai-runtime.ts
+ai runtime check passed (ai v7, provider v4, provider-utils v5, OpenRouter v3)
+$ bunx tsc -p expert-squads/tsconfig.json
+• turbo 2.9.14
+
+   • Packages in scope: @opencorvus-ai/channel-config, @opencorvus-ai/channel-runtime, @opencorvus-ai/overlay, @opencorvus-ai/plugin, @opencorvus-ai/script, @opencorvus-ai/sdk, @opencorvus-ai/transport-protocol, @opencorvus-ai/util, @opencorvus/web, opencorvus
+   • Running typecheck in 10 packages
+   • Remote caching disabled
+
+@opencorvus-ai/util:typecheck: cache hit, replaying logs c79d5574caa63d7b
+@opencorvus-ai/util:typecheck: $ tsc --noEmit
+@opencorvus-ai/sdk:typecheck: cache hit, replaying logs 19a844d391a397f8
+@opencorvus-ai/sdk:typecheck: $ tsc --noEmit
+@opencorvus-ai/transport-protocol:typecheck: cache hit, replaying logs 520e42579f71028c
+@opencorvus-ai/transport-protocol:typecheck: $ tsc --noEmit
+@opencorvus-ai/plugin:typecheck: cache hit, replaying logs 4f3ea83980f0648d
+@opencorvus-ai/plugin:typecheck: $ tsc --noEmit
+opencorvus:typecheck: cache miss, executing e6882506c5ecd8cc
+@opencorvus-ai/overlay:typecheck: cache miss, executing 5be38c6782c8b30a
+@opencorvus-ai/channel-config:typecheck: cache hit, replaying logs 6fb6cfaefe574580
+@opencorvus-ai/channel-config:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-runtime:typecheck: cache hit, replaying logs e93a0041201004f1
+@opencorvus-ai/channel-runtime:typecheck: $ tsgo --noEmit
+opencorvus:typecheck: $ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+@opencorvus-ai/overlay:typecheck: $ tsc --noEmit
+
+ Tasks:    8 successful, 8 total
+Cached:    6 cached, 8 total
+  Time:    41.898s 
+
+$ bun run ./packages/opencorvus/script/check/routes.ts
+api:routes-check ok — 6 rules and route inventory clean across 35 files
+$ bun run ./packages/opencorvus/script/docs/render-api-md.ts --check
+docs:check ok (348 ops, 26 groups)
+$ bun run --cwd packages/opencorvus check:control-lease-owners
+$ bun run script/check/control-lease-owners.ts
+control lease owner check passed (18 owners, 22 acquire sites, all declared)
+$ bun run ./packages/opencorvus/script/check/architecture-index.ts
+architecture-index ok — 19 current documents indexed, every link live
+$ bun run ./packages/opencorvus/script/check/package-topology.ts
+package-topology ok — 10 workspace packages, no dependency or generation cycle, bun.lock inputs aligned
+$ bun run ./script/check-release-mutation-topology.ts --treeish "e080173922c92d7800ee3291f185ec18a0f4ae19"
+release-mutation-topology ok (e8614a0a8579) — 5 canonical authorities
+$ bun run ./packages/opencorvus/script/check/module-topology.ts --treeish "e080173922c92d7800ee3291f185ec18a0f4ae19"
+module-topology ok (treeish:e080173922c9) — 1148 modules, 5884 runtime edges, retained SCC sizes ; 4 clean imports passed
+[secret-scan] OK — 0 hits across tracked sources
+remote: 
+remote: GitHub found 4 vulnerabilities on yangheng95/opencorvus's default branch (2 moderate, 2 low). To find out more, visit:        
+remote:      https://github.com/yangheng95/opencorvus/security/dependabot        
+remote: 
+To https://github.com/yangheng95/opencorvus
+   0112199cd..e08017392  main -> main

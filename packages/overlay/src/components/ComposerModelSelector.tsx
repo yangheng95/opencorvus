@@ -21,7 +21,7 @@ import { openConfigDialog } from "../services/config-dialog-control"
 import { activeDirectory } from "../services/workspace"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { connectedModelOptions, providerAccountUsageCapability, providerLabel } from "../services/llm"
-import { localeTag, t } from "../utils/i18n"
+import { localeTag, t, tc } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
 import { matchesSearchParts } from "../services/text-search"
@@ -84,7 +84,10 @@ function runModelSelectorAction(label: string, action: () => void | Promise<void
   const authority = captureApiAuthority()
   const selectionEpoch = boardStore.selectEpoch
   const directory = activeDirectory().trim()
-  const owns = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch && activeDirectory().trim() === directory
+  const owns = () =>
+    isApiAuthorityCurrent(authority) &&
+    boardStore.selectEpoch === selectionEpoch &&
+    activeDirectory().trim() === directory
   try {
     void Promise.resolve(action()).catch((error) => {
       if (!owns()) return
@@ -316,8 +319,7 @@ export function ComposerModelSelector() {
   const selectedModel = createMemo(() => appStore.composerModel)
   const modelLabel = createMemo(() => {
     const selected = selectedModel()
-    if (!selected)
-      return t(boardStore.selectedSource ? "model_selector.model_choose" : "model_selector.model_inherit")
+    if (!selected) return t(boardStore.selectedSource ? "model_selector.model_choose" : "model_selector.model_inherit")
     return connectedModelOptions().find((option) => option.value === selected)?.modelLabel ?? selected
   })
   const accountUsage = createProviderAccountUsageState(selectedModel, taskID)
@@ -348,7 +350,10 @@ export function ComposerModelSelector() {
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = activeDirectory().trim()
-    const owns = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch && activeDirectory().trim() === directory
+    const owns = () =>
+      isApiAuthorityCurrent(authority) &&
+      boardStore.selectEpoch === selectionEpoch &&
+      activeDirectory().trim() === directory
     providerLoadsInFlight += 1
     setProviderLoading(true)
     try {
@@ -517,11 +522,7 @@ function ProviderModelGroup(props: ProviderModelGroupProps) {
           <span class="model-selector-popover-group-name oc-section-heading">{props.group.providerName}</span>
           <span class="model-selector-popover-group-id">{props.group.providerID}</span>
         </span>
-        <span class="model-selector-popover-group-count">
-          {t(options().length === 1 ? "provider.models.count_one" : "provider.models.count", {
-            count: options().length,
-          })}
-        </span>
+        <span class="model-selector-popover-group-count">{tc("provider.models.count", options().length)}</span>
       </div>
       <ListboxRoot<ModelOption>
         class="model-selector-listbox"
@@ -542,12 +543,7 @@ function ProviderModelGroup(props: ProviderModelGroupProps) {
         renderItem={(node) => {
           const option = node.rawValue as ModelOption
           return (
-            <ListboxItem
-              item={node}
-              class="model-selector-option"
-              data-model-value={option.id}
-              title={option.id}
-            >
+            <ListboxItem item={node} class="model-selector-option" data-model-value={option.id} title={option.id}>
               <span class="composer-picker-option-icon" aria-hidden="true">
                 <Icon name="config-agent-models" size="compact" />
               </span>

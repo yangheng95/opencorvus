@@ -2,6 +2,8 @@
 
 - [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391.md)：现有数据合同、可见提示和真实桌面交付。
 
+- [模型数量与服务商搜索计数](2026-10-13-provider-count-projection.md)：根因、作用域与双语验收。
+
 - [387 尺寸通知真实归因](2026-10-13-resize-delivery-387.md)：Virtua同步测量的实际回调证据与未复现的原Rendering闪烁边界。
 
 - [Explorer操作结果与刷新回执](2026-10-13-file-operation-outcomes.md)：双失败、部分完成与当前读owner合同。

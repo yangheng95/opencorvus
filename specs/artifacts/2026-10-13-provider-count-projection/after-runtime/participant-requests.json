@@ -1,0 +1,56 @@
+[
+  {
+    "method": "POST",
+    "path": "/count-one/v1/chat/completions",
+    "model": "owned-single",
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/count-two/v1/chat/completions",
+    "model": "owned-dual-a",
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/count-two/v1/chat/completions",
+    "model": "owned-dual-b",
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/count-one/v1/models",
+    "modelIDs": [
+      "owned-single"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/count-two/v1/models",
+    "modelIDs": [
+      "owned-dual-a",
+      "owned-dual-b"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/count-one/v1/models",
+    "modelIDs": [
+      "owned-single"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/count-zero/v1/models",
+    "modelIDs": []
+  }
+]

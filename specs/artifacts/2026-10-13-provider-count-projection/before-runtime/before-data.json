@@ -1,0 +1,1889 @@
+{
+  "boundary": "Explicit owned catalog/config and local protocol input through real production HTTP/ledger; not online vendor metadata or financial evidence",
+  "catalog": {
+    "opencorvus": {
+      "id": "opencorvus",
+      "name": "OpenCorvus",
+      "env": [],
+      "npm": "@ai-sdk/openai-compatible",
+      "api": "http://127.0.0.1:49210/empty/v1",
+      "models": {}
+    },
+    "kilo": {
+      "id": "kilo",
+      "name": "Kilo Gateway",
+      "env": [],
+      "npm": "@ai-sdk/openai-compatible",
+      "api": "http://127.0.0.1:49210/empty/v1",
+      "models": {}
+    },
+    "catalog-one": {
+      "id": "catalog-one",
+      "name": "Catalog one",
+      "env": [],
+      "npm": "@ai-sdk/openai-compatible",
+      "api": "http://127.0.0.1:49210/catalog-one/v1",
+      "models": {
+        "catalog-single": {
+          "id": "catalog-single",
+          "name": "catalog-single",
+          "release_date": "2026-10-13",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 1,
+            "output": 2
+          },
+          "limit": {
+            "context": 10000,
+            "output": 1000
+          },
+          "options": {}
+        }
+      }
+    },
+    "catalog-two": {
+      "id": "catalog-two",
+      "name": "Catalog two",
+      "env": [],
+      "npm": "@ai-sdk/openai-compatible",
+      "api": "http://127.0.0.1:49210/catalog-two/v1",
+      "models": {
+        "catalog-dual-a": {
+          "id": "catalog-dual-a",
+          "name": "catalog-dual-a",
+          "release_date": "2026-10-13",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 1,
+            "output": 2
+          },
+          "limit": {
+            "context": 10000,
+            "output": 1000
+          },
+          "options": {}
+        },
+        "catalog-dual-b": {
+          "id": "catalog-dual-b",
+          "name": "catalog-dual-b",
+          "release_date": "2026-10-13",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 1,
+            "output": 2
+          },
+          "limit": {
+            "context": 10000,
+            "output": 1000
+          },
+          "options": {}
+        }
+      }
+    }
+  },
+  "custom": {
+    "count-zero": {
+      "name": "Local zero",
+      "api": "http://127.0.0.1:49210/count-zero/v1",
+      "npm": "@ai-sdk/openai-compatible",
+      "env": [],
+      "options": {},
+      "models": {}
+    },
+    "count-one": {
+      "name": "Local one",
+      "api": "http://127.0.0.1:49210/count-one/v1",
+      "npm": "@ai-sdk/openai-compatible",
+      "env": [],
+      "options": {},
+      "models": {
+        "owned-single": {
+          "id": "owned-single",
+          "name": "owned-single",
+          "release_date": "2026-10-13",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 1,
+            "output": 2
+          },
+          "limit": {
+            "context": 10000,
+            "output": 1000
+          },
+          "options": {}
+        }
+      }
+    },
+    "count-two": {
+      "name": "Local two",
+      "api": "http://127.0.0.1:49210/count-two/v1",
+      "npm": "@ai-sdk/openai-compatible",
+      "env": [],
+      "options": {},
+      "models": {
+        "owned-dual-a": {
+          "id": "owned-dual-a",
+          "name": "owned-dual-a",
+          "release_date": "2026-10-13",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 1,
+            "output": 2
+          },
+          "limit": {
+            "context": 10000,
+            "output": 1000
+          },
+          "options": {}
+        },
+        "owned-dual-b": {
+          "id": "owned-dual-b",
+          "name": "owned-dual-b",
+          "release_date": "2026-10-13",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 1,
+            "output": 2
+          },
+          "limit": {
+            "context": 10000,
+            "output": 1000
+          },
+          "options": {}
+        }
+      }
+    }
+  },
+  "observations": [
+    {
+      "providerID": "count-one",
+      "modelID": "owned-single",
+      "text": "Owned declared usage",
+      "normalized": {
+        "billing": {
+          "status": "priced"
+        },
+        "cost": 0.00003,
+        "tokens": {
+          "total": 25,
+          "input": 20,
+          "output": 5,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 0
+          }
+        }
+      }
+    },
+    {
+      "providerID": "count-two",
+      "modelID": "owned-dual-a",
+      "text": "Owned declared usage",
+      "normalized": {
+        "billing": {
+          "status": "priced"
+        },
+        "cost": 0.00003,
+        "tokens": {
+          "total": 25,
+          "input": 20,
+          "output": 5,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 0
+          }
+        }
+      }
+    },
+    {
+      "providerID": "count-two",
+      "modelID": "owned-dual-b",
+      "text": "Owned declared usage",
+      "normalized": {
+        "billing": {
+          "status": "priced"
+        },
+        "cost": 0.00003,
+        "tokens": {
+          "total": 25,
+          "input": 20,
+          "output": 5,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 0
+          }
+        }
+      }
+    }
+  ],
+  "global": {
+    "status": 200,
+    "body": {
+      "catalog": {
+        "all": [
+          {
+            "id": "opencorvus",
+            "source": "custom",
+            "name": "OpenCorvus",
+            "env": [],
+            "options": {},
+            "models": {}
+          },
+          {
+            "id": "kilo",
+            "source": "custom",
+            "name": "Kilo Gateway",
+            "env": [],
+            "options": {},
+            "models": {}
+          },
+          {
+            "id": "catalog-one",
+            "source": "custom",
+            "name": "Catalog one",
+            "env": [],
+            "options": {},
+            "models": {
+              "catalog-single": {
+                "id": "catalog-single",
+                "providerID": "catalog-one",
+                "name": "catalog-single",
+                "api": {
+                  "id": "catalog-single",
+                  "url": "http://127.0.0.1:49210/catalog-one/v1",
+                  "npm": "@ai-sdk/openai-compatible"
+                },
+                "status": "active",
+                "headers": {},
+                "options": {},
+                "cost": {
+                  "available": true,
+                  "input": 1,
+                  "output": 2,
+                  "cache": {
+                    "read": 0,
+                    "write": 0
+                  }
+                },
+                "limit": {
+                  "context": 10000,
+                  "output": 1000
+                },
+                "capabilities": {
+                  "temperature": true,
+                  "reasoning": false,
+                  "attachment": false,
+                  "toolcall": true,
+                  "input": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "output": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "interleaved": false
+                },
+                "release_date": "2026-10-13",
+                "variants": {}
+              }
+            }
+          },
+          {
+            "id": "catalog-two",
+            "source": "custom",
+            "name": "Catalog two",
+            "env": [],
+            "options": {},
+            "models": {
+              "catalog-dual-a": {
+                "id": "catalog-dual-a",
+                "providerID": "catalog-two",
+                "name": "catalog-dual-a",
+                "api": {
+                  "id": "catalog-dual-a",
+                  "url": "http://127.0.0.1:49210/catalog-two/v1",
+                  "npm": "@ai-sdk/openai-compatible"
+                },
+                "status": "active",
+                "headers": {},
+                "options": {},
+                "cost": {
+                  "available": true,
+                  "input": 1,
+                  "output": 2,
+                  "cache": {
+                    "read": 0,
+                    "write": 0
+                  }
+                },
+                "limit": {
+                  "context": 10000,
+                  "output": 1000
+                },
+                "capabilities": {
+                  "temperature": true,
+                  "reasoning": false,
+                  "attachment": false,
+                  "toolcall": true,
+                  "input": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "output": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "interleaved": false
+                },
+                "release_date": "2026-10-13",
+                "variants": {}
+              },
+              "catalog-dual-b": {
+                "id": "catalog-dual-b",
+                "providerID": "catalog-two",
+                "name": "catalog-dual-b",
+                "api": {
+                  "id": "catalog-dual-b",
+                  "url": "http://127.0.0.1:49210/catalog-two/v1",
+                  "npm": "@ai-sdk/openai-compatible"
+                },
+                "status": "active",
+                "headers": {},
+                "options": {},
+                "cost": {
+                  "available": true,
+                  "input": 1,
+                  "output": 2,
+                  "cache": {
+                    "read": 0,
+                    "write": 0
+                  }
+                },
+                "limit": {
+                  "context": 10000,
+                  "output": 1000
+                },
+                "capabilities": {
+                  "temperature": true,
+                  "reasoning": false,
+                  "attachment": false,
+                  "toolcall": true,
+                  "input": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "output": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "interleaved": false
+                },
+                "release_date": "2026-10-13",
+                "variants": {}
+              }
+            }
+          },
+          {
+            "id": "count-zero",
+            "name": "Local zero",
+            "env": [],
+            "options": {},
+            "source": "config",
+            "models": {}
+          },
+          {
+            "id": "count-one",
+            "name": "Local one",
+            "env": [],
+            "options": {},
+            "source": "config",
+            "models": {
+              "owned-single": {
+                "id": "owned-single",
+                "api": {
+                  "id": "owned-single",
+                  "npm": "@ai-sdk/openai-compatible",
+                  "url": "http://127.0.0.1:49210/count-one/v1"
+                },
+                "status": "active",
+                "name": "owned-single",
+                "providerID": "count-one",
+                "capabilities": {
+                  "temperature": true,
+                  "reasoning": false,
+                  "attachment": false,
+                  "toolcall": true,
+                  "input": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "output": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "interleaved": false
+                },
+                "cost": {
+                  "available": true,
+                  "input": 1,
+                  "output": 2,
+                  "cache": {
+                    "read": 0,
+                    "write": 0
+                  }
+                },
+                "options": {},
+                "limit": {
+                  "context": 10000,
+                  "output": 1000
+                },
+                "headers": {},
+                "family": "",
+                "release_date": "2026-10-13",
+                "variants": {}
+              }
+            }
+          },
+          {
+            "id": "count-two",
+            "name": "Local two",
+            "env": [],
+            "options": {},
+            "source": "config",
+            "models": {
+              "owned-dual-a": {
+                "id": "owned-dual-a",
+                "api": {
+                  "id": "owned-dual-a",
+                  "npm": "@ai-sdk/openai-compatible",
+                  "url": "http://127.0.0.1:49210/count-two/v1"
+                },
+                "status": "active",
+                "name": "owned-dual-a",
+                "providerID": "count-two",
+                "capabilities": {
+                  "temperature": true,
+                  "reasoning": false,
+                  "attachment": false,
+                  "toolcall": true,
+                  "input": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "output": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "interleaved": false
+                },
+                "cost": {
+                  "available": true,
+                  "input": 1,
+                  "output": 2,
+                  "cache": {
+                    "read": 0,
+                    "write": 0
+                  }
+                },
+                "options": {},
+                "limit": {
+                  "context": 10000,
+                  "output": 1000
+                },
+                "headers": {},
+                "family": "",
+                "release_date": "2026-10-13",
+                "variants": {}
+              },
+              "owned-dual-b": {
+                "id": "owned-dual-b",
+                "api": {
+                  "id": "owned-dual-b",
+                  "npm": "@ai-sdk/openai-compatible",
+                  "url": "http://127.0.0.1:49210/count-two/v1"
+                },
+                "status": "active",
+                "name": "owned-dual-b",
+                "providerID": "count-two",
+                "capabilities": {
+                  "temperature": true,
+                  "reasoning": false,
+                  "attachment": false,
+                  "toolcall": true,
+                  "input": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "output": {
+                    "text": true,
+                    "audio": false,
+                    "image": false,
+                    "video": false,
+                    "pdf": false
+                  },
+                  "interleaved": false
+                },
+                "cost": {
+                  "available": true,
+                  "input": 1,
+                  "output": 2,
+                  "cache": {
+                    "read": 0,
+                    "write": 0
+                  }
+                },
+                "options": {},
+                "limit": {
+                  "context": 10000,
+                  "output": 1000
+                },
+                "headers": {},
+                "family": "",
+                "release_date": "2026-10-13",
+                "variants": {}
+              }
+            }
+          }
+        ],
+        "default": {
+          "catalog-one": "catalog-single",
+          "catalog-two": "catalog-dual-b",
+          "count-one": "owned-single",
+          "count-two": "owned-dual-b"
+        },
+        "connected": [
+          "count-one",
+          "count-two"
+        ],
+        "accountUsage": {
+          "openai": "rate_limits"
+        },
+        "issues": []
+      }
+    }
+  },
+  "project": {
+    "status": 200,
+    "body": {
+      "all": [
+        {
+          "id": "opencorvus",
+          "source": "custom",
+          "name": "OpenCorvus",
+          "env": [],
+          "options": {},
+          "models": {}
+        },
+        {
+          "id": "kilo",
+          "source": "custom",
+          "name": "Kilo Gateway",
+          "env": [],
+          "options": {},
+          "models": {}
+        },
+        {
+          "id": "catalog-one",
+          "source": "custom",
+          "name": "Catalog one",
+          "env": [],
+          "options": {},
+          "models": {
+            "catalog-single": {
+              "id": "catalog-single",
+              "providerID": "catalog-one",
+              "name": "catalog-single",
+              "api": {
+                "id": "catalog-single",
+                "url": "http://127.0.0.1:49210/catalog-one/v1",
+                "npm": "@ai-sdk/openai-compatible"
+              },
+              "status": "active",
+              "headers": {},
+              "options": {},
+              "cost": {
+                "available": true,
+                "input": 1,
+                "output": 2,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "capabilities": {
+                "temperature": true,
+                "reasoning": false,
+                "attachment": false,
+                "toolcall": true,
+                "input": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "output": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "interleaved": false
+              },
+              "release_date": "2026-10-13",
+              "variants": {}
+            }
+          }
+        },
+        {
+          "id": "catalog-two",
+          "source": "custom",
+          "name": "Catalog two",
+          "env": [],
+          "options": {},
+          "models": {
+            "catalog-dual-a": {
+              "id": "catalog-dual-a",
+              "providerID": "catalog-two",
+              "name": "catalog-dual-a",
+              "api": {
+                "id": "catalog-dual-a",
+                "url": "http://127.0.0.1:49210/catalog-two/v1",
+                "npm": "@ai-sdk/openai-compatible"
+              },
+              "status": "active",
+              "headers": {},
+              "options": {},
+              "cost": {
+                "available": true,
+                "input": 1,
+                "output": 2,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "capabilities": {
+                "temperature": true,
+                "reasoning": false,
+                "attachment": false,
+                "toolcall": true,
+                "input": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "output": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "interleaved": false
+              },
+              "release_date": "2026-10-13",
+              "variants": {}
+            },
+            "catalog-dual-b": {
+              "id": "catalog-dual-b",
+              "providerID": "catalog-two",
+              "name": "catalog-dual-b",
+              "api": {
+                "id": "catalog-dual-b",
+                "url": "http://127.0.0.1:49210/catalog-two/v1",
+                "npm": "@ai-sdk/openai-compatible"
+              },
+              "status": "active",
+              "headers": {},
+              "options": {},
+              "cost": {
+                "available": true,
+                "input": 1,
+                "output": 2,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "capabilities": {
+                "temperature": true,
+                "reasoning": false,
+                "attachment": false,
+                "toolcall": true,
+                "input": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "output": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "interleaved": false
+              },
+              "release_date": "2026-10-13",
+              "variants": {}
+            }
+          }
+        },
+        {
+          "id": "count-zero",
+          "name": "Local zero",
+          "env": [],
+          "options": {},
+          "source": "config",
+          "models": {}
+        },
+        {
+          "id": "count-one",
+          "name": "Local one",
+          "env": [],
+          "options": {},
+          "source": "config",
+          "models": {
+            "owned-single": {
+              "id": "owned-single",
+              "api": {
+                "id": "owned-single",
+                "npm": "@ai-sdk/openai-compatible",
+                "url": "http://127.0.0.1:49210/count-one/v1"
+              },
+              "status": "active",
+              "name": "owned-single",
+              "providerID": "count-one",
+              "capabilities": {
+                "temperature": true,
+                "reasoning": false,
+                "attachment": false,
+                "toolcall": true,
+                "input": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "output": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "interleaved": false
+              },
+              "cost": {
+                "available": true,
+                "input": 1,
+                "output": 2,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "options": {},
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "headers": {},
+              "family": "",
+              "release_date": "2026-10-13",
+              "variants": {}
+            }
+          }
+        },
+        {
+          "id": "count-two",
+          "name": "Local two",
+          "env": [],
+          "options": {},
+          "source": "config",
+          "models": {
+            "owned-dual-a": {
+              "id": "owned-dual-a",
+              "api": {
+                "id": "owned-dual-a",
+                "npm": "@ai-sdk/openai-compatible",
+                "url": "http://127.0.0.1:49210/count-two/v1"
+              },
+              "status": "active",
+              "name": "owned-dual-a",
+              "providerID": "count-two",
+              "capabilities": {
+                "temperature": true,
+                "reasoning": false,
+                "attachment": false,
+                "toolcall": true,
+                "input": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "output": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "interleaved": false
+              },
+              "cost": {
+                "available": true,
+                "input": 1,
+                "output": 2,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "options": {},
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "headers": {},
+              "family": "",
+              "release_date": "2026-10-13",
+              "variants": {}
+            },
+            "owned-dual-b": {
+              "id": "owned-dual-b",
+              "api": {
+                "id": "owned-dual-b",
+                "npm": "@ai-sdk/openai-compatible",
+                "url": "http://127.0.0.1:49210/count-two/v1"
+              },
+              "status": "active",
+              "name": "owned-dual-b",
+              "providerID": "count-two",
+              "capabilities": {
+                "temperature": true,
+                "reasoning": false,
+                "attachment": false,
+                "toolcall": true,
+                "input": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "output": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "interleaved": false
+              },
+              "cost": {
+                "available": true,
+                "input": 1,
+                "output": 2,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "options": {},
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "headers": {},
+              "family": "",
+              "release_date": "2026-10-13",
+              "variants": {}
+            }
+          }
+        },
+        {
+          "id": "count-project",
+          "name": "Local project",
+          "env": [],
+          "options": {},
+          "source": "config",
+          "models": {
+            "owned-project": {
+              "id": "owned-project",
+              "api": {
+                "id": "owned-project",
+                "npm": "@ai-sdk/openai-compatible",
+                "url": "http://127.0.0.1:49210/count-one/v1"
+              },
+              "status": "active",
+              "name": "owned-project",
+              "providerID": "count-project",
+              "capabilities": {
+                "temperature": true,
+                "reasoning": false,
+                "attachment": false,
+                "toolcall": true,
+                "input": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "output": {
+                  "text": true,
+                  "audio": false,
+                  "image": false,
+                  "video": false,
+                  "pdf": false
+                },
+                "interleaved": false
+              },
+              "cost": {
+                "available": true,
+                "input": 1,
+                "output": 2,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "options": {},
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "headers": {},
+              "family": "",
+              "release_date": "2026-10-13",
+              "variants": {}
+            }
+          }
+        }
+      ],
+      "default": {
+        "catalog-one": "catalog-single",
+        "catalog-two": "catalog-dual-b",
+        "count-one": "owned-single",
+        "count-two": "owned-dual-b",
+        "count-project": "owned-project"
+      },
+      "connected": [
+        "count-one",
+        "count-two",
+        "count-project"
+      ],
+      "accountUsage": {
+        "openai": "rate_limits"
+      },
+      "issues": []
+    }
+  },
+  "usage": {
+    "status": 200,
+    "body": {
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "grain": "hour",
+      "current": {
+        "start": 1791820800000,
+        "end": 1791907200000,
+        "summary": {
+          "tokens": {
+            "input": 60,
+            "output": 15,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 75
+          },
+          "costUSD": 0.00009,
+          "calls": 3,
+          "averageTokensPerCall": 25,
+          "billing": {
+            "pricedTokens": 75,
+            "unpricedTokens": 0,
+            "unknownTokens": 0,
+            "percent": 100
+          }
+        }
+      },
+      "previous": {
+        "start": 1791734400000,
+        "end": 1791820800000,
+        "summary": {
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0,
+          "averageTokensPerCall": 0,
+          "billing": {
+            "pricedTokens": 0,
+            "unpricedTokens": 0,
+            "unknownTokens": 0,
+            "percent": null
+          }
+        }
+      },
+      "comparison": {
+        "tokensPercent": null,
+        "costPercent": null,
+        "callsPercent": null
+      },
+      "buckets": [
+        {
+          "start": 1791820800000,
+          "end": 1791824400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791824400000,
+          "end": 1791828000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791828000000,
+          "end": 1791831600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791831600000,
+          "end": 1791835200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791835200000,
+          "end": 1791838800000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791838800000,
+          "end": 1791842400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791842400000,
+          "end": 1791846000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791846000000,
+          "end": 1791849600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791849600000,
+          "end": 1791853200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791853200000,
+          "end": 1791856800000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791856800000,
+          "end": 1791860400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791860400000,
+          "end": 1791864000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791864000000,
+          "end": 1791867600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791867600000,
+          "end": 1791871200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791871200000,
+          "end": 1791874800000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791874800000,
+          "end": 1791878400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791878400000,
+          "end": 1791882000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791882000000,
+          "end": 1791885600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791885600000,
+          "end": 1791889200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791889200000,
+          "end": 1791892800000,
+          "tokens": {
+            "input": 60,
+            "output": 15,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 75
+          },
+          "costUSD": 0.00009,
+          "calls": 3
+        },
+        {
+          "start": 1791892800000,
+          "end": 1791896400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791896400000,
+          "end": 1791900000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791900000000,
+          "end": 1791903600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791903600000,
+          "end": 1791907200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        }
+      ],
+      "providers": [
+        {
+          "providerID": "count-two",
+          "modelCount": 2,
+          "share": 0.6666666666666666,
+          "summary": {
+            "tokens": {
+              "input": 40,
+              "output": 10,
+              "reasoning": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 50
+            },
+            "costUSD": 0.00006,
+            "calls": 2,
+            "averageTokensPerCall": 25,
+            "billing": {
+              "pricedTokens": 50,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        },
+        {
+          "providerID": "count-one",
+          "modelCount": 1,
+          "share": 0.3333333333333333,
+          "summary": {
+            "tokens": {
+              "input": 20,
+              "output": 5,
+              "reasoning": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 25
+            },
+            "costUSD": 0.00003,
+            "calls": 1,
+            "averageTokensPerCall": 25,
+            "billing": {
+              "pricedTokens": 25,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        }
+      ],
+      "models": [
+        {
+          "providerID": "count-one",
+          "modelID": "owned-single",
+          "share": 0.3333333333333333,
+          "summary": {
+            "tokens": {
+              "input": 20,
+              "output": 5,
+              "reasoning": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 25
+            },
+            "costUSD": 0.00003,
+            "calls": 1,
+            "averageTokensPerCall": 25,
+            "billing": {
+              "pricedTokens": 25,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        },
+        {
+          "providerID": "count-two",
+          "modelID": "owned-dual-a",
+          "share": 0.3333333333333333,
+          "summary": {
+            "tokens": {
+              "input": 20,
+              "output": 5,
+              "reasoning": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 25
+            },
+            "costUSD": 0.00003,
+            "calls": 1,
+            "averageTokensPerCall": 25,
+            "billing": {
+              "pricedTokens": 25,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        },
+        {
+          "providerID": "count-two",
+          "modelID": "owned-dual-b",
+          "share": 0.3333333333333333,
+          "summary": {
+            "tokens": {
+              "input": 20,
+              "output": 5,
+              "reasoning": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 25
+            },
+            "costUSD": 0.00003,
+            "calls": 1,
+            "averageTokensPerCall": 25,
+            "billing": {
+              "pricedTokens": 25,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        }
+      ],
+      "official": {
+        "fetchedAt": 1791890323081,
+        "sources": [
+          {
+            "id": "openai-organization",
+            "providerID": "openai",
+            "label": "OpenAI organization",
+            "status": "unconfigured",
+            "authorities": [
+              "organization_usage",
+              "financial_ledger"
+            ],
+            "scope": "Entire OpenAI organization; may include traffic outside OpenCorvus.",
+            "freshness": "Provider aggregation lag applies; Costs is the financial authority.",
+            "credentialEnv": "OPENAI_ADMIN_KEY",
+            "documentationURL": "https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "anthropic-organization",
+            "providerID": "anthropic",
+            "label": "Anthropic organization",
+            "status": "unconfigured",
+            "authorities": [
+              "organization_usage",
+              "financial_ledger"
+            ],
+            "scope": "Entire Anthropic organization; may include traffic outside OpenCorvus.",
+            "freshness": "Provider aggregation lag applies; Cost Report is the financial authority.",
+            "credentialEnv": "ANTHROPIC_ADMIN_KEY",
+            "documentationURL": "https://platform.claude.com/docs/en/api/admin/usage_report/retrieve_messages",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "openrouter-account",
+            "providerID": "openrouter",
+            "label": "OpenRouter account credits",
+            "status": "unconfigured",
+            "authorities": [
+              "account_credit"
+            ],
+            "scope": "Lifetime purchased and used credits for the authenticated OpenRouter account; the key ledger includes disabled keys in its default workspace.",
+            "freshness": "Live account credit balance and default-workspace key facts; not a natural-period Token ledger.",
+            "credentialEnv": "OPENROUTER_MANAGEMENT_KEY",
+            "documentationURL": "https://openrouter.ai/docs/api/api-reference/credits/get-credits",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "aws-bedrock-control-plane",
+            "providerID": "amazon-bedrock",
+            "label": "AWS Bedrock control plane",
+            "status": "requires_configuration",
+            "authorities": [
+              "cloud_control_plane"
+            ],
+            "scope": "AWS account and Region through CloudWatch plus Cost Explorer or CUR.",
+            "freshness": "CloudWatch and billing export grains differ.",
+            "credentialEnv": null,
+            "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "azure-openai-control-plane",
+            "providerID": "azure",
+            "label": "Azure OpenAI control plane",
+            "status": "requires_configuration",
+            "authorities": [
+              "cloud_control_plane"
+            ],
+            "scope": "Azure subscription and resource through Azure Monitor plus Cost Management.",
+            "freshness": "Metric and invoice settlement grains differ.",
+            "credentialEnv": null,
+            "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "vertex-ai-control-plane",
+            "providerID": "google-vertex",
+            "label": "Google Vertex AI control plane",
+            "status": "requires_configuration",
+            "authorities": [
+              "cloud_control_plane"
+            ],
+            "scope": "Google Cloud project through Cloud Monitoring plus Cloud Billing export.",
+            "freshness": "Metric and billing export grains differ.",
+            "credentialEnv": null,
+            "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          }
+        ],
+        "rule": "compare_never_sum"
+      }
+    }
+  },
+  "config": {
+    "status": 200,
+    "body": {
+      "$schema": "https://opencorvus.ai/config.json",
+      "model": "count-two/owned-dual-a",
+      "small_model": "count-two/owned-dual-a",
+      "provider": {
+        "count-zero": {
+          "api": "http://127.0.0.1:49210/count-zero/v1",
+          "name": "Local zero",
+          "env": [],
+          "npm": "@ai-sdk/openai-compatible",
+          "options": {}
+        },
+        "count-one": {
+          "api": "http://127.0.0.1:49210/count-one/v1",
+          "name": "Local one",
+          "env": [],
+          "npm": "@ai-sdk/openai-compatible",
+          "models": {
+            "owned-single": {
+              "id": "owned-single",
+              "name": "owned-single",
+              "release_date": "2026-10-13",
+              "attachment": false,
+              "reasoning": false,
+              "temperature": true,
+              "tool_call": true,
+              "cost": {
+                "input": 1,
+                "output": 2
+              },
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "modalities": {
+                "input": [
+                  "text"
+                ],
+                "output": [
+                  "text"
+                ]
+              },
+              "options": {}
+            }
+          },
+          "options": {}
+        },
+        "count-two": {
+          "api": "http://127.0.0.1:49210/count-two/v1",
+          "name": "Local two",
+          "env": [],
+          "npm": "@ai-sdk/openai-compatible",
+          "models": {
+            "owned-dual-a": {
+              "id": "owned-dual-a",
+              "name": "owned-dual-a",
+              "release_date": "2026-10-13",
+              "attachment": false,
+              "reasoning": false,
+              "temperature": true,
+              "tool_call": true,
+              "cost": {
+                "input": 1,
+                "output": 2
+              },
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "modalities": {
+                "input": [
+                  "text"
+                ],
+                "output": [
+                  "text"
+                ]
+              },
+              "options": {}
+            },
+            "owned-dual-b": {
+              "id": "owned-dual-b",
+              "name": "owned-dual-b",
+              "release_date": "2026-10-13",
+              "attachment": false,
+              "reasoning": false,
+              "temperature": true,
+              "tool_call": true,
+              "cost": {
+                "input": 1,
+                "output": 2
+              },
+              "limit": {
+                "context": 10000,
+                "output": 1000
+              },
+              "modalities": {
+                "input": [
+                  "text"
+                ],
+                "output": [
+                  "text"
+                ]
+              },
+              "options": {}
+            }
+          },
+          "options": {}
+        }
+      },
+      "prompt_profile": {
+        "active": "base"
+      },
+      "permission_mode": "full_access",
+      "experimental": {
+        "auto_question": true,
+        "memory": {
+          "enabled": false,
+          "document_token_limit": 10000,
+          "organizer_input_token_budget": 32000,
+          "pending_availability_limit": 500
+        }
+      }
+    }
+  },
+  "archiveBoundary": "Configuration API-key values excluded from archived observations; local participant accepts protocol samples without authentication."
+}

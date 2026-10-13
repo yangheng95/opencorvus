@@ -1,0 +1,2057 @@
+{
+  "observedAt": "2026-10-13T11:39:32.608Z",
+  "boundary": "Three actual isolated production /ui occurrences and production HTTP/stream ledger; no online credentials or model inference. Screenshot conclusions are personal observation, not UI automation assertions.",
+  "commands": {
+    "beforeBuild": {
+      "session": 23863,
+      "exit": 0
+    },
+    "afterBuild": {
+      "session": 80458,
+      "exit": 0
+    },
+    "typecheck": {
+      "session": 87997,
+      "exit": 0
+    },
+    "i18n": {
+      "exit": 0,
+      "locales": 2,
+      "topLevelKeys": 2199
+    },
+    "docs": {
+      "exit": 0,
+      "operations": 348,
+      "groups": 26
+    }
+  },
+  "runtimes": [
+    {
+      "stage": "before",
+      "ready": {
+        "pid": 27624,
+        "started": 1791890311984,
+        "port": 18576,
+        "participantPort": 49210,
+        "project": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-counts-01a133\\before\\project",
+        "occurrence": {
+          "pid": 27624,
+          "processInstanceID": "win32:639274871119327005",
+          "occurrenceID": "3fc08ca4-dd42-4a1d-a3c4-4bea9153d40a"
+        }
+      },
+      "exit": {
+        "exitCode": 0,
+        "observedUtc": "2026-10-13T11:26:05.0581273Z",
+        "pid": 27624
+      },
+      "terminal": {
+        "pid": 27624,
+        "reason": "Own count page closed",
+        "elapsed": 452995,
+        "productionStop": "settled"
+      },
+      "global": {
+        "status": 200,
+        "ids": [
+          "opencorvus",
+          "kilo",
+          "catalog-one",
+          "catalog-two",
+          "count-zero",
+          "count-one",
+          "count-two"
+        ],
+        "connected": [
+          "count-one",
+          "count-two"
+        ]
+      },
+      "project": {
+        "status": 200,
+        "ids": [
+          "opencorvus",
+          "kilo",
+          "catalog-one",
+          "catalog-two",
+          "count-zero",
+          "count-one",
+          "count-two",
+          "count-project"
+        ]
+      },
+      "usage": {
+        "status": 200,
+        "body": {
+          "period": "day",
+          "timeZone": "Asia/Shanghai",
+          "grain": "hour",
+          "current": {
+            "start": 1791820800000,
+            "end": 1791907200000,
+            "summary": {
+              "tokens": {
+                "input": 60,
+                "output": 15,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 75
+              },
+              "costUSD": 0.00009,
+              "calls": 3,
+              "averageTokensPerCall": 25,
+              "billing": {
+                "pricedTokens": 75,
+                "unpricedTokens": 0,
+                "unknownTokens": 0,
+                "percent": 100
+              }
+            }
+          },
+          "previous": {
+            "start": 1791734400000,
+            "end": 1791820800000,
+            "summary": {
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0,
+              "averageTokensPerCall": 0,
+              "billing": {
+                "pricedTokens": 0,
+                "unpricedTokens": 0,
+                "unknownTokens": 0,
+                "percent": null
+              }
+            }
+          },
+          "comparison": {
+            "tokensPercent": null,
+            "costPercent": null,
+            "callsPercent": null
+          },
+          "buckets": [
+            {
+              "start": 1791820800000,
+              "end": 1791824400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791824400000,
+              "end": 1791828000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791828000000,
+              "end": 1791831600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791831600000,
+              "end": 1791835200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791835200000,
+              "end": 1791838800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791838800000,
+              "end": 1791842400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791842400000,
+              "end": 1791846000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791846000000,
+              "end": 1791849600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791849600000,
+              "end": 1791853200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791853200000,
+              "end": 1791856800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791856800000,
+              "end": 1791860400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791860400000,
+              "end": 1791864000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791864000000,
+              "end": 1791867600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791867600000,
+              "end": 1791871200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791871200000,
+              "end": 1791874800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791874800000,
+              "end": 1791878400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791878400000,
+              "end": 1791882000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791882000000,
+              "end": 1791885600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791885600000,
+              "end": 1791889200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791889200000,
+              "end": 1791892800000,
+              "tokens": {
+                "input": 60,
+                "output": 15,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 75
+              },
+              "costUSD": 0.00009,
+              "calls": 3
+            },
+            {
+              "start": 1791892800000,
+              "end": 1791896400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791896400000,
+              "end": 1791900000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791900000000,
+              "end": 1791903600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791903600000,
+              "end": 1791907200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            }
+          ],
+          "providers": [
+            {
+              "providerID": "count-two",
+              "modelCount": 2,
+              "share": 0.6666666666666666,
+              "summary": {
+                "tokens": {
+                  "input": 40,
+                  "output": 10,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 50
+                },
+                "costUSD": 0.00006,
+                "calls": 2,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 50,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            },
+            {
+              "providerID": "count-one",
+              "modelCount": 1,
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            }
+          ],
+          "models": [
+            {
+              "providerID": "count-one",
+              "modelID": "owned-single",
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            },
+            {
+              "providerID": "count-two",
+              "modelID": "owned-dual-a",
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            },
+            {
+              "providerID": "count-two",
+              "modelID": "owned-dual-b",
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            }
+          ],
+          "official": {
+            "fetchedAt": 1791890323081,
+            "sources": [
+              {
+                "id": "openai-organization",
+                "providerID": "openai",
+                "label": "OpenAI organization",
+                "status": "unconfigured",
+                "authorities": [
+                  "organization_usage",
+                  "financial_ledger"
+                ],
+                "scope": "Entire OpenAI organization; may include traffic outside OpenCorvus.",
+                "freshness": "Provider aggregation lag applies; Costs is the financial authority.",
+                "credentialEnv": "OPENAI_ADMIN_KEY",
+                "documentationURL": "https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "anthropic-organization",
+                "providerID": "anthropic",
+                "label": "Anthropic organization",
+                "status": "unconfigured",
+                "authorities": [
+                  "organization_usage",
+                  "financial_ledger"
+                ],
+                "scope": "Entire Anthropic organization; may include traffic outside OpenCorvus.",
+                "freshness": "Provider aggregation lag applies; Cost Report is the financial authority.",
+                "credentialEnv": "ANTHROPIC_ADMIN_KEY",
+                "documentationURL": "https://platform.claude.com/docs/en/api/admin/usage_report/retrieve_messages",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "openrouter-account",
+                "providerID": "openrouter",
+                "label": "OpenRouter account credits",
+                "status": "unconfigured",
+                "authorities": [
+                  "account_credit"
+                ],
+                "scope": "Lifetime purchased and used credits for the authenticated OpenRouter account; the key ledger includes disabled keys in its default workspace.",
+                "freshness": "Live account credit balance and default-workspace key facts; not a natural-period Token ledger.",
+                "credentialEnv": "OPENROUTER_MANAGEMENT_KEY",
+                "documentationURL": "https://openrouter.ai/docs/api/api-reference/credits/get-credits",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "aws-bedrock-control-plane",
+                "providerID": "amazon-bedrock",
+                "label": "AWS Bedrock control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "AWS account and Region through CloudWatch plus Cost Explorer or CUR.",
+                "freshness": "CloudWatch and billing export grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "azure-openai-control-plane",
+                "providerID": "azure",
+                "label": "Azure OpenAI control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "Azure subscription and resource through Azure Monitor plus Cost Management.",
+                "freshness": "Metric and invoice settlement grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "vertex-ai-control-plane",
+                "providerID": "google-vertex",
+                "label": "Google Vertex AI control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "Google Cloud project through Cloud Monitoring plus Cloud Billing export.",
+                "freshness": "Metric and billing export grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              }
+            ],
+            "rule": "compare_never_sum"
+          }
+        }
+      }
+    },
+    {
+      "stage": "after",
+      "ready": {
+        "pid": 82204,
+        "started": 1791890962882,
+        "port": 18576,
+        "participantPort": 56619,
+        "project": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-counts-01a133\\after\\project",
+        "occurrence": {
+          "pid": 82204,
+          "processInstanceID": "win32:639274877628430290",
+          "occurrenceID": "e28cf77e-0c34-4107-894f-b0e830df2e81"
+        }
+      },
+      "exit": {
+        "pid": 82204,
+        "observedUtc": "2026-10-13T11:34:39.9464523Z",
+        "exitCode": 0
+      },
+      "terminal": {
+        "pid": 82204,
+        "reason": "Own count page closed",
+        "elapsed": 316968,
+        "productionStop": "settled"
+      },
+      "global": {
+        "status": 200,
+        "ids": [
+          "opencorvus",
+          "kilo",
+          "catalog-one",
+          "catalog-two",
+          "count-zero",
+          "count-one",
+          "count-two"
+        ],
+        "connected": [
+          "count-one",
+          "count-two"
+        ]
+      },
+      "project": {
+        "status": 200,
+        "ids": [
+          "opencorvus",
+          "kilo",
+          "catalog-one",
+          "catalog-two",
+          "count-zero",
+          "count-one",
+          "count-two",
+          "count-project"
+        ]
+      },
+      "usage": {
+        "status": 200,
+        "body": {
+          "period": "day",
+          "timeZone": "Asia/Shanghai",
+          "grain": "hour",
+          "current": {
+            "start": 1791820800000,
+            "end": 1791907200000,
+            "summary": {
+              "tokens": {
+                "input": 60,
+                "output": 15,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 75
+              },
+              "costUSD": 0.00009,
+              "calls": 3,
+              "averageTokensPerCall": 25,
+              "billing": {
+                "pricedTokens": 75,
+                "unpricedTokens": 0,
+                "unknownTokens": 0,
+                "percent": 100
+              }
+            }
+          },
+          "previous": {
+            "start": 1791734400000,
+            "end": 1791820800000,
+            "summary": {
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0,
+              "averageTokensPerCall": 0,
+              "billing": {
+                "pricedTokens": 0,
+                "unpricedTokens": 0,
+                "unknownTokens": 0,
+                "percent": null
+              }
+            }
+          },
+          "comparison": {
+            "tokensPercent": null,
+            "costPercent": null,
+            "callsPercent": null
+          },
+          "buckets": [
+            {
+              "start": 1791820800000,
+              "end": 1791824400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791824400000,
+              "end": 1791828000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791828000000,
+              "end": 1791831600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791831600000,
+              "end": 1791835200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791835200000,
+              "end": 1791838800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791838800000,
+              "end": 1791842400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791842400000,
+              "end": 1791846000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791846000000,
+              "end": 1791849600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791849600000,
+              "end": 1791853200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791853200000,
+              "end": 1791856800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791856800000,
+              "end": 1791860400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791860400000,
+              "end": 1791864000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791864000000,
+              "end": 1791867600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791867600000,
+              "end": 1791871200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791871200000,
+              "end": 1791874800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791874800000,
+              "end": 1791878400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791878400000,
+              "end": 1791882000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791882000000,
+              "end": 1791885600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791885600000,
+              "end": 1791889200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791889200000,
+              "end": 1791892800000,
+              "tokens": {
+                "input": 60,
+                "output": 15,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 75
+              },
+              "costUSD": 0.00009,
+              "calls": 3
+            },
+            {
+              "start": 1791892800000,
+              "end": 1791896400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791896400000,
+              "end": 1791900000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791900000000,
+              "end": 1791903600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791903600000,
+              "end": 1791907200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            }
+          ],
+          "providers": [
+            {
+              "providerID": "count-two",
+              "modelCount": 2,
+              "share": 0.6666666666666666,
+              "summary": {
+                "tokens": {
+                  "input": 40,
+                  "output": 10,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 50
+                },
+                "costUSD": 0.00006,
+                "calls": 2,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 50,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            },
+            {
+              "providerID": "count-one",
+              "modelCount": 1,
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            }
+          ],
+          "models": [
+            {
+              "providerID": "count-one",
+              "modelID": "owned-single",
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            },
+            {
+              "providerID": "count-two",
+              "modelID": "owned-dual-a",
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            },
+            {
+              "providerID": "count-two",
+              "modelID": "owned-dual-b",
+              "share": 0.3333333333333333,
+              "summary": {
+                "tokens": {
+                  "input": 20,
+                  "output": 5,
+                  "reasoning": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0,
+                  "total": 25
+                },
+                "costUSD": 0.00003,
+                "calls": 1,
+                "averageTokensPerCall": 25,
+                "billing": {
+                  "pricedTokens": 25,
+                  "unpricedTokens": 0,
+                  "unknownTokens": 0,
+                  "percent": 100
+                }
+              }
+            }
+          ],
+          "official": {
+            "fetchedAt": 1791890970649,
+            "sources": [
+              {
+                "id": "openai-organization",
+                "providerID": "openai",
+                "label": "OpenAI organization",
+                "status": "unconfigured",
+                "authorities": [
+                  "organization_usage",
+                  "financial_ledger"
+                ],
+                "scope": "Entire OpenAI organization; may include traffic outside OpenCorvus.",
+                "freshness": "Provider aggregation lag applies; Costs is the financial authority.",
+                "credentialEnv": "OPENAI_ADMIN_KEY",
+                "documentationURL": "https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "anthropic-organization",
+                "providerID": "anthropic",
+                "label": "Anthropic organization",
+                "status": "unconfigured",
+                "authorities": [
+                  "organization_usage",
+                  "financial_ledger"
+                ],
+                "scope": "Entire Anthropic organization; may include traffic outside OpenCorvus.",
+                "freshness": "Provider aggregation lag applies; Cost Report is the financial authority.",
+                "credentialEnv": "ANTHROPIC_ADMIN_KEY",
+                "documentationURL": "https://platform.claude.com/docs/en/api/admin/usage_report/retrieve_messages",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "openrouter-account",
+                "providerID": "openrouter",
+                "label": "OpenRouter account credits",
+                "status": "unconfigured",
+                "authorities": [
+                  "account_credit"
+                ],
+                "scope": "Lifetime purchased and used credits for the authenticated OpenRouter account; the key ledger includes disabled keys in its default workspace.",
+                "freshness": "Live account credit balance and default-workspace key facts; not a natural-period Token ledger.",
+                "credentialEnv": "OPENROUTER_MANAGEMENT_KEY",
+                "documentationURL": "https://openrouter.ai/docs/api/api-reference/credits/get-credits",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "aws-bedrock-control-plane",
+                "providerID": "amazon-bedrock",
+                "label": "AWS Bedrock control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "AWS account and Region through CloudWatch plus Cost Explorer or CUR.",
+                "freshness": "CloudWatch and billing export grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "azure-openai-control-plane",
+                "providerID": "azure",
+                "label": "Azure OpenAI control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "Azure subscription and resource through Azure Monitor plus Cost Management.",
+                "freshness": "Metric and invoice settlement grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "vertex-ai-control-plane",
+                "providerID": "google-vertex",
+                "label": "Google Vertex AI control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "Google Cloud project through Cloud Monitoring plus Cloud Billing export.",
+                "freshness": "Metric and billing export grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              }
+            ],
+            "rule": "compare_never_sum"
+          }
+        }
+      }
+    },
+    {
+      "stage": "edges",
+      "ready": {
+        "pid": 81284,
+        "started": 1791891324371,
+        "port": 18576,
+        "participantPort": 57332,
+        "project": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-counts-01a133\\edges\\project",
+        "occurrence": {
+          "pid": 81284,
+          "processInstanceID": "win32:639274881243328108",
+          "occurrenceID": "5476d1e3-947a-4998-bd79-d28a1393674b"
+        }
+      },
+      "exit": {
+        "observedUtc": "2026-10-13T11:37:22.1805392Z",
+        "exitCode": 0,
+        "pid": 81284
+      },
+      "terminal": {
+        "pid": 81284,
+        "reason": "Own count page closed",
+        "elapsed": 117667,
+        "productionStop": "settled"
+      },
+      "global": {
+        "status": 200,
+        "ids": [
+          "catalog-two",
+          "count-two"
+        ],
+        "connected": [
+          "count-two"
+        ]
+      },
+      "project": {
+        "status": 200,
+        "ids": [
+          "catalog-two",
+          "count-two"
+        ]
+      },
+      "usage": {
+        "status": 200,
+        "body": {
+          "period": "day",
+          "timeZone": "Asia/Shanghai",
+          "grain": "hour",
+          "current": {
+            "start": 1791820800000,
+            "end": 1791907200000,
+            "summary": {
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0,
+              "averageTokensPerCall": 0,
+              "billing": {
+                "pricedTokens": 0,
+                "unpricedTokens": 0,
+                "unknownTokens": 0,
+                "percent": null
+              }
+            }
+          },
+          "previous": {
+            "start": 1791734400000,
+            "end": 1791820800000,
+            "summary": {
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0,
+              "averageTokensPerCall": 0,
+              "billing": {
+                "pricedTokens": 0,
+                "unpricedTokens": 0,
+                "unknownTokens": 0,
+                "percent": null
+              }
+            }
+          },
+          "comparison": {
+            "tokensPercent": 0,
+            "costPercent": 0,
+            "callsPercent": 0
+          },
+          "buckets": [
+            {
+              "start": 1791820800000,
+              "end": 1791824400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791824400000,
+              "end": 1791828000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791828000000,
+              "end": 1791831600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791831600000,
+              "end": 1791835200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791835200000,
+              "end": 1791838800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791838800000,
+              "end": 1791842400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791842400000,
+              "end": 1791846000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791846000000,
+              "end": 1791849600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791849600000,
+              "end": 1791853200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791853200000,
+              "end": 1791856800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791856800000,
+              "end": 1791860400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791860400000,
+              "end": 1791864000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791864000000,
+              "end": 1791867600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791867600000,
+              "end": 1791871200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791871200000,
+              "end": 1791874800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791874800000,
+              "end": 1791878400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791878400000,
+              "end": 1791882000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791882000000,
+              "end": 1791885600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791885600000,
+              "end": 1791889200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791889200000,
+              "end": 1791892800000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791892800000,
+              "end": 1791896400000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791896400000,
+              "end": 1791900000000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791900000000,
+              "end": 1791903600000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            },
+            {
+              "start": 1791903600000,
+              "end": 1791907200000,
+              "tokens": {
+                "input": 0,
+                "output": 0,
+                "reasoning": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              },
+              "costUSD": 0,
+              "calls": 0
+            }
+          ],
+          "providers": [],
+          "models": [],
+          "official": {
+            "fetchedAt": 1791891330740,
+            "sources": [
+              {
+                "id": "openai-organization",
+                "providerID": "openai",
+                "label": "OpenAI organization",
+                "status": "unconfigured",
+                "authorities": [
+                  "organization_usage",
+                  "financial_ledger"
+                ],
+                "scope": "Entire OpenAI organization; may include traffic outside OpenCorvus.",
+                "freshness": "Provider aggregation lag applies; Costs is the financial authority.",
+                "credentialEnv": "OPENAI_ADMIN_KEY",
+                "documentationURL": "https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "anthropic-organization",
+                "providerID": "anthropic",
+                "label": "Anthropic organization",
+                "status": "unconfigured",
+                "authorities": [
+                  "organization_usage",
+                  "financial_ledger"
+                ],
+                "scope": "Entire Anthropic organization; may include traffic outside OpenCorvus.",
+                "freshness": "Provider aggregation lag applies; Cost Report is the financial authority.",
+                "credentialEnv": "ANTHROPIC_ADMIN_KEY",
+                "documentationURL": "https://platform.claude.com/docs/en/api/admin/usage_report/retrieve_messages",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "openrouter-account",
+                "providerID": "openrouter",
+                "label": "OpenRouter account credits",
+                "status": "unconfigured",
+                "authorities": [
+                  "account_credit"
+                ],
+                "scope": "Lifetime purchased and used credits for the authenticated OpenRouter account; the key ledger includes disabled keys in its default workspace.",
+                "freshness": "Live account credit balance and default-workspace key facts; not a natural-period Token ledger.",
+                "credentialEnv": "OPENROUTER_MANAGEMENT_KEY",
+                "documentationURL": "https://openrouter.ai/docs/api/api-reference/credits/get-credits",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "aws-bedrock-control-plane",
+                "providerID": "amazon-bedrock",
+                "label": "AWS Bedrock control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "AWS account and Region through CloudWatch plus Cost Explorer or CUR.",
+                "freshness": "CloudWatch and billing export grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "azure-openai-control-plane",
+                "providerID": "azure",
+                "label": "Azure OpenAI control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "Azure subscription and resource through Azure Monitor plus Cost Management.",
+                "freshness": "Metric and invoice settlement grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              },
+              {
+                "id": "vertex-ai-control-plane",
+                "providerID": "google-vertex",
+                "label": "Google Vertex AI control plane",
+                "status": "requires_configuration",
+                "authorities": [
+                  "cloud_control_plane"
+                ],
+                "scope": "Google Cloud project through Cloud Monitoring plus Cloud Billing export.",
+                "freshness": "Metric and billing export grains differ.",
+                "credentialEnv": null,
+                "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+                "message": null,
+                "period": null,
+                "periodAlignment": null,
+                "tokens": null,
+                "costUSD": null,
+                "credits": null,
+                "keyUsage": null,
+                "reconciliation": null
+              }
+            ],
+            "rule": "compare_never_sum"
+          }
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "after-catalog-expand-zh.png",
+    "after-composer-all-en.png",
+    "after-composer-empty-en.png",
+    "after-composer-filter-en.png",
+    "after-composer-filter-zh.png",
+    "after-composer-selected-en.png",
+    "after-composer-selected-zh.png",
+    "after-discover-one-en.png",
+    "after-discover-one-zh.png",
+    "after-discover-two-en.png",
+    "after-discover-zero-zh.png",
+    "after-filtered-edit-zh.png",
+    "after-filtered-global-en.png",
+    "after-filtered-project-zh.png",
+    "after-global-all-en.png",
+    "after-global-all-zh.png",
+    "after-project-all-en.png",
+    "after-project-all-zh.png",
+    "after-project-one-en.png",
+    "after-project-zero-en.png",
+    "after-usage-empty-en.png",
+    "after-usage-empty-zh.png",
+    "after-usage-en.png",
+    "after-usage-zh.png",
+    "before-discover-one-en.png",
+    "before-global-en.png",
+    "before-search-all-en.png",
+    "before-single-en.png",
+    "before-usage-en.png"
+  ]
+}

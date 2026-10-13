@@ -2697,6 +2697,16 @@ model-only declarations and runtime templates. Discovery validates its current
 input without the edit exemption. This does not prove connectivity or alter
 the backend provider schema or its single template-expansion owner.
 
+Provider search derives its numerator and denominator from the same custom and
+catalog row collections. The unsearched collections retain editable custom
+declarations and exclude their IDs from catalog rows; the query filters those
+collections without counting declarations twice. The separate Configured
+summary remains the union of configuration and connected IDs, while Catalog
+remains the complete current catalog projection. Model quantities in provider
+rows, discovery receipts, Composer groups and usage use the shared plural
+translation contract. Discovery stores the current successful count, translated
+at render time under the existing form occurrence and response ownership.
+
 Channel edits require the currently selected project and show the existing
 workspace selection hint in the directory-free launcher. Shared Skill/MCP
 resource pages use the same loading lifecycle on first entry and manual reload;

@@ -15,6 +15,8 @@
 
 - 可编辑表格明确提示编辑仅保留在当前视图，离开或折叠前可下载修改后的工作表；说明 CSV 仅保留单元格值。提示随语言切换，全屏仍保留完整工作表操作区域。
 
+- 服务商搜索的显示数量与实际行集合一致，修复已配置项被目录重复计入总数的问题；服务商、发现模型、模型选择与用量统计共用模型数量翻译，英文单模型使用正确单数，发现成功提示跟随当前界面语言。
+
 - 修复电子表格全屏时工作表菜单、颜色对话框、缩放菜单和提示不可见的问题；子菜单重复打开保持可用，关闭父菜单后同步收起。全屏与语言切换保留当前工作簿及编辑导出。
 
 - 修复 MCP 合法空文件、音频内容和资源链接导致整个工具结果失败的问题。音频保存为附件并保留当前模型传输限制；资源链接保留原始引用信息。
@@ -57,6 +59,8 @@
 #### Fixed
 
 - Editable spreadsheets now explain that edits stay in the current view and that changed sheets should be downloaded before leaving or collapsing it. The localized note clarifies that CSV retains cell values and leaves the workbook usable in fullscreen.
+
+- Provider search counts use the actual row collections, fixing configured entries being counted again in the catalog total. Provider rows, discovery, model selection and usage share model-count translations; a single model uses the correct English singular, and discovery receipts follow the current interface language.
 
 - Fixed spreadsheet sheet menus, color dialogs, zoom menus and tooltips being hidden in fullscreen. Repeated submenu activation stays usable, and closing its parent also closes the submenu. Fullscreen and language changes retain the current workbook and edited exports.
 

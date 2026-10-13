@@ -515,7 +515,10 @@
   "provider.form.advanced_id_pending": "待自动生成",
   "provider.form.discover.button": "发现模型",
   "provider.form.discover.running": "发现中…",
-  "provider.form.discover.success": "已发现 {{count}} 个模型。",
+  "provider.form.discover.success": {
+    "one": "已发现 {{count}} 个模型。",
+    "other": "已发现 {{count}} 个模型。"
+  },
   "provider.form.discover.failed": "发现模型失败：{{reason}}",
   "provider.catalog_refresh.button": "刷新 Provider",
   "provider.catalog_refresh.title": "从 models.dev 刷新 Provider 目录。",
@@ -550,7 +553,10 @@
   "provider.label.api": "API",
   "provider.label.env": "环境变量",
   "provider.label.no_models": "无",
-  "provider.models.count": "{{count}} 个模型",
+  "provider.models.count": {
+    "one": "{{count}} 个模型",
+    "other": "{{count}} 个模型"
+  },
   "provider.models.more": "另有 {{count}} 个",
   "chat.git.commit": "提交",
   "chat.git.message": "提交信息",
@@ -2174,7 +2180,10 @@
   "usage.empty_body": "完成的流式 API 调用将按真实发生时间显示在这里。",
   "usage.providers_title": "Provider",
   "usage.providers_description": "按 Provider 汇总实测 Token 占比。",
-  "usage.models_count": "{{value}} 个模型",
+  "usage.models_count": {
+    "one": "{{count}} 个模型",
+    "other": "{{count}} 个模型"
+  },
   "usage.no_provider_data": "本周期暂无 Provider 用量。",
   "usage.coverage_priced": "已计价 Token",
   "usage.coverage_unpriced": "未定价 Token",
@@ -2222,6 +2231,5 @@
   "project_runtime.interactive_delivery": "交互产物",
   "settings.git_preferences": "Git",
   "settings.offer_git_init": "打开目录时询问是否初始化 Git",
-  "settings.offer_git_init_hint": "手动打开非 Git 目录时先询问，确认后才创建仓库。应用启动只读取现有状态。",
-  "provider.models.count_one": "{{count}} 个模型"
+  "settings.offer_git_init_hint": "手动打开非 Git 目录时先询问，确认后才创建仓库。应用启动只读取现有状态。"
 }
