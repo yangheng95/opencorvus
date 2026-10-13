@@ -1,0 +1,126 @@
+[1/1] START test/continuous-goal-independent.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent continuous goal persistence and authority audit > chat: real HTTP mutation, native Tool read, replay and revision error share persisted state [4715.28ms]
+(pass) independent continuous goal persistence and authority audit > chat: late descendant settlement retains its original goal across completion and archive [2997.03ms]
+(pass) independent continuous goal persistence and authority audit > chat: descendant inherits exact accounting scope and gets a typed mutation refusal [2367.75ms]
+196 |         }))
+197 |         const { EngineService } = await import("@/task-api")
+198 |         const result = await EngineService.deleteSession(session.id, { projectID: owner.projectID, deleteTasks: kind === "task" })
+199 |         expect(result).toMatchObject({ status: "tombstoned", sessionHistoryRetained: true })
+200 |         recordUsage(session.id, 37, captured)
+201 |         expect(readContinuousGoal(owner)).toMatchObject({ id: goal.id, status: "paused", reason: "owner_unavailable", tokensUsed: 37 })
+                                                ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "createdAt": 1791879189536,
++   "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-Gdei6X\test-66040-zKtEKw\fixtures\memory-JG6YKW",
+    "id": "pev_g0VXuoT4a00OYHziwDQo",
+-   "reason": "owner_unavailable",
+-   "status": "paused",
++   "objective": "Retain audit evidence",
++   "owner": {
++     "id": "ses_-zUS5BWvizzP78WGztN7",
++     "kind": "chat",
++   },
++   "projectID": "prj_hFPzLOnOL3Ye8qR51yus",
++   "reason": undefined,
++   "revision": "pev_g0VXuoT4a00OYHziwDQo",
++   "sessionID": "ses_-zUS5BWvizzP78WGztN7",
++   "status": "active",
++   "tokenBudget": undefined,
+    "tokensUsed": 37,
++   "turnBudget": undefined,
++   "turnsAccepted": 0,
++   "updatedAt": 1791879189536,
+  }
+
+- Expected  - 2
++ Received  + 16
+
+      at <anonymous> (C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts:201:43)
+(fail) independent continuous goal persistence and authority audit > chat: retained owner deletion returns unavailable while preserving exact late usage [2717.01ms]
+(pass) independent continuous goal persistence and authority audit > task: real HTTP mutation, native Tool read, replay and revision error share persisted state [2386.35ms]
+(pass) independent continuous goal persistence and authority audit > task: late descendant settlement retains its original goal across completion and archive [2275.04ms]
+(pass) independent continuous goal persistence and authority audit > task: descendant inherits exact accounting scope and gets a typed mutation refusal [2923.25ms]
+(pass) independent continuous goal persistence and authority audit > task: retained owner deletion returns unavailable while preserving exact late usage [3347.50ms]
+(pass) independent continuous goal persistence and authority audit > mission: real HTTP mutation, native Tool read, replay and revision error share persisted state [3333.51ms]
+(pass) independent continuous goal persistence and authority audit > mission: late descendant settlement retains its original goal across completion and archive [4185.24ms]
+(pass) independent continuous goal persistence and authority audit > mission: descendant inherits exact accounting scope and gets a typed mutation refusal [2981.78ms]
+196 |         }))
+197 |         const { EngineService } = await import("@/task-api")
+198 |         const result = await EngineService.deleteSession(session.id, { projectID: owner.projectID, deleteTasks: kind === "task" })
+199 |         expect(result).toMatchObject({ status: "tombstoned", sessionHistoryRetained: true })
+200 |         recordUsage(session.id, 37, captured)
+201 |         expect(readContinuousGoal(owner)).toMatchObject({ id: goal.id, status: "paused", reason: "owner_unavailable", tokensUsed: 37 })
+                                                ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "createdAt": 1791879216239,
++   "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-Gdei6X\test-66040-zKtEKw\fixtures\memory-Bf8Ql9",
+    "id": "pev_g0VXuoa1H00swbwga8RW",
+-   "reason": "owner_unavailable",
+-   "status": "paused",
++   "objective": "Retain audit evidence",
++   "owner": {
++     "id": "ses_-zUS5BPz8zzoE4JUBcY7",
++     "kind": "mission",
++   },
++   "projectID": "prj_hsEfWc3mP6zz5j4pFVx6",
++   "reason": undefined,
++   "revision": "pev_g0VXuoa1H00swbwga8RW",
++   "sessionID": "ses_-zUS5BPz8zzoE4JUBcY7",
++   "status": "active",
++   "tokenBudget": undefined,
+    "tokensUsed": 37,
++   "turnBudget": undefined,
++   "turnsAccepted": 0,
++   "updatedAt": 1791879216239,
+  }
+
+- Expected  - 2
++ Received  + 16
+
+      at <anonymous> (C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts:201:43)
+(fail) independent continuous goal persistence and authority audit > mission: retained owner deletion returns unavailable while preserving exact late usage [5122.88ms]
+214 |       const mission = await ownerFixture("mission")
+215 |       const task = await ownerFixture("task", mission.owner)
+216 |       const goal = createContinuousGoal(mission.owner, { requestID: "mission", objective: "One Mission objective" }, "user")
+217 |       await Session.setArchived({ sessionID: mission.session.id, time: Date.now() })
+218 |       const response = await goalRequest(goalApp(), task.owner, "POST", { requestID: "task", objective: "Overlapping Task objective" })
+219 |       expect(response.status).toBe(409)
+                                    ^
+error: expect(received).toBe(expected)
+
+Expected: 409
+Received: 200
+
+      at <anonymous> (C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts:219:31)
+(fail) independent continuous goal persistence and authority audit > archived Mission retains unresolved scope ownership over its child Task [6355.16ms]
+237 |         session_id: task.session.id, source: "test", payload: { execution_epoch: 1 },
+238 |       }))
+239 |       const { EngineService } = await import("@/task-api")
+240 |       await EngineService.setTaskArchived(task.owner.id, true)
+241 |       const response = await goalRequest(goalApp(), mission.owner, "POST", { requestID: "mission", objective: "Overlapping Mission objective" })
+242 |       expect(response.status).toBe(409)
+                                    ^
+error: expect(received).toBe(expected)
+
+Expected: 409
+Received: 200
+
+      at <anonymous> (C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts:242:31)
+(fail) independent continuous goal persistence and authority audit > archived child Task retains unresolved scope ownership when Mission requests a goal [5964.22ms]
+(pass) independent continuous goal persistence and authority audit > public routes resolve Project ownership before reading or mutating a foreign goal [15332.49ms]
+
+ 11 pass
+ 4 fail
+ 96 expect() calls
+Ran 15 tests across 1 file. [73.77s]
+OpenCorvus test file failed (exit=1): C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts
+[1/1] DONE test/continuous-goal-independent.test.ts exit=1 duration=75.16s
+OpenCorvus failed test files (1):
+C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts

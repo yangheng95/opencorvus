@@ -22,7 +22,7 @@ export type ControlledProviderRequest = {
 /** OpenAI-compatible streaming Provider whose physical replies are released by
  * the owning test. Memory requests settle immediately so they cannot become a
  * scheduling barrier or pollute Prompt request assertions. */
-export function startControlledStreamingProvider(options?: { failPromptFrom?: number }) {
+export function startControlledStreamingProvider(options?: { failPromptFrom?: number; memoryModelID?: string }) {
   const requests: ControlledProviderRequest[] = []
   const server = Bun.serve({
     hostname: "127.0.0.1",
@@ -34,7 +34,11 @@ export function startControlledStreamingProvider(options?: { failPromptFrom?: nu
       const responded = Promise.withResolvers<void>()
       const index = requests.length
       const messages = Array.isArray((body as any)?.messages) ? (body as any).messages : []
-      const kind = controlledProviderRequestKind(messages)
+      const kind = options?.memoryModelID
+        ? (body as { model?: string })?.model === options.memoryModelID
+          ? "memory"
+          : "prompt"
+        : controlledProviderRequestKind(messages)
       const promptOrdinal =
         kind === "prompt" ? requests.filter((candidate) => candidate.kind === "prompt").length + 1 : 0
       requests.push({ index, kind, body, responded: responded.promise, release: released.resolve })

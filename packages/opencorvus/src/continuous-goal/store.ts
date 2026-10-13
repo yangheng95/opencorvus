@@ -1,6 +1,7 @@
 import { isDeepStrictEqual } from "node:util"
 import { Database, and, asc, eq, inArray, sql } from "@/storage/db"
 import { Instance } from "@/project/instance"
+import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { taskIDForSession } from "@/engine/task-session-lineage"
@@ -31,7 +32,7 @@ const CREATED = "continuous_goal.created"
 const UPDATED = "continuous_goal.updated"
 export const GOAL_CONTINUATION = "continuous_goal.continuation_requested"
 
-export function resolveGoalOwner(raw: ContinuousGoalOwner): GoalOwner {
+export function resolveGoalOwner(raw: ContinuousGoalOwner, options?: { includeArchived?: boolean }): GoalOwner {
   const input = ContinuousGoalOwner.parse({ kind: raw.kind, id: raw.id })
   return Database.use((db) => {
     const task =
@@ -45,9 +46,14 @@ export function resolveGoalOwner(raw: ContinuousGoalOwner): GoalOwner {
       return goalError("owner_unavailable", "Continuous goal Task is unavailable in the current Project.")
     const sessionID = task?.session_id ?? input.id
     const session = db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get()
-    if (!session || session.project_id !== Instance.project.id || session.time_archived)
+    if (
+      !session ||
+      session.project_id !== Instance.project.id ||
+      Session.deletedInTransaction(db, sessionID) ||
+      (!options?.includeArchived && session.time_archived !== null)
+    )
       return goalError("owner_unavailable", "Continuous goal Session is unavailable in the current Project.")
-    if (task?.time_archived)
+    if (!options?.includeArchived && task?.time_archived != null)
       return goalError("owner_unavailable", "Archived Task cannot own an active continuous goal.")
     if (input.kind === "chat" && (session.kind !== "assistant" || session.parent_id || taskIDForSession(session.id)))
       return goalError("owner_forbidden", "A Chat continuous goal belongs to its standalone primary Session.")
@@ -66,7 +72,11 @@ export function resolveGoalOwner(raw: ContinuousGoalOwner): GoalOwner {
 
 export function goalOwnerForAgent(sessionID: string): GoalOwner {
   const session = Database.use((db) => db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get())
-  if (!session || session.project_id !== Instance.project.id)
+  if (
+    !session ||
+    session.project_id !== Instance.project.id ||
+    Database.use((db) => Session.deletedInTransaction(db, sessionID))
+  )
     return goalError("owner_unavailable", "Goal Tool Session is unavailable in the current Project.")
   const taskID = taskIDForSession(sessionID)
   if (taskID) {
@@ -139,7 +149,8 @@ function append(owner: GoalOwner, type: string, payload: Record<string, unknown>
 export function goalOwnerBoundary(owner: GoalOwner, afterRevisionSeq?: number): string | undefined {
   return Database.use((db) => {
     const session = db.select().from(SessionTable).where(eq(SessionTable.id, owner.sessionID)).get()
-    if (!session || session.time_archived) return "owner_unavailable"
+    if (!session || session.time_archived !== null || Session.deletedInTransaction(db, owner.sessionID))
+      return "owner_unavailable"
     if (afterRevisionSeq !== undefined) {
       const stopped = db
         .select()
@@ -164,7 +175,7 @@ export function goalOwnerBoundary(owner: GoalOwner, afterRevisionSeq?: number): 
     }
     if (owner.kind === "task") {
       const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, owner.id)).get()
-      if (!task || task.time_archived || taskDeletedInTransaction(db, owner.id)) return "owner_unavailable"
+      if (!task || task.time_archived !== null || taskDeletedInTransaction(db, owner.id)) return "owner_unavailable"
       const lifecycle = taskLifecycleProjectionInTransaction(db, owner.id)
       if (lifecycle.status === "cancelled" || lifecycle.status === "cancelling") return "owner_cancelled"
     }
@@ -265,6 +276,31 @@ export function projectGoalOwners(projectID = Instance.project.id): ContinuousGo
   ]
 }
 
+function assertExclusiveGoalScope(owner: GoalOwner) {
+  const scope = new Set(goalScopeSessionIDs(owner))
+  for (const other of projectGoalOwners(owner.projectID)) {
+    if (other.kind === owner.kind && other.id === owner.id) continue
+    let otherOwner: GoalOwner
+    try {
+      // Archiving pauses execution while retaining the unresolved goal's scope.
+      otherOwner = resolveGoalOwner(other, { includeArchived: true })
+    } catch (error) {
+      if (
+        ContinuousGoalError.isInstance(error as Error) &&
+        (error as InstanceType<typeof ContinuousGoalError>).data.code === "owner_unavailable"
+      )
+        continue
+      throw error
+    }
+    const goal = readContinuousGoal(otherOwner)
+    if (goal && goal.status !== "complete" && goalScopeSessionIDs(otherOwner).some((id) => scope.has(id)))
+      return goalError(
+        "overlapping_owner",
+        "A parent or child already owns a continuous goal for this execution scope.",
+      )
+  }
+}
+
 export function createContinuousGoal(owner: GoalOwner, raw: z.input<typeof ContinuousGoalCreate>, author: string) {
   const input = ContinuousGoalCreate.parse(raw)
   return Database.immediateTransaction(() => {
@@ -281,27 +317,7 @@ export function createContinuousGoal(owner: GoalOwner, raw: z.input<typeof Conti
       return goalError("conflict", "Complete the current goal before creating another.")
     if (goalOwnerBoundary(owner))
       return goalError("owner_unavailable", "Open the owner before creating a continuous goal.")
-    const scope = new Set(goalScopeSessionIDs(owner))
-    for (const other of projectGoalOwners(owner.projectID)) {
-      if (other.kind === owner.kind && other.id === owner.id) continue
-      let otherOwner: GoalOwner
-      try {
-        otherOwner = resolveGoalOwner(other)
-      } catch (error) {
-        if (
-          ContinuousGoalError.isInstance(error as Error) &&
-          (error as InstanceType<typeof ContinuousGoalError>).data.code === "owner_unavailable"
-        )
-          continue
-        throw error
-      }
-      const goal = readContinuousGoal(otherOwner)
-      if (goal && goal.status !== "complete" && goalScopeSessionIDs(otherOwner).some((id) => scope.has(id)))
-        return goalError(
-          "overlapping_owner",
-          "A parent or child already owns a continuous goal for this execution scope.",
-        )
-    }
+    assertExclusiveGoalScope(owner)
     append(owner, CREATED, { owner: { kind: owner.kind, id: owner.id }, request_id: input.requestID, input, author })
     return readContinuousGoal(owner)!
   })
@@ -324,6 +340,7 @@ export function updateContinuousGoal(owner: GoalOwner, raw: z.input<typeof Conti
     if (current.status === "complete") return goalError("inactive", "This goal has already completed.")
     if (input.status === "active" && goalOwnerBoundary(owner))
       return goalError("owner_unavailable", "Resume the owner explicitly before resuming its continuous goal.")
+    if (input.status === "active") assertExclusiveGoalScope(owner)
     append(owner, UPDATED, { goal_id: current.id, request_id: input.requestID, input, author })
     return readContinuousGoal(owner)!
   })
@@ -333,7 +350,7 @@ export function inheritedContinuousGoal(sessionID: string): ContinuousGoalView |
   for (const candidate of projectGoalOwners()) {
     let owner: GoalOwner
     try {
-      owner = resolveGoalOwner(candidate)
+      owner = resolveGoalOwner(candidate, { includeArchived: true })
     } catch (error) {
       if (
         ContinuousGoalError.isInstance(error as Error) &&

@@ -26,6 +26,10 @@ Explicit paused/blocked intent takes precedence over exhausted budgets; budget_l
 is derived only for active intent. Resuming preserves all usage and rechecks the limit.
 
 At most one unresolved goal owns any overlapping Session/Task/Mission scope.
+Archived owners retain that scope and inherited usage association while paused;
+creation and explicit active updates recheck exclusivity in the same transaction.
+Owner deletion follows the existing Session/Task deletion facts, including retained
+history rows. A retained row alone does not authorize execution or public goal access.
 Objective and identity are immutable; updates preserve accumulated usage and accepted
 continuation count. A completed goal permits a new goal identity.
 

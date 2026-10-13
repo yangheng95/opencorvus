@@ -1,0 +1,53 @@
+[1/1] START test/continuous-goal-independent.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent continuous goal persistence and authority audit > chat: real HTTP mutation, native Tool read, replay and revision error share persisted state [31793.61ms]
+(pass) independent continuous goal persistence and authority audit > chat: late descendant settlement retains its original goal across completion and archive [7320.12ms]
+(pass) independent continuous goal persistence and authority audit > chat: descendant inherits exact accounting scope and gets a typed mutation refusal [3983.76ms]
+(pass) independent continuous goal persistence and authority audit > task: real HTTP mutation, native Tool read, replay and revision error share persisted state [3677.86ms]
+(pass) independent continuous goal persistence and authority audit > task: late descendant settlement retains its original goal across completion and archive [4727.71ms]
+(pass) independent continuous goal persistence and authority audit > task: descendant inherits exact accounting scope and gets a typed mutation refusal [4719.58ms]
+(pass) independent continuous goal persistence and authority audit > mission: real HTTP mutation, native Tool read, replay and revision error share persisted state [3861.54ms]
+(pass) independent continuous goal persistence and authority audit > mission: late descendant settlement retains its original goal across completion and archive [4492.71ms]
+(pass) independent continuous goal persistence and authority audit > mission: descendant inherits exact accounting scope and gets a typed mutation refusal [3393.91ms]
+190 |       const mission = await ownerFixture("mission")
+191 |       const task = await ownerFixture("task", mission.owner)
+192 |       const goal = createContinuousGoal(mission.owner, { requestID: "mission", objective: "One Mission objective" }, "user")
+193 |       await Session.setArchived({ sessionID: mission.session.id, time: Date.now() })
+194 |       const response = await goalRequest(goalApp(), task.owner, "POST", { requestID: "task", objective: "Overlapping Task objective" })
+195 |       expect(response.status).toBe(409)
+      ^
+error: expect(received).toBe(expected)
+
+Expected: 409
+Received: 200
+
+      at toBe (unknown:1:1)
+      at C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts:195:31
+      at processTicksAndRejections (unknown:7:39)
+(fail) independent continuous goal persistence and authority audit > archived Mission retains unresolved scope ownership over its child Task [3070.16ms]
+206 |       const mission = await ownerFixture("mission")
+207 |       const task = await ownerFixture("task", mission.owner)
+208 |       const goal = createContinuousGoal(task.owner, { requestID: "task", objective: "One Task objective" }, "user")
+209 |       await Session.setArchived({ sessionID: task.session.id, time: Date.now() })
+210 |       const response = await goalRequest(goalApp(), mission.owner, "POST", { requestID: "mission", objective: "Overlapping Mission objective" })
+211 |       expect(response.status).toBe(409)
+                                    ^
+error: expect(received).toBe(expected)
+
+Expected: 409
+Received: 200
+
+      at <anonymous> (C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts:211:31)
+(fail) independent continuous goal persistence and authority audit > archived child Task retains unresolved scope ownership when Mission requests a goal [3094.31ms]
+(pass) independent continuous goal persistence and authority audit > public routes resolve Project ownership before reading or mutating a foreign goal [7598.70ms]
+
+ 10 pass
+ 2 fail
+ 86 expect() calls
+Ran 12 tests across 1 file. [105.92s]
+OpenCorvus test file failed (exit=1): C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts
+[1/1] DONE test/continuous-goal-independent.test.ts exit=1 duration=116.62s
+OpenCorvus failed test files (1):
+C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-independent.test.ts

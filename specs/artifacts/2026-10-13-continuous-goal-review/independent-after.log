@@ -1,0 +1,25 @@
+[1/1] START test/continuous-goal-independent.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent continuous goal persistence and authority audit > chat: real HTTP mutation, native Tool read, replay and revision error share persisted state [5493.09ms]
+(pass) independent continuous goal persistence and authority audit > chat: late descendant settlement retains its original goal across completion and archive [4354.75ms]
+(pass) independent continuous goal persistence and authority audit > chat: descendant inherits exact accounting scope and gets a typed mutation refusal [3433.97ms]
+(pass) independent continuous goal persistence and authority audit > chat: retained owner deletion returns unavailable while preserving exact late usage [3162.20ms]
+(pass) independent continuous goal persistence and authority audit > task: real HTTP mutation, native Tool read, replay and revision error share persisted state [2786.38ms]
+(pass) independent continuous goal persistence and authority audit > task: late descendant settlement retains its original goal across completion and archive [2735.98ms]
+(pass) independent continuous goal persistence and authority audit > task: descendant inherits exact accounting scope and gets a typed mutation refusal [3245.80ms]
+(pass) independent continuous goal persistence and authority audit > task: retained owner deletion returns unavailable while preserving exact late usage [2644.00ms]
+(pass) independent continuous goal persistence and authority audit > mission: real HTTP mutation, native Tool read, replay and revision error share persisted state [3055.02ms]
+(pass) independent continuous goal persistence and authority audit > mission: late descendant settlement retains its original goal across completion and archive [2742.79ms]
+(pass) independent continuous goal persistence and authority audit > mission: descendant inherits exact accounting scope and gets a typed mutation refusal [2891.68ms]
+(pass) independent continuous goal persistence and authority audit > mission: retained owner deletion returns unavailable while preserving exact late usage [2706.08ms]
+(pass) independent continuous goal persistence and authority audit > archived Mission retains unresolved scope ownership over its child Task [2758.86ms]
+(pass) independent continuous goal persistence and authority audit > archived child Task retains unresolved scope ownership when Mission requests a goal [4706.60ms]
+(pass) independent continuous goal persistence and authority audit > public routes resolve Project ownership before reading or mutating a foreign goal [10922.45ms]
+
+ 15 pass
+ 0 fail
+ 119 expect() calls
+Ran 15 tests across 1 file. [68.30s]
+[1/1] DONE test/continuous-goal-independent.test.ts exit=0 duration=70.14s

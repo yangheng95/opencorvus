@@ -1,0 +1,21 @@
+$ bun script/run-tests.ts test/continuous-goal-runtime.test.ts
+[1/1] START test/continuous-goal-runtime.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[goal-runtime-stage] accepted C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-L3GAsO\test-36772-J9dB5T\goal-stream-restart-OnQrPS
+[goal-runtime-stage] owner exited
+[goal-runtime-stage] recovery stream requested
+killed 1 dangling process
+(fail) a fresh process settles the same accepted goal input after its streamed owner exits [180001.90ms]
+  ^ this test timed out after 180000ms.
+
+ 0 pass
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [185.89s]
+[1/1] DONE test/continuous-goal-runtime.test.ts exit=1 duration=187.39s
+OpenCorvus test file failed (exit=1): C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-runtime.test.ts
+OpenCorvus failed test files (1):
+C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal-runtime.test.ts
+error: script "test" exited with code 1

@@ -1,0 +1,60 @@
+$ bun script/run-tests.ts test/continuous-goal.test.ts test/continuous-goal-independent.test.ts test/continuous-goal-process.test.ts
+[1/3] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [4122.92ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [4124.81ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [4675.05ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [5812.70ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [6942.22ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [6916.67ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [3481.40ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [9146.89ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [4476.81ms]
+(pass) durable continuous goal contracts > chat reopening preserves cancellation until an explicit goal revision [3998.62ms]
+(pass) durable continuous goal contracts > mission reopening preserves cancellation until an explicit goal revision [3753.13ms]
+(pass) durable continuous goal contracts > archive and restore retain one paused goal on the exact owner [3352.97ms]
+(pass) durable continuous goal contracts > the production Task archive entry retains pause when a completed Task is restored [3147.07ms]
+
+ 13 pass
+ 0 fail
+ 60 expect() calls
+Ran 13 tests across 1 file. [78.31s]
+[1/3] DONE test/continuous-goal.test.ts exit=0 duration=82.85s
+[2/3] START test/continuous-goal-independent.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent continuous goal persistence and authority audit > chat: real HTTP mutation, native Tool read, replay and revision error share persisted state [3683.72ms]
+(pass) independent continuous goal persistence and authority audit > chat: late descendant settlement retains its original goal across completion and archive [3657.59ms]
+(pass) independent continuous goal persistence and authority audit > chat: descendant inherits exact accounting scope and gets a typed mutation refusal [3426.69ms]
+(pass) independent continuous goal persistence and authority audit > chat: retained owner deletion returns unavailable while preserving exact late usage [3211.54ms]
+(pass) independent continuous goal persistence and authority audit > task: real HTTP mutation, native Tool read, replay and revision error share persisted state [3034.64ms]
+(pass) independent continuous goal persistence and authority audit > task: late descendant settlement retains its original goal across completion and archive [2701.21ms]
+(pass) independent continuous goal persistence and authority audit > task: descendant inherits exact accounting scope and gets a typed mutation refusal [2754.06ms]
+(pass) independent continuous goal persistence and authority audit > task: retained owner deletion returns unavailable while preserving exact late usage [2768.52ms]
+(pass) independent continuous goal persistence and authority audit > mission: real HTTP mutation, native Tool read, replay and revision error share persisted state [3761.01ms]
+(pass) independent continuous goal persistence and authority audit > mission: late descendant settlement retains its original goal across completion and archive [2917.08ms]
+(pass) independent continuous goal persistence and authority audit > mission: descendant inherits exact accounting scope and gets a typed mutation refusal [3053.64ms]
+(pass) independent continuous goal persistence and authority audit > mission: retained owner deletion returns unavailable while preserving exact late usage [3148.90ms]
+(pass) independent continuous goal persistence and authority audit > archived Mission retains unresolved scope ownership over its child Task [3230.23ms]
+(pass) independent continuous goal persistence and authority audit > archived child Task retains unresolved scope ownership when Mission requests a goal [2734.29ms]
+(pass) independent continuous goal persistence and authority audit > public routes resolve Project ownership before reading or mutating a foreign goal [5344.01ms]
+
+ 15 pass
+ 0 fail
+ 119 expect() calls
+Ran 15 tests across 1 file. [53.07s]
+[2/3] DONE test/continuous-goal-independent.test.ts exit=0 duration=53.51s
+[3/3] START test/continuous-goal-process.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent processes converge on one goal reservation and restore the paused revision [28017.69ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [29.63s]
+[3/3] DONE test/continuous-goal-process.test.ts exit=0 duration=29.94s

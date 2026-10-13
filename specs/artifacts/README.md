@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标独立复核](2026-10-13-continuous-goal-review/README.md)：归档/删除缺陷与受控流式跨进程恢复。
+
 - [文件点段身份](2026-10-13-file-alias-identity/README.md)：真实 Git/API 和桌面引用前后证据。
 
 - [持续目标模式验收](2026-10-13-continuous-goal-mode/README.md)：三种真实模型执行、Task 跨轮次重开、计量与最终桌面截图。

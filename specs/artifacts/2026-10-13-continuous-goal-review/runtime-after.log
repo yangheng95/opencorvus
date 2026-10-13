@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts test/continuous-goal-runtime.test.ts
+[1/1] START test/continuous-goal-runtime.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[goal-runtime-stage] accepted C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ODnjZZ\test-73864-za7cG2\goal-stream-restart-UYLRHo
+[goal-runtime-stage] owner exited
+[goal-runtime-stage] recovery stream requested
+[goal-runtime-stage] result {"outcome":"recovered","goal":{"id":"pev_g0VXuqwIx00a9kewxKRq","revision":"pev_g0VXuqwIx00a9kewxKRq","owner":{"kind":"chat","id":"ses_-zUS593hdzzUwoMLg5nF"},"objective":"Return one visible streamed response","status":"budget_limited","reason":"turn_budget","turnBudget":1,"tokensUsed":0,"turnsAccepted":1,"createdAt":1791879778558,"updatedAt":1791879778558,"sessionID":"ses_-zUS593hdzzUwoMLg5nF","projectID":"prj_hFGex0AWKK7cTs04KlOg","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ODnjZZ\\test-73864-za7cG2\\fixtures\\memory-oAsW4I"},"request":{"id":"pev_hv7yLTPnhpxx3fB97v50","goalID":"pev_g0VXuqwIx00a9kewxKRq","revision":"pev_g0VXuqwIx00a9kewxKRq","frontier":"start","number":1},"controllerInputs":["msg_hQ8uQxarNjQXmidi1NhE"],"replies":[{"id":"msg_g0VXur0oq009pkFpsbrU","parentID":"msg_hQ8uQxarNjQXmidi1NhE","text":"provider reply 2"}]}
+(pass) a fresh process settles the same accepted goal input after its streamed owner exits [37591.41ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [42.96s]
+[1/1] DONE test/continuous-goal-runtime.test.ts exit=0 duration=44.90s

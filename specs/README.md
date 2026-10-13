@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [持续目标独立测试与修复](records/2026-10/2026-10-13-continuous-goal-review.md)：独立 agent 审计、恢复路径与正向回归。
+- [持续目标独立存储审计](records/2026-10/2026-10-13-continuous-goal-independent-audit.md)：归档范围冲突与保留历史删除的修前复现和修后合同。
+- [持续目标独立复核证据](artifacts/2026-10-13-continuous-goal-review/README.md)：独立及主 agent 日志、受控流式跨进程恢复。
+
 - [项目文件点段身份](records/2026-10/2026-10-13-file-alias-identity.md)：词法归属、草稿导航与真实 Git 差异。
 
 - [Chat、Task、Mission 持续目标模式](records/2026-10/2026-10-13-continuous-goal-mode.md)：现状、授权与轮次、预算合同、实施和验收。

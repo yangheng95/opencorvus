@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [持续目标独立测试与修复](2026-10-13-continuous-goal-review.md)：独立审计反馈、运行验证与修复。
+- [持续目标独立存储审计](2026-10-13-continuous-goal-independent-audit.md)：归档重叠与保留历史删除的两个真实缺陷。
+- [持续目标独立复核证据](../../artifacts/2026-10-13-continuous-goal-review/README.md)：修前、修后与实际 Prompt 重启恢复日志。
+
 - [项目文件点段身份](2026-10-13-file-alias-identity.md)：全入口影响、真实服务与桌面验收。
 
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
