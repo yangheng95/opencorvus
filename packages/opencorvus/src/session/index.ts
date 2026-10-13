@@ -51,6 +51,7 @@ import { inlineBase64DataUrlMatch, inlineBase64DataUrlSnippet } from "@/util/inl
 import { withKeyedLock } from "@/util/lock"
 import { SessionControl } from "./control"
 import { CompactionHandoff } from "./compaction-handoff"
+import { CompactionCoverage } from "./compaction-coverage"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
 import {
@@ -471,6 +472,9 @@ export namespace Session {
       const cutoff = input.messageID ? msgs.findIndex((msg) => msg.info.id >= input.messageID!) : -1
       if (cutoff >= 0) msgs = msgs.slice(0, cutoff)
       const idMap = new Map(msgs.map((msg) => [msg.info.id, Identifier.ascending("message")]))
+      const partIDMaps = new Map(msgs.map((msg) => [msg.info.id,
+        new Map(msg.parts.map((part) => [part.id, Identifier.ascending("part")])),
+      ]))
       const copiedMessageID = (messageID: string, owner: string) => {
         const copied = idMap.get(messageID)
         if (!copied) {
@@ -482,7 +486,7 @@ export namespace Session {
 
       for (const msg of msgs) {
         const newID = idMap.get(msg.info.id)!
-        const partIDs = new Map(msg.parts.map((part) => [part.id, Identifier.ascending("part")]))
+        const partIDs = partIDMaps.get(msg.info.id)!
 
         const parentID =
           msg.info.role === "assistant" ? copiedMessageID(msg.info.parentID, `Message ${msg.info.id}`) : undefined
@@ -527,6 +531,16 @@ export namespace Session {
           } as Message.Part
         })
         clones.push({ info: clonedInfo, parts: clonedParts })
+      }
+      for (const clone of clones) {
+        for (const part of clone.parts) {
+          if (part.type !== "compaction" || !part.covered_parts) continue
+          part.covered_parts = part.covered_parts.map((entry) => {
+            const targetID = copiedMessageID(entry.messageID, `Compaction Part ${part.id}`)
+            return CompactionCoverage.copy(entry, msgs.find((msg) => msg.info.id === entry.messageID),
+              clones.find((msg) => msg.info.id === targetID)!, partIDMaps.get(entry.messageID)!)
+          })
+        }
       }
 
       return Database.immediateTransaction((db) => {
@@ -1723,6 +1737,11 @@ export namespace Session {
         .join("\n\n")
       if (!continuation.trim()) {
         throw new Error(`Compaction checkpoint assistant ${input.info.id} must contain final-step visible text`)
+      }
+      for (const entry of input.part.covered_parts ?? []) {
+        CompactionCoverage.assertSource(entry, MessageStore.getInTransaction(db, {
+          sessionID: input.info.sessionID, messageID: entry.messageID,
+        }))
       }
       info = upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
       part = updatePartRow(input.part, { publish: true, completedCompactionCheckpoint: true }, db)

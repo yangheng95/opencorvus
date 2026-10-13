@@ -15,6 +15,7 @@ import type { Provider } from "@/provider/provider"
 import { decodeDataUrlBase64Bytes, decodeTextBytes, isDecodableText } from "./text-mime"
 import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { CompactionHandoff } from "./compaction-handoff"
+import { CompactionCoverage } from "./compaction-coverage"
 import { sideChatIdentity } from "@/chat/side-chat-identity"
 import { MessageCopyEvidence } from "./copy-evidence"
 import { AssistantDiagnostics } from "./assistant-diagnostics"
@@ -419,6 +420,7 @@ export namespace Message {
     overflow: z.boolean().optional(),
     tail_start_id: z.string().optional(),
     anchor_id: z.string().optional(),
+    covered_parts: CompactionCoverage.Schema.optional(),
     focus: z.string().optional(),
   }).meta({
     ref: "CompactionPart",
@@ -693,6 +695,7 @@ export namespace Message {
         ContextOverflowError.Schema,
         CompactionContinuationMissingError.Schema,
         CompactionSummaryInvalidError.Schema,
+        CompactionCoverage.IntegrityError.Schema,
         PromptBudgetOverflowError.Schema,
         ToolSchemaBudgetError.Schema,
         ModelImageInputTooLargeError.Schema,
@@ -1156,6 +1159,7 @@ export namespace Message {
   ): Promise<ModelMessage[]> {
     const result: UIMessage[] = []
     const toolNames = new Set<string>()
+    const coveredDiagnostics = CompactionCoverage.coveredDiagnostics(input)
 
     // AI SDK v6 invokes tool.toModelOutput with an args object
     // ({ toolCallId, input, output }), not a raw output. v5 passed `output`
@@ -1214,7 +1218,8 @@ export namespace Message {
     const toModelOutput = (args: unknown) => toolResultToModelOutput(args, model)
 
     for (const msg of input) {
-      const diagnostics = msg.info.role === "assistant" ? AssistantDiagnostics.project(msg.info) : undefined
+      const diagnostics = msg.info.role === "assistant" && !coveredDiagnostics.has(msg.info.id)
+        ? AssistantDiagnostics.project(msg.info) : undefined
       if (msg.parts.length === 0 && !diagnostics) continue
 
       if (msg.info.role === "user") {
@@ -1487,6 +1492,7 @@ export namespace Message {
 
   export async function filterCompacted(stream: AsyncIterable<Message.WithParts>) {
     const result = [] as Message.WithParts[]
+    const sources = new Map<string, Message.WithParts>()
     const completed = new Map<string, { part: Message.CompactionPart; summaryID: string }>()
     let projectedCheckpointID: string | undefined
     let retain:
@@ -1498,6 +1504,7 @@ export namespace Message {
         }
       | undefined
     for await (const msg of stream) {
+      sources.set(msg.info.id, msg)
       if (retain) {
         if (!retain.tailSatisfied) {
           result.push(msg)
@@ -1609,6 +1616,13 @@ export namespace Message {
         const [summary] = result.splice(markerIndex, 1)
         result.splice(anchorIndex + 1, 0, summary!)
       }
+      const coverage = part?.covered_parts ?? []
+      const suffixes = coverage.map((entry) => CompactionCoverage.suffix(entry, sources.get(entry.messageID)))
+      const coveredIDs = new Set(coverage.map((entry) => entry.messageID))
+      for (let index = result.length - 1; index >= 0; index--) {
+        if (coveredIDs.has(result[index]!.info.id)) result.splice(index, 1)
+      }
+      result.splice(result.findIndex((message) => message.info.id === marker.info.id) + 1, 0, ...suffixes)
       const anchorID = part?.anchor_id
       const projectedAnchorIndex = anchorID ? result.findIndex((message) => message.info.id === anchorID) : -1
       if (projectedAnchorIndex >= 0) {
@@ -1721,6 +1735,8 @@ export namespace Message {
       case Message.CompactionContinuationMissingError.isInstance(e):
         return e.toObject()
       case Message.CompactionSummaryInvalidError.isInstance(e):
+        return e.toObject()
+      case CompactionCoverage.IntegrityError.isInstance(e):
         return e.toObject()
       case ModelImageInputTooLargeError.isInstance(e):
         return e.toObject()

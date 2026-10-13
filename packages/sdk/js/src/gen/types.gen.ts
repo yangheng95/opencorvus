@@ -102,6 +102,7 @@ export type AssistantMessage = {
     | ContextOverflowError
     | CompactionContinuationMissingError
     | CompactionSummaryInvalidError
+    | CompactionCoverageIntegrityError
     | PromptBudgetOverflowError
     | ToolSchemaBudgetError
     | ModelImageInputTooLargeError
@@ -360,9 +361,26 @@ export type CompactionContinuationMissingError = {
   name: "CompactionContinuationMissingError"
 }
 
+export type CompactionCoverageIntegrityError = {
+  data: {
+    message: string
+    messageID: string
+    partID?: string
+  }
+  name: "CompactionCoverageIntegrityError"
+}
+
 export type CompactionPart = {
   anchor_id?: string
   auto: boolean
+  covered_parts?: Array<{
+    diagnostics_sha256: string
+    messageID: string
+    parts: Array<{
+      partID: string
+      sha256: string
+    }>
+  }>
   focus?: string
   id: string
   messageID: string
@@ -1584,6 +1602,7 @@ export type EventSessionError = {
       | ContextOverflowError
       | CompactionContinuationMissingError
       | CompactionSummaryInvalidError
+      | CompactionCoverageIntegrityError
       | PromptBudgetOverflowError
       | ToolSchemaBudgetError
       | ModelImageInputTooLargeError
@@ -5698,6 +5717,7 @@ export type VisibleMessage =
         | ContextOverflowError
         | CompactionContinuationMissingError
         | CompactionSummaryInvalidError
+        | CompactionCoverageIntegrityError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -5924,6 +5944,14 @@ export type VisibleMessagePart =
   | {
       anchor_id?: string
       auto: boolean
+      covered_parts?: Array<{
+        diagnostics_sha256: string
+        messageID: string
+        parts: Array<{
+          partID: string
+          sha256: string
+        }>
+      }>
       focus?: string
       id: string
       messageID: string
@@ -28406,6 +28434,7 @@ export type SessionCommandResponses = {
         | ContextOverflowError
         | CompactionContinuationMissingError
         | CompactionSummaryInvalidError
+        | CompactionCoverageIntegrityError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -30061,6 +30090,7 @@ export type SessionPromptResponses = {
         | ContextOverflowError
         | CompactionContinuationMissingError
         | CompactionSummaryInvalidError
+        | CompactionCoverageIntegrityError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError

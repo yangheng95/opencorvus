@@ -30,7 +30,7 @@ try {
     .map((row) => ({ id: row.id, sessionID, messageID: summaryID, ...JSON.parse(row.data) })) as Message.Part[]
   const markers = parts.filter((part): part is Message.CompactionPart => part.type === "compaction")
   if (markers.length !== 1) throw new Error(`Checkpoint ${summaryID} must own one compaction marker`)
-  const marker = markers[0]!
+  const marker = Message.CompactionPart.parse(markers[0]!)
   const parent = messages.find((message) => message.id === summary.parentID)
   if (parent?.role !== "user") throw new Error(`Checkpoint ${summaryID} has no owned source user Message`)
   if (marker.anchor_id && messages.find((message) => message.id === marker.anchor_id)?.role !== "user") {
@@ -59,6 +59,16 @@ try {
       .get(marker.tail_start_id)?.count
     if (openRequests) throw new Error(`Checkpoint ${summaryID} tail has unsettled tool requests`)
   }
+  for (const entry of marker.covered_parts ?? []) {
+    const source = messages.find((message) => message.id === entry.messageID)
+    if (source?.role !== "assistant") throw new Error(`Checkpoint ${summaryID} has no covered assistant ${entry.messageID}`)
+    const partIDs = new Set(database.query<{ id: string }, [string, string]>(
+      "SELECT id FROM part WHERE message_id = ? UNION ALL SELECT id FROM tool_part_request WHERE message_id = ?",
+    ).all(entry.messageID, entry.messageID).map((part) => part.id))
+    for (const bound of entry.parts) {
+      if (!partIDs.has(bound.partID)) throw new Error(`Checkpoint ${summaryID} has no covered Part ${bound.partID}`)
+    }
+  }
   const text = Message.compactionContinuationTextParts(parts)
     .map((part) => part.text)
     .join("\n\n")
@@ -73,6 +83,8 @@ try {
       anchorID: marker.anchor_id,
       tailStartID: marker.tail_start_id,
       summaryCharacters: text.length,
+      coveredMessages: marker.covered_parts?.length ?? 0,
+      coveredParts: marker.covered_parts?.reduce((count, entry) => count + entry.parts.length, 0) ?? 0,
     }),
   )
 } finally {

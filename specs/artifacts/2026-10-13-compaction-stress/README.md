@@ -365,3 +365,31 @@ and `policy-grant`, five rounds each, with a minimum of 30 requests and a planne
 80-request cap for paging/retries. The main record contains the exact invocation
 and acceptance contract. Current real usage stays **159/160**; additional paid
 approval is required before running that matrix.
+
+## Open execution Message coverage
+
+[Compact results](open-message-summary.json) link the reproducible loss of a late
+Tool result to the exact checkpoint boundary repair. The
+[baseline](open-message-before.log.gz) records two failed projections despite
+intact raw Tool trace/cursor rows. [Final runtime evidence](open-message-final-evidence.log.gz)
+contains five passing tests, ten local streamed requests and one joined replay
+checker. A real Task ingress keeps one assistant through four Provider steps and
+an automatic checkpoint; the fourth HTTP request contains the later read result.
+The native Task process is replaced only by the existing in-process driver hook;
+the Task admission, activation, compactor, Provider transport and Tools are real.
+
+The open-message case covers three open checkpoints and a fourth after completion,
+changed text, newly settled Tools, late diagnostics, exact source bindings,
+ordinary/side copying, reopen and pruning. [Related contracts](open-message-final-contracts.log.gz)
+and [regression](open-message-regression.log.gz) bring distinct coverage across
+eight files to 53 tests. Earlier repeated passes do not inflate that total.
+[Initial expanded check](open-message-expanded.log.gz) retains a nonexistent-file
+invocation error; [initial Task check](open-message-task-runtime.log.gz) retains
+the corrected immediate-park expectation. These are checker calibration, not
+unresolved product failures. [Initial activation check](open-message-fixture-activation.log.gz)
+records rejection of a fabricated activation and is excluded from runtime claims.
+
+[Final typecheck](open-message-typecheck-final.log), [SDK generation](open-message-sdk-build.log.gz)
+and [documentation checks](open-message-docs.log) record the public contract
+validation. Paid use remains 159/160. Full concurrent Task/Mission recovery,
+provider-native comparison and real five-round policy behavior remain open.

@@ -21,6 +21,7 @@ import { ContextBudget } from "./context-budget"
 import { RequestBudget } from "./request-budget"
 import { LLM } from "./llm"
 import { CompactionHandoff } from "./compaction-handoff"
+import { CompactionCoverage } from "./compaction-coverage"
 import { renderToolFailureCause } from "./tool-failure-cause"
 import { InstructionPrompt } from "./instruction"
 import { TaskPlan } from "@/memory/task-plan"
@@ -437,12 +438,14 @@ export namespace SessionCompaction {
   }
 
   function compactionTranscriptMessages(messages: Message.WithParts[]): ModelMessage[] {
+    const coveredDiagnostics = CompactionCoverage.coveredDiagnostics(messages)
     return messages.flatMap((msg): ModelMessage[] => {
       const info = msg.info
       const lines = [
         `<message id="${escapeTranscriptText(info.id)}" role="${info.role}" agent="${escapeTranscriptText(info.agent)}" author="${escapeTranscriptText(info.author)}">`,
       ]
-      const diagnostics = info.role === "assistant" ? AssistantDiagnostics.project(info) : undefined
+      const diagnostics = info.role === "assistant" && !coveredDiagnostics.has(info.id)
+        ? AssistantDiagnostics.project(info) : undefined
       if (diagnostics) {
         const serialized = JSON.stringify(diagnostics)
         const value =
@@ -723,13 +726,20 @@ export namespace SessionCompaction {
   function prunableToolParts(messages: Message.WithParts[]): Message.ToolPart[] {
     const range = latestCompactionPruneRange(messages)
     if (!range) return []
+    const marker = messages.find((message) => message.info.id === range.markerID)?.parts.find(
+      (part): part is Message.CompactionPart => part.type === "compaction",
+    )
+    const covered = new Map(marker?.covered_parts?.map((entry) => [entry.messageID, entry]))
     let total = 0
     let pruned = 0
     const toPrune: Message.ToolPart[] = []
     for (let msgIndex = range.endIndex - 1; msgIndex >= range.startIndex; msgIndex--) {
       const msg = messages[msgIndex]
+      const entry = covered.get(msg.info.id)
+      const matching = entry ? CompactionCoverage.matchingPartIDs(entry, msg) : undefined
       for (let partIndex = msg.parts.length - 1; partIndex >= 0; partIndex--) {
         const part = msg.parts[partIndex]
+        if (matching && !matching.has(part.id)) continue
         if (part.type !== "tool") continue
         if (part.state.status !== "completed") continue
         if (PRUNE_PROTECTED_TOOLS.includes(part.tool)) continue
@@ -880,6 +890,7 @@ export namespace SessionCompaction {
         }
       : undefined
     const sourceTokens = await estimate({ messages: selected.head, model: continuationModel })
+    const coveredParts = CompactionCoverage.snapshot(selected.head)
 
     const msg = (await Session.updateMessage({
       id: Identifier.ascending("message"),
@@ -1054,6 +1065,7 @@ export namespace SessionCompaction {
       focus: input.focus ?? compactionPart?.focus,
       tail_start_id: selected.tail_start_id,
       anchor_id: selected.anchor_id,
+      covered_parts: coveredParts,
     } satisfies Message.CompactionPart
 
     await Session.publishCompactionCheckpoint({ info: processor.message, part: marker })

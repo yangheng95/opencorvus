@@ -1,0 +1,6 @@
+$ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+src/session/compaction-coverage.ts(34,52): error TS2345: Argument of type '{ id: string; sessionID: string; author: string; role: "assistant"; time: { created: number; completed?: number | undefined; }; parentID: string; modelID: string; providerID: string; agent: string; ... 15 more ...; activationID?: string | undefined; } | { ...; }' is not assignable to parameter of type '{ role: string; summary?: boolean | undefined; finish?: unknown; error?: unknown; structured?: unknown; }'.
+  Type '{ id: string; sessionID: string; author: string; role: "user"; time: { created: number; }; agent: string; model: { providerID: string; modelID: string; }; orderKey?: string | undefined; copySources?: ({ ...; } | { ...; })[] | undefined; ... 6 more ...; extra?: Record<...> | undefined; }' is not assignable to type '{ role: string; summary?: boolean | undefined; finish?: unknown; error?: unknown; structured?: unknown; }'.
+    Types of property 'summary' are incompatible.
+      Type '{ title?: string | undefined; body?: string | undefined; } | undefined' is not assignable to type 'boolean | undefined'.
+        Type '{ title?: string | undefined; body?: string | undefined; }' is not assignable to type 'boolean | undefined'.

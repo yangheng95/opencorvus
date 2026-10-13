@@ -1,0 +1,97 @@
+{
+  "status": "passed",
+  "scope": "scripted loopback Provider; real Task admission, activation, compaction and Tool execution; in-process ingress driver",
+  "realProviderRequests": {
+    "total": 159,
+    "authorizedTotal": 160,
+    "newRequests": 0,
+    "pendingRequestedTotal": 240
+  },
+  "distinctTests": 53,
+  "files": 8,
+  "finalRun": {
+    "tests": 5,
+    "loopbackRequests": 10,
+    "compactionRequests": 6,
+    "joinedReplayCheckerChildren": 1
+  },
+  "task": {
+    "taskID": "tsk_g00VXx0Dt000FVrsO7QG",
+    "sessionID": "ses_-zUS2zlxSzz56tgXL6kc",
+    "messageID": "msg_hJ0JvUJE8BHbie62CRep",
+    "controlID": "sctl_g0VXx0Em40010DY3L6a",
+    "steps": 4,
+    "checkpoints": 1,
+    "occurrences": [
+      {
+        "step": 1,
+        "id": "msg_hJ0JvUJE8BHbie62CRep",
+        "tokens": 0,
+        "finishedSteps": 0
+      },
+      {
+        "step": 2,
+        "id": "msg_hJ0JvUJE8BHbie62CRep",
+        "tokens": 18,
+        "finishedSteps": 1
+      },
+      {
+        "step": 3,
+        "id": "msg_hJ0JvUJE8BHbie62CRep",
+        "tokens": 36,
+        "finishedSteps": 2
+      },
+      {
+        "step": 4,
+        "id": "msg_hJ0JvUJE8BHbie62CRep",
+        "tokens": 54,
+        "finishedSteps": 3
+      }
+    ],
+    "finish": "tool-calls",
+    "completedAt": 1791911548372,
+    "tokens": {
+      "total": 54,
+      "input": 33,
+      "output": 21,
+      "reasoning": 0,
+      "cache": {
+        "read": 0,
+        "write": 0
+      }
+    },
+    "allRequestsStreamed": true,
+    "actualLateToolResult": {
+      "role": "tool",
+      "tool_call_id": "read_after_compaction",
+      "content": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-4zOLnI\\test-48488-TMD7wY\\fixtures\\memory-n9bNWs\\evidence.txt</path>\n<type>file</type>\n<content>1: TRACE-TASK-AFTER-CHECKPOINT-432 next_offset=17031\n\n(End of file - total 1 lines)\n</content>"
+    }
+  },
+  "repeated": {
+    "sessionID": "ses_-zUS2zjrjzzv5t3eybXu",
+    "openCheckpoints": 3,
+    "completedCheckpoint": "msg_g0VXx0GZq00AkmLVDkM7",
+    "copyID": "ses_-zUS2zjSRzz5OYTibPC0",
+    "requests": 4,
+    "checker": {
+      "status": "valid_checkpoint",
+      "sessionID": "ses_-zUS2zjrjzzv5t3eybXu",
+      "summaryID": "msg_g0VXx0GJZ00cRtBYrxOO",
+      "finish": "stop",
+      "sourceMessageID": "msg_g0VXx0G8S00lQ48I5hUS",
+      "anchorID": "msg_g0VXx0G8S00lQ48I5hUS",
+      "summaryCharacters": 114,
+      "coveredMessages": 1,
+      "coveredParts": 5,
+      "processExitCode": 0
+    },
+    "finalModelMessages": 2
+  },
+  "remaining": [
+    "Real five-round paired policy action semantics awaits budget approval",
+    "Full concurrent Task/Mission native recovery",
+    "Provider-native compaction controlled comparison",
+    "Multiple model distributions and whole-OS failure",
+    "Scale of partial-coverage metadata for very long histories"
+  ]
+}

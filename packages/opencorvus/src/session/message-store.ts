@@ -586,25 +586,28 @@ export namespace MessageStore {
     },
   )
 
+  function read(db: Database.TxOrDb, input: { sessionID: string; messageID: string }): Message.WithParts {
+    const row = db.select().from(MessageTable)
+      .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID))).get()
+    if (!row) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+    return {
+      info: { ...row.data, id: row.id, sessionID: row.session_id } as Message.Info,
+      parts: loadPartRows(db, [row.id]).map((part) => loadedPart(db, part)),
+    }
+  }
+
+  export function getInTransaction(db: Database.TxOrDb, input: { sessionID: string; messageID: string }) {
+    Database.requireActiveTransaction("MessageStore.getInTransaction")
+    return read(db, input)
+  }
+
   export const get = fn(
     z.object({
       sessionID: Identifier.schema("session"),
       messageID: Identifier.schema("message"),
     }),
     async (input): Promise<Message.WithParts> => {
-      const row = Database.use((db) =>
-        db
-          .select()
-          .from(MessageTable)
-          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
-          .get(),
-      )
-      if (!row) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
-      const info = { ...row.data, id: row.id, sessionID: row.session_id } as Message.Info
-      return {
-        info,
-        parts: await parts(input.messageID),
-      }
+      return Database.use((db) => read(db, input))
     },
   )
 }

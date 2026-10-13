@@ -12,6 +12,25 @@ Project memory has three explicitly scoped authorities:
    Skill and attachment references are historical locators, not current tool
    grants, desktop focus or permission authority.
 
+   A long-lived assistant can continue appending Parts after a checkpoint.
+   Its checkpoint `covered_parts` binds the exact captured Part payloads and
+   assistant diagnostics, carrying coverage through subsequent checkpoints.
+   Reconstruction replaces matching captured material and projects changed or
+   appended material after the summary under the original Message identity.
+   A running Tool's later outcome and a text Part's later streaming update are
+   new material. Missing captured identities raise
+   `CompactionCoverageIntegrityError`. The original records remain canonical;
+   these bindings carry no copied payload or independent execution authority.
+   Recompaction detection and Tool pruning use this same coverage. Unchanged
+   covered diagnostics are replaced by the summary in model input, while new
+   diagnostics remain readable and the evidence reader retains the full source.
+   Task-root execution reads its deterministic assistant occurrence directly
+   from persistence, preserving cumulative usage and semantic-step facts even
+   when the model sees only a suffix. Copies remap coverage and Tool references
+   together; a changed source stays changed after copying. Whole-Message
+   checkpoints without partial coverage do not provide a recoverable historical
+   Part boundary.
+
    Summary completion, checkpoint publication and compaction-control consumption
    are separate durable boundaries. A process interrupted before marker commit
    leaves the previous checkpoint authoritative; the recovered Session loop

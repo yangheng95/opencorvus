@@ -8,6 +8,7 @@ import { recoverCompletedToolResult } from "./tool-result-recovery"
 import { MessageStore } from "./message-store"
 import { settleAbandonedProviderActivity } from "./provider-activity-facts"
 import { NotFoundError } from "@/storage/db"
+import { CompactionCoverage } from "./compaction-coverage"
 import { Session } from "."
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Provider } from "../provider/provider"
@@ -1638,19 +1639,33 @@ export namespace SessionLoop {
     )
     if (latestSummaryIndex < 0) return false
     const summaryOrderKey = timelineMessageOrderKey(messages[latestSummaryIndex]!)
+    const marker = messages[latestSummaryIndex]!.parts.find((part) => part.type === "compaction")
+    const coverage = new Map(marker?.covered_parts?.map((entry) => [entry.messageID, entry]))
     return messages.some((msg) => {
       if (msg.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(msg.info)) return false
+      const entry = coverage.get(msg.info.id)
+      const matched = entry ? CompactionCoverage.matchingPartIDs(entry, msg) : undefined
+      if (
+        entry && msg.info.role === "assistant" &&
+        CompactionCoverage.diagnosticsDigest(msg.info) !== entry.diagnostics_sha256
+      ) return true
       // Model history moves the checkpoint beside its original anchor. The
       // retained tail can follow it there while preceding it in durable time.
-      if (compareTimelineOrderKeys(timelineMessageOrderKey(msg), summaryOrderKey) <= 0) return false
+      if (!entry && compareTimelineOrderKeys(timelineMessageOrderKey(msg), summaryOrderKey) <= 0) return false
       return msg.parts.some(
         (part) =>
-          part.type === "text" ||
-          part.type === "reasoning" ||
-          part.type === "tool" ||
-          part.type === "patch" ||
-          part.type === "file" ||
-          part.type === "snapshot",
+          !matched?.has(part.id) && (
+            part.type === "text" ||
+            part.type === "reasoning" ||
+            part.type === "tool" ||
+            part.type === "patch" ||
+            part.type === "file" ||
+            part.type === "source-url" ||
+            part.type === "source-document" ||
+            part.type === "source-file" ||
+            part.type === "interactive-artifact" ||
+            part.type === "snapshot"
+          ),
       )
     })
   }
@@ -1846,14 +1861,24 @@ export namespace SessionLoop {
       runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
         ? runtimeIdentity.taskIngressActivationID
         : undefined
-    const taskRootAssistant = taskRootActivation
-      ? input.msgs.findLast(
-          (message): message is Message.WithParts & { info: Message.Assistant } =>
-            message.info.role === "assistant" &&
-            message.info.parentID === input.lastUser.id &&
-            message.info.activationID === taskRootActivation,
+    let taskRootAssistant: (Message.WithParts & { info: Message.Assistant }) | undefined
+    if (taskRootActivation) {
+      const messageID = Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
+      let persisted: Message.WithParts | undefined
+      try {
+        persisted = await MessageStore.get({ sessionID: input.sessionID, messageID })
+      } catch (error) {
+        if (!NotFoundError.isInstance(error as Error)) throw error
+      }
+      if (persisted) {
+        if (
+          persisted.info.role !== "assistant" || persisted.info.parentID !== input.lastUser.id ||
+          persisted.info.activationID !== taskRootActivation
         )
-      : undefined
+          throw new Error(`Task-root assistant ${messageID} does not belong to activation ${taskRootActivation}`)
+        taskRootAssistant = { ...persisted, info: persisted.info }
+      }
+    }
     if (taskRootAssistant?.info.time.completed !== undefined) return "stop" as const
     const openTaskRootAssistant = taskRootAssistant
     const taskRootDecisionGapCount = openTaskRootAssistant

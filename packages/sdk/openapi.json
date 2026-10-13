@@ -356,6 +356,9 @@
                 "$ref": "#/components/schemas/CompactionSummaryInvalidError"
               },
               {
+                "$ref": "#/components/schemas/CompactionCoverageIntegrityError"
+              },
+              {
                 "$ref": "#/components/schemas/PromptBudgetOverflowError"
               },
               {
@@ -1320,6 +1323,37 @@
         ],
         "type": "object"
       },
+      "CompactionCoverageIntegrityError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "messageID": {
+                "type": "string"
+              },
+              "partID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "messageID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "CompactionCoverageIntegrityError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "CompactionPart": {
         "properties": {
           "anchor_id": {
@@ -1327,6 +1361,49 @@
           },
           "auto": {
             "type": "boolean"
+          },
+          "covered_parts": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "diagnostics_sha256": {
+                  "pattern": "^[a-f0-9]{64}$",
+                  "type": "string"
+                },
+                "messageID": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "parts": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "partID": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "sha256": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "partID",
+                      "sha256"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "messageID",
+                "diagnostics_sha256",
+                "parts"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "focus": {
             "type": "string"
@@ -5156,6 +5233,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/CompactionSummaryInvalidError"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CompactionCoverageIntegrityError"
                   },
                   {
                     "$ref": "#/components/schemas/PromptBudgetOverflowError"
@@ -19439,6 +19519,9 @@
                     "$ref": "#/components/schemas/CompactionSummaryInvalidError"
                   },
                   {
+                    "$ref": "#/components/schemas/CompactionCoverageIntegrityError"
+                  },
+                  {
                     "$ref": "#/components/schemas/PromptBudgetOverflowError"
                   },
                   {
@@ -20337,6 +20420,49 @@
               },
               "auto": {
                 "type": "boolean"
+              },
+              "covered_parts": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "diagnostics_sha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "messageID": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "parts": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "partID": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "sha256": {
+                            "pattern": "^[a-f0-9]{64}$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "partID",
+                          "sha256"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "messageID",
+                    "diagnostics_sha256",
+                    "parts"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "focus": {
                 "type": "string"
@@ -98813,6 +98939,9 @@
                               "$ref": "#/components/schemas/CompactionSummaryInvalidError"
                             },
                             {
+                              "$ref": "#/components/schemas/CompactionCoverageIntegrityError"
+                            },
+                            {
                               "$ref": "#/components/schemas/PromptBudgetOverflowError"
                             },
                             {
@@ -105408,6 +105537,9 @@
                             },
                             {
                               "$ref": "#/components/schemas/CompactionSummaryInvalidError"
+                            },
+                            {
+                              "$ref": "#/components/schemas/CompactionCoverageIntegrityError"
                             },
                             {
                               "$ref": "#/components/schemas/PromptBudgetOverflowError"

@@ -1,0 +1,7 @@
+$ bun run ./packages/opencorvus/script/docs/render-api-md.ts
+wrote: packages\web\src\content\docs\reference\api.mdx (60702 bytes, 348 ops, 26 groups)
+wrote: packages\web\src\content\docs\zh-cn\reference\api.mdx (58873 bytes)
+$ bun run ./packages/opencorvus/script/docs/render-api-md.ts --check
+docs:check ok (348 ops, 26 groups)
+$ bun run ./packages/opencorvus/script/check/architecture-index.ts
+architecture-index ok — 19 current documents indexed, every link live
