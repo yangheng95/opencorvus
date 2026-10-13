@@ -26,6 +26,7 @@ import { matchesSearchParts } from "../../services/text-search"
 import { activeDirectory } from "../../services/workspace"
 import {
   authenticateSelectedProvider,
+  modelsForProvider,
   providerAuthMethods,
   providerApiKeyConfigured,
   providerState,
@@ -554,11 +555,6 @@ export default function ProvidersPanel() {
     return Array.isArray(cat?.all) ? cat.all : []
   }
 
-  function providerModelIds(models: Record<string, unknown> | undefined): string[] {
-    if (!models || typeof models !== "object" || Array.isArray(models)) return []
-    return Object.keys(models)
-  }
-
   function providerMatchesSearch(parts: Array<unknown>): boolean {
     return matchesSearchParts(providerSearch(), parts)
   }
@@ -1004,9 +1000,22 @@ export default function ProvidersPanel() {
     setEditing(null)
   }
 
+  function modelListIssue(providerID: string): boolean {
+    return appStore.providerLoadIssues.some(
+      (issue) =>
+        issue.resource === "catalog" ||
+        (issue.resource === "provider" && (!issue.providerID || issue.providerID === providerID)),
+    )
+  }
+
+  function modelListKnown(providerID: string): boolean {
+    return Boolean(appStore.providerCatalog) && !modelListIssue(providerID)
+  }
+
   const unfilteredProviderEntries = createMemo(() =>
     Object.entries(configProviders()).map(([id, provider]) => {
-      const modelIds = providerModelIds(provider.models)
+      const modelsKnown = modelListKnown(id)
+      const modelIds = modelsKnown ? modelsForProvider(id) : []
       const canAuthenticate = providerAuthMethods(id).length > 0
       const status = canAuthenticate ? providerState(id) : null
       const statusText = status
@@ -1023,8 +1032,10 @@ export default function ProvidersPanel() {
         name: provider.name || id,
         envText: provider.env?.join(", ") || "",
         modelIds,
-        modelCountText: tc("provider.models.count", modelIds.length),
-        modelSummaryText: modelSummary(modelIds),
+        modelCountText: modelsKnown ? tc("provider.models.count", modelIds.length) : "—",
+        modelSummaryText: modelsKnown
+          ? modelSummary(modelIds)
+          : t(modelListIssue(id) ? "provider.models.unavailable" : "common.loading"),
         modelOverflowText,
         canAuthenticate,
         status,
@@ -1041,6 +1052,7 @@ export default function ProvidersPanel() {
         row.envText,
         row.modelCountText,
         row.modelSummaryText,
+        ...row.modelIds,
         row.modelOverflowText,
         row.statusText,
       ]),
@@ -1051,13 +1063,14 @@ export default function ProvidersPanel() {
     return catalogProviders()
       .filter((p: any) => p && typeof p.id === "string" && !custom.has(p.id))
       .map((p: any) => {
-        const modelCount = providerModelIds(p.models).length
+        const modelsKnown = modelListKnown(p.id)
+        const modelCount = modelsKnown ? modelsForProvider(p.id).length : 0
         const providerStatus = providerState(p.id)
         const status = providerStatus.tone === "active" ? providerStatus : null
         return {
           id: p.id,
           name: p.name || p.id,
-          modelCountText: tc("provider.models.count", modelCount),
+          modelCountText: modelsKnown ? tc("provider.models.count", modelCount) : "—",
           authMethods: providerAuthMethods(p.id).length,
           status,
           statusText: status

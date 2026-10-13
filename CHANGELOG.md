@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 服务商行的模型数量、摘要和搜索使用同一公开目录，正确显示空声明或部分覆盖继承的模型；编辑继续保留原配置覆盖。目录读取失败时显示本地化未知状态，成功重读后恢复。
+
 - 服务商全局凭据保存跨项目完成后，当前面板按实际服务商清除过期连接测试；项目配置保持目录范围，并行服务商测试独立收敛。此项覆盖当前前端实际收到的接受回执。
 
 - 服务商连接测试从有效目录选择默认模型，空模型声明继续可测试；零有效模型与配置不可用保持明确原因。结果使用当前语言摘要、实际模型身份和可展开的原始模型回复或完整诊断；保存配置、Key、删除及目录刷新后退休对应旧结果和在途回写。
@@ -95,6 +97,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Provider model counts, summaries and search use the public catalog, including models inherited by empty or partial configuration. Editing retains the original overrides. Catalog read failures show a localized unknown state until a successful reload.
 
 - Accepted global provider credential saves retire the affected connection test across project navigation. Project configuration retains its directory scope, and parallel provider tests settle independently. This covers accepted responses received by the current frontend.
 

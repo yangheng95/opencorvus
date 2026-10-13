@@ -1,0 +1,90 @@
+{
+  "at": "2026-10-13T22:53:00.903Z",
+  "facts": [
+    {
+      "scope": "global",
+      "directory": "",
+      "providers": [
+        {
+          "id": "owned-summary-a",
+          "configuredIDs": [],
+          "catalogIDs": [
+            "owned-summary-a-model"
+          ]
+        },
+        {
+          "id": "owned-summary-b",
+          "configuredIDs": [
+            "owned-summary-b-model"
+          ],
+          "catalogIDs": [
+            "owned-summary-b-model",
+            "owned-summary-b-inherited"
+          ]
+        },
+        {
+          "id": "owned-summary-zero",
+          "configuredIDs": [],
+          "catalogIDs": []
+        }
+      ]
+    },
+    {
+      "scope": "A",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\after\\project-A",
+      "providers": [
+        {
+          "id": "owned-summary-a",
+          "configuredIDs": [],
+          "catalogIDs": [
+            "owned-summary-a-model"
+          ]
+        },
+        {
+          "id": "owned-summary-b",
+          "configuredIDs": [
+            "owned-summary-b-model"
+          ],
+          "catalogIDs": [
+            "owned-summary-b-model",
+            "owned-summary-b-inherited"
+          ]
+        },
+        {
+          "id": "owned-summary-zero",
+          "configuredIDs": [],
+          "catalogIDs": []
+        }
+      ]
+    },
+    {
+      "scope": "B",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\after\\project-B",
+      "providers": [
+        {
+          "id": "owned-summary-a",
+          "configuredIDs": [],
+          "catalogIDs": [
+            "owned-summary-a-model"
+          ]
+        },
+        {
+          "id": "owned-summary-b",
+          "configuredIDs": [
+            "owned-summary-b-model"
+          ],
+          "catalogIDs": [
+            "owned-summary-b-model",
+            "owned-summary-b-inherited"
+          ]
+        },
+        {
+          "id": "owned-summary-zero",
+          "configuredIDs": [],
+          "catalogIDs": []
+        }
+      ]
+    }
+  ],
+  "boundary": "Actual public config/catalog projection only; no credential content retained"
+}

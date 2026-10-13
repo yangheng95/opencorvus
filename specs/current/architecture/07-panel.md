@@ -15,6 +15,15 @@ environment preparation failures keep their existing native retry command.
 One startup lifecycle hands readiness and listener disposal to the renderer;
 pre-catalog error reporting does not query unavailable translations.
 
+Provider rows display model counts, summaries, complete ID tooltips and model-ID
+search from the same public catalog used by model selection, through the existing
+modelsForProvider reader. Configuration remains the source for model editing and
+field intent; inherited catalog models are not copied into configuration. Missing
+catalog data, catalog read errors and applicable Provider projection issues render
+an unknown count and localized model-list status. A successful explicit reload
+restores the catalog presentation. A catalog count does not prove authentication
+or runnable model availability.
+
 ## Composer availability
 
 Composer model groups retain each connected catalog option's canonical label

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Provider 模型摘要](2026-10-14-provider-model-summary/README.md)：17张原图、三个正常退出服务、完整原日志与第14批正常交付回执。
+
 - [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority/README.md)：原交付回执、有限宿主资格与Root独立功能/桌面证据。
 
 - [持续目标 UI/UX 证据](2026-10-14-continuous-goal-ui-ux/README.md)：隔离实页、操作截图和真实目标投影。

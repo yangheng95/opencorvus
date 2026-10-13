@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Provider 模型摘要](records/2026-10/2026-10-14-provider-model-summary.md)：统一目录数量、摘要和完整模型ID搜索；17张原图及真实读取失败恢复。
+
 - [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
 
 - [持续目标 UI/UX](records/2026-10/2026-10-14-continuous-goal-ui-ux.md)：三模式统一入口、状态、预算控制和真实桌面验收。

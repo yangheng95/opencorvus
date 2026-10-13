@@ -1,0 +1,23 @@
+{
+  "boundary": "Actual credential bytes retained only in memory; completed original logs scanned after physical exit and pair cleanup",
+  "files": [
+    {
+      "file": "stdout.log",
+      "bytes": 0,
+      "rawContainsKnownCredential": false,
+      "archivedContainsKnownCredential": false
+    },
+    {
+      "file": "stderr.log",
+      "bytes": 0,
+      "rawContainsKnownCredential": false,
+      "archivedContainsKnownCredential": false
+    },
+    {
+      "file": "runtime\\log\\2026-10-13T224552-89936-1.log",
+      "bytes": 97956,
+      "rawContainsKnownCredential": false,
+      "archivedContainsKnownCredential": false
+    }
+  ]
+}
