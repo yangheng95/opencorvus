@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Native外输出接收端调查](records/2026-10/2026-10-13-native-output-sink-audit.md)：真实管道、逐分支结算和共享生产矩阵。
+
+- [Explorer标签所有者与上传搜索](records/2026-10/2026-10-13-explorer-tab-owner-search.md)：批次完成、跨工具状态和唯一搜索收敛。
+
 - [无模型时的 Provider 发现入口](records/2026-10/2026-10-13-provider-discovery-bootstrap.md)：凭据事实、可推理投影与发现恢复。
 
 - [388 参考历史重连身份](artifacts/2026-10-05-connection-workspace-authority/history-render-identity-plan-388.md)：真实完整快照、正文生命周期与侧聊历史稳定性。

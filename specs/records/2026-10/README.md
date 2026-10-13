@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [Native外输出调查](2026-10-13-native-output-sink-audit.md)：原未知错误、同句柄观测和完整横审计划。
+
+- [Explorer标签所有者与搜索](2026-10-13-explorer-tab-owner-search.md)：共享生命周期根因、真实批次与上传查询。
+
 - [无模型时的 Provider 发现入口](2026-10-13-provider-discovery-bootstrap.md)：共享根因与真实作用域验证。
 
 - [388 参考历史重连身份](2026-10-13-history-render-identity-388.md)：真实重连的消息组件身份、来源焦点与文件定位。

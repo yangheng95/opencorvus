@@ -551,6 +551,20 @@ or waiting cache. Creating a file retains its successful creation separately
 from the editor's actual opened, stopped or failed post-open result. Stable
 failure and refresh facts preserve their Details owner across language changes.
 
+The existing Explorer TabPanel stays mounted while its Files tool tab is open,
+through the same Tabs forceMount primitive used by retained workbench tools.
+Selecting File after a successful mutation, switching tools or hiding the dock
+preserves this single Explorer owner, its query, expansion, selection and action
+receipts. Explicitly closing Files disposes it; directory, API authority and
+selection epoch changes keep their existing reset and late-receipt fences.
+The active property means tool-open, so its one existing 15-second directory
+poll continues while hidden. Existing selected-panel CSS owns visibility.
+All explicit file actions, including upload, refresh the current nonempty query
+through the same required-refresh collector as their directory reads. There is
+no separate revision watcher, search polling loop or search opt-out. Concurrent
+superseded upload publication and in-flight backend scan freshness remain
+independent audit boundaries, not guarantees added by this panel lifetime change.
+
 Explorer rows retain their render identity through equivalent directory refreshes.
 The key derives from the existing API authority revision, directory, committed
 selection epoch, row kind, physical node type and exact normalized path. Ordinary

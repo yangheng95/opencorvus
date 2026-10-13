@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [Native外输出证据](2026-10-13-native-output-sink-audit/README.md)：各原Promise、双层drain及实际OS身份。
+
+- [Explorer标签与搜索证据](2026-10-13-explorer-tab-owner-search/README.md)：真实批成员、当前搜索、截图和原实例收尾。
+
 - [无模型时的 Provider 发现入口](2026-10-13-provider-discovery-bootstrap/README.md)：实际HTTP、已存地址绑定与桌面证据。
 
 - [388 参考历史重连身份](2026-10-05-connection-workspace-authority/history-render-identity-388/README.md)：真实侧聊、限定连接中断与正文身份记录。
