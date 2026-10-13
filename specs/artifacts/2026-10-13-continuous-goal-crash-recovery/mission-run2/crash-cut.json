@@ -1,0 +1,82 @@
+{
+  "pid": 75032,
+  "at": 1791883722036,
+  "continuationID": "pev_hMgKxHMZQLFCsYt2oOfP",
+  "inputID": "msg_hAmJ61OfBx4WlPGk7ptW",
+  "assistantID": "msg_g0VXv7SWK00s93k6a9X9",
+  "requestIndex": 10,
+  "reader": {
+    "boundary": "provider-source-reader",
+    "state": "reading",
+    "receivedAt": 1791883717481,
+    "boundAt": 1791883717484,
+    "chunkCount": 24,
+    "byteCount": 477570,
+    "firstByteReadAt": 1791883717487,
+    "lastByteReadAt": 1791883721826,
+    "identityState": "observed",
+    "requestContext": {
+      "sessionID": "ses_-zUS4soa6zzXQpUZpUP7",
+      "streamRequest": {
+        "requestID": "msg_hAmJ61OfBx4WlPGk7ptW",
+        "agentID": "mission",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "activity": {
+        "id": "act_g0VXv7Sgp00MIcZNw7UZ",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXv7SWK00s93k6a9X9"
+      }
+    }
+  },
+  "progress": [
+    {
+      "id": "prt_g0VXv7U5m00vr51Vu9vy",
+      "type": "reasoning",
+      "characters": 0
+    },
+    {
+      "id": "prt_g0VXv7U7v00V1vDbizdT",
+      "type": "text",
+      "characters": 2
+    }
+  ],
+  "toolIDs": [],
+  "promptOwner": {
+    "session_id": "ses_-zUS4soa6zzXQpUZpUP7",
+    "project_id": "prj_hWitMMvclfC21ZFRKAt5",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-MTpvgK\\runner-83928-oNK6ZI\\project",
+    "generation": "cal_g0VXv7BTc00T2jcR3ZB4",
+    "owner_pid": 75032,
+    "owner_process_instance_id": "win32:639274804341911436",
+    "owner_occurrence_id": "a9b03acd-e45f-4c97-ac3b-0966c20106f8",
+    "time_acquired": 1791883650128
+  },
+  "opened": {
+    "id": "pev_hpTIkLl5KlErH74e4iCU",
+    "kind": "event",
+    "type": "mission.execution.opened",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUS4soa6zzXQpUZpUP7",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "mission.wake",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": "e7516c1c-8656-5b9c-a06a-a4b6216f7f0e",
+    "reply_to": null,
+    "seq": 1,
+    "deadline_ms": null,
+    "emitted_at": 1791883649933,
+    "payload": {
+      "missionID": "0710804814069903",
+      "requestID": "dba287af-5b3e-4e78-94b8-522850ef20ab",
+      "requestFingerprint": "647051b0402b2eb8e8b0f5230cf59194137bbfafa83fced1cad74560addc11e8"
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task/Mission 持续目标崩溃恢复](2026-10-13-continuous-goal-crash-recovery.md)：实际进程终止、正式启动恢复与用量身份。
+
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence.md)：部分成功收敛与真实桌面/API根保护。
 
 - [383 完整工具结果与来源恢复](2026-10-13-source-result-commit-383.md)：完整事务、共享恢复入口与实际页面边界。

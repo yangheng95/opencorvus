@@ -64,6 +64,16 @@ and first-in-first-out pipeline. A current active goal receipt adds narrowly sco
 authority to reopen a completed/failed Task at epoch+1. Cancelled Tasks still require
 an explicit operator Message; ordinary scheduler input retains its original permission.
 
+An unanswered accepted Mission goal wake can resume its original Message through
+SessionWake under the same opened occurrence. The existing Mission process-recovery
+driver can instead claim a dead Prompt generation and persist its own visible recovery
+Message, binding that opened event, generation and interrupted assistant frontier.
+Both triggers share the durable SessionPromptOwner authority; exact dead-generation
+release and recovery admission fences prevent a stale claimant from replacing a live
+successor. Recovery evidence follows whichever persisted input acquired the new owner.
+The original goal identity, continuation receipt and accepted-turn count remain fixed;
+a runtime recovery Message is not an extra goal continuation.
+
 Pause stops new automatic Message admission. Already committed input may settle through
 its normal owner; uncommitted candidates must revalidate current intent and frontier.
 Goal state does not discard requested external effects or replace Task/Mission completion.

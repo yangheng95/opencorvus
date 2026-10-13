@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
+
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence/README.md)：前后真实桌面、物理文件与根保护合同。
 
 - [用量时间桶键盘详情](2026-10-13-usage-keyboard-details/README.md)：真实双语桌面、快速刷新焦点、单一集合与提示层复核。
