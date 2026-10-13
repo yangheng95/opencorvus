@@ -1,0 +1,49 @@
+{
+  "observedAtUtc": "2026-10-13T19:05:13.127Z",
+  "count": 327,
+  "exact": 320,
+  "mismatches": [
+    {
+      "path": "specs/artifacts/2026-10-14-directory-target-navigation/analysis/architecture-evidence-check.log",
+      "originalBytes": 141,
+      "gitBytes": 139,
+      "bytesEqual": false
+    },
+    {
+      "path": "specs/artifacts/2026-10-14-directory-target-navigation/analysis/docs-evidence-check.log",
+      "originalBytes": 106,
+      "gitBytes": 104,
+      "bytesEqual": false
+    },
+    {
+      "path": "specs/artifacts/2026-10-14-directory-target-navigation/analysis/evidence-check-exits.json",
+      "originalBytes": 82,
+      "gitBytes": 77,
+      "bytesEqual": false
+    },
+    {
+      "path": "specs/artifacts/2026-10-14-directory-target-navigation/analysis/formal-before-copy.json",
+      "originalBytes": 387,
+      "gitBytes": 380,
+      "bytesEqual": false
+    },
+    {
+      "path": "specs/artifacts/2026-10-14-directory-target-navigation/before/manifest.initial-null-totals.json",
+      "originalBytes": 179549,
+      "gitBytes": 176476,
+      "bytesEqual": false
+    },
+    {
+      "path": "specs/artifacts/2026-10-14-directory-target-navigation/before/manifest.json",
+      "originalBytes": 179936,
+      "gitBytes": 176861,
+      "bytesEqual": false
+    },
+    {
+      "path": "specs/artifacts/2026-10-14-directory-target-navigation/before/verification.json",
+      "originalBytes": 48723,
+      "gitBytes": 47560,
+      "bytesEqual": false
+    }
+  ]
+}

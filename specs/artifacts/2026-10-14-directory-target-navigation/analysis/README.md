@@ -9,5 +9,6 @@
 - meta-timeout-audit.md 完整覆盖共享生产矩阵及两次原/vcs长耗时；具体Git phase/inner身份与完整client cause仍缺证。
 - before-visual-second-review.md 是逐张原图人工复核；ui-plan-second-review.md 是未来目录浏览的代码方案复核，后态尚未取得。
 - docs-evidence-check.log、architecture-evidence-check.log与evidence-check-exits.json是检查点文档检查的原结果，分别0；类型/构建/静态索引检查不替功能或视觉验收。
+- checkpoint-{docs-check,architecture-check}.log/check-exits.json保留提交前最新文档检查原0；checkpoint-git-original-byte-review.json是首次Git与原件直接比较的原结果（7份CRLF规范化差异），范围.gitattributes随后保留本目录原字节。该比较仅资格固定证据原件，不作为产品功能检查。
 
 当前尚无产品修复、后态、中文或完整目录link浏览资格。原tool-return.json是工具实际结构化返回，不冒称分别捕获了原进程的binary stdout/stderr。

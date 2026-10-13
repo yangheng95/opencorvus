@@ -58,6 +58,8 @@ primitive先记录Bun1.4/Windows真实Dirent.isDirectory/isFile/isSymbolicLink�
 
 本次交付是调查证据检查点：修前48个真实脚本HTTP、8个独立mutation、8张人工查看的桌面JPEG、原实例正常结算已完成；当前产品没有修改，两个准入根因尚未实施，目录link浏览、后态/中文与meta等待根因尚未达成。完整原失败与未知保留，持续Goal仍active，检查点正常提交/最新上游合并与push之后继续资格与实施，不把它称完整修复批次。
 
+原范围检查点commit=4486f230c9491d14aea5022f03b9adab9aaefcdb，331文件，私有index只含本spec/artifact和三个owned索引条目；原real index已精确patch收回且为空。首次Git blob与工作区原件直接逐字节比较327项，320相同，7份原日志/JSON受全仓text=auto的CRLF规范化影响（JPEG/bin/gzip原件一致）。Root先核完整.gitattributes、原差异与影响，再为本次唯一artifact目录设置-text，重新收录原7完整文本；不改原日志/重算期望/用可变源码摘要冒功能门。首比较原结果保留，后续准确blob字节资格与本轮docs/architecture原0另录。随后private prepare原exit1来自diff --check把raw CRLF视为trailing whitespace，外层输出过长被工具截断、没有保存完整首stdout文件，明确不伪造。按Git官方per-path whitespace合同声明cr-at-eol并保其余三项默认检查，使原换行合法而不重写证据；helper同时将后续任何原Git失败全stdout/stderr保存独立文件。修正提交与正常push尚未完成前不称归档已完整交付。
+
 Root全文核native-entry-effect-revision并查Microsoft GetFileInformationByHandleEx/CreateFileW/Creating Symbolic Links与Koffi官方输出参数资料：现仓Koffi3.3.2、runtime/package-require及Windows包已有可复用成熟绑定范式；候选读取FileAttributeTagInfo固定两个DWORD，无NTFS reparse buffer parser、无Bun-only新绑定或第二fallback。未知tag/原I/O不能猜普通目录或junction，Handle首失败与关闭失败均保存。当前仅授权准备固定只读metadata qualifier；Node/Bun库ABI、实际flags/权限/关闭/loader与访问walker仍未运行，不凭此改产品。POSIX dot/hop、future tree内部link和UNC仍缺完整资格，下一步须收敛而非仅加terminal修补。
 
 ## 新出现的原meta等待错误（横向审计后仍待取证）

@@ -35,6 +35,9 @@ specs/artifacts/2026-08-25-benchmark-history/** -text
 specs/artifacts/2026-10-05-connection-workspace-authority/artifact-download-root-implementation/manual-05-*-clipboard.txt -text
 specs/artifacts/2026-10-05-connection-workspace-authority/artifact-download-root-implementation/manual-05-*-download.txt -text
 specs/artifacts/2026-10-05-connection-workspace-authority/artifact-download-root-implementation/manual-05-table-download.csv -text
+
+# Retain the original process, HTTP, and manual investigation evidence bytes.
+specs/artifacts/2026-10-14-directory-target-navigation/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 specs/artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation/manual-06-*-copy.txt -text
 specs/artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation/manual-06-*-download.txt -text
 specs/artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation/manual-06-code-edited-clipboard.txt -text
