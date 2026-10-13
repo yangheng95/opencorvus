@@ -30,6 +30,17 @@ available. The leave dialog reads the same action error. Save conflicts retain
 their existing message and write preconditions. No automatic retry loop or
 parallel file loader is introduced.
 
+Shared CodeEditor keeps original CRLF, LF and CR separators as line-boundary
+metadata beside canonical CodeMirror Text. Changes map surviving boundaries
+and give new boundaries the loaded file's first separator (LF for a file with
+no separator). Only removed or overridden format facts join CodeMirror's
+existing mapped undo history. Serialization combines the current Text with
+these boundaries, so small edits preserve mixed endings and undo restores
+deleted separators. External values use canonical Text equality before any
+document replacement; format-only updates keep the text and cursor intact.
+File drafts, artifact edits and exact-byte file revision/write contracts share
+this one serialization boundary; no second raw-text draft or undo stack exists.
+
 File Editor renders base64 image content from its existing FileContent response
 through the shared PreviewableImage and image preview host. Image viewing is
 separate from text editability: images carry the existing read-only badge while

@@ -721,3 +721,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [2026-10-13 历史来源与短文件光标369](2026-10-13-source-shortened-file-369.md)。
 
 - [2026-10-13 文件行号锚点370](2026-10-13-source-line-anchor-370.md)。
+
+- [2026-10-13 来源文件保存换行371](2026-10-13-source-line-endings-371.md)。

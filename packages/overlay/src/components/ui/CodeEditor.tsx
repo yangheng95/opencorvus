@@ -7,6 +7,12 @@ import { Button } from "./Button"
 import { editorLanguage } from "./code-editor-language"
 import { createCodeEditorLocale } from "./code-editor-locale"
 import { codeEditorContent } from "./code-editor-content"
+import {
+  codeEditorLineEndings,
+  codeEditorLineEndingEffects,
+  codeEditorLineEndingExtensions,
+  codeEditorValue,
+} from "./code-editor-line-endings"
 import { createAnimationFrameScheduler, hasRunningLayoutAnimation } from "../../utils/animation-frame"
 import {
   overlayCodeEditorExtensions,
@@ -139,14 +145,16 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
       parent: host,
       extensions: [
         basicSetup,
+        codeEditorLineEndingExtensions(local.value),
         ...overlayCodeEditorExtensions(),
         localeExtension(),
         languageCompartment.of([]),
         EditorView.lineWrapping,
         readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
         EditorView.updateListener.of((update) => {
-          if (!update.docChanged || applyingExternalValue) return
-          local.onValueChange(update.state.doc.toString())
+          if (applyingExternalValue) return
+          if (!update.docChanged && update.startState.field(codeEditorLineEndings) === update.state.field(codeEditorLineEndings)) return
+          local.onValueChange(codeEditorValue(update.state))
         }),
       ],
     })
@@ -191,15 +199,16 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     const next = local.value
     const editor = view
     if (!editor) return
+    if (codeEditorValue(editor.state) === next) return
     const nextText = editor.state.toText(next)
-    if (editor.state.doc.eq(nextText)) return
     applyingExternalValue = true
     editor.dispatch({
-      changes: {
+      changes: editor.state.doc.eq(nextText) ? undefined : {
         from: 0,
         to: editor.state.doc.length,
         insert: nextText,
       },
+      effects: codeEditorLineEndingEffects(next),
     })
     applyingExternalValue = false
   })

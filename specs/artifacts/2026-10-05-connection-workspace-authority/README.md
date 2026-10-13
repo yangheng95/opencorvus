@@ -813,3 +813,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [历史来源与短文件光标369](source-shortened-file-369/README.md) / [Recall](source-shortened-file-plan-369.md)。
 
 - [文件行号锚点370](source-line-anchor-370/README.md) / [Recall](source-line-anchor-plan-370.md)。
+
+- [来源文件保存换行371](source-line-endings-371/README.md) / [Recall](source-line-endings-plan-371.md)。

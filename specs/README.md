@@ -3168,3 +3168,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [历史来源与短文件光标369](records/2026-10/2026-10-13-source-shortened-file-369.md)：实页复现并修复越界引用抢回输入光标。
 
 - [文件行号锚点370](records/2026-10/2026-10-13-source-line-anchor-370.md)：正文单行/范围锚点统一打开，外部页面保留原地址。
+
+- [来源文件保存换行371](records/2026-10/2026-10-13-source-line-endings-371.md)：保留原始及混合换行，真实保存、撤销与重载验收。

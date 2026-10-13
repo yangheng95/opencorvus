@@ -1,0 +1,61 @@
+{
+  "observedAt": "2026-10-13T00:19:41.821Z",
+  "results": [
+    {
+      "name": "crlf",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\crlf.txt",
+      "bytes": 40,
+      "base64": "eGFscGhhIGNybGYNCk1BVENIMzcxIGNybGYNCmdhbW1hDQpvbWVnYQ==",
+      "text": "xalpha crlf\r\nMATCH371 crlf\r\ngamma\r\nomega",
+      "separators": [
+        "\r\n",
+        "\r\n",
+        "\r\n"
+      ],
+      "equalsOriginal": false,
+      "equalsSingleEdit": true
+    },
+    {
+      "name": "lf",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\lf.txt",
+      "bytes": 33,
+      "base64": "eGFscGhhIGxmCk1BVENIMzcxIGxmCmdhbW1hCm9tZWdh",
+      "text": "xalpha lf\nMATCH371 lf\ngamma\nomega",
+      "separators": [
+        "\n",
+        "\n",
+        "\n"
+      ],
+      "equalsOriginal": false,
+      "equalsSingleEdit": true
+    },
+    {
+      "name": "cr",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\cr.txt",
+      "bytes": 33,
+      "base64": "eGFscGhhIGNyDU1BVENIMzcxIGNyDWdhbW1hDW9tZWdh",
+      "text": "xalpha cr\rMATCH371 cr\rgamma\romega",
+      "separators": [
+        "\r",
+        "\r",
+        "\r"
+      ],
+      "equalsOriginal": false,
+      "equalsSingleEdit": true
+    },
+    {
+      "name": "mixed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+      "bytes": 40,
+      "base64": "eGFscGhhIG1peGVkDQpNQVRDSDM3MSBtaXhlZApnYW1tYQ1vbWVnYQ==",
+      "text": "xalpha mixed\r\nMATCH371 mixed\ngamma\romega",
+      "separators": [
+        "\r\n",
+        "\n",
+        "\r"
+      ],
+      "equalsOriginal": false,
+      "equalsSingleEdit": true
+    }
+  ]
+}

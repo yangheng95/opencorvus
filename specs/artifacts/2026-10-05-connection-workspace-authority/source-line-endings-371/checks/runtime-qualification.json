@@ -1,0 +1,541 @@
+{
+  "results": [
+    {
+      "stage": "before",
+      "session": "ses_-zUS79qhFzzWhhQ0ryms",
+      "sources": [
+        {
+          "id": "prt_g0VXsqAaW005W9qpbmiI",
+          "messageID": "msg_g0VXsq9Zo000WGreC8GT",
+          "type": "source-file",
+          "sourceId": "bc8d85c2522f8956e13d081ed73e27a5dec5b4bb0bb4c679305542d234c02bae",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\mixed.txt",
+          "title": "mixed.txt",
+          "snippet": "MATCH371 mixed",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 1
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsqAac00qQuIDD62B",
+          "messageID": "msg_g0VXsq9Zo000WGreC8GT",
+          "type": "source-file",
+          "sourceId": "f047900726564a78c2519bd10c742d2f3709228b1bebd4f0ac078f91cf456224",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\cr.txt",
+          "title": "cr.txt",
+          "snippet": "alpha cr\rMATCH371 cr\rgamma\romega",
+          "range": {
+            "startLine": 1,
+            "endLine": 1,
+            "startColumn": 10
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsqAaf001Rv8RWgA7",
+          "messageID": "msg_g0VXsq9Zo000WGreC8GT",
+          "type": "source-file",
+          "sourceId": "1c4a98e19d4073113284c8c7b0ea767025818dadbd60293f8b5cb3d732a166e8",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\lf.txt",
+          "title": "lf.txt",
+          "snippet": "MATCH371 lf",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 1
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsqAaj00gl4ceAxNi",
+          "messageID": "msg_g0VXsq9Zo000WGreC8GT",
+          "type": "source-file",
+          "sourceId": "c5d0cbfdad75d8d781a10910d52ffdbf6c20b0299a1fde4d6d4c834900c5064a",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\crlf.txt",
+          "title": "crlf.txt",
+          "snippet": "MATCH371 crlf",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 1
+          },
+          "provider": "opencorvus-search-code"
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXsqAcp008HrwonDgt",
+          "sessionID": "ses_-zUS79qhFzzWhhQ0ryms",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791850042607,
+            "completed": 1791850048081
+          },
+          "finish": "stop"
+        }
+      ],
+      "requests": 5,
+      "elapsedMs": 162056,
+      "settled": {
+        "occurrence": "source-line-endings-371-before-dc790da2-c283-455b-97df-467c08cb8478",
+        "outcome": "settled",
+        "host": {
+          "pid": 79572,
+          "processInstanceID": "win32:639274467893794464",
+          "occurrenceID": "396bbc63-9784-4b68-b6da-f800e00ac7a5"
+        },
+        "target": {
+          "pid": 78312,
+          "processInstanceID": "win32:639274467901711326",
+          "occurrenceID": "77f6fa69-7688-45fb-81aa-d0645f222fa4"
+        },
+        "observedAtUtc": "2026-10-13T00:09:12.227Z",
+        "deadlineAt": 1791850589360,
+        "terminal": {
+          "occurrenceID": "source-line-endings-371-before-dc790da2-c283-455b-97df-467c08cb8478",
+          "pid": 78312,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "providerEOFRequests": 5,
+        "cancellation": null,
+        "providerUserCancelledRequests": 0,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "qualification": "NativeService",
+        "physicalCompletion": true
+      },
+      "saved": {
+        "observedAt": "2026-10-13T00:08:59.287Z",
+        "results": [
+          {
+            "name": "crlf",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\crlf.txt",
+            "bytes": 37,
+            "base64": "eGFscGhhIGNybGYKTUFUQ0gzNzEgY3JsZgpnYW1tYQpvbWVnYQ==",
+            "text": "xalpha crlf\nMATCH371 crlf\ngamma\nomega",
+            "separators": [
+              "\n",
+              "\n",
+              "\n"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": false
+          },
+          {
+            "name": "lf",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\lf.txt",
+            "bytes": 33,
+            "base64": "eGFscGhhIGxmCk1BVENIMzcxIGxmCmdhbW1hCm9tZWdh",
+            "text": "xalpha lf\nMATCH371 lf\ngamma\nomega",
+            "separators": [
+              "\n",
+              "\n",
+              "\n"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          },
+          {
+            "name": "cr",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\cr.txt",
+            "bytes": 33,
+            "base64": "eGFscGhhIGNyCk1BVENIMzcxIGNyCmdhbW1hCm9tZWdh",
+            "text": "xalpha cr\nMATCH371 cr\ngamma\nomega",
+            "separators": [
+              "\n",
+              "\n",
+              "\n"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": false
+          },
+          {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-before\\project\\格式\\mixed.txt",
+            "bytes": 39,
+            "base64": "eGFscGhhIG1peGVkCk1BVENIMzcxIG1peGVkCmdhbW1hCm9tZWdh",
+            "text": "xalpha mixed\nMATCH371 mixed\ngamma\nomega",
+            "separators": [
+              "\n",
+              "\n",
+              "\n"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": false
+          }
+        ]
+      },
+      "historyFiles": [],
+      "served": {
+        "level": "info",
+        "time": "2026-10-13T00:07:09.635Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "9adf6d0f-05d0-4753-8330-8fbd764929f8",
+          "method": "GET",
+          "path": "/ui/assets/main-w4chjmbj.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 12
+        },
+        "message": "request"
+      }
+    },
+    {
+      "stage": "after",
+      "session": "ses_-zUS77oN6zzXIeUlHESk",
+      "sources": [
+        {
+          "id": "prt_g0VXssCpV007evCKJ5hJ",
+          "messageID": "msg_g0VXssBvG00AIphkYi2U",
+          "type": "source-file",
+          "sourceId": "a707cfcc36130db637fe32b842342d1b7aff7b88b5c11685ca81e2567c8d77a3",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+          "title": "mixed.txt",
+          "snippet": "MATCH371 mixed",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 1
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXssCpb00Uo2qIry7T",
+          "messageID": "msg_g0VXssBvG00AIphkYi2U",
+          "type": "source-file",
+          "sourceId": "2c007f8e3360d11949fbec16bc1de400e5ff71c83197bc55d13b18a23534ecf1",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\cr.txt",
+          "title": "cr.txt",
+          "snippet": "alpha cr\rMATCH371 cr\rgamma\romega",
+          "range": {
+            "startLine": 1,
+            "endLine": 1,
+            "startColumn": 10
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXssCpf00ua9GR5BoD",
+          "messageID": "msg_g0VXssBvG00AIphkYi2U",
+          "type": "source-file",
+          "sourceId": "ac9a3c90ff752b0eec76bbf28697c79a89ea10c626e91413ec55fc1751ceba4e",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\lf.txt",
+          "title": "lf.txt",
+          "snippet": "MATCH371 lf",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 1
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXssCpi00RFeu51P0a",
+          "messageID": "msg_g0VXssBvG00AIphkYi2U",
+          "type": "source-file",
+          "sourceId": "357101a4d62f857de935318a0963909c9d53cbd1120da857bdb60a1167706b2f",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\crlf.txt",
+          "title": "crlf.txt",
+          "snippet": "MATCH371 crlf",
+          "range": {
+            "startLine": 2,
+            "endLine": 2,
+            "startColumn": 1
+          },
+          "provider": "opencorvus-search-code"
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXssCrt00ti7FpvRm8",
+          "sessionID": "ses_-zUS77oN6zzXIeUlHESk",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791850527885,
+            "completed": 1791850536083
+          },
+          "finish": "stop"
+        }
+      ],
+      "requests": 5,
+      "elapsedMs": 315960,
+      "settled": {
+        "occurrence": "source-line-endings-371-after-cb78220a-60ac-43c6-b351-ad9cb68d7e5a",
+        "outcome": "settled",
+        "host": {
+          "pid": 47452,
+          "processInstanceID": "win32:639274472673691131",
+          "occurrenceID": "69c68f1f-d737-4cd1-b05f-06d514eedca3"
+        },
+        "target": {
+          "pid": 41576,
+          "processInstanceID": "win32:639274472681501412",
+          "occurrenceID": "052851a1-24c2-467c-bf5a-7b576f4e5f96"
+        },
+        "observedAtUtc": "2026-10-13T00:19:44.110Z",
+        "deadlineAt": 1791851067353,
+        "terminal": {
+          "occurrenceID": "source-line-endings-371-after-cb78220a-60ac-43c6-b351-ad9cb68d7e5a",
+          "pid": 41576,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "providerUserCancelledRequests": 0,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "qualification": "NativeService",
+        "physicalCompletion": true,
+        "cancellation": null,
+        "providerEOFRequests": 5
+      },
+      "saved": {
+        "observedAt": "2026-10-13T00:16:39.033Z",
+        "results": [
+          {
+            "name": "crlf",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\crlf.txt",
+            "bytes": 40,
+            "base64": "eGFscGhhIGNybGYNCk1BVENIMzcxIGNybGYNCmdhbW1hDQpvbWVnYQ==",
+            "text": "xalpha crlf\r\nMATCH371 crlf\r\ngamma\r\nomega",
+            "separators": [
+              "\r\n",
+              "\r\n",
+              "\r\n"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          },
+          {
+            "name": "lf",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\lf.txt",
+            "bytes": 33,
+            "base64": "eGFscGhhIGxmCk1BVENIMzcxIGxmCmdhbW1hCm9tZWdh",
+            "text": "xalpha lf\nMATCH371 lf\ngamma\nomega",
+            "separators": [
+              "\n",
+              "\n",
+              "\n"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          },
+          {
+            "name": "cr",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\cr.txt",
+            "bytes": 33,
+            "base64": "eGFscGhhIGNyDU1BVENIMzcxIGNyDWdhbW1hDW9tZWdh",
+            "text": "xalpha cr\rMATCH371 cr\rgamma\romega",
+            "separators": [
+              "\r",
+              "\r",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          },
+          {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 40,
+            "base64": "eGFscGhhIG1peGVkDQpNQVRDSDM3MSBtaXhlZApnYW1tYQ1vbWVnYQ==",
+            "text": "xalpha mixed\r\nMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\r\n",
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          }
+        ]
+      },
+      "historyFiles": [
+        {
+          "name": "02-deleted-files",
+          "observedAt": "2026-10-13T00:16:51.412Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 38,
+            "base64": "eGFscGhhIG1peGVkTUFUQ0gzNzEgbWl4ZWQKZ2FtbWENb21lZ2E=",
+            "text": "xalpha mixedMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": false
+          }
+        },
+        {
+          "name": "03-undo-files",
+          "observedAt": "2026-10-13T00:17:03.772Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 40,
+            "base64": "eGFscGhhIG1peGVkDQpNQVRDSDM3MSBtaXhlZApnYW1tYQ1vbWVnYQ==",
+            "text": "xalpha mixed\r\nMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\r\n",
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          }
+        },
+        {
+          "name": "04-redo-files",
+          "observedAt": "2026-10-13T00:17:37.416Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 38,
+            "base64": "eGFscGhhIG1peGVkTUFUQ0gzNzEgbWl4ZWQKZ2FtbWENb21lZ2E=",
+            "text": "xalpha mixedMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": false
+          }
+        },
+        {
+          "name": "05-inserted-files",
+          "observedAt": "2026-10-13T00:17:54.341Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 43,
+            "base64": "eGFscGhhIG1peGVkDQp6DQpNQVRDSDM3MSBtaXhlZApnYW1tYQ1vbWVnYQ==",
+            "text": "xalpha mixed\r\nz\r\nMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\r\n",
+              "\r\n",
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": false
+          }
+        },
+        {
+          "name": "06-insert-undone-files",
+          "observedAt": "2026-10-13T00:18:11.332Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 40,
+            "base64": "eGFscGhhIG1peGVkDQpNQVRDSDM3MSBtaXhlZApnYW1tYQ1vbWVnYQ==",
+            "text": "xalpha mixed\r\nMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\r\n",
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          }
+        },
+        {
+          "name": "07-format-undo-files",
+          "observedAt": "2026-10-13T00:18:48.545Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 40,
+            "base64": "eGFscGhhIG1peGVkDQpNQVRDSDM3MSBtaXhlZApnYW1tYQ1vbWVnYQ==",
+            "text": "xalpha mixed\r\nMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\r\n",
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          }
+        },
+        {
+          "name": "08-format-redo-files",
+          "observedAt": "2026-10-13T00:19:05.183Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 39,
+            "base64": "eGFscGhhIG1peGVkCk1BVENIMzcxIG1peGVkCmdhbW1hCm9tZWdh",
+            "text": "xalpha mixed\nMATCH371 mixed\ngamma\nomega",
+            "separators": [
+              "\n",
+              "\n",
+              "\n"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": false
+          }
+        },
+        {
+          "name": "09-final-files",
+          "observedAt": "2026-10-13T00:19:41.821Z",
+          "record": {
+            "name": "mixed",
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+            "bytes": 40,
+            "base64": "eGFscGhhIG1peGVkDQpNQVRDSDM3MSBtaXhlZApnYW1tYQ1vbWVnYQ==",
+            "text": "xalpha mixed\r\nMATCH371 mixed\ngamma\romega",
+            "separators": [
+              "\r\n",
+              "\n",
+              "\r"
+            ],
+            "equalsOriginal": false,
+            "equalsSingleEdit": true
+          }
+        }
+      ],
+      "served": {
+        "level": "info",
+        "time": "2026-10-13T00:15:16.853Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "18d7061d-8064-4b24-a388-ba9524b33d5d",
+          "method": "GET",
+          "path": "/ui/assets/main--IPEAIl1.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5
+        },
+        "message": "request"
+      }
+    }
+  ],
+  "boundary": "Actual Provider/Native/completed canonical messages and search outcomes plus complete file bytes only. Screenshots and keyboard history are manual evidence, without UI assertions. CR-only source location retains ripgrep coordinates; separate unresolved coordinate candidate."
+}

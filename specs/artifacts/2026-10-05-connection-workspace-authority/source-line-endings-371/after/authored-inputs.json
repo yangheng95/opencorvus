@@ -1,0 +1,42 @@
+[
+  {
+    "name": "crlf",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\crlf.txt",
+    "text": "alpha crlf\r\nMATCH371 crlf\r\ngamma\r\nomega",
+    "separators": [
+      "\r\n",
+      "\r\n",
+      "\r\n"
+    ]
+  },
+  {
+    "name": "lf",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\lf.txt",
+    "text": "alpha lf\nMATCH371 lf\ngamma\nomega",
+    "separators": [
+      "\n",
+      "\n",
+      "\n"
+    ]
+  },
+  {
+    "name": "cr",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\cr.txt",
+    "text": "alpha cr\rMATCH371 cr\rgamma\romega",
+    "separators": [
+      "\r",
+      "\r",
+      "\r"
+    ]
+  },
+  {
+    "name": "mixed",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-line-endings-371-after\\project\\格式\\mixed.txt",
+    "text": "alpha mixed\r\nMATCH371 mixed\ngamma\romega",
+    "separators": [
+      "\r\n",
+      "\n",
+      "\r"
+    ]
+  }
+]
