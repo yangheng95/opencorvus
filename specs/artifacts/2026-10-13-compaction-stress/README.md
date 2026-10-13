@@ -330,3 +330,38 @@ remain preserved. The request ledger now totals **159/160**. This is one seeded
 semantic run, not five-round policy-update behavior, an action benchmark or a
 native-Codex quality comparison. The research update and precise next acceptance
 dimensions are in the main investigation record.
+
+## Paired policy-action checker (local validation)
+
+The [compact matrix](policy-action-summary.json) records two five-round cases:
+revoking an initial release authorization, and granting one scoped release after
+an initial draft-only rule. The genuine correction is in a long middle user
+Message. Each round compares full and compacted history under the same model,
+Tool surface and context capacity. Probe histories are separate copies; their
+answers and writes cannot become later source-summary input. Actual input size
+estimates are reported rather than represented as equal lengths.
+
+The production streaming processor calls WriteDeliveryArtifact, which writes
+every supplied action into a fresh sandbox file without enforcing the expected
+policy. Each file is read and matched to its completed canonical Tool receipt.
+Ten checkpoints and 20 correct local actions pass. A separate wrong-target run
+actually writes two wrong files and is graded POLICY_ACTION_SCOPE_MISMATCH;
+missing/multiple/wrong-kind actions also have explicit result contracts.
+
+[Final settlement log](policy-action-settlement-final.log.gz) passes the six
+policy tests; [combined regression](policy-action-final.log.gz) also passes 13
+compaction-integrity tests, for **19 distinct tests**. The first
+[mechanical run](policy-action-mechanics.log.gz) is retained as earlier evidence,
+not added to the count. All logs preserve their original bytes. The final local
+chain uses **33 loopback requests, zero remote calls and 11 joined checker
+children**, including the deliberately wrong scenario. The
+[final typecheck](policy-action-typecheck-final.log) and
+[initial typecheck](policy-action-typecheck.log) both pass.
+
+These Provider responses are scripted; no five-round semantic model result is
+claimed. Actual processor errors or another requested compaction remain
+execution errors, not policy scores. The ready real cases are `policy-revoke`
+and `policy-grant`, five rounds each, with a minimum of 30 requests and a planned
+80-request cap for paging/retries. The main record contains the exact invocation
+and acceptance contract. Current real usage stays **159/160**; additional paid
+approval is required before running that matrix.

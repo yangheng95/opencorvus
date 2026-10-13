@@ -16,6 +16,7 @@ import {
 } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 import { assertCopiedOAuthAccess, CredentialRedactor, RealProviderAudit } from "./real-provider-audit"
+import { CompactionPolicyCase } from "./compaction-policy-case"
 
 const env = (name: string) => process.env[`COMPACTION_STRESS_${name}`]
 assert.equal(env("ALLOW_REAL_PROVIDER"), "1", "Explicit real Provider authorization required")
@@ -32,6 +33,7 @@ const caseNames = [
   "tool-file",
   "tool-failure",
   "message-diagnostics",
+  ...CompactionPolicyCase.names,
 ]
 assert(authSource && exactModel && resultPath, "AUTH_SOURCE, MODEL and RESULT are required")
 assert(Number.isSafeInteger(maxRequests) && maxRequests > 0 && maxRequests <= 100)
@@ -173,40 +175,7 @@ async function save() {
   await fs.mkdir(path.dirname(path.resolve(resultPath!)), { recursive: true })
   await fs.writeFile(resultPath!, redactor.redact(JSON.stringify(report, null, 2)))
 }
-async function user(sessionID: string, text: string) {
-  const info = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID,
-    role: "user",
-    author: "user",
-    time: { created: Date.now() },
-    agent: "chat",
-    model: target,
-  })
-  if (info.role !== "user") throw new Error("Benchmark input must persist as a user Message")
-  await Session.updatePart({ id: Identifier.ascending("part"), sessionID, messageID: info.id, type: "text", text })
-  return info
-}
-async function assistant(sessionID: string, parentID: string, text: string, complete = true) {
-  const info = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID,
-    parentID,
-    role: "assistant",
-    author: "chat",
-    agent: "chat",
-    time: { created: Date.now() },
-    path: { cwd: project, root: project },
-    ...target,
-    finish: "stop",
-    cost: 0,
-    tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
-  })
-  if (info.role !== "assistant") throw new Error("Benchmark response must persist as an assistant Message")
-  await Session.updatePart({ id: Identifier.ascending("part"), sessionID, messageID: info.id, type: "text", text })
-  if (complete) await Session.updateMessage({ ...info, time: { ...info.time, completed: Date.now() } })
-  return info
-}
+const { user, assistant } = await CompactionPolicyCase.history({ target, project })
 async function inactive<T>(run: (signal: AbortSignal) => Promise<T>) {
   activity = Date.now()
   const controller = new AbortController()
@@ -233,6 +202,33 @@ try {
         assert(caseNames.includes(name), "Unknown case")
         if (audit.exhausted) break
         const nonce = `${nonceSeed}-${name}`
+        if (CompactionPolicyCase.names.includes(name as CompactionPolicyCase.Name)) {
+          await CompactionPolicyCase.run({
+            name: name as CompactionPolicyCase.Name,
+            nonce,
+            rounds,
+            project,
+            model,
+            inactive,
+            requestCount: () => audit.requests.length,
+            exhausted: () => audit.exhausted,
+            redact: (text) => redactor.redact(text),
+            async record(entry) {
+              if (!reports.includes(entry)) reports.push(entry)
+              await save()
+              if (entry.status !== "running")
+                console.log(
+                  JSON.stringify({
+                    case: name,
+                    round: entry.round,
+                    status: entry.status,
+                    requests: audit.requests.length,
+                  }),
+                )
+            },
+          })
+          continue
+        }
         const session = await Session.create({ kind: "assistant", title: `Compaction benchmark ${name}` })
         const anchor = await user(
           session.id,
@@ -493,27 +489,9 @@ try {
               )
               entry.originalDiagnosticPreserved = true
             }
-            const checker = Bun.spawn(
-              [process.execPath, path.resolve(import.meta.dir, "replay-compaction-errors-validator.ts")],
-              {
-                cwd: path.resolve(import.meta.dir, ".."),
-                env: {
-                  ...process.env,
-                  OPENCORVUS_DB: Database.Path(),
-                  SESSION_ID: session.id,
-                  COMPACTION_MESSAGE_ID: summary.info.id,
-                },
-                stdout: "pipe",
-                stderr: "pipe",
-              },
+            entry.checkpoint = await CompactionPolicyCase.checkCheckpoint(session.id, summary.info.id, (text) =>
+              redactor.redact(text),
             )
-            const [checkerOut, checkerErr, checkerExit] = await Promise.all([
-              new Response(checker.stdout).text(),
-              new Response(checker.stderr).text(),
-              checker.exited,
-            ])
-            assert.equal(checkerExit, 0, redactor.redact(checkerErr))
-            entry.checkpoint = JSON.parse(checkerOut.trim().split("\n").at(-1)!)
             const before = projected.map((m) => m.info.id)
             Database.close()
             const reopened = await Message.filterCompacted(MessageStore.stream(session.id))

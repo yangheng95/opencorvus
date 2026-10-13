@@ -1,0 +1,1397 @@
+{
+  "focusedTestsPassed": 19,
+  "remoteRequests": 0,
+  "joinedCheckerProcesses": 11,
+  "deliberateWrongActionEffects": 2,
+  "scope": "scripted local streaming production compactor/processor; semantic model quality unmeasured",
+  "localRequests": 33,
+  "acceptedCheckpoints": 10,
+  "acceptedActionEffects": 20,
+  "matrix": [
+    {
+      "name": "policy-revoke",
+      "deliberatelyWrong": false,
+      "localRequests": 15,
+      "rounds": [
+        {
+          "round": 1,
+          "status": "passed",
+          "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+          "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+          "updateID": "msg_g0VXwkNLx00rXLRJZfwd",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+            "summaryID": "msg_g0VXwkNQi00IJ6KZIHFu",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkNMf00PJRNRLExR",
+            "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+            "summaryCharacters": 490,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3Fcd3zziLbCGmUY1",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 88086,
+                "messagePayloadTokensEst": 22022,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 22212
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3Fcd3zziLbCGmUY1\\prt_g0VXwkNnK00S5P1JeIbx.json",
+                  "callID": "call_action_2",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkNme004lCBBK2OO",
+                  "partID": "prt_g0VXwkNnF00U46l52pYk",
+                  "callID": "call_action_2",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FcF5zzrY7i0WwWD",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2014,
+                "messagePayloadTokensEst": 504,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 694
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3FcF5zzrY7i0WwWD\\prt_g0VXwkNon00tumJQe04m.json",
+                  "callID": "call_action_3",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkNoL008x1fkFN73",
+                  "partID": "prt_g0VXwkNol00C5Efm49A1",
+                  "callID": "call_action_3",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "status": "passed",
+          "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+          "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+          "updateID": "msg_g0VXwkNLx00rXLRJZfwd",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+            "summaryID": "msg_g0VXwkNse0020QIsCcwo",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkNqP00AxykzCs5f",
+            "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+            "summaryCharacters": 490,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3Fc9QzzuyjaS7DKV",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 103730,
+                "messagePayloadTokensEst": 25933,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 26123
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3Fc9QzzuyjaS7DKV\\prt_g0VXwkO4t00Z07IjqMUO.json",
+                  "callID": "call_action_5",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkO4400P4dOn0mYC",
+                  "partID": "prt_g0VXwkO4q00ez3kMYlXS",
+                  "callID": "call_action_5",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FbyKzzAME63SqW0",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2014,
+                "messagePayloadTokensEst": 504,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 694
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3FbyKzzAME63SqW0\\prt_g0VXwkO7A003IyGB60N9.json",
+                  "callID": "call_action_6",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkO5p004Tf1sIeMZ",
+                  "partID": "prt_g0VXwkO78007s0o8k62J",
+                  "callID": "call_action_6",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "status": "passed",
+          "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+          "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+          "updateID": "msg_g0VXwkNLx00rXLRJZfwd",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+            "summaryID": "msg_g0VXwkOBS00yITgZVo8A",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkO8A00TNB0TzDjG",
+            "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+            "summaryCharacters": 490,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3Fbrgzzswc4hp6rF",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 119374,
+                "messagePayloadTokensEst": 29844,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 30034
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3Fbrgzzswc4hp6rF\\prt_g0VXwkOOJ00YAvfrWFD3.json",
+                  "callID": "call_action_8",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkOMx00c0UbYJ03D",
+                  "partID": "prt_g0VXwkOOH00Gem1VOI1G",
+                  "callID": "call_action_8",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FbgJzziMvRbbiZ0",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2014,
+                "messagePayloadTokensEst": 504,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 694
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3FbgJzziMvRbbiZ0\\prt_g0VXwkOPh00ohrdaXobu.json",
+                  "callID": "call_action_9",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkOPG0080JWs5JTQ",
+                  "partID": "prt_g0VXwkOPf00FLspGeQcF",
+                  "callID": "call_action_9",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 4,
+          "status": "passed",
+          "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+          "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+          "updateID": "msg_g0VXwkNLx00rXLRJZfwd",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+            "summaryID": "msg_g0VXwkOV100LTIvKJEbg",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkOQn00OMDe4f85B",
+            "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+            "summaryCharacters": 490,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3FbZ1zzVj171vssx",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 135018,
+                "messagePayloadTokensEst": 33755,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 33945
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3FbZ1zzVj171vssx\\prt_g0VXwkOhY00OXjTAUojM.json",
+                  "callID": "call_action_11",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkOh3003rmypNhqX",
+                  "partID": "prt_g0VXwkOhV00zyTgHEEig",
+                  "callID": "call_action_11",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FbNczzfjAHvX9un",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2014,
+                "messagePayloadTokensEst": 504,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 694
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3FbNczzfjAHvX9un\\prt_g0VXwkOjC000zhplXl0r.json",
+                  "callID": "call_action_12",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkOig00Vsq22KOPC",
+                  "partID": "prt_g0VXwkOjA00Otc0aq1zw",
+                  "callID": "call_action_12",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 5,
+          "status": "passed",
+          "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+          "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+          "updateID": "msg_g0VXwkNLx00rXLRJZfwd",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3Fcf1zzyv36tUVUn",
+            "summaryID": "msg_g0VXwkOq9007zlI2WNI6",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkOkH000V2jFuBF9",
+            "anchorID": "msg_g0VXwkNLB00cj0yfsefK",
+            "summaryCharacters": 490,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3FbFZzzPQ5zf3YZm",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 150662,
+                "messagePayloadTokensEst": 37666,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 37856
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3FbFZzzPQ5zf3YZm\\prt_g0VXwkP4N00FkLrxkUn0.json",
+                  "callID": "call_action_14",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkP3s00NYWpw9RJI",
+                  "partID": "prt_g0VXwkP4L00DepMam5Vk",
+                  "callID": "call_action_14",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3Fb1bzzry4A5akhe",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2014,
+                "messagePayloadTokensEst": 504,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 694
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-OXHVdv\\policy-actions\\ses_-zUS3Fb1bzzry4A5akhe\\prt_g0VXwkP5r00c0ysGNtsb.json",
+                  "callID": "call_action_15",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "CHANNEL-local-policy-revoke",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkP5Q008rYzbW0jk",
+                  "partID": "prt_g0VXwkP5p00ptelFwAoa",
+                  "callID": "call_action_15",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "deliberatelyWrong": false,
+      "localRequests": 15,
+      "rounds": [
+        {
+          "round": 1,
+          "status": "passed",
+          "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+          "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+          "updateID": "msg_g0VXwkPjE00Co2jEVfMq",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+            "summaryID": "msg_g0VXwkPlI00fOvIUhj2B",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkPjY00ADacgXX4Z",
+            "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+            "summaryCharacters": 498,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3FaGIzzmCaWqYNYk",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 88081,
+                "messagePayloadTokensEst": 22020,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 22210
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FaGIzzmCaWqYNYk\\prt_g0VXwkPvX004xXctBS1h.json",
+                  "callID": "call_action_2",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkPuw00EMNi5JWuj",
+                  "partID": "prt_g0VXwkPvU00g8IwdVM6d",
+                  "callID": "call_action_2",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3Fa70zz8ynPqR2gQ",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2013,
+                "messagePayloadTokensEst": 503,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 693
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3Fa70zz8ynPqR2gQ\\prt_g0VXwkPxK00pROCKpA2r.json",
+                  "callID": "call_action_3",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkPwn00av8J0B4il",
+                  "partID": "prt_g0VXwkPxH00Cig1b417x",
+                  "callID": "call_action_3",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "status": "passed",
+          "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+          "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+          "updateID": "msg_g0VXwkPjE00Co2jEVfMq",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+            "summaryID": "msg_g0VXwkQ0n00LyUq91hH2",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkPyu006xPsrSUZK",
+            "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+            "summaryCharacters": 498,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3Fa0wzzilB342xIk",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 103721,
+                "messagePayloadTokensEst": 25930,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 26120
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3Fa0wzzilB342xIk\\prt_g0VXwkQCe00vYdP32Tz4.json",
+                  "callID": "call_action_5",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkQC300cwZAmfg0c",
+                  "partID": "prt_g0VXwkQCc00gbbvBuJIl",
+                  "callID": "call_action_5",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FZqwzzga6MPEGrx",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2013,
+                "messagePayloadTokensEst": 503,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 693
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FZqwzzga6MPEGrx\\prt_g0VXwkQFT00zl42gTRve.json",
+                  "callID": "call_action_6",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkQE100bcvtDCKTK",
+                  "partID": "prt_g0VXwkQFQ00dFCC69F0R",
+                  "callID": "call_action_6",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "status": "passed",
+          "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+          "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+          "updateID": "msg_g0VXwkPjE00Co2jEVfMq",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+            "summaryID": "msg_g0VXwkQMK00PZiGS6VxO",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkQH500PpgyGpHRX",
+            "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+            "summaryCharacters": 498,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3FZihzzwD2aS2A36",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 119361,
+                "messagePayloadTokensEst": 29840,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 30030
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FZihzzwD2aS2A36\\prt_g0VXwkQcq00w5zSTQhbV.json",
+                  "callID": "call_action_8",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkQaK00TwltMjSxh",
+                  "partID": "prt_g0VXwkQco00dzRQBnd0I",
+                  "callID": "call_action_8",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FZUrzznjxZKqJIR",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2013,
+                "messagePayloadTokensEst": 503,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 693
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FZUrzznjxZKqJIR\\prt_g0VXwkQeR00rMa4A3nEv.json",
+                  "callID": "call_action_9",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkQdx00isD0UmYx1",
+                  "partID": "prt_g0VXwkQeO00nd7FFs6IQ",
+                  "callID": "call_action_9",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 4,
+          "status": "passed",
+          "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+          "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+          "updateID": "msg_g0VXwkPjE00Co2jEVfMq",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+            "summaryID": "msg_g0VXwkQln00JaHCNkF50",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkQfc00gCzii1nvq",
+            "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+            "summaryCharacters": 498,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3FZKAzzq6asaO0ui",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 135001,
+                "messagePayloadTokensEst": 33750,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 33940
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FZKAzzq6asaO0ui\\prt_g0VXwkR2O00kDusD2E56.json",
+                  "callID": "call_action_11",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkR1h00voZTchgP7",
+                  "partID": "prt_g0VXwkR2L00PT02TEaYh",
+                  "callID": "call_action_11",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FZ3czzHv1OSmw2a",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2013,
+                "messagePayloadTokensEst": 503,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 693
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FZ3czzHv1OSmw2a\\prt_g0VXwkR4700ebnbZqhpt.json",
+                  "callID": "call_action_12",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkR3d00ZFblW5roj",
+                  "partID": "prt_g0VXwkR4500QZP86C5ZO",
+                  "callID": "call_action_12",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 5,
+          "status": "passed",
+          "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+          "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+          "updateID": "msg_g0VXwkPjE00Co2jEVfMq",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3FaH5zzMcAY9RQcN",
+            "summaryID": "msg_g0VXwkRMn00EP539nkes",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkR5x00koyjYwLxF",
+            "anchorID": "msg_g0VXwkPiz00EHsjeft1A",
+            "summaryCharacters": 498,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3FYtlzzfN03TIXot",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 150641,
+                "messagePayloadTokensEst": 37660,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 37850
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FYtlzzfN03TIXot\\prt_g0VXwkRgL00jELMcmuC2.json",
+                  "callID": "call_action_14",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkRfe0054OJG0fcp",
+                  "partID": "prt_g0VXwkRgI00TVL0uE4jt",
+                  "callID": "call_action_14",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FYRlzzT7a0vXbSB",
+              "status": "passed",
+              "code": "POLICY_ACTION_MATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2013,
+                "messagePayloadTokensEst": 503,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 693
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-k0wQFu\\policy-actions\\ses_-zUS3FYRlzzT7a0vXbSB\\prt_g0VXwkRiW00rxDK2b48u.json",
+                  "callID": "call_action_15",
+                  "action": {
+                    "kind": "release",
+                    "channel": "CHANNEL-local-policy-grant",
+                    "region": "REGION-local-policy-grant",
+                    "artifact_id": "ARTIFACT-local-policy-grant",
+                    "policy_revision": "POLICY-local-policy-grant"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkRhj00Q2YjiypWm",
+                  "partID": "prt_g0VXwkRiU00z7ZExcU0y",
+                  "callID": "call_action_15",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "policy-revoke",
+      "deliberatelyWrong": true,
+      "localRequests": 3,
+      "rounds": [
+        {
+          "round": 1,
+          "status": "failed",
+          "sessionID": "ses_-zUS3FXYtzzxrrmPV50V",
+          "anchorID": "msg_g0VXwkSRC00kToupvxnM",
+          "updateID": "msg_g0VXwkSRV000xMS78Jqh",
+          "checkpoint": {
+            "status": "valid_checkpoint",
+            "sessionID": "ses_-zUS3FXYtzzxrrmPV50V",
+            "summaryID": "msg_g0VXwkSUO0075J6aufuj",
+            "finish": "stop",
+            "sourceMessageID": "msg_g0VXwkSRs00rcmw16KSG",
+            "anchorID": "msg_g0VXwkSRC00kToupvxnM",
+            "summaryCharacters": 490,
+            "processExitCode": 0
+          },
+          "reopen": "exact projection identities",
+          "lanes": [
+            {
+              "lane": "full",
+              "sessionID": "ses_-zUS3FXXVzzlF860pVpJ",
+              "status": "failed",
+              "code": "POLICY_ACTION_SCOPE_MISMATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 88086,
+                "messagePayloadTokensEst": 22022,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 22212
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-dOqxjy\\policy-actions\\ses_-zUS3FXXVzzlF860pVpJ\\prt_g0VXwkSe700XULF3eTE5.json",
+                  "callID": "call_action_2",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "WRONG-DESTINATION",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkSde00Ip5d5Keyn",
+                  "partID": "prt_g0VXwkSe5002l7qfbzyn",
+                  "callID": "call_action_2",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            },
+            {
+              "lane": "compacted",
+              "sessionID": "ses_-zUS3FXNrzzaVDQYdkut",
+              "status": "failed",
+              "code": "POLICY_ACTION_SCOPE_MISMATCH",
+              "processorResult": "continue",
+              "actionCount": {
+                "expected": 1,
+                "actual": 1,
+                "pass": true
+              },
+              "capacity": {
+                "status": "known",
+                "tokens": 256000
+              },
+              "inputEstimate": {
+                "messagePayloadChars": 2014,
+                "messagePayloadTokensEst": 504,
+                "mediaCounts": {
+                  "image": 0,
+                  "pdf": 0,
+                  "audio": 0,
+                  "video": 0
+                },
+                "mediaTokensEst": 0,
+                "systemTokensEst": 0,
+                "toolSchemaTokensEst": 190,
+                "totalTokensEst": 694
+              },
+              "effects": [
+                {
+                  "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-25ty8T\\test-87492-vngbvP\\fixtures\\memory-dOqxjy\\policy-actions\\ses_-zUS3FXNrzzaVDQYdkut\\prt_g0VXwkSfS00S9aAYNqI4.json",
+                  "callID": "call_action_3",
+                  "action": {
+                    "kind": "draft",
+                    "channel": "WRONG-DESTINATION",
+                    "region": "REGION-local-policy-revoke",
+                    "artifact_id": "ARTIFACT-local-policy-revoke",
+                    "policy_revision": "POLICY-local-policy-revoke"
+                  }
+                }
+              ],
+              "toolIdentities": [
+                {
+                  "messageID": "msg_g0VXwkSex007f2gwLvvN",
+                  "partID": "prt_g0VXwkSfR0091pwnb8ca",
+                  "callID": "call_action_3",
+                  "tool": "WriteDeliveryArtifact",
+                  "status": "completed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
