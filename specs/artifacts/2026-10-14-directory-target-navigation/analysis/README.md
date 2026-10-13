@@ -10,5 +10,8 @@
 - before-visual-second-review.md 是逐张原图人工复核；ui-plan-second-review.md 是未来目录浏览的代码方案复核，后态尚未取得。
 - docs-evidence-check.log、architecture-evidence-check.log与evidence-check-exits.json是检查点文档检查的原结果，分别0；类型/构建/静态索引检查不替功能或视觉验收。
 - checkpoint-{docs-check,architecture-check}.log/check-exits.json保留提交前最新文档检查原0；checkpoint-git-original-byte-review.json是首次Git与原件直接比较的原结果（7份CRLF规范化差异），范围.gitattributes随后保留本目录原字节。该比较仅资格固定证据原件，不作为产品功能检查。
+- state-and-futuretree-amendment.md是最新只读修正：target内部junction须保访问context，future普通树位置映射尚不能解析其内部link/..；不能按历史建议直接实现整树权限。
+- checkpoint-git-restored/current-byte-review.json是恢复后331份stage/commit原件直接比较，均逐字节相同；checkpoint-push-original.log.gz/exit.json保原正常hooks0与远端并发ref拒绝1。原log完整gzip保实际输出尾空格；metadata-git-style-error.json保第一次style检查的原失败，不修写日志正文。
+- metadata-{docs-check,architecture-check}.log/doc-check-exits.json保双宿主证据与新增README后两项文档检查原0。
 
 当前尚无产品修复、后态、中文或完整目录link浏览资格。原tool-return.json是工具实际结构化返回，不冒称分别捕获了原进程的binary stdout/stderr。

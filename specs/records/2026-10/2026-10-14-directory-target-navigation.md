@@ -62,6 +62,16 @@ primitive先记录Bun1.4/Windows真实Dirent.isDirectory/isFile/isSymbolicLink�
 
 Root全文核native-entry-effect-revision并查Microsoft GetFileInformationByHandleEx/CreateFileW/Creating Symbolic Links与Koffi官方输出参数资料：现仓Koffi3.3.2、runtime/package-require及Windows包已有可复用成熟绑定范式；候选读取FileAttributeTagInfo固定两个DWORD，无NTFS reparse buffer parser、无Bun-only新绑定或第二fallback。未知tag/原I/O不能猜普通目录或junction，Handle首失败与关闭失败均保存。当前仅授权准备固定只读metadata qualifier；Node/Bun库ABI、实际flags/权限/关闭/loader与访问walker仍未运行，不凭此改产品。POSIX dot/hop、future tree内部link和UNC仍缺完整资格，下一步须收敛而非仅加terminal修补。
 
+追加只读资格计划已完成Root全文审阅：native-metadata-qualifier.mjs、固定inputs JSON和review，20项=17个before operand（含三对原base/trailing）+2个hop祖先+1个预声明missing；不运行服务/API/mutation或模型。明确createRequire(opencorvus/package.json)只证明已安装库ABI；opaque HANDLE、two DWORD library struct、stdcall/_Out_及固定0access/share7/OPEN_EXISTING/OPEN_REPARSE_POINT|BACKUP_SEMANTICS，失败立即GetLastError，有效handle只Close一次，完整首cause和close错误都保留。Node25.7与Bun1.4各首次一次，首非预期停当前host后续path；每个独立外层child固定30000ms/8MiB capture，原inputs/full stdout/stderr/exit/timeout signal保存exclusive路径，不复用namespace。该直接库进程不是NativeFacade终态或生产loader资格，不冒称其receipt；超时保原退出/未知，不重跑。Node --check首次真实0、双输出0B，只证明语法，尚无load/native调用；Root随后顺序授权原Node/Bun两份只读输入。
+
+原Node pid87276/library执行0，stdout94908B/stderr0B；Bun pid87920/0，stdout97087B/stderr0B，各20/20完成。actual Koffi/native3.3.2与唯一@koromix win32-x64 addon路径、pointer8/struct8/offset0,4实证一致；两host普通tag0、SYMLINK=0xa000000c、MOUNT_POINT=0xa0000003，同三对尾separatormetadata/entry、19有效handle各原Close1，missing原Win322与完整firstCause。固定原输入/完整bytes/退出存native-metadata artifact。这里只资格库/Win32事实，不声称production loader/未知reparse/close失败、dot grammar或File修复。
+
+Root全文读state-and-futuretree-amendment：absolute SYMLINK target内部junction必须把递归得到的访问namespace交给remaining suffix，不能ultimate realpath覆盖；junction独立target依赖审查不能回写外层context。source与future readlink内部component-link/..被path.resolve抹hop仍是共享潜在根因；futureRoot+suffix只映射位置，不能解析未发布树。当前仅可独立收敛current Move访问依赖，先补混合/dot真实有限资格再实现；relative/sharedrelocation与完整目录浏览保持明确未满足，不能以terminal两case宣称整树根治。尚无产品源修改。
+
+3c6bf0420a717ba3fa06db394a39086fbc93ff2f修正commit14文件，私有index精确收回后real index空；Git与当前331份归档逐字节均相同。最新fresh fetch/merge正常，完整outgoing三commit包含本两笔与并行已授权/13正向合同+20真实流式requests/typecheck0具证的Provider交付，Root核其完整产品/test差异与原validation。首次正常push全部hooks（typecheck、routes/docs/owners/architecture/package/release/module与secret scan）0，原push退出1是并行远端已到同3c6但预期旧7d7的ref lock冲突；全原日志/退出保留。需fresh fetch/merge/集合审查/必要验证与正常push，不覆盖远端或将原1伪称0。
+
+后续fresh fetch实际origin已包含本两commit，普通merge为Already up to date、outgoing为空。新增双host证据的docs/architecture各原0。第三private prepare首次失败是原Turbo timing行尾实际空格的diff --check（完整原Git stdout/stderr已单独保存），不是产品行为；按现artifact完整gzip方式保存原push日志，解压与原件直接字节一致，不编辑实际尾空格或原退出，再准备精确范围提交。
+
 ## 新出现的原meta等待错误（横向审计后仍待取证）
 
 Root新增2case host资格实际exit0，两个生产native rename均returned、原source inode真实发布：absolute dir symlink祖先下raw新目标仍present/addressable，junction祖先下raw新目标ENOENT，两个独立alias与markers保持。完整inputs/results及原tool structured return保存；这**推翻**post-evidence-design中统一Windows logical relative-hop anchor建议，其推荐不能作为实现方案。源依赖访问必须保不同reparse祖先的真实prefix语义，当前尚缺成熟metadata/Host adapter最小方案，Root已继续授权后端agent只读权威原语调查。此次没有API/UI/旧case重放，尚无产品实现或后态，不能以局部3case修补代替共享根因。

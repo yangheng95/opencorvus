@@ -11,3 +11,5 @@
 两条原meta timeout已立即横向审计；原/vcs耗时约163/165秒，具体Git子阶段与inner身份缺证，不能叫console clean或判偶发。当前仅调查/工具资格交付，**产品修复、后态和完整目录浏览尚未达成**。下一最小准入方案须保Windows真实不同reparse祖先语义，不能以统一逻辑父路径误拒合法操作。
 
 [完整追加分析与独立宿主对照](analysis/README.md)保留已被推翻的原方案、两种祖先的真实不同结果、尾分隔符读取和meta共享横审；后续实现应先重读正式Recall并收敛此差异。
+
+[双宿主原Win32分类资格](native-metadata/README.md)：Node/Bun各首次20项只读metadata真实0，完整input、库/addon/ABI、native/close/cause与原bytes；不能当File产品或未来树修复通过。当前访问状态与未来树进一步只读修正在analysis中保留，原方案作历史。

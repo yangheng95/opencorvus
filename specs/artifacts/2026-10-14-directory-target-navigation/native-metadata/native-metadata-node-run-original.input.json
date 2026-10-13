@@ -1,0 +1,14 @@
+{
+  "mode": "run",
+  "host": "node",
+  "executable": "C:/Program Files/nodejs/node.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/native-metadata-qualifier.mjs",
+    "--host",
+    "node"
+  ],
+  "timeoutMs": 30000,
+  "maxOutputBytes": 8388608,
+  "qualification": "Direct single child/library ABI observation only; no NativeFacade or production loader/File API/UI acceptance",
+  "startedAtUtc": "2026-10-13T19:13:10.107Z"
+}

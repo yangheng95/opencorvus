@@ -1,0 +1,47 @@
+{
+  "schema": "directory-target-native-metadata-qualification/v1",
+  "qualification": "Prepared read-only Koffi library/Win32 ABI qualification only; no File API or production-runtime loader acceptance",
+  "fixtureID": "c2a68b0b-9f1b-4fe3-af16-f289f0715e93",
+  "fixtureManifest": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/directory-target-before/prepared-fixture.json",
+  "hopFacts": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/hop-qualification-results.json",
+  "packageAnchor": "D:/myhexin-local/opencorvus/packages/opencorvus/package.json",
+  "runtimes": {
+    "node": { "executable": "C:/Program Files/nodejs/node.exe", "nodeVersion": "25.7.0", "arguments": ["D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/native-metadata-qualifier.mjs", "--host", "node"] },
+    "bun": { "executable": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/ui-bundle/bin/bun.exe", "bunVersion": "1.4.0", "arguments": ["D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/native-metadata-qualifier.mjs", "--host", "bun"] }
+  },
+  "koffiVersion": "3.3.2",
+  "platform": "win32",
+  "architecture": "x64",
+  "nativeInput": { "library": "kernel32.dll", "desiredAccess": 0, "shareMode": 7, "securityAttributes": null, "creationDisposition": 3, "flagsAndAttributes": 35651584, "flagsHex": "0x02200000", "templateFile": null, "fileInformationClass": 9, "struct": { "FileAttributes": "uint32_t", "ReparseTag": "uint32_t" }, "bufferSize": 8 },
+  "maximumItems": 20,
+  "paths": [
+    { "id": "a-ordinary-directory", "root": "a", "relative": "target-dir" },
+    { "id": "a-ordinary-file", "root": "a", "relative": "regular-file.txt" },
+    { "id": "a-junction-base", "root": "a", "relative": "junction-dir", "pair": "junction", "trailing": false },
+    { "id": "a-junction-trailing", "root": "a", "relative": "junction-dir", "pair": "junction", "trailing": true },
+    { "id": "a-absolute-dir-base", "root": "a", "relative": "absolute-dir-link", "pair": "absolute-dir", "trailing": false },
+    { "id": "a-absolute-dir-trailing", "root": "a", "relative": "absolute-dir-link", "pair": "absolute-dir", "trailing": true },
+    { "id": "a-root-base", "root": "a", "relative": "root-link", "pair": "root", "trailing": false },
+    { "id": "a-root-trailing", "root": "a", "relative": "root-link", "pair": "root", "trailing": true },
+    { "id": "a-relative-dir", "root": "a", "relative": "relative-dir-link" },
+    { "id": "a-file-link", "root": "a", "relative": "file-link" },
+    { "id": "a-broken-dir", "root": "a", "relative": "broken-dir-link" },
+    { "id": "a-broken-junction", "root": "a", "relative": "broken-junction" },
+    { "id": "a-external-owned-dir", "root": "a", "relative": "external-dir-link" },
+    { "id": "a-root-back", "root": "a", "relative": "aliases/root-back" },
+    { "id": "a-unicode-file", "root": "a", "relative": "target-dir/资料 Note.txt" },
+    { "id": "b-ordinary-directory", "root": "b", "relative": "target-dir" },
+    { "id": "b-ordinary-file", "root": "b", "relative": "target-dir/marker.txt" },
+    { "id": "hop-dir-ancestor", "root": "hop-dir", "relative": "project/context/root-alias" },
+    { "id": "hop-junction-ancestor", "root": "hop-junction", "relative": "project/context/root-alias" },
+    { "id": "declared-missing", "root": "a", "relative": "__native_metadata_missing_01a133__", "expectedOpenWin32Error": 2 }
+  ],
+  "roots": {
+    "a": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-before-01a133/project",
+    "b": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-before-01a133/project-b",
+    "hop-dir": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/hop-qualification/dir",
+    "hop-junction": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/hop-qualification/junction"
+  },
+  "behavior": "No file creation, content writes, native mutation, prototype retries, alternate loader/API, service, model, UI or credential access; stop after first unexpected ABI/native/entry-identity result; stdout is the only artifact channel",
+  "modelCallsRequested": "none"
+}

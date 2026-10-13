@@ -1,0 +1,31 @@
+# Native metadata qualifier — prepared only
+
+Root authorized only `native-metadata-qualifier.mjs`, its input JSON and this review. The complete `native-entry-effect-revision.md`, current File/source contracts, installed Koffi3.3.2 package/loader/types and its output/pointer/struct documentation were read first. No library/module load, native call, qualifier entrypoint or fixture has been executed during preparation. No product/package-loader/spec/Git change, package install, model, service, API or UI activity is authorized here.
+
+The revised entry-effect analysis rejects the earlier unified Windows logical-anchor proposal: the two actual hop cases show different behavior under a true absolute dir symlink and junction. This qualifier collects the missing public Win32 tag fact. It does not implement the dependency walker, shared relocation or a product fix.
+
+## Exact fixed scope
+
+The input file lists20 operands, below Root's23 maximum:17 before-fixture operands and2 unchanged hop ancestors plus one declared missing path. The17 include A/B ordinary directories/files, the Unicode file, normal/relative/file/broken/external links and root-back, and three explicit base/trailing-backslash pairs. This is a selected subset of the existing20-link fixture, not a claim to query every original link (some original mutation sources have retired). No source mutation is replayed. Roots and relative paths are all explicit, and expanded original operands are emitted before any library call; trailing separators are retained in every lstat/stat/readlink/realpath/CreateFileW call.
+
+Node invocation is exactly the declared Node25.7.0 executable with `--host node`; Bun uses the existing private Bun1.4.0 with `--host bun`. The script checks actual execPath, versions, Windows/x64, the original before fixtureID and hop ancestor bindings. It reads only those input/reference files, the exact installed package metadata and fixed operand metadata. It creates no directory or file; stdout is the only artifact channel, owned by Root's outer execution recorder.
+
+## Single installed-library load and ABI
+
+`createRequire` is explicitly anchored to `packages/opencorvus/package.json`, then calls the installed `koffi` once. This avoids the previous scratch bare-import resolution fault without touching production `runtime/package-require.ts`, adding a fallback, installing a package or copying a native addon. Installed package and actual native version must both be3.3.2. The actual loaded `.node` module path/version is read from require.cache, resolved to its real path and emitted. If that actual addon cannot be proven, the qualifier fails with the original evidence; it does not infer a loaded file from package layout or try a different loader. The installed Koffi library's own unmodified loader remains its current implementation.
+
+One kernel32 library and one declaration per API are retained for the process lifetime. HANDLE is the library's opaque pointer type; x64 pointer size8 is checked. FILE_ATTRIBUTE_TAG_INFO is a library struct of two `uint32_t` fields, size8 and offsets0/4. The function uses `_Out_` on that struct pointer, following installed Koffi output-struct documentation; it does not parse an NTFS buffer or hand-written byte offset payload.
+
+Fixed calls: CreateFileW(operand,0,7,null,3,0x02200000,null), GetFileInformationByHandleEx(handle,9,out,8), GetLastError(), CloseHandle(handle). Each API's next native call is synchronous GetLastError, with no await, logging or other native call in between. On success the captured last-error value is explicitly marked potentially stale and is not treated as failure. Returned pointer bits identify INVALID_HANDLE_VALUE; no invalid handle is closed.
+
+Every valid returned handle has one CloseHandle in finally, even when query/marshalling fails. Native failures retain operation, raw result and original Win32 code; host/FFI exceptions retain complete own properties/cause graph. The first cause is retained separately, and a close failure is appended rather than replacing it. This preparation does not claim to have exercised a CloseHandle failure.
+
+## Observations and result boundary
+
+Each operand emits full BigInt lstat before/after (all own stat fields and file-kind predicates), followed stat, readlink and realpath result or complete raw error. Identity comparison uses dev/inode/birth/type from the original two observations; it is not a source hash or proof of atomic namespace stability. Ordinary readlink errors and broken followed-target errors remain visible observations, not inferred target flags. Native tag values are read from the actual returned struct and emitted as uint32/hex; no filename or readlink text selects a tag/prototype.
+
+The declared missing path is A root `__native_metadata_missing_01a133__`. It is never created. Its only expected native error is CreateFileW returning INVALID_HANDLE_VALUE with original Win32 ERROR_FILE_NOT_FOUND2, alongside original lstat ENOENT before/after. A different native error remains an unexpected result, not a reason to retry or reinterpret the prototype. Native query/close and original entry identity must succeed for other cases; first unexpected result stops subsequent paths, preserves all collected records and exits1.
+
+This is library/host ABI qualification only. It does not validate production package loading, deployed addons, File API authorization, Native Move/Copy, unknown reparse semantics, external races, remote filesystems, ARM64/POSIX, UI or models. Root must read this script and exact inputs before separately authorizing the Node and Bun executions. The stdout JSON-line records and outer exit/raw bytes must remain original, including any load/open/query/close failure.
+
+Primary materials read locally: installed Koffi `doc/output.md`, `doc/pointers.md`, `doc/composites.md`, `doc/load.md` and package loader source; production `windows-dpi.ts` provides only a library lifetime/stdcall precedent and is never imported by the qualifier. Root's prior authoritative Microsoft references in the entry-effect report are GetFileInformationByHandleEx, FILE_ATTRIBUTE_TAG_INFO, CreateFileW and reparse tag definitions. Their documented contracts are not presented as actual Node/Bun native qualification results.

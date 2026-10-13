@@ -1,0 +1,14 @@
+{
+  "mode": "run",
+  "host": "bun",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/ui-bundle/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/native-metadata-qualifier.mjs",
+    "--host",
+    "bun"
+  ],
+  "timeoutMs": 30000,
+  "maxOutputBytes": 8388608,
+  "qualification": "Direct single child/library ABI observation only; no NativeFacade or production loader/File API/UI acceptance",
+  "startedAtUtc": "2026-10-13T19:13:41.384Z"
+}

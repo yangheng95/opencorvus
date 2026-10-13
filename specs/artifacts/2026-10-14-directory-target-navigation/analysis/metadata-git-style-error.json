@@ -1,0 +1,11 @@
+{
+  "args": [
+    "diff",
+    "--cached",
+    "--check"
+  ],
+  "stdout": "specs/artifacts/2026-10-14-directory-target-navigation/analysis/checkpoint-push-original.log:34: trailing whitespace.\n+  Time:    1m5.783s \r\n",
+  "stderr": "",
+  "exitCode": 2,
+  "at": "2026-10-13T19:17:21.925Z"
+}
