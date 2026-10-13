@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [375 附件原名与图片引用](2026-10-13-attachment-display-375.md)：统一内容显示名、图片链接修复与旧worker404后续线索。
+
 - [374 项目文件引用身份](2026-10-13-source-file-identity-374.md)：统一引用资源、保留草稿并约束附件编辑。
 
 - [Dependabot全部升级与测试兼容](2026-10-13-dependabot-upgrades.md)：十项PR、共享AI SDK图和隔离验收。

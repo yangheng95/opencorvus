@@ -1,0 +1,65 @@
+{
+  "results": [
+    {
+      "id": "first",
+      "status": 200,
+      "displayName": " Résumé（终版）.txt",
+      "type": "text",
+      "bytes": 41,
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\media-inputs\\first.txt",
+      "completeContentBytes": "equal to actual uploaded original"
+    },
+    {
+      "id": "second",
+      "status": 200,
+      "displayName": " Résumé（终版）.txt",
+      "type": "text",
+      "bytes": 39,
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\media-inputs\\second.txt",
+      "completeContentBytes": "equal to actual uploaded original"
+    },
+    {
+      "id": "image",
+      "status": 200,
+      "displayName": "研究图（终版）.png",
+      "type": "text",
+      "mimeType": "image/png",
+      "encoding": "base64",
+      "bytes": 22168,
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\media-inputs\\image.png",
+      "completeContentBytes": "equal to actual uploaded original"
+    },
+    {
+      "id": "pdf",
+      "status": 200,
+      "displayName": "研究报告（终版）.pdf",
+      "type": "text",
+      "mimeType": "application/pdf",
+      "encoding": "base64",
+      "bytes": 4472337,
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\media-inputs\\pdf.pdf",
+      "completeContentBytes": "equal to actual uploaded original"
+    },
+    {
+      "id": "missing",
+      "status": 404,
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": ".opencorvus/.r/project/attachments/a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c/abf92754fb57decbc3073bb6beb467a5f6d5914fff62fd7f4f2c812a7adc1a9f.txt",
+          "message": "Attachment metadata not found for file: .opencorvus/.r/project/attachments/a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c/abf92754fb57decbc3073bb6beb467a5f6d5914fff62fd7f4f2c812a7adc1a9f.txt"
+        }
+      }
+    },
+    {
+      "id": "ordinary",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "普通项目文件375\n",
+        "revision": "37012545718b1a9102227aa47780f0ef6e8688a05af8f355e1a301a878681c0b"
+      }
+    }
+  ],
+  "boundary": "Exact original input bytes are retained privately. Full actual HTTP decoded bytes compared; no UI assertions."
+}

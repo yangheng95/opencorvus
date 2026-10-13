@@ -2197,6 +2197,10 @@ export type File = {
 export type FileContent = {
   content: string
   diff?: string
+  /**
+   * Canonical attachment display name for project-scoped file content.
+   */
+  displayName?: string
   encoding?: "base64"
   mimeType?: string
   patch?: {

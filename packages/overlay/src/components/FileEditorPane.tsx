@@ -129,7 +129,7 @@ export function FileEditorPane() {
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
   const path = createMemo(() => target()?.path ?? "")
-  const displayName = createMemo(() => target()?.displayName)
+  const displayName = createMemo(() => target()?.displayName ?? content()?.displayName)
   const textContent = createMemo(() => canEdit(content()))
   const imageSource = createMemo(() => {
     const file = content()
@@ -349,7 +349,7 @@ export function FileEditorPane() {
         }
       >
         <header class="file-editor-header">
-          <div class="file-editor-title" title={displayName() ?? path()}>
+          <div class="file-editor-title" title={[displayName(), target()?.sourceAbsolutePath || path()].filter(Boolean).join("\n")}>
             <span class="file-editor-title-name">{displayName() ?? shortWorkbenchPath(path(), target()?.sourceAbsolutePath || target()?.directory || "")}</span>
             <Show when={dirty()}>
               <span class="file-editor-dirty" aria-label={t("file_editor.unsaved")}>

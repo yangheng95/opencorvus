@@ -72,6 +72,22 @@ absolute paths retain the source reader. Explicit attachment sources retain thei
 original display names and source targets. Existing persisted source snapshots
 are not rewritten.
 
+Project file content projects an attachment's canonical displayName from the same
+AttachmentStore metadata for text, binary, image and PDF reads. Body path links
+therefore retain the original filename in the toolbar and accessible preview
+labels, without making that label a resource key. A persisted Source's explicit
+display label remains its annotation; ordinary references use the current loaded
+content label. The existing resource/generation loader clears previous content
+before another read. Header tooltips retain the actual path for same-name
+attachments. Missing canonical metadata is a FileNotFoundError with a metadata
+diagnostic; it is not replaced by a storage-name label. Ordinary copies and
+metadata sidecars retain their file-path labels. Absolute source-content remains
+an independent read-only byte reader.
+Explicit Markdown image-file links and path-like image codespans use the shared
+project-file recognition list and the existing workbench admission. The image
+extensions accepted by that list follow the File reader's image formats, while
+external URL and inline Markdown image semantics remain unchanged.
+
 Project and absolute-source file reads also return PDF bytes through the same
 FileContent base64/mimeType contract. Encoded PDFs remain read-only under the
 existing write admission. File Editor lazily loads the shared PdfPreview used

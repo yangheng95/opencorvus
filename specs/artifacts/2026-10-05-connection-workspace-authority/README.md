@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [375 附件原名与图片引用](attachment-display-plan-375.md)：原始名称投影、媒体引用入口与[12图实页证据](attachment-display-375/README.md)。
+
 - [374 项目文件引用身份](source-file-identity-plan-374.md)：普通文件共享编辑入口、附件只读与[实页证据](source-file-identity-374/README.md)。
 
 - [350 长消息重排阅读位置](main-transition-plan-350.md)：真实重排跳位、段落恢复与键盘输入接管。

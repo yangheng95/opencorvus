@@ -292,10 +292,10 @@ function browserPreviewAttrs(raw: string): string {
 }
 
 // File-ish extensions shared by code-path references and explicit Markdown
-// deliverable links. Office documents and Portable Document Format (PDF)
-// outputs are project artifacts even when their names contain Unicode text.
+// deliverable links. Images, Office documents and Portable Document Format
+// (PDF) outputs use the same project-file reader as text references.
 const FILE_EXT_RE =
-  /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs|json|jsonc|md|mdx|css|scss|less|html|htm|xml|svg|yaml|yml|toml|py|pyi|rs|go|java|c|h|cpp|cc|cxx|hpp|sh|bash|zsh|sql|rb|php|lua|kt|swift|dart|vue|astro|conf|ini|env|lock|txt|pdf|csv|tsv|xls|xlsx|xlsm|ods|doc|docx|odt|ppt|pptx|odp)$/i
+  /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs|json|jsonc|md|mdx|css|scss|less|html|htm|xml|svg|svgz|png|jpg|jpeg|gif|bmp|webp|ico|tif|tiff|avif|apng|jxl|heic|heif|raw|cr2|nef|arw|dng|orf|raf|pef|x3f|yaml|yml|toml|py|pyi|rs|go|java|c|h|cpp|cc|cxx|hpp|sh|bash|zsh|sql|rb|php|lua|kt|swift|dart|vue|astro|conf|ini|env|lock|txt|pdf|csv|tsv|xls|xlsx|xlsm|ods|doc|docx|odt|ppt|pptx|odp)$/i
 
 function markdownProjectFileReference(raw: string): FileReference | null {
   // Split the cited location off first: `src/a.ts:42` has to clear the

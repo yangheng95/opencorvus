@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [375 附件原名与图片引用](records/2026-10/2026-10-13-attachment-display-375.md)：同名附件、图片/PDF呈现，补齐正文图片链接及12图验收。
+
 - [374 项目文件引用身份](records/2026-10/2026-10-13-source-file-identity-374.md)：绝对/相对引用共用草稿、附件文本只读边界与九图真实验收。
 
 - [Dependabot全部升级与测试兼容](records/2026-10/2026-10-13-dependabot-upgrades.md)：十项PR、共享AI SDK图和隔离验收。

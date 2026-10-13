@@ -7692,6 +7692,10 @@
           "diff": {
             "type": "string"
           },
+          "displayName": {
+            "description": "Canonical attachment display name for project-scoped file content.",
+            "type": "string"
+          },
           "encoding": {
             "const": "base64",
             "type": "string"

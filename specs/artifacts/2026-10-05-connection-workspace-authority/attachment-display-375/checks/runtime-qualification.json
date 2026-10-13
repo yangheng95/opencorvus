@@ -1,0 +1,168 @@
+{
+  "result": {
+    "calls": [
+      {
+        "sourceID": "65f7104e0efef6dc3947f8ffa99c9e32153d72521ec1879392d7cbdd17343053",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\project\\.opencorvus\\.r\\project\\attachments\\a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c\\d9107175f3157edbddd3e5ce53a80983aa92235bba54c52124175dcedbc4b948.txt",
+        "callID": "call_38dd6693b344401ca9c2feed789a42cf",
+        "outcome": "completed"
+      },
+      {
+        "sourceID": "16c9d24cfd4d0792982ba1cac942f5fef92080f59e0d7456099bc37037c10bd2",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\project\\.opencorvus\\.r\\project\\attachments\\a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c\\4541e70ac38f9ab46703899318db6937a49cbe6f86e0914c20df658e9f7dac69.txt",
+        "callID": "call_5c53b11147094cf7bde755ede10c5bfc",
+        "outcome": "completed"
+      }
+    ],
+    "completed": [
+      {
+        "id": "msg_g0VXtKpLM00vmbH0oEAd",
+        "sessionID": "ses_hpnaOVXLXiFq2kvILCS7",
+        "role": "assistant",
+        "author": "chat",
+        "agent": "chat",
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "time": {
+          "created": 1791857348968,
+          "completed": 1791857353195
+        },
+        "finish": "stop"
+      },
+      {
+        "id": "msg_g0VXtL0Ir007bLTN3G5K",
+        "sessionID": "ses_-zUS6f2oWzz7BD32HOGM",
+        "role": "assistant",
+        "author": "work",
+        "agent": "work",
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "time": {
+          "created": 1791857391097,
+          "completed": 1791857404614
+        },
+        "finish": "stop"
+      }
+    ],
+    "requests": 6,
+    "elapsedMs": 568620,
+    "files": [
+      {
+        "id": "first",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\project\\.opencorvus\\.r\\project\\attachments\\a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c\\d9107175f3157edbddd3e5ce53a80983aa92235bba54c52124175dcedbc4b948.txt",
+        "name": " Résumé（终版）.txt",
+        "bytes": 41,
+        "identity": "Complete bytes equal actual uploaded originals; metadata names and canonical URLs match"
+      },
+      {
+        "id": "second",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\project\\.opencorvus\\.r\\project\\attachments\\a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c\\4541e70ac38f9ab46703899318db6937a49cbe6f86e0914c20df658e9f7dac69.txt",
+        "name": " Résumé（终版）.txt",
+        "bytes": 39,
+        "identity": "Complete bytes equal actual uploaded originals; metadata names and canonical URLs match"
+      },
+      {
+        "id": "image",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\project\\.opencorvus\\.r\\project\\attachments\\a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c\\d9bff8cbe8b2d2773d2769c2c27071e17569ee935b96e37b05b88ccb4f1e1d9a.png",
+        "name": "研究图（终版）.png",
+        "bytes": 22168,
+        "identity": "Complete bytes equal actual uploaded originals; metadata names and canonical URLs match"
+      },
+      {
+        "id": "pdf",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\project\\.opencorvus\\.r\\project\\attachments\\a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c\\7fb7ff656cdb85971e53920a81c604da203f039008500cf6cc34e38edb6371c5.pdf",
+        "name": "研究报告（终版）.pdf",
+        "bytes": 4472337,
+        "identity": "Complete bytes equal actual uploaded originals; metadata names and canonical URLs match"
+      },
+      {
+        "id": "missing",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\attachment-display-375-after\\project\\.opencorvus\\.r\\project\\attachments\\a8b8e60fd20a5c79bd2c6529ea71f199d62ad2ee86a2afaaabeee8bde576c67c\\abf92754fb57decbc3073bb6beb467a5f6d5914fff62fd7f4f2c812a7adc1a9f.txt",
+        "name": "缺失元数据.txt",
+        "bytes": 12,
+        "identity": "Complete bytes equal actual uploaded originals; metadata names and canonical URLs match"
+      }
+    ],
+    "settled": {
+      "occurrence": "attachment-display-375-after-f9fafa3f-4b64-4870-8240-b8900d292dc3",
+      "outcome": "settled",
+      "host": {
+        "pid": 62036,
+        "processInstanceID": "win32:639274541391440327",
+        "occurrenceID": "2614e9b9-94d2-47b4-a15a-a6e05247ee2c"
+      },
+      "target": {
+        "pid": 69276,
+        "processInstanceID": "win32:639274541399451774",
+        "occurrenceID": "0a03dfcd-43c9-4455-aaaa-a79df31f8308"
+      },
+      "observedAtUtc": "2026-10-13T02:18:28.565Z",
+      "deadlineAt": 1791857939128,
+      "terminal": {
+        "occurrenceID": "attachment-display-375-after-f9fafa3f-4b64-4870-8240-b8900d292dc3",
+        "pid": 69276,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "qualified": {
+      "physicalCompletion": true,
+      "providerEOFRequests": 6,
+      "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+      "qualification": "NativeService",
+      "cancellation": null,
+      "providerUserCancelledRequests": 0
+    },
+    "served": {
+      "level": "info",
+      "time": "2026-10-13T02:15:21.800Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f14b9c7d-24c2-445f-9136-917cda273d1b",
+        "method": "GET",
+        "path": "/ui/assets/main-CAo85tzZ.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 8
+      },
+      "message": "request"
+    },
+    "failedOldWorker": {
+      "level": "info",
+      "time": "2026-10-13T02:14:43.552Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5638209e-8cdf-40a9-9246-fc681c55df73",
+        "method": "GET",
+        "path": "/ui/assets/markdown-render.worker-D_K6Yc7v.js",
+        "status": "completed",
+        "statusCode": 404,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    "finalWorker": {
+      "level": "info",
+      "time": "2026-10-13T02:15:29.959Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d7750280-16ee-45b4-955d-a9953dcd1034",
+        "method": "GET",
+        "path": "/ui/assets/markdown-render.worker-CF9y63Km.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    }
+  },
+  "boundary": "Actual Provider/Native/Source/completed Message/ToolOutcome/full file bytes and HTTP facts. Twelve UI screenshots were manually reviewed; no UI assertions. Old worker 404 after replacing the served bundle is preserved separately from the image-link fix. PNG/PDF are actual UI/backend previews; model read only the two text attachments."
+}

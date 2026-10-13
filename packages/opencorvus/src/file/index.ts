@@ -60,6 +60,7 @@ export namespace File {
     .object({
       type: z.enum(["text", "binary"]),
       content: z.string(),
+      displayName: z.string().optional().describe("Canonical attachment display name for project-scoped file content."),
       revision: ContentRevision.optional(),
       diff: z.string().optional(),
       patch: z
@@ -933,6 +934,16 @@ export namespace File {
     if (!physical) throw fileNotFound({ path: file })
     if (!(await isPathAllowed(physical))) throw new Error(`Access denied: path escapes project directory`)
     const result = await readResolvedContent(file, physical, normalizeCanonicalPath(physical))
+    const attachment = AttachmentStore.nameFromAbsolutePath(Instance.project.id, physical)
+    if (attachment) {
+      const reference = await AttachmentStore.readReference(attachment.projectID, attachment.name).catch((error) => {
+        if (isMissingPathError(error)) {
+          throw fileNotFound({ path: file, message: `Attachment metadata not found for file: ${file}` })
+        }
+        throw error
+      })
+      return { ...result, displayName: reference.filename ?? AttachmentStore.displayFilename(reference) }
+    }
     if (result.type !== "text" || result.encoding) return result
     const content = result.content
 
