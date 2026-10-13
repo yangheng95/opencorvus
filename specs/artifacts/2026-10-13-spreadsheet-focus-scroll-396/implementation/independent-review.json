@@ -1,0 +1,40 @@
+{
+  "iteration": 396,
+  "reviewer": "audit_ui",
+  "qualification": "Static scope, API and actual installed-consumer review; not real page acceptance",
+  "result": "No concrete implementation issue found",
+  "script": ".tmp-spreadsheet-focus-scroll-396/apply-vendor.mjs",
+  "patch": "patches/@univerjs%2Fdocs-ui@0.25.1.patch",
+  "resolutionOrigin": "Real packages/overlay/node_modules/@univerjs/preset-sheets-core/package.json using createRequire",
+  "actualConsumer": "node_modules/.bun/@univerjs+docs-ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/docs-ui",
+  "files": [
+    "lib/index.js",
+    "lib/es/index.js",
+    "lib/cjs/index.js",
+    "lib/umd/index.js"
+  ],
+  "review": [
+    "Each actual runtime has one DocSelectionRenderService hidden-input focus method calling this._input.focus({ preventScroll: true })",
+    "UMD class Y is the correct scope; the options object uses the native preventScroll property and introduces no binding",
+    "Each runtime has zero syntax parse diagnostics and source outside that exact method remains identical to its saved before copy",
+    "The patch has exactly four runtime file sections and no cache or declaration sections",
+    "Public focus(): void declaration remains unchanged",
+    "Visible-control focus, editor host ownership, event lifecycle, Docs back-scroll and Sheets navigation logic remain unchanged",
+    "Actual sheets-ui still includes 394 derived range error and ranges-only callback; ui/design patches have no new task diff",
+    "Root package registration adds docs-ui; Bun lock changes the registration ordering while retaining prior entries and adding docs-ui",
+    "Recorded normal patch-commit and frozen install logs show successful package installation and no-change verification"
+  ],
+  "pending": [
+    "Root private build/typecheck completion",
+    "Ordinary-view Add and retained Chat position on real mouse interaction",
+    "394 same-instance bilingual error/title, valid Confirm and temporary rule cleanup",
+    "Real internal navigation, input and fullscreen checks",
+    "Accurate keyboard-focus policy boundary and final page/owner shutdown"
+  ],
+  "notPerformed": [
+    "Product or dependency modification",
+    "UI automation or browser operation",
+    "Service, model or credential use",
+    "Shared documentation, commit or delegation"
+  ]
+}

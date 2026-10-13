@@ -1,0 +1,185 @@
+Browser tab: 37, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18505/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					113 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-441-trigger, Secondary Actions: Expand
+					114 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-443-trigger, Secondary Actions: Expand
+					115 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-445-trigger, Secondary Actions: Expand
+					116 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-447-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-120-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				117 container workspacePageStack
+					118 container leftActivityShell
+						119 container workspaceContextbar
+							120 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							121 button Search chats or run a command
+							122 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						123 container sidebar
+							124 container workLedgerPanel
+								125 container Chat navigation
+									126 button New chat
+								127 container workLedgerProjectsScroll
+									128 text Projects
+									129 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									130 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									131 container
+										132 button (expanded) Description: Collapse Anonymous c846f4, Secondary Actions: Collapse
+										133 container
+											134 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											135 button 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+											136 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-187-trigger, Secondary Actions: Expand
+										137 button (expanded) Description: Collapse Anonymous bb5ca9, Secondary Actions: Collapse
+										138 container
+											139 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											140 button Reply with OK.
+											141 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-200-trigger, Secondary Actions: Expand
+										142 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									143 container Recents
+										144 text Recents
+										145 container
+											146 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											147 button 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+											148 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+										149 container
+											150 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											151 button Reply with OK.
+											152 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-219-trigger, Secondary Actions: Expand
+							153 container Connection Diagnostics
+								154 container Description: Connection Diagnostics · Online · Port 18505, ID: connBadge
+									155 text Online
+					156 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					157 container chatSection
+						158 container Description: Loading task, ID: taskSwitchProgress
+						159 container
+							160 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+							161 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-233-trigger, Secondary Actions: Expand
+							162 container Description: Not running, ID: taskStatus
+								163 text Not running
+							164 button Side chat
+							165 container solidChatHeaderRuntimeActions
+								166 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								167 checkbox Description: Open right dock, Value: 0
+						168 container
+							169 container Description: Conversation, ID: chatScroll
+								170 container
+									171 container
+										172 text User
+										173 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为Item，B1为Quantity，A2为Notebook，B2为7，A3为Pen，B3为5，A4为Total，B4公式为=SUM(B2:B3)，计算值为12。请用真实产物发布工具完成，保留这些原始标题和数据，成功后简短说明即可。
+									174 container
+										175 text chat
+										176 text 33s
+										177 button (collapsed) Secondary Actions: Expand, Description: publish_interactive_artifact · AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
+											178 text publish_interactive_artifact
+											179 text AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
+											180 text 1 failed
+										181 button (collapsed) Description: publish_interactive_artifact · Desk budget, Secondary Actions: Expand
+											182 text publish_interactive_artifact
+											183 text Desk budget
+											184 image
+										185 container Desk budget
+											186 container
+												187 text Spreadsheet
+												188 heading Desk budget, Value: 3
+													189 text Desk budget
+												190 button Copy text
+												191 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-253-trigger, Secondary Actions: Expand
+												192 button Open Desk budget in artifact workspace
+											193 text Edits stay in this view. Before leaving or collapsing it, download the edited sheets as CSV. CSV keeps cell values, not formulas or formatting.
+											194 container Desk budget
+												195 container
+													196 container
+														197 container
+															198 text field (settable) A1
+															199 link (collapsed) Secondary Actions: Expand
+																200 image
+														201 image univer-doc-main-canvas
+														202 button
+															203 image
+														204 image univer-doc-main-canvas
+														205 image univer-sheet-main-canvas_interactive-artifact-Desk budget
+													206 container Sidebar panel
+														207 splitter Description: Resize sidebar, Value: 50
+														208 container
+															209 text Protect Rows and Columns
+															210 button Close sidebar
+																211 image
+															212 text Protected Range
+															213 container
+																214 image univer-doc-main-canvas
+																215 image
+															216 text Range cannot overlap
+															217 text Permission Description
+															218 text field (settable) LOCALE-394/396 temporary
+															219 text Edit Permissions
+															220 container
+																221 radio button (settable, integer) Description: Only I can edit, Value: 1
+																222 text Only I can edit
+															223 container
+																224 radio button (settable, integer) Description: Specified users can edit, Value: 0
+																225 text Specified users can edit
+															226 text View Permissions
+															227 container
+																228 radio button (settable, integer) Description: Others can view, Value: 1
+																229 text Others can view
+															230 container
+																231 radio button (settable, integer) Description: No one else can view, Value: 0
+																232 text No one else can view
+															233 button Confirm
+															234 button Cancel
+													235 container
+														236 button
+															237 image
+														238 button
+															239 image
+														240 tab group Sheet tabs
+															241 tab (selected, settable, boolean) 清单, Value: 1
+														242 button
+															243 image
+														244 button
+															245 image
+														246 container
+															247 button
+														248 button
+															249 image
+														250 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
+												251 container Notifications alt+T
+												252 container Notifications alt+T
+										253 container
+											254 text 已发布可编辑的  Desk budget ：仅含“清单”工作表，20行6列，首行冻结；原始数据及 B4 公式均已保留，计算值为12。可直接在表格中编辑。
+							255 container chatHomeComposition
+								256 container solidChatComposer
+									257 container
+										258 text Model configuration unavailable
+										259 text You can still read this conversation. Review the details or choose a model before sending a message.
+										260 button (collapsed) Details, Secondary Actions: Expand
+											261 text Details
+										262 button Retry
+										263 container chatForm
+											264 splitter Description: Drag to resize the message input, Value: 42
+											265 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											266 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											267 text Code
+											268 text Chat
+											269 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											270 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											271 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												272 text Choose model
+											273 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									274 button Scroll to bottom
+		275 container Settings Settings, ID: tooltip-cl-123-content
+			276 text Settings
+			277 text Settings
+
+The focused UI element is 18 button Settings

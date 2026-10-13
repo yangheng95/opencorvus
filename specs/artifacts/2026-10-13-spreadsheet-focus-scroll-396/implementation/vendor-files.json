@@ -1,0 +1,30 @@
+[
+  {
+    "path": "node_modules/@univerjs/docs-ui/lib/index.js",
+    "file": "lib/index.js",
+    "className": "DocSelectionRenderService",
+    "before": "focus() {\n\t\tthis._input.focus();\n\t}",
+    "after": "focus() {\n\t\tthis._input.focus({ preventScroll: true });\n\t}"
+  },
+  {
+    "path": "node_modules/@univerjs/docs-ui/lib/es/index.js",
+    "file": "lib/es/index.js",
+    "className": "DocSelectionRenderService",
+    "before": "focus() {\n\t\tthis._input.focus();\n\t}",
+    "after": "focus() {\n\t\tthis._input.focus({ preventScroll: true });\n\t}"
+  },
+  {
+    "path": "node_modules/@univerjs/docs-ui/lib/cjs/index.js",
+    "file": "lib/cjs/index.js",
+    "className": "DocSelectionRenderService",
+    "before": "focus() {\n\t\tthis._input.focus();\n\t}",
+    "after": "focus() {\n\t\tthis._input.focus({ preventScroll: true });\n\t}"
+  },
+  {
+    "path": "node_modules/@univerjs/docs-ui/lib/umd/index.js",
+    "file": "lib/umd/index.js",
+    "className": "Y",
+    "before": "focus(){this._input.focus()}",
+    "after": "focus(){this._input.focus({ preventScroll: true })}"
+  }
+]

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [396 表格焦点与读位](2026-10-13-spreadsheet-focus-scroll-396.md)：共享隐藏输入focus与内部导航的分工。
+
 - [394 表格权限面板语言](2026-10-13-spreadsheet-permission-panel-locale-394.md)：权限标题与范围错误的同实例语言合同。
 
 - [390 执行轮次身份](2026-10-13-execution-actor-identity-390.md)：真实输入身份、成员最终正文与Sources、协议回放和单agent验收。

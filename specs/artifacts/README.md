@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [396 表格焦点与读位](2026-10-13-spreadsheet-focus-scroll-396/README.md)：真实点击、同实例语言、规则清理、编辑导航、CSV与原owner关闭。
+
 - [394 表格权限面板语言](2026-10-13-spreadsheet-permission-panel-locale-394/README.md)：标题/错误前态、精确依赖修改与396联合真实后态入口。
 
 - [390 执行轮次身份](2026-10-05-connection-workspace-authority/execution-actor-identity-390/README.md)：共享身份契约和真实模型/页面证据。

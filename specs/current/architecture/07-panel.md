@@ -2463,6 +2463,12 @@ the current locale in its memo inputs, so keyed labels and render-time panel
 text refresh without replacing component state, width or the workbook. Previously
 translated titles and stored translated panel state remain separate consumer
 contracts; this does not claim every panel snapshot is locale-reactive.
+The shared hidden document input returns editing focus with `preventScroll`,
+so focusing this keyboard proxy does not scroll an enclosing Chat to its offscreen
+position. Docs and Sheets retain their explicit internal cursor and selection
+reveal controllers; visible controls retain their own native focus behavior.
+This contract concerns ancestor scrolling, while button activation focus is a
+separate policy.
 The protection panel keeps the locale key in both List Add and successful Detail
 Confirm title producers. Its range error is derived from the current ranges by
 the existing checker at render time, and that same result governs display and

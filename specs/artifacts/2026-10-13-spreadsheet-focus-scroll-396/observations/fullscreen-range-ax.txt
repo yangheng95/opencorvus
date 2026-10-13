@@ -1,0 +1,73 @@
+Browser tab: 37, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18505/ui/
+	1 container Desk budget
+		2 container
+			3 text 电子表格
+			4 heading Desk budget, Value: 3
+				5 text Desk budget
+			6 button 复制文本
+			7 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-253-trigger, Secondary Actions: Expand
+			8 button 关闭 Desk budget 作品视图
+		9 text 编辑仅保留在当前视图。离开或折叠前，请下载修改后的工作表 CSV；CSV 仅保留单元格值，不保留公式和格式。
+		10 container Desk budget
+			11 container
+				54 container
+					55 container
+						56 text field (settable) B3
+						57 link (collapsed) Secondary Actions: Expand
+							58 image
+					59 image univer-doc-main-canvas
+					60 button
+						61 image
+					62 image univer-doc-main-canvas
+					63 image univer-sheet-main-canvas_interactive-artifact-Desk budget
+				64 container 侧边栏面板
+					65 splitter Description: 调整侧边栏宽度, Value: 50
+					66 container
+						67 text 保护行列
+						68 button 关闭侧边栏
+							69 image
+						70 text 保护区域
+						71 container
+							72 image univer-doc-main-canvas
+							73 image
+						92 text 范围不能重叠
+						74 text 权限描述
+						75 text field (settable) LOCALE-396 full unsaved
+						76 text 编辑权限
+						77 container
+							78 radio button (settable, integer) Description: 仅我可以编辑, Value: 1
+							79 text 仅我可以编辑
+						80 container
+							81 radio button (settable, integer) Description: 指定用户可以编辑, Value: 0
+							82 text 指定用户可以编辑
+						83 text 查看权限
+						84 container
+							85 radio button (settable, integer) Description: 其他人可以查看, Value: 1
+							86 text 其他人可以查看
+						87 container
+							88 radio button (settable, integer) Description: 其他人不可以查看, Value: 0
+							89 text 其他人不可以查看
+						90 button 确认
+						91 button 取消
+				36 container
+					37 button
+						38 image
+					39 button
+						40 image
+					41 tab group 工作表标签
+						42 tab (selected, settable, boolean) 清单, Value: 1
+					43 button
+						44 image
+					45 button
+						46 image
+					47 container
+						48 button
+					49 button
+						50 image
+					51 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
+			52 container 通知 alt+T
+			53 container 通知 alt+T
+			93 container
+
+The focused UI element is 93 container

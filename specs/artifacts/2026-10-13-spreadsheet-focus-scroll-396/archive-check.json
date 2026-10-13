@@ -1,0 +1,173 @@
+{
+  "kind": "Archive safety, exact immutable evidence byte preservation and local-document links; not UI automation or product acceptance",
+  "gzipRestoration": [
+    {
+      "path": "logs/build.log.gz",
+      "decodedBytes": 69033,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/typecheck.log.gz",
+      "decodedBytes": 16,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/install.log.gz",
+      "decodedBytes": 178,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/patch-commit.log.gz",
+      "decodedBytes": 153,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/patch-prepare.log.gz",
+      "decodedBytes": 371,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/docs-plan.log.gz",
+      "decodedBytes": 106,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "implementation/docs-ui.patch.gz",
+      "decodedBytes": 117142,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "downloads/edited-normal.csv.gz",
+      "decodedBytes": 61,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/final/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/final/stderr.log.gz",
+      "decodedBytes": 118789,
+      "matchesSourceBytes": true
+    }
+  ],
+  "images": [
+    {
+      "path": "screenshots/after-add-detail.jpg",
+      "sourceFilename": "after-add-detail.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-B20-internal-target-visible.jpg",
+      "sourceFilename": "after-B20-internal-target-visible.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-before-add-visible.jpg",
+      "sourceFilename": "after-before-add-visible.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-created-rule-en.jpg",
+      "sourceFilename": "after-created-rule-en.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-created-rule-zh.jpg",
+      "sourceFilename": "after-created-rule-zh.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-en-overlap.jpg",
+      "sourceFilename": "after-en-overlap.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-fullscreen-dialog-overlap-qualified.jpg",
+      "sourceFilename": "after-fullscreen-dialog-overlap-qualified.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-fullscreen-range-blurred.jpg",
+      "sourceFilename": "after-fullscreen-range-blurred.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-fullscreen-range-paste.jpg",
+      "sourceFilename": "after-fullscreen-range-paste.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-internal-navigation-B20.jpg",
+      "sourceFilename": "after-internal-navigation-B20.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-normal-edit-confirmed.jpg",
+      "sourceFilename": "after-normal-edit-confirmed.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-normal-edited.jpg",
+      "sourceFilename": "after-normal-edited.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-normal-paste-9-5-14.jpg",
+      "sourceFilename": "after-normal-paste-9-5-14.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "screenshots/after-zh-overlap.jpg",
+      "sourceFilename": "after-zh-overlap.png",
+      "format": "JPEG",
+      "matchesSourceBytes": true
+    }
+  ],
+  "csv": {
+    "path": "downloads/edited-normal.csv.gz",
+    "bytes": 61,
+    "exactExpectedBytes": true,
+    "values": [
+      9,
+      5,
+      14
+    ],
+    "utf8BOM": true,
+    "crlfCount": 3,
+    "terminalNewline": false
+  },
+  "credentialScan": {
+    "textFilesInspected": 41,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "qualification": "Bounded pattern scan, no claim of universal secret detection; no auth/models were read or copied"
+  },
+  "localLinks": {
+    "count": 67,
+    "broken": 0
+  },
+  "selection": {
+    "allowlistedCopiedFiles": 52,
+    "fullRuntimeOrCredentialDirectoriesCopied": false
+  }
+}
