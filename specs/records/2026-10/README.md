@@ -1,5 +1,11 @@
 # 2026-10 Records
 
+- [403 Native关闭收敛](2026-10-13-native-shutdown-pending-permission-403.md)：待授权下的实际关闭失败、全部入口与阶段根因调查。
+
+- [402 独立会话权限批准投影](2026-10-13-standalone-permission-projection-402.md)：Main Chat的hydrate/live/reconnect、真实排序与完整控制入口横审。
+
+- [398 表格权限卡片悬停](2026-10-13-spreadsheet-permission-hover-398.md)：同一权限列表的深色背景/说明文字与普通、全屏验收范围。
+
 - [392 委派失败与终态](2026-10-14-delegate-terminal-392.md)：原错误保留、准确执行轮次、Sources与真实终态验收。
 
 - [395 稀疏配置层](2026-10-13-sparse-config-layer-defaults-395.md)：跨层默认值、读取/写候选与当前配置契约。

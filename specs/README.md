@@ -1,5 +1,11 @@
 # Specs Storage Index
 
+- [403 Native关闭收敛](records/2026-10/2026-10-13-native-shutdown-pending-permission-403.md)：待授权下的实际关闭失败、全部入口与阶段根因调查。
+
+- [402 独立会话权限批准投影](records/2026-10/2026-10-13-standalone-permission-projection-402.md)：Main Chat的hydrate/live/reconnect、真实排序与完整控制入口横审。
+
+- [398 表格权限卡片悬停](records/2026-10/2026-10-13-spreadsheet-permission-hover-398.md)：深色卡片及操作可读性根因、既有主题变体与真实桌面计划。
+
 - [392 委派失败与终态](artifacts/2026-10-05-connection-workspace-authority/delegate-terminal-plan-392.md)：返回消息错误、交接校验及首次终态发布。
 
 - [395 稀疏配置层](records/2026-10/2026-10-13-sparse-config-layer-defaults-395.md)：实际文件层默认注入与有效配置继承的根因、影响和单源方案。
