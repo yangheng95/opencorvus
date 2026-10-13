@@ -1,0 +1,15 @@
+$ bun script/run-tests.ts test/continuous-goal-crash-checker.test.ts
+[1/1] START test/continuous-goal-crash-checker.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) task crash checker selects current output with exact accepted-input and physical-reader authority [2.80ms]
+(pass) mission crash checker selects current output with exact accepted-input and physical-reader authority [0.25ms]
+(pass) Mission runtime recovery carries the exact opened event, dead generation and interrupted frontier [0.11ms]
+(pass) inactivity evidence consists of business frontiers and physical reader progress [0.26ms]
+
+ 4 pass
+ 0 fail
+ 6 expect() calls
+Ran 4 tests across 1 file. [3.12s]
+[1/1] DONE test/continuous-goal-crash-checker.test.ts exit=0 duration=4.13s

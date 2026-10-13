@@ -2,6 +2,8 @@
 
 - [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：真实请求、失败基线、修复后语义指标和明确验收边界。
 
+- [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
+
 - [387 电子表格语言与编辑](2026-10-13-spreadsheet-artifact-identity-387/README.md)：真实Sol发布、双语菜单、编辑后CSV和物理收尾。
 
 - [Provider 地址编辑](2026-10-13-provider-address-intent/README.md)：真实表单、实际配置和运行收尾。

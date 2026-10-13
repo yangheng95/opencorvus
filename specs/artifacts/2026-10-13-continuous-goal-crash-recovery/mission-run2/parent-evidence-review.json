@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "kind": "mission",
+  "goalID": "pev_g0VXv7PoS001WLtbWEJ6",
+  "continuationID": "pev_hMgKxHMZQLFCsYt2oOfP",
+  "originalPID": 75032,
+  "recoveredPID": 83872,
+  "interruptedAssistantID": "msg_g0VXv7SWK00s93k6a9X9",
+  "ownerCompletion": {
+    "recoveryKind": "accepted_goal_input",
+    "recoveryInputID": "msg_hAmJ61OfBx4WlPGk7ptW",
+    "messageID": "msg_g0VXv80ab00kvaseJfh3",
+    "toolCallID": "call_bc3d76cab44344909d855870f9295f00",
+    "toolPartID": "prt_g0VXv82EP002S20sZF8w",
+    "summary": "已在第一个自动轮次交付两阶段各三项、共六项具体核对标准，每项包含可观察证据和通过条件；已核对实际正文并完成持续目标，发布完整交互验收说明。当前负责人直接交付，无子Task，未进行禁止操作；未发生真实中断，不声称恢复已实测。",
+    "timeRecorded": 1791883855954,
+    "kind": "accepted"
+  },
+  "providerRequests": 19,
+  "tokensUsed": 225103,
+  "recoveredUsageIDs": [
+    "pvu_g0VXv7Ycf00aPf7QlNXZ",
+    "pvu_g0VXv7aQg00oOhfF4VWn",
+    "pvu_g0VXv7cSU005Q38sPuVV",
+    "pvu_g0VXv7km800DmPYX83Gq"
+  ],
+  "visibleMessageIDs": [
+    "msg_g0VXv7BTr00Cn6eDTfjn",
+    "msg_g0VXv7Prv00xxRqKFww5",
+    "msg_g0VXv7SWK00s93k6a9X9",
+    "msg_g0VXv7VdS00xAaJRjk3R",
+    "msg_g0VXv7cV100l06NigCGU",
+    "msg_g0VXv834G001syCqzBIe"
+  ],
+  "interruptedUnreportedUsage": "unknown",
+  "reviewedAt": "2026-10-13T09:31:25.632Z"
+}

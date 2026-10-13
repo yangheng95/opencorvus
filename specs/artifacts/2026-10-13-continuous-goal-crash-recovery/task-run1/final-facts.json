@@ -1,0 +1,1945 @@
+{
+  "session": {
+    "id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+    "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+    "parent_id": null,
+    "slug": "crisp-knight",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zhMTUG\\runner-83284-zrKy27\\project",
+    "title": "持续目标真实崩溃恢复",
+    "version": "local",
+    "kind": "root",
+    "share_url": null,
+    "summary_additions": null,
+    "summary_deletions": null,
+    "summary_files": null,
+    "permission": null,
+    "metadata": "{\"taskConfigSnapshot\":{\"prompt_profile\":{\"active\":\"dynamic\"},\"permission_mode\":\"full_access\",\"agent\":{},\"plugin\":[],\"experimental\":{\"auto_question\":true},\"command\":{},\"$schema\":\"https://opencorvus.ai/config.json\",\"terminal\":{\"default_profile_id\":\"powershell\",\"profiles\":{\"powershell\":{\"label\":\"Windows PowerShell\",\"command\":\"C:\\\\WINDOWS\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"pwsh\":{\"label\":\"PowerShell\",\"command\":\"C:\\\\Users\\\\hengu\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"cmd\":{\"label\":\"Command Prompt\",\"command\":\"C:\\\\WINDOWS\\\\system32\\\\cmd.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"command-prompt\"},\"git-bash\":{\"label\":\"Git Bash\",\"command\":\"C:\\\\Program Files\\\\Git\\\\bin\\\\bash.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"bash\"}}},\"model\":\"openai/gpt-6.1-sol\",\"small_model\":\"openai/gpt-6.1-sol\",\"username\":\"hengu\",\"mcp\":{\"browser\":{\"type\":\"local\",\"command\":[\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\npm-cache\\\\_npx\\\\214ebe133ee6a004\\\\node_modules\\\\bun\\\\bin\\\\bun.exe\",\"mcp\",\"browser\"],\"timeout\":30000},\"computer\":{\"type\":\"local\",\"command\":[\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\npm-cache\\\\_npx\\\\214ebe133ee6a004\\\\node_modules\\\\bun\\\\bin\\\\bun.exe\",\"C:\\\\Users\\\\hengu\\\\.codex\\\\worktrees\\\\continuous-goal-mode\\\\opencorvus\\\\packages\\\\opencorvus\\\\src\\\\mcp\\\\computer\\\\stdio.ts\"],\"timeout\":30000}}},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}",
+    "time_created": 1791882408274,
+    "time_updated": 1791882451243,
+    "time_archived": null,
+    "time_pinned": null
+  },
+  "ids": [
+    "ses_-zUS4y1aHzz0a6DJ2HUg",
+    "ses_-zUS4y0jizzu6IFv7yOd"
+  ],
+  "messages": [
+    {
+      "id": "msg_g0VXv1zIe007f3HziEwM",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "time_created": 1791882411680,
+      "time_updated": 1791882411684,
+      "data": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791882411680
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "orderKey": "v1:0001791882411680:0000000000000030:0000000000000000:message:msg_g0VXv1zIe007f3HziEwM"
+      }
+    },
+    {
+      "id": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "time_created": 1791882411681,
+      "time_updated": 1791882411689,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791882411681
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "orchestrator_control_ingress": {
+            "ingress_id": "art_hhu8MFF8NzOTuLOw9zO2",
+            "predecessor_id": "art_hhu8MFF8NzOTuLOw9zO2"
+          }
+        },
+        "orderKey": "v1:0001791882411681:0000000000000030:0000000000000000:message:msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2"
+      }
+    },
+    {
+      "id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "time_created": 1791882411872,
+      "time_updated": 1791882450257,
+      "data": {
+        "orderKey": "v1:0001791882411872:0000000000000030:0000000000000000:message:msg_h4Yk39swoFPjgvZ2eA9R",
+        "author": "orchestrator",
+        "role": "assistant",
+        "time": {
+          "created": 1791882411872,
+          "completed": 1791882450255
+        },
+        "parentID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "acceptedInputMessageIDs": [
+          "msg_g0VXv1zIe007f3HziEwM",
+          "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "orchestrator",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zhMTUG\\runner-83284-zrKy27\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zhMTUG\\runner-83284-zrKy27\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 100079,
+          "input": 50116,
+          "output": 286,
+          "reasoning": 13,
+          "cache": {
+            "read": 49664,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "activationID": "act_g0VXv1ySe00f8UGpUgK6"
+      }
+    },
+    {
+      "id": "msg_hGZzhrPGAVmt9dbP9U1c",
+      "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+      "time_created": 1791882451239,
+      "time_updated": 1791882451242,
+      "data": {
+        "author": "goal-controller",
+        "role": "user",
+        "time": {
+          "created": 1791882451239
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "task_root_message": {
+            "protocol": "task-root-message",
+            "taskID": "tsk_g00VXv1yI400ygHduvEs",
+            "kind": "goal-controller",
+            "source": "continuous_goal"
+          }
+        },
+        "orderKey": "v1:0001791882451239:0000000000000030:0000000000000000:message:msg_hGZzhrPGAVmt9dbP9U1c"
+      }
+    },
+    {
+      "id": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "time_created": 1791882451434,
+      "time_updated": 1791882451437,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791882451434
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "orchestrator_control_ingress": {
+            "ingress_id": "art_hqIRZPDrSSfsnDP4cL8g",
+            "predecessor_id": "art_hqIRZPDrSSfsnDP4cL8g"
+          }
+        },
+        "orderKey": "v1:0001791882451434:0000000000000030:0000000000000000:message:msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g"
+      }
+    },
+    {
+      "id": "msg_hdkwhkYFdpTewMzsCORv",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "time_created": 1791882451568,
+      "time_updated": 1791882571383,
+      "data": {
+        "orderKey": "v1:0001791882451568:0000000000000030:0000000000000000:message:msg_hdkwhkYFdpTewMzsCORv",
+        "author": "orchestrator",
+        "role": "assistant",
+        "time": {
+          "created": 1791882451568,
+          "completed": 1791882571338
+        },
+        "error": {
+          "name": "ProcessExecutionInterruptedError",
+          "data": {
+            "message": "Previous process ended before Session ses_-zUS4y0jizzu6IFv7yOd completed assistant message msg_hdkwhkYFdpTewMzsCORv"
+          }
+        },
+        "parentID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g",
+        "acceptedInputMessageIDs": [
+          "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "orchestrator",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zhMTUG\\runner-83284-zrKy27\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zhMTUG\\runner-83284-zrKy27\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 0,
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "finish": "error",
+        "activationID": "act_g0VXv29cK00Z90b13kiK"
+      }
+    },
+    {
+      "id": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "time_created": 1791882571623,
+      "time_updated": 1791882571632,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791882571623
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "orchestrator_control_ingress": {
+            "ingress_id": "art_hqIRZPDrSSfsnDP4cL8g",
+            "predecessor_id": "msg_hdkwhkYFdpTewMzsCORv"
+          }
+        },
+        "orderKey": "v1:0001791882571623:0000000000000030:0000000000000000:message:msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv"
+      }
+    },
+    {
+      "id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "time_created": 1791882571739,
+      "time_updated": 1791882652011,
+      "data": {
+        "orderKey": "v1:0001791882571739:0000000000000030:0000000000000000:message:msg_hnHzcs5lX7uGCZDfCuf4",
+        "author": "orchestrator",
+        "role": "assistant",
+        "time": {
+          "created": 1791882571739,
+          "completed": 1791882652008
+        },
+        "parentID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "acceptedInputMessageIDs": [
+          "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "orchestrator",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zhMTUG\\runner-83284-zrKy27\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zhMTUG\\runner-83284-zrKy27\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 160360,
+          "input": 96344,
+          "output": 1181,
+          "reasoning": 115,
+          "cache": {
+            "read": 62720,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "activationID": "act_g0VXv2er100Y3OwzAFzJ"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_g0VXv1zIQ009Gam9i704",
+      "message_id": "msg_g0VXv1zIe007f3HziEwM",
+      "time_created": 1791882411683,
+      "time_updated": 1791882411683,
+      "data": {
+        "type": "text",
+        "text": "请执行有限持续目标验收。用户明确授权创建持续目标，tokenBudget=800000，turnBudget=3。目标是交付一份含六项具体核对标准的两阶段验收说明。\n首次输入这一轮：创建目标，简要说明阶段一需求核对、阶段二验收核对，然后结束当前输入，保持目标active。\n第一个goal-controller自动轮次：实际输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；写完六项后核对实际消息，调用update_continuous_goal标记complete并引用证据，再完成当前模式的正常完成合同。\n本验收可能在自动轮次中发生真实进程中断。若收到运行时恢复消息，请核对已有持久化输入和结果，从同一六项标准的安全边界继续，避免重复已完成工作；不创建新目标，不要求用户再说继续。\n不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待。本有限说明由当前负责人直接交付，无需子agent或子Task。\n首轮用现有no_action结算当前输入；最后目标complete后按当前Task完成合同正常完成Task。"
+      }
+    },
+    {
+      "id": "prt_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+      "message_id": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+      "time_created": 1791882411687,
+      "time_updated": 1791882412212,
+      "data": {
+        "type": "text",
+        "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hhu8MFF8NzOTuLOw9zO2.\nThis wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization.\nOn the initial Task wake, the creator's original request is already in its real participant Message in this Turn. It has no task-root message identity. Read that Message directly.",
+        "kind": "control",
+        "source": "system",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hnvs3Uz0FgZuMdOFu1r6/4c12540ca4aa4d8e6d9dfcb52a4646f55ad0176a425ebd9ff40aa59e20b89883.json",
+          "catalog_snapshot_hash": "4c12540ca4aa4d8e6d9dfcb52a4646f55ad0176a425ebd9ff40aa59e20b89883"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv1zXV00bZ0GCFFD6",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882412601,
+      "time_updated": 1791882412604,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXv20oD00mBI2es5eg",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882417482,
+      "time_updated": 1791882417489,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXv20or00J2mFAy8ii",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882417521,
+      "time_updated": 1791882419195,
+      "data": {
+        "type": "text",
+        "text": "我会先核对是否已有持续目标，避免重复创建。本轮只说明两个阶段：阶段一核对需求与约束，阶段二核对交付内容与通过条件；六项具体标准留到自动轮次输出。",
+        "time": {
+          "start": 1791882417521,
+          "end": 1791882419193
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0bc1f612fa62b8e5016acdf4b163b08191b2ecbce8c49d78fb",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv21NT00px1iLWyZB",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882419669,
+      "time_updated": 1791882419671,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 49928,
+          "input": 49838,
+          "output": 77,
+          "reasoning": 13,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv21Ts003wrObrYXy",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882420064,
+      "time_updated": 1791882420066,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXv250e00HmMjOHDla",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882433631,
+      "time_updated": 1791882433633,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 50151,
+          "input": 278,
+          "output": 209,
+          "reasoning": 0,
+          "cache": {
+            "read": 49664,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv25B800B1O809mPX",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882434278,
+      "time_updated": 1791882434283,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXv278L00099jmBL0L",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882441793,
+      "time_updated": 1791882441799,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXv27B600VCtQd4Qbu",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "time_created": 1791882441964,
+      "time_updated": 1791882445967,
+      "data": {
+        "type": "text",
+        "text": "持续目标已确认，预算为 800000 tokens，最多 3 个自动轮次，目前保持运行。\n\n- **阶段一：需求核对**。核对交付范围、六项标准的结构，以及执行限制。\n- **阶段二：验收核对**。核对实际输出是否齐全，每项是否包含可观察证据与明确的通过条件。\n\n本轮到此结束，不提前标记完成。下一自动轮次将直接交付两阶段各三项标准；若发生中断，将从已持久化的结果继续，不重复创建目标，也不要求你再次说“继续”。",
+        "time": {
+          "start": 1791882441964,
+          "end": 1791882445965
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_01c9ce9a3814a089016acdf4c9eeb881919833260d9c235b31",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_hj5i1wM7rvx90PIgVvfZ",
+      "message_id": "msg_hGZzhrPGAVmt9dbP9U1c",
+      "time_created": 1791882451241,
+      "time_updated": 1791882451242,
+      "data": {
+        "type": "text",
+        "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 交付一份含六项具体核对标准的两阶段验收说明。首次输入仅创建目标并简要说明阶段一需求核对、阶段二验收核对，保持目标active，以no_action结算。第一个goal-controller自动轮次直接输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；核对实际已输出消息后将持续目标标记complete并引用证据，再按当前Task合同完成Task。若真实进程中断，核对已有持久化输入与结果，从同一六项标准的安全边界继续，避免重复完成内容，不创建新目标、不要求用户再说继续。不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待；由当前负责人直接交付，无需子agent或子Task。\nGoal: pev_g0VXv250H004TnLPWiCA; prior settled frontier: pev_g0VXv1yQZ00aL8xImczF:active:art_hhu8MFF8NzOTuLOw9zO2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 51783; token budget: 800000.\nThis message is authored by the goal controller, not a new user instruction.",
+        "kind": "user_content",
+        "metadata": {
+          "continuous_goal": {
+            "id": "pev_hNMFkeqxzxq8mXBziMrc",
+            "goalID": "pev_g0VXv250H004TnLPWiCA",
+            "revision": "pev_g0VXv250H004TnLPWiCA",
+            "frontier": "pev_g0VXv1yQZ00aL8xImczF:active:art_hhu8MFF8NzOTuLOw9zO2",
+            "number": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g",
+      "message_id": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g",
+      "time_created": 1791882451436,
+      "time_updated": 1791882451796,
+      "data": {
+        "type": "text",
+        "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hqIRZPDrSSfsnDP4cL8g.\nCurrent rootMessage=msg_hGZzhrPGAVmt9dbP9U1c; kind=goal-controller. This exact real-participant message is the current input for this wake. Read it through read_task_message before any wait or lifecycle decision. Do not infer its contents from older conversation history.\nOnly the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.",
+        "kind": "control",
+        "source": "system",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hnvs3Uz0FgZuMdOFu1r6/4c12540ca4aa4d8e6d9dfcb52a4646f55ad0176a425ebd9ff40aa59e20b89883.json",
+          "catalog_snapshot_hash": "4c12540ca4aa4d8e6d9dfcb52a4646f55ad0176a425ebd9ff40aa59e20b89883"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv29oD00FYLt8fcnj",
+      "message_id": "msg_hdkwhkYFdpTewMzsCORv",
+      "time_created": 1791882452077,
+      "time_updated": 1791882452079,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+      "message_id": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+      "time_created": 1791882571630,
+      "time_updated": 1791882572211,
+      "data": {
+        "type": "text",
+        "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hqIRZPDrSSfsnDP4cL8g.\nCurrent rootMessage=msg_hGZzhrPGAVmt9dbP9U1c; kind=goal-controller. This exact real-participant message is the current input for this wake. Read it through read_task_message before any wait or lifecycle decision. Do not infer its contents from older conversation history.\nOnly the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.",
+        "kind": "control",
+        "source": "system",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hnvs3Uz0FgZuMdOFu1r6/4c12540ca4aa4d8e6d9dfcb52a4646f55ad0176a425ebd9ff40aa59e20b89883.json",
+          "catalog_snapshot_hash": "4c12540ca4aa4d8e6d9dfcb52a4646f55ad0176a425ebd9ff40aa59e20b89883"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv2fAy00fuQW6CAj9",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882572652,
+      "time_updated": 1791882572655,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXv2hJD00g5RGgA2Gh",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882580855,
+      "time_updated": 1791882580857,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 52378,
+          "input": 52314,
+          "output": 64,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv2hQX00VH9CC22t7",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882581305,
+      "time_updated": 1791882581308,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXv2kTt00z8hHwYIYq",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882593046,
+      "time_updated": 1791882593053,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXv2kUU00HAtiwe52V",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882593082,
+      "time_updated": 1791882615512,
+      "data": {
+        "type": "text",
+        "text": "当前自动轮次已确认。下面直接交付六项标准，每个阶段各三项，每项均列出可观察证据和通过条件；随后核对实际输出，再记录完成。\n\n## 两阶段验收说明\n\n### 阶段一：需求核对\n\n**1. 交付范围与数量**\n- **可观察证据**：原始请求明确要求“两阶段、共六项具体核对标准、每阶段三项”；实际说明中的阶段标题和条目编号可直接逐项计数。\n- **通过条件**：说明包含“需求核对”和“验收核对”两个阶段，每阶段恰好三项，共六项，不以阶段简介代替具体标准。\n\n**2. 每项标准的必要字段**\n- **可观察证据**：实际说明的六个条目均分别列出“可观察证据”和“通过条件”，并写明要检查的对象。\n- **通过条件**：六项均有这两个字段；证据可定位、可观察，通过条件能够据此判断满足或不满足，不能只写“符合要求”或“质量良好”。\n\n**3. 授权范围与执行限制**\n- **可观察证据**：原始授权、持续目标记录及本次执行记录，可用于核对目标预算、目标是否重复创建，以及是否发生禁止的操作。\n- **通过条件**：沿用同一个持续目标，tokenBudget 为 800000、turnBudget 为 3；由当前负责人直接交付，不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待，也不创建子 agent 或子 Task。\n\n### 阶段二：验收核对\n\n**4. 实际交付的完整性**\n- **可观察证据**：本条消息中的两个阶段、六个编号条目，以及各条目实际显示的证据与通过条件。\n- **通过条件**：逐项核对第 1—6 项均已实际输出，无缺项、无占位符、无“以后补充”；读者无需等待另一条消息即可获得完整六项标准。\n\n**5. 中断恢复与重复工作控制**\n- **可观察证据**：已持久化的原始输入、持续目标记录、自动轮次输入和已输出结果；如发生中断，再对照恢复后的执行记录。\n- **通过条件**：发生中断时，从同一目标中最后一个已确认完成的安全边界继续，不重复创建目标、不重做已完成条目、不要求用户再次说“继续”；未发生中断时，记录为“恢复分支未触发”，不宣称已经验证了真实中断恢复。\n\n**6. 完成顺序与证据一致性**\n- **可观察证据**：六项标准的实际消息、对该消息的核对结果、持续目标完成记录，以及随后整项任务的完成记录。\n- **通过条件**：先实际输出并核对六项标准，再以该输出为证据将持续目标标记完成，最后完成整项任务；不得在内容交付前提前完成，也不得把仅完成持续目标当作整项任务已经完成。",
+        "time": {
+          "start": 1791882593082,
+          "end": 1791882615510
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0cefb582ad36ef44016acdf5610170819190a5604e3894ce32",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv2qQN003N9QPn5h0",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882615894,
+      "time_updated": 1791882615895,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 53588,
+          "input": 21418,
+          "output": 715,
+          "reasoning": 95,
+          "cache": {
+            "read": 31360,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv2qVn00Gm2lFsbbH",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882616228,
+      "time_updated": 1791882616229,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXv2s0n00gK5FpveEZ",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882621993,
+      "time_updated": 1791882623000,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXv2sH5008hCcOVS5P",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882623003,
+      "time_updated": 1791882626209,
+      "data": {
+        "type": "text",
+        "text": "已核对上方实际消息：需求核对三项、验收核对三项，共六项；每项均包含可观察证据和通过条件，没有占位内容。本轮沿用原有目标，未执行禁止的操作。\n\n当前没有收到明确的运行时中断恢复消息，因此不宣称已验证真实进程中断恢复。六项说明已交付，现在记录目标完成，再完成整项任务。",
+        "time": {
+          "start": 1791882623003,
+          "end": 1791882626207
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_030c9c1a7638f844016acdf57ef4e087d0a1c2373e3321025c",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv2vsJ00sahkUz6kA",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882636846,
+      "time_updated": 1791882636847,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 54394,
+          "input": 22612,
+          "output": 402,
+          "reasoning": 20,
+          "cache": {
+            "read": 31360,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv2vxu00or1rvvh5Y",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "time_created": 1791882637190,
+      "time_updated": 1791882637193,
+      "data": {
+        "type": "step-start"
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXv21Fu00Ln8LZ0y0d",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_722e59b8e6d049f59b181f05ec9a5579",
+        "tool": "get_continuous_goal",
+        "input": {},
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0bc1f612fa62b8e5016acdf4b3282c81919d4ea8e6fa2365b6"
+          }
+        },
+        "time": {
+          "start": 1791882419198
+        }
+      },
+      "time_created": 1791882419283
+    },
+    {
+      "id": "prt_g0VXv23Tj00j5x3x4Z1D",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_611f3d29c4b14545b3d85e6a63aadc42",
+        "tool": "create_continuous_goal",
+        "input": {
+          "tokenBudget": 800000,
+          "turnBudget": 3,
+          "objective": "交付一份含六项具体核对标准的两阶段验收说明。首次输入仅创建目标并简要说明阶段一需求核对、阶段二验收核对，保持目标active，以no_action结算。第一个goal-controller自动轮次直接输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；核对实际已输出消息后将持续目标标记complete并引用证据，再按当前Task合同完成Task。若真实进程中断，核对已有持久化输入与结果，从同一六项标准的安全边界继续，避免重复完成内容，不创建新目标、不要求用户再说继续。不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待；由当前负责人直接交付，无需子agent或子Task。"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0c8eefe1bc11a90c016acdf4bba87481919f06a0c1582a9500"
+          }
+        },
+        "time": {
+          "start": 1791882427743
+        }
+      },
+      "time_created": 1791882433144
+    },
+    {
+      "id": "prt_g0VXv28Di00QrN7egfeH",
+      "message_id": "msg_h4Yk39swoFPjgvZ2eA9R",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_8ac9923e4523408e8330f786f76a89fd",
+        "tool": "no_action",
+        "input": {
+          "observed_task": {
+            "epoch": 1,
+            "status": "active",
+            "openedEventID": "pev_g0VXv1yQZ00aL8xImczF",
+            "terminalEventID": null
+          },
+          "reason": "首轮已确认持续目标及指定预算，已简要说明需求核对和验收核对两个阶段；按原始请求本轮不输出六项标准、不完成目标或Task。已有active持续目标负责后续自动轮次，本输入无需其他动作。"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_01c9ce9a3814a089016acdf4cdef4c8191acf8abb76914666e"
+          }
+        },
+        "time": {
+          "start": 1791882445970
+        }
+      },
+      "time_created": 1791882449347
+    },
+    {
+      "id": "prt_g0VXv2AoB00sMni0dleU",
+      "message_id": "msg_hdkwhkYFdpTewMzsCORv",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_35c87b5dd2874384b7811156616e167b",
+        "tool": "read_task_message",
+        "input": {
+          "message_id": "msg_hGZzhrPGAVmt9dbP9U1c",
+          "reason": "核对当前自动轮次的实际输入，确认应继续交付和中断恢复边界。"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_01a93ad71fda1d5d016acdf4d7d58c81918d5d7646370e897a"
+          }
+        },
+        "time": {
+          "start": 1791882455919
+        }
+      },
+      "time_created": 1791882457087
+    },
+    {
+      "id": "prt_g0VXv2gwX00CpVMR4QTg",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_AfTBOE1NEDUCMVUGfuDg6ECC",
+        "tool": "read_task_message",
+        "input": {
+          "message_id": "msg_hGZzhrPGAVmt9dbP9U1c",
+          "reason": "核对本次自动轮次的真实输入，按原有持续目标继续交付并避免重复已完成内容。"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_065c678c502b3434016acdf552578c87d0afb723d731f69a07"
+          }
+        },
+        "time": {
+          "start": 1791882579445
+        }
+      },
+      "time_created": 1791882580452
+    },
+    {
+      "id": "prt_g0VXv2qKJ0003jKfLyXg",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_8fc0c86499394b0ca57d5ba449bc1807",
+        "tool": "get_continuous_goal",
+        "input": {},
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0cefb582ad36ef44016acdf57777748191af3358f2d9da046e"
+          }
+        },
+        "time": {
+          "start": 1791882615515
+        }
+      },
+      "time_created": 1791882615581
+    },
+    {
+      "id": "prt_g0VXv2t6r00qoa7MQreg",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_fZ7aBsORltAWD9Xt28ZM6ffC",
+        "tool": "update_continuous_goal",
+        "input": {
+          "goalID": "pev_g0VXv250H004TnLPWiCA",
+          "expectedRevision": "pev_g0VXv250H004TnLPWiCA",
+          "status": "complete",
+          "reason": "已实际输出并核对当前负责人本轮的《两阶段验收说明》消息：阶段一第1项交付范围与数量、第2项必要字段、第3项授权范围与执行限制；阶段二第4项实际交付完整性、第5项中断恢复与重复控制、第6项完成顺序与证据一致性。六项均含可观察证据和通过条件，两个阶段各三项，无占位符。证据为当前Orchestrator会话ses_-zUS4y0jizzu6IFv7yOd中的实际说明及随后核对消息；本轮输入已通过read_task_message核对msg_hGZzhrPGAVmt9dbP9U1c，get_continuous_goal确认沿用同一目标及800000/3预算。未创建新目标、子agent、子Task或定时等待，未访问网站、部署、读取凭据或改变权限。当前未收到明确运行时中断恢复消息，不宣称验证真实中断分支。先交付并核对消息后标记目标完成，随后完成Task合同。"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_030c9c1a7638f844016acdf582153087d0866219b127e83028"
+          }
+        },
+        "time": {
+          "start": 1791882626213
+        }
+      },
+      "time_created": 1791882636535
+    },
+    {
+      "id": "prt_g0VXv2xRA00qv7i91E66",
+      "message_id": "msg_hnHzcs5lX7uGCZDfCuf4",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_CgDgMXDZLIwyqiT2THINq97A",
+        "tool": "manage_task",
+        "input": {
+          "summary": "已在当前对话直接交付《两阶段验收说明》：需求核对和验收核对各三项，共六项，每项均列明可观察证据和通过条件。输出后已逐项核对实际消息，随后将原有持续目标标记完成，完成记录已返回；预算保持800000 tokens、3个自动轮次。遵守不访问网站、不部署、不读凭据、不改权限、不创建计划定时等待及不创建子agent或子Task的限制。当前没有明确运行时恢复消息，真实中断恢复分支未作已验证声明。交付形式为用户要求的对话说明，未请求或生成文件，无需文件附件。",
+          "evidence_locators": [
+            {
+              "source": "session",
+              "session_id": "ses_-zUS4y0jizzu6IFv7yOd"
+            }
+          ],
+          "deliverable_artifact_locators": [],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_id": null,
+          "action": "complete_task"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_043245a9576f3961016acdf592c39c87d08bba785c947e8f84"
+          }
+        },
+        "time": {
+          "start": 1791882642847
+        }
+      },
+      "time_created": 1791882649567
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "prt_huLW1Ep0JuAgvjzdFKTE",
+      "request_part_id": "prt_g0VXv21Fu00Ln8LZ0y0d",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hxtraFOPgWvqqbqarW0L",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791882419623
+        }
+      },
+      "time_created": 1791882419624
+    },
+    {
+      "id": "prt_h6T32OPSQk7Nx3wpw4RQ",
+      "request_part_id": "prt_g0VXv23Tj00j5x3x4Z1D",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hpsnm8WHWBBqwgku3dIv",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791882433614
+        }
+      },
+      "time_created": 1791882433614
+    },
+    {
+      "id": "prt_hUqmpZ3FGxsu3N7UsLlw",
+      "request_part_id": "prt_g0VXv28Di00QrN7egfeH",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h8eOJ6fpKCb2PRYmO9KG",
+        "title": "Current Ingress Reconciled",
+        "metadata": {
+          "opencorvusToolResultControl": {
+            "kind": "immediate_park"
+          }
+        },
+        "time": {
+          "end": 1791882450234
+        }
+      },
+      "time_created": 1791882450234
+    },
+    {
+      "id": "prt_hnir3HuKBiKPNeRSIEMd",
+      "request_part_id": "prt_g0VXv2AoB00sMni0dleU",
+      "data": {
+        "outcome": "failed",
+        "failure": {
+          "kind": "process-execution-interrupted",
+          "name": "ProcessExecutionInterruptedError",
+          "message": "Previous process ended before Session ses_-zUS4y0jizzu6IFv7yOd completed assistant message msg_hdkwhkYFdpTewMzsCORv",
+          "originSite": "SessionLoop.terminalizeRecoveredIncompleteAssistant",
+          "classification": "llm-activity",
+          "data": {
+            "sessionID": "ses_-zUS4y0jizzu6IFv7yOd",
+            "messageID": "msg_hdkwhkYFdpTewMzsCORv"
+          }
+        },
+        "time": {
+          "end": 1791882571338
+        }
+      },
+      "time_created": 1791882571364
+    },
+    {
+      "id": "prt_hOySgGHAMc0EEVMaZMD1",
+      "request_part_id": "prt_g0VXv2gwX00CpVMR4QTg",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hxcGcx7sMDwLWISoljNS",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791882580835
+        }
+      },
+      "time_created": 1791882580835
+    },
+    {
+      "id": "prt_hLqogI9rQpRJ4nmgxJTk",
+      "request_part_id": "prt_g0VXv2qKJ0003jKfLyXg",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hd991ulfbnBczQrPycAo",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791882615880
+        }
+      },
+      "time_created": 1791882615880
+    },
+    {
+      "id": "prt_hzlRSMmgKy5SMLHqiZsV",
+      "request_part_id": "prt_g0VXv2t6r00qoa7MQreg",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hPKdTRCGbarHEEDywZCI",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791882636796
+        }
+      },
+      "time_created": 1791882636797
+    },
+    {
+      "id": "prt_hAlbtj1LvYzjk0Hq5pT1",
+      "request_part_id": "prt_g0VXv2xRA00qv7i91E66",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hOpdMKBsOzffIpT9UX77",
+        "title": "Task Completed",
+        "metadata": {
+          "opencorvusToolResultControl": {
+            "kind": "immediate_park"
+          }
+        },
+        "time": {
+          "end": 1791882651986
+        }
+      },
+      "time_created": 1791882651986
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_g0VXv1yQC00V0gnkuAA1",
+      "kind": "event",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "engine.artifact",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 1,
+      "deadline_ms": null,
+      "emitted_at": 1791882408304,
+      "payload": {
+        "artifactID": "art_g0VXv1yPu00YCrKYtdDt",
+        "kind": "task_package_revision_binding",
+        "catalogRevision": 1
+      }
+    },
+    {
+      "id": "pev_g0VXv1yQY001aYpX3DIf",
+      "kind": "event",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "engine.artifact",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 2,
+      "deadline_ms": null,
+      "emitted_at": 1791882408326,
+      "payload": {
+        "artifactID": "art_g0VXv1yQE00yOmgFF7aj",
+        "kind": "task_execution_capsule_binding",
+        "catalogRevision": 2
+      }
+    },
+    {
+      "id": "pev_g0VXv1yQZ00aL8xImczF",
+      "kind": "event",
+      "type": "task.execution.opened",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "engine.pipeline",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 3,
+      "deadline_ms": null,
+      "emitted_at": 1791882407800,
+      "payload": {
+        "execution_epoch": 1
+      }
+    },
+    {
+      "id": "pev_g0VXv1yQd00tmOPOkTYJ",
+      "kind": "event",
+      "type": "task.created",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "pipeline.active",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 4,
+      "deadline_ms": null,
+      "emitted_at": 1791882408331,
+      "payload": {
+        "summary": "Task started"
+      }
+    },
+    {
+      "id": "pev_g0VXv1zVz00IkxFV8ZT0",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 5,
+      "deadline_ms": null,
+      "emitted_at": 1791882412507,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv1zXS00xGn0gdzxX",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 6,
+      "deadline_ms": null,
+      "emitted_at": 1791882412598,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv21SX00kOIkBACyr",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 7,
+      "deadline_ms": null,
+      "emitted_at": 1791882419980,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv21Tp00hfMJlKAEK",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 8,
+      "deadline_ms": null,
+      "emitted_at": 1791882420060,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv250H004TnLPWiCA",
+      "kind": "event",
+      "type": "continuous_goal.created",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 9,
+      "deadline_ms": null,
+      "emitted_at": 1791882433605,
+      "payload": {
+        "owner": {
+          "kind": "task",
+          "id": "tsk_g00VXv1yI400ygHduvEs"
+        },
+        "request_id": "prt_g0VXv23Tj00j5x3x4Z1D",
+        "input": {
+          "tokenBudget": 800000,
+          "turnBudget": 3,
+          "requestID": "prt_g0VXv23Tj00j5x3x4Z1D",
+          "objective": "交付一份含六项具体核对标准的两阶段验收说明。首次输入仅创建目标并简要说明阶段一需求核对、阶段二验收核对，保持目标active，以no_action结算。第一个goal-controller自动轮次直接输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；核对实际已输出消息后将持续目标标记complete并引用证据，再按当前Task合同完成Task。若真实进程中断，核对已有持久化输入与结果，从同一六项标准的安全边界继续，避免重复完成内容，不创建新目标、不要求用户再说继续。不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待；由当前负责人直接交付，无需子agent或子Task。"
+        },
+        "author": "ses_-zUS4y0jizzu6IFv7yOd"
+      }
+    },
+    {
+      "id": "pev_g0VXv259C00eY9YXsoGF",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 10,
+      "deadline_ms": null,
+      "emitted_at": 1791882434157,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv25B500WE7Mu5fiz",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 11,
+      "deadline_ms": null,
+      "emitted_at": 1791882434275,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv29LF00FiFiPqvqu",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 12,
+      "deadline_ms": null,
+      "emitted_at": 1791882450281,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hhu8MFF8NzOTuLOw9zO2_art_hhu8MFF8NzOTuLOw9zO2",
+        "status": {
+          "type": "idle"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv29M500acObNYJJ1",
+      "kind": "event",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "engine.artifact",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 13,
+      "deadline_ms": null,
+      "emitted_at": 1791882450333,
+      "payload": {
+        "artifactID": "art_hmrEA4bIxJPmBgGjb0me",
+        "kind": "task_root_ingress_disposition",
+        "catalogRevision": 3
+      }
+    },
+    {
+      "id": "pev_hNMFkeqxzxq8mXBziMrc",
+      "kind": "event",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 14,
+      "deadline_ms": null,
+      "emitted_at": 1791882451251,
+      "payload": {
+        "goal_id": "pev_g0VXv250H004TnLPWiCA",
+        "revision": "pev_g0VXv250H004TnLPWiCA",
+        "frontier": "pev_g0VXv1yQZ00aL8xImczF:active:art_hhu8MFF8NzOTuLOw9zO2",
+        "number": 1
+      }
+    },
+    {
+      "id": "pev_g0VXv29mS00wIeA3144J",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 15,
+      "deadline_ms": null,
+      "emitted_at": 1791882451967,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv29oA00qDTe2uozC",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 16,
+      "deadline_ms": null,
+      "emitted_at": 1791882452074,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2f8X00XwYV2y9e1",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 17,
+      "deadline_ms": null,
+      "emitted_at": 1791882572501,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2fAv00Za49usLN3",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 18,
+      "deadline_ms": null,
+      "emitted_at": 1791882572648,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2hPK00xR7PKCF2j",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 19,
+      "deadline_ms": null,
+      "emitted_at": 1791882581230,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2hQU00JwLFTShqi",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 20,
+      "deadline_ms": null,
+      "emitted_at": 1791882581301,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2qUz00cRxK9acZk",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 21,
+      "deadline_ms": null,
+      "emitted_at": 1791882616176,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2qVl00V0dyjSjg0",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 22,
+      "deadline_ms": null,
+      "emitted_at": 1791882616225,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2vrU008TEgpXoxG",
+      "kind": "event",
+      "type": "continuous_goal.updated",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 23,
+      "deadline_ms": null,
+      "emitted_at": 1791882636792,
+      "payload": {
+        "goal_id": "pev_g0VXv250H004TnLPWiCA",
+        "request_id": "prt_g0VXv2t6r00qoa7MQreg",
+        "input": {
+          "requestID": "prt_g0VXv2t6r00qoa7MQreg",
+          "goalID": "pev_g0VXv250H004TnLPWiCA",
+          "expectedRevision": "pev_g0VXv250H004TnLPWiCA",
+          "status": "complete",
+          "reason": "已实际输出并核对当前负责人本轮的《两阶段验收说明》消息：阶段一第1项交付范围与数量、第2项必要字段、第3项授权范围与执行限制；阶段二第4项实际交付完整性、第5项中断恢复与重复控制、第6项完成顺序与证据一致性。六项均含可观察证据和通过条件，两个阶段各三项，无占位符。证据为当前Orchestrator会话ses_-zUS4y0jizzu6IFv7yOd中的实际说明及随后核对消息；本轮输入已通过read_task_message核对msg_hGZzhrPGAVmt9dbP9U1c，get_continuous_goal确认沿用同一目标及800000/3预算。未创建新目标、子agent、子Task或定时等待，未访问网站、部署、读取凭据或改变权限。当前未收到明确运行时中断恢复消息，不宣称验证真实中断分支。先交付并核对消息后标记目标完成，随后完成Task合同。"
+        },
+        "author": "ses_-zUS4y0jizzu6IFv7yOd"
+      }
+    },
+    {
+      "id": "pev_g0VXv2vwt00c2P5gm4k7",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 24,
+      "deadline_ms": null,
+      "emitted_at": 1791882637127,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2vxs00B0e4gaCz3",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 25,
+      "deadline_ms": null,
+      "emitted_at": 1791882637187,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2znd00QPxaz00ok",
+      "kind": "event",
+      "type": "task.completed",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "state.task",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 26,
+      "deadline_ms": null,
+      "emitted_at": 1791882649845,
+      "payload": {
+        "execution_epoch": 1,
+        "summary": "已在当前对话直接交付《两阶段验收说明》：需求核对和验收核对各三项，共六项，每项均列明可观察证据和通过条件。输出后已逐项核对实际消息，随后将原有持续目标标记完成，完成记录已返回；预算保持800000 tokens、3个自动轮次。遵守不访问网站、不部署、不读凭据、不改权限、不创建计划定时等待及不创建子agent或子Task的限制。当前没有明确运行时恢复消息，真实中断恢复分支未作已验证声明。交付形式为用户要求的对话说明，未请求或生成文件，无需文件附件。"
+      }
+    },
+    {
+      "id": "pev_g0VXv2znz00srXO7oXPt",
+      "kind": "event",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "engine.artifact",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 27,
+      "deadline_ms": null,
+      "emitted_at": 1791882651951,
+      "payload": {
+        "artifactID": "art_g0VXv2zG400Ex6ikbuQO",
+        "kind": "task_completion_decision",
+        "catalogRevision": 4
+      }
+    },
+    {
+      "id": "pev_g0VXv2zpw00Jobz9hJZI",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 28,
+      "deadline_ms": null,
+      "emitted_at": 1791882652072,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "idle"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXv2zqI00xtRQcgfis",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 29,
+      "deadline_ms": null,
+      "emitted_at": 1791882652093,
+      "payload": {
+        "inputMessageID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_msg_hdkwhkYFdpTewMzsCORv",
+        "status": {
+          "type": "terminal",
+          "reason": "completed"
+        }
+      }
+    }
+  ],
+  "created": {
+    "id": "pev_g0VXv250H004TnLPWiCA",
+    "kind": "event",
+    "type": "continuous_goal.created",
+    "aggregate_type": "task",
+    "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+    "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+    "task_id": null,
+    "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "continuous-goal",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 9,
+    "deadline_ms": null,
+    "emitted_at": 1791882433605,
+    "payload": {
+      "owner": {
+        "kind": "task",
+        "id": "tsk_g00VXv1yI400ygHduvEs"
+      },
+      "request_id": "prt_g0VXv23Tj00j5x3x4Z1D",
+      "input": {
+        "tokenBudget": 800000,
+        "turnBudget": 3,
+        "requestID": "prt_g0VXv23Tj00j5x3x4Z1D",
+        "objective": "交付一份含六项具体核对标准的两阶段验收说明。首次输入仅创建目标并简要说明阶段一需求核对、阶段二验收核对，保持目标active，以no_action结算。第一个goal-controller自动轮次直接输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；核对实际已输出消息后将持续目标标记complete并引用证据，再按当前Task合同完成Task。若真实进程中断，核对已有持久化输入与结果，从同一六项标准的安全边界继续，避免重复完成内容，不创建新目标、不要求用户再说继续。不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待；由当前负责人直接交付，无需子agent或子Task。"
+      },
+      "author": "ses_-zUS4y0jizzu6IFv7yOd"
+    }
+  },
+  "updates": [
+    {
+      "id": "pev_g0VXv2vrU008TEgpXoxG",
+      "kind": "event",
+      "type": "continuous_goal.updated",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 23,
+      "deadline_ms": null,
+      "emitted_at": 1791882636792,
+      "payload": {
+        "goal_id": "pev_g0VXv250H004TnLPWiCA",
+        "request_id": "prt_g0VXv2t6r00qoa7MQreg",
+        "input": {
+          "requestID": "prt_g0VXv2t6r00qoa7MQreg",
+          "goalID": "pev_g0VXv250H004TnLPWiCA",
+          "expectedRevision": "pev_g0VXv250H004TnLPWiCA",
+          "status": "complete",
+          "reason": "已实际输出并核对当前负责人本轮的《两阶段验收说明》消息：阶段一第1项交付范围与数量、第2项必要字段、第3项授权范围与执行限制；阶段二第4项实际交付完整性、第5项中断恢复与重复控制、第6项完成顺序与证据一致性。六项均含可观察证据和通过条件，两个阶段各三项，无占位符。证据为当前Orchestrator会话ses_-zUS4y0jizzu6IFv7yOd中的实际说明及随后核对消息；本轮输入已通过read_task_message核对msg_hGZzhrPGAVmt9dbP9U1c，get_continuous_goal确认沿用同一目标及800000/3预算。未创建新目标、子agent、子Task或定时等待，未访问网站、部署、读取凭据或改变权限。当前未收到明确运行时中断恢复消息，不宣称验证真实中断分支。先交付并核对消息后标记目标完成，随后完成Task合同。"
+        },
+        "author": "ses_-zUS4y0jizzu6IFv7yOd"
+      }
+    }
+  ],
+  "continuations": [
+    {
+      "id": "pev_hNMFkeqxzxq8mXBziMrc",
+      "kind": "event",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "task_id": null,
+      "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 14,
+      "deadline_ms": null,
+      "emitted_at": 1791882451251,
+      "payload": {
+        "goal_id": "pev_g0VXv250H004TnLPWiCA",
+        "revision": "pev_g0VXv250H004TnLPWiCA",
+        "frontier": "pev_g0VXv1yQZ00aL8xImczF:active:art_hhu8MFF8NzOTuLOw9zO2",
+        "number": 1
+      }
+    }
+  ],
+  "usage": [
+    {
+      "id": "pvu_g0VXv29Ko00ZHnd64he1",
+      "occurred_at": 1791882450254,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 20154,
+      "output_tokens": 256,
+      "reasoning_tokens": 13,
+      "cache_read_tokens": 31360,
+      "cache_write_tokens": 0,
+      "total_tokens": 51783,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "agent_id": "orchestrator",
+      "association_id": "pev_hLIBZcLOZQkG04dTOHkP"
+    },
+    {
+      "id": "pvu_g0VXv2hJE00DGIw0aVjl",
+      "occurred_at": 1791882580852,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 52314,
+      "output_tokens": 64,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 52378,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "agent_id": "orchestrator",
+      "association_id": "pev_hi8fSX7Np7LwO8zKIP7P"
+    },
+    {
+      "id": "pvu_g0VXv2qQO00loXz7D9Ot",
+      "occurred_at": 1791882615892,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 21418,
+      "output_tokens": 715,
+      "reasoning_tokens": 95,
+      "cache_read_tokens": 31360,
+      "cache_write_tokens": 0,
+      "total_tokens": 53588,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "agent_id": "orchestrator",
+      "association_id": "pev_h8kvaeGRSw29P8iZ4Bb4"
+    },
+    {
+      "id": "pvu_g0VXv2vsK00u7omtt6ky",
+      "occurred_at": 1791882636844,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 22612,
+      "output_tokens": 402,
+      "reasoning_tokens": 20,
+      "cache_read_tokens": 31360,
+      "cache_write_tokens": 0,
+      "total_tokens": 54394,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS4y0jizzu6IFv7yOd",
+      "agent_id": "orchestrator",
+      "association_id": "pev_hDVFJcalhYZZJMgg3Ems"
+    }
+  ],
+  "ingresses": [
+    {
+      "id": "art_hhu8MFF8NzOTuLOw9zO2",
+      "task_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "execution_epoch": 1,
+      "sequence": 1,
+      "source": "task",
+      "source_id": "tsk_g00VXv1yI400ygHduvEs",
+      "inline_payload": null,
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791882407800
+    },
+    {
+      "id": "art_hqIRZPDrSSfsnDP4cL8g",
+      "task_id": "tsk_g00VXv1yI400ygHduvEs",
+      "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+      "execution_epoch": 1,
+      "sequence": 2,
+      "source": "message",
+      "source_id": "msg_hGZzhrPGAVmt9dbP9U1c",
+      "inline_payload": null,
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791882451239
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Task/Mission 持续目标崩溃恢复](records/2026-10/2026-10-13-continuous-goal-crash-recovery.md)：独立真实 Provider 故障、恢复与修复验收。
+
 - [387 电子表格身份与运行时语言](records/2026-10/2026-10-13-spreadsheet-artifact-identity-387.md)：真实类型/菜单复现、同工作簿语言切换与编辑CSV验证。
 
 - [389 电子表格全屏弹层](records/2026-10/2026-10-13-spreadsheet-fullscreen-popups-389.md)：真实弹层父链、全屏显示与剩余无障碍语言调查。

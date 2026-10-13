@@ -1,0 +1,4 @@
+{"stage":"server_ready","kind":"mission","phase":"before","pid":81624,"url":"http://127.0.0.1:7878"}
+{"stage":"crashed","kind":"mission","pid":81624,"requests":7,"continuationID":"pev_h6JfnidbEpL3eB6gpUkW","partial":[{"id":"prt_g0VXv43k300bD4bdZXTO","type":"reasoning","characters":0},{"id":"prt_g0VXv43mS007g6ARlVoN","type":"text","characters":4}]}
+{"stage":"server_ready","kind":"mission","phase":"after","pid":80608,"url":"http://127.0.0.1:7878"}
+AssertionError [ERR_ASSERTION]: Mission runtime recovery cites interrupted assistant

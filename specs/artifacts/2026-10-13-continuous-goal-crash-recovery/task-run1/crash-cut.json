@@ -1,0 +1,79 @@
+{
+  "pid": 83328,
+  "at": 1791882457192,
+  "continuationID": "pev_hNMFkeqxzxq8mXBziMrc",
+  "inputID": "msg_hGZzhrPGAVmt9dbP9U1c",
+  "assistantID": "msg_hdkwhkYFdpTewMzsCORv",
+  "requestIndex": 6,
+  "reader": {
+    "boundary": "provider-source-reader",
+    "state": "reading",
+    "receivedAt": 1791882453295,
+    "boundAt": 1791882453298,
+    "chunkCount": 36,
+    "byteCount": 544748,
+    "firstByteReadAt": 1791882453313,
+    "lastByteReadAt": 1791882457083,
+    "identityState": "observed",
+    "requestContext": {
+      "sessionID": "ses_-zUS4y0jizzu6IFv7yOd",
+      "streamRequest": {
+        "requestID": "msg_task-root-control_art_hqIRZPDrSSfsnDP4cL8g_art_hqIRZPDrSSfsnDP4cL8g",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "activity": {
+        "id": "act_g0VXv29nn00hYczfthrh",
+        "attempt": 0,
+        "assistantMessageID": "msg_hdkwhkYFdpTewMzsCORv"
+      }
+    }
+  },
+  "progress": [
+    {
+      "id": "prt_g0VXv29oD00FYLt8fcnj",
+      "type": "step-start",
+      "characters": 0
+    }
+  ],
+  "toolIDs": [
+    "prt_g0VXv2AoB00sMni0dleU"
+  ],
+  "ingress": {
+    "id": "art_hqIRZPDrSSfsnDP4cL8g",
+    "task_id": "tsk_g00VXv1yI400ygHduvEs",
+    "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+    "execution_epoch": 1,
+    "sequence": 2,
+    "source": "message",
+    "source_id": "msg_hGZzhrPGAVmt9dbP9U1c",
+    "inline_payload": null,
+    "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+    "time_accepted": 1791882451239
+  },
+  "opened": {
+    "id": "pev_g0VXv1yQZ00aL8xImczF",
+    "kind": "event",
+    "type": "task.execution.opened",
+    "aggregate_type": "task",
+    "aggregate_id": "tsk_g00VXv1yI400ygHduvEs",
+    "project_id": "prj_hnvs3Uz0FgZuMdOFu1r6",
+    "task_id": null,
+    "session_id": "ses_-zUS4y1aHzz0a6DJ2HUg",
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "engine.pipeline",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 3,
+    "deadline_ms": null,
+    "emitted_at": 1791882407800,
+    "payload": {
+      "execution_epoch": 1
+    }
+  }
+}

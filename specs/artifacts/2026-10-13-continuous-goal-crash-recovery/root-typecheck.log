@@ -1,0 +1,32 @@
+$ bun run check:sdk-imports && bun run check:ai-runtime && bun run check:expert-squad-types && bunx turbo run typecheck
+$ bun run ./script/check-sdk-imports.ts
+sdk import check passed (OpenCorvusClient)
+$ bun run ./script/check-ai-runtime.ts
+ai runtime check passed (ai v7, provider v4, provider-utils v5, OpenRouter v3)
+$ bunx tsc -p expert-squads/tsconfig.json
+• turbo 2.9.14
+
+   • Packages in scope: @opencorvus-ai/channel-config, @opencorvus-ai/channel-runtime, @opencorvus-ai/overlay, @opencorvus-ai/plugin, @opencorvus-ai/script, @opencorvus-ai/sdk, @opencorvus-ai/transport-protocol, @opencorvus-ai/util, @opencorvus/web, opencorvus
+   • Running typecheck in 10 packages
+   • Remote caching disabled, using shared worktree cache
+
+@opencorvus-ai/sdk:typecheck: cache hit, replaying logs 19a844d391a397f8
+@opencorvus-ai/sdk:typecheck: $ tsc --noEmit
+opencorvus:typecheck: cache miss, executing 21fd07729958e42e
+@opencorvus-ai/plugin:typecheck: cache hit, replaying logs 4f3ea83980f0648d
+@opencorvus-ai/channel-config:typecheck: cache hit, replaying logs 6fb6cfaefe574580
+@opencorvus-ai/plugin:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-config:typecheck: $ tsc --noEmit
+@opencorvus-ai/overlay:typecheck: cache hit, replaying logs 8d64e8d7730bfa7b
+@opencorvus-ai/overlay:typecheck: $ tsc --noEmit
+@opencorvus-ai/util:typecheck: cache hit, replaying logs c79d5574caa63d7b
+@opencorvus-ai/channel-runtime:typecheck: cache hit, replaying logs e93a0041201004f1
+@opencorvus-ai/util:typecheck: $ tsc --noEmit
+@opencorvus-ai/transport-protocol:typecheck: cache hit, replaying logs 520e42579f71028c
+@opencorvus-ai/transport-protocol:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-runtime:typecheck: $ tsgo --noEmit
+opencorvus:typecheck: $ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+
+ Tasks:    8 successful, 8 total
+Cached:    7 cached, 8 total
+  Time:    39.938s

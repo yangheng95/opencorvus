@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task/Mission 持续目标崩溃恢复](2026-10-13-continuous-goal-crash-recovery.md)：实际进程终止、正式启动恢复与用量身份。
+
 - [387 电子表格身份与运行时语言](2026-10-13-spreadsheet-artifact-identity-387.md)：原工作簿语言更新和真实编辑导出。
 
 - [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389.md)：原生全屏之外的菜单宿主与后续分析。
