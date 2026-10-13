@@ -32,7 +32,7 @@ import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
 import { fileReferenceRange, type FileReferenceLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
-import { pathWithForwardSeparators } from "../utils/server-path"
+import { isAbsoluteServerPath, pathWithForwardSeparators } from "../utils/server-path"
 import { AppLog } from "../utils/log"
 import { t } from "../utils/i18n"
 import {
@@ -1306,23 +1306,15 @@ async function openProjectPathInWorkbench(target: string, location?: Partial<Fil
   const directory = activeDirectory().trim()
   const rawTarget = typeof target === "string" ? target : ""
   if (!directory || !rawTarget) return
-  const { openFileEditor, openSourceFileEditor } = await import("./file-workbench")
+  const { openFileReference } = await import("./file-workbench")
   assertApiAuthorityCurrent(authority)
   const range = fileReferenceRange(location)
-  if (isAbsoluteEditorPath(rawTarget)) {
-    await openSourceFileEditor(rawTarget, { directory, authority }, range)
-    return
-  }
-  await openFileEditor(rawTarget, { directory, authority }, range)
-}
-
-function isAbsoluteEditorPath(path: string): boolean {
-  return /^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/.test(path)
+  await openFileReference(rawTarget, { directory, authority }, range)
 }
 
 export function editorTargetPath(target: string): string {
   const path = typeof target === "string" ? target : ""
-  if (!path || isAbsoluteEditorPath(path)) return path
+  if (!path || isAbsoluteServerPath(path)) return path
   const base = activeDirectory().trim()
   if (!base) return ""
   return `${pathWithForwardSeparators(base, base).replace(/\/+$/, "")}/${pathWithForwardSeparators(path, base).replace(/^\/+/, "")}`

@@ -1,0 +1,15 @@
+{
+  "pid": 76320,
+  "occurrence": "source-file-identity-374-after-995d24ba-e1ff-42b6-9899-07961831df22",
+  "owner": {
+    "pid": 76320,
+    "processInstanceID": "win32:639274527813362833",
+    "occurrenceID": "deed0d19-cbcf-4798-a6b4-fb4d4c939b7c"
+  },
+  "parent": {
+    "pid": 73416,
+    "processInstanceID": "win32:639274527812978985",
+    "occurrenceID": "429fdf8e-0723-475b-a939-0fcece6fb066"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

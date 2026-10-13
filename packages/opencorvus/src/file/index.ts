@@ -18,6 +18,7 @@ import { createHash, randomUUID } from "node:crypto"
 import { withKeyedLock } from "../util/lock"
 import { CROSS_PROCESS_LOCK_RETRY, SHARED_JSON_FACT_QUEUE_TIMEOUT_MS, withProcessLock } from "../util/process-lock"
 import { hostGit } from "../util/git"
+import { AttachmentStore } from "../storage/attachment-store"
 
 export namespace File {
   const log = Log.create({ service: "file" })
@@ -904,10 +905,11 @@ export namespace File {
     }
 
     const bytes = await readFileBytes(file, full)
+    const editable = identity !== undefined && !AttachmentStore.nameFromAbsolutePath(Instance.project.id, full)
     return {
       type: "text",
       content: bytes.toString("utf8"),
-      ...(identity === undefined ? {} : { revision: contentRevision(identity, bytes) }),
+      ...(editable ? { revision: contentRevision(identity!, bytes) } : {}),
     }
   }
 
@@ -985,6 +987,9 @@ export namespace File {
           const current = await readResolvedContent(file, currentPhysical, identity)
           if (current.type !== "text" || current.encoding) {
             throw fileInvalidPath({ path: file, message: `Cannot edit binary file: ${file}` })
+          }
+          if (current.revision === undefined) {
+            throw fileInvalidPath({ path: file, message: `Cannot edit read-only file: ${file}` })
           }
           if (current.revision !== expectedRevision) throw conflict()
           await Filesystem.writeAtomic(currentPhysical, content, existing.mode & 0o777)

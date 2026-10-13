@@ -2,8 +2,8 @@ import { Key } from "@solid-primitives/keyed"
 import type { SourceFilePart } from "@opencorvus-ai/sdk"
 import { Match, Show, Switch, onCleanup, onMount, untrack } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
-import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
-import { relativePathFrom, shortRelativePath } from "../utils/tool"
+import { openFileReference, openSourceFileEditor } from "../services/file-workbench"
+import { shortRelativePath } from "../utils/tool"
 import { pathWithForwardSeparators } from "../utils/server-path"
 import { localeTag, t } from "../utils/i18n"
 import { Icon, type IconName } from "./ui/Icon"
@@ -150,17 +150,12 @@ async function openSourceFile(source: ConversationSourcePart): Promise<void> {
   const directory = sourceDirectory()
   const path = source.path || ""
   if (!directory || !path) return
-  const projectPath = relativePathFrom(directory, path)
   try {
     if (source.origin === "attachment") {
       await openSourceFileEditor(path, { directory, authority }, source.range, source.title)
       return
     }
-    if (projectPath) {
-      await openFileEditor(projectPath, { directory, authority }, source.range)
-      return
-    }
-    await openSourceFileEditor(path, { directory, authority }, source.range)
+    await openFileReference(path, { directory, authority }, source.range)
   } catch (error) {
     if (!isApiAuthorityCurrent(authority) || boardStore.selectEpoch !== epoch) return
     if (error instanceof DOMException && error.name === "AbortError") return

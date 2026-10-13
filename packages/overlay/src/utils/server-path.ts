@@ -1,4 +1,8 @@
 /** Absolute server paths determine syntax; the browser's platform does not. */
+export function isAbsoluteServerPath(path: string): boolean {
+  return /^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/.test(path)
+}
+
 export function isWindowsPath(path: string): boolean {
   return /^(?:[A-Za-z]:[\\/]|\\\\[^\\]|\/\/[^/])/.test(path)
 }

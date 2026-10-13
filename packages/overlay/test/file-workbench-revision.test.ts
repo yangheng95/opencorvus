@@ -7,13 +7,52 @@ import {
   fileEditorRevealRevision,
   fileWorkbenchRevision,
   openFileEditor,
+  openFileReference,
   openSourceFileEditor,
+  registerFileEditorBeforeNavigate,
   selectedFileTarget,
 } from "../src/services/file-workbench"
 
 afterEach(async () => {
   await closeFileEditor()
   __setHostTransportForTest(undefined)
+})
+
+test.each([
+  ["C:/project", "c:\\PROJECT\\资料\\note.md", "资料/note.md"],
+  ["\\\\host\\share\\project", "//HOST/SHARE/project/note.md", "note.md"],
+  ["/repo", "/repo/资料/file\\name.md ", "资料/file\\name.md "],
+  ["/", "/note.md", "note.md"],
+])("absolute citations use the existing project resource in %s", async (directory, absolute, relative) => {
+  await openFileEditor(relative, { directory })
+  const release = registerFileEditorBeforeNavigate({
+    confirmLeave: async () => null,
+    getRevision: () => 7,
+    isBusy: () => false,
+    isDirty: () => true,
+  })
+  try {
+    const before = fileEditorRevealRevision()
+    const range = { startLine: 2, endLine: 3 }
+    expect(await openFileReference(absolute, { directory }, range)).toBe(true)
+    expect({ target: selectedFileTarget(), revision: fileEditorRevealRevision() }).toEqual({
+      target: { directory, path: relative, range }, revision: before + 1,
+    })
+    expect(await openFileReference(relative, { directory }, range)).toBe(true)
+    expect(selectedFileTarget()).toEqual({ directory, path: relative, range })
+  } finally {
+    release()
+  }
+})
+
+test("external citations and explicitly opened attachments retain exact source identities", async () => {
+  const scope = { directory: "/repo" }
+  await openFileReference("/repo-other/note.md", scope)
+  expect(selectedFileTarget()).toEqual({ ...scope, path: "/repo-other/note.md", sourceAbsolutePath: "/repo-other/note.md" })
+  await openSourceFileEditor("/repo/.opencorvus/blob.txt", scope, undefined, "研究附件.txt")
+  expect(selectedFileTarget()).toEqual({
+    ...scope, path: "/repo/.opencorvus/blob.txt", sourceAbsolutePath: "/repo/.opencorvus/blob.txt", displayName: "研究附件.txt",
+  })
 })
 
 test.each([

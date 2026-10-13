@@ -143,7 +143,7 @@ export function FileEditorPane() {
       ? `data:${file.mimeType};base64,${file.content}`
       : undefined
   })
-  const writable = createMemo(() => textContent() && !target()?.sourceAbsolutePath)
+  const writable = createMemo(() => textContent() && content()?.revision !== undefined && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
   const identityOf = (file: FileEditorTarget | null) => file
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
@@ -358,7 +358,7 @@ export function FileEditorPane() {
             </Show>
           </div>
           <Show
-            when={target()?.sourceAbsolutePath || imageSource() || pdfSource()}
+            when={!loading() && content() && !writable() || target()?.sourceAbsolutePath}
             fallback={
               <Button
                 type="button"
@@ -461,7 +461,7 @@ export function FileEditorPane() {
                     lineRangeRevealRevision={fileEditorRevealRevision()}
                     ariaLabel={displayName() ?? t("file_editor.title")}
                     onValueChange={updateDraft}
-                    readOnly={!!target()?.sourceAbsolutePath || fileEditorReserved()}
+                    readOnly={!writable() || fileEditorReserved()}
                   />
                 </Match>
               </Switch>

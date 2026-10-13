@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [374 项目文件引用身份](2026-10-13-source-file-identity-374.md)：统一引用资源、保留草稿并约束附件编辑。
+
 - [Dependabot全部升级与测试兼容](2026-10-13-dependabot-upgrades.md)：十项PR、共享AI SDK图和隔离验收。
 - [对应界面证据](../../artifacts/2026-10-13-dependabot-upgrades/README.md)：CodeMirror、Geist 与 Timeline 桌面人工验收。
 

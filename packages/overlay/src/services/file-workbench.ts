@@ -3,7 +3,8 @@ import type { FileContent as SdkFileContent, SourceFileRange } from "@opencorvus
 import { uint8ToBase64 } from "@opencorvus-ai/transport-protocol"
 import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { projectScopedPath } from "./project-directory"
-import { normalizeProjectFilePath, pathWithForwardSeparators } from "../utils/server-path"
+import { isAbsoluteServerPath, normalizeProjectFilePath, pathWithForwardSeparators } from "../utils/server-path"
+import { relativePathFrom } from "../utils/tool"
 
 export interface FileNode {
   name: string
@@ -174,7 +175,7 @@ function normalizeSourceFileEditorTarget(
   if (!sourceAbsolutePath || !directory) {
     throw new Error("openSourceFileEditor: absolutePath and directory are required")
   }
-  if (!/^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/.test(sourceAbsolutePath)) {
+  if (!isAbsoluteServerPath(sourceAbsolutePath)) {
     throw new Error("openSourceFileEditor: source path must be absolute")
   }
   return {
@@ -299,6 +300,13 @@ export function registerFileEditorBeforeNavigate(owner: FileEditorNavigationOwne
 export function openFileEditor(path: string, scope: FileOperationScope, range?: SourceFileRange): Promise<boolean> {
   const authority = scope.authority ?? captureApiAuthority()
   return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, range), authority)
+}
+
+/** Ordinary citations share the project's editor resource, regardless of path spelling. */
+export function openFileReference(path: string, scope: FileOperationScope, range?: SourceFileRange): Promise<boolean> {
+  if (!isAbsoluteServerPath(path)) return openFileEditor(path, scope, range)
+  const relative = relativePathFrom(scope.directory.trim(), path)
+  return relative ? openFileEditor(relative, scope, range) : openSourceFileEditor(path, scope, range)
 }
 
 export function openSourceFileEditor(

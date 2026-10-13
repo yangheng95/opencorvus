@@ -65,7 +65,12 @@ existing read-only source reader. The file target's optional displayName is a
 presentation annotation; content loading, write admission and navigation resource
 identity still use directory/path/sourceAbsolutePath. A display-name change can
 update the target/reveal without reloading its file content. Ordinary project
-file sources retain editing. Existing persisted source snapshots are not rewritten.
+file sources retain editing. Ordinary Sources and body references use the same
+file-workbench classifier: project-relative and project-contained absolute paths
+open one project target, preserving drafts across repeated citations. External
+absolute paths retain the source reader. Explicit attachment sources retain their
+original display names and source targets. Existing persisted source snapshots
+are not rewritten.
 
 Project and absolute-source file reads also return PDF bytes through the same
 FileContent base64/mimeType contract. Encoded PDFs remain read-only under the
@@ -312,7 +317,7 @@ at both the state and DOM levels; range reveals can focus the same view, and
 navigation/search commands belong to that editor rather than the page.
 An absolute Source target displays a localized read-only badge in the file
 toolbar's save position. This status derives from the same target that owns
-the editor's read-only mode; project-file targets retain their save action.
+the editor's read-only mode; editable project-file targets retain their save action.
 The shared CodeMirror theme also owns its built-in panel fields and buttons:
 input surfaces, text, control sizing and focus use the existing design tokens,
 so library light defaults cannot mix with the application's dark text palette.
@@ -383,7 +388,13 @@ filesystem writer. CodeMirror retains its existing search and undo keymaps.
 
 Editable project file reads expose an opaque revision of the same read bytes and
 canonical physical resource. Both file save actions send that exact revision to
-the single conditional HTTP writer. A typed conflict preserves the authored
+the single conditional HTTP writer. Canonical blobs in the current Project's
+database-scoped AttachmentStore return their text without an editable revision;
+the locked conditional writer rejects them with FileInvalidPathError. Metadata
+sidecars and same-named ordinary project copies retain their existing editable
+contract. The pane derives input editability, Save and the read-only badge from
+this same revision-bearing text contract and the source target restriction.
+A typed conflict preserves the authored
 draft and loaded baseline. Reload uses the same unsaved decision owner and only
 publishes a successful response still owned by the resource, generation and
 draft revision; failed or superseded reads retain input. Save-and-leave errors
