@@ -1,0 +1,159 @@
+{
+  "selection": "Explicit allowlist. Excludes tools, initial diff backups, built UI assets, runtime databases, environment and credentials.",
+  "files": [
+    {
+      "path": "screenshots/normal-english-edited.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/normal-english-edited.png",
+      "sourceBytes": 75822,
+      "archivedBytes": 75822,
+      "compression": "none"
+    },
+    {
+      "path": "screenshots/normal-chinese-edited.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/normal-chinese-edited.png",
+      "sourceBytes": 74071,
+      "archivedBytes": 74071,
+      "compression": "none"
+    },
+    {
+      "path": "screenshots/fullscreen-english-initial.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/fullscreen-english-initial.png",
+      "sourceBytes": 59807,
+      "archivedBytes": 59807,
+      "compression": "none"
+    },
+    {
+      "path": "screenshots/fullscreen-english-edited.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/fullscreen-english-edited.png",
+      "sourceBytes": 59953,
+      "archivedBytes": 59953,
+      "compression": "none"
+    },
+    {
+      "path": "screenshots/fullscreen-chinese-edited.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/fullscreen-chinese-edited.png",
+      "sourceBytes": 58026,
+      "archivedBytes": 58026,
+      "compression": "none"
+    },
+    {
+      "path": "screenshots/fullscreen-chinese-dialog.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/fullscreen-chinese-dialog.png",
+      "sourceBytes": 52214,
+      "archivedBytes": 52214,
+      "compression": "none"
+    },
+    {
+      "path": "screenshots/normal-chinese-footer.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/normal-chinese-footer.png",
+      "sourceBytes": 68192,
+      "archivedBytes": 68192,
+      "compression": "none"
+    },
+    {
+      "path": "screenshots/remounted-chinese-published.png",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/screenshots/remounted-chinese-published.png",
+      "sourceBytes": 57951,
+      "archivedBytes": 57951,
+      "compression": "none"
+    },
+    {
+      "path": "observations/fullscreen-geometry.json",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/fullscreen-geometry.json",
+      "sourceBytes": 1777,
+      "archivedBytes": 1777,
+      "compression": "none"
+    },
+    {
+      "path": "observations/download-check.json",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/download-check.json",
+      "sourceBytes": 203,
+      "archivedBytes": 203,
+      "compression": "none"
+    },
+    {
+      "path": "observations/published-download-check.json",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/published-download-check.json",
+      "sourceBytes": 218,
+      "archivedBytes": 218,
+      "compression": "none"
+    },
+    {
+      "path": "observations/page-closed.json",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/page-closed.json",
+      "sourceBytes": 251,
+      "archivedBytes": 251,
+      "compression": "none"
+    },
+    {
+      "path": "downloads/edited.csv.gz",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/edited.csv",
+      "sourceBytes": 61,
+      "archivedBytes": 77,
+      "compression": "gzip"
+    },
+    {
+      "path": "downloads/published-keyboard.csv.gz",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/published-keyboard.csv",
+      "sourceBytes": 61,
+      "archivedBytes": 77,
+      "compression": "gzip"
+    },
+    {
+      "path": "logs/build.log.gz",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/build.log",
+      "sourceBytes": 72092,
+      "archivedBytes": 11104,
+      "compression": "gzip"
+    },
+    {
+      "path": "logs/typecheck.log.gz",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/typecheck.log",
+      "sourceBytes": 16,
+      "archivedBytes": 36,
+      "compression": "gzip"
+    },
+    {
+      "path": "logs/docs-plan.log.gz",
+      "source": ".tmp-spreadsheet-local-edit-guidance-391/docs-plan.log",
+      "sourceBytes": 106,
+      "archivedBytes": 115,
+      "compression": "gzip"
+    },
+    {
+      "path": "logs/owner.json",
+      "source": ".tmp-spreadsheet-artifact-identity-387/391-after/owner.json",
+      "sourceBytes": 154,
+      "archivedBytes": 154,
+      "compression": "none"
+    },
+    {
+      "path": "logs/ready.json",
+      "source": ".tmp-spreadsheet-artifact-identity-387/391-after/ready.json",
+      "sourceBytes": 343,
+      "archivedBytes": 343,
+      "compression": "none"
+    },
+    {
+      "path": "logs/terminal.json",
+      "source": ".tmp-spreadsheet-artifact-identity-387/391-after/terminal.json",
+      "sourceBytes": 210,
+      "archivedBytes": 210,
+      "compression": "none"
+    },
+    {
+      "path": "logs/stdout.log.gz",
+      "source": ".tmp-spreadsheet-artifact-identity-387/391-after/stdout.log",
+      "sourceBytes": 51,
+      "archivedBytes": 69,
+      "compression": "gzip"
+    },
+    {
+      "path": "logs/stderr.log.gz",
+      "source": ".tmp-spreadsheet-artifact-identity-387/391-after/stderr.log",
+      "sourceBytes": 132804,
+      "archivedBytes": 11734,
+      "compression": "gzip"
+    }
+  ]
+}

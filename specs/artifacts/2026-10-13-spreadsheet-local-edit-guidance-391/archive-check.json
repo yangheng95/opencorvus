@@ -1,0 +1,77 @@
+{
+  "kind": "Bounded archive safety, exact downloaded-artifact preservation and local-document link inspection; not UI automation",
+  "gzipRestoration": [
+    {
+      "path": "downloads/edited.csv.gz",
+      "decodedBytes": 61,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "downloads/published-keyboard.csv.gz",
+      "decodedBytes": 61,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/build.log.gz",
+      "decodedBytes": 72092,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/typecheck.log.gz",
+      "decodedBytes": 16,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/docs-plan.log.gz",
+      "decodedBytes": 106,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/stderr.log.gz",
+      "decodedBytes": 132804,
+      "matchesSourceBytes": true
+    }
+  ],
+  "csv": [
+    {
+      "path": "downloads/edited.csv.gz",
+      "decodedBytes": 61,
+      "utf8Bom": "efbbbf",
+      "crlfSeparators": 3,
+      "matchesRecordedText": true,
+      "matchesActualDownloadBytes": true
+    },
+    {
+      "path": "downloads/published-keyboard.csv.gz",
+      "decodedBytes": 61,
+      "utf8Bom": "efbbbf",
+      "crlfSeparators": 3,
+      "matchesRecordedText": true,
+      "matchesActualDownloadBytes": true
+    }
+  ],
+  "safety": {
+    "inspectedTextFiles": 18,
+    "patterns": [
+      "Bearer credential",
+      "quoted secret assignment",
+      "private key marker",
+      "provider key marker"
+    ],
+    "findings": [],
+    "scope": "Explicit allowlist; no database, environment, credentials or built assets copied. Pattern scan is bounded, not a universal absence guarantee."
+  },
+  "links": {
+    "documents": [
+      "specs/records/2026-10/2026-10-13-spreadsheet-local-edit-guidance-391.md",
+      "specs\\artifacts\\2026-10-13-spreadsheet-local-edit-guidance-391\\README.md"
+    ],
+    "checkedLocalLinks": 52,
+    "missing": []
+  }
+}

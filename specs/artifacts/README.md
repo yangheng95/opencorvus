@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391/README.md)：中英文普通/全屏提示、编辑与发布值CSV下载及页面收尾。
+
 - [387 尺寸通知与页面布局](2026-10-05-connection-workspace-authority/resize-delivery-387/README.md)：实际尺寸回调、真实页面与原运行边界。
 
 - [Explorer操作结果与刷新回执](2026-10-13-file-operation-outcomes/README.md)：真实多失败、桌面复核及聚焦正向证据。

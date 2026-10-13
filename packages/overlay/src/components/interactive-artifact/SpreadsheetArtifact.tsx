@@ -51,15 +51,20 @@ export function SpreadsheetArtifact(props: { payload: SpreadsheetPayload }) {
           </div>
         }
       >
-        <div
-          class="msg-artifact-spreadsheet"
-          role="region"
-          aria-label={props.payload.title}
-          data-editable={props.payload.editable}
-          ref={(element) => {
-            host = element
-          }}
-        />
+        <div class="msg-artifact-spreadsheet-workspace">
+          <Show when={props.payload.editable}>
+            <p class="msg-artifact-spreadsheet__note">{t("artifact.spreadsheet.local_edits")}</p>
+          </Show>
+          <div
+            class="msg-artifact-spreadsheet"
+            role="region"
+            aria-label={props.payload.title}
+            data-editable={props.payload.editable}
+            ref={(element) => {
+              host = element
+            }}
+          />
+        </div>
       </Show>
     </ArtifactFrame>
   )

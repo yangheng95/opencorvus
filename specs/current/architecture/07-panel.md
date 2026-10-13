@@ -2403,6 +2403,12 @@ custom export accessor continues to read the currently mounted workbook. Product
 language changes update that same Univer instance through its public locale
 service and the already registered language packages; they do not recreate the
 workbook or replace edited cells with the published payload.
+Editable spreadsheets show a current-language note before editing: changes live
+only in the current view, and edited sheets must be downloaded before leaving or
+collapsing it. CSV exports preserve cell values rather than workbook formulas or
+formatting. A local column layout gives the note its natural height and the same
+mounted workbook the remaining fullscreen space. This guidance does not add a
+durable draft, a dirty-state owner or a navigation prompt.
 
 Shared artifact action controls preserve native focus while an operation owns
 their busy state. Native disabled is reserved for genuinely unavailable actions;

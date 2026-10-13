@@ -1,0 +1,51 @@
+{
+  "reviewedBy": "root: actual isolated tab 29 interactions and all eight screenshots; audit_ui: independent source review, all eight image reviews and evidence archival",
+  "canonicalChat": "ses_h0VKkCl7hbz3BKHVW2Xp",
+  "artifact": "art_g0VXv65e1004ErsrwSJs",
+  "acceptance": "Implemented static editable-spreadsheet guidance; verified bounded editable desktop scenarios. Readonly and other listed scenarios remain unverified.",
+  "observed": [
+    "English normal-view guidance wraps to two lines; Chinese normal guidance occupies one line",
+    "Actual B2=9 produces Total14; language switch and fullscreen retain the same edited workbook",
+    "Fullscreen More Colors accepts 336699 and shows RGB51,102,153 before cancel",
+    "Normal scroll exposes the worksheet/footer controls",
+    "Switch to Reply OK and return remounts A1/Notebook7/Total12 with the guidance still present",
+    "Actual mouse download produces Desk budget - 清单 (2).csv, 61 bytes, edited9/14",
+    "Actual native click Download then Down then Return produces Desk budget - 清单 (3).csv, 61 bytes, published7/12"
+  ],
+  "interactionBoundaries": [
+    "An earlier attempt mixing Playwright Enter with native Return did not produce a file; it is not accepted as successful download",
+    "After two quick Escape actions a menu was still visible; one subsequent Escape closed it. No unconditional two-key close claim",
+    "Readonly sample, explicit collapse, virtualized unmount, mobile, multiple instances, reconnect and restart were not manually qualified",
+    "Static guidance does not provide autosave, cross-Chat edit retention, dirty navigation guard, formula/format-preserving workbook export or modified tracking"
+  ],
+  "fullscreen": {
+    "viewport": [
+      2560,
+      1440
+    ],
+    "headerHeight": 64,
+    "bodyAndWorkspaceHeight": 1376,
+    "noteRectHeight": 30.666667938232425,
+    "hostRectHeight": 1345.3333740234375
+  },
+  "validation": {
+    "build": {
+      "session": 20477,
+      "exitCode": 0,
+      "reportedDuration": "1m 1s"
+    },
+    "typecheck": {
+      "session": 34086,
+      "exitCode": 0
+    },
+    "docsPlan": "docs:check ok (348 ops,26 groups); final shared-document checks remain root responsibility"
+  },
+  "pageClosedAt": "2026-10-13T11:34:43.205Z",
+  "localeRestored": "en-US",
+  "ownerPID": 84388,
+  "occurrenceID": "655041dc-6e4b-4c44-9c3f-55ff412a43ef",
+  "launcher": 23515,
+  "launcherExitCode": 0,
+  "elapsedMilliseconds": 370031,
+  "shutdown": "Original owned stop-requested; normal terminal and runtime handoff. Root additionally confirmed PID and port18505 listener closed. No new credentials/model execution."
+}

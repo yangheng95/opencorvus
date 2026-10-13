@@ -2074,7 +2074,7 @@ button.msg-source-chip .msg-source-chip__filename {
 .msg-artifact:fullscreen[data-artifact-renderer="Candlestick"] .msg-artifact-chart,
 .msg-artifact:fullscreen[data-artifact-renderer="Map"] .msg-artifact-map,
 .msg-artifact:fullscreen[data-artifact-renderer="Map"] .msg-artifact-map-shell,
-.msg-artifact:fullscreen[data-artifact-renderer="Spreadsheet"] .msg-artifact-spreadsheet,
+.msg-artifact:fullscreen[data-artifact-renderer="Spreadsheet"] .msg-artifact-spreadsheet-workspace,
 .msg-artifact:fullscreen[data-artifact-renderer="Timeline"] .msg-artifact-timeline,
 .msg-artifact:fullscreen[data-artifact-renderer="Network"] .msg-artifact-network,
 .msg-artifact:fullscreen[data-artifact-renderer="Terminal"] .msg-artifact-terminal,
@@ -2122,6 +2122,27 @@ button.msg-source-chip .msg-source-chip__filename {
 .msg-artifact-terminal__toolbar,
 .msg-artifact-timeline__toolbar {
   border-bottom: var(--oc-border-width) solid var(--border);
+}
+
+.msg-artifact-spreadsheet-workspace {
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-artifact-spreadsheet__note {
+  flex-shrink: 0;
+  margin: 0;
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
+  border-bottom: var(--oc-border-width) solid var(--border);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+}
+
+.msg-artifact:fullscreen[data-artifact-renderer="Spreadsheet"] .msg-artifact-spreadsheet {
+  flex: 1;
+  height: auto;
+  min-height: 0;
 }
 
 .msg-artifact-spreadsheet {

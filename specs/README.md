@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [391 表格本地编辑说明](records/2026-10/2026-10-13-spreadsheet-local-edit-guidance-391.md)：编辑寿命、CSV下载提示与同实例布局验收。
+
 - [387 尺寸通知与页面布局](artifacts/2026-10-05-connection-workspace-authority/resize-delivery-plan-387.md)：真实回调归因、共享尺寸实现与实页修复。
 
 - [Explorer操作结果与刷新回执](records/2026-10/2026-10-13-file-operation-outcomes.md)：成员与刷新错误、真实完成事实和并发读取资格。

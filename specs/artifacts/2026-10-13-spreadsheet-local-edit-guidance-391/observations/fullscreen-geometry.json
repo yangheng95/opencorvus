@@ -1,0 +1,88 @@
+{
+  "boxes": [
+    {
+      "class": "msg-artifact__header",
+      "flex": "0 1 auto",
+      "height": "64px",
+      "minHeight": "64px",
+      "rect": {
+        "bottom": 64,
+        "height": 64,
+        "left": 0,
+        "right": 2560,
+        "top": 0,
+        "width": 2560,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "class": "msg-artifact__body",
+      "flex": "0 1 auto",
+      "height": "1376px",
+      "minHeight": "0px",
+      "rect": {
+        "bottom": 1440,
+        "height": 1376,
+        "left": 0,
+        "right": 2560,
+        "top": 64,
+        "width": 2560,
+        "x": 0,
+        "y": 64
+      }
+    },
+    {
+      "class": "msg-artifact-spreadsheet-workspace",
+      "flex": "0 1 auto",
+      "height": "1376px",
+      "minHeight": "0px",
+      "rect": {
+        "bottom": 1440,
+        "height": 1376,
+        "left": 0,
+        "right": 2560,
+        "top": 64,
+        "width": 2560,
+        "x": 0,
+        "y": 64
+      }
+    },
+    {
+      "class": "msg-artifact-spreadsheet__note",
+      "flex": "0 0 auto",
+      "height": "30.6667px",
+      "minHeight": "auto",
+      "rect": {
+        "bottom": 94.66666793823242,
+        "height": 30.666667938232425,
+        "left": 0,
+        "right": 2560,
+        "top": 64,
+        "width": 2560,
+        "x": 0,
+        "y": 64
+      }
+    },
+    {
+      "class": "msg-artifact-spreadsheet",
+      "flex": "1 1 0%",
+      "height": "1345.33px",
+      "minHeight": "0px",
+      "rect": {
+        "bottom": 1440.0000457763672,
+        "height": 1345.3333740234375,
+        "left": 0,
+        "right": 2560,
+        "top": 94.66667175292967,
+        "width": 2560,
+        "x": 0,
+        "y": 94.66667175292967
+      }
+    }
+  ],
+  "viewport": {
+    "height": 1440,
+    "width": 2560
+  }
+}
