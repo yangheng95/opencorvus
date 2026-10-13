@@ -1,0 +1,97 @@
+{
+  "observedAt": "2026-10-13T13:45:47.155Z",
+  "acceptance": "backend-global-chat-public-followup-passed",
+  "responseReceipt": "public-message-response.json",
+  "sessionID": "ses_hy8M8XN2Rne4fRPQQSPD",
+  "projectID": "prj_h4GNrUzySvBzLq1B98xi",
+  "directory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\74260a56-5913-48cb-89d9-6b3dbf383c1a",
+  "initialMessageID": "msg_h1UwLBZv7i44OtOQAdB7",
+  "initialAssistantID": "msg_g0VXw9oft00D3ri8lFj2",
+  "globalChatAllocationID": "gca_d6ff188616bf755f93606a294548b5d65d62c179f69fdd68952ad3d4b4ec9f20",
+  "messageID": "msg_fb59ba41-541e-447c-9a6f-a60e4213a5fd",
+  "assistantID": "msg_g0VXw9vmB00Mt2XDoLH3",
+  "exactOrderedUserParts": 13,
+  "actualSDKResourceReads": 3,
+  "attachmentFacts": [
+    {
+      "partID": "prt_g0VXw9qK4056nA5nI6zB",
+      "filename": "public-empty.csv",
+      "url": "/attachment/prj_h4GNrUzySvBzLq1B98xi/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\74260a56-5913-48cb-89d9-6b3dbf383c1a\\.opencorvus\\.r\\project\\attachments\\c6de9a765cadcb50355f8062974f242cf3c291f254dee7f4734e0d90788744f1\\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "bytes": 0,
+      "exactPublicSample": true,
+      "publicHTTPExactBytes": true,
+      "metadata": {
+        "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "url": "/attachment/prj_h4GNrUzySvBzLq1B98xi/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+        "mime": "text/csv",
+        "size": 0,
+        "filename": "public-empty.csv"
+      }
+    },
+    {
+      "partID": "prt_g0VXw9qK40AHd9JN1awl",
+      "filename": "public-mixed.csv",
+      "url": "/attachment/prj_h4GNrUzySvBzLq1B98xi/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\74260a56-5913-48cb-89d9-6b3dbf383c1a\\.opencorvus\\.r\\project\\attachments\\c6de9a765cadcb50355f8062974f242cf3c291f254dee7f4734e0d90788744f1\\6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+      "bytes": 32,
+      "exactPublicSample": true,
+      "publicHTTPExactBytes": true,
+      "metadata": {
+        "sha": "6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b",
+        "url": "/attachment/prj_h4GNrUzySvBzLq1B98xi/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+        "mime": "text/csv",
+        "size": 32,
+        "filename": "public-mixed.csv"
+      }
+    },
+    {
+      "partID": "prt_g0VXw9qK40C8edWpbqRc",
+      "filename": "public-upload.csv",
+      "url": "/attachment/prj_h4GNrUzySvBzLq1B98xi/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\74260a56-5913-48cb-89d9-6b3dbf383c1a\\.opencorvus\\.r\\project\\attachments\\c6de9a765cadcb50355f8062974f242cf3c291f254dee7f4734e0d90788744f1\\bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+      "bytes": 34,
+      "exactPublicSample": true,
+      "publicHTTPExactBytes": true,
+      "metadata": {
+        "sha": "bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648",
+        "url": "/attachment/prj_h4GNrUzySvBzLq1B98xi/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+        "mime": "text/csv",
+        "size": 34,
+        "filename": "public-upload.csv"
+      }
+    }
+  ],
+  "providerRequests": 9,
+  "allRequestsExactModelStreamingHTTP200EOF": true,
+  "nativeDeadlineAt": 1791899611722,
+  "mcpDeadlineAt": 1791899630759,
+  "closeBy": 1791899551722,
+  "replyFacts": {
+    "expectedReviewCode": "MOSS-393-PUBLIC",
+    "expectedMixedRows": [
+      {
+        "item": "Maple",
+        "quantity": 3
+      },
+      {
+        "item": "Iris",
+        "quantity": 4
+      }
+    ],
+    "expectedMixedTotal": 7,
+    "expectedUploadRows": [
+      {
+        "item": "Notebook",
+        "quantity": 7
+      },
+      {
+        "item": "Pen",
+        "quantity": 5
+      }
+    ],
+    "expectedUploadTotal": 12,
+    "review": "Root must inspect visible Chinese answer, totals, empty-resource descriptions and actual references; byte truth comes from independent store checks"
+  },
+  "boundary": "Actual Global Chat first turn followed by the public Session resource/canonical attachment route and completed real assistant. No Task/Mission qualification, ACP/App, data/file live sample, browser or physical-close claim."
+}

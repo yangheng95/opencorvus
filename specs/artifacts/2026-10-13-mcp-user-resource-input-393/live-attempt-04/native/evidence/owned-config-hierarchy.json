@@ -1,0 +1,22 @@
+{
+  "global": {
+    "path": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\runtime\\config\\opencorvus.jsonc",
+    "config": {
+      "model": "openai/gpt-6.1-sol",
+      "small_model": "openai/gpt-6.1-sol",
+      "prompt_profile": {
+        "active": "base"
+      }
+    }
+  },
+  "project": {
+    "path": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\project\\.opencorvus\\opencorvus.jsonc",
+    "config": {
+      "prompt_profile": {
+        "active": "base"
+      }
+    }
+  },
+  "inlineConfig": "absent",
+  "boundary": "Fresh canonical global Base and selected project profile configuration before first Instance; no environment profile switching"
+}

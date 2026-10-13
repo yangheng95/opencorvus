@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [393 用户资源与附件归属](2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
+
 - [Provider API Key 配置事实](2026-10-13-provider-credential-presence.md)：同源投影、读取失败与真实恢复验收。
 
 - [389 成员刷新失败可读性](2026-10-13-child-refresh-retention-389.md)：错误、已有来源、键盘详情及真实恢复。

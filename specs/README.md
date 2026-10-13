@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [393 用户资源与附件归属](records/2026-10/2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
+
 - [Provider API Key 配置事实](records/2026-10/2026-10-13-provider-credential-presence.md)：非敏感三态、当前观察与零模型显示。
 
 - [389 成员刷新失败可读性](artifacts/2026-10-05-connection-workspace-authority/child-refresh-retention-plan-389.md)：已有Sources、真实读取错误和重试。

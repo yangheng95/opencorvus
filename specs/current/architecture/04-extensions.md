@@ -680,6 +680,14 @@ only their actual public identity and description fields, including size zero;
 this does not fetch the URI or grant resource-read authority. Original MCP content
 and existing error metadata remain canonical across these representations.
 
+User-selected MCP resources consume the official SDK `ReadResourceResult.contents`
+array in source order. Text accepts every string, including empty content; a blob
+uses the same resource-specific decoder as embedded tool-result resources,
+including valid zero-byte files. Nonempty base64 retains strict validation, and
+other binary ingress retains its own nonempty contract. Authored source identity,
+filename, MIME and natural Host reading notices remain visible; no single-object
+resource-result compatibility path or remote-URI fetch is added.
+
 Projected default MCP result materialization uses the parsed server identity,
 separately from the provider-visible Tool name. A Browser screenshot result
 exposes its canonical invocation `sourceToolPartID`, page URL and attachment

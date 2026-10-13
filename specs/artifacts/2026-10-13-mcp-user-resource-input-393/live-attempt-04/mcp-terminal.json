@@ -1,0 +1,103 @@
+{
+  "occurrence": "d96712dc-4c4f-43ed-bfca-1be8b33cece8",
+  "pid": 87340,
+  "startedAt": 1791899030759,
+  "deadlineAt": 1791899630759,
+  "closedAt": "2026-10-13T13:46:26.680Z",
+  "reason": "owned-stop-file",
+  "closeFacts": [
+    {
+      "kind": "inventory-client",
+      "outcome": "closed"
+    },
+    {
+      "kind": "inventory-client-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "http",
+      "outcome": "closed"
+    }
+  ],
+  "exitCode": 0
+}

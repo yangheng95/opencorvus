@@ -1,0 +1,13 @@
+{
+  "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/launch.ps1",
+  "changes": [],
+  "immutableExecutableAndUI": "live-attempt-01/bundle/bin/bun.exe + already-reviewed392 ui",
+  "freshRuntime": "live-attempt-02/provider-run/runtime",
+  "oldScopeClosed": true,
+  "model": "gpt-6.1-sol",
+  "qualification": "NativeService",
+  "maxRequests": 20,
+  "physicalMilliseconds": 600000,
+  "inactivityMilliseconds": 180000,
+  "preparationOnly": true
+}

@@ -595,6 +595,7 @@ async function preparePublicSessionPrompt(
   const authoredPrompt: Omit<SessionPrompt.PromptInput, "sessionID"> = {
     ...identifiedPrompt,
     author: "user",
+    byteMaterializationProjectID: session.projectID,
     extra: {
       ...ProjectMemory.userInputExtra({
         surface: "session.prompt",

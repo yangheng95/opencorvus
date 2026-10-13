@@ -3,6 +3,7 @@ import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { decodeRawBase64Payload } from "@/session/text-mime"
+import { decodeMcpResourceBlob } from "./resource-content"
 import { Identifier } from "@/id/id"
 import type { Message } from "@/session/message"
 import z from "zod"
@@ -98,10 +99,7 @@ export async function materializeMcpToolResult(input: {
       }
       if ("blob" in resource && typeof resource.blob === "string") {
         const mime = resource.mimeType ?? "application/octet-stream"
-        const bytes =
-          resource.blob === ""
-            ? Buffer.alloc(0)
-            : decodeRawBase64Payload(resource.blob, `MCP tool resource blob ${resource.uri}`)
+        const bytes = decodeMcpResourceBlob(resource.blob, `MCP tool resource blob ${resource.uri}`)
         attachments.push(
           await AttachmentStore.write(
             input.projectID,

@@ -1,0 +1,10 @@
+{
+  "pid": 76992,
+  "occurrence": "mcp-user-resource-input-393-live-03-f3cf3d59-6361-4df9-984f-c9ef465c31c3",
+  "error": {
+    "name": "Error",
+    "message": "PROVIDER_PREFLIGHT: {\"name\":\"UnknownError\",\"data\":{\"message\":\"AI_StreamProviderError: Our servers are currently overloaded. Please try again later.\"}}"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

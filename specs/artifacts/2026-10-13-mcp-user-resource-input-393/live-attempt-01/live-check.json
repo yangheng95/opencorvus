@@ -1,0 +1,91 @@
+{
+  "observedAt": "2026-10-13T12:53:59.264Z",
+  "acceptance": "backend-public-input-passed",
+  "sessionID": "ses_-zUS44MvyzzqNo1nOIQP",
+  "projectID": "prj_hpQ6WzPiO1E1UJddJNQ5",
+  "messageID": "msg_71a81e25-1b5f-4d80-a94b-4d94945275e0",
+  "assistantID": "msg_g0VXvwqDd00rZpTLYiQD",
+  "exactOrderedUserParts": 13,
+  "actualSDKResourceReads": 3,
+  "attachmentFacts": [
+    {
+      "partID": "prt_g0VXvwjgr04kRXUKCtZL",
+      "filename": "public-empty.csv",
+      "url": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-01\\provider-run\\project\\.opencorvus\\.r\\project\\attachments\\d27f9bd123e8f23604f84ff2f5378cb5de2be3b47e7b53178861da1dab396a59\\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "bytes": 0,
+      "exactPublicSample": true,
+      "publicHTTPExactBytes": true,
+      "metadata": {
+        "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "url": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+        "mime": "text/csv",
+        "size": 0,
+        "filename": "public-empty.csv"
+      }
+    },
+    {
+      "partID": "prt_g0VXvwjgr09nnVGwQwwg",
+      "filename": "public-mixed.csv",
+      "url": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-01\\provider-run\\project\\.opencorvus\\.r\\project\\attachments\\d27f9bd123e8f23604f84ff2f5378cb5de2be3b47e7b53178861da1dab396a59\\6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+      "bytes": 32,
+      "exactPublicSample": true,
+      "publicHTTPExactBytes": true,
+      "metadata": {
+        "sha": "6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b",
+        "url": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+        "mime": "text/csv",
+        "size": 32,
+        "filename": "public-mixed.csv"
+      }
+    },
+    {
+      "partID": "prt_g0VXvwjgr0BXaIvC34tb",
+      "filename": "public-upload.csv",
+      "url": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-01\\provider-run\\project\\.opencorvus\\.r\\project\\attachments\\d27f9bd123e8f23604f84ff2f5378cb5de2be3b47e7b53178861da1dab396a59\\bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+      "bytes": 34,
+      "exactPublicSample": true,
+      "publicHTTPExactBytes": true,
+      "metadata": {
+        "sha": "bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648",
+        "url": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+        "mime": "text/csv",
+        "size": 34,
+        "filename": "public-upload.csv"
+      }
+    }
+  ],
+  "providerRequests": 7,
+  "allRequestsExactModelStreamingHTTP200EOF": true,
+  "nativeDeadlineAt": 1791896197323,
+  "mcpDeadlineAt": 1791896221113,
+  "replyFacts": {
+    "expectedReviewCode": "MOSS-393-PUBLIC",
+    "expectedMixedRows": [
+      {
+        "item": "Maple",
+        "quantity": 3
+      },
+      {
+        "item": "Iris",
+        "quantity": 4
+      }
+    ],
+    "expectedMixedTotal": 7,
+    "expectedUploadRows": [
+      {
+        "item": "Notebook",
+        "quantity": 7
+      },
+      {
+        "item": "Pen",
+        "quantity": 5
+      }
+    ],
+    "expectedUploadTotal": 12,
+    "review": "Root must inspect visible Chinese answer, totals, empty-resource descriptions and actual references; byte truth comes from independent store checks"
+  },
+  "boundary": "Actual public Session message → resource/canonical user input → completed real assistant. No Task/Mission qualification, ACP/App, data/file live sample, browser or physical-close claim."
+}

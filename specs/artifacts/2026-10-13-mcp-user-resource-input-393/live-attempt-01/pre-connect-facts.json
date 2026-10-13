@@ -1,0 +1,27 @@
+[
+  {
+    "route": "/mcp",
+    "status": 200,
+    "result": {
+      "public_user_resources": {
+        "status": "disconnected"
+      },
+      "browser": {
+        "status": "disconnected"
+      },
+      "computer": {
+        "status": "disconnected"
+      }
+    }
+  },
+  {
+    "route": "/session/ses_-zUS44MvyzzqNo1nOIQP/message/msg_71a81e25-1b5f-4d80-a94b-4d94945275e0",
+    "status": 404,
+    "result": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Message not found: msg_71a81e25-1b5f-4d80-a94b-4d94945275e0"
+      }
+    }
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "occurrence": "d96712dc-4c4f-43ed-bfca-1be8b33cece8",
+  "pid": 87340,
+  "parentPID": 85444,
+  "startedAt": 1791899030759,
+  "deadlineAt": 1791899630759,
+  "lifetimeMilliseconds": 600000,
+  "idleTimeout": 0,
+  "port": 18507,
+  "stopFile": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\mcp-stop.json",
+  "observedAt": "2026-10-13T13:43:50.800Z",
+  "resources": [
+    {
+      "name": "public-empty-text",
+      "title": "public-empty.txt",
+      "uri": "reports://public/empty-text",
+      "description": "Read-only public resource sample.",
+      "mimeType": "text/plain"
+    },
+    {
+      "name": "public-empty-csv",
+      "title": "public-empty.csv",
+      "uri": "reports://public/empty.csv",
+      "description": "Read-only public resource sample.",
+      "mimeType": "text/csv"
+    },
+    {
+      "name": "public-mixed-report",
+      "title": "public-mixed.csv",
+      "uri": "reports://public/mixed",
+      "description": "Read-only public resource sample.",
+      "mimeType": "text/csv"
+    }
+  ],
+  "selfcheck": "official SDK listResources only; no resource reads"
+}

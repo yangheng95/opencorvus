@@ -1,0 +1,16 @@
+{
+  "project": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\74260a56-5913-48cb-89d9-6b3dbf383c1a",
+  "projectID": "prj_h4GNrUzySvBzLq1B98xi",
+  "nativeProject": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\project",
+  "rawProjectPromptProfile": "dynamic",
+  "effectiveSessionPromptProfile": "base",
+  "mcp": {
+    "public_user_resources": {
+      "type": "remote",
+      "url": "http://127.0.0.1:18507/mcp",
+      "transport": "streamable-http",
+      "oauth": false,
+      "timeout": 15000
+    }
+  }
+}

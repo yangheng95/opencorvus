@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [393 用户 MCP 资源与附件输入](2026-10-13-mcp-user-resource-input-393/README.md)：正式正向测试、四独立模型轮次原失败与终态、成功 Chat/实际下载的公开证据。
+
 - [Provider API Key 配置事实](2026-10-13-provider-credential-presence/README.md)：实页、公开字段、正向合同与正常收尾。
 
 - [389 成员刷新失败可读性](2026-10-05-connection-workspace-authority/child-refresh-retention-389/README.md)：隔离实页、读取中断与生命周期证据。

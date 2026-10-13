@@ -1,0 +1,10 @@
+{
+  "requestSentAt": "2026-10-13T12:47:52.615Z",
+  "observedAt": "2026-10-13T12:47:52.655Z",
+  "sessionID": "ses_-zUS44MvyzzqNo1nOIQP",
+  "messageID": "msg_71a81e25-1b5f-4d80-a94b-4d94945275e0",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n404 !== 200\n",
+  "deadlineAt": 1791896197323,
+  "pageReservedAt": 1791896077323,
+  "boundary": "HTTP wait ended; this is not evidence that the model owner was cancelled. Root must settle original owners."
+}

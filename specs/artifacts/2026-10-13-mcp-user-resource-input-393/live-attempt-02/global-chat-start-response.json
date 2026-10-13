@@ -1,0 +1,161 @@
+{
+  "status": 202,
+  "observedAt": "2026-10-13T13:13:03.393Z",
+  "result": {
+    "requestID": "25d843e7-cb24-476b-b0d9-b85604f67d4d",
+    "session": {
+      "id": "ses_hiatkkDDura7ROko2gD2",
+      "slug": "witty-pixel",
+      "projectID": "prj_hCdYt6WIaLjgOzfLor87",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-02\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\d8ec8827-148e-4c6c-873d-e6acff915ec3",
+      "title": "我想核对两份公开CSV和几个公开资源，稍后会把资料发来。请先简短确认可以根据原始内容核对各行数据、合计和引用。",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "globalChatStart": {
+          "version": 2,
+          "requestID": "25d843e7-cb24-476b-b0d9-b85604f67d4d",
+          "requestFingerprint": "89dd65cbeaa0bc383f4ad1310f9efbb8706efcde253c1c7aab02c2617286ebcc",
+          "messageID": "msg_hL8qezT0yD0WZastzlLw"
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "model": "openai/gpt-6.1-sol",
+          "prompt_profile": {
+            "active": "base"
+          }
+        }
+      },
+      "time": {
+        "created": 1791897183083,
+        "updated": 1791897183325
+      },
+      "permission": [
+        {
+          "permission": "delegate_agent",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_expert_squad_inspect",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task_artifacts",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_create_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_mission",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_work",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_send_task_message",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_respond_interaction",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_cancel_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_checks",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_select_workspace",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_delete_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "question",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "bash",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "read",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "glob",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "search_code",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "edit",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "write",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "apply_patch",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "todo",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "schedule",
+          "pattern": "*",
+          "action": "allow"
+        }
+      ]
+    },
+    "messageID": "msg_hL8qezT0yD0WZastzlLw"
+  }
+}

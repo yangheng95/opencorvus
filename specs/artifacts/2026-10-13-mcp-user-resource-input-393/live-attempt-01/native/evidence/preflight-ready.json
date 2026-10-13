@@ -1,0 +1,22 @@
+{
+  "pid": 80880,
+  "owner": {
+    "pid": 80880,
+    "processInstanceID": "win32:639274923986770641",
+    "occurrenceID": "9737edde-adae-4926-8ff3-370dd5dbf93f"
+  },
+  "occurrence": "mcp-user-resource-input-393-live-01-f9090fb7-5c79-4b1d-8fd6-622db0038ac8",
+  "port": 18506,
+  "preflight": {
+    "sessionID": "ses_h6tvkMBcIdp2aJGPyL6P",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 20,
+  "qualificationKind": "NativeService",
+  "budgetScope": "preflight-and-selected-qualification-surface-cumulative-same-process",
+  "nextAction": "root-owned-manual-conversation",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

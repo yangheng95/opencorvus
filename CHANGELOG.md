@@ -32,6 +32,8 @@
 
 - 通用 MCP 工具保留结构化结果正文，超限时可保存完整文件并继续读取；合法空文本资源不会再使整个结果失败。
 
+- 用户附加的 MCP 资源保留合法空文本和零字节文件，混合内容按原顺序呈现；普通 Chat 续聊正确绑定所属项目的附件，保留原始引用、文件名与严格字节校验。
+
 - 电子表格产物的类型名称与工作表菜单跟随界面语言；切换语言保留当前编辑值、公式结果和选区，导出继续使用当前工作簿。
 
 - Provider 表单的地址错误、保存和发现入口使用同一校验，修复已标为无效的地址仍可添加的问题；仅编辑其他字段时保留当前声明的地址与模型配置。
@@ -82,6 +84,8 @@
 - Service shutdown and restart cancel background work across all Projects before joining its physical cleanup, fixing background work such as Memory organization waiting for cancellation from a later shutdown stage.
 
 - Generic MCP tools preserve structured result content, including full-file recovery for oversized output. Valid empty text resources no longer fail the whole result.
+
+- User-attached MCP resources retain valid empty text and zero-byte files, with mixed content in its original order. Chat follow-ups correctly bind attachments to their owning project while preserving references, filenames and strict byte validation.
 
 - Spreadsheet artifact type labels and sheet menus follow the interface language. Language changes retain edited cells, formula results and selection, and exports continue to use the current workbook.
 

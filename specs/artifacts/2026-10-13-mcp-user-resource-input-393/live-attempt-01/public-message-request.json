@@ -1,0 +1,69 @@
+{
+  "messageID": "msg_71a81e25-1b5f-4d80-a94b-4d94945275e0",
+  "agent": "chat",
+  "model": {
+    "providerID": "openai",
+    "modelID": "gpt-6.1-sol"
+  },
+  "parts": [
+    {
+      "type": "text",
+      "text": "请根据本消息所附的三个公开MCP资源和普通上传CSV，用中文简短核对：报告的 review_code，混合资源CSV每行 item/quantity 及合计，上传CSV每行 item/quantity 及合计，以及空文本和空CSV的实际情况。请以真实正文及附件内容为依据，必要时读取附件，并列出可核对的资源或附件引用。不修改项目文件。\n"
+    },
+    {
+      "type": "file",
+      "mime": "text/plain",
+      "filename": "public-empty.txt",
+      "url": "reports://public/empty-text",
+      "source": {
+        "type": "resource",
+        "clientName": "public_user_resources",
+        "uri": "reports://public/empty-text",
+        "text": {
+          "value": "reports://public/empty-text",
+          "start": 0,
+          "end": 27
+        }
+      }
+    },
+    {
+      "type": "file",
+      "mime": "text/csv",
+      "filename": "public-empty.csv",
+      "url": "reports://public/empty.csv",
+      "source": {
+        "type": "resource",
+        "clientName": "public_user_resources",
+        "uri": "reports://public/empty.csv",
+        "text": {
+          "value": "reports://public/empty.csv",
+          "start": 0,
+          "end": 26
+        }
+      }
+    },
+    {
+      "type": "file",
+      "mime": "text/csv",
+      "filename": "public-mixed.csv",
+      "url": "reports://public/mixed",
+      "source": {
+        "type": "resource",
+        "clientName": "public_user_resources",
+        "uri": "reports://public/mixed",
+        "text": {
+          "value": "reports://public/mixed",
+          "start": 0,
+          "end": 22
+        }
+      }
+    },
+    {
+      "type": "file",
+      "mime": "text/csv",
+      "filename": "public-upload.csv",
+      "url": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+      "presentation": "attachment-index"
+    }
+  ]
+}
