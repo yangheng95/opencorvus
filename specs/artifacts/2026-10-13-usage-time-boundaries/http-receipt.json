@@ -1,0 +1,52 @@
+{
+  "qualification": "Production ledger writer and real loopback HTTP reader using declared artificial statistical inputs",
+  "status": 200,
+  "requestID": "ce272c5e-f176-43f9-bad9-c61476c91ec9",
+  "period": "year",
+  "timeZone": "America/Santiago",
+  "current": {
+    "start": 1767236400000,
+    "end": 1798772400000,
+    "summary": {
+      "tokens": {
+        "input": 600,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 600
+      },
+      "costUSD": 0.006,
+      "calls": 3,
+      "averageTokensPerCall": 200,
+      "billing": {
+        "pricedTokens": 600,
+        "unpricedTokens": 0,
+        "unknownTokens": 0,
+        "percent": 100
+      }
+    }
+  },
+  "bucketCalls": 3,
+  "bucketTokens": 600,
+  "occupied": [
+    {
+      "start": 1788580800000,
+      "calls": 1,
+      "tokens": 100,
+      "costUSD": 0.001
+    },
+    {
+      "start": 1788667200000,
+      "calls": 1,
+      "tokens": 200,
+      "costUSD": 0.002
+    },
+    {
+      "start": 1788750000000,
+      "calls": 1,
+      "tokens": 300,
+      "costUSD": 0.003
+    }
+  ]
+}

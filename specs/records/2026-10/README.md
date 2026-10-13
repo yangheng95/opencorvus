@@ -2,6 +2,8 @@
 
 - [382 工具结果恢复断点](2026-10-13-source-result-recovery-382.md)：真实读取、持久化中断边界及共享恢复入口审计。
 
+- [用量自然周期、时间桶与控件生命周期](2026-10-13-usage-time-boundaries.md)：共享边界根因、正向统计合同和真实桌面验收。
+
 - [381 Sources 并发持久化](2026-10-13-source-persistence-381.md)：真实数据库重复复现、共享 writer 修复与实页复核。
 
 - [模型列表键盘前缀导航](2026-10-13-model-keyboard.md)：真实Tab/键入/Enter路径与身份保真。

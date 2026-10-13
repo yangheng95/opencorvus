@@ -1,0 +1,146 @@
+[1/1] START test/usage/usage-stats.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) natural-period Provider usage > aggregates current and previous calendar months with deterministic Provider and model rows [56.68ms]
+(pass) natural-period Provider usage > uses the real IANA day length across daylight-saving time [7.02ms]
+(pass) natural-period Provider usage > uses the 25-hour IANA day across the daylight-saving fallback [4.76ms]
+(pass) natural-period Provider usage > starts natural weeks on Monday [2.55ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for local [2.48ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for system [0.85ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for UTC+3 [0.68ms]
+58 |         total: total.tokens.total + bucket.tokens.total,
+59 |       },
+60 |     }),
+61 |     { calls: 0, costUSD: 0, tokens: { input: 0, output: 0, reasoning: 0, cacheRead: 0, cacheWrite: 0, total: 0 } },
+62 |   )
+63 |   expect(summed.calls).toBe(expected.calls)
+                            ^
+error: expect(received).toBe(expected)
+
+Expected: 4
+Received: 1
+
+      at expectMeasuredBuckets (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:63:24)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:233:5)
+(fail) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour forward transition [6.72ms]
+58 |         total: total.tokens.total + bucket.tokens.total,
+59 |       },
+60 |     }),
+61 |     { calls: 0, costUSD: 0, tokens: { input: 0, output: 0, reasoning: 0, cacheRead: 0, cacheWrite: 0, total: 0 } },
+62 |   )
+63 |   expect(summed.calls).toBe(expected.calls)
+                            ^
+error: expect(received).toBe(expected)
+
+Expected: 4
+Received: 1
+
+      at expectMeasuredBuckets (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:63:24)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:233:5)
+(fail) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour backward transition [5.12ms]
+65 |   expect(summed.costUSD).toBeCloseTo(expected.costUSD, 12)
+66 |   expect(result.buckets.map((bucket) => bucket.start)).toEqual([
+67 |     result.current.start,
+68 |     ...result.buckets.slice(0, -1).map((bucket) => bucket.end),
+69 |   ])
+70 |   expect(result.buckets.at(-1)!.end).toBe(result.current.end)
+                                          ^
+error: expect(received).toBe(expected)
+
+Expected: 1775395800000
+Received: 1775397600000
+
+      at expectMeasuredBuckets (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:70:38)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:259:5)
+(fail) natural-period Provider usage > assigns both Lord Howe 01:45 instants to their distinct real-hour intervals [5.89ms]
+278 |       now: Date.parse("2026-09-06T12:00:00-03:00"),
+279 |     })
+280 |     const previousStart = Date.parse("2026-09-05T00:00:00-04:00")
+281 |     const start = Date.parse("2026-09-06T01:00:00-03:00")
+282 |     const end = Date.parse("2026-09-07T00:00:00-03:00")
+283 |     expect(window).toEqual({
+                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "current": {
+-     "end": 1788750000000,
++     "end": 1788753600000,
+      "start": 1788667200000,
+    },
+    "grain": "hour",
+    "period": "day",
+    "previous": {
+      "end": 1788667200000,
+-     "start": 1788580800000,
++     "start": 1788584400000,
+    },
+    "timeZone": "America/Santiago",
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:283:20)
+(fail) natural-period Provider usage > resolves Santiago's missing midnight to exact adjacent natural days [2.75ms]
+65 |   expect(summed.costUSD).toBeCloseTo(expected.costUSD, 12)
+66 |   expect(result.buckets.map((bucket) => bucket.start)).toEqual([
+67 |     result.current.start,
+68 |     ...result.buckets.slice(0, -1).map((bucket) => bucket.end),
+69 |   ])
+70 |   expect(result.buckets.at(-1)!.end).toBe(result.current.end)
+                                          ^
+error: expect(received).toBe(expected)
+
+Expected: 1788750000000
+Received: 1788753600000
+
+      at expectMeasuredBuckets (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:70:38)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:346:5)
+(fail) natural-period Provider usage > fills Santiago's week with natural-day intervals through the midnight transition [4.21ms]
+58 |         total: total.tokens.total + bucket.tokens.total,
+59 |       },
+60 |     }),
+61 |     { calls: 0, costUSD: 0, tokens: { input: 0, output: 0, reasoning: 0, cacheRead: 0, cacheWrite: 0, total: 0 } },
+62 |   )
+63 |   expect(summed.calls).toBe(expected.calls)
+                            ^
+error: expect(received).toBe(expected)
+
+Expected: 4
+Received: 2
+
+      at expectMeasuredBuckets (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:63:24)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:346:5)
+(fail) natural-period Provider usage > fills Santiago's month with natural-day intervals through the midnight transition [3.74ms]
+58 |         total: total.tokens.total + bucket.tokens.total,
+59 |       },
+60 |     }),
+61 |     { calls: 0, costUSD: 0, tokens: { input: 0, output: 0, reasoning: 0, cacheRead: 0, cacheWrite: 0, total: 0 } },
+62 |   )
+63 |   expect(summed.calls).toBe(expected.calls)
+                            ^
+error: expect(received).toBe(expected)
+
+Expected: 4
+Received: 2
+
+      at expectMeasuredBuckets (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:63:24)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:346:5)
+(fail) natural-period Provider usage > fills Santiago's year with natural-day intervals through the midnight transition [17.21ms]
+(pass) natural-period Provider usage > assigns both ends of the 24-hour Asia/Shanghai day to the correct half-open window [4.36ms]
+(pass) natural-period Provider usage > assigns both ends of the 23-hour America/New_York day to the correct half-open window [2.39ms]
+(pass) natural-period Provider usage > assigns both ends of the 25-hour America/New_York day to the correct half-open window [2.53ms]
+(pass) natural-period Provider usage > includes the measured leap day and exact year endpoints in Shanghai's leap year [41.18ms]
+(pass) natural-period Provider usage > projects a natural year as daily activity buckets [10.85ms]
+(pass) natural-period Provider usage > serves canonical streamed-call ledger occurrences through the global usage API [2957.55ms]
+
+ 13 pass
+ 7 fail
+ 95 expect() calls
+Ran 20 tests across 1 file. [9.75s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts
+[1/1] DONE test/usage/usage-stats.test.ts exit=1 duration=10.67s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts

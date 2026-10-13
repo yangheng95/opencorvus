@@ -674,7 +674,11 @@ workspace, apply the default chat intent and reset the primary center surface.
 Usage presents the current server's real aggregate with an OpenCorvus identity,
 five equal metrics, activity grid, and side-by-side token/provider breakdowns.
 Period selection controls the existing usage contract; year is the initial
-view. Empty periods retain their actual zero-valued buckets. Official provider
+view. The activity header, period controls and refresh button stay mounted
+while current-period data loads, preserving keyboard focus across consecutive
+selections and refreshes. Loading clears the prior data and appears within the
+activity section; a busy refresh remains focusable and suppresses repeat requests.
+Empty periods retain their actual zero-valued buckets. Official provider
 comparisons and model detail remain below the primary overview. No personal
 identity, subscription, streak or plugin usage is inferred from server credentials.
 Default light/dark palettes use neutral chrome; named palettes retain their

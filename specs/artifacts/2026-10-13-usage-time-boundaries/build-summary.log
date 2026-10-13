@@ -1,0 +1,14 @@
+../../../.tmp-codex-usage-01a133/ui-after/assets/TimelineArtifact-DQ6PijZc.js                            615.00 kB │ gzip:   189.01 kB
+../../../.tmp-codex-usage-01a133/ui-after/assets/cynefin-VYW2F7L2-GE7oD3Bt.js                            688.18 kB │ gzip:   152.04 kB
+../../../.tmp-codex-usage-01a133/ui-after/assets/hu-DVk7Y_ka-CCTZJfqn.js                                 765.41 kB │ gzip:   172.84 kB
+../../../.tmp-codex-usage-01a133/ui-after/assets/vega-embed-policy-fSIymO6N.js                           786.03 kB │ gzip:   274.42 kB
+../../../.tmp-codex-usage-01a133/ui-after/assets/MapArtifact-C8qZ45bj.js                                 957.17 kB │ gzip:   251.72 kB
+../../../.tmp-codex-usage-01a133/ui-after/assets/Model3dArtifact-TGjmm0ug.js                           1,072.74 kB │ gzip:   300.33 kB
+../../../.tmp-codex-usage-01a133/ui-after/assets/main-QmZyps_H.js                                      1,701.60 kB │ gzip:   491.82 kB
+../../../.tmp-codex-usage-01a133/ui-after/assets/SpreadsheetArtifact-nrr492Jz.js                       6,140.77 kB │ gzip: 1,703.73 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1m 2s

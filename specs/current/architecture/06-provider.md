@@ -261,8 +261,11 @@ step 不入账，所以它是已记录用量而不是账单；Session 树之外�
 
 `GET /global/usage` 是 Overlay 的唯一自然周期聚合 API：按严格 IANA 时区计算
 day/week/month/year 半开区间和上一周期，补齐真实 DST（Daylight Saving Time，夏令时）
-hourly/daily buckets，并返回总量、比较、Provider/model 分组和计费覆盖。自然周从周一开始；
-year heatmap 使用真实 weekday offset。
+hourly/daily buckets，并返回总量、比较、Provider/model 分组和计费覆盖。所有自然周期边界
+统一取该当地起点的最早合法实际时刻；不存在的午夜取当天实际起点，相邻周期重新归一化。
+小时桶从自然起点按真实经过的一小时推进，日桶按相邻自然日起点推进，末桶截到周期终点。
+记录按实际 event time 归入同一组半开桶区间，分桶的 Token、成本与调用次数保持完整汇总。
+自然周从周一开始；year heatmap 使用真实 weekday offset。
 
 同一路由还返回独立的 official-source inventory：
 

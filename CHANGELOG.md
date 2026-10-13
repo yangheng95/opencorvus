@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 用量统计正确覆盖半小时夏令时和午夜切换的自然周期，修复部分调用漏入时间桶、错分到上一周期或周期终点越界的问题。
+- 用量周期选择和刷新保留键盘焦点，可连续切换周期并继续操作；加载时显示当前请求状态。
 - 网络代理设置保留用户名和密码的首尾空格及字面百分号，修复保存或发起请求时认证信息被改写的问题。此前已被裁剪并保存的内容需要重新输入。
 - 清空代理认证字段后保存会移除当前配置中的旧值，修复清空密码后又被回填的问题。
 - 搜索框清除后可直接继续键盘输入；清除操作遵守输入框的禁用状态，并保留页面原有的搜索行为。
@@ -31,6 +33,8 @@
 
 #### Fixed
 
+- Usage covers natural periods across half-hour daylight-saving and midnight transitions, fixing calls missing from time buckets, assigned to the previous period, or counted beyond the period end.
+- Usage period controls and refresh retain keyboard focus for consecutive actions. Loading shows the current request state.
 - Network proxy settings preserve leading and trailing spaces and literal percent signs in usernames and passwords, fixing credentials being changed when saved or used. Values already trimmed and saved must be entered again.
 - Saving cleared proxy authentication fields removes the old values from the current configuration instead of restoring them in the form.
 - Clearing a search field returns focus for continued typing. Clear actions follow the input's disabled state and retain each page's existing search behavior.

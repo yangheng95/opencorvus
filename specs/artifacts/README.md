@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [用量时间边界与键盘操作](2026-10-13-usage-time-boundaries/README.md)：真实双语桌面截图、32项正向测试与生产HTTP统计。
+
 - [382 工具结果恢复调查](2026-10-05-connection-workspace-authority/source-result-recovery-382/README.md)：完整状态阶段、四个失败合同和源探针。
 
 - [381 Sources 并发持久化](2026-10-05-connection-workspace-authority/source-persistence-381/README.md)：聚焦功能合同、真实来源与运行证据。

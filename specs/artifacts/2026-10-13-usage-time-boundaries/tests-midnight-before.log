@@ -1,0 +1,165 @@
+[1/1] START test/usage/usage-stats.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) natural-period Provider usage > aggregates current and previous calendar months with deterministic Provider and model rows [58.92ms]
+(pass) natural-period Provider usage > uses the real IANA day length across daylight-saving time [5.58ms]
+(pass) natural-period Provider usage > uses the 25-hour IANA day across the daylight-saving fallback [3.91ms]
+(pass) natural-period Provider usage > starts natural weeks on Monday [2.14ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for local [1.99ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for system [0.71ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for UTC+3 [0.93ms]
+(pass) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour forward transition [6.92ms]
+(pass) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour backward transition [4.22ms]
+(pass) natural-period Provider usage > assigns both Lord Howe 01:45 instants to their distinct real-hour intervals [4.78ms]
+(pass) natural-period Provider usage > resolves Santiago's missing midnight to exact adjacent natural days [3.37ms]
+(pass) natural-period Provider usage > fills Santiago's week with natural-day intervals through the midnight transition [2.48ms]
+(pass) natural-period Provider usage > fills Santiago's month with natural-day intervals through the midnight transition [4.09ms]
+(pass) natural-period Provider usage > fills Santiago's year with natural-day intervals through the midnight transition [15.06ms]
+(pass) natural-period Provider usage > assigns both ends of the 24-hour Asia/Shanghai day to the correct half-open window [2.55ms]
+(pass) natural-period Provider usage > assigns both ends of the 23-hour America/New_York day to the correct half-open window [2.66ms]
+(pass) natural-period Provider usage > assigns both ends of the 25-hour America/New_York day to the correct half-open window [3.23ms]
+(pass) natural-period Provider usage > includes the measured leap day and exact year endpoints in Shanghai's leap year [18.89ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the day observed at first 00:30 [2.65ms]
+417 |     ])(`uses Havana's first real midnight for the ${period} observed at $observation`, (sample) => {
+418 |       const window = UsageStats.resolveWindow({ period, timeZone: "America/Havana", now: Date.parse(sample.now) })
+419 |       const start = Date.parse("2026-11-01T00:00:00-04:00")
+420 |       const dayEnd = Date.parse("2026-11-02T00:00:00-05:00")
+421 |       const end = period === "day" ? dayEnd : Date.parse("2026-12-01T00:00:00-05:00")
+422 |       expect(window.current).toEqual({ start, end })
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "end": 1793595600000,
+-   "start": 1793505600000,
++   "start": 1793509200000,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:422:30)
+(fail) natural-period Provider usage > uses Havana's first real midnight for the day observed at second 00:30 [1.25ms]
+417 |     ])(`uses Havana's first real midnight for the ${period} observed at $observation`, (sample) => {
+418 |       const window = UsageStats.resolveWindow({ period, timeZone: "America/Havana", now: Date.parse(sample.now) })
+419 |       const start = Date.parse("2026-11-01T00:00:00-04:00")
+420 |       const dayEnd = Date.parse("2026-11-02T00:00:00-05:00")
+421 |       const end = period === "day" ? dayEnd : Date.parse("2026-12-01T00:00:00-05:00")
+422 |       expect(window.current).toEqual({ start, end })
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "end": 1793595600000,
+-   "start": 1793505600000,
++   "start": 1793509200000,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:422:30)
+(fail) natural-period Provider usage > uses Havana's first real midnight for the day observed at noon [1.10ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the month observed at first 00:30 [2.92ms]
+417 |     ])(`uses Havana's first real midnight for the ${period} observed at $observation`, (sample) => {
+418 |       const window = UsageStats.resolveWindow({ period, timeZone: "America/Havana", now: Date.parse(sample.now) })
+419 |       const start = Date.parse("2026-11-01T00:00:00-04:00")
+420 |       const dayEnd = Date.parse("2026-11-02T00:00:00-05:00")
+421 |       const end = period === "day" ? dayEnd : Date.parse("2026-12-01T00:00:00-05:00")
+422 |       expect(window.current).toEqual({ start, end })
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "end": 1796101200000,
+-   "start": 1793505600000,
++   "start": 1793509200000,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:422:30)
+(fail) natural-period Provider usage > uses Havana's first real midnight for the month observed at second 00:30 [24.55ms]
+417 |     ])(`uses Havana's first real midnight for the ${period} observed at $observation`, (sample) => {
+418 |       const window = UsageStats.resolveWindow({ period, timeZone: "America/Havana", now: Date.parse(sample.now) })
+419 |       const start = Date.parse("2026-11-01T00:00:00-04:00")
+420 |       const dayEnd = Date.parse("2026-11-02T00:00:00-05:00")
+421 |       const end = period === "day" ? dayEnd : Date.parse("2026-12-01T00:00:00-05:00")
+422 |       expect(window.current).toEqual({ start, end })
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "end": 1796101200000,
+-   "start": 1793505600000,
++   "start": 1793509200000,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:422:30)
+(fail) natural-period Provider usage > uses Havana's first real midnight for the month observed at noon [1.88ms]
+475 |       timeZone: "America/Havana",
+476 |       now: Date.parse(sample.now),
+477 |     })
+478 |     const start = Date.parse(sample.start)
+479 |     expect(window.current).toEqual({ start, end: Date.parse(sample.end) })
+480 |     expect(window.previous).toEqual({ start: Date.parse("2026-11-01T00:00:00-04:00"), end: start })
+                                  ^
+error: expect(received).toEqual(expected)
+
+  {
+    "end": 1793595600000,
+-   "start": 1793505600000,
++   "start": 1793509200000,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:480:29)
+(fail) natural-period Provider usage > includes both Havana midnight hours in the previous day [1.55ms]
+475 |       timeZone: "America/Havana",
+476 |       now: Date.parse(sample.now),
+477 |     })
+478 |     const start = Date.parse(sample.start)
+479 |     expect(window.current).toEqual({ start, end: Date.parse(sample.end) })
+480 |     expect(window.previous).toEqual({ start: Date.parse("2026-11-01T00:00:00-04:00"), end: start })
+                                  ^
+error: expect(received).toEqual(expected)
+
+  {
+    "end": 1796101200000,
+-   "start": 1793505600000,
++   "start": 1793509200000,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts:480:29)
+(fail) natural-period Provider usage > includes both Havana midnight hours in the previous month [1.17ms]
+(pass) natural-period Provider usage > places both Havana midnight hours in one natural-day bucket within the week [2.41ms]
+(pass) natural-period Provider usage > places both Havana midnight hours in one natural-day bucket within the year [16.58ms]
+(pass) natural-period Provider usage > projects a natural year as daily activity buckets [15.97ms]
+(pass) natural-period Provider usage > serves canonical streamed-call ledger occurrences through the global usage API [2297.01ms]
+
+6 tests failed:
+(fail) natural-period Provider usage > uses Havana's first real midnight for the day observed at second 00:30 [1.25ms]
+(fail) natural-period Provider usage > uses Havana's first real midnight for the day observed at noon [1.10ms]
+(fail) natural-period Provider usage > uses Havana's first real midnight for the month observed at second 00:30 [24.55ms]
+(fail) natural-period Provider usage > uses Havana's first real midnight for the month observed at noon [1.88ms]
+(fail) natural-period Provider usage > includes both Havana midnight hours in the previous day [1.55ms]
+(fail) natural-period Provider usage > includes both Havana midnight hours in the previous month [1.17ms]
+
+ 24 pass
+ 6 fail
+ 184 expect() calls
+Ran 30 tests across 1 file. [7.95s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts
+[1/1] DONE test/usage/usage-stats.test.ts exit=1 duration=8.63s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\usage-stats.test.ts

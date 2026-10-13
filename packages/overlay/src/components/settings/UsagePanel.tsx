@@ -402,42 +402,63 @@ export default function UsagePanel() {
               <span>{resolved().timeZone}</span>
               <span>{comparisonLabel(resolved().comparison.tokensPercent)}</span>
             </div>
+          </>
+        )}
+      </Show>
 
-            <section class="usage-section usage-section--activity">
-              <header class="usage-section__head">
-                <div>
-                  <h2>{t("usage.activity_title")}</h2>
-                  <p>{t("usage.trend_description")}</p>
-                </div>
-                <div class="usage-hero__controls">
-                  <SegmentedControl
-                    class="usage-period-control"
-                    value={period()}
-                    options={PERIODS.map((value) => ({ value, label: t(`usage.period.${value}`) }))}
-                    ariaLabel={t("usage.period_aria")}
-                    size="sm"
-                    onChange={setPeriod}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    tone="neutral"
-                    aria-label={t("usage.refresh")}
-                    title={t("usage.refresh")}
-                    disabled={loading()}
-                    onClick={() => setRevision((value) => value + 1)}
-                  >
-                    <Icon name={loading() ? "loading" : "refresh"} class={loading() ? "is-spinning" : undefined} />
-                  </Button>
-                </div>
-              </header>
+      <section class="usage-section usage-section--activity">
+        <header class="usage-section__head">
+          <div>
+            <h2>{t("usage.activity_title")}</h2>
+            <p>{t("usage.trend_description")}</p>
+          </div>
+          <div class="usage-hero__controls">
+            <SegmentedControl
+              class="usage-period-control"
+              value={period()}
+              options={PERIODS.map((value) => ({ value, label: t(`usage.period.${value}`) }))}
+              ariaLabel={t("usage.period_aria")}
+              size="sm"
+              onChange={setPeriod}
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              aria-label={t("usage.refresh")}
+              title={t("usage.refresh")}
+              aria-disabled={loading() || undefined}
+              aria-busy={loading() || undefined}
+              onClick={() => {
+                if (!loading()) setRevision((value) => value + 1)
+              }}
+            >
+              <Icon name={loading() ? "loading" : "refresh"} class={loading() ? "is-spinning" : undefined} />
+            </Button>
+          </div>
+        </header>
+        <Show when={data()}>
+          {(resolved) => (
+            <>
               <UsageActivityGrid data={resolved()} />
               <Show when={resolved().current.summary.calls === 0}>
                 <p class="usage-coverage-note">{t("usage.empty_body")}</p>
               </Show>
-            </section>
+            </>
+          )}
+        </Show>
+        <Show when={loading() && !data() && !error()}>
+          <div class="usage-loading" role="status">
+            <Icon name="loading" class="is-spinning" />
+            <span>{t("usage.loading")}</span>
+          </div>
+        </Show>
+      </section>
 
+      <Show when={data()}>
+        {(resolved) => (
+          <>
             <div class="usage-insights">
               <section class="usage-insight">
                 <header class="usage-section__head">
@@ -493,7 +514,9 @@ export default function UsagePanel() {
                           <span>{t("usage.models_count", { value: String(provider.modelCount) })}</span>
                         </div>
                         <div class="usage-provider-row__measure">
-                          <span>{exactNumber(provider.summary.tokens.total)} {t("usage.table_tokens")}</span>
+                          <span>
+                            {exactNumber(provider.summary.tokens.total)} {t("usage.table_tokens")}
+                          </span>
                           <span>{formatDetailedCostUSD(provider.summary.costUSD)}</span>
                         </div>
                         <div class="usage-provider-row__bar" aria-hidden="true">
@@ -573,13 +596,6 @@ export default function UsagePanel() {
             </Show>
           </>
         )}
-      </Show>
-
-      <Show when={loading() && !data() && !error()}>
-        <div class="usage-loading" role="status">
-          <Icon name="loading" class="is-spinning" />
-          <span>{t("usage.loading")}</span>
-        </div>
       </Show>
     </SettingsPanel>
   )
