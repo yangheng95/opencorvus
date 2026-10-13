@@ -286,7 +286,7 @@ Recall补充：本批真实桌面Reject发现跨入口终态合同冲突，按�
 
 正式后台原组9文件71测试/301断言；deny组含9文件89测试/297断言，其中7相关文件79/247（Task-root多步3/7、精确取消4/9、approved恢复8/25、Tool settlement10/22及控制/producer/activity）。两组含重复，不相加为总覆盖。warm canonical summary组Permission8/39＋transport1/4，共9/43；SDK后原公开合同重复10/50；Bun matcher原错误已保留，clonefix后TCP3/30重新通过。前端两个纯transport/state文件27/66及renderer-surface检查通过；没有源码文案、DOM、组件、snapshot、Playwright或像素测试。最后当前共享工作树重复结果另见归档final-root-recheck，不将重复次数当新增覆盖。
 
-最后四个正式文件重跑22测试/113断言、runner16987 join0。当前共享树core首轮56306 join2：另一任务正在编辑的compaction.ts:97重写NamedError.data尚缺override，llm.ts把可空maxOutputTokens传入要求number的准备合同。原日志/退出/失败后观察输入保存；观察时llm已经补回实际maxOutputTokens默认，compaction override仍待其owner收敛。Root不覆盖peer文件，不把此前通过伪称当前类型已通过。SDK工作树后来出现同一peer新Provider schema生成差异；Root提交只应用已保存的402完整生成事务两文件patch，保留后来其它SDK差异，不整文件纳入本批。
+最后四个正式文件重跑22测试/113断言、runner16987 join0。core首轮56306在20:31:19–20:32:08UTC join2：另一任务当时正在编辑的compaction.ts:97报TS4114，LLM将可空maxOutputTokens传入number合同。原日志/退出/失败后观察输入保存，但当时没有原子源码快照。后续把旧97行解释成当前data缺override是错误归因，明确撤回：NamedError基类没有data字段，当前data无须override；20:37peer已经补name override和实际maxOutputTokens默认。20:50正常push声明typecheck八包全cache miss、52.057秒全部通过，80384按同一包声明/同一TS5.8.2/cwd/tsconfig在20:56重复join0；当前源前后观察一致。Root未覆盖peer文件。SDK工作树后来出现新Provider schema生成差异；Root提交只应用已保存402完整生成事务两文件patch，保留后来其它SDK差异，不整文件纳入本批。
 
 完整SDK生成六目标事务已join0，所有stage/build/backup与generator owner关闭。唯一tracked SDK变化为types+83/-4与OpenAPI+311/-4；旧Config字段删除由唯一生成器产生。核心/SDK source/实际published declarations类型通过；最终Overlay types与Node私有构建通过，全部owner已join。实际使用ui-after-final；真实Sol02把它复制到自己Native exe相邻ui，原Sol01旧UI移到自有ui-first-allow-01保留。未覆盖共享dist、未新建branch/worktree、未启用用户Browser。
 
@@ -317,3 +317,9 @@ Task边界、typed-control与文件guards横审覆盖全生产调用、Task/Sess
 未满足的扩展验收：Work/Mission各自桌面入口、真正Question reconnect/draft、真实Task全链完成、queued输入与全入口排列、大Board性能及cached Brief标题失效、已completed历史自动修复均未证明。已验证的是上述明确入口和同源数据契约，不能宣称全部模式/恢复/性能无缺陷。公开完整Board tag忠实已有可见Brief缓存；Task title变更200真实新title已验证，旧Brief缓存另列候选。
 
 公开产物及准确输入/输出见[402归档](../../artifacts/2026-10-14-standalone-permission-projection-402/README.md)。仅明确allowlist公开日志/夹具/差异/报告和原JPEG，排除运行目录、数据库、auth/models内容、二进制/UIbundle、peer全仓diff与真实Provider raw payload；Native只保存已审计公开身份/reader/预算投影。当前Git交付完成后另补精确提交与push事实；Goal仍active，持续下一批。
+
+### 已提交与正常推送首轮（2026-10-14）
+
+实现、当前架构、实质双语Unreleased、原485公开产物/31原JPEG已提交`b3958bebfd9728c43c42c8f7ba4b9d9af53beb72`，527文件、8072增/289删。临时Git index只含本任务精确code/tests/spec与共享文档hunk；SDK从原完整生成事务patch应用，peer后续SDK/生产改动保留。Windows首次Git add全部文件名超过命令行上限ENAMETOOLONG，原输入/log保留；按本机git add帮助改用NUL pathspec文件，重跑原范围check/准备/正常commit通过，未缩减交付或绕hook。
+
+fresh fetch/merge上游已最新，完整pending集合只有b3958bebf且diff-check0。正常push原43534失败：声明全仓types八包实际全部cache miss/0，随后api:routes-check发现当前另一个任务刚增加ProviderConnectionTestResult.output而生成OpenAPI尚未对应；此前docs:check也见同任务新Provider error schema的API文档差异。两种原失败/input/output分别保留，未Root伪补peer schema、未no-verify、未创建worktree规避。当前核心已复验0，API/文档生成需按其唯一事务收敛后重跑并重新fetch/merge/完整pending审计/正常push；尚未宣称远端交付成功。新增证据/归因更正在归档delivery-review，旧错误报告保留为历史。

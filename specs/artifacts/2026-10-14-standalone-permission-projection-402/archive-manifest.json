@@ -420,11 +420,13 @@
       "archivedBytes": 3597
     },
     {
-      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/README.md",
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/README-before-correction.md",
       "path": "final-root-recheck/README.md.gz",
       "compression": "gzip",
       "sourceBytes": 2877,
-      "archivedBytes": 1492
+      "archivedBytes": 1492,
+      "originalSource": ".tmp-standalone-permission-projection-402/final-root-recheck/README.md",
+      "sourceHistory": "Actual preserved pre-correction input; original archive bytes unchanged"
     },
     {
       "source": ".tmp-standalone-permission-projection-402/final-root-recheck/bun-version.txt",
@@ -3400,6 +3402,286 @@
       "compression": "gzip",
       "sourceBytes": 75,
       "archivedBytes": 92
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/commit-final-initial.mjs",
+      "path": "delivery-review/commit-final-initial.mjs.gz",
+      "compression": "gzip",
+      "sourceBytes": 4404,
+      "archivedBytes": 1715
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/commit-final.mjs",
+      "path": "delivery-review/commit-final.mjs.gz",
+      "compression": "gzip",
+      "sourceBytes": 4629,
+      "archivedBytes": 1790
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/stage-final-review.log",
+      "path": "delivery-review/stage-final-review.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 11014,
+      "archivedBytes": 1511
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/stage-final-review.exit",
+      "path": "delivery-review/stage-final-review.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/stage-final-review02.log",
+      "path": "delivery-review/stage-final-review02.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 39585,
+      "archivedBytes": 5817
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/stage-final-review02.exit",
+      "path": "delivery-review/stage-final-review02.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-commit.json",
+      "path": "delivery-review/final-commit.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 57957,
+      "archivedBytes": 4106
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/commit-final.exit",
+      "path": "delivery-review/commit-final.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/docs-final.log",
+      "path": "delivery-review/docs-final.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 2046,
+      "archivedBytes": 464
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/docs-final.exit",
+      "path": "delivery-review/docs-final.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/push-final01.log",
+      "path": "delivery-review/push-final01.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 5069,
+      "archivedBytes": 1521
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/push-final01.exit",
+      "path": "delivery-review/push-final01.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/api-final02.log",
+      "path": "delivery-review/api-final02.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 131,
+      "archivedBytes": 128
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/api-final02.exit",
+      "path": "delivery-review/api-final02.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/docs-final02.log",
+      "path": "delivery-review/docs-final02.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 106,
+      "archivedBytes": 115
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/docs-final02.exit",
+      "path": "delivery-review/docs-final02.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/add-delivery-evidence.mjs",
+      "path": "delivery-review/add-delivery-evidence.mjs.gz",
+      "compression": "gzip",
+      "sourceBytes": 3042,
+      "archivedBytes": 1534
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/freeze-root-facts.mjs",
+      "path": "delivery-review/freeze-root-facts.mjs.gz",
+      "compression": "gzip",
+      "sourceBytes": 4812,
+      "archivedBytes": 2654
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/actual-process-observation.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/actual-process-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1006,
+      "archivedBytes": 412
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/bun-version.txt",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/bun-version.txt.gz",
+      "compression": "gzip",
+      "sourceBytes": 7,
+      "archivedBytes": 27
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/command.txt",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/command.txt.gz",
+      "compression": "gzip",
+      "sourceBytes": 45,
+      "archivedBytes": 65
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/compiler-resolution.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/compiler-resolution.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1842,
+      "archivedBytes": 673
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/head-before.txt",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/head-before.txt.gz",
+      "compression": "gzip",
+      "sourceBytes": 42,
+      "archivedBytes": 61
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/join-and-input-observation.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/join-and-input-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 205,
+      "archivedBytes": 158
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/node-version.txt",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/node-version.txt.gz",
+      "compression": "gzip",
+      "sourceBytes": 9,
+      "archivedBytes": 29
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/owner-completed.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/owner-completed.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 91,
+      "archivedBytes": 103
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/owner-start.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/owner-start.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 446,
+      "archivedBytes": 310
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/peer-source-before.patch",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/peer-source-before.patch.gz",
+      "compression": "gzip",
+      "sourceBytes": 8444,
+      "archivedBytes": 2647
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/README-before-correction.md",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/README-before-correction.md.gz",
+      "compression": "gzip",
+      "sourceBytes": 2877,
+      "archivedBytes": 1492
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/reconciliation.md",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/reconciliation.md.gz",
+      "compression": "gzip",
+      "sourceBytes": 5152,
+      "archivedBytes": 2459
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/typecheck.exit",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/typecheck.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/typecheck.log",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/typecheck.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 75,
+      "archivedBytes": 92
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__package.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__package.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 5758,
+      "archivedBytes": 1814
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__compaction.ts",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__compaction.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 46340,
+      "archivedBytes": 12188
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__llm.ts",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__llm.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 18055,
+      "archivedBytes": 5526
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__tsconfig.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__tsconfig.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 635,
+      "archivedBytes": 385
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/inputs/packages__util__package.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__util__package.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 916,
+      "archivedBytes": 424
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/inputs/packages__util__src__error.ts",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__util__src__error.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 2366,
+      "archivedBytes": 989
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/package-script-repeat/inputs/tsconfig-bun.json",
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/tsconfig-bun.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 893,
+      "archivedBytes": 466
+    },
+    {
+      "source": ".tmp-standalone-permission-projection-402/final-root-recheck/README.md",
+      "path": "delivery-review/final-root-recheck/README.md.gz",
+      "compression": "gzip",
+      "sourceBytes": 3255,
+      "archivedBytes": 1616
     }
   ]
 }

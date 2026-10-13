@@ -15,3 +15,7 @@ Root与一层audit_functionality/audit_ui，2026-10-14。当前生产、正向�
 [archive-manifest.json](archive-manifest.json)逐一列原公开source/原字节数与归档位置。文本用gzip原字节保存，JPEG直接复制；[archive-check.json](archive-check.json)仅证明这些不可变captured artifact字节与链接完好、界定的敏感模式扫描，不是mutable源码hash门槛或功能/UI验收。Implementation、warm-summary、denied-continuation/sdk-final、final-root-recheck为实际红绿/类型/完整生成事务；各组重复不相加。manual/sol各scope保留自己原身份/预算/时序/结果。
 
 选择排除auth.json、models.json内容、runtime/owned-temporary/database、exe、UI bundles、真实Provider raw payload、peer全仓diff与完整SDK baseline bundle。旧源码preimage/失败fixture仅历史证据，不是兼容实现或当前事实来源。
+
+## Delivery review
+
+实现提交 `b3958bebf`。首推送经过实际八包全cache miss类型检查/0，随后API生成差异失败；旧核心类型错误的行号归因已由同一包声明复验0及原时序更正。delivery-review保留原失败、精确SDK patch范围准备、Windows NUL pathspec工具修复与原公开输入输出；旧README原字节保留，manifest另指向实际存留的pre-correction input。当前api:routes-check与docs:check已重复通过（6规则/35文件、345 ops/26 groups），正常上游同步与重推仍需原回执确认。没有修改peer Provider、生成SDK或绕过hook。

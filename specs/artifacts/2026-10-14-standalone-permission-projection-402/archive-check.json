@@ -1,10 +1,10 @@
 {
   "kind": "Preservation of exact captured artifacts and links; no source hash gate or UI/functionality acceptance",
-  "sourceFiles": 485,
-  "archiveFiles": 488,
+  "sourceFiles": 525,
+  "archiveFiles": 528,
   "jpeg": 31,
-  "gzip": 454,
-  "bytes": 2883106,
+  "gzip": 494,
+  "bytes": 3015245,
   "restored": [
     {
       "path": "check-live-402-deny.ts.gz",
@@ -2275,6 +2275,206 @@
       "path": "warm-summary/typecheck.log.gz",
       "sourceBytes": 75,
       "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/commit-final-initial.mjs.gz",
+      "sourceBytes": 4404,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/commit-final.mjs.gz",
+      "sourceBytes": 4629,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review.log.gz",
+      "sourceBytes": 11014,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review02.log.gz",
+      "sourceBytes": 39585,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-commit.json.gz",
+      "sourceBytes": 57957,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/commit-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final.log.gz",
+      "sourceBytes": 2046,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/push-final01.log.gz",
+      "sourceBytes": 5069,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/push-final01.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/api-final02.log.gz",
+      "sourceBytes": 131,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/api-final02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final02.log.gz",
+      "sourceBytes": 106,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/add-delivery-evidence.mjs.gz",
+      "sourceBytes": 3042,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/freeze-root-facts.mjs.gz",
+      "sourceBytes": 4812,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/actual-process-observation.json.gz",
+      "sourceBytes": 1006,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/bun-version.txt.gz",
+      "sourceBytes": 7,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/command.txt.gz",
+      "sourceBytes": 45,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/compiler-resolution.json.gz",
+      "sourceBytes": 1842,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/head-before.txt.gz",
+      "sourceBytes": 42,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/join-and-input-observation.json.gz",
+      "sourceBytes": 205,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/node-version.txt.gz",
+      "sourceBytes": 9,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/owner-completed.json.gz",
+      "sourceBytes": 91,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/owner-start.json.gz",
+      "sourceBytes": 446,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/peer-source-before.patch.gz",
+      "sourceBytes": 8444,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/README-before-correction.md.gz",
+      "sourceBytes": 2877,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/reconciliation.md.gz",
+      "sourceBytes": 5152,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/typecheck.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/typecheck.log.gz",
+      "sourceBytes": 75,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__package.json.gz",
+      "sourceBytes": 5758,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__compaction.ts.gz",
+      "sourceBytes": 46340,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__llm.ts.gz",
+      "sourceBytes": 18055,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__tsconfig.json.gz",
+      "sourceBytes": 635,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__util__package.json.gz",
+      "sourceBytes": 916,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__util__src__error.ts.gz",
+      "sourceBytes": 2366,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/tsconfig-bun.json.gz",
+      "sourceBytes": 893,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/README.md.gz",
+      "sourceBytes": 3255,
+      "decodedMatchesOriginal": true
     }
   ],
   "images": [
@@ -2435,7 +2635,7 @@
     }
   ],
   "credentialScan": {
-    "inspected": 457,
+    "inspected": 497,
     "patternFamilies": [
       "provider-key",
       "bearer-value",
