@@ -1,4 +1,7 @@
 import z from "zod"
+import { MIMEType } from "node:util"
+import sniffEncoding from "html-encoding-sniffer"
+import { labelToName, legacyHookDecode } from "@exodus/bytes/encoding.js"
 import { Tool } from "./tool"
 import TurndownService from "turndown"
 import DESCRIPTION from "./webfetch.txt"
@@ -131,7 +134,13 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
     }
     const arrayBuffer = await readHttpResponseBody(owner, { maxBytes: MAX_RESPONSE_SIZE, error: oversized })
     const contentType = response.headers.get("content-type") || ""
-    const mime = contentType.split(";")[0]?.trim().toLowerCase() || ""
+    let mediaType: MIMEType | undefined
+    try {
+      mediaType = new MIMEType(contentType)
+    } catch (error) {
+      if (!(error instanceof TypeError)) throw error
+    }
+    const mime = mediaType?.essence || ""
     const title = `${params.url} (${contentType})`
     const source = urlSource({
       url: response.url || params.url,
@@ -158,7 +167,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
       }
     }
 
-    const content = new TextDecoder().decode(arrayBuffer)
+    const content = decodeFetchedText(arrayBuffer, mediaType)
     const documentTitle = fetchedDocumentTitle(mime, content)
     if (documentTitle) source.title = documentTitle
 
@@ -215,6 +224,18 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
   } finally {
     clearTimeout()
   }
+}
+
+function decodeFetchedText(bytes: Uint8Array, mediaType: MIMEType | undefined): string {
+  const mime = mediaType?.essence || ""
+  const charset = mediaType?.params.get("charset") ?? undefined
+  const xml = mime === "application/xml" || mime === "text/xml" || mime.endsWith("+xml")
+  const options = { transportLayerEncodingLabel: charset, defaultEncoding: "UTF-8", xml }
+  // Title extraction and every output format share the same decoded document.
+  // HTML/XML declarations have meaning only for their corresponding media types.
+  const encoding =
+    mime === "text/html" || xml ? sniffEncoding(bytes, options) : (labelToName(charset ?? "utf-8") ?? "UTF-8")
+  return legacyHookDecode(bytes, encoding.toLowerCase())
 }
 
 function isHtmlMime(mime: string): boolean {

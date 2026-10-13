@@ -1,0 +1,198 @@
+{
+  "scopes": [
+    {
+      "scope": "before",
+      "sources": [
+        {
+          "id": "prt_g0VXtsy4E008M77VF61z",
+          "messageID": "msg_g0VXtswsR00MYpoIW19S",
+          "type": "source-url",
+          "sourceId": "b717d8436de8696c441d981c01e46e79e2fe42c14567c40f557388b5e1a99ec1",
+          "url": "https://www.stats.gov.cn/sj/ndsj/2011/indexch.htm",
+          "title": "�й�ͳ�����-2011",
+          "provider": "opencorvus-webfetch"
+        },
+        {
+          "id": "prt_g0VXtt0BB00qX5aHj1dR",
+          "messageID": "msg_g0VXtsy6L00gnqvHsCje",
+          "type": "source-url",
+          "sourceId": "179c7bf88e3d3171c1f691fcc9b546aa8c2d8a9ec827ec24a5c6487d76cf2e04",
+          "url": "https://www.stats.gov.cn/sj/ndsj/2024/indexch.htm",
+          "title": "�й�ͳ�����2024",
+          "provider": "opencorvus-webfetch"
+        }
+      ],
+      "requests": 6,
+      "elapsedMs": 92251,
+      "settled": {
+        "occurrence": "source-charset-378-before-05aeaea6-feba-45df-a9e5-366d72343056",
+        "outcome": "settled",
+        "host": {
+          "pid": 27772,
+          "processInstanceID": "win32:639274622473604249",
+          "occurrenceID": "c7047aed-2909-4fa4-a615-a0fe80b55007"
+        },
+        "target": {
+          "pid": 39476,
+          "processInstanceID": "win32:639274622481973553",
+          "occurrenceID": "0b51fdfd-c758-4d89-9003-ce3f940b0b6d"
+        },
+        "observedAtUtc": "2026-10-13T04:25:40.448Z",
+        "deadlineAt": 1791866047345,
+        "terminal": {
+          "occurrenceID": "source-charset-378-before-05aeaea6-feba-45df-a9e5-366d72343056",
+          "pid": 39476,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "cancellation": null,
+        "providerEOFRequests": 6,
+        "qualification": "NativeService",
+        "providerUserCancelledRequests": 0,
+        "physicalCompletion": true,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned"
+      },
+      "completeOutputs": [
+        {
+          "requestPartID": "prt_g0VXtsxoB00H9d87yHLk",
+          "outcome": "completed",
+          "resultAttemptID": "per_hu7P2MDDGHfXBY0iHdga",
+          "outputChars": 840,
+          "output": "<html>\n\n<head>\n<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">\n<meta name=\"GENERATOR\" content=\"Microsoft FrontPage 6.0\">\n<meta name=\"ProgId\" content=\"FrontPage.Editor.Document\">\n<title>�й�ͳ�����-2011</title>\n<SCRIPT LANGUAGE=\"java script\">\n\nwindow.open ('aa.htm')\n\n</SCRIPT>\n\n</head>\n\n\n<frameset rows=\"61,*,19\" framespacing=\"0\" border=\"0\" frameborder=\"0\">\n  <frame name=\"top\" scrolling=\"no\" noresize target=\"contents\" src=\"top.htm\">\n  <frameset cols=\"240,*\">\n    <frame name=\"contents\" target=\"main\" src=\"left.htm\" scrolling=\"auto\">\n    <frame name=\"main\" src=\"notepyrightch.htm\" scrolling=\"auto\">\n  </frameset>\n  <frame name=\"bottom\" scrolling=\"no\" noresize target=\"contents\" src=\"bottom.htm\">\n  <noframes>\n  <body topmargin=\"2\">\n\n  <p>����ҳʹ���˿�ܣ��������������֧�ֿ�ܡ�</p>\n\n  </body>\n  </noframes>\n</frameset>\n\n</html>",
+          "metadata": {
+            "originalBytes": 913,
+            "shownBytes": 913,
+            "webfetchOutputClipped": false,
+            "webfetchEmbeddedAttachmentCount": 0,
+            "truncated": false
+          },
+          "time": {
+            "end": 1791865485646
+          }
+        },
+        {
+          "requestPartID": "prt_g0VXtszxV004klePaqW6",
+          "outcome": "completed",
+          "resultAttemptID": "per_hYUsQ5AR47dHKM8TEWc3",
+          "outputChars": 839,
+          "output": "<html>\n\n<head>\n<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">\n<meta name=\"GENERATOR\" content=\"Microsoft FrontPage 6.0\">\n<meta name=\"ProgId\" content=\"FrontPage.Editor.Document\">\n<title>�й�ͳ�����2024</title>\n<SCRIPT LANGUAGE=\"java script\">\n\nwindow.open ('aa.htm')\n\n</SCRIPT>\n\n</head>\n\n\n<frameset rows=\"61,*,19\" framespacing=\"0\" border=\"0\" frameborder=\"0\">\n  <frame name=\"top\" scrolling=\"no\" noresize target=\"contents\" src=\"top.htm\">\n  <frameset cols=\"240,*\">\n    <frame name=\"contents\" target=\"main\" src=\"left.htm\" scrolling=\"auto\">\n    <frame name=\"main\" src=\"notepyrightch.htm\" scrolling=\"auto\">\n  </frameset>\n  <frame name=\"bottom\" scrolling=\"no\" noresize target=\"contents\" src=\"bottom.htm\">\n  <noframes>\n  <body topmargin=\"2\">\n\n  <p>����ҳʹ���˿�ܣ��������������֧�ֿ�ܡ�</p>\n\n  </body>\n  </noframes>\n</frameset>\n\n</html>",
+          "metadata": {
+            "originalBytes": 912,
+            "shownBytes": 912,
+            "webfetchOutputClipped": false,
+            "webfetchEmbeddedAttachmentCount": 0,
+            "truncated": false
+          },
+          "time": {
+            "end": 1791865493769
+          }
+        }
+      ]
+    },
+    {
+      "scope": "after",
+      "sources": [
+        {
+          "id": "prt_g0VXtuQuE00otyOY7iLn",
+          "messageID": "msg_g0VXtuOzr00TsEikqk7X",
+          "type": "source-url",
+          "sourceId": "b717d8436de8696c441d981c01e46e79e2fe42c14567c40f557388b5e1a99ec1",
+          "url": "https://www.stats.gov.cn/sj/ndsj/2011/indexch.htm",
+          "title": "中国统计年鉴-2011",
+          "provider": "opencorvus-webfetch"
+        },
+        {
+          "id": "prt_g0VXtuRqM00QDHxeJ94r",
+          "messageID": "msg_g0VXtuQwP000IaE8r4S8",
+          "type": "source-url",
+          "sourceId": "179c7bf88e3d3171c1f691fcc9b546aa8c2d8a9ec827ec24a5c6487d76cf2e04",
+          "url": "https://www.stats.gov.cn/sj/ndsj/2024/indexch.htm",
+          "title": "中国统计年鉴2024",
+          "provider": "opencorvus-webfetch"
+        }
+      ],
+      "requests": 6,
+      "elapsedMs": 194736,
+      "settled": {
+        "occurrence": "source-charset-378-after-8a7017a4-e651-43c2-b8a4-44d6b71f2cfd",
+        "outcome": "settled",
+        "host": {
+          "pid": 76936,
+          "processInstanceID": "win32:639274625874452810",
+          "occurrenceID": "b2e70fcf-0661-4e89-bf2d-4a86daa6a35c"
+        },
+        "target": {
+          "pid": 76900,
+          "processInstanceID": "win32:639274625882157656",
+          "occurrenceID": "28e7c34c-fd65-43f8-b458-efccaa08d1b2"
+        },
+        "observedAtUtc": "2026-10-13T04:33:02.951Z",
+        "deadlineAt": 1791866387430,
+        "terminal": {
+          "occurrenceID": "source-charset-378-after-8a7017a4-e651-43c2-b8a4-44d6b71f2cfd",
+          "pid": 76900,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "physicalCompletion": true,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "providerEOFRequests": 6,
+        "providerUserCancelledRequests": 0,
+        "cancellation": null,
+        "qualification": "NativeService"
+      },
+      "completeOutputs": [
+        {
+          "requestPartID": "prt_g0VXtuPno004rKgbBpZy",
+          "outcome": "completed",
+          "resultAttemptID": "per_hdXBRoKUvHYg1jleGzFY",
+          "outputChars": 826,
+          "output": "<html>\n\n<head>\n<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">\n<meta name=\"GENERATOR\" content=\"Microsoft FrontPage 6.0\">\n<meta name=\"ProgId\" content=\"FrontPage.Editor.Document\">\n<title>中国统计年鉴-2011</title>\n<SCRIPT LANGUAGE=\"java script\">\n\nwindow.open ('aa.htm')\n\n</SCRIPT>\n\n</head>\n\n\n<frameset rows=\"61,*,19\" framespacing=\"0\" border=\"0\" frameborder=\"0\">\n  <frame name=\"top\" scrolling=\"no\" noresize target=\"contents\" src=\"top.htm\">\n  <frameset cols=\"240,*\">\n    <frame name=\"contents\" target=\"main\" src=\"left.htm\" scrolling=\"auto\">\n    <frame name=\"main\" src=\"notepyrightch.htm\" scrolling=\"auto\">\n  </frameset>\n  <frame name=\"bottom\" scrolling=\"no\" noresize target=\"contents\" src=\"bottom.htm\">\n  <noframes>\n  <body topmargin=\"2\">\n\n  <p>此网页使用了框架，但您的浏览器不支持框架。</p>\n\n  </body>\n  </noframes>\n</frameset>\n\n</html>",
+          "metadata": {
+            "originalBytes": 880,
+            "shownBytes": 880,
+            "webfetchOutputClipped": false,
+            "webfetchEmbeddedAttachmentCount": 0,
+            "truncated": false
+          },
+          "time": {
+            "end": 1791865834831
+          }
+        },
+        {
+          "requestPartID": "prt_g0VXtuRe200VbSgWMlU8",
+          "outcome": "completed",
+          "resultAttemptID": "per_hXHXN56GfPIHB1yx546O",
+          "outputChars": 825,
+          "output": "<html>\n\n<head>\n<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=gb2312\">\n<meta name=\"GENERATOR\" content=\"Microsoft FrontPage 6.0\">\n<meta name=\"ProgId\" content=\"FrontPage.Editor.Document\">\n<title>中国统计年鉴2024</title>\n<SCRIPT LANGUAGE=\"java script\">\n\nwindow.open ('aa.htm')\n\n</SCRIPT>\n\n</head>\n\n\n<frameset rows=\"61,*,19\" framespacing=\"0\" border=\"0\" frameborder=\"0\">\n  <frame name=\"top\" scrolling=\"no\" noresize target=\"contents\" src=\"top.htm\">\n  <frameset cols=\"240,*\">\n    <frame name=\"contents\" target=\"main\" src=\"left.htm\" scrolling=\"auto\">\n    <frame name=\"main\" src=\"notepyrightch.htm\" scrolling=\"auto\">\n  </frameset>\n  <frame name=\"bottom\" scrolling=\"no\" noresize target=\"contents\" src=\"bottom.htm\">\n  <noframes>\n  <body topmargin=\"2\">\n\n  <p>此网页使用了框架，但您的浏览器不支持框架。</p>\n\n  </body>\n  </noframes>\n</frameset>\n\n</html>",
+          "metadata": {
+            "originalBytes": 879,
+            "shownBytes": 879,
+            "webfetchOutputClipped": false,
+            "webfetchEmbeddedAttachmentCount": 0,
+            "truncated": false
+          },
+          "time": {
+            "end": 1791865838437
+          }
+        }
+      ]
+    }
+  ],
+  "bundledEncoding": "GBK",
+  "boundary": "Canonical Source titles, exact real ToolRequest/ToolOutcome, complete public response decoded independently with existing output whitespace contract, and Provider/Native closure. Screenshots and navigation reviewed manually; no UI assertions. Library bundle check is not a packaged-product build."
+}

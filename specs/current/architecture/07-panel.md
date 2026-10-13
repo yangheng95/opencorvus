@@ -760,6 +760,14 @@ times or change the stored citation payload.
 Known built-in read, local search and webfetch provenance uses localized resource-acquisition
 labels; the original provider identifier remains in the metadata title and stored
 payload. Other source-provider names retain their authored value.
+Webfetch decodes the bounded response bytes once before title extraction and
+text/Markdown/HTML conversion. Parsed HTTP charset and the document's HTML/XML
+encoding declarations use the standard sniffing library; byte-order marks take
+precedence. Other media types use BOM and transport declarations without treating
+literal HTML metadata as encoding instructions. Undeclared text retains the
+product's UTF-8 default. The same decoded document supplies both Source metadata
+and Tool output; persisted historical Messages are not rewritten.
+
 Webfetch publishes the document's own title from HTML/XHTML metadata or default
 YAML frontmatter in native Markdown responses, using the shared frontmatter
 parser. Remote script-language metadata is literal resource content. Optional

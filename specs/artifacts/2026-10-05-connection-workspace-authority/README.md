@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [378 网页来源字符编码](source-charset-plan-378.md)：[真实官网来源与完整运行证据](source-charset-378/README.md)。
+
 - [377 语言资源与启动失败](locale-bootstrap-plan-377.md)：[真实页面与运行证据](locale-bootstrap-377/README.md)。
 
 - [376 前端资源快照](ui-resource-snapshot-plan-376.md)：旧页面资源生命周期修复与[真实重建证据](ui-resource-snapshot-376/README.md)。

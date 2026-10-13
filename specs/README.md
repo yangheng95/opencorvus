@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [378 网页来源字符编码](records/2026-10/2026-10-13-source-charset-378.md)：修复真实中文网页的来源标题和正文乱码。
+
 - [377 语言资源与启动失败](records/2026-10/2026-10-13-locale-bootstrap-377.md)：嵌套页面资源定位与真实失败诊断。
 
 - [376 前端资源快照](records/2026-10/2026-10-13-ui-resource-snapshot-376.md)：重建后保留运行中页面资源，真实私有构建替换与保存验收。
