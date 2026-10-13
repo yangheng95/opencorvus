@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [387 尺寸通知与页面布局](artifacts/2026-10-05-connection-workspace-authority/resize-delivery-plan-387.md)：真实回调归因、共享尺寸实现与实页修复。
+
 - [Explorer操作结果与刷新回执](records/2026-10/2026-10-13-file-operation-outcomes.md)：成员与刷新错误、真实完成事实和并发读取资格。
 
 - [390 MCP 文件与资源引用](records/2026-10/2026-10-13-mcp-content-boundaries-390.md)：合法空文件、音频附件与资源链接的真实结果和下载验收。

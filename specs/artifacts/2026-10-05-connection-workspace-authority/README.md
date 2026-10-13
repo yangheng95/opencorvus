@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [387 尺寸通知与布局调查](resize-delivery-plan-387.md)：[真实页面与诊断证据](resize-delivery-387/README.md)。
+
 - [386 Sources多文件刷新](source-reopen-plan-386.md)：[真实模型与实页证据](source-reopen-386/README.md)。
 
 - [385 权限续行消息结算](permission-message-settlement-plan-385.md)：[72项后台合同与真实进程证据](permission-message-settlement-385/README.md)。

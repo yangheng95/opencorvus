@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [387 尺寸通知与页面布局](2026-10-05-connection-workspace-authority/resize-delivery-387/README.md)：实际尺寸回调、真实页面与原运行边界。
+
 - [Explorer操作结果与刷新回执](2026-10-13-file-operation-outcomes/README.md)：真实多失败、桌面复核及聚焦正向证据。
 
 - [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389/README.md)：菜单、颜色对话框、缩放、提示、真实CSV和三轮独立服务收尾。

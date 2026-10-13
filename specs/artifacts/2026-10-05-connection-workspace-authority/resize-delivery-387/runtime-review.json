@@ -1,0 +1,70 @@
+{
+  "backendCanonicalSources": "passed",
+  "actualAgent": "work",
+  "toolCalls": 3,
+  "sourceBindings": [
+    {
+      "id": "prt_g0VXvbSWh00nv7RmAgVr",
+      "messageID": "msg_g0VXvbRGA00TAa0LU799",
+      "toolPartID": "prt_g0VXvbSN200F7eWhOH4R",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\resize-delivery-387-before\\project\\来源材料\\方案甲.txt",
+      "range": {
+        "startLine": 2,
+        "endLine": 3
+      }
+    },
+    {
+      "id": "prt_g0VXvbUn200l4Ri47Sdk",
+      "messageID": "msg_g0VXvbSYs00asV70s8EH",
+      "toolPartID": "prt_g0VXvbULU00gdnUbqdED",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\resize-delivery-387-before\\project\\来源材料\\方案乙.txt",
+      "range": {
+        "startLine": 2,
+        "endLine": 3
+      }
+    },
+    {
+      "id": "prt_g0VXvbWsl00bZ03McXYD",
+      "messageID": "msg_g0VXvbUqJ00dIpGSpJRh",
+      "toolPartID": "prt_g0VXvbWQ0007gs77fQEE",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\resize-delivery-387-before\\project\\来源材料\\来源显示与刷新后定位验证——较长的中文补充说明文件.txt",
+      "range": {
+        "startLine": 2,
+        "endLine": 3
+      }
+    }
+  ],
+  "provider": {
+    "model": "gpt-6.1-sol",
+    "requests": 7,
+    "stream": true,
+    "allHTTP200andEOF": true,
+    "budget": 20
+  },
+  "native": {
+    "terminal": {
+      "occurrenceID": "resize-delivery-387-before-9fd3b8e0-2651-4e66-ba04-8077b5890fbc",
+      "pid": 76316,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "pairedCleanupComplete": true,
+    "durationMilliseconds": 395715
+  },
+  "launcherExit": 0,
+  "qualified": {
+    "qualification": "NativeService",
+    "physicalCompletion": true,
+    "providerEOFRequests": 7,
+    "cancellation": null,
+    "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+    "providerUserCancelledRequests": 0
+  },
+  "visualBoundary": "Real page screenshots manually reviewed; this checker does not assert UI, callback diagnostics or original subagent flicker",
+  "remaining": [
+    "Original subagent Rendering placeholder flicker was not reproduced or resolved in this run.",
+    "386 first memory fetch failure remains its original failed scope."
+  ]
+}

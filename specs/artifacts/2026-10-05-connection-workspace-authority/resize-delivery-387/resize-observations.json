@@ -1,0 +1,1131 @@
+{
+  "boundary": "Descriptive analysis of passive logs from manually operated real page; no UI assertions, pass score or automated driver",
+  "logEntries": 28,
+  "callbackOrigins": {
+    "1": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at RightDock (http://localhost:18407/ui/assets/main-B704oHnd.js:59868:16)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:958:24\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at createComponent (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:958:10)\n    at get rightDock (http://localhost:18407/ui/assets/main-B704oHnd.js:101366:14)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:67183:32\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:1534:58)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)",
+      "callback": "() => scheduleReflow()",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "oc-tabs right-dock-tab-strip",
+          "width": 0,
+          "height": 32,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "2": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at setupAutoScroll (http://localhost:18407/ui/assets/main-B704oHnd.js:68304:33)\n    at createReaderController (http://localhost:18407/ui/assets/main-B704oHnd.js:77182:24)\n    at bindReader (http://localhost:18407/ui/assets/main-B704oHnd.js:77210:5)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:77436:5\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)",
+      "callback": "() => scheduleFollowScroll()",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "quotation-scope",
+          "width": 0,
+          "height": 0,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "3": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:77439:30\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)\n    at runUserEffects (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:687:36)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:662:34\n    at runUpdates (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:645:17)",
+      "callback": "() => {\n    if (frame) return;\n    frame = requestAnimationFrame(() => {\n      frame = 0;\n      run();\n    });\n  }",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "solidChatComposer",
+          "class": "",
+          "width": 760,
+          "height": 123.33333587646484,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "4": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:77054:16\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)\n    at runUserEffects (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:687:36)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:662:34\n    at runUpdates (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:645:17)",
+      "callback": "() => {\n    if (frame) return;\n    frame = requestAnimationFrame(() => {\n      frame = 0;\n      run();\n    });\n  }",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "chatScroll",
+          "class": "chat-scroll session-content",
+          "width": 942.3333740234375,
+          "height": 683.3333740234375,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "5": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:82152:22\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)\n    at runUserEffects (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:687:36)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:662:34\n    at runUpdates (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:645:17)",
+      "callback": "() => {\n    if (!toolbarRef) return;\n    const width = toolbarRef.getBoundingClientRect().width / currentUIScale();\n    const next = width < 400 ? \"overflow\" : width < 680 ? \"icons\" : \"full\";\n    const relocated = next === \"overflow\" !== (toolbarLayout() === \"overflow\");\n    const restoreFocus = relocated && (toolbarRef.contains(document.activeElement) || overflowContent?.contains(document.activeElement));\n    setToolbarLayout(next);\n    if (next !== \"overflow\") setOverflowOpen(false);\n    if (restoreFocus) queueMicrotask(() => {\n      const target = next === \"overflow\" ? overflowTrigger : toolbarRef.querySelector(\".composer-toolbar-options button\");\n      if (target?.isConnected) target.focus();\n    });\n  }",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "chat-compose-meta",
+          "width": 718.6666870117188,
+          "height": 32,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "6": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:50749:16\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)\n    at runUserEffects (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:687:36)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:662:34\n    at runUpdates (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:645:17)",
+      "callback": "([entry]) => {\n      const nextWidth = entry.contentRect.width;\n      if (nextWidth === width) return;\n      width = nextWidth;\n      resize();\n    }",
+      "firstTargets": [
+        {
+          "node": "TEXTAREA",
+          "id": "chatTextarea",
+          "class": "oc-text-field__textarea chat-textarea",
+          "width": 718.6666870117188,
+          "height": 56,
+          "styleHeight": "56px",
+          "connected": true
+        }
+      ]
+    },
+    "7": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:101740:20",
+      "callback": "() => renderRightDockHandleSemanticsOnFrame.schedule()",
+      "firstTargets": [
+        {
+          "node": "ASIDE",
+          "id": "rightDock",
+          "class": "right-dock",
+          "width": 0,
+          "height": 683.3333740234375,
+          "styleHeight": "",
+          "connected": true
+        },
+        {
+          "node": "DIV",
+          "id": "workspaceMain",
+          "class": "workspace-main",
+          "width": 943,
+          "height": 684,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "9": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at setupAutoScroll (http://localhost:18407/ui/assets/main-B704oHnd.js:68304:33)\n    at createReaderController (http://localhost:18407/ui/assets/main-B704oHnd.js:77182:24)\n    at bindReader (http://localhost:18407/ui/assets/main-B704oHnd.js:77210:5)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:436:34\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:436:20)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)",
+      "callback": "() => scheduleFollowScroll()",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "quotation-scope",
+          "width": 0,
+          "height": 0,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "10": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at setupAutoScroll (http://localhost:18407/ui/assets/main-B704oHnd.js:68304:33)\n    at createReaderController (http://localhost:18407/ui/assets/main-B704oHnd.js:77182:24)\n    at bindReader (http://localhost:18407/ui/assets/main-B704oHnd.js:77210:5)\n    at Conversation.on.defer (http://localhost:18407/ui/assets/main-B704oHnd.js:77561:5)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:436:34\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:436:20)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)",
+      "callback": "() => scheduleFollowScroll()",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "quotation-scope",
+          "width": 0,
+          "height": 0,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "11": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at Object._observe (http://localhost:18407/ui/assets/main-B704oHnd.js:67956:13)\n    at Object.$observeRoot (http://localhost:18407/ui/assets/main-B704oHnd.js:67992:22)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:68110:13\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)\n    at runUserEffects (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:687:36)",
+      "callback": "(entries) => {\n    const resizes = [];\n    for (const {\n      target,\n      contentRect\n    } of entries) {\n      if (!target.offsetParent) continue;\n      if (target === viewportElement) {\n        store.$update(ACTION_VIEWPORT_RESIZE, contentRect[sizeKey]);\n      } else {\n        const index = mountedIndexes.get(target);\n        if (index != NULL) {\n          resizes.push([index, contentRect[sizeKey]]);\n        }\n      }\n    }\n    if (resizes.length) {\n      store.$update(ACTION_ITEM_RESIZE, resizes);\n    }\n  }",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "chatScroll",
+          "class": "chat-scroll session-content",
+          "width": 942.3333740234375,
+          "height": 635.3333740234375,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "12": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at setupAutoScroll (http://localhost:18407/ui/assets/main-B704oHnd.js:68304:33)\n    at createReaderController (http://localhost:18407/ui/assets/main-B704oHnd.js:77182:24)\n    at resumeReading (http://localhost:18407/ui/assets/main-B704oHnd.js:77253:9)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:77275:10\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:13303:7",
+      "callback": "() => scheduleFollowScroll()",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "quotation-scope",
+          "width": 0,
+          "height": 0,
+          "styleHeight": "",
+          "connected": true
+        },
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "conversation-scroll-shell",
+          "width": 723.28125,
+          "height": 635.3333740234375,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "14": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at new DOMObserver (http://localhost:18407/ui/assets/CodeEditor-DaVIoHz1.js:11513:33)\n    at new EditorView (http://localhost:18407/ui/assets/CodeEditor-DaVIoHz1.js:12266:25)\n    at http://localhost:18407/ui/assets/CodeEditor-DaVIoHz1.js:28369:12\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)\n    at runUserEffects (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:687:36)",
+      "callback": "() => {\n                var _a;\n                if (((_a = this.view.docView) === null || _a === void 0 ? void 0 : _a.lastUpdate) < Date.now() - 75)\n                    this.onResize();\n            }",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "cm-scroller",
+          "width": 380,
+          "height": 572.6666870117188,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "15": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at http://localhost:18407/ui/assets/CodeEditor-DaVIoHz1.js:28378:22\n    at untrack (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:417:12)\n    at Object.fn (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:442:22)\n    at runComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:575:22)\n    at updateComputation (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:567:3)\n    at runTop (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:629:7)\n    at runUserEffects (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:687:36)\n    at http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:662:34\n    at runUpdates (http://localhost:18407/ui/assets/CommandMenuSurface-CfXGfZyb.js:645:17)",
+      "callback": "() => {\n    if (frame) return;\n    frame = requestAnimationFrame(() => {\n      frame = 0;\n      run();\n    });\n  }",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "file-editor-view",
+          "width": 380,
+          "height": 572.6666870117188,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    },
+    "16": {
+      "creation": "Error: Observer creation\n    at new ObservedNativeResizeObserver (http://localhost:18407/ui/:19:24)\n    at setupAutoScroll (http://localhost:18407/ui/assets/main-B704oHnd.js:68304:33)\n    at createReaderController (http://localhost:18407/ui/assets/main-B704oHnd.js:77182:24)\n    at resumeReading (http://localhost:18407/ui/assets/main-B704oHnd.js:77253:9)\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:77275:10\n    at http://localhost:18407/ui/assets/main-B704oHnd.js:13303:7",
+      "callback": "() => scheduleFollowScroll()",
+      "firstTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "quotation-scope",
+          "width": 0,
+          "height": 0,
+          "styleHeight": "",
+          "connected": true
+        },
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "conversation-scroll-shell",
+          "width": 550.3229370117188,
+          "height": 635.3333740234375,
+          "styleHeight": "",
+          "connected": true
+        }
+      ]
+    }
+  },
+  "deliveryEvents": [
+    {
+      "at": 18127.300000190735,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 18125,
+      "millisecondsAfterCallback": 0.5,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 124.66667175292969,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 4,
+          "at": 18112.10000038147,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 320
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "conversation-virtual-window",
+                "width": 759.6666870117188,
+                "height": 320,
+                "styleHeight": "320px",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "conversation-virtual-window",
+              "width": 759.6666870117188,
+              "height": 320,
+              "styleHeight": "320px",
+              "connected": true
+            }
+          ]
+        },
+        {
+          "observer": 11,
+          "at": 18112.10000038147,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 448
+              },
+              "box": {
+                "node": "DIV",
+                "id": "chatScroll",
+                "class": "chat-scroll session-content",
+                "width": 942.3333740234375,
+                "height": 635.3333740234375,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "chatScroll",
+              "class": "chat-scroll session-content",
+              "width": 942.3333740234375,
+              "height": 635.3333740234375,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        },
+        {
+          "observer": 11,
+          "at": 18125,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 124.65625
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 124.66667175292969,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 124.66667175292969,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 18166.300000190735,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 18165.200000286102,
+      "millisecondsAfterCallback": 0.3000001907348633,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 189.1979217529297,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 18165.200000286102,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 189.1875
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 189.1979217529297,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 189.1979217529297,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 18480.60000038147,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 18478.700000286102,
+      "millisecondsAfterCallback": 0.6000003814697266,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 68,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 4,
+          "at": 18478.60000038147,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 509.1875
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "conversation-virtual-window",
+                "width": 759.6666870117188,
+                "height": 509.1875,
+                "styleHeight": "509.188px",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "conversation-virtual-window",
+              "width": 759.6666870117188,
+              "height": 509.1875,
+              "styleHeight": "509.188px",
+              "connected": true
+            }
+          ]
+        },
+        {
+          "observer": 11,
+          "at": 18478.700000286102,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 68
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 68,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 68,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 22412.900000095367,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 22411.700000286102,
+      "millisecondsAfterCallback": 0.40000009536743164,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 76,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 22411.700000286102,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 76
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 76,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 76,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 23111.700000286102,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 23110.5,
+      "millisecondsAfterCallback": 0.40000009536743164,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 126.39583587646484,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 23110.5,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 126.390625
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 126.39583587646484,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 126.39583587646484,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 30002.900000095367,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 30001.60000038147,
+      "millisecondsAfterCallback": 0.5,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 150.39584350585938,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 30001.60000038147,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 150.390625
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 150.39584350585938,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 150.39584350585938,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 31850.800000190735,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 31849.5,
+      "millisecondsAfterCallback": 0.40000009536743164,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 212.7916717529297,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 31849.5,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 212.78125
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 212.7916717529297,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 212.7916717529297,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 37967.300000190735,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 37965.800000190735,
+      "millisecondsAfterCallback": 0.5,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 236.7916717529297,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 37965.800000190735,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 236.78125
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 236.7916717529297,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 236.7916717529297,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 39887.7000002861,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 39885.90000009537,
+      "millisecondsAfterCallback": 0.7000002861022949,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 759.6666870117188,
+          "height": 299.1875,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 39885.90000009537,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 759.65625,
+                "height": 299.1875
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 759.6666870117188,
+                "height": 299.1875,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 759.6666870117188,
+              "height": 299.1875,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 47401.2000002861,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 47399.7000002861,
+      "millisecondsAfterCallback": 0.5,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 502,
+          "height": 329.1875,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 47399.7000002861,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 502,
+                "height": 329.1875
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 502,
+                "height": 329.1875,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 502,
+              "height": 329.1875,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 47417.7000002861,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 47416.40000009537,
+      "millisecondsAfterCallback": 0.40000009536743164,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 502,
+          "height": 340.69793701171875,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 47399.7000002861,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 502,
+                "height": 329.1875
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 502,
+                "height": 329.1875,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 502,
+              "height": 329.1875,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        },
+        {
+          "observer": 4,
+          "at": 47416.40000009537,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 502,
+                "height": 565.40625
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "conversation-virtual-window",
+                "width": 502,
+                "height": 565.40625,
+                "styleHeight": "565.406px",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "conversation-virtual-window",
+              "width": 502,
+              "height": 565.40625,
+              "styleHeight": "565.406px",
+              "connected": true
+            }
+          ]
+        },
+        {
+          "observer": 11,
+          "at": 47416.40000009537,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 502,
+                "height": 340.6875
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 502,
+                "height": 340.69793701171875,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 502,
+              "height": 340.69793701171875,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 48285.800000190735,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 48284.5,
+      "millisecondsAfterCallback": 0.40000009536743164,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 502,
+          "height": 364.2083435058594,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 48284.5,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 502,
+                "height": 364.203125
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 502,
+                "height": 364.2083435058594,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 502,
+              "height": 364.2083435058594,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "at": 49003.800000190735,
+      "message": "ResizeObserver loop completed with undelivered notifications.",
+      "lastCallback": 11,
+      "lastCallbackAt": 49002.5,
+      "millisecondsAfterCallback": 0.5,
+      "observedTargets": [
+        {
+          "node": "DIV",
+          "id": "",
+          "class": "",
+          "width": 502,
+          "height": 385.54168701171875,
+          "styleHeight": "",
+          "connected": true
+        }
+      ],
+      "recentCallbacks": [
+        {
+          "observer": 11,
+          "at": 49002.5,
+          "changed": false,
+          "before": [
+            {
+              "delivered": {
+                "width": 502,
+                "height": 385.53125
+              },
+              "box": {
+                "node": "DIV",
+                "id": "",
+                "class": "",
+                "width": 502,
+                "height": 385.54168701171875,
+                "styleHeight": "",
+                "connected": true
+              }
+            }
+          ],
+          "after": [
+            {
+              "node": "DIV",
+              "id": "",
+              "class": "",
+              "width": 502,
+              "height": 385.54168701171875,
+              "styleHeight": "",
+              "connected": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lastCallbackFrequencies": {
+    "11": 13
+  },
+  "callbacksWithSynchronousObservedBoxChange": [],
+  "phaseObservations": [
+    {
+      "phase": "start",
+      "entries": 9,
+      "deliveryEvents": 0
+    },
+    {
+      "phase": "file",
+      "entries": 27,
+      "deliveryEvents": 13
+    },
+    {
+      "phase": "resize",
+      "entries": 28,
+      "deliveryEvents": 13
+    },
+    {
+      "phase": "final",
+      "entries": 28,
+      "deliveryEvents": 13
+    }
+  ],
+  "inference": "Every observed delivery error follows the current Virtua resizer callback. Its synchronous store update publishes virtual list sizes. This agrees with the installed library code and upstream documented behavior; the trace does not demonstrate the original Rendering placeholder flicker.",
+  "limitations": [
+    "Recording layout boxes adds measurement overhead.",
+    "Observed box equality cannot rule out every descendant mutation or future callback path.",
+    "No production implementation change was justified by these notifications alone."
+  ]
+}

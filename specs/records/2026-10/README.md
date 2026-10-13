@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [387 尺寸通知真实归因](2026-10-13-resize-delivery-387.md)：Virtua同步测量的实际回调证据与未复现的原Rendering闪烁边界。
+
 - [Explorer操作结果与刷新回执](2026-10-13-file-operation-outcomes.md)：双失败、部分完成与当前读owner合同。
 
 - [390 MCP 文件与资源引用](2026-10-13-mcp-content-boundaries-390.md)：共享物化补齐、35项正向测试及真实Sol结果交付。
