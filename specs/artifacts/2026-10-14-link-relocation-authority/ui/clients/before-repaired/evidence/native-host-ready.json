@@ -1,0 +1,32 @@
+{
+  "occurrence": "directory-target-dot-copy-ui-before-repaired-node-265f4c30-c0c8-45bf-a953-f40cbade307f",
+  "outcome": "ready",
+  "host": {
+    "pid": 90136,
+    "processInstanceID": "win32:639275273750807646",
+    "occurrenceID": "7acba957-d1a3-48cd-8f0f-f0f47334cf2b"
+  },
+  "parent": {
+    "pid": 79572,
+    "processInstanceID": "win32:639275273750228209",
+    "occurrenceID": "068c74bb-2a3f-4049-9d73-0213e4d586b6"
+  },
+  "target": {
+    "pid": 74260,
+    "processInstanceID": "win32:639275273767185412",
+    "occurrenceID": "fd49ab50-3332-452b-8ef5-e862b7610375"
+  },
+  "targetBirthAtMs": 1791930576718,
+  "deadlineAt": 1791930695073,
+  "inactivityTimeoutMs": 30000,
+  "printLogs": false,
+  "hostExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "hostBunVersion": "1.4.0",
+  "observedAtUtc": "2026-10-13T22:29:36.755Z",
+  "executable": "C:/Program Files/nodejs/node.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-kind-after-tools\\verify-state.mjs",
+    "before-repaired"
+  ],
+  "authority": "Original production foreground run/onSpawned handle; run alone consumes child streams; no detached transfer"
+}

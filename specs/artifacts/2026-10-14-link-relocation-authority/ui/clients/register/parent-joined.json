@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-copy-ui-register-node-658a4f2a-36a9-4da3-8248-c69a763509b6",
+  "hostPID": 89268,
+  "parentPID": 68532,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 15009
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T22:27:27.142Z"
+}

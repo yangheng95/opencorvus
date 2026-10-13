@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-relocation-prepare-node-adbd314b-74a4-4c94-b577-d7a854429c3f",
+  "hostPID": 84440,
+  "parentPID": 87304,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 262865
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T21:48:24.651Z"
+}

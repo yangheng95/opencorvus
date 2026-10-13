@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-copy-ui-before-repaired-node-265f4c30-c0c8-45bf-a953-f40cbade307f",
+  "hostPID": 90136,
+  "parentPID": 79572,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 14630
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T22:29:38.000Z"
+}

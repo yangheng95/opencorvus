@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
+
 - [持续目标 UI/UX](2026-10-14-continuous-goal-ui-ux.md)：目标控制、状态反馈、双语与真实页面复核。
 
 - [长历史分叉耗时](2026-10-14-fork-latency.md)：实际卡顿、共享调用栈与完整数据合同。

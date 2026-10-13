@@ -1,0 +1,94 @@
+{
+  "occurrence": "directory-target-dot-relocation-read-node-2198faea-846a-4647-b6b7-7058d6fa5c00",
+  "host": {
+    "pid": 82732,
+    "processInstanceID": "win32:639275249619148179",
+    "occurrenceID": "c6d9c92a-98cd-4709-9607-6c4f104d8044"
+  },
+  "parent": {
+    "pid": 84584,
+    "processInstanceID": "win32:639275249618549317",
+    "occurrenceID": "5abd2752-6aff-4430-9cbe-63f5de37945f"
+  },
+  "target": {
+    "pid": 87220,
+    "processInstanceID": "win32:639275249634794788",
+    "occurrenceID": "812cbf3e-6e58-4223-974f-a8b1c603eaf4"
+  },
+  "targetBirthAtMs": 1791928163479,
+  "observedAtUtc": "2026-10-13T21:49:23.902Z",
+  "deadlineAt": 1791928221909,
+  "inactivityTimeoutMs": 15000,
+  "printLogs": false,
+  "terminal": {
+    "occurrenceID": "directory-target-dot-relocation-read-node-2198faea-846a-4647-b6b7-7058d6fa5c00",
+    "pid": 87220,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "runOutcome": "returned",
+  "originalJoins": [
+    {
+      "kind": "terminal",
+      "status": "fulfilled",
+      "value": {
+        "occurrenceID": "directory-target-dot-relocation-read-node-2198faea-846a-4647-b6b7-7058d6fa5c00",
+        "pid": 87220,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "settled",
+      "status": "fulfilled",
+      "value": {
+        "occurrenceID": "directory-target-dot-relocation-read-node-2198faea-846a-4647-b6b7-7058d6fa5c00",
+        "pid": 87220,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "kind": "outputSettled",
+      "status": "fulfilled"
+    }
+  ],
+  "bytes": {
+    "origin": "ProcessRunResult",
+    "complete": true,
+    "stdout": 1448353,
+    "stderr": 0
+  },
+  "outputFacts": [
+    {
+      "kind": "stdout-file",
+      "status": "fulfilled"
+    },
+    {
+      "kind": "stderr-file",
+      "status": "fulfilled"
+    },
+    {
+      "kind": "stdout-parent-forward",
+      "status": "fulfilled"
+    },
+    {
+      "kind": "stderr-parent-forward",
+      "status": "fulfilled"
+    }
+  ],
+  "laterFailures": {
+    "identity": 1,
+    "type": "Array",
+    "values": []
+  },
+  "phase": "whole-job-output-request-settlement",
+  "outcome": "settled",
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Original fulfilled run handle terminal/settled/outputSettled and full original byte persistence/parent writes; controlled terminal reason retained"
+}

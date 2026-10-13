@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority/README.md)：原交付回执、有限宿主资格与Root独立功能/桌面证据。
+
 - [持续目标 UI/UX 证据](2026-10-14-continuous-goal-ui-ux/README.md)：隔离实页、操作截图和真实目标投影。
 
 - [长历史分叉耗时](2026-10-14-fork-latency/README.md)：原始请求、CPU采样与真实复制/视觉证据。

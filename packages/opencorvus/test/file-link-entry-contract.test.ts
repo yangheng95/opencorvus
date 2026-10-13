@@ -8,6 +8,7 @@ import { Instance } from "../src/project/instance"
 import { FileRoutes } from "../src/server/routes/file"
 import { serverErrorResponse } from "../src/server/error-handler"
 import { hostGit } from "../src/util/git"
+import { readFileEntry } from "../src/util/file-entry"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(resetMemoryDatabase)
@@ -425,6 +426,79 @@ function dependentDestination(result: { status: number; body: any }, target: str
     },
   })
 }
+
+test.each(
+  process.platform === "win32"
+    ? ([
+        { kind: "junction", broken: false },
+        { kind: "junction", broken: true },
+        { kind: "dir", broken: false },
+        { kind: "dir", broken: true },
+      ] as const)
+    : [],
+)("Windows Copy retains $kind creation type with broken=$broken", async ({ kind, broken }) => {
+  await using fixture = await project(`link-copy-creation-${kind}-${broken}`)
+  const target = path.join(fixture.path, "target")
+  if (!broken) {
+    await fs.mkdir(target)
+    await fs.writeFile(path.join(target, "marker.md"), marker)
+  }
+  await link(kind === "junction" ? target : "target", path.join(fixture.path, "source"), kind)
+  const original = await linkIdentity(path.join(fixture.path, "source"))
+  await using http = await api(fixture.path)
+  published(
+    await http.mutate("copy", "source", "copied"),
+    "copy",
+    "source",
+    "copied",
+    node(fixture.path, path.join(fixture.path, "copied")),
+  )
+  expect((await readFileEntry(path.join(fixture.path, "copied"))).link).toBe(kind)
+  expect(await fs.readlink(path.join(fixture.path, "copied"))).toBe(original.text)
+  expect(await linkIdentity(path.join(fixture.path, "source"))).toEqual(original)
+  if (broken) {
+    missing(await http.content("copied/marker.md"), "copied/marker.md")
+    await fs.mkdir(target)
+    await fs.writeFile(path.join(target, "marker.md"), marker)
+  }
+  await textContent(http, "copied/marker.md")
+  await exactBytes(path.join(target, "marker.md"))
+}, 60_000)
+
+test.skipIf(process.platform !== "win32")(
+  "Copy retains an internal junction's relative context at the same tree depth",
+  async () => {
+    await using fixture = await project("link-copy-internal-junction-context")
+    await using external = await project("link-copy-internal-junction-external")
+    expect(path.dirname(fixture.path)).toBe(path.dirname(external.path))
+    const externalName = path.basename(external.path)
+    for (const relative of ["deep/tree", "data/nested", externalName])
+      await fs.mkdir(path.join(fixture.path, relative), { recursive: true })
+    await fs.writeFile(path.join(fixture.path, externalName, "marker.md"), marker)
+    await fs.writeFile(path.join(external.path, "marker.md"), replacement)
+    await link(`../../../${externalName}`, path.join(fixture.path, "data/nested/r"), "dir")
+    await link(path.join(fixture.path, "data/nested"), path.join(fixture.path, "deep/tree/p"), "junction")
+    await link("p", path.join(fixture.path, "deep/tree/q"), "dir")
+    await link("q/r", path.join(fixture.path, "deep/tree/u"), "dir")
+    const original = await linkIdentity(path.join(fixture.path, "deep/tree/p"))
+    await using http = await api(fixture.path)
+    await textContent(http, "deep/tree/u/marker.md")
+    published(
+      await http.mutate("copy", "deep/tree", "deep/copied"),
+      "copy",
+      "deep/tree",
+      "deep/copied",
+      node(fixture.path, path.join(fixture.path, "deep/copied"), false, "directory"),
+    )
+    await textContent(http, "deep/copied/u/marker.md")
+    expect((await readFileEntry(path.join(fixture.path, "deep/copied/p"))).link).toBe("junction")
+    expect(await fs.readlink(path.join(fixture.path, "deep/copied/p"))).toBe(original.text)
+    expect(await linkIdentity(path.join(fixture.path, "deep/tree/p"))).toEqual(original)
+    await exactBytes(path.join(fixture.path, externalName, "marker.md"))
+    await exactBytes(path.join(external.path, "marker.md"), replacement)
+  },
+  90_000,
+)
 
 test.each(["junction", "dir", "indirect", ...(process.platform === "win32" ? ["uppercase"] : [])] as const)(
   "%s destination dependency returns 400 and the retained source can move through an independent alias",

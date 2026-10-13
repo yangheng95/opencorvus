@@ -7,7 +7,7 @@ import fs from "fs"
 import ignore from "ignore"
 import { Log } from "../util/log"
 import { Filesystem } from "../util/filesystem"
-import { readFileEntry, sameFileEntry } from "../util/file-entry"
+import { readFileEntry, sameFileEntry, type FileEntry } from "../util/file-entry"
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
 import { Project } from "../project/project"
@@ -1333,7 +1333,10 @@ export namespace File {
   }
 
   async function validateCopiedTree(source: string, target: string): Promise<void> {
-    const [sourceStat, targetStat] = await Promise.all([fs.promises.lstat(source), fs.promises.lstat(target)])
+    const [sourceStat, targetStat] = await Promise.all([
+      fs.promises.lstat(source, { bigint: true }),
+      fs.promises.lstat(target, { bigint: true }),
+    ])
     if (
       sourceStat.isDirectory() !== targetStat.isDirectory() ||
       sourceStat.isFile() !== targetStat.isFile() ||
@@ -1342,6 +1345,12 @@ export namespace File {
       throw new Error(`File.copy publication type mismatch: ${source} -> ${target}`)
     }
     if (sourceStat.isSymbolicLink()) {
+      const [sourceEntry, targetEntry] = await Promise.all([
+        readFileEntry(source, sourceStat),
+        readFileEntry(target, targetStat),
+      ])
+      if (sourceEntry.link !== targetEntry.link)
+        throw new Error(`File.copy symlink creation type mismatch: ${source} -> ${target}`)
       const [sourceLink, targetLink] = await Promise.all([fs.promises.readlink(source), fs.promises.readlink(target)])
       if (sourceLink !== targetLink) throw new Error(`File.copy symlink mismatch: ${source} -> ${target}`)
       return
@@ -1529,6 +1538,7 @@ export namespace File {
     })
 
     const stagingPath = path.join(path.dirname(targetFull), `.opencorvus-copy-${randomUUID()}.staging`)
+    const symlinks = new Map<string, { text: string; kind: NonNullable<FileEntry["link"]> }>()
     let published = false
     try {
       await fs.promises.cp(sourceFull, stagingPath, {
@@ -1537,7 +1547,19 @@ export namespace File {
         force: false,
         dereference: false,
         verbatimSymlinks: true,
+        async filter(from, to) {
+          const stat = await fs.promises.lstat(from, { bigint: true })
+          if (!stat.isSymbolicLink()) return true
+          const entry = await readFileEntry(from, stat)
+          if (!entry.link) throw new Error(`File.copy symlink creation type changed: ${from}`)
+          const text = await fs.promises.readlink(from)
+          symlinks.set(to, { text, kind: entry.link })
+          return false
+        },
       })
+      for (const [destination, link] of symlinks) {
+        await fs.promises.symlink(link.text, destination, link.kind)
+      }
       await validateCopiedTree(sourceFull, stagingPath)
       await Filesystem.renameNoReplace(stagingPath, targetFull)
       published = true

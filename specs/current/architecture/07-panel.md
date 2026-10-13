@@ -522,6 +522,13 @@ Move/copy validate each link's declared source and relocated destination targets
 through the current project path authority; an in-scope missing target remains
 a valid link entry. Native rename retains the link text. Copy retains it with
 verbatim symlink copying and the existing strict staged tree validation.
+The private entry observation supplies the symlink creation type from that same
+entry metadata. Copy records each link's original text and creation type while
+the mature copier handles ordinary entries, then creates the staged links with
+that explicit type. Windows junctions and broken directory symbolic links retain
+their original reparse semantics. Strict staging and publication checks compare
+creation types as well as link text and file bytes. This does not publish a
+followed-directory navigation fact or a complete unpublished-tree resolver.
 Recursion and self-directory protection apply to actual directory entries.
 Delete retains the existing source authority and unlinks admitted terminal
 entries without requiring their targets to exist. Unknown filesystem errors

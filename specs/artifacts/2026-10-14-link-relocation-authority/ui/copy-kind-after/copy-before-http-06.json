@@ -1,0 +1,26 @@
+{
+  "role": "b",
+  "method": "GET",
+  "url": "http://127.0.0.1:18457/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Ccopy-kind-after-01a133%5Cproject-b&path=root-marker.txt",
+  "status": 200,
+  "requestID": "047a42a4-6bcb-4761-ad14-4ed5ba10b1e5",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "128",
+    "content-type": "application/json",
+    "date": "Tue, 13 Oct 2026 22:27:30 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "047a42a4-6bcb-4761-ad14-4ed5ba10b1e5"
+  },
+  "rawBodyBase64": "eyJ0eXBlIjoidGV4dCIsImNvbnRlbnQiOiJDT1BZIFJPT1QgQiAwMWExMzNcclxuIiwicmV2aXNpb24iOiI0OTZmYjFhODViMzAyNWRjMWZiN2Q3MTQ3MmM2NGY1ODlhYWRiMzg5Yjk2YTAwNjI3YzdmMWI0MDAwZTk3NWZiIn0=",
+  "body": {
+    "type": "text",
+    "content": "COPY ROOT B 01a133\r\n",
+    "revision": "496fb1a85b3025dc1fb7d71472c64f589aadb389b96a00627c7f1b4000e975fb"
+  },
+  "at": {
+    "utc": "2026-10-13T22:27:31.168Z",
+    "wallMs": 1791930451168,
+    "monotonicNs": "2748341611255200"
+  }
+}

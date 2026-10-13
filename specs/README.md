@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
+
 - [持续目标 UI/UX](records/2026-10/2026-10-14-continuous-goal-ui-ux.md)：三模式统一入口、状态、预算控制和真实桌面验收。
 
 - [长历史分叉耗时](records/2026-10/2026-10-14-fork-latency.md)：真实长引用、运行时采样与原子消息/事件共享机制。
