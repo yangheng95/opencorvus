@@ -318,7 +318,7 @@ function markdownProjectFileReference(raw: string): FileReference | null {
 
 /**
  * Decide whether a codespan's text is a file path reference. Returns the cited
- * reference — path plus the optional `:line[:col]` location, which is what
+ * reference — path plus the optional line, column or range, which is what
  * makes the click land on the cited line rather than the top of the file — and
  * the display label (original text). Returns null for non-path content
  * (commands, identifiers, URLs, etc.).
@@ -331,7 +331,7 @@ function extractFileReference(text: string): { display: string; reference: FileR
   // Reject whitespace (multi-word commands) and shell flags.
   if (/\s/.test(s)) return null
   if (s.startsWith("-")) return null
-  // Split the trailing :line[:col] off; the guards below judge the path half.
+  // Split the cited location off; the guards below judge the path half.
   const reference = parseFileReference(s)
   const pathPart = reference.path
   // A rooted Windows drive prefix belongs to the path; its colon is not a

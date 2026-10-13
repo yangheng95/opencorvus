@@ -1,0 +1,214 @@
+{
+  "results": [
+    {
+      "stage": "before",
+      "sessions": [
+        "ses_-zUS6v83Rzzm4rfaVOyk"
+      ],
+      "calls": [
+        {
+          "sourceID": "b2c93990ab45edbcae1eed0fba509a882cfa234f4c5a27dc18f3d43c0f7f8b58",
+          "partID": "prt_g0VXt4tMU00ALHhYPyMd",
+          "messageID": "msg_g0VXt4sEF00u8XZF4JZ9",
+          "sessionID": "ses_-zUS6v83Rzzm4rfaVOyk",
+          "callID": "call_ff8895d66e524ed28565eb8440c2d5be"
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXt4tOK00s7pQnVwtU",
+          "sessionID": "ses_-zUS6v83Rzzm4rfaVOyk",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791853551280,
+            "completed": 1791853557734
+          },
+          "finish": "stop"
+        }
+      ],
+      "requests": 5,
+      "elapsedMs": 207158,
+      "settled": {
+        "occurrence": "source-colon-range-373-before-fab64462-e693-4bba-861e-3cc8d4da6585",
+        "outcome": "settled",
+        "host": {
+          "pid": 49896,
+          "processInstanceID": "win32:639274502790205311",
+          "occurrenceID": "98448fec-f8cb-4913-866e-27b5dccdc0a3"
+        },
+        "target": {
+          "pid": 14200,
+          "processInstanceID": "win32:639274502797912220",
+          "occurrenceID": "1ae9823f-dae9-4821-9319-e1d1665392c0"
+        },
+        "observedAtUtc": "2026-10-13T01:08:06.949Z",
+        "deadlineAt": 1791854079005,
+        "terminal": {
+          "occurrenceID": "source-colon-range-373-before-fab64462-e693-4bba-861e-3cc8d4da6585",
+          "pid": 14200,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "physicalCompletion": true,
+        "cancellation": null,
+        "qualification": "NativeService",
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "providerUserCancelledRequests": 0,
+        "providerEOFRequests": 5
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-13T01:05:29.851Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "1d3217ba-3a52-4c47-9909-aa64a0af9f1b",
+          "method": "GET",
+          "path": "/ui/assets/main--IPEAIl1.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 8
+        },
+        "message": "request"
+      }
+    },
+    {
+      "stage": "after",
+      "sessions": [
+        "ses_-zUS6tZ6tzzcQm75g7L0",
+        "ses_-zUS6sZAtzzlDAv8jmXN"
+      ],
+      "calls": [
+        {
+          "sourceID": "c780f096259f9cf9d1f731b19b704eec848f84bc62bcacec9646688c94fe2593",
+          "partID": "prt_g0VXt6SFJ00sAmv59Ko5",
+          "messageID": "msg_g0VXt6RDR00aJrtW4q7o",
+          "sessionID": "ses_-zUS6tZ6tzzcQm75g7L0",
+          "callID": "call_f875ed3f2a32462588be59adb64a86b4"
+        },
+        {
+          "sourceID": "c780f096259f9cf9d1f731b19b704eec848f84bc62bcacec9646688c94fe2593",
+          "partID": "prt_g0VXt7Qp803FWB4budfI",
+          "messageID": "msg_g0VXt7Qp8012bezsH5Cl",
+          "sessionID": "ses_-zUS6sZAtzzlDAv8jmXN",
+          "callID": "call_f875ed3f2a32462588be59adb64a86b4"
+        },
+        {
+          "sourceID": "c780f096259f9cf9d1f731b19b704eec848f84bc62bcacec9646688c94fe2593",
+          "partID": "prt_g0VXt7Y3T00A7ktV9sR7",
+          "messageID": "msg_g0VXt7Ws200vGgnDx6Di",
+          "sessionID": "ses_-zUS6sZAtzzlDAv8jmXN",
+          "callID": "call_54773e7de052487c825f76a5b59d3406"
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXt6SHL00drHcQtykz",
+          "sessionID": "ses_-zUS6tZ6tzzcQm75g7L0",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791853923715,
+            "completed": 1791853929244
+          },
+          "finish": "stop"
+        },
+        {
+          "id": "msg_g0VXt7Qp802kTueVYUsl",
+          "sessionID": "ses_-zUS6sZAtzzlDAv8jmXN",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791853923715,
+            "completed": 1791853929244
+          },
+          "finish": "stop"
+        },
+        {
+          "id": "msg_g0VXt7Y5z00JT7dVTtix",
+          "sessionID": "ses_-zUS6sZAtzzlDAv8jmXN",
+          "role": "assistant",
+          "author": "chat",
+          "agent": "chat",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791854184403,
+            "completed": 1791854189786
+          },
+          "finish": "stop"
+        }
+      ],
+      "requests": 9,
+      "elapsedMs": 460397,
+      "settled": {
+        "occurrence": "source-colon-range-373-after-c93b1c12-271a-477f-b15b-513f0220cfd2",
+        "outcome": "settled",
+        "host": {
+          "pid": 65172,
+          "processInstanceID": "win32:639274506215083999",
+          "occurrenceID": "5812a923-67f6-4538-a624-47d4847934c7"
+        },
+        "target": {
+          "pid": 73132,
+          "processInstanceID": "win32:639274506222886229",
+          "occurrenceID": "9e7abff8-eb35-480a-8f0d-795cc6474afd"
+        },
+        "observedAtUtc": "2026-10-13T01:18:02.685Z",
+        "deadlineAt": 1791854421493,
+        "terminal": {
+          "occurrenceID": "source-colon-range-373-after-c93b1c12-271a-477f-b15b-513f0220cfd2",
+          "pid": 73132,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "cancellation": null,
+        "providerUserCancelledRequests": 0,
+        "physicalCompletion": true,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "qualification": "NativeService",
+        "providerEOFRequests": 9
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-13T01:11:48.367Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "44f74398-cd8a-4f9b-a0d3-e8f54f0ff3c0",
+          "method": "GET",
+          "path": "/ui/assets/main-B5ENb1Oe.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 7
+        },
+        "message": "request"
+      }
+    }
+  ],
+  "boundary": "Actual Provider/Native/Source/completed Message/ToolOutcome/input file and HTTP facts. Main and sequential product Side UI activation are independently reviewed screenshots, not UI assertions. Native external editor and first-use clipboard behavior are outside this qualification."
+}

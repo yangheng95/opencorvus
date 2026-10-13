@@ -981,8 +981,10 @@ prose. Rooted Windows drive paths
 retain their drive and either separator through the same reference grammar.
 Path tokens accept Unicode letters, numbers and combining marks, preserving
 the authored character sequence through the existing file-reference attributes.
-The shared location parser accepts `:line[:column]` and `#Lline[-Lend]`.
-Valid line anchors carry their inclusive end through the same delegated file
+The shared location parser accepts `:line[:column]`, the Source location format
+`:line-end`, and `#Lline[-Lend]`. Valid ranges use positive safe integers and an
+end at or after their start; invalid ranges retain their original path text.
+Both colon ranges and line anchors carry their inclusive end through the same delegated file
 action and canonical workbench range; unknown fragments retain their original
 text. External web links keep their complete authored URL and fragment.
 Bare filenames remain code

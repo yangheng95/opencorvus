@@ -3172,3 +3172,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [来源文件保存换行371](records/2026-10/2026-10-13-source-line-endings-371.md)：保留原始及混合换行，真实保存、撤销与重载验收。
 
 - [CR文件来源坐标372](records/2026-10/2026-10-13-source-cr-location-372.md)：修复CR、混合换行、BOM行列及跨行匹配来源。
+
+- [正文冒号行范围引用373](records/2026-10/2026-10-13-source-colon-range-373.md)：Sources范围格式与正文解析的一致性。

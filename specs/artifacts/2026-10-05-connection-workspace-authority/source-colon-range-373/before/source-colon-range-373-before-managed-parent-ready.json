@@ -1,0 +1,15 @@
+{
+  "pid": 14200,
+  "occurrence": "source-colon-range-373-before-fab64462-e693-4bba-861e-3cc8d4da6585",
+  "owner": {
+    "pid": 14200,
+    "processInstanceID": "win32:639274502797912220",
+    "occurrenceID": "58e509d6-6f03-4fee-b960-ec68b42b4fb7"
+  },
+  "parent": {
+    "pid": 66192,
+    "processInstanceID": "win32:639274502797552644",
+    "occurrenceID": "1c705ebc-4245-4f7f-81d5-33546b2f2e3a"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

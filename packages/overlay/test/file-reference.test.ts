@@ -44,6 +44,25 @@ test("an anchored line range becomes the inclusive editor range", () => {
   expect(fileReferenceRange(parseFileReference("src/example.ts#L30"))).toEqual({ startLine: 30, endLine: 30 })
 })
 
+test.each([
+  ["src/example.ts:20-22", { path: "src/example.ts", line: 20, endLine: 22 }],
+  ["资料/范围示例.txt:20-22", { path: "资料/范围示例.txt", line: 20, endLine: 22 }],
+  ["C:\\repo\\example.ts:20-22", { path: "C:\\repo\\example.ts", line: 20, endLine: 22 }],
+  ["example.ts:20-20", { path: "example.ts", line: 20, endLine: 20 }],
+])("a source-style colon range retains its complete location: %s", (raw, expected) => {
+  expect(parseFileReference(raw as string)).toEqual(expected)
+})
+
+test("a source-style range becomes the same inclusive workbench range", () => {
+  expect(fileReferenceRange(parseFileReference("资料/范围示例.txt:20-22"))).toEqual({ startLine: 20, endLine: 22 })
+})
+
+test.each(["src/example.ts:0-2", "src/example.ts:20-0", "src/example.ts:22-20", "src/example.ts:20-9007199254740992"])(
+  "an uninterpreted colon range retains the original reference: %s", (raw) => {
+    expect(parseFileReference(raw)).toEqual({ path: raw })
+  },
+)
+
 test.each(["src/example.ts#section", "src/example.ts#L0", "src/example.ts#L30-L12", "src/example.ts#L9007199254740992"])(
   "an uninterpreted fragment retains the complete original reference: %s", (raw) => {
     expect(parseFileReference(raw)).toEqual({ path: raw })

@@ -1,4 +1,4 @@
-// ── Cited file locations (`path:line[:column]`, `path#Lline[-Lend]`) ──
+// ── Cited file locations (`path:line[:column]`, `path:line-end`, `path#Lline[-Lend]`) ──
 //
 // Agents cite source locations the way every terminal and compiler does:
 // `src/engine/pipeline.ts:42`. The renderer used to throw the location half
@@ -20,7 +20,7 @@ const FILE_REFERENCE_COLUMN_ATTRIBUTE = "data-file-column"
 // Lazy path half plus an anchored numeric tail, so a Windows drive letter
 // (`C:\repo\a.ts`) is never mistaken for a location separator: the tail must
 // run to the end of the string as digits.
-const LOCATION_SUFFIX_RE = /^(.+?)(?::(\d+)(?::(\d+))?|#L(\d+)(?:-L(\d+))?)$/
+const LOCATION_SUFFIX_RE = /^(.+?)(?::(\d+)(?::(\d+)|-(\d+))?|#L(\d+)(?:-L(\d+))?)$/
 
 export interface FileReferenceLocation {
   line: number
@@ -47,12 +47,13 @@ export function parseFileReference(raw: string): FileReference {
   const text = String(raw ?? "").trim()
   const match = text.match(LOCATION_SUFFIX_RE)
   if (!match) return { path: text }
-  const line = positiveLineNumber(match[2] ?? match[4])
+  const line = positiveLineNumber(match[2] ?? match[5])
   if (line === undefined) return { path: text }
   const column = positiveLineNumber(match[3])
   if (match[3] !== undefined && column === undefined) return { path: text }
-  const endLine = positiveLineNumber(match[5])
-  if (match[5] !== undefined && (endLine === undefined || endLine < line)) return { path: text }
+  const rawEndLine = match[4] ?? match[6]
+  const endLine = positiveLineNumber(rawEndLine)
+  if (rawEndLine !== undefined && (endLine === undefined || endLine < line)) return { path: text }
   return {
     path: match[1]!,
     line,
@@ -63,7 +64,7 @@ export function parseFileReference(raw: string): FileReference {
 
 /**
  * Convert a cited location into the canonical inclusive editor range. A single
- * line collapses onto itself; a line anchor range retains its supplied end.
+ * line collapses onto itself; a cited range retains its supplied end.
  */
 export function fileReferenceRange(
   reference: Partial<FileReferenceLocation> | undefined,
