@@ -1,0 +1,3074 @@
+{
+  "createdAtUtc": "2026-10-13T18:22:39.3658876Z",
+  "qualification": "Bounded pre-evidence copy only; no product/function/visual acceptance inferred from archive integrity",
+  "pack": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack",
+  "copiedFiles": 305,
+  "originalBytes": null,
+  "packedBytes": null,
+  "originalJPEG": 8,
+  "generatedFiles": [
+    "verification.json",
+    "manifest.json",
+    "README.md"
+  ],
+  "originalOuterToolLog": "not-saved-to-file; root tool transcript only",
+  "exclusions": [
+    "ui-bundle/bin and generated UI",
+    "native-observer generated runtime",
+    "all databases/credentials/auth/provider/models",
+    "all run runtime paths except exact admitted service/runtime/log/dev.log",
+    "all source Project trees and user directories"
+  ],
+  "items": [
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\backend-impact.md",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\backend-impact.md.gz",
+      "relative": "scratch/backend-impact.md.gz",
+      "originalBytes": 21285,
+      "packedBytes": 10691,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-visual-second-review.md",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\before-visual-second-review.md.gz",
+      "relative": "scratch/before-visual-second-review.md.gz",
+      "originalBytes": 7791,
+      "packedBytes": 4570,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\build-before.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\build-before.log.gz",
+      "relative": "scratch/build-before.log.gz",
+      "originalBytes": 72966,
+      "packedBytes": 11084,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\check-tool-syntax.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\check-tool-syntax.ps1.gz",
+      "relative": "scratch/check-tool-syntax.ps1.gz",
+      "originalBytes": 2914,
+      "packedBytes": 1137,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\docs-plan.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\docs-plan.log.gz",
+      "relative": "scratch/docs-plan.log.gz",
+      "originalBytes": 106,
+      "packedBytes": 115,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-02-original.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-02-original.exit.json.gz",
+      "relative": "scratch/fixture-before-probe-02-original.exit.json.gz",
+      "originalBytes": 403,
+      "packedBytes": 232,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-02-original.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-02-original.input.json.gz",
+      "relative": "scratch/fixture-before-probe-02-original.input.json.gz",
+      "originalBytes": 517,
+      "packedBytes": 366,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-02-original.stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-02-original.stderr.bin",
+      "relative": "scratch/fixture-before-probe-02-original.stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-02-original.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-02-original.stderr.log.gz",
+      "relative": "scratch/fixture-before-probe-02-original.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-02-original.stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-02-original.stdout.bin",
+      "relative": "scratch/fixture-before-probe-02-original.stdout.bin",
+      "originalBytes": 3075,
+      "packedBytes": 3075,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-02-original.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-02-original.stdout.log.gz",
+      "relative": "scratch/fixture-before-probe-02-original.stdout.log.gz",
+      "originalBytes": 3075,
+      "packedBytes": 553,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-original.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-original.exit.json.gz",
+      "relative": "scratch/fixture-before-probe-original.exit.json.gz",
+      "originalBytes": 397,
+      "packedBytes": 231,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-original.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-original.input.json.gz",
+      "relative": "scratch/fixture-before-probe-original.input.json.gz",
+      "originalBytes": 490,
+      "packedBytes": 355,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-original.stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-original.stderr.bin",
+      "relative": "scratch/fixture-before-probe-original.stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-original.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-original.stderr.log.gz",
+      "relative": "scratch/fixture-before-probe-original.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-original.stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-original.stdout.bin",
+      "relative": "scratch/fixture-before-probe-original.stdout.bin",
+      "originalBytes": 351,
+      "packedBytes": 351,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-before-probe-original.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-before-probe-original.stdout.log.gz",
+      "relative": "scratch/fixture-before-probe-original.stdout.log.gz",
+      "originalBytes": 351,
+      "packedBytes": 273,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-prepare-original.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-prepare-original.exit.json.gz",
+      "relative": "scratch/fixture-prepare-original.exit.json.gz",
+      "originalBytes": 379,
+      "packedBytes": 226,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-prepare-original.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-prepare-original.input.json.gz",
+      "relative": "scratch/fixture-prepare-original.input.json.gz",
+      "originalBytes": 362,
+      "packedBytes": 275,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-prepare-original.stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-prepare-original.stderr.bin",
+      "relative": "scratch/fixture-prepare-original.stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-prepare-original.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-prepare-original.stderr.log.gz",
+      "relative": "scratch/fixture-prepare-original.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-prepare-original.stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-prepare-original.stdout.bin",
+      "relative": "scratch/fixture-prepare-original.stdout.bin",
+      "originalBytes": 316,
+      "packedBytes": 316,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-prepare-original.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-prepare-original.stdout.log.gz",
+      "relative": "scratch/fixture-prepare-original.stdout.log.gz",
+      "originalBytes": 316,
+      "packedBytes": 246,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-primitive-original.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-primitive-original.exit.json.gz",
+      "relative": "scratch/fixture-primitive-original.exit.json.gz",
+      "originalBytes": 391,
+      "packedBytes": 229,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-primitive-original.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-primitive-original.input.json.gz",
+      "relative": "scratch/fixture-primitive-original.input.json.gz",
+      "originalBytes": 443,
+      "packedBytes": 310,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-primitive-original.stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-primitive-original.stderr.bin",
+      "relative": "scratch/fixture-primitive-original.stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-primitive-original.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-primitive-original.stderr.log.gz",
+      "relative": "scratch/fixture-primitive-original.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-primitive-original.stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-primitive-original.stdout.bin",
+      "relative": "scratch/fixture-primitive-original.stdout.bin",
+      "originalBytes": 324,
+      "packedBytes": 324,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-primitive-original.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-primitive-original.stdout.log.gz",
+      "relative": "scratch/fixture-primitive-original.stdout.log.gz",
+      "originalBytes": 324,
+      "packedBytes": 254,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-readOnly-original.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-readOnly-original.exit.json.gz",
+      "relative": "scratch/fixture-readOnly-original.exit.json.gz",
+      "originalBytes": 389,
+      "packedBytes": 226,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-readOnly-original.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-readOnly-original.input.json.gz",
+      "relative": "scratch/fixture-readOnly-original.input.json.gz",
+      "originalBytes": 520,
+      "packedBytes": 362,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-readOnly-original.stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-readOnly-original.stderr.bin",
+      "relative": "scratch/fixture-readOnly-original.stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-readOnly-original.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-readOnly-original.stderr.log.gz",
+      "relative": "scratch/fixture-readOnly-original.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-readOnly-original.stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-readOnly-original.stdout.bin",
+      "relative": "scratch/fixture-readOnly-original.stdout.bin",
+      "originalBytes": 357,
+      "packedBytes": 357,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-readOnly-original.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-readOnly-original.stdout.log.gz",
+      "relative": "scratch/fixture-readOnly-original.stdout.log.gz",
+      "originalBytes": 357,
+      "packedBytes": 279,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-register-original.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-register-original.exit.json.gz",
+      "relative": "scratch/fixture-register-original.exit.json.gz",
+      "originalBytes": 389,
+      "packedBytes": 230,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-register-original.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-register-original.input.json.gz",
+      "relative": "scratch/fixture-register-original.input.json.gz",
+      "originalBytes": 481,
+      "packedBytes": 338,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-register-original.stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-register-original.stderr.bin",
+      "relative": "scratch/fixture-register-original.stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-register-original.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-register-original.stderr.log.gz",
+      "relative": "scratch/fixture-register-original.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-register-original.stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-register-original.stdout.bin",
+      "relative": "scratch/fixture-register-original.stdout.bin",
+      "originalBytes": 326,
+      "packedBytes": 326,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-register-original.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-register-original.stdout.log.gz",
+      "relative": "scratch/fixture-register-original.stdout.log.gz",
+      "originalBytes": 326,
+      "packedBytes": 255,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.before-metadata-stage.mjs",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.before-metadata-stage.mjs.gz",
+      "relative": "scratch/fixture-support.before-metadata-stage.mjs.gz",
+      "originalBytes": 13079,
+      "packedBytes": 4198,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.metadata-stage.syntax.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.metadata-stage.syntax.exit.json.gz",
+      "relative": "scratch/fixture-support.metadata-stage.syntax.exit.json.gz",
+      "originalBytes": 71,
+      "packedBytes": 88,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.metadata-stage.syntax.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.metadata-stage.syntax.input.json.gz",
+      "relative": "scratch/fixture-support.metadata-stage.syntax.input.json.gz",
+      "originalBytes": 311,
+      "packedBytes": 252,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.metadata-stage.syntax.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.metadata-stage.syntax.log.gz",
+      "relative": "scratch/fixture-support.metadata-stage.syntax.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.mjs",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.mjs.gz",
+      "relative": "scratch/fixture-support.mjs.gz",
+      "originalBytes": 13082,
+      "packedBytes": 4201,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.mjs.syntax.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.mjs.syntax.exit.json.gz",
+      "relative": "scratch/fixture-support.mjs.syntax.exit.json.gz",
+      "originalBytes": 71,
+      "packedBytes": 88,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.mjs.syntax.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.mjs.syntax.input.json.gz",
+      "relative": "scratch/fixture-support.mjs.syntax.input.json.gz",
+      "originalBytes": 326,
+      "packedBytes": 260,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-support.mjs.syntax.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-support.mjs.syntax.log.gz",
+      "relative": "scratch/fixture-support.mjs.syntax.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.before-metadata-stage.mjs",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.before-metadata-stage.mjs.gz",
+      "relative": "scratch/fixture-tool.before-metadata-stage.mjs.gz",
+      "originalBytes": 25519,
+      "packedBytes": 6994,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.metadata-stage.syntax.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.metadata-stage.syntax.exit.json.gz",
+      "relative": "scratch/fixture-tool.metadata-stage.syntax.exit.json.gz",
+      "originalBytes": 71,
+      "packedBytes": 88,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.metadata-stage.syntax.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.metadata-stage.syntax.input.json.gz",
+      "relative": "scratch/fixture-tool.metadata-stage.syntax.input.json.gz",
+      "originalBytes": 308,
+      "packedBytes": 250,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.metadata-stage.syntax.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.metadata-stage.syntax.log.gz",
+      "relative": "scratch/fixture-tool.metadata-stage.syntax.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.mjs",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.mjs.gz",
+      "relative": "scratch/fixture-tool.mjs.gz",
+      "originalBytes": 26399,
+      "packedBytes": 7219,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.mjs.syntax.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.mjs.syntax.exit.json.gz",
+      "relative": "scratch/fixture-tool.mjs.syntax.exit.json.gz",
+      "originalBytes": 71,
+      "packedBytes": 88,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.mjs.syntax.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.mjs.syntax.input.json.gz",
+      "relative": "scratch/fixture-tool.mjs.syntax.input.json.gz",
+      "originalBytes": 323,
+      "packedBytes": 259,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\fixture-tool.mjs.syntax.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\fixture-tool.mjs.syntax.log.gz",
+      "relative": "scratch/fixture-tool.mjs.syntax.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\launch-ui.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\launch-ui.ps1.gz",
+      "relative": "scratch/launch-ui.ps1.gz",
+      "originalBytes": 11229,
+      "packedBytes": 3709,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\metadata-stage-current.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\metadata-stage-current.diff.gz",
+      "relative": "scratch/metadata-stage-current.diff.gz",
+      "originalBytes": 9868,
+      "packedBytes": 3023,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-prepare.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-prepare.exit.json.gz",
+      "relative": "scratch/native-active-prepare.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 126,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-prepare.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-prepare.input.json.gz",
+      "relative": "scratch/native-active-prepare.input.json.gz",
+      "originalBytes": 477,
+      "packedBytes": 323,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-prepare.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-prepare.stderr.log.gz",
+      "relative": "scratch/native-active-prepare.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-prepare.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-prepare.stdout.log.gz",
+      "relative": "scratch/native-active-prepare.stdout.log.gz",
+      "originalBytes": 127,
+      "packedBytes": 124,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-run.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-run.exit.json.gz",
+      "relative": "scratch/native-active-run.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 127,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-run.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-run.input.json.gz",
+      "relative": "scratch/native-active-run.input.json.gz",
+      "originalBytes": 469,
+      "packedBytes": 323,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-run.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-run.stderr.log.gz",
+      "relative": "scratch/native-active-run.stderr.log.gz",
+      "originalBytes": 470,
+      "packedBytes": 289,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-active-run.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-active-run.stdout.log.gz",
+      "relative": "scratch/native-active-run.stdout.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-activity-target.mjs",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-activity-target.mjs.gz",
+      "relative": "scratch/native-activity-target.mjs.gz",
+      "originalBytes": 1016,
+      "packedBytes": 550,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-host.ts",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-host.ts.gz",
+      "relative": "scratch/native-host.ts.gz",
+      "originalBytes": 11568,
+      "packedBytes": 3723,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-qualification-inputs.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-qualification-inputs.json.gz",
+      "relative": "scratch/native-qualification-inputs.json.gz",
+      "originalBytes": 2127,
+      "packedBytes": 736,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-prepare.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-prepare.exit.json.gz",
+      "relative": "scratch/native-resolution-02-active-prepare.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 127,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-prepare.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-prepare.input.json.gz",
+      "relative": "scratch/native-resolution-02-active-prepare.input.json.gz",
+      "originalBytes": 491,
+      "packedBytes": 331,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-prepare.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-prepare.stderr.log.gz",
+      "relative": "scratch/native-resolution-02-active-prepare.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-prepare.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-prepare.stdout.log.gz",
+      "relative": "scratch/native-resolution-02-active-prepare.stdout.log.gz",
+      "originalBytes": 141,
+      "packedBytes": 133,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-run.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-run.exit.json.gz",
+      "relative": "scratch/native-resolution-02-active-run.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 126,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-run.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-run.input.json.gz",
+      "relative": "scratch/native-resolution-02-active-run.input.json.gz",
+      "originalBytes": 483,
+      "packedBytes": 330,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-run.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-run.stderr.log.gz",
+      "relative": "scratch/native-resolution-02-active-run.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-active-run.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-active-run.stdout.log.gz",
+      "relative": "scratch/native-resolution-02-active-run.stdout.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-prepare.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-prepare.exit.json.gz",
+      "relative": "scratch/native-resolution-02-idle-prepare.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 127,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-prepare.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-prepare.input.json.gz",
+      "relative": "scratch/native-resolution-02-idle-prepare.input.json.gz",
+      "originalBytes": 487,
+      "packedBytes": 330,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-prepare.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-prepare.stderr.log.gz",
+      "relative": "scratch/native-resolution-02-idle-prepare.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-prepare.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-prepare.stdout.log.gz",
+      "relative": "scratch/native-resolution-02-idle-prepare.stdout.log.gz",
+      "originalBytes": 139,
+      "packedBytes": 132,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-run.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-run.exit.json.gz",
+      "relative": "scratch/native-resolution-02-idle-run.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 127,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-run.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-run.input.json.gz",
+      "relative": "scratch/native-resolution-02-idle-run.input.json.gz",
+      "originalBytes": 479,
+      "packedBytes": 329,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-run.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-run.stderr.log.gz",
+      "relative": "scratch/native-resolution-02-idle-run.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-idle-run.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-idle-run.stdout.log.gz",
+      "relative": "scratch/native-resolution-02-idle-run.stdout.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\owned-launch-functions.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\owned-launch-functions.ps1.gz",
+      "relative": "scratch/owned-launch-functions.ps1.gz",
+      "originalBytes": 4170,
+      "packedBytes": 1645,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\passive-directories.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\passive-directories.json.gz",
+      "relative": "scratch/passive-directories.json.gz",
+      "originalBytes": 402,
+      "packedBytes": 210,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\preflight-design.md",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\preflight-design.md.gz",
+      "relative": "scratch/preflight-design.md.gz",
+      "originalBytes": 29827,
+      "packedBytes": 15231,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\prepared-native-tools.md",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\prepared-native-tools.md.gz",
+      "relative": "scratch/prepared-native-tools.md.gz",
+      "originalBytes": 13962,
+      "packedBytes": 5705,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\qualify-native-activity.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\qualify-native-activity.ps1.gz",
+      "relative": "scratch/qualify-native-activity.ps1.gz",
+      "originalBytes": 11046,
+      "packedBytes": 3747,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\shared-initial-diff.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\shared-initial-diff.txt.gz",
+      "relative": "scratch/shared-initial-diff.txt.gz",
+      "originalBytes": 29061,
+      "packedBytes": 7188,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\shutdown.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\shutdown.ps1.gz",
+      "relative": "scratch/shutdown.ps1.gz",
+      "originalBytes": 8079,
+      "packedBytes": 2723,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\source-before-head.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\source-before-head.txt.gz",
+      "relative": "scratch/source-before-head.txt.gz",
+      "originalBytes": 95,
+      "packedBytes": 106,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\source-before-status.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\source-before-status.txt.gz",
+      "relative": "scratch/source-before-status.txt.gz",
+      "originalBytes": 1595,
+      "packedBytes": 488,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-impact.md",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\ui-impact.md.gz",
+      "relative": "scratch/ui-impact.md.gz",
+      "originalBytes": 33063,
+      "packedBytes": 16312,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-plan-second-review.md",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\ui-plan-second-review.md.gz",
+      "relative": "scratch/ui-plan-second-review.md.gz",
+      "originalBytes": 7323,
+      "packedBytes": 4166,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-02-1791915073645-a68ea244-8845-4080-86d2-da55835f3371.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-02-1791915073645-a68ea244-8845-4080-86d2-da55835f3371.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-02-1791915073645-a68ea244-8845-4080-86d2-da55835f3371.json.gz",
+      "originalBytes": 4605088,
+      "packedBytes": 400121,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-02-admission.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-02-admission.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-02-admission.json.gz",
+      "originalBytes": 12343,
+      "packedBytes": 1719,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-1791914779410-e3f79794-9e60-4309-b827-8541d5b5e8cd.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-1791914779410-e3f79794-9e60-4309-b827-8541d5b5e8cd.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-1791914779410-e3f79794-9e60-4309-b827-8541d5b5e8cd.json.gz",
+      "originalBytes": 3744,
+      "packedBytes": 1319,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-admission.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-admission.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-admission.json.gz",
+      "originalBytes": 12251,
+      "packedBytes": 1653,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-b-independent-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-b-independent-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-b-independent-complete.json.gz",
+      "originalBytes": 610647,
+      "packedBytes": 50812,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-b-independent-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-b-independent-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-b-independent-mutation-and-physical.json.gz",
+      "originalBytes": 24609,
+      "packedBytes": 2793,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-independent-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-independent-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-independent-complete.json.gz",
+      "originalBytes": 527249,
+      "packedBytes": 47128,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-independent-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-independent-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-independent-mutation-and-physical.json.gz",
+      "originalBytes": 24759,
+      "packedBytes": 2806,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-j-self-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-j-self-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-j-self-complete.json.gz",
+      "originalBytes": 434025,
+      "packedBytes": 43699,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-j-self-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-j-self-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-j-self-mutation-and-physical.json.gz",
+      "originalBytes": 24564,
+      "packedBytes": 2558,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-relative-copy-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-relative-copy-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-relative-copy-complete.json.gz",
+      "originalBytes": 605374,
+      "packedBytes": 51401,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-relative-copy-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-relative-copy-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-relative-copy-mutation-and-physical.json.gz",
+      "originalBytes": 21407,
+      "packedBytes": 2775,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-relative-move-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-relative-move-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-relative-move-complete.json.gz",
+      "originalBytes": 578758,
+      "packedBytes": 50491,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-relative-move-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-relative-move-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-relative-move-mutation-and-physical.json.gz",
+      "originalBytes": 23962,
+      "packedBytes": 2823,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-relative-normal-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-relative-normal-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-relative-normal-complete.json.gz",
+      "originalBytes": 635757,
+      "packedBytes": 51681,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-relative-normal-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-relative-normal-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-relative-normal-mutation-and-physical.json.gz",
+      "originalBytes": 23575,
+      "packedBytes": 2725,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-s-dependent-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-s-dependent-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-s-dependent-complete.json.gz",
+      "originalBytes": 502731,
+      "packedBytes": 46616,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-s-dependent-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-s-dependent-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-s-dependent-mutation-and-physical.json.gz",
+      "originalBytes": 25244,
+      "packedBytes": 2596,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-s-self-complete.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-s-self-complete.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-s-self-complete.json.gz",
+      "originalBytes": 467901,
+      "packedBytes": 45238,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\before-probe-case-s-self-mutation-and-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\before-probe-case-s-self-mutation-and-physical.json.gz",
+      "relative": "scratch/directory-target-before/before-probe-case-s-self-mutation-and-physical.json.gz",
+      "originalBytes": 24566,
+      "packedBytes": 2576,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\directory-target-before-inputs.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\directory-target-before-inputs.json.gz",
+      "relative": "scratch/directory-target-before/directory-target-before-inputs.json.gz",
+      "originalBytes": 2935,
+      "packedBytes": 961,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\directory-target-before-launch-owner.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\directory-target-before-launch-owner.json.gz",
+      "relative": "scratch/directory-target-before/directory-target-before-launch-owner.json.gz",
+      "originalBytes": 1796,
+      "packedBytes": 658,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\directory-target-before-launcher-joined.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\directory-target-before-launcher-joined.json.gz",
+      "relative": "scratch/directory-target-before/directory-target-before-launcher-joined.json.gz",
+      "originalBytes": 2897,
+      "packedBytes": 878,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\directory-target-before-physical-terminal-and-credential-free.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\directory-target-before-physical-terminal-and-credential-free.json.gz",
+      "relative": "scratch/directory-target-before/directory-target-before-physical-terminal-and-credential-free.json.gz",
+      "originalBytes": 3886,
+      "packedBytes": 1176,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\directory-target-before-settlement-owner.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\directory-target-before-settlement-owner.json.gz",
+      "relative": "scratch/directory-target-before/directory-target-before-settlement-owner.json.gz",
+      "originalBytes": 506,
+      "packedBytes": 304,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\directory-target-before-shutdown-admission.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\directory-target-before-shutdown-admission.json.gz",
+      "relative": "scratch/directory-target-before/directory-target-before-shutdown-admission.json.gz",
+      "originalBytes": 539,
+      "packedBytes": 372,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\directory-target-before-ui-binding.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\directory-target-before-ui-binding.json.gz",
+      "relative": "scratch/directory-target-before/directory-target-before-ui-binding.json.gz",
+      "originalBytes": 284,
+      "packedBytes": 229,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-01-register-root-project.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-01-register-root-project.json.gz",
+      "relative": "scratch/directory-target-before/http-01-register-root-project.json.gz",
+      "originalBytes": 2943,
+      "packedBytes": 1246,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-02-register-root-chat.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-02-register-root-chat.json.gz",
+      "relative": "scratch/directory-target-before/http-02-register-root-chat.json.gz",
+      "originalBytes": 4035,
+      "packedBytes": 1622,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-03-register-b-project.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-03-register-b-project.json.gz",
+      "relative": "scratch/directory-target-before/http-03-register-b-project.json.gz",
+      "originalBytes": 2943,
+      "packedBytes": 1229,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-04-register-b-chat.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-04-register-b-chat.json.gz",
+      "relative": "scratch/directory-target-before/http-04-register-b-chat.json.gz",
+      "originalBytes": 4045,
+      "packedBytes": 1620,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-05-j-self-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-05-j-self-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-05-j-self-mutation.json.gz",
+      "originalBytes": 2740,
+      "packedBytes": 1162,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-06-j-self-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-06-j-self-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-06-j-self-source-parent.json.gz",
+      "originalBytes": 7593,
+      "packedBytes": 1782,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-07-j-self-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-07-j-self-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-07-j-self-target-parent.json.gz",
+      "originalBytes": 2398,
+      "packedBytes": 1037,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-08-j-self-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-08-j-self-content.json.gz",
+      "relative": "scratch/directory-target-before/http-08-j-self-content.json.gz",
+      "originalBytes": 2519,
+      "packedBytes": 1102,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-09-s-self-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-09-s-self-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-09-s-self-mutation.json.gz",
+      "originalBytes": 2740,
+      "packedBytes": 1166,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-10-s-self-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-10-s-self-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-10-s-self-source-parent.json.gz",
+      "originalBytes": 6554,
+      "packedBytes": 1716,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-11-s-self-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-11-s-self-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-11-s-self-target-parent.json.gz",
+      "originalBytes": 2399,
+      "packedBytes": 1034,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-12-s-self-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-12-s-self-content.json.gz",
+      "relative": "scratch/directory-target-before/http-12-s-self-content.json.gz",
+      "originalBytes": 2520,
+      "packedBytes": 1099,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-13-s-dependent-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-13-s-dependent-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-13-s-dependent-mutation.json.gz",
+      "originalBytes": 2892,
+      "packedBytes": 1176,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-14-s-dependent-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-14-s-dependent-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-14-s-dependent-source-parent.json.gz",
+      "originalBytes": 5389,
+      "packedBytes": 1563,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-15-s-dependent-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-15-s-dependent-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-15-s-dependent-target-parent.json.gz",
+      "originalBytes": 2422,
+      "packedBytes": 1039,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-16-s-dependent-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-16-s-dependent-content.json.gz",
+      "relative": "scratch/directory-target-before/http-16-s-dependent-content.json.gz",
+      "originalBytes": 2545,
+      "packedBytes": 1119,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-17-independent-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-17-independent-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-17-independent-mutation.json.gz",
+      "originalBytes": 3894,
+      "packedBytes": 1437,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-18-independent-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-18-independent-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-18-independent-source-parent.json.gz",
+      "originalBytes": 4183,
+      "packedBytes": 1337,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-19-independent-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-19-independent-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-19-independent-target-parent.json.gz",
+      "originalBytes": 4427,
+      "packedBytes": 1402,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-20-independent-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-20-independent-content.json.gz",
+      "relative": "scratch/directory-target-before/http-20-independent-content.json.gz",
+      "originalBytes": 2583,
+      "packedBytes": 1129,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-21-relative-move-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-21-relative-move-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-21-relative-move-mutation.json.gz",
+      "originalBytes": 3862,
+      "packedBytes": 1445,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-22-relative-move-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-22-relative-move-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-22-relative-move-source-parent.json.gz",
+      "originalBytes": 4161,
+      "packedBytes": 1470,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-23-relative-move-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-23-relative-move-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-23-relative-move-target-parent.json.gz",
+      "originalBytes": 28429,
+      "packedBytes": 2867,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-24-relative-move-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-24-relative-move-content.json.gz",
+      "relative": "scratch/directory-target-before/http-24-relative-move-content.json.gz",
+      "originalBytes": 2585,
+      "packedBytes": 1139,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-25-relative-copy-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-25-relative-copy-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-25-relative-copy-mutation.json.gz",
+      "originalBytes": 3876,
+      "packedBytes": 1423,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-26-relative-copy-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-26-relative-copy-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-26-relative-copy-source-parent.json.gz",
+      "originalBytes": 4161,
+      "packedBytes": 1472,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-27-relative-copy-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-27-relative-copy-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-27-relative-copy-target-parent.json.gz",
+      "originalBytes": 29737,
+      "packedBytes": 2949,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-28-relative-copy-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-28-relative-copy-content.json.gz",
+      "relative": "scratch/directory-target-before/http-28-relative-copy-content.json.gz",
+      "originalBytes": 2587,
+      "packedBytes": 1144,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-29-b-independent-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-29-b-independent-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-29-b-independent-mutation.json.gz",
+      "originalBytes": 3907,
+      "packedBytes": 1439,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-30-b-independent-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-30-b-independent-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-30-b-independent-source-parent.json.gz",
+      "originalBytes": 3032,
+      "packedBytes": 1213,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-31-b-independent-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-31-b-independent-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-31-b-independent-target-parent.json.gz",
+      "originalBytes": 4452,
+      "packedBytes": 1500,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-32-b-independent-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-32-b-independent-content.json.gz",
+      "relative": "scratch/directory-target-before/http-32-b-independent-content.json.gz",
+      "originalBytes": 2582,
+      "packedBytes": 1141,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-33-relative-normal-mutation.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-33-relative-normal-mutation.json.gz",
+      "relative": "scratch/directory-target-before/http-33-relative-normal-mutation.json.gz",
+      "originalBytes": 3680,
+      "packedBytes": 1395,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-34-relative-normal-source-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-34-relative-normal-source-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-34-relative-normal-source-parent.json.gz",
+      "originalBytes": 2981,
+      "packedBytes": 1213,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-35-relative-normal-target-parent.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-35-relative-normal-target-parent.json.gz",
+      "relative": "scratch/directory-target-before/http-35-relative-normal-target-parent.json.gz",
+      "originalBytes": 3015,
+      "packedBytes": 1214,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-36-relative-normal-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-36-relative-normal-content.json.gz",
+      "relative": "scratch/directory-target-before/http-36-relative-normal-content.json.gz",
+      "originalBytes": 2561,
+      "packedBytes": 1126,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-37-gui-root-list.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-37-gui-root-list.json.gz",
+      "relative": "scratch/directory-target-before/http-37-gui-root-list.json.gz",
+      "originalBytes": 25399,
+      "packedBytes": 2805,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-38-gui-b-list.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-38-gui-b-list.json.gz",
+      "relative": "scratch/directory-target-before/http-38-gui-b-list.json.gz",
+      "originalBytes": 7107,
+      "packedBytes": 1748,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-39-gui-alias-1-list.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-39-gui-alias-1-list.json.gz",
+      "relative": "scratch/directory-target-before/http-39-gui-alias-1-list.json.gz",
+      "originalBytes": 4276,
+      "packedBytes": 1504,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-40-gui-alias-1-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-40-gui-alias-1-content.json.gz",
+      "relative": "scratch/directory-target-before/http-40-gui-alias-1-content.json.gz",
+      "originalBytes": 2561,
+      "packedBytes": 1145,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-41-gui-alias-2-list.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-41-gui-alias-2-list.json.gz",
+      "relative": "scratch/directory-target-before/http-41-gui-alias-2-list.json.gz",
+      "originalBytes": 4386,
+      "packedBytes": 1392,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-42-gui-alias-2-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-42-gui-alias-2-content.json.gz",
+      "relative": "scratch/directory-target-before/http-42-gui-alias-2-content.json.gz",
+      "originalBytes": 2571,
+      "packedBytes": 1158,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-43-gui-alias-3-list.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-43-gui-alias-3-list.json.gz",
+      "relative": "scratch/directory-target-before/http-43-gui-alias-3-list.json.gz",
+      "originalBytes": 4386,
+      "packedBytes": 1400,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-44-gui-alias-3-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-44-gui-alias-3-content.json.gz",
+      "relative": "scratch/directory-target-before/http-44-gui-alias-3-content.json.gz",
+      "originalBytes": 2571,
+      "packedBytes": 1157,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-45-gui-file-link-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-45-gui-file-link-content.json.gz",
+      "relative": "scratch/directory-target-before/http-45-gui-file-link-content.json.gz",
+      "originalBytes": 2469,
+      "packedBytes": 1090,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-46-gui-broken-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-46-gui-broken-content.json.gz",
+      "relative": "scratch/directory-target-before/http-46-gui-broken-content.json.gz",
+      "originalBytes": 2557,
+      "packedBytes": 1080,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-47-gui-external-list.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-47-gui-external-list.json.gz",
+      "relative": "scratch/directory-target-before/http-47-gui-external-list.json.gz",
+      "originalBytes": 2408,
+      "packedBytes": 1034,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-48-gui-b-own-content.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\http-48-gui-b-own-content.json.gz",
+      "relative": "scratch/directory-target-before/http-48-gui-b-own-content.json.gz",
+      "originalBytes": 2528,
+      "packedBytes": 1122,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\physical-manifest-review.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\physical-manifest-review.json.gz",
+      "relative": "scratch/directory-target-before/physical-manifest-review.json.gz",
+      "originalBytes": 56393,
+      "packedBytes": 4251,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\post-register-gitignore-physical.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\post-register-gitignore-physical.json.gz",
+      "relative": "scratch/directory-target-before/post-register-gitignore-physical.json.gz",
+      "originalBytes": 2373,
+      "packedBytes": 669,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\prepare-1791914438139-1d4eadb9-1abe-4b2c-a6cc-588ea540eb8f.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\prepare-1791914438139-1d4eadb9-1abe-4b2c-a6cc-588ea540eb8f.json.gz",
+      "relative": "scratch/directory-target-before/prepare-1791914438139-1d4eadb9-1abe-4b2c-a6cc-588ea540eb8f.json.gz",
+      "originalBytes": 111286,
+      "packedBytes": 7400,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\prepare-admission.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\prepare-admission.json.gz",
+      "relative": "scratch/directory-target-before/prepare-admission.json.gz",
+      "originalBytes": 21923,
+      "packedBytes": 2165,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\prepared-fixture.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\prepared-fixture.json.gz",
+      "relative": "scratch/directory-target-before/prepared-fixture.json.gz",
+      "originalBytes": 103706,
+      "packedBytes": 6803,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\primitive-1791914548301-c14c3c4d-74e3-47b9-b9e3-d36e2176831e.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\primitive-1791914548301-c14c3c4d-74e3-47b9-b9e3-d36e2176831e.json.gz",
+      "relative": "scratch/directory-target-before/primitive-1791914548301-c14c3c4d-74e3-47b9-b9e3-d36e2176831e.json.gz",
+      "originalBytes": 37941,
+      "packedBytes": 3345,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\primitive-admission.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\primitive-admission.json.gz",
+      "relative": "scratch/directory-target-before/primitive-admission.json.gz",
+      "originalBytes": 2437,
+      "packedBytes": 987,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\readOnly-1791915159107-6ed27b18-4271-419f-9aad-ef0e992fc3cf.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\readOnly-1791915159107-6ed27b18-4271-419f-9aad-ef0e992fc3cf.json.gz",
+      "relative": "scratch/directory-target-before/readOnly-1791915159107-6ed27b18-4271-419f-9aad-ef0e992fc3cf.json.gz",
+      "originalBytes": 107936,
+      "packedBytes": 9599,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\readOnly-admission.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\readOnly-admission.json.gz",
+      "relative": "scratch/directory-target-before/readOnly-admission.json.gz",
+      "originalBytes": 4692,
+      "packedBytes": 1080,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\register-1791914740717-fc5e7c62-8c70-4cc4-b08b-e24311c4bec9.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\register-1791914740717-fc5e7c62-8c70-4cc4-b08b-e24311c4bec9.json.gz",
+      "relative": "scratch/directory-target-before/register-1791914740717-fc5e7c62-8c70-4cc4-b08b-e24311c4bec9.json.gz",
+      "originalBytes": 37097,
+      "packedBytes": 4533,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\register-admission.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\register-admission.json.gz",
+      "relative": "scratch/directory-target-before/register-admission.json.gz",
+      "originalBytes": 2861,
+      "packedBytes": 883,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\registered-projects.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\registered-projects.json.gz",
+      "relative": "scratch/directory-target-before/registered-projects.json.gz",
+      "originalBytes": 18031,
+      "packedBytes": 3251,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\01-before-root.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\01-before-root.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/01-before-root.ax.txt.gz",
+      "originalBytes": 2008,
+      "packedBytes": 589,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\01-before-root.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\01-before-root.jpg",
+      "relative": "scratch/directory-target-before/screenshots/01-before-root.jpg",
+      "originalBytes": 43084,
+      "packedBytes": 43084,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\02-before-junction-details.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\02-before-junction-details.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/02-before-junction-details.ax.txt.gz",
+      "originalBytes": 1158,
+      "packedBytes": 597,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\02-before-junction-details.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\02-before-junction-details.jpg",
+      "relative": "scratch/directory-target-before/screenshots/02-before-junction-details.jpg",
+      "originalBytes": 64102,
+      "packedBytes": 64102,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\03-before-junction-menu.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\03-before-junction-menu.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/03-before-junction-menu.ax.txt.gz",
+      "originalBytes": 8591,
+      "packedBytes": 2073,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\03-before-junction-menu.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\03-before-junction-menu.jpg",
+      "relative": "scratch/directory-target-before/screenshots/03-before-junction-menu.jpg",
+      "originalBytes": 40942,
+      "packedBytes": 40942,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\04-before-dir-link-details.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\04-before-dir-link-details.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/04-before-dir-link-details.ax.txt.gz",
+      "originalBytes": 1183,
+      "packedBytes": 606,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\04-before-dir-link-details.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\04-before-dir-link-details.jpg",
+      "relative": "scratch/directory-target-before/screenshots/04-before-dir-link-details.jpg",
+      "originalBytes": 64278,
+      "packedBytes": 64278,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\05-before-ordinary-file.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\05-before-ordinary-file.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/05-before-ordinary-file.ax.txt.gz",
+      "originalBytes": 919,
+      "packedBytes": 509,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\05-before-ordinary-file.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\05-before-ordinary-file.jpg",
+      "relative": "scratch/directory-target-before/screenshots/05-before-ordinary-file.jpg",
+      "originalBytes": 31304,
+      "packedBytes": 31304,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\06-before-ordinary-file-loaded.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\06-before-ordinary-file-loaded.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/06-before-ordinary-file-loaded.ax.txt.gz",
+      "originalBytes": 596,
+      "packedBytes": 389,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\06-before-ordinary-file-loaded.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\06-before-ordinary-file-loaded.jpg",
+      "relative": "scratch/directory-target-before/screenshots/06-before-ordinary-file-loaded.jpg",
+      "originalBytes": 33721,
+      "packedBytes": 33721,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\07-before-project-b.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\07-before-project-b.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/07-before-project-b.ax.txt.gz",
+      "originalBytes": 808,
+      "packedBytes": 393,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\07-before-project-b.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\07-before-project-b.jpg",
+      "relative": "scratch/directory-target-before/screenshots/07-before-project-b.jpg",
+      "originalBytes": 32559,
+      "packedBytes": 32559,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\08-before-project-b-file.ax.txt",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\08-before-project-b-file.ax.txt.gz",
+      "relative": "scratch/directory-target-before/screenshots/08-before-project-b-file.ax.txt.gz",
+      "originalBytes": 592,
+      "packedBytes": 375,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\screenshots\\08-before-project-b-file.jpg",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\directory-target-before\\screenshots\\08-before-project-b-file.jpg",
+      "relative": "scratch/directory-target-before/screenshots/08-before-project-b-file.jpg",
+      "originalBytes": 33419,
+      "packedBytes": 33419,
+      "encoding": "original-bytes",
+      "media": "original-JPEG",
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-original\\check-tool-syntax.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-original\\check-tool-syntax.ps1.gz",
+      "relative": "scratch/native-original/check-tool-syntax.ps1.gz",
+      "originalBytes": 2960,
+      "packedBytes": 1165,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-original\\launch-ui.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-original\\launch-ui.ps1.gz",
+      "relative": "scratch/native-original/launch-ui.ps1.gz",
+      "originalBytes": 10872,
+      "packedBytes": 3663,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-original\\native-host.ts",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-original\\native-host.ts.gz",
+      "relative": "scratch/native-original/native-host.ts.gz",
+      "originalBytes": 5099,
+      "packedBytes": 1976,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-original\\owned-launch-functions.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-original\\owned-launch-functions.ps1.gz",
+      "relative": "scratch/native-original/owned-launch-functions.ps1.gz",
+      "originalBytes": 4170,
+      "packedBytes": 1645,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-original\\shutdown.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-original\\shutdown.ps1.gz",
+      "relative": "scratch/native-original/shutdown.ps1.gz",
+      "originalBytes": 8065,
+      "packedBytes": 2725,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-diffs\\check-tool-syntax.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-diffs\\check-tool-syntax.ps1.diff.gz",
+      "relative": "scratch/native-diffs/check-tool-syntax.ps1.diff.gz",
+      "originalBytes": 1937,
+      "packedBytes": 829,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-diffs\\launch-ui.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-diffs\\launch-ui.ps1.diff.gz",
+      "relative": "scratch/native-diffs/launch-ui.ps1.diff.gz",
+      "originalBytes": 10016,
+      "packedBytes": 2575,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-diffs\\native-host.ts.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-diffs\\native-host.ts.diff.gz",
+      "relative": "scratch/native-diffs/native-host.ts.diff.gz",
+      "originalBytes": 17255,
+      "packedBytes": 4792,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-diffs\\owned-launch-functions.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-diffs\\owned-launch-functions.ps1.diff.gz",
+      "relative": "scratch/native-diffs/owned-launch-functions.ps1.diff.gz",
+      "originalBytes": 382,
+      "packedBytes": 187,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-diffs\\results.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-diffs\\results.json.gz",
+      "relative": "scratch/native-diffs/results.json.gz",
+      "originalBytes": 1355,
+      "packedBytes": 281,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-diffs\\shutdown.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-diffs\\shutdown.ps1.diff.gz",
+      "relative": "scratch/native-diffs/shutdown.ps1.diff.gz",
+      "originalBytes": 3382,
+      "packedBytes": 960,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\check-tool-syntax.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\check-tool-syntax.ps1.gz",
+      "relative": "scratch/native-resolution-first-history/check-tool-syntax.ps1.gz",
+      "originalBytes": 2914,
+      "packedBytes": 1137,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\launch-ui.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\launch-ui.ps1.gz",
+      "relative": "scratch/native-resolution-first-history/launch-ui.ps1.gz",
+      "originalBytes": 11229,
+      "packedBytes": 3709,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-prepare.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-prepare.exit.json.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-prepare.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 126,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-prepare.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-prepare.input.json.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-prepare.input.json.gz",
+      "originalBytes": 477,
+      "packedBytes": 323,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-prepare.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-prepare.stderr.log.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-prepare.stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-prepare.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-prepare.stdout.log.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-prepare.stdout.log.gz",
+      "originalBytes": 127,
+      "packedBytes": 124,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-run.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-run.exit.json.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-run.exit.json.gz",
+      "originalBytes": 142,
+      "packedBytes": 127,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-run.input.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-run.input.json.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-run.input.json.gz",
+      "originalBytes": 469,
+      "packedBytes": 323,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-run.stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-run.stderr.log.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-run.stderr.log.gz",
+      "originalBytes": 470,
+      "packedBytes": 289,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-active-run.stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-active-run.stdout.log.gz",
+      "relative": "scratch/native-resolution-first-history/native-active-run.stdout.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-activity-target.mjs",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-activity-target.mjs.gz",
+      "relative": "scratch/native-resolution-first-history/native-activity-target.mjs.gz",
+      "originalBytes": 1002,
+      "packedBytes": 541,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-host.ts",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-host.ts.gz",
+      "relative": "scratch/native-resolution-first-history/native-host.ts.gz",
+      "originalBytes": 11509,
+      "packedBytes": 3714,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\native-qualification-inputs.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\native-qualification-inputs.json.gz",
+      "relative": "scratch/native-resolution-first-history/native-qualification-inputs.json.gz",
+      "originalBytes": 2071,
+      "packedBytes": 727,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\owned-launch-functions.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\owned-launch-functions.ps1.gz",
+      "relative": "scratch/native-resolution-first-history/owned-launch-functions.ps1.gz",
+      "originalBytes": 4170,
+      "packedBytes": 1645,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\prepared-native-tools.md",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\prepared-native-tools.md.gz",
+      "relative": "scratch/native-resolution-first-history/prepared-native-tools.md.gz",
+      "originalBytes": 10929,
+      "packedBytes": 4639,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\qualify-native-activity.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\qualify-native-activity.ps1.gz",
+      "relative": "scratch/native-resolution-first-history/qualify-native-activity.ps1.gz",
+      "originalBytes": 11029,
+      "packedBytes": 3735,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-first-history\\shutdown.ps1",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-first-history\\shutdown.ps1.gz",
+      "relative": "scratch/native-resolution-first-history/shutdown.ps1.gz",
+      "originalBytes": 8079,
+      "packedBytes": 2723,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\check-tool-syntax.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\check-tool-syntax.ps1.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/check-tool-syntax.ps1.diff.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\launch-ui.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\launch-ui.ps1.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/launch-ui.ps1.diff.gz",
+      "originalBytes": 372,
+      "packedBytes": 191,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\native-activity-target.mjs.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\native-activity-target.mjs.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/native-activity-target.mjs.diff.gz",
+      "originalBytes": 1278,
+      "packedBytes": 530,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\native-host.ts.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\native-host.ts.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/native-host.ts.diff.gz",
+      "originalBytes": 1637,
+      "packedBytes": 620,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\native-qualification-inputs.json.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\native-qualification-inputs.json.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/native-qualification-inputs.json.diff.gz",
+      "originalBytes": 1761,
+      "packedBytes": 454,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\owned-launch-functions.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\owned-launch-functions.ps1.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/owned-launch-functions.ps1.diff.gz",
+      "originalBytes": 398,
+      "packedBytes": 197,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\prepared-native-tools.md.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\prepared-native-tools.md.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/prepared-native-tools.md.diff.gz",
+      "originalBytes": 3736,
+      "packedBytes": 1639,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\qualify-native-activity.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\qualify-native-activity.ps1.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/qualify-native-activity.ps1.diff.gz",
+      "originalBytes": 1018,
+      "packedBytes": 440,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\results.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\results.json.gz",
+      "relative": "scratch/native-resolution-02-diffs/results.json.gz",
+      "originalBytes": 2643,
+      "packedBytes": 363,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-resolution-02-diffs\\shutdown.ps1.diff",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\native-resolution-02-diffs\\shutdown.ps1.diff.gz",
+      "relative": "scratch/native-resolution-02-diffs/shutdown.ps1.diff.gz",
+      "originalBytes": 370,
+      "packedBytes": 190,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\check-tool-syntax.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\check-tool-syntax.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/check-tool-syntax.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\check-tool-syntax.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\check-tool-syntax.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/check-tool-syntax.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\launch-ui.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\launch-ui.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/launch-ui.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\launch-ui.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\launch-ui.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/launch-ui.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\native-activity-target.mjs.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\native-activity-target.mjs.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/native-activity-target.mjs.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\native-activity-target.mjs.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\native-activity-target.mjs.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/native-activity-target.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\native-host.ts.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\native-host.ts.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/native-host.ts.log.gz",
+      "originalBytes": 59,
+      "packedBytes": 79,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\native-host.ts.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\native-host.ts.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/native-host.ts.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\owned-launch-functions.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\owned-launch-functions.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/owned-launch-functions.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\owned-launch-functions.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\owned-launch-functions.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/owned-launch-functions.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\qualify-native-activity.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\qualify-native-activity.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/qualify-native-activity.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\qualify-native-activity.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\qualify-native-activity.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/qualify-native-activity.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\results.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\results.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/results.json.gz",
+      "originalBytes": 2204,
+      "packedBytes": 461,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\shutdown.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\shutdown.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/shutdown.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T175004113\\shutdown.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T175004113\\shutdown.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T175004113/shutdown.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\check-tool-syntax.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\check-tool-syntax.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/check-tool-syntax.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\check-tool-syntax.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\check-tool-syntax.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/check-tool-syntax.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\launch-ui.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\launch-ui.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/launch-ui.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\launch-ui.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\launch-ui.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/launch-ui.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\native-activity-target.mjs.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\native-activity-target.mjs.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/native-activity-target.mjs.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\native-activity-target.mjs.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\native-activity-target.mjs.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/native-activity-target.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\native-host.ts.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\native-host.ts.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/native-host.ts.log.gz",
+      "originalBytes": 59,
+      "packedBytes": 79,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\native-host.ts.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\native-host.ts.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/native-host.ts.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\owned-launch-functions.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\owned-launch-functions.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/owned-launch-functions.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\owned-launch-functions.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\owned-launch-functions.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/owned-launch-functions.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\qualify-native-activity.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\qualify-native-activity.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/qualify-native-activity.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\qualify-native-activity.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\qualify-native-activity.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/qualify-native-activity.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\results.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\results.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/results.json.gz",
+      "originalBytes": 2204,
+      "packedBytes": 458,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\shutdown.ps1.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\shutdown.ps1.log.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/shutdown.ps1.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\tool-validation\\syntax-20261013T180138838\\shutdown.ps1.log.exit.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\scratch\\tool-validation\\syntax-20261013T180138838\\shutdown.ps1.log.exit.json.gz",
+      "relative": "scratch/tool-validation/syntax-20261013T180138838/shutdown.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "packedBytes": 89,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\prepared-fixture.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\prepared-fixture.json.gz",
+      "relative": "service/prepared-fixture.json.gz",
+      "originalBytes": 103706,
+      "packedBytes": 6803,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\startup.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\startup.json.gz",
+      "relative": "service/startup.json.gz",
+      "originalBytes": 162,
+      "packedBytes": 154,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\launch-owner.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\launch-owner.json.gz",
+      "relative": "service/launch-owner.json.gz",
+      "originalBytes": 1796,
+      "packedBytes": 658,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\stdout.log.gz",
+      "relative": "service/stdout.log.gz",
+      "originalBytes": 549,
+      "packedBytes": 366,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\stderr.log.gz",
+      "relative": "service/stderr.log.gz",
+      "originalBytes": 258115,
+      "packedBytes": 17985,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\evidence\\native-host-ready.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\evidence\\native-host-ready.json.gz",
+      "relative": "service/evidence/native-host-ready.json.gz",
+      "originalBytes": 1683,
+      "packedBytes": 737,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\evidence\\native-host-settled.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\evidence\\native-host-settled.json.gz",
+      "relative": "service/evidence/native-host-settled.json.gz",
+      "originalBytes": 2412,
+      "packedBytes": 822,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\evidence\\native-host-stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\evidence\\native-host-stderr.bin",
+      "relative": "service/evidence/native-host-stderr.bin",
+      "originalBytes": 258115,
+      "packedBytes": 258115,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\evidence\\native-host-stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\evidence\\native-host-stdout.bin",
+      "relative": "service/evidence/native-host-stdout.bin",
+      "originalBytes": 549,
+      "packedBytes": 549,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\runtime\\log\\dev.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\service\\runtime\\log\\dev.log.gz",
+      "relative": "service/runtime/log/dev.log.gz",
+      "originalBytes": 258115,
+      "packedBytes": 17985,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-01a133\\prepared-native-case.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-01a133\\prepared-native-case.json.gz",
+      "relative": "native-runs/directory-target-native-active-01a133/prepared-native-case.json.gz",
+      "originalBytes": 3913,
+      "packedBytes": 724,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-01a133\\stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-01a133\\stdout.log.gz",
+      "relative": "native-runs/directory-target-native-active-01a133/stdout.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-01a133\\stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-01a133\\stderr.log.gz",
+      "relative": "native-runs/directory-target-native-active-01a133/stderr.log.gz",
+      "originalBytes": 167,
+      "packedBytes": 158,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-01a133\\evidence\\directory-target-native-active-inputs.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-01a133\\evidence\\directory-target-native-active-inputs.json.gz",
+      "relative": "native-runs/directory-target-native-active-01a133/evidence/directory-target-native-active-inputs.json.gz",
+      "originalBytes": 1859,
+      "packedBytes": 696,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-01a133\\evidence\\directory-target-native-active-parent-joined.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-01a133\\evidence\\directory-target-native-active-parent-joined.json.gz",
+      "relative": "native-runs/directory-target-native-active-01a133/evidence/directory-target-native-active-parent-joined.json.gz",
+      "originalBytes": 368,
+      "packedBytes": 244,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-01a133\\evidence\\directory-target-native-active-qualification-error.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-01a133\\evidence\\directory-target-native-active-qualification-error.json.gz",
+      "relative": "native-runs/directory-target-native-active-01a133/evidence/directory-target-native-active-qualification-error.json.gz",
+      "originalBytes": 1270,
+      "packedBytes": 608,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\prepared-native-case.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\prepared-native-case.json.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/prepared-native-case.json.gz",
+      "originalBytes": 4123,
+      "packedBytes": 740,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\stdout.log.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/stdout.log.gz",
+      "originalBytes": 1650,
+      "packedBytes": 284,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\stderr.log.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\evidence\\directory-target-native-active-resolution-02-inputs.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\evidence\\directory-target-native-active-resolution-02-inputs.json.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/evidence/directory-target-native-active-resolution-02-inputs.json.gz",
+      "originalBytes": 1943,
+      "packedBytes": 717,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\evidence\\directory-target-native-active-resolution-02-parent-joined.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\evidence\\directory-target-native-active-resolution-02-parent-joined.json.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/evidence/directory-target-native-active-resolution-02-parent-joined.json.gz",
+      "originalBytes": 382,
+      "packedBytes": 250,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\evidence\\directory-target-native-active-resolution-02-qualification.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\evidence\\directory-target-native-active-resolution-02-qualification.json.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/evidence/directory-target-native-active-resolution-02-qualification.json.gz",
+      "originalBytes": 3350,
+      "packedBytes": 729,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-ready.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-ready.json.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/evidence/native-host-ready.json.gz",
+      "originalBytes": 1291,
+      "packedBytes": 641,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-settled.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-settled.json.gz",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/evidence/native-host-settled.json.gz",
+      "originalBytes": 2490,
+      "packedBytes": 835,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-stderr.bin",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-active-resolution-02-01a133\\evidence\\native-host-stdout.bin",
+      "relative": "native-runs/directory-target-native-active-resolution-02-01a133/evidence/native-host-stdout.bin",
+      "originalBytes": 1650,
+      "packedBytes": 1650,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\prepared-native-case.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\prepared-native-case.json.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/prepared-native-case.json.gz",
+      "originalBytes": 4103,
+      "packedBytes": 749,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\stdout.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\stdout.log.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/stdout.log.gz",
+      "originalBytes": 237,
+      "packedBytes": 205,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\stderr.log",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\stderr.log.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/stderr.log.gz",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\directory-target-native-idle-resolution-02-inputs.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\directory-target-native-idle-resolution-02-inputs.json.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/directory-target-native-idle-resolution-02-inputs.json.gz",
+      "originalBytes": 1927,
+      "packedBytes": 716,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\directory-target-native-idle-resolution-02-parent-joined.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\directory-target-native-idle-resolution-02-parent-joined.json.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/directory-target-native-idle-resolution-02-parent-joined.json.gz",
+      "originalBytes": 380,
+      "packedBytes": 249,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\directory-target-native-idle-resolution-02-qualification.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\directory-target-native-idle-resolution-02-qualification.json.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/directory-target-native-idle-resolution-02-qualification.json.gz",
+      "originalBytes": 1493,
+      "packedBytes": 637,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-ready.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-ready.json.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/native-host-ready.json.gz",
+      "originalBytes": 1285,
+      "packedBytes": 638,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-run-error.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-run-error.json.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/native-host-run-error.json.gz",
+      "originalBytes": 2429,
+      "packedBytes": 938,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-settled.json",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-settled.json.gz",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/native-host-settled.json.gz",
+      "originalBytes": 4711,
+      "packedBytes": 1492,
+      "encoding": "gzip-complete-original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-stderr.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-stderr.bin",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "packedBytes": 0,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    },
+    {
+      "original": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-stdout.bin",
+      "packed": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\before-evidence-pack\\native-runs\\directory-target-native-idle-resolution-02-01a133\\evidence\\native-host-stdout.bin",
+      "relative": "native-runs/directory-target-native-idle-resolution-02-01a133/evidence/native-host-stdout.bin",
+      "originalBytes": 237,
+      "packedBytes": 237,
+      "encoding": "original-bytes",
+      "media": null,
+      "copyReadbackEqual": true
+    }
+  ]
+}

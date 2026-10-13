@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation.md)：独立列表target合同、别名移动与相对链接范围前检。
+
 - [删除 MySQL 转换能力](2026-10-14-remove-mysql-transfer.md)：删除转换实现、三个公开接口及专用测试，保留 SQLite 当前契约。
 
 - [Explorer 根目录展示](2026-10-14-explorer-directory-label.md)：五处目录提示、稳定目录错误和当前语言唯一投影。

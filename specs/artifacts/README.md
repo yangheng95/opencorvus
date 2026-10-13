@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation/README.md)：独立分析、真实predicate/文件准入、原活动与桌面资格。
+
 - [删除 MySQL 转换能力](2026-10-14-remove-mysql-transfer/README.md)：公开接口、生成产物及剩余 SQLite/运行时合同验收。
 
 - [394 原Research Studio历史](2026-10-05-connection-workspace-authority/original-research-history-394/README.md)：原始数据库只读事实及后续视觉资格。

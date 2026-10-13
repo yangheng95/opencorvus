@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [目录链接浏览与别名目的地](records/2026-10/2026-10-14-directory-target-navigation.md)：entry与目标事实、物理准入、有限真实调查和完整浏览方案。
+
 - [删除 MySQL 转换能力](records/2026-10/2026-10-14-remove-mysql-transfer.md)：删除转换实现、三个公开接口及专用测试，保留 SQLite 当前契约。
 
 - [394 原Research Studio历史](artifacts/2026-10-05-connection-workspace-authority/original-research-history-plan-394.md)：原始209来源、真实历史装载和成员侧栏。

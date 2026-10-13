@@ -1,0 +1,624 @@
+{
+  "qualification": "Actual two host access-namespace observations; not File API or UI acceptance",
+  "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+  "bun": "1.4.0",
+  "root": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification",
+  "startedAt": "2026-10-13T18:40:07.948Z",
+  "cases": [
+    {
+      "kind": "dir",
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\source-link",
+      "independent": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\source-link",
+      "relative": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\other-relative",
+      "ancestor": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\root-alias",
+      "target": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\root-alias\\other-relative\\moved",
+      "physical": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data\\moved",
+      "before": {
+        "source": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\source-link",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487153"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        },
+        "independent": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\source-link",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487154"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        },
+        "relative": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\other-relative",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487155"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "..\\source-link"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        },
+        "accessed": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\root-alias\\other-relative",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487155"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "..\\source-link"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        }
+      },
+      "native": {
+        "outcome": "returned",
+        "at": "2026-10-13T18:40:07.958Z"
+      },
+      "after": {
+        "source": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\source-link",
+          "entry": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, lstat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\source-link'"
+            }
+          },
+          "target": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, stat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\source-link'"
+            }
+          },
+          "text": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, readlink 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\source-link'"
+            }
+          },
+          "realpath": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, lstat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\source-link'"
+            }
+          }
+        },
+        "independent": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\source-link",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487154"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        },
+        "accessed": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\root-alias\\other-relative",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487155"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "..\\source-link"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        },
+        "target": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\context\\root-alias\\other-relative\\moved",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487153"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        },
+        "physical": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data\\moved",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487153"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487151"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\dir\\project\\data"
+          }
+        }
+      },
+      "marker": {
+        "expectedBytesBase64": "SE9TVCBkaXIgb3JpZ2luYWwNCg==",
+        "actualBytesBase64": "SE9TVCBkaXIgb3JpZ2luYWwNCg=="
+      }
+    },
+    {
+      "kind": "junction",
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\source-link",
+      "independent": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\source-link",
+      "relative": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\other-relative",
+      "ancestor": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias",
+      "target": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative\\moved",
+      "physical": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data\\moved",
+      "before": {
+        "source": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\source-link",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487162"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487160"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          }
+        },
+        "independent": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\source-link",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487163"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487160"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          }
+        },
+        "relative": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\other-relative",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487164"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487160"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "..\\source-link"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          }
+        },
+        "accessed": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487164"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487160"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "..\\source-link"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          }
+        }
+      },
+      "native": {
+        "outcome": "returned",
+        "at": "2026-10-13T18:40:07.966Z"
+      },
+      "after": {
+        "source": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\source-link",
+          "entry": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, lstat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\source-link'"
+            }
+          },
+          "target": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, stat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\source-link'"
+            }
+          },
+          "text": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, readlink 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\source-link'"
+            }
+          },
+          "realpath": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, lstat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\source-link'"
+            }
+          }
+        },
+        "independent": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\source-link",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487163"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487160"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          }
+        },
+        "accessed": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487164"
+            }
+          },
+          "target": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, stat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative'"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "..\\source-link"
+          },
+          "realpath": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, lstat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative'"
+            }
+          }
+        },
+        "target": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative\\moved",
+          "entry": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, lstat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative\\moved'"
+            }
+          },
+          "target": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, stat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative\\moved'"
+            }
+          },
+          "text": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, readlink 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative\\moved'"
+            }
+          },
+          "realpath": {
+            "state": "error",
+            "error": {
+              "name": "Error",
+              "code": "ENOENT",
+              "message": "ENOENT: no such file or directory, lstat 'D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\context\\root-alias\\other-relative\\moved'"
+            }
+          }
+        },
+        "physical": {
+          "full": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data\\moved",
+          "entry": {
+            "state": "present",
+            "value": {
+              "directory": false,
+              "file": false,
+              "link": true,
+              "dev": "3260155833",
+              "ino": "1970324841487162"
+            }
+          },
+          "target": {
+            "state": "present",
+            "value": {
+              "directory": true,
+              "file": false,
+              "link": false,
+              "dev": "3260155833",
+              "ino": "1970324841487160"
+            }
+          },
+          "text": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          },
+          "realpath": {
+            "state": "present",
+            "value": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\hop-qualification\\junction\\project\\data"
+          }
+        }
+      },
+      "marker": {
+        "expectedBytesBase64": "SE9TVCBqdW5jdGlvbiBvcmlnaW5hbA0K",
+        "actualBytesBase64": "SE9TVCBqdW5jdGlvbiBvcmlnaW5hbA0K"
+      }
+    }
+  ],
+  "completedAt": "2026-10-13T18:40:07.970Z"
+}

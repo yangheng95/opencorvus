@@ -1,0 +1,1164 @@
+{
+  "observedAtUtc": "2026-10-13T18:21:05.7322164Z",
+  "qualification": "Read-only verification of complete original service/HTTP/byte-transfer receipts; not a new runtime or product test",
+  "occurrence": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+  "fixtureID": "c2a68b0b-9f1b-4fe3-af16-f289f0715e93",
+  "service": {
+    "originalJoins": [
+      {
+        "kind": "terminal",
+        "status": "fulfilled",
+        "value": {
+          "occurrenceID": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+          "pid": 88500,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      {
+        "kind": "settled",
+        "status": "fulfilled",
+        "value": {
+          "occurrenceID": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+          "pid": 88500,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        }
+      },
+      {
+        "kind": "outputSettled",
+        "status": "fulfilled"
+      }
+    ],
+    "host": {
+      "pid": 89556,
+      "processInstanceID": "win32:639275114758752565",
+      "occurrenceID": "e840c8b2-dd37-43d0-8ea8-c6d089995f13"
+    },
+    "originalOuterToolLog": "not-saved-to-file; root tool transcript only",
+    "parent": {
+      "pid": 83452,
+      "processInstanceID": "win32:639275114716296739",
+      "occurrenceID": "adc01704-1339-438b-b018-ab1ae221d012"
+    },
+    "listeners": null,
+    "outputFacts": [
+      {
+        "kind": "stdout-file",
+        "status": "fulfilled"
+      },
+      {
+        "kind": "stderr-file",
+        "status": "fulfilled"
+      },
+      {
+        "kind": "stdout-parent-forward",
+        "status": "fulfilled"
+      },
+      {
+        "kind": "stderr-parent-forward",
+        "status": "fulfilled"
+      }
+    ],
+    "terminal": {
+      "occurrenceID": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+      "pid": 88500,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "stderrEqualsDevLog": true,
+    "shutdown": {
+      "observedAtUtc": "2026-10-13T18:13:15.4358919Z",
+      "occurrence": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+      "owner": {
+        "pid": 88500,
+        "processInstanceID": "win32:639275114770895054",
+        "occurrenceID": "a5d91985-e700-4550-b57c-8aca4d97ad42"
+      },
+      "pageClosed": true,
+      "dispatch": true,
+      "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VXxFXsL00Dg08m24Dx"
+      }
+    },
+    "byteTransfers": [
+      {
+        "parentBytes": 549,
+        "equal": true,
+        "stream": "stdout",
+        "originalBytes": 549
+      },
+      {
+        "parentBytes": 258115,
+        "equal": true,
+        "stream": "stderr",
+        "originalBytes": 258115
+      }
+    ],
+    "physicalChain": [
+      {
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 88500,
+          "processInstanceID": "win32:639275114770895054",
+          "occurrenceID": "a5d91985-e700-4550-b57c-8aca4d97ad42"
+        },
+        "originalOccurrencePresent": false
+      },
+      {
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 89556,
+          "processInstanceID": "win32:639275114758752565",
+          "occurrenceID": "e840c8b2-dd37-43d0-8ea8-c6d089995f13"
+        },
+        "originalOccurrencePresent": false
+      }
+    ],
+    "target": {
+      "pid": 88500,
+      "processInstanceID": "win32:639275114770895054",
+      "occurrenceID": "a5d91985-e700-4550-b57c-8aca4d97ad42"
+    }
+  },
+  "aggregates": [
+    {
+      "occurrence": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+      "file": "register-1791914740717-fc5e7c62-8c70-4cc4-b08b-e24311c4bec9.json",
+      "exitCode": 0,
+      "outcome": "two-original-independent-projects-registered",
+      "requests": 4,
+      "fixtureID": "c2a68b0b-9f1b-4fe3-af16-f289f0715e93"
+    },
+    {
+      "occurrence": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+      "file": "before-probe-02-1791915073645-a68ea244-8845-4080-86d2-da55835f3371.json",
+      "exitCode": 0,
+      "outcome": "eight-original-before-observations-collected-not-product-acceptance",
+      "requests": 32,
+      "fixtureID": "c2a68b0b-9f1b-4fe3-af16-f289f0715e93"
+    },
+    {
+      "occurrence": "directory-target-before-09220245-c7b6-4b49-91ac-7114a981bd7d",
+      "file": "readOnly-1791915159107-6ed27b18-4271-419f-9aad-ef0e992fc3cf.json",
+      "exitCode": 0,
+      "outcome": "original-GUI-readback-content-and-list-contracts-collected-no-visual-claim",
+      "requests": 12,
+      "fixtureID": "c2a68b0b-9f1b-4fe3-af16-f289f0715e93"
+    }
+  ],
+  "originalFirstProbe": {
+    "cases": 0,
+    "exitCode": 1,
+    "error": {
+      "name": "Error",
+      "message": "Original literal bytes/entry changed: .gitignore",
+      "stack": "Error: Original literal bytes/entry changed: .gitignore\n    at requireFact (file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/fixture-support.mjs:17:76)\n    at markerFacts (file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/fixture-tool.mjs:89:5)\n    at async beforeProbe (file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/fixture-tool.mjs:225:53)\n    at async file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/fixture-tool.mjs:274:165"
+    },
+    "requests": 0
+  },
+  "requests": [
+    {
+      "status": 200,
+      "route": "/project/current",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-01-register-root-project.json",
+      "sequence": 1,
+      "method": "GET",
+      "responseBytes": 226,
+      "originalBodyAndChunksBound": true,
+      "requestID": "58e94e99-d687-42f8-8086-41c9434bb1f6",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 201,
+      "route": "/coding/chat/session",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-02-register-root-chat.json",
+      "sequence": 2,
+      "method": "POST",
+      "responseBytes": 412,
+      "originalBodyAndChunksBound": true,
+      "requestID": "12cb46b2-5460-4829-9dff-1e3f54dbee4f",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/project/current",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-03-register-b-project.json",
+      "sequence": 3,
+      "method": "GET",
+      "responseBytes": 228,
+      "originalBodyAndChunksBound": true,
+      "requestID": "630be1ea-78ee-419c-827e-1c51cc42b323",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 201,
+      "route": "/coding/chat/session",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-04-register-b-chat.json",
+      "sequence": 4,
+      "method": "POST",
+      "responseBytes": 415,
+      "originalBodyAndChunksBound": true,
+      "requestID": "e6696d20-f6c9-4e01-9490-a91b6846e3e1",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 404,
+      "route": "/file/item",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-05-j-self-mutation.json",
+      "sequence": 5,
+      "method": "PATCH",
+      "responseBytes": 130,
+      "originalBodyAndChunksBound": true,
+      "requestID": "d660bfc4-711d-4ec6-a061-43998d33da7f",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-06-j-self-source-parent.json",
+      "sequence": 6,
+      "method": "GET",
+      "responseBytes": 1142,
+      "originalBodyAndChunksBound": true,
+      "requestID": "98127ff8-9058-4937-825a-1e4d19ad6396",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 500,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-07-j-self-target-parent.json",
+      "sequence": 7,
+      "method": "GET",
+      "responseBytes": 112,
+      "originalBodyAndChunksBound": true,
+      "requestID": "53d17671-b338-4d41-a0ad-04de7c34598b",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-08-j-self-content.json",
+      "sequence": 8,
+      "method": "GET",
+      "responseBytes": 129,
+      "originalBodyAndChunksBound": true,
+      "requestID": "7837db48-909f-4c00-b039-e93624d7978d",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 404,
+      "route": "/file/item",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-09-s-self-mutation.json",
+      "sequence": 9,
+      "method": "PATCH",
+      "responseBytes": 130,
+      "originalBodyAndChunksBound": true,
+      "requestID": "8f3f683e-cf1e-4e84-bb49-f2aade44ed0f",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-10-s-self-source-parent.json",
+      "sequence": 10,
+      "method": "GET",
+      "responseBytes": 939,
+      "originalBodyAndChunksBound": true,
+      "requestID": "7c200fdd-2a11-4d6c-b3f0-73fe2b971d93",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 500,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-11-s-self-target-parent.json",
+      "sequence": 11,
+      "method": "GET",
+      "responseBytes": 112,
+      "originalBodyAndChunksBound": true,
+      "requestID": "d784b7d1-c1d5-43f6-9a1e-b7138ab4a73e",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-12-s-self-content.json",
+      "sequence": 12,
+      "method": "GET",
+      "responseBytes": 129,
+      "originalBodyAndChunksBound": true,
+      "requestID": "815d91e1-c8a9-40ed-b48a-d331bc61db92",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 404,
+      "route": "/file/item",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-13-s-dependent-mutation.json",
+      "sequence": 13,
+      "method": "PATCH",
+      "responseBytes": 148,
+      "originalBodyAndChunksBound": true,
+      "requestID": "5a3383de-d3b4-4286-b7c4-2619037eeb0b",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-14-s-dependent-source-parent.json",
+      "sequence": 14,
+      "method": "GET",
+      "responseBytes": 706,
+      "originalBodyAndChunksBound": true,
+      "requestID": "04d71598-18ad-4af0-b013-efda7b771ea2",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 500,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-15-s-dependent-target-parent.json",
+      "sequence": 15,
+      "method": "GET",
+      "responseBytes": 112,
+      "originalBodyAndChunksBound": true,
+      "requestID": "42545c6a-1be4-4fe2-b507-43d60076f191",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-16-s-dependent-content.json",
+      "sequence": 16,
+      "method": "GET",
+      "responseBytes": 132,
+      "originalBodyAndChunksBound": true,
+      "requestID": "9acd4770-cd2e-40a0-8dbe-58afb2bd636d",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/item",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-17-independent-mutation.json",
+      "sequence": 17,
+      "method": "PATCH",
+      "responseBytes": 347,
+      "originalBodyAndChunksBound": true,
+      "requestID": "b816fc81-8353-4a3c-8467-5c50ef2d2798",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-18-independent-source-parent.json",
+      "sequence": 18,
+      "method": "GET",
+      "responseBytes": 467,
+      "originalBodyAndChunksBound": true,
+      "requestID": "24901683-a0f1-425a-a8fd-cf1c03100090",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-19-independent-target-parent.json",
+      "sequence": 19,
+      "method": "GET",
+      "responseBytes": 510,
+      "originalBodyAndChunksBound": true,
+      "requestID": "5cc379b5-d4f8-49a8-8d3c-509d9b6b5607",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-20-independent-content.json",
+      "sequence": 20,
+      "method": "GET",
+      "responseBytes": 134,
+      "originalBodyAndChunksBound": true,
+      "requestID": "acf01ae3-8788-451b-9706-75e3d4ce6386",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/item",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-21-relative-move-mutation.json",
+      "sequence": 21,
+      "method": "PATCH",
+      "responseBytes": 343,
+      "originalBodyAndChunksBound": true,
+      "requestID": "ef6b5512-1098-4af6-9c22-f577e9f30cd9",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-22-relative-move-source-parent.json",
+      "sequence": 22,
+      "method": "GET",
+      "responseBytes": 462,
+      "originalBodyAndChunksBound": true,
+      "requestID": "36fd1c71-1288-4d4b-a851-1fa275e80f15",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-23-relative-move-target-parent.json",
+      "sequence": 23,
+      "method": "GET",
+      "responseBytes": 5279,
+      "originalBodyAndChunksBound": true,
+      "requestID": "da9aa057-7fb6-4d34-8c86-f304136fab87",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-24-relative-move-content.json",
+      "sequence": 24,
+      "method": "GET",
+      "responseBytes": 135,
+      "originalBodyAndChunksBound": true,
+      "requestID": "6daceb98-b5a9-4974-ac38-cb7a4116b1f0",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/item/copy",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-25-relative-copy-mutation.json",
+      "sequence": 25,
+      "method": "POST",
+      "responseBytes": 345,
+      "originalBodyAndChunksBound": true,
+      "requestID": "6d3c6356-6a7c-42d3-9354-5e8c5564a365",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-26-relative-copy-source-parent.json",
+      "sequence": 26,
+      "method": "GET",
+      "responseBytes": 462,
+      "originalBodyAndChunksBound": true,
+      "requestID": "88b39e88-ccd8-4495-963e-ac27869a6906",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-27-relative-copy-target-parent.json",
+      "sequence": 27,
+      "method": "GET",
+      "responseBytes": 5539,
+      "originalBodyAndChunksBound": true,
+      "requestID": "4a72f12f-53f7-4d20-ba9f-18334718c316",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-28-relative-copy-content.json",
+      "sequence": 28,
+      "method": "GET",
+      "responseBytes": 135,
+      "originalBodyAndChunksBound": true,
+      "requestID": "b2bbe4ae-1b9b-4807-b69f-ddaf395713b5",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/item",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-29-b-independent-mutation.json",
+      "sequence": 29,
+      "method": "PATCH",
+      "responseBytes": 349,
+      "originalBodyAndChunksBound": true,
+      "requestID": "41942c1e-5f29-49e7-8f3c-8a79321e6592",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-30-b-independent-source-parent.json",
+      "sequence": 30,
+      "method": "GET",
+      "responseBytes": 239,
+      "originalBodyAndChunksBound": true,
+      "requestID": "231ce10a-f142-47ea-b6b7-0d67b4554386",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-31-b-independent-target-parent.json",
+      "sequence": 31,
+      "method": "GET",
+      "responseBytes": 514,
+      "originalBodyAndChunksBound": true,
+      "requestID": "cb948acc-5c7f-4e4f-a3d3-7df50a2a55b8",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-32-b-independent-content.json",
+      "sequence": 32,
+      "method": "GET",
+      "responseBytes": 133,
+      "originalBodyAndChunksBound": true,
+      "requestID": "bc3c11b0-882e-4363-8b06-54ac4637a4ba",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/item",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-33-relative-normal-mutation.json",
+      "sequence": 33,
+      "method": "PATCH",
+      "responseBytes": 311,
+      "originalBodyAndChunksBound": true,
+      "requestID": "72d0d5b2-5266-49e8-a583-7445ce4336a9",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-34-relative-normal-source-parent.json",
+      "sequence": 34,
+      "method": "GET",
+      "responseBytes": 227,
+      "originalBodyAndChunksBound": true,
+      "requestID": "8a6a8988-d891-4ded-b226-f7d33a571443",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-35-relative-normal-target-parent.json",
+      "sequence": 35,
+      "method": "GET",
+      "responseBytes": 234,
+      "originalBodyAndChunksBound": true,
+      "requestID": "83ec700b-6c9f-4e92-b3be-5b60d718080d",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-36-relative-normal-content.json",
+      "sequence": 36,
+      "method": "GET",
+      "responseBytes": 134,
+      "originalBodyAndChunksBound": true,
+      "requestID": "98b858c3-0748-4078-992b-16e69634aa96",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-37-gui-root-list.json",
+      "sequence": 37,
+      "method": "GET",
+      "responseBytes": 4659,
+      "originalBodyAndChunksBound": true,
+      "requestID": "38d0c38a-3e59-46ee-9637-515a6b2500d1",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-38-gui-b-list.json",
+      "sequence": 38,
+      "method": "GET",
+      "responseBytes": 1045,
+      "originalBodyAndChunksBound": true,
+      "requestID": "ff611e07-14d9-4053-9e22-7b3edecfd2c9",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-39-gui-alias-1-list.json",
+      "sequence": 39,
+      "method": "GET",
+      "responseBytes": 485,
+      "originalBodyAndChunksBound": true,
+      "requestID": "3b856a02-af47-4d8f-a2b5-86700dfe98be",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-40-gui-alias-1-content.json",
+      "sequence": 40,
+      "method": "GET",
+      "responseBytes": 135,
+      "originalBodyAndChunksBound": true,
+      "requestID": "ab93c494-4f44-44b2-af2e-42a71e5852b7",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-41-gui-alias-2-list.json",
+      "sequence": 41,
+      "method": "GET",
+      "responseBytes": 507,
+      "originalBodyAndChunksBound": true,
+      "requestID": "e5902862-6ad5-44a8-ab4a-9fbf939748f7",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-42-gui-alias-2-content.json",
+      "sequence": 42,
+      "method": "GET",
+      "responseBytes": 135,
+      "originalBodyAndChunksBound": true,
+      "requestID": "6b04f9f5-92b0-4cc6-a95e-56b4510bb576",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-43-gui-alias-3-list.json",
+      "sequence": 43,
+      "method": "GET",
+      "responseBytes": 507,
+      "originalBodyAndChunksBound": true,
+      "requestID": "2dbd64a5-48b8-4ee8-8c7a-bab8003a9b91",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-44-gui-alias-3-content.json",
+      "sequence": 44,
+      "method": "GET",
+      "responseBytes": 135,
+      "originalBodyAndChunksBound": true,
+      "requestID": "ca84f306-4112-446b-bde4-0ce26ce8f124",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-45-gui-file-link-content.json",
+      "sequence": 45,
+      "method": "GET",
+      "responseBytes": 126,
+      "originalBodyAndChunksBound": true,
+      "requestID": "c0811f7d-789a-48af-bf11-980fe46604af",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 404,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-46-gui-broken-content.json",
+      "sequence": 46,
+      "method": "GET",
+      "responseBytes": 134,
+      "originalBodyAndChunksBound": true,
+      "requestID": "7f72ed4f-b4d8-48a0-886e-d6fc354fe211",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 500,
+      "route": "/file",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-47-gui-external-list.json",
+      "sequence": 47,
+      "method": "GET",
+      "responseBytes": 112,
+      "originalBodyAndChunksBound": true,
+      "requestID": "02706228-40a9-46bb-9234-38f3d492e30b",
+      "role": "root",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    },
+    {
+      "status": 200,
+      "route": "/file/content",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\directory-target-before\\http-48-gui-b-own-content.json",
+      "sequence": 48,
+      "method": "GET",
+      "responseBytes": 133,
+      "originalBodyAndChunksBound": true,
+      "requestID": "538e2ea5-44d7-4570-971f-7110452e58c4",
+      "role": "b",
+      "originalLogEvents": [
+        "started",
+        "completed"
+      ]
+    }
+  ],
+  "statusCounts": [
+    {
+      "count": 38,
+      "status": "200"
+    },
+    {
+      "count": 2,
+      "status": "201"
+    },
+    {
+      "count": 4,
+      "status": "404"
+    },
+    {
+      "count": 4,
+      "status": "500"
+    }
+  ],
+  "serviceErrors": [
+    {
+      "level": "error",
+      "time": "2026-10-13T18:05:43.463Z",
+      "service": "overlay:project-load",
+      "logDomain": "non-session",
+      "data": {
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project",
+        "error": "signal timed out"
+      },
+      "message": "meta load failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:06:12.441Z",
+      "service": "overlay:project-load",
+      "logDomain": "non-session",
+      "data": {
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project",
+        "error": "signal timed out"
+      },
+      "message": "meta reload failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:06:28.255Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "bd339b97-dbe6-4653-9e15-8be8b9a41227",
+        "method": "GET",
+        "path": "/file/content",
+        "statusCode": 404,
+        "error": {
+          "type": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry is not a file: junction-dir",
+          "stack": "FileNotFoundError: FileNotFoundError: File entry is not a file: junction-dir\n    at fileNotFound (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:655:16)\n    at statReadableFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:677:13)\n    at async readResolvedContent (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:882:11)\n    at async read (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1029:26)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:144:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "type": "Object",
+            "message": "File entry is not a file: junction-dir",
+            "stack": "",
+            "path": "junction-dir"
+          },
+          "name": "FileNotFoundError"
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:08:38.848Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d4699886-7507-40d9-9f99-23f8c62034d7",
+        "method": "GET",
+        "path": "/file/content",
+        "statusCode": 404,
+        "error": {
+          "type": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry is not a file: absolute-dir-link",
+          "stack": "FileNotFoundError: FileNotFoundError: File entry is not a file: absolute-dir-link\n    at fileNotFound (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:655:16)\n    at statReadableFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:677:13)\n    at async readResolvedContent (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:882:11)\n    at async read (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1029:26)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:144:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "type": "Object",
+            "message": "File entry is not a file: absolute-dir-link",
+            "stack": "",
+            "path": "absolute-dir-link"
+          },
+          "name": "FileNotFoundError"
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:11:10.423Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d660bfc4-711d-4ec6-a061-43998d33da7f",
+        "method": "PATCH",
+        "path": "/file/item",
+        "statusCode": 404,
+        "error": {
+          "type": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry not found: mut\\j-self\\moved-entry",
+          "stack": "FileNotFoundError: FileNotFoundError: File entry not found: mut\\j-self\\moved-entry\n    at fileNotFound (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:655:16)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1201:44)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "type": "Object",
+            "message": "File entry not found: mut\\j-self\\moved-entry",
+            "stack": "",
+            "path": "mut\\j-self\\moved-entry"
+          },
+          "name": "FileNotFoundError"
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:11:10.5Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "53d17671-b338-4d41-a0ad-04de7c34598b",
+        "method": "GET",
+        "path": "/file",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\j-self'",
+          "stack": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\j-self'\n    at async list (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1648:39)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:113:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\hono-base.js:308:31)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:925:45)",
+          "code": "ENOENT",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\j-self",
+          "syscall": "scandir",
+          "errno": -4058
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:11:10.924Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8f3f683e-cf1e-4e84-bb49-f2aade44ed0f",
+        "method": "PATCH",
+        "path": "/file/item",
+        "statusCode": 404,
+        "error": {
+          "type": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry not found: mut\\s-self\\moved-entry",
+          "stack": "FileNotFoundError: FileNotFoundError: File entry not found: mut\\s-self\\moved-entry\n    at fileNotFound (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:655:16)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1201:44)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "type": "Object",
+            "message": "File entry not found: mut\\s-self\\moved-entry",
+            "stack": "",
+            "path": "mut\\s-self\\moved-entry"
+          },
+          "name": "FileNotFoundError"
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:11:10.952Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d784b7d1-c1d5-43f6-9a1e-b7138ab4a73e",
+        "method": "GET",
+        "path": "/file",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\s-self'",
+          "stack": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\s-self'\n    at async list (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1648:39)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:113:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\hono-base.js:308:31)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:925:45)",
+          "code": "ENOENT",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\s-self",
+          "syscall": "scandir",
+          "errno": -4058
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:11:11.301Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5a3383de-d3b4-4286-b7c4-2619037eeb0b",
+        "method": "PATCH",
+        "path": "/file/item",
+        "statusCode": 404,
+        "error": {
+          "type": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry not found: mut\\dependent-other\\moved-entry",
+          "stack": "FileNotFoundError: FileNotFoundError: File entry not found: mut\\dependent-other\\moved-entry\n    at fileNotFound (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:655:16)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1201:44)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "type": "Object",
+            "message": "File entry not found: mut\\dependent-other\\moved-entry",
+            "stack": "",
+            "path": "mut\\dependent-other\\moved-entry"
+          },
+          "name": "FileNotFoundError"
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:11:11.353Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "42545c6a-1be4-4fe2-b507-43d60076f191",
+        "method": "GET",
+        "path": "/file",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\dependent-other'",
+          "stack": "Error: ENOENT: no such file or directory, scandir 'C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\dependent-other'\n    at async list (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1648:39)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:113:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\hono-base.js:308:31)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:925:45)",
+          "code": "ENOENT",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-before-01a133\\project\\mut\\dependent-other",
+          "syscall": "scandir",
+          "errno": -4058
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:12:38.721Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "7f72ed4f-b4d8-48a0-886e-d6fc354fe211",
+        "method": "GET",
+        "path": "/file/content",
+        "statusCode": 404,
+        "error": {
+          "type": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry not found: broken-dir-link/marker.txt",
+          "stack": "FileNotFoundError: FileNotFoundError: File entry not found: broken-dir-link/marker.txt\n    at fileNotFound (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:655:16)\n    at read (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1027:26)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:144:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at processTicksAndRejections (native:7:39)",
+          "data": {
+            "type": "Object",
+            "message": "File entry not found: broken-dir-link/marker.txt",
+            "stack": "",
+            "path": "broken-dir-link/marker.txt"
+          },
+          "name": "FileNotFoundError"
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-13T18:12:38.73Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "02706228-40a9-46bb-9234-38f3d492e30b",
+        "method": "GET",
+        "path": "/file",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "Access denied: path escapes project directory",
+          "stack": "Error: Access denied: path escapes project directory\n    at list (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1645:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:113:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at processTicksAndRejections (native:7:39)"
+        }
+      },
+      "message": "request failed"
+    }
+  ]
+}
