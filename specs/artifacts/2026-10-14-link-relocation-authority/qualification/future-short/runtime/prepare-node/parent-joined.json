@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-future-short-prepare-node-270ca22c-de0b-4c15-9e6d-bde1ce51bae3",
+  "hostPID": 87904,
+  "parentPID": 63976,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 252632
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T23:04:57.557Z"
+}

@@ -1,0 +1,62 @@
+{
+  "atUtc": "2026-10-13T22:55:03.582Z",
+  "head": "625c7c5c2e4c9ef1e2835f6ad19d195f8d59f257",
+  "upstream": "625c7c5c2e4c9ef1e2835f6ad19d195f8d59f257",
+  "ownCommit": "625c7c5c2e4c9ef1e2835f6ad19d195f8d59f257",
+  "ownCommitOnFreshUpstream": true,
+  "ancestor": {
+    "args": [
+      "merge-base",
+      "--is-ancestor",
+      "625c7c5c2e4c9ef1e2835f6ad19d195f8d59f257",
+      "@{upstream}"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "ownedScopeStatus": "",
+  "ownedRows": [
+    {
+      "file": "specs/README.md",
+      "expected": [
+        "- [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。"
+      ],
+      "actual": [
+        "- [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。"
+      ],
+      "matches": true
+    },
+    {
+      "file": "specs/records/2026-10/README.md",
+      "expected": [
+        "- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。"
+      ],
+      "actual": [
+        "- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。"
+      ],
+      "matches": true
+    },
+    {
+      "file": "specs/artifacts/README.md",
+      "expected": [
+        "- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority/README.md)：原交付回执、有限宿主资格与Root独立功能/桌面证据。"
+      ],
+      "actual": [
+        "- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority/README.md)：原交付回执、有限宿主资格与Root独立功能/桌面证据。"
+      ],
+      "matches": true
+    }
+  ],
+  "remainingStaged": "",
+  "fullWorkspaceStatus": "M CHANGELOG.md\n M packages/opencorvus/src/engine/git-process.ts\n M packages/opencorvus/src/engine/interaction.ts\n M packages/opencorvus/src/engine/model.ts\n M packages/opencorvus/src/engine/task-session-lineage.ts\n M packages/opencorvus/src/protocol/session-mirror.ts\n M packages/opencorvus/src/question/index.ts\n M packages/opencorvus/src/server/routes/session.ts\n M packages/opencorvus/src/storage/db.ts\n M packages/opencorvus/test/engine-git-batched-transaction.test.ts\n M packages/opencorvus/test/engine-git-fact-reconciliation.test.ts\n M packages/opencorvus/test/engine-interaction-recovery.test.ts\n M packages/opencorvus/test/server/session-event-connection-snapshot.test.ts\n M packages/opencorvus/test/storage/schema-contract.test.ts\n M packages/overlay/src/components/settings/ProvidersPanel.tsx\n M packages/overlay/src/i18n/en-US.json\n M packages/overlay/src/i18n/zh-CN.json\n M packages/overlay/src/services/conversation.ts\n M packages/overlay/src/services/event-policy.ts\n M packages/overlay/src/services/side-chat.ts\n M packages/overlay/src/services/tree-writer.ts\n M packages/overlay/test/side-chat-transport.test.ts\n M packages/overlay/test/subagent-conversation-service.test.ts\n M packages/sdk/js/src/gen/types.gen.ts\n M packages/sdk/openapi.json\n M specs/README.md\n M specs/artifacts/README.md\n M specs/current/architecture/02-data.md\n M specs/current/architecture/07-panel-reactivity.md\n M specs/current/architecture/07-panel.md\n M specs/current/architecture/task-runtime-directory.md\n M specs/records/2026-10/2026-10-13-compaction-stress.md\n M specs/records/2026-10/2026-10-14-task-git-question-reconnect-404.md\n M specs/records/2026-10/README.md\n?? .bun/\n?? packages/opencorvus/bun/\n?? packages/opencorvus/test/engine-git-frozen-directory.test.ts\n?? packages/opencorvus/test/question-publication-projection.test.ts\n?? packages/opencorvus/test/storage/database-checkpoint.test.ts\n?? packages/overlay/src/utils/question-interaction.ts",
+  "pushOriginal": {
+    "exitCode": 0,
+    "command": "git push",
+    "atUtc": "2026-10-13T22:54:35.4176436Z"
+  },
+  "boundaries": [
+    "Other task changes remain preserved in the shared workspace",
+    "Original source/future permission and directory-link navigation goal remains active; no agent delegation"
+  ]
+}

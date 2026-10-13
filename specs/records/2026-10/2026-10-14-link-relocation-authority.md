@@ -66,6 +66,26 @@ Copy仍只有一个成熟fs.promises.cp调用。其正式filter扩展点观察�
 
 以下保留各阶段当时的状态与失败，不代表当前未完成项；最终验收以“当前状态”及原回执为准。
 
+## 下一批：未来树访问输入资格
+
+上一轮属于实质进展，625c7c5c2e4c9ef1e2835f6ad19d195f8d59f257已普通提交/精确index收敛，fresh fetch/merge后完整待推送集合只有该提交；正常push原0，全部hooks通过。2026-10-13T22:55:03.582Z fresh upstream=HEAD=该提交，own scopes clean、真实index空；他人共享工作区改动保留。本轮仍由Root独立推进完整shared source/future权限，用户停止子agent的要求持续有效。
+
+进一步全仓核对当前唯一shared遍历及两caller、FileEntry创建类型、Move退休访问guard、canonicalPath/isPathAllowed、FileInvalidPathError400和现真实TCP合同。现未来输入仅长名字的有限位置投影仍有未经排除的缺口：Windows真实8.3（短文件名）可参与链接文本，复制重新生成别名，Move子项保身份但顶层rename可能改变别名；把未知未来短名字直接当合法missing可能漏掉内部链接链。此前entry-name原运行已实际返回REGULA~1.TXT等别名，当前C卷不能假定无短名。源/目的地址、访问namespace、lookup实体位置是不同的执行事实，不可互换。当前无新增调度异常；API/SDK/Node/配置/凭据/模型无改动需求；非Windows、UNC、大小写敏感卷和外部retarget仍未知。
+
+在产品解析器实现前，先对这一个有实证来源的输入边界作有限原生资格。新owned root为C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/future-short-input-01a133；Node25.7/Bun1.4各4个独立case（稳定别名与碰撞创建顺序，各Copy/Move），预声明所有普通目录/文件/链接及正文总预算1024B。Prepare一次建立原UUID、A/B独立实体和original full stat/readlink/bytes，原GetShortPathNameW返回的完整路径和basename是唯一alias输入；API未返回改变终端拼写时显式未资格，禁止猜~1。碰撞case按显式先创建两个JUNCTION、再创建同前缀普通目录，保存真实短名；u文字只从首JUNCTION的原API结果形成。没有用户窗口/进程、Provider、auth/models或数据库。
+
+Read对各host自己的原case每项只做一次原操作：Copy使用现同一fs.cp正式filter/普通成员后原fs.symlink明确type协议，Move只用fs.rename观察OS语义，不冒生产renameNoReplace。所有before/after长名、真实短名、NOFOLLOW原tag/name/close、lstat/realpath/stat和完整正文/错误及source变化全文输出。Copy资格只证明原库/OS协议，不冒FileRoutes、网页或视觉验收；不根据名字、最终错误或预期推alias身份。此前已资格的完整native reader保持不改；同一NativeFacade wrapper只增本新mode分支，先保旧全文与精确差异，再syntax，Prepare/NodeRead/BunRead各首次独立namespace，60000ms cap/15000ms真实Target输出无活动；三joins和四writes完整收齐。未知/failed native observation立即保全停phase，readonly目标错误作为原观测，不用phase0冒所有目标可读。
+
+Windows官方[Reparse Points](https://learn.microsoft.com/en-us/windows/win32/fileio/reparse-points)规定当前路径最多63个reparse point；[Linux path_resolution](https://www.man7.org/linux/man-pages/man7/path_resolution.7.html)规定40个符号链接。它们是原生合同来源，不是本产品任意次数策略，尚未作为本机边界资格或新代码常量。原self-cycle ELOOP证据仍有效，当前不能用裸inode去重拒绝不同namespace的有限访问。未来完整解析器必须只保一个snapshot/位置投影事实来源，显式区分Current、Copy保源及Move退休旧源；短名结果决定是否必须在原staging生产后取得实际子项别名，再基于final位置核权限。禁止以关键词拒绝、物理试发布、原target成功代future成功或新增平行权限root替代完整解析。后续实际FileRoutes正向错误/成功、完整bytes/身份和Root桌面验收仍必要，本资格不关闭原完整目标。
+
+### 本轮首次运行结果与方案修正
+
+Root全文复核固定新工具、原23处精确变化与preflight纠错后，三项Node syntax原0。唯一Prepare建立fixture=0d7295b0-5876-41db-834f-5b1a2ce57d51、8独立case、304B普通正文；所有u的原文字JUNCTI~1/r来自各原GetShortPathNameW返回，非猜测。随后Node/Bun各自己的4case/4操作首次原0：Prepare252632B，Node2036904B，Bun2064307B，stderr均0；Read各175完整record、71次NOFOLLOW目录项观察、5次copy link原观察/明确type创建。三phase原Target/parent 0、三joins、四writes与physical/output/request settled收齐。142次目录项观察不包括另外10次copy-filter观察；不把两个计数混同。
+
+两host完全一致：u原完整正文SHORT INNER A\r\n（15B）；stable Copy、stable Move和collision Move后均为SHORT OUTER B\r\n（15B），原NOFOLLOW同短名指JUNCTION且长entry地址精确落到result下原链接名。collision Copy后u为SHORT ORDINARY\r\n（16B）：JUNCTI~1实际目录项tag=0、ordinary directory，长地址是junction-altar-folder；alpha/alpine两个链接仍tag=0xA0000003，但实际短名变为JUNCTI~2/~3。collision Move保两子项的JUNCTI~1/~2及原身份，随后相对namespace变浅导致u读B。原text/创建类型并未变化；复制新目录项的实际别名分配随普通目录先创建、链接后创建的真实协议变化。完整stat/readlink/native原buffer/关闭/realpath/正文与错误保全，不由正文推断entry身份。
+
+这不是新的FileRoutes回执或网页通过，A/B是隔离实体目录而非注册Git Project；也不是“Copy改变type”的旧根。它明确排除了源树长名map，以及源树短名map不加区分地直接用于Copy future的方案。下一实施合同须将Copy future检查放在原staging完整生产/strict检查之后、noReplace发布之前，使用该实际树的长名/实际别名与创建类型，按最终实体位置解释；Current与Move仍使用原source实际目录项，Move显式退休旧namespace。只保持一个解释器，不双读择成功，不制造未来stat、不先发布再撤销，不以~关键词拒绝。顶层长名字rename后的新short alias、short-name政策/关闭卷、非Windows、UNC与retarget原子性仍没有本轮资格；原source/future权限/循环/完整整树实现与目录浏览均未达成。由本新证据继续完整实现，不能将本调查检查点称该批功能已完成。
+
 第一原FileRoutes checker运行实际30 pass/5 fail、352断言；同深度tree Copy回执200后content实际500/UnknownError，原readScope禁止B访问，故不是A API已读取外域。四创建类型正向合同中健康dir的红态也包含旧私有字段只有symbolic的合同差异；真实tag/属性变化仍由前述Native原件证明。Root调用时误将Bun test的筛选参数传给本仓只接受文件的run-tests.ts，原运行另把两个参数当文件并各报module missing，整runner原1保全；不把额外故障归产品。后续采用正确文件入口，不扩改成熟runner。
 
 首修后正确checker35 link+18 root+13 ignore共66 pass、748断言、原runner0。Root复核进一步让filter只收原descriptor、普通成员完成后再创建link，不在predicate内发布FS；最后直接受影响link35与source类型检查正在重新运行，首66不借给此最终版本。新18457页面工具已沿原已关闭guard成熟launcher/fixture精确准备独立copy-kind-after namespace，六原脚本与完整修改保存；输入仍95B、五健康links、A/B两独立Git根，四注册请求，无root循环或model/Auth/models。UI仅手动两次Copy source-j/source-s到copied-j/copied-s，前6/后8只读HTTP及真正native tag/directory/text/原身份/六注册后完整bytes读回；broken与nested tree由真实FileRoutes合同单独证明，不借健康UI图替完整浏览。仅当前原service900s/120s，准备60s/20s、注册与读取120s/30s，所有原收尾保全。工具parser后再Root首次授权Prepare/Launch/Register/页面；当前没有新service或UI截图。
