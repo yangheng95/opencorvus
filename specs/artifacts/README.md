@@ -1,5 +1,8 @@
 # Artifact entry points
 
+- [文件完整字节准入](2026-10-13-file-text-admission/README.md)：真实有损保存前态、只读后态、文本保存与聚焦功能合同。
+- [Composer模型名称搜索](2026-10-13-iteration-batch-380/README.md)：可见名称搜索前后桌面截图。
+
 - [代理认证原值验收](2026-10-13-proxy-credentials/README.md)：修复前后功能测试、真实页面保存、双语截图与本地认证请求。
 
 - [Dependabot升级验收](2026-10-13-dependabot-upgrades/README.md)：实际Provider/ACP流式测试、逐文件回归结果、编辑保存与时间线截图。

@@ -69,6 +69,17 @@ content keeps the existing non-editable description. The file-image container
 owns its bounded layout and scrolling; there is no additional fetch, image
 cache, file mutation or parallel preview implementation.
 
+File readers admit existing text candidates only when their complete original
+bytes are valid UTF-8 and contain no NUL. Invalid candidates use the existing
+binary response before text decoding, diff generation or editable revision
+publication. The same byte predicate guards text saves after the existing path,
+read-only and revision checks. Submitted strings must also round-trip through
+UTF-8 exactly; NUL and isolated UTF-16 surrogates produce FileInvalidPathError.
+Successful atomic writes and revision receipts share the same validated bytes.
+Valid replacement characters, BOM, empty content and line separators retain
+their original text. Dedicated image/PDF previews and existing extension/MIME
+classifications keep their contracts; no alternate encoding is guessed.
+
 Read sources resolved from canonical attachments carry origin=attachment and
 the exact original filename from AttachmentStore metadata, including Unicode and
 punctuation. Only unnamed uploads use the existing generated-name policy;

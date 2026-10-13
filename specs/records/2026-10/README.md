@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件完整字节的文本准入](2026-10-13-file-text-admission.md)：读取、保存错误合同与真实桌面复核。
+
 - [Composer 可见模型名称搜索](2026-10-13-composer-model-search.md)：根因、桌面交互与范围验证。
 
 - [持续迭代首批：代理认证原值](2026-10-13-iteration-proxy-credentials.md)：并行调查、设置草稿和代理认证的完整数据链。

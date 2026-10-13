@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件完整字节的文本准入](records/2026-10/2026-10-13-file-text-admission.md)：非法UTF-8与二进制可编辑风险的完整字节验证。
+
 - [Composer 可见模型名称搜索](records/2026-10/2026-10-13-composer-model-search.md)：真实名称搜索失败与单一选项投影修复。
 
 - [持续迭代首批：代理认证原值](records/2026-10/2026-10-13-iteration-proxy-credentials.md)：并行根因调查、原值保真与本地真实传输验收。
