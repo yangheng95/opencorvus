@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [386 全屏菜单键盘循环](2026-10-13-artifact-fullscreen-menu-386/README.md)：真实祖先样式、双语菜单、下载字节及服务退出证据。
+
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence/README.md)：前后真实桌面、物理文件与根保护合同。
 
 - [用量时间桶键盘详情](2026-10-13-usage-keyboard-details/README.md)：真实双语桌面、快速刷新焦点、单一集合与提示层复核。

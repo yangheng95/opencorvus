@@ -1,0 +1,14 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18499/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18499/ui/
+	1 container Desk note
+		2 container
+			3 text Document
+			4 heading Desk note, Value: 3
+				5 text Desk note
+			6 button Copy text
+			7 pop up button (expanded) Description: Download, ID: dropdownmenu-cl-255-trigger, Secondary Actions: Collapse
+			8 button Close Desk note artifact workspace
+		9 menu Download, ID: dropdownmenu-cl-255-content-cl-284
+			10 Desk note.md, ID: dropdownmenu-cl-255-item-cl-285
+
+The focused UI element is 10 Desk note.md, ID: dropdownmenu-cl-255-item-cl-285

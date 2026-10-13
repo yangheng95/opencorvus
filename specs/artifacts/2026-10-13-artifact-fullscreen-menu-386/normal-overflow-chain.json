@@ -1,0 +1,314 @@
+{
+  "chain": [
+    {
+      "class": "oc-button",
+      "fullscreen": false,
+      "id": "dropdownmenu-cl-257-trigger",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "BUTTON"
+    },
+    {
+      "class": "msg-artifact__actions",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "msg-artifact__header-trailing",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "msg-artifact__header",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "HEADER"
+    },
+    {
+      "class": "msg-artifact",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "SECTION"
+    },
+    {
+      "class": "card-message-run",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "SECTION"
+    },
+    {
+      "class": "chat-bubble__body-inner",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat-bubble__body",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat-bubble",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat-bubble-shell",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat-bubble-row",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "ARTICLE"
+    },
+    {
+      "class": "conversation-virtual-item",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "conversation-virtual-window",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "quotation-scope",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat-scroll session-content",
+      "fullscreen": false,
+      "id": "chatScroll",
+      "overflow": "auto scroll",
+      "overflowX": "auto",
+      "overflowY": "scroll",
+      "tag": "DIV"
+    },
+    {
+      "class": "conversation-scroll-shell",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "clip",
+      "overflowX": "clip",
+      "overflowY": "clip",
+      "tag": "DIV"
+    },
+    {
+      "class": "conversation-body",
+      "fullscreen": false,
+      "id": "conversationBody",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat-message-pane",
+      "fullscreen": false,
+      "id": "chatMessagePane",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat-content-frame",
+      "fullscreen": false,
+      "id": "chatContentFrame",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "chat",
+      "fullscreen": false,
+      "id": "chatSection",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "SECTION"
+    },
+    {
+      "class": "center-workbench-activity chat-conversation-activity",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "center-workbench-view",
+      "fullscreen": false,
+      "id": "centerWorkbenchConversation",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "center-workbench-body",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "center-workbench",
+      "fullscreen": false,
+      "id": "centerWorkbench",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "SECTION"
+    },
+    {
+      "class": "conversation-workspace",
+      "fullscreen": false,
+      "id": "conversationWorkspace",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "workspace-main",
+      "fullscreen": false,
+      "id": "workspaceMain",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "workspace-primary-page",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "workspace-page-stack",
+      "fullscreen": false,
+      "id": "workspacePageStack",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "panel-body",
+      "fullscreen": false,
+      "id": "panelBody",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "DIV"
+    },
+    {
+      "class": "panel",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "MAIN"
+    },
+    {
+      "class": "",
+      "fullscreen": false,
+      "id": "overlayAppHost",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "tag": "DIV"
+    },
+    {
+      "class": "",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "hidden",
+      "overflowX": "hidden",
+      "overflowY": "hidden",
+      "tag": "BODY"
+    },
+    {
+      "class": "",
+      "fullscreen": false,
+      "id": "",
+      "overflow": "clip",
+      "overflowX": "clip",
+      "overflowY": "clip",
+      "tag": "HTML"
+    }
+  ],
+  "root": {
+    "overflow": "clip",
+    "tag": "HTML"
+  }
+}

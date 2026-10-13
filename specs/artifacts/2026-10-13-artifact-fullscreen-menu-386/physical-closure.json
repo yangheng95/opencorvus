@@ -1,0 +1,19 @@
+{
+  "observedAt": "2026-10-13T09:00:47.883Z",
+  "before": {
+    "ownerPID": 42596,
+    "launcherHandle": 48988,
+    "exitCode": 0,
+    "tab20": "closed",
+    "tab18": "keyboard-trigger hang; close unconfirmed; still in later inventory"
+  },
+  "after": {
+    "ownerPID": 26324,
+    "launcherHandle": 87250,
+    "exitCode": 0,
+    "joinChunk": "279f1a",
+    "tab21": "closed",
+    "language": "English restored"
+  },
+  "boundary": "Service owner terminal reason is fixed text and does not prove prior tab18 closure. No user process or browser restart. Credentialless UI review."
+}

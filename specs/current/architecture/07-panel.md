@@ -2372,6 +2372,12 @@ abort ownership still decide whether a completed export belongs to the current
 view. Visible type badges use the current payload renderer and the product
 locale catalog; technical kind attributes retain their stable styling identity.
 
+Menu keyboard activation uses the shared Kobalte scroll primitive. When root
+overflow is locked, each completed scroll step continues from the current scroll
+ancestor’s parent, so traversal advances toward the root. The dependency patch
+keeps the existing inclusive getScrollParent contract and normal native scrolling;
+fullscreen uses the same trigger, portal and mounted artifact renderer.
+
 The nineteen model-publishable renderers have one canonical payload validator.
 The search-native Provider Tool projection factors their shared
 `schemaVersion`, `title`, and `presentation` fields once and keeps only the

@@ -1,4 +1,4 @@
-# 386 全屏产物菜单操作超时调查
+# 386 全屏产物菜单键盘循环修复
 
 ## Recall
 
@@ -40,3 +40,105 @@
 每个服务必须使用现有owner正常收尾并保留原始退出/输出/请求事实；标签页独立确认closed。无法完成时逐项列明：全屏菜单仍未验收、精确根因未知、哪条观测通道受阻、哪些tab关闭未确认，以及已有的前后态对照和服务退出事实。不得以384局部复制修复已通过、旧版本也失败或新普通tab可用宣称整体完成。
 
 新增本spec及384追加记录的共享README/目录索引、当前package.json声明的文档检查、范围提交及正常上游同步推送，由主 agent统一完成。本次文档分工只创建本文件并追加384，不接管并行任务的产品源码、暂存或Git提交。
+
+## 2026-10-13 16:26 继续调查：文档与输入方式对照
+
+上一goal turn为实质进展：384、383、385生产修复/证据分别提交e782d749a、f1884ead9、3d4adff49并正常推送，main与upstream相同。本批开始git status仍为其他任务的file/permission/session恢复、Explorer和用量界面改动，保持不动。当前真实CUA inventory仅保留旧tab1（18481不可达页），先前10/12/13/15等自有tab已不在清单；这是本轮实际库存事实，补足上轮关闭未确认，不能倒填上轮成功关闭。
+
+根因尚未知，先做一个有区别的实页观察：同一真实Chat中自然发布的Desk note文档没有CodeMirror与附件获取过程，进入相同ArtifactFrame全屏后先用鼠标打开Download，取得菜单实际父级/焦点和截图；如可用，再单独键盘打开与Escape返回，下载真实文档文本核对其声明内容。这样区分共享Frame/menu与File/CodeMirror、鼠标与键盘，而不是再重复同一失败。所有页面交互仍由主agent用受支持CUA完成，DOM只读信息不是自动化断言，不改隐藏状态或请求。audit_ui单层只读审机制与权威上游资料，audit_functionality负责独立383/385模型复验，无再次委托。
+
+先核实原ui-final-localized owner已正常退出，复用其原真实规范数据库和已删除凭据的隔离home。调用现有launch-review.ps1新Stage ui-fullscreen-document-386，冻结UI使用已验收ui-final-build，仍生产listener/recovery、localhost:18499/ui、20分钟固定自有服务边界。新scope不用模型、不复制凭据、不制造消息/产物、不操作用户进程。新归档目录只保留本次原始实页与物理回执，具体根因收敛前不修改产品。
+
+## Recall 进度：386 根因已经收敛，实施与后态验收尚待完成
+
+本节追加于主 agent 完成 Document 鼠标、键盘及根元素样式对照之后，更新前文调查阶段的“根因未知”，不倒填此前证据。主 agent 授权 audit_ui 只向本386追加根因、影响、实际依赖路径、分发格式与补丁方案；本子任务未改产品、依赖、共享索引或其它规格，未运行 UI 自动化、服务或 Provider，未操作浏览器或再次委托。主 agent 持有实际交互回执并负责实现、重新构建、真实页面验收、归档、文档检查和范围提交。
+
+目前已收敛为安装版 `@kobalte/utils@0.9.2` 的 `scrollIntoViewport` 在根元素 `overflow:hidden` 时不会前进的同步祖先遍历。已完成代码闭环证明、真实普通/全屏 computed style 条件核对，以及绕过该调用但仍执行菜单项 autofocus 的 ArrowUp 正向对照。未完成的是补丁安装与发布入口核对、重建后的 Enter/Space/ArrowDown 全屏打开、实际下载和关闭焦点，以及修复后局部滚动与原阅读位置的视觉复核。本次没有把“已定位”表述成“已修复”。
+
+### 实际证据与触发顺序
+
+主 agent 在同一真实 Chat 的 Desk note（`document@1`，无 CodeMirror）上完成以下观察。原始证据当前位于自有临时目录 `.tmp-artifact-fullscreen-menu-386`；归档到 `specs/artifacts/**` 与原服务回执绑定由主 agent 完成，本节不虚构尚未生成的归档路径。
+
+| 观察 | 实际结果与证据 |
+| --- | --- |
+| Document 全屏后鼠标打开 Download | tab18 的单独 click 约0.76秒完成；随后可访问性树、截图和 `document-mouse-menu.json` 均可读。菜单物理父链为 DIV → DIV → SECTION，SECTION 是 `data-artifact-renderer=Document` 且匹配 `:fullscreen`；焦点在 `role=menu` 内容上。 |
+| 关闭后键盘 Enter | Escape 关闭鼠标菜单且焦点回 Download；随后单独 Return（未串接读取可访问性树）约30秒超时并 kernel reset，与 File 键盘现象一致。 |
+| 普通根样式 | `normal-overflow-chain.json` 中 root 为 HTML，computed `overflow=clip`；从 Download 到根的首个且唯一 `auto/scroll` 祖先为 `DIV#chatScroll.chat-scroll.session-content`，`overflow="auto scroll"`、X=`auto`、Y=`scroll`。 |
+| 全屏根样式 | `fullscreen-overflow-chain.json` 中 root 为 HTML，computed `overflow=hidden`；上述滚动祖先身份和值相同，产物 SECTION 的 `fullscreen=true`。这是页面实际 computed 值，不能用普通源码声明的 `clip` 覆盖它。 |
+| 同一真实 Document 全屏 ArrowUp | Shift+Tab 聚焦 Download 后，Up 成功打开菜单并直接聚焦唯一的 `Desk note.md` 菜单项，见 `screenshots/fullscreen-arrowup-menu.png`。这条库分支仍会执行菜单项焦点、modal 和定位机制，但跳过有缺陷的打开前滚动。 |
+
+audit_ui 已读取三份 JSON，并人工查看 `screenshots/document-mouse-menu.png` 与 `screenshots/fullscreen-arrowup-menu.png`：两张均显示全屏 Desk note 的正文、顶部工具栏及右上方真实文件菜单；ArrowUp 图的文件项具有焦点/高亮状态。实际操作、键盘输入与动作耗时仍归属于主 agent 的原工具回执，不冒称由子 agent 操作。CUA 只读 document 代理未暴露 `fullscreenElement`，不得将该代理属性缺席当作真实浏览器属性为空；本次使用已读的元素 `:fullscreen` 状态和物理父链核对。
+
+主 agent 已说明将正常关闭本次仍可操作的页面；该说明是计划，最终关闭结果与新服务退出状态仍以其后续回执为准。本轮开始 inventory 中旧失败页已不在清单的事实见上一节，不改写旧轮的关闭未确认记录。
+
+### 数据与控制流根因
+
+生产 `ArtifactActions.tsx:162` 使用唯一 `DropdownMenu.Trigger`，`components/ui/DropdownMenu.tsx:46` 直接导出 Kobalte Trigger。安装版 Core `src/menu/menu-trigger.tsx:198`（默认 JS 分发 `dist/chunk/46NU5BYI.js:336`，Solid JSX 分发 `dist/chunk/LEK3K6R3.jsx:454`）在 Enter、Space 及当前横向 root 的 ArrowDown 中执行以下顺序：阻止原生键盘默认动作 → `scrollIntoViewport(e.currentTarget)` → `context.open("first")`。ArrowUp 分支直接 `context.open("last")`；鼠标分支 `context.toggle(true)`。因此 Enter 的挂死发生于菜单 open 之前，无需菜单已经挂载，也无需下载动作、异步资源读取或 `ArtifactActions.run()` 已开始。
+
+安装版 Utils `src/scroll-into-view.ts:81` 读取 `document.scrollingElement || document.documentElement`，只有根的 computed `overflow` 严格等于 `hidden` 才进入手工滚动祖先分支。正常页实际为 `clip`，走原生 `scrollIntoView` 分支；全屏实际为 `hidden`，走本次有缺陷分支。`src/get-scroll-parent.ts:9` 的既有公开语义是从传入节点本身开始查找第一个 computed overflow 含 `auto` 或 `scroll` 的节点；它允许返回传入节点自身，并不保证严格祖先。
+
+缺陷位于调用方循环末尾 `src/scroll-into-view.ts:125`：它先令 `targetElement = scrollParent`，再调用 `getScrollParent(targetElement)`，未向父节点推进。以真实的 S=`DIV#chatScroll`、R=`HTML` 代入：初次 `getScrollParent(trigger)` 返回 S；第一轮末 `(targetElement, scrollParent)=(S,S)`；后续 `getScrollParent(S)` 仍返回 S，且 S 始终不等于 R，四项 while 条件继续为真。重复写同一元素的滚动坐标不会改变其 computed overflow 或父子身份，控制流无法返回。库代码加真实 DOM 条件已形成充分的同步无限循环证据；未取得 CPU profile 或浏览器执行栈，不声称已经捕获这些额外诊断。
+
+原377完整UI和384后态均保留此依赖逻辑，解释了前后态同样复现。384调整的受控 disclosure、文件准备先后和忙碌 ARIA 属性均在循环后的打开或下载路径，不是此问题的首次引入。287复制反馈、359剪贴板宿主记录、此前全屏布局与鼠标下载验收没有覆盖根元素变为 `hidden` 后的键盘打开链，所以没有根治本项缺陷。当前仓库已有的 Core patch 修改类型声明、指针层、定位选项与 tooltip 焦点，并未修补 Utils 的该遍历。
+
+### 全部消费者、公共契约与影响范围
+
+全仓产品源码、`script/`、`patches/` 以及安装版 Core/Utils 的源码与可执行分发检索了 `scrollIntoViewport`、`getScrollParent` 和 `MenuTrigger`。产品源码没有直接调用这两个 Utils 函数。安装 Core 内唯一直接 `scrollIntoViewport` 调用是 `MenuTrigger`，其 `.js` 与 `.jsx` 是同一源实现的分发，不是两个产品能力。Utils 的 `getScrollParent` 在该包内由同一个滚动函数调用；不应为修调用方进度而改变这个独立导出的包含自身语义。
+
+Core 公开入口的传递关系为：`dropdown-menu/index.tsx` 直接导出 `MenuTrigger as Trigger`；`menubar/menubar-trigger.tsx` 调用同一 `MenuTrigger`；`navigation-menu/navigation-menu-trigger.tsx` 包装 `MenubarTrigger`。Core `Menu` 自身也导出该 Trigger。ContextMenu 使用独立 `ContextMenuTrigger`，子菜单使用独立 `MenuSubTrigger`，Select 使用独立 `SelectTrigger`；这些触发器并无本函数调用，不因也有 modal/定位机制就算作同一故障入口。当前产品没有 NavigationMenu 或原始 Menu 的直接消费。
+
+当前生产 DropdownMenu Trigger 消费文件共15个、调用点19处：`App.tsx:127`、`CardOverflowMenu.tsx:43`、`ChatComposer.tsx:378`、`ComposerPermissionControl.tsx:69`、`Conversation.tsx:1020`、`ProjectLedgerGroup.tsx:202`、`RightDock.tsx:381/430`、`SidebarVersionLabel.tsx:35`、`TaskDirBar.tsx:1273`、`WorkLedger.tsx:623/1213/1329/1473`、`WorkspaceSplitLauncher.tsx:188`、`interactive-artifact/ArtifactActions.tsx:162`、`interactive-artifact/McpAppArtifact.tsx:655`、`settings/ExpertSquadPanel.tsx:1578`、`settings/ProvidersPanel.tsx:992`。以上路径相对 `packages/overlay/src/components/`；`WorkLedger` 四处和 `RightDock` 两处属于各自重复入口。另有 `titlebar/TitlebarMenubar.tsx:533` 经唯一 `ui/Menubar.tsx` 使用同一底层 Trigger。数量为本次源码快照，后续并行编辑可能移动行号。
+
+共享函数修复覆盖这些入口在“根 hidden 且存在非根滚动祖先”时的进度保证，不宣称它们都已实页复现。ArtifactActions 仍由唯一 Frame 提供给20个产物 renderer，File 与 Document 为本次实际样本；MCP App 还有自己的资源菜单。纯 ContextMenu 的 FileExplorer、ImagePreview 等不是本次直接消费。下载内容、文件名、权限、异步动作归属、复制器、语言目录、持久化数据及网络接口均不需要修改。没有 Task/Mission/Session 调度、终态、并发或重启恢复异常证据，本次循环属于浏览器主线程同步调用，不把它扩展为服务执行恢复问题。
+
+### modal、焦点和观察器横审结论
+
+- Core `455ZADO2.js` 的 ariaHideOutside 只观察 `childList/subtree`；其自身 `aria-hidden` 属性写入不会触发同一 observer。可见菜单及其祖先在遍历中被保留。本次鼠标成功还实际覆盖了该机制的启用和关闭。
+- `ISKHZMHS.js` 的焦点范围由统一栈暂停旧范围；sentinel observer 只检查内容直接子节点，未见本次发生重复边界移动的证据。`H6DSIDEC.js:417` 的延迟 `tryAutoFocus` 设置 focused key，`:580` 聚焦条目，`:460` 调整菜单内滚动；ArrowUp 的唯一文件项成功对照覆盖这条后续链，证明它不是本次 Enter 挂死所必需。
+- `solid-prevent-scroll@0.1.10` 在启用时给 body 设置 overflow 及可能的滚动条补偿，事件监听处理 wheel/touch；当前根样式证据在菜单打开前取得。上游 [Kobalte #698](https://github.com/kobaltedev/kobalte/issues/698) / [Corvu #107](https://github.com/corvudev/corvu/pull/107) 的已知问题是 body 锁改变 sticky 布局，维护者说明由0.1.11修复；不能将这个不同症状当作386修复或顺带升级依赖。
+- Kobalte 本次实际引用 Floating UI DOM 1.7.6（仓库另有1.8.0但不是此依赖解析）。其 autoUpdate 含对 `size` + ResizeObserver 的取消/下一帧重观察保护；`observeMove` 对完全裁剪情况有节流。Popper 的变换与尺寸写入、全屏 Frame 的隐式第三条 grid 行、Conversation 的 requestAnimationFrame 合并测量原本都是候选，但发生在菜单创建之后，鼠标与 ArrowUp 已成功，不是此次打开前同步循环所必需。
+- Conversation 的 focusin/out 仅据真实祖先更新被保留的卡片 ID，尺寸 observer 通过现有逐帧合并调度调用内容测量；本次没有证明该处另有闭环。上游 [Floating UI #1740](https://github.com/floating-ui/floating-ui/issues/1740) 为尺寸反馈问题，当前版本已有相关保护；[#3512](https://github.com/floating-ui/floating-ui/issues/3512) 是 React useFloating 随 placement 重建 observer，产品这条 Solid 路径不适用。历史 [Kobalte #167](https://github.com/kobaltedev/kobalte/issues/167) 是两个 Select 展开切换，未提供与此调用相同的证据。
+
+本次未证明这些机制在所有场景均无缺陷，只用具体读取与正向对照排除了它们作为已定位同步循环的必要条件。无需关闭 modal、移 Portal、改 grid、延迟打开、拦截按键或引入第二套焦点管理。
+
+### 实际依赖解析与完整发布格式
+
+Node.js 的 `createRequire`/`require.resolve` 与文件真实路径只用于读取模块解析，没有加载 DOM 或运行 UI 测试。实际结果是：仓库根 `node_modules/@kobalte/utils` 和 `packages/overlay/node_modules/@kobalte/utils` 均不存在，从 root/overlay 的 `package.json` 直接解析 Utils 都得到 `MODULE_NOT_FOUND`。不能据此宣称依赖缺失，也不能在上述想当然路径写补丁。
+
+`packages/overlay/node_modules/@kobalte/core` 实际指向 `D:\myhexin-local\opencorvus\node_modules\.bun\@kobalte+core@0.13.11+ee58d66d663bac7b\node_modules\@kobalte\core`。从该 Core 的真实 `package.json` 建立 require 后，Utils 解析到 `D:\myhexin-local\opencorvus\node_modules\.bun\@kobalte+utils@0.9.2+ee58d66d663bac7b\node_modules\@kobalte\utils\dist\index.cjs`；Core 私有 `node_modules/@kobalte/utils` 链接也指向这个 Utils 包。全仓 Bun 包文件清单中只有此版本的 Utils。Bun 存储后缀是当前安装事实，不写入产品导入或未来可移植脚本；实施时按锁文件的包身份重新解析。
+
+| 包内路径/入口 | 读取结果与补丁处理 |
+| --- | --- |
+| `src/scroll-into-view.ts` | 循环末尾第125行；package `exports["./src/*"]` 暴露源码路径。同步修源实现。 |
+| `src/get-scroll-parent.ts` | 第9行从自身开始搜索；保持语义和代码。 |
+| `dist/index.js` | ECMAScript Modules（ESM，模块分发），循环末尾第770行；`exports.solid`、`exports.import.default` 和 `module` 都指向这里，是 Solid/Vite 构建所需实现。 |
+| `dist/index.cjs` | CommonJS（CJS，CommonJS模块分发），循环末尾第772行；`exports.require` 与 `main` 指向这里。即使当前页面走ESM也同步修此正式入口。 |
+| `dist/index.js.map` / `dist/index.cjs.map` | 两份 source map 都有21个sources及sourcesContent，含 `../src/scroll-into-view.ts` 的旧实现；属于调试元数据，不执行，补丁同步该sourcesContent源段，避免调试器显示旧循环。 |
+| `dist/index.d.ts` / `dist/index.d.cts` | 都声明 `scrollIntoViewport(...):void` 和 `getScrollParent(Element|null):Element`；修复不改签名，无需改声明。 |
+| 其它入口 | 实际包清单无 Utils JSX、UMD、单独 browser bundle 或第二个 chunk 实现；`src/index.ts` 和分发出口只重导出，无需新增别名或产品侧替代实现。 |
+
+安装包源码和现行上游 [scroll-into-view.ts](https://github.com/kobaltedev/kobalte/blob/main/packages/utils/src/scroll-into-view.ts) / [get-scroll-parent.ts](https://github.com/kobaltedev/kobalte/blob/main/packages/utils/src/get-scroll-parent.ts) 都保留相同逻辑；本次只读 GitHub issue 检索没有找到明确描述该函数闭环的现有 issue，不能把“未检到”写成上游从未报告。读取到的路径历史最近提交为 `f191fe728cf17df414d0fb2bd433a34c5b3a659c`（2024-05-03，构建许可证注释调整），没有本次遍历修复；引用历史事实不重建仓库禁止的旧日期规格。
+
+### 最小 patchedDependencies 实施方案与验收
+
+保持现有 API（Application Programming Interface，应用程序接口）、初次 `getScrollParent(targetElement)` 查找、普通根的原生滚动分支、根截止条件以及实际滚动计算。仅将 while 末尾的下一次查找改为 `getScrollParent(targetElement.parentElement)`：处理当前滚动节点之后，从其父节点继续查找，循环的每次继续都严格向上移动；父节点为空时沿库既有根返回语义结束。不是在相同节点上加次数上限、超时或跳过功能，也不改变独立 `getScrollParent` 的包含自身语义。
+
+根 `package.json:182` 与 `bun.lock:367` 已有 `patchedDependencies`，Core 现有补丁必须保留。主 agent 已确定实施范围为根 `package.json`、`bun.lock` 和新增单一 `patches/@kobalte%2Futils@0.9.2.patch`，包内只包含上述源码、ESM、CJS及两份 map 的sourcesContent一致改动；通过既有 Bun patch/install 流程更新包注册和锁文件，不把 Bun 缓存本身当可提交事实，也不把 Utils 代码复制到产品工具函数。source map 是调试元数据，本次不以映射列位置或其内容作为运行正确性的验收；补丁后的入口检查属于依赖交付完整性检查，不冒充 UI 验收。
+
+本改动直接修 UI DOM 滚动行为，按 AGENTS 禁止新增或运行 DOM、组件、浏览器fixture及源码文案断言测试；不为绕过规定包装伪 DOM 纯数据测试。本次触及的 Utils 发布包清单、Core 指定源码及产品直接控件路径未发现需运行的现存 UI 测试；没有无目标扩展扫描其它测试树。主 agent 需走现有真实开发 `/ui`，用同一真实产物完成补丁后的 Enter、Space、ArrowDown、ArrowUp和鼠标打开，确认实际菜单项、Escape返回、文件选择下载及文件内容，并截图人工复核；检查关闭/退出全屏后原页面仍可操作，正文和阅读位置没有被错误滚动。另以嵌入菜单及一个已有普通菜单进行共享路径回归，不宣称19处均已逐一实页验收。
+
+风险在于修正后的遍历会继续处理此前到达不了的更外层滚动祖先；因此实际阅读位置与嵌套滚动行为是需要视觉确认的正向输出。保持所有现有权限、disabled/busy准入、文件身份与下载归属合同。纯类型检查、构建、补丁格式核对可以证明分发可构建，不能替代上述真实行为。没有版本更新、发布、凭据使用或上游发issue授权；本批只做仓库修复和正常Git交付。完成前继续列明未验收项，主 agent 负责共享索引、`docs:check`、真实证据归档、范围提交、拉取合并上游与正常推送。
+
+## 实施与真实桌面后态（本轮完成）
+
+主 agent 按以上方案使用 Bun 1.4.0 的 patch 流程，新增唯一 Utils 补丁及根 manifest/lock 注册。prepare 会建立其提示的 root editable package；这不改写此前从 Core 私有路径解析依赖的事实。实际 Core 私有安装中源码、ESM、CJS 与两份 map 均已应用；公开类型及 getScrollParent 本身保持。audit_ui 随后独立只读复核这五处及四张后态截图，通过且未另改代码。
+
+完整[本轮证据](../../artifacts/2026-10-13-artifact-fullscreen-menu-386/README.md)保留前态根样式、鼠标/Up对照，以及后态中英文文档/文件。主 agent 实际 Enter、Space、Down、Up 与鼠标均成功打开全屏文档菜单，聚焦真实文件项；Escape 与键盘完成下载均回到下载按钮。长文件 Enter/Down 成功，滚动到行74/Note72后打开菜单、退出全屏、语言切换与重新全屏均保持所见阅读位置。普通 More 及嵌入下载菜单也通过；不外推全部19处消费者均已实际验收。没有UI自动化、DOM断言或截图比对。
+
+真实浏览器下载文档101字节与发布正文相等，文件14687字节与规范原附件逐字节相等；重复文件名由浏览器加(2)，产物菜单保留原名。复制动作显示Copied并保持焦点；本轮CUA clipboard readText为空，未据此声称系统剪贴板内容再次通过，384既有实际复制证据继续独立保留。产品仅改菜单键盘滚动，没有修改复制合同。
+
+私有构建exit0（7300 modules，63秒），冻结锁文件安装exit0（无依赖版本升级）。前后scope采用生产listener/recovery与私有构建、localhost:18499/ui，无独立Vite服务与模型调用。后态原生26324、launcher87250正常exit0，服务397226ms收尾；语言恢复English，tab21关闭，前态tab20已关闭。前态卡死tab18仍在清单，关闭未确认；固定terminal.reason不代表该tab关闭。初次误用Windows PowerShell5的ArgumentList调用在启动子进程前失败，改用当前PowerShell7正常执行原launcher；工具调用失误未冒充产品失败。
+
+383/385 attempt04同期由audit_functionality独立验收并只读复核：真实GPT-6.1 Sol的11次流式请求全部HTTP200/EOF，Task completed，大结果全文及首尾补读正确，页面四图人工查看，原owner/输出/请求闭合且授权副本成对清理。它的模型验收只覆盖package Task链，不外推MCP模型/worker/Mission；前三轮失败原文继续保留。
+
+`bun run --cwd packages/overlay typecheck` exit0；`bun run docs:check` exit0（348 ops/26 groups），范围diff检查通过，18499 listener已释放。类型与文档原始日志归入本轮证据。提交和上游推送在交付时另行核实，不预先标记成功。

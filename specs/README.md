@@ -12,7 +12,7 @@
 
 - [383 投影工具大结果授权](records/2026-10/2026-10-13-projected-output-authority-383.md)：三个结果适配器的真实授权传递与完整输出保存。
 
-- [386 全屏产物菜单调查](records/2026-10/2026-10-13-artifact-fullscreen-menu-386.md)：前后态操作超时、已排除解释与未完成范围。
+- [386 全屏产物菜单键盘循环](records/2026-10/2026-10-13-artifact-fullscreen-menu-386.md)：依赖祖先遍历根因、单一补丁与双语真实桌面验证。
 
 - [384 产物工具栏忙碌焦点](records/2026-10/2026-10-13-artifact-action-focus-384.md)：真实产物复制与下载的键盘连续操作。
 

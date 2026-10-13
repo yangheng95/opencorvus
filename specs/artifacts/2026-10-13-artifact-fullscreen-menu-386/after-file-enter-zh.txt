@@ -1,0 +1,14 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18499/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18499/ui/
+	1 container Reading notes
+		2 container
+			3 text 文件
+			4 heading Reading notes, Value: 3
+				5 text Reading notes
+			6 button 复制文本
+			7 pop up button (expanded) Description: 下载, ID: dropdownmenu-cl-262-trigger, Secondary Actions: Collapse
+			8 button 关闭 Reading notes 作品视图
+		9 menu 下载, ID: dropdownmenu-cl-262-content-cl-410
+			10 reading-notes.txt, ID: dropdownmenu-cl-262-item-cl-411
+
+The focused UI element is 10 reading-notes.txt, ID: dropdownmenu-cl-262-item-cl-411
