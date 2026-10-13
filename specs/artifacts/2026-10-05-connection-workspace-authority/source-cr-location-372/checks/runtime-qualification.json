@@ -1,0 +1,399 @@
+{
+  "results": [
+    {
+      "stage": "before",
+      "session": "ses_-zUS72ObBzzJFRuw94Ys",
+      "sources": [
+        {
+          "id": "prt_g0VXsxd7k00ISg1zVhH6",
+          "messageID": "msg_g0VXsxbh600p8Dypog5u",
+          "type": "source-file",
+          "sourceId": "0149c6839bed37e679763a5896c7974ce7b4bc193cf53827fc198e71bfc40fb7",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\bom.txt",
+          "title": "bom.txt",
+          "snippet": "前😀MATCH372_F",
+          "range": {
+            "startLine": 1,
+            "endLine": 1,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsxd7u00BleDVQ2yM",
+          "messageID": "msg_g0VXsxbh600p8Dypog5u",
+          "type": "source-file",
+          "sourceId": "cce9f8f3f6959f734eedff25f5ed11651c70a2f631f6d5940f062e93890f6d06",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\crlf.txt",
+          "title": "crlf.txt",
+          "snippet": "前😀MATCH372_D",
+          "range": {
+            "startLine": 3,
+            "endLine": 3,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsxd7z00yiAXRIgOm",
+          "messageID": "msg_g0VXsxbh600p8Dypog5u",
+          "type": "source-file",
+          "sourceId": "7188f77def127cdc3f409c5cf38679467b744e592528c98037e615718117c812",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\lf.txt",
+          "title": "lf.txt",
+          "snippet": "前😀MATCH372_E",
+          "range": {
+            "startLine": 3,
+            "endLine": 3,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsxd8200F2Cvrlh5P",
+          "messageID": "msg_g0VXsxbh600p8Dypog5u",
+          "type": "source-file",
+          "sourceId": "16c61ef968e10b64ad4ca006fadc04f422f17f9842aa5e298e7e6885b39c0461",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\mixed.txt",
+          "title": "mixed.txt",
+          "snippet": "前😀MATCH372_C",
+          "range": {
+            "startLine": 3,
+            "endLine": 3,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsxd8600yAGJ0fsTr",
+          "messageID": "msg_g0VXsxbh600p8Dypog5u",
+          "type": "source-file",
+          "sourceId": "f48e6bb959ec02217ab5493184f234b48c753c26ed2b419666ac74fe8837e1a6",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\cr.txt",
+          "title": "cr.txt",
+          "snippet": "开头\r未命中\r前😀MATCH372_A\rtail\r次MATCH372_B",
+          "range": {
+            "startLine": 1,
+            "endLine": 1,
+            "startColumn": 11
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsxe9U00HeU2BAM7i",
+          "messageID": "msg_g0VXsxdAH0024gicOoHt",
+          "type": "source-file",
+          "sourceId": "502a63069d79da06e89d653e2df150ac3a6c031093fd66221ec1608c601ccd4d",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\cross.txt",
+          "title": "cross.txt",
+          "snippet": "header\rBEGIN372\rEND372\rtail",
+          "range": {
+            "startLine": 1,
+            "endLine": 1,
+            "startColumn": 8
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXsxfKR00fT1AfWtpE",
+          "messageID": "msg_g0VXsxeBk00XS6c0TuHt",
+          "type": "source-file",
+          "sourceId": "b5e5cac945d1149c5931eeba3234f14571fa323a7f574d242f9f1b6e730b1a7c",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\cr.txt",
+          "title": "格式\\cr.txt",
+          "range": {
+            "startLine": 3,
+            "endLine": 3
+          },
+          "provider": "opencorvus-read"
+        },
+        {
+          "id": "prt_g0VXsxgFM00FXir4UVeR",
+          "messageID": "msg_g0VXsxfMe00krWogB7av",
+          "type": "source-file",
+          "sourceId": "9a9bbc82745a88a59f1e5c566dfe7cdff46dde6ddd6fed0b13da81fa4507f645",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-before\\project\\格式\\mixed.txt",
+          "title": "格式\\mixed.txt",
+          "range": {
+            "startLine": 5,
+            "endLine": 5
+          },
+          "provider": "opencorvus-read"
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXsxgHA0040XZv7os8",
+          "sessionID": "ses_-zUS72ObBzzJFRuw94Ys",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791851832568,
+            "completed": 1791851840328
+          },
+          "finish": "stop"
+        }
+      ],
+      "requests": 8,
+      "elapsedMs": 241666,
+      "settled": {
+        "occurrence": "source-cr-location-372-before-8c0a490d-213e-4d22-a60f-2d686f53daea",
+        "outcome": "settled",
+        "host": {
+          "pid": 52708,
+          "processInstanceID": "win32:639274485682127651",
+          "occurrenceID": "f5b5e30d-9ae5-4942-8ee2-d8df56dce67c"
+        },
+        "target": {
+          "pid": 75168,
+          "processInstanceID": "win32:639274485690712309",
+          "occurrenceID": "940b0f3d-224d-41cc-8465-24084e97562c"
+        },
+        "observedAtUtc": "2026-10-13T00:40:10.737Z",
+        "deadlineAt": 1791852368196,
+        "terminal": {
+          "occurrenceID": "source-cr-location-372-before-8c0a490d-213e-4d22-a60f-2d686f53daea",
+          "pid": 75168,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "cancellation": null,
+        "qualification": "NativeService",
+        "providerUserCancelledRequests": 0,
+        "physicalCompletion": true,
+        "providerEOFRequests": 8,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned"
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-13T00:36:41.974Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "c0d8cb74-7fe1-4d1b-8e59-ba41f5eab609",
+          "method": "GET",
+          "path": "/ui/assets/main--IPEAIl1.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 4
+        },
+        "message": "request"
+      }
+    },
+    {
+      "stage": "after",
+      "session": "ses_-zUS6zev8zz4nwvGbUmf",
+      "sources": [
+        {
+          "id": "prt_g0VXt0MPS00Y0L6mGO6r",
+          "messageID": "msg_g0VXt0LN300kOheR1J41",
+          "type": "source-file",
+          "sourceId": "ff04768dfd168a162c4dd12fa04f07b96b4ea6644d0bcdac263940c1136f8515",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\bom.txt",
+          "title": "bom.txt",
+          "snippet": "﻿前😀MATCH372_F",
+          "range": {
+            "startLine": 1,
+            "endLine": 1,
+            "startColumn": 5
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXt0MPY00oc61UZ7sU",
+          "messageID": "msg_g0VXt0LN300kOheR1J41",
+          "type": "source-file",
+          "sourceId": "f868a621dded6dd292b4226e8529a8dfee5a3dc51d9dc11821e4cf05b04c1f01",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\lf.txt",
+          "title": "lf.txt",
+          "snippet": "前😀MATCH372_E",
+          "range": {
+            "startLine": 3,
+            "endLine": 3,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXt0MPb000M7wHMc13",
+          "messageID": "msg_g0VXt0LN300kOheR1J41",
+          "type": "source-file",
+          "sourceId": "ee93cf8ed6c2ac449ced4700d72291c0cf3a80162b53364f9f93cc719098fa9e",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\crlf.txt",
+          "title": "crlf.txt",
+          "snippet": "前😀MATCH372_D",
+          "range": {
+            "startLine": 3,
+            "endLine": 3,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXt0MPf007F76y9X37",
+          "messageID": "msg_g0VXt0LN300kOheR1J41",
+          "type": "source-file",
+          "sourceId": "5c6abb55b4bf60d51f0735e554898367c78edc30b246f2580e1d6ede40448352",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\mixed.txt",
+          "title": "mixed.txt",
+          "snippet": "前😀MATCH372_C",
+          "range": {
+            "startLine": 5,
+            "endLine": 5,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXt0MPh0092u2U9h8d",
+          "messageID": "msg_g0VXt0LN300kOheR1J41",
+          "type": "source-file",
+          "sourceId": "9260fdfe8eef860716743c1d76fb6f004124726aeef1bf19085c1c2268480000",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\cr.txt",
+          "title": "cr.txt",
+          "snippet": "前😀MATCH372_A",
+          "range": {
+            "startLine": 3,
+            "endLine": 3,
+            "startColumn": 4
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXt0MPl004D3KO6bah",
+          "messageID": "msg_g0VXt0LN300kOheR1J41",
+          "type": "source-file",
+          "sourceId": "bb5ee0d0493fa0ce8523ff4f33ebef35a458c76f51ec66ca80d6324ba786d22e",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\cr.txt",
+          "title": "cr.txt",
+          "snippet": "次MATCH372_B",
+          "range": {
+            "startLine": 5,
+            "endLine": 5,
+            "startColumn": 2
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXt0NqF007EGYKXFa1",
+          "messageID": "msg_g0VXt0MS400p9xtdoUPw",
+          "type": "source-file",
+          "sourceId": "628b7501c68204696646acf00ceda3a752778b14d1ea1275574de360115b9a9e",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\cross.txt",
+          "title": "cross.txt",
+          "snippet": "BEGIN372\nEND372",
+          "range": {
+            "startLine": 2,
+            "endLine": 3
+          },
+          "provider": "opencorvus-search-code"
+        },
+        {
+          "id": "prt_g0VXt0P3o00IwQGMWl6h",
+          "messageID": "msg_g0VXt0Ns30058DQ74I6o",
+          "type": "source-file",
+          "sourceId": "25a26ff994bad0d5ea1c18f5b65d51c9729b6a10c3563473d01e171f18cde4b0",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\cr.txt",
+          "title": "格式\\cr.txt",
+          "range": {
+            "startLine": 3,
+            "endLine": 3
+          },
+          "provider": "opencorvus-read"
+        },
+        {
+          "id": "prt_g0VXt0QMW00EiN9d8a96",
+          "messageID": "msg_g0VXt0P5h00Sd0v7RMmu",
+          "type": "source-file",
+          "sourceId": "c88ec99cb1cc575df32a796e187d09d57c8e855c6ea1a7d882579987b9a811c5",
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\mixed.txt",
+          "title": "格式\\mixed.txt",
+          "range": {
+            "startLine": 5,
+            "endLine": 5
+          },
+          "provider": "opencorvus-read"
+        }
+      ],
+      "completed": [
+        {
+          "id": "msg_g0VXt0QOi005TIsIWCtJ",
+          "sessionID": "ses_-zUS6zev8zz4nwvGbUmf",
+          "role": "assistant",
+          "author": "work",
+          "agent": "work",
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "time": {
+            "created": 1791852486516,
+            "completed": 1791852499387
+          },
+          "finish": "stop"
+        }
+      ],
+      "requests": 8,
+      "elapsedMs": 271765,
+      "settled": {
+        "occurrence": "source-cr-location-372-after-a3c2f3ee-52d5-4e86-b050-5a5ab5cbb141",
+        "outcome": "settled",
+        "host": {
+          "pid": 62112,
+          "processInstanceID": "win32:639274492101197661",
+          "occurrenceID": "86f01812-ea5c-43c5-833f-32e4cbfe9482"
+        },
+        "target": {
+          "pid": 36012,
+          "processInstanceID": "win32:639274492108682078",
+          "occurrenceID": "b92cb282-71b5-4ada-8734-bb044bea0471"
+        },
+        "observedAtUtc": "2026-10-13T00:51:22.633Z",
+        "deadlineAt": 1791853010103,
+        "terminal": {
+          "occurrenceID": "source-cr-location-372-after-a3c2f3ee-52d5-4e86-b050-5a5ab5cbb141",
+          "pid": 36012,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "providerEOFRequests": 8,
+        "providerUserCancelledRequests": 0,
+        "qualification": "NativeService",
+        "cancellation": null,
+        "physicalCompletion": true
+      },
+      "served": {
+        "level": "info",
+        "time": "2026-10-13T00:47:38.150Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "27e443e8-c24a-4dd4-8e60-28a6fcbe73ac",
+          "method": "GET",
+          "path": "/ui/assets/main--IPEAIl1.js",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 6
+        },
+        "message": "request"
+      }
+    }
+  ],
+  "boundary": "Actual Provider/Native/completed canonical messages, search/read outcomes and unchanged input bytes only. UI activation, visual ranges and cursor positions are separately reviewed manual screenshots; no UI assertions."
+}

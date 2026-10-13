@@ -1,0 +1,15 @@
+{
+  "pid": 36012,
+  "occurrence": "source-cr-location-372-after-a3c2f3ee-52d5-4e86-b050-5a5ab5cbb141",
+  "owner": {
+    "pid": 36012,
+    "processInstanceID": "win32:639274492108682078",
+    "occurrenceID": "e4001c6f-fd2d-4f23-9c51-5186ac0a3673"
+  },
+  "parent": {
+    "pid": 31244,
+    "processInstanceID": "win32:639274492108326685",
+    "occurrenceID": "d6bf78d2-9212-4065-b9ac-09033e3813d0"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

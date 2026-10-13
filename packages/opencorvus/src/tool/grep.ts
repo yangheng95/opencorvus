@@ -5,6 +5,7 @@ import { Filesystem } from "../util/filesystem"
 import { Ripgrep } from "../file/ripgrep"
 import { Process } from "../util/process"
 import { fileSource } from "./source"
+import { searchCodeLineOffsets, searchCodeLines, type SearchCodeLine } from "./search-code-lines"
 
 import DESCRIPTION from "./grep.txt"
 import { Instance } from "../project/instance"
@@ -231,13 +232,14 @@ export const SearchCodeTool = Tool.define("search_code", {
     const searchArgs = [
       "--json",
       "--line-number",
+      "--encoding=none",
       "--hidden",
       "--regexp",
       params.pattern,
       "--glob",
       "!**/.git/**",
     ]
-    const matches: Array<{ path: string; modTime: number; lineNum: number; lineText: string; matchOffset: number; startColumn?: number }> = []
+    const records: Ripgrep.ParsedMatch[] = []
 
     for (const targets of searchTargets) {
       const result = await run([...searchArgs, ...targets])
@@ -258,31 +260,37 @@ export const SearchCodeTool = Tool.define("search_code", {
         partialErrorDetail ||= errorOutput
       }
 
-      let results: Ripgrep.ParsedMatch[]
       try {
-        results = Ripgrep.parseSearchOutput(output)
+        records.push(...Ripgrep.parseSearchOutput(output))
       } catch (cause) {
         throw executionError(cause)
       }
-      for (const { data: result, lineBytes } of results) {
-        const stats = Filesystem.stat(result.path.text)
-        if (!stats) continue
-        const firstMatch = result.submatches[0]
-        const byteOffset = firstMatch?.start ?? 0
-        const prefix = lineBytes.subarray(0, byteOffset).toString("utf8")
-        const suffix = lineBytes.subarray(byteOffset).toString("utf8")
-        // Splitting a UTF-8 decoding unit flushes a replacement character at
-        // the end of the prefix. Anchor that unit at its displayed beginning.
-        const matchOffset = prefix.length - (prefix + suffix === result.lines.text ? 0 : 1)
-        const lineText = result.lines.text.replace(/\r?\n$/, "")
-        matches.push({
-          path: result.path.text,
-          modTime: stats.mtime.getTime(),
-          lineNum: result.line_number,
-          lineText,
-          matchOffset,
-          ...(firstMatch ? { startColumn: Math.min(matchOffset, lineText.length) + 1 } : {}),
-        })
+    }
+
+    // A matching LF record cannot account for bare CRs in earlier unmatched
+    // records. Read those facts through the same execution authority and budget.
+    // A CR at EOF cannot precede another record, so only internal CRs are needed.
+    const prefixFiles = [...new Set(records.filter((record) => record.data.line_number > 1).map((record) => record.data.path.text))]
+    const prefixRecords: Ripgrep.ParsedMatch[] = []
+    for (const targets of batches(prefixFiles, rgPath.length + 128)) {
+      const result = await run(["--json", "--line-number", "--encoding=none", "--regexp", "\\r[^\\n]", ...targets])
+      if (result.code === 1) continue
+      if (result.code !== 0) throw executionError(new Error(result.stderr.toString().trim() || `ripgrep line-boundary scan exited with code ${result.code}`))
+      try {
+        prefixRecords.push(...Ripgrep.parseSearchOutput(result.stdout.toString()))
+      } catch (cause) {
+        throw executionError(cause)
+      }
+    }
+    const extraLines = searchCodeLineOffsets(prefixRecords)
+    const matches: Array<SearchCodeLine & { path: string; modTime: number }> = []
+    for (const record of records) {
+      ctx.abort.throwIfAborted()
+      if (Date.now() >= deadlineAt) throw executionError(new Error(`search_code exceeded its ${SEARCH_CODE_TIMEOUT_MS}ms deadline`))
+      const stats = Filesystem.stat(record.data.path.text)
+      if (!stats) continue
+      for (const line of searchCodeLines(record, extraLines(record.data.path.text, record.data.line_number))) {
+        matches.push({ ...line, path: record.data.path.text, modTime: stats.mtime.getTime() })
       }
     }
 
@@ -328,7 +336,8 @@ export const SearchCodeTool = Tool.define("search_code", {
         currentFile = match.path
         outputLines.push(`${match.path}:`)
       }
-      outputLines.push(`  Line ${match.lineNum}: ${match.snippet}`)
+      const location = match.endLine === match.lineNum ? `Line ${match.lineNum}` : `Lines ${match.lineNum}-${match.endLine}`
+      outputLines.push(`  ${location}: ${match.snippet}`)
     }
 
     if (truncated) {
@@ -354,7 +363,7 @@ export const SearchCodeTool = Tool.define("search_code", {
         path: match.path,
         range: {
           startLine: match.lineNum,
-          endLine: match.lineNum,
+          endLine: match.endLine,
           ...(match.startColumn === undefined ? {} : { startColumn: match.startColumn }),
         },
         snippet: match.snippet,

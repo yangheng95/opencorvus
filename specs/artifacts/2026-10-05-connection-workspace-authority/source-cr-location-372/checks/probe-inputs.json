@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-10-13T00:54:30.464Z",
+  "inputs": [
+    {
+      "name": "cr.txt",
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-cr-location-372\\probe\\cr.txt",
+      "text": "a\rb\r",
+      "base64": "YQ1iDQ=="
+    },
+    {
+      "name": "crlf.txt",
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-cr-location-372\\probe\\crlf.txt",
+      "text": "a\r\nb\r\n",
+      "base64": "YQ0KYg0K"
+    },
+    {
+      "name": "mixed.txt",
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-cr-location-372\\probe\\mixed.txt",
+      "text": "a\rb\nc\rd\r\nx\n",
+      "base64": "YQ1iCmMNZA0KeAo="
+    },
+    {
+      "name": "bom.txt",
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-cr-location-372\\probe\\bom.txt",
+      "text": "﻿needle\n",
+      "base64": "77u/bmVlZGxlCg=="
+    }
+  ]
+}

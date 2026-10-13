@@ -162,6 +162,9 @@ describe("search_code bounded execution", () => {
     { name: "inside-codepoint", bytes: Buffer.from("beforeé suffix"), pattern: "(?-u:\\xA9)", line: 1, column: 7 },
     { name: "inside-replacement", bytes: Buffer.concat([Buffer.from("before"), Buffer.from([0xe1, 0x80]), Buffer.from(" suffix")]), pattern: "(?-u:\\x80)", line: 1, column: 7 },
     { name: "crlf", bytes: Buffer.from("header\r\nbefore中😀NEEDLE\r\n"), pattern: "NEEDLE", line: 2, column: 10 },
+    { name: "cr", bytes: Buffer.from("header\rprefix\rbefore中😀NEEDLE\rtail"), pattern: "NEEDLE", line: 3, column: 10 },
+    { name: "mixed-prefix", bytes: Buffer.from("a\rb\nc\rd\r\nbefore中😀NEEDLE\n"), pattern: "NEEDLE", line: 5, column: 10 },
+    { name: "utf8-bom", bytes: Buffer.from("\uFEFFbefore中😀NEEDLE\n"), pattern: "NEEDLE", line: 1, column: 11 },
   ])("publishes the displayed character column of a real $name match", async ({ name, bytes, pattern, line, column }) => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
@@ -176,6 +179,80 @@ describe("search_code bounded execution", () => {
       }])
     } })
   })
+
+  test("publishes each real matching CR line from one ripgrep record", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "cr-matches.txt")
+      await fs.writeFile(filename, "header\r前😀NEEDLE_A\rbetween\r次NEEDLE_B\rtail")
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "CR source lines" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "NEEDLE_", path: filename }, context))
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 2 matches\n${filename}:\n  Line 2: 前😀NEEDLE_A\n  Line 4: 次NEEDLE_B`,
+        sources: [expectedSearchSource(filename, 2, "前😀NEEDLE_A", 4), expectedSearchSource(filename, 4, "次NEEDLE_B", 2)],
+      })
+    } })
+  })
+
+  test("publishes a real regex spanning CR as its complete logical line range", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "cr-range.txt")
+      await fs.writeFile(filename, "header\rBEGIN372\rEND372\rtail")
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "CR source range" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "BEGIN372\\rEND372", path: filename }, context))
+      expect({ output: result.output, sources: result.sources }).toEqual({
+        output: `Found 1 matches\n${filename}:\n  Lines 2-3: BEGIN372\nEND372`,
+        sources: [{ ...expectedSearchSource(filename, 2, "BEGIN372\nEND372"), range: { startLine: 2, endLine: 3 } }],
+      })
+    } })
+  })
+
+  test.each(["conversation", "task"] as const)("projects unmatched CR prefix lines under real %s authority", async (kind) => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "prefix-lines.txt")
+      await fs.writeFile(filename, "a\r\rb\nc\rd\r\n前😀NEEDLE\n")
+      const context = kind === "task" ? await taskContext(project.path)
+        : await conversationContext(await Session.create({ kind: "assistant", title: "Source line authority" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "NEEDLE", path: filename }, context))
+      expect(result.sources).toEqual([expectedSearchSource(filename, 6, "前😀NEEDLE", 4)])
+    } })
+  })
+
+  test("retains the complete CR record range for a real zero-width match without a span", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "cr-empty-span.txt")
+      await fs.writeFile(filename, "header\ra\rb\rtail")
+      const context = await conversationContext(await Session.create({ kind: "assistant", title: "Source record range" }))
+      const result = await SearchCodeTool.init().then(tool => tool.execute({ pattern: "$", path: filename }, context))
+      expect(result.sources).toEqual([{ ...expectedSearchSource(filename, 1, "header\na\nb\ntail"), range: { startLine: 1, endLine: 4 } }])
+    } })
+  })
+
+  test.each(["conversation", "task"] as const)("settles a real %s line-boundary scan within the shared output budget", async (kind) => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const filename = path.join(project.path, "large-prefix.txt")
+      await fs.writeFile(filename, "x\r".repeat(250_000) + "tail\nNEEDLE\n")
+      const context = kind === "task" ? await taskContext(project.path)
+        : await conversationContext(await Session.create({ kind: "assistant", title: "Bounded line facts" }))
+      const liveBefore = ProcessSupervisor.metricsSnapshot().live
+      let observed: unknown
+      try { await SearchCodeTool.init().then(tool => tool.execute({ pattern: "NEEDLE", path: filename }, context)) }
+      catch (error) { observed = error }
+      const limitError = observed instanceof SearchCodeExecutionError && observed.cause instanceof Error ? observed.cause.cause : undefined
+      if (!(limitError instanceof ProcessOutputLimitError)) throw observed ?? new Error("Expected line-boundary output-limit receipt")
+      const bytes = limitError.result.stdout.byteLength + limitError.result.stderr.byteLength
+      console.info("real line-boundary budget receipt", JSON.stringify({ kind, receipt: limitError.result.receipt, bytes }))
+      expect({ code: (observed as SearchCodeExecutionError).code, reason: limitError.result.receipt.reason, live: ProcessSupervisor.metricsSnapshot().live }).toEqual({
+        code: "SEARCH_CODE_EXECUTION_FAILED", reason: "output_limit", live: liveBefore,
+      })
+      expect(bytes).toBeGreaterThan(0)
+      expect(bytes).toBeLessThan(SEARCH_CODE_MAX_OUTPUT_BYTES)
+    } })
+  }, 30_000)
 
   test("previews a late real regex match with complete Unicode window boundaries", async () => {
     await using project = await memoryProject()

@@ -846,8 +846,21 @@ retain their original recorded values.
 The shared Message source schema validates HTTP and HTTPS URLs with the native
 URL validator. Malformed and other-protocol inputs produce a URL-format schema
 error; accepted URL strings and source metadata retain their recorded values.
+Local search file sources use the same CR, LF and CRLF logical lines as file
+reads and the editor. Search operates on original bytes (`--encoding=none`),
+including a UTF-8 BOM, to agree with the current UTF-8 file display. For matched
+files whose results have preceding LF records, the same ripgrep execution
+authority reads internal bare-CR records and counts missing line boundaries.
+That scan shares the original deadline and cumulative output budget; a failed
+boundary scan returns the existing typed execution error rather than invented
+coordinates. There is no Host file-read bypass for Task searches.
+Original submatch byte spans determine logical matching lines; spans on the
+same or overlapping lines share one source, while spans across CR carry the
+complete line range. A real zero-width result without reported spans keeps its
+whole record's logical range. The public find-text and debug ripgrep APIs retain
+their explicit raw ripgrep protocol, encoding behavior and coordinates.
 Local search file sources retain the same bounded, inline-payload-redacted
-matching-line preview that appears in the Tool output. Short safe lines remain
+matching-line or range preview that appears in the Tool output. Short safe lines remain
 complete. Longer safe lines use the existing 2000 UTF-16 code-unit budget around
 the first reported ripgrep match span, with up to 40 preceding code units.
 Records without a reported span retain the bounded line prefix. Original

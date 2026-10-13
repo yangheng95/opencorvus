@@ -1,0 +1,32 @@
+[
+  {
+    "name": "cr",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\cr.txt",
+    "text": "开头\r未命中\r前😀MATCH372_A\rtail\r次MATCH372_B"
+  },
+  {
+    "name": "mixed",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\mixed.txt",
+    "text": "一\r二\n三\r四\r\n前😀MATCH372_C\nend"
+  },
+  {
+    "name": "crlf",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\crlf.txt",
+    "text": "header\r\nprefix\r\n前😀MATCH372_D\r\nend"
+  },
+  {
+    "name": "lf",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\lf.txt",
+    "text": "header\nprefix\n前😀MATCH372_E\nend"
+  },
+  {
+    "name": "bom",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\bom.txt",
+    "text": "﻿前😀MATCH372_F\nend"
+  },
+  {
+    "name": "cross",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-cr-location-372-after\\project\\格式\\cross.txt",
+    "text": "header\rBEGIN372\rEND372\rtail"
+  }
+]

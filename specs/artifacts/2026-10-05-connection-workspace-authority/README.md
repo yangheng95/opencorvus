@@ -815,3 +815,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [文件行号锚点370](source-line-anchor-370/README.md) / [Recall](source-line-anchor-plan-370.md)。
 
 - [来源文件保存换行371](source-line-endings-371/README.md) / [Recall](source-line-endings-plan-371.md)。
+
+- [CR文件来源坐标372](source-cr-location-372/README.md) / [Recall](source-cr-location-plan-372.md)。
