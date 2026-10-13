@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。
+
 - [文件链接条目与回执](2026-10-13-file-link-entry-contract.md)：entry与target边界、根因及验收。
 
 - [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391.md)：现有数据合同、可见提示和真实桌面交付。

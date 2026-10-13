@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392/README.md)：五个名称、侧栏正文双向语言、状态/宽度保留与真实CSV下载。
+
 - [文件链接条目证据](2026-10-13-file-link-entry-contract/README.md)：原HTTP、链接身份、桌面截图与完整收尾。
 
 - [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391/README.md)：中英文普通/全屏提示、编辑与发布值CSV下载及页面收尾。

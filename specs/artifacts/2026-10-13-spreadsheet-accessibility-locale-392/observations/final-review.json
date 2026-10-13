@@ -1,0 +1,61 @@
+{
+  "observedAt": "2026-10-13T12:33:41.895Z",
+  "review": "manual-desktop-passed",
+  "workbook": "Desk budget",
+  "sessionID": "ses_h0VKkCl7hbz3BKHVW2Xp",
+  "artifactID": "art_g0VXv65e1004ErsrwSJs",
+  "localeCycle": [
+    "English",
+    "简体中文",
+    "English"
+  ],
+  "names": [
+    "Sheet tabs/工作表标签",
+    "Sidebar panel/侧边栏面板",
+    "Resize sidebar/调整侧边栏宽度",
+    "Close sidebar/关闭侧边栏",
+    "Notifications/通知 alt+T"
+  ],
+  "sonnerRegionsObserved": 2,
+  "sidebarContent": "View All header/list follows same locale without reopening",
+  "state": "All sheets selected, 350 width and edited9/5/14 preserved; ArrowLeft returned330",
+  "widths": [
+    330,
+    350,
+    350,
+    350,
+    330
+  ],
+  "csv": {
+    "bytes": 61,
+    "actualDownload": true,
+    "exactPublicEditedValues": true
+  },
+  "screenshots": 9,
+  "checks": {
+    "frozenInstallExit": 0,
+    "typecheckExit": 0,
+    "privateBuildExit": 0
+  },
+  "owners": {
+    "before": {
+      "pid": 80260,
+      "launcherSession": 88318,
+      "exit": 0
+    },
+    "after": {
+      "pid": 41976,
+      "launcherSession": 22528,
+      "exit": 0
+    }
+  },
+  "credentials": "none",
+  "model": "none",
+  "boundaries": [
+    "Notification service independent visible toast not triggered; both actual region names observed",
+    "Other Sidebar pretranslated title/state snapshots require394",
+    "Mobile sheet bar unchanged",
+    "More Colors/focus and readonly/collapse/virtual scroll unchanged"
+  ],
+  "toolFailure": "Initial Windows PowerShell5 invocation reached no process start; corrected to existing PowerShell7 launcher, exact owner then normally joined"
+}

@@ -2427,6 +2427,13 @@ collapsing it. CSV exports preserve cell values rather than workbook formulas or
 formatting. A local column layout gives the note its natural height and the same
 mounted workbook the remaining fullscreen space. This guidance does not add a
 durable draft, a dirty-state owner or a navigation prompt.
+The installed Univer locale packages own sheet-tab, Sidebar and notification
+accessibility names. Their four mounted components redraw from the same locale
+service with the existing disposable update binder. Sidebar projection includes
+the current locale in its memo inputs, so keyed labels and render-time panel
+text refresh without replacing component state, width or the workbook. Previously
+translated titles and stored translated panel state remain separate consumer
+contracts; this does not claim every panel snapshot is locale-reactive.
 
 Shared artifact action controls preserve native focus while an operation owns
 their busy state. Native disabled is reserved for genuinely unavailable actions;
