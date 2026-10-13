@@ -2344,6 +2344,15 @@ current source against the published payload. It does not write a durable draft
 or mutate the original publication. Copy/download continue to export the current
 mounted source; recreating the renderer restores the published content.
 
+Shared artifact action controls preserve native focus while an operation owns
+their busy state. Native disabled is reserved for genuinely unavailable actions;
+ARIA disabled/busy and the existing operation owner describe transient work.
+The existing disclosure owns Download open state, admits opening only when
+available, and always admits closing. Resource identity, project selection and
+abort ownership still decide whether a completed export belongs to the current
+view. Visible type badges use the current payload renderer and the product
+locale catalog; technical kind attributes retain their stable styling identity.
+
 The nineteen model-publishable renderers have one canonical payload validator.
 The search-native Provider Tool projection factors their shared
 `schemaVersion`, `title`, and `presentation` fields once and keeps only the

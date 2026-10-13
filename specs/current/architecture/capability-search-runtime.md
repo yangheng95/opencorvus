@@ -148,6 +148,13 @@ list the current Project, while native Mission queries retain Mission ownership.
 Explicit taskIDs requires at least one ID; an empty array is a schema error.
 Future projected Panel grant changes must review their schema and mode identity.
 
+Projected package tools, package MCP tools and default MCP tools pass the
+execution authority derived from their validated TaskToolExecutionScope to the
+shared output truncator. Oversized successful output retains the existing
+bounded preview and full file under the primary Project, Task and exact
+Session. This adapter step neither infers authority from a bare Session ID nor
+changes the original producer execution directory or its possible effects.
+
 ## Search and reveal contract
 
 One search accepts one to four queries, exact kind/owner filters, at most five
@@ -183,6 +190,11 @@ requires a continuous revision chain and canonical ordering. A completed search
 without exactly one receipt, a moved call identity, changed persisted input, or
 an invalid recomputed materialization fingerprint is corruption. Valid receipts
 remain ordinary visible Tool results.
+
+The search completion transaction retains the exact request metadata read from
+the current ToolPart beside its completed state and reveal receipt. Provider
+request annotations and result metadata remain distinct facts; completion and
+replay preserve both through the existing immutable request validation.
 
 Candidate definition initialization, MCP inspection, plugin definition hooks,
 and Provider normalization happen outside SQLite. The short immediate

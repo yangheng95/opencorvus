@@ -1,0 +1,10 @@
+{
+  "pid": 64196,
+  "occurrence": "projected-output-authority-383-live-02-49e7efce-136f-4c03-ae69-b2a15414bbb9",
+  "error": {
+    "name": "TimeoutError",
+    "message": "The operation timed out."
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

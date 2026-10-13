@@ -1,0 +1,15 @@
+{
+  "pid": 13412,
+  "occurrence": "artifact-action-focus-384-before-02-2c56b4dc-cc0a-4739-9e8f-a3023e95dcdc",
+  "owner": {
+    "pid": 13412,
+    "processInstanceID": "win32:639274721449394489",
+    "occurrenceID": "f59cd861-0f3f-452c-bc89-c81bb219299e"
+  },
+  "parent": {
+    "pid": 80732,
+    "processInstanceID": "win32:639274721449023569",
+    "occurrenceID": "5e6931f9-83a8-4310-9278-1cdd2dc7ed25"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

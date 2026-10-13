@@ -1,0 +1,463 @@
+{
+  "observedAt": "2026-10-13T08:00:57.553Z",
+  "files": [
+    {
+      "source": "notes.txt",
+      "archive": "notes.txt",
+      "bytes": 14687,
+      "redacted": false
+    },
+    {
+      "source": "input-metadata.json",
+      "archive": "input-metadata.json",
+      "bytes": 155,
+      "redacted": false
+    },
+    {
+      "source": "chat-input.json",
+      "archive": "chat-input.json",
+      "bytes": 20443,
+      "redacted": false
+    },
+    {
+      "source": "chat-accepted.json",
+      "archive": "chat-accepted.json",
+      "bytes": 3830,
+      "redacted": false
+    },
+    {
+      "source": "canonical-before.json",
+      "archive": "canonical-before.json",
+      "bytes": 14851,
+      "redacted": false
+    },
+    {
+      "source": "canonical-check.json",
+      "archive": "canonical-check.json",
+      "bytes": 298,
+      "redacted": false
+    },
+    {
+      "source": "canonical-check.log",
+      "archive": "canonical-check.log.gz",
+      "bytes": 225,
+      "redacted": false
+    },
+    {
+      "source": "canonical-check.exit.txt",
+      "archive": "canonical-check.exit.txt",
+      "bytes": 1,
+      "redacted": false
+    },
+    {
+      "source": "check-canonical.py",
+      "archive": "check-canonical.py",
+      "bytes": 3493,
+      "redacted": false
+    },
+    {
+      "source": "start-chat.mjs",
+      "archive": "start-chat.mjs",
+      "bytes": 2131,
+      "redacted": false
+    },
+    {
+      "source": "before-download-check.json",
+      "archive": "before-download-check.json",
+      "bytes": 190,
+      "redacted": false
+    },
+    {
+      "source": "after-download-check.json",
+      "archive": "after-download-check.json",
+      "bytes": 206,
+      "redacted": false
+    },
+    {
+      "source": "before-launcher.log",
+      "archive": "before-launcher.log.gz",
+      "bytes": 208,
+      "redacted": false
+    },
+    {
+      "source": "before-02-launcher.log",
+      "archive": "before-02-launcher.log.gz",
+      "bytes": 366,
+      "redacted": false
+    },
+    {
+      "source": "before-02-shutdown.log",
+      "archive": "before-02-shutdown.log.gz",
+      "bytes": 91,
+      "redacted": false
+    },
+    {
+      "source": "typecheck.log",
+      "archive": "typecheck.log.gz",
+      "bytes": 36,
+      "redacted": false
+    },
+    {
+      "source": "typecheck.exit.txt",
+      "archive": "typecheck.exit.txt",
+      "bytes": 1,
+      "redacted": false
+    },
+    {
+      "source": "build.log",
+      "archive": "build.log.gz",
+      "bytes": 11034,
+      "redacted": false
+    },
+    {
+      "source": "build.exit.txt",
+      "archive": "build.exit.txt",
+      "bytes": 1,
+      "redacted": false
+    },
+    {
+      "source": "typecheck-final.log",
+      "archive": "typecheck-final.log.gz",
+      "bytes": 36,
+      "redacted": false
+    },
+    {
+      "source": "typecheck-final.exit.txt",
+      "archive": "typecheck-final.exit.txt",
+      "bytes": 1,
+      "redacted": false
+    },
+    {
+      "source": "build-final.log",
+      "archive": "build-final.log.gz",
+      "bytes": 11054,
+      "redacted": false
+    },
+    {
+      "source": "build-final.exit.txt",
+      "archive": "build-final.exit.txt",
+      "bytes": 1,
+      "redacted": false
+    },
+    {
+      "source": "i18n.log",
+      "archive": "i18n.log.gz",
+      "bytes": 94,
+      "redacted": false
+    },
+    {
+      "source": "i18n.exit.txt",
+      "archive": "i18n.exit.txt",
+      "bytes": 1,
+      "redacted": false
+    },
+    {
+      "source": "i18n-final.log",
+      "archive": "i18n-final.log.gz",
+      "bytes": 94,
+      "redacted": false
+    },
+    {
+      "source": "i18n-final.exit.txt",
+      "archive": "i18n-final.exit.txt",
+      "bytes": 1,
+      "redacted": false
+    },
+    {
+      "source": "review-server.ts",
+      "archive": "review-server.ts",
+      "bytes": 2098,
+      "redacted": false
+    },
+    {
+      "source": "launch-review.ps1",
+      "archive": "launch-review.ps1",
+      "bytes": 3479,
+      "redacted": false
+    },
+    {
+      "source": "manual-review.json",
+      "archive": "manual-review.json",
+      "bytes": 2730,
+      "redacted": false
+    },
+    {
+      "source": "owner-handle-joins.json",
+      "archive": "owner-handle-joins.json",
+      "bytes": 652,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/failed.json",
+      "archive": "provider-before/evidence/failed.json",
+      "bytes": 464,
+      "redacted": false
+    },
+    {
+      "source": "provider-before-02/evidence/authority-ready.json",
+      "archive": "provider-before-02/evidence/authority-ready.json",
+      "bytes": 15906,
+      "redacted": false
+    },
+    {
+      "source": "provider-before-02/evidence/managed-parent-ready.json",
+      "archive": "provider-before-02/evidence/managed-parent-ready.json",
+      "bytes": 524,
+      "redacted": false
+    },
+    {
+      "source": "provider-before-02/evidence/native-host-ready.json",
+      "archive": "provider-before-02/evidence/native-host-ready.json",
+      "bytes": 1802,
+      "redacted": false
+    },
+    {
+      "source": "provider-before-02/evidence/native-host-settled.json",
+      "archive": "provider-before-02/evidence/native-host-settled.json",
+      "bytes": 947,
+      "redacted": false
+    },
+    {
+      "source": "provider-before-02/evidence/preflight-ready.json",
+      "archive": "provider-before-02/evidence/preflight-ready.json",
+      "bytes": 713,
+      "redacted": false
+    },
+    {
+      "source": "provider-before-02/evidence/profile-selection-admitted.json",
+      "archive": "provider-before-02/evidence/profile-selection-admitted.json",
+      "bytes": 246,
+      "redacted": false
+    },
+    {
+      "source": "provider-before-02/evidence/provider-pair-staging.json",
+      "archive": "provider-before-02/evidence/provider-pair-staging.json",
+      "bytes": 1663,
+      "redacted": false
+    },
+    {
+      "source": "ui-review/owner.json",
+      "archive": "ui-review/owner.json",
+      "bytes": 149,
+      "redacted": false
+    },
+    {
+      "source": "ui-review/ready.json",
+      "archive": "ui-review/ready.json",
+      "bytes": 343,
+      "redacted": false
+    },
+    {
+      "source": "ui-review/terminal.json",
+      "archive": "ui-review/terminal.json",
+      "bytes": 206,
+      "redacted": false
+    },
+    {
+      "source": "ui-review/stop-requested",
+      "archive": "ui-review/stop-requested",
+      "bytes": 162,
+      "redacted": false
+    },
+    {
+      "source": "ui-before-menu/owner.json",
+      "archive": "ui-before-menu/owner.json",
+      "bytes": 149,
+      "redacted": false
+    },
+    {
+      "source": "ui-before-menu/ready.json",
+      "archive": "ui-before-menu/ready.json",
+      "bytes": 343,
+      "redacted": false
+    },
+    {
+      "source": "ui-before-menu/terminal.json",
+      "archive": "ui-before-menu/terminal.json",
+      "bytes": 205,
+      "redacted": false
+    },
+    {
+      "source": "ui-before-menu/stop-requested",
+      "archive": "ui-before-menu/stop-requested",
+      "bytes": 127,
+      "redacted": false
+    },
+    {
+      "source": "ui-final/owner.json",
+      "archive": "ui-final/owner.json",
+      "bytes": 149,
+      "redacted": false
+    },
+    {
+      "source": "ui-final/ready.json",
+      "archive": "ui-final/ready.json",
+      "bytes": 343,
+      "redacted": false
+    },
+    {
+      "source": "ui-final/terminal.json",
+      "archive": "ui-final/terminal.json",
+      "bytes": 205,
+      "redacted": false
+    },
+    {
+      "source": "ui-final/stop-requested",
+      "archive": "ui-final/stop-requested",
+      "bytes": 46,
+      "redacted": false
+    },
+    {
+      "source": "ui-final-localized/owner.json",
+      "archive": "ui-final-localized/owner.json",
+      "bytes": 149,
+      "redacted": false
+    },
+    {
+      "source": "ui-final-localized/ready.json",
+      "archive": "ui-final-localized/ready.json",
+      "bytes": 343,
+      "redacted": false
+    },
+    {
+      "source": "ui-final-localized/terminal.json",
+      "archive": "ui-final-localized/terminal.json",
+      "bytes": 205,
+      "redacted": false
+    },
+    {
+      "source": "ui-final-localized/stop-requested",
+      "archive": "ui-final-localized/stop-requested",
+      "bytes": 66,
+      "redacted": false
+    },
+    {
+      "source": "before-live/artifact-action-focus-384-before-final-provider-audit.json",
+      "archive": "before-live/artifact-action-focus-384-before-final-provider-audit.json",
+      "bytes": 30337,
+      "redacted": false
+    },
+    {
+      "source": "before-live/artifact-action-focus-384-before-physical-terminal-and-pair-cleanup.json",
+      "archive": "before-live/artifact-action-focus-384-before-physical-terminal-and-pair-cleanup.json",
+      "bytes": 2444,
+      "redacted": false
+    },
+    {
+      "source": "before-live/artifact-action-focus-384-before-settlement-owner.json",
+      "archive": "before-live/artifact-action-focus-384-before-settlement-owner.json",
+      "bytes": 1043,
+      "redacted": false
+    },
+    {
+      "source": "before-live/artifact-action-focus-384-before-shutdown-admission.json",
+      "archive": "before-live/artifact-action-focus-384-before-shutdown-admission.json",
+      "bytes": 549,
+      "redacted": false
+    },
+    {
+      "source": "before-02-live/artifact-action-focus-384-before-02-final-provider-audit.json",
+      "archive": "before-02-live/artifact-action-focus-384-before-02-final-provider-audit.json.gz",
+      "bytes": 3155,
+      "redacted": false
+    },
+    {
+      "source": "before-02-live/artifact-action-focus-384-before-02-physical-terminal-and-pair-cleanup.json",
+      "archive": "before-02-live/artifact-action-focus-384-before-02-physical-terminal-and-pair-cleanup.json",
+      "bytes": 2459,
+      "redacted": false
+    },
+    {
+      "source": "before-02-live/artifact-action-focus-384-before-02-qualified-surface-completion.json",
+      "archive": "before-02-live/artifact-action-focus-384-before-02-qualified-surface-completion.json",
+      "bytes": 361,
+      "redacted": false
+    },
+    {
+      "source": "before-02-live/artifact-action-focus-384-before-02-settlement-owner.json",
+      "archive": "before-02-live/artifact-action-focus-384-before-02-settlement-owner.json",
+      "bytes": 478,
+      "redacted": false
+    },
+    {
+      "source": "before-02-live/artifact-action-focus-384-before-02-shutdown-admission.json",
+      "archive": "before-02-live/artifact-action-focus-384-before-02-shutdown-admission.json",
+      "bytes": 551,
+      "redacted": false
+    },
+    {
+      "source": "screenshots/before-copy-focus.png",
+      "archive": "screenshots/before-copy-focus.png",
+      "bytes": 90548,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/before-copy-completed.png",
+      "archive": "screenshots/before-copy-completed.png",
+      "bytes": 90572,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/before-download-completed.png",
+      "archive": "screenshots/before-download-completed.png",
+      "bytes": 94332,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/before-document-copy.png",
+      "archive": "screenshots/before-document-copy.png",
+      "bytes": 97443,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/after-copy-focus.png",
+      "archive": "screenshots/after-copy-focus.png",
+      "bytes": 90218,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/after-download-focus.png",
+      "archive": "screenshots/after-download-focus.png",
+      "bytes": 93015,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/after-fullscreen-copy.png",
+      "archive": "screenshots/after-fullscreen-copy.png",
+      "bytes": 189757,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/baseline-fullscreen-menu-focused.png",
+      "archive": "screenshots/baseline-fullscreen-menu-focused.png",
+      "bytes": 189667,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/after-chinese-copy-focused-visible.png",
+      "archive": "screenshots/after-chinese-copy-focused-visible.png",
+      "bytes": 86201,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/final-chinese-file-copy.png",
+      "archive": "screenshots/final-chinese-file-copy.png",
+      "bytes": 86010,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/final-chinese-document.png",
+      "archive": "screenshots/final-chinese-document.png",
+      "bytes": 80942,
+      "kind": "Actual root-captured and manually viewed UI"
+    },
+    {
+      "source": "screenshots/final-english-types.png",
+      "archive": "screenshots/final-english-types.png",
+      "bytes": 82177,
+      "kind": "Actual root-captured and manually viewed UI"
+    }
+  ],
+  "boundary": "Exact allowlist; no auth/models/database/runtime tree or browser test. Logs are lossless gzip, screenshots are original captures.",
+  "knownCredentialScan": "Passed in memory after redaction; no credential values emitted"
+}

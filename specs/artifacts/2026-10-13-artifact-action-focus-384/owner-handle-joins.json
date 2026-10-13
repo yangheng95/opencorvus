@@ -1,0 +1,13 @@
+{
+  "authority": "Actual original exec launcher handles joined, not process-name inference",
+  "provider": [
+    {"handle": 98585, "exitCode": 1, "qualification": "preflight overloaded; physical cleanup completed"},
+    {"handle": 13797, "exitCode": 0, "qualification": "7 target model streams EOF, 2 real published artifacts, physical pair cleanup completed"}
+  ],
+  "credentiallessReview": [
+    {"stage": "ui-review", "handle": 49166, "exitCode": 0},
+    {"stage": "ui-before-menu", "handle": 89413, "exitCode": 0},
+    {"stage": "ui-final", "handle": 45087, "exitCode": 0},
+    {"stage": "ui-final-localized", "handle": 68201, "exitCode": 0}
+  ]
+}

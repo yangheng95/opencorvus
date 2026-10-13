@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-13",
+  "reviewer": "root agent through real CUA desktop interactions and manual screenshot inspection",
+  "sessionID": "ses_hVS7dJNLzINUMa8gSm91",
+  "modelArtifacts": "Actual visible user upload, GPT-6.1 Sol and completed publish_interactive_artifact outcomes; no synthetic messages",
+  "before": {
+    "fileCopy": "Keyboard Enter produced Copied and moved focus to page root; visible button focus was lost",
+    "inlineDocumentCopy": "Copied with focus retained",
+    "fileDownload": "Real browser download, 14687 original bytes, focus returned to Download"
+  },
+  "after": {
+    "fileCopy": "Focus retained after keyboard Enter, subsequent Space copied again, Tab reached Download",
+    "fileDownload": "Real browser download of reading-notes (1).txt; all 14687 bytes equal original; closed menu returned focus to Download",
+    "fullscreenCopy": "Copied and retained Copy focus in the same fullscreen renderer",
+    "chinese": "Final built page shows 文件/文档, 复制文本, 下载, 已复制 and localized controls; original titles and body remain literal",
+    "english": "Final page shows File/Document and English controls; original bilingual document body remains literal"
+  },
+  "notQualified": [
+    "Fullscreen Download: two after tabs and one original-build tab timed out upon opening; precise product/host cause remains unknown",
+    "Fullscreen menu selection, download and focus return not verified",
+    "OS clipboard readback is outside this result; Copied only proves writer promise fulfillment",
+    "Transient busy duplicate suppression and disabled empty MCP result were reviewed in code, not independently observed in a slow live sample",
+    "Other eighteen renderer layouts were not individually rendered in this batch"
+  ],
+  "tabs": {
+    "closed": [9, 11, 14, 16],
+    "closureUnconfirmed": [10, 12, 13, 15],
+    "notes": "10/12/13 fail browser focus control after fullscreen menu. 15 is a startup connection error page whose data URL is blocked by browser policy; no bypass attempted. No user browser process was stopped."
+  },
+  "reviewServiceNotes": [
+    "All four credentialless review services were normally stopped and original launcher joined exit 0",
+    "The review-server terminal reason is a fixed label, not proof of tab closure; individual stop-requested and this record give actual closure status",
+    "Credentialless provider discovery recreated a public models.json after original auth/models pair removal; launcher now verifies original cleanup receipt and absence of auth.json instead of treating public catalog as credentials",
+    "Final tab15 was opened before listener ready and connection refused; after ready receipt, tab16 loaded successfully"
+  ]
+}

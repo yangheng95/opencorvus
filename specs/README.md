@@ -4,6 +4,14 @@
 - [持续目标独立存储审计](records/2026-10/2026-10-13-continuous-goal-independent-audit.md)：归档范围冲突与保留历史删除的修前复现和修后合同。
 - [持续目标独立复核证据](artifacts/2026-10-13-continuous-goal-review/README.md)：独立及主 agent 日志、受控流式跨进程恢复。
 
+- [385 能力搜索请求元数据](records/2026-10/2026-10-13-capability-request-metadata-385.md)：共享搜索事务保留不可变请求，覆盖重放、跨进程及多项目。
+
+- [383 投影工具大结果授权](records/2026-10/2026-10-13-projected-output-authority-383.md)：三个结果适配器的真实授权传递与完整输出保存。
+
+- [386 全屏产物菜单调查](records/2026-10/2026-10-13-artifact-fullscreen-menu-386.md)：前后态操作超时、已排除解释与未完成范围。
+
+- [384 产物工具栏忙碌焦点](records/2026-10/2026-10-13-artifact-action-focus-384.md)：真实产物复制与下载的键盘连续操作。
+
 - [项目文件点段身份](records/2026-10/2026-10-13-file-alias-identity.md)：词法归属、草稿导航与真实 Git 差异。
 
 - [Chat、Task、Mission 持续目标模式](records/2026-10/2026-10-13-continuous-goal-mode.md)：现状、授权与轮次、预算合同、实施和验收。

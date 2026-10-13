@@ -6,6 +6,7 @@ import { boardStore } from "../../store/board"
 import { copyText } from "../../services/clipboard"
 import { reportError } from "../../services/diagnostics"
 import { t } from "../../utils/i18n"
+import { useDisclosure } from "../../solid/disclosure"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { DropdownMenu } from "../ui/DropdownMenu"
@@ -26,6 +27,7 @@ export function ArtifactActions(props: {
   const [operation, setOperation] = createSignal<Action>()
   const [copied, setCopied] = createSignal<Action>()
   const [files, setFiles] = createSignal<ArtifactExport[]>([])
+  const downloads = useDisclosure()
   let reset: ReturnType<typeof setTimeout> | undefined
   let disposed = false
   const matchesCurrent = (entry: Action) => {
@@ -74,7 +76,7 @@ export function ArtifactActions(props: {
     if (entry) retire(entry)
   })
   async function run(action: (entry: Action) => Promise<void>, selected?: ArtifactExport) {
-    if (operation()) return
+    if (operation() || props.disabled) return
     let entry: Action | undefined
     try {
       const current = props.files().map(file => ({ ...file }))
@@ -124,9 +126,14 @@ export function ArtifactActions(props: {
       }, 2000)
     })
   const prepareDownloads = (open: boolean) => {
-    if (!open) return
+    if (!open) {
+      downloads.close()
+      return
+    }
+    if (operation() || props.disabled) return
     try {
       setFiles(props.files())
+      downloads.openIt()
     } catch (error) {
       setFiles([])
       reportError({
@@ -142,20 +149,24 @@ export function ArtifactActions(props: {
         variant="ghost"
         size="icon"
         tone="neutral"
-        disabled={Boolean(operation()) || props.disabled}
+        disabled={props.disabled}
+        aria-disabled={Boolean(operation()) || props.disabled || undefined}
+        aria-busy={Boolean(operation()) || undefined}
         title={props.copyLabel || t("artifact.actions.copy")}
         aria-label={props.copyLabel || t("artifact.actions.copy")}
         onClick={() => void copy()}
       >
         <Icon name={showsCopied() ? "check" : "copy"} size="compact" />
       </Button>
-      <DropdownMenu.Root onOpenChange={prepareDownloads}>
+      <DropdownMenu.Root open={downloads.open()} onOpenChange={prepareDownloads}>
         <DropdownMenu.Trigger
           as={Button}
           variant="ghost"
           size="sm"
           tone="neutral"
-          disabled={Boolean(operation()) || props.disabled}
+          disabled={props.disabled}
+          aria-disabled={Boolean(operation()) || props.disabled || undefined}
+          aria-busy={Boolean(operation()) || undefined}
           title={t("artifact.actions.download")}
           aria-label={t("artifact.actions.download")}
         >

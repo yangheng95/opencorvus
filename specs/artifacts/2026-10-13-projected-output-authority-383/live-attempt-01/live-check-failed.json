@@ -1,0 +1,75 @@
+{
+  "observedAt": "2026-10-13T07:33:14.513Z",
+  "acceptance": "not-achieved",
+  "taskID": "tsk_g00VXudNQE00V1AFy1DS",
+  "lifecycleStatus": "failed",
+  "causeObserved": "Four capability_search request metadata conflicts in orchestrator and worker; deeper shared root cause delegated to main audit",
+  "failedToolParts": [
+    {
+      "sessionID": "ses_-zUS5MbHczzU5ORXN735",
+      "id": "prt_g0VXudTFh00RRzinHO6I",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "HostProcessingFaultError",
+        "message": "Tool request Part prt_g0VXudTFh00RRzinHO6I conflicts with its immutable request fact — metadata: stored={\"openai\":{\"itemId\":\"fc_00e67766ec6884ae016acdddd88f1c81919294daebbe0e8d33\"}} received=undefined",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_5995db3a290044a0a248b9ea184b4f85",
+          "toolName": "capability_search"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_-zUS5MbHczzU5ORXN735",
+      "id": "prt_g0VXudV1R00duRv9Q5LR",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "HostProcessingFaultError",
+        "message": "Tool request Part prt_g0VXudV1R00duRv9Q5LR conflicts with its immutable request fact — metadata: stored={\"openai\":{\"itemId\":\"fc_0d0a07f99e0146c1016acddddf5800819199dc45fa7e15355e\"}} received=undefined",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_5edd233595dc49d3afd93d157817a2f8",
+          "toolName": "capability_search"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_-zUS5MbHczzU5ORXN735",
+      "id": "prt_g0VXudooy0063pSDn4B7",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "HostProcessingFaultError",
+        "message": "Tool request Part prt_g0VXudooy0063pSDn4B7 conflicts with its immutable request fact — metadata: stored={\"openai\":{\"itemId\":\"fc_06119f97ddecf3ae016acdde2b7a1c8191acad3f167732ed69\"}} received=undefined",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_43db7fa93ebe4e45902cff79378cec1d",
+          "toolName": "capability_search"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_hXA8bUS608rQ27NvRxcX",
+      "id": "prt_g0VXudan700TnBJInEHm",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "HostProcessingFaultError",
+        "message": "Tool request Part prt_g0VXudan700TnBJInEHm conflicts with its immutable request fact — metadata: stored={\"openai\":{\"itemId\":\"fc_00351ffe3956254f016acdddf58d24819182226725c1c63304\"}} received=undefined",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_fda25d9e27ad4170ad474558e6d99031",
+          "toolName": "capability_search"
+        }
+      }
+    }
+  ],
+  "requestedOutputVerification": "Not reached: projected report result and read continuation were not produced",
+  "providerRequests": 15,
+  "allRequestsExactModelStreamingHTTP200EOF": true,
+  "naturalTerminal": "Model invoked real manage_task fail_task; completed outcome and immediate_park persisted",
+  "nativeDeadlineAt": 1791877039801,
+  "boundary": "Evidence collector succeeded; the requested 383 real model acceptance failed. Native physical closure and desktop review remain separate."
+}

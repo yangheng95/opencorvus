@@ -1,0 +1,12 @@
+{
+  "occurrence": "projected-output-authority-383-live-02-49e7efce-136f-4c03-ae69-b2a15414bbb9",
+  "observedAt": "2026-10-13T08:07:34.9750608Z",
+  "handles": {
+    "chunkID": "9d67bb",
+    "exitCode": 1,
+    "qualification": "preflight failed; native supervisor completed normal cleanup",
+    "name": "native-launcher",
+    "sessionID": 91783
+  },
+  "boundary": "Actual execution tool completion; empty LASTEXITCODE files are not exit evidence"
+}

@@ -545,6 +545,7 @@ export function createCapabilityRevealOwner(input: {
             type: "tool",
             callID: committed.callID,
             tool: committed.tool,
+            metadata: current.metadata,
             state: {
               status: "completed",
               input: params,

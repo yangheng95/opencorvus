@@ -4,6 +4,14 @@
 - [持续目标独立存储审计](2026-10-13-continuous-goal-independent-audit.md)：归档重叠与保留历史删除的两个真实缺陷。
 - [持续目标独立复核证据](../../artifacts/2026-10-13-continuous-goal-review/README.md)：修前、修后与实际 Prompt 重启恢复日志。
 
+- [385 能力搜索请求元数据](2026-10-13-capability-request-metadata-385.md)：共享搜索事务保留不可变请求，覆盖重放、跨进程及多项目。
+
+- [383 投影工具大结果授权](2026-10-13-projected-output-authority-383.md)：包工具和MCP输出阈值的根因与正向合同。
+
+- [386 全屏产物菜单调查](2026-10-13-artifact-fullscreen-menu-386.md)：原版与改后页面同触发超时，根因待查。
+
+- [384 产物工具栏忙碌焦点](2026-10-13-artifact-action-focus-384.md)：共享动作根因分析和真实桌面验收。
+
 - [项目文件点段身份](2026-10-13-file-alias-identity.md)：全入口影响、真实服务与桌面验收。
 
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
