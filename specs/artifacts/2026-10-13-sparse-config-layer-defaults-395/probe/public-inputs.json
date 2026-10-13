@@ -1,0 +1,78 @@
+{
+  "source": "probe-results.json captured public globalInput and each original input; not a fresh runtime read or probe rerun",
+  "globalInput": {
+    "prompt_profile": {
+      "active": "base"
+    },
+    "permission_mode": "ask",
+    "experimental": {
+      "auto_question": false,
+      "memory": {
+        "document_token_limit": 5000,
+        "organizer_input_token_budget": 16000,
+        "pending_availability_limit": 50
+      }
+    },
+    "terminal": {
+      "profiles": {
+        "public": {
+          "command": "powershell",
+          "label": "Public",
+          "args": [
+            "-NoProfile"
+          ],
+          "env": {
+            "MODE": "public"
+          }
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "absent",
+      "input": null,
+      "sourceState": "absent"
+    },
+    {
+      "name": "empty",
+      "input": "",
+      "sourceState": "file"
+    },
+    {
+      "name": "whitespace",
+      "input": " \n\t",
+      "sourceState": "file"
+    },
+    {
+      "name": "empty-object",
+      "input": "{}",
+      "sourceState": "file"
+    },
+    {
+      "name": "unrelated-username",
+      "input": "{\"username\":\"public-project-user\"}",
+      "sourceState": "file"
+    },
+    {
+      "name": "nested-experimental",
+      "input": "{\"experimental\":{\"openTelemetry\":true}}",
+      "sourceState": "file"
+    },
+    {
+      "name": "nested-memory",
+      "input": "{\"experimental\":{\"memory\":{\"enabled\":true}}}",
+      "sourceState": "file"
+    },
+    {
+      "name": "nested-terminal",
+      "input": "{\"terminal\":{\"profiles\":{\"public\":{\"command\":\"powershell\",\"label\":\"Project\"}}}}",
+      "sourceState": "file"
+    },
+    {
+      "name": "inherited-memory-relation",
+      "input": "{\"experimental\":{\"memory\":{\"organizer_input_token_budget\":12000}}}",
+      "sourceState": "file"
+    }
+  ]
+}

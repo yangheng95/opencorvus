@@ -36,7 +36,10 @@ function modelBelongsToProvider(value: unknown, providerID: string): boolean {
   return typeof value === "string" && value.startsWith(`${providerID}/`)
 }
 
-function removalPatch(current: Config.Info, providerID: string): Config.ProjectMergePatch {
+function removalPatch(
+  current: Pick<Config.Source, "disabled_providers" | "enabled_providers" | "model" | "small_model" | "agent">,
+  providerID: string,
+): Config.ProjectMergePatch {
   const patch: Config.ProjectMergePatch = {
     provider: { [providerID]: null },
   }

@@ -1,0 +1,14 @@
+{
+  "observedAt": "2026-10-13T15:09:49.891Z",
+  "target": "packages/opencorvus/src/config/config.ts",
+  "originalPreimage": "config-before.ts",
+  "ownVariant": "config-395-only.ts",
+  "combinedVariant": "config-combined-review.ts",
+  "ownHunks": 33,
+  "externalHunks": 2,
+  "externalBoundary": [
+    "JSONC import printParseErrorCode removal/format",
+    "parseConfig syntax-error formatter to ConfigPaths.jsonErrorMessage"
+  ],
+  "unchanged": "Production worktree and every Git index remain untouched. Review patches are based on saved preimage, not a claim of current HEAD/index admission."
+}

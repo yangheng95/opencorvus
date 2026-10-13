@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [395 稀疏配置层](records/2026-10/2026-10-13-sparse-config-layer-defaults-395.md)：实际文件层默认注入与有效配置继承的根因、影响和单源方案。
+
 - [文件发布后的搜索采集](records/2026-10/2026-10-13-file-search-publication-order.md)：真实并发采集边界、原身份与正向验收。
 
 - [进程结算错误屏障](records/2026-10/2026-10-13-process-settlement-barrier.md)：原完整Handle合同、真实原错误与Capsule共享缺口。

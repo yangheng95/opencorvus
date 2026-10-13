@@ -1,0 +1,675 @@
+{
+  "observedAt": "2026-10-13T15:55:13.511Z",
+  "occurrence": "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+  "boundary": "Actual readonly SQLite BEGIN snapshot after physical exit. This is evidence collection, not successful end-to-end acceptance, not HTTP fallback, and not recovered runtime execution.",
+  "identity": {
+    "sessionID": "ses_hxQa5jQTUbR8tnvMY6gA",
+    "projectID": "prj_htaqdXH2yXa4W5BGreGP",
+    "directory": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1",
+    "nativeDeadlineAt": 1791906255154,
+    "nativeTarget": {
+      "pid": 88712,
+      "processInstanceID": "win32:639275024560160282",
+      "occurrenceID": "1feca4c8-c441-4db1-8cdd-ad8066fe4552"
+    },
+    "host": {
+      "pid": 84240,
+      "processInstanceID": "win32:639275024551689077",
+      "occurrenceID": "ba6bf955-a0d4-45cc-ab88-faa50155acd7"
+    }
+  },
+  "canonical": {
+    "session": [
+      {
+        "id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "project_id": "prj_htaqdXH2yXa4W5BGreGP",
+        "parent_id": null,
+        "slug": "glowing-squid",
+        "directory": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1",
+        "title": "我想核对一份公开表格，稍后会给你文件路径。请先简短确认可以根据文件原文核对各行和合计。",
+        "version": "local",
+        "kind": "assistant",
+        "share_url": null,
+        "summary_additions": 0,
+        "summary_deletions": 0,
+        "summary_files": 0,
+        "permission": "[{\"permission\":\"delegate_agent\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_expert_squad_inspect\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_query_task\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_query_task_artifacts\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_create_task\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_wake_mission\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_wake_work\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_send_task_message\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_respond_interaction\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_cancel_task\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_update_checks\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_select_workspace\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_update_goal\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"panel_delete_goal\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"bash\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"read\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"glob\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"search_code\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"edit\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"write\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"apply_patch\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"todo\",\"pattern\":\"*\",\"action\":\"allow\"},{\"permission\":\"schedule\",\"pattern\":\"*\",\"action\":\"allow\"}]",
+        "metadata": {
+          "globalChatStart": {
+            "version": 2,
+            "requestID": "34a5fc43-11ac-4489-859d-b66a44c4c2bb",
+            "requestFingerprint": "1ba33d1995055772a91e8a0f8ae7301ebdebb70dd94ec4bf0132cee78852c267",
+            "messageID": "msg_hlsuwMtaiqCvVMeIfVxR"
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          },
+          "configOverlay": {
+            "model": "openai/gpt-6.1-sol",
+            "prompt_profile": {
+              "active": "base"
+            }
+          }
+        },
+        "time_created": 1791905703830,
+        "time_updated": 1791905794757,
+        "time_archived": null,
+        "time_pinned": null
+      }
+    ],
+    "allocation": [
+      {
+        "id": "gca_d40eb43339adaf98f00563588eba94940a8685fbcde093c1d924b7ad57db4726",
+        "kind": "global_chat_start",
+        "request_id": "34a5fc43-11ac-4489-859d-b66a44c4c2bb",
+        "request_fingerprint": "1ba33d1995055772a91e8a0f8ae7301ebdebb70dd94ec4bf0132cee78852c267",
+        "request_contract": "{\"attachments\":[],\"model\":\"openai/gpt-6.1-sol\",\"protocol\":\"global-chat-start-request-v2\",\"text\":\"我想核对一份公开表格，稍后会给你文件路径。请先简短确认可以根据文件原文核对各行和合计。\"}",
+        "resolution_seed": "{\"$schema\":\"https://opencorvus.ai/config.json\",\"model\":\"openai/gpt-6.1-sol\",\"small_model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"},\"permission_mode\":\"ask\"}",
+        "task_resolution": null,
+        "materialized_project_id": "prj_htaqdXH2yXa4W5BGreGP",
+        "materialized_project_generation": "6294cdd3-4716-4c8f-b1c2-bd6059d8880d",
+        "time_materialized": 1791905702047,
+        "rejected_error": null,
+        "time_rejected": null,
+        "accepted_project_id": "prj_htaqdXH2yXa4W5BGreGP",
+        "accepted_target_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "accepted_initial_config_overlay": "{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}",
+        "time_accepted": 1791905703830,
+        "time_project_retained": null,
+        "directory": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1",
+        "time_created": 1791905701165
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_hlsuwMtaiqCvVMeIfVxR",
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "time_created": 1791905703871,
+        "time_updated": 1791905703875,
+        "data": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1791905703871
+          },
+          "agent": "chat",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "tools": {
+            "delegate_agent": true,
+            "panel_expert_squad_inspect": true,
+            "panel_query_task": true,
+            "panel_query_task_artifacts": true,
+            "panel_create_task": true,
+            "panel_wake_mission": true,
+            "panel_wake_work": true,
+            "panel_send_task_message": true,
+            "panel_respond_interaction": true,
+            "panel_cancel_task": true,
+            "panel_update_checks": true,
+            "panel_select_workspace": true,
+            "panel_update_goal": true,
+            "panel_delete_goal": true,
+            "question": true,
+            "bash": true,
+            "read": true,
+            "glob": true,
+            "search_code": true,
+            "edit": true,
+            "write": true,
+            "apply_patch": true,
+            "todo": true,
+            "schedule": true
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "api.chat",
+              "requestID": "34a5fc43-11ac-4489-859d-b66a44c4c2bb",
+              "requestFingerprint": "1ba33d1995055772a91e8a0f8ae7301ebdebb70dd94ec4bf0132cee78852c267"
+            },
+            "surface": "right-sidebar",
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "api.chat",
+              "literalText": "我想核对一份公开表格，稍后会给你文件路径。请先简短确认可以根据文件原文核对各行和合计。"
+            },
+            "source": "right-sidebar-conversation",
+            "experience": "chat"
+          },
+          "orderKey": "v1:0001791905703871:0000000000000030:0000000000000000:message:msg_hlsuwMtaiqCvVMeIfVxR"
+        }
+      },
+      {
+        "id": "msg_g0VXwbij000mWr0kleF3",
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "time_created": 1791905704110,
+        "time_updated": 1791905709288,
+        "data": {
+          "author": "chat",
+          "role": "assistant",
+          "time": {
+            "created": 1791905704110,
+            "completed": 1791905709287
+          },
+          "parentID": "msg_hlsuwMtaiqCvVMeIfVxR",
+          "acceptedInputMessageIDs": [
+            "msg_hlsuwMtaiqCvVMeIfVxR"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "chat",
+          "path": {
+            "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1",
+            "root": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 30706,
+            "input": 30676,
+            "output": 30,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001791905704110:0000000000000030:0000000000000000:message:msg_g0VXwbij000mWr0kleF3"
+        }
+      },
+      {
+        "id": "msg_2ec34fd6-5460-4240-b634-40edcaea7594",
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "time_created": 1791905794005,
+        "time_updated": 1791905794504,
+        "data": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1791905794005
+          },
+          "agent": "chat",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "tools": {
+            "delegate_agent": true,
+            "panel_expert_squad_inspect": true,
+            "panel_query_task": true,
+            "panel_query_task_artifacts": true,
+            "panel_create_task": true,
+            "panel_wake_mission": true,
+            "panel_wake_work": true,
+            "panel_send_task_message": true,
+            "panel_respond_interaction": true,
+            "panel_cancel_task": true,
+            "panel_update_checks": true,
+            "panel_select_workspace": true,
+            "panel_update_goal": true,
+            "panel_delete_goal": true,
+            "question": true,
+            "bash": true,
+            "read": true,
+            "glob": true,
+            "search_code": true,
+            "edit": true,
+            "write": true,
+            "apply_patch": true,
+            "todo": true,
+            "schedule": true
+          },
+          "extra": {
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "session.prompt",
+              "literalText": "请用文件读取功能查看这份公开CSV：D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\public-external.csv。它位于当前会话项目之外；如出现授权请求，请等待我在界面确认。读取后用中文说明批次代号、两行项目及各自数量、合计，并引用原文件。"
+            },
+            "publicSessionPromptIdentity": {
+              "version": 1,
+              "fingerprint": "459b43ffcb858666c4f6e7ec676e54644c2e2309748592aa806c759794ef8b77"
+            },
+            "surface": "right-sidebar",
+            "source": "right-sidebar-conversation",
+            "experience": "chat"
+          },
+          "orderKey": "v1:0001791905794005:0000000000000030:0000000000000000:message:msg_2ec34fd6-5460-4240-b634-40edcaea7594"
+        }
+      },
+      {
+        "id": "msg_g0VXwc6A300L3a9Twb3I",
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "time_created": 1791905794199,
+        "time_updated": 1791905794503,
+        "data": {
+          "author": "chat",
+          "role": "assistant",
+          "time": {
+            "created": 1791905794199
+          },
+          "parentID": "msg_2ec34fd6-5460-4240-b634-40edcaea7594",
+          "acceptedInputMessageIDs": [
+            "msg_2ec34fd6-5460-4240-b634-40edcaea7594"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "chat",
+          "path": {
+            "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1",
+            "root": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 0,
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "orderKey": "v1:0001791905794199:0000000000000030:0000000000000000:message:msg_g0VXwc6A300L3a9Twb3I"
+        }
+      }
+    ],
+    "parts": [
+      {
+        "id": "prt_hmJPL3AWbnP0HcnqRMy5",
+        "message_id": "msg_hlsuwMtaiqCvVMeIfVxR",
+        "time_created": 1791905703873,
+        "time_updated": 1791905704420,
+        "data": {
+          "type": "text",
+          "text": "我想核对一份公开表格，稍后会给你文件路径。请先简短确认可以根据文件原文核对各行和合计。",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_htaqdXH2yXa4W5BGreGP/5ba3c17dd1836534f2808cc8e63033672a86f6e9b88f65341e6e533254957f31.json",
+            "catalog_snapshot_hash": "5ba3c17dd1836534f2808cc8e63033672a86f6e9b88f65341e6e533254957f31"
+          }
+        }
+      },
+      {
+        "id": "prt_g0VXwbitQ00aSIZCmt0Y",
+        "message_id": "msg_g0VXwbij000mWr0kleF3",
+        "time_created": 1791905704756,
+        "time_updated": 1791905704757,
+        "data": {
+          "type": "step-start"
+        }
+      },
+      {
+        "id": "prt_g0VXwbjji00wCNWd72mu",
+        "message_id": "msg_g0VXwbij000mWr0kleF3",
+        "time_created": 1791905707998,
+        "time_updated": 1791905708942,
+        "data": {
+          "type": "text",
+          "text": "可以。提供文件路径后，我会根据文件原文逐行核对数据及合计，并指出任何差异。",
+          "time": {
+            "start": 1791905707998,
+            "end": 1791905708941
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_04f11883a41b75a2016ace4fabe9048191bc0301d13a3a29ff",
+              "phase": "final_answer"
+            }
+          }
+        }
+      },
+      {
+        "id": "prt_g0VXwbk3c00j0RkZyT8c",
+        "message_id": "msg_g0VXwbij000mWr0kleF3",
+        "time_created": 1791905709234,
+        "time_updated": 1791905709235,
+        "data": {
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 30706,
+            "input": 30676,
+            "output": 30,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      },
+      {
+        "id": "prt_g0VXwc66v00zSlda3dVc",
+        "message_id": "msg_2ec34fd6-5460-4240-b634-40edcaea7594",
+        "time_created": 1791905794010,
+        "time_updated": 1791905794505,
+        "data": {
+          "type": "text",
+          "text": "请用文件读取功能查看这份公开CSV：D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\public-external.csv。它位于当前会话项目之外；如出现授权请求，请等待我在界面确认。读取后用中文说明批次代号、两行项目及各自数量、合计，并引用原文件。",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_htaqdXH2yXa4W5BGreGP/9c3e253bb6783c03eb2e0afa6e7385666968f584a47222552d6a4a4b29dadff3.json",
+            "catalog_snapshot_hash": "9c3e253bb6783c03eb2e0afa6e7385666968f584a47222552d6a4a4b29dadff3"
+          }
+        }
+      },
+      {
+        "id": "prt_g0VXwc6L1006jEWi9eH8",
+        "message_id": "msg_g0VXwc6A300L3a9Twb3I",
+        "time_created": 1791905794880,
+        "time_updated": 1791905794880,
+        "data": {
+          "type": "step-start"
+        }
+      }
+    ],
+    "toolRequests": [
+      {
+        "id": "prt_g0VXwc7Iz00stc5XSdnz",
+        "message_id": "msg_g0VXwc6A300L3a9Twb3I",
+        "data": {
+          "type": "tool-request",
+          "callID": "call_224d69aadbed492c98e67a29eea61ea3",
+          "tool": "read",
+          "input": {
+            "filePath": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\public-external.csv"
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "fc_0c3df8fefa4f0c60016ace50067780819190dd718259da70d4"
+            }
+          },
+          "time": {
+            "start": 1791905798597
+          }
+        },
+        "time_created": 1791905799347
+      }
+    ],
+    "toolProgress": [],
+    "toolOutcomes": [],
+    "permissionPolicy": [
+      {
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "project_id": "prj_htaqdXH2yXa4W5BGreGP",
+        "mode": "ask",
+        "revision": "cfa97de97527f525a1a47442ee0277668c77d784f9af25675aef307792309b6e",
+        "time_created": 1791905799754
+      }
+    ],
+    "permissionLedger": [
+      {
+        "id": "per_g0VXwc7bi00L2fPi5OL2",
+        "request_id": "per_hnAtJviYIcPphDoaRGRp",
+        "project_id": "prj_htaqdXH2yXa4W5BGreGP",
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "task_id": null,
+        "message_id": "msg_g0VXwc6A300L3a9Twb3I",
+        "tool_call_id": "call_224d69aadbed492c98e67a29eea61ea3",
+        "attempt_id": null,
+        "event_type": "requested",
+        "mode": "ask",
+        "policy_revision": "cfa97de97527f525a1a47442ee0277668c77d784f9af25675aef307792309b6e",
+        "provider_kind": "builtin",
+        "provider_id": "read",
+        "provider_digest": "4927fdb40ba6b6d176ed1925df9cca4849c6ddc9fc53b66518af5496c530c7e4",
+        "tool_name": "read",
+        "effect_class": "read_local",
+        "scope_version": "2",
+        "scope": {
+          "provider_kind": "builtin",
+          "provider_id": "read",
+          "provider_digest": "4927fdb40ba6b6d176ed1925df9cca4849c6ddc9fc53b66518af5496c530c7e4",
+          "tool_name": "read",
+          "effect_class": "read_local",
+          "resource": {
+            "scope_type": "filesystem",
+            "operation": "read",
+            "paths": [
+              "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\public-external.csv"
+            ],
+            "working_directory": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1",
+            "payload_sha256": "9148f2c82c71f006adfd085c2e3ec3c1de7abc1a1aaed40e891ba27f8fe5cf53"
+          }
+        },
+        "fingerprint": "8e96648b2de82f1abf7c66e4baf0aa49dbda982ac43781f6e9888b3f8f7216cb",
+        "summary": "read (read_local)",
+        "decision_scope": null,
+        "source_event_id": null,
+        "decision_slot": null,
+        "outcome_slot": null,
+        "actor_id": null,
+        "reason": null,
+        "metadata": {
+          "choices": [
+            "allow_once",
+            "allow_project",
+            "deny"
+          ],
+          "projectGrantEligible": true
+        },
+        "time_created": 1791905799758
+      }
+    ],
+    "promptOwner": [
+      {
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "project_id": "prj_htaqdXH2yXa4W5BGreGP",
+        "directory": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1",
+        "generation": "cal_g0VXwbihb00qWOIckElo",
+        "owner_pid": 88712,
+        "owner_process_instance_id": "win32:639275024560160282",
+        "owner_occurrence_id": "fa2e709c-1e27-4e88-b5f8-977b56567bf8",
+        "time_acquired": 1791905704023
+      }
+    ],
+    "controlInputs": [
+      {
+        "id": "sctl_hzSMyRvmsnxQFv9gXqc",
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "kind": "wake_reason",
+        "source": "api.chat",
+        "payload": {
+          "messageID": "msg_hlsuwMtaiqCvVMeIfVxR",
+          "wake_reason": {
+            "source": "api.chat",
+            "requestID": "34a5fc43-11ac-4489-859d-b66a44c4c2bb",
+            "requestFingerprint": "1ba33d1995055772a91e8a0f8ae7301ebdebb70dd94ec4bf0132cee78852c267"
+          }
+        },
+        "time_created": 1791905703878
+      }
+    ],
+    "controlEvents": [
+      {
+        "id": "sctl_hxk3QQCq89yrXnvNyuv",
+        "control_id": "sctl_hzSMyRvmsnxQFv9gXqc",
+        "kind": "consumed",
+        "payload": null,
+        "time_created": 1791905703878
+      }
+    ],
+    "allOwnerIdentities": [
+      {
+        "session_id": "ses_hmxKiv6MAdMjJ33wkK05",
+        "project_id": "prj_hSEp1dbvLhswQMTctvSA",
+        "generation": "cal_g0VXwbZMQ00Vghnf3wQq",
+        "owner_pid": 88712,
+        "owner_process_instance_id": "win32:639275024560160282",
+        "owner_occurrence_id": "fa2e709c-1e27-4e88-b5f8-977b56567bf8",
+        "time_acquired": 1791905668114
+      },
+      {
+        "session_id": "ses_hxQa5jQTUbR8tnvMY6gA",
+        "project_id": "prj_htaqdXH2yXa4W5BGreGP",
+        "generation": "cal_g0VXwbihb00qWOIckElo",
+        "owner_pid": 88712,
+        "owner_process_instance_id": "win32:639275024560160282",
+        "owner_occurrence_id": "fa2e709c-1e27-4e88-b5f8-977b56567bf8",
+        "time_acquired": 1791905704023
+      }
+    ]
+  },
+  "provider": {
+    "source": "settlement/sparse-config-layer-defaults-395-live-01-final-provider-audit.json",
+    "pid": 88712,
+    "model": "gpt-6.1-sol",
+    "maxRequests": 20,
+    "exhausted": false,
+    "observedAt": "2026-10-13T15:36:43.202Z",
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "responseReader": {
+          "state": "settled",
+          "terminal": "eof",
+          "firstByteReadAt": 1791905670146,
+          "lastByteReadAt": 1791905675229,
+          "sessionID": "ses_hmxKiv6MAdMjJ33wkK05",
+          "streamRequest": {
+            "requestID": "msg_hlPKbZvaX7Zc9QG4W9C2",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "responseReader": {
+          "state": "settled",
+          "terminal": "eof",
+          "firstByteReadAt": 1791905671725,
+          "lastByteReadAt": 1791905673653,
+          "sessionID": "ses_hmxKiv6MAdMjJ33wkK05",
+          "streamRequest": {
+            "requestID": "msg_hlPKbZvaX7Zc9QG4W9C2",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "responseReader": {
+          "state": "settled",
+          "terminal": "eof",
+          "firstByteReadAt": 1791905705461,
+          "lastByteReadAt": 1791905710646,
+          "sessionID": "ses_hxQa5jQTUbR8tnvMY6gA",
+          "streamRequest": {
+            "requestID": "msg_hlsuwMtaiqCvVMeIfVxR",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "responseReader": {
+          "state": "settled",
+          "terminal": "eof",
+          "firstByteReadAt": 1791905705958,
+          "lastByteReadAt": 1791905708982,
+          "sessionID": "ses_hxQa5jQTUbR8tnvMY6gA",
+          "streamRequest": {
+            "requestID": "msg_hlsuwMtaiqCvVMeIfVxR",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "responseReader": {
+          "state": "settled",
+          "terminal": "eof",
+          "firstByteReadAt": 1791905711806,
+          "lastByteReadAt": 1791905716392,
+          "sessionID": "ses_hxQa5jQTUbR8tnvMY6gA",
+          "streamRequest": {
+            "requestID": "msg_hlsuwMtaiqCvVMeIfVxR",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "responseReader": {
+          "state": "settled",
+          "terminal": "eof",
+          "firstByteReadAt": 1791905794909,
+          "lastByteReadAt": 1791905803142,
+          "sessionID": "ses_hxQa5jQTUbR8tnvMY6gA",
+          "streamRequest": {
+            "requestID": "msg_2ec34fd6-5460-4240-b634-40edcaea7594",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "responseReader": {
+          "state": "settled",
+          "terminal": "eof",
+          "firstByteReadAt": 1791905797691,
+          "lastByteReadAt": 1791905799407,
+          "sessionID": "ses_hxQa5jQTUbR8tnvMY6gA",
+          "streamRequest": {
+            "requestID": "msg_2ec34fd6-5460-4240-b634-40edcaea7594",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        }
+      }
+    ]
+  },
+  "separatePublicEvidence": {
+    "configuration": [
+      "global-config-facts.json",
+      "project-config-facts.json"
+    ],
+    "originalReceipts": [
+      "settlement/sparse-config-layer-defaults-395-live-01-shutdown-admission.json",
+      "settlement/sparse-config-layer-defaults-395-live-01-physical-terminal-and-pair-cleanup.json",
+      "helper-failure-send-1791906100148.json"
+    ]
+  }
+}

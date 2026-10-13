@@ -928,7 +928,7 @@ async function validateSkillDirectory(dir: string): Promise<Skill.Definition[]> 
   return definitions
 }
 
-async function patchGlobal(mutator: (next: z.infer<typeof Config.Info>) => void) {
+async function patchGlobal(mutator: (next: Pick<Config.Source, "skills" | "skill_policy">) => void) {
   await updateGlobalConfigPatchAtomic((_effective, currentWritable) => {
     const next = structuredClone(currentWritable)
     mutator(next)
@@ -940,7 +940,7 @@ async function patchGlobal(mutator: (next: z.infer<typeof Config.Info>) => void)
 }
 
 function applyPolicyToConfig(
-  next: z.infer<typeof Config.Info>,
+  next: Pick<Config.Source, "skill_policy">,
   names: string[],
   policy: z.infer<typeof SkillManager.Policy>,
 ) {

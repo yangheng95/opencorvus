@@ -131,7 +131,7 @@ Network保存将清空的认证字段显式投影为merge patch的null，移除�
 不等于关闭上层配置的认证。代理URL为空仍走原整项删除合同。
 
 ```
-opencorvus.jsonc ──→ Config.get() ──→ Zod 验证 + 层级合并 ──→ 带 source revision 的缓存
+opencorvus.jsonc ──→ 声明层 + 累积校验/合并 ──→ Config.get() ──→ 带 source revision 的缓存
                       │
                       ├─→ EngineConfig.get()     合并 DEFAULTS，返回完整 typed config
                       ├─→ GET  /config                  → Overlay appStore.config (reactive)
@@ -170,8 +170,13 @@ Event 和 Provider 的活跃 effect 数。Project source 在 commit 前按 canon
 
 `Config.get()`、`Config.getGlobal()` 与本进程 Project/global writer 共享一个 generation
 边界。`Config.global()` 与 `Config.getGlobal()` 发布前按 `Config.Info` 补齐默认值；canonical
-global 文件缺失或只有空白时，与空对象文件得到相同的默认配置。缺失或空白的底层文件层保持稀疏，
-不向文件写入默认值，也不让缺失的文件层覆盖上层已配置值。上述接口共享同一个 generation
+global 文件缺失、空白或空对象时发布相同的完整默认配置。每个canonical文件层均只拥有其
+显式声明的字段：以当前累计低层值与本层声明值进入唯一`Config.Info`校验/正规化，再按原声明
+形状投影`Config.Source`参与原层级合并，不把schema补出的默认当作较高层覆盖。嵌套关系按
+真实继承值校验；扩展数组仍在实际层合并处追加去重，源数组正规化保留本层原归属。
+`Config.getProject()`及atomic writer的currentWritable返回真实声明源，global callback的effective
+仍为完整Info；写候选与冷读遵循同一投影。null删除项目字段恢复全局继承，删除global字段
+恢复schema默认；不会修改已持久化的Task选择或Session权限策略。上述接口共享同一个 generation
 read/write owner；writer 从 candidate、canonical replace、cache reset、runtime projection 到事件确认均在
 同一 write generation 内。写 generation 中自然产生的嵌套读取会被登记并在释放前排空；继承 context 但在
 generation 结束后才运行的读取必须重新取得 owner；嵌套 mutation 以

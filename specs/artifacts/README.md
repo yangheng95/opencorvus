@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [395 稀疏配置层继承](2026-10-13-sparse-config-layer-defaults-395/README.md)：公开探针、58项后台合同、真实Base/Ask与未完成批准、迟关闭/exit1原证据。
+
 - [文件发布与搜索顺序证据](2026-10-13-file-search-publication-order/README.md)：原HTTP/Native采集时序、实体与桌面。
 
 - [进程結算错误屏障证据](2026-10-13-process-settlement-barrier/README.md)：原Promise身份、具名结算与平台资格。

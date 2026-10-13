@@ -1,0 +1,233 @@
+{
+  "kind": "Archive evidence preservation, bounded credential-pattern scan and local links; no product or UI test/checker execution",
+  "selection": {
+    "allowlistedSourceFiles": 96,
+    "fullRuntimeOrCredentialsOrRawProviderAuditCopied": false
+  },
+  "gzipRestoration": [
+    {
+      "path": "logs/formal/before.log.gz",
+      "decodedBytes": 17361,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/after-first.log.gz",
+      "decodedBytes": 3406,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/source-array-before.log.gz",
+      "decodedBytes": 4656,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/boundary-before.log.gz",
+      "decodedBytes": 6117,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/boundary-after.log.gz",
+      "decodedBytes": 3554,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/after-final.log.gz",
+      "decodedBytes": 3887,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/direct-final.log.gz",
+      "decodedBytes": 8171,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/related.log.gz",
+      "decodedBytes": 20115,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/related-final.log.gz",
+      "decodedBytes": 19005,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/root-final-functional.log.gz",
+      "decodedBytes": 4991,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/typecheck-first.log.gz",
+      "decodedBytes": 8770,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/typecheck-inputs.log.gz",
+      "decodedBytes": 1058,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/typecheck-final.log.gz",
+      "decodedBytes": 439,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/typecheck-source-records.log.gz",
+      "decodedBytes": 75,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/format-final.log.gz",
+      "decodedBytes": 68,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/diff-check.log.gz",
+      "decodedBytes": 0,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/helper-syntax.log.gz",
+      "decodedBytes": 0,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/checker-syntax.log.gz",
+      "decodedBytes": 0,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/formal/checker-transpile.log.gz",
+      "decodedBytes": 0,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/probe.log.gz",
+      "decodedBytes": 8983,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/empty.jsonc.gz",
+      "decodedBytes": 0,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/whitespace.jsonc.gz",
+      "decodedBytes": 3,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/empty-object.jsonc.gz",
+      "decodedBytes": 2,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/unrelated-username.jsonc.gz",
+      "decodedBytes": 34,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/nested-experimental.jsonc.gz",
+      "decodedBytes": 39,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/nested-memory.jsonc.gz",
+      "decodedBytes": 44,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/nested-terminal.jsonc.gz",
+      "decodedBytes": 79,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "probe/fixtures/inherited-memory-relation.jsonc.gz",
+      "decodedBytes": 66,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "implementation/config-only.patch.gz",
+      "decodedBytes": 21787,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "live-01/public-external.csv.gz",
+      "decodedBytes": 53,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/live-01/start.log.gz",
+      "decodedBytes": 1238,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/live-01/send.log.gz",
+      "decodedBytes": 1313,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/live-01/native-stdout.log.gz",
+      "decodedBytes": 490,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/live-01/native-stderr.log.gz",
+      "decodedBytes": 8412,
+      "matchesSourceBytes": true
+    }
+  ],
+  "images": [
+    {
+      "path": "screenshots/chat-base-ask.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/history-pending-read.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/permission-pending.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/settings-inherited-ask.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    }
+  ],
+  "publicCSV": {
+    "path": "live-01/public-external.csv.gz",
+    "decodedBytes": 53,
+    "exactOriginalBytes": true,
+    "batch": "CEDAR395",
+    "values": [
+      3,
+      4
+    ],
+    "meaning": "Original public input only; requested live read never completed"
+  },
+  "retainedFailure": {
+    "terminalObservedAt": "2026-10-13T15:55:13.511Z",
+    "noHistoricalCheckerRerun": true,
+    "pageCloseLateByMilliseconds": 28830,
+    "scopeQualification": "Configuration and Ask observation qualified; UI approval/read/final answer/native exit0 not achieved"
+  },
+  "credentialScan": {
+    "textFilesInspected": 95,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "qualification": "Bounded patterns only; Root separately owns KnownCredentialRedactor in-memory scan against the authorized source. Archiver did not read auth/models."
+  },
+  "localLinks": {
+    "count": 104,
+    "broken": 0
+  }
+}

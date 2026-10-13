@@ -1,0 +1,63 @@
+{
+  "observedAt": "2026-10-13T15:44:28.783Z",
+  "file": ".tmp-mcp-user-resource-input-393/live-attempt-01/bundle/bin/ui/assets/main-QSwgWIyk.js",
+  "bytes": 1709330,
+  "boundary": "Readable compiled JS source excerpts; not DOM/browser/screenshot or automated UI assertions.",
+  "excerpts": [
+    {
+      "token": "permission.asked",
+      "characterOffset": 379083,
+      "excerpt": "age.part.updated\",\"message.moved\",\"message.removed\",\"message.part.removed\",\"review.stream.started\",\"review.stream.progress\",\"review.stream.chunk\",\"agent.execution.lifecycle\",\"approval.request\",\"input.request\",\"permission.asked\",\"permission.replied\",\"diff.delta\"]),Ate=new Set([\"task.execution.opened\",\"task.execution.reopened\",\"task.created\",\"task.updated\",\"task.completed\",\"task.failed\",\"task.infrastructure.failed\",\"task.cancelled\",\"mission.execution.closure\",\"art"
+    },
+    {
+      "token": "permission.asked",
+      "characterOffset": 390807,
+      "excerpt": "action.resolved\")return sl(),cre();if(t===\"question.asked\"||t===\"question.replied\"||t===\"question.rejected\")return sl(),Li(()=>gre(e));if(!(t===\"goal.created\"||t===\"approval.request\"||t===\"input.request\"||t===\"permission.asked\"||t===\"permission.replied\"||t===\"diff.delta\"||zk(t)||Fk(t))){if(sl(),t===\"message.moved\")return Li(()=>ere(e));if(t===\"message.updated\")return Li(()=>J$(e));if(t===\"message.part.updated\")return Li(()=>Eq(e));if(t===\"message.removed\")return"
+    },
+    {
+      "token": "permission.asked",
+      "characterOffset": 391424,
+      "excerpt": ")return Li(()=>wre(e));if(t===\"review.stream.chunk\")return Li(()=>_re(e));if(t===\"agent.execution.lifecycle\")return Li(()=>ire(e));if(t!==\"session.error\"&&!(t===\"approval.request\"||t===\"input.request\")&&!(t===\"permission.asked\"||t===\"permission.replied\")&&t!==\"diff.delta\"&&!zk(t)&&!Fk(t))throw new Error(`tree-writer: unhandled event type \"${t}\"`)}}function Sq(e){if(!e?.info?.id)throw new Error(\"ingestPersistedConversationMessage: persisted message missing info.i"
+    },
+    {
+      "token": "permission.asked",
+      "characterOffset": 1568874,
+      "excerpt": "e.sessionID){const w=_.payload,S=w?.id??w?.requestID;if(_.type===\"question.asked\"){const[I]=Lq([{...w,orderKey:_.orderKey}]);d.set(S,{...I,directory:e.directory}),t.interactions([...d.values()])}else _.type===\"permission.asked\"?(d.set(S,{id:S,type:\"permission\",title:w.toolName,body:`${w.summary}\n\n\\`\\`\\`json\n${JSON.stringify(w.scope,null,2)}\n\\`\\`\\``,status:\"pending\",payload:{choices:w.choices},replyEndpoint:\"permission\",directory:e.directory}),t.interactions([..."
+    },
+    {
+      "token": "permission.asked",
+      "totalOccurrences": 4
+    },
+    {
+      "token": "pendingQuestions",
+      "characterOffset": 493690,
+      "excerpt": "ry);l&&Gk(e,l);const u=await Pe(qne(e,a,l),{signal:i,authority:r});Pg(e,o,i,r);const d=to(u?.board,\"board\"),g=vB(e,d),h=e.kind===\"task\"?Kne(d,e.id):l,p=uo(u?.transcript,\"transcript\"),v=e.kind===\"session\"?uo(u?.pendingQuestions,\"pendingQuestions\"):[],y=uo(u?.events,\"events\"),b=to(u?.view,\"view\"),_=to(u?.agentView,\"agentView\"),w=mE(u?.turnArtifacts),S=e.kind===\"task\"?fB(u?.eventReplay):{cursor:0,latestSequence:0,complete:!0,limit:Eb,sinceTimestamp:null},I=Cb(u?.hi"
+    },
+    {
+      "token": "pendingQuestions",
+      "characterOffset": 493708,
+      "excerpt": "st u=await Pe(qne(e,a,l),{signal:i,authority:r});Pg(e,o,i,r);const d=to(u?.board,\"board\"),g=vB(e,d),h=e.kind===\"task\"?Kne(d,e.id):l,p=uo(u?.transcript,\"transcript\"),v=e.kind===\"session\"?uo(u?.pendingQuestions,\"pendingQuestions\"):[],y=uo(u?.events,\"events\"),b=to(u?.view,\"view\"),_=to(u?.agentView,\"agentView\"),w=mE(u?.turnArtifacts),S=e.kind===\"task\"?fB(u?.eventReplay):{cursor:0,latestSequence:0,complete:!0,limit:Eb,sinceTimestamp:null},I=Cb(u?.history),E=mB(d.rewi"
+    },
+    {
+      "token": "pendingQuestions",
+      "totalOccurrences": 2
+    },
+    {
+      "token": "replyEndpoint:\"permission\"",
+      "characterOffset": 1569060,
+      "excerpt": "lues()])}else _.type===\"permission.asked\"?(d.set(S,{id:S,type:\"permission\",title:w.toolName,body:`${w.summary}\n\n\\`\\`\\`json\n${JSON.stringify(w.scope,null,2)}\n\\`\\`\\``,status:\"pending\",payload:{choices:w.choices},replyEndpoint:\"permission\",directory:e.directory}),t.interactions([...d.values()])):[\"question.replied\",\"question.rejected\",\"permission.replied\"].includes(_.type)&&(d.delete(S),t.interactions([...d.values()]))}}catch(_){t.error(_)}},onError(b){!h()||y!==u||(t.error("
+    },
+    {
+      "token": "replyEndpoint:\"permission\"",
+      "totalOccurrences": 1
+    },
+    {
+      "token": "permission/grants",
+      "totalOccurrences": 0
+    },
+    {
+      "token": "permission/history",
+      "totalOccurrences": 0
+    }
+  ]
+}

@@ -70,17 +70,18 @@ export namespace Config {
     worktree?: string
     projectFileOverride?: {
       filepath: string
-      config: Info
+      config: Source
     }
     globalFileOverride?: {
       filepath: string
-      config: Info
+      config: Source
     }
   }
 
   type ConfigLoadOptions = {
     writeSchema?: boolean
     projectOwnedSource?: "project" | "non-project"
+    base?: Info
   }
 
   export namespace TestHooks {
@@ -210,7 +211,7 @@ export namespace Config {
   // Configuration-owned extension lists are additive across precedence layers.
   // A layer can remove only entries it owns; replacing a higher-layer list must
   // never hide a Skill source declared by a lower owner.
-  function mergeConfigConcatArrays(target: Info, source: Info): Info {
+  function mergeConfigConcatArrays(target: Info, source: Source): Info {
     const merged = mergeDeep(target, source)
     if (target.plugin && source.plugin) {
       merged.plugin = Array.from(new Set([...target.plugin, ...source.plugin]))
@@ -226,7 +227,7 @@ export namespace Config {
       merged.skills = merged.skills || {}
       merged.skills.urls = Array.from(new Set([...target.skills.urls, ...source.skills.urls]))
     }
-    return merged
+    return merged as Info
   }
 
   type SourceRevision = Readonly<{
@@ -314,9 +315,9 @@ export namespace Config {
     return (await readSourceSnapshot(filepath)).revision
   }
 
-  async function loadSourceSnapshot(snapshot: SourceSnapshot, options?: ConfigLoadOptions): Promise<Info> {
+  async function loadSourceSnapshot(snapshot: SourceSnapshot, options?: ConfigLoadOptions): Promise<Source> {
     const text = snapshot.text
-    if (!text || text.trim().length === 0) return {} as Info
+    if (!text || text.trim().length === 0) return {}
     return load(text, { path: snapshot.revision.path }, options)
   }
 
@@ -342,13 +343,13 @@ export namespace Config {
         options.globalFileOverride &&
         Filesystem.resolve(filepath) === Filesystem.resolve(options.globalFileOverride.filepath)
       ) {
-        return structuredClone(options.globalFileOverride.config)
+        return parseSourceLayer(options.globalFileOverride.config, filepath, fileOptions?.base)
       }
       if (
         options.projectFileOverride &&
         Filesystem.resolve(filepath) === Filesystem.resolve(options.projectFileOverride.filepath)
       ) {
-        return structuredClone(options.projectFileOverride.config)
+        return parseSourceLayer(options.projectFileOverride.config, filepath, fileOptions?.base)
       }
       const snapshot = await readSourceSnapshot(filepath)
       sourceRevisions.set(snapshot.revision.path, snapshot.revision)
@@ -392,7 +393,7 @@ export namespace Config {
               dir: path.dirname(`${key}/.well-known/opencorvus`),
               source: `${key}/.well-known/opencorvus`,
             },
-            loadOptions,
+            { ...loadOptions, base: result },
           ),
         )
         log.debug("loaded remote config from well-known", { url: key })
@@ -404,11 +405,14 @@ export namespace Config {
     }
 
     // Global user config overrides remote config.
-    result = mergeConfigConcatArrays(result, await loadGlobalConfig(loadOptions, loadStateFile))
+    result = mergeConfigConcatArrays(result, await loadGlobalConfig({ ...loadOptions, base: result }, loadStateFile))
 
     // Custom config path overrides global config.
     if (Flag.OPENCORVUS_CONFIG) {
-      result = mergeConfigConcatArrays(result, await loadStateFile(Flag.OPENCORVUS_CONFIG, loadOptions))
+      result = mergeConfigConcatArrays(
+        result,
+        await loadStateFile(Flag.OPENCORVUS_CONFIG, { ...loadOptions, base: result }),
+      )
       log.debug("loaded custom config", { path: Flag.OPENCORVUS_CONFIG })
     }
 
@@ -440,7 +444,10 @@ export namespace Config {
         const filepath = await ConfigPaths.assertCanonicalDirectory(dir)
         const projectOwnedSource = isExactProjectConfigDir ? "project" : "non-project"
         log.debug(`loading config from ${filepath}`)
-        result = mergeConfigConcatArrays(result, await loadStateFile(filepath, { ...loadOptions, projectOwnedSource }))
+        result = mergeConfigConcatArrays(
+          result,
+          await loadStateFile(filepath, { ...loadOptions, projectOwnedSource, base: result }),
+        )
         // to satisfy the type checker
         result.agent ??= {}
         result.plugin ??= []
@@ -484,7 +491,7 @@ export namespace Config {
             dir: directory,
             source: "OPENCORVUS_CONFIG_CONTENT",
           },
-          loadOptions,
+          { ...loadOptions, base: result },
         ),
       )
       log.debug("loaded custom config from OPENCORVUS_CONFIG_CONTENT")
@@ -494,7 +501,7 @@ export namespace Config {
     // Kept separate from directories array to avoid write operations when installing plugins
     // which would fail on system directories requiring elevated permissions
     // This way it only loads config file and not skills/plugins/commands
-    const managedLoadOptions = { ...loadOptions, writeSchema: false }
+    const managedLoadOptions = { ...loadOptions, writeSchema: false, base: result }
     const managedFile = await ConfigPaths.assertCanonicalDirectory(managedDir)
     result = mergeConfigConcatArrays(result, await loadStateFile(managedFile, managedLoadOptions))
 
@@ -508,7 +515,7 @@ export namespace Config {
     }
 
     result.plugin = deduplicatePlugins(result.plugin ?? [])
-    result = materializeBuiltinMcp(result)
+    result = materializeBuiltinMcp(parseEffectiveConfig(result, managedFile))
 
     // NOTE: first-load auto-write of resolved config to the project directory
     // was removed (spec §6-2, rule 7/8). It wrote `result.model ??= DEFAULT_MODEL`
@@ -1836,9 +1843,43 @@ export namespace Config {
 
   export type Info = z.output<typeof Info>
 
+  type DeclaredFields<T> = unknown extends T
+    ? T
+    : T extends readonly unknown[]
+      ? T
+      : T extends object
+        ? string extends keyof T
+          ? { [K in keyof T]: DeclaredFields<T[K]> }
+          : { [K in keyof T]?: DeclaredFields<T[K]> }
+        : T
+  /** A canonical file owns only its declared values, not schema defaults. */
+  export type Source = DeclaredFields<z.input<typeof Info>>
+
+  function parseEffectiveConfig(value: unknown, source: string): Info {
+    const parsed = Info.safeParse(value)
+    if (parsed.success) return parsed.data
+    throw new InvalidError({ path: source, issues: parsed.error.issues })
+  }
+
+  function declaredValues(source: unknown, effective: unknown): unknown {
+    if (!isRecord(source) || !isRecord(effective)) return structuredClone(effective)
+    return Object.fromEntries(
+      Object.keys(source)
+        .filter((key) => Object.hasOwn(effective, key))
+        .map((key) => [key, declaredValues(source[key], effective[key])]),
+    )
+  }
+
+  function parseSourceLayer(value: unknown, source: string, base: Info = Info.parse({})): Source {
+    // Normalize each declared array as its own value. Extension-list accumulation
+    // belongs to the actual layer merge, not the source's writable projection.
+    const effective = parseEffectiveConfig(isRecord(value) ? mergeDeep(base, value) : value, source)
+    return declaredValues(value, effective) as Source
+  }
+
   async function loadGlobalConfig(
     options?: ConfigLoadOptions,
-    loader: (filepath: string, options?: ConfigLoadOptions) => Promise<Info> = loadFile,
+    loader: (filepath: string, options?: ConfigLoadOptions) => Promise<Source> = loadFile,
   ) {
     const canonical = await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
     return loader(canonical, options)
@@ -1855,7 +1896,7 @@ export namespace Config {
       const snapshot = await readSourceSnapshot(filepath)
       // File layers stay sparse; published global configuration is effective Info,
       // including schema defaults when the canonical file is absent or blank.
-      const config = Info.parse(await loadSourceSnapshot(snapshot))
+      const config = parseEffectiveConfig(await loadSourceSnapshot(snapshot), filepath)
       if (await sourceRevisionsAreCurrent([snapshot.revision])) return { config, revision: snapshot.revision }
     }
   }
@@ -1884,10 +1925,10 @@ export namespace Config {
 
   export const { readFile } = ConfigPaths
 
-  async function loadFile(filepath: string, options?: ConfigLoadOptions): Promise<Info> {
+  async function loadFile(filepath: string, options?: ConfigLoadOptions): Promise<Source> {
     log.info("loading", { path: filepath })
     const text = await readFile(filepath)
-    if (!text || text.trim().length === 0) return {} as Info
+    if (!text || text.trim().length === 0) return {}
     return load(text, { path: filepath }, options)
   }
 
@@ -1944,27 +1985,20 @@ export namespace Config {
 
     assertProjectOwnedConfigSource(data, source, loadOptions)
 
-    const parsed = Info.safeParse(data)
-    if (parsed.success) {
-      // A file that holds nothing but the empty object is either untouched or
-      // freshly provisioned by the write lock. Injecting a `$schema` into it
-      // would turn a read into a write, and would put content into a file the
-      // user never created.
-      const isEmptyObjectFile = original.trim() === "{}"
-      if (!parsed.data.$schema && isFile && !isEmptyObjectFile && loadOptions?.writeSchema !== false) {
-        parsed.data.$schema = CONFIG_SCHEMA_URL
-        const updated = original.replace(/^\s*\{/, `{\n  "$schema": "${CONFIG_SCHEMA_URL}",`)
-        // Unlocked for the same reason as the migration rewrite above, and
-        // idempotent: the next load re-injects it if a concurrent writer wins.
-        await Filesystem.writeAtomic(options.path, updated)
-      }
-      return parsed.data
+    const parsed = parseSourceLayer(data, source, loadOptions?.base)
+    // A file that holds nothing but the empty object is either untouched or
+    // freshly provisioned by the write lock. Injecting a `$schema` into it
+    // would turn a read into a write, and would put content into a file the
+    // user never created.
+    const isEmptyObjectFile = original.trim() === "{}"
+    if (!parsed.$schema && isFile && !isEmptyObjectFile && loadOptions?.writeSchema !== false) {
+      parsed.$schema = CONFIG_SCHEMA_URL
+      const updated = original.replace(/^\s*\{/, `{\n  "$schema": "${CONFIG_SCHEMA_URL}",`)
+      // Unlocked for the same reason as the migration rewrite above, and
+      // idempotent: the next load re-injects it if a concurrent writer wins.
+      await Filesystem.writeAtomic(options.path, updated)
     }
-
-    throw new InvalidError({
-      path: source,
-      issues: parsed.error.issues,
-    })
+    return parsed
   }
   export const { JsonError, InvalidError } = ConfigPaths
 
@@ -1975,11 +2009,6 @@ export namespace Config {
       dir: z.string(),
       suggestion: z.string(),
     }),
-  )
-
-  export const GlobalConfigInheritedValueError = NamedError.create(
-    "GlobalConfigInheritedValueError",
-    z.object({ path: z.string(), message: z.string() }),
   )
 
   export class GlobalConfigCommittedReconcileError extends AggregateError {
@@ -2327,7 +2356,7 @@ export namespace Config {
     return topLevel ? Filesystem.resolve(topLevel) : resolvedDirectory
   }
 
-  export async function snapshotForProject(directory: string, globalConfigOverride?: Info) {
+  export async function snapshotForProject(directory: string, globalConfigOverride?: Source) {
     const resolvedDirectory = Filesystem.resolve(directory)
     const worktree = await readOnlyWorktreeBoundary(resolvedDirectory)
     return structuredClone(
@@ -2362,10 +2391,21 @@ export namespace Config {
   /** Returns only the project-owned writable config, without inherited global values. */
   export async function getProject() {
     const target = await assertCanonicalProjectConfig()
-    return loadFile(target, { writeSchema: false, projectOwnedSource: "project" })
+    return withConfigGenerationRead(async () => {
+      while (true) {
+        const resolved = await loadState({ readOnly: true })
+        const source = await readSourceSnapshot(target)
+        const config = await loadSourceSnapshot(source, {
+          writeSchema: false,
+          projectOwnedSource: "project",
+          base: resolved.config,
+        })
+        if (await sourceRevisionsAreCurrent([...resolved.sourceRevisions, source.revision])) return config
+      }
+    })
   }
 
-  async function resolveProjectCandidate(projectConfig: Info) {
+  async function resolveProjectCandidate(projectConfig: Source) {
     return (
       await loadState({
         readOnly: true,
@@ -2377,13 +2417,14 @@ export namespace Config {
     ).config
   }
 
-  async function resolveGlobalCandidate(globalConfig: Info) {
+  async function resolveGlobalCandidate(globalConfig: Source) {
     const target = globalConfigFile()
-    return loadGlobalConfig({ writeSchema: false }, (filepath, options) =>
+    const source = await loadGlobalConfig({ writeSchema: false }, (filepath, options) =>
       Filesystem.resolve(filepath) === Filesystem.resolve(target)
-        ? Promise.resolve(structuredClone(globalConfig))
+        ? Promise.resolve(parseSourceLayer(globalConfig, target))
         : loadFile(filepath, options),
     )
+    return parseEffectiveConfig(source, target)
   }
 
   export function projectConfigDirectory() {
@@ -2454,7 +2495,7 @@ export namespace Config {
   }
 
   async function writeProjectPatch(
-    patch: ProjectMergePatch | ((currentProject: Info) => ProjectMergePatch | Promise<ProjectMergePatch>),
+    patch: ProjectMergePatch | ((currentProject: Source) => ProjectMergePatch | Promise<ProjectMergePatch>),
   ) {
     return withConfigMutationAuthority(async () => {
       const projectDirectory = ProjectInstanceContext.use().directory
@@ -2462,6 +2503,7 @@ export namespace Config {
       let transition: { before: Info; after: Info } | undefined
       await fs.mkdir(path.dirname(target), { recursive: true })
       return writeConfigFile(target, patch, {
+        resolve: resolveProjectCandidate,
         async commit(merged, _appliedPatch, persist) {
           assertProjectOwnedConfigSource(merged, target, { projectOwnedSource: "project" })
           await state.reset()
@@ -2517,7 +2559,7 @@ export namespace Config {
   }
 
   export async function updateProjectPatchAtomic(
-    resolve: (currentProject: Info) => ProjectMergePatch | Promise<ProjectMergePatch>,
+    resolve: (currentProject: Source) => ProjectMergePatch | Promise<ProjectMergePatch>,
   ) {
     return writeProjectPatch(resolve)
   }
@@ -2555,13 +2597,24 @@ export namespace Config {
       return applyEdits(input, edits)
     }
 
+    let current: unknown = parseJsonc(input)
+    for (const segment of path) {
+      current = isRecord(current) && Object.hasOwn(current, segment) ? current[segment] : undefined
+    }
+    if (!isRecord(current)) {
+      input = applyEdits(
+        input,
+        modify(input, path, {}, { formattingOptions: { insertSpaces: true, tabSize: 2 } }),
+      )
+    }
+
     return Object.entries(patch).reduce((result, [key, value]) => {
       if (value === undefined) return result
       return patchJsonc(result, value, [...path, key])
     }, input)
   }
 
-  function parseConfig(text: string, filepath: string): Info {
+  function parseConfig(text: string, filepath: string): Source {
     const errors: JsoncParseError[] = []
     const data = parseJsonc(text, errors, { allowTrailingComma: true })
     if (errors.length) {
@@ -2572,57 +2625,24 @@ export namespace Config {
     }
 
     const migrated = migrateLegacyPermissionConfig(data)
-    const parsed = Info.safeParse(migrated.config)
-    if (parsed.success) return parsed.data
-
-    throw new InvalidError({
-      path: filepath,
-      issues: parsed.error.issues,
-    })
+    return migrated.config as Source
   }
 
   // RFC 7396-compatible deep merge: null values in the source delete the
   // corresponding key from the target, matching patchJsonc's behavior.
   function mergeWithNullDelete(target: any, source: any): any {
-    if (!isRecord(target) || !isRecord(source)) return source
-    const result: Record<string, unknown> = { ...target }
+    if (!isRecord(source)) return source
+    const result: Record<string, unknown> = isRecord(target) ? { ...target } : {}
     for (const [k, v] of Object.entries(source)) {
       if (v === null) {
         delete result[k]
-      } else if (isRecord(v) && isRecord(result[k])) {
+      } else if (isRecord(v)) {
         result[k] = mergeWithNullDelete(result[k], v)
       } else {
         result[k] = v
       }
     }
     return result
-  }
-
-  function assertNoInheritedGlobalDeletes(
-    effective: unknown,
-    currentWritable: unknown,
-    patch: unknown,
-    path: string[] = [],
-  ) {
-    if (patch === null) {
-      if (effective !== undefined && currentWritable === undefined) {
-        const field = path.join(".")
-        throw new GlobalConfigInheritedValueError({
-          path: field,
-          message: `Global config field ${field} is owned by a lower-priority file and cannot be deleted from the active writable layer.`,
-        })
-      }
-      return
-    }
-    if (!isRecord(patch)) return
-    for (const [key, value] of Object.entries(patch)) {
-      assertNoInheritedGlobalDeletes(
-        isRecord(effective) ? effective[key] : undefined,
-        isRecord(currentWritable) ? currentWritable[key] : undefined,
-        value,
-        [...path, key],
-      )
-    }
   }
 
   // THE single API for applying a sparse session overlay onto a base config.
@@ -2672,11 +2692,12 @@ export namespace Config {
 
   async function writeConfigFile(
     filepath: string,
-    config: unknown | ((existing: Info) => unknown | Promise<unknown>),
-    hooks?: {
-      validate?(merged: Info, appliedPatch: unknown): Promise<void>
-      commit?(merged: Info, appliedPatch: unknown, persist: () => Promise<void>): Promise<void>
-      onWritten?(merged: Info): Promise<void>
+    config: unknown | ((existing: Source) => unknown | Promise<unknown>),
+    hooks: {
+      resolve(source: Source): Promise<Info>
+      validate?(merged: Source, appliedPatch: unknown): Promise<void>
+      commit?(merged: Source, appliedPatch: unknown, persist: () => Promise<void>): Promise<void>
+      onWritten?(merged: Source): Promise<void>
     },
   ) {
     // The read has to happen inside the cross-process lock. Two backends over
@@ -2690,11 +2711,15 @@ export namespace Config {
         throw new JsonError({ path: filepath }, { cause: err })
       })
 
-      const existing = parseConfig(before, filepath)
+      const normalize = async (text: string) => {
+        const source = parseConfig(text, filepath)
+        return parseSourceLayer(source, filepath, await hooks.resolve(source))
+      }
+      const existing = await normalize(before)
       const appliedPatch = typeof config === "function" ? await config(existing) : config
       if (filepath.endsWith(".jsonc")) {
         let updated = patchJsonc(before, appliedPatch)
-        let merged = parseConfig(updated, filepath)
+        let merged = await normalize(updated)
         if (Object.keys(merged).length > 0 && !merged.$schema) {
           updated = applyEdits(
             updated,
@@ -2702,7 +2727,7 @@ export namespace Config {
               formattingOptions: { tabSize: 2, insertSpaces: true },
             }),
           )
-          merged = parseConfig(updated, filepath)
+          merged = await normalize(updated)
         }
         const persist = () => Filesystem.writeAtomic(filepath, updated)
         if (hooks?.commit) await hooks.commit(merged, appliedPatch, persist)
@@ -2716,7 +2741,7 @@ export namespace Config {
       const writable = mergeWithNullDelete(existing, appliedPatch)
       if (Object.keys(writable).length > 0 && !writable.$schema) writable.$schema = CONFIG_SCHEMA_URL
       const serialized = JSON.stringify(writable, null, 2)
-      const merged = parseConfig(serialized, filepath)
+      const merged = await normalize(serialized)
       const persist = () => Filesystem.writeAtomic(filepath, serialized)
       if (hooks?.commit) await hooks.commit(merged, appliedPatch, persist)
       else {
@@ -2768,7 +2793,7 @@ export namespace Config {
     return removed
   }
 
-  async function commitGlobalCandidate(merged: Info, persist: () => Promise<void>) {
+  async function commitGlobalCandidate(merged: Source, persist: () => Promise<void>) {
     const effectiveGlobal = await resolveGlobalCandidate(merged)
     const { SkillManager } = await import("@/skill/manager")
     const managedSkillRoot = SkillManager.managedRoot()
@@ -2903,11 +2928,12 @@ export namespace Config {
     }
   }
 
-  async function writeGlobalMutation(patch: unknown | ((existing: Info) => unknown | Promise<unknown>)) {
+  async function writeGlobalMutation(patch: unknown | ((existing: Source) => unknown | Promise<unknown>)) {
     await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
     return withConfigMutationAuthority(async () => {
       let transitions: GlobalProjectTransition[] = []
-      return writeConfigFile(globalConfigFile(), patch, {
+      const written = await writeConfigFile(globalConfigFile(), patch, {
+        resolve: resolveGlobalCandidate,
         async commit(merged, _appliedPatch, persist) {
           transitions = await commitGlobalCandidate(merged, persist)
         },
@@ -2915,6 +2941,7 @@ export namespace Config {
           await reconcileGlobalProjectTransitions(transitions)
         },
       })
+      return parseEffectiveConfig(written, globalConfigFile())
     })
   }
 
@@ -2937,13 +2964,12 @@ export namespace Config {
   }
 
   export async function updateGlobalPatchAtomic(
-    resolve: (currentGlobal: Info, currentWritable: Info) => ProjectMergePatch | Promise<ProjectMergePatch>,
+    resolve: (currentGlobal: Info, currentWritable: Source) => ProjectMergePatch | Promise<ProjectMergePatch>,
   ) {
     return writeGlobalMutation(async (currentWritable) => {
-      const effective = structuredClone(await loadGlobalConfig({ writeSchema: false }))
+      const effective = await resolveGlobalCandidate(currentWritable)
       const patch = await resolve(effective, structuredClone(currentWritable))
       assertNoProjectOwnedConfig(patch)
-      assertNoInheritedGlobalDeletes(effective, currentWritable, patch)
       return patch
     })
   }

@@ -16,7 +16,7 @@ export async function updateGlobalConfigPatch(patch: Config.ProjectMergePatch) {
 export async function updateGlobalConfigPatchAtomic(
   resolve: (
     currentGlobal: Config.Info,
-    currentWritable: Config.Info,
+    currentWritable: Config.Source,
   ) => Config.ProjectMergePatch | Promise<Config.ProjectMergePatch>,
 ) {
   return commitGlobalConfigMutation(() => Config.updateGlobalPatchAtomic(resolve))

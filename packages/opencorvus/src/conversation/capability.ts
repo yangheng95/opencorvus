@@ -88,7 +88,10 @@ export namespace ConversationCapability {
     return result
   }
 
-  export function assignment(config: Config.Info, agentID: ConversationAgentID = CHAT_AGENT_ID): Assignment {
+  export function assignment(
+    config: Pick<Config.Source, "primary_assistant_capabilities">,
+    agentID: ConversationAgentID = CHAT_AGENT_ID,
+  ): Assignment {
     const configured = config.primary_assistant_capabilities?.[agentID]
     const defaults = DEFAULT_ASSIGNMENTS[agentID]
     return Assignment.parse({

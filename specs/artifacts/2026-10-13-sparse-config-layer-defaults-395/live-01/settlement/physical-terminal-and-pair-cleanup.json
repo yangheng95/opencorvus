@@ -1,0 +1,69 @@
+{
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 88712,
+        "processInstanceID": "win32:639275024560160282",
+        "occurrenceID": "1feca4c8-c441-4db1-8cdd-ad8066fe4552"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 84240,
+        "processInstanceID": "win32:639275024551689077",
+        "occurrenceID": "ba6bf955-a0d4-45cc-ab88-faa50155acd7"
+      }
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-13T15:44:05.4264968Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "copiedLength": 2194,
+      "presentAfter": false,
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\auth.json",
+      "outcome": "removed"
+    },
+    {
+      "copiedLength": 9155406,
+      "presentAfter": false,
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\models.json",
+      "outcome": "removed"
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+    "outcome": "settled",
+    "host": {
+      "pid": 84240,
+      "processInstanceID": "win32:639275024551689077",
+      "occurrenceID": "ba6bf955-a0d4-45cc-ab88-faa50155acd7"
+    },
+    "target": {
+      "pid": 88712,
+      "processInstanceID": "win32:639275024560160282",
+      "occurrenceID": "1feca4c8-c441-4db1-8cdd-ad8066fe4552"
+    },
+    "observedAtUtc": "2026-10-13T15:44:02.509Z",
+    "deadlineAt": 1791906255154,
+    "terminal": {
+      "occurrenceID": "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+      "pid": 88712,
+      "reason": "exited",
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+  "listeners": null
+}

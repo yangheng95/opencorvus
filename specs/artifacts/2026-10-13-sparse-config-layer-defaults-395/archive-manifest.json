@@ -1,0 +1,788 @@
+{
+  "iteration": 395,
+  "qualification": "Backend source-layer fix qualified; scope01 configuration/Ask observation only. UI allow_once, completed read/final answer and clean native exit were not achieved.",
+  "selection": "Explicit public inputs/results, original formal failures and final checks, selected scope metadata and post-exit observation. Excludes raw Provider audits, runtime/DB/auth/models, environments, whole source/vendor/ui build and unrelated diffs.",
+  "helpers": "Historical live helper/complete checker copied only; neither was rerun by the archiver. LIVE-HELPERS describes preparation, not completed end-to-end acceptance.",
+  "generatedDocuments": [
+    "README.md",
+    "archive-check.json"
+  ],
+  "files": [
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/before.log",
+      "path": "logs/formal/before.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 17361,
+      "archivedBytes": 3287
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/before.exit",
+      "path": "logs/formal/before.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/after-first.log",
+      "path": "logs/formal/after-first.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3406,
+      "archivedBytes": 982
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/after-first.exit",
+      "path": "logs/formal/after-first.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/source-array-before.log",
+      "path": "logs/formal/source-array-before.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 4656,
+      "archivedBytes": 1396
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/source-array-before.exit",
+      "path": "logs/formal/source-array-before.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/boundary-before.log",
+      "path": "logs/formal/boundary-before.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 6117,
+      "archivedBytes": 1759
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/boundary-before.exit",
+      "path": "logs/formal/boundary-before.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/boundary-after.log",
+      "path": "logs/formal/boundary-after.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3554,
+      "archivedBytes": 1016
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/boundary-after.exit",
+      "path": "logs/formal/boundary-after.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/after-final.log",
+      "path": "logs/formal/after-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3887,
+      "archivedBytes": 1114
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/after-final.exit",
+      "path": "logs/formal/after-final.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/direct-final.log",
+      "path": "logs/formal/direct-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 8171,
+      "archivedBytes": 2208
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/direct-final.exit",
+      "path": "logs/formal/direct-final.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/related.log",
+      "path": "logs/formal/related.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 20115,
+      "archivedBytes": 3784
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/related.exit",
+      "path": "logs/formal/related.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/related-final.log",
+      "path": "logs/formal/related-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 19005,
+      "archivedBytes": 3577
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/related-final.exit",
+      "path": "logs/formal/related-final.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/root-final-functional.log",
+      "path": "logs/formal/root-final-functional.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 4991,
+      "archivedBytes": 1301
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/root-final-functional.exit",
+      "path": "logs/formal/root-final-functional.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-first.log",
+      "path": "logs/formal/typecheck-first.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 8770,
+      "archivedBytes": 690
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-first.exit",
+      "path": "logs/formal/typecheck-first.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-inputs.log",
+      "path": "logs/formal/typecheck-inputs.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 1058,
+      "archivedBytes": 450
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-inputs.exit",
+      "path": "logs/formal/typecheck-inputs.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-final.log",
+      "path": "logs/formal/typecheck-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 439,
+      "archivedBytes": 251
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-final.exit",
+      "path": "logs/formal/typecheck-final.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-source-records.log",
+      "path": "logs/formal/typecheck-source-records.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 75,
+      "archivedBytes": 92
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/typecheck-source-records.exit",
+      "path": "logs/formal/typecheck-source-records.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/format-final.log",
+      "path": "logs/formal/format-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 68,
+      "archivedBytes": 87
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/format-final.exit",
+      "path": "logs/formal/format-final.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/diff-check.log",
+      "path": "logs/formal/diff-check.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/diff-check.exit",
+      "path": "logs/formal/diff-check.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/helper-syntax.log",
+      "path": "logs/formal/helper-syntax.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/helper-syntax.exit",
+      "path": "logs/formal/helper-syntax.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/checker-syntax.log",
+      "path": "logs/formal/checker-syntax.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/checker-syntax.exit",
+      "path": "logs/formal/checker-syntax.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/checker-transpile.log",
+      "path": "logs/formal/checker-transpile.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/checker-transpile.exit",
+      "path": "logs/formal/checker-transpile.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/probe.ts",
+      "path": "probe/probe.ts",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3349,
+      "archivedBytes": 3349
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/probe-results.json",
+      "path": "probe/probe-results.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 8658,
+      "archivedBytes": 8658
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/probe-integrity-facts.json",
+      "path": "probe/probe-integrity-facts.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 175,
+      "archivedBytes": 175
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/probe.log",
+      "path": "probe/probe.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 8983,
+      "archivedBytes": 1124
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/probe.exit",
+      "path": "probe/probe.exit",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/archive-public-inputs.json",
+      "path": "probe/public-inputs.json",
+      "compression": "none",
+      "qualification": "Derived only from the captured public original inputs, explicitly qualified",
+      "sourceBytes": 1862,
+      "archivedBytes": 1862
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/empty/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/empty.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/whitespace/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/whitespace.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/empty-object/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/empty-object.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 2,
+      "archivedBytes": 22
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/unrelated-username/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/unrelated-username.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 34,
+      "archivedBytes": 52
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/nested-experimental/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/nested-experimental.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 39,
+      "archivedBytes": 59
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/nested-memory/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/nested-memory.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 44,
+      "archivedBytes": 61
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/nested-terminal/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/nested-terminal.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 79,
+      "archivedBytes": 89
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/projects/inherited-memory-relation/.opencorvus/opencorvus.jsonc",
+      "path": "probe/fixtures/inherited-memory-relation.jsonc.gz",
+      "compression": "gzip",
+      "qualification": "Exact public probe input bytes; absent case is recorded in public-inputs.json",
+      "sourceBytes": 66,
+      "archivedBytes": 83
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-395.mjs",
+      "path": "implementation/live-395.mjs",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 11385,
+      "archivedBytes": 11385
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/check-live-395.ts",
+      "path": "implementation/check-live-395.ts",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 10944,
+      "archivedBytes": 10944
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/LIVE-HELPERS.md",
+      "path": "implementation/LIVE-HELPERS.md",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 4935,
+      "archivedBytes": 4935
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/permission-bundle-code-evidence.json",
+      "path": "implementation/permission-bundle-code-evidence.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 4855,
+      "archivedBytes": 4855
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/read-permission-bundle-evidence.mjs",
+      "path": "implementation/read-permission-bundle-evidence.mjs",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 1130,
+      "archivedBytes": 1130
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/config-hunk-split-review.json",
+      "path": "implementation/config-hunk-split-review.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 595,
+      "archivedBytes": 595
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/395-config-only.patch",
+      "path": "implementation/config-only.patch.gz",
+      "compression": "gzip",
+      "qualification": "Exact bounded 395 config change snapshot; no full source preimage or unrelated workspace diff",
+      "sourceBytes": 21787,
+      "archivedBytes": 5662
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/builtin.json",
+      "path": "live-01/builtin.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 54,
+      "archivedBytes": 54
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/global-chat-start-request.json",
+      "path": "live-01/global-chat-start-request.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 234,
+      "archivedBytes": 234
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/global-chat-start-response.json",
+      "path": "live-01/global-chat-start-response.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 4215,
+      "archivedBytes": 4215
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/global-config-facts.json",
+      "path": "live-01/global-config-facts.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 356,
+      "archivedBytes": 356
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/project-config-facts.json",
+      "path": "live-01/project-config-facts.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 1144,
+      "archivedBytes": 1144
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/first-completed.json",
+      "path": "live-01/first-completed.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 2725,
+      "archivedBytes": 2725
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/public-message-request.json",
+      "path": "live-01/public-message-request.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 571,
+      "archivedBytes": 571
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/ready.json",
+      "path": "live-01/ready.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 623,
+      "archivedBytes": 623
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/observation-1791905827294.json",
+      "path": "live-01/observation-1791905827294.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 14315,
+      "archivedBytes": 14315
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/helper-failure-send-1791906100148.json",
+      "path": "live-01/helper-failure-send-1791906100148.json",
+      "compression": "none",
+      "qualification": "Original scope01 input or result; no complete-checker success claim",
+      "sourceBytes": 362,
+      "archivedBytes": 362
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/terminal-observation.json",
+      "path": "live-01/terminal-observation.json",
+      "compression": "none",
+      "qualification": "Backend-owned selected readonly post-exit snapshot; contains selected provider identity/EOF only, not raw Provider audit or DB",
+      "sourceBytes": 26960,
+      "archivedBytes": 26960
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/public-external.csv",
+      "path": "live-01/public-external.csv.gz",
+      "compression": "gzip",
+      "qualification": "Original 53-byte public model input, not a completed read output",
+      "sourceBytes": 53,
+      "archivedBytes": 65
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/start.log",
+      "path": "logs/live-01/start.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 1238,
+      "archivedBytes": 486
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/send.log",
+      "path": "logs/live-01/send.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 1313,
+      "archivedBytes": 768
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/observations/chat-first-completed-ax.txt",
+      "path": "live-01/observations/chat-first-completed-ax.txt",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 1827,
+      "archivedBytes": 1827
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/observations/chat-stable-config-ax.txt",
+      "path": "live-01/observations/chat-stable-config-ax.txt",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 7330,
+      "archivedBytes": 7330
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/observations/history-pending-read-ax.txt",
+      "path": "live-01/observations/history-pending-read-ax.txt",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 954,
+      "archivedBytes": 954
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/observations/page-closed.json",
+      "path": "live-01/observations/page-closed.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 393,
+      "archivedBytes": 393
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/observations/permission-pending-ax.txt",
+      "path": "live-01/observations/permission-pending-ax.txt",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 317,
+      "archivedBytes": 317
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/observations/settings-inherited-ask-ax.txt",
+      "path": "live-01/observations/settings-inherited-ask-ax.txt",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 5464,
+      "archivedBytes": 5464
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/screenshots/chat-base-ask.jpg",
+      "path": "screenshots/chat-base-ask.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG; Root actual page and manual review, no UI automation",
+      "sourceBytes": 59733,
+      "archivedBytes": 59733,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "chat-base-ask.jpg"
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/screenshots/history-pending-read.jpg",
+      "path": "screenshots/history-pending-read.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG; Root actual page and manual review, no UI automation",
+      "sourceBytes": 67823,
+      "archivedBytes": 67823,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "history-pending-read.jpg"
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/screenshots/permission-pending.jpg",
+      "path": "screenshots/permission-pending.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG; Root actual page and manual review, no UI automation",
+      "sourceBytes": 71566,
+      "archivedBytes": 71566,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "permission-pending.jpg"
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/screenshots/settings-inherited-ask.jpg",
+      "path": "screenshots/settings-inherited-ask.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG; Root actual page and manual review, no UI automation",
+      "sourceBytes": 67293,
+      "archivedBytes": 67293,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "settings-inherited-ask.jpg"
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/launch-owner.json",
+      "path": "live-01/owner/launch-owner.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 3460,
+      "archivedBytes": 3460
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/startup.json",
+      "path": "live-01/owner/startup.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 179,
+      "archivedBytes": 179
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/stdout.log",
+      "path": "logs/live-01/native-stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 490,
+      "archivedBytes": 335
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/stderr.log",
+      "path": "logs/live-01/native-stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 8412,
+      "archivedBytes": 1008
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/evidence/preflight-ready.json",
+      "path": "live-01/owner/preflight-ready.json",
+      "compression": "none",
+      "qualification": "Selected original owner/preflight or pair metadata only; no credential/catalog contents",
+      "sourceBytes": 718,
+      "archivedBytes": 718
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/evidence/profile-selection-admitted.json",
+      "path": "live-01/owner/profile-selection-admitted.json",
+      "compression": "none",
+      "qualification": "Selected original owner/preflight or pair metadata only; no credential/catalog contents",
+      "sourceBytes": 270,
+      "archivedBytes": 270
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/evidence/owned-config-hierarchy.json",
+      "path": "live-01/owner/owned-config-hierarchy.json",
+      "compression": "none",
+      "qualification": "Selected original owner/preflight or pair metadata only; no credential/catalog contents",
+      "sourceBytes": 760,
+      "archivedBytes": 760
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/evidence/native-host-ready.json",
+      "path": "live-01/owner/native-host-ready.json",
+      "compression": "none",
+      "qualification": "Selected original owner/preflight or pair metadata only; no credential/catalog contents",
+      "sourceBytes": 1914,
+      "archivedBytes": 1914
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/evidence/native-host-settled.json",
+      "path": "live-01/owner/native-host-settled.json",
+      "compression": "none",
+      "qualification": "Selected original owner/preflight or pair metadata only; no credential/catalog contents",
+      "sourceBytes": 957,
+      "archivedBytes": 957
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/provider-run/evidence/provider-pair-staging.json",
+      "path": "live-01/owner/provider-pair-staging.json",
+      "compression": "none",
+      "qualification": "Selected original owner/preflight or pair metadata only; no credential/catalog contents",
+      "sourceBytes": 1699,
+      "archivedBytes": 1699
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/settlement/sparse-config-layer-defaults-395-live-01-shutdown-admission.json",
+      "path": "live-01/settlement/shutdown-admission.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 556,
+      "archivedBytes": 556
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/settlement/sparse-config-layer-defaults-395-live-01-physical-terminal-and-pair-cleanup.json",
+      "path": "live-01/settlement/physical-terminal-and-pair-cleanup.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 2510,
+      "archivedBytes": 2510
+    },
+    {
+      "source": ".tmp-sparse-config-layer-defaults-395/live-attempt-01/settlement/sparse-config-layer-defaults-395-live-01-settlement-owner.json",
+      "path": "live-01/settlement/settlement-owner.json",
+      "compression": "none",
+      "qualification": "Original public selected evidence",
+      "sourceBytes": 573,
+      "archivedBytes": 573
+    }
+  ]
+}

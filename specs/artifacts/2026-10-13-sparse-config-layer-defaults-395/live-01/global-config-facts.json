@@ -1,0 +1,16 @@
+{
+  "occurrence": "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+  "before": {
+    "model": "openai/gpt-6.1-sol",
+    "profile": "base",
+    "permission": "full_access"
+  },
+  "patch": {
+    "permission_mode": "ask"
+  },
+  "after": {
+    "model": "openai/gpt-6.1-sol",
+    "profile": "base",
+    "permission": "ask"
+  }
+}

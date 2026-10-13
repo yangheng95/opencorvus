@@ -1,0 +1,34 @@
+{
+  "occurrence": "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+  "sourceBefore": {
+    "file": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1\\.opencorvus\\opencorvus.jsonc",
+    "exists": true,
+    "keys": [
+      "$schema",
+      "terminal"
+    ],
+    "profileSource": "global",
+    "permissionSource": "global"
+  },
+  "patch": {
+    "username": "Config 395 public project"
+  },
+  "sourceAfter": {
+    "file": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\370124c5-e849-45af-8289-03232cffe4a1\\.opencorvus\\opencorvus.jsonc",
+    "exists": true,
+    "keys": [
+      "$schema",
+      "terminal",
+      "username"
+    ],
+    "username": "Config 395 public project",
+    "profileSource": "global",
+    "permissionSource": "global"
+  },
+  "actual": {
+    "model": "openai/gpt-6.1-sol",
+    "profile": "base",
+    "permission": "ask",
+    "username": "Config 395 public project"
+  }
+}

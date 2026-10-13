@@ -1,0 +1,23 @@
+Browser tab: 39, Title: "OpenCorvus", URL: "http://127.0.0.1:18506/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 44-45, 50-54, 59-63, 66
++									87 container
++										88 button (expanded) Description: Collapse Anonymous ffe4a1, Secondary Actions: Collapse
++										89 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-187-trigger, Secondary Actions: Expand
++										90 button New chat for this project
++					91 container
++						92 text 我想核对一份公开表格，稍后会给你文件路径。请先简短确认可以根据文件原文核对各行和合计。
++						93 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-240-trigger, Secondary Actions: Expand
++						94 container Description: Not running, ID: taskStatus
++							95 text Not running
++						96 button Side chat
++						97 container solidChatHeaderRuntimeActions
++							98 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							99 checkbox Description: Open right dock, Value: 0
++								100 text Code
++								101 text Chat
++								102 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+~									57 text Choose model
+~								58 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 69 button 我想核对一份公开表格，稍后会给你文件路径。请先简短确认可以根据文件原文核对各行和合计。

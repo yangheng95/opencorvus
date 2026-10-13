@@ -1,0 +1,17 @@
+Browser tab: 39, Title: "OpenCorvus", URL: "http://127.0.0.1:18506/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 96-98
+~									94 container
+~										95 button (expanded) read Read local files Requested Oct 13, 2026, 11:36 PM, Secondary Actions: Collapse
++											96 text read
++											97 text Read local files
++											98 text Requested
++											99 text Oct 13, 2026, 11:36 PM
++										100 text read (read_local)
++										101 content list
++											102 container
++												103 text Requested
++												104 text 11:36:39 PM
++										105 button (collapsed) Operation details, Secondary Actions: Expand
++											106 text Operation details
+The focused UI element is 95 button (expanded) read Read local files Requested Oct 13, 2026, 11:36 PM, Secondary Actions: Collapse

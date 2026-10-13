@@ -1,0 +1,324 @@
+{
+  "pid": 86520,
+  "startedAt": 1791898640819,
+  "deadlineAt": 1791898700819,
+  "completedAt": 1791898643454,
+  "globalInput": {
+    "prompt_profile": {
+      "active": "base"
+    },
+    "permission_mode": "ask",
+    "experimental": {
+      "auto_question": false,
+      "memory": {
+        "document_token_limit": 5000,
+        "organizer_input_token_budget": 16000,
+        "pending_availability_limit": 50
+      }
+    },
+    "terminal": {
+      "profiles": {
+        "public": {
+          "command": "powershell",
+          "label": "Public",
+          "args": [
+            "-NoProfile"
+          ],
+          "env": {
+            "MODE": "public"
+          }
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "name": "absent",
+      "input": null,
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "ask",
+        "experimental": {
+          "auto_question": false,
+          "memory": {
+            "document_token_limit": 5000,
+            "organizer_input_token_budget": 16000,
+            "pending_availability_limit": 50
+          }
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Public",
+              "command": "powershell",
+              "args": [
+                "-NoProfile"
+              ],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "empty",
+      "input": "",
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "ask",
+        "experimental": {
+          "auto_question": false,
+          "memory": {
+            "document_token_limit": 5000,
+            "organizer_input_token_budget": 16000,
+            "pending_availability_limit": 50
+          }
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Public",
+              "command": "powershell",
+              "args": [
+                "-NoProfile"
+              ],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "whitespace",
+      "input": " \n\t",
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "ask",
+        "experimental": {
+          "auto_question": false,
+          "memory": {
+            "document_token_limit": 5000,
+            "organizer_input_token_budget": 16000,
+            "pending_availability_limit": 50
+          }
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Public",
+              "command": "powershell",
+              "args": [
+                "-NoProfile"
+              ],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "empty-object",
+      "input": "{}",
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "dynamic"
+        },
+        "permission_mode": "full_access",
+        "experimental": {
+          "auto_question": false,
+          "memory": {
+            "document_token_limit": 5000,
+            "organizer_input_token_budget": 16000,
+            "pending_availability_limit": 50
+          }
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Public",
+              "command": "powershell",
+              "args": [
+                "-NoProfile"
+              ],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "unrelated-username",
+      "input": "{\"username\":\"public-project-user\"}",
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "dynamic"
+        },
+        "permission_mode": "full_access",
+        "experimental": {
+          "auto_question": false,
+          "memory": {
+            "document_token_limit": 5000,
+            "organizer_input_token_budget": 16000,
+            "pending_availability_limit": 50
+          }
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Public",
+              "command": "powershell",
+              "args": [
+                "-NoProfile"
+              ],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "nested-experimental",
+      "input": "{\"experimental\":{\"openTelemetry\":true}}",
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "dynamic"
+        },
+        "permission_mode": "full_access",
+        "experimental": {
+          "auto_question": true,
+          "memory": {
+            "document_token_limit": 5000,
+            "organizer_input_token_budget": 16000,
+            "pending_availability_limit": 50
+          },
+          "openTelemetry": true
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Public",
+              "command": "powershell",
+              "args": [
+                "-NoProfile"
+              ],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "nested-memory",
+      "input": "{\"experimental\":{\"memory\":{\"enabled\":true}}}",
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "dynamic"
+        },
+        "permission_mode": "full_access",
+        "experimental": {
+          "auto_question": true,
+          "memory": {
+            "document_token_limit": 10000,
+            "organizer_input_token_budget": 32000,
+            "pending_availability_limit": 500,
+            "enabled": true
+          }
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Public",
+              "command": "powershell",
+              "args": [
+                "-NoProfile"
+              ],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "nested-terminal",
+      "input": "{\"terminal\":{\"profiles\":{\"public\":{\"command\":\"powershell\",\"label\":\"Project\"}}}}",
+      "outcome": "resolved",
+      "output": {
+        "prompt_profile": {
+          "active": "dynamic"
+        },
+        "permission_mode": "full_access",
+        "experimental": {
+          "auto_question": false,
+          "memory": {
+            "document_token_limit": 5000,
+            "organizer_input_token_budget": 16000,
+            "pending_availability_limit": 50
+          }
+        },
+        "terminal": {
+          "profiles": {
+            "public": {
+              "label": "Project",
+              "command": "powershell",
+              "args": [],
+              "env": {
+                "MODE": "public"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "inherited-memory-relation",
+      "input": "{\"experimental\":{\"memory\":{\"organizer_input_token_budget\":12000}}}",
+      "outcome": "error",
+      "error": {
+        "name": "ConfigInvalidError",
+        "message": "ConfigInvalidError: {\"path\":\"D:\\\\myhexin-local\\\\opencorvus\\\\.tmp-sparse-config-layer-defaults-395\\\\projects\\\\inherited-memory-relation\\\\.opencorvus\\\\opencorvus.jsonc\",\"issues\":[{\"code\":\"custom\",\"path\":[\"experimental\",\"memory\",\"organizer_input_token_budget\"],\"message\":\"organizer_input_token_budget must exceed document_token_limit plus the 2000-token Organizer protocol reserve\"}]}",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\projects\\inherited-memory-relation\\.opencorvus\\opencorvus.jsonc",
+          "issues": [
+            {
+              "code": "custom",
+              "path": [
+                "experimental",
+                "memory",
+                "organizer_input_token_budget"
+              ],
+              "message": "organizer_input_token_budget must exceed document_token_limit plus the 2000-token Organizer protocol reserve"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "boundary": "Actual Config.snapshotForProject readOnly over public fixtures in own runtime; no service, Provider/model, user config or credential copying"
+}

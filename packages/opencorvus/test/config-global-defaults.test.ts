@@ -52,7 +52,7 @@ describe.serial("effective global configuration defaults", () => {
       observed = { effective, writable }
       return { username: "first-write" }
     })
-    expect(observed).toEqual({ effective: Config.Info.parse({}), writable: Config.Info.parse({}) })
+    expect(observed).toEqual({ effective: Config.Info.parse({}), writable: {} })
     expect((await Config.getGlobal()).username).toBe("first-write")
     expect((await Config.getGlobal()).prompt_profile).toEqual({ active: "dynamic" })
   })

@@ -1,0 +1,38 @@
+{
+  "occurrence": "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+  "outcome": "ready",
+  "host": {
+    "pid": 84240,
+    "processInstanceID": "win32:639275024551689077",
+    "occurrenceID": "ba6bf955-a0d4-45cc-ab88-faa50155acd7"
+  },
+  "parent": {
+    "pid": 52284,
+    "processInstanceID": "win32:639275024530131127",
+    "occurrenceID": "85ae6e9c-e041-4949-916d-aa59c9d41ff4"
+  },
+  "target": {
+    "pid": 88712,
+    "processInstanceID": "win32:639275024560160282",
+    "occurrenceID": "1feca4c8-c441-4db1-8cdd-ad8066fe4552"
+  },
+  "targetBirthAtMs": 1791905656016,
+  "deadlineAt": 1791906255154,
+  "observedAtUtc": "2026-10-13T15:34:16.063Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-mcp-user-resource-input-393/live-attempt-01/bundle/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\runtime",
+    "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\project",
+    "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\evidence",
+    "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\startup.json",
+    "18506",
+    "sparse-config-layer-defaults-395-live-01-f496abf4-d946-4025-9b30-6340012de09a",
+    "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\provider-run\\task-selection.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-sparse-config-layer-defaults-395\\live-attempt-01\\builtin.json",
+    "20",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}
