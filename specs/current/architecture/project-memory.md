@@ -24,6 +24,19 @@ Project memory has three explicitly scoped authorities:
    crash checker covers owned child-process exits and fresh Session reopening,
    not operating-system power loss or every Task/Mission recovery layer.
 
+   Ordinary model replay and the compaction transcript use the same attributed
+   assistant diagnostics from canonical Message fields: Message/Session/parent
+   identity, accepted input batch, timestamps, finish/summary state, main error,
+   failure occurrence, convergence and observation evidence. The existing
+   Provider redactor removes credential values from this read projection.
+   Failed attempts retain their authored content and settled Tool call/result
+   pairs; an error-only Message still contributes its actual diagnostics.
+   These are metadata on the existing assistant, not a synthetic recovery
+   Message. A failed summary remains ineligible as a MEMORY.MD checkpoint.
+   Oversized Message-level diagnostics still follow the transcript preview
+   ceiling; exact paginated recovery of those fields is not yet provided by
+   the Part-scoped evidence reader.
+
    The compaction transcript includes original authors and exact text/Tool Part
    and call identities. Large text and Tool fields carry bounded previews plus
    `ReadCompactionEvidence` references. The one reader resolves text, input,

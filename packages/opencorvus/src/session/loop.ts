@@ -296,7 +296,7 @@ export namespace SessionLoop {
     }
   }
 
-  const { log, state, cancel, finish, flushCallbacks, enterLoop, touch, attachedReplyTargets, hasAttachedPromptWork } =
+  const { log, state, cancel, finish, flushCallbacks, enterLoop, touch, attachedReplyTargets } =
     SessionPromptState
 
   type StrictAITool = AITool & { strict?: boolean }
@@ -1620,7 +1620,9 @@ export namespace SessionLoop {
     if (!consumed || consumed.payload.result_summary_message_id !== input.summary.info.id) {
       throw new Error(`Session ${input.sessionID} summary control ${input.control.id} result binding failed`)
     }
-    flushCallbacks(input.sessionID, input.summary, input.directory, "summary", input.control.id)
+    if (input.control.kind !== "manual_summarize") {
+      flushCallbacks(input.sessionID, input.summary, input.directory, "summary", input.control.id)
+    }
     return input.control.kind === "manual_summarize" ? "stop" : "continue"
   }
 
@@ -2513,11 +2515,10 @@ export namespace SessionLoop {
     return `Session prompt loop ended after internal ${agent} summary checkpoint before continuation`
   }
 
-  async function flushPromptFinalMessage(input: {
+  async function resolvePromptFinalMessage(input: {
     sessionID: string
     abort: AbortSignal
     resultMode: "reply" | "summary"
-    directory?: string
   }) {
     const candidates: Message.WithParts[] = []
     for await (const item of MessageStore.stream(input.sessionID)) {
@@ -2527,16 +2528,11 @@ export namespace SessionLoop {
 
     const selected = selectPromptFinalMessageFromNewest(candidates)
     if (selected.type === "message") {
-      flushCallbacks(input.sessionID, selected.message, input.directory, "reply")
-      return
+      return { message: selected.message, resultMode: "reply" as const }
     }
 
-    if (
-      selected.type === "maintenance-summary" &&
-      (flushCallbacks(input.sessionID, selected.message, input.directory, "summary") > 0 ||
-        input.resultMode === "summary")
-    ) {
-      return
+    if (selected.type === "maintenance-summary" && input.resultMode === "summary") {
+      return { message: selected.message, resultMode: "summary" as const }
     }
 
     if (selected.type === "maintenance-summary" && !input.abort.aborted) {
@@ -2930,6 +2926,24 @@ export namespace SessionLoop {
       if (joined.type === "result") return joined.message
     }
     const { abort, startedOwner, firstResult } = admitted
+    const publishTerminalResult = (
+      result: Message.WithParts,
+      mode: "reply" | "summary",
+      summaryControlID?: string,
+    ): boolean => {
+      if (!abort || state(directory)[sessionID]?.abort.signal !== abort) return false
+      const continueWork =
+        !abort.aborted &&
+        (SessionPromptState.hasCallbacksBeyondResult(sessionID, result, directory, mode, summaryControlID) ||
+          SessionControl.pending(sessionID).some(isActionableSessionControl) ||
+          SessionRuntimeContractStore.hasPendingWake(sessionID))
+      // This decision and callback publication are synchronous. A caller that
+      // immediately continues after its result either joins retained work or
+      // waits for this exact owner's existing reusable receipt.
+      if (!continueWork) SessionPromptState.beginTermination(sessionID, abort, directory)
+      flushCallbacks(sessionID, result, directory, mode, summaryControlID)
+      return continueWork
+    }
     try {
       if (resultMode === "summary" && input.summary_source_message_id && input.summary_control_id) {
         const persistedSummary = await settledSummaryForControl({
@@ -2938,9 +2952,14 @@ export namespace SessionLoop {
           controlID: input.summary_control_id,
         })
         if (persistedSummary) {
-          flushCallbacks(sessionID, persistedSummary, directory, "summary", input.summary_control_id)
-          if (startedOwner) await finish(sessionID, abort, directory)
-          return persistedSummary
+          if (!startedOwner) {
+            flushCallbacks(sessionID, persistedSummary, directory, "summary", input.summary_control_id)
+            return persistedSummary
+          }
+          if (!publishTerminalResult(persistedSummary, "summary", input.summary_control_id)) {
+            await finish(sessionID, abort, directory)
+            return persistedSummary
+          }
         }
       }
       if (input.reply_to_message_id) {
@@ -2950,12 +2969,15 @@ export namespace SessionLoop {
           startedOwner && input.retry_failed_reply !== true,
         )
         if (persistedReply) {
-          flushCallbacks(sessionID, persistedReply, directory, "reply")
           consumeRuntimeContractTurn(sessionID)
           if (startedOwner) {
-            await finish(sessionID, abort, directory)
-            SessionRuntimeContractStore.settleConsumedWake(sessionID)
-            return firstResult
+            if (!publishTerminalResult(persistedReply, "reply")) {
+              await finish(sessionID, abort, directory)
+              SessionRuntimeContractStore.settleConsumedWake(sessionID)
+              return firstResult
+            }
+          } else {
+            flushCallbacks(sessionID, persistedReply, directory, "reply")
           }
         }
         if (input.retry_failed_reply === true) {
@@ -2985,6 +3007,7 @@ export namespace SessionLoop {
       if (!abort) return firstResult
       if (!resume_existing) await terminalizeRecoveredIncompleteAssistant(sessionID)
     } catch (error) {
+      if (abort && !resume_existing) SessionPromptState.beginTermination(sessionID, abort, directory)
       SessionRuntimeContractStore.failConsumedWake(sessionID, error)
       if (abort && !resume_existing) {
         await finish(sessionID, abort, directory, error)
@@ -3015,18 +3038,24 @@ export namespace SessionLoop {
       return active.value
     }
 
-    const finalizePrompt = async (replyToMessageID?: string) => {
+    const finalizePrompt = async (
+      replyToMessageID?: string,
+      summary?: { message: Message.WithParts; controlID: string },
+    ): Promise<boolean> => {
       await SessionCompaction.prune({ sessionID })
       await SessionStatus.settleAcceptedExecutionOccurrence(sessionID, abort)
+      if (summary) return publishTerminalResult(summary.message, "summary", summary.controlID)
       if (replyToMessageID) {
         const reply = await completedReplyToUserMessage(sessionID, replyToMessageID, true)
         if (!reply) {
           throw new Error(`Session ${sessionID} completed without a durable reply to ${replyToMessageID}`)
         }
-        flushCallbacks(sessionID, reply, directory, "reply")
-        return
+        return publishTerminalResult(reply, "reply")
       }
-      await flushPromptFinalMessage({ sessionID, abort, resultMode, directory })
+      const selected = await resolvePromptFinalMessage({ sessionID, abort, resultMode })
+      if (selected) return publishTerminalResult(selected.message, selected.resultMode, input.summary_control_id)
+      SessionPromptState.beginTermination(sessionID, abort, directory)
+      return false
     }
 
     const rejectCallbacks = (error: unknown) => {
@@ -3156,7 +3185,12 @@ export namespace SessionLoop {
                     sessionID,
                     directory,
                   })
-                  if (disposition === "stop") break
+                  if (disposition === "stop") {
+                    if (await finalizePrompt(undefined, { message: completedSummary, controlID: compactionControl.id }))
+                      continue
+                    finalizedTerminalTurn = true
+                    break
+                  }
                   continue
                 }
                 const result = await executeCompactionControl({
@@ -3213,7 +3247,9 @@ export namespace SessionLoop {
                       `Manual summary for source ${sourceUserMessageID} completed without a durable summary message`,
                     )
                   }
-                  flushCallbacks(sessionID, completedSummary, directory, "summary", compactionControl.id)
+                  if (await finalizePrompt(undefined, { message: completedSummary, controlID: compactionControl.id }))
+                    continue
+                  finalizedTerminalTurn = true
                   break
                 }
                 if (resultMode === "summary" && input.summary_source_message_id && input.summary_control_id) {
@@ -3334,11 +3370,7 @@ export namespace SessionLoop {
               // signal.
               await fireStepHook(sessionID, { step, turn })
               if (turn === "stop") {
-                await finalizePrompt(lastUser.id)
-                if (
-                  hasAttachedPromptWork(sessionID, directory) ||
-                  SessionControl.pending(sessionID).some(isActionableSessionControl)
-                ) {
+                if (await finalizePrompt(lastUser.id)) {
                   acceptedInputMessageIDs = undefined
                   step = 0
                   continue
@@ -3352,10 +3384,13 @@ export namespace SessionLoop {
           }
           const runAcceptedTurn = async () => {
             try {
-              const outcome = await runActiveTurn()
-              if (outcome.type === "stop" && !outcome.finalized) await finalizePrompt()
-              return outcome
+              while (true) {
+                const outcome = await runActiveTurn()
+                if (outcome.type === "stop" && !outcome.finalized && (await finalizePrompt())) continue
+                return outcome
+              }
             } catch (error) {
+              SessionPromptState.beginTermination(sessionID, abort, directory)
               try {
                 await terminalizeIncompleteAssistant({
                   sessionID,
@@ -3383,6 +3418,7 @@ export namespace SessionLoop {
           step = 0
         }
       } catch (e) {
+        SessionPromptState.beginTermination(sessionID, abort, directory)
         SessionRuntimeContractStore.failConsumedWake(sessionID, e)
         const executionCancelled = isExecutionCancellationError(e) || isExecutionCancellationError(abort.reason)
         let terminalPublished = executionCancelled || SessionStatus.get(sessionID).type === "terminal"

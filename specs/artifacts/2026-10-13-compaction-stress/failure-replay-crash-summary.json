@@ -1,0 +1,200 @@
+{
+  "scope": "physical child exit and fresh Session loop recovery using scripted local streaming transport",
+  "status": "passed",
+  "remoteModelRequests": 0,
+  "localRequests": 18,
+  "cases": [
+    {
+      "cut": "summary_saved",
+      "kind": "automatic",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 3,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 82,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    },
+    {
+      "cut": "streaming",
+      "kind": "manual",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 2,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 81,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    },
+    {
+      "cut": "streaming",
+      "kind": "automatic",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 3,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 81,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    },
+    {
+      "cut": "summary_saved",
+      "kind": "manual",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 2,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 82,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    },
+    {
+      "cut": "checkpoint_saved",
+      "kind": "manual",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 1,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 84,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    },
+    {
+      "cut": "checkpoint_saved",
+      "kind": "automatic",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 2,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 84,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    },
+    {
+      "cut": "checkpoint_transaction",
+      "kind": "manual",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 2,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 83,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    },
+    {
+      "cut": "checkpoint_transaction",
+      "kind": "automatic",
+      "status": "passed",
+      "settlementConfirmed": true,
+      "requests": 3,
+      "phases": [
+        {
+          "mode": "cut",
+          "exitCode": 83,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "recover",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        },
+        {
+          "mode": "inspect",
+          "exitCode": 0,
+          "settlementConfirmed": true
+        }
+      ]
+    }
+  ]
+}

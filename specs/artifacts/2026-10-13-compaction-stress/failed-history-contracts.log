@@ -1,0 +1,21 @@
+$ bun script/run-tests.ts test/read-context-history-retention.test.ts
+[1/1] START test/read-context-history-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Decision Log reads retain every previously visible page in model context [3.05ms]
+(pass) file evidence projects its original line and column into model context [0.27ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProcessExecutionInterruptedError [3.50ms]
+(pass) preserves committed Tool evidence and exact diagnostics after APIError [0.54ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageOutputLengthError [0.35ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageAbortedError [0.33ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProviderAuthError [0.36ms]
+(pass) projects an error-only assistant as its original attributed diagnostic record [0.42ms]
+(pass) retains secondary observation evidence alongside a completed assistant [0.34ms]
+(pass) redacts credential diagnostics while preserving request trace and literal quoted content [1.81ms]
+
+ 10 pass
+ 0 fail
+ 33 expect() calls
+Ran 10 tests across 1 file. [2.31s]
+[1/1] DONE test/read-context-history-retention.test.ts exit=0 duration=2.97s

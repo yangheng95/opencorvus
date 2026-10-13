@@ -1,0 +1,92 @@
+$ bun script/run-tests.ts test/read-context-history-retention.test.ts test/session/failed-history-replay.test.ts test/session/session-loop-execution-occurrence.test.ts test/server/session-prompt-idempotency.test.ts test/session/prompt-cancellation-occurrence.test.ts
+[1/5] START test/read-context-history-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Decision Log reads retain every previously visible page in model context [3.70ms]
+(pass) file evidence projects its original line and column into model context [0.47ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProcessExecutionInterruptedError [5.01ms]
+(pass) preserves committed Tool evidence and exact diagnostics after APIError [0.96ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageOutputLengthError [0.85ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageAbortedError [0.86ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProviderAuthError [0.67ms]
+(pass) projects an error-only assistant as its original attributed diagnostic record [1.25ms]
+(pass) retains secondary observation evidence alongside a completed assistant [0.74ms]
+(pass) redacts credential diagnostics while preserving request trace and literal quoted content [1.47ms]
+(pass) uses the same exact failure occurrence and convergence evidence in normal and compaction views [2.59ms]
+
+ 11 pass
+ 0 fail
+ 35 expect() calls
+Ran 11 tests across 1 file. [3.89s]
+[1/5] DONE test/read-context-history-retention.test.ts exit=0 duration=4.52s
+[2/5] START test/session/failed-history-replay.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"scenario":"failed-history-wire","key":"project-one","request":1,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":2,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":3,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-one","sessionID":"ses_-zUS3g0lOzzWElnU6gy0","failedMessageID":"msg_g0VXwJzFJ00BwUFEgU7y","summaryMessageID":"msg_g0VXwK0Ba00GsUFM1NFF","requestCount":3,"trace":"TRACE-FAILED-project-one","overlap":false,"observedDiagnostics":{"sessionID":"ses_-zUS3g0lOzzWElnU6gy0","messageID":"msg_g0VXwJzFJ00BwUFEgU7y","author":"chat","parentID":"msg_g0VXwJzEt00elIrV0bGN","time":{"created":1791901477714,"completed":1791901477747},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3g0lOzzWElnU6gy0","assistant_message_id":"msg_g0VXwJzFJ00BwUFEgU7y","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3g0lOzzWElnU6gy0","messageID":"msg_g0VXwJzFJ00BwUFEgU7y","author":"chat","parentID":"msg_g0VXwJzEt00elIrV0bGN","time":{"created":1791901477714,"completed":1791901477747},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3g0lOzzWElnU6gy0","assistant_message_id":"msg_g0VXwJzFJ00BwUFEgU7y","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-one","content":"{\"trace\":\"TRACE-FAILED-project-one\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-one; failed assistant msg_g0VXwJzFJ00BwUFEgU7y has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+{"scenario":"failed-history-wire","key":"project-two","request":4,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":5,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":6,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-two","sessionID":"ses_-zUS3fysmzzxSTftPBh1","failedMessageID":"msg_g0VXwK17Z00op5eGoHtM","summaryMessageID":"msg_g0VXwK1Pw00WoHvRedQa","requestCount":3,"trace":"TRACE-FAILED-project-two","overlap":true,"observedDiagnostics":{"sessionID":"ses_-zUS3fysmzzxSTftPBh1","messageID":"msg_g0VXwK17Z00op5eGoHtM","author":"chat","parentID":"msg_g0VXwK17K00s7wdpS3T9","time":{"created":1791901484921,"completed":1791901484944},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3fysmzzxSTftPBh1","assistant_message_id":"msg_g0VXwK17Z00op5eGoHtM","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3fysmzzxSTftPBh1","messageID":"msg_g0VXwK17Z00op5eGoHtM","author":"chat","parentID":"msg_g0VXwK17K00s7wdpS3T9","time":{"created":1791901484921,"completed":1791901484944},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3fysmzzxSTftPBh1","assistant_message_id":"msg_g0VXwK17Z00op5eGoHtM","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-two","content":"{\"trace\":\"TRACE-FAILED-project-two\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-two; failed assistant msg_g0VXwK17Z00op5eGoHtM has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+(pass) real streamed Session replay and compaction retain a failed attempt's evidence in independent projects [12188.18ms]
+
+ 1 pass
+ 0 fail
+ 30 expect() calls
+Ran 1 test across 1 file. [15.01s]
+[2/5] DONE test/session/failed-history-replay.test.ts exit=0 duration=15.32s
+[3/5] START test/session/session-loop-execution-occurrence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session standby wakes for queued input older than the prior Turn final assistant [2682.41ms]
+(pass) SessionLoop binds each accepted user message to its streaming execution occurrence [5263.88ms]
+(pass) Session standby wakes from a later durable Message whose deterministic ID sorts below the prior assistant [1527.67ms]
+(pass) a queued mid-Turn input receives its own reply after the prior multi-step Turn settles [3950.60ms]
+
+ 4 pass
+ 0 fail
+ 25 expect() calls
+Ran 4 tests across 1 file. [17.79s]
+[3/5] DONE test/session/session-loop-execution-occurrence.test.ts exit=0 duration=18.08s
+[4/5] START test/server/session-prompt-idempotency.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) direct Session prompt identity > rebuilds the exact durable accepted batch for a failed middle-input retry [57.25ms]
+(pass) direct Session prompt identity > accepts a queued input while preserving its complete stored authored payload [6486.54ms]
+(pass) direct Session prompt identity > returns one exact assistant reply for first submission and exact retry [7169.05ms]
+(pass) direct Session prompt identity > retries one persisted failed reply under the same public input identity [6538.28ms]
+(pass) direct Session prompt identity > settles concurrent reuse of one public identity against one canonical request [5985.43ms]
+(pass) direct Session prompt identity > settles every overlapping caller from one durable delivered-batch reply [11068.99ms]
+(pass) direct Session prompt identity > refuses a failed batch replay that races with a newer accepted user Turn [7822.69ms]
+(pass) direct Session prompt identity > keeps newer request settlement when a stale failed replay wins Session ownership [7101.11ms]
+(pass) direct Session prompt identity > settles an overlapping manual summary through the existing Session owner [5376.32ms]
+(pass) direct Session prompt identity > executes the exact reply input after an earlier context-only user Message [7021.78ms]
+(pass) direct Session prompt identity > runs different Sessions concurrently with one exact owner and reply per Session [6631.56ms]
+(pass) direct Session prompt identity > resumes a persisted public prompt under its exact Session and initialized project context [6287.05ms]
+(pass) direct Session prompt identity > summarizes under the target Session and initialized project context [10005.72ms]
+
+ 13 pass
+ 0 fail
+ 21 expect() calls
+Ran 13 tests across 1 file. [90.61s]
+[4/5] DONE test/server/session-prompt-idempotency.test.ts exit=0 duration=91.05s
+[5/5] START test/session/prompt-cancellation-occurrence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) production process shutdown preserves settled inputs and cancels exact active inputs across two Projects [13338.44ms]
+(pass) exact owner settlement preserves an idle input and its unconsumed durable queued successor [8283.58ms]
+(pass) session public abort retains settled input history and publishes an active input cancellation [13929.41ms]
+(pass) coding/work/session public abort retains settled input history and publishes an active input cancellation [6627.77ms]
+
+ 4 pass
+ 0 fail
+ 9 expect() calls
+Ran 4 tests across 1 file. [45.97s]
+[5/5] DONE test/session/prompt-cancellation-occurrence.test.ts exit=0 duration=46.41s

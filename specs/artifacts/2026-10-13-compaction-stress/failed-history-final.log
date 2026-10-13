@@ -1,0 +1,41 @@
+$ bun script/run-tests.ts test/read-context-history-retention.test.ts test/session/failed-history-replay.test.ts
+[1/2] START test/read-context-history-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Decision Log reads retain every previously visible page in model context [2.79ms]
+(pass) file evidence projects its original line and column into model context [0.44ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProcessExecutionInterruptedError [2.76ms]
+(pass) preserves committed Tool evidence and exact diagnostics after APIError [0.66ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageOutputLengthError [0.34ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageAbortedError [0.50ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProviderAuthError [0.49ms]
+(pass) projects an error-only assistant as its original attributed diagnostic record [0.46ms]
+(pass) retains secondary observation evidence alongside a completed assistant [0.28ms]
+(pass) redacts credential diagnostics while preserving request trace and literal quoted content [0.95ms]
+(pass) uses the same exact failure occurrence and convergence evidence in normal and compaction views [1.79ms]
+
+ 11 pass
+ 0 fail
+ 35 expect() calls
+Ran 11 tests across 1 file. [4.71s]
+[1/2] DONE test/read-context-history-retention.test.ts exit=0 duration=5.42s
+[2/2] START test/session/failed-history-replay.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"scenario":"failed-history-wire","key":"project-one","request":1,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":2,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":3,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-one","sessionID":"ses_-zUS3aXUhzz7ZeBdhKN8","failedMessageID":"msg_g0VXwPSVm00PL3QnWr3z","summaryMessageID":"msg_g0VXwPSyF00C7gkjB3bH","requestCount":3,"trace":"TRACE-FAILED-project-one","overlap":false,"observedDiagnostics":{"sessionID":"ses_-zUS3aXUhzz7ZeBdhKN8","messageID":"msg_g0VXwPSVm00PL3QnWr3z","author":"chat","parentID":"msg_g0VXwPSVU00Wry0fN1ts","acceptedInputMessageIDs":["msg_g0VXwPSVU00Wry0fN1ts"],"time":{"created":1791902781850,"completed":1791902781874},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3aXUhzz7ZeBdhKN8","assistant_message_id":"msg_g0VXwPSVm00PL3QnWr3z","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3aXUhzz7ZeBdhKN8","messageID":"msg_g0VXwPSVm00PL3QnWr3z","author":"chat","parentID":"msg_g0VXwPSVU00Wry0fN1ts","acceptedInputMessageIDs":["msg_g0VXwPSVU00Wry0fN1ts"],"time":{"created":1791902781850,"completed":1791902781874},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3aXUhzz7ZeBdhKN8","assistant_message_id":"msg_g0VXwPSVm00PL3QnWr3z","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-one","content":"{\"trace\":\"TRACE-FAILED-project-one\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-one; failed assistant msg_g0VXwPSVm00PL3QnWr3z has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+{"scenario":"failed-history-wire","key":"project-two","request":4,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":5,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":6,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-two","sessionID":"ses_-zUS3aWUszzC12GJT2KO","failedMessageID":"msg_g0VXwPTVJ00adCc18Ci7","summaryMessageID":"msg_g0VXwPTeW00nZEcqv6qE","requestCount":3,"trace":"TRACE-FAILED-project-two","overlap":true,"observedDiagnostics":{"sessionID":"ses_-zUS3aWUszzC12GJT2KO","messageID":"msg_g0VXwPTVJ00adCc18Ci7","author":"chat","parentID":"msg_g0VXwPTVC008j8lWBhly","acceptedInputMessageIDs":["msg_g0VXwPTVC008j8lWBhly"],"time":{"created":1791902785665,"completed":1791902785675},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3aWUszzC12GJT2KO","assistant_message_id":"msg_g0VXwPTVJ00adCc18Ci7","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3aWUszzC12GJT2KO","messageID":"msg_g0VXwPTVJ00adCc18Ci7","author":"chat","parentID":"msg_g0VXwPTVC008j8lWBhly","acceptedInputMessageIDs":["msg_g0VXwPTVC008j8lWBhly"],"time":{"created":1791902785665,"completed":1791902785675},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3aWUszzC12GJT2KO","assistant_message_id":"msg_g0VXwPTVJ00adCc18Ci7","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-two","content":"{\"trace\":\"TRACE-FAILED-project-two\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-two; failed assistant msg_g0VXwPTVJ00adCc18Ci7 has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+(pass) real streamed Session replay and compaction retain a failed attempt's evidence in independent projects [6868.97ms]
+
+ 1 pass
+ 0 fail
+ 30 expect() calls
+Ran 1 test across 1 file. [9.04s]
+[2/2] DONE test/session/failed-history-replay.test.ts exit=0 duration=9.38s

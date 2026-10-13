@@ -524,6 +524,14 @@ assistant 的 timeline cursor 跳过它。该检查只唤醒现有循环，由�
 终态化废弃 assistant。服务重启只销毁 Runtime，不能使 Session、message、descriptor
 或 durable coordination request 失效。
 
+本地 Prompt 的同一 `terminating` 状态区分关闭接纳与释放资源两个阶段。终态结果回调
+可见前，循环先依据精确结果匹配、其他已接入回调、待处理控制和 runtime wake，决定
+继续当前 owner 还是同步关闭接纳；新调用随后等待原有 reusable receipt，再取得下一代
+owner。资源释放只加入已经释放中的同一 owner，不能把“已关闭接纳”误作释放已启动。
+手动压缩按其实际 summary/control receipt 完成并交付结果，不按最早调用方的 result mode
+或最新一条 Message 推断。普通成功、失败、重复结果与取消继续使用相同的拥有者合同；
+自动压缩和待机通知本身不是终态。此过程没有增加持久化队列或调度状态副本。
+
 `SessionStatus.executionOccurrence`绑定当前接管的真实输入与精确Prompt拥有者，
 并从唯一进程内executionStates派生已发布status。真实idle保留在该现状态中；
 尚未有首次发布的输入为undefined，不能把getExecution的展示默认idle当作已结束事实。

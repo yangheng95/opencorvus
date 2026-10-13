@@ -48,7 +48,7 @@
 
 - [Venice 用量与共享后台停机](records/2026-10/2026-10-13-venice-stream-usage.md)：唯一适配器计量、共享取消顺序与真实视觉/进程证据。
 
-- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：研究、三轮保真、证据引用、Task 复制归属与物理中断恢复验收。
+- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：三轮保真、证据与失败记录、Task 归属、终态接纳及物理中断验收。
 
 - [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
 

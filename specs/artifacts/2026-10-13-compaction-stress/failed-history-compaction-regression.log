@@ -1,0 +1,61 @@
+$ bun script/run-tests.ts test/compaction-integrity.test.ts test/memory/session-memory.test.ts test/server/session-prompt-cross-process-owner.test.ts
+[1/3] START test/compaction-integrity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction request and continuation contracts > intersects input capacity with the actual combined-window output reservation [9.55ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail before-source and repeated continuation compaction [2538.78ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail after-source and repeated continuation compaction [2781.74ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail at-source and repeated continuation compaction [2716.91ms]
+(pass) compaction request and continuation contracts > prices compaction system, tools and binary images in the same request envelope [5.39ms]
+(pass) compaction request and continuation contracts > retains a completed assistant tool step and reconstructs the same tail [2206.72ms]
+(pass) compaction request and continuation contracts > bounded summary input keeps an exact readable result and attachment locator [4.89ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after tool-result growth [7718.49ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after step-system growth [5366.54ms]
+(pass) real local streaming compaction transport > publishes the completed contract through HTTP stream, processor and durable control [5932.54ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [3929.65ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [4708.24ms]
+(pass) real local streaming compaction transport > publishes the not_smaller contract through HTTP stream, processor and durable control [8100.38ms]
+
+ 13 pass
+ 0 fail
+ 83 expect() calls
+Ran 13 tests across 1 file. [52.18s]
+[1/3] DONE test/compaction-integrity.test.ts exit=0 duration=53.41s
+[2/3] START test/memory/session-memory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session MEMORY.MD compaction checkpoint > persists automatic compaction control in canonical JSON form [3247.24ms]
+(pass) Session MEMORY.MD compaction checkpoint > parks a contended compaction control until its durable lease expires and recovers it once [3373.78ms]
+(pass) Session MEMORY.MD compaction checkpoint > reconstructs, advances, and projects the latest successful compaction exactly once [3549.02ms]
+(pass) Session MEMORY.MD compaction checkpoint > runs the real compaction integration and exposes its checkpoint to the next compaction only [3115.36ms]
+(pass) Session MEMORY.MD compaction checkpoint > continues original evidence through the provider tool loop into one checkpoint [3100.15ms]
+(pass) Session MEMORY.MD compaction checkpoint > continues copy evidence through the provider tool loop into one checkpoint [4212.20ms]
+(pass) Session MEMORY.MD compaction checkpoint > settles an empty compaction continuation as one typed failed control [3877.64ms]
+(pass) Session MEMORY.MD compaction checkpoint > preserves compaction failure diagnostics, settlement authority, and atomic publication [4642.43ms]
+(pass) Session MEMORY.MD compaction checkpoint > returns the canonical never-compacted document state through tool and HTTP surfaces [5900.62ms]
+(pass) Session MEMORY.MD compaction checkpoint > keeps the last completed checkpoint when a newer summary attempt is incomplete [3705.76ms]
+(pass) Session MEMORY.MD compaction checkpoint > reconstructs a forked checkpoint and enforces project ownership at the HTTP boundary [7165.49ms]
+(pass) Session MEMORY.MD compaction checkpoint > serves the bound checkpoint through the read-only tool and owned HTTP contract [4238.93ms]
+
+ 12 pass
+ 0 fail
+ 37 expect() calls
+Ran 12 tests across 1 file. [54.15s]
+[2/3] DONE test/memory/session-memory.test.ts exit=0 duration=54.67s
+[3/3] START test/server/session-prompt-cross-process-owner.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable cross-process Session prompt ownership > a live backend serves duplicate and queued peer inputs through one Session owner [63667.46ms]
+(pass) durable cross-process Session prompt ownership > a standby owner settles a peer summarize request by its exact durable source [48839.22ms]
+(pass) durable cross-process Session prompt ownership > a first summarize with no compactable material persists its exact failed control [13136.16ms]
+(pass) durable cross-process Session prompt ownership > a standby peer receives the exact failed summarize control terminal [13961.46ms]
+(pass) durable cross-process Session prompt ownership > a peer takes over only after the exact owner process dies [17423.53ms]
+
+ 5 pass
+ 0 fail
+ 45 expect() calls
+Ran 5 tests across 1 file. [158.66s]
+[3/3] DONE test/server/session-prompt-cross-process-owner.test.ts exit=0 duration=158.94s

@@ -894,7 +894,6 @@ export namespace Message {
   export interface ToModelMessagesOptions {
     stripMedia?: boolean
     toolOutputMaxChars?: number
-    preserveAssistantErrors?: boolean
     omitAssistantReasoning?: boolean
   }
 
@@ -909,22 +908,33 @@ export namespace Message {
     ].join("\n")
   }
 
-  function assistantErrorText(error: unknown): string {
-    const serialized = (() => {
-      try {
-        return JSON.stringify(error)
-      } catch {
-        return String(error)
-      }
-    })()
-    if (typeof error === "object" && error !== null) {
-      const record = error as Record<string, unknown>
-      const name = typeof record.name === "string" ? record.name : "AssistantError"
-      const message = typeof record.message === "string" ? record.message : serialized
-      const status = typeof record.statusCode === "number" ? ` status=${record.statusCode}` : ""
-      return `[Assistant error preserved for compaction: ${name}${status}: ${message}]\n${serialized}`
+  /** Read-only diagnostic facts belonging to this real assistant occurrence.
+   * Both ordinary replay and compaction retain the same attributed evidence;
+   * an attempt failure does not erase its already committed Tool results. */
+  export function assistantDiagnostics(info: Assistant) {
+    if (
+      !info.error &&
+      !info.failureOccurrence &&
+      !info.convergenceFailure &&
+      !info.observationFailures?.length &&
+      info.finish !== "error"
+    ) {
+      return
     }
-    return `[Assistant error preserved for compaction: ${serialized}]`
+    return ProviderError.redactSensitiveProviderValue({
+      sessionID: info.sessionID,
+      messageID: info.id,
+      author: info.author,
+      parentID: info.parentID,
+      acceptedInputMessageIDs: info.acceptedInputMessageIDs,
+      time: info.time,
+      finish: info.finish,
+      summary: info.summary,
+      error: info.error,
+      failureOccurrence: info.failureOccurrence,
+      convergenceFailure: info.convergenceFailure,
+      observationFailures: info.observationFailures,
+    })
   }
 
   type ToolResultAttachment = {
@@ -1232,7 +1242,8 @@ export namespace Message {
     const toModelOutput = (args: unknown) => toolResultToModelOutput(args, model)
 
     for (const msg of input) {
-      if (msg.parts.length === 0) continue
+      const diagnostics = msg.info.role === "assistant" ? assistantDiagnostics(msg.info) : undefined
+      if (msg.parts.length === 0 && !diagnostics) continue
 
       if (msg.info.role === "user") {
         const userMessage: UIMessage = {
@@ -1309,24 +1320,19 @@ export namespace Message {
 
       if (msg.info.role === "assistant") {
         const differentModel = `${model.providerID}/${model.id}` !== `${msg.info.providerID}/${msg.info.modelID}`
-        const shouldSkipErroredAssistant =
-          msg.info.error &&
-          !(
-            Message.AbortedError.isInstance(msg.info.error) &&
-            msg.parts.some((part) => part.type !== "step-start" && part.type !== "reasoning")
-          )
-        if (shouldSkipErroredAssistant && !options.preserveAssistantErrors) {
-          continue
-        }
         const assistantMessage: UIMessage = {
           id: msg.info.id,
           role: "assistant",
           parts: [],
         }
-        if (msg.info.error && options.preserveAssistantErrors) {
+        if (diagnostics) {
+          const json = JSON.stringify(diagnostics)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
           assistantMessage.parts.push({
             type: "text",
-            text: assistantErrorText(msg.info.error),
+            text: `<assistant-diagnostics>${json}</assistant-diagnostics>`,
           })
         }
         const parts = CompactionHandoff.isValidSummaryMessage(msg.info)

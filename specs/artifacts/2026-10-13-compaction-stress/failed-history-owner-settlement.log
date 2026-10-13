@@ -1,0 +1,18 @@
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) prompt ownership termination > retains the live local owner until its exact durable generation release succeeds [3097.19ms]
+(pass) prompt ownership termination > releases a managed-worktree Session owner after its Instance lease closes [5868.51ms]
+(pass) prompt ownership termination > retries the exact managed-worktree cleanup receipt after a transient owner-release failure [4131.05ms]
+(pass) prompt ownership termination > readmits a Session prompt after a deterministic owner-release failure by retrying the retained cleanup on start [4087.50ms]
+(pass) prompt ownership termination > releases the complete prompt resource set idempotently [1784.93ms]
+(pass) prompt ownership termination > releases ownership and side tables when status termination fails [1855.44ms]
+(pass) prompt ownership termination > reports cleanup failure when subtree settlement starts after the prompt owner has finished [4658.08ms]
+(pass) prompt ownership termination > publishes the exact owned cancellation after prompt resources finish [5681.00ms]
+(pass) prompt ownership termination > holds replacement admission from live-owner cleanup through terminal handoff [3544.84ms]
+
+ 9 pass
+ 28 filtered out
+ 0 fail
+ 36 expect() calls
+Ran 9 tests across 1 file. [40.72s]

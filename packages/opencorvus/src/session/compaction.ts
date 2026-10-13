@@ -201,14 +201,6 @@ export namespace SessionCompaction {
     }
   }
 
-  function assistantErrorText(error: unknown) {
-    try {
-      return transcriptText(JSON.stringify(error))
-    } catch {
-      return transcriptText(String(error))
-    }
-  }
-
   function sha256(text: string) {
     return createHash("sha256").update(text).digest("hex")
   }
@@ -449,23 +441,9 @@ export namespace SessionCompaction {
       const lines = [
         `<message id="${escapeTranscriptText(info.id)}" role="${info.role}" agent="${escapeTranscriptText(info.agent)}" author="${escapeTranscriptText(info.author)}">`,
       ]
-      if (info.role === "assistant" && info.error) {
-        lines.push(`<assistant-error>${assistantErrorText(info.error)}</assistant-error>`)
-        if (info.failureOccurrence) {
-          lines.push(
-            `<failure-occurrence>${transcriptText(JSON.stringify(info.failureOccurrence))}</failure-occurrence>`,
-          )
-        }
-        if (info.convergenceFailure) {
-          lines.push(
-            `<processor-convergence-error>${transcriptText(JSON.stringify(info.convergenceFailure))}</processor-convergence-error>`,
-          )
-        }
-        if (info.observationFailures?.length) {
-          lines.push(
-            `<processor-observation-errors>${transcriptText(JSON.stringify(info.observationFailures))}</processor-observation-errors>`,
-          )
-        }
+      const diagnostics = info.role === "assistant" ? Message.assistantDiagnostics(info) : undefined
+      if (diagnostics) {
+        lines.push(`<assistant-diagnostics>${jsonForTranscript(diagnostics)}</assistant-diagnostics>`)
       }
       const parts =
         info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(info)

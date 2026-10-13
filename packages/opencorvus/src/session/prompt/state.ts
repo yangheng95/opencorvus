@@ -67,7 +67,7 @@ export namespace SessionPromptState {
       finish(error?: unknown): void
       reusable: Promise<void>
       reuse(): void
-      terminating?: boolean
+      terminating?: "closing" | "releasing"
       cancellationSettlementRequired?: boolean
       timeCreated: number
       timeUpdated: number
@@ -453,6 +453,15 @@ export namespace SessionPromptState {
 
   export function hasAttachedPromptWork(sessionID: string, directory?: string): boolean {
     return (existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]?.callbacks.length ?? 0) > 0
+  }
+
+  /** Close this exact owner's admission before publishing its terminal result.
+   * Resource release still belongs to finish(), and retains the same receipt. */
+  export function beginTermination(sessionID: string, owner: AbortSignal, directory?: string): boolean {
+    const match = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
+    if (!match || match.abort.signal !== owner) return false
+    match.terminating ??= "closing"
+    return true
   }
 
   export async function enterLoop(input: {
@@ -1008,7 +1017,7 @@ export namespace SessionPromptState {
       }
     },
     isPromptTerminating(sessionID: string, directory?: string) {
-      return existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]?.terminating === true
+      return Boolean(existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]?.terminating)
     },
   }
 
@@ -1044,11 +1053,11 @@ export namespace SessionPromptState {
     const { key, promptState } = entry
     const match = promptState?.[input.sessionID]
     if (input.abort && match && match.abort.signal !== input.abort) return false
-    if (match?.terminating) {
+    if (match?.terminating === "releasing") {
       await match.finished
       return true
     }
-    if (match) match.terminating = true
+    if (match) match.terminating = "releasing"
     const errors: unknown[] = []
     let worktreeReleaseError: unknown
     try {
@@ -1139,6 +1148,31 @@ export namespace SessionPromptState {
     await terminatePromptResources({ sessionID, directory })
   }
 
+  function callbackMatchesResult(
+    callback: PromptState[string]["callbacks"][number],
+    result: Message.WithParts,
+    resultMode: ResultMode,
+    summaryControlID?: string,
+  ): boolean {
+    if (callback.resultMode !== resultMode) return false
+    if (resultMode === "summary") return callback.summaryControlID === summaryControlID
+    return (
+      result.info.role === "assistant" &&
+      (callback.replyToMessageID === undefined || Message.acceptsInputMessage(result.info, callback.replyToMessageID))
+    )
+  }
+
+  export function hasCallbacksBeyondResult(
+    sessionID: string,
+    result: Message.WithParts,
+    directory: string | undefined,
+    resultMode: ResultMode,
+    summaryControlID?: string,
+  ): boolean {
+    const s = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
+    return s?.callbacks.some((callback) => !callbackMatchesResult(callback, result, resultMode, summaryControlID)) ?? false
+  }
+
   export function flushCallbacks(
     sessionID: string,
     result: Message.WithParts,
@@ -1149,14 +1183,8 @@ export namespace SessionPromptState {
     const s = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
     if (!s) return 0
     s.timeUpdated = Date.now()
-    const matches = (callback: (typeof s.callbacks)[number]) => {
-      if (callback.resultMode !== resultMode) return false
-      if (resultMode === "summary") return callback.summaryControlID === summaryControlID
-      if (result.info.role !== "assistant") return false
-      return (
-        callback.replyToMessageID === undefined || Message.acceptsInputMessage(result.info, callback.replyToMessageID)
-      )
-    }
+    const matches = (callback: (typeof s.callbacks)[number]) =>
+      callbackMatchesResult(callback, result, resultMode, summaryControlID)
     const matching = s.callbacks.filter(matches)
     s.callbacks = s.callbacks.filter((callback) => !matches(callback))
     for (const callback of matching) callback.resolve(result)

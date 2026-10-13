@@ -204,3 +204,48 @@ both before and after compaction, alongside original authority and side history.
 Combined with the copy/atomicity/Mission regressions, 24 distinct tests pass.
 The [SDK build](task-authority-sdk-build.log) synchronizes error responses. This
 continuation consumes **zero** remote model requests; total remains 154/160.
+
+## Failed-attempt replay and terminal admission
+
+[Original converter baseline](failed-history-before.log.gz) records eight new
+positive contracts failing while the two existing history contracts pass.
+[First streamed chain](failed-history-wire.log.gz) and
+[repeated lifecycle baseline](failed-history-lifecycle-before.log.gz) retain the
+actual manual-summary/reply race: a completed summary and consumed control,
+durable next user input, two Provider requests, and cleanup rejecting the next
+reply callback. These are captured runtime facts, not a model's explanation.
+
+[Final replay contracts](failed-history-final.log) verify 11 diagnostic/history
+cases and the two-project real HTTP streaming chain. They record diagnostics,
+original accepted input IDs and exact Tool call/results as received by the
+local Provider, including compactor and post-checkpoint requests. One project
+reuses its completed manual checkpoint and immediately continues; the other
+attaches a reply while compaction is held at an HTTP barrier. Both issue three
+local requests. Scripted responses prove transport and settlement, not model
+semantic quality. The canonical failed Message remains unchanged.
+
+[Five-file regression](failed-history-settlement-final.log) passes 33 tests;
+[owner termination](failed-history-owner-settlement.log) adds nine selected
+cases; [compaction, memory and cross-process regression](failed-history-compaction-regression.log)
+adds 30. These sets contain **72 distinct passing tests**; repeated runs are
+not additional coverage. The
+[first regression log](failed-history-settlement-regression.log.gz) preserves
+a checker XML quote-decoding mistake, corrected before final acceptance.
+
+[Physical crash summary](failure-replay-crash-summary.json) records all eight
+manual/automatic durable interruption boundaries passing with 24 joined child
+commands, 18 local streamed requests and zero remote requests. The full
+[report](failure-replay-crash.json.gz) and [log](failure-replay-crash.log.gz)
+preserve exact physical/output settlement receipts. Compression preserves the
+original report bytes. This is process-crash recovery, not whole-OS power loss.
+
+The same canonical diagnostic projection serves ordinary replay and compaction;
+the existing Provider redactor handles credential fields. Terminal callbacks
+close admission on their exact owner before releasing callers, unless other
+accepted work remains. This uses the existing reusable receipt and in-memory
+termination state. It does not add a retry queue or Task execution authority.
+Oversized Message-level errors still need exact paginated recovery; full
+Task/Mission orchestration and native-compaction comparisons remain open.
+The [focused typecheck receipt](failed-history-typecheck.log) covers the two
+changed tests and their production dependencies. Documentation and architecture
+index checks also pass.

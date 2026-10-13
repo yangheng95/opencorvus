@@ -1,0 +1,20 @@
+$ bun script/run-tests.ts test/session/failed-history-replay.test.ts
+[1/1] START test/session/failed-history-replay.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"scenario":"failed-history-wire","key":"project-one","request":1,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":2,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":3,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-one","sessionID":"ses_-zUS3hcRfzzCzXryCh10","failedMessageID":"msg_g0VXwINYn00gyU83a6PE","summaryMessageID":"msg_g0VXwINyc00gkKDmJoU8","requestCount":3,"trace":"TRACE-FAILED-project-one","overlap":false,"observedDiagnostics":{"sessionID":"ses_-zUS3hcRfzzCzXryCh10","messageID":"msg_g0VXwINYn00gyU83a6PE","author":"chat","finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3hcRfzzCzXryCh10","assistant_message_id":"msg_g0VXwINYn00gyU83a6PE","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3hcRfzzCzXryCh10","messageID":"msg_g0VXwINYn00gyU83a6PE","author":"chat","finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3hcRfzzCzXryCh10","assistant_message_id":"msg_g0VXwINYn00gyU83a6PE","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-one","content":"{\"trace\":\"TRACE-FAILED-project-one\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-one; failed assistant msg_g0VXwINYn00gyU83a6PE has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+{"scenario":"failed-history-wire","key":"project-two","request":4,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":5,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":6,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-two","sessionID":"ses_-zUS3hbNLzzOtQC0Oh97","failedMessageID":"msg_g0VXwIOcp00GF03Nxm1H","summaryMessageID":"msg_g0VXwIOll00vANynyHqx","requestCount":3,"trace":"TRACE-FAILED-project-two","overlap":true,"observedDiagnostics":{"sessionID":"ses_-zUS3hbNLzzOtQC0Oh97","messageID":"msg_g0VXwIOcp00GF03Nxm1H","author":"chat","finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3hbNLzzOtQC0Oh97","assistant_message_id":"msg_g0VXwIOcp00GF03Nxm1H","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3hbNLzzOtQC0Oh97","messageID":"msg_g0VXwIOcp00GF03Nxm1H","author":"chat","finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3hbNLzzOtQC0Oh97","assistant_message_id":"msg_g0VXwIOcp00GF03Nxm1H","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-two","content":"{\"trace\":\"TRACE-FAILED-project-two\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-two; failed assistant msg_g0VXwIOcp00GF03Nxm1H has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+(pass) real streamed Session replay and compaction retain a failed attempt's evidence in independent projects [7166.77ms]
+
+ 1 pass
+ 0 fail
+ 30 expect() calls
+Ran 1 test across 1 file. [11.51s]
+[1/1] DONE test/session/failed-history-replay.test.ts exit=0 duration=12.15s
