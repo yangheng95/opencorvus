@@ -1,0 +1,23 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\bus-delivery-transaction.test.ts:
+(pass) queued delivery writes return their exact committed rows across bounded batches [326.28ms]
+(pass) a rejected delivery rolls back its savepoint while adjacent deliveries commit [253.75ms]
+(pass) a source transaction receives the explicit retired-context admission error [255.36ms]
+
+test\bus-durable-outbox.test.ts:
+(pass) durable Bus publication outbox > settles durable publications created by an owned subscriber before disposing test state [1631.06ms]
+(pass) durable Bus publication outbox > scopes one durable subscriber identity independently to each live Project Instance [2883.10ms]
+(pass) durable Bus publication outbox > retains the Project lease until an asynchronous durable subscriber settles [1832.99ms]
+(pass) durable Bus publication outbox > cancels a real durable subscriber at shutdown and replays its retained receipt in a successor [2058.27ms]
+(pass) durable Bus publication outbox > recovers a Message source commit with the same occurrence after a successor runtime starts [2131.29ms]
+(pass) durable Bus publication outbox > retries only the unsettled subscriber receipt within one exact phase [1802.20ms]
+(pass) durable Bus publication outbox > coalesces concurrent manual retries behind one durable occurrence owner [1521.82ms]
+(pass) durable Bus publication outbox > settles durable scheduler acceptance despite a failed transient Global projection [1587.98ms]
+(pass) durable Bus publication outbox > retries only the unsettled Global subscriber receipt [2041.05ms]
+(pass) durable Bus publication outbox > settles a failed non-durable local projection after one delivery attempt [1730.10ms]
+
+ 13 pass
+ 0 fail
+ 46 expect() calls
+Ran 13 tests across 2 files. [21.79s]

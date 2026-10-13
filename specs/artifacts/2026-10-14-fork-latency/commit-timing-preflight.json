@@ -1,0 +1,87 @@
+{
+  "pragma": {
+    "journal_mode": {
+      "journal_mode": "memory"
+    },
+    "synchronous": {
+      "synchronous": 2
+    },
+    "wal_autocheckpoint": {
+      "wal_autocheckpoint": 1000
+    },
+    "cache_size": {
+      "cache_size": -2000
+    },
+    "auto_vacuum": {
+      "auto_vacuum": 0
+    }
+  },
+  "samples": [
+    {
+      "beganAt": 1791929273989,
+      "durationMs": 0.36019999999999897,
+      "beginMs": 0.215799999999998,
+      "bodyMs": 0.10960000000000036,
+      "commitMs": 0.03480000000000061,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-commit-timing.ts:9:17",
+      "commitCPU": {
+        "user": 0,
+        "system": 0
+      }
+    },
+    {
+      "beganAt": 1791929273989,
+      "durationMs": 0.1600999999999999,
+      "beginMs": 0.11250000000000071,
+      "bodyMs": 0.03609999999999758,
+      "commitMs": 0.01150000000000162,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-commit-timing.ts:9:17",
+      "commitCPU": {
+        "user": 0,
+        "system": 0
+      }
+    },
+    {
+      "beganAt": 1791929273989,
+      "durationMs": 0.06769999999999854,
+      "beginMs": 0.0472999999999999,
+      "bodyMs": 0.012899999999998357,
+      "commitMs": 0.007500000000000284,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-commit-timing.ts:9:17",
+      "commitCPU": {
+        "user": 0,
+        "system": 0
+      }
+    },
+    {
+      "beganAt": 1791929273989,
+      "durationMs": 0.061899999999997846,
+      "beginMs": 0.046599999999997976,
+      "bodyMs": 0.009100000000000108,
+      "commitMs": 0.006199999999999761,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-commit-timing.ts:9:17",
+      "commitCPU": {
+        "user": 0,
+        "system": 0
+      }
+    },
+    {
+      "beganAt": 1791929273990,
+      "durationMs": 0.1711999999999989,
+      "beginMs": 0.06550000000000011,
+      "bodyMs": 0.05069999999999908,
+      "commitMs": 0.054999999999999716,
+      "outcome": "threw",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-commit-timing.ts:13:18",
+      "commitCPU": {
+        "user": 0,
+        "system": 0
+      }
+    }
+  ],
+  "boundary": "Actual synchronous transaction timing; no SQL parameters, result values, or business state are captured."
+}

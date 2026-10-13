@@ -1,0 +1,26 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\bus-delivery-transaction.test.ts:
+(pass) queued delivery writes return their exact committed rows across bounded batches [599.59ms]
+(pass) a rejected delivery rolls back its savepoint while adjacent deliveries commit [469.83ms]
+(pass) a source transaction receives the explicit retired-context admission error [327.28ms]
+
+test\bus-durable-outbox.test.ts:
+(pass) durable Bus publication outbox > settles durable publications created by an owned subscriber before disposing test state [1848.11ms]
+(pass) durable Bus publication outbox > scopes one durable subscriber identity independently to each live Project Instance [3035.17ms]
+(pass) durable Bus publication outbox > retains the Project lease until an asynchronous durable subscriber settles [2574.43ms]
+(pass) durable Bus publication outbox > cancels a real durable subscriber at shutdown and replays its retained receipt in a successor [2428.48ms]
+(pass) durable Bus publication outbox > recovers a Message source commit with the same occurrence after a successor runtime starts [3086.09ms]
+(pass) durable Bus publication outbox > retries only the unsettled subscriber receipt within one exact phase [2642.89ms]
+(pass) durable Bus publication outbox > coalesces concurrent manual retries behind one durable occurrence owner [1743.10ms]
+(pass) durable Bus publication outbox > settles durable scheduler acceptance despite a failed transient Global projection [1777.68ms]
+(pass) durable Bus publication outbox > retries only the unsettled Global subscriber receipt [2126.69ms]
+(pass) durable Bus publication outbox > settles a failed non-durable local projection after one delivery attempt [1428.57ms]
+
+test\bus-writer-cross-process.test.ts:
+(pass) concurrent durable Bus publications deliver exact values and preserve replay receipts [16272.91ms]
+
+ 14 pass
+ 0 fail
+ 78 expect() calls
+Ran 14 tests across 3 files. [42.69s]

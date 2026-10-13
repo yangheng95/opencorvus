@@ -1,0 +1,4214 @@
+{
+  "window": {
+    "startedAt": "2026-10-13T21:28:32.770Z",
+    "completedAt": "2026-10-13T21:28:48.278Z",
+    "profileStart": 1791926767280621.2,
+    "profileEnd": 1791926957533264,
+    "matchedSamples": 2079,
+    "coveredMs": 15508,
+    "maxSampleGapMs": 152.32
+  },
+  "app": [
+    {
+      "id": 1842,
+      "functionName": "dispatchDurableTargets",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 669,
+      "columnNumber": 111,
+      "samples": 1,
+      "selfMs": 9.449,
+      "inclusiveMs": 10231.288
+    },
+    {
+      "id": 1843,
+      "functionName": "immediateTransaction",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1672,
+      "columnNumber": 41,
+      "samples": 1,
+      "selfMs": 13.236,
+      "inclusiveMs": 8597.821
+    },
+    {
+      "id": 4218,
+      "functionName": "immediateTransaction",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1672,
+      "columnNumber": 41,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 3380.632
+    },
+    {
+      "id": 4386,
+      "functionName": "runEffect",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1365,
+      "columnNumber": 20,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2839.211
+    },
+    {
+      "id": 4385,
+      "functionName": "drainEffects",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1420,
+      "columnNumber": 23,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2839.211
+    },
+    {
+      "id": 4391,
+      "functionName": "executeDurableOccurrence",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 915,
+      "columnNumber": 35,
+      "samples": 2,
+      "selfMs": 29.827,
+      "inclusiveMs": 2838.274
+    },
+    {
+      "id": 4390,
+      "functionName": "",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 1084,
+      "columnNumber": 33,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2838.274
+    },
+    {
+      "id": 4388,
+      "functionName": "",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 1082,
+      "columnNumber": 20,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2838.274
+    },
+    {
+      "id": 4396,
+      "functionName": "executeDurableRow",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 866,
+      "columnNumber": 73,
+      "samples": 2,
+      "selfMs": 16.832,
+      "inclusiveMs": 2760.048
+    },
+    {
+      "id": 4395,
+      "functionName": "executeDurableRow",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 866,
+      "columnNumber": 34,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2760.048
+    },
+    {
+      "id": 4394,
+      "functionName": "",
+      "scriptId": "149",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/instance.ts",
+      "lineNumber": 1200,
+      "columnNumber": 35,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2760.048
+    },
+    {
+      "id": 4392,
+      "functionName": "startLeaseActivity",
+      "scriptId": "149",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/instance.ts",
+      "lineNumber": 1196,
+      "columnNumber": 30,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2760.048
+    },
+    {
+      "id": 4399,
+      "functionName": "",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 876,
+      "columnNumber": 60,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2743.216
+    },
+    {
+      "id": 4398,
+      "functionName": "",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 876,
+      "columnNumber": 43,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2743.216
+    },
+    {
+      "id": 4401,
+      "functionName": "dispatchDurableTargets",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 669,
+      "columnNumber": 111,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2661.584
+    },
+    {
+      "id": 4400,
+      "functionName": "dispatchDurableTargets",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 669,
+      "columnNumber": 39,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2661.584
+    },
+    {
+      "id": 4402,
+      "functionName": "immediateTransaction",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1672,
+      "columnNumber": 41,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 2219.122
+    },
+    {
+      "id": 1853,
+      "functionName": "executeDurableRow",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 866,
+      "columnNumber": 73,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1753.297
+    },
+    {
+      "id": 1855,
+      "functionName": "dispatchDurableTargets",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 669,
+      "columnNumber": 111,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1554.446
+    },
+    {
+      "id": 1854,
+      "functionName": "dispatchDurableTargets",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 669,
+      "columnNumber": 39,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1554.446
+    },
+    {
+      "id": 1848,
+      "functionName": "provideDatabaseContext",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1426,
+      "columnNumber": 36,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1532.028
+    },
+    {
+      "id": 1847,
+      "functionName": "",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1684,
+      "columnNumber": 8,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1532.028
+    },
+    {
+      "id": 1856,
+      "functionName": "immediateTransaction",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1672,
+      "columnNumber": 41,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1460.903
+    },
+    {
+      "id": 1969,
+      "functionName": "use",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1445,
+      "columnNumber": 24,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1049.864
+    },
+    {
+      "id": 1968,
+      "functionName": "settlePhase",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 660,
+      "columnNumber": 22,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1049.864
+    },
+    {
+      "id": 1970,
+      "functionName": "provideDatabaseContext",
+      "scriptId": "152",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "lineNumber": 1426,
+      "columnNumber": 36,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1048.85
+    },
+    {
+      "id": 1850,
+      "functionName": "",
+      "scriptId": "284",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+      "lineNumber": 776,
+      "columnNumber": 38,
+      "samples": 0,
+      "selfMs": 0,
+      "inclusiveMs": 1047.276
+    },
+    {
+      "id": 1999,
+      "functionName": "releaseControlLeaseInTransaction",
+      "scriptId": "298",
+      "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+      "lineNumber": 155,
+      "columnNumber": 48,
+      "samples": 1,
+      "selfMs": 1.058,
+      "inclusiveMs": 653.857
+    }
+  ],
+  "hot": [
+    {
+      "leaf": {
+        "id": 2042,
+        "functionName": "run",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 893,
+        "selfMs": 6878.87,
+        "inclusiveMs": 6878.87
+      },
+      "stack": [
+        {
+          "id": 2042,
+          "functionName": "run",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 893,
+          "selfMs": 6878.87,
+          "inclusiveMs": 6878.87
+        },
+        {
+          "id": 2041,
+          "functionName": "#runNoArgs",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 138,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 6878.87
+        },
+        {
+          "id": 1845,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 1,
+          "selfMs": 0.956,
+          "inclusiveMs": 8411.854
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 4427,
+        "functionName": "run",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 260,
+        "selfMs": 1780.133,
+        "inclusiveMs": 1780.133
+      },
+      "stack": [
+        {
+          "id": 4427,
+          "functionName": "run",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 260,
+          "selfMs": 1780.133,
+          "inclusiveMs": 1780.133
+        },
+        {
+          "id": 4426,
+          "functionName": "#runNoArgs",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 138,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1780.133
+        },
+        {
+          "id": 4425,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2199.784
+        },
+        {
+          "id": 4403,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2219.122
+        },
+        {
+          "id": 4402,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2219.122
+        },
+        {
+          "id": 4401,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2661.584
+        },
+        {
+          "id": 4400,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 39,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2661.584
+        },
+        {
+          "id": 4399,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 876,
+          "columnNumber": 60,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2743.216
+        },
+        {
+          "id": 4398,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 876,
+          "columnNumber": 43,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2743.216
+        },
+        {
+          "id": 4397,
+          "functionName": "map",
+          "scriptId": "148",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2743.216
+        },
+        {
+          "id": 4396,
+          "functionName": "executeDurableRow",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 866,
+          "columnNumber": 73,
+          "samples": 2,
+          "selfMs": 16.832,
+          "inclusiveMs": 2760.048
+        },
+        {
+          "id": 4395,
+          "functionName": "executeDurableRow",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 866,
+          "columnNumber": 34,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2760.048
+        },
+        {
+          "id": 4394,
+          "functionName": "",
+          "scriptId": "149",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/instance.ts",
+          "lineNumber": 1200,
+          "columnNumber": 35,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2760.048
+        },
+        {
+          "id": 4393,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2760.048
+        },
+        {
+          "id": 4392,
+          "functionName": "startLeaseActivity",
+          "scriptId": "149",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/instance.ts",
+          "lineNumber": 1196,
+          "columnNumber": 30,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2760.048
+        },
+        {
+          "id": 4391,
+          "functionName": "executeDurableOccurrence",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 915,
+          "columnNumber": 35,
+          "samples": 2,
+          "selfMs": 29.827,
+          "inclusiveMs": 2838.274
+        },
+        {
+          "id": 4390,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 1084,
+          "columnNumber": 33,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2838.274
+        },
+        {
+          "id": 4389,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2838.274
+        },
+        {
+          "id": 4388,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 1082,
+          "columnNumber": 20,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2838.274
+        },
+        {
+          "id": 4387,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2838.274
+        },
+        {
+          "id": 4386,
+          "functionName": "runEffect",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1365,
+          "columnNumber": 20,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2839.211
+        },
+        {
+          "id": 4385,
+          "functionName": "drainEffects",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1420,
+          "columnNumber": 23,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 2839.211
+        },
+        {
+          "id": 4218,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 3380.632
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 1989,
+        "functionName": "run",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 145,
+        "selfMs": 1172.13,
+        "inclusiveMs": 1172.13
+      },
+      "stack": [
+        {
+          "id": 1989,
+          "functionName": "run",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 145,
+          "selfMs": 1172.13,
+          "inclusiveMs": 1172.13
+        },
+        {
+          "id": 1988,
+          "functionName": "#runNoArgs",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 138,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1172.13
+        },
+        {
+          "id": 1858,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1460.903
+        },
+        {
+          "id": 1857,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1460.903
+        },
+        {
+          "id": 1856,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1460.903
+        },
+        {
+          "id": 1855,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1554.446
+        },
+        {
+          "id": 1854,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 39,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1554.446
+        },
+        {
+          "id": 1853,
+          "functionName": "executeDurableRow",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 866,
+          "columnNumber": 73,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1753.297
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 1974,
+        "functionName": "run",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 137,
+        "selfMs": 1014.194,
+        "inclusiveMs": 1014.194
+      },
+      "stack": [
+        {
+          "id": 1974,
+          "functionName": "run",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 137,
+          "selfMs": 1014.194,
+          "inclusiveMs": 1014.194
+        },
+        {
+          "id": 1973,
+          "functionName": "#run",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 181,
+          "columnNumber": 6,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1014.194
+        },
+        {
+          "id": 1972,
+          "functionName": "withStatement",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 76,
+          "columnNumber": 14,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1014.194
+        },
+        {
+          "id": 1971,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1048.85
+        },
+        {
+          "id": 1970,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1048.85
+        },
+        {
+          "id": 1969,
+          "functionName": "use",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1445,
+          "columnNumber": 24,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1049.864
+        },
+        {
+          "id": 1968,
+          "functionName": "settlePhase",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 660,
+          "columnNumber": 22,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1049.864
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 2003,
+        "functionName": "prepare",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 53,
+        "selfMs": 401.826,
+        "inclusiveMs": 401.826
+      },
+      "stack": [
+        {
+          "id": 2003,
+          "functionName": "prepare",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 53,
+          "selfMs": 401.826,
+          "inclusiveMs": 401.826
+        },
+        {
+          "id": 2002,
+          "functionName": "prepare",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 325,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 401.826
+        },
+        {
+          "id": 2001,
+          "functionName": "prepareOneTimeQuery",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 24,
+          "columnNumber": 20,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 401.826
+        },
+        {
+          "id": 2000,
+          "functionName": "run",
+          "scriptId": "313",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/query-builders/update.js",
+          "lineNumber": 147,
+          "columnNumber": 7,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 478.356
+        },
+        {
+          "id": 1999,
+          "functionName": "releaseControlLeaseInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 155,
+          "columnNumber": 48,
+          "samples": 1,
+          "selfMs": 1.058,
+          "inclusiveMs": 653.857
+        },
+        {
+          "id": 1850,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 776,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1047.276
+        },
+        {
+          "id": 1849,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 2,
+          "selfMs": 1.944,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1848,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1847,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1846,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1845,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 1,
+          "selfMs": 0.956,
+          "inclusiveMs": 8411.854
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 2606,
+        "functionName": "entries",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 9,
+        "selfMs": 106.413,
+        "inclusiveMs": 106.413
+      },
+      "stack": [
+        {
+          "id": 2606,
+          "functionName": "entries",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 9,
+          "selfMs": 106.413,
+          "inclusiveMs": 106.413
+        },
+        {
+          "id": 2605,
+          "functionName": "BaseSQLiteDatabase",
+          "scriptId": "315",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/db.js",
+          "lineNumber": 16,
+          "columnNumber": 12,
+          "samples": 1,
+          "selfMs": 0.967,
+          "inclusiveMs": 125.228
+        },
+        {
+          "id": 2604,
+          "functionName": "SQLiteTransaction",
+          "scriptId": "195",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/session.js",
+          "lineNumber": 157,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 125.228
+        },
+        {
+          "id": 2603,
+          "functionName": "SQLiteBunTransaction",
+          "scriptId": "314",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 125.228
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 5555,
+        "functionName": "prepare",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 12,
+        "selfMs": 104.539,
+        "inclusiveMs": 104.539
+      },
+      "stack": [
+        {
+          "id": 5555,
+          "functionName": "prepare",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 12,
+          "selfMs": 104.539,
+          "inclusiveMs": 104.539
+        },
+        {
+          "id": 5554,
+          "functionName": "prepare",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 325,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 104.539
+        },
+        {
+          "id": 5553,
+          "functionName": "prepareOneTimeQuery",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 24,
+          "columnNumber": 20,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 104.539
+        },
+        {
+          "id": 5527,
+          "functionName": "_prepare",
+          "scriptId": "312",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/query-builders/insert.js",
+          "lineNumber": 138,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 106.444
+        },
+        {
+          "id": 4331,
+          "functionName": "run",
+          "scriptId": "312",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/query-builders/insert.js",
+          "lineNumber": 147,
+          "columnNumber": 7,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 106.444
+        },
+        {
+          "id": 4266,
+          "functionName": "write",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 2287,
+          "columnNumber": 18,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 346.14
+        },
+        {
+          "id": 4265,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 346.14
+        },
+        {
+          "id": 4264,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 346.14
+        },
+        {
+          "id": 4263,
+          "functionName": "runSavepoint",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1596,
+          "columnNumber": 26,
+          "samples": 1,
+          "selfMs": 1.024,
+          "inclusiveMs": 347.164
+        },
+        {
+          "id": 4262,
+          "functionName": "updatePartRow",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 2264,
+          "columnNumber": 24,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 347.164
+        },
+        {
+          "id": 4230,
+          "functionName": "",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 1820,
+          "columnNumber": 34,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4229,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4228,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4227,
+          "functionName": "runSavepoint",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1596,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4226,
+          "functionName": "persistMessageBundleRows",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 1806,
+          "columnNumber": 35,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4225,
+          "functionName": "",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 545,
+          "columnNumber": 43,
+          "samples": 1,
+          "selfMs": 15.014,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4224,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4223,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4222,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4221,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4220,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 541.421
+        },
+        {
+          "id": 4219,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 541.421
+        },
+        {
+          "id": 4218,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 3380.632
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 4330,
+        "functionName": "run",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 13,
+        "selfMs": 94.253,
+        "inclusiveMs": 94.253
+      },
+      "stack": [
+        {
+          "id": 4330,
+          "functionName": "run",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 13,
+          "selfMs": 94.253,
+          "inclusiveMs": 94.253
+        },
+        {
+          "id": 4329,
+          "functionName": "#run",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 181,
+          "columnNumber": 6,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 94.253
+        },
+        {
+          "id": 4328,
+          "functionName": "withStatement",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 76,
+          "columnNumber": 14,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 94.253
+        },
+        {
+          "id": 4266,
+          "functionName": "write",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 2287,
+          "columnNumber": 18,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 346.14
+        },
+        {
+          "id": 4265,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 346.14
+        },
+        {
+          "id": 4264,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 346.14
+        },
+        {
+          "id": 4263,
+          "functionName": "runSavepoint",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1596,
+          "columnNumber": 26,
+          "samples": 1,
+          "selfMs": 1.024,
+          "inclusiveMs": 347.164
+        },
+        {
+          "id": 4262,
+          "functionName": "updatePartRow",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 2264,
+          "columnNumber": 24,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 347.164
+        },
+        {
+          "id": 4230,
+          "functionName": "",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 1820,
+          "columnNumber": 34,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4229,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4228,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4227,
+          "functionName": "runSavepoint",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1596,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4226,
+          "functionName": "persistMessageBundleRows",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 1806,
+          "columnNumber": 35,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 498.871
+        },
+        {
+          "id": 4225,
+          "functionName": "",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 545,
+          "columnNumber": 43,
+          "samples": 1,
+          "selfMs": 15.014,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4224,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4223,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4222,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4221,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 529.295
+        },
+        {
+          "id": 4220,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 541.421
+        },
+        {
+          "id": 4219,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 541.421
+        },
+        {
+          "id": 4218,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 3380.632
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 4770,
+        "functionName": "prepare",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 17,
+        "selfMs": 92.4,
+        "inclusiveMs": 92.4
+      },
+      "stack": [
+        {
+          "id": 4770,
+          "functionName": "prepare",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 17,
+          "selfMs": 92.4,
+          "inclusiveMs": 92.4
+        },
+        {
+          "id": 4769,
+          "functionName": "prepare",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 325,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 93.332
+        },
+        {
+          "id": 4768,
+          "functionName": "prepareOneTimeQuery",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 24,
+          "columnNumber": 20,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 93.332
+        },
+        {
+          "id": 4767,
+          "functionName": "all",
+          "scriptId": "195",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/session.js",
+          "lineNumber": 130,
+          "columnNumber": 4,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 172.631
+        },
+        {
+          "id": 4766,
+          "functionName": "all",
+          "scriptId": "315",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/db.js",
+          "lineNumber": 326,
+          "columnNumber": 4,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 172.631
+        },
+        {
+          "id": 4765,
+          "functionName": "currentControlLeasesInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 41,
+          "columnNumber": 49,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 176.833
+        },
+        {
+          "id": 4764,
+          "functionName": "currentControlLeaseInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 50,
+          "columnNumber": 48,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 176.833
+        },
+        {
+          "id": 1850,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 776,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1047.276
+        },
+        {
+          "id": 1849,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 2,
+          "selfMs": 1.944,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1848,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1847,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1846,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1845,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 1,
+          "selfMs": 0.956,
+          "inclusiveMs": 8411.854
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 5040,
+        "functionName": "prepare",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 15,
+        "selfMs": 92.282,
+        "inclusiveMs": 92.282
+      },
+      "stack": [
+        {
+          "id": 5040,
+          "functionName": "prepare",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 15,
+          "selfMs": 92.282,
+          "inclusiveMs": 92.282
+        },
+        {
+          "id": 5039,
+          "functionName": "prepare",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 325,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 92.282
+        },
+        {
+          "id": 5038,
+          "functionName": "prepareOneTimeQuery",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 24,
+          "columnNumber": 20,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 92.282
+        },
+        {
+          "id": 4791,
+          "functionName": "_prepare",
+          "scriptId": "312",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/query-builders/insert.js",
+          "lineNumber": 138,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 261.11
+        },
+        {
+          "id": 4787,
+          "functionName": "run",
+          "scriptId": "312",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/query-builders/insert.js",
+          "lineNumber": 147,
+          "columnNumber": 7,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 261.11
+        },
+        {
+          "id": 4753,
+          "functionName": "acquireControlLeaseInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 83,
+          "columnNumber": 48,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 482.808
+        },
+        {
+          "id": 1849,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 2,
+          "selfMs": 1.944,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1848,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1847,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1846,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1845,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 1,
+          "selfMs": 0.956,
+          "inclusiveMs": 8411.854
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 5099,
+        "functionName": "run",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 7,
+        "selfMs": 86.453,
+        "inclusiveMs": 86.453
+      },
+      "stack": [
+        {
+          "id": 5099,
+          "functionName": "run",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 7,
+          "selfMs": 86.453,
+          "inclusiveMs": 86.453
+        },
+        {
+          "id": 5098,
+          "functionName": "#run",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 181,
+          "columnNumber": 6,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 86.453
+        },
+        {
+          "id": 5097,
+          "functionName": "withStatement",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 76,
+          "columnNumber": 14,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 87.509
+        },
+        {
+          "id": 1850,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 776,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1047.276
+        },
+        {
+          "id": 1849,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 2,
+          "selfMs": 1.944,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1848,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1847,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1846,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1845,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 1,
+          "selfMs": 0.956,
+          "inclusiveMs": 8411.854
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 4773,
+        "functionName": "run",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 11,
+        "selfMs": 83.448,
+        "inclusiveMs": 83.448
+      },
+      "stack": [
+        {
+          "id": 4773,
+          "functionName": "run",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 11,
+          "selfMs": 83.448,
+          "inclusiveMs": 83.448
+        },
+        {
+          "id": 4772,
+          "functionName": "#run",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 181,
+          "columnNumber": 6,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 83.448
+        },
+        {
+          "id": 4771,
+          "functionName": "withStatement",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 76,
+          "columnNumber": 14,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 83.448
+        },
+        {
+          "id": 4753,
+          "functionName": "acquireControlLeaseInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 83,
+          "columnNumber": 48,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 482.808
+        },
+        {
+          "id": 1849,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 2,
+          "selfMs": 1.944,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1848,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1847,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1846,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1845,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 1,
+          "selfMs": 0.956,
+          "inclusiveMs": 8411.854
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 5485,
+        "functionName": "buildWithCTE",
+        "scriptId": "176",
+        "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/dialect.js",
+        "lineNumber": 36,
+        "columnNumber": 13,
+        "samples": 1,
+        "selfMs": 67.82325,
+        "inclusiveMs": 67.82325
+      },
+      "stack": [
+        {
+          "id": 5485,
+          "functionName": "buildWithCTE",
+          "scriptId": "176",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/dialect.js",
+          "lineNumber": 36,
+          "columnNumber": 13,
+          "samples": 1,
+          "selfMs": 67.82325,
+          "inclusiveMs": 67.82325
+        },
+        {
+          "id": 5484,
+          "functionName": "buildSelectQuery",
+          "scriptId": "176",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/dialect.js",
+          "lineNumber": 156,
+          "columnNumber": 17,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 67.82325
+        },
+        {
+          "id": 5483,
+          "functionName": "_prepare",
+          "scriptId": "175",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/query-builders/select.js",
+          "lineNumber": 554,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 68.92325
+        },
+        {
+          "id": 5482,
+          "functionName": "get",
+          "scriptId": "175",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/query-builders/select.js",
+          "lineNumber": 585,
+          "columnNumber": 7,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 68.92325
+        },
+        {
+          "id": 5481,
+          "functionName": "projectToolPartInTransaction",
+          "scriptId": "434",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/tool-part-facts.ts",
+          "lineNumber": 25,
+          "columnNumber": 44,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 68.92325
+        },
+        {
+          "id": 5480,
+          "functionName": "loadedPart",
+          "scriptId": "331",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/message-store.ts",
+          "lineNumber": 118,
+          "columnNumber": 19,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 68.92325
+        },
+        {
+          "id": 4205,
+          "functionName": "",
+          "scriptId": "331",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/message-store.ts",
+          "lineNumber": 129,
+          "columnNumber": 22,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 4204,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 4203,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 4202,
+          "functionName": "use",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1445,
+          "columnNumber": 24,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 4201,
+          "functionName": "",
+          "scriptId": "331",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/message-store.ts",
+          "lineNumber": 323,
+          "columnNumber": 85,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 4200,
+          "functionName": "",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 1057,
+          "columnNumber": 21,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 4199,
+          "functionName": "",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 1057,
+          "columnNumber": 4,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 4198,
+          "functionName": "",
+          "scriptId": "296",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/index.ts",
+          "lineNumber": 403,
+          "columnNumber": 21,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 82.32825
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 5176,
+        "functionName": "values",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 9,
+        "selfMs": 65.047,
+        "inclusiveMs": 65.047
+      },
+      "stack": [
+        {
+          "id": 5176,
+          "functionName": "values",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 9,
+          "selfMs": 65.047,
+          "inclusiveMs": 65.047
+        },
+        {
+          "id": 5175,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 117,
+          "columnNumber": 28,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 65.047
+        },
+        {
+          "id": 5174,
+          "functionName": "withStatement",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 76,
+          "columnNumber": 14,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 65.047
+        },
+        {
+          "id": 5149,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 652,
+          "columnNumber": 24,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 94.228
+        },
+        {
+          "id": 5148,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 94.228
+        },
+        {
+          "id": 5147,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 94.228
+        },
+        {
+          "id": 5146,
+          "functionName": "use",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1445,
+          "columnNumber": 24,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 94.228
+        },
+        {
+          "id": 5145,
+          "functionName": "every",
+          "scriptId": "148",
+          "url": "",
+          "lineNumber": 0,
+          "columnNumber": 10,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 94.228
+        },
+        {
+          "id": 1853,
+          "functionName": "executeDurableRow",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 866,
+          "columnNumber": 73,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1753.297
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    },
+    {
+      "leaf": {
+        "id": 4812,
+        "functionName": "prepare",
+        "scriptId": "0",
+        "url": "",
+        "lineNumber": -1,
+        "columnNumber": -1,
+        "samples": 9,
+        "selfMs": 61.901,
+        "inclusiveMs": 61.901
+      },
+      "stack": [
+        {
+          "id": 4812,
+          "functionName": "prepare",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 9,
+          "selfMs": 61.901,
+          "inclusiveMs": 61.901
+        },
+        {
+          "id": 4811,
+          "functionName": "prepare",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 325,
+          "columnNumber": 9,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 61.901
+        },
+        {
+          "id": 4810,
+          "functionName": "prepareOneTimeQuery",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 24,
+          "columnNumber": 20,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 61.901
+        },
+        {
+          "id": 4809,
+          "functionName": "all",
+          "scriptId": "195",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/session.js",
+          "lineNumber": 130,
+          "columnNumber": 4,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 65.88
+        },
+        {
+          "id": 4808,
+          "functionName": "all",
+          "scriptId": "315",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/sqlite-core/db.js",
+          "lineNumber": 326,
+          "columnNumber": 4,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 65.88
+        },
+        {
+          "id": 4775,
+          "functionName": "currentControlLeasesInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 41,
+          "columnNumber": 49,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 66.782
+        },
+        {
+          "id": 4774,
+          "functionName": "currentControlLeaseInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 50,
+          "columnNumber": 48,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 66.782
+        },
+        {
+          "id": 1999,
+          "functionName": "releaseControlLeaseInTransaction",
+          "scriptId": "298",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/engine/control-lease.ts",
+          "lineNumber": 155,
+          "columnNumber": 48,
+          "samples": 1,
+          "selfMs": 1.058,
+          "inclusiveMs": 653.857
+        },
+        {
+          "id": 1850,
+          "functionName": "",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 776,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1047.276
+        },
+        {
+          "id": 1849,
+          "functionName": "run",
+          "scriptId": "161",
+          "url": "node:async_hooks",
+          "lineNumber": 78,
+          "columnNumber": 5,
+          "samples": 2,
+          "selfMs": 1.944,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1848,
+          "functionName": "provideDatabaseContext",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1426,
+          "columnNumber": 36,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1847,
+          "functionName": "",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1684,
+          "columnNumber": 8,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1846,
+          "functionName": "",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 36,
+          "columnNumber": 26,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 1532.028
+        },
+        {
+          "id": 1845,
+          "functionName": "transaction",
+          "scriptId": "158",
+          "url": "bun:sqlite",
+          "lineNumber": 391,
+          "columnNumber": 114,
+          "samples": 1,
+          "selfMs": 0.956,
+          "inclusiveMs": 8411.854
+        },
+        {
+          "id": 1844,
+          "functionName": "transaction",
+          "scriptId": "171",
+          "url": "file:///D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+9151dc89920f49e2/node_modules/drizzle-orm/bun-sqlite/session.js",
+          "lineNumber": 33,
+          "columnNumber": 12,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 8584.585
+        },
+        {
+          "id": 1843,
+          "functionName": "immediateTransaction",
+          "scriptId": "152",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+          "lineNumber": 1672,
+          "columnNumber": 41,
+          "samples": 1,
+          "selfMs": 13.236,
+          "inclusiveMs": 8597.821
+        },
+        {
+          "id": 1842,
+          "functionName": "dispatchDurableTargets",
+          "scriptId": "284",
+          "url": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/bus/index.ts",
+          "lineNumber": 669,
+          "columnNumber": 111,
+          "samples": 1,
+          "selfMs": 9.449,
+          "inclusiveMs": 10231.288
+        },
+        {
+          "id": 154,
+          "functionName": "",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 153,
+          "functionName": "processTicksAndRejections",
+          "scriptId": "10",
+          "url": "",
+          "lineNumber": 6,
+          "columnNumber": 38,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        },
+        {
+          "id": 1,
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1,
+          "samples": 0,
+          "selfMs": 0,
+          "inclusiveMs": 15508
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:12.690Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "78deffad-32de-473d-ace0-74f6ae42038b",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:12.692Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "78deffad-32de-473d-ace0-74f6ae42038b",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:26.387Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1258d3d5-927f-4425-befe-15237970ccd0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:26.388Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1258d3d5-927f-4425-befe-15237970ccd0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:37.545Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "c2966fc6-6862-45b1-ac73-393256ca1c49",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:37.545Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "c2966fc6-6862-45b1-ac73-393256ca1c49",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:47.541Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1481bc3c-7043-42ea-a430-65c88ed26dd2",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:47.542Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1481bc3c-7043-42ea-a430-65c88ed26dd2",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:48.111Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "63babdd7-5cca-4a00-8173-f992d84bd4c1",
+        "method": "GET",
+        "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:48.114Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "63babdd7-5cca-4a00-8173-f992d84bd4c1",
+        "method": "GET",
+        "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:57.534Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5f0149fa-efaa-48b5-bddb-966b3f5fdc79",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:26:57.534Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5f0149fa-efaa-48b5-bddb-966b3f5fdc79",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:07.576Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e66b45b0-e21e-4bc8-b32d-e2f3f509f46e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:07.576Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e66b45b0-e21e-4bc8-b32d-e2f3f509f46e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:17.281Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4d64b3fd-849d-4d94-a5a0-0c3866a65cf0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:17.282Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4d64b3fd-849d-4d94-a5a0-0c3866a65cf0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:17.543Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4c841008-42e3-469c-8c18-1ec092d17952",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:17.544Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4c841008-42e3-469c-8c18-1ec092d17952",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:18.302Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "29d42644-6350-4051-ae85-3399add9fa5b",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:18.302Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "29d42644-6350-4051-ae85-3399add9fa5b",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:19.320Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "6e0c564f-020b-4681-a9b2-f837add12e4a",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:19.320Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "6e0c564f-020b-4681-a9b2-f837add12e4a",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:20.340Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d1bd0079-e010-463d-aed7-a40be1db213e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:20.340Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d1bd0079-e010-463d-aed7-a40be1db213e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:21.366Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e750dd76-faf2-4e7c-b01f-c108a2dea3f7",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:21.366Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e750dd76-faf2-4e7c-b01f-c108a2dea3f7",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:22.373Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "90f6319f-e12d-4dd0-b21f-3d768eea24c0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:22.373Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "90f6319f-e12d-4dd0-b21f-3d768eea24c0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:23.382Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "c636f25a-e583-4c10-98d9-64297d9368e1",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:23.382Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "c636f25a-e583-4c10-98d9-64297d9368e1",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:24.391Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "6f561ea0-d074-4369-852c-8200b877321e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:24.392Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "6f561ea0-d074-4369-852c-8200b877321e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:25.396Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "919d0b14-3cf9-433b-b639-fdcf955726b8",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:25.397Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "919d0b14-3cf9-433b-b639-fdcf955726b8",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:26.407Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f6fe7b0c-28e0-4560-b1f7-d3d7df584313",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:26.407Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f6fe7b0c-28e0-4560-b1f7-d3d7df584313",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:27.412Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d9991e41-e0b4-4a1a-a58e-16c1630f7c38",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:27.413Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d9991e41-e0b4-4a1a-a58e-16c1630f7c38",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:27.537Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "215bf036-a332-4bb6-82a6-c790c1400f63",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:27.537Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "215bf036-a332-4bb6-82a6-c790c1400f63",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:28.424Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "9aeda65d-9a5d-4b50-99ad-1102da231c20",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:28.424Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "9aeda65d-9a5d-4b50-99ad-1102da231c20",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:37.534Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "be915d10-a6a4-42e1-b4a5-a3a925d5c8a1",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:37.534Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "be915d10-a6a4-42e1-b4a5-a3a925d5c8a1",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:38.485Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "ace9042b-a98f-47f4-b797-d8a09bfe586c",
+        "method": "POST",
+        "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:48.405Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "ace9042b-a98f-47f4-b797-d8a09bfe586c",
+        "method": "POST",
+        "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 9920
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:48.542Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "98a7c801-44c1-4cac-a445-ead7556ab49a",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:48.543Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "98a7c801-44c1-4cac-a445-ead7556ab49a",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:57.536Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "915bfa1e-29e8-4448-9050-ef414dc39c13",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:27:57.536Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "915bfa1e-29e8-4448-9050-ef414dc39c13",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:07.547Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5587b363-5355-442d-971e-d377992a0d15",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:07.547Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5587b363-5355-442d-971e-d377992a0d15",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:17.540Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "b513710d-cc75-4f3e-810d-408d82374c77",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:17.541Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "b513710d-cc75-4f3e-810d-408d82374c77",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:27.534Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "cfa125fe-bbec-463b-9d82-127dc9cca44e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:27.534Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "cfa125fe-bbec-463b-9d82-127dc9cca44e",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:32.830Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "a659cc86-ebca-472a-8a73-450c0a734f5f",
+        "method": "POST",
+        "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:48.226Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "a659cc86-ebca-472a-8a73-450c0a734f5f",
+        "method": "POST",
+        "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 15396
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:48.402Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f6a8ee74-8b08-4af2-b13f-c6b521a2532b",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:48.402Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f6a8ee74-8b08-4af2-b13f-c6b521a2532b",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:48.403Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "6353582f-8e2a-4fca-9ea5-a45b75197710",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:48.404Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "6353582f-8e2a-4fca-9ea5-a45b75197710",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:48.408Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f72ab7b1-c91e-4f7b-9ada-7f5765270116",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:48.408Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f72ab7b1-c91e-4f7b-9ada-7f5765270116",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:57.542Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "728e4169-aff1-4df6-b950-7e708ebb6d12",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-13T21:28:57.543Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "728e4169-aff1-4df6-b950-7e708ebb6d12",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    }
+  ],
+  "boundary": "Sampling and request timing, not an automated UI assertion. Durations include sampling gaps; inspect stacks and actual write statements before attributing CPU cost."
+}

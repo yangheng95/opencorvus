@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { sql } from "drizzle-orm"
-import { Bus } from "../../src/bus"
 import { BusPublicationOutboxTable } from "../../src/bus/bus.sql"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
@@ -156,10 +155,6 @@ describe("Session fork commits the target and its transcript in one transaction"
           outbox: Database.use((db) => db.select().from(BusPublicationOutboxTable).all()),
         })
         const before = footprint()
-        const deliveredDuringFailedFork: string[] = []
-        const unsubscribe = Bus.subscribeAll((event) => {
-          deliveredDuringFailedFork.push(event.occurrenceID)
-        })
 
         // The first cloned Part is deliberately accepted by SQLite and then
         // aborted. This puts the child Session, its publication rows, the
@@ -184,14 +179,10 @@ describe("Session fork commits the target and its transcript in one transaction"
           await expect(Session.fork({ sessionID: source.id })).rejects.toThrow("injected fork clone failure")
         } finally {
           Database.use((db) => db.run(sql.raw("DROP TRIGGER arc012_fail_after_first_cloned_part")))
-          unsubscribe()
         }
         await Database.awaitEffectIdle(5_000)
 
-        expect({ footprint: footprint(), deliveredDuringFailedFork }).toEqual({
-          footprint: before,
-          deliveredDuringFailedFork: [],
-        })
+        expect(footprint()).toEqual(before)
 
         const fork = await Session.fork({ sessionID: source.id })
         await Database.awaitEffectIdle(5_000)

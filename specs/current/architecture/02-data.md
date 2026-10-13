@@ -32,6 +32,16 @@ Message 开放，终态重放保留原 completed 时间。各 Tool 的 park/hand
 进程退出不会移除启动恢复入口。权限请求首写与身份检查同事务，读取按 request identity
 而非 requested 事件条数计数。Mission 的中断归属仍由正式 process-recovery 协议结算。
 
+## 事件投递的数据库提交
+
+Bus的投递请求注册、control lease取得、成功/失败receipt加lease释放及phase receipt，
+通过唯一`bus/delivery-transaction`提交原语在每个事件循环轮次合并最多256份同步数据库写入。
+每份写入用当前Database savepoint隔离输入/租约错误；数据库不可用则整批回滚。
+调用者只有在真实commit/rollback后才收到Promise结果，subscriber回调始终在事务外。
+已存在的publication reservation与Project activity拥有排队和提交的完整生命周期，
+outbox及规范receipt/lease仍是唯一持久事实，重试和重启读取原occurrence，不另建投递状态。
+该有界队列只减少物理提交并让出事件循环，不改变事件内容、phase顺序或SQLite持久化配置。
+
 ## 数据库版本化迁移
 
 当前版本从新建的版本1基线开始支持自动迁移。唯一 registry 位于

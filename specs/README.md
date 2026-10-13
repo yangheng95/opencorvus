@@ -2,6 +2,8 @@
 
 - [持续目标 UI/UX](records/2026-10/2026-10-14-continuous-goal-ui-ux.md)：三模式统一入口、状态、预算控制和真实桌面验收。
 
+- [长历史分叉耗时](records/2026-10/2026-10-14-fork-latency.md)：真实长引用、运行时采样与原子消息/事件共享机制。
+
 - [Provider Test 在途生命周期](records/2026-10/2026-10-14-provider-test-lifecycle.md)：独立补验并行、Key、删除重建与作用域接受边界。
 
 - [404 Task Git 与 Question 重连](records/2026-10/2026-10-14-task-git-question-reconnect-404.md)：冻结 Git 目录实证、同页草稿重连与合法 Work/Mission 后续验收。

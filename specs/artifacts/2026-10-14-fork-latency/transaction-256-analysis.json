@@ -1,0 +1,145 @@
+{
+  "window": {
+    "start": 1791929006799,
+    "end": 1791929014524
+  },
+  "count": 291,
+  "totals": {
+    "beginMs": 3.632099999977072,
+    "bodyMs": 1928.8561000000154,
+    "commitMs": 3875.6284000000123
+  },
+  "groups": [
+    {
+      "count": 22,
+      "beginMs": 0.5376999999971304,
+      "bodyMs": 1579.457899999994,
+      "commitMs": 3868.267100000019,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at flush (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\delivery-transaction.ts:25:30)"
+    },
+    {
+      "count": 1,
+      "beginMs": 0.026700000002165325,
+      "bodyMs": 285.53740000000107,
+      "commitMs": 2.594099999998434,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\session.ts:1842:37)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\hono-base.js:308:31)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:925:45)"
+    },
+    {
+      "count": 1,
+      "beginMs": 0.006300000000919681,
+      "bodyMs": 0.719199999999546,
+      "commitMs": 2.379499999999098,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at transaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1654:31)\n    at runUnlocked (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:189:28)\n    at withKeyedLock (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\lock.ts:46:19)\n    at run (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:170:12)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:366:21)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1173:15)\n    at run (node:async_hooks:99:29)\n    at run (node:async_hooks:99:29)"
+    },
+    {
+      "count": 264,
+      "beginMs": 2.9972999999772583,
+      "bodyMs": 61.940700000021025,
+      "commitMs": 2.2920999999951164,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at accept (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\scheduler\\event-service.ts:539:28)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\scheduler\\event-service.ts:251:15)\n    at dispatchDurableTargets (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\index.ts:779:22)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\index.ts:891:17)\n    at async executeDurableRow (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\index.ts:879:19)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "count": 1,
+      "beginMs": 0.037299999999959255,
+      "bodyMs": 0.5487999999968451,
+      "commitMs": 0.07770000000164146,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at acquire (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\runtime\\durable-execution-capacity.ts:120:13)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:960:57)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@ai-sdk+provider-utils@5.0.59+68a1e3a0c4588df3\\node_modules\\@ai-sdk\\provider-utils\\dist\\index.js:3543:26)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@ai-sdk+provider-utils@5.0.59+68a1e3a0c4588df3\\node_modules\\@ai-sdk\\provider-utils\\dist\\index.js:3514:133)\n    at async doStream (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@ai-sdk+openai@4.0.92+68a1e3a0c4588df3\\node_modules\\@ai-sdk\\openai\\dist\\index.js:6924:54)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\ai@7.0.138+68a1e3a0c4588df3\\node_modules\\ai\\dist\\index.js:15861:45)\n    at async wrapStream (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\llm.ts:81:36)\n    at async doStream (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\ai@7.0.138+68a1e3a0c4588df3\\node_modules\\ai\\dist\\index.js:15862:30)"
+    },
+    {
+      "count": 1,
+      "beginMs": 0.01929999999993015,
+      "bodyMs": 0.17920000000231084,
+      "commitMs": 0.010099999999511056,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at init (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:434:16)\n    at InstanceBootstrap (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:101:26)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "count": 1,
+      "beginMs": 0.007499999999708962,
+      "bodyMs": 0.47290000000066357,
+      "commitMs": 0.007799999999406282,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at transaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1654:31)\n    at runUnlocked (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:183:36)\n    at withKeyedLock (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\lock.ts:46:19)\n    at run (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:170:12)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:366:21)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1173:15)\n    at run (node:async_hooks:99:29)\n    at run (node:async_hooks:99:29)"
+    }
+  ],
+  "slow": [
+    {
+      "beganAt": 1791929008233,
+      "durationMs": 323.9989000000023,
+      "beginMs": 0.01660000000265427,
+      "bodyMs": 91.86149999999907,
+      "commitMs": 232.1208000000006,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929008715,
+      "durationMs": 357.1307000000015,
+      "beginMs": 0.02149999999892316,
+      "bodyMs": 69.57670000000144,
+      "commitMs": 287.53250000000116,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929009343,
+      "durationMs": 466.20080000000235,
+      "beginMs": 0.019700000000739237,
+      "bodyMs": 108.8757000000005,
+      "commitMs": 357.3054000000011,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929009958,
+      "durationMs": 408.7534000000014,
+      "beginMs": 0.029699999999138527,
+      "bodyMs": 56.45850000000064,
+      "commitMs": 352.26520000000164,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929010525,
+      "durationMs": 472.1810000000005,
+      "beginMs": 0.016100000000733417,
+      "bodyMs": 94.58280000000013,
+      "commitMs": 377.5820999999996,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929011108,
+      "durationMs": 549.5914999999986,
+      "beginMs": 0.02299999999740976,
+      "bodyMs": 91.75,
+      "commitMs": 457.8185000000012,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929011763,
+      "durationMs": 408.6837999999989,
+      "beginMs": 0.026499999999941792,
+      "bodyMs": 108.78219999999783,
+      "commitMs": 299.8751000000011,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929012312,
+      "durationMs": 594.2517000000007,
+      "beginMs": 0.049299999998766,
+      "bodyMs": 104.14150000000154,
+      "commitMs": 490.0609000000004,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929013035,
+      "durationMs": 560.6601999999984,
+      "beginMs": 0.01749999999810825,
+      "bodyMs": 97.80719999999928,
+      "commitMs": 462.83550000000105,
+      "outcome": "returned"
+    },
+    {
+      "beganAt": 1791929013707,
+      "durationMs": 569.5815000000002,
+      "beginMs": 0.01969999999710126,
+      "bodyMs": 94.76320000000123,
+      "commitMs": 474.7986000000019,
+      "outcome": "returned"
+    }
+  ]
+}
