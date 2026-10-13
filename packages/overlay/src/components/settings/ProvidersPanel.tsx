@@ -25,7 +25,7 @@ import { activeDirectory } from "../../services/workspace"
 import {
   authenticateSelectedProvider,
   providerAuthMethods,
-  providerEntry,
+  providerApiKeyConfigured,
   providerState,
   testProviderConnection,
   type AuthDialogCallbacks,
@@ -690,10 +690,6 @@ export default function ProvidersPanel() {
     }
   }
 
-  function providerConfig(id: string): any {
-    return providerConfigs()[id]
-  }
-
   function removeProjectApiKeyOverride(cfg: Record<string, any>, providerId: string): void {
     const providers =
       cfg.provider && typeof cfg.provider === "object" && !Array.isArray(cfg.provider) ? cfg.provider : null
@@ -721,11 +717,11 @@ export default function ProvidersPanel() {
     if (cfg.disabled_providers.length === 0) delete cfg.disabled_providers
   }
 
-  function providerHasSavedApiKey(id: string): boolean {
-    const override = providerConfig(id)?.options?.apiKey
-    if (typeof override === "string" && override.trim() !== "") return true
-    const entry = providerEntry(id)
-    return typeof entry?.key === "string" && entry.key.trim() !== ""
+  function apiKeyPlaceholder(id?: string): string {
+    if (!id) return t("provider.api_key.placeholder_empty")
+    const configured = savingKey().has(id) ? undefined : providerApiKeyConfigured(id)
+    if (configured === undefined) return t("provider.api_key.placeholder_unknown")
+    return t(configured ? "provider.api_key.placeholder_configured" : "provider.api_key.placeholder_empty")
   }
 
   function apiKeyInput(id: string): string {
@@ -830,11 +826,7 @@ export default function ProvidersPanel() {
           <TextField.Input
             type="password"
             autocomplete="off"
-            placeholder={
-              providerHasSavedApiKey(id())
-                ? t("provider.api_key.placeholder_configured")
-                : t("provider.api_key.placeholder_empty")
-            }
+            placeholder={apiKeyPlaceholder(id())}
             value={apiKeyInput(id())}
             onInput={(e) => setApiKeyInput(id(), e.currentTarget.value)}
             data-testid={`provider-api-key-input-${id()}`}
@@ -1303,11 +1295,7 @@ export default function ProvidersPanel() {
               <TextField.Input
                 type="password"
                 autocomplete="off"
-                placeholder={
-                  editing() && providerHasSavedApiKey(editing()!)
-                    ? t("provider.api_key.placeholder_configured")
-                    : t("provider.api_key.placeholder_empty")
-                }
+                placeholder={apiKeyPlaceholder(editing() ?? undefined)}
                 value={formApiKey()}
                 onInput={(e) => {
                   invalidateDiscovery()

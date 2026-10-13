@@ -14391,6 +14391,10 @@
       },
       "Provider": {
         "properties": {
+          "apiKeyConfigured": {
+            "description": "Observed non-empty API-key configuration; omitted when unknown. Does not indicate credential validity or runnable models.",
+            "type": "boolean"
+          },
           "env": {
             "items": {
               "type": "string"

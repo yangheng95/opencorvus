@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 零模型服务商正确显示已保存或已配置的 API Key；凭据、配置或目录读取失败时显示状态暂不可用，恢复后重新确认。行内与编辑输入使用同一事实，OAuth 登录不会被误当作 API Key，模型选择继续只显示真实可用模型。
+
 - 已保存密钥的服务商可在尚未配置模型时发现模型；OpenCorvus 实时目录刷新可恢复空模型目录或已被模型筛选清空的目录。全局与项目地址按各自配置解析，模型选择仍只显示真实可用模型。
 
 - 表格的工作表标签、侧栏和通知名称随界面语言切换；已打开的保护范围列表同步更新标题与正文，并保留工作表编辑、侧栏选项和宽度。
@@ -61,6 +63,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Providers with no models correctly show saved or configured API keys. Credential, configuration or catalog read failures show an unavailable status until a successful read. Inline and edit inputs share the same fact; OAuth sign-in is distinct from API-key configuration, and model selection retains usable models only.
 
 - Providers with saved keys can discover models before any model has been configured. OpenCorvus live refresh can restore empty catalogs or catalogs fully filtered by model settings. Global and project discovery use their own configured endpoints, while model selection continues to show runnable models.
 

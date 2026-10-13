@@ -271,6 +271,7 @@ export namespace Provider {
       environment?: Record<string, string | undefined>
       pluginHooks?: () => Promise<Awaited<ReturnType<typeof Plugin.list>>>
       includeCustomLoaders?: boolean
+      configAvailable?: boolean
     } = {},
   ): Promise<ProviderState> {
     using _ = log.time("state")
@@ -292,9 +293,11 @@ export namespace Provider {
     const disabled = new Set(config.disabled_providers ?? [])
     const enabled = config.enabled_providers ? new Set(config.enabled_providers) : null
     let savedAuth: Record<string, Auth.Info> = {}
+    let authAvailable = true
     try {
       savedAuth = await Auth.all()
     } catch (error) {
+      authAvailable = false
       issues.push(loadIssue("auth.read", error))
     }
     const plugins = await (options.pluginHooks?.() ?? Plugin.list()).catch((error) => {
@@ -474,6 +477,7 @@ export namespace Provider {
       // When the provider declares more than one env candidate (e.g. ["AZURE_KEY", "OPENAI_KEY"]),
       // we cannot guess which one carries the active credential. Leave key unset and let the SDK pick.
       if (!isDashScope && provider.env.length > 1) continue
+      provider.apiKeyConfigured = true
       mergeProvider(providerID, {
         source: "env",
         key: apiKey,
@@ -489,6 +493,7 @@ export namespace Provider {
       try {
         const key = await dashscopeKey(env)
         if (key) {
+          if (database["alibaba-cn"]) database["alibaba-cn"].apiKeyConfigured = true
           mergeProvider("alibaba-cn", {
             source: "env",
             key,
@@ -617,6 +622,33 @@ export namespace Provider {
       log.info("found", { providerID })
     }
 
+    const nonemptyKey = (value: unknown): value is string => typeof value === "string" && value.trim() !== ""
+    for (const [providerID, declaration] of Object.entries(database)) {
+      const configured = providers[providerID]
+      const auth = savedAuth[providerID]
+      const configKey = options.configAvailable === false ? undefined : config.provider?.[providerID]?.options?.apiKey
+      const observedKey =
+        declaration.apiKeyConfigured === true ||
+        nonemptyKey(configKey) ||
+        (auth?.type === "api" && nonemptyKey(auth.key)) ||
+        nonemptyKey(configured?.key)
+      const credentialIssue = issues.some(
+        (issue) =>
+          issue.providerID === providerID &&
+          ["provider.credential", "provider.loader", "plugin.auth"].includes(issue.phase),
+      )
+      const opaqueKey = auth?.type !== "oauth" && nonemptyKey(configured?.options.apiKey)
+      const unknown =
+        !authAvailable ||
+        options.configAvailable === false ||
+        credentialIssue ||
+        declaration.env.length > 1 ||
+        opaqueKey
+      const apiKeyConfigured = observedKey ? true : unknown ? undefined : false
+      declaration.apiKeyConfigured = apiKeyConfigured
+      if (configured) configured.apiKeyConfigured = apiKeyConfigured
+    }
+
     return {
       config,
       models: languages,
@@ -632,11 +664,11 @@ export namespace Provider {
   const globalScopedStates = new CanonicalCache<Promise<ProviderState>>()
   const defaultStates = createInstanceState(() => new CanonicalCache<Promise<ProviderState>>(), undefined, "provider")
 
-  function configStateSource(config: Config.Info) {
+  function configStateSource(config: Config.Info, configAvailable = true) {
     const snapshot = Config.Info.parse(config)
     return {
       snapshot,
-      source: canonicalDigestSource("opencorvus.provider.config-state.v1", snapshot),
+      source: canonicalDigestSource("opencorvus.provider.config-state.v2", { config: snapshot, configAvailable }),
     }
   }
 
@@ -655,36 +687,32 @@ export namespace Provider {
     return next
   }
 
-  async function stateFor(config?: Config.Info): Promise<ProviderState> {
+  async function stateFor(config?: Config.Info, configAvailable = true): Promise<ProviderState> {
     const isDefault = !config
     if (!config) config = await Config.get()
     const snapshot = Config.Info.parse(config)
-    if (containsRuntimeCapability(snapshot)) return buildState(snapshot)
-    const { source } = configStateSource(snapshot)
-    if (isDefault) return cachedState(defaultStates(), source, () => buildState(snapshot))
+    const init = () => buildState(snapshot, { configAvailable })
+    if (containsRuntimeCapability(snapshot)) return init()
+    const { source } = configStateSource(snapshot, configAvailable)
+    if (isDefault) return cachedState(defaultStates(), source, init)
     const directory = currentProjectDirectory()
     const states = scopedStates.get(directory) ?? new CanonicalCache<Promise<ProviderState>>()
     scopedStates.set(directory, states)
-    return cachedState(states, source, () => buildState(snapshot))
+    return cachedState(states, source, init)
   }
 
-  function globalStateFor(config: Config.Info): Promise<ProviderState> {
+  function globalStateFor(config: Config.Info, configAvailable = true): Promise<ProviderState> {
     const snapshot = Config.Info.parse(config)
-    if (containsRuntimeCapability(snapshot)) {
-      return buildState(snapshot, {
-        environment: { ...process.env },
-        pluginHooks: Plugin.listGlobalProviderHooks,
-        includeCustomLoaders: false,
-      })
-    }
-    const { source } = configStateSource(snapshot)
-    return cachedState(globalScopedStates, source, () =>
+    const init = () =>
       buildState(snapshot, {
         environment: { ...process.env },
         pluginHooks: Plugin.listGlobalProviderHooks,
         includeCustomLoaders: false,
-      }),
-    )
+        configAvailable,
+      })
+    if (containsRuntimeCapability(snapshot)) return init()
+    const { source } = configStateSource(snapshot, configAvailable)
+    return cachedState(globalScopedStates, source, init)
   }
 
   export async function reset(): Promise<void> {
@@ -827,16 +855,16 @@ export namespace Provider {
     return globalStateFor(config).then(runnableProviders)
   }
 
-  export async function catalog(opts?: { config?: Config.Info }) {
-    return stateFor(opts?.config).then((state) => ({
+  export async function catalog(opts?: { config?: Config.Info; configAvailable?: boolean }) {
+    return stateFor(opts?.config, opts?.configAvailable).then((state) => ({
       database: state.database,
       providers: runnableProviders(state),
       issues: state.issues,
     }))
   }
 
-  export async function catalogGlobal(config: Config.Info) {
-    return globalStateFor(config).then((state) => ({
+  export async function catalogGlobal(config: Config.Info, configAvailable = true) {
+    return globalStateFor(config, configAvailable).then((state) => ({
       database: state.database,
       providers: runnableProviders(state),
       issues: state.issues,

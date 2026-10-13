@@ -1,0 +1,149 @@
+{
+  "boundary": "Production HTTP with isolated generated sample Auth and own registry/model participant; key bytes excluded; no online inference",
+  "outcomes": {
+    "globalCatalog": {
+      "status": 200,
+      "body": {
+        "connected": [
+          "owned-ready"
+        ],
+        "issues": [],
+        "providers": [
+          {
+            "id": "openai",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "opencorvus",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "kilo",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-bootstrap",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-empty",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-configzero",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-ready",
+            "models": [
+              "ready-known"
+            ],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-env",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          }
+        ]
+      }
+    },
+    "projectCatalog": {
+      "status": 200,
+      "body": {
+        "connected": [
+          "owned-ready"
+        ],
+        "issues": [],
+        "providers": [
+          {
+            "id": "openai",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "opencorvus",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "kilo",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-bootstrap",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-empty",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-configzero",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-ready",
+            "models": [
+              "ready-known"
+            ],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-env",
+            "models": [],
+            "apiKeyConfigured": "unknown",
+            "rawKeyPresent": false
+          }
+        ]
+      }
+    },
+    "globalSavedZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "global-discovered-a",
+          "global-discovered-b"
+        ],
+        "count": 2
+      }
+    },
+    "projectSavedZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "project-discovered-a",
+          "project-discovered-b"
+        ],
+        "count": 2
+      }
+    }
+  }
+}

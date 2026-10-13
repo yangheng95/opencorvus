@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Provider API Key 配置事实](2026-10-13-provider-credential-presence.md)：同源投影、读取失败与真实恢复验收。
+
 - [389 成员刷新失败可读性](2026-10-13-child-refresh-retention-389.md)：错误、已有来源、键盘详情及真实恢复。
 
 - [Native外输出调查](2026-10-13-native-output-sink-audit.md)：原未知错误、同句柄观测和完整横审计划。

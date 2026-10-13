@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Provider API Key 配置事实](records/2026-10/2026-10-13-provider-credential-presence.md)：非敏感三态、当前观察与零模型显示。
+
 - [389 成员刷新失败可读性](artifacts/2026-10-05-connection-workspace-authority/child-refresh-retention-plan-389.md)：已有Sources、真实读取错误和重试。
 
 - [Native外输出接收端调查](records/2026-10/2026-10-13-native-output-sink-audit.md)：真实管道、逐分支结算和共享生产矩阵。

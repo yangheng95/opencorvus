@@ -595,7 +595,9 @@ export const GlobalRoutes = lazy(() =>
       }),
       async (c) => {
         const configIssues: Provider.LoadIssue[] = []
+        let configAvailable = true
         const config = await Config.getGlobal().catch((error) => {
+          configAvailable = false
           const authError = Auth.findReadError(error)
           configIssues.push({
             phase: authError ? "auth.read" : "config.read",
@@ -605,7 +607,7 @@ export const GlobalRoutes = lazy(() =>
         })
         const disabled = new Set(config.disabled_providers ?? [])
         const enabled = config.enabled_providers ? new Set(config.enabled_providers) : undefined
-        const loaded = await Provider.catalogGlobal(config)
+        const loaded = await Provider.catalogGlobal(config, configAvailable)
         const database = loaded.database
         const connected = loaded.providers
         const providers = Object.fromEntries(

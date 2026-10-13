@@ -4111,6 +4111,10 @@ export type PromptBudgetOverflowError = {
 }
 
 export type Provider = {
+  /**
+   * Observed non-empty API-key configuration; omitted when unknown. Does not indicate credential validity or runnable models.
+   */
+  apiKeyConfigured?: boolean
   env: Array<string>
   id: string
   key?: string

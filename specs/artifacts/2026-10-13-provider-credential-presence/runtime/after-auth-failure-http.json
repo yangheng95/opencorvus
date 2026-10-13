@@ -1,0 +1,31 @@
+{
+  "time": "2026-10-13T13:50:11.6583407Z",
+  "facts": [
+    {
+      "id": "owned-bootstrap",
+      "apiKeyConfigured": null,
+      "models": 0
+    },
+    {
+      "id": "owned-empty",
+      "apiKeyConfigured": null,
+      "models": 0
+    },
+    {
+      "id": "owned-configzero",
+      "apiKeyConfigured": true,
+      "models": 0
+    },
+    {
+      "id": "owned-env",
+      "apiKeyConfigured": true,
+      "models": 0
+    }
+  ],
+  "issues": [
+    {
+      "phase": "auth.read",
+      "message": "AuthReadError: Saved Provider credentials contain malformed JSON"
+    }
+  ]
+}

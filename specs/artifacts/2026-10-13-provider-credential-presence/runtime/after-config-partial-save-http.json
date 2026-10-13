@@ -1,0 +1,19 @@
+{
+  "time": "2026-10-13T13:51:30.4514326Z",
+  "http": 200,
+  "ids": [
+    "openai",
+    "opencorvus",
+    "kilo"
+  ],
+  "issues": [
+    {
+      "phase": "config.read",
+      "type": "ConfigJsonError"
+    }
+  ],
+  "savedAuthKind": "api",
+  "savedKeyNonempty": true,
+  "zeroModels": 0,
+  "scope": "owned global; only synthetic credentials"
+}

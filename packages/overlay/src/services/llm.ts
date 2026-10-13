@@ -50,6 +50,7 @@ export interface ProviderEntry {
   id: string
   name?: string
   key?: string
+  apiKeyConfigured?: boolean
   env?: string[]
   models?: Record<string, any>
 }
@@ -168,6 +169,17 @@ export function providerConnected(providerID: string): boolean {
   return Array.isArray(appStore.providerCatalog?.connected) && appStore.providerCatalog.connected.includes(providerID)
 }
 
+function providerCatalogUnavailable(): boolean {
+  return appStore.providerLoadIssues.some((issue) => issue.resource === "catalog")
+}
+
+/** Current API-key configuration evidence is independent of runnable models. */
+export function providerApiKeyConfigured(providerID: string): boolean | undefined {
+  if (providerCatalogUnavailable()) return undefined
+  const configured = providerEntry(providerID)?.apiKeyConfigured
+  return typeof configured === "boolean" ? configured : undefined
+}
+
 /** Resolve the server-published account-usage capability for one Provider. */
 export function providerAccountUsageCapability(providerID: string): ProviderAccountUsageCapability | undefined {
   const capabilities = appStore.providerCatalog?.accountUsage
@@ -223,17 +235,21 @@ export function providerPreferredOauthMethod(providerID: string): AuthMethodItem
 
 /**
  * Compute the current status info for a provider.
- * Accepts an optional config override (
  * Accepts an optional modelID to match against providerTest.
  */
-export function providerState(providerID: string, configOverride?: any, currentModelID?: string): ProviderStatusInfo {
-  const config = configOverride ?? appStore.config ?? {}
+export function providerState(providerID: string, currentModelID?: string): ProviderStatusInfo {
   const item = providerEntry(providerID)
   const connected = providerConnected(providerID)
   const authMethods = providerAuthMethods(providerID)
-  const configKey = config?.provider?.[providerID]?.options?.apiKey
-  const key = configKey || item?.key
+  const apiKeyConfigured = providerApiKeyConfigured(providerID)
   const tested = appStore.providerTest
+
+  const unknownKey: ProviderStatusInfo = {
+    tone: "warn",
+    label: t("llm.status.api_key_unknown"),
+    detail: t("llm.detail.api_key_unknown"),
+  }
+  if (providerCatalogUnavailable()) return unknownKey
 
   // If a test result is available for this exact (provider, model) pair, use it.
   if (tested?.providerID === providerID && (currentModelID === undefined || tested?.modelID === currentModelID)) {
@@ -251,13 +267,14 @@ export function providerState(providerID: string, configOverride?: any, currentM
       detail: t("llm.detail.connected"),
     }
   }
-  if (key) {
+  if (apiKeyConfigured === true) {
     return {
       tone: "ready",
       label: t("llm.status.configured"),
       detail: t("llm.detail.configured"),
     }
   }
+  if (apiKeyConfigured === undefined) return unknownKey
   if (authMethods.length > 0) {
     return {
       tone: "warn",
@@ -333,7 +350,7 @@ export interface ConnectedModelOption {
  * Return the sorted provider list (connected first, then alphabetical).
  * Each entry includes a `stateLabel` derived from providerState.
  */
-export function sortedProviders(config?: any): SortedProvider[] {
+export function sortedProviders(): SortedProvider[] {
   const catalog = appStore.providerCatalog
   const all: ProviderEntry[] = Array.isArray(catalog?.all) ? [...catalog.all] : []
   const connected: string[] = catalog?.connected ?? []
@@ -347,7 +364,7 @@ export function sortedProviders(config?: any): SortedProvider[] {
 
   return all.map((item) => ({
     ...item,
-    stateLabel: providerState(item.id, config).label,
+    stateLabel: providerState(item.id).label,
   }))
 }
 

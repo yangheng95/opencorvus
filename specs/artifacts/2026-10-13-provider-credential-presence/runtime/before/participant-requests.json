@@ -1,0 +1,20 @@
+[
+  {
+    "method": "GET",
+    "path": "/global/v1/models",
+    "status": 200,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/project/v1/models",
+    "status": 200,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/project/v1/models",
+    "status": 200,
+    "sampleCredentialMatched": true
+  }
+]
