@@ -42,6 +42,8 @@ const conversationEffects = [
   "mission_state",
 ] as const
 
+const continuousGoalTools = ["create_continuous_goal", "get_continuous_goal", "update_continuous_goal"] as const
+
 describe("execution authority Tool surfaces", () => {
   test("binds the source and generated general Mission Skill to the ordered Mission Panel leaf contract", async () => {
     const generated = builtinMissionSkillSources.find((item) => item.name === "general")
@@ -75,17 +77,18 @@ describe("execution authority Tool surfaces", () => {
       taskBuild: AgentToolPool.runtimeTemplateAssignment("build"),
     }).toEqual({
       coding: {
-        global: ["delegate_agent", "skill_market", ...conversationEffects],
+        global: ["delegate_agent", "skill_market", ...continuousGoalTools, ...conversationEffects],
         private: [],
       },
       chat: {
-        global: ["delegate_agent", "skill_market", ...conversationEffects, ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS],
+        global: ["delegate_agent", "skill_market", ...continuousGoalTools, ...conversationEffects, ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS],
         private: [],
       },
       work: {
         global: [
           "delegate_agent",
           "skill_market",
+          ...continuousGoalTools,
           ...conversationEffects,
           ...RIGHT_SIDEBAR_PANEL_LEAF_TOOL_IDS,
           ...WORK_ARTIFACT_TOOL_IDS,
@@ -98,6 +101,7 @@ describe("execution authority Tool surfaces", () => {
       },
       mission: {
         global: [
+          ...continuousGoalTools,
           "skill_market",
           ...conversationEffects.filter((toolID) => toolID !== "mission_state" && toolID !== "skill"),
           "mission_skill",

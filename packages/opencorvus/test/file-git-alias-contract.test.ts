@@ -81,6 +81,14 @@ test("real Git HTTP reads share dot-alias content and physical revision with exa
     for (const file of files) await fs.writeFile(path.join(project.path, file), `${wave}\ncommon-second\n`)
     if (wave === "staged-first") await git(project.path, ["--literal-pathspecs", "add", "--", ...files])
     for (const file of files) {
+      const full = path.join(project.path, file)
+      const physical = await fs.realpath(full)
+      expect(physical).toBe(full)
+      expect(await fs.readFile(physical, "utf8")).toBe(`${wave}\ncommon-second\n`)
+      const direct = await Instance.provide({ directory: project.path, fn: () => File.read(file) })
+      expect(direct).toEqual(expect.objectContaining({
+        type: "text", content: `${wave}\ncommon-second\n`, revision: expect.any(String),
+      }))
       const loaded = await http.read(file)
       expect(loaded).toMatchObject({
         status: 200,

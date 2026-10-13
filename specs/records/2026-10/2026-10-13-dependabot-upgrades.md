@@ -2,6 +2,18 @@
 
 ## Recall
 
+2026-10-14续查本地验收：5个重复PR32/28/25/24/20已逐个关闭，读回open PR列表为空。20261014-fix-check.log原runner七文件67测试全部通过（1+5+6+8+36+3+8），包含真实Task两次进程切断、Mission中断且兄弟Tool待审批、重复恢复、错误退休及多Project隔离；typecheck八任务、docs:check、architecture-index通过。原失败日志20261014-reproduce.log保留。Linux字面反斜杠/尾部换行文件名仍待远端复现，已在原File Git测试增加物理路径、实际字节与直接File.read正向检查来区分运行库、文件入口及HTTP阶段。本轮先提交并推送同一工作分支运行七文件三平台聚焦诊断；selected成功也不具备main合入资格，定位/修复该文件问题后最终版本必须另跑空test_files完整三平台CI。本轮尚未更动main。
+
+2026-10-14修改前根因核对：Windows原runner复现4文件/6断言失败，File Git 8测试通过但排除了POSIX字面反斜杠文件名。两份工具表未随continuous-goal公开架构及tool-pool-data的角色投影更新，修正独立预期，Task worker工具集保持当前合同。跨进程两例实际均已完成assistant和ToolPart、保存immediate_park、且副作用/成功receipt均恰好一次；失败是共享worker新增requestFacts/resultFacts/toolRequest诊断字段后旧精确整对象断言未同步。全仓搜索确认session/permission-message-process-recovery也消费这些字段，不能删worker字段；改为正向验证完成合同，并精确比较首次与再次恢复的全部事实不变。artifact-read用例手工插入requested与result，缺少execution_succeeded/outcome_slot，违反当前02-data和completedToolExecutionResult的成对事实契约；改用真实PermissionAuthority.authorizeAndExecute写入projected调用成功及结果，保留实际延迟读取/索引/来源归属验收，不能放松生产writer检查。
+
+恢复横审已读取PermissionAuthority授权/成功复合事务、project-scoped扫描、exact continuation、SessionLoop的普通Session/Task与Mission分支、accepted invocation owner校验、终态退休及后续同Message兄弟扫描。34项本地通过覆盖真实Task wait、完成/取消、旧epoch、同epoch终态/删除、Worker handoff、串并行与Part-to-message恢复；两项失败的持久化diff只有额外诊断字段。共享根因仍通过新增原有session/permission-message-process-recovery及permission-continuation-recovery回归复核，生产调度无已证明缺陷，不改队列/租约/重启逻辑。Linux文件读取404的数据.path保留原反斜杠和换行，HTTP输入未丢失；realpath/stat/access/read各路径尚须定位。WSL Ubuntu启动返回HCS_E_CONNECTION_TIMEOUT，本任务不重启用户虚拟机，使用同分支远端聚焦运行取得边界诊断后再定修复。当前main自动run38438075810已因后续push取消，不能当通过。
+
+2026-10-14续查：用户指出“我看还有ci错误和版本pr”。此前升级和修复代码已合入且run38312512597三平台完整成功，但5个旧PR未关闭，属于收尾遗漏。当前main=5107ed64b，PR32/28/25/24/20目标分别为notification2.5.1、Astro check0.9.10、ACP1.4.0、Geist5.3.0、Timeline8.5.4；已逐项读取真实PR diff及当前manifest/lock，目标均已包含。32当前diff只剩删除旧typebox1.3.3节点，而当前锁图已无该节点；其他PR没有新的目标升级。按原“处理全部10个PR”范围关闭已被集成交付取代的5个重复PR，保留历史CI证据，不再合并旧锁图。
+
+最新失败run38393107094绑定f48d1c69c，Linux621文件中5个失败：orchestrator-initial-task-render、file-git-alias-contract、tool-result-control-protocol、execution-authority-tool-surface、artifact-read-facts-provider-input。前两份工具投影断言仍未包含后来新增的create/get/update_continuous_goal；另有文件读取合同差异、跨进程permission等待恢复失败和Permission success/result pair不完整，后几类直接触发点与共享根因待查，不以“旧CI”排除。较早38362595775包含其他MCP/Skill目录/静态资源用例失败，按后续实际日志及代码核对收敛；最新main run38438075810的verify/audit/service成功，三平台unit尚未结束。两个后来绿色docs scope运行不能证明这些用例通过。
+
+实施前计划：沿用已授权codex/dependabot-upgrades工作树，已干净fast-forward到origin/main，不更动主工作树的serve/restart/权限/压缩及其他并行未提交文件。冻结安装后先重跑最新5个失败文件，读取当前工具声明、调用点、权限ledger/result事实与生产恢复入口；终态/跨进程问题横审Task/Mission/Session occurrence、正常与错误、重试重启、串并行和Project隔离。证据明确后修当前合同/真实根因，保留正向实际行为，不放宽预算、不改回旧工具集、不以无效摘要或UI自动化验收。修复经原checker及必要共享回归、typecheck/docs/hooks后提交并只推同一隔离分支；最终仍以修复版本的完整三平台CI成功为main合入条件。新调查和真实状态覆盖以下历史完成记录。
+
 本地main同步已完成：main从a7575c5fc安全fast-forward到e1dc4ea01，十项升级与3b0562c97恢复修复均已包含。同步前后分别保存并直接比较staged/unstaged binary patch，二者完全一致；最初6份并行未提交修改期间已由原任务独立提交为a7575c5fc，其23项数据/service测试及真实页面证据已审查并保留。集成的11个后端原checker文件共76测试全部通过，含更新后的来源/搜索/持久化合同和本任务Provider/恢复回归；8项类型检查、文档与架构索引通过。合并后本任务10个实现/测试文件相对完整CI的dced22e42实际diff为空，依赖manifest/lock也未变；其余代码差异仅为已经授权并有独立验收的来源/编辑器并行交付。最终记录提交随正常hooks推送main与同名工作分支，成功后停用dependabot-main。以下按阶段保留调查和历史运行，不把先前进行中/失败状态当作当前资格。
 
 2026-10-13 07:49（Asia/Shanghai）完整资格确认：run38312512597已success，verify、dependency audit、service tests、Linux/macOS/Windows完整unit和最终CI passed全部success。三个真实job日志各592条文件级DONE，全部exit=0；日志位于.scratch/dependabot-upgrades/full-{linux,macos,windows}-38312512597.log，公开运行与job身份见artifact README。旧run38302496808的Windows也已跑完592文件，其5个失败与旧Linux/macOS完全相同，没有新增类别；不混入新轮成功证据。当前隔离HEAD=09592d963相对已测dced22e42只有本记录文档差异。
