@@ -1,0 +1,99 @@
+{
+  "physical": [
+    {
+      "path": "note.md",
+      "text": "SCOPED NOTE\r\n",
+      "bytes": [
+        83,
+        67,
+        79,
+        80,
+        69,
+        68,
+        32,
+        78,
+        79,
+        84,
+        69,
+        13,
+        10
+      ]
+    },
+    {
+      "path": "note-copy.md",
+      "text": "SCOPED NOTE\r\n",
+      "bytes": [
+        83,
+        67,
+        79,
+        80,
+        69,
+        68,
+        32,
+        78,
+        79,
+        84,
+        69,
+        13,
+        10
+      ]
+    },
+    {
+      "path": "conflict.md",
+      "text": "EXISTING CONFLICT\r\n",
+      "bytes": [
+        69,
+        88,
+        73,
+        83,
+        84,
+        73,
+        78,
+        71,
+        32,
+        67,
+        79,
+        78,
+        70,
+        76,
+        73,
+        67,
+        84,
+        13,
+        10
+      ]
+    },
+    {
+      "path": "../parent-copy.md",
+      "text": "SCOPED NOTE\r\n",
+      "bytes": [
+        83,
+        67,
+        79,
+        80,
+        69,
+        68,
+        32,
+        78,
+        79,
+        84,
+        69,
+        13,
+        10
+      ]
+    }
+  ],
+  "scope": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-before02-01a133\\project\\scoped-project",
+  "parentListing": {
+    "body": {
+      "name": "ProjectDirectoryIntegrityError",
+      "data": {
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-before02-01a133\\project\\scoped-project path=..",
+        "reason": "missing",
+        "message": "Project directory does not exist: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-before02-01a133\\project\\scoped-project path=.."
+      }
+    },
+    "requestID": "e2f5b969-f39c-4f38-a027-e6d3469ddd5b",
+    "status": 400
+  }
+}

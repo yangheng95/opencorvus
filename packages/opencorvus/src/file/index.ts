@@ -1182,12 +1182,13 @@ export namespace File {
     const stat = await fs.promises.stat(fullPath).catch(() => undefined)
     if (!stat) throw fileNotFound({ path: relativePathFor(fullPath) })
     const relativePath = relativePathFor(fullPath)
+    const ignored = await createIgnoreMatcher(path.dirname(fullPath))
     return {
       name: path.basename(fullPath),
       path: relativePath,
       absolute: fullPath,
       type: stat.isDirectory() ? "directory" : "file",
-      ignored: await isIgnored(relativePath, stat.isDirectory()),
+      ignored: ignored(fullPath, stat.isDirectory()),
     }
   }
 
@@ -1279,18 +1280,50 @@ export namespace File {
     }
   }
 
-  async function isIgnored(relativePath: string, directory: boolean): Promise<boolean> {
-    if (!Project.isGitRepo(Instance.directory)) return false
+  async function createIgnoreMatcher(parentPath: string): Promise<(fullPath: string, directory: boolean) => boolean> {
+    if (!Project.isGitRepo(Instance.directory)) return () => false
     const ig = ignore()
-    const gitignorePath = path.join(Instance.worktree, ".gitignore")
-    if (await Filesystem.exists(gitignorePath)) {
-      ig.add(await Filesystem.readText(gitignorePath))
+    for (const name of [".gitignore", ".ignore"]) {
+      try {
+        ig.add(await Filesystem.readText(path.join(Instance.worktree, name)))
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException | undefined)?.code !== "ENOENT") throw error
+      }
     }
-    const ignorePath = path.join(Instance.worktree, ".ignore")
-    if (await Filesystem.exists(ignorePath)) {
-      ig.add(await Filesystem.readText(ignorePath))
+
+    const worktree = Filesystem.normalizeWindowsPath(Instance.worktree)
+    const parent = Filesystem.normalizeWindowsPath(parentPath)
+    let root: { origin: string; offset: string } | null = { origin: worktree, offset: "" }
+    if (!Filesystem.contains(worktree, parent)) {
+      const physicalWorktree = await fs.promises.realpath(worktree)
+      root = null
+      let current = parent
+      while (true) {
+        const physical = await fs.promises.realpath(current)
+        if (!Filesystem.contains(physicalWorktree, physical)) break
+        root = { origin: current, offset: path.relative(physicalWorktree, physical) }
+        const ancestor = path.dirname(current)
+        if (ancestor === current) break
+        current = ancestor
+      }
     }
-    return ig.ignores(directory ? relativePath + "/" : relativePath)
+
+    const coordinateFor = (fullPath: string): string | null => {
+      const full = Filesystem.normalizeWindowsPath(fullPath)
+      let coordinate: string
+      if (Filesystem.contains(worktree, full)) {
+        coordinate = path.relative(worktree, full)
+      } else {
+        if (root === null) return null
+        const suffix = path.relative(root.origin, full)
+        coordinate = root.offset ? path.join(root.offset, suffix) : suffix
+      }
+      return coordinate === "" ? null : coordinate
+    }
+    return (fullPath, directory) => {
+      const coordinate = coordinateFor(fullPath)
+      return coordinate === null ? false : ig.ignores(directory ? coordinate + "/" : coordinate)
+    }
   }
 
   export async function create(input: CreateRequest): Promise<Node> {
@@ -1599,19 +1632,6 @@ export namespace File {
 
   export async function list(dir?: string) {
     const exclude = [".git", ".DS_Store"]
-    let ignored = (_: string) => false
-    if (Project.isGitRepo(Instance.directory)) {
-      const ig = ignore()
-      const gitignorePath = path.join(Instance.worktree, ".gitignore")
-      if (await Filesystem.exists(gitignorePath)) {
-        ig.add(await Filesystem.readText(gitignorePath))
-      }
-      const ignorePath = path.join(Instance.worktree, ".ignore")
-      if (await Filesystem.exists(ignorePath)) {
-        ig.add(await Filesystem.readText(ignorePath))
-      }
-      ignored = ig.ignores.bind(ig)
-    }
     const resolved = dir ? path.join(Instance.directory, dir) : Instance.directory
 
     if (!(await isPathAllowed(resolved))) {
@@ -1621,6 +1641,7 @@ export namespace File {
     const entries = await fs.promises.readdir(resolved, {
       withFileTypes: true,
     })
+    const ignored = await createIgnoreMatcher(resolved)
     const nodes: Node[] = []
     for (const entry of entries) {
       if (exclude.includes(entry.name)) continue
@@ -1632,7 +1653,7 @@ export namespace File {
         path: relativePath,
         absolute: fullPath,
         type,
-        ignored: ignored(type === "directory" ? relativePath + "/" : relativePath),
+        ignored: ignored(fullPath, type === "directory"),
       })
     }
     return nodes.sort((a, b) => {

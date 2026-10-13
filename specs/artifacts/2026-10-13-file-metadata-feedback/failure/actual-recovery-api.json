@@ -1,0 +1,28 @@
+{
+  "manualRetryAttempt": "No node with given id found; periodic recovery retired the previously observed button. Not counted as a successful Retry click.",
+  "requests": [
+    {
+      "status": 200,
+      "body": {
+        "name": "marker.txt",
+        "path": "nested-check\\marker.txt",
+        "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-failure-01a133\\project\\scoped-project\\nested-check\\marker.txt",
+        "type": "file",
+        "ignored": false
+      },
+      "url": "http://127.0.0.1:18443/file?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-13%2Ffile-feedback-failure-01a133%2Fproject%2Fscoped-project&path=nested-check"
+    },
+    {
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "NESTED RETRY EXACT\r\n",
+        "revision": "4c4b5f5f348c6030bc040b1e2d04207774729ee3d5eb688deb2850ba412495f0"
+      },
+      "url": "http://127.0.0.1:18443/file/content?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-13%2Ffile-feedback-failure-01a133%2Fproject%2Fscoped-project&path=nested-check%2Fmarker.txt"
+    }
+  ],
+  "physical": "NESTED RETRY EXACT\r\n",
+  "actualManualAction": "Background context menu Refresh after real recovery; Explorer refreshed screenshot",
+  "scope": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/file-feedback-failure-01a133/project/scoped-project"
+}

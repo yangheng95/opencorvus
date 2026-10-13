@@ -1,0 +1,107 @@
+[
+  {
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp",
+      "projectID": "prj_hnjRbEa54ljqd51zt5cV"
+    },
+    "rules": "/main-only.md\n.opencorvus/.r/\n",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "linked-checkout",
+          "path": "linked-checkout",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "linked-only.md",
+          "path": "linked-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-only.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "main-only.md",
+          "path": "main-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\main-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    }
+  },
+  {
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp",
+      "projectID": "prj_hnjRbEa54ljqd51zt5cV"
+    },
+    "rules": "/linked-only.md\n.opencorvus/.r/\n",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "linked-only.md",
+          "path": "linked-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout\\linked-only.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "main-only.md",
+          "path": "main-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-c0eyKB\\test-77308-Cmqv8k\\fixtures\\memory-4lasPp\\linked-checkout\\main-only.md",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    }
+  }
+]

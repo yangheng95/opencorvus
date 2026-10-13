@@ -1,0 +1,219 @@
+[
+  {
+    "label": "internal alias child logical listing",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "projectID": "prj_hN8hJ8VN9rR9o9K4Sh6i"
+    },
+    "route": "/file?path=alias-child",
+    "method": "GET",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "note.md",
+          "path": "alias-child\\note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\alias-child\\note.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "internal ancestor outward then inward logical listing",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "projectID": "prj_hN8hJ8VN9rR9o9K4Sh6i"
+    },
+    "route": "/file?path=back-link%2Fmemory-M1hltu%2Fsub",
+    "method": "GET",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "note.md",
+          "path": "back-link\\memory-M1hltu\\sub\\note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\back-link\\memory-M1hltu\\sub\\note.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "terminal junction move metadata",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "projectID": "prj_hN8hJ8VN9rR9o9K4Sh6i"
+    },
+    "route": "/file/item",
+    "method": "PATCH",
+    "input": {
+      "path": "terminal-dir",
+      "newPath": "moved-terminal"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "previousPath": "terminal-dir",
+        "path": "moved-terminal",
+        "node": {
+          "name": "moved-terminal",
+          "path": "moved-terminal",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\moved-terminal",
+          "type": "directory",
+          "ignored": true
+        }
+      }
+    },
+    "errors": []
+  },
+  {
+    "label": "terminal junction and file-link listing",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+      "projectID": "prj_hN8hJ8VN9rR9o9K4Sh6i"
+    },
+    "route": "/file?path=",
+    "method": "GET",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "sub",
+          "path": "sub",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\sub",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "alias-child",
+          "path": "alias-child",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\alias-child",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "back-link",
+          "path": "back-link",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\back-link",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved-terminal",
+          "path": "moved-terminal",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\moved-terminal",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "terminal-file.md",
+          "path": "terminal-file.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\terminal-file.md",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "actual Git terminal entry results",
+    "result": {
+      "args": [
+        "check-ignore",
+        "--no-index",
+        "-v",
+        "--",
+        "moved-terminal",
+        "terminal-file.md",
+        "sub"
+      ],
+      "exitCode": 0,
+      "stdout": ".gitignore:3:/moved-terminal/\tmoved-terminal\n",
+      "stderr": ""
+    }
+  },
+  {
+    "label": "actual Git ancestor traversal result",
+    "result": {
+      "args": [
+        "check-ignore",
+        "--no-index",
+        "-v",
+        "--",
+        "alias-child/note.md"
+      ],
+      "exitCode": 0,
+      "stdout": ".gitignore:1:/alias-child/note.md\talias-child/note.md\n",
+      "stderr": ""
+    }
+  },
+  {
+    "label": "continuous anchor risk",
+    "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\back-link\\memory-M1hltu\\sub\\note.md",
+    "chain": [
+      {
+        "ancestor": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\back-link\\memory-M1hltu\\sub",
+        "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\sub",
+        "relative": "sub",
+        "admitted": true
+      },
+      {
+        "ancestor": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\back-link\\memory-M1hltu",
+        "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu",
+        "relative": "",
+        "admitted": true
+      },
+      {
+        "ancestor": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\back-link",
+        "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures",
+        "relative": "..",
+        "admitted": false
+      }
+    ],
+    "anchor": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\back-link\\memory-M1hltu",
+    "logicalCoordinate": "back-link\\memory-M1hltu\\sub\\note.md",
+    "anchorCoordinate": "sub\\note.md",
+    "logicalDecision": true,
+    "anchorDecision": false,
+    "content": "Exact logical entry content\n"
+  },
+  {
+    "label": "terminal link filesystem identities",
+    "target": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\moved-terminal",
+    "statDirectory": true,
+    "lstatSymlink": true,
+    "terminalFileSymlink": true,
+    "targetPhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5ko2Db\\test-83084-TpfUcH\\fixtures\\memory-M1hltu\\sub"
+  }
+]

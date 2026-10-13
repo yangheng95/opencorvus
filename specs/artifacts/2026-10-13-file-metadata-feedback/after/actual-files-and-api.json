@@ -1,0 +1,296 @@
+{
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project",
+  "files": [
+    {
+      "file": "note.md",
+      "byteLength": 13,
+      "content": "SCOPED NOTE\r\n"
+    },
+    {
+      "file": "note-copy.md",
+      "byteLength": 13,
+      "content": "SCOPED NOTE\r\n"
+    },
+    {
+      "file": "conflict.md",
+      "byteLength": 19,
+      "content": "EXISTING CONFLICT\r\n"
+    },
+    {
+      "file": "child-ignore.txt",
+      "byteLength": 15,
+      "content": "IGNORED CHILD\r\n"
+    },
+    {
+      "file": "../parent-copy.md",
+      "byteLength": 13,
+      "content": "SCOPED NOTE\r\n"
+    },
+    {
+      "file": "../parent-move.md",
+      "byteLength": 13,
+      "content": "SCOPED MOVE\r\n"
+    },
+    {
+      "file": "../parent-created.md",
+      "byteLength": 22,
+      "content": "PARENT CREATED EXACT\r\n"
+    },
+    {
+      "file": "upload-proof.txt",
+      "byteLength": 20,
+      "content": "UPLOAD PROOF EXACT\r\n"
+    }
+  ],
+  "outputs": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18442/file/item?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project",
+      "input": {
+        "path": "../parent-created.md",
+        "type": "file",
+        "content": "PARENT CREATED EXACT\r\n"
+      },
+      "status": 200,
+      "requestID": "90bd3ddf-3ead-48b9-a48d-968d43d0f702",
+      "body": {
+        "name": "parent-created.md",
+        "path": "..\\parent-created.md",
+        "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\parent-created.md",
+        "type": "file",
+        "ignored": false
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=.",
+      "status": 200,
+      "requestID": "a0545f76-2440-4398-a288-f7045dc82e53",
+      "body": [
+        {
+          "name": ".opencorvus",
+          "path": ".opencorvus",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\.opencorvus",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "child-ignore.txt",
+          "path": "child-ignore.txt",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\child-ignore.txt",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "conflict.md",
+          "path": "conflict.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\conflict.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "note-copy.md",
+          "path": "note-copy.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\note-copy.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "note.md",
+          "path": "note.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\note.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "upload-proof.txt",
+          "path": "upload-proof.txt",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project\\upload-proof.txt",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=..",
+      "status": 200,
+      "requestID": "5c11000d-9cdc-453b-bf0b-d24b82f55421",
+      "body": [
+        {
+          "name": "root-copy",
+          "path": "..\\root-copy",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\root-copy",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "root-move",
+          "path": "..\\root-move",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\root-move",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "scoped-project",
+          "path": "",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\scoped-project",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "source",
+          "path": "..\\source",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\source",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "target",
+          "path": "..\\target",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\target",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": ".gitattributes",
+          "path": "..\\.gitattributes",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": "..\\.gitignore",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "parent-copy.md",
+          "path": "..\\parent-copy.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\parent-copy.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "parent-created.md",
+          "path": "..\\parent-created.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\parent-created.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "parent-move.md",
+          "path": "..\\parent-move.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-after02-01a133\\project\\parent-move.md",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=note.md",
+      "status": 200,
+      "requestID": "67491a75-35ac-47d5-ae5d-9c54f81209ae",
+      "body": {
+        "type": "text",
+        "content": "SCOPED NOTE\r\n",
+        "revision": "89c0efbd492d043fa9fd68b6360b5282bfc8207f9cc53b63c476098c3487a201"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=note-copy.md",
+      "status": 200,
+      "requestID": "82dd4635-6333-46f7-808a-aa23974c6d64",
+      "body": {
+        "type": "text",
+        "content": "SCOPED NOTE\r\n",
+        "revision": "9d12e3999cbabb8d402570a7d16e21ca13676da6a5e410eafdb0a42005f94fd2"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=conflict.md",
+      "status": 200,
+      "requestID": "09cca3e0-78e8-4824-974c-351a47e10d3e",
+      "body": {
+        "type": "text",
+        "content": "EXISTING CONFLICT\r\n",
+        "revision": "aca273ee0ce20f92f410f0bcdb7256811b4b843ba71b76a146be447a0f165471"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=child-ignore.txt",
+      "status": 200,
+      "requestID": "65c2a5d0-c735-465d-ba80-9a7acf255d80",
+      "body": {
+        "type": "text",
+        "content": "IGNORED CHILD\r\n",
+        "revision": "04f3ccf4e15663916e7b805b4f9571e5df8aa1aeef2ed0815bed50cf5b835124"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=..%2Fparent-copy.md",
+      "status": 200,
+      "requestID": "e8d23246-cd40-4653-9a20-1eee87a29827",
+      "body": {
+        "type": "text",
+        "content": "SCOPED NOTE\r\n",
+        "revision": "4193155b1a551d96a1b06bdc10b38ca913f83de8fd5dae89414092466ed5ea1a"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=..%2Fparent-move.md",
+      "status": 200,
+      "requestID": "f982fc81-2667-4f38-992a-1377e55da3c2",
+      "body": {
+        "type": "text",
+        "content": "SCOPED MOVE\r\n",
+        "revision": "46b85f2de7657df3284ecc7097346371857da9db0ce1433fea1f133b5332f387"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=..%2Fparent-created.md",
+      "status": 200,
+      "requestID": "2e71a1e6-a341-4088-9b1b-6ceaf3e3076c",
+      "body": {
+        "type": "text",
+        "content": "PARENT CREATED EXACT\r\n",
+        "revision": "883e28a2f3d255f23fac74b6e683ade1b30fda903b1289687916e63f65b7e2f2"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18442/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cfile-feedback-after02-01a133%5Cproject%5Cscoped-project&path=upload-proof.txt",
+      "status": 200,
+      "requestID": "8639a8aa-211c-40a9-8a02-01413b3c97de",
+      "body": {
+        "type": "text",
+        "content": "UPLOAD PROOF EXACT\r\n",
+        "revision": "7751a7a0d29d7aacd05915ea30842ee6017e99060e52728886637161d381a179"
+      }
+    }
+  ],
+  "boundary": "Same production /ui server; published metadata and exact authored bytes, no model or injected messages"
+}

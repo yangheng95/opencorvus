@@ -1,0 +1,1726 @@
+[
+  {
+    "label": "independent project identities",
+    "first": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "second": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E",
+      "projectID": "prj_holAPEXi6cHWQdfbwFKS"
+    },
+    "identities": [
+      "prj_hS9HS58OxAAW6WSBgnUj",
+      "prj_holAPEXi6cHWQdfbwFKS"
+    ]
+  },
+  {
+    "label": "normal FIRST",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "real-target",
+          "path": "real-target",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\real-target",
+          "type": "directory",
+          "ignored": true
+        },
+        {
+          "name": "scoped-project",
+          "path": "scoped-project",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".ignore",
+          "path": ".ignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.ignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "scoped FIRST",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "normal SECOND",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E",
+      "projectID": "prj_holAPEXi6cHWQdfbwFKS"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "real-target",
+          "path": "real-target",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\real-target",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "scoped-project",
+          "path": "scoped-project",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\!note.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".ignore",
+          "path": ".ignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\.ignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\#note.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\anchored 资料.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\root-only.md",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "scoped SECOND",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E",
+      "projectID": "prj_holAPEXi6cHWQdfbwFKS"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-QmCX6E\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "scoped dot alias .",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=.",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "scoped dot alias ./",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=.%2F",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "scoped dot alias missing/..",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=missing%2F..",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "scoped dot alias dirs/..",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=dirs%2F..",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "parent worktree list",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=..",
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "scoped create root-rule entry",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "POST",
+    "route": "/file/item",
+    "input": {
+      "path": "missing/../created.md",
+      "type": "file",
+      "content": "Exact created child\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "name": "created.md",
+        "path": "created.md",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\created.md",
+        "type": "file",
+        "ignored": false
+      }
+    },
+    "target": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\created.md",
+    "targetContent": "Exact created child\n",
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "scoped copy root-rule entry",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "POST",
+    "route": "/file/item/copy",
+    "input": {
+      "path": "extra.md",
+      "newPath": "./copied.md"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "sourcePath": "extra.md",
+        "path": "./copied.md",
+        "node": {
+          "name": "copied.md",
+          "path": "copied.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\copied.md",
+          "type": "file",
+          "ignored": false
+        }
+      }
+    },
+    "target": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\copied.md",
+    "targetContent": "ignore-domain-FIRST:extra.md\n",
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "scoped move root-rule entry",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "PATCH",
+    "route": "/file/item",
+    "input": {
+      "path": "override.md",
+      "newPath": "missing/../moved.md"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "previousPath": "override.md",
+        "path": "missing/../moved.md",
+        "node": {
+          "name": "moved.md",
+          "path": "moved.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\moved.md",
+          "type": "file",
+          "ignored": false
+        }
+      }
+    },
+    "target": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\moved.md",
+    "targetContent": "ignore-domain-FIRST:override.md\n",
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "scoped list after mutations",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "copied.md",
+          "path": "copied.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\copied.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "created.md",
+          "path": "created.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\created.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved.md",
+          "path": "moved.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\moved.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "scope itself junction list",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=.",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "real-target",
+          "path": "real-target",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\real-target",
+          "type": "directory",
+          "ignored": true
+        },
+        {
+          "name": "scoped-project",
+          "path": "scoped-project",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\scoped-project",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".ignore",
+          "path": ".ignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\.ignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-scope\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "ancestor junction child list",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=..%5Cmemory-KnqDna-ancestor%5Cmemory-KnqDna%5Cscoped-project",
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "child scope through ancestor junction",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=.",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "dirs",
+          "path": "dirs",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\dirs",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "copied.md",
+          "path": "copied.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\copied.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "created.md",
+          "path": "created.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\created.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved.md",
+          "path": "moved.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\moved.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "terminal directory junction list",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "real-target",
+          "path": "real-target",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\real-target",
+          "type": "directory",
+          "ignored": true
+        },
+        {
+          "name": "scoped-project",
+          "path": "scoped-project",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".ignore",
+          "path": ".ignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.ignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\root-only.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "terminal-dir",
+          "path": "terminal-dir",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\terminal-dir",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "terminal junction move receipt",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "PATCH",
+    "route": "/file/item",
+    "input": {
+      "path": "terminal-dir",
+      "newPath": "moved-terminal"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "previousPath": "terminal-dir",
+        "path": "moved-terminal",
+        "node": {
+          "name": "moved-terminal",
+          "path": "moved-terminal",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\moved-terminal",
+          "type": "directory",
+          "ignored": true
+        }
+      }
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "terminal junction list after move",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "real-target",
+          "path": "real-target",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\real-target",
+          "type": "directory",
+          "ignored": true
+        },
+        {
+          "name": "scoped-project",
+          "path": "scoped-project",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".ignore",
+          "path": ".ignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.ignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved-terminal",
+          "path": "moved-terminal",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\moved-terminal",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\root-only.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "Git terminal junction entry decision",
+    "result": {
+      "exitCode": 128,
+      "stdout": "",
+      "stderr": "fatal: -z only makes sense with --stdin\n"
+    }
+  },
+  {
+    "label": "terminal file symlink list",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+      "projectID": "prj_hS9HS58OxAAW6WSBgnUj"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "real-target",
+          "path": "real-target",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\real-target",
+          "type": "directory",
+          "ignored": true
+        },
+        {
+          "name": "scoped-project",
+          "path": "scoped-project",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\scoped-project",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": " Source 资料[1].md",
+          "path": " Source 资料[1].md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\ Source 资料[1].md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "!note.md",
+          "path": "!note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\!note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".ignore",
+          "path": ".ignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.ignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".opencorvus-test-project-identity",
+          "path": ".opencorvus-test-project-identity",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\.opencorvus-test-project-identity",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "#note.md",
+          "path": "#note.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\#note.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "anchored 资料.md",
+          "path": "anchored 资料.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\anchored 资料.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "extra.md",
+          "path": "extra.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\extra.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved-terminal",
+          "path": "moved-terminal",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\moved-terminal",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "override.md",
+          "path": "override.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\override.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "root-only.md",
+          "path": "root-only.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\root-only.md",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "terminal-file.md",
+          "path": "terminal-file.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\terminal-file.md",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\ Source 资料[1].md\""
+      }
+    ]
+  },
+  {
+    "label": "Git terminal file entry decision",
+    "result": {
+      "exitCode": 128,
+      "stdout": "",
+      "stderr": "fatal: -z only makes sense with --stdin\n"
+    }
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "root-only.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "root-only.md",
+    "rootRelative": "scoped-project\\root-only.md",
+    "directoryDecision": true,
+    "rootDecision": false
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "anchored 资料.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "anchored 资料.md",
+    "rootRelative": "scoped-project\\anchored 资料.md",
+    "directoryDecision": false,
+    "rootDecision": true
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "extra.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "extra.md",
+    "rootRelative": "scoped-project\\extra.md",
+    "directoryDecision": false,
+    "rootDecision": true
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "created.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "created.md",
+    "rootRelative": "scoped-project\\created.md",
+    "directoryDecision": false,
+    "rootDecision": true
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "copied.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "copied.md",
+    "rootRelative": "scoped-project\\copied.md",
+    "directoryDecision": false,
+    "rootDecision": true
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "moved.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "moved.md",
+    "rootRelative": "scoped-project\\moved.md",
+    "directoryDecision": false,
+    "rootDecision": true
+  },
+  {
+    "label": "library rule coordinates",
+    "name": " Source 资料[1].md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": " Source 资料[1].md",
+    "rootRelative": "scoped-project\\ Source 资料[1].md",
+    "directoryDecision": true,
+    "rootDecision": false
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "#note.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "#note.md",
+    "rootRelative": "scoped-project\\#note.md",
+    "directoryDecision": true,
+    "rootDecision": true
+  },
+  {
+    "label": "library rule coordinates",
+    "name": "!note.md",
+    "rulesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "directoryRelative": "!note.md",
+    "rootRelative": "scoped-project\\!note.md",
+    "directoryDecision": true,
+    "rootDecision": true
+  },
+  {
+    "label": "ancestor entry coordinates",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna",
+    "fullPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+    "lexical": "..\\memory-KnqDna-ancestor\\memory-KnqDna\\scoped-project\\anchored 资料.md",
+    "physicalParentEntry": "scoped-project\\anchored 资料.md"
+  },
+  {
+    "label": "terminal identity coordinates",
+    "fullPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nR51oe\\test-71084-QWwTv1\\fixtures\\memory-KnqDna\\moved-terminal",
+    "parentEntry": "moved-terminal",
+    "fullTarget": "real-target",
+    "link": true
+  }
+]

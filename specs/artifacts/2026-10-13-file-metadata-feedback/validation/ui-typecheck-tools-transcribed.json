@@ -1,0 +1,38 @@
+{
+  "provenance": "transcribed from original tool output; checks were not rerun",
+  "records": [
+    {
+      "command": "bun run --cwd packages/overlay typecheck",
+      "cwd": "D:\\myhexin-local\\opencorvus",
+      "initial": {
+        "chunk_id": "ec18ea",
+        "session_id": 65338,
+        "wall_time_seconds": 10.0017948,
+        "output": "$ tsc --noEmit\n"
+      },
+      "completion": {
+        "chunk_id": "a463b8",
+        "wall_time_seconds": 0.000013,
+        "exit_code": 0,
+        "output": ""
+      }
+    },
+    {
+      "command": "bun run --cwd packages/overlay typecheck; git diff --check -- packages/overlay/src/components/FileExplorerPanel.tsx packages/overlay/src/i18n/en-US.json packages/overlay/src/i18n/zh-CN.json packages/overlay/src/styles/surfaces/inspector.css",
+      "cwd": "D:\\myhexin-local\\opencorvus",
+      "initial": {
+        "chunk_id": "5b6a5d",
+        "session_id": 73470,
+        "wall_time_seconds": 10.0130859,
+        "output": "$ tsc --noEmit\n"
+      },
+      "completion": {
+        "chunk_id": "47e3bb",
+        "wall_time_seconds": 0.0000091,
+        "exit_code": 0,
+        "output": ""
+      },
+      "exit_scope": "combined shell command; separate typecheck exit variable was not captured"
+    }
+  ]
+}

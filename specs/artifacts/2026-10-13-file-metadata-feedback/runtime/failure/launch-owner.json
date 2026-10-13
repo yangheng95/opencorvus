@@ -1,0 +1,26 @@
+{
+  "owner": {
+    "processInstanceID": "win32:639274818711258146",
+    "ProcessId": 33528
+  },
+  "targetBirthAtMs": 1791885071125,
+  "nativeTarget": {
+    "pid": 33528,
+    "processInstanceID": "win32:639274818711258146",
+    "occurrenceID": "7cbf85bc-d4f4-4ded-b888-f3a909210395"
+  },
+  "nativeDeadline": 1791885970183,
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-13-file-metadata-feedback\\failure",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-failure-01a133\\evidence",
+  "port": 18443,
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-failure-01a133\\runtime",
+  "occurrence": "failure-5ad384b6-8fd5-465a-8767-8a2c7f2f83b7",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-failure-01a133\\project\\scoped-project",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-feedback-failure-01a133",
+  "host": {
+    "pid": 59612,
+    "processInstanceID": "win32:639274818702358072",
+    "occurrenceID": "30c16c77-b368-4359-a720-52c0836f7829"
+  },
+  "evidencePrefix": "failure"
+}

@@ -13,7 +13,7 @@ import {
 } from "solid-js"
 import { ContextMenu } from "./ui/ContextMenu"
 import { Virtualizer, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
-import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { boardStore } from "../store/board"
 import { showAppDialog } from "../services/app-dialog"
 import {
@@ -33,12 +33,14 @@ import {
 } from "../services/file-workbench"
 import { normalizeProjectFilePath } from "../utils/server-path"
 import { currentUIScale } from "../utils/layout-tokens"
-import { t, tc } from "../utils/i18n"
+import { localeTag, t, tc } from "../utils/i18n"
+import { formatErrorDetails } from "../utils/error-details"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
 import { FileRowContent } from "./ui/FileRow"
 import { SurfaceHeader } from "./ui/SurfaceHeader"
+import { Feedback } from "./ui/Feedback"
 
 const VIRTUAL_EXPLORER_ROW_THRESHOLD = 120
 const FILE_EXPLORER_ROW_HEIGHT_PX = 32
@@ -54,7 +56,7 @@ const ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS = 15_000
 const EXPLORER_SELECTION_MIME = "application/x-opencorvus-explorer-selection"
 
 type ExplorerRow =
-  | { kind: "node"; key: string; node: FileNode; depth: number; expanded: boolean; loading: boolean; error: string }
+  | { kind: "node"; key: string; node: FileNode; depth: number; expanded: boolean; loading: boolean; error: ExplorerFailure | null }
   | { kind: "search"; key: string; path: string; depth: number }
 
 type ExplorerSelection = {
@@ -70,6 +72,21 @@ type FileMutationOperation = {
   directory: string
 }
 type ExplorerOperationScope = FileOperationScope & { selectionEpoch: number }
+
+type ExplorerFailure = { error: unknown }
+type ExplorerFailureOperation = Exclude<FileMutationKind, ""> | "open" | "upload" | "load" | "search"
+type ExplorerValidation = "selection" | "directory" | "name" | "copy-target" | "move-target"
+type ExplorerSuccess =
+  | { kind: "created" | "renamed" | "copied" | "moved" | "deleted"; path: string }
+  | { kind: "copied-many" | "moved-many"; count: number; target: string }
+  | { kind: "deleted-many"; count: number }
+  | { kind: "refreshed" }
+type ExplorerFeedback =
+  | ExplorerSuccess
+  | { kind: "validation"; reason: ExplorerValidation }
+  | { kind: "failure"; operation: ExplorerFailureOperation; error: unknown }
+  | { kind: "uploaded"; count: number; target: string }
+  | { kind: "upload-reload-failed"; count: number; target: string; error: unknown }
 
 type ExplorerDropStatus = "move" | "upload" | "invalid"
 
@@ -155,16 +172,108 @@ async function searchFiles(query: string, scope: ExplorerOperationScope): Promis
   return (await apiJson(`find/file?${params.toString()}`, { authority: scope.authority })) as string[]
 }
 
+function operationFailureMessage(operation: ExplorerFailureOperation): string {
+  const keys: Record<ExplorerFailureOperation, string> = {
+    "create-file": "explorer.create_failed",
+    "create-directory": "explorer.create_failed",
+    rename: "explorer.rename_failed",
+    copy: "explorer.copy_failed",
+    move: "explorer.move_failed",
+    delete: "explorer.delete_failed",
+    refresh: "explorer.refresh_failed",
+    open: "explorer.open_failed",
+    upload: "explorer.upload_failed",
+    load: "explorer.load_failed",
+    search: "explorer.search_failed",
+  }
+  return t(keys[operation])
+}
+
+function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): string {
+  if (error instanceof ApiError && error.body && typeof error.body === "object" && !Array.isArray(error.body)) {
+    const body = error.body as { name?: unknown; data?: unknown }
+    const data = body.data && typeof body.data === "object" && !Array.isArray(body.data)
+      ? body.data as Record<string, unknown>
+      : undefined
+    const summary = (key: string, field: string) =>
+      typeof data?.[field] === "string" ? t(key, { path: data[field] }) : operationFailureMessage(operation)
+    switch (body.name) {
+      case "FileConflictError":
+      case "FileUploadConflictError":
+        return summary("explorer.error.destination_exists", "path")
+      case "FileNotFoundError":
+        return summary("explorer.error.not_found", "path")
+      case "FileInvalidPathError":
+        return summary("explorer.error.invalid_path", "path")
+      case "FileUploadInvalidTargetError":
+        return summary("explorer.error.invalid_upload_target", "targetDir")
+      case "FileUploadInvalidNameError":
+        return summary("explorer.error.invalid_upload_name", "name")
+      case "FileUploadInvalidContentError":
+        return summary("explorer.error.invalid_upload_content", "name")
+    }
+  }
+  return operationFailureMessage(operation)
+}
+
+function feedbackIsError(feedback: ExplorerFeedback): boolean {
+  return feedback.kind === "validation" || feedback.kind === "failure" || feedback.kind === "upload-reload-failed"
+}
+
+function feedbackDetails(feedback: ExplorerFeedback): string | undefined {
+  return "error" in feedback ? formatErrorDetails(feedback.error) || undefined : undefined
+}
+
+function feedbackMessage(feedback: ExplorerFeedback): string {
+  const count = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
+  switch (feedback.kind) {
+    case "created": return t("explorer.create_success", { path: feedback.path })
+    case "renamed": return t("explorer.rename_success", { path: feedback.path })
+    case "copied": return t("explorer.copy_success", { path: feedback.path })
+    case "moved": return t("explorer.move_success", { path: feedback.path })
+    case "deleted": return t("explorer.delete_success", { path: feedback.path })
+    case "copied-many": return t("explorer.copy_many_success", { count: count(feedback.count), target: feedback.target || "." })
+    case "moved-many": return t("explorer.move_many_success", { count: count(feedback.count), target: feedback.target || "." })
+    case "deleted-many": return t("explorer.delete_many_success", { count: count(feedback.count) })
+    case "refreshed": return t("explorer.refresh_success")
+    case "uploaded": return tc("explorer.upload_success", feedback.count, { count: count(feedback.count), target: feedback.target || "." })
+    case "upload-reload-failed": return tc("explorer.upload_reload_error", feedback.count, { count: count(feedback.count), target: feedback.target || "." })
+    case "failure": return fileErrorSummary(feedback.error, feedback.operation)
+    case "validation": {
+      const keys: Record<ExplorerValidation, string> = {
+        selection: "explorer.select_required",
+        directory: "explorer.directory_required",
+        name: "explorer.name_required",
+        "copy-target": "explorer.copy_invalid",
+        "move-target": "explorer.drop_move_invalid",
+      }
+      return t(keys[feedback.reason])
+    }
+  }
+}
+
+function ExplorerActionFeedback(props: { feedback: ExplorerFeedback; dataUI?: string }) {
+  return (
+    <Feedback
+      class="file-explorer-feedback"
+      data-ui={props.dataUI}
+      tone={feedbackIsError(props.feedback) ? "error" : "success"}
+      details={feedbackDetails(props.feedback)}
+    >
+      {feedbackMessage(props.feedback)}
+    </Feedback>
+  )
+}
+
 export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [query, setQuery] = createSignal("")
   const deferredQuery = createDeferred(() => query().trim())
   const [expandedPaths, setExpandedPaths] = createSignal(new Set<string>([""]))
   const [childrenByPath, setChildrenByPath] = createSignal(new Map<string, FileNode[]>())
   const [loadingPaths, setLoadingPaths] = createSignal(new Set<string>())
-  const [directoryErrors, setDirectoryErrors] = createSignal(new Map<string, string>())
+  const [directoryErrors, setDirectoryErrors] = createSignal(new Map<string, ExplorerFailure>())
   const [uploadOperation, setUploadOperation] = createSignal<{ token: number; directory: string } | null>(null)
-  const [uploadMessage, setUploadMessage] = createSignal("")
-  const [uploadMessageStatus, setUploadMessageStatus] = createSignal<"active" | "error">("active")
+  const [uploadFeedback, setUploadFeedback] = createSignal<ExplorerFeedback | null>(null)
   const [selectedItems, setSelectedItems] = createSignal(new Map<string, ExplorerSelection>())
   const [selectionAnchorPath, setSelectionAnchorPath] = createSignal("")
   const [draggedItems, setDraggedItems] = createSignal<ExplorerSelection[]>([])
@@ -172,8 +281,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [dropTargetRowPath, setDropTargetRowPath] = createSignal<string | null>(null)
   const [dropStatus, setDropStatus] = createSignal<ExplorerDropStatus>("move")
   const [mutationOperation, setMutationOperation] = createSignal<FileMutationOperation | null>(null)
-  const [mutationMessage, setMutationMessage] = createSignal("")
-  const [mutationMessageStatus, setMutationMessageStatus] = createSignal<"active" | "error">("active")
+  const [mutationFeedback, setMutationFeedback] = createSignal<ExplorerFeedback | null>(null)
   const active = createMemo(() => props.active?.() ?? true)
   const directory = createMemo(() => (props.directory ? props.directory().trim() : ""))
 
@@ -268,8 +376,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     setQuery("")
     setExpandedPaths(new Set<string>([""]))
     setMutationOperation(null)
-    setMutationMessage("")
-    setMutationMessageStatus("active")
+    setMutationFeedback(null)
     mutationOperationSequence += 1
   })
 
@@ -321,10 +428,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     } catch (error) {
       if (!ownsLoad() || !ownsExplorerOperation(scope)) return
       if (!opts?.required) console.error("[file-explorer] list failed", normalizedPath, error)
-      const message = error instanceof Error ? error.message : String(error)
       setDirectoryErrors((prev) => {
         const next = new Map(prev)
-        next.set(normalizedPath, message)
+        next.set(normalizedPath, { error })
         return next
       })
       if (opts?.required) throw error
@@ -353,7 +459,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     uploadInputTargetDir = ""
     uploadInputScope = null
     setUploadOperation(null)
-    setUploadMessage("")
+    setUploadFeedback(null)
     directoryLoadSequence += 1
     directoryLoadTokens.clear()
     requiredDirectoryLoadTokens.clear()
@@ -413,22 +519,22 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
   })
   const [searchResults, { refetch: refetchSearch }] = createResource(searchSource, async (source) => {
-    if (!source.query) return { source, query: source.query, paths: [] as string[], error: "" }
+    if (!source.query) return { source, query: source.query, paths: [] as string[], error: null as ExplorerFailure | null }
     try {
       const paths = await searchFiles(source.query, source)
-      return { source, query: source.query, paths, error: "" }
+      return { source, query: source.query, paths, error: null as ExplorerFailure | null }
     } catch (error) {
       return {
         source,
         query: source.query,
         paths: [] as string[],
-        error: error instanceof Error ? error.message : String(error),
+        error: { error },
       }
     }
   })
-  const searchErrorMessage = createMemo(() => {
+  const currentSearchFailure = createMemo(() => {
     const result = searchResults()
-    return result && result.source === searchSource() && ownsExplorerOperation(result.source) ? result.error : ""
+    return result && result.source === searchSource() && ownsExplorerOperation(result.source) ? result.error : null
   })
 
   const rows = createMemo<ExplorerRow[]>(() => {
@@ -463,7 +569,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           depth,
           expanded: nodeExpanded,
           loading: loading.has(node.path),
-          error: errors.get(node.path) ?? "",
+          error: errors.get(node.path) ?? null,
         })
         if (nodeExpanded) pushChildren(node.path, depth + 1)
       }
@@ -491,8 +597,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const current = searchResults()
     return current?.query !== query && searchResults.latest?.query !== query
   })
-  const rootError = createMemo(() => (!deferredQuery() ? (directoryErrors().get("") ?? "") : ""))
-  const searchError = createMemo(() => (deferredQuery() ? searchErrorMessage() : ""))
+  const rootError = createMemo(() => (!deferredQuery() ? (directoryErrors().get("") ?? null) : null))
+  const searchError = createMemo(() => (deferredQuery() ? currentSearchFailure() : null))
+  const expandedDirectoryFailures = createMemo(() => {
+    if (deferredQuery()) return []
+    const visibleDirectories = new Set(rows().flatMap((row) => row.kind === "node" && row.expanded ? [row.node.path] : []))
+    return [...directoryErrors()].filter(([path]) => path !== "" && visibleDirectories.has(path))
+  })
   const explorerPanelStyle = () => ({
     "--file-explorer-row-height": `calc(${FILE_EXPLORER_ROW_HEIGHT_PX}px * var(--ui-scale))`,
     "--file-explorer-row-indent": `calc(${FILE_EXPLORER_ROW_INDENT_PX}px * var(--ui-scale))`,
@@ -514,18 +625,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return [...new Set(paths.map(normalizeExplorerPath))]
   }
 
-  function mutationErrorMessage(error: unknown): string {
-    return error instanceof Error ? error.message : String(error)
-  }
-
-  function setMutationSuccess(message: string): void {
-    setMutationMessageStatus("active")
-    setMutationMessage(message)
-  }
-
-  function setMutationError(message: string): void {
-    setMutationMessageStatus("error")
-    setMutationMessage(message)
+  function setMutationValidation(reason: ExplorerValidation): void {
+    setMutationFeedback({ kind: "validation", reason })
   }
 
   function setSingleSelection(item: ExplorerSelection): void {
@@ -705,18 +806,18 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     capturedScope?: ExplorerOperationScope,
   ): Promise<void> {
     if (items.length === 0) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     const scope = capturedScope ?? currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput)
     const targets = topLevelActionSelections(items)
     if (!canPlaceSelectionsInDirectory(targets, targetDir)) {
-      setMutationError(t("explorer.drop_move_invalid"))
+      setMutationValidation("move-target")
       return
     }
     await runMutation("move", scope, async (ownsOperation) => {
@@ -730,11 +831,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         }
       } finally {
         if (moved.length > 0) {
-          const message =
+          const feedback: ExplorerSuccess =
             moved.length === 1
-              ? t("explorer.move_success", { path: moved[0]?.path ?? "" })
-              : t("explorer.move_many_success", { count: moved.length, target: targetDir || "." })
-          await applyMoveResults(moved, message, scope, ownsOperation)
+              ? { kind: "moved", path: moved[0]!.path }
+              : { kind: "moved-many", count: moved.length, target: targetDir }
+          await applyMoveResults(moved, feedback, scope, ownsOperation)
         }
       }
     })
@@ -754,7 +855,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         return
       }
       if (status === "invalid") {
-        setMutationError(t("explorer.drop_move_invalid"))
+        setMutationValidation("move-target")
         return
       }
       await moveSelectionsToDirectory(draggedItems(), targetDir, scope)
@@ -766,24 +867,24 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   function openExplorerFile(path: string): void {
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     if (!ownsExplorerOperation(scope)) return
     void openFileEditor(path, scope).catch((error) => {
-      if (ownsExplorerOperation(scope)) setMutationError(mutationErrorMessage(error))
+      if (ownsExplorerOperation(scope)) setMutationFeedback({ kind: "failure", operation: "open", error })
     })
   }
 
   async function runMutation(
-    kind: FileMutationKind,
+    kind: Exclude<FileMutationKind, "">,
     scope: ExplorerOperationScope,
     fn: (isCurrent: () => boolean) => Promise<void>,
   ): Promise<void> {
     if (commandBusy() || !ownsExplorerOperation(scope)) return
     const token = ++mutationOperationSequence
     setMutationOperation({ token, kind, directory: scope.directory.trim() })
-    setMutationMessage("")
+    setMutationFeedback(null)
     const ownsMutationOperation = () => mutationOperation()?.token === token && ownsExplorerOperation(scope)
     try {
       await fn(ownsMutationOperation)
@@ -793,7 +894,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         ownsMutationOperation() &&
         ownsExplorerOperation(scope)
       ) {
-        setMutationError(mutationErrorMessage(error))
+        setMutationFeedback({ kind: "failure", operation: kind, error })
       }
     } finally {
       if (ownsMutationOperation()) setMutationOperation(null)
@@ -836,7 +937,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   async function refreshVisibleDirectories(): Promise<void> {
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     await runMutation("refresh", scope, async (ownsOperation) => {
@@ -844,12 +945,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       if (!ownsOperation()) return
       await refreshActiveSearchResults(scope)
       if (!ownsOperation()) return
-      setMutationSuccess(t("explorer.refresh_success"))
+      setMutationFeedback({ kind: "refreshed" })
     })
   }
 
   async function retryRootDirectory(): Promise<void> {
-    setMutationMessage("")
+    setMutationFeedback(null)
     await loadDirectory("", { force: true })
   }
 
@@ -872,7 +973,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   async function applyMoveResults(
     results: FileMoveResult[],
-    message: string,
+    feedback: ExplorerSuccess,
     scope: ExplorerOperationScope,
     ownsOperation: () => boolean,
   ): Promise<void> {
@@ -900,12 +1001,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsOperation()) return
     await refreshActiveSearchResults(scope)
     if (!ownsOperation()) return
-    setMutationSuccess(message)
+    setMutationFeedback(feedback)
   }
 
   async function applyCopyResults(
     results: FileCopyResult[],
-    message: string,
+    feedback: ExplorerSuccess,
     scope: ExplorerOperationScope,
     ownsOperation: () => boolean,
   ): Promise<void> {
@@ -933,13 +1034,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsOperation()) return
     await refreshActiveSearchResults(scope)
     if (!ownsOperation()) return
-    setMutationSuccess(message)
+    setMutationFeedback(feedback)
   }
 
   async function createEntry(type: "file" | "directory", targetDirInput?: string): Promise<void> {
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput ?? contextTargetDirectory(selectedItemList()[0] ?? null))
@@ -959,7 +1060,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsExplorerOperation(scope)) return
     const name = String(result.value || "")
     if (!name) {
-      setMutationError(t("explorer.name_required"))
+      setMutationValidation("name")
       return
     }
     await runMutation(type === "file" ? "create-file" : "create-directory", scope, async (ownsOperation) => {
@@ -982,18 +1083,18 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setSingleSelection(selectionFromNode(node))
       if (type === "file") await openFileEditor(node.path, scope)
       if (!ownsOperation()) return
-      setMutationSuccess(t("explorer.create_success", { path: node.path }))
+      setMutationFeedback({ kind: "created", path: node.path })
     })
   }
 
   async function renameItem(item: ExplorerSelection | null): Promise<void> {
     if (!item) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const result = await showAppDialog({
@@ -1012,25 +1113,25 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsExplorerOperation(scope)) return
     const name = String(result.value || "")
     if (!name) {
-      setMutationError(t("explorer.name_required"))
+      setMutationValidation("name")
       return
     }
     const nextPath = joinExplorerPath(parentPath(item.path), name)
     if (normalizeExplorerPath(nextPath) === item.path) return
     await runMutation("rename", scope, async (ownsOperation) => {
       const result = await moveFileItem(item.path, nextPath, scope)
-      await applyMoveResults([result], t("explorer.rename_success", { path: result.path }), scope, ownsOperation)
+      await applyMoveResults([result], { kind: "renamed", path: result.path }, scope, ownsOperation)
     })
   }
 
   async function moveItem(item: ExplorerSelection | null): Promise<void> {
     if (!item) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const result = await showAppDialog({
@@ -1049,19 +1150,19 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsExplorerOperation(scope)) return
     const nextPath = normalizeExplorerPath(String(result.value || ""))
     if (!nextPath) {
-      setMutationError(t("explorer.name_required"))
+      setMutationValidation("name")
       return
     }
     if (nextPath === item.path) return
     await runMutation("move", scope, async (ownsOperation) => {
       const result = await moveFileItem(item.path, nextPath, scope)
-      await applyMoveResults([result], t("explorer.move_success", { path: result.path }), scope, ownsOperation)
+      await applyMoveResults([result], { kind: "moved", path: result.path }, scope, ownsOperation)
     })
   }
 
   async function moveItems(items: ExplorerSelection[]): Promise<void> {
     if (items.length === 0) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     if (items.length === 1) {
@@ -1070,7 +1171,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const result = await showAppDialog({
@@ -1089,7 +1190,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsExplorerOperation(scope)) return
     const targetDirInput = String(result.value || "")
     if (!targetDirInput.trim()) {
-      setMutationError(t("explorer.name_required"))
+      setMutationValidation("name")
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput)
@@ -1102,18 +1203,18 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     capturedScope?: ExplorerOperationScope,
   ): Promise<void> {
     if (items.length === 0) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     const scope = capturedScope ?? currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput)
     const targets = topLevelActionSelections(items)
     if (!canPlaceSelectionsInDirectory(targets, targetDir)) {
-      setMutationError(t("explorer.copy_invalid"))
+      setMutationValidation("copy-target")
       return
     }
     await runMutation("copy", scope, async (ownsOperation) => {
@@ -1126,11 +1227,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         }
       } finally {
         if (copied.length > 0) {
-          const message =
+          const feedback: ExplorerSuccess =
             copied.length === 1
-              ? t("explorer.copy_success", { path: copied[0]?.path ?? "" })
-              : t("explorer.copy_many_success", { count: copied.length, target: targetDir || "." })
-          await applyCopyResults(copied, message, scope, ownsOperation)
+              ? { kind: "copied", path: copied[0]!.path }
+              : { kind: "copied-many", count: copied.length, target: targetDir }
+          await applyCopyResults(copied, feedback, scope, ownsOperation)
         }
       }
     })
@@ -1138,12 +1239,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   async function copyItem(item: ExplorerSelection | null): Promise<void> {
     if (!item) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const result = await showAppDialog({
@@ -1162,22 +1263,22 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsExplorerOperation(scope)) return
     const nextPath = normalizeExplorerPath(String(result.value || ""))
     if (!nextPath) {
-      setMutationError(t("explorer.name_required"))
+      setMutationValidation("name")
       return
     }
     if (item.type === "directory" && (nextPath === item.path || isPathOrDescendant(nextPath, item.path))) {
-      setMutationError(t("explorer.copy_invalid"))
+      setMutationValidation("copy-target")
       return
     }
     await runMutation("copy", scope, async (ownsOperation) => {
       const result = await copyFileItem(item.path, nextPath, scope)
-      await applyCopyResults([result], t("explorer.copy_success", { path: result.path }), scope, ownsOperation)
+      await applyCopyResults([result], { kind: "copied", path: result.path }, scope, ownsOperation)
     })
   }
 
   async function copyItems(items: ExplorerSelection[]): Promise<void> {
     if (items.length === 0) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     if (items.length === 1) {
@@ -1186,7 +1287,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const result = await showAppDialog({
@@ -1205,7 +1306,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsExplorerOperation(scope)) return
     const targetDirInput = String(result.value || "")
     if (!targetDirInput.trim()) {
-      setMutationError(t("explorer.name_required"))
+      setMutationValidation("name")
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput)
@@ -1214,12 +1315,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   async function deleteItems(items: ExplorerSelection[], capturedScope?: ExplorerOperationScope): Promise<void> {
     if (items.length === 0) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     const scope = capturedScope ?? currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const targets = topLevelActionSelections(items)
@@ -1258,21 +1359,21 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsOperation()) return
     await refreshActiveSearchResults(scope)
     if (!ownsOperation()) return
-    setMutationSuccess(
+    setMutationFeedback(
       deletedPaths.length === 1
-        ? t("explorer.delete_success", { path: deletedPaths[0] ?? "" })
-        : t("explorer.delete_many_success", { count: deletedPaths.length }),
+        ? { kind: "deleted", path: deletedPaths[0]! }
+        : { kind: "deleted-many", count: deletedPaths.length },
     )
   }
 
   async function confirmDeleteItems(items: ExplorerSelection[]): Promise<void> {
     if (items.length === 0) {
-      setMutationError(t("explorer.select_required"))
+      setMutationValidation("selection")
       return
     }
     const scope = currentOperationScope()
     if (!scope) {
-      setMutationError(t("explorer.directory_required"))
+      setMutationValidation("directory")
       return
     }
     const result = await showAppDialog({
@@ -1305,8 +1406,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   function openUploadPicker(targetDirInput: string): void {
     const scope = currentOperationScope()
     if (!scope) {
-      setUploadMessageStatus("error")
-      setUploadMessage(t("explorer.directory_required"))
+      setUploadFeedback({ kind: "validation", reason: "directory" })
       return
     }
     if (!uploadInputRef) throw new Error("file upload input is not mounted")
@@ -1323,8 +1423,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   ): Promise<void> {
     const scope = capturedScope ?? currentOperationScope()
     if (!scope) {
-      setUploadMessageStatus("error")
-      setUploadMessage(t("explorer.directory_required"))
+      setUploadFeedback({ kind: "validation", reason: "directory" })
       return
     }
     if (!ownsExplorerOperation(scope) || fileEditorReserved()) return
@@ -1333,8 +1432,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const uploadToken = ++uploadOperationSequence
     const ownsUploadOperation = () => uploadOperation()?.token === uploadToken && ownsExplorerOperation(scope)
     setUploadOperation({ token: uploadToken, directory: scope.directory.trim() })
-    setUploadMessageStatus("active")
-    setUploadMessage(t("explorer.uploading"))
+    setUploadFeedback(null)
     try {
       const uploaded = await uploadDroppedFiles(targetDir, files, scope)
       if (!ownsUploadOperation()) return
@@ -1344,19 +1442,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         if (!ownsUploadOperation()) return
       } catch (error) {
         if (!ownsUploadOperation()) return
-        setUploadMessageStatus("error")
-        setUploadMessage(
-          t("explorer.upload_reload_error", { message: error instanceof Error ? error.message : String(error) }),
-        )
+        setUploadFeedback({ kind: "upload-reload-failed", count: uploaded.length, target: targetDir, error })
         return
       }
       if (!ownsUploadOperation()) return
-      setUploadMessageStatus("active")
-      setUploadMessage(tc("explorer.upload_success", uploaded.length, { target: targetDir || "." }))
+      setUploadFeedback({ kind: "uploaded", count: uploaded.length, target: targetDir })
     } catch (error) {
       if (!ownsUploadOperation()) return
-      setUploadMessageStatus("error")
-      setUploadMessage(t("explorer.upload_error", { message: error instanceof Error ? error.message : String(error) }))
+      setUploadFeedback({ kind: "failure", operation: "upload", error })
     } finally {
       if (ownsUploadOperation()) {
         setUploadOperation(null)
@@ -1666,27 +1759,40 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           />
         }
       />
-      <Show when={uploadMessage()}>
-        <div
-          class="file-explorer-upload-message"
-          data-status={uploadMessageStatus()}
-          role={uploadMessageStatus() === "error" ? "alert" : "status"}
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {uploadMessage()}
-        </div>
-      </Show>
-      <Show when={mutationMessage()}>
-        <div
-          class="file-explorer-command-message"
-          data-status={mutationMessageStatus()}
-          data-ui="file-explorer-command-message"
-          role={mutationMessageStatus() === "error" ? "alert" : "status"}
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {mutationMessage()}
+      <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailures().length > 0}>
+        <div class="file-explorer-feedback-stack">
+          <Show when={uploading()}>
+            <Feedback class="file-explorer-feedback" tone="info">{t("explorer.uploading")}</Feedback>
+          </Show>
+          <Show when={!uploading() && uploadFeedback()}>
+            {(feedback) => <ExplorerActionFeedback feedback={feedback()} dataUI="file-explorer-upload-message" />}
+          </Show>
+          <Show when={mutationFeedback()}>
+            {(feedback) => <ExplorerActionFeedback feedback={feedback()} dataUI="file-explorer-command-message" />}
+          </Show>
+          <For each={expandedDirectoryFailures()}>
+            {([path, failure]) => (
+              <Feedback
+                class="file-explorer-feedback"
+                tone="error"
+                title={t("explorer.directory_load_failed", { path })}
+                details={formatErrorDetails(failure.error) || undefined}
+                actions={
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    tone="neutral"
+                    onClick={() => void loadDirectory(path, { force: true })}
+                  >
+                    {t("common.retry")}
+                  </Button>
+                }
+              >
+                {fileErrorSummary(failure.error, "load")}
+              </Feedback>
+            )}
+          </For>
         </div>
       </Show>
       <ContextMenu.Root>
@@ -1713,19 +1819,29 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             <Show
               when={!rootError() && !searchError()}
               fallback={
-                <div class="empty-hint file-explorer-empty">
-                  <p>{searchError() ? t("explorer.search_failed") : t("explorer.load_failed")}</p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="md"
-                    tone="danger"
-                    data-ui={searchError() ? "file-explorer-search-retry" : "file-explorer-retry"}
-                    onClick={() => (searchError() ? void refetchSearch() : void retryRootDirectory())}
-                  >
-                    {t("common.retry")}
-                  </Button>
-                </div>
+                <Show when={searchError() ?? rootError()}>
+                  {(failure) => (
+                    <Feedback
+                      class="file-explorer-feedback file-explorer-read-feedback"
+                      tone="error"
+                      details={formatErrorDetails(failure().error) || undefined}
+                      actions={
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          tone="neutral"
+                          data-ui={searchError() ? "file-explorer-search-retry" : "file-explorer-retry"}
+                          onClick={() => (searchError() ? void refetchSearch() : void retryRootDirectory())}
+                        >
+                          {t("common.retry")}
+                        </Button>
+                      }
+                    >
+                      {fileErrorSummary(failure().error, searchError() ? "search" : "load")}
+                    </Feedback>
+                  )}
+                </Show>
               }
             >
               <Show

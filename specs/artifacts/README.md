@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件规则坐标与操作提示](2026-10-13-file-metadata-feedback/README.md)：真实API、前后截图与运行资格。
+
 - [388 MCP 结构化结果](2026-10-13-mcp-structured-result-388/README.md)：后台红绿、12次真实Sol流式请求、页面截图与正常收尾。
 
 - [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：真实请求、失败基线、修复后语义指标和明确验收边界。

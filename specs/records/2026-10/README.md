@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件规则坐标与操作提示](2026-10-13-file-metadata-feedback.md)：单一忽略规则、真实回执和桌面反馈。
+
 - [388 MCP 结构化结果与空资源](2026-10-13-mcp-structured-result-388.md)：协议根因、真实Task调用与大结果补读。
 
 - [Task/Mission 持续目标崩溃恢复](2026-10-13-continuous-goal-crash-recovery.md)：实际进程终止、正式启动恢复与用量身份。

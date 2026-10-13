@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件规则坐标与操作提示](records/2026-10/2026-10-13-file-metadata-feedback.md)：父工作树回执与当前语言事实投影。
+
 - [388 MCP 结构化结果与空资源](records/2026-10/2026-10-13-mcp-structured-result-388.md)：共享物化修复、正式正向测试和真实Sol完整文件恢复验收。
 
 - [Task/Mission 持续目标崩溃恢复](records/2026-10/2026-10-13-continuous-goal-crash-recovery.md)：独立真实 Provider 故障、恢复与修复验收。

@@ -1,0 +1,146 @@
+[
+  {
+    "action": "copy",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh"
+    },
+    "input": {
+      "path": "note.md",
+      "newPath": "../copied.md"
+    },
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "target": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\copied.md",
+    "targetContent": "Scoped child exact content\n",
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\copied.md\""
+      }
+    ]
+  },
+  {
+    "action": "move",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh"
+    },
+    "input": {
+      "path": "note.md",
+      "newPath": "../moved.md"
+    },
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "target": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\moved.md",
+    "targetContent": "Scoped child exact content\n",
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\copied.md\""
+      },
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\moved.md\""
+      }
+    ]
+  },
+  {
+    "action": "create",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh"
+    },
+    "input": {
+      "path": "../created.md",
+      "type": "file",
+      "content": "Created exact content\n"
+    },
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "target": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\created.md",
+    "targetContent": "Created exact content\n",
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\copied.md\""
+      },
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\moved.md\""
+      },
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\created.md\""
+      }
+    ]
+  },
+  {
+    "action": "list",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh"
+    },
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\copied.md\""
+      },
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\moved.md\""
+      },
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\created.md\""
+      },
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\.opencorvus-test-project-identity\""
+      }
+    ]
+  },
+  {
+    "action": "delete",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5L7VJb\\test-83660-q0s70r\\fixtures\\memory-pNyUnh"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": "../moved.md"
+      }
+    }
+  }
+]

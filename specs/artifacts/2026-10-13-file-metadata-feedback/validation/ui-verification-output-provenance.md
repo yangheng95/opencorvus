@@ -1,0 +1,9 @@
+# Explorer feedback verification output
+
+These files are **transcribed from original tool output**, not newly executed checks and not recovered runner log files. The stdout text was available in this agent's conversation. Displayed timings and tool result metadata are copied from those original results. No routine verification was rerun to produce this record.
+
+- `service-tests-transcribed.log`: command `bun run script/run-unit-tests.ts test/file-workbench-mutation.test.ts test/api-error.test.ts`, cwd `D:\myhexin-local\opencorvus\packages\overlay`. Original exec_command chunk `536bb9`, exit_code `0`, wall_time_seconds `2.2241152`. It contains the entire tool-visible output: 27 tests / 87 assertions, then 28 tests / 107 assertions. A separate runtime/log path was not surfaced in that original output. This agent did not retain a separate runner stdout file.
+- `typecheck-tools-transcribed.json`: both original typecheck invocations, including yielded session identifiers and the completion tool results. The first command was typecheck alone. The final command also ran scoped `git diff --check` after typecheck, so its exit_code is the combined shell command result, not a separately captured typecheck exit variable. There was no additional completion stdout or diagnostic text in either original result.
+- `css-and-diff-transcribed.log`: entire tool-visible output from original exec_command chunk `8ec5d9`, exit_code `0`, wall_time_seconds `3.3795103`. The command ran `bun run --cwd packages/overlay check:css-tokens`, scoped `git diff --check`, then `git status --short`. The diff check printed no diagnostics. The worktree listing is the original observation, including other owners' paths.
+
+No separate typecheck stdout beyond `$ tsc --noEmit` was produced by the original tools; no missing diagnostics or measurements have been inferred or reconstructed. These artifacts prove the recorded static/service checks only, not desktop visual acceptance.

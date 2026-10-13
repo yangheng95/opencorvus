@@ -1,0 +1,118 @@
+[
+  {
+    "label": "explicit root discovery",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectID": "prj_hofiDu8sFRsQ3R6Oghiw"
+    },
+    "discovery": {
+      "exitCode": 0,
+      "stdout": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-BJHIDs/test-81428-VrDqHF/fixtures/memory-ZUzfW3\n",
+      "stderr": ""
+    },
+    "physical": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "relative": "..\\memory-g47GNt\\explicit-outside-scope"
+    },
+    "rules": "/report.md\n"
+  },
+  {
+    "label": "list directory authority outside rule root",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectID": "prj_hofiDu8sFRsQ3R6Oghiw"
+    },
+    "method": "GET",
+    "route": "/file?path=",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "report.md",
+          "path": "report.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope\\report.md",
+          "type": "file",
+          "ignored": true
+        }
+      ]
+    },
+    "errors": []
+  },
+  {
+    "label": "list worktree authority from outside directory",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectID": "prj_hofiDu8sFRsQ3R6Oghiw"
+    },
+    "method": "GET",
+    "route": "/file?path=..%5C..%5Cmemory-ZUzfW3",
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "errors": [
+      {
+        "name": "RangeError",
+        "message": "path should be a `path.relative()`d string, but got \"..\\..\\memory-ZUzfW3\\.gitignore\""
+      }
+    ]
+  },
+  {
+    "label": "copy within outside directory authority",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-ZUzfW3",
+      "projectID": "prj_hofiDu8sFRsQ3R6Oghiw"
+    },
+    "method": "POST",
+    "route": "/file/item/copy",
+    "input": {
+      "path": "report.md",
+      "newPath": "copied.md"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "sourcePath": "report.md",
+        "path": "copied.md",
+        "node": {
+          "name": "copied.md",
+          "path": "copied.md",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope\\copied.md",
+          "type": "file",
+          "ignored": false
+        }
+      }
+    },
+    "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BJHIDs\\test-81428-VrDqHF\\fixtures\\memory-g47GNt\\explicit-outside-scope\\copied.md",
+    "content": "Directory-authority exact content\n",
+    "errors": []
+  }
+]

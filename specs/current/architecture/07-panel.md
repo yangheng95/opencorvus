@@ -498,6 +498,26 @@ current directory root or its Git worktree root, through lexical or physical
 aliases. Independently addressable terminal symlink entries retain their own
 move/delete semantics; an ancestor link does not make an entity root mutable.
 
+File listing and mutation receipts share one current-worktree root ignore-rule
+loader and entry matcher. Public Node paths stay directory-relative; rule
+coordinates retain the logical worktree entry, including internal and terminal
+links. An admitted external directory alias maps its outer continuous physical worktree
+ancestor to that root while preserving the remaining logical entry suffix.
+An admitted entry with neither a logical worktree coordinate nor a continuous
+physical-parent worktree mapping has ignored=false; the root container itself
+also has ignored=false. An empty root offset remains a valid entry anchor;
+rule reads and path resolution errors remain errors. Root .gitignore and .ignore
+retain their existing order and scope, without a second directory rule source.
+
+Explorer feedback retains operation results, validation reasons and original
+failure causes in the existing mutation, upload, directory and search owners.
+Current-language summaries and counts derive during rendering; language changes
+do not replay file actions. Stable API error types supply localized summaries,
+with complete original diagnostics in the shared Details disclosure. Upload
+publication followed by reload failure retains its committed-upload meaning.
+Expanded directory failures derive from the current directory error Map;
+feedback and diagnostic scrolling stay within a bounded Explorer region.
+
 Explorer rows retain their render identity through equivalent directory refreshes.
 The key derives from the existing API authority revision, directory, committed
 selection epoch, row kind, physical node type and exact normalized path. Ordinary
