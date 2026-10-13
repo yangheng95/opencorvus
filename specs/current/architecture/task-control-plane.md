@@ -69,6 +69,16 @@ The domain writer and its canonical Protocol fact share one database transaction
 
 Execution actor identity is resolved from the exact durable user Message named by `inputMessageID` and its owning Session. `persistedExecutionIdentity` is shared by lifecycle, assistant-message ownership, and Task execution projections. A generic `assistant` Session is a container; its occurrence actor is the input Message's `agent`. Fixed right-sidebar Chat/Work metadata and exact WorkerTurnDescriptor identity remain binding and must agree with that input. Helper and Mission receipt messages retain their real participant identity while `sessionAgentID` identifies the input's execution owner. User-message removal projects the original event snapshot through the same identity resolver because the row has already been deleted. Session-level notifications and empty containers have no fabricated execution; the root control inbox keeps its distinct addressing semantics. Historical occurrences never derive an actor from a newer input, the latest descriptor, or the current configuration.
 
+Session-local delegates classify the returned canonical assistant Message before
+publishing a terminal fact. They use the same hard-error conversion as Task
+workers and Orchestrator, preserve the original error as its cause, handle
+cancelled replies through the cancellation path, and require a completed reply
+with a nonempty text handoff before publishing `completed`. A returned reply
+pins publication to its own `inputMessageID` and `final_message_id`. The first
+terminal remains immutable; a later handoff-validation exception cannot be used
+to repair an already-published success. Original failed Message/Part evidence is
+retained, and an independent retry has its own execution identity.
+
 The lifecycle event family is:
 
 ```text

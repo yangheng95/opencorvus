@@ -1,7 +1,10 @@
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
+import { AgentRunError, buildHardErrorFromFinalMessage } from "@/agent/run-error"
 import { CapabilityRules } from "@/capability/rules"
 import { Session } from "@/session"
 import { SessionStatus } from "@/session/status"
+import { Message } from "@/session/message"
+import { isCompletedReplyToUserMessage } from "@/session/completed-reply"
 import z from "zod"
 import { Tool } from "./tool"
 import {
@@ -152,6 +155,8 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
     }
     const abortChild = () => SessionPrompt.cancel(child.id, child.directory, childCancellationOrigin())
     let promptGenerationOwner: AbortSignal | undefined
+    let inputMessageID: string | undefined
+    let finalMessageID: string | undefined
     let abortListenerInstalled = false
     try {
       ctx.metadata({
@@ -181,41 +186,62 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
           },
         },
       )
+      if (result.info.role !== "assistant" || result.info.sessionID !== child.id) {
+        throw new AgentRunError(child.kind, `${ctx.agent} returned a Message outside its child assistant reply`)
+      }
+      inputMessageID = result.info.parentID
+      finalMessageID = result.info.id
       promptGenerationOwner = SessionPrompt.messageOwner(child.id, result.info.id)
       if (!promptGenerationOwner && SessionPrompt.hasGeneration(child.id)) {
         throw new Error(
           `delegate_agent child ${child.id} final message ${result.info.id} has no prompt generation receipt`,
         )
       }
-      await SessionStatus.set(child.id, { type: "terminal", reason: "completed" }, { promptGenerationOwner })
+      if (ctx.abort.aborted) throw abortError(ctx.abort)
+      const hardError = buildHardErrorFromFinalMessage({ kind: child.kind, agentName: ctx.agent, finalMessage: result })
+      if (hardError) throw hardError
+      if (result.info.error && Message.AbortedError.isInstance(result.info.error)) {
+        throw new Message.AbortedError(result.info.error.data, { cause: result.info.error })
+      }
+      if (!isCompletedReplyToUserMessage(result, inputMessageID)) {
+        throw new AgentRunError(child.kind, `${ctx.agent} returned an unsettled child reply`)
+      }
       const handoff = result.parts
         .filter((part): part is Extract<(typeof result.parts)[number], { type: "text" }> => part.type === "text")
         .map((part) => part.text.trim())
         .filter(Boolean)
         .join("\n\n")
+      if (!handoff) throw new AgentRunError(child.kind, `${ctx.agent} returned an empty text handoff`)
+      const output = JSON.stringify(
+        DelegateAgentOutcomeSchema.parse({
+          kind: "terminal_success",
+          session_id: child.id,
+          final_message_id: result.info.id,
+          handoff,
+        }),
+      )
+      await SessionStatus.set(
+        child.id,
+        { type: "terminal", reason: "completed", final_message_id: finalMessageID },
+        { promptGenerationOwner, inputMessageID },
+      )
       return {
         title: child.title,
         metadata: { childSessionID: child.id, parentSessionID: parent.id, agent: ctx.agent },
-        output: JSON.stringify(
-          DelegateAgentOutcomeSchema.parse({
-            kind: "terminal_success",
-            session_id: child.id,
-            final_message_id: result.info.id,
-            handoff,
-          }),
-        ),
+        output,
       }
     } catch (error) {
-      if (ctx.abort.aborted) {
-        SessionPrompt.cancel(child.id, child.directory, childCancellationOrigin())
+      if (ctx.abort.aborted || (error != null && Message.AbortedError.isInstance(error))) {
+        if (ctx.abort.aborted) SessionPrompt.cancel(child.id, child.directory, childCancellationOrigin())
         await SessionStatus.set(
           child.id,
           {
             type: "terminal",
             reason: "aborted",
-            error: abortError(ctx.abort).message,
+            error: ctx.abort.aborted ? abortError(ctx.abort).message : (error as Error).message,
+            ...(finalMessageID ? { final_message_id: finalMessageID } : {}),
           },
-          { promptGenerationOwner },
+          { promptGenerationOwner, inputMessageID },
         )
       } else {
         await SessionStatus.set(
@@ -224,8 +250,9 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
             type: "terminal",
             reason: "error",
             error: error instanceof Error ? error.message : String(error),
+            ...(finalMessageID ? { final_message_id: finalMessageID } : {}),
           },
-          { promptGenerationOwner },
+          { promptGenerationOwner, inputMessageID },
         )
       }
       throw error

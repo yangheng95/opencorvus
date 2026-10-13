@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [392 委派失败与终态](delegate-terminal-plan-392.md)：[原始错误、准确执行轮次与验收](delegate-terminal-392/README.md)。
+
 - [391 历史活动与交接输入](activity-input-projection-plan-391.md)：[实时与恢复的一致性及Sources](activity-input-projection-391/README.md)。
 
 - [390 执行轮次身份](execution-actor-identity-plan-390.md)：[消息、生命周期与真实成员更新](execution-actor-identity-390/README.md)。

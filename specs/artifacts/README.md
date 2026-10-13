@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [392 委派失败与终态](2026-10-05-connection-workspace-authority/delegate-terminal-392/README.md)：原始Provider故障、正向合同和真实模型验收。
+
 - [395 稀疏配置层继承](2026-10-13-sparse-config-layer-defaults-395/README.md)：公开探针、58项后台合同、真实Base/Ask与未完成批准、迟关闭/exit1原证据。
 
 - [文件发布与搜索顺序证据](2026-10-13-file-search-publication-order/README.md)：原HTTP/Native采集时序、实体与桌面。

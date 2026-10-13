@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [392 委派失败与终态](2026-10-14-delegate-terminal-392.md)：原错误保留、准确执行轮次、Sources与真实终态验收。
+
 - [395 稀疏配置层](2026-10-13-sparse-config-layer-defaults-395.md)：跨层默认值、读取/写候选与当前配置契约。
 
 - [文件发布与搜索顺序](2026-10-13-file-search-publication-order.md)：旧scan复用候选与有限真实验证。

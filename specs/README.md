@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [392 委派失败与终态](artifacts/2026-10-05-connection-workspace-authority/delegate-terminal-plan-392.md)：返回消息错误、交接校验及首次终态发布。
+
 - [395 稀疏配置层](records/2026-10/2026-10-13-sparse-config-layer-defaults-395.md)：实际文件层默认注入与有效配置继承的根因、影响和单源方案。
 
 - [文件发布后的搜索采集](records/2026-10/2026-10-13-file-search-publication-order.md)：真实并发采集边界、原身份与正向验收。

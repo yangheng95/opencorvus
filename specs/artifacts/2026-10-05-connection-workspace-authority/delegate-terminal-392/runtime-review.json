@@ -1,0 +1,77 @@
+{
+  "childSessionID": "ses_-zUS3ECxnzzAYeefUeoJ",
+  "parentSessionID": "ses_-zUS3EF60zz7jCzz2G51",
+  "inputMessageID": "msg_g0VXwln3q00ESBcR3bU0",
+  "finalMessageID": "msg_g0VXwloQX008mxDjSX23",
+  "actor": "work",
+  "source": {
+    "id": "prt_g0VXwloNt00iW7zhpjR7",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\project\\来源材料\\方案甲.txt",
+    "range": {
+      "startLine": 2,
+      "endLine": 3
+    },
+    "toolPartID": "prt_g0VXwloFv001rXq1RrLY"
+  },
+  "requests": 7,
+  "preflight": {
+    "sessionID": "ses_hVtl7dPWnsYZaBel63Lf",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "native": {
+    "terminal": {
+      "occurrenceID": "delegate392-live-10cb7163-c924-4c5c-a932-f89cb47d70e9",
+      "pid": 4584,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "durationMilliseconds": 147737,
+    "physicalCompletion": true,
+    "pairedCleanupComplete": true
+  },
+  "replayEventID": "pev_g0VXwlqQX00kxoA3XvUj",
+  "canonicalTerminalEventID": "pev_g0VXwlqQX00kxoA3XvUj",
+  "lifecycleSequence": [
+    {
+      "id": "pev_g0VXwlnC8004JUY877uW",
+      "status": {
+        "type": "streaming"
+      }
+    },
+    {
+      "id": "pev_g0VXwlnCy00qCCL1VUfk",
+      "status": {
+        "type": "streaming"
+      }
+    },
+    {
+      "id": "pev_g0VXwloUB008qQXEbWmg",
+      "status": {
+        "type": "streaming"
+      }
+    },
+    {
+      "id": "pev_g0VXwloV100S7AsOTISa",
+      "status": {
+        "type": "streaming"
+      }
+    },
+    {
+      "id": "pev_g0VXwlqQX00kxoA3XvUj",
+      "status": {
+        "type": "terminal",
+        "reason": "completed",
+        "final_message_id": "msg_g0VXwloQX008mxDjSX23"
+      }
+    }
+  ],
+  "boundary": "Canonical DB, public HTTP/SSE, actual streaming Provider, and Native resource checks. UI accepted separately by actual page interaction and manual screenshot review.",
+  "remaining": [
+    "The 391 Provider business failure is preserved. This 392 live scope completed normally; real Provider failure after the fix was not reproduced. Failure behavior is qualified by separate backend contracts, not this live success.",
+    "Original Research Studio long-history dataset is not covered by this bounded real session-local run."
+  ]
+}

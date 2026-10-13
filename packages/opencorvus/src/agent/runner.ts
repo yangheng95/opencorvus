@@ -111,6 +111,7 @@ import { Bus } from "@/bus"
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
 import { Message } from "@/session/message"
+import { AgentRunError, buildHardErrorFromFinalMessage } from "./run-error"
 import type { SessionKind } from "@/session/session.sql"
 import type { Tool as AITool } from "ai"
 import { AgentTrace } from "@/trace"
@@ -855,77 +856,6 @@ export function promptToolSwitchesForAgentRun(input: {
     if (Object.hasOwn(switches, toolID)) switches[toolID] = true
   }
   return switches
-}
-
-// ---------------------------------------------------------------------------
-// Error types — every failure surfaces as AgentRunError so callers do not
-// need to know about kind-specific exception classes.
-// ---------------------------------------------------------------------------
-
-export class AgentRunError extends Error {
-  constructor(
-    public readonly kind: SessionKind,
-    message: string,
-    options?: ErrorOptions,
-  ) {
-    super(`[${kind}] ${message}`, options)
-    this.name = "AgentRunError"
-  }
-}
-
-/**
- * Pure assertion that converts a finished assistant message's stamped error
- * or real output-limit finish into a thrown AgentRunError when the error must
- * abort the agent run. Returns `null` when no failure should be raised — i.e.
- * no error or output-limit finish is present, or the error is
- * `Message.AbortedError` (soft cancellation already represented by
- * SessionStatus terminal "aborted").
- *
- * Extracted from runAgentSession so the conversion logic (provider error
- * shape → AgentRunError) can be exercised by unit
- * tests without standing up SessionPrompt / Provider mocks.
- *
- * Spec: surface hard LLM failures so the orchestrator's catch path runs.
- * Root cause of the intent-analysis "秒退" incident on tsk_ddf383614
- * (2026-04-30) — see runAgentSession callsite below.
- */
-export function buildHardErrorFromFinalMessage(input: {
-  kind: SessionKind
-  agentName: string
-  finalMessage: { info: { role: string; error?: unknown; finish?: string } }
-  effectiveOutputLimit?: number
-}): AgentRunError | null {
-  const { kind, agentName, finalMessage } = input
-  if (finalMessage.info.role !== "assistant") return null
-  const err = finalMessage.info.error
-  if (err) {
-    if (Message.AbortedError.isInstance(err as Error)) return null
-    const errName = (err as { name?: string }).name ?? "UnknownError"
-    const errMessage = (err as { data?: { message?: string } }).data?.message ?? errName
-    return new AgentRunError(kind, `LLM error during ${agentName}: ${errName}: ${errMessage}`, {
-      cause: err as Error,
-    })
-  }
-  if (finalMessage.info.finish === "length") {
-    const outputLengthMessage =
-      input.effectiveOutputLimit === undefined
-        ? "The model response exceeded its output limit."
-        : `The model response exceeded the effective runtime output cap of ${input.effectiveOutputLimit} tokens.`
-    const outputLengthError = new Message.OutputLengthError({
-      message: outputLengthMessage,
-      ...(input.effectiveOutputLimit === undefined ? {} : { effectiveOutputLimit: input.effectiveOutputLimit }),
-    })
-    const limitDetail =
-      input.effectiveOutputLimit === undefined
-        ? ""
-        : ` The effective runtime output cap for this request was ${input.effectiveOutputLimit} tokens.`
-    return new AgentRunError(
-      kind,
-      `LLM error during ${agentName}: ${outputLengthError.name}: The model response exceeded its output limit.${limitDetail}`,
-      { cause: outputLengthError },
-    )
-  }
-  return null
 }
 
 export function toolErrorPartsFromFinalMessage(finalMessage: {

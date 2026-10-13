@@ -1,0 +1,619 @@
+{
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\after-canonical-tests.log",
+      "archive": "checks/local/after-canonical-tests.log.gz",
+      "redactedBytes": 1493,
+      "compressedBytes": 546
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\after-tests.log",
+      "archive": "checks/local/after-tests.log.gz",
+      "redactedBytes": 11660,
+      "compressedBytes": 2089
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\architecture.log",
+      "archive": "checks/local/architecture.log.gz",
+      "redactedBytes": 72,
+      "compressedBytes": 86
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\archive.log",
+      "archive": "checks/local/archive.log.gz",
+      "redactedBytes": 0,
+      "compressedBytes": 20
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\archive.ts",
+      "archive": "checks/local/archive.ts.gz",
+      "redactedBytes": 3710,
+      "compressedBytes": 1602
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\before-canonical-tests.log",
+      "archive": "checks/local/before-canonical-tests.log.gz",
+      "redactedBytes": 15862,
+      "compressedBytes": 2629
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\before-contract-tests.log",
+      "archive": "checks/local/before-contract-tests.log.gz",
+      "redactedBytes": 15690,
+      "compressedBytes": 2391
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\before-tests.log",
+      "archive": "checks/local/before-tests.log.gz",
+      "redactedBytes": 14585,
+      "compressedBytes": 1859
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\builtin.json",
+      "archive": "checks/local/builtin.json.gz",
+      "redactedBytes": 52,
+      "compressedBytes": 58
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\check-runtime.mjs",
+      "archive": "checks/local/check-runtime.mjs.gz",
+      "redactedBytes": 7741,
+      "compressedBytes": 2665
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\child-conversation.json",
+      "archive": "checks/local/child-conversation.json.gz",
+      "redactedBytes": 24806,
+      "compressedBytes": 4243
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\contract-tests-final.log",
+      "archive": "checks/local/contract-tests-final.log.gz",
+      "redactedBytes": 1742,
+      "compressedBytes": 605
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\delegate-after-complete.patch",
+      "archive": "checks/local/delegate-after-complete.patch.gz",
+      "redactedBytes": 5086,
+      "compressedBytes": 1485
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\delegate-after.patch",
+      "archive": "checks/local/delegate-after.patch.gz",
+      "redactedBytes": 5046,
+      "compressedBytes": 1472
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\delegate-agent.before.ts",
+      "archive": "checks/local/delegate-agent.before.ts.gz",
+      "redactedBytes": 9505,
+      "compressedBytes": 3180
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\docs.log",
+      "archive": "checks/local/docs.log.gz",
+      "redactedBytes": 35,
+      "compressedBytes": 55
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\launch.log",
+      "archive": "checks/local/launch.log.gz",
+      "redactedBytes": 1817,
+      "compressedBytes": 826
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live-final.json",
+      "archive": "checks/local/live-final.json.gz",
+      "redactedBytes": 30996,
+      "compressedBytes": 5731
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\parent-conversation.json",
+      "archive": "checks/local/parent-conversation.json.gz",
+      "redactedBytes": 45130,
+      "compressedBytes": 5882
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\prepare-check.mjs",
+      "archive": "checks/local/prepare-check.mjs.gz",
+      "redactedBytes": 3500,
+      "compressedBytes": 1271
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\prepare.mjs",
+      "archive": "checks/local/prepare.mjs.gz",
+      "redactedBytes": 2236,
+      "compressedBytes": 961
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\read-api.log",
+      "archive": "checks/local/read-api.log.gz",
+      "redactedBytes": 121,
+      "compressedBytes": 126
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\read-api.mjs",
+      "archive": "checks/local/read-api.mjs.gz",
+      "redactedBytes": 1412,
+      "compressedBytes": 715
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\read-facts.log",
+      "archive": "checks/local/read-facts.log.gz",
+      "redactedBytes": 2856,
+      "compressedBytes": 1359
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\read-facts.ts",
+      "archive": "checks/local/read-facts.ts.gz",
+      "redactedBytes": 3090,
+      "compressedBytes": 1260
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\replay-events.log",
+      "archive": "checks/local/replay-events.log.gz",
+      "redactedBytes": 24491,
+      "compressedBytes": 5023
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\runner.before.ts",
+      "archive": "checks/local/runner.before.ts.gz",
+      "redactedBytes": 82134,
+      "compressedBytes": 19517
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\runtime-check.log",
+      "archive": "checks/local/runtime-check.log.gz",
+      "redactedBytes": 1877,
+      "compressedBytes": 1041
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\shutdown.log",
+      "archive": "checks/local/shutdown.log.gz",
+      "redactedBytes": 82,
+      "compressedBytes": 90
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\typecheck.log",
+      "archive": "checks/local/typecheck.log.gz",
+      "redactedBytes": 75,
+      "compressedBytes": 91
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-1.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-1.json.gz",
+      "redactedBytes": 691,
+      "compressedBytes": 378
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-10.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-10.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-11.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-11.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-12.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-12.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-13.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-13.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-14.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-14.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 420
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-15.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-15.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-16.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-16.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-17.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-17.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-18.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-18.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 418
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-19.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-19.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 418
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-2.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-2.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 418
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-20.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-20.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-21.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-21.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 418
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-22.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-22.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-23.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-23.json.gz",
+      "redactedBytes": 802,
+      "compressedBytes": 418
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-3.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-3.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-4.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-4.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-5.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-5.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-6.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-6.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-7.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-7.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-8.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-8.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 418
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-chain-supervision-80344-9.json",
+      "archive": "checks/local/live/delegate392-live-chain-supervision-80344-9.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-final-provider-audit.json",
+      "archive": "checks/local/live/delegate392-live-final-provider-audit.json.gz",
+      "redactedBytes": 130735,
+      "compressedBytes": 3226
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-physical-terminal-and-pair-cleanup.json",
+      "archive": "checks/local/live/delegate392-live-physical-terminal-and-pair-cleanup.json.gz",
+      "redactedBytes": 2425,
+      "compressedBytes": 845
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-qualified-surface-completion.json",
+      "archive": "checks/local/live/delegate392-live-qualified-surface-completion.json.gz",
+      "redactedBytes": 361,
+      "compressedBytes": 239
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-settlement-owner.json",
+      "archive": "checks/local/live/delegate392-live-settlement-owner.json.gz",
+      "redactedBytes": 458,
+      "compressedBytes": 291
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\delegate-terminal-392\\live\\delegate392-live-shutdown-admission.json",
+      "archive": "checks/local/live/delegate392-live-shutdown-admission.json.gz",
+      "redactedBytes": 531,
+      "compressedBytes": 365
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\stdout.log",
+      "archive": "checks/live/runtime/stdout.log.gz",
+      "redactedBytes": 545,
+      "compressedBytes": 368
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\stderr.log",
+      "archive": "checks/live/runtime/stderr.log.gz",
+      "redactedBytes": 7797,
+      "compressedBytes": 751
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\startup.json",
+      "archive": "checks/live/runtime/startup.json.gz",
+      "redactedBytes": 154,
+      "compressedBytes": 149
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\launch-owner.json",
+      "archive": "checks/live/runtime/launch-owner.json.gz",
+      "redactedBytes": 3355,
+      "compressedBytes": 1291
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\runtime\\log\\dev.log",
+      "archive": "checks/live/runtime/runtime/log/dev.log.gz",
+      "redactedBytes": 1895167,
+      "compressedBytes": 66010
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\authority-ready.json",
+      "archive": "checks/live/runtime/evidence/authority-ready.json.gz",
+      "redactedBytes": 15917,
+      "compressedBytes": 2774
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\managed-parent-ready.json",
+      "archive": "checks/live/runtime/evidence/managed-parent-ready.json.gz",
+      "redactedBytes": 503,
+      "compressedBytes": 303
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\native-host-ready.json",
+      "archive": "checks/live/runtime/evidence/native-host-ready.json.gz",
+      "redactedBytes": 1860,
+      "compressedBytes": 695
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\native-host-settled.json",
+      "archive": "checks/live/runtime/evidence/native-host-settled.json.gz",
+      "redactedBytes": 907,
+      "compressedBytes": 479
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\owned-config-hierarchy.json",
+      "archive": "checks/live/runtime/evidence/owned-config-hierarchy.json.gz",
+      "redactedBytes": 750,
+      "compressedBytes": 332
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\preflight-ready.json",
+      "archive": "checks/live/runtime/evidence/preflight-ready.json.gz",
+      "redactedBytes": 692,
+      "compressedBytes": 434
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\profile-selection-admitted.json",
+      "archive": "checks/live/runtime/evidence/profile-selection-admitted.json.gz",
+      "redactedBytes": 261,
+      "compressedBytes": 178
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\project-baseline.json",
+      "archive": "checks/live/runtime/evidence/project-baseline.json.gz",
+      "redactedBytes": 461,
+      "compressedBytes": 327
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-1.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-1.json.gz",
+      "redactedBytes": 254,
+      "compressedBytes": 215
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-10.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-10.json.gz",
+      "redactedBytes": 28249,
+      "compressedBytes": 1587
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-11.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-11.json.gz",
+      "redactedBytes": 28705,
+      "compressedBytes": 1689
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-12.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-12.json.gz",
+      "redactedBytes": 29218,
+      "compressedBytes": 1747
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-13.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-13.json.gz",
+      "redactedBytes": 36746,
+      "compressedBytes": 1889
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-14.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-14.json.gz",
+      "redactedBytes": 36785,
+      "compressedBytes": 1899
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-15.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-15.json.gz",
+      "redactedBytes": 37280,
+      "compressedBytes": 1985
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-16.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-16.json.gz",
+      "redactedBytes": 37325,
+      "compressedBytes": 1983
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-17.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-17.json.gz",
+      "redactedBytes": 44853,
+      "compressedBytes": 2065
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-18.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-18.json.gz",
+      "redactedBytes": 44892,
+      "compressedBytes": 2074
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-19.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-19.json.gz",
+      "redactedBytes": 45387,
+      "compressedBytes": 2128
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-2.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-2.json.gz",
+      "redactedBytes": 430,
+      "compressedBytes": 300
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-20.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-20.json.gz",
+      "redactedBytes": 59364,
+      "compressedBytes": 2281
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-21.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-21.json.gz",
+      "redactedBytes": 59403,
+      "compressedBytes": 2288
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-22.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-22.json.gz",
+      "redactedBytes": 59914,
+      "compressedBytes": 2348
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-3.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-3.json.gz",
+      "redactedBytes": 13035,
+      "compressedBytes": 1023
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-4.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-4.json.gz",
+      "redactedBytes": 13074,
+      "compressedBytes": 1055
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-5.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-5.json.gz",
+      "redactedBytes": 13563,
+      "compressedBytes": 1296
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-6.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-6.json.gz",
+      "redactedBytes": 14009,
+      "compressedBytes": 1360
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-7.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-7.json.gz",
+      "redactedBytes": 14056,
+      "compressedBytes": 1361
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-8.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-8.json.gz",
+      "redactedBytes": 14233,
+      "compressedBytes": 1373
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-9.json",
+      "archive": "checks/live/runtime/evidence/provider-4584-df4a43dd-c86b-4413-95ab-7dd4af804ffb-9.json.gz",
+      "redactedBytes": 28210,
+      "compressedBytes": 1574
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\evidence\\provider-pair-staging.json",
+      "archive": "checks/live/runtime/evidence/provider-pair-staging.json.gz",
+      "redactedBytes": 1689,
+      "compressedBytes": 473
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-delegate-terminal-392-live.ts",
+      "archive": "checks/live/launcher/live-sol-delegate-terminal-392-live.ts.gz",
+      "redactedBytes": 33465,
+      "compressedBytes": 9569
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-delegate-terminal-392-live-launch.ps1",
+      "archive": "checks/live/launcher/live-sol-delegate-terminal-392-live-launch.ps1.gz",
+      "redactedBytes": 33055,
+      "compressedBytes": 8226
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-delegate-terminal-392-live-shutdown.ps1",
+      "archive": "checks/live/launcher/live-sol-delegate-terminal-392-live-shutdown.ps1.gz",
+      "redactedBytes": 9061,
+      "compressedBytes": 2922
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live\\project\\来源材料\\方案甲.txt",
+      "archive": "checks/live/input/方案甲.txt.gz",
+      "redactedBytes": 59,
+      "compressedBytes": 82
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\delegate-terminal-392-live-bundle\\bin\\ui\\index.html",
+      "archive": "checks/live/static-ui/index.html.gz",
+      "redactedBytes": 11891,
+      "compressedBytes": 2860
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\activity-input-projection-391\\push.log",
+      "archive": "checks/previous-391/push.log.gz",
+      "redactedBytes": 2725,
+      "compressedBytes": 990
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\activity-input-projection-391\\module-exact.log",
+      "archive": "checks/previous-391/module-exact.log.gz",
+      "redactedBytes": 243,
+      "compressedBytes": 208
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\activity-input-projection-391\\release-exact.log",
+      "archive": "checks/previous-391/release-exact.log.gz",
+      "redactedBytes": 181,
+      "compressedBytes": 162
+    }
+  ],
+  "integrity": "Every complete redacted input equals its decompressed archive. Integrity check is not functional acceptance.",
+  "qualification": "392 live scope qualifies successful delegation, exact final-message lifecycle, Sources and refresh. Original 391 Provider failure retained in its own archive. 392 error paths are separate backend contracts. Native and credentials closed.",
+  "ui": "Unchanged 389-final formal bundle; screenshots 01–03 manually reviewed. No UI automation."
+}
