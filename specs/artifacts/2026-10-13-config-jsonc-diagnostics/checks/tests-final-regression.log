@@ -1,0 +1,75 @@
+[1/3] START test/config-jsonc-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Config JSONC diagnostic projection > literal input produces the exact syntax, named-error and CLI diagnostics [6.89ms]
+(pass) Config JSONC diagnostic projection > environment input produces the exact syntax, named-error and CLI diagnostics [2.64ms]
+(pass) Config JSONC diagnostic projection > file input produces the exact syntax, named-error and CLI diagnostics [2.05ms]
+(pass) Config JSONC diagnostic projection > LF source reports its one-based final line and column [2.46ms]
+(pass) Config JSONC diagnostic projection > CRLF source reports its one-based final line and column [2.12ms]
+(pass) Config JSONC diagnostic projection > CR source reports its one-based final line and column [1.68ms]
+(pass) Config JSONC diagnostic projection > Unicode positions use the parser's UTF-16 offsets [1.71ms]
+(pass) Config JSONC diagnostic projection > multiple syntax errors retain the parser's diagnostic order [1.73ms]
+(pass) Config JSONC diagnostic projection > valid comments, trailing commas and both substitutions produce their actual values [2.10ms]
+(pass) Config JSONC diagnostic projection > global malformed environment source preserves distinct reader and writer coordinates [26.46ms]
+(pass) Config JSONC diagnostic projection > global malformed file source preserves distinct reader and writer coordinates [22.79ms]
+(pass) Config JSONC diagnostic projection > global canonical reader reports the exact stored-file syntax error [10.35ms]
+(pass) Config JSONC diagnostic projection > global canonical writer reports the exact existing-file syntax error [8.84ms]
+(pass) Config JSONC diagnostic projection > global public Config reads and writes return the named 500 contract [227.00ms]
+(pass) Config JSONC diagnostic projection > global Provider catalog publishes the exact partial-success configuration issue [82.34ms]
+(pass) Config JSONC diagnostic projection > global writer preserves literal references while its reader expands them [185.54ms]
+(pass) Config JSONC diagnostic projection > project malformed environment source preserves distinct reader and writer coordinates [768.21ms]
+(pass) Config JSONC diagnostic projection > project malformed file source preserves distinct reader and writer coordinates [757.26ms]
+(pass) Config JSONC diagnostic projection > project canonical reader reports the exact stored-file syntax error [739.73ms]
+(pass) Config JSONC diagnostic projection > project canonical writer reports the exact existing-file syntax error [618.96ms]
+(pass) Config JSONC diagnostic projection > project public Config reads and writes return the named 500 contract [951.10ms]
+(pass) Config JSONC diagnostic projection > project Provider catalog publishes the exact partial-success configuration issue [715.31ms]
+(pass) Config JSONC diagnostic projection > project writer preserves literal references while its reader expands them [690.52ms]
+(pass) Config JSONC diagnostic projection > the actual HTTP failure log retains the same canonical syntax diagnostic [19.86ms]
+
+ 24 pass
+ 0 fail
+ 30 expect() calls
+Ran 24 tests across 1 file. [13.01s]
+[1/3] DONE test/config-jsonc-diagnostics.test.ts exit=0 duration=13.58s
+[2/3] START test/provider-credential-presence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider API-key configuration presence > both public scopes expose zero-model source facts while keeping the exact runnable projection [1645.66ms]
+(pass) Provider API-key configuration presence > project configuration supplies its own presence fact without changing the global configuration [1801.34ms]
+(pass) Provider API-key configuration presence > real built-in OAuth loaders publish dummy and access options while API-key presence stays false [1684.48ms]
+(pass) Provider API-key configuration presence > explicit API-key configuration remains a positive fact alongside OAuth and an empty override preserves saved API existence [1831.74ms]
+(pass) Provider API-key configuration presence > missing Auth is a successfully observed empty authority in both scopes [1978.60ms]
+(pass) Provider API-key configuration presence > malformed_json Auth observation yields unknown while a separately observed configured key remains true [1640.63ms]
+(pass) Provider API-key configuration presence > io Auth observation yields unknown while a separately observed configured key remains true [1654.92ms]
+(pass) Provider API-key configuration presence > ConfigJsonError through each public route publishes a configuration issue and unknown presence [1355.04ms]
+(pass) Provider API-key configuration presence > ConfigInvalidError through each public route publishes a configuration issue and unknown presence [1427.08ms]
+(pass) Provider API-key configuration presence > successful and failed observations of empty configuration have distinct reusable Provider cache identities [1405.36ms]
+(pass) Provider API-key configuration presence > multiple environment candidates retain unknown and existing provider filters retain exact public collections [1918.75ms]
+(pass) Provider API-key configuration presence > an actual built-in loader error preserves unknown and independently configured API evidence [2253.28ms]
+(pass) Provider API-key configuration presence > an observed environment API key remains configured when a later built-in loader fails [1716.27ms]
+(pass) Provider API-key configuration presence > vendor-owned API options and a real custom-loader failure publish unknown [1694.59ms]
+
+ 14 pass
+ 0 fail
+ 26 expect() calls
+Ran 14 tests across 1 file. [26.54s]
+[2/3] DONE test/provider-credential-presence.test.ts exit=0 duration=26.70s
+[3/3] START test/auth-config-read-authority.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) saved Auth and Config read authority > malformed JSON is one typed Config failure and one safe HTTP 503 [3690.83ms]
+(pass) saved Auth and Config read authority > a schema-invalid credential remains distinct from missing auth [1516.17ms]
+(pass) saved Auth and Config read authority > a non-record saved-auth document is one typed invalid-credential result [1731.65ms]
+(pass) saved Auth and Config read authority > a filesystem observation failure remains a typed io result [1766.46ms]
+(pass) saved Auth and Config read authority > a valid well-known credential merges the real remote configuration [1531.86ms]
+(pass) saved Auth and Config read authority > the Provider catalog keeps its explicit partial-success issue contract [1424.37ms]
+(pass) saved Auth and Config read authority > a missing saved-auth file remains a valid empty authority [1360.19ms]
+
+ 7 pass
+ 0 fail
+ 15 expect() calls
+Ran 7 tests across 1 file. [14.73s]
+[3/3] DONE test/auth-config-read-authority.test.ts exit=0 duration=14.92s

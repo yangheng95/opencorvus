@@ -95,6 +95,18 @@ export namespace ConfigPaths {
     }),
   )
 
+  /** Parser diagnostics retain codes and positions without promoting configuration values. */
+  export function jsonErrorMessage(text: string, errors: JsoncParseError[]): string {
+    return errors
+      .map((error) => {
+        const lines = text.substring(0, error.offset).split(/\r\n|\r|\n/)
+        const line = lines.length
+        const column = lines[lines.length - 1].length + 1
+        return `${printParseErrorCode(error.error)} at line ${line}, column ${column}`
+      })
+      .join("\n")
+  }
+
   export const InvalidError = NamedError.create(
     "ConfigInvalidError",
     z.object({
@@ -206,24 +218,9 @@ export namespace ConfigPaths {
     const errors: JsoncParseError[] = []
     const data = parseJsonc(text, errors, { allowTrailingComma: true })
     if (errors.length) {
-      const lines = text.split("\n")
-      const errorDetails = errors
-        .map((e) => {
-          const beforeOffset = text.substring(0, e.offset).split("\n")
-          const line = beforeOffset.length
-          const column = beforeOffset[beforeOffset.length - 1].length + 1
-          const problemLine = lines[line - 1]
-
-          const error = `${printParseErrorCode(e.error)} at line ${line}, column ${column}`
-          if (!problemLine) return error
-
-          return `${error}\n   Line ${line}: ${problemLine}\n${"".padStart(column + 9)}^`
-        })
-        .join("\n")
-
       throw new JsonError({
         path: configSource,
-        message: `\n--- JSONC Input ---\n${text}\n--- Errors ---\n${errorDetails}\n--- End ---`,
+        message: jsonErrorMessage(text, errors),
       })
     }
 

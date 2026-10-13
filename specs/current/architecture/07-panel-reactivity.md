@@ -40,6 +40,16 @@ results and explicitly committed errors remain original facts; obsolete UI
 projection, feedback and finally retire. Source-local busy state resets through
 its existing source effect, without another epoch or request owner.
 
+Provider settings retain separate form, catalog-refresh and model-refresh feedback
+owners. Each stores message keys, variables and original diagnostic details;
+summaries translate at render time and details use the existing native disclosure.
+Exceptions retain available HTTP method, path, request ID and body, while service
+issues retain their phase and Provider identity. Configuration committed, credential
+saved and follow-up failed remain distinct facts; deletion residue and reload failure
+can retain both messages. A successful refresh clears its own operation feedback.
+Existing API authority, directory selection and operation generation govern publication
+and retirement, without a second state owner or automatic mutation retry.
+
 Child transcript keys include the same captured API authority beside the actual
 source, child Session and directory. The existing resource and refresh generation
 retire queued reads/live frames on key change; loader and ordered snapshot parser

@@ -145,6 +145,15 @@ opencorvus.jsonc ──→ Config.get() ──→ Zod 验证 + 层级合并 ─�
 2. Config 变更后 SSE 推送，所有 Overlay 自动 `setAppStore("config", newConfig)`
 3. `scaffoldProjectConfig` 直接导入 `EngineConfig.defaults`，不硬编码
 
+## JSONC 语法错误诊断
+
+`ConfigJsonError` 保留现有 `{path, message?}` 与具名 HTTP 500 合同。两个配置 parser 共享
+`ConfigPaths.jsonErrorMessage`，按 parser 顺序仅输出错误码及 1 基行、列；列按 UTF-16 offset，
+行边界识别 CRLF、CR 和 LF。读取仍先展开 env/file 引用，位置对应实际解析的展开文本；writer
+仍解析并保存字面引用，位置对应候选原文本。诊断不提升配置全文、出错原行或指针行，
+同一安全 message 供具名序列化、实际日志、CLI 和 Provider `config.read` 局部失败使用。
+I/O 错误、schema 验证与成功读取配置保持各自原契约。
+
 ## 跨进程 reader generation 与 runtime projection
 
 Project 和 global JSONC 文件是唯一配置事实；不存在 revision sidecar、影子配置、第二事件协议或

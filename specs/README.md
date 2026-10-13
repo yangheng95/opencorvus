@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Config JSONC 诊断与 Provider 反馈](records/2026-10/2026-10-13-config-jsonc-diagnostics.md)：安全producer、真实错误与当前语言反馈。
+
 - [396 表格焦点与读位](records/2026-10/2026-10-13-spreadsheet-focus-scroll-396.md)：隐藏输入焦点的外层滚动根因、完整调用面与真实桌面复核。
 
 - [394 表格权限面板语言](records/2026-10/2026-10-13-spreadsheet-permission-panel-locale-394.md)：标题producer与范围错误派生的当前语言调查和桌面验收。

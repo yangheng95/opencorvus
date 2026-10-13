@@ -1,0 +1,252 @@
+{
+  "phase": "after",
+  "boundary": "Actual production TCP; literal/env/file are fictional marker inputs; original owned sources restored",
+  "records": [
+    {
+      "scope": "global",
+      "kind": "literal",
+      "method": "GET",
+      "status": 500,
+      "requestID": "035e7b29-7119-4b30-97ff-328e005a28ed",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\runtime\\config\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 122"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "literal",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "74283786-722f-47aa-a846-991cb1ed3b5d",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\runtime\\config\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 122"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "literal",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "8f882d23-817f-402e-beff-56c96fcceb36",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: CloseBraceExpected at line 1, column 122"
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "kind": "env",
+      "method": "GET",
+      "status": 500,
+      "requestID": "16a515af-ce5f-455a-862a-9ae5047be632",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\runtime\\config\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 118"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "env",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "5ee46c62-b79f-41a2-a605-0a9c66e80cf4",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\runtime\\config\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 125"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "env",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "3160027d-904b-4a39-9510-acd15f999839",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: CloseBraceExpected at line 1, column 118"
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "kind": "file",
+      "method": "GET",
+      "status": 500,
+      "requestID": "8b527724-c59b-42fb-b394-ec3cd403edca",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\runtime\\config\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 119"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "file",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "9a59b840-185c-42ee-8880-fa807650b9df",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\runtime\\config\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 129"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "file",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "2344f9ca-4a88-4c81-917d-a556b41e2903",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: CloseBraceExpected at line 1, column 119"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "kind": "literal",
+      "method": "GET",
+      "status": 500,
+      "requestID": "d2a8ffef-27b7-48ff-bf5f-e6d5dc458c5c",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 122"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "literal",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "e0533325-12e1-459d-8755-21988bb9aae0",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 122"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "literal",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "095ac460-8b51-4e14-8dab-e317b5b6820b",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: CloseBraceExpected at line 1, column 122"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "kind": "env",
+      "method": "GET",
+      "status": 500,
+      "requestID": "25af1229-a2cd-4fe3-aa38-68da1191aaa9",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 118"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "env",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "33d7d79d-cfc1-4008-91af-f27326b8aa06",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 125"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "env",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "8535b633-5c5f-4e65-85d6-91b990bb4c70",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: CloseBraceExpected at line 1, column 118"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "kind": "file",
+      "method": "GET",
+      "status": 500,
+      "requestID": "5a951fce-5679-4923-963a-bc80006a225e",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 119"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "file",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "626123ca-2e6c-437e-b8c2-0d788e2f1793",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "CloseBraceExpected at line 1, column 129"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "file",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "4d52f210-5528-4957-bbe6-fc2cf159a221",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: CloseBraceExpected at line 1, column 119"
+        }
+      ]
+    }
+  ]
+}

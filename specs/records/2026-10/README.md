@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Config JSONC 诊断与 Provider 反馈](2026-10-13-config-jsonc-diagnostics.md)：两解析入口、原输入边界和实页资格。
+
 - [396 表格焦点与读位](2026-10-13-spreadsheet-focus-scroll-396.md)：共享隐藏输入focus与内部导航的分工。
 
 - [394 表格权限面板语言](2026-10-13-spreadsheet-permission-panel-locale-394.md)：权限标题与范围错误的同实例语言合同。

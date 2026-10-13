@@ -1,0 +1,44 @@
+[
+  {
+    "method": "GET",
+    "path": "/global/v1/models",
+    "status": 200,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/project/v1/models",
+    "status": 200,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/api.json",
+    "status": 200,
+    "boundary": "Owned registry participant"
+  },
+  {
+    "method": "GET",
+    "path": "/api.json",
+    "status": 200,
+    "boundary": "Owned registry participant"
+  },
+  {
+    "method": "GET",
+    "path": "/product-global/v1/models",
+    "status": 200,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/product-global/v1/model/info",
+    "status": 200,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/global/v1/models",
+    "status": 200,
+    "sampleCredentialMatched": true
+  }
+]

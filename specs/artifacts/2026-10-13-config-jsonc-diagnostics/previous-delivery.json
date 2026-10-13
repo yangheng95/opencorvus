@@ -1,0 +1,48 @@
+{
+  "commit": "e7cbfee23c1394485763db9badd6827545567b51",
+  "parent": "0ea2a524b2f97e52b6416ccfef125cd4b43034d7",
+  "scopedPaths": 97,
+  "branch": "main",
+  "upstream": "origin/main",
+  "freshFetch": true,
+  "upstreamMerge": "Already up to date",
+  "pendingReviewedBeforePush": "e7cbfee23c1394485763db9badd6827545567b51 fix(provider): publish observed API-key configuration presence",
+  "push": {
+    "originalExec": 90034,
+    "actualExit": 0,
+    "normalHooks": true,
+    "noBypass": true,
+    "remoteTip": "e7cbfee23c1394485763db9badd6827545567b51",
+    "pendingAfter": "",
+    "laterParallelPending": "f6c93a756747a0d38e7b738a7e50c77093e1d5df fix(session): materialize user resource attachments in their project",
+    "pendingAfterBoundary": "Original exec90034 completion + immediate ls-remote/upstream range observation was empty; later parallel commits have a separate owner and were not part of that push"
+  },
+  "checks": {
+    "positiveTests": 37,
+    "assertions": 105,
+    "desktopScreenshots": 24,
+    "sol": {
+      "originalExec": 34351,
+      "actualExit": 0,
+      "actualRequests": 4,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "http": 200,
+      "reader": "settled/eof",
+      "failureEvidenceRetained": true
+    },
+    "types": "Backend/Overlay and 8 hook projects pass",
+    "docs": "348 operations / 26 groups pass",
+    "hook": "routes, leases, architecture, package, release/module topology and tracked-source secret scan passed"
+  },
+  "originalCommitWrapper": {
+    "normalGitCommit": "succeeded",
+    "wrapperExit": 1,
+    "cause": "Post-commit git show exceeded default Node 1MiB buffer for 1,064,960-byte OpenAPI",
+    "repair": "32MiB buffer, exact committed content/scope reviewed, existing commit reconciled only; actual resume35903 exit0"
+  },
+  "ownedRuntime": "3 UI scopes exit0; sol-01 exit1/sol-02 exit0; owned listeners0 and copied real auth/models removed",
+  "sourceEvidence": "specs/artifacts/2026-10-13-provider-credential-presence/README.md",
+  "goalStatus": "active; batch9 delivered; next batch readonly root/impact intake underway",
+  "at": "2026-10-13T14:10:37.822Z"
+}

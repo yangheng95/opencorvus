@@ -43,12 +43,29 @@ import { Disclosure } from "../ui/Disclosure"
 import { SearchField } from "../ui/SearchField"
 import { TextField } from "../ui/TextField"
 import { getHostTransport } from "../../services/host-transport-runtime"
+import { formatErrorDetails } from "../../utils/error-details"
 import { SettingsDetailSection, SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 
-function describeFailure(e: unknown): string {
-  if (e instanceof ApiError) return e.message
-  if (e instanceof Error) return e.message
-  return String(e)
+interface ProviderFeedback {
+  key: string
+  vars?: Record<string, string>
+  details?: string
+}
+
+function feedback(key: string, details?: string, vars?: Record<string, string>): ProviderFeedback[] {
+  return [{ key, vars, details }]
+}
+
+function ProviderMessages(props: { messages: ProviderFeedback[]; testID?: string }) {
+  return (
+    <For each={props.messages}>
+      {(message) => (
+        <Feedback tone="error" details={message.details} data-testid={props.testID}>
+          {t(message.key, message.vars)}
+        </Feedback>
+      )}
+    </For>
+  )
 }
 
 function describeProviderIssue(issue: { phase?: string; providerID?: string; message: string }): string {
@@ -107,7 +124,7 @@ export default function ProvidersPanel() {
   // id / api in handleSave produced a button that did nothing. Anything
   // user-visible writes here; clearForm / startAdd / startEdit / cancel
   // resets it so a new attempt starts clean.
-  const [formError, setFormError] = createSignal<string | null>(null)
+  const [formError, setFormError] = createSignal<ProviderFeedback[] | null>(null)
   // The provider declaration and configured live-model identities have
   // independent writers. Keep their UI ownership independent as well so a
   // failure in one refresh never masks or suppresses the other.
@@ -115,8 +132,8 @@ export default function ProvidersPanel() {
   const [refreshingModels, setRefreshingModels] = createSignal(false)
   const [lastProvidersRefreshedAt, setLastProvidersRefreshedAt] = createSignal<number | null>(null)
   const [lastModelsRefreshedAt, setLastModelsRefreshedAt] = createSignal<number | null>(null)
-  const [providerRefreshError, setProviderRefreshError] = createSignal<string | null>(null)
-  const [modelRefreshError, setModelRefreshError] = createSignal<string | null>(null)
+  const [providerRefreshError, setProviderRefreshError] = createSignal<ProviderFeedback[] | null>(null)
+  const [modelRefreshError, setModelRefreshError] = createSignal<ProviderFeedback[] | null>(null)
   const [providerSearch, setProviderSearch] = createSignal("")
   const [expandedCatalogProviderID, setExpandedCatalogProviderID] = createSignal("")
   const [discoveringModels, setDiscoveringModels] = createSignal(false)
@@ -176,20 +193,21 @@ export default function ProvidersPanel() {
       const result = await requestProviderCatalogRefresh(directory, options.authority)
       if (sequence !== providerRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
-        setProviderRefreshError(t("provider.catalog_refresh.failed", { reason: result.error || "unknown" }))
+        setProviderRefreshError(feedback("provider.catalog_refresh.failed", result.error))
         return
       }
       setLastProvidersRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
         setProviderRefreshError(
-          t("provider.catalog_refresh.completed_with_issues", {
-            reason: result.issues.map(describeProviderIssue).join("; "),
-          }),
+          feedback(
+            "provider.catalog_refresh.completed_with_issues",
+            result.issues.map(describeProviderIssue).join("\n"),
+          ),
         )
       }
     } catch (e) {
       if (sequence === providerRefreshSequence && options.isCurrentDirectory(directory)) {
-        setProviderRefreshError(t("provider.catalog_refresh.failed", { reason: describeFailure(e) }))
+        setProviderRefreshError(feedback("provider.catalog_refresh.failed", formatErrorDetails(e)))
       }
     } finally {
       if (sequence === providerRefreshSequence && options.isCurrentDirectory(directory)) setRefreshingProviders(false)
@@ -207,20 +225,18 @@ export default function ProvidersPanel() {
       const result = await requestProviderModelsRefresh(directory, options.authority)
       if (sequence !== modelRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
-        setModelRefreshError(t("provider.model_refresh.failed", { reason: result.error || "unknown" }))
+        setModelRefreshError(feedback("provider.model_refresh.failed", result.error))
         return
       }
       setLastModelsRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
         setModelRefreshError(
-          t("provider.model_refresh.completed_with_issues", {
-            reason: result.issues.map(describeProviderIssue).join("; "),
-          }),
+          feedback("provider.model_refresh.completed_with_issues", result.issues.map(describeProviderIssue).join("\n")),
         )
       }
     } catch (e) {
       if (sequence === modelRefreshSequence && options.isCurrentDirectory(directory)) {
-        setModelRefreshError(t("provider.model_refresh.failed", { reason: describeFailure(e) }))
+        setModelRefreshError(feedback("provider.model_refresh.failed", formatErrorDetails(e)))
       }
     } finally {
       if (sequence === modelRefreshSequence && options.isCurrentDirectory(directory)) setRefreshingModels(false)
@@ -231,7 +247,8 @@ export default function ProvidersPanel() {
     try {
       await loadProviderInfo(undefined, options)
     } catch (error) {
-      if (options.isCurrentDirectory(directory)) setFormError(describeFailure(error))
+      if (options.isCurrentDirectory(directory))
+        setFormError(feedback("provider.form.error.reload_failed", formatErrorDetails(error)))
     }
   }
 
@@ -339,7 +356,7 @@ export default function ProvidersPanel() {
     showLlmNotice: (message, tone = "info", _duration, link) => {
       if (!owns()) return
       void nativeMessage(message, { title: t("llm.title"), kind: tone, link }).catch((error) => {
-        if (owns()) setFormError(t("provider.auth.failed", { reason: describeFailure(error) }))
+        if (owns()) setFormError(feedback("provider.auth.failed", formatErrorDetails(error)))
       })
     },
     onAuthCancelled: (providerID) => {
@@ -369,7 +386,7 @@ export default function ProvidersPanel() {
             kind: "success",
           })
         } catch (error) {
-          if (owns()) setFormError(t("provider.auth.completed_with_issues", { reason: describeFailure(error) }))
+          if (owns()) setFormError(feedback("provider.auth.completed_with_issues", formatErrorDetails(error)))
         }
       }
     } catch (e) {
@@ -377,8 +394,8 @@ export default function ProvidersPanel() {
       const body = e instanceof ApiError ? e.body : undefined
       setFormError(
         body && typeof body === "object" && "name" in body && body.name === "ProviderAuthOAuthExchangeActiveError"
-          ? t("provider.auth.in_progress")
-          : t("provider.auth.failed", { reason: describeFailure(e) }),
+          ? feedback("provider.auth.in_progress", formatErrorDetails(e))
+          : feedback("provider.auth.failed", formatErrorDetails(e)),
       )
     } finally {
       if (!owns()) return
@@ -547,14 +564,14 @@ export default function ProvidersPanel() {
     setDiscoveredModelCount(null)
     const directory = formDirectory()
     if (directory === null) {
-      setFormError(t("provider.form.error.scope_missing"))
+      setFormError(feedback("provider.form.error.scope_missing"))
       return
     }
     const api = formApi().trim()
     const validation = validateProviderFormApi(api)
     if (validation.ok === false) {
       setFormError(
-        t(
+        feedback(
           validation.code === "PROVIDER_API_REQUIRED"
             ? "provider.form.error.api_required"
             : "provider.form.api_invalid",
@@ -584,13 +601,13 @@ export default function ProvidersPanel() {
       })) as { ok: boolean; models: string[]; count: number; error?: string }
       if (!ownsResponse()) return
       if (!result.ok) {
-        setFormError(t("provider.form.discover.failed", { reason: result.error || "unknown" }))
+        setFormError(feedback("provider.form.discover.failed", result.error))
         return
       }
       setFormModels(result.models.join("\n"))
       setDiscoveredModelCount(result.count)
     } catch (e) {
-      if (ownsResponse()) setFormError(t("provider.form.discover.failed", { reason: describeFailure(e) }))
+      if (ownsResponse()) setFormError(feedback("provider.form.discover.failed", formatErrorDetails(e)))
     } finally {
       if (ownsResponse()) setDiscoveringModels(false)
     }
@@ -603,18 +620,18 @@ export default function ProvidersPanel() {
     const directory = formDirectory()
     const initial = formInitialValues()
     if (directory === null) {
-      setFormError(t("provider.form.error.scope_missing"))
+      setFormError(feedback("provider.form.error.scope_missing"))
       return
     }
     const id = formProviderId()
     if (!id) {
-      setFormError(t("provider.form.error.id_required"))
+      setFormError(feedback("provider.form.error.id_required"))
       return
     }
     const apiValidation = formApiValidation()
     if (apiValidation.ok === false) {
       setFormError(
-        t(
+        feedback(
           apiValidation.code === "PROVIDER_API_REQUIRED"
             ? "provider.form.error.api_required"
             : "provider.form.api_invalid",
@@ -624,7 +641,7 @@ export default function ProvidersPanel() {
     }
     const values = currentFormValues()
     if (providerModelIDs(values.models).length === 0) {
-      setFormError(t("provider.form.error.models_required"))
+      setFormError(feedback("provider.form.error.models_required"))
       return
     }
 
@@ -665,9 +682,7 @@ export default function ProvidersPanel() {
       setEditing(null)
       if (credentialIssues.length > 0) {
         setFormError(
-          t("provider.api_key.saved_with_issues", {
-            reason: credentialIssues.map(describeProviderIssue).join("; "),
-          }),
+          feedback("provider.api_key.saved_with_issues", credentialIssues.map(describeProviderIssue).join("\n")),
         )
       }
     } catch (e) {
@@ -677,12 +692,14 @@ export default function ProvidersPanel() {
         setShowAdd(false)
         resetForm()
         setEditing(null)
-        setFormError(t("provider.form.saved_with_issues", { reason: describeFailure(e) }))
+        setFormError(feedback("provider.form.saved_with_issues", formatErrorDetails(e)))
       } else {
         setFormError(
           e instanceof ProviderFormApiError
-            ? t(e.code === "PROVIDER_API_REQUIRED" ? "provider.form.error.api_required" : "provider.form.api_invalid")
-            : t("provider.form.error.save_failed", { reason: describeFailure(e) }),
+            ? feedback(
+                e.code === "PROVIDER_API_REQUIRED" ? "provider.form.error.api_required" : "provider.form.api_invalid",
+              )
+            : feedback("provider.form.error.save_failed", formatErrorDetails(e)),
         )
       }
     } finally {
@@ -790,7 +807,7 @@ export default function ProvidersPanel() {
           ? [
               {
                 phase: followups[index]?.phase,
-                message: describeFailure(result.reason),
+                message: formatErrorDetails(result.reason),
               },
             ]
           : [],
@@ -798,15 +815,11 @@ export default function ProvidersPanel() {
       const issues = [...authResult.issues, ...followupIssues]
       if (!owns()) return
       if (issues.length > 0) {
-        setFormError(
-          t("provider.api_key.saved_with_issues", {
-            reason: issues.map(describeProviderIssue).join("; "),
-          }),
-        )
+        setFormError(feedback("provider.api_key.saved_with_issues", issues.map(describeProviderIssue).join("\n")))
       }
     } catch (e) {
       if (!owns()) return
-      setFormError(t("provider.api_key.save_failed", { reason: describeFailure(e) }))
+      setFormError(feedback("provider.api_key.save_failed", formatErrorDetails(e)))
     } finally {
       if (!owns()) return
       setSavingKey((prev) => {
@@ -865,11 +878,12 @@ export default function ProvidersPanel() {
       if (!owns()) return
       const residueNotice =
         receipt.status === "committed_with_residue"
-          ? t("provider.form.error.delete_residue", {
-              id,
-              reason: receipt.residue.map((item) => `${item.owner}: ${item.message}`).join("; "),
-            })
-          : ""
+          ? feedback(
+              "provider.form.error.delete_residue",
+              receipt.residue.map((item) => `${item.owner}: ${item.message}`).join("\n"),
+              { id },
+            )
+          : null
       if (residueNotice) setFormError(residueNotice)
       clearApiKeyInput(id)
       setTestResults((prev) => {
@@ -881,13 +895,13 @@ export default function ProvidersPanel() {
         await refreshAuthState(options)
       } catch (error) {
         if (!owns()) return
-        const refreshNotice = t("provider.form.error.delete_refresh_failed", { id, reason: describeFailure(error) })
-        setFormError([residueNotice, refreshNotice].filter(Boolean).join("\n"))
+        const refreshNotice = feedback("provider.form.error.delete_refresh_failed", formatErrorDetails(error), { id })
+        setFormError([...(residueNotice ?? []), ...refreshNotice])
       }
     } catch (e) {
       if (!owns()) return
       console.error("[providers] delete failed", e)
-      setFormError(t("provider.form.error.delete_failed", { id, reason: describeFailure(e) }))
+      setFormError(feedback("provider.form.error.delete_failed", formatErrorDetails(e), { id }))
     } finally {
       if (!owns()) return
       setDeletingProviders((prev) => {
@@ -1130,22 +1144,14 @@ export default function ProvidersPanel() {
         </Show>
 
         <Show when={providerRefreshError()}>
-          {(msg) => (
-            <Feedback tone="error" data-testid="provider-refresh-error">
-              {msg()}
-            </Feedback>
-          )}
+          {(messages) => <ProviderMessages messages={messages()} testID="provider-refresh-error" />}
         </Show>
 
         <Show when={modelRefreshError()}>
-          {(msg) => (
-            <Feedback tone="error" data-testid="provider-model-refresh-error">
-              {msg()}
-            </Feedback>
-          )}
+          {(messages) => <ProviderMessages messages={messages()} testID="provider-model-refresh-error" />}
         </Show>
 
-        <Show when={!showAdd() ? formError() : null}>{(msg) => <Feedback tone="error">{msg()}</Feedback>}</Show>
+        <Show when={!showAdd() ? formError() : null}>{(messages) => <ProviderMessages messages={messages()} />}</Show>
 
         <Show when={providerEntries().length > 0}>
           <SettingsDetailSection
@@ -1390,7 +1396,7 @@ export default function ProvidersPanel() {
               <Feedback tone="success">{tc("provider.form.discover.success", discoveredModelCount()!)}</Feedback>
             </Show>
 
-            <Show when={formError()}>{(msg) => <Feedback tone="error">{msg()}</Feedback>}</Show>
+            <Show when={formError()}>{(messages) => <ProviderMessages messages={messages()} />}</Show>
 
             <div class="dialog-actions compact provider-form-actions">
               <Button type="button" variant="outline" size="md" tone="neutral" onClick={cancel}>

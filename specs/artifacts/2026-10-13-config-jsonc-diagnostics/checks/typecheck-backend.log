@@ -1,0 +1,5 @@
+$ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+src/skill/manager.ts(934,13): error TS2345: Argument of type '{ $schema?: string | undefined; logLevel?: "DEBUG" | "INFO" | "WARN" | "ERROR" | undefined; server?: { port?: number | undefined; hostname?: string | undefined; publicUrl?: string | undefined; mdns?: boolean | undefined; mdnsDomain?: string | undefined; cors?: string[] | undefined; } | undefined; ... 36 more ...; ex...' is not assignable to parameter of type '{ prompt_profile: { active: string; }; permission_mode: "full_access" | "ask"; $schema?: string | undefined; logLevel?: "DEBUG" | "INFO" | "WARN" | "ERROR" | undefined; server?: { port?: number | undefined; ... 4 more ...; cors?: string[] | undefined; } | undefined; ... 34 more ...; experimental?: { ...; } | undefin...'.
+  Types of property 'prompt_profile' are incompatible.
+    Type '{ active?: string | undefined; } | undefined' is not assignable to type '{ active: string; }'.
+      Type 'undefined' is not assignable to type '{ active: string; }'.

@@ -1,0 +1,14 @@
+# Config JSONC 诊断与 Provider 反馈证据
+
+[第10批Recall、根因、方案及结果](../../records/2026-10/2026-10-13-config-jsonc-diagnostics.md)；[资格原退出汇总](qualification.json)；[第9批交付回执](previous-delivery.json)。第10批最终范围提交与推送回执在交付后由下一批引用，本文不提前宣称已推送。
+
+- 正向功能：原诊断红24项3pass/21fail（[日志](checks/tests-before.log)、[exit1](checks/tests-before.exit)），绿色24pass/30断言（[日志](checks/tests-after.log)、[exit0](checks/tests-after.exit)），当前最终三个隔离文件45pass/71断言（[日志](checks/tests-final-regression.log)、[exit0](checks/tests-final-regression.exit)）。首轮日志夹具预期错误也保留[首轮红](checks/tests-before-initial.log)，不当作产品根因。
+- 实际TCP：[18前态](tcp/http-before.json)、[18后态](tcp/http-after.json)、[两个scope恢复200](tcp/http-after-recovered.json)。global/project literal/env/file均为明确虚构标记；前态全文仅是虚构测试输入，不是实际私有泄漏证据。后态具名500和Provider200 config.read issue精确输出错误码/位置，成功解析及writer字面引用保持原语义。
+- 实际桌面：19张1280×720图均由主agent人工查看。[前态主摘要](desktop/before-save-error-en.png)、[英文短摘要](desktop/after-save-error-en.png)、[英文详情](desktop/after-save-details-en.png)、[键盘收起](desktop/after-save-collapsed-keyboard-en.png)、[中文摘要](desktop/after-save-error-zh.png)、[中文详情](desktop/after-save-details-zh.png)、[模型刷新安全正文](desktop/after-model-refresh-body-zh.png)、[输入恢复并重存Key](desktop/after-recovered-save-zh.png)、[发现400](desktop/after-discovery-failure-details-zh.png)、[发现成功](desktop/after-discovery-recovered-zh.png)、[两个断连错误](desktop/after-transport-errors-zh.png)、[目录已恢复保留model错误](desktop/final-catalog-recovered-zh.png)、[两个入口恢复](desktop/final-both-recovered-zh.png)。使用真实生产 /ui、自有source backend、Node冻结UI及隔离参与者；无UI自动化测试、网络拦截或浏览器fixture。前态expanded AX后截图仍折叠，未获得完整展开前态视觉；语言切换卸载Panel，未宣称跨卸载状态保留。
+- 实际Sol：[执行前配对目录及模型](sol/authority-ready.json)、[公共preflight](sol/preflight-ready.json)、[Chat READY与精确真实请求](sol/qualified.json)、[4个200流式reader/eof](sol/provider-audit-final.json)、[自然终态](sol/terminal.json)、[物理exit0/port0/凭据与目录副本移除](sol/physical-exit-pair-cleanup.json)。原exec58042实际exit0，不复用第9批失败checker。
+- 物理退出：[before exit0](runtime/before/exit.json)、[after exit0](runtime/after/exit.json)、[fresh final exit0](runtime/final/exit.json)，各自ready/owner/terminal与真实目录参与者请求在相应目录。原已挂载tab23真实断连及两个逐个恢复，不reload、不动用户实例；正常关闭自有页与服务。
+- 工程检查：[最终backend typecheck](checks/typecheck-backend-verified.log)、[Overlay typecheck](checks/typecheck-overlay.log)、[Node最终UI build](checks/build-after.log)、[docs348ops/26groups](checks/docs-final.log)、[精确source格式](checks/format-final.log)。此前并行Source类型边界失败两份日志保留，owner修复后原32961实际exit0；新测试格式失败仅修复精确文件再跑原检查。工程检查不替代截图和运行路径。
+
+[runtime](recipes/runtime.ts)、[隔离启动](recipes/launch.ps1)、[TCP探针](recipes/probe.cjs)、[Sol资格](recipes/sol.ts)、[Sol启动与配对清理](recipes/launch-sol.ps1)保留实际使用脚本以便审查。它们依赖仓库当前已有primitive，按既有scratch路径运行；不包含凭据正文。归档文本只正规化CRLF/行尾空白，原日志保留于scratch。已知真实及随机虚构Auth内容扫描0；截图中密钥为空/已清空/遮罩，只显示虚构诊断标记。
+
+范围限制：没有本批实际OAuth登录、删除residue故障或连接testResults视觉资格；无新调度异常，不把此UI交付扩展成Task/Mission/Session共享调度矩阵资格。未升级版本、发布Release/tag/PR或操作用户运行进程。

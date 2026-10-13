@@ -15,13 +15,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { Flag } from "../flag/flag"
 import { Auth } from "../auth"
 import { parseEnvJson } from "./parse-env-json"
-import {
-  type ParseError as JsoncParseError,
-  applyEdits,
-  modify,
-  parse as parseJsonc,
-  printParseErrorCode,
-} from "jsonc-parser"
+import { type ParseError as JsoncParseError, applyEdits, modify, parse as parseJsonc } from "jsonc-parser"
 import { createHash } from "node:crypto"
 import { AsyncLocalStorage } from "node:async_hooks"
 import { isDeepStrictEqual } from "node:util"
@@ -2571,24 +2565,9 @@ export namespace Config {
     const errors: JsoncParseError[] = []
     const data = parseJsonc(text, errors, { allowTrailingComma: true })
     if (errors.length) {
-      const lines = text.split("\n")
-      const errorDetails = errors
-        .map((e) => {
-          const beforeOffset = text.substring(0, e.offset).split("\n")
-          const line = beforeOffset.length
-          const column = beforeOffset[beforeOffset.length - 1].length + 1
-          const problemLine = lines[line - 1]
-
-          const error = `${printParseErrorCode(e.error)} at line ${line}, column ${column}`
-          if (!problemLine) return error
-
-          return `${error}\n   Line ${line}: ${problemLine}\n${"".padStart(column + 9)}^`
-        })
-        .join("\n")
-
       throw new JsonError({
         path: filepath,
-        message: `\n--- JSONC Input ---\n${text}\n--- Errors ---\n${errorDetails}\n--- End ---`,
+        message: ConfigPaths.jsonErrorMessage(text, errors),
       })
     }
 

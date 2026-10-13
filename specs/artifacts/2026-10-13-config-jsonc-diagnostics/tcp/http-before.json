@@ -1,0 +1,252 @@
+{
+  "phase": "before",
+  "boundary": "Actual production TCP; literal/env/file are fictional marker inputs; original owned sources restored",
+  "records": [
+    {
+      "scope": "global",
+      "kind": "literal",
+      "method": "GET",
+      "status": 500,
+      "requestID": "caf0cd27-d085-445d-a2fb-0c4c6734026d",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\runtime\\config\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 122\n   Line 1: {\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                   ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "literal",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "64001615-4883-425f-ae61-10a1720ac005",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\runtime\\config\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 122\n   Line 1: {\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                   ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "literal",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "142be727-ffdd-40ba-ae60-c3b917238f7b",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: \n--- JSONC Input ---\n{\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 122\n   Line 1: {\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                   ^\n--- End ---"
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "kind": "env",
+      "method": "GET",
+      "status": 500,
+      "requestID": "07ff3fb7-30cc-4f3f-b7fc-94d42464638e",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\runtime\\config\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 118\n   Line 1: {\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                               ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "env",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "116b08c7-8464-4f43-a5b8-54bd166c57d9",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\runtime\\config\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"{env:OWNED_DIAGNOSTIC_VALUE}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 125\n   Line 1: {\"username\":\"{env:OWNED_DIAGNOSTIC_VALUE}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                      ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "env",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "3bac2fea-41d2-4e22-b002-87adcc15f519",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: \n--- JSONC Input ---\n{\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 118\n   Line 1: {\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                               ^\n--- End ---"
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "kind": "file",
+      "method": "GET",
+      "status": 500,
+      "requestID": "0cdc399a-76a6-4967-ae25-d91abdc9bf49",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\runtime\\config\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 119\n   Line 1: {\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "file",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "110e2a98-c98e-4997-9bc1-4b49bb340edf",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\runtime\\config\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"{file:owned-diagnostic-note.txt}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 129\n   Line 1: {\"username\":\"{file:owned-diagnostic-note.txt}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                          ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "kind": "file",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "2e1fb774-5dcf-4912-8df9-18b7f87c6d21",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: \n--- JSONC Input ---\n{\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 119\n   Line 1: {\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                ^\n--- End ---"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "kind": "literal",
+      "method": "GET",
+      "status": 500,
+      "requestID": "803f0ad8-ff08-43a6-b060-39996e438388",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 122\n   Line 1: {\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                   ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "literal",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "e761fcea-2b6c-4629-ba51-dadd0c401858",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 122\n   Line 1: {\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                   ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "literal",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "272e85cf-09a8-495e-8b10-9172c8cb28e7",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: \n--- JSONC Input ---\n{\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 122\n   Line 1: {\"username\":\"diagnostic-literal-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                   ^\n--- End ---"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "kind": "env",
+      "method": "GET",
+      "status": 500,
+      "requestID": "0aeadb2d-3873-45fd-994c-f34f426e63fe",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 118\n   Line 1: {\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                               ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "env",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "88855d85-45fd-4d36-bcee-7b71cdafc2f6",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"{env:OWNED_DIAGNOSTIC_VALUE}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 125\n   Line 1: {\"username\":\"{env:OWNED_DIAGNOSTIC_VALUE}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                      ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "env",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "597ad2bc-8e7b-4a43-8819-b039561bfbe4",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: \n--- JSONC Input ---\n{\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 118\n   Line 1: {\"username\":\"diagnostic-env-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                               ^\n--- End ---"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "kind": "file",
+      "method": "GET",
+      "status": 500,
+      "requestID": "7eafa133-3e82-4cd5-ac43-904cc542237e",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 119\n   Line 1: {\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "file",
+      "method": "PATCH",
+      "status": 500,
+      "requestID": "dc6fe8d1-06d1-4b8a-952c-f7c763d60560",
+      "body": {
+        "name": "ConfigJsonError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-config-diagnostics-01a133\\before\\project\\.opencorvus\\opencorvus.jsonc",
+          "message": "\n--- JSONC Input ---\n{\"username\":\"{file:owned-diagnostic-note.txt}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 129\n   Line 1: {\"username\":\"{file:owned-diagnostic-note.txt}\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                          ^\n--- End ---"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "kind": "file",
+      "method": "GET providers",
+      "status": 200,
+      "requestID": "69f7184c-8896-4f33-a630-bd3e9d3c35ec",
+      "issues": [
+        {
+          "phase": "config.read",
+          "message": "ConfigJsonError: \n--- JSONC Input ---\n{\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n--- Errors ---\nCloseBraceExpected at line 1, column 119\n   Line 1: {\"username\":\"diagnostic-file-sample\",\"provider\":{\"owned-bootstrap\":{\"options\":{\"apiKey\":\"diagnostic-literal-sample\"}}}\n                                                                                                                                ^\n--- End ---"
+        }
+      ]
+    }
+  ]
+}

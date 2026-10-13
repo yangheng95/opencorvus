@@ -1,0 +1,891 @@
+[1/1] START test/config-jsonc-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+128 |   ] as const) {
+129 |     test(`${label} input produces the exact syntax, named-error and CLI diagnostics`, async () => {
+130 |       const source = `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`
+131 |       const message = "CloseBraceExpected at line 1, column 53"
+132 |       const error = await jsonError(() => ConfigPaths.parseText(source, projectFile))
+133 |       expect({ body: error.toObject(), message: error.message, cli: FormatError(error) }).toEqual({
+                                                                                                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 53",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+-   "cli": "Config file at C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc is not valid JSON(C): CloseBraceExpected at line 1, column 53",
+-   "message": "ConfigJsonError: CloseBraceExpected at line 1, column 53",
++   "cli":
++ "Config file at C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc is not valid JSON(C):
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
++   "message":
++ "ConfigJsonError:
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+  }
+
+- Expected  - 3
++ Received  + 30
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:133:91)
+(fail) Config JSONC diagnostic projection > literal input produces the exact syntax, named-error and CLI diagnostics [15.03ms]
+128 |   ] as const) {
+129 |     test(`${label} input produces the exact syntax, named-error and CLI diagnostics`, async () => {
+130 |       const source = `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`
+131 |       const message = "CloseBraceExpected at line 1, column 53"
+132 |       const error = await jsonError(() => ConfigPaths.parseText(source, projectFile))
+133 |       expect({ body: error.toObject(), message: error.message, cli: FormatError(error) }).toEqual({
+                                                                                                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 53",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+-   "cli": "Config file at C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc is not valid JSON(C): CloseBraceExpected at line 1, column 53",
+-   "message": "ConfigJsonError: CloseBraceExpected at line 1, column 53",
++   "cli":
++ "Config file at C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc is not valid JSON(C):
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
++   "message":
++ "ConfigJsonError:
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+  }
+
+- Expected  - 3
++ Received  + 30
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:133:91)
+(fail) Config JSONC diagnostic projection > environment input produces the exact syntax, named-error and CLI diagnostics [4.43ms]
+128 |   ] as const) {
+129 |     test(`${label} input produces the exact syntax, named-error and CLI diagnostics`, async () => {
+130 |       const source = `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`
+131 |       const message = "CloseBraceExpected at line 1, column 53"
+132 |       const error = await jsonError(() => ConfigPaths.parseText(source, projectFile))
+133 |       expect({ body: error.toObject(), message: error.message, cli: FormatError(error) }).toEqual({
+                                                                                                ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 53",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+-   "cli": "Config file at C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc is not valid JSON(C): CloseBraceExpected at line 1, column 53",
+-   "message": "ConfigJsonError: CloseBraceExpected at line 1, column 53",
++   "cli":
++ "Config file at C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc is not valid JSON(C):
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
++   "message":
++ "ConfigJsonError:
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+  }
+
+- Expected  - 3
++ Received  + 30
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:133:91)
+(fail) Config JSONC diagnostic projection > file input produces the exact syntax, named-error and CLI diagnostics [3.62ms]
+140 |
+141 |   for (const [label, newline] of [["LF", "\n"], ["CRLF", "\r\n"], ["CR", "\r"]] as const) {
+142 |     test(`${label} source reports its one-based final line and column`, async () => {
+143 |       const source = ["{", '  "provider": {"owned": {"options": {"apiKey": "DUMMY"}}}', ""].join(newline)
+144 |       const error = await jsonError(() => ConfigPaths.parseText(source, projectFile))
+145 |       expect(error.toObject()).toEqual(errorBody(projectFile, "CloseBraceExpected at line 3, column 1"))
+                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 3, column 1",
++     "message":
++ "
++ --- JSONC Input ---
++ {
++   "provider": {"owned": {"options": {"apiKey": "DUMMY"}}}
++
++ --- Errors ---
++ CloseBraceExpected at line 3, column 1
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:145:32)
+(fail) Config JSONC diagnostic projection > LF source reports its one-based final line and column [3.16ms]
+140 |
+141 |   for (const [label, newline] of [["LF", "\n"], ["CRLF", "\r\n"], ["CR", "\r"]] as const) {
+142 |     test(`${label} source reports its one-based final line and column`, async () => {
+143 |       const source = ["{", '  "provider": {"owned": {"options": {"apiKey": "DUMMY"}}}', ""].join(newline)
+144 |       const error = await jsonError(() => ConfigPaths.parseText(source, projectFile))
+145 |       expect(error.toObject()).toEqual(errorBody(projectFile, "CloseBraceExpected at line 3, column 1"))
+                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 3, column 1",
++     "message":
++ "
++ --- JSONC Input ---
++ {
++   "provider": {"owned": {"options": {"apiKey": "DUMMY"}}}
++
++ --- Errors ---
++ CloseBraceExpected at line 3, column 1
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:145:32)
+(fail) Config JSONC diagnostic projection > CRLF source reports its one-based final line and column [2.88ms]
+140 |
+141 |   for (const [label, newline] of [["LF", "\n"], ["CRLF", "\r\n"], ["CR", "\r"]] as const) {
+142 |     test(`${label} source reports its one-based final line and column`, async () => {
+143 |       const source = ["{", '  "provider": {"owned": {"options": {"apiKey": "DUMMY"}}}', ""].join(newline)
+144 |       const error = await jsonError(() => ConfigPaths.parseText(source, projectFile))
+145 |       expect(error.toObject()).toEqual(errorBody(projectFile, "CloseBraceExpected at line 3, column 1"))
+                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 3, column 1",
++     "message":
++ "
++ --- JSONC Input ---
++ {
++   "provider": {"owned": {"options": {"apiKey": "DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 61
++    Line 1: {
++   "provider": {"owned": {"options": {"apiKey": "DUMMY"}}}
++                                                                       ^
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 12
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:145:32)
+(fail) Config JSONC diagnostic projection > CR source reports its one-based final line and column [4.49ms]
+146 |     })
+147 |   }
+148 |
+149 |   test("Unicode positions use the parser's UTF-16 offsets", async () => {
+150 |     const error = await jsonError(() => ConfigPaths.parseText('{"username":"甲🔑"', projectFile))
+151 |     expect(error.toObject()).toEqual(errorBody(projectFile, "CloseBraceExpected at line 1, column 18"))
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 1, column 18",
++     "message":
++ "
++ --- JSONC Input ---
++ {"username":"甲🔑"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 18
++    Line 1: {"username":"甲🔑"
++                            ^
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:151:30)
+(fail) Config JSONC diagnostic projection > Unicode positions use the parser's UTF-16 offsets [4.61ms]
+151 |     expect(error.toObject()).toEqual(errorBody(projectFile, "CloseBraceExpected at line 1, column 18"))
+152 |   })
+153 |
+154 |   test("multiple syntax errors retain the parser's diagnostic order", async () => {
+155 |     const error = await jsonError(() => ConfigPaths.parseText('{"username":', projectFile))
+156 |     expect(error.toObject()).toEqual(errorBody(
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+      "message":
+- "ValueExpected at line 1, column 13
+- CloseBraceExpected at line 1, column 13"
++ "
++ --- JSONC Input ---
++ {"username":
++ --- Errors ---
++ ValueExpected at line 1, column 13
++    Line 1: {"username":
++                       ^
++ CloseBraceExpected at line 1, column 13
++    Line 1: {"username":
++                       ^
++ --- End ---"
+  ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 2
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:156:30)
+(fail) Config JSONC diagnostic projection > multiple syntax errors retain the parser's diagnostic order [3.36ms]
+(pass) Config JSONC diagnostic projection > valid comments, trailing commas and both substitutions produce their actual values [6.04ms]
+180 |     ] as const) {
+181 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+182 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+183 |         const readerError = await jsonError(() => readConfig(scope))
+184 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+185 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 53",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 86",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"{env:OPENCORVUS_TEST_JSONC_DIAGNOSTIC}"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 86
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"{env:OPENCORVUS_TEST_JSONC_DIAGNOSTIC}"}}}
++                                                                                                ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 2
++ Received  + 20
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:185:84)
+(fail) Config JSONC diagnostic projection > global malformed environment source preserves distinct reader and writer coordinates [47.19ms]
+180 |     ] as const) {
+181 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+182 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+183 |         const readerError = await jsonError(() => readConfig(scope))
+184 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+185 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 53",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 87",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"{file:jsonc-diagnostic-owned-value.txt}"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 87
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"{file:jsonc-diagnostic-owned-value.txt}"}}}
++                                                                                                 ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 2
++ Received  + 20
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:185:84)
+(fail) Config JSONC diagnostic projection > global malformed file source preserves distinct reader and writer coordinates [33.87ms]
+190 |     }
+191 |
+192 |     test(`${scope} canonical reader reports the exact stored-file syntax error`, async () => {
+193 |       await writeFile(configFile(scope), invalidFile)
+194 |       const error = await jsonError(() => readConfig(scope))
+195 |       expect(error.toObject()).toEqual(errorBody(configFile(scope), fileMessage))
+                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 1, column 20",
++     "message":
++ "
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:195:32)
+(fail) Config JSONC diagnostic projection > global canonical reader reports the exact stored-file syntax error [12.42ms]
+196 |     })
+197 |
+198 |     test(`${scope} canonical writer reports the exact existing-file syntax error`, async () => {
+199 |       await writeFile(configFile(scope), invalidFile)
+200 |       const error = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+201 |       expect(error.toObject()).toEqual(errorBody(configFile(scope), fileMessage))
+                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 1, column 20",
++     "message":
++ "
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:201:32)
+(fail) Config JSONC diagnostic projection > global canonical writer reports the exact existing-file syntax error [28.30ms]
+203 |
+204 |     test(`${scope} public Config reads and writes return the named 500 contract`, async () => {
+205 |       await writeFile(configFile(scope), invalidFile)
+206 |       for (const method of ["GET", "PATCH"] as const) {
+207 |         const response = await request(scope, method)
+208 |         expect({ status: response.status, body: await response.json() }).toEqual({
+                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 20",
++       "message":
++ "
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "status": 500,
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:208:74)
+(fail) Config JSONC diagnostic projection > global public Config reads and writes return the named 500 contract [420.75ms]
+218 |     test(`${scope} Provider catalog publishes the exact partial-success configuration issue`, async () => {
+219 |       await writeFile(configFile(scope), invalidFile)
+220 |       const response = await request(scope, "GET", true)
+221 |       const body = await response.json()
+222 |       const catalog = scope === "global" ? body.catalog : body
+223 |       expect({ status: response.status, issues: catalog.issues.filter((issue: { phase: string }) => issue.phase === "config.read") }).toEqual({
+                                                                                                                                            ^
+error: expect(received).toEqual(expected)
+
+  {
+    "issues": [
+      {
+-       "message": "ConfigJsonError: CloseBraceExpected at line 1, column 20",
++       "message":
++ "ConfigJsonError:
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+        "phase": "config.read",
+      },
+    ],
+    "status": 200,
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:223:135)
+(fail) Config JSONC diagnostic projection > global Provider catalog publishes the exact partial-success configuration issue [199.40ms]
+(pass) Config JSONC diagnostic projection > global writer preserves literal references while its reader expands them [381.00ms]
+180 |     ] as const) {
+181 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+182 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+183 |         const readerError = await jsonError(() => readConfig(scope))
+184 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+185 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 53",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 86",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"{env:OPENCORVUS_TEST_JSONC_DIAGNOSTIC}"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 86
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"{env:OPENCORVUS_TEST_JSONC_DIAGNOSTIC}"}}}
++                                                                                                ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 2
++ Received  + 20
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:185:84)
+(fail) Config JSONC diagnostic projection > project malformed environment source preserves distinct reader and writer coordinates [1238.46ms]
+180 |     ] as const) {
+181 |       test(`${scope} malformed ${label} source preserves distinct reader and writer coordinates`, async () => {
+182 |         await writeFile(configFile(scope), `{"provider":{"owned":{"options":{"apiKey":"${value}"}}}`)
+183 |         const readerError = await jsonError(() => readConfig(scope))
+184 |         const writerError = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+185 |         expect({ reader: readerError.toObject(), writer: writerError.toObject() }).toEqual({
+                                                                                         ^
+error: expect(received).toEqual(expected)
+
+  {
+    "reader": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 53",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 53
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"DUMMY"}}}
++                                                               ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "writer": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 87",
++       "message":
++ "
++ --- JSONC Input ---
++ {"provider":{"owned":{"options":{"apiKey":"{file:jsonc-diagnostic-owned-value.txt}"}}}
++ --- Errors ---
++ CloseBraceExpected at line 1, column 87
++    Line 1: {"provider":{"owned":{"options":{"apiKey":"{file:jsonc-diagnostic-owned-value.txt}"}}}
++                                                                                                 ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+  }
+
+- Expected  - 2
++ Received  + 20
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:185:84)
+(fail) Config JSONC diagnostic projection > project malformed file source preserves distinct reader and writer coordinates [1317.82ms]
+190 |     }
+191 |
+192 |     test(`${scope} canonical reader reports the exact stored-file syntax error`, async () => {
+193 |       await writeFile(configFile(scope), invalidFile)
+194 |       const error = await jsonError(() => readConfig(scope))
+195 |       expect(error.toObject()).toEqual(errorBody(configFile(scope), fileMessage))
+                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 1, column 20",
++     "message":
++ "
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:195:32)
+(fail) Config JSONC diagnostic projection > project canonical reader reports the exact stored-file syntax error [1484.36ms]
+196 |     })
+197 |
+198 |     test(`${scope} canonical writer reports the exact existing-file syntax error`, async () => {
+199 |       await writeFile(configFile(scope), invalidFile)
+200 |       const error = await jsonError(() => writeConfig(scope, { username: "owned-update" }))
+201 |       expect(error.toObject()).toEqual(errorBody(configFile(scope), fileMessage))
+                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+-     "message": "CloseBraceExpected at line 1, column 20",
++     "message":
++ "
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+      "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+    },
+    "name": "ConfigJsonError",
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:201:32)
+(fail) Config JSONC diagnostic projection > project canonical writer reports the exact existing-file syntax error [2063.49ms]
+203 |
+204 |     test(`${scope} public Config reads and writes return the named 500 contract`, async () => {
+205 |       await writeFile(configFile(scope), invalidFile)
+206 |       for (const method of ["GET", "PATCH"] as const) {
+207 |         const response = await request(scope, method)
+208 |         expect({ status: response.status, body: await response.json() }).toEqual({
+                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "message": "CloseBraceExpected at line 1, column 20",
++       "message":
++ "
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+        "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\fixtures\memory-IOxWMd\.opencorvus\opencorvus.jsonc",
+      },
+      "name": "ConfigJsonError",
+    },
+    "status": 500,
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:208:74)
+(fail) Config JSONC diagnostic projection > project public Config reads and writes return the named 500 contract [1523.64ms]
+218 |     test(`${scope} Provider catalog publishes the exact partial-success configuration issue`, async () => {
+219 |       await writeFile(configFile(scope), invalidFile)
+220 |       const response = await request(scope, "GET", true)
+221 |       const body = await response.json()
+222 |       const catalog = scope === "global" ? body.catalog : body
+223 |       expect({ status: response.status, issues: catalog.issues.filter((issue: { phase: string }) => issue.phase === "config.read") }).toEqual({
+                                                                                                                                            ^
+error: expect(received).toEqual(expected)
+
+  {
+    "issues": [
+      {
+-       "message": "ConfigJsonError: CloseBraceExpected at line 1, column 20",
++       "message":
++ "ConfigJsonError:
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+        "phase": "config.read",
+      },
+    ],
+    "status": 200,
+  }
+
+- Expected  - 1
++ Received  + 10
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:223:135)
+(fail) Config JSONC diagnostic projection > project Provider catalog publishes the exact partial-success configuration issue [1273.96ms]
+(pass) Config JSONC diagnostic projection > project writer preserves literal references while its reader expands them [1394.14ms]
+255 |     expect({
+256 |       level: record.level,
+257 |       service: record.service,
+258 |       message: record.message,
+259 |       data: record.data,
+260 |     }).toEqual({
+             ^
+error: expect(received).toEqual(expected)
+
+  {
+    "data": {
+      "error": {
+        "data": {
+-         "message": "CloseBraceExpected at line 1, column 20",
++         "message":
++ "
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+          "path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-q3szQb\test-65980-1AMtiW\runtime-root\config\opencorvus.jsonc",
+          "stack": "",
+          "type": "Object",
+        },
+-       "message": "ConfigJsonError: CloseBraceExpected at line 1, column 20",
++       "message":
++ "ConfigJsonError:
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---"
++ ,
+        "name": "ConfigJsonError",
+-       "stack": StringMatching /^ConfigJsonError: ConfigJsonError: CloseBraceExpected at line 1, column 20\n/,
++       "stack":
++ "ConfigJsonError: ConfigJsonError:
++ --- JSONC Input ---
++ {"username":"DUMMY"
++ --- Errors ---
++ CloseBraceExpected at line 1, column 20
++    Line 1: {"username":"DUMMY"
++                              ^
++ --- End ---
++     at parseText (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\paths.ts:224:17)
++     at async load (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:1941:34)
++     at processTicksAndRejections (native:7:39)"
++ ,
+        "type": "ConfigJsonError",
+      },
+      "method": "GET",
+      "path": "/global/config",
+      "requestID": "f0779a52-c4b5-47a2-9c0f-ab419edce7ca",
+      "statusCode": 500,
+    },
+    "level": "error",
+    "message": "request failed",
+    "service": "server",
+  }
+
+- Expected  - 3
++ Received  + 33
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts:260:8)
+(fail) Config JSONC diagnostic projection > the actual HTTP failure log retains the same canonical syntax diagnostic [40.69ms]
+
+ 3 pass
+ 21 fail
+ 24 expect() calls
+Ran 24 tests across 1 file. [22.53s]
+[1/1] DONE test/config-jsonc-diagnostics.test.ts exit=1 duration=24.10s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\config-jsonc-diagnostics.test.ts

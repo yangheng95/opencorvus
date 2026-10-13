@@ -1,0 +1,132 @@
+{
+  "batch": 10,
+  "positive": {
+    "originalExec": 36834,
+    "actualExit": 0,
+    "tests": 45,
+    "assertions": 71,
+    "files": [
+      [
+        "config-jsonc-diagnostics",
+        24,
+        30
+      ],
+      [
+        "provider-credential-presence",
+        14,
+        26
+      ],
+      [
+        "auth-config-read-authority",
+        7,
+        15
+      ]
+    ],
+    "red": {
+      "originalExec": 90813,
+      "actualExit": 1,
+      "pass": 3,
+      "fail": 21,
+      "assertions": 24
+    },
+    "green": {
+      "originalExec": 82455,
+      "actualExit": 0,
+      "tests": 24,
+      "assertions": 30
+    }
+  },
+  "tcp": {
+    "before": {
+      "originalExec": "2be3a9",
+      "actualExit": 0,
+      "responses": 18
+    },
+    "after": {
+      "originalExec": "44c80d",
+      "actualExit": 0,
+      "responses": 18
+    },
+    "scope": "global/project × fictional literal/env/file × GET/PATCH500/Provider200 issue; restored GET200"
+  },
+  "types": {
+    "overlay": {
+      "originalExec": 32104,
+      "actualExit": 0
+    },
+    "backend": {
+      "originalExec": 32961,
+      "actualExit": 0,
+      "priorFailures": [
+        62028,
+        93851
+      ],
+      "repairOwner": "Parallel Source/DeclaredFields change; own diagnostics/UI implementation unchanged"
+    }
+  },
+  "uiBuild": {
+    "before": {
+      "originalExec": 62420,
+      "actualExit": 0
+    },
+    "after": {
+      "originalExec": 93391,
+      "actualExit": 0
+    }
+  },
+  "desktop": {
+    "screenshots": 19,
+    "personallyViewed": true,
+    "viewport": "1280x720 desktop",
+    "scope": "Production source backend /ui serving frozen Node UI; own fictional participants; manual Chinese/English actions and native Details keyboard, real malformed source and real connection refusal/recovery",
+    "beforeExpandedVisual": "AX expanded, screenshot collapsed; no claim of full expanded before visual",
+    "transport": "Original mounted page: independent catalog and model errors; first recovery clears only catalog, second clears model; final zero-model configured row restored",
+    "limits": [
+      "testResults excluded",
+      "No actual OAuth sign-in or delete-residue UI qualification",
+      "Language switch unmounted panel; no claim of descriptor retained across unmount",
+      "No user runtime/window used or private malformed config read"
+    ]
+  },
+  "runtime": [
+    {
+      "stage": "before",
+      "originalExec": 91894,
+      "actualExit": 0
+    },
+    {
+      "stage": "after",
+      "originalExec": 11627,
+      "actualExit": 0
+    },
+    {
+      "stage": "final",
+      "originalExec": 86849,
+      "actualExit": 0
+    }
+  ],
+  "sol": {
+    "originalExec": 58042,
+    "actualExit": 0,
+    "actualRequests": 4,
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "http": 200,
+    "streaming": true,
+    "reader": "settled/eof",
+    "business": "READY persisted for exact Chat/user/assistant identity",
+    "pairedCredentialModels": "Verified before execution; removed after physical exit"
+  },
+  "at": "2026-10-13T15:13:37.299Z",
+  "docs": {
+    "originalExec": "44f3d0",
+    "actualExit": 0,
+    "operations": 348,
+    "groups": 26
+  },
+  "format": {
+    "originalExec": "7c6b34",
+    "actualExit": 0,
+    "initialFailure": "New test formatting only; exact file formatted, product and contract unchanged"
+  }
+}

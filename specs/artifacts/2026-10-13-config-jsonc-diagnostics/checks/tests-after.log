@@ -1,0 +1,34 @@
+[1/1] START test/config-jsonc-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Config JSONC diagnostic projection > literal input produces the exact syntax, named-error and CLI diagnostics [6.42ms]
+(pass) Config JSONC diagnostic projection > environment input produces the exact syntax, named-error and CLI diagnostics [2.76ms]
+(pass) Config JSONC diagnostic projection > file input produces the exact syntax, named-error and CLI diagnostics [2.01ms]
+(pass) Config JSONC diagnostic projection > LF source reports its one-based final line and column [1.64ms]
+(pass) Config JSONC diagnostic projection > CRLF source reports its one-based final line and column [1.66ms]
+(pass) Config JSONC diagnostic projection > CR source reports its one-based final line and column [1.41ms]
+(pass) Config JSONC diagnostic projection > Unicode positions use the parser's UTF-16 offsets [1.69ms]
+(pass) Config JSONC diagnostic projection > multiple syntax errors retain the parser's diagnostic order [1.70ms]
+(pass) Config JSONC diagnostic projection > valid comments, trailing commas and both substitutions produce their actual values [1.77ms]
+(pass) Config JSONC diagnostic projection > global malformed environment source preserves distinct reader and writer coordinates [26.72ms]
+(pass) Config JSONC diagnostic projection > global malformed file source preserves distinct reader and writer coordinates [22.78ms]
+(pass) Config JSONC diagnostic projection > global canonical reader reports the exact stored-file syntax error [10.22ms]
+(pass) Config JSONC diagnostic projection > global canonical writer reports the exact existing-file syntax error [8.89ms]
+(pass) Config JSONC diagnostic projection > global public Config reads and writes return the named 500 contract [227.52ms]
+(pass) Config JSONC diagnostic projection > global Provider catalog publishes the exact partial-success configuration issue [85.01ms]
+(pass) Config JSONC diagnostic projection > global writer preserves literal references while its reader expands them [179.67ms]
+(pass) Config JSONC diagnostic projection > project malformed environment source preserves distinct reader and writer coordinates [716.56ms]
+(pass) Config JSONC diagnostic projection > project malformed file source preserves distinct reader and writer coordinates [785.44ms]
+(pass) Config JSONC diagnostic projection > project canonical reader reports the exact stored-file syntax error [904.39ms]
+(pass) Config JSONC diagnostic projection > project canonical writer reports the exact existing-file syntax error [975.88ms]
+(pass) Config JSONC diagnostic projection > project public Config reads and writes return the named 500 contract [1400.51ms]
+(pass) Config JSONC diagnostic projection > project Provider catalog publishes the exact partial-success configuration issue [840.51ms]
+(pass) Config JSONC diagnostic projection > project writer preserves literal references while its reader expands them [791.24ms]
+(pass) Config JSONC diagnostic projection > the actual HTTP failure log retains the same canonical syntax diagnostic [22.10ms]
+
+ 24 pass
+ 0 fail
+ 30 expect() calls
+Ran 24 tests across 1 file. [13.47s]
+[1/1] DONE test/config-jsonc-diagnostics.test.ts exit=0 duration=14.08s

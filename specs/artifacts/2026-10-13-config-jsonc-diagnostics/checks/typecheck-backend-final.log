@@ -1,0 +1,5 @@
+$ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+src/skill/manager.ts(947,9): error TS2322: Type '{ [x: string]: "allow" | "deny" | undefined; }' is not assignable to type 'Record<string, "allow" | "deny">'.
+  'string' index signatures are incompatible.
+    Type '"allow" | "deny" | undefined' is not assignable to type '"allow" | "deny"'.
+      Type 'undefined' is not assignable to type '"allow" | "deny"'.
