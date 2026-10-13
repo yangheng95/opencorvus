@@ -530,7 +530,7 @@ function ProviderModelGroup(props: ProviderModelGroupProps) {
         options={options()}
         value={selectedKeys()}
         optionValue={(option) => option.id}
-        optionTextValue={(option) => option.id}
+        optionTextValue={(option) => option.label}
         optionDisabled={() => !!props.disabled}
         disallowEmptySelection={options().length > 0}
         allowDuplicateSelectionEvents

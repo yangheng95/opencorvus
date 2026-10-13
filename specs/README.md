@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [模型列表键盘前缀导航](records/2026-10/2026-10-13-model-keyboard.md)：可见模型名称与键盘导航的一致性。
+
 - [清除操作的焦点与保存语义](records/2026-10/2026-10-13-clear-intent.md)：共享搜索控件和代理认证清空的真实前后复核。
 
 - [文件完整字节的文本准入](records/2026-10/2026-10-13-file-text-admission.md)：非法UTF-8与二进制可编辑风险的完整字节验证。

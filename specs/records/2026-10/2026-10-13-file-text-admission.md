@@ -48,4 +48,4 @@ File.readResolvedContent使用扩展名集合与 MIME（Multipurpose Internet Ma
 
 18433同项目的实际桌面打开原二进制：显示Read only与不可编辑说明；打开notes.txt后实际追加“保存复核 ✅”、Save及Reload。人工截图确认正文正确；磁盘准确保留UTF-8 BOM、中文/emoji、两段CRLF及追加文本，原二进制11字节保持。四图与字节JSON（JavaScript Object Notation，数据交换格式）均在[证据目录](../../artifacts/2026-10-13-file-text-admission/README.md)。18432/18433均通过正常/shutdown自然exit0，自己的页面关闭。没有Provider请求。仅Windows英文深色1280×720浏览器已验收，原生窗口/其它平台未验证。
 
-当前只余范围提交、fresh fetch/merge、正常push。其它任务的Unicode、代理和日志改动继续保留，不混入此提交。
+范围提交5768f3b35e5ca41fc63ebf4678db256ee27514b9，fresh fetch/merge后完整待推集合仅本提交；正常push全部hook通过（含类型、路由、文档、拓扑与secret scan），远端随后80d5bd375确认包含本提交。并行Unicode任务同时暂存，使用独立Git index构造本批17文件提交并保留对方暂存，不创建分支/worktree或绕过hook。其它任务产品改动未混入。持续目标进入下一批键盘导航调查。

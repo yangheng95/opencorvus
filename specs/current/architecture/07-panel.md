@@ -20,7 +20,8 @@ pre-catalog error reporting does not query unavailable translations.
 Composer model groups retain each connected catalog option's canonical label
 beside its fully-qualified ID. The visible list and literal search consume that
 same option; search covers model label, model ID, provider ID and provider label.
-Selection and persistence continue to use the fully-qualified model ID.
+Listbox typeahead uses that visible model label for prefix navigation. Selection
+and persistence continue to use the fully-qualified model ID.
 
 Project file listing, content/source-content, file status and text/file search
 GET readers use the existing Project identity admission independently of
@@ -2240,9 +2241,9 @@ same surface and preserves canonical tab order and selected identity.
 The Composer's Code/Work control, active conversation context badges, and model
 trigger share `--oc-density-chip-height`; the send/stop action alone uses the
 larger `--oc-density-icon-button`. The model Listbox groups the canonical
-connected-provider catalog but renders each fully-qualified
-`<provider>/<model>` value once on one line. It does not derive and repeat a
-second short display identity.
+connected-provider catalog and renders each model's canonical label once on
+one line. Its fully-qualified `<provider>/<model>` ID remains the selection
+value and tooltip; the visible label also supplies keyboard prefix navigation.
 
 Right Dock width has one persisted source, `rightDockWidth`. Its runtime
 renderer, pointer and keyboard resizers, and Cascading Style Sheets (CSS)
