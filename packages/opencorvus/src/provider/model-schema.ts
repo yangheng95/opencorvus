@@ -93,6 +93,12 @@ export const ProviderInfoSchema = z
     source: z.enum(["env", "config", "custom", "api"]),
     env: z.string().array(),
     key: z.string().optional(),
+    apiKeyConfigured: z
+      .boolean()
+      .optional()
+      .describe(
+        "Observed non-empty API-key configuration; omitted when unknown. Does not indicate credential validity or runnable models.",
+      ),
     options: z.record(z.string(), z.any()),
     models: z.record(z.string(), ProviderModelSchema),
   })

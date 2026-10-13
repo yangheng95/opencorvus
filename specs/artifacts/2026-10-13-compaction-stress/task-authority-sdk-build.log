@@ -1,0 +1,33 @@
+$ bun ./script/build.ts
+[90m@hey-api/openapi-ts v0.97.3[39m
+
+[90m[Job 1] [39m⏳ [36mGenerating from 1 input:[39m
+[90m[Job 1] [39m[36m  [1] [39mD:\myhexin-local\opencorvus\packages\sdk\js\.tmp-sdk-build\openapi.json
+[90m[Job 1] [39m[32m✅ Done![39m Your output is in [96mD:\myhexin-local\opencorvus\packages\sdk\js\.tmp-sdk-build\src\gen[39m [90m(3 files in 5s)[39m
+.tmp-sdk-build/src/client.ts 121ms (unchanged)
+.tmp-sdk-build/src/defaults.ts 7ms (unchanged)
+.tmp-sdk-build/src/expert-squad-authoring.ts 272ms (unchanged)
+.tmp-sdk-build/src/expert-squad-manifest-v2.ts 95ms (unchanged)
+.tmp-sdk-build/src/expert-squad-package-contract.ts 4ms (unchanged)
+.tmp-sdk-build/src/gen/client.gen.ts 7ms
+.tmp-sdk-build/src/gen/client/client.gen.ts 33ms
+.tmp-sdk-build/src/gen/client/index.ts 6ms
+.tmp-sdk-build/src/gen/client/types.gen.ts 22ms
+.tmp-sdk-build/src/gen/client/utils.gen.ts 35ms
+.tmp-sdk-build/src/gen/core/auth.gen.ts 7ms
+.tmp-sdk-build/src/gen/core/bodySerializer.gen.ts 17ms
+.tmp-sdk-build/src/gen/core/params.gen.ts 20ms
+.tmp-sdk-build/src/gen/core/pathSerializer.gen.ts 16ms
+.tmp-sdk-build/src/gen/core/queryKeySerializer.gen.ts 13ms
+.tmp-sdk-build/src/gen/core/serverSentEvents.gen.ts 35ms
+.tmp-sdk-build/src/gen/core/types.gen.ts 10ms
+.tmp-sdk-build/src/gen/core/utils.gen.ts 20ms
+.tmp-sdk-build/src/gen/sdk.gen.ts 847ms
+.tmp-sdk-build/src/gen/types.gen.ts 1596ms
+.tmp-sdk-build/src/index.ts 176ms (unchanged)
+.tmp-sdk-build/src/platform-artifact-tool-ids.ts 4ms
+.tmp-sdk-build/src/project-path.ts 5ms (unchanged)
+.tmp-sdk-build/src/route-policy.ts 8ms (unchanged)
+.tmp-sdk-build/src/server-diagnostic-tail.ts 125ms (unchanged)
+.tmp-sdk-build/src/server.ts 293ms (unchanged)
+.tmp-sdk-build/src/startup-receipt.ts 31ms (unchanged)

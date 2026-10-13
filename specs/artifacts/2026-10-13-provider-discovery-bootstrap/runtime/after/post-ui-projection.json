@@ -1,0 +1,84 @@
+{
+  "boundary": "Actual production HTTP catalog, durable live catalog and owned project config; exact model IDs only; credentials excluded",
+  "global": {
+    "route": "/global/providers",
+    "status": 200,
+    "connected": [
+      "owned-bootstrap",
+      "owned-ready",
+      "opencorvus"
+    ],
+    "providers": [
+      {
+        "id": "opencorvus",
+        "models": [
+          "global-live-a",
+          "global-live-b"
+        ]
+      },
+      {
+        "id": "kilo",
+        "models": []
+      },
+      {
+        "id": "owned-bootstrap",
+        "models": [
+          "global-discovered-a",
+          "global-discovered-b"
+        ]
+      },
+      {
+        "id": "owned-ready",
+        "models": [
+          "ready-known"
+        ]
+      }
+    ],
+    "issues": []
+  },
+  "project": {
+    "route": "/provider?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-provider-discovery-01a133%5Cafter%5Cproject",
+    "status": 200,
+    "connected": [
+      "owned-bootstrap",
+      "owned-ready"
+    ],
+    "providers": [
+      {
+        "id": "opencorvus",
+        "models": []
+      },
+      {
+        "id": "kilo",
+        "models": []
+      },
+      {
+        "id": "owned-bootstrap",
+        "models": [
+          "global-discovered-a",
+          "global-discovered-b",
+          "project-discovered-a",
+          "project-discovered-b"
+        ]
+      },
+      {
+        "id": "owned-ready",
+        "models": [
+          "ready-known"
+        ]
+      }
+    ],
+    "issues": []
+  },
+  "durableLive": [
+    "global-live-a",
+    "global-live-b"
+  ],
+  "projectBootstrap": [
+    "project-discovered-a",
+    "project-discovered-b"
+  ],
+  "projectWhitelist": [
+    "owned-filtered-model"
+  ]
+}

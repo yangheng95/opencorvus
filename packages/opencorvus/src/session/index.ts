@@ -388,6 +388,11 @@ export namespace Session {
     },
   )
 
+  export const TaskBoundSessionForkError = NamedError.create(
+    "TaskBoundSessionForkError",
+    z.object({ message: z.string(), sessionID: Identifier.schema("session"), taskID: Identifier.schema("task") }),
+  )
+
   export const fork = fn(
     z.object({
       sessionID: Identifier.schema("session"),
@@ -398,6 +403,19 @@ export namespace Session {
       const original = await getInProject({ sessionID: input.sessionID, projectID: Instance.project.id })
       if (!original) throw new Error("session not found")
       const side = input.purpose === "side-chat"
+      const { taskIDForSession } = await import("@/engine/task-session-lineage")
+      const assertCopyOwnership = () => {
+        if (side) return
+        const taskID = taskIDForSession(original.id)
+        if (taskID) {
+          throw new TaskBoundSessionForkError({
+            sessionID: original.id,
+            taskID,
+            message: "Task execution identity belongs to its dispatch. Use an independent side chat to copy this history.",
+          })
+        }
+      }
+      assertCopyOwnership()
       if (side && (sideChatIdentity(original.metadata) || original.time.archived)) {
         const reason = original.time.archived ? "archived" : "nested"
         throw new SideChatSourceError({
@@ -407,7 +425,7 @@ export namespace Session {
         })
       }
       const title = side ? `Side chat · ${original.title}` : getForkedTitle(original.title)
-      // A normal fork retains execution lineage; a side conversation is an
+      // A normal standalone fork retains Session ancestry; a side conversation is an
       // independent assistant root with a reference to its source. Both use
       // this single transcript-copy primitive. The target Session and its
       // complete bounded transcript commit in ONE transaction: an interrupted
@@ -508,6 +526,7 @@ export namespace Session {
       }
 
       return Database.immediateTransaction((db) => {
+        assertCopyOwnership()
         assertSessionDeletionAdmissionInTransaction(db, original.id)
         if (side)
           prepared.metadata = {

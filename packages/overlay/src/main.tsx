@@ -2774,6 +2774,7 @@ function OverlayRoot() {
         >
           <TabPanel
             value="explorer"
+            forceMount={isCenterWorkbenchPanelOpen("explorer")}
             class="center-workbench-view"
             id="centerWorkbenchExplorer"
             data-workbench-view="explorer"

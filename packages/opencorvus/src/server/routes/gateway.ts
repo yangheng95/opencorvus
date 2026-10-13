@@ -13,6 +13,7 @@ import { Instance } from "@/project/instance"
 import { PanelActionSchema, PanelCapabilityResponse, panelCapabilities } from "@/panel/capability"
 import { createPanelUIRequestToolContext, PanelTool } from "@/tool/panel"
 import { requestID as resolveRequestID } from "@/server/error-handler"
+import { namedErrorResponse } from "../error"
 
 const GatewayControlMessageInput = ControlMessageInput.omit({ surface: true }).extend({
   surface: z.literal("gateway").optional(),
@@ -200,6 +201,11 @@ export function GatewayRoutes() {
         description: "Execute a structured gateway capability action without LLM interpretation.",
         operationId: "gateway.control.action",
         responses: {
+          409: namedErrorResponse(
+            "The source execution identity is owned by its Task or Mission",
+            "MissionSessionAuthorityError",
+            "TaskBoundSessionForkError",
+          ),
           200: {
             description: "Action result",
             content: { "application/json": { schema: resolver(GatewayActionResult) } },

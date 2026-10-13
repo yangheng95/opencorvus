@@ -1,0 +1,81 @@
+{
+  "boundary": "Actual production HTTP using isolated generated sample credential and loopback participant; no private credential, online provider or model inference",
+  "outcomes": {
+    "globalSavedZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "global-discovered-a",
+          "global-discovered-b"
+        ],
+        "count": 2
+      }
+    },
+    "projectSavedZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "project-discovered-a",
+          "project-discovered-b"
+        ],
+        "count": 2
+      }
+    },
+    "globalExplicitZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "global-discovered-a",
+          "global-discovered-b"
+        ],
+        "count": 2
+      }
+    },
+    "globalSavedKnown": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "ready-known"
+        ],
+        "count": 1
+      }
+    },
+    "globalLiveRefresh": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "fetchedAt": 1791894050586,
+        "providers": [
+          {
+            "providerID": "opencorvus",
+            "count": 2,
+            "ids": [
+              "global-live-a",
+              "global-live-b"
+            ]
+          }
+        ]
+      }
+    },
+    "projectLiveRefresh": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "fetchedAt": 1791894050617,
+        "providers": [
+          {
+            "providerID": "opencorvus",
+            "count": 1,
+            "ids": [
+              "project-live-a"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -12,6 +12,7 @@ import { Instance } from "../../project/instance"
 import { InstructionPrompt } from "../instruction"
 import { Plugin } from "../../plugin"
 import { MCP } from "../../mcp"
+import { decodeMcpResourceBlob } from "../../mcp/resource-content"
 import { ReadTool } from "../../tool/read"
 import { FileTime } from "../../file/time"
 import { ConfigMarkdown } from "../../config/markdown"
@@ -24,7 +25,7 @@ import { defer } from "../../util/defer"
 import { setSessionTitleFromFirstUserMessage } from "../first-message-title"
 import { fileURLToPath, pathToFileURL } from "bun"
 import type { PromptInput } from "./schema"
-import { decodeDataUrlBase64Bytes, decodeRawBase64Payload } from "../text-mime"
+import { decodeDataUrlBase64Bytes } from "../text-mime"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { resolveSessionMessageIdentity } from "../message-identity"
 import type { SessionMessageIdentity } from "../message-identity"
@@ -446,18 +447,13 @@ export async function materializeUserMessage(
                 throw new Error(`Resource not found: ${clientName}/${uri}`)
               }
 
-              const contents = Array.isArray(resourceContent.contents)
-                ? resourceContent.contents
-                : resourceContent.contents
-                  ? [resourceContent.contents]
-                  : []
               let materializedResourceContent = false
 
-              for (const content of contents) {
+              for (const content of resourceContent.contents) {
                 if (!content || typeof content !== "object") {
                   throw new Error(`MCP resource content for ${clientName}/${uri} must be an object`)
                 }
-                if ("text" in content && typeof content.text === "string" && content.text.length > 0) {
+                if ("text" in content && typeof content.text === "string") {
                   pieces.push({
                     messageID: info.id,
                     sessionID: input.sessionID,
@@ -465,17 +461,14 @@ export async function materializeUserMessage(
                     text: content.text as string,
                   })
                   materializedResourceContent = true
-                } else if ("blob" in content && content.blob) {
-                  if (typeof content.blob !== "string") {
-                    throw new Error(`MCP resource blob for ${clientName}/${uri} must be a base64 string`)
-                  }
+                } else if ("blob" in content && typeof content.blob === "string") {
                   const mimeType =
                     "mimeType" in content && typeof content.mimeType === "string" && content.mimeType
                       ? content.mimeType
                       : part.mime
                   const fileRef = await AttachmentStore.write(
                     requireByteMaterializationProjectID(input, `MCP resource blob for ${clientName}/${uri}`),
-                    decodeRawBase64Payload(content.blob, `MCP resource blob for ${clientName}/${uri}`),
+                    decodeMcpResourceBlob(content.blob, `MCP resource blob for ${clientName}/${uri}`),
                     mimeType,
                     part.filename,
                   )

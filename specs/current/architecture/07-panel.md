@@ -551,6 +551,20 @@ or waiting cache. Creating a file retains its successful creation separately
 from the editor's actual opened, stopped or failed post-open result. Stable
 failure and refresh facts preserve their Details owner across language changes.
 
+The existing Explorer TabPanel stays mounted while its Files tool tab is open,
+through the same Tabs forceMount primitive used by retained workbench tools.
+Selecting File after a successful mutation, switching tools or hiding the dock
+preserves this single Explorer owner, its query, expansion, selection and action
+receipts. Explicitly closing Files disposes it; directory, API authority and
+selection epoch changes keep their existing reset and late-receipt fences.
+The active property means tool-open, so its one existing 15-second directory
+poll continues while hidden. Existing selected-panel CSS owns visibility.
+All explicit file actions, including upload, refresh the current nonempty query
+through the same required-refresh collector as their directory reads. There is
+no separate revision watcher, search polling loop or search opt-out. Concurrent
+superseded upload publication and in-flight backend scan freshness remain
+independent audit boundaries, not guarantees added by this panel lifetime change.
+
 Explorer rows retain their render identity through equivalent directory refreshes.
 The key derives from the existing API authority revision, directory, committed
 selection epoch, row kind, physical node type and exact normalized path. Ordinary
@@ -665,6 +679,11 @@ existing conversation disclosure store, scoped to API authority, source and Side
 Session. Its layout choice survives Dock remounts and primary-conversation
 returns alongside the reading position;
 opening it pauses the nearest transcript's follow controller for reading.
+Reference-history rows retain their component identity by canonical Message ID,
+independently of wrapper objects received in a replacement connection snapshot.
+The keyed accessor supplies current message data; removing a Message or changing
+the actual target retains the existing retirement behavior. Reconnection does
+not discard rendered history solely because its snapshot objects are new.
 Pending questions and permissions render through the existing InteractionCard.
 Side Chat cards project their body parts through the shared conversation display
 contract, as child transcript cards do. Full protocol parts remain in the
@@ -1417,6 +1436,16 @@ ConversationCard owns its bubble/card branch through a non-keyed boolean
 condition. A new selected-child transcript projection updates the mounted
 renderer through reactive props; object replacement is not a reason to
 recreate the entire bubble and its streaming Markdown controllers.
+
+The selected-child resource and its presentation share the resource's single
+storage signal. A failed refresh keeps an accepted transcript readable only
+while its complete target key still matches. The resource's actual error is
+shown beside that content with an explicit retry action; initial load failures
+show the same error without an indefinite loading placeholder. Reading the
+stored value does not rethrow a fetch failure into unrelated reactive work.
+Target changes retain the existing keyed retirement and request ownership.
+Full fetch diagnostics remain in a bounded, keyboard-focusable reading region,
+so expanding an error preserves space for the loaded transcript and Sources.
 
 The selected Agent transcript uses the existing transcript-run gap token at
 the medium spacing tier. That scoped token controls adjacent message margins

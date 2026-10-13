@@ -14391,6 +14391,10 @@
       },
       "Provider": {
         "properties": {
+          "apiKeyConfigured": {
+            "description": "Observed non-empty API-key configuration; omitted when unknown. Does not indicate credential validity or runnable models.",
+            "type": "boolean"
+          },
           "env": {
             "items": {
               "type": "string"
@@ -76274,6 +76278,57 @@
               }
             },
             "description": "Action result"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskBoundSessionForkError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "The source execution identity is owned by its Task or Mission"
           }
         },
         "summary": "Run gateway control action",
@@ -104294,28 +104349,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionSessionAuthorityError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "MissionSessionAuthorityError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "TaskBoundSessionForkError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Mission execution and lifecycle are owned by the canonical Mission API"
+            "description": "The source execution identity is owned by its Task or Mission"
           }
         },
         "summary": "Fork session",

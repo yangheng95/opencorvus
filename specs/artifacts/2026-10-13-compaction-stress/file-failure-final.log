@@ -1,0 +1,5 @@
+$ bun run script/compaction-stress.ts
+{"case":"tool-file","round":1,"status":"passed","requests":7}
+{"case":"tool-failure","round":1,"status":"error","requests":13}
+{"status":"failed","requests":13,"resultPath":"D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-13-compaction-stress\\file-failure-final.json"}
+error: script "check:compaction-stress" exited with code 1

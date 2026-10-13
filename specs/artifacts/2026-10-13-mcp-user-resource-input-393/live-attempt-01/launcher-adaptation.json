@@ -1,0 +1,17 @@
+{
+  "source": ".tmp-product-iteration/live-sol-launch.ps1",
+  "changes": [
+    "Own copied executable with already-reviewed392 UI next to it",
+    "References to original helper directory remain absolute"
+  ],
+  "binary": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-01\\bundle\\bin\\bun.exe",
+  "sourceBinary": "C:/Users/hengu/.bun/bin/bun.exe",
+  "uiSource": ".tmp-spreadsheet-accessibility-locale-392/ui-after",
+  "qualification": "NativeService",
+  "model": "gpt-6.1-sol",
+  "requestBudget": 20,
+  "inactivityMilliseconds": 180000,
+  "physicalMaxMilliseconds": 600000,
+  "credentialUse": "Only mature wrapper after startup exact Git baseline and paired auth/models stage",
+  "executed": false
+}

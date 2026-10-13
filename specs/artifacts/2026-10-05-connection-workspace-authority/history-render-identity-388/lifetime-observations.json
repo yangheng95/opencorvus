@@ -1,0 +1,127 @@
+{
+  "boundary": "Descriptive passive diagnostic timeline for manual causal review; no UI assertion, score or pass/fail.",
+  "phases": [
+    {
+      "phase": "before",
+      "rows": [
+        {
+          "time": "2026-10-13T12:12:22.075Z",
+          "kind": "create",
+          "owner": 1,
+          "messageID": "msg_g0VXvmghx00yLSOWLVWC",
+          "at": 76784.09999990463
+        },
+        {
+          "time": "2026-10-13T12:12:22.082Z",
+          "kind": "create",
+          "owner": 2,
+          "messageID": "msg_g0VXvmghx01DnnaSpVp0",
+          "at": 76787.19999980927
+        },
+        {
+          "time": "2026-10-13T12:12:22.087Z",
+          "kind": "create",
+          "owner": 3,
+          "messageID": "msg_g0VXvmghx02p0zO7qvE3",
+          "at": 76790.09999990463
+        },
+        {
+          "time": "2026-10-13T12:12:53.052Z",
+          "kind": "create",
+          "owner": 4,
+          "messageID": "msg_09b90c8d-f9e1-4340-ac28-c16b6d7be196",
+          "at": 107748.59999990463
+        },
+        {
+          "time": "2026-10-13T12:12:57.370Z",
+          "kind": "create",
+          "owner": 5,
+          "messageID": "msg_g0VXvmosV004Bi0tv7VW",
+          "at": 112080.09999990463
+        },
+        {
+          "time": "2026-10-13T12:16:13.410Z",
+          "kind": "dispose",
+          "owner": 1,
+          "messageID": "msg_g0VXvmghx00yLSOWLVWC",
+          "at": 307363.19999980927
+        },
+        {
+          "time": "2026-10-13T12:16:13.413Z",
+          "kind": "dispose",
+          "owner": 2,
+          "messageID": "msg_g0VXvmghx01DnnaSpVp0",
+          "at": 307363.59999990463
+        },
+        {
+          "time": "2026-10-13T12:16:13.418Z",
+          "kind": "dispose",
+          "owner": 3,
+          "messageID": "msg_g0VXvmghx02p0zO7qvE3",
+          "at": 307364
+        },
+        {
+          "time": "2026-10-13T12:16:13.418Z",
+          "kind": "create",
+          "owner": 6,
+          "messageID": "msg_g0VXvmghx00yLSOWLVWC",
+          "at": 307364.19999980927
+        },
+        {
+          "time": "2026-10-13T12:16:13.419Z",
+          "kind": "create",
+          "owner": 7,
+          "messageID": "msg_g0VXvmghx01DnnaSpVp0",
+          "at": 307368.19999980927
+        },
+        {
+          "time": "2026-10-13T12:16:13.419Z",
+          "kind": "create",
+          "owner": 8,
+          "messageID": "msg_g0VXvmghx02p0zO7qvE3",
+          "at": 307374.19999980927
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "rows": [
+        {
+          "time": "2026-10-13T12:24:56.367Z",
+          "kind": "create",
+          "owner": 1,
+          "messageID": "msg_g0VXvpqoE00kbmRBmH80",
+          "at": 83141.2999997139
+        },
+        {
+          "time": "2026-10-13T12:24:56.368Z",
+          "kind": "create",
+          "owner": 2,
+          "messageID": "msg_g0VXvpqoE01h5uK1SOEI",
+          "at": 83146.09999990463
+        },
+        {
+          "time": "2026-10-13T12:24:56.376Z",
+          "kind": "create",
+          "owner": 3,
+          "messageID": "msg_g0VXvpqoE02mJeHgQvw6",
+          "at": 83150.40000009537
+        },
+        {
+          "time": "2026-10-13T12:25:16.891Z",
+          "kind": "create",
+          "owner": 4,
+          "messageID": "msg_01810c12-aa4a-430c-897f-3a6649c25080",
+          "at": 103669.2999997139
+        },
+        {
+          "time": "2026-10-13T12:25:24.022Z",
+          "kind": "create",
+          "owner": 5,
+          "messageID": "msg_g0VXvpwO200NnB3NPBNK",
+          "at": 110795.19999980927
+        }
+      ]
+    }
+  ]
+}

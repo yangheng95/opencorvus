@@ -2,6 +2,20 @@
 
 - [持续目标重复崩溃与子 Task](2026-10-13-continuous-goal-repeated-recovery.md)：连续中断、恢复身份和真实子任务验收。
 
+- [393 用户资源与附件归属](2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
+
+- [Provider API Key 配置事实](2026-10-13-provider-credential-presence.md)：同源投影、读取失败与真实恢复验收。
+
+- [389 成员刷新失败可读性](2026-10-13-child-refresh-retention-389.md)：错误、已有来源、键盘详情及真实恢复。
+
+- [Native外输出调查](2026-10-13-native-output-sink-audit.md)：原未知错误、同句柄观测和完整横审计划。
+
+- [Explorer标签所有者与搜索](2026-10-13-explorer-tab-owner-search.md)：共享生命周期根因、真实批次与上传查询。
+
+- [无模型时的 Provider 发现入口](2026-10-13-provider-discovery-bootstrap.md)：共享根因与真实作用域验证。
+
+- [388 参考历史重连身份](2026-10-13-history-render-identity-388.md)：真实重连的消息组件身份、来源焦点与文件定位。
+
 - [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。
 
 - [文件链接条目与回执](2026-10-13-file-link-entry-contract.md)：entry与target边界、根因及验收。
@@ -32,7 +46,7 @@
 
 - [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage.md)：协议、取消根因与横向验收。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：研究、投影根因、真实模型、证据保留与复制引用追溯验收。
+- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：研究、154 次真实请求、三轮保真、Task 复制归属与物理中断恢复验收。
 
 - [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
 

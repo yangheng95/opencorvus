@@ -1,0 +1,13 @@
+{
+  "project": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-01\\provider-run\\project",
+  "promptProfile": "base",
+  "mcp": {
+    "public_user_resources": {
+      "type": "remote",
+      "url": "http://127.0.0.1:18507/mcp",
+      "transport": "streamable-http",
+      "oauth": false,
+      "timeout": 15000
+    }
+  }
+}

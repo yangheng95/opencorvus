@@ -1,0 +1,15 @@
+[1/1] START test/provider-live-model-refresh.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider live model refresh authority > the default catalog migration adds the bundled OpenCorvus declaration and explicit overrides stay strict [246.15ms]
+(pass) Provider live model refresh authority > both public routes publish exact live identities through one durable catalog writer [2786.25ms]
+(pass) Provider live model refresh authority > duplicate live identities return an explicit failure and preserve the canonical catalog [82.46ms]
+(pass) Provider live model refresh authority > live metadata rejects extensions instead of publishing inferred catalog fields [88.72ms]
+(pass) Provider live model refresh authority > malformed saved Auth is the public typed 503 and strict live metadata never commits [1619.06ms]
+
+ 5 pass
+ 0 fail
+ 17 expect() calls
+Ran 5 tests across 1 file. [9.28s]
+[1/1] DONE test/provider-live-model-refresh.test.ts exit=0 duration=9.92s

@@ -1,0 +1,166 @@
+{
+  "occurrence": "mcp-user-resource-input-393-live-04-068e974f-4d5f-4a1d-8db9-95975a1f7a1b",
+  "mcpOccurrence": "d96712dc-4c4f-43ed-bfca-1be8b33cece8",
+  "observedAt": "2026-10-13T13:44:20.076Z",
+  "session": {
+    "id": "ses_hy8M8XN2Rne4fRPQQSPD",
+    "slug": "stellar-rocket",
+    "projectID": "prj_h4GNrUzySvBzLq1B98xi",
+    "directory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-04\\provider-run\\runtime\\data\\projects\\2026\\10\\13\\74260a56-5913-48cb-89d9-6b3dbf383c1a",
+    "title": "我想核对两份公开CSV和几个公开资源，稍后会把资料发来。请先简短确认可以根据原始内容核对各行数据、合计和引用。",
+    "version": "local",
+    "kind": "assistant",
+    "metadata": {
+      "globalChatStart": {
+        "version": 2,
+        "requestID": "7bde98ff-5bc0-4090-92e9-016310c43749",
+        "requestFingerprint": "89dd65cbeaa0bc383f4ad1310f9efbb8706efcde253c1c7aab02c2617286ebcc",
+        "messageID": "msg_h1UwLBZv7i44OtOQAdB7"
+      },
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "openai/gpt-6.1-sol",
+        "prompt_profile": {
+          "active": "base"
+        }
+      }
+    },
+    "time": {
+      "created": 1791899053535,
+      "updated": 1791899053677
+    },
+    "permission": [
+      {
+        "permission": "delegate_agent",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_expert_squad_inspect",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_query_task",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_query_task_artifacts",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_create_task",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_wake_mission",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_wake_work",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_send_task_message",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_respond_interaction",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_cancel_task",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_update_checks",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_select_workspace",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_update_goal",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_delete_goal",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "bash",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "read",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "glob",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "search_code",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "edit",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "write",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "apply_patch",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "todo",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "schedule",
+        "pattern": "*",
+        "action": "allow"
+      }
+    ]
+  },
+  "messageID": "msg_fb59ba41-541e-447c-9a6f-a60e4213a5fd",
+  "initialMessageID": "msg_h1UwLBZv7i44OtOQAdB7",
+  "globalRequestID": "7bde98ff-5bc0-4090-92e9-016310c43749",
+  "nativeDeadlineAt": 1791899611722,
+  "mcpDeadlineAt": 1791899630759,
+  "pageReservedAt": 1791899431722,
+  "closeBy": 1791899551722,
+  "url": "http://127.0.0.1:18506/ui"
+}

@@ -51,7 +51,9 @@ export const ProviderRoutes = lazy(() =>
       }),
       async (c) => {
         const configIssues: Provider.LoadIssue[] = []
+        let configAvailable = true
         const config = await Config.get().catch((error) => {
+          configAvailable = false
           const authError = Auth.findReadError(error)
           configIssues.push({
             phase: authError ? "auth.read" : "config.read",
@@ -64,7 +66,7 @@ export const ProviderRoutes = lazy(() =>
 
         // Source the complete provider database so locally registered
         // providers remain visible before credentials are configured.
-        const loaded = await Provider.catalog({ config })
+        const loaded = await Provider.catalog({ config, configAvailable })
         const allProviders = loaded.database
         const filteredProviders: Record<string, (typeof allProviders)[string]> = {}
         for (const [key, value] of Object.entries(allProviders)) {

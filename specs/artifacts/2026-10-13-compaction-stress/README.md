@@ -14,8 +14,17 @@ full browser, Task/Mission scheduling, or native Codex comparison benchmark.
 | [repeated](repeated.json) | 30 | Detects reversion to initial region and references outside reader scope; third Tool round reaches request ceiling. |
 | [repeated-text-repair](repeated-text-repair.json) | 14 | After second repair, two rounds pass; third is incomplete at request ceiling. |
 | [repeated-tool-repair](repeated-tool-repair.json) | 13 | Two consecutive Tool-evidence rounds pass, including exact input/output/trace/call/Part/cursor. |
+| [text-three-rounds](text-three-rounds.json) | 16 | Three consecutive text-middle rounds pass, 15/15 exact fields. |
+| [tool-three-rounds](tool-three-rounds.json) | 21 | Three consecutive Tool-evidence rounds pass, 30/30 exact fields. |
+| [file-failure-final](file-failure-final.json) | 13 | Full-file case passes 10/10. Failed-Tool checkpoint is valid, but continuation receives Provider overload; that case remains an error. |
+| [failure-retry](failure-retry.json) | 5 | Fresh failed-Tool case passes 11/11, including original failure name, trace and cursor. |
 
-Total: **99** real requests. Failures and runner calibration are preserved rather
+Total: **154/160** authorized real requests, with **6 remaining**. The final
+accepted text/Tool/file/failure cases score **66/66** fields over eight completed
+rounds; this finite, single-model corpus is not a general reliability estimate.
+[Final request accounting](final-request-ledger.json) reconciles all new sidecars
+and confirms completed-run credential/catalog cleanup.
+Failures and runner calibration are preserved rather
 than removed from the accounting. Every successful checkpoint is checked by
 `replay-compaction-errors-validator.ts`; its stored projection is reopened and
 compared by actual message identities. Reports include sanitized outgoing probe
@@ -49,17 +58,18 @@ The runner enforces its per-run budget and audits actual model/streaming. The
 operator must account for all earlier runs against the user's total allowance.
 The `.requests.json` sidecar persists accounting before each remote request.
 The 180-second timeout measures inactivity at the real Provider source reader,
-not process lifetime. Full-file and failure scenarios are implemented, but their
-remote results have not yet been obtained within the current allowance.
+not process lifetime. The latest four runs also retain their `.requests.json`
+sidecars; request counts include unsuccessful calls and agree with each report.
 
 Local positive contracts additionally read two real persisted megabyte-class
 Unicode output files across database reopen, fence other-project Parts, verify
 complete exact reconstruction, and check typed scope/field/offset errors. Those
 results do not establish remote semantic performance on the full-file cases.
 
-Still unverified: three successful consecutive rounds after the second repair,
-remote full-file/failure cases, operating-system restart mid-compaction, parallel
-full Task/Mission workloads, broader model distribution, and measured Codex parity.
+Still unverified: operating-system restart mid-compaction, parallel full
+Task/Mission workloads, broader model distribution, and measured Codex parity.
+The Task-bound copy contract below qualifies history-copy ownership; it does
+not implement a new Task execution branch or certify the complete Task driver.
 
 ## Retained evidence lifetime
 
@@ -101,9 +111,9 @@ reader resolves that ancestry only to Parts present in the bound snapshot. No
 old-ID lookup expands to another Session's live history. Copies predating the
 new provenance field still lack that proof and return the explicit scope error.
 The [SDK generation](citation-sdk-build.log) synchronizes the public message
-contract. This work adds zero real Provider requests. Ordinary Task-bound fork
-authority, real-model semantic continuation and crash recovery remain separate
-unverified requirements.
+contract. This work adds zero real Provider requests. Full Task continuation
+remains a separate unverified requirement. Later semantic, process and copy
+ownership runs extend coverage without certifying that complete Task lifecycle.
 
 [Streaming-loop integration](citation-stream-integration.log) uses a scripted
 streamed model to request the old Part ID through the production compaction
@@ -115,3 +125,82 @@ This proves local integration of the alias contract, not remote model reasoning.
 projection, completed/incomplete/nonshrinking checkpoint and local HTTP streaming
 contracts with the updated Tool declaration. Together with the final reader/copy
 and memory runs, this continuation has 47 distinct passing focused tests.
+
+## Physical interruption and recovery
+
+The [compact process ledger](crash-summary.json) lists each case, physical exit,
+settlement receipt and local request count. Full raw JSON/log pairs are gzip
+compressed without changing their bytes; no digest-only check is used to score
+recovery. The [accepted matrix](crash-final.json.gz) and its
+[process log](crash-final.log.gz) cover 24 real child commands across eight cases:
+
+| Abrupt exit boundary | Manual | Automatic | Verified recovery |
+| --- | --- | --- | --- |
+| After a real nonempty summary Part commit | Pass | Pass | Persisted text plus ProcessExecutionInterruptedError; previous checkpoint remains authoritative until retry succeeds. |
+| After summary completion, before marker publication | Pass | Pass | Previous checkpoint before recovery; a new valid checkpoint after normal lease recovery. |
+| During checkpoint transaction, before commit | Pass | Pass | SQLite rollback preserves previous checkpoint; retry settles one checkpoint binding. |
+| After checkpoint commit, before control consumption | Pass | Pass | Existing summary reused; pending control consumed with that exact summary ID. |
+
+Every case uses separate project/runtime/database state, then reopens it in a
+fresh recovery child and again in an inspection child. Original authored fields
+are compared exactly, allowing only the real validated catalog-binding pair
+added by automatic normal-turn continuation. Final memory, projection and
+control identity agree across fresh reads. Automatic cases await the ordinary
+reply as well as checkpoint settlement. The matrix uses **18 loopback streaming
+requests and zero remote requests**. It waits for the real 120-second abandoned
+lease to expire; it never rewrites lease deadlines or stored statuses.
+
+The [final teardown smoke](crash-final-smoke.json.gz) and
+[typed-hook recheck](crash-typed-hooks.json.gz) exercise the delivered runner after
+review adjustments. Preparation failures are reported within their case, all
+parallel cases are joined before server cleanup, and owned runtimes are removed
+only after confirmed child/output settlement and successful checks. A focused
+TypeScript check includes both scripts and existing ambient declarations;
+standard backend typecheck excludes scripts.
+
+Preserved calibration evidence:
+
+- [Manual baseline](crash-calibration.json.gz): committed-checkpoint recovery passes.
+- [Automatic calibration](crash-automatic-calibration.json.gz): an early summary-mode snapshot raced the legitimate normal-turn continuation. The runner now awaits that reply and validates the canonical catalog annotations.
+- [Role-parser calibration](crash-runner-role-calibration.json.gz): strict user-input parsing was incorrectly applied to assistant Messages; no local Provider call occurred. Corrected the checker to parse user inputs.
+- [Live-delta boundary](crash-volatile-window.json.gz): six durable-boundary cases pass; two live-delta cuts retain original history and truthful interrupted failure but lose uncommitted partial summary text. Delta publication is ephemeral; accumulated Parts persist on the existing 200 ms cadence. The accepted streaming cut is after a real Part commit. **Uncommitted visible fragments can be lost**, and process exit tests do not prove power-loss durability.
+
+Reproduce from `packages/opencorvus` with
+`COMPACTION_CRASH_RESULT=<absolute report.json path>` and
+`bun run check:compaction-crash`. Optional selections are
+`COMPACTION_CRASH_CUTS=streaming,summary_saved,checkpoint_transaction,checkpoint_saved`
+and `COMPACTION_CRASH_KINDS=manual,automatic`. The existing native process
+supervisor owns and joins each child. Inactivity timeout is 180 seconds of no
+stdout/stderr activity; the existing test-command resource deadline is separate.
+The fixed local model output proves persistence and recovery mechanics, not
+semantic reasoning, full application startup or Task/Mission scheduling.
+
+## Task-bound checkpoint and copy ownership
+
+[Task authority baseline](task-authority-baseline.log.gz) proves exact original
+worker authority through three authored checkpoints and reproduces a normal
+worker fork whose copied anchor names a descriptor belonging to the source
+Session. Its new Session lacks a descriptor, so compaction projection returns
+the precise authority error. The same baseline contains one checker expectation
+mistake: metadata is the documented `{part,state}` envelope, not a bare object.
+[Fork admission baseline](task-fork-before.log) records the missing typed
+ownership conflict; its first fixture case also exposes separately sampled
+creation timestamps, now corrected to one Task creation instant.
+
+[Focused contracts](task-authority-final.log) exercise actual Task/dispatch/
+descriptor persistence, checkpoint reconstruction, exact source reads and
+database reopen, plus ordinary copy/atomicity/citation regression. The canonical
+writer now returns `TaskBoundSessionForkError` for normal Task-root or worker
+forks. Explicit side-chat retains the source as independent history using the
+same copier. Strict current-worker authority remains intact. The change prevents
+publishing an invalid execution container; it does not synthesize a dispatch or
+add an alternative execution identity.
+
+[Public route contracts](task-fork-routes.log) cover actual HTTP Session/Gateway
+requests and the panel Tool, plus existing Mission ownership. These are backend
+contracts, not UI automated tests or a full Task lifecycle run. The
+[final six-case matrix](task-fork-complete.log) covers Task-root/worker copies
+both before and after compaction, alongside original authority and side history.
+Combined with the copy/atomicity/Mission regressions, 24 distinct tests pass.
+The [SDK build](task-authority-sdk-build.log) synchronizes error responses. This
+continuation consumes **zero** remote model requests; total remains 154/160.

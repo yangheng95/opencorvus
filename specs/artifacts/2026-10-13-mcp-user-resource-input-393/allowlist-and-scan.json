@@ -1,0 +1,2273 @@
+{
+  "version": 1,
+  "copiedFiles": 247,
+  "findings": [],
+  "knownSecretMaterialRead": false,
+  "redactionBoundary": "Provider audits are original mature-runner CredentialRedactor outputs. Archive performs format/pattern screening, never reads auth/models or claims a new known-secret-value scan.",
+  "excluded": [
+    "auth.json",
+    "models.json",
+    "SQLite and WAL/SHM",
+    "entire runtime or project trees",
+    "binary executable/UI bundle",
+    "node_modules",
+    "unrelated shared-index preimages"
+  ],
+  "summaries": [
+    {
+      "scope": "live-attempt-01",
+      "occurrence": "mcp-user-resource-input-393-live-01-f9090fb7-5c79-4b1d-8fd6-622db0038ac8",
+      "nativeDeadlineAt": 1791896197323,
+      "providerRequests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "nativeClosedAt": "2026-10-13T12:56:35.945Z",
+      "pairedCleanupAt": "2026-10-13T12:56:39.2423222Z",
+      "mcpClosedAt": "2026-10-13T12:56:39.419Z",
+      "physicalOutputRequestPairCleanup": true,
+      "mcpAllClosed": true,
+      "acceptance": "public standalone Session backend passed; target UI not reached"
+    },
+    {
+      "scope": "live-attempt-02",
+      "occurrence": "mcp-user-resource-input-393-live-02-0df95275-32b0-4e83-87a4-3ee283563892",
+      "nativeDeadlineAt": 1791897713055,
+      "providerRequests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "nativeClosedAt": "2026-10-13T13:20:38.473Z",
+      "pairedCleanupAt": "2026-10-13T13:20:42.7247419Z",
+      "mcpClosedAt": "2026-10-13T13:20:42.956Z",
+      "physicalOutputRequestPairCleanup": true,
+      "mcpAllClosed": true,
+      "acceptance": "Global Chat first turn only; attachment follow-up never submitted"
+    },
+    {
+      "scope": "live-attempt-03",
+      "occurrence": "mcp-user-resource-input-393-live-03-f3cf3d59-6361-4df9-984f-c9ef465c31c3",
+      "nativeDeadlineAt": 1791898391939,
+      "providerRequests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "aborted"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "nativeClosedAt": "2026-10-13T13:23:32.194Z",
+      "pairedCleanupAt": "2026-10-13T13:23:35.0603689Z",
+      "mcpClosedAt": "2026-10-13T13:25:38.082Z",
+      "physicalOutputRequestPairCleanup": true,
+      "mcpAllClosed": true,
+      "acceptance": "Provider overload preflight failure; no business or UI; one aborted stream after error"
+    },
+    {
+      "scope": "live-attempt-04",
+      "occurrence": "mcp-user-resource-input-393-live-04-068e974f-4d5f-4a1d-8db9-95975a1f7a1b",
+      "nativeDeadlineAt": 1791899611722,
+      "providerRequests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "state": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "nativeClosedAt": "2026-10-13T13:46:30.299Z",
+      "pairedCleanupAt": "2026-10-13T13:46:34.4131589Z",
+      "mcpClosedAt": "2026-10-13T13:46:26.680Z",
+      "physicalOutputRequestPairCleanup": true,
+      "mcpAllClosed": true,
+      "acceptance": "normal Global Chat public attachment follow-up backend + desktop + actual downloads passed"
+    }
+  ],
+  "byteChecks": [
+    {
+      "scope": "live-attempt-01",
+      "kind": "actual-store",
+      "filename": "public-empty.csv",
+      "bytes": 0,
+      "exactPublicSample": true,
+      "canonicalURL": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv"
+    },
+    {
+      "scope": "live-attempt-01",
+      "kind": "actual-store",
+      "filename": "public-mixed.csv",
+      "bytes": 32,
+      "exactPublicSample": true,
+      "canonicalURL": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv"
+    },
+    {
+      "scope": "live-attempt-01",
+      "kind": "actual-store",
+      "filename": "public-upload.csv",
+      "bytes": 34,
+      "exactPublicSample": true,
+      "canonicalURL": "/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv"
+    },
+    {
+      "scope": "live-attempt-04",
+      "kind": "actual-store",
+      "filename": "public-empty.csv",
+      "bytes": 0,
+      "exactPublicSample": true,
+      "canonicalURL": "/attachment/prj_h4GNrUzySvBzLq1B98xi/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv"
+    },
+    {
+      "scope": "live-attempt-04",
+      "kind": "actual-store",
+      "filename": "public-mixed.csv",
+      "bytes": 32,
+      "exactPublicSample": true,
+      "canonicalURL": "/attachment/prj_h4GNrUzySvBzLq1B98xi/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv"
+    },
+    {
+      "scope": "live-attempt-04",
+      "kind": "actual-store",
+      "filename": "public-upload.csv",
+      "bytes": 34,
+      "exactPublicSample": true,
+      "canonicalURL": "/attachment/prj_h4GNrUzySvBzLq1B98xi/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv"
+    },
+    {
+      "scope": "live-attempt-04",
+      "kind": "actual-download",
+      "filename": "download-empty.csv",
+      "bytes": 0,
+      "exactPublicSample": true
+    },
+    {
+      "scope": "live-attempt-04",
+      "kind": "actual-download",
+      "filename": "download-mixed.csv",
+      "bytes": 32,
+      "exactPublicSample": true
+    }
+  ],
+  "files": [
+    {
+      "source": ".tmp-mcp-user-resource-input-393/before.log",
+      "artifact": "backend/before.log.gz",
+      "sourceBytes": 9572,
+      "archiveBytes": 1454,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/before-exit.txt",
+      "artifact": "backend/before-exit.txt",
+      "sourceBytes": 3,
+      "archiveBytes": 3,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/before-confirmed.log",
+      "artifact": "backend/before-confirmed.log.gz",
+      "sourceBytes": 11230,
+      "archiveBytes": 1780,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/before-confirmed-exit.txt",
+      "artifact": "backend/before-confirmed-exit.txt",
+      "sourceBytes": 3,
+      "archiveBytes": 3,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/after.log",
+      "artifact": "backend/after.log.gz",
+      "sourceBytes": 1900,
+      "archiveBytes": 732,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/after-exit.txt",
+      "artifact": "backend/after-exit.txt",
+      "sourceBytes": 3,
+      "archiveBytes": 3,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/related.log",
+      "artifact": "backend/related.log.gz",
+      "sourceBytes": 10969,
+      "archiveBytes": 2965,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/related-exit.txt",
+      "artifact": "backend/related-exit.txt",
+      "sourceBytes": 3,
+      "archiveBytes": 3,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/typecheck.log",
+      "artifact": "backend/typecheck.log.gz",
+      "sourceBytes": 75,
+      "archiveBytes": 92,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/typecheck-exit.txt",
+      "artifact": "backend/typecheck-exit.txt",
+      "sourceBytes": 3,
+      "archiveBytes": 3,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/docs-check.log",
+      "artifact": "backend/docs-check.log.gz",
+      "sourceBytes": 106,
+      "archiveBytes": 115,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/docs-check-exit.txt",
+      "artifact": "backend/docs-check-exit.txt",
+      "sourceBytes": 3,
+      "archiveBytes": 3,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/format.log",
+      "artifact": "backend/format.log.gz",
+      "sourceBytes": 139,
+      "archiveBytes": 121,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/format-check.log",
+      "artifact": "backend/format-check.log.gz",
+      "sourceBytes": 68,
+      "archiveBytes": 87,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/runner-cleanup.json",
+      "artifact": "backend/runner-cleanup.json",
+      "sourceBytes": 894,
+      "archiveBytes": 894,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/production-before.diff",
+      "artifact": "backend/production-before.diff.gz",
+      "sourceBytes": 0,
+      "archiveBytes": 20,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/materialize-before.ts",
+      "artifact": "source-preimage/materialize-before.ts.gz",
+      "sourceBytes": 10345,
+      "archiveBytes": 2951,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/parts-before.ts",
+      "artifact": "source-preimage/parts-before.ts.gz",
+      "sourceBytes": 34544,
+      "archiveBytes": 7777,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/session-route-before.ts",
+      "artifact": "source-preimage/session-route-before.ts.gz",
+      "sourceBytes": 87239,
+      "archiveBytes": 17420,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/prepare-live.mjs",
+      "artifact": "helper-collected-after-close/prepare-live.mjs.gz",
+      "sourceBytes": 2629,
+      "archiveBytes": 1245,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/mcp-resources.ts",
+      "artifact": "helper-collected-after-close/mcp-resources.ts.gz",
+      "sourceBytes": 6254,
+      "archiveBytes": 2179,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/send-session.mjs",
+      "artifact": "helper-collected-after-close/send-session.mjs.gz",
+      "sourceBytes": 10681,
+      "archiveBytes": 3159,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/check-live.ts",
+      "artifact": "helper-collected-after-close/check-live.ts.gz",
+      "sourceBytes": 15103,
+      "archiveBytes": 4384,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/stop-mcp.mjs",
+      "artifact": "helper-collected-after-close/stop-mcp.mjs.gz",
+      "sourceBytes": 1307,
+      "archiveBytes": 655,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/LIVE-HELPERS.md",
+      "artifact": "helper-collected-after-close/LIVE-HELPERS.md.gz",
+      "sourceBytes": 6453,
+      "archiveBytes": 2910,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/send-session-before-connect.mjs",
+      "artifact": "helper-collected-after-close/send-session-before-connect.mjs.gz",
+      "sourceBytes": 6552,
+      "archiveBytes": 2203,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/check-live-before-isolation-fix.ts",
+      "artifact": "helper-collected-after-close/check-live-before-isolation-fix.ts.gz",
+      "sourceBytes": 11945,
+      "archiveBytes": 3797,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/check-live-before-attempt02.ts",
+      "artifact": "helper-collected-after-close/check-live-before-attempt02.ts.gz",
+      "sourceBytes": 11934,
+      "archiveBytes": 3791,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/resume-attempt-02.mjs",
+      "artifact": "helper-collected-after-close/resume-attempt-02.mjs.gz",
+      "sourceBytes": 1955,
+      "archiveBytes": 868,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/continue-scope02.mjs",
+      "artifact": "helper-collected-after-close/continue-scope02.mjs.gz",
+      "sourceBytes": 5715,
+      "archiveBytes": 2007,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/builtin.json",
+      "artifact": "live-attempt-01/builtin.json",
+      "sourceBytes": 66,
+      "archiveBytes": 66,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/mcp-config.json",
+      "artifact": "live-attempt-01/mcp-config.json",
+      "sourceBytes": 134,
+      "archiveBytes": 134,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-resources.json",
+      "artifact": "live-attempt-01/public-resources.json",
+      "sourceBytes": 1343,
+      "archiveBytes": 1343,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/user-request.txt",
+      "artifact": "live-attempt-01/user-request.txt",
+      "sourceBytes": 388,
+      "archiveBytes": 388,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-empty.txt",
+      "artifact": "live-attempt-01/public-empty.txt",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-empty.csv",
+      "artifact": "live-attempt-01/public-empty.csv",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-mixed.csv",
+      "artifact": "live-attempt-01/public-mixed.csv.gz",
+      "sourceBytes": 32,
+      "archiveBytes": 52,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-upload.csv",
+      "artifact": "live-attempt-01/public-upload.csv.gz",
+      "sourceBytes": 34,
+      "archiveBytes": 54,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/attempt-02-intent.json",
+      "artifact": "live-attempt-01/attempt-02-intent.json",
+      "sourceBytes": 384,
+      "archiveBytes": 384,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/attempt-02.log",
+      "artifact": "live-attempt-01/attempt-02.log.gz",
+      "sourceBytes": 515,
+      "archiveBytes": 364,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/check-input-1791896039211.json",
+      "artifact": "live-attempt-01/check-input-1791896039211.json.gz",
+      "sourceBytes": 184016,
+      "archiveBytes": 7506,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/check.log",
+      "artifact": "live-attempt-01/check.log.gz",
+      "sourceBytes": 4227,
+      "archiveBytes": 1265,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/checker-isolation-first-failure.txt",
+      "artifact": "live-attempt-01/checker-isolation-first-failure.txt",
+      "sourceBytes": 290,
+      "archiveBytes": 290,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/handle-joins.json",
+      "artifact": "live-attempt-01/handle-joins.json",
+      "sourceBytes": 360,
+      "archiveBytes": 360,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/launch.ps1",
+      "artifact": "live-attempt-01/launch.ps1.gz",
+      "sourceBytes": 33221,
+      "archiveBytes": 8232,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/launcher-adaptation.json",
+      "artifact": "live-attempt-01/launcher-adaptation.json",
+      "sourceBytes": 732,
+      "archiveBytes": 732,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/live-canonical.json",
+      "artifact": "live-attempt-01/live-canonical.json.gz",
+      "sourceBytes": 34306,
+      "archiveBytes": 4725,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/live-check.json",
+      "artifact": "live-attempt-01/live-check.json",
+      "sourceBytes": 4136,
+      "archiveBytes": 4136,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/live-provider-audit.json",
+      "artifact": "live-attempt-01/live-provider-audit.json.gz",
+      "sourceBytes": 142387,
+      "archiveBytes": 3062,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/mcp-connect-receipt.json",
+      "artifact": "live-attempt-01/mcp-connect-receipt.json",
+      "sourceBytes": 276,
+      "archiveBytes": 276,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/page-closed.json",
+      "artifact": "live-attempt-01/page-closed.json",
+      "sourceBytes": 224,
+      "archiveBytes": 224,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/pre-connect-facts.json",
+      "artifact": "live-attempt-01/pre-connect-facts.json",
+      "sourceBytes": 555,
+      "archiveBytes": 555,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/project-default-fact.json",
+      "artifact": "live-attempt-01/project-default-fact.json",
+      "sourceBytes": 353,
+      "archiveBytes": 353,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-message-failure.json",
+      "artifact": "live-attempt-01/public-message-failure.json",
+      "sourceBytes": 488,
+      "archiveBytes": 488,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-message-request.json",
+      "artifact": "live-attempt-01/public-message-request.json",
+      "sourceBytes": 2091,
+      "archiveBytes": 2091,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-message-response-attempt-02.json",
+      "artifact": "live-attempt-01/public-message-response-attempt-02.json",
+      "sourceBytes": 4213,
+      "archiveBytes": 4213,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/public-message-response.json",
+      "artifact": "live-attempt-01/public-message-response.json",
+      "sourceBytes": 344,
+      "archiveBytes": 344,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/send-intent.json",
+      "artifact": "live-attempt-01/send-intent.json",
+      "sourceBytes": 263,
+      "archiveBytes": 263,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/send.log",
+      "artifact": "live-attempt-01/send.log.gz",
+      "sourceBytes": 821,
+      "archiveBytes": 558,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/session-created.json",
+      "artifact": "live-attempt-01/session-created.json",
+      "sourceBytes": 848,
+      "archiveBytes": 848,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/ui-navigation-boundary-ax.txt",
+      "artifact": "live-attempt-01/ui-navigation-boundary-ax.txt.gz",
+      "sourceBytes": 5136,
+      "archiveBytes": 1467,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/upload-receipt.json",
+      "artifact": "live-attempt-01/upload-receipt.json",
+      "sourceBytes": 358,
+      "archiveBytes": 358,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/visible-answer.txt",
+      "artifact": "live-attempt-01/visible-answer.txt",
+      "sourceBytes": 1145,
+      "archiveBytes": 1145,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/mcp-owner.json",
+      "artifact": "live-attempt-01/mcp-owner.json",
+      "sourceBytes": 342,
+      "archiveBytes": 342,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/mcp-ready.json",
+      "artifact": "live-attempt-01/mcp-ready.json",
+      "sourceBytes": 1115,
+      "archiveBytes": 1115,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/mcp-stop.json",
+      "artifact": "live-attempt-01/mcp-stop.json",
+      "sourceBytes": 131,
+      "archiveBytes": 131,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/mcp-terminal.json",
+      "artifact": "live-attempt-01/mcp-terminal.json",
+      "sourceBytes": 1905,
+      "archiveBytes": 1905,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/mcp-read-calls.jsonl",
+      "artifact": "live-attempt-01/mcp-read-calls.jsonl",
+      "sourceBytes": 1013,
+      "archiveBytes": 1013,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/launch-owner.json",
+      "artifact": "live-attempt-01/native/launch-owner.json",
+      "sourceBytes": 3413,
+      "archiveBytes": 3413,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/startup.json",
+      "artifact": "live-attempt-01/native/startup.json",
+      "sourceBytes": 174,
+      "archiveBytes": 174,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/stdout.log",
+      "artifact": "live-attempt-01/native/stdout.log.gz",
+      "sourceBytes": 546,
+      "archiveBytes": 363,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/stderr.log",
+      "artifact": "live-attempt-01/native/stderr.log.gz",
+      "sourceBytes": 7797,
+      "archiveBytes": 750,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/authority-ready.json",
+      "artifact": "live-attempt-01/native/evidence/authority-ready.json",
+      "sourceBytes": 15919,
+      "archiveBytes": 15919,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/managed-parent-ready.json",
+      "artifact": "live-attempt-01/native/evidence/managed-parent-ready.json",
+      "sourceBytes": 524,
+      "archiveBytes": 524,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/native-host-ready.json",
+      "artifact": "live-attempt-01/native/evidence/native-host-ready.json",
+      "sourceBytes": 1874,
+      "archiveBytes": 1874,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/native-host-settled.json",
+      "artifact": "live-attempt-01/native/evidence/native-host-settled.json",
+      "sourceBytes": 947,
+      "archiveBytes": 947,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/owned-config-hierarchy.json",
+      "artifact": "live-attempt-01/native/evidence/owned-config-hierarchy.json",
+      "sourceBytes": 750,
+      "archiveBytes": 750,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/profile-selection-admitted.json",
+      "artifact": "live-attempt-01/native/evidence/profile-selection-admitted.json",
+      "sourceBytes": 265,
+      "archiveBytes": 265,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/project-baseline.json",
+      "artifact": "live-attempt-01/native/evidence/project-baseline.json",
+      "sourceBytes": 461,
+      "archiveBytes": 461,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/provider-pair-staging.json",
+      "artifact": "live-attempt-01/native/evidence/provider-pair-staging.json",
+      "sourceBytes": 1689,
+      "archiveBytes": 1689,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/evidence/preflight-ready.json",
+      "artifact": "live-attempt-01/native/evidence/preflight-ready.json",
+      "sourceBytes": 713,
+      "archiveBytes": 713,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-live/mcp-user-resource-input-393-live-01-final-provider-audit.json",
+      "artifact": "live-attempt-01/closure/final-provider-audit.json.gz",
+      "sourceBytes": 147295,
+      "archiveBytes": 3082,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-live/mcp-user-resource-input-393-live-01-physical-terminal-and-pair-cleanup.json",
+      "artifact": "live-attempt-01/closure/physical-terminal-and-pair-cleanup.json",
+      "sourceBytes": 2485,
+      "archiveBytes": 2485,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-live/mcp-user-resource-input-393-live-01-settlement-owner.json",
+      "artifact": "live-attempt-01/closure/settlement-owner.json",
+      "sourceBytes": 509,
+      "archiveBytes": 509,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-live/mcp-user-resource-input-393-live-01-shutdown-admission.json",
+      "artifact": "live-attempt-01/closure/shutdown-admission.json",
+      "sourceBytes": 551,
+      "archiveBytes": 551,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-live/mcp-user-resource-input-393-live-01-qualified-surface-completion.json",
+      "artifact": "live-attempt-01/closure/qualified-surface-completion.json",
+      "sourceBytes": 361,
+      "archiveBytes": 361,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/builtin.json",
+      "artifact": "live-attempt-02/builtin.json",
+      "sourceBytes": 66,
+      "archiveBytes": 66,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/mcp-config.json",
+      "artifact": "live-attempt-02/mcp-config.json",
+      "sourceBytes": 134,
+      "archiveBytes": 134,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/public-resources.json",
+      "artifact": "live-attempt-02/public-resources.json",
+      "sourceBytes": 1343,
+      "archiveBytes": 1343,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/user-request.txt",
+      "artifact": "live-attempt-02/user-request.txt",
+      "sourceBytes": 388,
+      "archiveBytes": 388,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/public-empty.txt",
+      "artifact": "live-attempt-02/public-empty.txt",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/public-empty.csv",
+      "artifact": "live-attempt-02/public-empty.csv",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/public-mixed.csv",
+      "artifact": "live-attempt-02/public-mixed.csv.gz",
+      "sourceBytes": 32,
+      "archiveBytes": 52,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/public-upload.csv",
+      "artifact": "live-attempt-02/public-upload.csv.gz",
+      "sourceBytes": 34,
+      "archiveBytes": 54,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/continue.log",
+      "artifact": "live-attempt-02/continue.log.gz",
+      "sourceBytes": 452,
+      "archiveBytes": 338,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/global-chat-first-completed.json",
+      "artifact": "live-attempt-02/global-chat-first-completed.json",
+      "sourceBytes": 3007,
+      "archiveBytes": 3007,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/global-chat-ready.json",
+      "artifact": "live-attempt-02/global-chat-ready.json",
+      "sourceBytes": 707,
+      "archiveBytes": 707,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/global-chat-start-request.json",
+      "artifact": "live-attempt-02/global-chat-start-request.json",
+      "sourceBytes": 264,
+      "archiveBytes": 264,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/global-chat-start-response.json",
+      "artifact": "live-attempt-02/global-chat-start-response.json",
+      "sourceBytes": 4238,
+      "archiveBytes": 4238,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/handle-joins.json",
+      "artifact": "live-attempt-02/handle-joins.json",
+      "sourceBytes": 394,
+      "archiveBytes": 394,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/initial-chat-only-ax.txt",
+      "artifact": "live-attempt-02/initial-chat-only-ax.txt.gz",
+      "sourceBytes": 7117,
+      "archiveBytes": 1849,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/launch.ps1",
+      "artifact": "live-attempt-02/launch.ps1.gz",
+      "sourceBytes": 33221,
+      "archiveBytes": 8232,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/launcher-adaptation.json",
+      "artifact": "live-attempt-02/launcher-adaptation.json",
+      "sourceBytes": 451,
+      "archiveBytes": 451,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/page-closed.json",
+      "artifact": "live-attempt-02/page-closed.json",
+      "sourceBytes": 171,
+      "archiveBytes": 171,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/send-intent.json",
+      "artifact": "live-attempt-02/send-intent.json",
+      "sourceBytes": 291,
+      "archiveBytes": 291,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/send-session-before-config-surface-fix.mjs",
+      "artifact": "live-attempt-02/send-session-before-config-surface-fix.mjs.gz",
+      "sourceBytes": 10562,
+      "archiveBytes": 3133,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/send.log",
+      "artifact": "live-attempt-02/send.log.gz",
+      "sourceBytes": 1201,
+      "archiveBytes": 772,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/mcp-owner.json",
+      "artifact": "live-attempt-02/mcp-owner.json",
+      "sourceBytes": 342,
+      "archiveBytes": 342,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/mcp-ready.json",
+      "artifact": "live-attempt-02/mcp-ready.json",
+      "sourceBytes": 1115,
+      "archiveBytes": 1115,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/mcp-stop.json",
+      "artifact": "live-attempt-02/mcp-stop.json",
+      "sourceBytes": 131,
+      "archiveBytes": 131,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/mcp-terminal.json",
+      "artifact": "live-attempt-02/mcp-terminal.json",
+      "sourceBytes": 1041,
+      "archiveBytes": 1041,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/launch-owner.json",
+      "artifact": "live-attempt-02/native/launch-owner.json",
+      "sourceBytes": 3413,
+      "archiveBytes": 3413,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/startup.json",
+      "artifact": "live-attempt-02/native/startup.json",
+      "sourceBytes": 174,
+      "archiveBytes": 174,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/stdout.log",
+      "artifact": "live-attempt-02/native/stdout.log.gz",
+      "sourceBytes": 546,
+      "archiveBytes": 362,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/stderr.log",
+      "artifact": "live-attempt-02/native/stderr.log.gz",
+      "sourceBytes": 7799,
+      "archiveBytes": 762,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/authority-ready.json",
+      "artifact": "live-attempt-02/native/evidence/authority-ready.json",
+      "sourceBytes": 15919,
+      "archiveBytes": 15919,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/managed-parent-ready.json",
+      "artifact": "live-attempt-02/native/evidence/managed-parent-ready.json",
+      "sourceBytes": 524,
+      "archiveBytes": 524,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/native-host-ready.json",
+      "artifact": "live-attempt-02/native/evidence/native-host-ready.json",
+      "sourceBytes": 1874,
+      "archiveBytes": 1874,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/native-host-settled.json",
+      "artifact": "live-attempt-02/native/evidence/native-host-settled.json",
+      "sourceBytes": 947,
+      "archiveBytes": 947,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/owned-config-hierarchy.json",
+      "artifact": "live-attempt-02/native/evidence/owned-config-hierarchy.json",
+      "sourceBytes": 750,
+      "archiveBytes": 750,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/profile-selection-admitted.json",
+      "artifact": "live-attempt-02/native/evidence/profile-selection-admitted.json",
+      "sourceBytes": 265,
+      "archiveBytes": 265,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/project-baseline.json",
+      "artifact": "live-attempt-02/native/evidence/project-baseline.json",
+      "sourceBytes": 461,
+      "archiveBytes": 461,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/provider-pair-staging.json",
+      "artifact": "live-attempt-02/native/evidence/provider-pair-staging.json",
+      "sourceBytes": 1689,
+      "archiveBytes": 1689,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-run/evidence/preflight-ready.json",
+      "artifact": "live-attempt-02/native/evidence/preflight-ready.json",
+      "sourceBytes": 713,
+      "archiveBytes": 713,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-live/mcp-user-resource-input-393-live-02-final-provider-audit.json",
+      "artifact": "live-attempt-02/closure/final-provider-audit.json.gz",
+      "sourceBytes": 61462,
+      "archiveBytes": 2099,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-live/mcp-user-resource-input-393-live-02-physical-terminal-and-pair-cleanup.json",
+      "artifact": "live-attempt-02/closure/physical-terminal-and-pair-cleanup.json",
+      "sourceBytes": 2485,
+      "archiveBytes": 2485,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-live/mcp-user-resource-input-393-live-02-settlement-owner.json",
+      "artifact": "live-attempt-02/closure/settlement-owner.json",
+      "sourceBytes": 509,
+      "archiveBytes": 509,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-live/mcp-user-resource-input-393-live-02-shutdown-admission.json",
+      "artifact": "live-attempt-02/closure/shutdown-admission.json",
+      "sourceBytes": 551,
+      "archiveBytes": 551,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/provider-live/mcp-user-resource-input-393-live-02-qualified-surface-completion.json",
+      "artifact": "live-attempt-02/closure/qualified-surface-completion.json",
+      "sourceBytes": 361,
+      "archiveBytes": 361,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/builtin.json",
+      "artifact": "live-attempt-03/builtin.json",
+      "sourceBytes": 66,
+      "archiveBytes": 66,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/mcp-config.json",
+      "artifact": "live-attempt-03/mcp-config.json",
+      "sourceBytes": 134,
+      "archiveBytes": 134,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/public-resources.json",
+      "artifact": "live-attempt-03/public-resources.json",
+      "sourceBytes": 1343,
+      "archiveBytes": 1343,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/user-request.txt",
+      "artifact": "live-attempt-03/user-request.txt",
+      "sourceBytes": 388,
+      "archiveBytes": 388,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/public-empty.txt",
+      "artifact": "live-attempt-03/public-empty.txt",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/public-empty.csv",
+      "artifact": "live-attempt-03/public-empty.csv",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/public-mixed.csv",
+      "artifact": "live-attempt-03/public-mixed.csv.gz",
+      "sourceBytes": 32,
+      "archiveBytes": 52,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/public-upload.csv",
+      "artifact": "live-attempt-03/public-upload.csv.gz",
+      "sourceBytes": 34,
+      "archiveBytes": 54,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/launch.ps1",
+      "artifact": "live-attempt-03/launch.ps1.gz",
+      "sourceBytes": 33221,
+      "archiveBytes": 8232,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/send.log",
+      "artifact": "live-attempt-03/send.log.gz",
+      "sourceBytes": 839,
+      "archiveBytes": 391,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/mcp-owner.json",
+      "artifact": "live-attempt-03/mcp-owner.json",
+      "sourceBytes": 342,
+      "archiveBytes": 342,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/mcp-ready.json",
+      "artifact": "live-attempt-03/mcp-ready.json",
+      "sourceBytes": 1115,
+      "archiveBytes": 1115,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/mcp-stop.json",
+      "artifact": "live-attempt-03/mcp-stop.json",
+      "sourceBytes": 131,
+      "archiveBytes": 131,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/mcp-terminal.json",
+      "artifact": "live-attempt-03/mcp-terminal.json",
+      "sourceBytes": 1041,
+      "archiveBytes": 1041,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/launch-owner.json",
+      "artifact": "live-attempt-03/native/launch-owner.json",
+      "sourceBytes": 3413,
+      "archiveBytes": 3413,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/startup.json",
+      "artifact": "live-attempt-03/native/startup.json",
+      "sourceBytes": 174,
+      "archiveBytes": 174,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/stdout.log",
+      "artifact": "live-attempt-03/native/stdout.log.gz",
+      "sourceBytes": 546,
+      "archiveBytes": 362,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/stderr.log",
+      "artifact": "live-attempt-03/native/stderr.log.gz",
+      "sourceBytes": 7887,
+      "archiveBytes": 820,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/authority-ready.json",
+      "artifact": "live-attempt-03/native/evidence/authority-ready.json",
+      "sourceBytes": 15919,
+      "archiveBytes": 15919,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/managed-parent-ready.json",
+      "artifact": "live-attempt-03/native/evidence/managed-parent-ready.json",
+      "sourceBytes": 524,
+      "archiveBytes": 524,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/native-host-ready.json",
+      "artifact": "live-attempt-03/native/evidence/native-host-ready.json",
+      "sourceBytes": 1874,
+      "archiveBytes": 1874,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/native-host-settled.json",
+      "artifact": "live-attempt-03/native/evidence/native-host-settled.json",
+      "sourceBytes": 947,
+      "archiveBytes": 947,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/owned-config-hierarchy.json",
+      "artifact": "live-attempt-03/native/evidence/owned-config-hierarchy.json",
+      "sourceBytes": 750,
+      "archiveBytes": 750,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/profile-selection-admitted.json",
+      "artifact": "live-attempt-03/native/evidence/profile-selection-admitted.json",
+      "sourceBytes": 265,
+      "archiveBytes": 265,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/project-baseline.json",
+      "artifact": "live-attempt-03/native/evidence/project-baseline.json",
+      "sourceBytes": 461,
+      "archiveBytes": 461,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/provider-pair-staging.json",
+      "artifact": "live-attempt-03/native/evidence/provider-pair-staging.json",
+      "sourceBytes": 1689,
+      "archiveBytes": 1689,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-run/evidence/failed.json",
+      "artifact": "live-attempt-03/native/evidence/failed.json",
+      "sourceBytes": 467,
+      "archiveBytes": 467,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-live/mcp-user-resource-input-393-live-03-final-provider-audit.json",
+      "artifact": "live-attempt-03/closure/final-provider-audit.json.gz",
+      "sourceBytes": 30327,
+      "archiveBytes": 1554,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-live/mcp-user-resource-input-393-live-03-physical-terminal-and-pair-cleanup.json",
+      "artifact": "live-attempt-03/closure/physical-terminal-and-pair-cleanup.json",
+      "sourceBytes": 2485,
+      "archiveBytes": 2485,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-live/mcp-user-resource-input-393-live-03-settlement-owner.json",
+      "artifact": "live-attempt-03/closure/settlement-owner.json",
+      "sourceBytes": 1105,
+      "archiveBytes": 1105,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-03/provider-live/mcp-user-resource-input-393-live-03-shutdown-admission.json",
+      "artifact": "live-attempt-03/closure/shutdown-admission.json",
+      "sourceBytes": 552,
+      "archiveBytes": 552,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/builtin.json",
+      "artifact": "live-attempt-04/builtin.json",
+      "sourceBytes": 66,
+      "archiveBytes": 66,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/mcp-config.json",
+      "artifact": "live-attempt-04/mcp-config.json",
+      "sourceBytes": 134,
+      "archiveBytes": 134,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/public-resources.json",
+      "artifact": "live-attempt-04/public-resources.json",
+      "sourceBytes": 1343,
+      "archiveBytes": 1343,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/user-request.txt",
+      "artifact": "live-attempt-04/user-request.txt",
+      "sourceBytes": 388,
+      "archiveBytes": 388,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/public-empty.txt",
+      "artifact": "live-attempt-04/public-empty.txt",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/public-empty.csv",
+      "artifact": "live-attempt-04/public-empty.csv",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/public-mixed.csv",
+      "artifact": "live-attempt-04/public-mixed.csv.gz",
+      "sourceBytes": 32,
+      "archiveBytes": 52,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/public-upload.csv",
+      "artifact": "live-attempt-04/public-upload.csv.gz",
+      "sourceBytes": 34,
+      "archiveBytes": 54,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/check-input-1791899147107.json",
+      "artifact": "live-attempt-04/check-input-1791899147107.json.gz",
+      "sourceBytes": 231341,
+      "archiveBytes": 9960,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/check.log",
+      "artifact": "live-attempt-04/check.log.gz",
+      "sourceBytes": 4958,
+      "archiveBytes": 1492,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/download-byte-review.json",
+      "artifact": "live-attempt-04/download-byte-review.json",
+      "sourceBytes": 117,
+      "archiveBytes": 117,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/global-chat-first-completed.json",
+      "artifact": "live-attempt-04/global-chat-first-completed.json",
+      "sourceBytes": 3007,
+      "archiveBytes": 3007,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/global-chat-ready.json",
+      "artifact": "live-attempt-04/global-chat-ready.json",
+      "sourceBytes": 707,
+      "archiveBytes": 707,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/global-chat-start-request.json",
+      "artifact": "live-attempt-04/global-chat-start-request.json",
+      "sourceBytes": 264,
+      "archiveBytes": 264,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/global-chat-start-response.json",
+      "artifact": "live-attempt-04/global-chat-start-response.json",
+      "sourceBytes": 4241,
+      "archiveBytes": 4241,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/launch.ps1",
+      "artifact": "live-attempt-04/launch.ps1.gz",
+      "sourceBytes": 33221,
+      "archiveBytes": 8232,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/live-canonical.json",
+      "artifact": "live-attempt-04/live-canonical.json.gz",
+      "sourceBytes": 50146,
+      "archiveBytes": 6769,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/live-check.json",
+      "artifact": "live-attempt-04/live-check.json",
+      "sourceBytes": 4861,
+      "archiveBytes": 4861,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/live-provider-audit.json",
+      "artifact": "live-attempt-04/live-provider-audit.json.gz",
+      "sourceBytes": 171428,
+      "archiveBytes": 3478,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/mcp-connect-precondition.json",
+      "artifact": "live-attempt-04/mcp-connect-precondition.json",
+      "sourceBytes": 92,
+      "archiveBytes": 92,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/observation-1791899109853.json",
+      "artifact": "live-attempt-04/observation-1791899109853.json.gz",
+      "sourceBytes": 231341,
+      "archiveBytes": 9960,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/observe.log",
+      "artifact": "live-attempt-04/observe.log.gz",
+      "sourceBytes": 1702,
+      "archiveBytes": 455,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/page-ax.txt",
+      "artifact": "live-attempt-04/page-ax.txt.gz",
+      "sourceBytes": 13310,
+      "archiveBytes": 3682,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/project-default-fact.json",
+      "artifact": "live-attempt-04/project-default-fact.json",
+      "sourceBytes": 646,
+      "archiveBytes": 646,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/public-message-request.json",
+      "artifact": "live-attempt-04/public-message-request.json",
+      "sourceBytes": 2091,
+      "archiveBytes": 2091,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/public-message-response.json",
+      "artifact": "live-attempt-04/public-message-response.json",
+      "sourceBytes": 4510,
+      "archiveBytes": 4510,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/send-intent.json",
+      "artifact": "live-attempt-04/send-intent.json",
+      "sourceBytes": 291,
+      "archiveBytes": 291,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/send.log",
+      "artifact": "live-attempt-04/send.log.gz",
+      "sourceBytes": 1331,
+      "archiveBytes": 585,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/session-created.json",
+      "artifact": "live-attempt-04/session-created.json",
+      "sourceBytes": 4291,
+      "archiveBytes": 4291,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/upload-receipt.json",
+      "artifact": "live-attempt-04/upload-receipt.json",
+      "sourceBytes": 358,
+      "archiveBytes": 358,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/visible-answer.txt",
+      "artifact": "live-attempt-04/visible-answer.txt",
+      "sourceBytes": 1301,
+      "archiveBytes": 1301,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/visual-review.json",
+      "artifact": "live-attempt-04/visual-review.json",
+      "sourceBytes": 733,
+      "archiveBytes": 733,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/mcp-owner.json",
+      "artifact": "live-attempt-04/mcp-owner.json",
+      "sourceBytes": 342,
+      "archiveBytes": 342,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/mcp-ready.json",
+      "artifact": "live-attempt-04/mcp-ready.json",
+      "sourceBytes": 1115,
+      "archiveBytes": 1115,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/mcp-stop.json",
+      "artifact": "live-attempt-04/mcp-stop.json",
+      "sourceBytes": 131,
+      "archiveBytes": 131,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/mcp-terminal.json",
+      "artifact": "live-attempt-04/mcp-terminal.json",
+      "sourceBytes": 1905,
+      "archiveBytes": 1905,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/mcp-read-calls.jsonl",
+      "artifact": "live-attempt-04/mcp-read-calls.jsonl",
+      "sourceBytes": 1013,
+      "archiveBytes": 1013,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/launch-owner.json",
+      "artifact": "live-attempt-04/native/launch-owner.json",
+      "sourceBytes": 3413,
+      "archiveBytes": 3413,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/startup.json",
+      "artifact": "live-attempt-04/native/startup.json",
+      "sourceBytes": 174,
+      "archiveBytes": 174,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/stdout.log",
+      "artifact": "live-attempt-04/native/stdout.log.gz",
+      "sourceBytes": 546,
+      "archiveBytes": 363,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/stderr.log",
+      "artifact": "live-attempt-04/native/stderr.log.gz",
+      "sourceBytes": 7797,
+      "archiveBytes": 760,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/authority-ready.json",
+      "artifact": "live-attempt-04/native/evidence/authority-ready.json",
+      "sourceBytes": 15919,
+      "archiveBytes": 15919,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/managed-parent-ready.json",
+      "artifact": "live-attempt-04/native/evidence/managed-parent-ready.json",
+      "sourceBytes": 524,
+      "archiveBytes": 524,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/native-host-ready.json",
+      "artifact": "live-attempt-04/native/evidence/native-host-ready.json",
+      "sourceBytes": 1874,
+      "archiveBytes": 1874,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/native-host-settled.json",
+      "artifact": "live-attempt-04/native/evidence/native-host-settled.json",
+      "sourceBytes": 947,
+      "archiveBytes": 947,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/owned-config-hierarchy.json",
+      "artifact": "live-attempt-04/native/evidence/owned-config-hierarchy.json",
+      "sourceBytes": 750,
+      "archiveBytes": 750,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/profile-selection-admitted.json",
+      "artifact": "live-attempt-04/native/evidence/profile-selection-admitted.json",
+      "sourceBytes": 265,
+      "archiveBytes": 265,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/project-baseline.json",
+      "artifact": "live-attempt-04/native/evidence/project-baseline.json",
+      "sourceBytes": 461,
+      "archiveBytes": 461,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/provider-pair-staging.json",
+      "artifact": "live-attempt-04/native/evidence/provider-pair-staging.json",
+      "sourceBytes": 1689,
+      "archiveBytes": 1689,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/evidence/preflight-ready.json",
+      "artifact": "live-attempt-04/native/evidence/preflight-ready.json",
+      "sourceBytes": 713,
+      "archiveBytes": 713,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-live/mcp-user-resource-input-393-live-04-final-provider-audit.json",
+      "artifact": "live-attempt-04/closure/final-provider-audit.json.gz",
+      "sourceBytes": 177340,
+      "archiveBytes": 3503,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-live/mcp-user-resource-input-393-live-04-physical-terminal-and-pair-cleanup.json",
+      "artifact": "live-attempt-04/closure/physical-terminal-and-pair-cleanup.json",
+      "sourceBytes": 2485,
+      "archiveBytes": 2485,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-live/mcp-user-resource-input-393-live-04-settlement-owner.json",
+      "artifact": "live-attempt-04/closure/settlement-owner.json",
+      "sourceBytes": 509,
+      "archiveBytes": 509,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-live/mcp-user-resource-input-393-live-04-shutdown-admission.json",
+      "artifact": "live-attempt-04/closure/shutdown-admission.json",
+      "sourceBytes": 551,
+      "archiveBytes": 551,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-live/mcp-user-resource-input-393-live-04-qualified-surface-completion.json",
+      "artifact": "live-attempt-04/closure/qualified-surface-completion.json",
+      "sourceBytes": 361,
+      "archiveBytes": 361,
+      "encoding": "original",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/helper-snapshot-after-close/prepare-live.mjs",
+      "artifact": "live-attempt-01/helper-snapshot-after-close/prepare-live.mjs.gz",
+      "sourceBytes": 2485,
+      "archiveBytes": 1180,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/helper-snapshot-after-close/mcp-resources.ts",
+      "artifact": "live-attempt-01/helper-snapshot-after-close/mcp-resources.ts.gz",
+      "sourceBytes": 6150,
+      "archiveBytes": 2138,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/helper-snapshot-after-close/send-session.mjs",
+      "artifact": "live-attempt-01/helper-snapshot-after-close/send-session.mjs.gz",
+      "sourceBytes": 6884,
+      "archiveBytes": 2259,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/helper-snapshot-after-close/check-live.ts",
+      "artifact": "live-attempt-01/helper-snapshot-after-close/check-live.ts.gz",
+      "sourceBytes": 11878,
+      "archiveBytes": 3778,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/helper-snapshot-after-close/stop-mcp.mjs",
+      "artifact": "live-attempt-01/helper-snapshot-after-close/stop-mcp.mjs.gz",
+      "sourceBytes": 1203,
+      "archiveBytes": 623,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/helper-snapshot-after-close/LIVE-HELPERS.md",
+      "artifact": "live-attempt-01/helper-snapshot-after-close/LIVE-HELPERS.md.gz",
+      "sourceBytes": 5215,
+      "archiveBytes": 2348,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/check-live-before-isolation-fix.ts",
+      "artifact": "live-attempt-01/scripts-final-used/check-live-before-isolation-fix.ts.gz",
+      "sourceBytes": 11945,
+      "archiveBytes": 3797,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/check-live.ts",
+      "artifact": "live-attempt-01/scripts-final-used/check-live.ts.gz",
+      "sourceBytes": 11878,
+      "archiveBytes": 3778,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/mcp-resources.ts",
+      "artifact": "live-attempt-01/scripts-final-used/mcp-resources.ts.gz",
+      "sourceBytes": 6254,
+      "archiveBytes": 2179,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/prepare-live.mjs",
+      "artifact": "live-attempt-01/scripts-final-used/prepare-live.mjs.gz",
+      "sourceBytes": 2629,
+      "archiveBytes": 1245,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/resume-attempt-02.mjs",
+      "artifact": "live-attempt-01/scripts-final-used/resume-attempt-02.mjs.gz",
+      "sourceBytes": 1955,
+      "archiveBytes": 868,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/send-session-before-connect.mjs",
+      "artifact": "live-attempt-01/scripts-final-used/send-session-before-connect.mjs.gz",
+      "sourceBytes": 6552,
+      "archiveBytes": 2203,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/send-session.mjs",
+      "artifact": "live-attempt-01/scripts-final-used/send-session.mjs.gz",
+      "sourceBytes": 10108,
+      "archiveBytes": 3067,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/scripts-final-used/stop-mcp.mjs",
+      "artifact": "live-attempt-01/scripts-final-used/stop-mcp.mjs.gz",
+      "sourceBytes": 1307,
+      "archiveBytes": 655,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/scripts-final-used/check-live.ts",
+      "artifact": "live-attempt-02/scripts-final-used/check-live.ts.gz",
+      "sourceBytes": 15103,
+      "archiveBytes": 4384,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/scripts-final-used/continue-scope02.mjs",
+      "artifact": "live-attempt-02/scripts-final-used/continue-scope02.mjs.gz",
+      "sourceBytes": 5715,
+      "archiveBytes": 2007,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/scripts-final-used/mcp-resources.ts",
+      "artifact": "live-attempt-02/scripts-final-used/mcp-resources.ts.gz",
+      "sourceBytes": 6254,
+      "archiveBytes": 2179,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/scripts-final-used/send-session.mjs",
+      "artifact": "live-attempt-02/scripts-final-used/send-session.mjs.gz",
+      "sourceBytes": 10681,
+      "archiveBytes": 3159,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/scripts-final-used/stop-mcp.mjs",
+      "artifact": "live-attempt-02/scripts-final-used/stop-mcp.mjs.gz",
+      "sourceBytes": 1307,
+      "archiveBytes": 655,
+      "encoding": "gzip",
+      "classification": "text"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/screenshots/ui-navigation-boundary.png",
+      "artifact": "live-attempt-01/screenshots/ui-navigation-boundary.png",
+      "sourceBytes": 34300,
+      "archiveBytes": 34300,
+      "encoding": "original",
+      "classification": "image"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-02/screenshots/initial-chat-only.png",
+      "artifact": "live-attempt-02/screenshots/initial-chat-only.png",
+      "sourceBytes": 52637,
+      "archiveBytes": 52637,
+      "encoding": "original",
+      "classification": "image"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/screenshots/live-answer-table.png",
+      "artifact": "live-attempt-04/screenshots/live-answer-table.png",
+      "sourceBytes": 75255,
+      "archiveBytes": 75255,
+      "encoding": "original",
+      "classification": "image"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/screenshots/live-resource-answer.png",
+      "artifact": "live-attempt-04/screenshots/live-resource-answer.png",
+      "sourceBytes": 85299,
+      "archiveBytes": 85299,
+      "encoding": "original",
+      "classification": "image"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/screenshots/live-resource-cards-downloads.png",
+      "artifact": "live-attempt-04/screenshots/live-resource-cards-downloads.png",
+      "sourceBytes": 69295,
+      "archiveBytes": 69295,
+      "encoding": "original",
+      "classification": "image"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/project/.opencorvus/.r/project/attachments/d27f9bd123e8f23604f84ff2f5378cb5de2be3b47e7b53178861da1dab396a59/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "artifact": "live-attempt-01/actual-stored/public-empty.csv",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "public-bytes"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/project/.opencorvus/.r/project/attachments/d27f9bd123e8f23604f84ff2f5378cb5de2be3b47e7b53178861da1dab396a59/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+      "artifact": "live-attempt-01/actual-stored/public-mixed.csv.gz",
+      "sourceBytes": 32,
+      "archiveBytes": 52,
+      "encoding": "gzip",
+      "classification": "public-bytes"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-01/provider-run/project/.opencorvus/.r/project/attachments/d27f9bd123e8f23604f84ff2f5378cb5de2be3b47e7b53178861da1dab396a59/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+      "artifact": "live-attempt-01/actual-stored/public-upload.csv.gz",
+      "sourceBytes": 34,
+      "archiveBytes": 54,
+      "encoding": "gzip",
+      "classification": "public-bytes"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/runtime/data/projects/2026/10/13/74260a56-5913-48cb-89d9-6b3dbf383c1a/.opencorvus/.r/project/attachments/c6de9a765cadcb50355f8062974f242cf3c291f254dee7f4734e0d90788744f1/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "artifact": "live-attempt-04/actual-stored/public-empty.csv",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "public-bytes"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/runtime/data/projects/2026/10/13/74260a56-5913-48cb-89d9-6b3dbf383c1a/.opencorvus/.r/project/attachments/c6de9a765cadcb50355f8062974f242cf3c291f254dee7f4734e0d90788744f1/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv",
+      "artifact": "live-attempt-04/actual-stored/public-mixed.csv.gz",
+      "sourceBytes": 32,
+      "archiveBytes": 52,
+      "encoding": "gzip",
+      "classification": "public-bytes"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/provider-run/runtime/data/projects/2026/10/13/74260a56-5913-48cb-89d9-6b3dbf383c1a/.opencorvus/.r/project/attachments/c6de9a765cadcb50355f8062974f242cf3c291f254dee7f4734e0d90788744f1/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv",
+      "artifact": "live-attempt-04/actual-stored/public-upload.csv.gz",
+      "sourceBytes": 34,
+      "archiveBytes": 54,
+      "encoding": "gzip",
+      "classification": "public-bytes"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/download-empty.csv",
+      "artifact": "live-attempt-04/downloaded/download-empty.csv",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "encoding": "original",
+      "classification": "public-bytes"
+    },
+    {
+      "source": ".tmp-mcp-user-resource-input-393/live-attempt-04/download-mixed.csv",
+      "artifact": "live-attempt-04/downloaded/download-mixed.csv.gz",
+      "sourceBytes": 32,
+      "archiveBytes": 52,
+      "encoding": "gzip",
+      "classification": "public-bytes"
+    }
+  ]
+}

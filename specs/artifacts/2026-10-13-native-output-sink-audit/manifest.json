@@ -1,0 +1,492 @@
+{
+  "observedAtUtc": "2026-10-13T13:31:37.033Z",
+  "boundary": "Original bytes preserved with gzip; manifest lengths are archival metadata, not acceptance gates.",
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\observed-causes.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/analysis/observed-causes.json.gz",
+      "sourceBytes": 17541,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\run-summary.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/analysis/run-summary.json.gz",
+      "sourceBytes": 41323,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\runtime-matrix-report.md",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/analysis/runtime-matrix-report.md.gz",
+      "sourceBytes": 7601,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\settlement-boundary-review.md",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/analysis/settlement-boundary-review.md.gz",
+      "sourceBytes": 7625,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\controller.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/reproduction/controller.mjs.gz",
+      "sourceBytes": 15340,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\evidence.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/reproduction/evidence.mjs.gz",
+      "sourceBytes": 6263,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\native-host.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/reproduction/native-host.mjs.gz",
+      "sourceBytes": 11798,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\observe-physical.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/reproduction/observe-physical.mjs.gz",
+      "sourceBytes": 2035,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\producer.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/reproduction/producer.mjs.gz",
+      "sourceBytes": 3573,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v1.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v1.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v1.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v1.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v2-physical.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v2-physical.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v2-physical.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v2-physical.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v2.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v2.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v2.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v2.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\controller.mjs.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/controller.mjs.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\controller.mjs.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/controller.mjs.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\controller.mjs.fixed-env.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/controller.mjs.fixed-env.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\controller.mjs.fixed-env.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/controller.mjs.fixed-env.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\evidence.mjs.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/evidence.mjs.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\evidence.mjs.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/evidence.mjs.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\evidence.mjs.fixed-env.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/evidence.mjs.fixed-env.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\evidence.mjs.fixed-env.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/evidence.mjs.fixed-env.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\fixed-env-syntax-results.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/fixed-env-syntax-results.json.gz",
+      "sourceBytes": 971,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\native-host.mjs.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/native-host.mjs.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\native-host.mjs.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/native-host.mjs.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\native-host.mjs.fixed-env.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/native-host.mjs.fixed-env.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\native-host.mjs.fixed-env.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/native-host.mjs.fixed-env.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\node-version.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/node-version.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\node-version.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/node-version.log.gz",
+      "sourceBytes": 9,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\observe-physical.mjs.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/observe-physical.mjs.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\observe-physical.mjs.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/observe-physical.mjs.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\observe-physical.mjs.fixed-env.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/observe-physical.mjs.fixed-env.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\observe-physical.mjs.fixed-env.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/observe-physical.mjs.fixed-env.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\producer.mjs.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/producer.mjs.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\producer.mjs.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/producer.mjs.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\producer.mjs.fixed-env.check.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/producer.mjs.fixed-env.check.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\producer.mjs.fixed-env.check.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/producer.mjs.fixed-env.check.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\reader-v2-physical.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/reader-v2-physical.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\reader-v2-physical.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/reader-v2-physical.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\reader-v2.exit.txt",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/reader-v2.exit.txt.gz",
+      "sourceBytes": 1,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\reader-v2.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/reader-v2.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\syntax-results.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/syntax-results.json.gz",
+      "sourceBytes": 921,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v1-source\\controller.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v1-source/controller.mjs.gz",
+      "sourceBytes": 15340,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v1-source\\evidence.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v1-source/evidence.mjs.gz",
+      "sourceBytes": 6297,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v1-source\\native-host.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v1-source/native-host.mjs.gz",
+      "sourceBytes": 11798,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v1-source\\observe-physical.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v1-source/observe-physical.mjs.gz",
+      "sourceBytes": 2035,
+      "gzip": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-sink-plan-01a133\\validation\\baseline-v1-source\\producer.mjs",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/validation/baseline-v1-source/producer.mjs.gz",
+      "sourceBytes": 3573,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v1\\expected-tail-stdout.bin",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v1/expected-tail-stdout.bin.gz",
+      "sourceBytes": 65536,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v1\\prepared-run.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v1/prepared-run.json.gz",
+      "sourceBytes": 916,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v1\\stderr.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v1/stderr.log.gz",
+      "sourceBytes": 915,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v1\\stdout.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v1/stdout.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v1\\evidence\\controller-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v1/evidence/controller-events.jsonl.gz",
+      "sourceBytes": 4882,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v1\\evidence\\controller-final.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v1/evidence/controller-final.json.gz",
+      "sourceBytes": 3768,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v1\\evidence\\host-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v1/evidence/host-events.jsonl.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\expected-tail-stdout.bin",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/expected-tail-stdout.bin.gz",
+      "sourceBytes": 65536,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\prepared-run.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/prepared-run.json.gz",
+      "sourceBytes": 916,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\stderr.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/stderr.log.gz",
+      "sourceBytes": 61,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\stdout.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/stdout.log.gz",
+      "sourceBytes": 65536,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\controller-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/controller-events.jsonl.gz",
+      "sourceBytes": 10179,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\controller-final.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/controller-final.json.gz",
+      "sourceBytes": 10152,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\host-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/host-events.jsonl.gz",
+      "sourceBytes": 23864,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\host-final.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/host-final.json.gz",
+      "sourceBytes": 4230,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\host-ready.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/host-ready.json.gz",
+      "sourceBytes": 4242,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\physical-observer.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/physical-observer.json.gz",
+      "sourceBytes": 1037,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\producer-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/producer-events.jsonl.gz",
+      "sourceBytes": 1708,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\producer-exit-intent.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/producer-exit-intent.json.gz",
+      "sourceBytes": 389,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v2\\evidence\\producer-ready.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-baseline-01a133-v2/evidence/producer-ready.json.gz",
+      "sourceBytes": 520,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\expected-tail-stdout.bin",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/expected-tail-stdout.bin.gz",
+      "sourceBytes": 65536,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\prepared-run.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/prepared-run.json.gz",
+      "sourceBytes": 923,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\stderr.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/stderr.log.gz",
+      "sourceBytes": 61,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\stdout.log",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/stdout.log.gz",
+      "sourceBytes": 0,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\controller-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/controller-events.jsonl.gz",
+      "sourceBytes": 11516,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\controller-final.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/controller-final.json.gz",
+      "sourceBytes": 17471,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\host-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/host-events.jsonl.gz",
+      "sourceBytes": 36361,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\host-final.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/host-final.json.gz",
+      "sourceBytes": 10579,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\host-ready.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/host-ready.json.gz",
+      "sourceBytes": 4220,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\physical-observer.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/physical-observer.json.gz",
+      "sourceBytes": 1035,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\producer-events.jsonl",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/producer-events.jsonl.gz",
+      "sourceBytes": 1707,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\producer-exit-intent.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/producer-exit-intent.json.gz",
+      "sourceBytes": 389,
+      "gzip": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v2\\evidence\\producer-ready.json",
+      "target": "specs/artifacts/2026-10-13-native-output-sink-audit/native-sink-reader-01a133-v2/evidence/producer-ready.json.gz",
+      "sourceBytes": 520,
+      "gzip": true
+    }
+  ]
+}

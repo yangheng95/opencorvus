@@ -2,6 +2,20 @@
 
 - [持续目标重复恢复证据](2026-10-13-continuous-goal-repeated-recovery/README.md)：逐代中断事实、真实模型请求和独立二次复核。
 
+- [393 用户 MCP 资源与附件输入](2026-10-13-mcp-user-resource-input-393/README.md)：正式正向测试、四独立模型轮次原失败与终态、成功 Chat/实际下载的公开证据。
+
+- [Provider API Key 配置事实](2026-10-13-provider-credential-presence/README.md)：实页、公开字段、正向合同与正常收尾。
+
+- [389 成员刷新失败可读性](2026-10-05-connection-workspace-authority/child-refresh-retention-389/README.md)：隔离实页、读取中断与生命周期证据。
+
+- [Native外输出证据](2026-10-13-native-output-sink-audit/README.md)：各原Promise、双层drain及实际OS身份。
+
+- [Explorer标签与搜索证据](2026-10-13-explorer-tab-owner-search/README.md)：真实批成员、当前搜索、截图和原实例收尾。
+
+- [无模型时的 Provider 发现入口](2026-10-13-provider-discovery-bootstrap/README.md)：实际HTTP、已存地址绑定与桌面证据。
+
+- [388 参考历史重连身份](2026-10-05-connection-workspace-authority/history-render-identity-388/README.md)：真实侧聊、限定连接中断与正文身份记录。
+
 - [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392/README.md)：五个名称、侧栏正文双向语言、状态/宽度保留与真实CSV下载。
 
 - [文件链接条目证据](2026-10-13-file-link-entry-contract/README.md)：原HTTP、链接身份、桌面截图与完整收尾。
@@ -26,7 +40,7 @@
 
 - [388 MCP 结构化结果](2026-10-13-mcp-structured-result-388/README.md)：后台红绿、12次真实Sol流式请求、页面截图与正常收尾。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：真实请求、失败基线、语义指标、证据保留与复制引用追溯。
+- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：真实请求、三轮语义指标、证据保留、Task 复制归属与物理中断记录。
 
 - [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
 

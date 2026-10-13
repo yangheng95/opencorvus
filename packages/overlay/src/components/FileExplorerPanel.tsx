@@ -1015,14 +1015,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   async function refreshFileViews(
     paths: string[],
     scope: ExplorerOperationScope,
-    includeSearch = true,
   ): Promise<FileRefreshReceipt[]> {
     const reads: { target: FileRefreshTarget; result: Promise<FileRefreshState> }[] = uniquePaths(paths).map((path) => ({
       target: { kind: "directory", path },
       result: loadDirectory(path, { required: true, scope }),
     }))
     const source = searchSource()
-    if (includeSearch && source?.query) reads.push({
+    if (source?.query) reads.push({
       target: { kind: "search", query: source.query },
       result: refreshActiveSearchResults(scope, source),
     })
@@ -1560,7 +1559,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       outcome.completed = uploaded
       if (!ownsUploadOperation()) return
       setExpandedPaths((prev) => new Set([...prev, targetDir]))
-      outcome.refresh = await refreshFileViews([targetDir], scope, false)
+      outcome.refresh = await refreshFileViews([targetDir], scope)
     } catch (error) {
       recordOperationFailure(outcome, { phase: "operation", error })
     } finally {

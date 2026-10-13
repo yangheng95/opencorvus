@@ -664,7 +664,7 @@ describe.serial("Provider cache identity", () => {
     })
   })
 
-  test("DashScope credential lifetime publishes only versioned SHA-256 identity", async () => {
+  test("DashScope credential lifetime publishes versioned SHA-256 identity", async () => {
     const originalKey = process.env.OPENCORVUS_EMBEDDED_DASHSCOPE_KEY
     const originalTTL = process.env.OPENCORVUS_EMBEDDED_DASHSCOPE_TTL_HOURS
     const stateFile = path.join(Global.Path.state, "dashscope-embedded.json")
@@ -681,7 +681,6 @@ describe.serial("Provider cache identity", () => {
         credential_sha256: sha256Text("opencorvus.provider.dashscope-credential.v2", "first-secret"),
         first: expect.any(Number),
       })
-      expect(JSON.stringify(first)).not.toContain("first-secret")
 
       expect(await dashscopeKey({})).toBe("first-secret")
       expect(JSON.parse(await readFile(stateFile, "utf8"))).toEqual(first)
@@ -689,12 +688,12 @@ describe.serial("Provider cache identity", () => {
       process.env.OPENCORVUS_EMBEDDED_DASHSCOPE_KEY = "second-secret"
       expect(await dashscopeKey({})).toBe("second-secret")
       const second = JSON.parse(await readFile(stateFile, "utf8"))
-      expect({ schema: second.schema_version, changed: second.credential_sha256 !== first.credential_sha256 }).toEqual({
-        schema: 2,
-        changed: true,
+      expect(second).toEqual({
+        schema_version: 2,
+        credential_sha256: sha256Text("opencorvus.provider.dashscope-credential.v2", "second-secret"),
+        first: expect.any(Number),
       })
       expect(second.first).toBeGreaterThanOrEqual(first.first)
-      expect(JSON.stringify(second)).not.toContain("second-secret")
     } finally {
       if (originalKey === undefined) delete process.env.OPENCORVUS_EMBEDDED_DASHSCOPE_KEY
       else process.env.OPENCORVUS_EMBEDDED_DASHSCOPE_KEY = originalKey

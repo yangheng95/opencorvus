@@ -1,0 +1,634 @@
+{
+  "copiedSources": 247,
+  "archiveFileCount": 251,
+  "gzipFiles": 91,
+  "gzipAndOriginalBytesExact": true,
+  "localLinks": 92,
+  "localLinksExist": true,
+  "patternFindings": [],
+  "knownSecretMaterialRead": false,
+  "redactionBoundary": "Provider audits are original mature-runner CredentialRedactor outputs. Archive performs format/pattern screening, never reads auth/models or claims a new known-secret-value scan.",
+  "files": [
+    "README.md",
+    "allowlist-and-scan.json",
+    "archive-verification.json",
+    "backend/after-exit.txt",
+    "backend/after.log.gz",
+    "backend/before-confirmed-exit.txt",
+    "backend/before-confirmed.log.gz",
+    "backend/before-exit.txt",
+    "backend/before.log.gz",
+    "backend/docs-check-exit.txt",
+    "backend/docs-check.log.gz",
+    "backend/format-check.log.gz",
+    "backend/format.log.gz",
+    "backend/production-before.diff.gz",
+    "backend/related-exit.txt",
+    "backend/related.log.gz",
+    "backend/runner-cleanup.json",
+    "backend/typecheck-exit.txt",
+    "backend/typecheck.log.gz",
+    "helper-collected-after-close/LIVE-HELPERS.md.gz",
+    "helper-collected-after-close/check-live-before-attempt02.ts.gz",
+    "helper-collected-after-close/check-live-before-isolation-fix.ts.gz",
+    "helper-collected-after-close/check-live.ts.gz",
+    "helper-collected-after-close/continue-scope02.mjs.gz",
+    "helper-collected-after-close/mcp-resources.ts.gz",
+    "helper-collected-after-close/prepare-live.mjs.gz",
+    "helper-collected-after-close/resume-attempt-02.mjs.gz",
+    "helper-collected-after-close/send-session-before-connect.mjs.gz",
+    "helper-collected-after-close/send-session.mjs.gz",
+    "helper-collected-after-close/stop-mcp.mjs.gz",
+    "live-attempt-01/actual-stored/public-empty.csv",
+    "live-attempt-01/actual-stored/public-mixed.csv.gz",
+    "live-attempt-01/actual-stored/public-upload.csv.gz",
+    "live-attempt-01/attempt-02-intent.json",
+    "live-attempt-01/attempt-02.log.gz",
+    "live-attempt-01/builtin.json",
+    "live-attempt-01/check-input-1791896039211.json.gz",
+    "live-attempt-01/check.log.gz",
+    "live-attempt-01/checker-isolation-first-failure.txt",
+    "live-attempt-01/closure/final-provider-audit.json.gz",
+    "live-attempt-01/closure/physical-terminal-and-pair-cleanup.json",
+    "live-attempt-01/closure/qualified-surface-completion.json",
+    "live-attempt-01/closure/settlement-owner.json",
+    "live-attempt-01/closure/shutdown-admission.json",
+    "live-attempt-01/handle-joins.json",
+    "live-attempt-01/helper-snapshot-after-close/LIVE-HELPERS.md.gz",
+    "live-attempt-01/helper-snapshot-after-close/check-live.ts.gz",
+    "live-attempt-01/helper-snapshot-after-close/mcp-resources.ts.gz",
+    "live-attempt-01/helper-snapshot-after-close/prepare-live.mjs.gz",
+    "live-attempt-01/helper-snapshot-after-close/send-session.mjs.gz",
+    "live-attempt-01/helper-snapshot-after-close/stop-mcp.mjs.gz",
+    "live-attempt-01/launch.ps1.gz",
+    "live-attempt-01/launcher-adaptation.json",
+    "live-attempt-01/live-canonical.json.gz",
+    "live-attempt-01/live-check.json",
+    "live-attempt-01/live-provider-audit.json.gz",
+    "live-attempt-01/mcp-config.json",
+    "live-attempt-01/mcp-connect-receipt.json",
+    "live-attempt-01/mcp-owner.json",
+    "live-attempt-01/mcp-read-calls.jsonl",
+    "live-attempt-01/mcp-ready.json",
+    "live-attempt-01/mcp-stop.json",
+    "live-attempt-01/mcp-terminal.json",
+    "live-attempt-01/native/evidence/authority-ready.json",
+    "live-attempt-01/native/evidence/managed-parent-ready.json",
+    "live-attempt-01/native/evidence/native-host-ready.json",
+    "live-attempt-01/native/evidence/native-host-settled.json",
+    "live-attempt-01/native/evidence/owned-config-hierarchy.json",
+    "live-attempt-01/native/evidence/preflight-ready.json",
+    "live-attempt-01/native/evidence/profile-selection-admitted.json",
+    "live-attempt-01/native/evidence/project-baseline.json",
+    "live-attempt-01/native/evidence/provider-pair-staging.json",
+    "live-attempt-01/native/launch-owner.json",
+    "live-attempt-01/native/startup.json",
+    "live-attempt-01/native/stderr.log.gz",
+    "live-attempt-01/native/stdout.log.gz",
+    "live-attempt-01/page-closed.json",
+    "live-attempt-01/pre-connect-facts.json",
+    "live-attempt-01/project-default-fact.json",
+    "live-attempt-01/public-empty.csv",
+    "live-attempt-01/public-empty.txt",
+    "live-attempt-01/public-message-failure.json",
+    "live-attempt-01/public-message-request.json",
+    "live-attempt-01/public-message-response-attempt-02.json",
+    "live-attempt-01/public-message-response.json",
+    "live-attempt-01/public-mixed.csv.gz",
+    "live-attempt-01/public-resources.json",
+    "live-attempt-01/public-upload.csv.gz",
+    "live-attempt-01/screenshots/ui-navigation-boundary.png",
+    "live-attempt-01/scripts-final-used/check-live-before-isolation-fix.ts.gz",
+    "live-attempt-01/scripts-final-used/check-live.ts.gz",
+    "live-attempt-01/scripts-final-used/mcp-resources.ts.gz",
+    "live-attempt-01/scripts-final-used/prepare-live.mjs.gz",
+    "live-attempt-01/scripts-final-used/resume-attempt-02.mjs.gz",
+    "live-attempt-01/scripts-final-used/send-session-before-connect.mjs.gz",
+    "live-attempt-01/scripts-final-used/send-session.mjs.gz",
+    "live-attempt-01/scripts-final-used/stop-mcp.mjs.gz",
+    "live-attempt-01/send-intent.json",
+    "live-attempt-01/send.log.gz",
+    "live-attempt-01/session-created.json",
+    "live-attempt-01/ui-navigation-boundary-ax.txt.gz",
+    "live-attempt-01/upload-receipt.json",
+    "live-attempt-01/user-request.txt",
+    "live-attempt-01/visible-answer.txt",
+    "live-attempt-02/builtin.json",
+    "live-attempt-02/closure/final-provider-audit.json.gz",
+    "live-attempt-02/closure/physical-terminal-and-pair-cleanup.json",
+    "live-attempt-02/closure/qualified-surface-completion.json",
+    "live-attempt-02/closure/settlement-owner.json",
+    "live-attempt-02/closure/shutdown-admission.json",
+    "live-attempt-02/continue.log.gz",
+    "live-attempt-02/global-chat-first-completed.json",
+    "live-attempt-02/global-chat-ready.json",
+    "live-attempt-02/global-chat-start-request.json",
+    "live-attempt-02/global-chat-start-response.json",
+    "live-attempt-02/handle-joins.json",
+    "live-attempt-02/initial-chat-only-ax.txt.gz",
+    "live-attempt-02/launch.ps1.gz",
+    "live-attempt-02/launcher-adaptation.json",
+    "live-attempt-02/mcp-config.json",
+    "live-attempt-02/mcp-owner.json",
+    "live-attempt-02/mcp-ready.json",
+    "live-attempt-02/mcp-stop.json",
+    "live-attempt-02/mcp-terminal.json",
+    "live-attempt-02/native/evidence/authority-ready.json",
+    "live-attempt-02/native/evidence/managed-parent-ready.json",
+    "live-attempt-02/native/evidence/native-host-ready.json",
+    "live-attempt-02/native/evidence/native-host-settled.json",
+    "live-attempt-02/native/evidence/owned-config-hierarchy.json",
+    "live-attempt-02/native/evidence/preflight-ready.json",
+    "live-attempt-02/native/evidence/profile-selection-admitted.json",
+    "live-attempt-02/native/evidence/project-baseline.json",
+    "live-attempt-02/native/evidence/provider-pair-staging.json",
+    "live-attempt-02/native/launch-owner.json",
+    "live-attempt-02/native/startup.json",
+    "live-attempt-02/native/stderr.log.gz",
+    "live-attempt-02/native/stdout.log.gz",
+    "live-attempt-02/page-closed.json",
+    "live-attempt-02/public-empty.csv",
+    "live-attempt-02/public-empty.txt",
+    "live-attempt-02/public-mixed.csv.gz",
+    "live-attempt-02/public-resources.json",
+    "live-attempt-02/public-upload.csv.gz",
+    "live-attempt-02/screenshots/initial-chat-only.png",
+    "live-attempt-02/scripts-final-used/check-live.ts.gz",
+    "live-attempt-02/scripts-final-used/continue-scope02.mjs.gz",
+    "live-attempt-02/scripts-final-used/mcp-resources.ts.gz",
+    "live-attempt-02/scripts-final-used/send-session.mjs.gz",
+    "live-attempt-02/scripts-final-used/stop-mcp.mjs.gz",
+    "live-attempt-02/send-intent.json",
+    "live-attempt-02/send-session-before-config-surface-fix.mjs.gz",
+    "live-attempt-02/send.log.gz",
+    "live-attempt-02/user-request.txt",
+    "live-attempt-03/builtin.json",
+    "live-attempt-03/closure/final-provider-audit.json.gz",
+    "live-attempt-03/closure/physical-terminal-and-pair-cleanup.json",
+    "live-attempt-03/closure/settlement-owner.json",
+    "live-attempt-03/closure/shutdown-admission.json",
+    "live-attempt-03/launch.ps1.gz",
+    "live-attempt-03/mcp-config.json",
+    "live-attempt-03/mcp-owner.json",
+    "live-attempt-03/mcp-ready.json",
+    "live-attempt-03/mcp-stop.json",
+    "live-attempt-03/mcp-terminal.json",
+    "live-attempt-03/native/evidence/authority-ready.json",
+    "live-attempt-03/native/evidence/failed.json",
+    "live-attempt-03/native/evidence/managed-parent-ready.json",
+    "live-attempt-03/native/evidence/native-host-ready.json",
+    "live-attempt-03/native/evidence/native-host-settled.json",
+    "live-attempt-03/native/evidence/owned-config-hierarchy.json",
+    "live-attempt-03/native/evidence/profile-selection-admitted.json",
+    "live-attempt-03/native/evidence/project-baseline.json",
+    "live-attempt-03/native/evidence/provider-pair-staging.json",
+    "live-attempt-03/native/launch-owner.json",
+    "live-attempt-03/native/startup.json",
+    "live-attempt-03/native/stderr.log.gz",
+    "live-attempt-03/native/stdout.log.gz",
+    "live-attempt-03/public-empty.csv",
+    "live-attempt-03/public-empty.txt",
+    "live-attempt-03/public-mixed.csv.gz",
+    "live-attempt-03/public-resources.json",
+    "live-attempt-03/public-upload.csv.gz",
+    "live-attempt-03/send.log.gz",
+    "live-attempt-03/user-request.txt",
+    "live-attempt-04/actual-stored/public-empty.csv",
+    "live-attempt-04/actual-stored/public-mixed.csv.gz",
+    "live-attempt-04/actual-stored/public-upload.csv.gz",
+    "live-attempt-04/builtin.json",
+    "live-attempt-04/check-input-1791899147107.json.gz",
+    "live-attempt-04/check.log.gz",
+    "live-attempt-04/closure/final-provider-audit.json.gz",
+    "live-attempt-04/closure/physical-terminal-and-pair-cleanup.json",
+    "live-attempt-04/closure/qualified-surface-completion.json",
+    "live-attempt-04/closure/settlement-owner.json",
+    "live-attempt-04/closure/shutdown-admission.json",
+    "live-attempt-04/download-byte-review.json",
+    "live-attempt-04/downloaded/download-empty.csv",
+    "live-attempt-04/downloaded/download-mixed.csv.gz",
+    "live-attempt-04/global-chat-first-completed.json",
+    "live-attempt-04/global-chat-ready.json",
+    "live-attempt-04/global-chat-start-request.json",
+    "live-attempt-04/global-chat-start-response.json",
+    "live-attempt-04/launch.ps1.gz",
+    "live-attempt-04/live-canonical.json.gz",
+    "live-attempt-04/live-check.json",
+    "live-attempt-04/live-provider-audit.json.gz",
+    "live-attempt-04/mcp-config.json",
+    "live-attempt-04/mcp-connect-precondition.json",
+    "live-attempt-04/mcp-owner.json",
+    "live-attempt-04/mcp-read-calls.jsonl",
+    "live-attempt-04/mcp-ready.json",
+    "live-attempt-04/mcp-stop.json",
+    "live-attempt-04/mcp-terminal.json",
+    "live-attempt-04/native/evidence/authority-ready.json",
+    "live-attempt-04/native/evidence/managed-parent-ready.json",
+    "live-attempt-04/native/evidence/native-host-ready.json",
+    "live-attempt-04/native/evidence/native-host-settled.json",
+    "live-attempt-04/native/evidence/owned-config-hierarchy.json",
+    "live-attempt-04/native/evidence/preflight-ready.json",
+    "live-attempt-04/native/evidence/profile-selection-admitted.json",
+    "live-attempt-04/native/evidence/project-baseline.json",
+    "live-attempt-04/native/evidence/provider-pair-staging.json",
+    "live-attempt-04/native/launch-owner.json",
+    "live-attempt-04/native/startup.json",
+    "live-attempt-04/native/stderr.log.gz",
+    "live-attempt-04/native/stdout.log.gz",
+    "live-attempt-04/observation-1791899109853.json.gz",
+    "live-attempt-04/observe.log.gz",
+    "live-attempt-04/page-ax.txt.gz",
+    "live-attempt-04/project-default-fact.json",
+    "live-attempt-04/public-empty.csv",
+    "live-attempt-04/public-empty.txt",
+    "live-attempt-04/public-message-request.json",
+    "live-attempt-04/public-message-response.json",
+    "live-attempt-04/public-mixed.csv.gz",
+    "live-attempt-04/public-resources.json",
+    "live-attempt-04/public-upload.csv.gz",
+    "live-attempt-04/screenshots/live-answer-table.png",
+    "live-attempt-04/screenshots/live-resource-answer.png",
+    "live-attempt-04/screenshots/live-resource-cards-downloads.png",
+    "live-attempt-04/send-intent.json",
+    "live-attempt-04/send.log.gz",
+    "live-attempt-04/session-created.json",
+    "live-attempt-04/upload-receipt.json",
+    "live-attempt-04/user-request.txt",
+    "live-attempt-04/visible-answer.txt",
+    "live-attempt-04/visual-review.json",
+    "root-reported-handle-outcomes.json",
+    "source-preimage/materialize-before.ts.gz",
+    "source-preimage/parts-before.ts.gz",
+    "source-preimage/session-route-before.ts.gz"
+  ],
+  "links": [
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "../../records/2026-10/2026-10-13-mcp-user-resource-input-393.md"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/before.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/before-exit.txt"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/before-confirmed.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/before-confirmed-exit.txt"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/after.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/after-exit.txt"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/related.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/related-exit.txt"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/typecheck.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/docs-check.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/format-check.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "backend/runner-cleanup.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "source-preimage/materialize-before.ts.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "source-preimage/parts-before.ts.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "source-preimage/session-route-before.ts.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/public-message-response.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/public-message-failure.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/mcp-connect-receipt.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/public-message-response-attempt-02.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/live-check.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/screenshots/ui-navigation-boundary.png"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/global-chat-start-response.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/global-chat-first-completed.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/send.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/continue.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/screenshots/initial-chat-only.png"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-03/native/evidence/failed.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-03/closure/final-provider-audit.json.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-03/send.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-03/closure/physical-terminal-and-pair-cleanup.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/global-chat-start-response.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/public-message-request.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/public-message-response.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/live-check.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/closure/final-provider-audit.json.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/checker-isolation-first-failure.txt"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/project-default-fact.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/mcp-connect-precondition.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/mcp-read-calls.jsonl"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/public-resources.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/live-canonical.json.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/check.log.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/visible-answer.txt"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/public-empty.csv"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/actual-stored/public-empty.csv"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/downloaded/download-empty.csv"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/public-mixed.csv.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/actual-stored/public-mixed.csv.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/downloaded/download-mixed.csv.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/public-upload.csv.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/actual-stored/public-upload.csv.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/download-byte-review.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "allowlist-and-scan.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/visual-review.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/page-ax.txt.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/screenshots/live-resource-cards-downloads.png"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/screenshots/live-answer-table.png"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/screenshots/live-resource-answer.png"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/closure/physical-terminal-and-pair-cleanup.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/mcp-terminal.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/handle-joins.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/closure/physical-terminal-and-pair-cleanup.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/mcp-terminal.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-02/handle-joins.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-03/closure/physical-terminal-and-pair-cleanup.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-03/mcp-terminal.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/closure/physical-terminal-and-pair-cleanup.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/mcp-terminal.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-04/closure/qualified-surface-completion.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "root-reported-handle-outcomes.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "allowlist-and-scan.json"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "helper-collected-after-close/LIVE-HELPERS.md.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "live-attempt-01/helper-snapshot-after-close/send-session.mjs.gz"
+    },
+    {
+      "document": "specs/artifacts/2026-10-13-mcp-user-resource-input-393/README.md",
+      "target": "archive-verification.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/README.md"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-03/native/evidence/failed.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-03/closure/final-provider-audit.json.gz"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-03/closure/physical-terminal-and-pair-cleanup.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/global-chat-start-response.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/live-check.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/live-canonical.json.gz"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/closure/final-provider-audit.json.gz"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/screenshots/live-resource-cards-downloads.png"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/screenshots/live-answer-table.png"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/screenshots/live-resource-answer.png"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/visual-review.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/download-byte-review.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/live-attempt-04/closure/physical-terminal-and-pair-cleanup.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/root-reported-handle-outcomes.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/allowlist-and-scan.json"
+    },
+    {
+      "document": "specs/records/2026-10/2026-10-13-mcp-user-resource-input-393.md",
+      "target": "../../artifacts/2026-10-13-mcp-user-resource-input-393/archive-verification.json"
+    }
+  ]
+}

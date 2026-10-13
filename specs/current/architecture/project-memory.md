@@ -12,6 +12,18 @@ Project memory has three explicitly scoped authorities:
    Skill and attachment references are historical locators, not current tool
    grants, desktop focus or permission authority.
 
+   Summary completion, checkpoint publication and compaction-control consumption
+   are separate durable boundaries. A process interrupted before marker commit
+   leaves the previous checkpoint authoritative; the recovered Session loop
+   retries under the existing control lease. A committed, completed checkpoint
+   can be reused while consuming the pending control. Automatic compaction then
+   continues the normal user turn. Interrupted assistants retain their persisted
+   text and typed failure evidence. Live text deltas are transport events; the
+   processor checkpoints accumulated Parts on its existing 200 ms cadence, so
+   fragments not yet persisted can be lost on abrupt process exit. The physical
+   crash checker covers owned child-process exits and fresh Session reopening,
+   not operating-system power loss or every Task/Mission recovery layer.
+
    The compaction transcript includes original authors and exact text/Tool Part
    and call identities. Large text and Tool fields carry bounded previews plus
    `ReadCompactionEvidence` references. The one reader resolves text, input,
@@ -57,6 +69,14 @@ Project memory has three explicitly scoped authorities:
    In an unbound independent side Session, an inherited worker descriptor is
    historical provenance; current Task or descriptor bindings still require the
    full execution-authority checks. Model-authored citation text is unchanged.
+
+   Normal transcript forks are limited to standalone Session ancestry. A
+   Task-bound root or worker returns `TaskBoundSessionForkError` (HTTP 409)
+   before a target is published; ownership is checked again under the copy
+   transaction. Copying history cannot manufacture the new child's dispatch,
+   descriptor or Task occurrence. An explicit independent side-chat still uses
+   the same copier and retains source locators as historical evidence. Actual
+   Task execution continues through its canonical dispatch/runtime contracts.
 
    Copied Messages expose `copySources` as exact Part ancestry, including earlier
    copy generations. The reader indexes those explicit historical identities

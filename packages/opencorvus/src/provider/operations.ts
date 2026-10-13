@@ -4,6 +4,7 @@ import type { Config } from "../config/config"
 import { ProviderLLM } from "./llm"
 import { Provider } from "./provider"
 import { ProviderError } from "./error"
+import { ModelsDev } from "./models"
 
 export type ProviderOperationScope = {
   config: () => Promise<Config.Info>
@@ -34,9 +35,15 @@ function normalizeApiBaseURL(raw: string): string | undefined {
   }
 }
 
-function providerAllowsSavedKey(provider: Provider.Info | undefined, requestedApi: string): boolean {
+function providerAllowsSavedKey(
+  provider: Provider.Info | undefined,
+  requestedApi: string,
+  discoveryEndpoint: string | undefined,
+): boolean {
   if (!provider) return false
   const allowed = new Set<string>()
+  const endpoint = discoveryEndpoint ? normalizeApiBaseURL(discoveryEndpoint) : undefined
+  if (endpoint) allowed.add(endpoint)
   for (const model of Object.values(provider.models)) {
     const normalized = normalizeApiBaseURL(model.api.url)
     if (normalized) allowed.add(normalized)
@@ -74,8 +81,15 @@ export async function discoverProviderModels(
   }
   if (!explicitKey && savedKey) {
     const config = await scope.config()
-    const provider = input.providerID ? await scopedProvider(input.providerID, scope, config) : undefined
-    if (!providerAllowsSavedKey(provider, requestedApi)) {
+    const provider = input.providerID
+      ? await Provider.getConfiguredProvider(input.providerID, { config, global: scope.global })
+      : undefined
+    const declaration =
+      provider && input.providerID && config.provider?.[input.providerID]?.api === undefined
+        ? (await ModelsDev.get())[input.providerID]
+        : undefined
+    const endpoint = input.providerID ? Provider.discoveryEndpoint(input.providerID, config, declaration) : undefined
+    if (!providerAllowsSavedKey(provider, requestedApi, endpoint)) {
       return {
         status: 400,
         body: {

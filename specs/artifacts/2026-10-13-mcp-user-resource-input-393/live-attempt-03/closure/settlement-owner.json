@@ -1,0 +1,20 @@
+{
+  "evidencePrefix": "mcp-user-resource-input-393-live-03",
+  "evidenceRoot": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-03\\provider-live",
+  "occurrence": "mcp-user-resource-input-393-live-03-f3cf3d59-6361-4df9-984f-c9ef465c31c3",
+  "runRoot": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-03\\provider-run",
+  "admittedAt": "2026-10-13T13:23:30.4671338Z",
+  "ownerPID": 74492,
+  "reason": "immutable-wrapper-failure",
+  "supervision": {
+    "reason": "immutable-wrapper-failure",
+    "observedAtUtc": "2026-10-13T13:23:30.4479074Z",
+    "firstFailedPath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-user-resource-input-393\\live-attempt-03\\provider-run\\evidence\\failed.json",
+    "preparationDeadlineMs": 1791898393271,
+    "boundary": "Winning immutable settlement owner publishes this stop request; actual physical settlement remains distinct",
+    "pid": 76992,
+    "totalDeadlineMs": null,
+    "occurrence": "mcp-user-resource-input-393-live-03-f3cf3d59-6361-4df9-984f-c9ef465c31c3",
+    "pinned": null
+  }
+}

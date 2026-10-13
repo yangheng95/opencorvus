@@ -1,0 +1,55 @@
+# 389 成员记录刷新失败后的可读性
+
+## Recall
+
+最新人工指令只用单agent开发，覆盖旧goal的Astra文字；不使用collaboration或其他开发agent。上一轮388为progress，328ee71c62066d9745aa63ba9c99a5ff7906ef26已在origin/main，历史Key/messageID修复及16次Sol/两次Native/来源行定位已完成。工作区当前有其他任务的Provider、MCP、压缩与共享索引修改，全部保留。
+
+重读388、353、328、359 Recall，现行07-panel、SubagentConversationPanel、ConversationCard、ChatBubble、CardParts、SourceParts、text-part-model及安装Solid createResource实现。353已修复隐藏/成员列表把目标与读取开关混为一谈，37正文保留已实证；388修复普通Side参考历史对象身份，两者不能证明成员读取失败的表现。359复制首写跨MDN也复现，当前无OpenCorvus专属修复证据。本轮不重复处理这些已排除候选。
+
+## 问题深度和影响面
+
+候选：SubagentConversationPanel用Show when=!conversation.error将已取得的目标内容整体替换为Feedback；displayedConversation memo和reconcile effect同时读取conversation()。安装Solid 1.x createResource在err且无在途请求时，read/latest均throw，即使内部value仍是原成功结果。因而真实刷新失败可能退休已有Source/Markdown owner，甚至越过局部错误区。待真实页面确定，不能凭源码直接宣称全局闪烁根因。
+
+数据流为同一authority/source/session/directory目标的真实GET conversation→唯一resource→live reconcile→完整card。目标变化必须退休旧数据，读取失败必须真实可见且可重试；相同目标已有完成快照应可阅读。旧隐藏保留修复未覆盖resource错误分支。Source、Markdown和交互字段继续用现有唯一实现，不能扩大缓存、隐藏错误或写假消息。涉及主Task/普通Session成员视图的同一面板；Side历史388路径不改。
+
+目前只有UI候选，接口/schema/调度/队列/Provider协议不拟改。发现恢复/队列/终态异常则按Task/Mission/Session全部入口与轮次、串并行、多项目横审。UI生命周期变化仍需审查初次失败、已有数据失败、重试、隐藏和真实换目标。若要实现，先依据实证在本方案追加唯一状态来源及错误契约设计，再改源码。
+
+## 输入、环境与验收
+
+使用benchmark-debug-template的先验收后修复流程，用户仓库的UI人工验收约束优先于技能自动验收建议。沿388成熟NativeService包装器，before18413/after18415，各独立真实开发/ui；代理18414/18416透明转发。完整相邻auth/models按既有授权复制，分别验证usable/projected/实际gpt-6.1-sol流式。20次同进程累计请求包含preflight和helper，无活动180000ms，独立Native物理资源上限600000ms，不续期；先构建再启动计时。
+
+为验收产品成员视图，正常Web UI只产生一条产品内只读委派记录，读取隔离项目来源文件并短答；它是被测功能参与者，开发/调查/实现/复核仍只有root，不委托开发工作或多个研究员。不合成历史、模型回复、Source或事件。需核对真实原始模型请求、工具、Message/Source绑定与完成事实。
+
+代理只在root显式开启诊断开关后，物理关闭指定已观察成员conversation路径的GET连接；不制造HTTP响应或替换内容。先看真实成功内容，再隐藏/显示触发已有刷新；人工截图错误表现，随后解除该路径阻断并点击真实重试。其余真实路径透明转发。私有Vite构建仅加入生命周期/资源状态被动日志，不改产品渲染/状态；所有交互经cua、截图人工查看，不运行UI/DOM/组件/快照/源码文案自动测试。
+
+成功条件：原目标正常内容与Source真实可见；失败原因明确显示且原已有内容可阅读；重试取得当前真实200数据；前后规范消息身份正确，Source打开真实文件行；真正目标变化仍退休旧视图。若未复现或缺少证据，记录边界，不制造补丁。日志只辅助归因，后台checker只核对真实数据/Provider/Native/传输，不能代替视觉。
+
+页面先关→自有代理socket/server退出join→原Native Job/output/request/精确Host/Target/端口关闭join→复制auth/models成对清除。原失败不覆盖，不因观察超时重开scope。记录工具故障和真实失败，完整脱敏归档，更新根/目录/月索引，docs/type/build与范围Git提交、fresh fetch/merge及正常push；无Release。持续goal active。
+
+## 修前实证与实施决定
+
+before实际Main ses_-zUS42xuUzzhZ4PU0Jdf正常调用一次产品delegate_agent，child ses_-zUS42uvQzza6rhz5qae完成read2—3、两段正文，Main完成。GET80/200后从All agents返回，代理明确阻断该真实路径GET102；12:54:40.790 UTC child owner1退休，随后Failed to fetch逃逸，画面仍留原正文但没有局部错误/重试。解除阻断后经All agents往返恢复GET200与新owner。四张截图逐张查看，最后Source打开真实文件且第2—3行高亮。不能把暖缓存恢复和旧DOM残留称为错误处理成功。
+
+原launcher48665、proxy5062实际exit0，Target83024/Host84800完整关闭，7次Sol流式200/EOF、NativeService资格及复制pair闭合。未延长600000ms运行。私有准备脚本的一次patch重复路径在执行前被拒绝，按实际文件修正后prepare与build49.44s通过；未影响产品。
+
+实施只读资源的现有值：用官方createResource storage选项将其唯一存储明确为同一个createSignal，由resource独占写入，呈现和reconcile直接读该信号。保持resource的原error/loading/refetch和请求所有权，既没有影子副本也不把异常换成成功数据。错误Feedback与正文并列，errored状态展示真实诊断与重试；pending/refreshing不显示上次目标错误。内容仍必须匹配完整targetKey，真正换目标按原keyed退休。初次失败只显示错误，不能永久显示Loading。补中英文重试与已加载内容提示，原Source/Markdown协议不动。依据[Solid官方resource storage合同](https://docs.solidjs.com/reference/basic-reactivity/create-resource)及当前安装实现read/latest错误抛出点；无需新库或通用抽象。
+
+另发现断网前12:53:59—12:54:05多次applyConversationAgentActivityToStore缺少同child的final Message归属，父视图活动仍停在首段。完整console与canonical消息已保存。这是独立共享增量队列候选，已立即横读events唯一入口、Task/Session hydrate、source隔离、occurrence归属/终态/删除/待刷新队列；mergeHydratedRecordWithCurrentRecord对messageIDs的处理是待证点。不能归为局部或直接加宽匹配。下一次真实流式诊断须只读记录源key/Message/occurrence身份及合并前后事实，以判断全入口影响；尚未修改该store。
+
+## 修后第一轮与剩余问题
+
+after真实7次Sol流式200/EOF，原launcher82346/proxy61794均exit0，Target77104/Host87316与proxy85220/18415—18416、页面9完整关闭，复制pair已清除。API错误时child owner1保持，错误Feedback及Sources/正文同时可见，英语和中文提示通过。解除实际连接阻断后点击重试，真实200恢复，Source再次打开第2—3行。再主动刷新自有页面，重新从已存聊天打开首次失败，只有错误/重试，无永久Loading；重试恢复完整真实正文。截图均人工查看。
+
+新视觉失败：展开完整TypeError详情时，未限制的Feedback诊断正文占满侧栏，已有Sources被挤出可视区。不接受此状态作为完成。拟仅在该Feedback的详情中提供可聚焦、有本地化名称的滚动region，沿文件浏览器现有诊断上限min(30vh,200px×ui-scale)，Feedback占据自身内容高度，正文仍有独立scroll；完整错误保留，不截断、不隐藏。需正式构建和新scope视觉复核后交付。
+
+增量诊断排除本次旧hydrate覆盖：只有起始空视图hydrate，之后没有merge。真实MessageUpdated/PartUpdated的agentID和sessionAgentID为work，随后同inputMessageID的agent.execution.lifecycle给出agentID=assistant；客户端下一条Message虽已到达，发生身份漂移后未进入该轮messageIDs，delta继续命中缺失。后台delegate_agent以kind=assistant、metadata.delegation.parentAgent=work创建子会话并用agent=work执行；message-bridge从Message解析work，而projectLifecycleProperties/persistedSessionAgentID未读取该委派身份而返回kind。已读全部该helper调用点、session-mirror、lifecycle-projection、message-bridge、Task event入口及store终态/队列/多源隔离；下一步还须横审普通无conversation metadata的assistant、Side Chat、Coding/Chat/Work与Task/Mission occurrence身份，不能只补一个成员标题或忽略异常。该后端身份问题仍未修复，单独跟进；本轮资源错误UI修复不代表全部成员流式功能通过。
+
+最终视觉补验使用全新final scope：18417开发/ui、18418透明代理、同20请求累计预算及600000ms Native/180000ms无活动界限。正式压缩构建没有生命周期观察插件；正常Web UI生成同一限定只读场景，复核错误详情滚动、键盘可达、Sources保留及重试。原before/after已完全闭合，不重开或续额。真实增量身份问题仍按原失败事实保留，下一轮必须继续共享身份修复，不能用本轮资源错误通过覆盖它。
+
+## 最终恢复点
+
+正式main-hq8_CedM.js无观察插件。原final第一条work请求为真实服务过载，Message msg_g0VXw5bQC00gEr0LP7Tc/UnknownError/finish=error完整保留；之后root经UI发送一条新的真实用户恢复输入，才完成同一限定成员场景。不是原请求重试成功，也未改Provider重试策略。final累计9次流式传输200/EOF，其中该模型业务失败不能计成功。
+
+最终详情region Tab可聚焦、End可滚到完整错误末尾，Sources同时可见，真实Retry恢复200，来源文件第2—3行高亮。final原67436、proxy3660、shutdown26193均exit0，Target84648/Host86960在549016ms后正常闭合，完整输出/request/端口结束后清理pair，页面10关闭；另两scope也已闭合。后台checker保留原失败并核对三组真实Source/Tool/Message和Native事实。类型/正式构建/locale结构/CSS/docs与架构索引通过，416份归档和420份凭据扫描完整留证。
+
+待推送收尾仅本轮4个UI文件、07-panel本段、规格与证据；locale中的Provider字段、07-panel Explorer段以及其他工作区修改属于别的任务，必须部分暂存。下一轮继续共享生命周期actor身份问题；原goal保持active。两不同成员之间的切换未新增实页验收，现行targetKey检查保留，不扩称全场景通过。

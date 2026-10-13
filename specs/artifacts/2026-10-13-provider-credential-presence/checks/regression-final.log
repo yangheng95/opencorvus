@@ -1,0 +1,57 @@
+[1/3] START test/provider-discovery-bootstrap.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider discovery before model availability > a configured endpoint retains discovery when the independent model catalog is malformed [1999.46ms]
+(pass) Provider discovery before model availability > both routes use their configured zero-model endpoint with the saved API credential [1586.66ms]
+(pass) Provider discovery before model availability > explicit credentials and existing model endpoint discovery retain their positive responses [2464.36ms]
+(pass) Provider discovery before model availability > catalog-only discovery uses the one current top-level declaration and configured overrides [1522.21ms]
+(pass) Provider discovery before model availability > configured facts and the public runnable view retain distinct positive contracts [795.69ms]
+(pass) Provider discovery before model availability > excluded providers and undeclared addresses return the existing bound-address error [1559.12ms]
+(pass) Provider discovery before model availability > live refresh restores a zero-model catalog with the configured API key selected ahead of saved Auth [1553.16ms]
+(pass) Provider discovery before model availability > an explicit empty configured API key produces the credential error contract [1185.82ms]
+(pass) Provider discovery before model availability > malformed saved Auth remains a typed 503 for generic discovery [816.77ms]
+
+ 9 pass
+ 0 fail
+ 21 expect() calls
+Ran 9 tests across 1 file. [20.62s]
+[1/3] DONE test/provider-discovery-bootstrap.test.ts exit=0 duration=21.31s
+[2/3] START test/provider-opencorvus-live-models.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+error: Cannot find module 'D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-opencorvus-live-models.test.ts' from 'D:\myhexin-local\opencorvus\packages\opencorvus\test\isolated-test-entry.test.ts'
+-------------------------------
+
+
+ 0 pass
+ 1 fail
+ 1 error
+Ran 1 test across 1 file. [788.00ms]
+[2/3] DONE test/provider-opencorvus-live-models.test.ts exit=1 duration=0.91s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-opencorvus-live-models.test.ts
+[3/3] START test/provider-cache-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider cache identity > canonical sources are runtime-independent and exact bytes remain the cache authority [1.56ms]
+(pass) Provider cache identity > validated Provider config and declarative SDK options use canonical exact identities [12.36ms]
+(pass) Provider cache identity > production Provider state and SDK caches reuse only exact canonical inputs [1870.40ms]
+(pass) Provider cache identity > default Provider generations are Project-owned and follow current Config lifecycle [5239.37ms]
+(pass) Provider cache identity > production runtime capabilities execute without entering the declarative SDK cache [1417.83ms]
+(pass) Provider cache identity > releases one Provider capacity slot on response EOF, cancel, abort and transport error [1553.85ms]
+(pass) Provider cache identity > shares the final Provider stream capacity lease across two backend processes [12168.23ms]
+(pass) Provider cache identity > production Bedrock credential capability initializes without cache serialization [2773.26ms]
+(pass) Provider cache identity > DashScope credential lifetime publishes versioned SHA-256 identity [82.53ms]
+
+ 9 pass
+ 0 fail
+ 41 expect() calls
+Ran 9 tests across 1 file. [26.29s]
+[3/3] DONE test/provider-cache-identity.test.ts exit=0 duration=26.55s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-opencorvus-live-models.test.ts

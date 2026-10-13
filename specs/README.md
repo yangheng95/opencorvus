@@ -2,6 +2,20 @@
 
 - [持续目标重复崩溃与子 Task](records/2026-10/2026-10-13-continuous-goal-repeated-recovery.md)：连续两次真实中断、正式启动恢复和 Mission 子任务计量验收。
 
+- [393 用户资源与附件归属](records/2026-10/2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。
+
+- [Provider API Key 配置事实](records/2026-10/2026-10-13-provider-credential-presence.md)：非敏感三态、当前观察与零模型显示。
+
+- [389 成员刷新失败可读性](artifacts/2026-10-05-connection-workspace-authority/child-refresh-retention-plan-389.md)：已有Sources、真实读取错误和重试。
+
+- [Native外输出接收端调查](records/2026-10/2026-10-13-native-output-sink-audit.md)：真实管道、逐分支结算和共享生产矩阵。
+
+- [Explorer标签所有者与上传搜索](records/2026-10/2026-10-13-explorer-tab-owner-search.md)：批次完成、跨工具状态和唯一搜索收敛。
+
+- [无模型时的 Provider 发现入口](records/2026-10/2026-10-13-provider-discovery-bootstrap.md)：凭据事实、可推理投影与发现恢复。
+
+- [388 参考历史重连身份](artifacts/2026-10-05-connection-workspace-authority/history-render-identity-plan-388.md)：真实完整快照、正文生命周期与侧聊历史稳定性。
+
 - [392 表格无障碍语言](records/2026-10/2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。
 
 - [文件链接条目与回执](records/2026-10/2026-10-13-file-link-entry-contract.md)：终端链接事实、权限与真实移动复制删除。
@@ -32,7 +46,7 @@
 
 - [Venice 用量与共享后台停机](records/2026-10/2026-10-13-venice-stream-usage.md)：唯一适配器计量、共享取消顺序与真实视觉/进程证据。
 
-- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：研究、信息与指令保真、证据保留、复制引用与执行追踪验收。
+- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：研究、三轮保真、证据引用、Task 复制归属与物理中断恢复验收。
 
 - [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
 

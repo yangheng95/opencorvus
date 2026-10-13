@@ -221,11 +221,15 @@ export function SubagentConversationPanel(props: {
     setLiveProjection(pendingLiveProjection)
     pendingLiveProjection = undefined
   })
-  const [conversation, { refetch }] = createResource<{
+  type ConversationRead = {
     transcript: SubagentConversationTranscript
     received: SubagentConversationTranscript
     observedLive: ReturnType<typeof createSubagentConversationLiveProjection>
-  }, string>(
+  }
+  // Share the resource's own storage with presentation. Its accessor throws on
+  // failed refreshes, while the last accepted value is still valid for this target.
+  const conversationStorage = createSignal<ConversationRead>()
+  const [conversation, { refetch }] = createResource<ConversationRead, string>(
     requestKey,
     async (serialized, context) => {
       transcriptAbort?.abort()
@@ -250,6 +254,7 @@ export function SubagentConversationPanel(props: {
         if (transcriptAbort === controller) transcriptAbort = undefined
       }
     },
+    { storage: () => conversationStorage },
   )
   createEffect(
     on(targetKey, (target) => {
@@ -269,7 +274,7 @@ export function SubagentConversationPanel(props: {
   })
   const displayedConversation = createMemo(() => {
     const target = targetKey()
-    const read = conversation()
+    const read = conversationStorage[0]()
     if (!target || !read || read.transcript.targetKey !== target) return undefined
     const flushedLive = liveProjection()
     return projectSubagentConversationLive(
@@ -278,7 +283,7 @@ export function SubagentConversationPanel(props: {
     )
   })
   createEffect(() => {
-    const read = conversation()
+    const read = conversationStorage[0]()
     if (!read || read.transcript.targetKey !== targetKey()) return
     const current = untrack(() => pendingLiveProjection ?? liveProjection())
     const next = reconcileSubagentConversationLive(read.received, read.observedLive, current)
@@ -339,40 +344,50 @@ export function SubagentConversationPanel(props: {
             <div class="subagent-conversation-panel__empty">{t("subagent.conversation.no_selection")}</div>
           }
         >
-          <Show
-            when={!conversation.error}
-            fallback={
-              <Feedback
-                tone="error"
-                title={t("subagent.conversation.load_failed")}
-                details={formatErrorDetails(conversation.error)}
-                actions={
-                  <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void refetch()}>
-                    {t("common.retry")}
-                  </Button>
-                }
-              >
-                {t("subagent.conversation.no_selection")}
-              </Feedback>
-            }
-          >
-            <Show
-              when={displayedConversation()?.targetKey}
-              keyed
-              fallback={
-                <div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>
+          <Show when={conversation.state === "errored"}>
+            <Feedback
+              class="subagent-conversation-panel__feedback"
+              tone="error"
+              title={t("subagent.conversation.load_failed")}
+              details={
+                <div
+                  class="subagent-conversation-panel__error-details"
+                  role="region"
+                  aria-label={t("subagent.conversation.error_details")}
+                  tabIndex={0}
+                >
+                  {formatErrorDetails(conversation.error)}
+                </div>
+              }
+              actions={
+                <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void refetch()}>
+                  {t("common.retry")}
+                </Button>
               }
             >
-              {(target) => (
-                <SubagentConversationScroll
-                  conversation={() => displayedConversation()!}
-                  active={() => readingActive() && requestKey() === target}
-                  readingPosition={() => readingPositions.get(target)}
-                  saveReadingPosition={(position) => saveReadingPosition(target, position)}
-                  activity={selectedRecord}
-                />
-              )}
-            </Show>
+              {t(displayedConversation()
+                ? "subagent.conversation.refresh_hint"
+                : "subagent.conversation.retry_hint")}
+            </Feedback>
+          </Show>
+          <Show
+            when={displayedConversation()?.targetKey}
+            keyed
+            fallback={
+              <Show when={conversation.loading}>
+                <div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>
+              </Show>
+            }
+          >
+            {(target) => (
+              <SubagentConversationScroll
+                conversation={() => displayedConversation()!}
+                active={() => readingActive() && requestKey() === target}
+                readingPosition={() => readingPositions.get(target)}
+                saveReadingPosition={(position) => saveReadingPosition(target, position)}
+                activity={selectedRecord}
+              />
+            )}
           </Show>
         </Show>
       </div>

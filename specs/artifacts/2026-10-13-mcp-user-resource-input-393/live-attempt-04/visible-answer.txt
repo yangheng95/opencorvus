@@ -1,0 +1,21 @@
+根据消息中的资源正文及实际读取的 CSV 附件，核对结果如下：
+
+| 核对项 | 实际内容 | quantity 合计 |
+|---|---|---:|
+| 报告 `review_code` | `MOSS-393-PUBLIC` | — |
+| 混合资源 CSV | 第 2 行：`Maple,3`；第 3 行：`Iris,4` | **7** |
+| 普通上传 CSV | 第 2 行：`Notebook,7`；第 3 行：`Pen,5` | **12** |
+
+两份有数据的 CSV 第 1 行均为表头 `item,quantity`。
+
+**空资源情况**：
+- `reports://public/empty-text`：本消息所附资源结果没有文本正文；不能把“Reading MCP resource…”提示当作正文。
+- `reports://public/empty.csv`：实际读取附件得到 **0 行**，无表头、无数据，不是“只有表头”的 CSV，也没有可核对的数量记录。
+
+**可核对引用**：
+- 报告及混合 CSV：`reports://public/mixed`；[public-mixed.csv](/attachment/prj_h4GNrUzySvBzLq1B98xi/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv)
+- 普通上传：[public-upload.csv](/attachment/prj_h4GNrUzySvBzLq1B98xi/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv)
+- 空 CSV：[public-empty.csv](/attachment/prj_h4GNrUzySvBzLq1B98xi/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv)
+- 空文本：`reports://public/empty-text`
+
+未修改项目文件。

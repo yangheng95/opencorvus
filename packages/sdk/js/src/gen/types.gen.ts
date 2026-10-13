@@ -4111,6 +4111,10 @@ export type PromptBudgetOverflowError = {
 }
 
 export type Provider = {
+  /**
+   * Observed non-empty API-key configuration; omitted when unknown. Does not indicate credential validity or runnable models.
+   */
+  apiKeyConfigured?: boolean
   env: Array<string>
   id: string
   key?: string
@@ -20288,6 +20292,27 @@ export type GatewayControlActionData = {
   url: "/gateway/control/action"
 }
 
+export type GatewayControlActionErrors = {
+  /**
+   * The source execution identity is owned by its Task or Mission
+   */
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskBoundSessionForkError"
+      }
+}
+
+export type GatewayControlActionError = GatewayControlActionErrors[keyof GatewayControlActionErrors]
+
 export type GatewayControlActionResponses = {
   /**
    * Action result
@@ -29586,14 +29611,21 @@ export type SessionForkData = {
 
 export type SessionForkErrors = {
   /**
-   * Mission execution and lifecycle are owned by the canonical Mission API
+   * The source execution identity is owned by its Task or Mission
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "MissionSessionAuthorityError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskBoundSessionForkError"
+      }
 }
 
 export type SessionForkError = SessionForkErrors[keyof SessionForkErrors]

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "public-empty-text",
+    "uri": "reports://public/empty-text",
+    "filename": "public-empty.txt",
+    "mime": "text/plain",
+    "contents": [
+      {
+        "uri": "reports://public/empty-text",
+        "mimeType": "text/plain",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "name": "public-empty-csv",
+    "uri": "reports://public/empty.csv",
+    "filename": "public-empty.csv",
+    "mime": "text/csv",
+    "contents": [
+      {
+        "uri": "reports://public/empty.csv",
+        "mimeType": "text/csv",
+        "blob": ""
+      }
+    ]
+  },
+  {
+    "name": "public-mixed-report",
+    "uri": "reports://public/mixed",
+    "filename": "public-mixed.csv",
+    "mime": "text/csv",
+    "contents": [
+      {
+        "uri": "reports://public/mixed/header.txt",
+        "mimeType": "text/plain",
+        "text": "Public resource report.\r\nreview_code=MOSS-393-PUBLIC\r\n"
+      },
+      {
+        "uri": "reports://public/mixed/empty.txt",
+        "mimeType": "text/plain",
+        "text": ""
+      },
+      {
+        "uri": "reports://public/mixed/rows.csv",
+        "mimeType": "text/csv",
+        "blob": "aXRlbSxxdWFudGl0eQ0KTWFwbGUsMw0KSXJpcyw0DQo="
+      },
+      {
+        "uri": "reports://public/mixed/tail.txt",
+        "mimeType": "text/plain",
+        "text": "End of public resource report."
+      }
+    ]
+  }
+]

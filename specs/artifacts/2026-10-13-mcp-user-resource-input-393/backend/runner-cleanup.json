@@ -1,0 +1,33 @@
+{
+  "foregroundResults": [
+    {
+      "phase": "initial-red",
+      "execSession": 45346,
+      "exitCode": 1
+    },
+    {
+      "phase": "confirmed-red",
+      "execSession": 32565,
+      "exitCode": 1
+    },
+    {
+      "phase": "green-14",
+      "execSession": 49881,
+      "exitCode": 0
+    },
+    {
+      "phase": "related-48",
+      "execSession": 94903,
+      "exitCode": 0
+    },
+    {
+      "phase": "core-typecheck",
+      "execSession": 67205,
+      "exitCode": 0
+    }
+  ],
+  "presentAfter": false,
+  "observedAt": "2026-10-13T12:28:10.9009428Z",
+  "capturedRelatedRunnerRoot": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-sD4VTs",
+  "boundary": "Formal runner process completions; new test finally awaits Instance disposal, SDK server close and HTTP/Provider stop. Only the captured related runner root is independently checked here."
+}

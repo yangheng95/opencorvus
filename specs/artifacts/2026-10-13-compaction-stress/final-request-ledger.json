@@ -1,0 +1,103 @@
+{
+  "priorRequests": 99,
+  "total": 154,
+  "authorizedTotal": 160,
+  "runs": [
+    {
+      "name": "text-three-rounds",
+      "status": "passed",
+      "requests": 16,
+      "credentialsRemoved": true,
+      "cases": [
+        {
+          "name": "text-middle",
+          "round": 1,
+          "status": "passed",
+          "passedFields": 5,
+          "fields": 5
+        },
+        {
+          "name": "text-middle",
+          "round": 2,
+          "status": "passed",
+          "passedFields": 5,
+          "fields": 5
+        },
+        {
+          "name": "text-middle",
+          "round": 3,
+          "status": "passed",
+          "passedFields": 5,
+          "fields": 5
+        }
+      ]
+    },
+    {
+      "name": "tool-three-rounds",
+      "status": "passed",
+      "requests": 21,
+      "credentialsRemoved": true,
+      "cases": [
+        {
+          "name": "tool-evidence",
+          "round": 1,
+          "status": "passed",
+          "passedFields": 10,
+          "fields": 10
+        },
+        {
+          "name": "tool-evidence",
+          "round": 2,
+          "status": "passed",
+          "passedFields": 10,
+          "fields": 10
+        },
+        {
+          "name": "tool-evidence",
+          "round": 3,
+          "status": "passed",
+          "passedFields": 10,
+          "fields": 10
+        }
+      ]
+    },
+    {
+      "name": "file-failure-final",
+      "status": "failed",
+      "requests": 13,
+      "credentialsRemoved": true,
+      "cases": [
+        {
+          "name": "tool-file",
+          "round": 1,
+          "status": "passed",
+          "passedFields": 10,
+          "fields": 10
+        },
+        {
+          "name": "tool-failure",
+          "round": 1,
+          "status": "error",
+          "passedFields": 0,
+          "fields": 0,
+          "error": "AI_StreamProviderError: Our servers are currently overloaded. Please try again later."
+        }
+      ]
+    },
+    {
+      "name": "failure-retry",
+      "status": "passed",
+      "requests": 5,
+      "credentialsRemoved": true,
+      "cases": [
+        {
+          "name": "tool-failure",
+          "round": 1,
+          "status": "passed",
+          "passedFields": 11,
+          "fields": 11
+        }
+      ]
+    }
+  ]
+}

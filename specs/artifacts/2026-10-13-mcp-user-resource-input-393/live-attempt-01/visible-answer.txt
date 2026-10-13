@@ -1,0 +1,17 @@
+核对结果（依据消息中的资源正文及实际读取的 CSV 附件）：
+
+| 核对项 | 实际内容 | quantity 合计 |
+|---|---|---:|
+| 报告 | `review_code=MOSS-393-PUBLIC` | — |
+| 混合资源 CSV | `Maple,3`；`Iris,4`，表头为 `item,quantity` | **7** |
+| 普通上传 CSV | `Notebook,7`；`Pen,5`，表头为 `item,quantity` | **12** |
+| 空文本 | 所附 `reports://public/empty-text` 资源未显示任何正文 | — |
+| 空 CSV | 实际读取为 **0 行**，无表头、无数据；不是“仅有表头”的 CSV | 无数据可求和 |
+
+**可核对引用**：
+- 报告及混合 CSV：`reports://public/mixed`；[public-mixed.csv](/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/6c9e636b5eb17cb75e120e5b94a327149a4291032765a97cb843b511c07c821b.csv)
+- 普通上传：[public-upload.csv](/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/bf3ae72ce6f494918293767dc2e32282dea99446165fc0f54551977e075ad648.csv)
+- 空文本：`reports://public/empty-text`
+- 空 CSV：`reports://public/empty.csv`；[public-empty.csv](/attachment/prj_hpQ6WzPiO1E1UJddJNQ5/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv)
+
+未修改项目文件。

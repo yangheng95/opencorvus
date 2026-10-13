@@ -1,0 +1,48 @@
+{
+  "focusedInitial": {
+    "exitCode": 1,
+    "bootstrap": {
+      "pass": 1,
+      "fail": 7
+    },
+    "live": {
+      "pass": 5,
+      "fail": 0
+    },
+    "cache": {
+      "pass": 9,
+      "fail": 0
+    }
+  },
+  "typeInitial": {
+    "exitCode": 2
+  },
+  "focusedCorrected": {
+    "execSession": 75698,
+    "exitCode": 0,
+    "tests": 23,
+    "assertions": 79
+  },
+  "focusedFinal": {
+    "execSession": 93463,
+    "exitCode": 0,
+    "tests": 23,
+    "assertions": 79
+  },
+  "backendTypecheck": {
+    "execSession": 49040,
+    "exitCode": 0
+  },
+  "nodeFrozenUi": {
+    "execSession": 16388,
+    "exitCode": 0
+  },
+  "docsFinal": {
+    "exitCode": 0,
+    "operations": 348,
+    "groups": 26
+  },
+  "prettierOwnedSourceAndNewTest": {
+    "exitCode": 0
+  }
+}

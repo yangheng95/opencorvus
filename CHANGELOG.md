@@ -13,6 +13,10 @@
 
 #### 修复
 
+- 零模型服务商正确显示已保存或已配置的 API Key；凭据、配置或目录读取失败时显示状态暂不可用，恢复后重新确认。行内与编辑输入使用同一事实，OAuth 登录不会被误当作 API Key，模型选择继续只显示真实可用模型。
+
+- 已保存密钥的服务商可在尚未配置模型时发现模型；OpenCorvus 实时目录刷新可恢复空模型目录或已被模型筛选清空的目录。全局与项目地址按各自配置解析，模型选择仍只显示真实可用模型。
+
 - 表格的工作表标签、侧栏和通知名称随界面语言切换；已打开的保护范围列表同步更新标题与正文，并保留工作表编辑、侧栏选项和宽度。
 
 - 可编辑表格明确提示编辑仅保留在当前视图，离开或折叠前可下载修改后的工作表；说明 CSV 仅保留单元格值。提示随语言切换，全屏仍保留完整工作表操作区域。
@@ -27,6 +31,8 @@
 - 关闭或重启服务时先取消所有项目的后台工作，再等待其物理清理完成，修复 Memory 整理等后台任务反向等待停机取消而卡住的问题。
 
 - 通用 MCP 工具保留结构化结果正文，超限时可保存完整文件并继续读取；合法空文本资源不会再使整个结果失败。
+
+- 用户附加的 MCP 资源保留合法空文本和零字节文件，混合内容按原顺序呈现；普通 Chat 续聊正确绑定所属项目的附件，保留原始引用、文件名与严格字节校验。
 
 - 电子表格产物的类型名称与工作表菜单跟随界面语言；切换语言保留当前编辑值、公式结果和选区，导出继续使用当前工作簿。
 
@@ -60,6 +66,10 @@
 
 #### Fixed
 
+- Providers with no models correctly show saved or configured API keys. Credential, configuration or catalog read failures show an unavailable status until a successful read. Inline and edit inputs share the same fact; OAuth sign-in is distinct from API-key configuration, and model selection retains usable models only.
+
+- Providers with saved keys can discover models before any model has been configured. OpenCorvus live refresh can restore empty catalogs or catalogs fully filtered by model settings. Global and project discovery use their own configured endpoints, while model selection continues to show runnable models.
+
 - Spreadsheet sheet-tab, Sidebar and notification names follow the interface language. Open protection-range lists refresh their title and content while retaining workbook edits, selected panel options and width.
 
 - Editable spreadsheets now explain that edits stay in the current view and that changed sheets should be downloaded before leaving or collapsing it. The localized note clarifies that CSV retains cell values and leaves the workbook usable in fullscreen.
@@ -74,6 +84,8 @@
 - Service shutdown and restart cancel background work across all Projects before joining its physical cleanup, fixing background work such as Memory organization waiting for cancellation from a later shutdown stage.
 
 - Generic MCP tools preserve structured result content, including full-file recovery for oversized output. Valid empty text resources no longer fail the whole result.
+
+- User-attached MCP resources retain valid empty text and zero-byte files, with mixed content in its original order. Chat follow-ups correctly bind attachments to their owning project while preserving references, filenames and strict byte validation.
 
 - Spreadsheet artifact type labels and sheet menus follow the interface language. Language changes retain edited cells, formula results and selection, and exports continue to use the current workbook.
 

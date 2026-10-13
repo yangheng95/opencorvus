@@ -1,0 +1,55 @@
+{
+  "occurrence": "6520e722-5a79-42a3-a232-7db3e6fe8982",
+  "pid": 84384,
+  "startedAt": 1791897808802,
+  "deadlineAt": 1791898408802,
+  "closedAt": "2026-10-13T13:25:38.082Z",
+  "reason": "owned-stop-file",
+  "closeFacts": [
+    {
+      "kind": "inventory-client",
+      "outcome": "closed"
+    },
+    {
+      "kind": "inventory-client-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "mcp-server-transport",
+      "outcome": "closed"
+    },
+    {
+      "kind": "http",
+      "outcome": "closed"
+    }
+  ],
+  "exitCode": 0
+}

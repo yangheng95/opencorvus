@@ -1,0 +1,15 @@
+{
+  "pid": 80880,
+  "occurrence": "mcp-user-resource-input-393-live-01-f9090fb7-5c79-4b1d-8fd6-622db0038ac8",
+  "owner": {
+    "pid": 80880,
+    "processInstanceID": "win32:639274923986770641",
+    "occurrenceID": "9737edde-adae-4926-8ff3-370dd5dbf93f"
+  },
+  "parent": {
+    "pid": 87968,
+    "processInstanceID": "win32:639274923986305769",
+    "occurrenceID": "a4c69584-d737-467b-a433-e2642c09745c"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
