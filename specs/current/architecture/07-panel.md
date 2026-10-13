@@ -489,6 +489,15 @@ resource or its ancestor. The file-workbench service reconciles every successful
 physical result immediately. Explorer refreshes all completed members even when
 a later batch member fails, without owning a second editor target mapping.
 
+Batch Copy uses that same completed-result reconciliation, including active file
+search and the actual copied destination selection. Directory destination forms
+validate their raw required input before normalizing it: relative dot segments
+may identify the valid empty project-root key. A complete single-entry target
+still requires a basename. File mutation sources cannot identify either the
+current directory root or its Git worktree root, through lexical or physical
+aliases. Independently addressable terminal symlink entries retain their own
+move/delete semantics; an ancestor link does not make an entity root mutable.
+
 Explorer rows retain their render identity through equivalent directory refreshes.
 The key derives from the existing API authority revision, directory, committed
 selection epoch, row kind, physical node type and exact normalized path. Ordinary

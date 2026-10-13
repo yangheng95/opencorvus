@@ -1,0 +1,24 @@
+{
+  "states": [
+    {
+      "expected": {
+        "pid": 82024,
+        "processInstanceID": "win32:639274743234833414",
+        "occurrenceID": "448e3f93-9e46-4301-a976-d6757d63547f"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 82736,
+        "processInstanceID": "win32:639274743248637348",
+        "occurrenceID": "a3ed0038-a2cc-4802-a825-903e45ed50a4"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "occurrence": "before-d48ba023-a6ef-4dce-ae9e-eb4122bb2a1b",
+  "listeners": [],
+  "qualification": "Original aggregate failure retained; observation proves original occurrences gone and owned port released only",
+  "nestedFailure": "unknown"
+}

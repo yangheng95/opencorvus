@@ -1,0 +1,8 @@
+{
+  "root-copy/root-copy-b.txt": "ROOT COPY B\r\n",
+  "source/audit-a.txt": "COPY A\r\n",
+  "target/audit-a.txt": "COPY A\r\n",
+  "source/audit-b.txt": "COPY B\r\n",
+  "root-copy/root-copy-a.txt": "ROOT COPY A\r\n",
+  "target/audit-b.txt": "EXISTING TARGET\r\n"
+}

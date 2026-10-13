@@ -1,0 +1,151 @@
+{
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/explorer-after-01a133/project",
+  "files": [
+    {
+      "file": "source/audit-a.txt",
+      "bytes": 8,
+      "content": "COPY A\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "COPY A\r\n",
+        "revision": "24170f13f3537e497a5d23aabb78dffddaeee97209e5c729bec243bdc33a5f96"
+      }
+    },
+    {
+      "file": "source/audit-b.txt",
+      "bytes": 8,
+      "content": "COPY B\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "COPY B\r\n",
+        "revision": "fd465c4f9c82057d037c88de2f192027106513eb4139b2b23ba2d66d149c4ba5"
+      }
+    },
+    {
+      "file": "target/audit-a.txt",
+      "bytes": 8,
+      "content": "COPY A\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "COPY A\r\n",
+        "revision": "b4f602f16fb20e95cee110c16579bce72760f9221530149016c73e523b930f73"
+      }
+    },
+    {
+      "file": "target/audit-b.txt",
+      "bytes": 17,
+      "content": "EXISTING TARGET\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "EXISTING TARGET\r\n",
+        "revision": "a90743e666e299c05350ca295dcb58b23ce3c5f5e6e04ddd3ca6846d13b41991"
+      }
+    },
+    {
+      "file": "root-copy/root-copy-a.txt",
+      "bytes": 13,
+      "content": "ROOT COPY A\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "ROOT COPY A\r\n",
+        "revision": "67f1f6dfe10656a944cfbb64ac74d790d0e372bb2d92ea4330cc5c4d5f700143"
+      }
+    },
+    {
+      "file": "root-copy/root-copy-b.txt",
+      "bytes": 13,
+      "content": "ROOT COPY B\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "ROOT COPY B\r\n",
+        "revision": "1bb74b8499d5628c140ed4c82d5925c4556c8e59a3de7d5bed17885aa96616ce"
+      }
+    },
+    {
+      "file": "root-copy-a.txt",
+      "bytes": 13,
+      "content": "ROOT COPY A\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "ROOT COPY A\r\n",
+        "revision": "96e2cff1c8e905b07e9086be3be4a43da7b26556deb3f5cf7fa1d3f79ce94445"
+      }
+    },
+    {
+      "file": "root-copy-b.txt",
+      "bytes": 13,
+      "content": "ROOT COPY B\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "ROOT COPY B\r\n",
+        "revision": "218d346398932fd9ce82dff6aa658c3b1ceb794203c3e10d69fa36d0cb2aabb5"
+      }
+    },
+    {
+      "file": "root-move-a.txt",
+      "bytes": 13,
+      "content": "ROOT MOVE A\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "ROOT MOVE A\r\n",
+        "revision": "c44b5ecba41e225cb17d5f5a8b1a383b3510f123d8fe4e1f053898ed1cc6bc9e"
+      }
+    },
+    {
+      "file": "root-move-b.txt",
+      "bytes": 13,
+      "content": "ROOT MOVE B\r\n",
+      "api": {
+        "status": 200,
+        "type": "text",
+        "content": "ROOT MOVE B\r\n",
+        "revision": "d89ef328aec1f62612d34feac4d97977697047d3fdd23a583c9e3216eb6c02d7"
+      }
+    }
+  ],
+  "roots": [
+    {
+      "action": "copy",
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": ".",
+          "message": "Cannot copy the project root from the file browser"
+        }
+      }
+    },
+    {
+      "action": "move",
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": ".",
+          "message": "Cannot move the project root from the file browser"
+        }
+      }
+    },
+    {
+      "action": "delete",
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": ".",
+          "message": "Cannot delete the project root from the file browser"
+        }
+      }
+    }
+  ],
+  "boundary": "Actual 18440 /ui production server and exact authored bytes; no model messages or UI automation"
+}

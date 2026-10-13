@@ -1,0 +1,305 @@
+{
+  "rows": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\architecture-check.log",
+      "target": "validation/architecture-check.log.gz",
+      "rawBytes": 141,
+      "storedBytes": 129
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\build-after.log",
+      "target": "validation/build-after.log.gz",
+      "rawBytes": 70782,
+      "storedBytes": 11089
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\commit-final.log",
+      "target": "validation/commit-final.log.gz",
+      "rawBytes": 767,
+      "storedBytes": 414
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\commit.log",
+      "target": "validation/commit.log.gz",
+      "rawBytes": 744,
+      "storedBytes": 392
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\docs-check.log",
+      "target": "validation/docs-check.log.gz",
+      "rawBytes": 106,
+      "storedBytes": 115
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\fetch-before-commit.log",
+      "target": "validation/fetch-before-commit.log.gz",
+      "rawBytes": 0,
+      "storedBytes": 20
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\frontend-tests-final.log",
+      "target": "validation/frontend-tests-final.log.gz",
+      "rawBytes": 16140,
+      "storedBytes": 3030
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\frontend-tests.log",
+      "target": "validation/frontend-tests.log.gz",
+      "rawBytes": 15619,
+      "storedBytes": 2971
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\merge-before-commit.log",
+      "target": "validation/merge-before-commit.log.gz",
+      "rawBytes": 262,
+      "storedBytes": 200
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\overlay-typecheck.log",
+      "target": "validation/overlay-typecheck.log.gz",
+      "rawBytes": 16,
+      "storedBytes": 36
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\launch.ps1",
+      "target": "reviewed-scripts/launch.ps1",
+      "rawBytes": 8335,
+      "storedBytes": 8335
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\launch-before.ps1",
+      "target": "reviewed-scripts/launch-before.ps1",
+      "rawBytes": 33069,
+      "storedBytes": 33069
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\native-host.ts",
+      "target": "reviewed-scripts/native-host.ts.gz",
+      "rawBytes": 5099,
+      "storedBytes": 1979
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\shutdown.ps1",
+      "target": "reviewed-scripts/shutdown.ps1",
+      "rawBytes": 9032,
+      "storedBytes": 9032
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\recovery-shutdown.ps1",
+      "target": "reviewed-scripts/recovery-shutdown.ps1",
+      "rawBytes": 9041,
+      "storedBytes": 9041
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\verify-files.mjs",
+      "target": "reviewed-scripts/verify-files.mjs",
+      "rawBytes": 2514,
+      "storedBytes": 2514
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-explorer-01a133\\archive.mjs",
+      "target": "reviewed-scripts/archive.mjs",
+      "rawBytes": 2331,
+      "storedBytes": 2331
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\contract-after-1.log",
+      "target": "root-contract/contract-after-1.log.gz",
+      "rawBytes": 30714,
+      "storedBytes": 2272
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\contract-before.log",
+      "target": "root-contract/contract-before.log.gz",
+      "rawBytes": 39181,
+      "storedBytes": 3546
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\contract-final.log",
+      "target": "root-contract/contract-final.log.gz",
+      "rawBytes": 36387,
+      "storedBytes": 3346
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\root-mutation-evidence.json",
+      "target": "root-contract/root-mutation-evidence.json",
+      "rawBytes": 40207,
+      "storedBytes": 40207
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\root-mutation-run-2.log",
+      "target": "root-contract/root-mutation-run-2.log.gz",
+      "rawBytes": 31024,
+      "storedBytes": 2496
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\root-mutation-run.log",
+      "target": "root-contract/root-mutation-run.log.gz",
+      "rawBytes": 4228,
+      "storedBytes": 1166
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\root-scope-evidence.json",
+      "target": "root-contract/root-scope-evidence.json",
+      "rawBytes": 6046,
+      "storedBytes": 6046
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\root-scope-run.log",
+      "target": "root-contract/root-scope-run.log.gz",
+      "rawBytes": 5335,
+      "storedBytes": 998
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\test-format-check.log",
+      "target": "root-contract/test-format-check.log.gz",
+      "rawBytes": 68,
+      "storedBytes": 87
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\test-format-final.log",
+      "target": "root-contract/test-format-final.log.gz",
+      "rawBytes": 80,
+      "storedBytes": 95
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\test-format.log",
+      "target": "root-contract/test-format.log.gz",
+      "rawBytes": 68,
+      "storedBytes": 85
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\typecheck.log",
+      "target": "root-contract/typecheck.log.gz",
+      "rawBytes": 75,
+      "storedBytes": 92
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\worktree-receipt-evidence.json",
+      "target": "root-contract/worktree-receipt-evidence.json",
+      "rawBytes": 4987,
+      "storedBytes": 4987
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-file-root-01a133\\worktree-receipt-run.log",
+      "target": "root-contract/worktree-receipt-run.log.gz",
+      "rawBytes": 3318,
+      "storedBytes": 773
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-01a133\\startup.json",
+      "target": "runtime/before-failed/startup.json",
+      "rawBytes": 144,
+      "storedBytes": 144
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-01a133\\launch-owner.json",
+      "target": "runtime/before-failed/launch-owner.json",
+      "rawBytes": 1182,
+      "storedBytes": 1182
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-01a133\\recovery-launch-owner.json",
+      "target": "runtime/before-failed/recovery-launch-owner.json",
+      "rawBytes": 1194,
+      "storedBytes": 1194
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-01a133\\stdout.log",
+      "target": "runtime/before-failed/stdout.log.gz",
+      "rawBytes": 0,
+      "storedBytes": 20
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-01a133\\stderr.log",
+      "target": "runtime/before-failed/stderr.log.gz",
+      "rawBytes": 0,
+      "storedBytes": 20
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-01a133\\evidence\\native-host-error.json",
+      "target": "runtime/before-failed/native-host-error.json",
+      "rawBytes": 528,
+      "storedBytes": 528
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-01a133\\evidence\\native-host-ready.json",
+      "target": "runtime/before-failed/native-host-ready.json",
+      "rawBytes": 1409,
+      "storedBytes": 1409
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-02-01a133\\startup.json",
+      "target": "runtime/before02/startup.json",
+      "rawBytes": 147,
+      "storedBytes": 147
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-02-01a133\\launch-owner.json",
+      "target": "runtime/before02/launch-owner.json",
+      "rawBytes": 1202,
+      "storedBytes": 1202
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-02-01a133\\stdout.log",
+      "target": "runtime/before02/stdout.log.gz",
+      "rawBytes": 544,
+      "storedBytes": 366
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-02-01a133\\stderr.log",
+      "target": "runtime/before02/stderr.log.gz",
+      "rawBytes": 0,
+      "storedBytes": 20
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-02-01a133\\evidence\\native-host-ready.json",
+      "target": "runtime/before02/native-host-ready.json",
+      "rawBytes": 1423,
+      "storedBytes": 1423
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-before-02-01a133\\evidence\\native-host-settled.json",
+      "target": "runtime/before02/native-host-settled.json",
+      "rawBytes": 893,
+      "storedBytes": 893
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-after-01a133\\startup.json",
+      "target": "runtime/after/startup.json",
+      "rawBytes": 144,
+      "storedBytes": 144
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-after-01a133\\launch-owner.json",
+      "target": "runtime/after/launch-owner.json",
+      "rawBytes": 1179,
+      "storedBytes": 1179
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-after-01a133\\stdout.log",
+      "target": "runtime/after/stdout.log.gz",
+      "rawBytes": 540,
+      "storedBytes": 363
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-after-01a133\\stderr.log",
+      "target": "runtime/after/stderr.log.gz",
+      "rawBytes": 0,
+      "storedBytes": 20
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-after-01a133\\evidence\\native-host-ready.json",
+      "target": "runtime/after/native-host-ready.json",
+      "rawBytes": 1408,
+      "storedBytes": 1408
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\explorer-after-01a133\\evidence\\native-host-settled.json",
+      "target": "runtime/after/native-host-settled.json",
+      "rawBytes": 887,
+      "storedBytes": 887
+    }
+  ],
+  "boundary": "Exact owned sources only; log gzip verified by restored bytes. No summary or mutable-source digest acceptance."
+}

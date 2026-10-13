@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Explorer批量文件操作](records/2026-10/2026-10-13-explorer-copy-convergence.md)：成功回执、根目标准入与真实API根保护。
+
 - [383 完整工具结果与来源恢复](records/2026-10/2026-10-13-source-result-commit-383.md)：原子结果提交、成功回执恢复、真实OS断点与实页未完成边界。
 
 - [持续目标独立测试与修复](records/2026-10/2026-10-13-continuous-goal-review.md)：独立 agent 审计、恢复路径与正向回归。

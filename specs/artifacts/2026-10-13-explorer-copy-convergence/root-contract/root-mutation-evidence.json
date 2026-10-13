@@ -1,0 +1,1353 @@
+[
+  {
+    "label": "delete-root-0",
+    "operation": "remove",
+    "source": "",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-20kply",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-20kply",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-20kply",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "1970324841037837"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-delete-root-0\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "",
+          "message": "Cannot delete the project root from the file browser"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "1970324841037837"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-delete-root-0\n"
+    }
+  },
+  {
+    "label": "delete-root-1",
+    "operation": "remove",
+    "source": ".",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-vSirzq",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-vSirzq",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-vSirzq",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "2251799817748483"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-delete-root-1\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": "."
+      }
+    },
+    "after": {
+      "root": {
+        "code": "ENOENT"
+      },
+      "entries": {
+        "code": "ENOENT"
+      },
+      "marker": {
+        "code": "ENOENT"
+      }
+    }
+  },
+  {
+    "label": "delete-root-2",
+    "operation": "remove",
+    "source": "./",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1SVLyS",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1SVLyS\\",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1SVLyS",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "13510798886064432"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-delete-root-2\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": "./"
+      }
+    },
+    "after": {
+      "root": {
+        "code": "ENOENT"
+      },
+      "entries": {
+        "code": "ENOENT"
+      },
+      "marker": {
+        "code": "ENOENT"
+      }
+    }
+  },
+  {
+    "label": "delete-root-3",
+    "operation": "remove",
+    "source": "folder/..",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-ErP9hq",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-ErP9hq",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-ErP9hq",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "13792273862775088"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-delete-root-3\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": "folder/.."
+      }
+    },
+    "after": {
+      "root": {
+        "code": "ENOENT"
+      },
+      "entries": {
+        "code": "ENOENT"
+      },
+      "marker": {
+        "code": "ENOENT"
+      }
+    }
+  },
+  {
+    "label": "delete-root-4",
+    "operation": "remove",
+    "source": "missing/..",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-2F3zAX",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-2F3zAX",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-2F3zAX",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "14073748839485744"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-delete-root-4\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": "missing/.."
+      }
+    },
+    "after": {
+      "root": {
+        "code": "ENOENT"
+      },
+      "entries": {
+        "code": "ENOENT"
+      },
+      "marker": {
+        "code": "ENOENT"
+      }
+    }
+  },
+  {
+    "label": "copy-source-root-0",
+    "operation": "copy",
+    "source": "",
+    "target": "root-result",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-K0aJI6",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-K0aJI6",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-K0aJI6",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "14355223816196400"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-source-root-0\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "",
+          "message": "Cannot copy the project root from the file browser"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "14355223816196400"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-source-root-0\n"
+    }
+  },
+  {
+    "label": "copy-source-root-1",
+    "operation": "copy",
+    "source": ".",
+    "target": "root-result",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-YafVGd",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-YafVGd",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-YafVGd",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "14636698792907056"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-source-root-1\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "root-result",
+          "message": "Cannot copy a directory into itself: root-result"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "14636698792907056"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-source-root-1\n"
+    }
+  },
+  {
+    "label": "copy-source-root-2",
+    "operation": "copy",
+    "source": "folder/..",
+    "target": "root-result",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-DiyoLw",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-DiyoLw",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-DiyoLw",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "14918173769617712"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-source-root-2\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "root-result",
+          "message": "Cannot copy a directory into itself: root-result"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "14918173769617712"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-source-root-2\n"
+    }
+  },
+  {
+    "label": "copy-target-root-0",
+    "operation": "copy",
+    "source": "note.md",
+    "target": "",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-Nu6zcE",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-Nu6zcE\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-Nu6zcE\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "15199648746328368"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-0\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "",
+          "message": "Invalid file entry name: (empty)"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "15199648746328368"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-0\n"
+    }
+  },
+  {
+    "label": "copy-target-root-1",
+    "operation": "copy",
+    "source": "note.md",
+    "target": ".",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-TalDsj",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-TalDsj\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-TalDsj\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "4222124654721503"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-1\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": ".",
+          "message": "Invalid file entry name: ."
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "4222124654721503"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-1\n"
+    }
+  },
+  {
+    "label": "copy-target-root-2",
+    "operation": "copy",
+    "source": "note.md",
+    "target": "folder/..",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-2HMreT",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-2HMreT\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-2HMreT\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16044073676460336"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-2\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "..",
+          "message": "Invalid file entry name: .."
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16044073676460336"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-2\n"
+    }
+  },
+  {
+    "label": "copy-target-root-3",
+    "operation": "copy",
+    "source": "note.md",
+    "target": "../memory-W0Selj",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-W0Selj",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-W0Selj\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-W0Selj\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16325548653170992"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-3\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "../memory-W0Selj",
+          "message": "Access denied: parent path escapes project directory"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16325548653170992"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-copy-target-root-3\n"
+    }
+  },
+  {
+    "label": "copy-target-root-4",
+    "operation": "copy",
+    "source": "note.md",
+    "target": "root-link",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-KQrsgd",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-KQrsgd\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-KQrsgd\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16607023629881648"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-copy-target-root-4\n"
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "name": "FileConflictError",
+        "data": {
+          "path": "root-link",
+          "message": "File destination already exists: root-link"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16607023629881648"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-copy-target-root-4\n"
+    }
+  },
+  {
+    "label": "move-source-root-0",
+    "operation": "move",
+    "source": "",
+    "target": "root-result",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-QqAJGn",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-QqAJGn",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-QqAJGn",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16888498606592304"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-source-root-0\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "",
+          "message": "Cannot move the project root from the file browser"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "16888498606592304"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-source-root-0\n"
+    }
+  },
+  {
+    "label": "move-source-root-1",
+    "operation": "move",
+    "source": ".",
+    "target": "root-result",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-OxIlP9",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-OxIlP9",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-OxIlP9",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "17169973583302960"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-source-root-1\n"
+    },
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "17169973583302960"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-source-root-1\n"
+    }
+  },
+  {
+    "label": "move-source-root-2",
+    "operation": "move",
+    "source": "folder/..",
+    "target": "root-result",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-e3MHGQ",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-e3MHGQ",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-e3MHGQ",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "17451448560013616"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-source-root-2\n"
+    },
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "17451448560013616"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-source-root-2\n"
+    }
+  },
+  {
+    "label": "move-target-root-0",
+    "operation": "move",
+    "source": "note.md",
+    "target": "",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-eUUGDj",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-eUUGDj\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-eUUGDj\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "24488322977116004"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-0\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "",
+          "message": "Invalid file entry name: (empty)"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "24488322977116004"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-0\n"
+    }
+  },
+  {
+    "label": "move-target-root-1",
+    "operation": "move",
+    "source": "note.md",
+    "target": ".",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-xvrRYZ",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-xvrRYZ\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-xvrRYZ\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "24769797953826660"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-1\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": ".",
+          "message": "Invalid file entry name: ."
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "24769797953826660"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-1\n"
+    }
+  },
+  {
+    "label": "move-target-root-2",
+    "operation": "move",
+    "source": "note.md",
+    "target": "folder/..",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-nKYxB4",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-nKYxB4\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-nKYxB4\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25051272930537316"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-2\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "..",
+          "message": "Invalid file entry name: .."
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25051272930537316"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-2\n"
+    }
+  },
+  {
+    "label": "move-target-root-3",
+    "operation": "move",
+    "source": "note.md",
+    "target": "../memory-1Z9y5w",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1Z9y5w",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1Z9y5w\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1Z9y5w\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25332747907247972"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-3\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "../memory-1Z9y5w",
+          "message": "Access denied: parent path escapes project directory"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25332747907247972"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-target-root-3\n"
+    }
+  },
+  {
+    "label": "move-target-root-4",
+    "operation": "move",
+    "source": "note.md",
+    "target": "root-link",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-7LrnXM",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-7LrnXM\\note.md",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-7LrnXM\\note.md",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25614222883958628"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-move-target-root-4\n"
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "name": "FileConflictError",
+        "data": {
+          "path": "root-link",
+          "message": "File destination already exists: root-link"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25614222883958628"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-move-target-root-4\n"
+    }
+  },
+  {
+    "label": "remove-terminal-root-link",
+    "operation": "remove",
+    "source": "root-link",
+    "target": "changed-link",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1dVexz",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1dVexz\\root-link",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-1dVexz",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": true
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25895697860669284"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-remove-terminal-root-link\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": "root-link"
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "25895697860669284"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-remove-terminal-root-link\n"
+    }
+  },
+  {
+    "label": "copy-terminal-root-link",
+    "operation": "copy",
+    "source": "root-link",
+    "target": "changed-link",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-fO3mBR",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-fO3mBR\\root-link",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-fO3mBR",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": true
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "26177172837379940"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-copy-terminal-root-link\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "changed-link",
+          "message": "Cannot copy a directory into itself: changed-link"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "26177172837379940"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-copy-terminal-root-link\n"
+    }
+  },
+  {
+    "label": "move-terminal-root-link",
+    "operation": "move",
+    "source": "root-link",
+    "target": "changed-link",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-dtPo0e",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-dtPo0e\\root-link",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-dtPo0e",
+    "sourceTerminal": {
+      "directory": false,
+      "symlink": true
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "26458647814090596"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "root-link"
+      ],
+      "marker": "owned-note-move-terminal-root-link\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "previousPath": "root-link",
+        "path": "changed-link",
+        "node": {
+          "name": "changed-link",
+          "path": "changed-link",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-dtPo0e\\changed-link",
+          "type": "directory",
+          "ignored": false
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "26458647814090596"
+      },
+      "entries": [
+        ".git",
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus-test-project-identity",
+        "changed-link",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-move-terminal-root-link\n"
+    }
+  },
+  {
+    "label": "delete-ancestor-root",
+    "operation": "remove",
+    "source": "../root-ancestor-alias/memory-zXNzjr",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-zXNzjr",
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\root-ancestor-alias\\memory-zXNzjr",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6waWuu\\test-75928-o5ukbJ\\fixtures\\memory-zXNzjr",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "26740122790801252"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md"
+      ],
+      "marker": "owned-note-delete-ancestor-root\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": "../root-ancestor-alias/memory-zXNzjr"
+      }
+    },
+    "after": {
+      "root": {
+        "code": "ENOENT"
+      },
+      "entries": {
+        "code": "ENOENT"
+      },
+      "marker": {
+        "code": "ENOENT"
+      }
+    }
+  }
+]

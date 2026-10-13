@@ -1,0 +1,12 @@
+{
+  "rootMarker": "COPY A\r\n",
+  "status": 400,
+  "body": {
+    "name": "FileInvalidPathError",
+    "data": {
+      "path": ".",
+      "message": "Cannot delete the project root from the file browser"
+    }
+  },
+  "source": "Actual same 18440 production /ui server"
+}

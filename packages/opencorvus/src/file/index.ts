@@ -1145,6 +1145,39 @@ export namespace File {
     }
   }
 
+  async function assertFileMutationPaths(input: {
+    action: "copy" | "move" | "delete"
+    source: { file: string; fullPath: string }
+    target?: { file: string; fullPath: string }
+  }): Promise<void> {
+    const rootError = () =>
+      fileInvalidPath({
+        path: input.source.file,
+        message: `Cannot ${input.action} the project root from the file browser`,
+      })
+    if (!input.source.file.trim()) throw rootError()
+    if (input.target) basenameForEntry(input.target.file)
+    await assertAllowedFilePath(input.source)
+    if (input.target) {
+      await assertAllowedFilePath(input.target)
+      await assertExistingParent(input.target)
+    }
+
+    const roots = [Instance.directory, Instance.worktree]
+    if (roots.some((root) => path.relative(root, input.source.fullPath) === "")) throw rootError()
+    const entry = await fs.promises.lstat(input.source.fullPath).catch((error) => {
+      if (isMissingPathError(error)) throw fileNotFound({ path: input.source.file })
+      throw error
+    })
+    // Use the actual operation path: a terminal link is an entry, while an ancestor link can re-enter a root.
+    if (entry.isSymbolicLink()) return
+    const [source, ...physicalRoots] = await Promise.all([
+      canonicalPath(input.source.fullPath),
+      ...roots.map((root) => canonicalPath(root)),
+    ])
+    if (physicalRoots.includes(source)) throw rootError()
+  }
+
   async function nodeForPath(fullPath: string): Promise<Node> {
     const stat = await fs.promises.stat(fullPath).catch(() => undefined)
     if (!stat) throw fileNotFound({ path: relativePathFor(fullPath) })
@@ -1299,15 +1332,13 @@ export namespace File {
     using _ = log.time("move", { path: input.path, newPath: input.newPath })
     const source = input.path
     const target = input.newPath
-    if (!source.trim()) {
-      throw fileInvalidPath({ path: source, message: "Cannot move the project root from the file browser" })
-    }
     const sourceFull = path.join(Instance.directory, source)
     const targetFull = path.join(Instance.directory, target)
-    basenameForEntry(target)
-    await assertAllowedFilePath({ file: source, fullPath: sourceFull })
-    await assertAllowedFilePath({ file: target, fullPath: targetFull })
-    await assertExistingParent({ file: target, fullPath: targetFull })
+    await assertFileMutationPaths({
+      action: "move",
+      source: { file: source, fullPath: sourceFull },
+      target: { file: target, fullPath: targetFull },
+    })
 
     const sourceStat = await fs.promises.stat(sourceFull).catch(() => undefined)
     if (!sourceStat) throw fileNotFound({ path: source })
@@ -1340,15 +1371,13 @@ export namespace File {
     using _ = log.time("copy", { path: input.path, newPath: input.newPath })
     const source = input.path
     const target = input.newPath
-    if (!source.trim()) {
-      throw fileInvalidPath({ path: source, message: "Cannot copy the project root from the file browser" })
-    }
     const sourceFull = path.join(Instance.directory, source)
     const targetFull = path.join(Instance.directory, target)
-    basenameForEntry(target)
-    await assertAllowedFilePath({ file: source, fullPath: sourceFull })
-    await assertAllowedFilePath({ file: target, fullPath: targetFull })
-    await assertExistingParent({ file: target, fullPath: targetFull })
+    await assertFileMutationPaths({
+      action: "copy",
+      source: { file: source, fullPath: sourceFull },
+      target: { file: target, fullPath: targetFull },
+    })
 
     const sourceStat = await fs.promises.stat(sourceFull).catch(() => undefined)
     if (!sourceStat) throw fileNotFound({ path: source })
@@ -1428,11 +1457,8 @@ export namespace File {
   export async function remove(input: { path: string }): Promise<DeleteResult> {
     using _ = log.time("remove", { path: input.path })
     const file = input.path
-    if (!file.trim()) {
-      throw fileInvalidPath({ path: file, message: "Cannot delete the project root from the file browser" })
-    }
     const full = path.join(Instance.directory, file)
-    await assertAllowedFilePath({ file, fullPath: full })
+    await assertFileMutationPaths({ action: "delete", source: { file, fullPath: full } })
     const stat = await fs.promises.stat(full).catch(() => undefined)
     if (!stat) throw fileNotFound({ path: file })
 

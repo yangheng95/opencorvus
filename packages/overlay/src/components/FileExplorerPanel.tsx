@@ -1087,11 +1087,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const targetDir = normalizeExplorerPath(String(result.value || ""))
-    if (!targetDir) {
+    const targetDirInput = String(result.value || "")
+    if (!targetDirInput.trim()) {
       setMutationError(t("explorer.name_required"))
       return
     }
+    const targetDir = normalizeExplorerPath(targetDirInput)
     await moveSelectionsToDirectory(items, targetDir, scope)
   }
 
@@ -1117,16 +1118,21 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     await runMutation("copy", scope, async (ownsOperation) => {
       const copied: FileCopyResult[] = []
-      for (const item of targets) {
-        if (!ownsOperation()) return
-        const nextPath = joinExplorerPath(targetDir, item.name)
-        copied.push(await copyFileItem(item.path, nextPath, scope))
+      try {
+        for (const item of targets) {
+          if (!ownsOperation()) return
+          const nextPath = joinExplorerPath(targetDir, item.name)
+          copied.push(await copyFileItem(item.path, nextPath, scope))
+        }
+      } finally {
+        if (copied.length > 0) {
+          const message =
+            copied.length === 1
+              ? t("explorer.copy_success", { path: copied[0]?.path ?? "" })
+              : t("explorer.copy_many_success", { count: copied.length, target: targetDir || "." })
+          await applyCopyResults(copied, message, scope, ownsOperation)
+        }
       }
-      const message =
-        copied.length === 1
-          ? t("explorer.copy_success", { path: copied[0]?.path ?? "" })
-          : t("explorer.copy_many_success", { count: copied.length, target: targetDir || "." })
-      await applyCopyResults(copied, message, scope, ownsOperation)
     })
   }
 
@@ -1197,11 +1203,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
-    const targetDir = normalizeExplorerPath(String(result.value || ""))
-    if (!targetDir) {
+    const targetDirInput = String(result.value || "")
+    if (!targetDirInput.trim()) {
       setMutationError(t("explorer.name_required"))
       return
     }
+    const targetDir = normalizeExplorerPath(targetDirInput)
     await copySelectionsToDirectory(items, targetDir, scope)
   }
 

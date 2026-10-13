@@ -1,0 +1,175 @@
+[
+  {
+    "label": "remove-parent-worktree-root",
+    "operation": "remove",
+    "source": "..",
+    "target": "scoped-copy",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-P9Km30",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-P9Km30\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-P9Km30",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-P9Km30"
+    },
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-P9Km30",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-P9Km30",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "3659174701299570"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "scoped-project"
+      ],
+      "marker": "owned-note-remove-parent-worktree-root\n"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "path": ".."
+      }
+    },
+    "after": {
+      "root": {
+        "code": "ENOENT"
+      },
+      "entries": {
+        "code": "ENOENT"
+      },
+      "marker": {
+        "code": "ENOENT"
+      }
+    }
+  },
+  {
+    "label": "copy-parent-worktree-root",
+    "operation": "copy",
+    "source": "..",
+    "target": "scoped-copy",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-gAhkyU",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-gAhkyU\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-gAhkyU",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-gAhkyU"
+    },
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-gAhkyU",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-gAhkyU",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "3940649678010226"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "scoped-project"
+      ],
+      "marker": "owned-note-copy-parent-worktree-root\n"
+    },
+    "response": {
+      "status": 400,
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "scoped-copy",
+          "message": "Cannot copy a directory into itself: scoped-copy"
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "3940649678010226"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "scoped-project"
+      ],
+      "marker": "owned-note-copy-parent-worktree-root\n"
+    }
+  },
+  {
+    "label": "move-parent-worktree-root",
+    "operation": "move",
+    "source": "..",
+    "target": "scoped-copy",
+    "owner": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM",
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-NsPcY7",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-NsPcY7\\scoped-project",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-NsPcY7",
+      "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-NsPcY7"
+    },
+    "sourceFull": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-NsPcY7",
+    "sourcePhysical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HPU3xA\\test-74768-XcXIFM\\fixtures\\memory-NsPcY7",
+    "sourceTerminal": {
+      "directory": true,
+      "symlink": false
+    },
+    "before": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "4222124654720882"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "scoped-project"
+      ],
+      "marker": "owned-note-move-parent-worktree-root\n"
+    },
+    "response": {
+      "status": 500,
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    "after": {
+      "root": {
+        "directory": true,
+        "symlink": false,
+        "device": "382532482",
+        "inode": "4222124654720882"
+      },
+      "entries": [
+        ".git",
+        ".opencorvus-test-project-identity",
+        "folder",
+        "note.md",
+        "scoped-project"
+      ],
+      "marker": "owned-note-move-parent-worktree-root\n"
+    }
+  }
+]

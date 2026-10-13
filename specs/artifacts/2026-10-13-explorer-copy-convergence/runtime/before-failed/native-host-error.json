@@ -1,0 +1,14 @@
+{
+  "occurrence": "before-d48ba023-a6ef-4dce-ae9e-eb4122bb2a1b",
+  "outcome": "failed",
+  "host": {
+    "pid": 82024,
+    "processInstanceID": "win32:639274743234833414",
+    "occurrenceID": "448e3f93-9e46-4301-a976-d6757d63547f"
+  },
+  "phase": "whole-job-output-request-settlement",
+  "observedAtUtc": "2026-10-13T07:47:15.314Z",
+  "errorType": "AggregateError",
+  "message": "Native Host physical/output/request settlement failed",
+  "authority": "Failed Host observation/admission/settlement; no physical completion claim"
+}
