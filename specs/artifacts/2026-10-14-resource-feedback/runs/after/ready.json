@@ -1,0 +1,62 @@
+{
+  "pid": 72448,
+  "started": 1791933310889,
+  "port": 18632,
+  "participantPort": 18633,
+  "occurrence": {
+    "pid": 72448,
+    "processInstanceID": "win32:639275301107883155",
+    "occurrenceID": "243c8e12-afcf-430a-ac99-b4e96fe75659"
+  },
+  "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\ui-after",
+  "localSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\after\\resource-fixtures\\owned-feedback",
+  "missingSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\after\\resource-fixtures\\missing-owned-skill",
+  "projects": [
+    {
+      "label": "A",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\after\\project-A"
+    },
+    {
+      "label": "B",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\after\\project-B"
+    }
+  ],
+  "sessions": [
+    {
+      "label": "A",
+      "sessionID": "ses_-zUS1WNSEzzGWin7pJX2",
+      "projectID": "prj_hN3K13TLcllY3fYh3nPL",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\after\\project-A"
+    },
+    {
+      "label": "B",
+      "sessionID": "ses_-zUS1WNCgzzEyUSosm7P",
+      "projectID": "prj_hrst2HdO7Pqbb1gJbqkB",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\after\\project-B"
+    }
+  ],
+  "catalogProviderCount": 91,
+  "scope": "Own generated fictional Auth only; complete public repository bootstrap catalog plus three owned entries; no real Provider credential copied",
+  "providers": [
+    {
+      "id": "owned-resource-a",
+      "models": [
+        "owned-resource-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-b",
+      "models": [
+        "owned-resource-b-model",
+        "owned-resource-b-inherited"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-zero",
+      "models": [],
+      "apiKeyConfigured": true
+    }
+  ]
+}

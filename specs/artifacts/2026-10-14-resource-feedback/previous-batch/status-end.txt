@@ -1,0 +1,41 @@
+ M CHANGELOG.md
+ D packages/opencorvus/script/compaction-task-crash-check.ts
+ M packages/opencorvus/src/engine/git-process.ts
+ M packages/opencorvus/src/engine/interaction.ts
+ M packages/opencorvus/src/engine/model.ts
+ M packages/opencorvus/src/engine/task-session-lineage.ts
+ M packages/opencorvus/src/protocol/session-mirror.ts
+ M packages/opencorvus/src/question/index.ts
+ M packages/opencorvus/src/server/routes/session.ts
+ M packages/opencorvus/src/storage/db.ts
+ M packages/opencorvus/test/engine-git-batched-transaction.test.ts
+ M packages/opencorvus/test/engine-git-fact-reconciliation.test.ts
+ M packages/opencorvus/test/engine-interaction-recovery.test.ts
+ M packages/opencorvus/test/server/session-event-connection-snapshot.test.ts
+ M packages/opencorvus/test/storage/schema-contract.test.ts
+ M packages/overlay/src/services/conversation.ts
+ M packages/overlay/src/services/event-policy.ts
+ M packages/overlay/src/services/side-chat.ts
+ M packages/overlay/src/services/tree-writer.ts
+ M packages/overlay/test/side-chat-transport.test.ts
+ M packages/overlay/test/subagent-conversation-service.test.ts
+ M packages/sdk/js/src/gen/types.gen.ts
+ M packages/sdk/openapi.json
+ M specs/README.md
+ M specs/artifacts/README.md
+ M specs/current/architecture/02-data.md
+ M specs/current/architecture/07-panel-reactivity.md
+ M specs/current/architecture/task-runtime-directory.md
+ M specs/records/2026-10/2026-10-13-compaction-stress.md
+ M specs/records/2026-10/2026-10-14-link-relocation-authority.md
+ M specs/records/2026-10/2026-10-14-task-git-question-reconnect-404.md
+ M specs/records/2026-10/README.md
+?? .bun/
+?? packages/opencorvus/bun/
+?? packages/opencorvus/script/compaction-runtime-crash-check.ts
+?? packages/opencorvus/test/engine-git-frozen-directory.test.ts
+?? packages/opencorvus/test/fixture/question-process-projection-worker.ts
+?? packages/opencorvus/test/question-process-projection.test.ts
+?? packages/opencorvus/test/question-publication-projection.test.ts
+?? packages/opencorvus/test/storage/database-checkpoint.test.ts
+?? packages/overlay/src/utils/question-interaction.ts

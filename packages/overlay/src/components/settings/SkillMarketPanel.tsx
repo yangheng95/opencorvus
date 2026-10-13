@@ -11,7 +11,7 @@ import { createEffect, createSignal, createMemo, For, onCleanup, Show } from "so
 import { createStore } from "solid-js/store"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import { t } from "../../utils/i18n"
-import { configure as configureApi } from "../../services/api"
+import { ApiError, configure as configureApi } from "../../services/api"
 import {
   pathRevealFailureText,
   pathRevealLabelKey,
@@ -221,6 +221,12 @@ function errorDetail(error: unknown): string {
 // ── Extension Settings Panels ──
 
 type ExtensionPanelMode = "skill" | "mcp"
+interface ResourceNotice {
+  key: string
+  vars?: () => Record<string, string>
+  tone: "success" | "error" | "warning"
+  details?: string
+}
 const MCP_STATUS_REFRESH_INTERVAL_MS = 1_000
 
 interface FormSelectOption extends SelectFieldOption {}
@@ -280,15 +286,21 @@ function SharedResourceManagementPanel(props: {
     { value: "bearer", label: t("mcp.credential.bearer") },
     { value: "header", label: t("mcp.credential.header") },
   ]
-  const [notice, setNotice] = createSignal("")
-  const [noticeStatus, setNoticeStatus] = createSignal<"active" | "error" | "warn">("error")
+  const [notice, setNotice] = createSignal<ResourceNotice>()
   const [loading, setLoading] = createSignal(false)
   const [skillDragActive, setSkillDragActive] = createSignal(false)
   const [skillLoadIssues, setSkillLoadIssues] = createSignal<SkillLoadIssue[]>([])
 
-  function setPanelNotice(message: string, status: "active" | "error" | "warn" = "error") {
-    setNotice(message)
-    setNoticeStatus(status)
+  function setPanelNotice(key: string, options: Partial<Omit<ResourceNotice, "key">> = {}) {
+    setNotice({ key, vars: options.vars, tone: options.tone ?? "error", details: options.details })
+  }
+
+  function setPanelError(error: unknown, key = props.mode === "skill" ? "skill.action_failed" : "mcp.action_failed") {
+    const requestID = error instanceof ApiError ? error.requestID : undefined
+    const details = [errorDetail(error), requestID ? `x-opencorvus-request-id: ${requestID}` : ""]
+      .filter(Boolean)
+      .join("\n")
+    setPanelNotice(key, { details })
   }
 
   function currentDirectory(): string {
@@ -333,12 +345,12 @@ function SharedResourceManagementPanel(props: {
     if (!directory) {
       setLoading(false)
       setSkillLoadIssues([])
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
     setLoading(true)
     setSkillLoadIssues([])
-    setNotice("")
+    setNotice(undefined)
     try {
       if (props.mode === "mcp") {
         await refreshMcpStatus({ directory })
@@ -350,7 +362,7 @@ function SharedResourceManagementPanel(props: {
       }
       if (!sourceMatchesDirectory(directory)) return
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+      if (sourceMatchesDirectory(directory)) setPanelError(e)
     } finally {
       if (sourceMatchesDirectory(directory)) setLoading(false)
     }
@@ -359,7 +371,7 @@ function SharedResourceManagementPanel(props: {
   async function handleRemoveSkill(source: string, kind: string, name: string) {
     const directory = currentDirectory()
     if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
     if (!(await nativeConfirm(t("skill.delete_confirm", { name }), { okTone: "danger" }))) return
@@ -368,18 +380,18 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+      if (sourceMatchesDirectory(directory)) setPanelError(e)
     }
   }
 
   async function handleUpdateSkill(item: SkillItem, source: SkillUpdateSource) {
     const directory = currentDirectory()
     if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
     setLoading(true)
-    setNotice("")
+    setNotice(undefined)
     try {
       const result = await updateSkill(item.name, source, {
         directory,
@@ -388,13 +400,13 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
       if (sourceMatchesDirectory(directory)) {
-        setPanelNotice(
-          t("skill.update_success", { name: result.name, version: result.version || t("skill.builtin") }),
-          "active",
-        )
+        setPanelNotice("skill.update_success", {
+          vars: () => ({ name: result.name, version: result.version || t("skill.builtin") }),
+          tone: "success",
+        })
       }
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+      if (sourceMatchesDirectory(directory)) setPanelError(e)
     } finally {
       if (sourceMatchesDirectory(directory)) setLoading(false)
     }
@@ -413,23 +425,23 @@ function SharedResourceManagementPanel(props: {
         const opened = await nativeOpen(location)
         if (!opened) throw new Error("native open returned false")
       } catch (e) {
-        setPanelNotice(t("skill.open_failed", { error: errorDetail(e) }))
+        setPanelError(e, "skill.open_failed")
       }
       return
     }
     try {
       const outcome = await revealPath(location)
       const notice = pathRevealNoticeKey(outcome)
-      if (notice) setPanelNotice(t(notice, { path: location }), "active")
+      if (notice) setPanelNotice(notice, { vars: () => ({ path: location }), tone: "success" })
     } catch (e) {
-      setPanelNotice(pathRevealFailureText(e))
+      setPanelError(pathRevealFailureText(e))
     }
   }
 
   async function handleDeleteAllMcp() {
     const directory = currentDirectory()
     if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
     const names = mcpEntries().map(([name]) => name)
@@ -440,7 +452,7 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+      if (sourceMatchesDirectory(directory)) setPanelError(e)
     }
   }
 
@@ -462,13 +474,13 @@ function SharedResourceManagementPanel(props: {
     const query = marketQuery().trim()
     if (query.length < 2) return
     setMarketLoading(true)
-    setNotice("")
+    setNotice(undefined)
     setMarketResults([])
     setMarketDetail(undefined)
     try {
       setMarketResults(await searchSkillMarket(query))
     } catch (error) {
-      setPanelNotice(error instanceof Error ? error.message : String(error))
+      setPanelError(error)
     } finally {
       setMarketLoading(false)
     }
@@ -476,14 +488,14 @@ function SharedResourceManagementPanel(props: {
 
   async function handleMarketInspect(candidate: SkillMarketCandidate) {
     setMarketLoading(true)
-    setNotice("")
+    setNotice(undefined)
     setMarketDetail(undefined)
     try {
       const detail = await inspectSkillMarket(candidate.id)
       setMarketDetail(detail)
       setMarketPolicy(detail.recommended_policy)
     } catch (error) {
-      setPanelNotice(error instanceof Error ? error.message : String(error))
+      setPanelError(error)
     } finally {
       setMarketLoading(false)
     }
@@ -501,17 +513,17 @@ function SharedResourceManagementPanel(props: {
     )
     if (!approved) return
     setMarketLoading(true)
-    setNotice("")
+    setNotice(undefined)
     try {
       const installed = await installSkillMarket(detail.id, detail.hash, marketPolicy())
-      setPanelNotice(t("skill.market_install_success", { name: installed.name }), "active")
+      setPanelNotice("skill.market_install_success", { vars: () => ({ name: installed.name }), tone: "success" })
       const directory = currentDirectory()
       if (directory) await reloadCurrentPanel({ directory })
       setMarketDetail({ ...detail, installed: true })
       setMarketResults((items) => items.map((item) => (item.id === detail.id ? { ...item, installed: true } : item)))
       notifyResourceChange()
     } catch (error) {
-      setPanelNotice(error instanceof Error ? error.message : String(error))
+      setPanelError(error)
     } finally {
       setMarketLoading(false)
     }
@@ -522,7 +534,7 @@ function SharedResourceManagementPanel(props: {
     if (!value) return
     const directory = currentDirectory()
     if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
     try {
@@ -536,14 +548,14 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+      if (sourceMatchesDirectory(directory)) setPanelError(e)
     }
   }
 
   async function handleDroppedSkillDrop(event: DragEvent) {
     const directory = currentDirectory()
     if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
     try {
@@ -551,7 +563,7 @@ function SharedResourceManagementPanel(props: {
       if (!payload) return
       if (!(await nativeConfirm(t("skill.drop_confirm", { name: payload.sourceName })))) return
       setLoading(true)
-      setNotice("")
+      setNotice(undefined)
       const imported = payload.archive
         ? await importSkillArchive(payload.archive.name, await fileToBase64(payload.archive), skillForm.policy, {
             directory,
@@ -571,11 +583,11 @@ function SharedResourceManagementPanel(props: {
       if (!imported) return
       const installedNames = imported.names?.length ? imported.names.join(", ") : imported.name
       if (!sourceMatchesDirectory(directory)) return
-      setPanelNotice(t("skill.drop_success", { name: installedNames }), "active")
+      setPanelNotice("skill.drop_success", { vars: () => ({ name: installedNames }), tone: "success" })
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+      if (sourceMatchesDirectory(directory)) setPanelError(e)
     } finally {
       setSkillDragActive(false)
       if (sourceMatchesDirectory(directory)) setLoading(false)
@@ -590,7 +602,7 @@ function SharedResourceManagementPanel(props: {
         setSkillForm("value", selected)
       }
     } catch (e) {
-      setPanelNotice(t("skill.pick_folder_failed", { error: errorDetail(e) }))
+      setPanelError(e, "skill.pick_folder_failed")
     }
   }
 
@@ -614,7 +626,7 @@ function SharedResourceManagementPanel(props: {
 
     const refresh = () => {
       refreshMcpStatus({ directory }).catch((e) => {
-        if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+        if (sourceMatchesDirectory(directory)) setPanelError(e)
       })
     }
     void reloadCurrentPanel({ directory })
@@ -646,7 +658,7 @@ function SharedResourceManagementPanel(props: {
   async function handleAddMcp() {
     const directory = currentDirectory()
     if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
     try {
@@ -684,7 +696,7 @@ function SharedResourceManagementPanel(props: {
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
+      if (sourceMatchesDirectory(directory)) setPanelError(e)
     }
   }
 
@@ -695,25 +707,28 @@ function SharedResourceManagementPanel(props: {
       </Show>
 
       <Show when={notice()}>
-        <Feedback
-          tone={noticeStatus() === "error" ? "error" : noticeStatus() === "warn" ? "warning" : "success"}
-          data-ui={`${props.mode}-capability-notice`}
-          actions={
-            <Button
-              type="button"
-              variant="ghost"
-              size="md"
-              tone="neutral"
-              title={t("common.dismiss")}
-              aria-label={t("common.dismiss")}
-              onClick={() => setNotice("")}
-            >
-              {t("common.dismiss")}
-            </Button>
-          }
-        >
-          {notice()}
-        </Feedback>
+        {(current) => (
+          <Feedback
+            tone={current().tone}
+            details={current().details}
+            data-ui={`${props.mode}-capability-notice`}
+            actions={
+              <Button
+                type="button"
+                variant="ghost"
+                size="md"
+                tone="neutral"
+                title={t("common.dismiss")}
+                aria-label={t("common.dismiss")}
+                onClick={() => setNotice(undefined)}
+              >
+                {t("common.dismiss")}
+              </Button>
+            }
+          >
+            {t(current().key, current().vars?.())}
+          </Feedback>
+        )}
       </Show>
 
       <For each={skillLoadIssues()}>

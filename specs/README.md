@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [资源管理反馈](records/2026-10/2026-10-14-resource-feedback.md)：中英短摘要、原诊断/真实请求ID和14张原图；Skill目录500问题单列。
+
 - [404 原始 Git 与 Question 证据](artifacts/2026-10-14-task-git-question-reconnect-404/README.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
 
 - [Provider 模型摘要](records/2026-10/2026-10-14-provider-model-summary.md)：统一目录数量、摘要和完整模型ID搜索；17张原图及真实读取失败恢复。

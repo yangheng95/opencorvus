@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [资源管理反馈](2026-10-14-resource-feedback.md)：共享资源页唯一反馈状态、真实中英错误/警告和本地安装读回资格。
+
 - [Provider 模型摘要](2026-10-14-provider-model-summary.md)：空/部分覆盖继承、10模型完整搜索与中英未知状态的真实修后资格。
 
 - [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。

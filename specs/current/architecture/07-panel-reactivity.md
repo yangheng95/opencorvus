@@ -60,6 +60,13 @@ Drafts and reads retain their original selection ownership. This covers accepted
 responses in the current frontend process; external writers and responses lost to
 transport timeout require separate qualification.
 
+Shared Skill and MCP resource actions use one notice object with a message key,
+render-time variables, Feedback tone and optional original diagnostic. Rendering
+translates the summary; errors retain the already public message and, for a real
+ApiError, its request ID in the existing disclosure. Dismissal clears only that
+notice. Source ownership checks and form values retain their existing contracts.
+This presentation does not reclassify backend errors or add resource operations.
+
 Child transcript keys include the same captured API authority beside the actual
 source, child Session and directory. The existing resource and refresh generation
 retire queued reads/live frames on key change; loader and ordered snapshot parser

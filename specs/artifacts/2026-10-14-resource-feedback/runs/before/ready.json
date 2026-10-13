@@ -1,0 +1,62 @@
+{
+  "pid": 79352,
+  "started": 1791932886398,
+  "port": 18630,
+  "participantPort": 18631,
+  "occurrence": {
+    "pid": 79352,
+    "processInstanceID": "win32:639275296863141274",
+    "occurrenceID": "1bd91f6c-2876-4212-a806-b370335a7bb7"
+  },
+  "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\ui-final",
+  "localSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\before\\resource-fixtures\\owned-feedback",
+  "missingSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\before\\resource-fixtures\\missing-owned-skill",
+  "projects": [
+    {
+      "label": "A",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\before\\project-A"
+    },
+    {
+      "label": "B",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\before\\project-B"
+    }
+  ],
+  "sessions": [
+    {
+      "label": "A",
+      "sessionID": "ses_-zUS1YBM9zzZQy3uUa2o",
+      "projectID": "prj_hQPeipfZTCCw942DXTWu",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\before\\project-A"
+    },
+    {
+      "label": "B",
+      "sessionID": "ses_-zUS1YBAszz4GclH1PDT",
+      "projectID": "prj_hWKXWcNKha3RxkoJpx0l",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\before\\project-B"
+    }
+  ],
+  "catalogProviderCount": 91,
+  "scope": "Own generated fictional Auth only; complete public repository bootstrap catalog plus three owned entries; no real Provider credential copied",
+  "providers": [
+    {
+      "id": "owned-resource-a",
+      "models": [
+        "owned-resource-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-b",
+      "models": [
+        "owned-resource-b-model",
+        "owned-resource-b-inherited"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-zero",
+      "models": [],
+      "apiKeyConfigured": true
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [资源管理反馈](2026-10-14-resource-feedback/README.md)：14张原图、真实Skill接受与checker原失败、完整日志和第15批正常交付原件。
+
 - [404 Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404/README.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
 
 - [Provider 模型摘要](2026-10-14-provider-model-summary/README.md)：17张原图、三个正常退出服务、完整原日志与第14批正常交付回执。

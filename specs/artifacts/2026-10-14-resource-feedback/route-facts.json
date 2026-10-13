@@ -1,0 +1,403 @@
+{
+  "before": [
+    {
+      "time": "2026-10-13T23:08:46.345Z",
+      "message": "request",
+      "data": {
+        "requestID": "84072044-3a7a-4765-982d-d2c7c35cb1f5",
+        "method": "GET",
+        "path": "/skill/mounts",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:08:46.346Z",
+      "message": "request",
+      "data": {
+        "requestID": "313fb93a-7492-4ff1-9cff-0ac18e3cbbf7",
+        "method": "GET",
+        "path": "/mcp",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:08:46.357Z",
+      "message": "request",
+      "data": {
+        "requestID": "313fb93a-7492-4ff1-9cff-0ac18e3cbbf7",
+        "method": "GET",
+        "path": "/mcp",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 11
+      }
+    },
+    {
+      "time": "2026-10-13T23:08:46.429Z",
+      "message": "request",
+      "data": {
+        "requestID": "84072044-3a7a-4765-982d-d2c7c35cb1f5",
+        "method": "GET",
+        "path": "/skill/mounts",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 84
+      }
+    },
+    {
+      "time": "2026-10-13T23:08:56.906Z",
+      "message": "request",
+      "data": {
+        "requestID": "cc117936-2737-4047-a6a1-da30ea6392b5",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:08:56.910Z",
+      "message": "request",
+      "data": {
+        "requestID": "cc117936-2737-4047-a6a1-da30ea6392b5",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 4
+      }
+    },
+    {
+      "time": "2026-10-13T23:09:07.590Z",
+      "message": "request",
+      "data": {
+        "requestID": "61c5f82a-24be-43f7-b070-412fc56d6546",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:09:07.595Z",
+      "message": "request failed",
+      "data": {
+        "requestID": "61c5f82a-24be-43f7-b070-412fc56d6546",
+        "method": "POST",
+        "path": "/skill/install",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "Skill directory not found: D:/myhexin-local/opencorvus/.tmp-codex-resource-feedback-01a133/before/resource-fixtures/missing-owned-skill",
+          "stack": "Error: Skill directory not found: D:/myhexin-local/opencorvus/.tmp-codex-resource-feedback-01a133/before/resource-fixtures/missing-owned-skill\n    at validateSkillDirectory (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\manager.ts:911:15)\n    at async installResolved (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\manager.ts:482:33)\n    at async withKeyedLock (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\lock.ts:49:18)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\reference-lock.ts:28:46)\n    at processTicksAndRejections (native:7:39)"
+        }
+      }
+    },
+    {
+      "time": "2026-10-13T23:09:07.595Z",
+      "message": "request",
+      "data": {
+        "requestID": "61c5f82a-24be-43f7-b070-412fc56d6546",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "completed",
+        "statusCode": 500,
+        "duration": 5
+      }
+    }
+  ],
+  "after": [
+    {
+      "time": "2026-10-13T23:16:32.743Z",
+      "message": "request",
+      "data": {
+        "requestID": "39394ba6-b252-4dc9-9fbc-8ad6e8742a83",
+        "method": "GET",
+        "path": "/skill/mounts",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:32.746Z",
+      "message": "request",
+      "data": {
+        "requestID": "4a7ad147-2aa4-4519-b941-6efbb7d0c4e3",
+        "method": "GET",
+        "path": "/mcp",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:32.764Z",
+      "message": "request",
+      "data": {
+        "requestID": "4a7ad147-2aa4-4519-b941-6efbb7d0c4e3",
+        "method": "GET",
+        "path": "/mcp",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 18
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:32.892Z",
+      "message": "request",
+      "data": {
+        "requestID": "39394ba6-b252-4dc9-9fbc-8ad6e8742a83",
+        "method": "GET",
+        "path": "/skill/mounts",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 148
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:39.396Z",
+      "message": "request",
+      "data": {
+        "requestID": "af654543-c798-44cd-8167-4ac5ad15eccb",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:39.400Z",
+      "message": "request",
+      "data": {
+        "requestID": "af654543-c798-44cd-8167-4ac5ad15eccb",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 4
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:50.874Z",
+      "message": "request",
+      "data": {
+        "requestID": "c3cbda65-9c33-4dea-b82e-a35a9aa3c916",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:50.880Z",
+      "message": "request failed",
+      "data": {
+        "requestID": "c3cbda65-9c33-4dea-b82e-a35a9aa3c916",
+        "method": "POST",
+        "path": "/skill/install",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "Skill directory not found: D:/myhexin-local/opencorvus/.tmp-codex-resource-feedback-01a133/after/resource-fixtures/missing-owned-skill",
+          "stack": "Error: Skill directory not found: D:/myhexin-local/opencorvus/.tmp-codex-resource-feedback-01a133/after/resource-fixtures/missing-owned-skill\n    at validateSkillDirectory (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\manager.ts:911:15)\n    at async installResolved (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\manager.ts:482:33)\n    at async withKeyedLock (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\lock.ts:49:18)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\reference-lock.ts:28:46)\n    at processTicksAndRejections (native:7:39)"
+        }
+      }
+    },
+    {
+      "time": "2026-10-13T23:16:50.880Z",
+      "message": "request",
+      "data": {
+        "requestID": "c3cbda65-9c33-4dea-b82e-a35a9aa3c916",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "completed",
+        "statusCode": 500,
+        "duration": 6
+      }
+    },
+    {
+      "time": "2026-10-13T23:18:12.634Z",
+      "message": "request",
+      "data": {
+        "requestID": "ec5d0eda-dff7-4cca-b3f3-db134ac1298c",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:18:12.646Z",
+      "message": "request",
+      "data": {
+        "requestID": "ec5d0eda-dff7-4cca-b3f3-db134ac1298c",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 12
+      }
+    },
+    {
+      "time": "2026-10-13T23:18:13.243Z",
+      "message": "request",
+      "data": {
+        "requestID": "94f170ee-6ac9-409d-b570-55b578b6ee2c",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:18:13.248Z",
+      "message": "request failed",
+      "data": {
+        "requestID": "94f170ee-6ac9-409d-b570-55b578b6ee2c",
+        "method": "POST",
+        "path": "/skill/install",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "Skill directory not found: D:/myhexin-local/opencorvus/.tmp-codex-resource-feedback-01a133/after/resource-fixtures/missing-owned-skill",
+          "stack": "Error: Skill directory not found: D:/myhexin-local/opencorvus/.tmp-codex-resource-feedback-01a133/after/resource-fixtures/missing-owned-skill\n    at validateSkillDirectory (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\manager.ts:911:15)\n    at async installResolved (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\manager.ts:482:33)\n    at async withKeyedLock (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\lock.ts:49:18)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\reference-lock.ts:28:46)\n    at processTicksAndRejections (native:7:39)"
+        }
+      }
+    },
+    {
+      "time": "2026-10-13T23:18:13.248Z",
+      "message": "request",
+      "data": {
+        "requestID": "94f170ee-6ac9-409d-b570-55b578b6ee2c",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "completed",
+        "statusCode": 500,
+        "duration": 5
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:06.649Z",
+      "message": "request",
+      "data": {
+        "requestID": "188fb25a-9df7-4776-a4ca-3cfc0be67708",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:08.617Z",
+      "message": "request",
+      "data": {
+        "requestID": "188fb25a-9df7-4776-a4ca-3cfc0be67708",
+        "method": "POST",
+        "path": "/skill/install",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1968
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:08.633Z",
+      "message": "request",
+      "data": {
+        "requestID": "df732357-290a-47c4-b12a-8bf78597b0d8",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:08.689Z",
+      "message": "request",
+      "data": {
+        "requestID": "df732357-290a-47c4-b12a-8bf78597b0d8",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 57
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:37.910Z",
+      "message": "request",
+      "data": {
+        "requestID": "e9be4f91-6c10-436f-97eb-090469e9f9b2",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:37.918Z",
+      "message": "request",
+      "data": {
+        "requestID": "e9be4f91-6c10-436f-97eb-090469e9f9b2",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 8
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:37.934Z",
+      "message": "request",
+      "data": {
+        "requestID": "d4c18f0b-6bc0-41e4-9311-64a44d180abc",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:19:37.935Z",
+      "message": "request",
+      "data": {
+        "requestID": "d4c18f0b-6bc0-41e4-9311-64a44d180abc",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T23:20:10.660Z",
+      "message": "request",
+      "data": {
+        "requestID": "7f130cfb-9602-4910-b255-8418d335a3e0",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:20:10.833Z",
+      "message": "request",
+      "data": {
+        "requestID": "7f130cfb-9602-4910-b255-8418d335a3e0",
+        "method": "GET",
+        "path": "/skill/installed",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 173
+      }
+    },
+    {
+      "time": "2026-10-13T23:20:10.850Z",
+      "message": "request",
+      "data": {
+        "requestID": "47a5b000-22d0-44e2-80cb-18995c109d69",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T23:20:10.851Z",
+      "message": "request",
+      "data": {
+        "requestID": "47a5b000-22d0-44e2-80cb-18995c109d69",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    }
+  ]
+}
