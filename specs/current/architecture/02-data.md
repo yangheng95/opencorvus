@@ -6,6 +6,10 @@
 
 ## 运行时目录根
 
+Continuous goal（持续目标）与既有 Delivery Slice Goal（交付切片）是不同合同。
+持续意图、自动输入与精确用量归属复用 Protocol/Message/Provider ledger，见
+[Continuous goal execution intent](continuous-goal.md)，不为交付切片增加执行状态。
+
 OpenCorvus 拥有的用户级运行时文件统一位于一个 canonical root。显式配置只接受绝对路径
 `OPENCORVUS_HOME`；未配置时，Windows 使用 `%LOCALAPPDATA%/opencorvus`，macOS 使用
 `~/Library/Application Support/opencorvus`，其他平台使用

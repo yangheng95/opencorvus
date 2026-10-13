@@ -1,5 +1,8 @@
 # 2026-10 Records
 
+- [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
+- [持续目标验收证据](../../artifacts/2026-10-13-continuous-goal-mode/README.md)：流式模型事实、Task 重开和桌面视觉复核。
+
 - [Composer 可见模型名称搜索](2026-10-13-composer-model-search.md)：根因、桌面交互与范围验证。
 
 - [379 网页转换链接目标](2026-10-13-source-link-base-379.md)：真实相对链接故障与最终网页地址解析。

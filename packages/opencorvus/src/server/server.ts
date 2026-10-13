@@ -1,4 +1,5 @@
 import { Log } from "../util/log"
+import { initializeContinuousGoals } from "@/continuous-goal/controller"
 import { generateSpecs } from "hono-openapi"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
@@ -948,6 +949,7 @@ export namespace Server {
 
   export function initializeGlobalAutomation() {
     AutomationService.initGlobal({ createGlobalConversation: GlobalConversationService.create })
+    initializeContinuousGoals()
   }
 
   function bind(opts: ListenOptions, initializeGlobalServices: boolean) {

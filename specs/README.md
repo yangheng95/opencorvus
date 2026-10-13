@@ -1,5 +1,8 @@
 # Specs Storage Index
 
+- [Chat、Task、Mission 持续目标模式](records/2026-10/2026-10-13-continuous-goal-mode.md)：现状、授权与轮次、预算合同、实施和验收。
+- [持续目标验收证据](artifacts/2026-10-13-continuous-goal-mode/README.md)：真实多轮、终态重开、用量与桌面截图。
+
 - [Composer 可见模型名称搜索](records/2026-10/2026-10-13-composer-model-search.md)：真实名称搜索失败与单一选项投影修复。
 
 - [379 网页转换链接目标](records/2026-10/2026-10-13-source-link-base-379.md)：保留原网页基址，修复网页引用误开本地文件。

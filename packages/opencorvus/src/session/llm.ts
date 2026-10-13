@@ -160,6 +160,7 @@ export namespace LLM {
       // any custom prompt passed into this call
       ...input.system,
       ...(await (await import("@/chat/side-chat")).sideChatSystem(input.sessionID)),
+      ...(await import("@/continuous-goal/store")).continuousGoalSystem(input.sessionID),
     ]
       .filter((x) => x)
       .join("\n")
@@ -187,6 +188,7 @@ export namespace LLM {
   }
 
   export async function stream(input: StreamInput): Promise<StreamResult> {
+    const onUsageRecorded = (await import("@/continuous-goal/store")).captureContinuousGoalUsage(input.sessionID)
     const streamRequest = streamRequestIdentity(input)
     const requestID = streamRequest.requestID
     const config = input.config ?? (await EffectiveConfig.effective({ sessionID: input.sessionID }))
@@ -398,6 +400,7 @@ export namespace LLM {
       timeoutMs: false,
       usagePurpose: "session",
       usageAttribution: { sessionID: input.sessionID, agentID: input.agentID },
+      onUsageRecorded,
       headers: requestHeaders,
       maxRetries: input.retries ?? 0,
       stopWhen: input.stopWhen,

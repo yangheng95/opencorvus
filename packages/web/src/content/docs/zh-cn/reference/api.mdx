@@ -227,6 +227,14 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/trace` | Get session AgentTrace events | `session.trace` |
 | GET | `/session/{sessionID}/turn-artifacts` | Project Mission child Task artifacts onto their owning turns 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.turnArtifacts` |
 
+### 持续目标
+
+| Method | 路径 | 说明 | operationId |
+|---|---|---|---|
+| GET | `/continuous-goal/{kind}/{ownerID}` | Read continuous goal 错误: `Goal owner or revision conflict.`. | `continuousGoal.get` |
+| PATCH | `/continuous-goal/{kind}/{ownerID}` | Update continuous goal 请求体: `expectedRevision`, `goalID`, `reason`, `requestID`, `status`, `tokenBudget`, `turnBudget`; 错误: `Goal owner, state or revision conflict.`. | `continuousGoal.update` |
+| POST | `/continuous-goal/{kind}/{ownerID}` | Create continuous goal 请求体: `objective`, `requestID`, `tokenBudget`, `turnBudget`; 错误: `Goal owner or request conflict.`. | `continuousGoal.create` |
+
 ### Coding
 
 | Method | 路径 | 说明 | operationId |

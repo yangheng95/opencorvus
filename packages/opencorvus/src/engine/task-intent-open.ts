@@ -8,8 +8,10 @@ import { appendTaskReopenedInTransaction, taskLifecycleProjectionInTransaction }
  *
  * The prior occurrence stays intact as an immutable fact at its old epoch; this
  * appends the reopen at epoch + 1. Its callers must already prove one of the
- * two canonical authorities: an explicit operator Message, or a Mission
- * acceptance resume for the exact current completed/failed occurrence.
+ * canonical authorities: an explicit operator Message, a Mission acceptance
+ * resume, or an active continuous-goal receipt bound to the current settled
+ * frontier. Automatic goal continuation opens completed/failed occurrences;
+ * cancellation still requires an explicit operator message.
  */
 export function openTaskForContinuationInTransaction(input: {
   db: Database.TxOrDb

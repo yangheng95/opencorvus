@@ -34,7 +34,8 @@ function UnsupportedChatBubbleChild(props: { child: CardNode; parentID: string }
 
 function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDuration?: boolean }) {
   const role = () => normalizeAgentRole(props.node.role || props.node.stage || "")
-  const identityLabel = () => agentIdentityLabel(props.node.agentID, role())
+  const participant = () => role() === "user" && props.node.author !== "user" ? props.node.author : undefined
+  const identityLabel = () => participant() || agentIdentityLabel(props.node.agentID, role())
   const status = () => props.node.status || "idle"
   const hasErrorReason = () => status() === "error" && !!String(props.node.errorReason || "").trim()
   return (
@@ -43,7 +44,7 @@ function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDura
       data-agent-id={props.node.agentID}
       data-compact={props.compact ? "true" : "false"}
     >
-      <Avatar role={role()} status={props.node.status} class="chat-bubble__head-avatar" />
+      <Avatar role={participant() ? "system" : role()} status={props.node.status} class="chat-bubble__head-avatar" />
       <span class="chat-bubble__title">{identityLabel()}</span>
       <Show when={!props.hideDuration}>
         <CardDurationChip node={props.node} />

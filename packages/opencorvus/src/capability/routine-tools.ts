@@ -4,6 +4,9 @@ import { capabilityRecoveryGuidance } from "./recovery-guidance"
 
 // Guidance describes tools; role grants and execution visibility own availability.
 const guidance: Readonly<Record<string, string>> = {
+  create_continuous_goal: "Create a continuous goal only on explicit user request; distinct from Delivery Slice Goals.",
+  get_continuous_goal: "Read the continuous goal, exact revision and settled usage.",
+  update_continuous_goal: "Record evidenced completion or an external blocker; pause/resume and budget changes require user intent.",
   capability_search: "Discover and load specialist or extension capabilities that are not already callable.",
   skill: "Load an authorized Skill or its supporting file by exact name; content is read on demand.",
   mission_skill: "Load an authorized Mission Skill or its supporting file by exact name.",

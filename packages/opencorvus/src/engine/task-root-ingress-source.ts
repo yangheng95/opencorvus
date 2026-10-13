@@ -5,6 +5,7 @@ export type TaskRootIngressSourceKind =
   | "operator_message"
   | "orchestrator_message"
   | "mission_message"
+  | "goal_continuation"
   | "mission_acceptance_resume"
   | "coordination_request"
   | "infrastructure_recovery"
@@ -21,6 +22,7 @@ export function taskRootIngressSourceKind(event: OrchestratorEvent): TaskRootIng
   if (parsed.rootMessage?.kind === "operator") candidates.push("operator_message")
   if (parsed.rootMessage?.kind === "orchestrator") candidates.push("orchestrator_message")
   if (parsed.rootMessage?.kind === "mission") candidates.push("mission_message")
+  if (parsed.rootMessage?.kind === "goal-controller") candidates.push("goal_continuation")
   if (parsed.missionAcceptanceResume) candidates.push("mission_acceptance_resume")
   if (parsed.missionAcceptanceExtension) candidates.push("mission_message")
   if (parsed.coordinationRequest) candidates.push("coordination_request")

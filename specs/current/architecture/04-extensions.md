@@ -15,6 +15,11 @@
 
 ## 单一内部运行时
 
+Chat、Mission 和 projected Task scheduler 直接获得通用的
+create_continuous_goal/get_continuous_goal/update_continuous_goal 工具；声明、registry 和
+实际 scheduler factory 同源。其 [持续意图合同](continuous-goal.md) 与 Delivery Slice Goal
+不同；子执行继承上下文及用量归属，不获得修改父目标的权限。
+
 Task 不再选择 Executor。`engine_task`、Task/Run API、Overlay settings、OpenAPI 和 SDK
 均没有 `executor` / `executor_ref` 字段，也没有 `set_executor`、`/executor` 或外部
 coding process registry。Codex 与 Claude Code 仍可作为人类显式启动的 coding CLI，

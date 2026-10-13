@@ -4,6 +4,7 @@ import z from "zod"
 import { Database, and, asc, gte, lt } from "@/storage/db"
 import { Message } from "@/session/message"
 import { ProviderUsageEventTable, type UsagePurpose } from "./usage.sql"
+import { Identifier } from "@/id/id"
 import { OfficialUsage } from "./official"
 
 export namespace UsageLedger {
@@ -17,11 +18,14 @@ export namespace UsageLedger {
     billing: Message.BillingCoverage
     sessionID?: string
     agentID?: string
+    onRecorded?: (usageID: string) => void
   }): void {
-    Database.use((db) =>
+    Database.transaction((db) => {
+      const id = Identifier.ascending("provider_usage")
       db
         .insert(ProviderUsageEventTable)
         .values({
+          id,
           occurred_at: input.occurredAt ?? Date.now(),
           provider_id: input.providerID,
           model_id: input.modelID,
@@ -37,8 +41,9 @@ export namespace UsageLedger {
           session_id: input.sessionID ?? null,
           agent_id: input.agentID ?? null,
         })
-        .run(),
-    )
+        .run()
+      input.onRecorded?.(id)
+    })
   }
 }
 

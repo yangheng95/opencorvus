@@ -7909,6 +7909,217 @@ export type ConfigProxyTestResponses = {
 
 export type ConfigProxyTestResponse = ConfigProxyTestResponses[keyof ConfigProxyTestResponses]
 
+export type ContinuousGoalGetData = {
+  body?: never
+  path: {
+    kind: "chat" | "task" | "mission"
+    ownerID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/continuous-goal/{kind}/{ownerID}"
+}
+
+export type ContinuousGoalGetErrors = {
+  /**
+   * ContinuousGoalError
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "Goal owner or revision conflict."
+  }
+}
+
+export type ContinuousGoalGetError = ContinuousGoalGetErrors[keyof ContinuousGoalGetErrors]
+
+export type ContinuousGoalGetResponses = {
+  /**
+   * Current durable continuous goal. Budgets stop new automatic turns; accepted work may settle.
+   */
+  200: {
+    createdAt: number
+    directory: string
+    id: string
+    objective: string
+    owner:
+      | {
+          id: string
+          kind: "chat"
+        }
+      | {
+          id: string
+          kind: "task"
+        }
+      | {
+          id: string
+          kind: "mission"
+        }
+    projectID: string
+    reason?: string
+    revision: string
+    sessionID: string
+    status: "active" | "paused" | "blocked" | "complete" | "budget_limited"
+    tokenBudget?: number
+    tokensUsed: number
+    turnBudget?: number
+    turnsAccepted: number
+    updatedAt: number
+  } | null
+}
+
+export type ContinuousGoalGetResponse = ContinuousGoalGetResponses[keyof ContinuousGoalGetResponses]
+
+export type ContinuousGoalUpdateData = {
+  body: {
+    expectedRevision: string
+    goalID: string
+    reason: string
+    requestID: string
+    status: "active" | "paused" | "blocked" | "complete"
+    tokenBudget?: number
+    turnBudget?: number
+  }
+  path: {
+    kind: "chat" | "task" | "mission"
+    ownerID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/continuous-goal/{kind}/{ownerID}"
+}
+
+export type ContinuousGoalUpdateErrors = {
+  /**
+   * ContinuousGoalError
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "Goal owner, state or revision conflict."
+  }
+}
+
+export type ContinuousGoalUpdateError = ContinuousGoalUpdateErrors[keyof ContinuousGoalUpdateErrors]
+
+export type ContinuousGoalUpdateResponses = {
+  /**
+   * Current durable continuous goal. Budgets stop new automatic turns; accepted work may settle.
+   */
+  200: {
+    createdAt: number
+    directory: string
+    id: string
+    objective: string
+    owner:
+      | {
+          id: string
+          kind: "chat"
+        }
+      | {
+          id: string
+          kind: "task"
+        }
+      | {
+          id: string
+          kind: "mission"
+        }
+    projectID: string
+    reason?: string
+    revision: string
+    sessionID: string
+    status: "active" | "paused" | "blocked" | "complete" | "budget_limited"
+    tokenBudget?: number
+    tokensUsed: number
+    turnBudget?: number
+    turnsAccepted: number
+    updatedAt: number
+  } | null
+}
+
+export type ContinuousGoalUpdateResponse = ContinuousGoalUpdateResponses[keyof ContinuousGoalUpdateResponses]
+
+export type ContinuousGoalCreateData = {
+  body: {
+    objective: string
+    requestID: string
+    tokenBudget?: number
+    turnBudget?: number
+  }
+  path: {
+    kind: "chat" | "task" | "mission"
+    ownerID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/continuous-goal/{kind}/{ownerID}"
+}
+
+export type ContinuousGoalCreateErrors = {
+  /**
+   * ContinuousGoalError
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "Goal owner or request conflict."
+  }
+}
+
+export type ContinuousGoalCreateError = ContinuousGoalCreateErrors[keyof ContinuousGoalCreateErrors]
+
+export type ContinuousGoalCreateResponses = {
+  /**
+   * Current durable continuous goal. Budgets stop new automatic turns; accepted work may settle.
+   */
+  200: {
+    createdAt: number
+    directory: string
+    id: string
+    objective: string
+    owner:
+      | {
+          id: string
+          kind: "chat"
+        }
+      | {
+          id: string
+          kind: "task"
+        }
+      | {
+          id: string
+          kind: "mission"
+        }
+    projectID: string
+    reason?: string
+    revision: string
+    sessionID: string
+    status: "active" | "paused" | "blocked" | "complete" | "budget_limited"
+    tokenBudget?: number
+    tokensUsed: number
+    turnBudget?: number
+    turnsAccepted: number
+    updatedAt: number
+  } | null
+}
+
+export type ContinuousGoalCreateResponse = ContinuousGoalCreateResponses[keyof ContinuousGoalCreateResponses]
+
 export type EventSubscribeData = {
   body?: never
   path?: never

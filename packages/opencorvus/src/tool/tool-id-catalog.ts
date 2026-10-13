@@ -9,6 +9,7 @@ import {
 // module is pure data with no imports, so the catalog now loads standalone.
 import { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 import { PANEL_LEAF_TOOL_IDS } from "@/panel/action-ids"
+import { CONTINUOUS_GOAL_TOOL_IDS } from "@/continuous-goal/schema"
 
 export { WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 
@@ -24,6 +25,7 @@ export const TASK_ARTIFACT_SCHEDULER_TOOL_IDS = [...TASK_ARTIFACT_DISCOVERY_TOOL
 export const TASK_ARTIFACT_TOOL_IDS = PLATFORM_ARTIFACT_TOOL_IDS
 
 export const GLOBAL_TOOL_IDS = [
+  ...CONTINUOUS_GOAL_TOOL_IDS,
   "delegate_agent",
   "question",
   "bash",

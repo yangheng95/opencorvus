@@ -40,6 +40,7 @@ export function requestID(c: { req: { header(name: string): string | undefined }
 }
 
 export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
+  if (err.name === "ContinuousGoalError") return 409
   if (err.name === "NotFoundError") return 404
   if (err.name === "WorktreeOwnershipObservationError") return 503
   if (err.name === "DatabaseUnavailableError") return 503

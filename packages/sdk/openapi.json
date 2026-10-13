@@ -25053,6 +25053,744 @@
         ]
       }
     },
+    "/continuous-goal/{kind}/{ownerID}": {
+      "get": {
+        "description": "Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project. Separate from Delivery Slice Goals.",
+        "operationId": "continuousGoal.get",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "enum": [
+                "chat",
+                "task",
+                "mission"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "ownerID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "createdAt": {
+                          "type": "number"
+                        },
+                        "directory": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "objective": {
+                          "type": "string"
+                        },
+                        "owner": {
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "chat",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "task",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "mission",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            }
+                          ]
+                        },
+                        "projectID": {
+                          "type": "string"
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "revision": {
+                          "type": "string"
+                        },
+                        "sessionID": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "enum": [
+                            "active",
+                            "paused",
+                            "blocked",
+                            "complete",
+                            "budget_limited"
+                          ],
+                          "type": "string"
+                        },
+                        "tokenBudget": {
+                          "type": "number"
+                        },
+                        "tokensUsed": {
+                          "type": "number"
+                        },
+                        "turnBudget": {
+                          "type": "number"
+                        },
+                        "turnsAccepted": {
+                          "type": "number"
+                        },
+                        "updatedAt": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "revision",
+                        "owner",
+                        "objective",
+                        "status",
+                        "tokensUsed",
+                        "turnsAccepted",
+                        "createdAt",
+                        "updatedAt",
+                        "sessionID",
+                        "projectID",
+                        "directory"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Current durable continuous goal. Budgets stop new automatic turns; accepted work may settle."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "Goal owner or revision conflict.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ContinuousGoalError"
+          }
+        },
+        "summary": "Read continuous goal",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.continuousGoal.get({\n  ...\n})"
+          }
+        ]
+      },
+      "patch": {
+        "description": "Pause, explicitly resume, block, complete or change explicit budgets using the exact current goal ID and revision. Usage remains cumulative.",
+        "operationId": "continuousGoal.update",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "enum": [
+                "chat",
+                "task",
+                "mission"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "ownerID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expectedRevision": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "goalID": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "reason": {
+                    "maxLength": 4000,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "status": {
+                    "enum": [
+                      "active",
+                      "paused",
+                      "blocked",
+                      "complete"
+                    ],
+                    "type": "string"
+                  },
+                  "tokenBudget": {
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991,
+                    "type": "integer"
+                  },
+                  "turnBudget": {
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "requestID",
+                  "goalID",
+                  "expectedRevision",
+                  "status",
+                  "reason"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "createdAt": {
+                          "type": "number"
+                        },
+                        "directory": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "objective": {
+                          "type": "string"
+                        },
+                        "owner": {
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "chat",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "task",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "mission",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            }
+                          ]
+                        },
+                        "projectID": {
+                          "type": "string"
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "revision": {
+                          "type": "string"
+                        },
+                        "sessionID": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "enum": [
+                            "active",
+                            "paused",
+                            "blocked",
+                            "complete",
+                            "budget_limited"
+                          ],
+                          "type": "string"
+                        },
+                        "tokenBudget": {
+                          "type": "number"
+                        },
+                        "tokensUsed": {
+                          "type": "number"
+                        },
+                        "turnBudget": {
+                          "type": "number"
+                        },
+                        "turnsAccepted": {
+                          "type": "number"
+                        },
+                        "updatedAt": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "revision",
+                        "owner",
+                        "objective",
+                        "status",
+                        "tokensUsed",
+                        "turnsAccepted",
+                        "createdAt",
+                        "updatedAt",
+                        "sessionID",
+                        "projectID",
+                        "directory"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Current durable continuous goal. Budgets stop new automatic turns; accepted work may settle."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "Goal owner, state or revision conflict.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ContinuousGoalError"
+          }
+        },
+        "summary": "Update continuous goal",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.continuousGoal.update({\n  ...\n})"
+          }
+        ]
+      },
+      "post": {
+        "description": "Explicitly authorize an ongoing goal on an existing owner. requestID is idempotent; one unresolved goal per execution scope.",
+        "operationId": "continuousGoal.create",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "enum": [
+                "chat",
+                "task",
+                "mission"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "ownerID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "objective": {
+                    "maxLength": 16000,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tokenBudget": {
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991,
+                    "type": "integer"
+                  },
+                  "turnBudget": {
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "requestID",
+                  "objective"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "createdAt": {
+                          "type": "number"
+                        },
+                        "directory": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "objective": {
+                          "type": "string"
+                        },
+                        "owner": {
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "chat",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "task",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "mission",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "id"
+                              ],
+                              "type": "object"
+                            }
+                          ]
+                        },
+                        "projectID": {
+                          "type": "string"
+                        },
+                        "reason": {
+                          "type": "string"
+                        },
+                        "revision": {
+                          "type": "string"
+                        },
+                        "sessionID": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "enum": [
+                            "active",
+                            "paused",
+                            "blocked",
+                            "complete",
+                            "budget_limited"
+                          ],
+                          "type": "string"
+                        },
+                        "tokenBudget": {
+                          "type": "number"
+                        },
+                        "tokensUsed": {
+                          "type": "number"
+                        },
+                        "turnBudget": {
+                          "type": "number"
+                        },
+                        "turnsAccepted": {
+                          "type": "number"
+                        },
+                        "updatedAt": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "revision",
+                        "owner",
+                        "objective",
+                        "status",
+                        "tokensUsed",
+                        "turnsAccepted",
+                        "createdAt",
+                        "updatedAt",
+                        "sessionID",
+                        "projectID",
+                        "directory"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Current durable continuous goal. Budgets stop new automatic turns; accepted work may settle."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "Goal owner or request conflict.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "ContinuousGoalError"
+          }
+        },
+        "summary": "Create continuous goal",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.continuousGoal.create({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/event": {
       "get": {
         "description": "Get events",

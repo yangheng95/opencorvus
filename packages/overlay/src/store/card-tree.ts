@@ -144,6 +144,8 @@ export interface CardNode {
   /** Exact projected worker identity for non-user agent cards. The stage
    * remains runtime-template/display metadata and must not replace this ID. */
   agentID?: string
+  /** Exact persisted participant for a message bubble, distinct from its transport role. */
+  author?: string
   /** Durable message id that opened this display segment. Consecutive
    *  `message.updated` rows from the same session can share this card;
    *  once another session interrupts, the next message opens a new segment.

@@ -1,4 +1,5 @@
 import { FRONTEND_DESIGN_STATIC_TOOL_IDS } from "@/frontend-design/static-tools"
+import { CONTINUOUS_GOAL_TOOL_IDS } from "@/continuous-goal/schema"
 import { INTEGRITY_DECLARED_TOOL_IDS } from "@/integrity/tool-ids"
 import {
   FRONTEND_DESIGN_EXPERT_DEFAULT_TOOL_IDS,
@@ -73,6 +74,7 @@ const ORCHESTRATOR_PRIVATE_TOOL_IDS = [
 ] as const
 
 export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
+  ...CONTINUOUS_GOAL_TOOL_IDS,
   ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
   "skill",
   "question",
@@ -179,7 +181,7 @@ const missionExecutionGlobal = primaryExecutionGlobal.filter(
   (toolID) => toolID !== "skill" && !NATIVE_MISSION_TRANSPORT_TOOL_IDS.some((transportToolID) => transportToolID === toolID),
 )
 
-const codingGlobal = ["delegate_agent", SKILL_MARKET_TOOL_ID, ...primaryExecutionGlobal] as const
+const codingGlobal = ["delegate_agent", SKILL_MARKET_TOOL_ID, ...CONTINUOUS_GOAL_TOOL_IDS, ...primaryExecutionGlobal] as const
 
 const taskBuildGlobal = [
   ...primaryExecutionGlobal,
@@ -302,6 +304,7 @@ export const roleAssignments = Object.freeze({
   control: createToolPool({ global: [...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS, ...PANEL_LEAF_TOOL_IDS] }),
   orchestrator: createToolPool({
     global: [
+      ...CONTINUOUS_GOAL_TOOL_IDS,
       ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
       "analytics",
       "publish_interactive_artifact",
@@ -316,6 +319,7 @@ export const roleAssignments = Object.freeze({
   }),
   mission: createToolPool({
     global: [
+      ...CONTINUOUS_GOAL_TOOL_IDS,
       SKILL_MARKET_TOOL_ID,
       ...missionExecutionGlobal,
       "mission_skill",

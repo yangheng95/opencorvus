@@ -1,0 +1,78 @@
+$ bun script/run-tests.ts test/continuous-goal.test.ts test/continuous-goal-process.test.ts test/usage/stream-ledger.test.ts test/task-root-ingress-reducer.test.ts
+[1/4] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [2777.89ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [2305.58ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [2283.81ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [2036.97ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [2402.78ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [2530.51ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [1911.86ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [4368.37ms]
+ZodError: [
+  {
+    "code": "custom",
+    "message": "Assistant parent must be the tail accepted input Message",
+    "path": [
+      "acceptedInputMessageIDs"
+    ]
+  }
+]
+(fail) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [2071.80ms]
+
+ 8 pass
+ 1 fail
+ 42 expect() calls
+Ran 9 tests across 1 file. [30.35s]
+[1/4] DONE test/continuous-goal.test.ts exit=1 duration=31.35s
+OpenCorvus test file failed (exit=1): C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal.test.ts
+[2/4] START test/continuous-goal-process.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) independent processes converge on one goal reservation and restore the paused revision [17840.06ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [18.99s]
+[2/4] DONE test/continuous-goal-process.test.ts exit=0 duration=19.18s
+[3/4] START test/usage/stream-ledger.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) shared streamed-call usage ledger > returns the exact cancellation outcome from the canonical wrapper around a parked provider stream [3387.81ms]
+(pass) shared streamed-call usage ledger > records a non-Session helper stream exactly once at the common wrapper [2745.12ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [7.45s]
+[3/4] DONE test/usage/stream-ledger.test.ts exit=0 duration=7.80s
+[4/4] START test/task-root-ingress-reducer.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task-root fact reducer > keeps prose-only Turns on the same unresolved ingress [1.14ms]
+(pass) Task-root fact reducer > resolves one assistant-owned decision set [0.19ms]
+(pass) Task-root fact reducer > resolves parallel dispatch receipts from one completed assistant Turn as one atomic decision set [0.89ms]
+(pass) Task-root fact reducer > resolves one canonical dispatch collection receipt [0.15ms]
+(pass) Task-root fact reducer > conflict wins over an apparent decision receipt [0.10ms]
+(pass) Task-root fact reducer > blocks decision receipts owned by different assistant Turns [0.10ms]
+(pass) Task-root fact reducer > does not consume an activation at an intermediate tool-call boundary [0.19ms]
+(pass) Task-root fact reducer > requires reconciliation for an unreceipted irreversible request [0.17ms]
+(pass) Task-root fact reducer > derives budget and lifecycle fences without blocker rows [0.19ms]
+(pass) Task-root fact reducer > exhausts repeated decision gaps inside one completed activation without double-counting its Turn [0.21ms]
+(pass) Task-root fact reducer > admits a same-epoch conversation accepted after the terminal boundary [0.14ms]
+(pass) Task-root fact reducer > lets lifecycle fences and the absolute deadline preempt an unresolved wait [0.17ms]
+
+ 12 pass
+ 0 fail
+ 17 expect() calls
+Ran 12 tests across 1 file. [1.77s]
+OpenCorvus failed test files (1):
+[4/4] DONE test/task-root-ingress-reducer.test.ts exit=0 duration=2.15s
+C:\Users\hengu\.codex\worktrees\continuous-goal-mode\opencorvus\packages\opencorvus\test\continuous-goal.test.ts
+error: script "test" exited with code 1

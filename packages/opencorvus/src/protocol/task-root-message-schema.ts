@@ -1,7 +1,7 @@
 import z from "zod"
 import { Identifier } from "@/id/id"
 
-export const TaskRootMessageKind = z.enum(["operator", "orchestrator", "mission"])
+export const TaskRootMessageKind = z.enum(["operator", "orchestrator", "mission", "goal-controller"])
 export type TaskRootMessageKind = z.infer<typeof TaskRootMessageKind>
 
 export const SchedulerDeliveryReference = z

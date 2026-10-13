@@ -37,6 +37,7 @@ import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
 import { reconcileBuildObservationCleanups } from "@/engine/build-observation-cleanup"
 import { SessionWake } from "@/session/wake"
 import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
+import { initializeContinuousGoals } from "@/continuous-goal/controller"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -96,6 +97,7 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   Truncate.init()
   AutomationService.init()
   EventService.init({ sessionWake: SessionWake })
+  initializeContinuousGoals()
   ProjectMemoryOrganizer.init()
   // Durable subscribers must exist before any persisted outbox occurrence is
   // resumed. In particular, message.moved is the single source/target

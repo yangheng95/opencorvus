@@ -16,6 +16,7 @@ file.
 - [02 — Data plane](02-data.md)
 - [03 — Control plane and message routing](03-control.md)
 - [Task control plane](task-control-plane.md)
+- [Continuous goal execution intent](continuous-goal.md)
 - [Task runtime directory ownership](task-runtime-directory.md)
 - [Server runtime readiness](server-runtime-readiness.md)
 

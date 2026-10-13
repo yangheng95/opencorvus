@@ -12,6 +12,10 @@
 
 ## 入站路径总览
 
+显式持续目标通过 [continuous goal](continuous-goal.md) 的唯一 reconciler 生成可见的
+goal-controller 参与者输入，仍进入下述 Session、Task 和 Mission 原始入口。
+其暂停、预算和精确轮次授权不替代原控制面或权限合同。
+
 ```
  外部渠道                                      本地用户
  (Slack, HTTP, 自建 bot)                       (overlay, CLI)

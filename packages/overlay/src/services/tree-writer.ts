@@ -1080,6 +1080,7 @@ function createSessionCardNode(
   parts: any[] = [],
   childIDs: string[] = [],
   parentSessionID = "",
+  author?: string,
 ): CardNode {
   const userStage = isUserStage(stage)
   const exactAgentID = agentID?.trim()
@@ -1091,6 +1092,7 @@ function createSessionCardNode(
     kind: userStage ? "message" : "agent",
     role: userStage ? "user" : undefined,
     sessionID,
+    author,
     parentSessionID: parentSessionID || undefined,
     ...(!userStage ? { agentID: exactAgentID } : {}),
     ...(messageID ? { messageID } : {}),
@@ -1218,6 +1220,7 @@ function handleMessageUpdated(event: any, options: { metadataOnly?: boolean } = 
 
   const messageCardID = ensureMessageTurnProjection(session, id, {
     stage,
+    author: origin.author,
     agentID: isUserStage(stage) ? undefined : canonicalAgentID,
     collapseContext: nextMessageInfo.delegatedContext,
     orderKey,
@@ -1460,6 +1463,7 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta 
     })
     cardID = ensureMessageTurnProjection(session, messageID, {
       stage: turnStage,
+      author: route.author,
       agentID: isUserStage(turnStage) ? undefined : route.agentID,
       collapseContext: isDelegatedContextMessage(route),
       orderKey: route.orderKey,
@@ -2685,6 +2689,7 @@ function ensureSessionProjection(sessionID: string, opts: EnsureSessionOpts): Se
 
 interface EnsureTurnCardOpts {
   stage: string
+  author: string
   agentID?: string
   collapseContext: boolean
   orderKey: string
@@ -2762,6 +2767,7 @@ function ensureMessageTurnProjection(session: SessionInfo, messageID: string, op
   const existing = cardTreeStore.cards[cardID]
   if (existing) {
     setCardTreeStore("cards", cardID, "sessionID", session.sessionID)
+    if (existing.author !== opts.author) setCardTreeStore("cards", cardID, "author", opts.author)
     if (existing.parentSessionID !== session.parentSessionID) {
       setCardTreeStore("cards", cardID, "parentSessionID", session.parentSessionID || undefined)
     }
@@ -2792,6 +2798,7 @@ function ensureMessageTurnProjection(session: SessionInfo, messageID: string, op
         [],
         [],
         session.parentSessionID,
+        opts.author,
       ),
     )
   }
@@ -2849,6 +2856,7 @@ function timelineSegmentKey(message: MessageInfo, session: SessionInfo, stage: s
     placement: "top_level",
     sessionID: message.sessionID,
     agentID: isUserStage(stage) ? "" : message.agentID,
+    author: isUserStage(stage) ? message.author : undefined,
     stage,
     parentSessionID: message.parentSessionID || session.parentSessionID || "",
   })
@@ -2960,6 +2968,7 @@ function projectedCardIsUnchanged(
     sessionID: string
     parentSessionID: string | undefined
     agentID: string | undefined
+    author: string
     messageID: string
     stage: string
     accent: string | undefined
@@ -2980,6 +2989,7 @@ function projectedCardIsUnchanged(
     current.sessionID !== fields.sessionID ||
     current.parentSessionID !== fields.parentSessionID ||
     current.agentID !== fields.agentID ||
+    current.author !== fields.author ||
     current.messageID !== fields.messageID ||
     current.stage !== fields.stage ||
     current.accent !== fields.accent ||
@@ -3179,6 +3189,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       sessionID: first.sessionID,
       parentSessionID: segment.session.parentSessionID || undefined,
       agentID: isUserStage(segment.stage) ? undefined : first.agentID,
+      author: first.author,
       messageID: first.id,
       stage: segment.stage,
       accent: !isUserStage(segment.stage) && segment.stage ? stageAccent(segment.stage) : undefined,
@@ -3206,7 +3217,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
           type: "boundary",
           messageID: message.id,
           role: message.stage,
-          roleLabel: roleLabel(message.stage),
+          roleLabel: isUserStage(message.stage) && message.author !== "user" ? message.author : roleLabel(message.stage),
           time: message.time > 0 ? message.time : undefined,
         }
         segment.session.partIndex.set(boundaryKey, {
@@ -3613,6 +3624,7 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
     replaceActualPartFacts(messages.get(messageID)!, message.parts)
     const cardID = ensureMessageTurnProjection(session, messageID, {
       stage,
+      author: origin.author,
       agentID: isUserStage(stage) ? undefined : canonicalAgentID,
       collapseContext: isDelegatedContextMessage(origin),
       orderKey: meta.orderKey,

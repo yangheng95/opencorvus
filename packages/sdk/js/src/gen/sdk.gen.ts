@@ -98,6 +98,12 @@ import type {
   ConfigProxyTestResponses,
   ConfigUpdateErrors,
   ConfigUpdateResponses,
+  ContinuousGoalCreateErrors,
+  ContinuousGoalCreateResponses,
+  ContinuousGoalGetErrors,
+  ContinuousGoalGetResponses,
+  ContinuousGoalUpdateErrors,
+  ContinuousGoalUpdateResponses,
   ConversationCapabilityUpdate,
   CreateQuickNoteRequest,
   EventSubscribeResponse,
@@ -2302,6 +2308,144 @@ export class Config extends HeyApiClient {
   private _proxy?: Proxy_
   get proxy(): Proxy_ {
     return (this._proxy ??= new Proxy_({ client: this.client }))
+  }
+}
+
+export class ContinuousGoal extends HeyApiClient {
+  /**
+   * Read continuous goal
+   *
+   * Read the ongoing goal for a Chat Session, Task or Mission Session in the selected Project. Separate from Delivery Slice Goals.
+   */
+  public get<ThrowOnError extends boolean = false>(
+    parameters: {
+      kind: "chat" | "task" | "mission"
+      ownerID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "kind" },
+            { in: "path", key: "ownerID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<ContinuousGoalGetResponses, ContinuousGoalGetErrors, ThrowOnError>({
+      url: "/continuous-goal/{kind}/{ownerID}",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Update continuous goal
+   *
+   * Pause, explicitly resume, block, complete or change explicit budgets using the exact current goal ID and revision. Usage remains cumulative.
+   */
+  public update<ThrowOnError extends boolean = false>(
+    parameters: {
+      kind: "chat" | "task" | "mission"
+      ownerID: string
+      directory?: string
+      expectedRevision: string
+      goalID: string
+      reason: string
+      requestID: string
+      status: "active" | "paused" | "blocked" | "complete"
+      tokenBudget?: number
+      turnBudget?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "kind" },
+            { in: "path", key: "ownerID" },
+            { in: "query", key: "directory" },
+            { in: "body", key: "expectedRevision" },
+            { in: "body", key: "goalID" },
+            { in: "body", key: "reason" },
+            { in: "body", key: "requestID" },
+            { in: "body", key: "status" },
+            { in: "body", key: "tokenBudget" },
+            { in: "body", key: "turnBudget" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).patch<
+      ContinuousGoalUpdateResponses,
+      ContinuousGoalUpdateErrors,
+      ThrowOnError
+    >({
+      url: "/continuous-goal/{kind}/{ownerID}",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Create continuous goal
+   *
+   * Explicitly authorize an ongoing goal on an existing owner. requestID is idempotent; one unresolved goal per execution scope.
+   */
+  public create<ThrowOnError extends boolean = false>(
+    parameters: {
+      kind: "chat" | "task" | "mission"
+      ownerID: string
+      directory?: string
+      objective: string
+      requestID: string
+      tokenBudget?: number
+      turnBudget?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "kind" },
+            { in: "path", key: "ownerID" },
+            { in: "query", key: "directory" },
+            { in: "body", key: "objective" },
+            { in: "body", key: "requestID" },
+            { in: "body", key: "tokenBudget" },
+            { in: "body", key: "turnBudget" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      ContinuousGoalCreateResponses,
+      ContinuousGoalCreateErrors,
+      ThrowOnError
+    >({
+      url: "/continuous-goal/{kind}/{ownerID}",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
   }
 }
 
@@ -14579,6 +14723,11 @@ export class OpenCorvusClient extends HeyApiClient {
   private _config?: Config
   get config(): Config {
     return (this._config ??= new Config({ client: this.client }))
+  }
+
+  private _continuousGoal?: ContinuousGoal
+  get continuousGoal(): ContinuousGoal {
+    return (this._continuousGoal ??= new ContinuousGoal({ client: this.client }))
   }
 
   private _event?: Event_

@@ -37,6 +37,7 @@ export const PermissionEffectClass = z.enum([
 export type PermissionEffectClass = z.infer<typeof PermissionEffectClass>
 
 const OBSERVATION_ONLY_BUILTINS = new Set<string>([
+  "get_continuous_goal",
   "question",
   "capability_search",
   "artifact_search",
@@ -58,6 +59,8 @@ const OBSERVATION_ONLY_BUILTINS = new Set<string>([
 ])
 
 const BUILTIN_EFFECTS = new Map<string, PermissionEffectClass>([
+  ["create_continuous_goal", "external_effect"],
+  ["update_continuous_goal", "external_effect"],
   ...PANEL_MUTATION_TOOL_IDS.map((toolID) => [toolID, "external_effect"] as const),
   ["panel_cancel_task", "destructive"],
   ["panel_delete_session", "destructive"],

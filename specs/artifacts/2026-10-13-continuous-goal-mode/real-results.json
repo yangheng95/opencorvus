@@ -1,0 +1,508 @@
+[
+  {
+    "run": "chat-03",
+    "kind": "chat",
+    "status": "passed",
+    "model": "openai/gpt-6.1-sol",
+    "preflight": {
+      "sessionID": "ses_hepBHTesEfNAbfUWtPc4",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "ownerID": "ses_hUhai2vMIQCogF4tpilv",
+    "sessionID": "ses_hUhai2vMIQCogF4tpilv",
+    "goal": {
+      "id": "pev_g0VXuIxTt00yUh1CwJ5W",
+      "revision": "pev_g0VXuJFZf00Q87ieA0I3",
+      "status": "complete",
+      "turnsAccepted": 2,
+      "turnBudget": 3,
+      "tokensUsed": 133432,
+      "tokenBudget": 180000,
+      "createdAt": 1791871679927,
+      "updatedAt": 1791871749478
+    },
+    "controllerMessageIDs": [
+      "msg_h9qGN4qUX9jicdNsxjCQ",
+      "msg_hV7c2YqdnPQ2CDW2bDFK"
+    ],
+    "taskLifecycle": null,
+    "providerRequests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hvgffFnpVtpvIWIXHA7r"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hvgffFnpVtpvIWIXHA7r"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h4l0dQkAuVMgyj5Sl3FI"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h4l0dQkAuVMgyj5Sl3FI"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h4l0dQkAuVMgyj5Sl3FI"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h4l0dQkAuVMgyj5Sl3FI"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h9qGN4qUX9jicdNsxjCQ"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hV7c2YqdnPQ2CDW2bDFK"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hV7c2YqdnPQ2CDW2bDFK"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hV7c2YqdnPQ2CDW2bDFK"
+      }
+    ],
+    "settlement": {
+      "settled": true,
+      "credentialPairRemoved": true,
+      "endedAt": 1791871893925
+    }
+  },
+  {
+    "run": "task-02",
+    "kind": "task",
+    "status": "passed",
+    "model": "openai/gpt-6.1-sol",
+    "preflight": {
+      "sessionID": "ses_hwblj9H5eN5uJ9i8c437",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "ownerID": "tsk_g00VXuJeJk00zJMlaTLC",
+    "sessionID": "ses_-zUS5gLYPzzwrWpHQzr3",
+    "goal": {
+      "id": "pev_g0VXuJmHJ00VfyXT0C4Y",
+      "revision": "pev_g0VXuK6o600ixGFwbIpE",
+      "status": "complete",
+      "turnsAccepted": 2,
+      "turnBudget": 3,
+      "tokensUsed": 318405,
+      "tokenBudget": 180000,
+      "createdAt": 1791871875193,
+      "updatedAt": 1791871954106
+    },
+    "controllerMessageIDs": [
+      "msg_haXsTWG93ZDYVgb6Ipy9",
+      "msg_hi4POyZyhMblqgyM7y5k"
+    ],
+    "taskLifecycle": {
+      "taskID": "tsk_g00VXuJeJk00zJMlaTLC",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXuJeSO00r2agcZpug",
+      "openedAt": 1791871844592,
+      "status": "completed",
+      "terminalEventID": "pev_g0VXuKBeL00pFl10YWkf",
+      "terminalAt": 1791871970805
+    },
+    "providerRequests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hhP6eImF4wSuigUW4tnn"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hhP6eImF4wSuigUW4tnn"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "tsk_g00VXuJeJk00zJMlaTLC"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hBjMnOtcqonol2GAIOrq_art_hBjMnOtcqonol2GAIOrq"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hBjMnOtcqonol2GAIOrq_art_hBjMnOtcqonol2GAIOrq"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hBjMnOtcqonol2GAIOrq_art_hBjMnOtcqonol2GAIOrq"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hAaE3dN22po14xNFjDLj_art_hAaE3dN22po14xNFjDLj"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hAaE3dN22po14xNFjDLj_art_hAaE3dN22po14xNFjDLj"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hDbPeMUpwftxrqJEYdef_art_hDbPeMUpwftxrqJEYdef"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hDbPeMUpwftxrqJEYdef_art_hDbPeMUpwftxrqJEYdef"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hDbPeMUpwftxrqJEYdef_art_hDbPeMUpwftxrqJEYdef"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hDbPeMUpwftxrqJEYdef_art_hDbPeMUpwftxrqJEYdef"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hidDtaIgLtqx7840FNi5_art_hidDtaIgLtqx7840FNi5"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hidDtaIgLtqx7840FNi5_art_hidDtaIgLtqx7840FNi5"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hidDtaIgLtqx7840FNi5_art_hidDtaIgLtqx7840FNi5"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_task-root-control_art_hidDtaIgLtqx7840FNi5_art_hidDtaIgLtqx7840FNi5"
+      }
+    ],
+    "settlement": {
+      "settled": true,
+      "credentialPairRemoved": true,
+      "endedAt": 1791872672189
+    }
+  },
+  {
+    "run": "mission-02",
+    "kind": "mission",
+    "status": "passed",
+    "model": "openai/gpt-6.1-sol",
+    "preflight": {
+      "sessionID": "ses_hBgLmFlY9Q5ZoxWA8O7c",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "ownerID": "ses_-zUS5fqdDzzug6jFUewO",
+    "sessionID": "ses_-zUS5fqdDzzug6jFUewO",
+    "goal": {
+      "id": "pev_g0VXuKFmo00ZtcTMRhPu",
+      "revision": "pev_g0VXuKx6H004u6U6VRc4",
+      "status": "complete",
+      "turnsAccepted": 2,
+      "turnBudget": 3,
+      "tokensUsed": 506000,
+      "tokenBudget": 600000,
+      "createdAt": 1791871988622,
+      "updatedAt": 1791872155120
+    },
+    "controllerMessageIDs": [
+      "msg_hlK3uMKn5pABhzw68ZKi",
+      "msg_h8wDnMTEmJtymmuILCa0"
+    ],
+    "taskLifecycle": null,
+    "providerRequests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hUyrFyDIoWaMsPxqhUiS"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hUyrFyDIoWaMsPxqhUiS"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hInNMNEOP6LzYn9AsPys"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hInNMNEOP6LzYn9AsPys"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hInNMNEOP6LzYn9AsPys"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hInNMNEOP6LzYn9AsPys"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hInNMNEOP6LzYn9AsPys"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hInNMNEOP6LzYn9AsPys"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hInNMNEOP6LzYn9AsPys"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hlK3uMKn5pABhzw68ZKi"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hlK3uMKn5pABhzw68ZKi"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hlK3uMKn5pABhzw68ZKi"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hlK3uMKn5pABhzw68ZKi"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_hlK3uMKn5pABhzw68ZKi"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof",
+        "requestID": "msg_h8wDnMTEmJtymmuILCa0"
+      }
+    ],
+    "settlement": {
+      "settled": true,
+      "credentialPairRemoved": true,
+      "endedAt": 1791872673190
+    }
+  }
+]

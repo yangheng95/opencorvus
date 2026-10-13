@@ -43,7 +43,7 @@ export function authorizedTaskRootMessagesForWake(input: {
   ]
 }
 
-function expectedTaskRootMessageAuthor(kind: TaskRootMessageKind): "user" | "orchestrator" | "mission" {
+function expectedTaskRootMessageAuthor(kind: TaskRootMessageKind): "user" | "orchestrator" | "mission" | "goal-controller" {
   switch (kind) {
     case "operator":
       return "user"
@@ -51,6 +51,8 @@ function expectedTaskRootMessageAuthor(kind: TaskRootMessageKind): "user" | "orc
       return "orchestrator"
     case "mission":
       return "mission"
+    case "goal-controller":
+      return "goal-controller"
   }
 }
 

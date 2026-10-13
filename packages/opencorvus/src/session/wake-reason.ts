@@ -4,11 +4,13 @@ import { SchedulerEventWakeReason } from "@/protocol/scheduler-event-wake-reason
 import { SchedulerMessageWakeReason } from "@/protocol/scheduler-message-wake-reason"
 import { MissionProcessRecoveryWakeReason } from "./mission-process-recovery-schema"
 import z from "zod"
+import { ContinuousGoalWakeReason } from "@/continuous-goal/schema"
 
 /** Durable codec for authored scheduler/control wake provenance. This module
  * deliberately has no Session runtime imports so transaction-local readers do
  * not create a Session -> scheduler -> Session initialization cycle. */
 export const SessionWakeReason = z.discriminatedUnion("source", [
+  ContinuousGoalWakeReason,
   MissionOperatorWakeReason,
   MissionProcessRecoveryWakeReason,
   z.object({

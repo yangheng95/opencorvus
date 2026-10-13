@@ -99,6 +99,8 @@ import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { Session } from "@/session"
 import type { TaskRootMessageKind } from "@/protocol/task-root-message-schema"
+import { CONTINUOUS_GOAL_TOOL_IDS } from "@/continuous-goal/schema"
+import { createContinuousGoalAiTool } from "@/tool/continuous-goal"
 import {
   isProjectedWorkerRuntimeContract,
   SessionRuntimeContractStore,
@@ -3047,6 +3049,8 @@ export function createOrchestratorTools(input: {
 
   const hiddenToolIDs = new Set<string>([...DispatchAdapterContractRegistry.ids, ...MANAGE_TASK_ACTION_NAMES])
   const materializePublicTool = (toolID: string): unknown => {
+    const goalToolID = CONTINUOUS_GOAL_TOOL_IDS.find((id) => id === toolID)
+    if (goalToolID) return createContinuousGoalAiTool(goalToolID, { taskID, sessionID: input.agentSessionID })
     if (Object.hasOwn(toolFactories, toolID) && !hiddenToolIDs.has(toolID)) {
       return tools[toolID as keyof typeof tools]
     }
@@ -3073,6 +3077,7 @@ export function createOrchestratorTools(input: {
   const publicTools: Record<string, unknown> = input.exactToolID
     ? { [input.exactToolID]: materializePublicTool(input.exactToolID) }
     : {
+        ...Object.fromEntries(CONTINUOUS_GOAL_TOOL_IDS.map((id) => [id, materializePublicTool(id)])),
         ...tools,
         ...createMulticaImportTools({ taskID: input.taskID, sessionID: input.agentSessionID }),
         expert_squad_author: materializePublicTool("expert_squad_author"),

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标模式验收](2026-10-13-continuous-goal-mode/README.md)：三种真实模型执行、Task 跨轮次重开、计量与最终桌面截图。
+
 - [Dependabot升级验收](2026-10-13-dependabot-upgrades/README.md)：实际Provider/ACP流式测试、逐文件回归结果、编辑保存与时间线截图。
 
 - [Issue 40：Parallel Search MCP](2026-10-12-parallel-search-issue-40/README.md)：真实匿名搜索、公开双语指南、0.1.25发布、完整公开日志修订及Issue回复回执。

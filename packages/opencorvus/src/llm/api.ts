@@ -78,6 +78,7 @@ export function streamText<
     /** Session/Agent that owns this Provider call, so the usage ledger can be grouped by
      *  worker instead of re-derived from transcript timestamps. */
     usageAttribution?: { sessionID?: string; agentID?: string }
+    onUsageRecorded?: (usageID: string) => void
   },
 ) {
   const {
@@ -85,6 +86,7 @@ export function streamText<
     retries: count,
     usagePurpose = "other",
     usageAttribution,
+    onUsageRecorded,
     abortSignal,
     onStepEnd: callerOnStepEnd,
     ...rest
@@ -123,6 +125,7 @@ export function streamText<
             billing: normalized.billing,
             sessionID: usageAttribution?.sessionID,
             agentID: usageAttribution?.agentID,
+            onRecorded: onUsageRecorded,
           })
         } catch (error) {
           failures.push(error)

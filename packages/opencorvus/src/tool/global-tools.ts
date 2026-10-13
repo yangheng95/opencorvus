@@ -23,6 +23,7 @@ export function builtInToolProviderState(
 let builtInGlobalToolLoad: Promise<readonly Tool.Info[]> | undefined
 
 async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
+  const { ContinuousGoalTools } = await import("./continuous-goal")
   const controlPlaneToolLoaders = requireControlPlaneToolLoaders()
   const [
     { DelegateAgentTool },
@@ -98,6 +99,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     ])
 
   return Object.freeze([
+    ...ContinuousGoalTools,
     DelegateAgentTool,
     QuestionTool,
     BashTool,

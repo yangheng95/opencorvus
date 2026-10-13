@@ -4261,6 +4261,39 @@ export namespace EngineService {
     }
   }
 
+  /** A real goal-controller Message and its exact epoch/ingress commit together. */
+  export async function deliverContinuousGoalMessage(input: {
+    owner: import("@/continuous-goal/store").GoalOwner
+    goal: import("@/continuous-goal/schema").ContinuousGoalView
+    request: import("@/continuous-goal/store").GoalContinuation
+    text: string
+  }) {
+    const { goalContinuationIdentity, admitGoalContinuation } = await import("@/continuous-goal/controller")
+    const identity = goalContinuationIdentity(input.request)
+    const task = requireTaskInCurrentProject(input.owner.id)
+    await assertTaskRootSessionLineageInCurrentProject(task)
+    const existing = Database.use((db) => db.select().from(EngineTaskRootIngressTable)
+      .where(and(eq(EngineTaskRootIngressTable.task_id, task.id),
+        eq(EngineTaskRootIngressTable.source_id, identity.messageID))).get())
+    if (existing) return dispatchPersistedTaskLoop(task.id, existing.id)
+    const bundle = await buildTaskSessionMessageBundle(task, input.text, "continuous_goal", "goal-controller",
+      [], { continuous_goal: input.request }, undefined, identity)
+    let ingressID: string | undefined
+    await Session.persistMessageWithCommit(bundle, () => {
+      Database.use((db) => {
+        admitGoalContinuation(input.owner, input.goal, input.request)
+        const lifecycle = taskLifecycleProjectionInTransaction(db, task.id)
+        if (lifecycle.status === "completed" || lifecycle.status === "failed")
+          openTaskForContinuationInTransaction({ db, taskID: task.id, now: bundle.info.time.created })
+        ingressID = persistTaskRootMessageIngressInTransaction(db, {
+          task, messageID: bundle.info.id, kind: "goal-controller", now: bundle.info.time.created,
+        })
+      })
+    })
+    if (!ingressID) throw new Error("Goal Message committed without its Task ingress.")
+    return dispatchPersistedTaskLoop(task.id, ingressID)
+  }
+
   export async function getTaskOperatorModelContext(taskID: string) {
     const task = requireTaskInCurrentProject(taskID)
     if (!task.session_id) {

@@ -23,6 +23,7 @@ import { ProjectRoutes } from "./project"
 import { ConfigRoutes } from "./config"
 import { ExperimentalRoutes, resetExperimentalRouteFactoriesForOpenApi } from "./experimental"
 import { SessionRoutes } from "./session"
+import { ContinuousGoalRoutes } from "./continuous-goal"
 import { PermissionRoutes } from "./permission"
 import { QuestionRoutes } from "./question"
 import { ChannelRoutes } from "./channel"
@@ -167,6 +168,7 @@ export function AppRoutes(root: Hono) {
     .route("/channel", ChannelRoutes())
     .route("/experimental", ExperimentalRoutes())
     .route("/session", SessionRoutes())
+    .route("/continuous-goal", ContinuousGoalRoutes())
     .route("/permission", PermissionRoutes())
     .route("/question", QuestionRoutes())
     .route("/provider", ProviderRoutes())

@@ -3,6 +3,11 @@ function hasPrefix(type: string, prefixes: readonly string[]): boolean {
 }
 
 const TREE_WRITER_NOOP_TYPES = new Set([
+  // Continuous intent is read through its goal API. The real controller
+  // Messages and Tool results already own their ordinary transcript events.
+  "continuous_goal.created",
+  "continuous_goal.updated",
+  "continuous_goal.continuation_requested",
   "task.heartbeat",
   "task.connected",
   "task-list.heartbeat",
@@ -130,6 +135,9 @@ const BOARD_INVALIDATING_PREFIXES = [
 ] as const
 
 const ROUTER_CONSUMED_NOOP_TYPES = new Set([
+  "continuous_goal.created",
+  "continuous_goal.updated",
+  "continuous_goal.continuation_requested",
   "agent.updated",
   "message.injected",
   "mission.handoff",
