@@ -127,6 +127,7 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
       </div>
       <div class="msg-artifact-terminal__toolbar">
         <SearchField
+          clearable
           value={query()}
           placeholder={t("artifact.terminal.search")}
           size="sm"
@@ -137,10 +138,6 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
             } else {
               search?.clearDecorations()
             }
-          }}
-          onClear={() => {
-            setQuery("")
-            search?.clearDecorations()
           }}
         />
         <Button variant="ghost" size="sm" tone="neutral" disabled={!query()} onClick={findNext}>

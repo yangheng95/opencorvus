@@ -14,6 +14,8 @@
 #### 修复
 
 - 网络代理设置保留用户名和密码的首尾空格及字面百分号，修复保存或发起请求时认证信息被改写的问题。此前已被裁剪并保存的内容需要重新输入。
+- 清空代理认证字段后保存会移除当前配置中的旧值，修复清空密码后又被回填的问题。
+- 搜索框清除后可直接继续键盘输入；清除操作遵守输入框的禁用状态，并保留页面原有的搜索行为。
 - 文件读取和技能附属文件的长行截断保留完整 Unicode 字符，修复边界处的 emoji 或补充平面汉字变成乱码的问题。
 - 修复英文版本搜索结果的单复数，以及更新日志固定使用中文语言属性和官网入口的问题。
 - 修复官网文档切换语言后返回首页又恢复旧语言偏好的问题；文档与其他官网页面共用同一语言偏好。
@@ -30,6 +32,8 @@
 #### Fixed
 
 - Network proxy settings preserve leading and trailing spaces and literal percent signs in usernames and passwords, fixing credentials being changed when saved or used. Values already trimmed and saved must be entered again.
+- Saving cleared proxy authentication fields removes the old values from the current configuration instead of restoring them in the form.
+- Clearing a search field returns focus for continued typing. Clear actions follow the input's disabled state and retain each page's existing search behavior.
 - Long-line truncation in file reads and Skill supporting files preserves complete Unicode characters, fixing corrupted emoji and supplementary-plane characters at the boundary.
 - Fixed singular and plural English release-search counts and Chinese-only language attributes and website links in release notes.
 - Fixed documentation language changes reverting to an earlier preference on return to the homepage. Documentation and other website pages share one language preference.

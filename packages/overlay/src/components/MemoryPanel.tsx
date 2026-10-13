@@ -441,6 +441,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
       {/* Search toolbar */}
       <div class="knowledge-toolbar">
         <SearchField
+          clearable
           class="memory-search"
           inputID="memorySearch"
           size={props.compact ? "sm" : "md"}

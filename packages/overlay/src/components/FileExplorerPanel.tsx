@@ -1650,11 +1650,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         data-ui="file-explorer-toolbar"
         actions={
           <SearchField
+            clearable
             class="file-explorer-search"
             value={query()}
             placeholder={t("explorer.search_placeholder")}
             onValueChange={setQuery}
-            onClear={() => setQuery("")}
             clearDataUI="file-explorer-search-clear"
           />
         }

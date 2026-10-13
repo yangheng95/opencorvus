@@ -633,13 +633,13 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               </Show>
             </TextField.Label>
             <SearchField
+              clearable
               value={expertSquadQuery()}
               disabled={!projectDirectory() || !productPillar()}
               onValueChange={(value) => {
                 setExpertSquadQuery(value)
                 void searchSquads(value)
               }}
-              onClear={() => undefined}
               placeholder={t("chat.references.search_placeholder")}
               size="sm"
             />

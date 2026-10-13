@@ -141,11 +141,11 @@ export function NetworkArtifact(props: { payload: NetworkPayload }) {
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Network">
       <div class="msg-artifact-network__toolbar">
         <SearchField
+          clearable
           value={filter()}
           placeholder={t("artifact.network.search")}
           size="sm"
           onValueChange={setFilter}
-          onClear={() => setFilter("")}
         />
         <Button
           variant="ghost"

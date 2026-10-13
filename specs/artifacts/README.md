@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [清除操作验收](2026-10-13-clear-intent/README.md)：搜索焦点、代理空值保存、双语桌面截图和实际配置。
+
 - [长行读取的完整字符边界](2026-10-13-text-unicode-380/README.md)：正向工具合同、真实Sol读取、桌面截图和正常运行收尾。
 
 - [文件完整字节准入](2026-10-13-file-text-admission/README.md)：真实有损保存前态、只读后态、文本保存与聚焦功能合同。

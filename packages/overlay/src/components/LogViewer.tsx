@@ -492,12 +492,12 @@ export function LogViewer(props: LogViewerProps) {
       }
     >
       <SearchField
+        clearable
         class="log-viewer-search"
         value={searchQuery()}
         placeholder={t("log.search_loaded")}
         clearLabel={t("log.clear_search")}
         onValueChange={setSearchQuery}
-        onClear={() => setSearchQuery("")}
         onKeyDown={(event) => {
           if (event.key === "Enter") event.preventDefault()
         }}

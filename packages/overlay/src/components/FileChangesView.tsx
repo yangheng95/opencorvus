@@ -452,6 +452,7 @@ export function FileChangesView(props: FileChangesViewProps) {
             <Show when={shouldShowFilter()}>
               <div class="changes-toolbar">
                 <SearchField
+                  clearable
                   class="changes-filter-field"
                   inputRef={(element) => {
                     filterInputEl = element
@@ -461,7 +462,6 @@ export function FileChangesView(props: FileChangesViewProps) {
                   placeholder={t("files.filter_placeholder")}
                   onValueChange={setFilterQuery}
                   onKeyDown={onFilterKeyDown}
-                  onClear={() => filterInputEl?.focus()}
                   clearLabel={t("files.clear_filter")}
                   clearDataUI="file-changes-search-clear"
                 />

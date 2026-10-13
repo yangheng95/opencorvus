@@ -636,6 +636,13 @@ to wrap within the measured sidebar. Settings owns compact row density and
 selection colors; the shared primitive owns vertical layout and tab semantics.
 Rail rows retain their intrinsic content height as the navigation scrolls.
 The search field keeps a concise visible hint and a complete accessible name.
+Shared SearchField uses explicit `clearable` for its clear affordance; optional
+`onClear` owns only a domain action after the single empty-value publication.
+Clear restores the same connected, enabled input synchronously and shares the
+input's disabled state. External input refs remain available to navigation
+owners. Memory retains its clear-triggered list reload; Mailbox retains its
+existing search dismissal without a clear button. There is no delayed focus
+recovery or consumer-specific duplicate focus implementation.
 Its resize separator projects the mounted sidebar's actual width and applied
 CSS scale through one local frame-scheduled geometry owner. Size and root-style
 observation retire with that open node; CSS default measurements do not become

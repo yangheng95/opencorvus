@@ -221,7 +221,13 @@ export default function NetworkPanel() {
 
     setSaving(true)
     try {
-      const nextProxy = input.proxyUrl ? proxyDraft(input) : null
+      const nextProxy = input.proxyUrl
+        ? {
+            ...proxyDraft(input),
+            username: input.proxyUsername || null,
+            password: input.proxyPassword || null,
+          }
+        : null
       const savedConfig = await patchConfig({ network: { proxy: nextProxy } }, { ...currentProjectConfigRequestOptions(), authority: owner.authority })
       if (!savedConfig) {
         if (ownsScope(owner)) setError(t("network.proxy.save_failed"))

@@ -400,12 +400,12 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
           >
             <div class="composer-reference-search">
               <SearchField
+                clearable
                 value={query()}
                 onValueChange={(value) => {
                   setQuery(value)
                   props.onExpertSquadQuery?.(value, props.launchReferences.expertSquadIDs)
                 }}
-                onClear={() => searchInputRef?.focus()}
                 placeholder={t("chat.references.search_placeholder")}
                 size="sm"
                 inputRef={(element) => {

@@ -593,6 +593,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               <span>{t("settings.back_to_app")}</span>
             </Button>
             <SearchField
+              clearable
               class="config-search"
               size="md"
               value={settingsSearch()}
@@ -600,7 +601,6 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               placeholder={t("common.search")}
               ariaLabel={t("settings.search_placeholder")}
               onValueChange={setSettingsSearch}
-              onClear={() => setSettingsSearch("")}
               clearDataUI="config-search-clear"
             />
             <Show when={normalizedSettingsSearch() && visibleConfigTabs().length === 0}>

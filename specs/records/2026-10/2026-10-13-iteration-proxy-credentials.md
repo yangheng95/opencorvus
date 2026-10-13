@@ -44,3 +44,5 @@
 跨turn继续时原exec句柄缺失，after服务和观察代理端口均已关闭、原服务PID已被其他进程复用，缺少after正常终态文件，退出码未知；不操作这个复用PID，不把未知退出归因于生产调度或伪称正常收尾。before已有生产stop/exit0。为最终收尾追加新的独立scope，不复用旧数据库。另发现scratch名称与并行模型搜索任务相同，最终构建及服务改用唯一`.tmp-codex-proxy-credentials-01a133`；仅保留和归档已知本任务文件，不移动或覆盖对方产物。
 
 最终唯一目录构建65秒exit0。新服务实际中文保存再次保留原值，截图人工查看；自有页面关闭后server.stop完成，原exec30033实际exit0、terminal回执和物理退出/端口关闭已归档。聚焦21测试/23断言、Overlay类型、i18n目录、docs检查通过。当前等待范围提交、上游同步及正常push；下一批候选为共享SearchField清除焦点，仍需实页复现，不先假定缺陷已成立。
+
+交付补记：已提交0d59082bb，fresh fetch/merge后待推集合仅此提交；完整正常pre-push通过，实际push返回0，HEAD与origin/main均为0d59082bb。随后自主进入第二批clear-intent，原未完成表述保留其记录时点。
