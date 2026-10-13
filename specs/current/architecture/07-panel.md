@@ -104,6 +104,27 @@ absolute paths retain the source reader. Explicit attachment sources retain thei
 original display names and source targets. Existing persisted source snapshots
 are not rewritten.
 
+Ordinary project-file keys and absolute containment share the server-path lexical
+normalizer with project-directory identity. Dot segments reduce against the
+selected directory, including return into the project and root clamping. Windows
+directory-prefix comparisons retain their existing case policy; the remaining
+filename preserves case, whitespace and POSIX backslashes. Same-file citations
+retain the draft resource while advancing the requested range/reveal; move and
+delete admission use that same key before reconciling the returned location.
+Explicit external/attachment source targets keep their original read-only path.
+Lexical normalization does not infer physical symlink or hardlink identities.
+
+File-content Git comparisons derive one literal worktree-relative path from the
+already admitted lexical full path. One porcelain-v2 status snapshot supplies
+the changed entry and HEAD identity, including an explicitly unborn branch.
+Exact NUL-delimited tree entries select the original blob from that commit;
+only an initial branch or a successful exact-path tree query proving a new file
+(including a prior directory or gitlink at that location) admits an empty baseline.
+Exact mode/type pairs distinguish regular blobs, symlink blobs, trees and gitlinks;
+unknown pairs and Git/protocol errors retain the existing HTTP error
+contract. Content, physical revision, permissions and original patch labels
+keep their reader contracts; raw citation spelling is never Git object syntax.
+
 Project file content projects an attachment's canonical displayName from the same
 AttachmentStore metadata for text, binary, image and PDF reads. Body path links
 therefore retain the original filename in the toolbar and accessible preview

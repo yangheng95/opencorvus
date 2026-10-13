@@ -1,0 +1,155 @@
+{
+  "boundary": "Actual independent development service HTTP before manual save; unchanged authored Git baseline",
+  "rows": [
+    {
+      "file": "notes.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "first line edited\r\nAlias ORIGINAL\r\nthird line\r\n",
+        "revision": "f411cb72229a01db900001ecf41f6be1ab2bbbefaa0ebf0222c906105a83ab21",
+        "patch": {
+          "oldFileName": "notes.txt",
+          "newFileName": "notes.txt",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 3,
+              "newStart": 1,
+              "newLines": 3,
+              "lines": [
+                "-first line",
+                "+first line edited\r",
+                " Alias ORIGINAL\r",
+                " third line\r"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: notes.txt\n===================================================================\n--- notes.txt\told\n+++ notes.txt\tnew\n@@ -1,3 +1,3 @@\n-first line\n+first line edited\r\n Alias ORIGINAL\r\n third line\r\n"
+      }
+    },
+    {
+      "file": "./notes.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "first line edited\r\nAlias ORIGINAL\r\nthird line\r\n",
+        "revision": "f411cb72229a01db900001ecf41f6be1ab2bbbefaa0ebf0222c906105a83ab21",
+        "patch": {
+          "oldFileName": "./notes.txt",
+          "newFileName": "./notes.txt",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 3,
+              "newStart": 1,
+              "newLines": 3,
+              "lines": [
+                "-first line",
+                "+first line edited\r",
+                " Alias ORIGINAL\r",
+                " third line\r"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: ./notes.txt\n===================================================================\n--- ./notes.txt\told\n+++ ./notes.txt\tnew\n@@ -1,3 +1,3 @@\n-first line\n+first line edited\r\n Alias ORIGINAL\r\n third line\r\n"
+      }
+    },
+    {
+      "file": "folder/../notes.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "first line edited\r\nAlias ORIGINAL\r\nthird line\r\n",
+        "revision": "f411cb72229a01db900001ecf41f6be1ab2bbbefaa0ebf0222c906105a83ab21",
+        "patch": {
+          "oldFileName": "folder/../notes.txt",
+          "newFileName": "folder/../notes.txt",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 3,
+              "newStart": 1,
+              "newLines": 3,
+              "lines": [
+                "-first line",
+                "+first line edited\r",
+                " Alias ORIGINAL\r",
+                " third line\r"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: folder/../notes.txt\n===================================================================\n--- folder/../notes.txt\told\n+++ folder/../notes.txt\tnew\n@@ -1,3 +1,3 @@\n-first line\n+first line edited\r\n Alias ORIGINAL\r\n third line\r\n"
+      }
+    },
+    {
+      "file": "missing/../notes.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "first line edited\r\nAlias ORIGINAL\r\nthird line\r\n",
+        "revision": "f411cb72229a01db900001ecf41f6be1ab2bbbefaa0ebf0222c906105a83ab21",
+        "patch": {
+          "oldFileName": "missing/../notes.txt",
+          "newFileName": "missing/../notes.txt",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 3,
+              "newStart": 1,
+              "newLines": 3,
+              "lines": [
+                "-first line",
+                "+first line edited\r",
+                " Alias ORIGINAL\r",
+                " third line\r"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: missing/../notes.txt\n===================================================================\n--- missing/../notes.txt\told\n+++ missing/../notes.txt\tnew\n@@ -1,3 +1,3 @@\n-first line\n+first line edited\r\n Alias ORIGINAL\r\n third line\r\n"
+      }
+    },
+    {
+      "file": "../project/notes.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "first line edited\r\nAlias ORIGINAL\r\nthird line\r\n",
+        "revision": "f411cb72229a01db900001ecf41f6be1ab2bbbefaa0ebf0222c906105a83ab21",
+        "patch": {
+          "oldFileName": "../project/notes.txt",
+          "newFileName": "../project/notes.txt",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 3,
+              "newStart": 1,
+              "newLines": 3,
+              "lines": [
+                "-first line",
+                "+first line edited\r",
+                " Alias ORIGINAL\r",
+                " third line\r"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: ../project/notes.txt\n===================================================================\n--- ../project/notes.txt\told\n+++ ../project/notes.txt\tnew\n@@ -1,3 +1,3 @@\n-first line\n+first line edited\r\n Alias ORIGINAL\r\n third line\r\n"
+      }
+    }
+  ]
+}

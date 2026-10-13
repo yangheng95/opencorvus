@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件点段身份](2026-10-13-file-alias-identity/README.md)：真实 Git/API 和桌面引用前后证据。
+
 - [持续目标模式验收](2026-10-13-continuous-goal-mode/README.md)：三种真实模型执行、Task 跨轮次重开、计量与最终桌面截图。
 
 - [网页读取的语义空白保真](2026-10-13-webfetch-text-fidelity-382/README.md)：聚焦正向测试、真实流式模型、持久化正文与桌面截图。

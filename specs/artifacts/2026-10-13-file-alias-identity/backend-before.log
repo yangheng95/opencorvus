@@ -1,0 +1,604 @@
+$ bun script/run-tests.ts "../../.tmp-codex-file-alias-01a133/file-alias-backend-probe.test.ts"
+[1/1] START ../../.tmp-codex-file-alias-01a133/file-alias-backend-probe.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{
+  "platform": "win32",
+  "url": "http://127.0.0.1:60550/",
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+  "base": "baseline-one\nbaseline-two\n",
+  "content": "edited-one\nbaseline-two\n",
+  "rows": [
+    {
+      "file": "README.md",
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\README.md",
+      "identity": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "localGit": true
+      },
+      "git": {
+        "exit": 0,
+        "text": "baseline-one\nbaseline-two\n",
+        "stderr": ""
+      },
+      "direct": {
+        "type": "text",
+        "content": "edited-one\nbaseline-two\n",
+        "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+        "patch": {
+          "oldFileName": "README.md",
+          "newFileName": "README.md",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 2,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                "-baseline-one",
+                "+edited-one",
+                " baseline-two"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: README.md\n===================================================================\n--- README.md\told\n+++ README.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+      },
+      "http": {
+        "status": 200,
+        "body": {
+          "type": "text",
+          "content": "edited-one\nbaseline-two\n",
+          "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+          "patch": {
+            "oldFileName": "README.md",
+            "newFileName": "README.md",
+            "oldHeader": "old",
+            "newHeader": "new",
+            "hunks": [
+              {
+                "oldStart": 1,
+                "oldLines": 2,
+                "newStart": 1,
+                "newLines": 2,
+                "lines": [
+                  "-baseline-one",
+                  "+edited-one",
+                  " baseline-two"
+                ]
+              }
+            ]
+          },
+          "diff": "Index: README.md\n===================================================================\n--- README.md\told\n+++ README.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+        }
+      }
+    },
+    {
+      "file": "./README.md",
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\README.md",
+      "identity": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "localGit": true
+      },
+      "git": {
+        "exit": 0,
+        "text": "baseline-one\nbaseline-two\n",
+        "stderr": ""
+      },
+      "direct": {
+        "type": "text",
+        "content": "edited-one\nbaseline-two\n",
+        "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+        "patch": {
+          "oldFileName": "./README.md",
+          "newFileName": "./README.md",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 2,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                "-baseline-one",
+                "+edited-one",
+                " baseline-two"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: ./README.md\n===================================================================\n--- ./README.md\told\n+++ ./README.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+      },
+      "http": {
+        "status": 200,
+        "body": {
+          "type": "text",
+          "content": "edited-one\nbaseline-two\n",
+          "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+          "patch": {
+            "oldFileName": "./README.md",
+            "newFileName": "./README.md",
+            "oldHeader": "old",
+            "newHeader": "new",
+            "hunks": [
+              {
+                "oldStart": 1,
+                "oldLines": 2,
+                "newStart": 1,
+                "newLines": 2,
+                "lines": [
+                  "-baseline-one",
+                  "+edited-one",
+                  " baseline-two"
+                ]
+              }
+            ]
+          },
+          "diff": "Index: ./README.md\n===================================================================\n--- ./README.md\told\n+++ ./README.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+        }
+      }
+    },
+    {
+      "file": "folder/../README.md",
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\README.md",
+      "identity": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "localGit": true
+      },
+      "git": {
+        "exit": 0,
+        "text": "commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\nAuthor: OpenCorvus Test <opencorvus-test@example.invalid>\nDate:   Tue Oct 13 14:17:39 2026 +0800\n\n    tracked fixture\n\ndiff --git a/README.md b/README.md\nnew file mode 100644\nindex 0000000..222d975\n--- /dev/null\n+++ b/README.md\n@@ -0,0 +1,2 @@\n+baseline-one\n+baseline-two\n",
+        "stderr": ""
+      },
+      "direct": {
+        "type": "text",
+        "content": "edited-one\nbaseline-two\n",
+        "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+        "patch": {
+          "oldFileName": "folder/../README.md",
+          "newFileName": "folder/../README.md",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 14,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                "-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a",
+                "-Author: OpenCorvus Test <opencorvus-test@example.invalid>",
+                "-Date:   Tue Oct 13 14:17:39 2026 +0800",
+                "-",
+                "-    tracked fixture",
+                "-",
+                "-diff --git a/README.md b/README.md",
+                "-new file mode 100644",
+                "-index 0000000..222d975",
+                "---- /dev/null",
+                "-+++ b/README.md",
+                "-@@ -0,0 +1,2 @@",
+                "-+baseline-one",
+                "-+baseline-two",
+                "+edited-one",
+                "+baseline-two"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: folder/../README.md\n===================================================================\n--- folder/../README.md\told\n+++ folder/../README.md\tnew\n@@ -1,14 +1,2 @@\n-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\n-Author: OpenCorvus Test <opencorvus-test@example.invalid>\n-Date:   Tue Oct 13 14:17:39 2026 +0800\n-\n-    tracked fixture\n-\n-diff --git a/README.md b/README.md\n-new file mode 100644\n-index 0000000..222d975\n---- /dev/null\n-+++ b/README.md\n-@@ -0,0 +1,2 @@\n-+baseline-one\n-+baseline-two\n+edited-one\n+baseline-two\n"
+      },
+      "http": {
+        "status": 200,
+        "body": {
+          "type": "text",
+          "content": "edited-one\nbaseline-two\n",
+          "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+          "patch": {
+            "oldFileName": "folder/../README.md",
+            "newFileName": "folder/../README.md",
+            "oldHeader": "old",
+            "newHeader": "new",
+            "hunks": [
+              {
+                "oldStart": 1,
+                "oldLines": 14,
+                "newStart": 1,
+                "newLines": 2,
+                "lines": [
+                  "-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a",
+                  "-Author: OpenCorvus Test <opencorvus-test@example.invalid>",
+                  "-Date:   Tue Oct 13 14:17:39 2026 +0800",
+                  "-",
+                  "-    tracked fixture",
+                  "-",
+                  "-diff --git a/README.md b/README.md",
+                  "-new file mode 100644",
+                  "-index 0000000..222d975",
+                  "---- /dev/null",
+                  "-+++ b/README.md",
+                  "-@@ -0,0 +1,2 @@",
+                  "-+baseline-one",
+                  "-+baseline-two",
+                  "+edited-one",
+                  "+baseline-two"
+                ]
+              }
+            ]
+          },
+          "diff": "Index: folder/../README.md\n===================================================================\n--- folder/../README.md\told\n+++ folder/../README.md\tnew\n@@ -1,14 +1,2 @@\n-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\n-Author: OpenCorvus Test <opencorvus-test@example.invalid>\n-Date:   Tue Oct 13 14:17:39 2026 +0800\n-\n-    tracked fixture\n-\n-diff --git a/README.md b/README.md\n-new file mode 100644\n-index 0000000..222d975\n---- /dev/null\n-+++ b/README.md\n-@@ -0,0 +1,2 @@\n-+baseline-one\n-+baseline-two\n+edited-one\n+baseline-two\n"
+        }
+      }
+    },
+    {
+      "file": "missing/../README.md",
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\README.md",
+      "identity": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "localGit": true
+      },
+      "git": {
+        "exit": 0,
+        "text": "commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\nAuthor: OpenCorvus Test <opencorvus-test@example.invalid>\nDate:   Tue Oct 13 14:17:39 2026 +0800\n\n    tracked fixture\n\ndiff --git a/README.md b/README.md\nnew file mode 100644\nindex 0000000..222d975\n--- /dev/null\n+++ b/README.md\n@@ -0,0 +1,2 @@\n+baseline-one\n+baseline-two\n",
+        "stderr": ""
+      },
+      "direct": {
+        "type": "text",
+        "content": "edited-one\nbaseline-two\n",
+        "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+        "patch": {
+          "oldFileName": "missing/../README.md",
+          "newFileName": "missing/../README.md",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 14,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                "-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a",
+                "-Author: OpenCorvus Test <opencorvus-test@example.invalid>",
+                "-Date:   Tue Oct 13 14:17:39 2026 +0800",
+                "-",
+                "-    tracked fixture",
+                "-",
+                "-diff --git a/README.md b/README.md",
+                "-new file mode 100644",
+                "-index 0000000..222d975",
+                "---- /dev/null",
+                "-+++ b/README.md",
+                "-@@ -0,0 +1,2 @@",
+                "-+baseline-one",
+                "-+baseline-two",
+                "+edited-one",
+                "+baseline-two"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: missing/../README.md\n===================================================================\n--- missing/../README.md\told\n+++ missing/../README.md\tnew\n@@ -1,14 +1,2 @@\n-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\n-Author: OpenCorvus Test <opencorvus-test@example.invalid>\n-Date:   Tue Oct 13 14:17:39 2026 +0800\n-\n-    tracked fixture\n-\n-diff --git a/README.md b/README.md\n-new file mode 100644\n-index 0000000..222d975\n---- /dev/null\n-+++ b/README.md\n-@@ -0,0 +1,2 @@\n-+baseline-one\n-+baseline-two\n+edited-one\n+baseline-two\n"
+      },
+      "http": {
+        "status": 200,
+        "body": {
+          "type": "text",
+          "content": "edited-one\nbaseline-two\n",
+          "revision": "1a49036ca1ad5aade08fb586d4f581c8b8981a24c5ee2a3342e9c372bee121d9",
+          "patch": {
+            "oldFileName": "missing/../README.md",
+            "newFileName": "missing/../README.md",
+            "oldHeader": "old",
+            "newHeader": "new",
+            "hunks": [
+              {
+                "oldStart": 1,
+                "oldLines": 14,
+                "newStart": 1,
+                "newLines": 2,
+                "lines": [
+                  "-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a",
+                  "-Author: OpenCorvus Test <opencorvus-test@example.invalid>",
+                  "-Date:   Tue Oct 13 14:17:39 2026 +0800",
+                  "-",
+                  "-    tracked fixture",
+                  "-",
+                  "-diff --git a/README.md b/README.md",
+                  "-new file mode 100644",
+                  "-index 0000000..222d975",
+                  "---- /dev/null",
+                  "-+++ b/README.md",
+                  "-@@ -0,0 +1,2 @@",
+                  "-+baseline-one",
+                  "-+baseline-two",
+                  "+edited-one",
+                  "+baseline-two"
+                ]
+              }
+            ]
+          },
+          "diff": "Index: missing/../README.md\n===================================================================\n--- missing/../README.md\told\n+++ missing/../README.md\tnew\n@@ -1,14 +1,2 @@\n-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\n-Author: OpenCorvus Test <opencorvus-test@example.invalid>\n-Date:   Tue Oct 13 14:17:39 2026 +0800\n-\n-    tracked fixture\n-\n-diff --git a/README.md b/README.md\n-new file mode 100644\n-index 0000000..222d975\n---- /dev/null\n-+++ b/README.md\n-@@ -0,0 +1,2 @@\n-+baseline-one\n-+baseline-two\n+edited-one\n+baseline-two\n"
+        }
+      }
+    },
+    {
+      "file": "资料/ Source note.md",
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\资料\\ Source note.md",
+      "identity": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "localGit": true
+      },
+      "git": {
+        "exit": 0,
+        "text": "baseline-one\nbaseline-two\n",
+        "stderr": ""
+      },
+      "direct": {
+        "type": "text",
+        "content": "edited-one\nbaseline-two\n",
+        "revision": "0c02fcd56c87c8d1e45e4a5de72a087748c34f0f7a96910e4d0dc536e98088c7",
+        "patch": {
+          "oldFileName": "资料/ Source note.md",
+          "newFileName": "资料/ Source note.md",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 2,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                "-baseline-one",
+                "+edited-one",
+                " baseline-two"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: 资料/ Source note.md\n===================================================================\n--- 资料/ Source note.md\told\n+++ 资料/ Source note.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+      },
+      "http": {
+        "status": 200,
+        "body": {
+          "type": "text",
+          "content": "edited-one\nbaseline-two\n",
+          "revision": "0c02fcd56c87c8d1e45e4a5de72a087748c34f0f7a96910e4d0dc536e98088c7",
+          "patch": {
+            "oldFileName": "资料/ Source note.md",
+            "newFileName": "资料/ Source note.md",
+            "oldHeader": "old",
+            "newHeader": "new",
+            "hunks": [
+              {
+                "oldStart": 1,
+                "oldLines": 2,
+                "newStart": 1,
+                "newLines": 2,
+                "lines": [
+                  "-baseline-one",
+                  "+edited-one",
+                  " baseline-two"
+                ]
+              }
+            ]
+          },
+          "diff": "Index: 资料/ Source note.md\n===================================================================\n--- 资料/ Source note.md\told\n+++ 资料/ Source note.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+        }
+      }
+    },
+    {
+      "file": "./资料/ Source note.md",
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\资料\\ Source note.md",
+      "identity": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "localGit": true
+      },
+      "git": {
+        "exit": 0,
+        "text": "baseline-one\nbaseline-two\n",
+        "stderr": ""
+      },
+      "direct": {
+        "type": "text",
+        "content": "edited-one\nbaseline-two\n",
+        "revision": "0c02fcd56c87c8d1e45e4a5de72a087748c34f0f7a96910e4d0dc536e98088c7",
+        "patch": {
+          "oldFileName": "./资料/ Source note.md",
+          "newFileName": "./资料/ Source note.md",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 2,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                "-baseline-one",
+                "+edited-one",
+                " baseline-two"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: ./资料/ Source note.md\n===================================================================\n--- ./资料/ Source note.md\told\n+++ ./资料/ Source note.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+      },
+      "http": {
+        "status": 200,
+        "body": {
+          "type": "text",
+          "content": "edited-one\nbaseline-two\n",
+          "revision": "0c02fcd56c87c8d1e45e4a5de72a087748c34f0f7a96910e4d0dc536e98088c7",
+          "patch": {
+            "oldFileName": "./资料/ Source note.md",
+            "newFileName": "./资料/ Source note.md",
+            "oldHeader": "old",
+            "newHeader": "new",
+            "hunks": [
+              {
+                "oldStart": 1,
+                "oldLines": 2,
+                "newStart": 1,
+                "newLines": 2,
+                "lines": [
+                  "-baseline-one",
+                  "+edited-one",
+                  " baseline-two"
+                ]
+              }
+            ]
+          },
+          "diff": "Index: ./资料/ Source note.md\n===================================================================\n--- ./资料/ Source note.md\told\n+++ ./资料/ Source note.md\tnew\n@@ -1,2 +1,2 @@\n-baseline-one\n+edited-one\n baseline-two\n"
+        }
+      }
+    },
+    {
+      "file": "folder/../资料/ Source note.md",
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\资料\\ Source note.md",
+      "identity": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU",
+        "localGit": true
+      },
+      "git": {
+        "exit": 0,
+        "text": "commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\nAuthor: OpenCorvus Test <opencorvus-test@example.invalid>\nDate:   Tue Oct 13 14:17:39 2026 +0800\n\n    tracked fixture\n\ndiff --git \"a/\\350\\265\\204\\346\\226\\231/ Source note.md\" \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\nnew file mode 100644\nindex 0000000..222d975\n--- /dev/null\n+++ \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\t\n@@ -0,0 +1,2 @@\n+baseline-one\n+baseline-two\n",
+        "stderr": ""
+      },
+      "direct": {
+        "type": "text",
+        "content": "edited-one\nbaseline-two\n",
+        "revision": "0c02fcd56c87c8d1e45e4a5de72a087748c34f0f7a96910e4d0dc536e98088c7",
+        "patch": {
+          "oldFileName": "folder/../资料/ Source note.md",
+          "newFileName": "folder/../资料/ Source note.md",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 14,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                "-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a",
+                "-Author: OpenCorvus Test <opencorvus-test@example.invalid>",
+                "-Date:   Tue Oct 13 14:17:39 2026 +0800",
+                "-",
+                "-    tracked fixture",
+                "-",
+                "-diff --git \"a/\\350\\265\\204\\346\\226\\231/ Source note.md\" \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"",
+                "-new file mode 100644",
+                "-index 0000000..222d975",
+                "---- /dev/null",
+                "-+++ \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\t",
+                "-@@ -0,0 +1,2 @@",
+                "-+baseline-one",
+                "-+baseline-two",
+                "+edited-one",
+                "+baseline-two"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: folder/../资料/ Source note.md\n===================================================================\n--- folder/../资料/ Source note.md\told\n+++ folder/../资料/ Source note.md\tnew\n@@ -1,14 +1,2 @@\n-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\n-Author: OpenCorvus Test <opencorvus-test@example.invalid>\n-Date:   Tue Oct 13 14:17:39 2026 +0800\n-\n-    tracked fixture\n-\n-diff --git \"a/\\350\\265\\204\\346\\226\\231/ Source note.md\" \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\n-new file mode 100644\n-index 0000000..222d975\n---- /dev/null\n-+++ \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\t\n-@@ -0,0 +1,2 @@\n-+baseline-one\n-+baseline-two\n+edited-one\n+baseline-two\n"
+      },
+      "http": {
+        "status": 200,
+        "body": {
+          "type": "text",
+          "content": "edited-one\nbaseline-two\n",
+          "revision": "0c02fcd56c87c8d1e45e4a5de72a087748c34f0f7a96910e4d0dc536e98088c7",
+          "patch": {
+            "oldFileName": "folder/../资料/ Source note.md",
+            "newFileName": "folder/../资料/ Source note.md",
+            "oldHeader": "old",
+            "newHeader": "new",
+            "hunks": [
+              {
+                "oldStart": 1,
+                "oldLines": 14,
+                "newStart": 1,
+                "newLines": 2,
+                "lines": [
+                  "-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a",
+                  "-Author: OpenCorvus Test <opencorvus-test@example.invalid>",
+                  "-Date:   Tue Oct 13 14:17:39 2026 +0800",
+                  "-",
+                  "-    tracked fixture",
+                  "-",
+                  "-diff --git \"a/\\350\\265\\204\\346\\226\\231/ Source note.md\" \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"",
+                  "-new file mode 100644",
+                  "-index 0000000..222d975",
+                  "---- /dev/null",
+                  "-+++ \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\t",
+                  "-@@ -0,0 +1,2 @@",
+                  "-+baseline-one",
+                  "-+baseline-two",
+                  "+edited-one",
+                  "+baseline-two"
+                ]
+              }
+            ]
+          },
+          "diff": "Index: folder/../资料/ Source note.md\n===================================================================\n--- folder/../资料/ Source note.md\told\n+++ folder/../资料/ Source note.md\tnew\n@@ -1,14 +1,2 @@\n-commit 52d305f3c16c469e32c038113a3ec1eeb08f188a\n-Author: OpenCorvus Test <opencorvus-test@example.invalid>\n-Date:   Tue Oct 13 14:17:39 2026 +0800\n-\n-    tracked fixture\n-\n-diff --git \"a/\\350\\265\\204\\346\\226\\231/ Source note.md\" \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\n-new file mode 100644\n-index 0000000..222d975\n---- /dev/null\n-+++ \"b/\\350\\265\\204\\346\\226\\231/ Source note.md\"\t\n-@@ -0,0 +1,2 @@\n-+baseline-one\n-+baseline-two\n+edited-one\n+baseline-two\n"
+        }
+      }
+    },
+    {
+      "subdir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\folder",
+      "sub": {
+        "identity": {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\folder",
+          "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\folder",
+          "projectWorktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-E4dApI\\test-45072-njSV4i\\fixtures\\memory-Az4XWU\\folder",
+          "localGit": false
+        },
+        "content": {
+          "type": "text",
+          "content": "baseline-one\nbaseline-two\n",
+          "revision": "ef78d23706575c72934e1de3481d3bc3d7da3820c0302451c0be76b85362530e"
+        },
+        "parentRead": {
+          "error": {
+            "name": "Error",
+            "message": "Access denied: path escapes project directory"
+          }
+        }
+      }
+    },
+    {
+      "explicitMissingGit": {
+        "exit": 128,
+        "text": "",
+        "stderr": "fatal: path 'missing-tracked-file.md' does not exist in 'HEAD'\n"
+      }
+    }
+  ]
+}
+(pass) read-only File alias audit across live HTTP and exact physical reads [8805.24ms]
+
+ 1 pass
+ 0 fail
+ 14 expect() calls
+Ran 1 test across 1 file. [10.08s]
+[1/1] DONE ../../.tmp-codex-file-alias-01a133/file-alias-backend-probe.test.ts exit=0 duration=10.88s

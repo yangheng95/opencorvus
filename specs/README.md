@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目文件点段身份](records/2026-10/2026-10-13-file-alias-identity.md)：词法归属、草稿导航与真实 Git 差异。
+
 - [Chat、Task、Mission 持续目标模式](records/2026-10/2026-10-13-continuous-goal-mode.md)：现状、授权与轮次、预算合同、实施和验收。
 - [持续目标验收证据](artifacts/2026-10-13-continuous-goal-mode/README.md)：真实多轮、终态重开、用量与桌面截图。
 
