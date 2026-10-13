@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [390 执行轮次身份](2026-10-05-connection-workspace-authority/execution-actor-identity-390/README.md)：共享身份契约和真实模型/页面证据。
+
 - [持续目标重复恢复证据](2026-10-13-continuous-goal-repeated-recovery/README.md)：逐代中断事实、真实模型请求和独立二次复核。
 
 - [393 用户 MCP 资源与附件输入](2026-10-13-mcp-user-resource-input-393/README.md)：正式正向测试、四独立模型轮次原失败与终态、成功 Chat/实际下载的公开证据。

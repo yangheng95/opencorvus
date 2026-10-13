@@ -20,6 +20,7 @@ import {
 } from "@/engine/task-session-lineage"
 import { timelineMessageOrderKey, timelineOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
+import { persistedExecutionIdentity } from "@/agent/persisted-execution-identity"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
@@ -29,7 +30,6 @@ import {
   type MissionCallerReceiptParticipantEvidence,
   resolveMissionCallerReceiptParticipant,
 } from "@/mission/caller-participant"
-import { rightSidebarConversationAgentID } from "@/chat/session"
 import { Context } from "@/util/context"
 import { awaitWithAbort } from "@/util/abort"
 
@@ -196,10 +196,7 @@ export function overlayMeta(
     throw new Error(`overlayMeta: assistant message on session ${sessionID} has non-agent author ${author}`)
   }
   const occurrenceInputMessageID = role === "user" ? String(info.id || "").trim() : String(info.parentID || "").trim()
-  const projectedIdentity = occurrenceInputMessageID
-    ? WorkerTurnDescriptor.findForMessageAuthority({ sessionID, inputMessageID: occurrenceInputMessageID })?.payload
-        .identity
-    : undefined
+  if (!occurrenceInputMessageID) throw new Error(`overlayMeta: message on session ${sessionID} has no execution input`)
   const helperParticipant =
     role === "assistant" && author === declaredAgentID && HelperAgentRegistry.isID(declaredAgentID)
   const participantEvidence = resolveMissionCallerReceiptParticipant({
@@ -214,20 +211,19 @@ export function overlayMeta(
     db.select({ metadata: SessionTable.metadata }).from(SessionTable).where(eq(SessionTable.id, sessionID)).get(),
   )
   if (!sessionRow) throw new Error(`overlayMeta: session ${sessionID} disappeared while resolving its owner`)
-  const rightSidebarOwner = rightSidebarConversationAgentID({ kind, metadata: sessionRow.metadata })
   const sessionAgentID =
-    externalParticipant || rightSidebarOwner
+    role === "user"
       ? persistedSessionAgentID({
           sessionID,
           sessionKind: kind,
           metadata: sessionRow.metadata,
-          projectedIdentity,
+          inputAgentID: declaredAgentID,
+          projectedIdentity: WorkerTurnDescriptor.findForMessageAuthority({
+            sessionID,
+            inputMessageID: occurrenceInputMessageID,
+          })?.payload.identity,
         })
-      : projectedIdentity
-        ? persistedSessionAgentID({ sessionID, sessionKind: kind, projectedIdentity })
-        : RuntimeTemplateRegistry.isWorkerSessionKind(kind)
-          ? persistedSessionAgentID({ sessionID, sessionKind: kind })
-          : declaredAgentID
+      : persistedExecutionIdentity({ sessionID, inputMessageID: occurrenceInputMessageID }).agentID
   const agentID = externalParticipant ? declaredAgentID : sessionAgentID
   if (declaredAgentID !== agentID) {
     throw new Error(

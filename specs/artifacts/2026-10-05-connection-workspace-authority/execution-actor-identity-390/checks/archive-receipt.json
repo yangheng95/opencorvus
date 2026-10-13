@@ -1,0 +1,756 @@
+{
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\after-tests-initial.log",
+      "archive": "checks/local/after-tests-initial.log.gz",
+      "redactedBytes": 543,
+      "compressedBytes": 283
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\architecture-check.log",
+      "archive": "checks/local/architecture-check.log.gz",
+      "redactedBytes": 141,
+      "compressedBytes": 131
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\archive.ts",
+      "archive": "checks/local/archive.ts.gz",
+      "redactedBytes": 3386,
+      "compressedBytes": 1458
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\backend-tests-1.log",
+      "archive": "checks/local/backend-tests-1.log.gz",
+      "redactedBytes": 3927,
+      "compressedBytes": 1510
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\backend-tests-2.log",
+      "archive": "checks/local/backend-tests-2.log.gz",
+      "redactedBytes": 824,
+      "compressedBytes": 419
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\backend-tests-final.log",
+      "archive": "checks/local/backend-tests-final.log.gz",
+      "redactedBytes": 1086,
+      "compressedBytes": 540
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\before-tests.log",
+      "archive": "checks/local/before-tests.log.gz",
+      "redactedBytes": 5077,
+      "compressedBytes": 1112
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\browser-after-reload.json",
+      "archive": "checks/local/browser-after-reload.json.gz",
+      "redactedBytes": 930,
+      "compressedBytes": 258
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\browser-before-reload.json",
+      "archive": "checks/local/browser-before-reload.json.gz",
+      "redactedBytes": 742,
+      "compressedBytes": 235
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\builtin.json",
+      "archive": "checks/local/builtin.json.gz",
+      "redactedBytes": 52,
+      "compressedBytes": 58
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\caller-owner-test.log",
+      "archive": "checks/local/caller-owner-test.log.gz",
+      "redactedBytes": 270,
+      "compressedBytes": 214
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\check-runtime.mjs",
+      "archive": "checks/local/check-runtime.mjs.gz",
+      "redactedBytes": 6005,
+      "compressedBytes": 2243
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\child-conversation.json",
+      "archive": "checks/local/child-conversation.json.gz",
+      "redactedBytes": 26695,
+      "compressedBytes": 4468
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\docs-check.log",
+      "archive": "checks/local/docs-check.log.gz",
+      "redactedBytes": 106,
+      "compressedBytes": 115
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\launch.log",
+      "archive": "checks/local/launch.log.gz",
+      "redactedBytes": 1823,
+      "compressedBytes": 845
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\lifecycle-projection.before.ts",
+      "archive": "checks/local/lifecycle-projection.before.ts.gz",
+      "redactedBytes": 2010,
+      "compressedBytes": 785
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live-final.json",
+      "archive": "checks/local/live-final.json.gz",
+      "redactedBytes": 25742,
+      "compressedBytes": 5349
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live-initial.json",
+      "archive": "checks/local/live-initial.json.gz",
+      "redactedBytes": 9999,
+      "compressedBytes": 2486
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\message-bridge.before.ts",
+      "archive": "checks/local/message-bridge.before.ts.gz",
+      "redactedBytes": 50149,
+      "compressedBytes": 11413
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\message-bridge.ts.formatted.patch",
+      "archive": "checks/local/message-bridge.ts.formatted.patch.gz",
+      "redactedBytes": 8732,
+      "compressedBytes": 2220
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\parent-conversation.json",
+      "archive": "checks/local/parent-conversation.json.gz",
+      "redactedBytes": 47550,
+      "compressedBytes": 6081
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\persisted-session-identity.before.ts",
+      "archive": "checks/local/persisted-session-identity.before.ts.gz",
+      "redactedBytes": 1202,
+      "compressedBytes": 455
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\prepare.mjs",
+      "archive": "checks/local/prepare.mjs.gz",
+      "redactedBytes": 1740,
+      "compressedBytes": 712
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\read-api.mjs",
+      "archive": "checks/local/read-api.mjs.gz",
+      "redactedBytes": 1419,
+      "compressedBytes": 719
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\read-facts.ts",
+      "archive": "checks/local/read-facts.ts.gz",
+      "redactedBytes": 2885,
+      "compressedBytes": 1193
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\replay-events.log",
+      "archive": "checks/local/replay-events.log.gz",
+      "redactedBytes": 24951,
+      "compressedBytes": 5135
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\runtime-check.log",
+      "archive": "checks/local/runtime-check.log.gz",
+      "redactedBytes": 1338,
+      "compressedBytes": 879
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\shutdown.log",
+      "archive": "checks/local/shutdown.log.gz",
+      "redactedBytes": 82,
+      "compressedBytes": 90
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\task-event-projection-contract.test.ts.formatted.patch",
+      "archive": "checks/local/task-event-projection-contract.test.ts.formatted.patch.gz",
+      "redactedBytes": 9064,
+      "compressedBytes": 1904
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\task-event.before.ts",
+      "archive": "checks/local/task-event.before.ts.gz",
+      "redactedBytes": 20530,
+      "compressedBytes": 4436
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\trim-format.mjs",
+      "archive": "checks/local/trim-format.mjs.gz",
+      "redactedBytes": 857,
+      "compressedBytes": 489
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\typecheck-final.log",
+      "archive": "checks/local/typecheck-final.log.gz",
+      "redactedBytes": 439,
+      "compressedBytes": 251
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\typecheck-rerun.log",
+      "archive": "checks/local/typecheck-rerun.log.gz",
+      "redactedBytes": 1058,
+      "compressedBytes": 448
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\typecheck.log",
+      "archive": "checks/local/typecheck.log.gz",
+      "redactedBytes": 3818,
+      "compressedBytes": 605
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\view.before.ts",
+      "archive": "checks/local/view.before.ts.gz",
+      "redactedBytes": 29689,
+      "compressedBytes": 6220
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-1.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-1.json.gz",
+      "redactedBytes": 689,
+      "compressedBytes": 375
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-10.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-10.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-11.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-11.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 414
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-12.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-12.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-13.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-13.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-14.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-14.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-15.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-15.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-16.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-16.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-17.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-17.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-18.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-18.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-19.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-19.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-2.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-2.json.gz",
+      "redactedBytes": 689,
+      "compressedBytes": 374
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-20.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-20.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 417
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-21.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-21.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-22.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-22.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-23.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-23.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-24.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-24.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-25.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-25.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-26.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-26.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 414
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-27.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-27.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-28.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-28.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-29.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-29.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-3.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-3.json.gz",
+      "redactedBytes": 800,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-30.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-30.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-31.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-31.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-32.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-32.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-33.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-33.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-34.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-34.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-35.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-35.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-36.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-36.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-37.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-37.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-38.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-38.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-39.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-39.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-4.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-4.json.gz",
+      "redactedBytes": 800,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-40.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-40.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-41.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-41.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 414
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-42.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-42.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-43.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-43.json.gz",
+      "redactedBytes": 801,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-5.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-5.json.gz",
+      "redactedBytes": 800,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-6.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-6.json.gz",
+      "redactedBytes": 800,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-7.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-7.json.gz",
+      "redactedBytes": 800,
+      "compressedBytes": 416
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-8.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-8.json.gz",
+      "redactedBytes": 800,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-chain-supervision-47204-9.json",
+      "archive": "checks/local/live/actor390-live-chain-supervision-47204-9.json.gz",
+      "redactedBytes": 800,
+      "compressedBytes": 415
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-final-provider-audit.json",
+      "archive": "checks/local/live/actor390-live-final-provider-audit.json.gz",
+      "redactedBytes": 130744,
+      "compressedBytes": 3221
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-physical-terminal-and-pair-cleanup.json",
+      "archive": "checks/local/live/actor390-live-physical-terminal-and-pair-cleanup.json.gz",
+      "redactedBytes": 2433,
+      "compressedBytes": 858
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-qualified-surface-completion.json",
+      "archive": "checks/local/live/actor390-live-qualified-surface-completion.json.gz",
+      "redactedBytes": 361,
+      "compressedBytes": 239
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-settlement-owner.json",
+      "archive": "checks/local/live/actor390-live-settlement-owner.json.gz",
+      "redactedBytes": 477,
+      "compressedBytes": 302
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\execution-actor-identity-390\\live\\actor390-live-shutdown-admission.json",
+      "archive": "checks/local/live/actor390-live-shutdown-admission.json.gz",
+      "redactedBytes": 529,
+      "compressedBytes": 362
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\stdout.log",
+      "archive": "checks/runtime/stdout.log.gz",
+      "redactedBytes": 552,
+      "compressedBytes": 371
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\stderr.log",
+      "archive": "checks/runtime/stderr.log.gz",
+      "redactedBytes": 8018,
+      "compressedBytes": 819
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\startup.json",
+      "archive": "checks/runtime/startup.json.gz",
+      "redactedBytes": 152,
+      "compressedBytes": 148
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\launch-owner.json",
+      "archive": "checks/runtime/launch-owner.json.gz",
+      "redactedBytes": 3408,
+      "compressedBytes": 1298
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\runtime\\log\\dev.log",
+      "archive": "checks/runtime/runtime/log/dev.log.gz",
+      "redactedBytes": 2928666,
+      "compressedBytes": 90633
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\authority-ready.json",
+      "archive": "checks/runtime/evidence/authority-ready.json.gz",
+      "redactedBytes": 15926,
+      "compressedBytes": 2776
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\managed-parent-ready.json",
+      "archive": "checks/runtime/evidence/managed-parent-ready.json.gz",
+      "redactedBytes": 502,
+      "compressedBytes": 302
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\native-host-ready.json",
+      "archive": "checks/runtime/evidence/native-host-ready.json.gz",
+      "redactedBytes": 1902,
+      "compressedBytes": 700
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\native-host-settled.json",
+      "archive": "checks/runtime/evidence/native-host-settled.json.gz",
+      "redactedBytes": 903,
+      "compressedBytes": 475
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\owned-config-hierarchy.json",
+      "archive": "checks/runtime/evidence/owned-config-hierarchy.json.gz",
+      "redactedBytes": 764,
+      "compressedBytes": 337
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\preflight-ready.json",
+      "archive": "checks/runtime/evidence/preflight-ready.json.gz",
+      "redactedBytes": 691,
+      "compressedBytes": 430
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\profile-selection-admitted.json",
+      "archive": "checks/runtime/evidence/profile-selection-admitted.json.gz",
+      "redactedBytes": 268,
+      "compressedBytes": 183
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\project-baseline.json",
+      "archive": "checks/runtime/evidence/project-baseline.json.gz",
+      "redactedBytes": 468,
+      "compressedBytes": 332
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-1.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-1.json.gz",
+      "redactedBytes": 262,
+      "compressedBytes": 217
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-10.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-10.json.gz",
+      "redactedBytes": 28674,
+      "compressedBytes": 1676
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-11.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-11.json.gz",
+      "redactedBytes": 28715,
+      "compressedBytes": 1688
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-12.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-12.json.gz",
+      "redactedBytes": 29227,
+      "compressedBytes": 1743
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-13.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-13.json.gz",
+      "redactedBytes": 29272,
+      "compressedBytes": 1741
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-14.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-14.json.gz",
+      "redactedBytes": 36800,
+      "compressedBytes": 1879
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-15.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-15.json.gz",
+      "redactedBytes": 36839,
+      "compressedBytes": 1888
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-16.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-16.json.gz",
+      "redactedBytes": 37334,
+      "compressedBytes": 1972
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-17.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-17.json.gz",
+      "redactedBytes": 44862,
+      "compressedBytes": 2056
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-18.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-18.json.gz",
+      "redactedBytes": 44901,
+      "compressedBytes": 2065
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-19.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-19.json.gz",
+      "redactedBytes": 45396,
+      "compressedBytes": 2120
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-2.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-2.json.gz",
+      "redactedBytes": 438,
+      "compressedBytes": 304
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-20.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-20.json.gz",
+      "redactedBytes": 59373,
+      "compressedBytes": 2274
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-21.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-21.json.gz",
+      "redactedBytes": 59412,
+      "compressedBytes": 2280
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-22.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-22.json.gz",
+      "redactedBytes": 59923,
+      "compressedBytes": 2339
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-3.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-3.json.gz",
+      "redactedBytes": 13043,
+      "compressedBytes": 1026
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-4.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-4.json.gz",
+      "redactedBytes": 13082,
+      "compressedBytes": 1057
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-5.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-5.json.gz",
+      "redactedBytes": 13522,
+      "compressedBytes": 1265
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-6.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-6.json.gz",
+      "redactedBytes": 14019,
+      "compressedBytes": 1362
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-7.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-7.json.gz",
+      "redactedBytes": 14064,
+      "compressedBytes": 1359
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-8.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-8.json.gz",
+      "redactedBytes": 14241,
+      "compressedBytes": 1371
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-9.json",
+      "archive": "checks/runtime/evidence/provider-80480-0f592352-2517-4a65-91bf-24f614f7ab27-9.json.gz",
+      "redactedBytes": 14280,
+      "compressedBytes": 1381
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\evidence\\provider-pair-staging.json",
+      "archive": "checks/runtime/evidence/provider-pair-staging.json.gz",
+      "redactedBytes": 1703,
+      "compressedBytes": 477
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-execution-actor-390-live.ts",
+      "archive": "checks/launcher/live-sol-execution-actor-390-live.ts.gz",
+      "redactedBytes": 33465,
+      "compressedBytes": 9569
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-execution-actor-390-live-launch.ps1",
+      "archive": "checks/launcher/live-sol-execution-actor-390-live-launch.ps1.gz",
+      "redactedBytes": 33063,
+      "compressedBytes": 8232
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-execution-actor-390-live-shutdown.ps1",
+      "archive": "checks/launcher/live-sol-execution-actor-390-live-shutdown.ps1.gz",
+      "redactedBytes": 9059,
+      "compressedBytes": 2924
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\project\\来源材料\\方案甲.txt",
+      "archive": "checks/input/方案甲.txt.gz",
+      "redactedBytes": 59,
+      "compressedBytes": 82
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live-bundle\\bin\\ui\\index.html",
+      "archive": "checks/static-ui/index.html.gz",
+      "redactedBytes": 11891,
+      "compressedBytes": 2860
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\child-refresh-retention-389\\push.log",
+      "archive": "checks/previous-389/push.log.gz",
+      "redactedBytes": 3454,
+      "compressedBytes": 1273
+    }
+  ],
+  "integrity": "Every complete redacted input equals its decompressed archive. Integrity check is not functional acceptance.",
+  "ui": "Immutable 389-final formal bundle copied for this backend-only change; same main-hq8_CedM.js. Manual screenshots 01–05 are the visual evidence."
+}

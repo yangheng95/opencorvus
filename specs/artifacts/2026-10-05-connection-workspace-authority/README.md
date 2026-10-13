@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [390 执行轮次身份](execution-actor-identity-plan-390.md)：[消息、生命周期与真实成员更新](execution-actor-identity-390/README.md)。
+
 - [389 成员刷新失败可读性](child-refresh-retention-plan-389.md)：[真实读取中断与错误恢复](child-refresh-retention-389/README.md)。
 
 - [388 参考历史重连身份](history-render-identity-plan-388.md)：[真实侧聊与正文生命周期](history-render-identity-388/README.md)。

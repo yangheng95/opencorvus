@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [390 执行轮次身份](2026-10-13-execution-actor-identity-390.md)：真实输入身份、成员最终正文与Sources、协议回放和单agent验收。
+
 - [持续目标重复崩溃与子 Task](2026-10-13-continuous-goal-repeated-recovery.md)：连续中断、恢复身份和真实子任务验收。
 
 - [393 用户资源与附件归属](2026-10-13-mcp-user-resource-input-393.md)：空MCP资源与公开Session附件项目绑定的真实输入合同。

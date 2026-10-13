@@ -3,6 +3,7 @@ import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage
 import { PersistedWorkerTurnDescriptorIncompatibleError } from "@/agent/worker-turn-descriptor-facts"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
+import { persistedExecutionIdentity } from "@/agent/persisted-execution-identity"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { MessageTable, type SessionKind } from "@/session/session.sql"
 import { Database, eq, sql } from "@/storage/db"
@@ -507,17 +508,7 @@ export function taskExecutionProjectionForTask(taskID: string): TaskExecutionPro
     if (!row.inputMessageID || !row.statusType || !(row.emittedAt > 0)) {
       throw new Error(`Task ${taskID} execution event ${row.eventID} has incomplete occurrence identity`)
     }
-    const inputMessage = Database.use((db) =>
-      db
-        .select({ sessionID: MessageTable.session_id, data: MessageTable.data })
-        .from(MessageTable)
-        .where(eq(MessageTable.id, row.inputMessageID!))
-        .get(),
-    )
-    if (!inputMessage || inputMessage.sessionID !== row.sessionID || inputMessage.data.role !== "user") {
-      throw new Error(`Task ${taskID} execution event ${row.eventID} does not reference its durable user message`)
-    }
-    const descriptor = WorkerTurnDescriptor.findForMessageAuthority({
+    const identity = persistedExecutionIdentity({
       sessionID: row.sessionID,
       inputMessageID: row.inputMessageID,
     })
@@ -536,6 +527,9 @@ export function taskExecutionProjectionForTask(taskID: string): TaskExecutionPro
       if (current.sessionID !== row.sessionID) {
         throw new Error(`Task ${taskID} input message ${row.inputMessageID} spans multiple Sessions`)
       }
+      if (current.agent !== identity.agentID || current.kind !== identity.kind) {
+        throw new Error(`Task ${taskID} input message ${row.inputMessageID} has inconsistent execution identity`)
+      }
       current.events.push(event)
       current.latest = event
       continue
@@ -543,9 +537,9 @@ export function taskExecutionProjectionForTask(taskID: string): TaskExecutionPro
     occurrences.set(row.inputMessageID, {
       inputMessageID: row.inputMessageID,
       sessionID: row.sessionID,
-      agent: descriptor?.payload.identity.agentID ?? session.agentID,
-      kind: descriptor?.payload.identity.sessionKind ?? session.stage,
-      preparedAt: descriptor?.time.created,
+      agent: identity.agentID,
+      kind: identity.kind,
+      preparedAt: identity.preparedAt,
       events: [event],
       latest: event,
     })

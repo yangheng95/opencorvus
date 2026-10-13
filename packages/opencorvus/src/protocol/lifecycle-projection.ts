@@ -1,7 +1,4 @@
-import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
-import { Database, eq } from "@/storage/db"
-import { SessionTable } from "@/session/session.sql"
+import { persistedExecutionIdentity } from "@/agent/persisted-execution-identity"
 
 /** The sole read-time projection for one persisted execution occurrence.
  * Durable protocol payloads retain only occurrence facts; Session routing is
@@ -11,20 +8,10 @@ export function projectLifecycleProperties(
   sessionID: string,
   input: { orderKey: string },
 ): Record<string, unknown> {
-  const session = Database.use((db) => db
-    .select({ kind: SessionTable.kind, parentID: SessionTable.parent_id, metadata: SessionTable.metadata })
-    .from(SessionTable)
-    .where(eq(SessionTable.id, sessionID))
-    .get())
-  if (!session) throw new Error(`lifecycle projection: session ${sessionID} does not exist`)
   const inputMessageID = typeof properties.inputMessageID === "string" ? properties.inputMessageID.trim() : ""
   if (!inputMessageID) throw new Error(`lifecycle projection: session ${sessionID} has no input message identity`)
-  const agentID = persistedSessionAgentID({
-    sessionID,
-    sessionKind: session.kind,
-    metadata: session.metadata,
-    projectedIdentity: WorkerTurnDescriptor.findForMessageAuthority({ sessionID, inputMessageID })?.payload.identity,
-  })
+  const session = persistedExecutionIdentity({ sessionID, inputMessageID })
+  const agentID = session.agentID
   const providedOrderKey = typeof properties.orderKey === "string" ? properties.orderKey.trim() : ""
   if (providedOrderKey && providedOrderKey !== input.orderKey) {
     throw new Error(`lifecycle projection: session ${sessionID} orderKey drift between payload and envelope`)

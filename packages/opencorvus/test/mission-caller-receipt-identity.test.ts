@@ -10,6 +10,7 @@ import {
 } from "@/mission/caller-receipt"
 import { missionCallerReceiptOccurrenceIdentity } from "@/mission/caller-receipt-identity"
 import { Instance } from "@/project/instance"
+import { projectPersistedSessionMessage } from "@/orchestrator/protocol/message-bridge"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { Provider } from "@/provider/provider"
 import { Session } from "@/session"
@@ -104,6 +105,12 @@ test("persists and replays one compact Mission caller receipt with complete prov
       })
       expect((await Session.get(fixture.missionSession.id)).metadata).toMatchObject({
         mission: { receipt: first },
+      })
+      const projected = projectPersistedSessionMessage(
+        await MessageStore.get({ sessionID: fixture.callerSession.id, messageID: occurrence.messageID }),
+      )
+      expect(projected.info).toMatchObject({
+        author: "mission", agentID: "mission", sessionAgentID: "work", parentID: fixture.callerMessageID,
       })
     },
   })

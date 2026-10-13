@@ -7,7 +7,6 @@ import {
   projectConversationAgentActivityPart,
   type ConversationAgentActivityItem,
 } from "@opencorvus-ai/transport-protocol"
-import { AgentRoleContract } from "@/agent/role-contract"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { isMissionCallerReceiptParticipant } from "@/mission/caller-participant"
 import { Message } from "@/session/message"
@@ -148,15 +147,6 @@ function agentIDFromMessageInfo(info: any): string {
   if (!agentID)
     throw new Error(`projectConversationView: message ${String(info?.id || "<unknown>")} missing info.agentID`)
   return agentID
-}
-
-function conversationLedgerAgentID(ledger: ConversationAgentSessionLedgerEntry, participantAgentID: string): string {
-  const ledgerAgentID = String(ledger.agentID || "").trim()
-  if (ledger.stage === "assistant" && ledgerAgentID === "assistant" && AgentRoleContract.isRoleID(participantAgentID)) {
-    const participant = AgentRoleContract.get(participantAgentID)
-    if (participant.controlSurface === "primary" && participant.sessionKind === null) return participantAgentID
-  }
-  return ledgerAgentID
 }
 
 function placementOf(): ConversationSessionView["placement"] {
@@ -385,7 +375,6 @@ export function projectConversationView(input: {
       throw new Error(`projectConversationView: message ${messageID} has invalid participant evidence`)
     }
     const ledger = ledgerBySession.get(sessionID)
-    const ledgerAgentID = ledger ? conversationLedgerAgentID(ledger, agentID) : undefined
     const persistedSessionAgentID = String(info?.sessionAgentID || "").trim()
     const evidencedSessionAgentID = missionCallerReceiptParticipant ? persistedSessionAgentID : ""
     if (missionCallerReceiptParticipant && !evidencedSessionAgentID) {
@@ -422,7 +411,7 @@ export function projectConversationView(input: {
     }
     const existing = bySession.get(sessionID)
     if (existing) {
-      existing.agentID = ledgerAgentID || messageSessionAgentID
+      existing.agentID = messageSessionAgentID
       existing.stage = ledger ? stageFromLedgerStage(ledger.stage) : stage
       existing.messageIDs.push(messageID)
       if (displayMessageID) existing.lastDisplayMessageID = displayMessageID
@@ -431,7 +420,7 @@ export function projectConversationView(input: {
       if (!existing.parentSessionID && parentSessionID) existing.parentSessionID = parentSessionID
       continue
     }
-    const sessionAgentID = ledgerAgentID || messageSessionAgentID
+    const sessionAgentID = messageSessionAgentID
     bySession.set(sessionID, {
       sessionID,
       agentID: sessionAgentID,
@@ -482,7 +471,7 @@ export function projectConversationAgentView(
   const projectedSessions = new Map(view.sessions.map((session) => [session.sessionID, session]))
   for (const session of ledgerSessions) {
     const projected = projectedSessions.get(session.sessionID)
-    const agentID = projected ? conversationLedgerAgentID(session, projected.agentID) : session.agentID
+    const agentID = projected ? projected.agentID : session.agentID
     applyLedgerSession(bySession, agentID === session.agentID ? session : { ...session, agentID })
   }
   for (const session of view.sessions) {

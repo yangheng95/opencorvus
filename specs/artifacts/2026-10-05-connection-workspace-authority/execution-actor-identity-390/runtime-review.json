@@ -1,0 +1,42 @@
+{
+  "childSessionID": "ses_-zUS3f1RWzzGYhiJ6sfA",
+  "parentSessionID": "ses_-zUS3f5Q0zz27jxMPkEm",
+  "inputMessageID": "msg_g0VXwKyb3002di2ihcUN",
+  "finalMessageID": "msg_g0VXwL0Q700IZZjA4Q8s",
+  "actor": "work",
+  "source": {
+    "id": "prt_g0VXwL0MI0053LeqDfqJ",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\execution-actor-identity-390-live\\project\\来源材料\\方案甲.txt",
+    "range": {
+      "startLine": 2,
+      "endLine": 3
+    },
+    "toolPartID": "prt_g0VXwL07000gvZ1lDN4J"
+  },
+  "requests": 7,
+  "preflight": {
+    "sessionID": "ses_hBcXoR9mJm7C9hsBnjlQ",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "native": {
+    "terminal": {
+      "occurrenceID": "actor390-live-26b98203-52a9-49c6-8a42-05cba0fba98d",
+      "pid": 80480,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "durationMilliseconds": 306843,
+    "physicalCompletion": true,
+    "pairedCleanupComplete": true
+  },
+  "replayEventID": "pev_g0VXwL3Il00I0e2k5Ne3",
+  "boundary": "Canonical DB, public HTTP/SSE, actual streaming Provider, and Native resource checks. UI accepted separately by actual page interaction and manual screenshot review.",
+  "remaining": [
+    "After page reload the parent progress preview adds a raw handoff input line; screenshots 03 and 05 retain the difference for the next iteration.",
+    "Original Research Studio long-history dataset is not covered by this bounded real session-local run."
+  ]
+}

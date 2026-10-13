@@ -8,6 +8,8 @@ export function persistedSessionAgentID(input: {
   sessionKind: SessionKind
   metadata?: unknown
   projectedIdentity?: ProjectedWorkerIdentity
+  /** Target from this execution's durable input or a real user-message event snapshot. */
+  inputAgentID?: string
 }): string {
   if (input.projectedIdentity) {
     if (input.projectedIdentity.sessionKind !== input.sessionKind) {
@@ -22,6 +24,11 @@ export function persistedSessionAgentID(input: {
     metadata: input.metadata,
   })
   if (rightSidebarIdentity) return rightSidebarIdentity
+  if (input.sessionKind === "assistant" && input.inputAgentID !== undefined) {
+    const agentID = input.inputAgentID.trim()
+    if (!agentID) throw new Error(`Session ${input.sessionID} execution input has no Agent identity`)
+    return agentID
+  }
   if (RuntimeTemplateRegistry.isWorkerSessionKind(input.sessionKind)) {
     throw new Error(`Worker session ${input.sessionID} (${input.sessionKind}) is missing projected agent evidence`)
   }

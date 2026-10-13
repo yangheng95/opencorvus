@@ -306,6 +306,10 @@ test("projects each reused Session lifecycle event from its exact occurrence des
       const first = await appendOccurrence("occurrence-one", 10)
       const second = await appendOccurrence("occurrence-two", 20)
       const events = ProtocolStore.listTaskEvents(taskID)
+      expect(taskExecutionProjectionForTask(taskID).occurrences.map(({ agent, sessionID }) => ({ agent, sessionID }))).toEqual([
+        { agent: "occurrence-one", sessionID: worker.id },
+        { agent: "occurrence-two", sessionID: worker.id },
+      ])
 
       expect(events.filter((event) => event.id === first.id || event.id === second.id).map((event) => ({
         eventID: event.id,
