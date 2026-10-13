@@ -65,3 +65,5 @@ POST耗时与健康超时之间的事件循环阻塞存在证据，但具体持�
 05准备时复制路径错误写成dist-vite/ui，原命令未因非终止PowerShell错误而停下。立刻检查正式构建输出和overlay-ui冻结来源，实际服务在启动时使用当前workspace dist-vite；补齐独立bundle后没有重启或冒称该bundle是已加载来源。后续准备器应先验证实际目录并设ErrorActionPreference=Stop。03、04、05运行与清理证据分别保存；04原句柄93563、05原句柄12333均join exit0，Native whole-job/output/request完成后父脚本检查原Host/Target身份消失及端口释放，再回收auth/models配对副本。
 
 真实checker通过：主38消息、37不同正文、36次read与36来源行范围；Side 1继承0，Side 2—4各继承38条消息和36条来源，payload相等并重新绑定Tool身份。47次实际模型请求全部gpt-6.1-sol流式200/EOF。Overlay build/public-surface、typecheck、i18n通过；没有UI自动化。见[完整证据](../../artifacts/2026-10-14-long-source-reading/README.md)。后续优先继续分析长历史fork同步成本和健康恢复链路，再补Task/Mission/成员专有的真实场景；goal保持active，不把这两个修复宣称为全部UI问题完成。
+
+交付复核发现并已修复一次本地提交归属事故：准备的独立索引基于e91191975；正常commit执行前并发任务提交46926caf7，长时间索引同步准备未再次检查HEAD，1d07e88a1因此带回33个其他任务文件的旧版本。停止的是本轮自有Node包装进程，原Git提交已完成；随后以46926caf7为事实底稿应用事先审阅的本轮精确patch，新增a71a3ee14恢复全部并发证据展示。没有改写历史、reset/clean或覆盖工作区；普通索引只应用本轮patch保留独立暂存。已核对46926caf7..a71a3ee14净差异严格等于本轮110个文件，目录目标证据及其记录净差异为空。准备器已加实际commit紧前的HEAD校验，并批量读索引元数据，避免逐文件读取新二进制产物造成长准备窗口。该事故不作为产品根因；fresh fetch/merge后继续正常推送hook，待推送含已获独立真实验收的Provider和目录证据提交。
