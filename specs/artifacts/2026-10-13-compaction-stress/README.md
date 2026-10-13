@@ -450,8 +450,8 @@ The [pre-run typecheck](policy-native-typecheck-final.log) and
 [Documentation checks](policy-native-docs.log) pass for the current indexes.
 All gzip files preserve original bytes; no digest stands in for behavioral
 acceptance. Run the backend checker with a new absolute
-COMPACTION_TASK_CRASH_RESULT and
-bun run --cwd packages/opencorvus script/compaction-task-crash-check.ts.
+COMPACTION_RUNTIME_CRASH_RESULT and
+bun run --cwd packages/opencorvus script/compaction-runtime-crash-check.ts.
 
 
 ## Native streamed reference comparison
@@ -521,3 +521,17 @@ The [original revoke run](policy-pressure-revoke-real.json) preserves its third-
 The replay guard now preserves its redacted nested Error cause chain and string codes in the existing durable error message. It retains its original refusal to replay an attempt with executed Tools. The checker uses the single project Config surface for declared comparison budgets, restores it after each full probe, and resumes an interrupted middle checkpoint or probe through the remaining originally planned rounds.
 
 [The artifact manifest](policy-pressure-artifact-manifest.json) inventories raw reports, independent summaries and byte-preserving gzip logs, including the failed baseline/fixture calibration. [Final local verification](policy-pressure-recovery-local.log.gz) passes 31 distinct contracts; [expanded TypeScript](policy-pressure-recovery-typecheck.log.gz) and [documentation/index checks](policy-pressure-docs-delivery.log.gz) retain the command evidence. Scripted local streams prove mechanics; real persisted effects provide the semantic results. Native product persistence, broader models, Mission/whole-OS recovery and larger source catalogs remain open.
+
+## Task and Mission checkpoint crash recovery
+
+[The independently reviewed final matrix](mission-recovery-matrix-summary.json) covers both owners, two separate Projects, and interruption during compaction or after a completed checkpoint with later Tool evidence. Eight owner cases pass in **72 local streamed requests**. Remote request use is zero; the paid ledger remains **530**. These streams are scripted and establish recovery/data-flow behavior, not model quality or operating-system power-loss durability.
+
+Three reproduced production defects are repaired: Projects opened after scoped host startup now install the existing Mission recovery driver; queued compaction preserves inputs accepted after its original source as an exact retained tail; the exclusive compaction-control owner settles abandoned helper attempts before rereading their typed diagnostics. The repair reuses current Project, Prompt, control-lease and checkpoint authorities without a new queue or stored protocol.
+
+[Mission startup-gap evidence](mission-after-checkpoint-repair.json.gz) retains the original failure where alpha recovered and the later-opened beta did not. [Task input-loss evidence](mission-task-during-compaction.json.gz) retains completed replacement summaries followed by the exact Task input-identity mismatch. [Local boundary reproduction](mission-input-boundary-baseline.log.gz) has four failures; [final boundary checks](mission-input-boundary-final.log.gz) retain both later accepted inputs and the old helper's original Parts plus typed interruption. The earlier [Mission marker calibration](mission-after-checkpoint.json.gz) remains a checker failure against a valid whole-Message checkpoint, not a production compaction failure.
+
+Final verification covers **55 distinct local contracts**: [40 compaction/runtime/producer contracts](mission-input-boundary-repair.log.gz), [four Project-open/frontier contracts](mission-project-open-contracts-final.log.gz), and ten cross-process plus one streamed Mission recovery contract in [the initial combined log](mission-recovery-contracts.log.gz). That combined command remains marked failed because its first suite contained the stale Project-open expectation; the separately linked final suite fixes and passes that contract. Repeated runs are not counted again. [Expanded TypeScript](mission-final-typecheck.log.gz), [module topology and clean imports](mission-delivery-module-topology.log.gz), and [documentation checks](mission-docs-delivery.log.gz) preserve command evidence.
+
+The [archive manifest](mission-recovery-artifact-manifest.json) inventories byte-preserving compressed reports, actual request bodies, canonical before/after facts, checkpoint-reader results, public Mission outcomes and owned process receipts. Existing leases may defer takeover until expiry (120 seconds for the compaction control); this phase preserves that protocol. Broader models, native product persistence, whole-OS failure and larger catalogs remain open.
+
+Reproduce with Bun 1.4.0 and the single `packages/opencorvus/script/compaction-runtime-crash-check.ts` entry. Set `COMPACTION_RUNTIME_CRASH_RESULT` to a new absolute report path, `COMPACTION_RUNTIME_CRASH_OWNER` to `task` or `mission`, and `COMPACTION_RUNTIME_CRASH_CUT` to `during-compaction` or `after-checkpoint`; run `bun run --cwd packages/opencorvus script/compaction-runtime-crash-check.ts`. It creates and settles only its own isolated runtimes and needs no credentials.

@@ -9,6 +9,10 @@ Project memory has three explicitly scoped authorities:
    summaries and nonshrinking summaries retain typed failure evidence and leave
    the previous valid memory readable. Memory reconstruction uses the same
    completion predicate as checkpoint publication and conversation projection.
+   A queued control replaces history only through its own source input's turn.
+   The first later accepted user input remains an exact `tail_start_id` boundary,
+   including overflow, zero optional tail and repeated checkpoints. It cannot
+   be absorbed into an older request's summary or lose its continuation identity.
    Skill and attachment references are historical locators, not current tool
    grants, desktop focus or permission authority.
 
@@ -42,12 +46,20 @@ Project memory has three explicitly scoped authorities:
    kind and control identity; publication does not terminate the reply owner.
    Reused checkpoints and cross-process joins resolve that same durable result.
    Interrupted assistants retain their persisted
-   text and typed failure evidence. Live text deltas are transport events; the
+   text and typed failure evidence. After acquiring the exclusive compaction
+   control lease, its executor settles unfinished helper attempts for that exact
+   source through the Session terminalizer, even across a later recovery input.
+   The compactor then rereads history so those actual diagnostics reach its request.
+   Live text deltas are transport events; the
    processor checkpoints accumulated Parts on its existing 200 ms cadence, so
    fragments not yet persisted can be lost on abrupt process exit. The physical
-   crash checkers cover owned child-process exits, fresh Session reopening and
-   two concurrent Task projects recovering through formal backend bootstrap.
-   They do not establish operating-system power-loss or Mission recovery behavior.
+   crash checkers cover owned child-process exits and fresh Session reopening.
+   The formal backend checker exercises Task and Mission owners in two Projects,
+   both during compaction and after a completed checkpoint with later Tool
+   evidence. Recovery preserves the original execution occurrence and exact
+   source Parts, Tool requests and outcomes. Scripted streaming transport proves
+   these mechanisms; it does not establish model quality or operating-system
+   power-loss recovery.
 
    Ordinary model replay and the compaction transcript use the same attributed
    assistant diagnostics from canonical Message fields: Message/Session/parent

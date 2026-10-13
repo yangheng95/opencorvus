@@ -182,6 +182,10 @@ const missionProjectReconciliationState = createInstanceState(
   "mission-project-reconciliation-driver",
 )
 
+export function initializeMissionProjectReconciliation(): void {
+  missionProjectReconciliationState()
+}
+
 async function requestMissionProjectReconciliation(input: {
   projectID: string
   directory: string

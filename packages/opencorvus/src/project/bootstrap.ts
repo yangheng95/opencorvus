@@ -38,6 +38,7 @@ import { reconcileBuildObservationCleanups } from "@/engine/build-observation-cl
 import { SessionWake } from "@/session/wake"
 import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
 import { initializeContinuousGoals } from "@/continuous-goal/controller"
+import { initializeMissionProjectReconciliation } from "@/engine/host-recovery"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -173,4 +174,7 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
       await Project.setInitialized(Instance.project.id)
     }
   })
+  // Projects opened after scoped host startup need the same Mission discovery.
+  // Its heartbeat reenters the serving Instance; open never waits for model work.
+  initializeMissionProjectReconciliation()
 }, validateInstanceConversationCapabilities)

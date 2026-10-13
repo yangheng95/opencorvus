@@ -920,14 +920,24 @@ export namespace SessionCompaction {
       config,
     })
     const history = input.messages
+    const sourceIndex = history.findIndex((message) => message.info.id === input.parentID)
+    const followingInputIndex = history.findIndex(
+      (message, index) => index > sourceIndex && message.info.role === "user",
+    )
+    // A queued control owns its original input. Later accepted inputs must
+    // remain exact continuation material, even with overflow or zero tail turns.
+    const replaceableHistory = followingInputIndex < 0 ? history : history.slice(0, followingInputIndex)
     const selected =
-      repeatedCompactionInput(history, input.parentID) ??
+      repeatedCompactionInput(replaceableHistory, input.parentID) ??
       (await selectCompactionInput({
-        messages: history,
+        messages: replaceableHistory,
         config,
         model: continuationModel,
         overflow: input.overflow === true,
       }))
+    if (followingInputIndex >= 0 && selected.head.length > 0) {
+      selected.tail_start_id ??= history[followingInputIndex]!.info.id
+    }
     if (selected.head.length === 0) {
       if (completedSummary) {
         return {

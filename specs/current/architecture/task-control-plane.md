@@ -402,6 +402,13 @@ Standalone Mission process recovery has no mutable marker, attempt counter, or s
 
 ## Reconciliation and recovery
 
+Every successful Project bootstrap installs the existing instance-owned Mission
+reconciliation driver, including Projects opened after scoped host startup.
+Its bounded heartbeat reenters the serving Instance and uses the same recovery,
+closing and deletion reducers as startup discovery. Bootstrap does not wait for
+a recovered model reply; host discovery and later hints share the one driver
+and its disposal owner. Project-scoped candidate reads preserve sibling isolation.
+
 Project reconciliation is the only Task-control recovery algorithm:
 
 1. enumerate Tasks whose lifecycle projection is open or cancelling;

@@ -1,4 +1,7 @@
-/** Formal backend + two isolated projects; local streamed Provider, no credentials. */
+/** Formal backend + two isolated projects; local streamed Provider, no credentials.
+ * COMPACTION_RUNTIME_CRASH_RESULT is an absolute new report path.
+ * OWNER is task or mission; CUT is after-checkpoint or during-compaction.
+ */
 import assert from "node:assert/strict"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -10,10 +13,18 @@ import {
 } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 import { readGoalCrashSnapshot } from "./continuous-goal-crash-check"
+import { CompactionPolicyCase } from "./compaction-policy-case"
 
 type Row = Record<string, any>
-const reportPath = process.env.COMPACTION_TASK_CRASH_RESULT
-assert(reportPath && path.isAbsolute(reportPath), "COMPACTION_TASK_CRASH_RESULT must be an absolute new report path")
+const ownerKind = (() => {
+  const value = process.env.COMPACTION_RUNTIME_CRASH_OWNER ?? "task"
+  assert(value === "task" || value === "mission", "Explicit Task or Mission owner")
+  return value
+})()
+const cut = process.env.COMPACTION_RUNTIME_CRASH_CUT ?? "after-checkpoint"
+assert(cut === "after-checkpoint" || cut === "during-compaction", "Explicit supported checkpoint cut")
+const reportPath = process.env.COMPACTION_RUNTIME_CRASH_RESULT
+assert(reportPath && path.isAbsolute(reportPath), "COMPACTION_RUNTIME_CRASH_RESULT must be an absolute new report path")
 assert.equal(
   await fs.stat(reportPath).then(
     () => true,
@@ -35,24 +46,30 @@ const cases = ["alpha", "beta"].map((name) => ({
   name,
   project: path.join(runtime.processRoot, "project-" + name),
   trace: `TRACE-NATIVE-${name}-17031`,
-  taskID: "",
+  ownerID: "",
   sessionID: "",
   rootSessionID: "",
   cutMessageID: "",
+  producerMessageIDs: [] as string[],
+  evidencePartID: "",
   steps: 0,
   summaries: 0,
   recoveredRequests: 0,
   held: false,
   summaryRequest: undefined as Promise<unknown> | undefined,
+  summarySettlement: undefined as unknown,
 }))
 const requests: Row[] = []
 const errors: string[] = []
 const children: ReturnType<typeof launch>[] = []
 let generation = "before"
+let cutStarted = false
 let backend: ReturnType<typeof launch>
 let result: Row = {
   status: "running",
-  scope: "formal backend interruption and two-project Task recovery with scripted streaming transport",
+  scope: "formal backend interruption and two-project Task/Mission recovery with scripted streaming transport",
+  ownerKind,
+  cut,
   remoteModelRequests: 0,
   runtime: runtime.runtimeRoot,
   databasePath,
@@ -82,14 +99,21 @@ function owner(sessionID: string) {
       .query<Row, [string]>(
         `WITH RECURSIVE ancestry(id,parent_id) AS (
     SELECT id,parent_id FROM session WHERE id=? UNION ALL SELECT s.id,s.parent_id FROM session s JOIN ancestry a ON s.id=a.parent_id
-  ) SELECT t.id taskID,t.session_id rootSessionID,p.worktree directory FROM ancestry a
-    JOIN engine_task t ON t.session_id=a.id JOIN project p ON p.id=t.project_id`,
+  ) ${
+    ownerKind === "task"
+      ? "SELECT t.id ownerID,t.session_id rootSessionID,p.worktree directory FROM ancestry a JOIN engine_task t ON t.session_id=a.id JOIN project p ON p.id=t.project_id"
+      : "SELECT json_extract(s.metadata,'$.mission.id') ownerID,s.id rootSessionID,p.worktree directory FROM ancestry a JOIN session s ON s.id=a.id JOIN project p ON p.id=s.project_id WHERE s.kind='mission'"
+  }`,
       )
       .get(sessionID),
   )!
 }
 function facts(item: (typeof cases)[number]) {
-  return readGoalCrashSnapshot(databasePath, { kind: "task", id: item.taskID, sessionID: item.rootSessionID })
+  return readGoalCrashSnapshot(databasePath, {
+    kind: ownerKind,
+    id: ownerKind === "task" ? item.ownerID : item.rootSessionID,
+    sessionID: item.rootSessionID,
+  })
 }
 function controls(sessionID: string) {
   return read((db) => ({
@@ -137,6 +161,7 @@ async function waitFor<T>(
   }
 }
 function launch(phase: string) {
+  const startedAt = Date.now()
   const receipt = path.join(evidenceRoot, phase + "-startup.json")
   const child = Bun.spawn(
     [
@@ -158,6 +183,7 @@ function launch(phase: string) {
   )
   const state = {
     phase,
+    startedAt,
     receipt,
     child,
     stdout: Promise.resolve(""),
@@ -217,10 +243,10 @@ const provider = Bun.serve({
       assert(requests.length < 24, "Finite local request ceiling")
       const sessionID = request.headers.get("x-opencorvus-session")!
       const owned = owner(sessionID)
-      assert(owned, "Provider request must belong to a created Task")
+      assert(owned, "Provider request must belong to a created owner")
       const item = cases.find((c) => path.resolve(c.project) === path.resolve(owned.directory))
       assert(item, "Provider request must belong to an isolated checker project")
-      Object.assign(item, { taskID: owned.taskID, rootSessionID: owned.rootSessionID, sessionID })
+      Object.assign(item, { ownerID: owned.ownerID, rootSessionID: owned.rootSessionID, sessionID })
       const names = (body.tools ?? []).map((tool: Row) => tool.function.name)
       const compaction = names.includes("ReadCompactionEvidence")
       requests.push({ generation, project: item.name, sessionID, compaction, textOnlyHelper: names.length === 0, body })
@@ -234,22 +260,77 @@ const provider = Bun.serve({
           created: 1,
           model: target.modelID,
           choices: [{ index: 0, delta, finish_reason: finish }],
-          ...(finish ? { usage: { prompt_tokens: 11, completion_tokens: 7, total_tokens: 18 } } : {}),
+          ...(finish
+            ? {
+                usage: {
+                  // Authored local usage exercises the genuine automatic trigger;
+                  // it is not a measurement of model tokenizer or billing behavior.
+                  prompt_tokens:
+                    ownerKind === "mission" &&
+                    generation === "before" &&
+                    names.length > 0 &&
+                    !compaction &&
+                    item.steps === 2
+                      ? 240_000
+                      : 11,
+                  completion_tokens: 7,
+                  total_tokens:
+                    ownerKind === "mission" &&
+                    generation === "before" &&
+                    names.length > 0 &&
+                    !compaction &&
+                    item.steps === 2
+                      ? 240_007
+                      : 18,
+                },
+              }
+            : {}),
         })}\n\n`
       const text = (value: string) =>
         new Response(chunk({ role: "assistant", content: value }, null) + chunk({}, "stop") + "data: [DONE]\n\n", {
           headers: { "content-type": "text/event-stream" },
         })
-      if (names.length === 0) return text(`Isolated ${item.name} compaction Task`)
-      if (compaction) {
-        item.summaries++
-        return text(
-          `The ${item.name} Task has inspected its own evidence. Keep project identity and continue reading subsequent exact traces.`,
+      const hold = (messageID: string) => {
+        item.cutMessageID = messageID
+        item.held = true
+        return new Response(
+          new ReadableStream({
+            start(controller) {
+              controller.enqueue(
+                new TextEncoder().encode(
+                  chunk({ role: "assistant", content: `Persisted crash boundary ${item.trace}.` }, null),
+                ),
+              )
+            },
+          }),
+          { headers: { "content-type": "text/event-stream" } },
         )
       }
+      if (names.length === 0) return text(`Isolated ${item.name} compaction ${ownerKind}`)
       const snapshot = facts(item)
+      if (compaction) {
+        item.summaries++
+        const evidence = snapshot.tools.filter((tool) => tool.data.tool === "read").at(-1)!
+        assert(evidence, "Compaction follows an actual persisted evidence read")
+        if (generation === "before" && cut === "during-compaction") {
+          item.evidencePartID = evidence.id
+          const helper = snapshot.messages
+            .filter((m) => m.session_id === sessionID && m.data.author === "compaction")
+            .at(-1)!
+          assert(helper, "Actual compactor assistant required at the cut")
+          return hold(helper.id)
+        }
+        return text(
+          `The ${item.name} ${ownerKind} has inspected its own evidence: ${item.trace}, next_offset=17031, Part ${evidence.id}, call ${evidence.data.callID}. Keep this project identity and continue the bounded original request.`,
+        )
+      }
       const assistant = snapshot.messages
-        .filter((m) => m.session_id === sessionID && m.data.role === "assistant" && m.data.author === "orchestrator")
+        .filter(
+          (m) =>
+            m.session_id === sessionID &&
+            m.data.role === "assistant" &&
+            m.data.author === (ownerKind === "task" ? "orchestrator" : "mission"),
+        )
         .at(-1)!
       assert(assistant, "Actual scheduler assistant is required")
       let toolName = "read"
@@ -257,17 +338,23 @@ const provider = Bun.serve({
       let callID: string
       if (generation === "before") {
         item.steps++
-        item.cutMessageID ||= assistant.id
-        assert.equal(assistant.id, item.cutMessageID)
+        item.producerMessageIDs.push(assistant.id)
+        if (ownerKind === "task") assert.equal(assistant.id, item.producerMessageIDs[0])
         callID = item.steps === 3 ? `late_${item.name}` : `${item.name}_${item.steps}`
-        if (item.steps === 2) {
+        if (item.steps === 2 && ownerKind === "task") {
           item.summaryRequest = json(backend, item.project, `/session/${sessionID}/summarize`, {
             ...target,
             auto: true,
           })
-          void item.summaryRequest.catch((error) => {
-            errors.push(String(error))
-          })
+          void item.summaryRequest.then(
+            (value) => {
+              item.summarySettlement = { status: "fulfilled", value }
+            },
+            (error) => {
+              item.summarySettlement = { status: "rejected", afterOwnedCut: cutStarted, error: String(error) }
+              if (!cutStarted) errors.push(String(error))
+            },
+          )
           await waitFor("queued automatic summary", backend, () => {
             const value = controls(sessionID)
             return { activity: value, value: value.records.length ? true : undefined }
@@ -276,39 +363,43 @@ const provider = Bun.serve({
         if (item.steps === 4) {
           const toolResult = body.messages.find((m: Row) => m.role === "tool" && m.tool_call_id === `late_${item.name}`)
           assert(toolResult?.content.includes(item.trace), "The exact late trace must reach the next real request")
-          item.held = true
-          return new Response(
-            new ReadableStream({
-              start(controller) {
-                controller.enqueue(
-                  new TextEncoder().encode(
-                    chunk({ role: "assistant", content: `Persisted crash boundary ${item.trace}.` }, null),
-                  ),
-                )
-              },
-            }),
-            { headers: { "content-type": "text/event-stream" } },
-          )
+          item.evidencePartID = snapshot.tools.find((tool) => tool.data.callID === `late_${item.name}`)!.id
+          return hold(assistant.id)
         }
         assert(item.steps < 4, "Only four original scheduler steps")
       } else {
         item.recoveredRequests++
-        const toolResult = body.messages.find((m: Row) => m.role === "tool" && m.tool_call_id === `late_${item.name}`)
-        assert(
-          toolResult?.content.includes(item.trace),
-          "Recovered Provider request must contain the original exact Tool trace",
-        )
+        if (cut === "after-checkpoint") {
+          const toolResult = body.messages.find((m: Row) => m.role === "tool" && m.tool_call_id === `late_${item.name}`)
+          assert(toolResult?.content.includes(item.trace), "Recovered request contains the original late Tool trace")
+        } else {
+          const replay = JSON.stringify(body.messages)
+          for (const value of [item.trace, item.evidencePartID, `${item.name}_2`, "17031"])
+            assert(replay.includes(value), "Recovered checkpoint carries exact original evidence identity and cursor")
+        }
         const interrupted = snapshot.messages.find((m) => m.id === item.cutMessageID)!
         assert.equal(interrupted.data.error?.name, "ProcessExecutionInterruptedError")
         assert.equal(typeof interrupted.data.time.completed, "number")
-        assert(assistant.id !== item.cutMessageID, "Recovery owns a new physical assistant occurrence")
-        const opened = snapshot.events.find((e) => e.type === "task.execution.opened")!
-        assert(opened, "Original Task lifecycle required")
-        toolName = "no_action"
-        input = {
-          observed_task: { epoch: 1, status: "active", openedEventID: opened.id, terminalEventID: null },
-          reason: "Recovered exact evidence after the isolated checkpoint interruption.",
-        }
+        assert(assistant.data.time.created >= backend.startedAt, "Recovery creates its assistant in the new backend")
+        assert.equal(
+          snapshot.promptOwners.find((owner) => owner.session_id === sessionID)?.owner_pid,
+          backend.child.pid,
+        )
+        const opened = snapshot.events.find((e) => e.type === `${ownerKind}.execution.opened`)!
+        assert(opened, "Original execution lifecycle required")
+        if (ownerKind === "mission" && snapshot.tools.some((tool) => tool.data.callID === `recovered_${item.name}`))
+          return text(`Recovered ${item.trace}, next_offset=17031, bounded Mission complete.`)
+        toolName = ownerKind === "task" ? "no_action" : "panel_complete_mission"
+        input =
+          ownerKind === "task"
+            ? {
+                observed_task: { epoch: 1, status: "active", openedEventID: opened.id, terminalEventID: null },
+                reason: "Recovered exact evidence after the isolated checkpoint interruption.",
+              }
+            : {
+                summary: `Recovered ${item.trace}, next_offset=17031; bounded coordination complete.`,
+                task_acceptances: [],
+              }
         callID = `recovered_${item.name}`
       }
       assert(names.includes(toolName), "Use an actually granted Tool")
@@ -368,7 +459,7 @@ try {
     await fs.writeFile(path.join(item.project, "evidence.txt"), `${item.trace} next_offset=17031\n`)
     for (const args of [
       ["init"],
-      ["config", "user.name", "Compaction Native Check"],
+      ["config", "user.name", "Compaction Runtime Check"],
       ["config", "user.email", "native@example.invalid"],
       ["add", "evidence.txt"],
       ["commit", "-m", "Isolated project evidence"],
@@ -379,18 +470,34 @@ try {
   children.push(backend)
   await ready(backend)
   for (const item of cases) {
-    const created = (await json(backend, item.project, "/task", {
-      requestID: crypto.randomUUID(),
-      productPillar: "work",
-      title: `Compaction crash ${item.name}`,
-      request: "Read the project evidence and preserve its exact trace through compaction.",
-      promptProfile: "base",
-      model: `${target.providerID}/${target.modelID}`,
-    })) as Row
-    item.taskID = created.task_id
-    item.rootSessionID = read(
-      (db) => db.query<Row, [string]>("SELECT session_id FROM engine_task WHERE id=?").get(item.taskID)!.session_id,
-    )
+    const created = (await json(
+      backend,
+      item.project,
+      ownerKind === "task" ? "/task" : "/mission/wake",
+      ownerKind === "task"
+        ? {
+            requestID: crypto.randomUUID(),
+            productPillar: "work",
+            title: `Compaction crash ${item.name}`,
+            request: "Read the project evidence and preserve its exact trace through compaction.",
+            promptProfile: "base",
+            model: `${target.providerID}/${target.modelID}`,
+          }
+        : {
+            requestID: crypto.randomUUID(),
+            productPillar: "work",
+            text: "This is bounded coordination without child Tasks. Read the project evidence, preserve its exact trace and cursor through compaction, then complete this Mission through its completion Tool.",
+            model: `${target.providerID}/${target.modelID}`,
+          },
+    )) as Row
+    item.ownerID = ownerKind === "task" ? created.task_id : created.missionID
+    item.rootSessionID =
+      ownerKind === "task"
+        ? read(
+            (db) =>
+              db.query<Row, [string]>("SELECT session_id FROM engine_task WHERE id=?").get(item.ownerID)!.session_id,
+          )
+        : created.sessionID
   }
   const before = await waitFor("both durable crash boundaries", backend, () => {
     const snapshots = cases.map(facts)
@@ -404,19 +511,53 @@ try {
     )
     return { activity: activity(snapshots), value: complete ? snapshots : undefined }
   })
-  assert.deepEqual(await Promise.all(cases.map((item) => item.summaryRequest)), [true, true])
-  console.log(JSON.stringify({ stage: "summary_waiters_settled", tasks: cases.map((item) => item.taskID) }))
+  if (ownerKind === "task" && cut === "after-checkpoint")
+    assert.deepEqual(await Promise.all(cases.map((item) => item.summaryRequest)), [true, true])
   before.forEach((snapshot, index) => {
     const item = cases[index]!
-    assert.equal(snapshot.messages.find((m) => m.id === item.cutMessageID)!.data.time.completed, undefined)
-    const marker = snapshot.parts.find((p) => p.data.type === "compaction")!
-    assert(marker.data.covered_parts.some((entry: Row) => entry.messageID === item.cutMessageID))
+    assert.equal(
+      snapshot.promptOwners.find((owner) => owner.session_id === item.sessionID)?.owner_pid,
+      backend.child.pid,
+    )
+    const controlFacts = controls(item.sessionID)
+    const control = controlFacts.records
+      .filter((record) => record.kind === "compaction_request")
+      .toSorted((a, b) => a.time_created - b.time_created || a.id.localeCompare(b.id))
+      .at(-1)!
+    assert(control, "A real compaction control owns the cut boundary")
+    const terminal = controlFacts.events
+      .filter((event) => event.control_id === control.id && ["consumed", "failed"].includes(event.kind))
+      .at(-1)
+    assert.equal(terminal?.kind ?? "pending", cut === "after-checkpoint" ? "consumed" : "pending")
+    if (cut === "after-checkpoint") {
+      const marker = snapshot.parts.find((p) => p.data.type === "compaction")!
+      const summary = snapshot.messages.find((message) => message.id === marker.message_id)!
+      assert.equal(summary.data.summary, true)
+      assert.equal(summary.data.finish, "stop")
+      if (ownerKind === "task") {
+        assert(marker.data.covered_parts.some((entry: Row) => item.producerMessageIDs.includes(entry.messageID)))
+      } else {
+        for (const id of item.producerMessageIDs.slice(0, 2)) {
+          const original = snapshot.messages.find((message) => message.id === id)!
+          assert.equal(typeof original.data.time.completed, "number")
+          assert(
+            original.data.time.completed <= summary.data.time.completed,
+            "Completed Mission messages precede their checkpoint",
+          )
+        }
+      }
+    }
   })
   await save("before-facts.json", before)
+  await save(
+    "before-controls.json",
+    cases.map((item) => controls(item.sessionID)),
+  )
+  cutStarted = true
   backend.child.kill("SIGKILL")
   await backend.child.exited
   await save("crashed-facts.json", cases.map(facts))
-  console.log(JSON.stringify({ stage: "crashed", pid: backend.child.pid, tasks: cases.map((item) => item.taskID) }))
+  console.log(JSON.stringify({ stage: "crashed", pid: backend.child.pid, owners: cases.map((item) => item.ownerID) }))
   generation = "recover"
   backend = launch("recover")
   children.push(backend)
@@ -444,6 +585,31 @@ try {
     for (const tool of old.tools) assert.deepEqual(current.tools.find((item) => item.id === tool.id)?.data, tool.data)
     for (const outcome of old.outcomes)
       assert.deepEqual(current.outcomes.find((item) => item.id === outcome.id)?.data, outcome.data)
+    const marker = current.parts.findLast((part) => part.data.type === "compaction")!
+    assert(marker, "Recovered history owns a completed checkpoint")
+    const item = cases[index]!
+    await save(
+      `${item.name}-checkpoint.json`,
+      await CompactionPolicyCase.checkCheckpoint(item.sessionID, marker.message_id),
+    )
+    if (ownerKind === "mission") {
+      assert.equal(
+        current.events.findLast((event) => event.type === "mission.execution.opened")?.id,
+        old.events.findLast((event) => event.type === "mission.execution.opened")?.id,
+        "Recovery retains the original Mission execution occurrence",
+      )
+      const status = (await json(backend, item.project, `/mission/${item.ownerID}/status`)) as Row
+      assert.equal(status.outcome?.kind, "accepted")
+      const request = current.tools.find((tool) => tool.id === status.outcome.toolPartID)!
+      assert.equal(request.data.tool, "panel_complete_mission")
+      assert.equal(request.data.callID, status.outcome.toolCallID)
+      assert.equal(request.message_id, status.outcome.messageID)
+      assert.equal(
+        current.outcomes.find((outcome) => outcome.request_part_id === request.id)?.data.outcome,
+        "completed",
+      )
+      await save(`${item.name}-public-outcome.json`, status)
+    }
   }
   await save("after-facts.json", after)
   result.status = "passed"
@@ -454,7 +620,7 @@ try {
   console.error(String(error))
   process.exitCode = 1
   for (const item of cases)
-    if (item.taskID && item.rootSessionID) await save(`${item.name}-failed-facts.json`, facts(item))
+    if (item.ownerID && item.rootSessionID) await save(`${item.name}-failed-facts.json`, facts(item))
 } finally {
   result.settlement = []
   for (const child of children) {

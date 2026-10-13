@@ -3,7 +3,11 @@ import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
 import { acquireControlLease, releaseControlLeaseOnErrorPath } from "@/engine/control-lease"
 import { recoverMissionProcessSession } from "@/mission/process-recovery"
-import { ensureMissionSession, listGlobalMissionProcessRecoveryCandidates, setMissionPendingPrompt } from "@/mission/session"
+import {
+  ensureMissionSession,
+  listGlobalMissionProcessRecoveryCandidates,
+  setMissionPendingPrompt,
+} from "@/mission/session"
 import {
   closeMissionExecutionOperation,
   currentMissionExecutionClosure,
@@ -17,7 +21,8 @@ import { Session } from "@/session"
 import { SessionPromptOwner } from "@/session/prompt/owner"
 import { SessionWake } from "@/session/wake"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
-import { resumeMissionDeleteRetention } from "@/mission/retention"
+import { sessionDeletedInTransaction } from "@/mission/retention-facts"
+import { Database } from "@/storage/db"
 import "@/task-api"
 
 afterEach(async () => {
@@ -134,14 +139,13 @@ async function incompleteAssistant(sessionID: string, label: string) {
 }
 
 describe("canonical Mission close and process reconciliation", () => {
-  test("scopes pending Mission delete recovery by Project while sibling cleanup remains actionable", async () => {
+  test("Project opening recovers its pending Mission deletion while the unopened sibling stays actionable", async () => {
     await using firstProject = await memoryProject()
     await using secondProject = await memoryProject()
     const pending: Array<{ sessionID: string; missionID: string; projectID: string; directory: string }> = []
     for (const [index, directory] of [firstProject.path, secondProject.path].entries()) {
       await Instance.provide({
         directory,
-        init: InstanceBootstrap,
         fn: async () => {
           const missionID = `delete-project-scope-${index}`
           const mission = await ensureMissionSession({
@@ -170,23 +174,18 @@ describe("canonical Mission close and process reconciliation", () => {
       second: [{ sessionID: second!.sessionID, directory: second!.directory }],
     })
 
-    await Instance.provide({
-      directory: first!.directory,
-      init: InstanceBootstrap,
-      fn: () => resumeMissionDeleteRetention({ sessionID: first!.sessionID, projectID: first!.projectID }),
-    })
-    expect({
-      first: listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: first!.projectID, limit: 4 }),
-      second: listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: second!.projectID, limit: 4 }),
-    }).toEqual({
-      first: [],
-      second: [{ sessionID: second!.sessionID, directory: second!.directory }],
-    })
-    await Instance.provide({
-      directory: second!.directory,
-      init: InstanceBootstrap,
-      fn: () => resumeMissionDeleteRetention({ sessionID: second!.sessionID, projectID: second!.projectID }),
-    })
+    for (const item of [first!, second!]) {
+      await Instance.provide({ directory: item.directory, init: InstanceBootstrap, fn: () => undefined })
+      const deleted = () => Database.use((db) => sessionDeletedInTransaction(db, item.sessionID))
+      const deadline = Date.now() + 10_000
+      while (!deleted() && Date.now() < deadline) await Bun.sleep(10)
+      expect(deleted()).toBe(true)
+      if (item === first) {
+        expect(listGlobalMissionProcessRecoveryCandidates({ scopeProjectID: second!.projectID, limit: 4 })).toEqual([
+          { sessionID: second!.sessionID, directory: second!.directory },
+        ])
+      }
+    }
   }, 60_000)
 
   test("discovers one Project's Mission recovery candidates through fixed cursor pages", async () => {
@@ -319,9 +318,10 @@ describe("canonical Mission close and process reconciliation", () => {
         const liveAssistant = (await Session.messages({ sessionID: mission.id })).find(
           (item) => item.info.id === assistant.id,
         )?.info
+        if (liveAssistant?.role !== "assistant") throw new Error("Persisted live-owner assistant is required")
         expect({
           live,
-          assistantState: liveAssistant?.time.completed === undefined ? "persisted_running" : "terminal",
+          assistantState: liveAssistant.time.completed === undefined ? "persisted_running" : "terminal",
         }).toEqual({
           live: { status: "live", sessionID: mission.id, ownerGeneration: admission.authority.generation },
           assistantState: "persisted_running",

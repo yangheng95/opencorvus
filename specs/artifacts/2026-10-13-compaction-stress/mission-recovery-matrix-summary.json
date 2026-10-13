@@ -1,0 +1,251 @@
+{
+  "scope": "Independent reinspection of canonical saved facts and actual model request bodies; local scripted transport only",
+  "status": "passed",
+  "remoteModelRequests": 0,
+  "cumulativePaidRequests": 530,
+  "runs": [
+    {
+      "report": "mission-mission-after-checkpoint-final.json.gz",
+      "ownerKind": "mission",
+      "cut": "after-checkpoint",
+      "status": "passed",
+      "localStreamedRequests": 22,
+      "textOnlyHelperRequests": 8,
+      "compactionRequests": 2,
+      "settlement": [
+        {
+          "pid": 90748,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 77668,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "owners": [
+        {
+          "project": "alpha",
+          "ownerID": "4dd2b5be35f4c344",
+          "rootSessionID": "ses_-zUS1Qo5EzzK7c5T4uit",
+          "modelSessionID": "ses_-zUS1Qo5EzzK7c5T4uit",
+          "openedEventID": "pev_hcb0ov4HbL6QmvpZ6F6J",
+          "interruptedMessageID": "msg_g0VXyZEkl00sdz5oAoze",
+          "checkpointMessageID": "msg_g0VXyZEIv00SH7cYbg3t",
+          "sourcePartsPreserved": 17,
+          "sourceToolRequestsPreserved": 3,
+          "sourceToolOutcomesPreserved": 3,
+          "originalEvidencePartID": "prt_g0VXyZEgP00Sb6DyRisL",
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "completedToolPartID": "prt_g0VXyZJAt004T2k4UTEA",
+          "completedTool": "panel_complete_mission",
+          "recoveredModelRequests": 2
+        },
+        {
+          "project": "beta",
+          "ownerID": "f16b05695c7d4413",
+          "rootSessionID": "ses_-zUS1QmGqzzYG5BYV2wG",
+          "modelSessionID": "ses_-zUS1QmGqzzYG5BYV2wG",
+          "openedEventID": "pev_hbOzsXEKi3MyIRzNNIZf",
+          "interruptedMessageID": "msg_g0VXyZFzt00jQozyeR8G",
+          "checkpointMessageID": "msg_g0VXyZFYr00aK96W9c6F",
+          "sourcePartsPreserved": 17,
+          "sourceToolRequestsPreserved": 3,
+          "sourceToolOutcomesPreserved": 3,
+          "originalEvidencePartID": "prt_g0VXyZFx100QsLz2ZRP0",
+          "trace": "TRACE-NATIVE-beta-17031",
+          "completedToolPartID": "prt_g0VXyZJyl00rA16zgP02",
+          "completedTool": "panel_complete_mission",
+          "recoveredModelRequests": 2
+        }
+      ]
+    },
+    {
+      "report": "mission-during-compaction-repair.json.gz",
+      "ownerKind": "mission",
+      "cut": "during-compaction",
+      "status": "passed",
+      "localStreamedRequests": 20,
+      "textOnlyHelperRequests": 8,
+      "compactionRequests": 4,
+      "settlement": [
+        {
+          "pid": 82320,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 63076,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "owners": [
+        {
+          "project": "alpha",
+          "ownerID": "2ae58bba7d7f47b9",
+          "rootSessionID": "ses_-zUS1RLA1zzUSSVfklL2",
+          "modelSessionID": "ses_-zUS1RLA1zzUSSVfklL2",
+          "openedEventID": "pev_haqusDvpFae2q3sMPkZ6",
+          "interruptedMessageID": "msg_g0VXyYhA80074QXMIXp5",
+          "checkpointMessageID": "msg_g0VXyZCNo00w9llHdTUz",
+          "sourcePartsPreserved": 10,
+          "sourceToolRequestsPreserved": 2,
+          "sourceToolOutcomesPreserved": 2,
+          "originalEvidencePartID": "prt_g0VXyYh6D00nUqARAvNf",
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "completedToolPartID": "prt_g0VXyZENL003efOWP0cT",
+          "completedTool": "panel_complete_mission",
+          "recoveredModelRequests": 2
+        },
+        {
+          "project": "beta",
+          "ownerID": "c656a7a60b3771c4",
+          "rootSessionID": "ses_-zUS1RJHVzzm5roMcvGM",
+          "modelSessionID": "ses_-zUS1RJHVzzm5roMcvGM",
+          "openedEventID": "pev_hqRnAeA80kwjxn0aIzXk",
+          "interruptedMessageID": "msg_g0VXyYhkP00QedT5H8w0",
+          "checkpointMessageID": "msg_g0VXyZCwt00dB71INpYN",
+          "sourcePartsPreserved": 10,
+          "sourceToolRequestsPreserved": 2,
+          "sourceToolOutcomesPreserved": 2,
+          "originalEvidencePartID": "prt_g0VXyYhgf00div2uOvy3",
+          "trace": "TRACE-NATIVE-beta-17031",
+          "completedToolPartID": "prt_g0VXyZEQm008S6ubE7BT",
+          "completedTool": "panel_complete_mission",
+          "recoveredModelRequests": 2
+        }
+      ]
+    },
+    {
+      "report": "mission-task-after-checkpoint-final.json.gz",
+      "ownerKind": "task",
+      "cut": "after-checkpoint",
+      "status": "passed",
+      "localStreamedRequests": 16,
+      "textOnlyHelperRequests": 4,
+      "compactionRequests": 2,
+      "settlement": [
+        {
+          "pid": 87736,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 74892,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "owners": [
+        {
+          "project": "alpha",
+          "ownerID": "tsk_g00VXyZBsM00R20I7vwx",
+          "rootSessionID": "ses_-zUS1QnrAzzC5hLnF8yM",
+          "modelSessionID": "ses_-zUS1QlVizzS9t7roWWE",
+          "openedEventID": "pev_g0VXyZC9z00tm0FoZvPF",
+          "interruptedMessageID": "msg_hls7eFdJQHYBvQ2M0BFe",
+          "checkpointMessageID": "msg_g0VXyZFir00mEpb4cZ61",
+          "sourcePartsPreserved": 16,
+          "sourceToolRequestsPreserved": 3,
+          "sourceToolOutcomesPreserved": 3,
+          "originalEvidencePartID": "prt_g0VXyZG4l00Zb5Y5JyRU",
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "completedToolPartID": "prt_g0VXyZhrt00OVgWGZAZf",
+          "completedTool": "no_action",
+          "recoveredModelRequests": 1
+        },
+        {
+          "project": "beta",
+          "ownerID": "tsk_g00VXyZDHu00GlZEav1o",
+          "rootSessionID": "ses_-zUS1QmVqzzxxOCTcQn2",
+          "modelSessionID": "ses_-zUS1QjMAzzmUowKu3ul",
+          "openedEventID": "pev_g0VXyZDVV00P4nJY3JPG",
+          "interruptedMessageID": "msg_hH6wuYoRpADsDCx5Vo6A",
+          "checkpointMessageID": "msg_g0VXyZHK000Mt2T422mb",
+          "sourcePartsPreserved": 16,
+          "sourceToolRequestsPreserved": 3,
+          "sourceToolOutcomesPreserved": 3,
+          "originalEvidencePartID": "prt_g0VXyZHd000FBi1JRTMA",
+          "trace": "TRACE-NATIVE-beta-17031",
+          "completedToolPartID": "prt_g0VXyZj3q00OXYxtW5GD",
+          "completedTool": "no_action",
+          "recoveredModelRequests": 1
+        }
+      ]
+    },
+    {
+      "report": "mission-task-during-compaction-repair.json.gz",
+      "ownerKind": "task",
+      "cut": "during-compaction",
+      "status": "passed",
+      "localStreamedRequests": 14,
+      "textOnlyHelperRequests": 4,
+      "compactionRequests": 4,
+      "settlement": [
+        {
+          "pid": 87360,
+          "exitCode": null,
+          "signalCode": "SIGKILL",
+          "forcedCleanup": false
+        },
+        {
+          "pid": 68280,
+          "exitCode": null,
+          "signalCode": "SIGTERM",
+          "forcedCleanup": false
+        }
+      ],
+      "owners": [
+        {
+          "project": "alpha",
+          "ownerID": "tsk_g00VXyYZ3A00l7R8RjK8",
+          "rootSessionID": "ses_-zUS1RQcizzPW3UXmBPJ",
+          "modelSessionID": "ses_-zUS1RO8bzzyTUVquma6",
+          "openedEventID": "pev_g0VXyYZOd00yGgvwxZYx",
+          "interruptedMessageID": "msg_g0VXyYdyH00Vubw6F9FM",
+          "checkpointMessageID": "msg_g0VXyZ9Cv00W7dZ1e1Aj",
+          "sourcePartsPreserved": 10,
+          "sourceToolRequestsPreserved": 2,
+          "sourceToolOutcomesPreserved": 2,
+          "originalEvidencePartID": "prt_g0VXyYds800WZTjS8Tet",
+          "trace": "TRACE-NATIVE-alpha-17031",
+          "completedToolPartID": "prt_g0VXyZAM600Xgfw7odTR",
+          "completedTool": "no_action",
+          "recoveredModelRequests": 1
+        },
+        {
+          "project": "beta",
+          "ownerID": "tsk_g00VXyYaSR002Q5nDZPz",
+          "rootSessionID": "ses_-zUS1RPACzzcHGtrbRJp",
+          "modelSessionID": "ses_-zUS1RLBJzzzRLllogFb",
+          "openedEventID": "pev_g0VXyYas100iaRz8QHr7",
+          "interruptedMessageID": "msg_g0VXyYgFZ00PsDKS0RWF",
+          "checkpointMessageID": "msg_g0VXyZBTB006KMFfT9Oa",
+          "sourcePartsPreserved": 10,
+          "sourceToolRequestsPreserved": 2,
+          "sourceToolOutcomesPreserved": 2,
+          "originalEvidencePartID": "prt_g0VXyYgCO00zCdB31EGf",
+          "trace": "TRACE-NATIVE-beta-17031",
+          "completedToolPartID": "prt_g0VXyZBqV00oglg2OMdR",
+          "completedTool": "no_action",
+          "recoveredModelRequests": 1
+        }
+      ]
+    }
+  ],
+  "ownersVerified": 8,
+  "localStreamedRequests": 72,
+  "limitations": [
+    "No operating-system power-loss test",
+    "No real-model Mission semantic quality claim",
+    "Pending compaction may wait for its existing control lease to expire"
+  ]
+}

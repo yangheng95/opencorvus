@@ -568,6 +568,20 @@ export namespace SessionLoop {
     }
     let result: SessionCompaction.ProcessResult
     try {
+      // A Task recovery can append a new input before normal Prompt recovery
+      // reaches the old helper. Only this control's exclusive owner may settle
+      // its abandoned compaction attempts across that input boundary.
+      const abandoned = (await Session.messages({ sessionID: input.sessionID })).flatMap((message) =>
+        message.info.role === "assistant" &&
+        message.info.author === "compaction" &&
+        message.info.parentID === input.control.payload.source_user_message_id &&
+        message.info.time.completed === undefined
+          ? [{ messageID: message.info.id, completedAt: Math.max(Date.now(), message.info.time.created + 1) }]
+          : [],
+      )
+      if (abandoned.length > 0) {
+        await terminalizeRecoveredIncompleteAssistant(input.sessionID, leaseAbort.signal, abandoned)
+      }
       result = await input.run(leaseAbort.signal)
     } catch (error) {
       clearInterval(heartbeat)
@@ -3221,10 +3235,10 @@ export namespace SessionLoop {
                 const result = await executeCompactionControl({
                   control: compactionControl,
                   sessionID,
-                  run: (leaseSignal) =>
+                  run: async (leaseSignal) =>
                     SessionCompaction.process(
                       {
-                        messages: msgs,
+                        messages: await Message.filterCompacted(MessageStore.stream(sessionID)),
                         parentID: sourceUserMessageID,
                         abort: AbortSignal.any([abort, leaseSignal]),
                         sessionID,
