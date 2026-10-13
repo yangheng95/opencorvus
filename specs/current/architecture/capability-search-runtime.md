@@ -191,6 +191,11 @@ without exactly one receipt, a moved call identity, changed persisted input, or
 an invalid recomputed materialization fingerprint is corruption. Valid receipts
 remain ordinary visible Tool results.
 
+The search completion transaction retains the exact request metadata read from
+the current ToolPart beside its completed state and reveal receipt. Provider
+request annotations and result metadata remain distinct facts; completion and
+replay preserve both through the existing immutable request validation.
+
 Candidate definition initialization, MCP inspection, plugin definition hooks,
 and Provider normalization happen outside SQLite. The short immediate
 transaction re-reads the assistant identity, its canonical input Catalog

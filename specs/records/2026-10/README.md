@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [385 能力搜索请求元数据](2026-10-13-capability-request-metadata-385.md)：共享搜索事务保留不可变请求，覆盖重放、跨进程及多项目。
+
 - [383 投影工具大结果授权](2026-10-13-projected-output-authority-383.md)：包工具和MCP输出阈值的根因与正向合同。
 
 - [386 全屏产物菜单调查](2026-10-13-artifact-fullscreen-menu-386.md)：原版与改后页面同触发超时，根因待查。

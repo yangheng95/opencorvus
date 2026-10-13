@@ -1,0 +1,62 @@
+{
+  "scannedAt": "2026-10-13T08:08:01.433Z",
+  "knownCredentialMatches": 0,
+  "files": [
+    {
+      "source": "before.log",
+      "archive": "before.log.gz"
+    },
+    {
+      "source": "before.exit.txt",
+      "archive": "before.exit.txt"
+    },
+    {
+      "source": "after.log",
+      "archive": "after.log.gz"
+    },
+    {
+      "source": "after.exit.txt",
+      "archive": "after.exit.txt"
+    },
+    {
+      "source": "related.log",
+      "archive": "related.log.gz"
+    },
+    {
+      "source": "related.exit.txt",
+      "archive": "related.exit.txt"
+    },
+    {
+      "source": "typecheck.log",
+      "archive": "typecheck.log.gz"
+    },
+    {
+      "source": "typecheck.exit.txt",
+      "archive": "typecheck.exit.txt"
+    },
+    {
+      "source": "final-review.log",
+      "archive": "final-review.log.gz"
+    }
+  ],
+  "before": {
+    "exitCode": 1,
+    "passed": 0,
+    "failed": 2,
+    "reason": "Exact CAS request metadata conflict"
+  },
+  "after": {
+    "exitCode": 0,
+    "passed": 2,
+    "assertions": 35
+  },
+  "related": {
+    "exitCode": 0,
+    "passed": 8,
+    "assertions": 39
+  },
+  "typecheckExitCode": 0,
+  "diffCheckExitCode": 0,
+  "productionChanges": "One metadata field from transaction-validated current request",
+  "realModel": "Not achieved; attempt02 local preflight timeout, attempt03 remote Provider overload before business Tools; linked 383 evidence preserves both"
+}
