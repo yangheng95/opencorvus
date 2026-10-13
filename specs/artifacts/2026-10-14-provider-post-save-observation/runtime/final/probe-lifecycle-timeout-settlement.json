@@ -1,0 +1,37 @@
+{
+  "scope": "global",
+  "id": "owned-global-partial",
+  "label": "lifecycle-timeout-settlement",
+  "config": {
+    "status": 200,
+    "requestID": "85ff6391-2583-4f0e-af22-7073eb4ad1d2",
+    "provider": {
+      "api": "http://127.0.0.1:18603/partial/v1",
+      "name": "Owned cancelled original intent",
+      "env": [],
+      "models": {}
+    },
+    "source": {
+      "name": "Owned cancelled original intent",
+      "api": "http://127.0.0.1:18603/partial/v1",
+      "env": [],
+      "models": {}
+    }
+  },
+  "catalog": {
+    "status": 200,
+    "requestID": "d89f453e-73b3-4fca-a137-2d74220b5071",
+    "provider": {
+      "id": "owned-global-partial",
+      "name": "Owned cancelled original intent",
+      "modelIDs": [],
+      "apiKeyConfigured": false
+    },
+    "issues": []
+  },
+  "auth": {
+    "type": null,
+    "keyMatchesOwnedParticipant": false
+  },
+  "boundary": "Production TCP and exact own canonical source, known fictional credentials masked; no inference calls"
+}

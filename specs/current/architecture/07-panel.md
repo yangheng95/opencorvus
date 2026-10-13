@@ -2804,6 +2804,20 @@ hint states that models can be added or discovered later and inheritance is
 preserved. Model references, captured scope and API validation keep their existing
 contracts. Saving configuration alone does not claim inference qualification.
 
+Provider saves distinguish configuration commitment, credential commitment and
+directory observation. A successful configuration response or the shared typed
+committed receipt proceeds through the existing serial followups, retaining any
+reconciliation issue. Auth acceptance permits credential cleanup; cleanup or
+Auth failure leaves the independent directory read eligible. Fulfilled partial
+load issues remain visible alongside rejected stages. The current form closes
+only after owned followups settle and reports saved-with-issues when needed;
+ordinary initial errors retain authored input. Row Key saves classify their
+result from the actual Auth receipt. Each stage uses the captured ownership;
+form saves additionally keep their exact occurrence. Reset clears that form's
+busy state before retirement, and an older completion cannot own a newer form.
+Diagnostic details consume the shared receipt projection while the original
+configuration snapshot remains exclusively in the business response.
+
 Channel edits require the currently selected project and show the existing
 workspace selection hint in the directory-free launcher. Shared Skill/MCP
 resource pages use the same loading lifecycle on first entry and manual reload;

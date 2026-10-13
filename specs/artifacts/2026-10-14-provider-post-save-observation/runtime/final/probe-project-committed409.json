@@ -1,0 +1,51 @@
+{
+  "scope": "project",
+  "id": "owned-new-no-key",
+  "label": "project-committed409",
+  "config": {
+    "status": 200,
+    "requestID": "706cee47-b5c7-43ff-8ee8-cadd95cd29e1",
+    "provider": {
+      "api": "http://127.0.0.1:18603/new/v1",
+      "name": "Owned accepted409 and key",
+      "env": [],
+      "models": {
+        "owned-exact-model": {
+          "name": "owned-exact-model",
+          "temperature": false,
+          "tool_call": true,
+          "options": {}
+        }
+      }
+    },
+    "source": {
+      "name": "Owned accepted409 and key",
+      "api": "http://127.0.0.1:18603/new/v1",
+      "env": [],
+      "models": {
+        "owned-exact-model": {
+          "name": "owned-exact-model",
+          "tool_call": true
+        }
+      }
+    }
+  },
+  "catalog": {
+    "status": 200,
+    "requestID": "59dbb67c-70f3-477e-8970-7968a6d1892b",
+    "provider": {
+      "id": "owned-new-no-key",
+      "name": "Owned accepted409 and key",
+      "modelIDs": [
+        "owned-exact-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    "issues": []
+  },
+  "auth": {
+    "type": "api",
+    "keyMatchesOwnedParticipant": true
+  },
+  "boundary": "Production TCP and exact own canonical source, known fictional credentials masked; no inference calls"
+}

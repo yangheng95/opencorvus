@@ -221,6 +221,14 @@ Provider 与 native Agent 的默认读取先取得当前 `Config.get()` snapshot
 snapshot 继续走原有 canonical cache。由此正确性不依赖 writer 进程能否向 peer 进程广播 reset，
 同时 Project 释放会清理它拥有的默认 derived cache。
 
+### 已提交回执的业务与诊断边界
+
+Global/Project Config 的已提交协调错误通过唯一 committedMutationReceipt 返回完整配置快照及协调原因。
+Overlay 用一个纯 typed receipt 解码器供三个 Config writer 消费与 Provider 保存判断复用；原 ApiError.body
+及当前 owner 的配置快照保留原值，错误仍携带原请求身份。诊断视图只投影 name、committed、message、failures，
+不把整份 config 或可携带快照的附加 stack 放入详情、console 或 AppLog。普通错误保留自己的原合同；
+HTTP 409 状态本身不是已提交证明。此边界不承诺识别任意上游 free text 中的秘密。
+
 ## Plugin 依赖树 generation owner
 
 项目、用户全局和显式 config directory 中的本地 Plugin 文件需要同目录

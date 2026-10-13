@@ -1,0 +1,10 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const root=path.resolve('.tmp-codex-provider-post-save-01a133/final');
+const secrets=Object.values(JSON.parse(fs.readFileSync(root+'/runtime/data/auth.json','utf8'))).flatMap(x=>[x.info?.key,x.info?.access,x.info?.refresh]).filter(x=>typeof x==='string');
+const mask=x=>secrets.reduce((s,key)=>s.replaceAll(key,'[OWNED SAMPLE CREDENTIAL]'),x);
+const files=fs.readdirSync(root+'/runtime/log').filter(x=>x.endsWith('.log'));
+const entries=files.flatMap(file=>fs.readFileSync(root+'/runtime/log/'+file,'utf8').split(/\r?\n/).filter(line=>line.includes('permissions:mode')).map(line=>({file,line:mask(line)})));
+assert.equal(entries.length>0,true,'Actual original permission-mode log consumer required');
+const source=JSON.parse(fs.readFileSync(root+'/runtime/config/opencorvus.jsonc','utf8'));assert.equal(source.permission_mode,'ask');
+fs.writeFileSync(root+'/log-committed-consumer.json',JSON.stringify({boundary:'Original UI General permission-mode call → typed config409 → shared formatter → AppLog POST → real backend retained log; no injected diagnostic message',permission_mode:source.permission_mode,entries},null,2)+'\n');
+console.log(JSON.stringify({permission_mode:source.permission_mode,entries}));

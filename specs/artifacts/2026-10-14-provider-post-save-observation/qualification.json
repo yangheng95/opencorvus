@@ -1,0 +1,787 @@
+{
+  "batch": 12,
+  "exits": {
+    "build-after.exit": 0,
+    "build-before.exit": 0,
+    "build-final.exit": 0,
+    "cleanup-watch.exit": 0,
+    "docs-plan-qualified.exit": 0,
+    "docs-plan-retry.exit": 1,
+    "docs-plan.exit": 1,
+    "fault-before-prepare.exit": 0,
+    "fault-before-restore.exit": 0,
+    "fault-final-prepare.exit": 0,
+    "fault-final-restore.exit": 0,
+    "format-source.exit": 0,
+    "lease-cancel-auth-fast.exit": 0,
+    "lease-cancel-auth.exit": 0,
+    "lease-cancel-config-fast.exit": 0,
+    "lease-cancel-config.exit": 0,
+    "lease-scope-auth.exit": 0,
+    "partial-probe.exit": 0,
+    "partial-watch.exit": 0,
+    "probe-project-409.exit": 0,
+    "probe-project-auth-failed.exit": 0,
+    "receipt-tests-after.exit": 1,
+    "receipt-tests-exact-after.exit": 0,
+    "save-tests.exit": 0,
+    "tests-final.exit": 0,
+    "types-overlay-final.exit": 0,
+    "types-overlay.exit": 2,
+    "archive.exit": 0,
+    "tests-current-head.exit": 0,
+    "tests-current-head-exact.exit": 0,
+    "types-current-head.exit": 0,
+    "docs-final.exit": 0
+  },
+  "tests": {
+    "files": 6,
+    "positive": 79,
+    "assertions": 242,
+    "boundary": "Business data/transport helper contracts only; fixtures are not end-to-end or UI tests"
+  },
+  "screenshots": [
+    "screenshots/after-cancel-reopen-current-auth-busy.png",
+    "screenshots/after-cancel-reopen-current-completed.png",
+    "screenshots/after-cancel-reopen-input-timeout.png",
+    "screenshots/after-global-cleanup-details-zh.png",
+    "screenshots/after-global-cleanup-failure-zh.png",
+    "screenshots/after-global-cleanup-restored-zh.png",
+    "screenshots/after-global-committed-log-consumer.png",
+    "screenshots/after-global-committed409-details-zh.png",
+    "screenshots/after-global-committed409-zh.png",
+    "screenshots/after-global-env-model.png",
+    "screenshots/after-global-no-key.png",
+    "screenshots/after-global-partial-read-zh.png",
+    "screenshots/after-project-auth-failure.png",
+    "screenshots/after-project-committed409-details.png",
+    "screenshots/after-project-committed409.png",
+    "screenshots/after-project-inline-key-failure.png",
+    "screenshots/after-project-inline-key-restored.png",
+    "screenshots/after-project-no-key.png",
+    "screenshots/after-scope-aba-current-draft-retained.png",
+    "screenshots/after-scope-original-auth-pending.png",
+    "screenshots/before-project-committed409.png",
+    "screenshots/before-project-no-key.png"
+  ],
+  "physical": {
+    "before": {
+      "exec": 23807,
+      "actualExit": 0,
+      "pid": 85632
+    },
+    "unfinishedBuildStart": {
+      "exec": 93108,
+      "actualExit": 1,
+      "pid": 48688
+    },
+    "final": {
+      "exec": 9089,
+      "actualExit": 0,
+      "pid": 81052
+    },
+    "tabs": {
+      "before": 1,
+      "after": 2,
+      "closed": true
+    },
+    "ports": [
+      18600,
+      18601,
+      18602,
+      18603
+    ],
+    "listeners": 0
+  },
+  "inference": {
+    "realRequests": 0,
+    "boundary": "Frontend result/observation repair; actual public config/Auth/catalog and controlled filesystem faults, not LLM inference qualification; batch11 real Sol receipt retained"
+  },
+  "cleanup": {
+    "pairedFakeInputRemovedAfterActualRuntimeExit": [
+      "auth.json",
+      "models.json"
+    ]
+  },
+  "inventory": [
+    {
+      "path": "checks/after-global-cleanup-ax.txt",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/after-global-committed409-ax.txt",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/after-project-committed409-ax.txt",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/archive.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/auth-fault.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/build-after.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/build-after.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/build-before.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/build-before.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/build-final.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/build-final.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/cleanup-fault.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/cleanup-watch.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/cleanup-watch.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/docs-plan-qualified.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/docs-plan-qualified.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/docs-plan-retry.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/docs-plan-retry.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/docs-plan.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/docs-plan.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/expected-project-409.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "inputs/expected-project-auth-failed.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/fault-before-prepare.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/fault-before-prepare.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/fault-before-restore.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/fault-before-restore.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/fault-final-prepare.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/fault-final-prepare.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/fault-final-restore.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/fault-final-restore.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/fault.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/format-source.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/format-source.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/launch-before-input.ps1",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "inputs/launch.ps1",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/lease-cancel-auth-fast.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/lease-cancel-auth-fast.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/lease-cancel-auth.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/lease-cancel-auth.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/lease-cancel-config-fast.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/lease-cancel-config-fast.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/lease-cancel-config.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/lease-cancel-config.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/lease-scope-auth.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/lease-scope-auth.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/lease.ts",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "inputs/log-probe.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "inputs/partial-probe.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/partial-probe.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/partial-probe.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/partial-read-fault.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/partial-watch.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/partial-watch.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/prepare.mjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "inputs/previous-batch-delivery-original.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/probe-project-409.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/probe-project-409.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/probe-project-auth-failed.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/probe-project-auth-failed.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/probe.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "inputs/project-label.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/receipt-tests-after.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/receipt-tests-after.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/receipt-tests-exact-after.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/receipt-tests-exact-after.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/runtime-before-input.ts",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "inputs/runtime.ts",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/save-tests.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/save-tests.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "inputs/scope-probe.cjs",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/tests-final.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/tests-final.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/types-overlay-final.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/types-overlay-final.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "checks/types-overlay.exit",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "checks/types-overlay.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/before/exit.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/fault-prepare.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/fault-restore.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/outcomes.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/owner.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/participant-requests.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/ready.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/stderr.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/before/stdout.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/before/terminal.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/before/backend-2026-10-13T180003-85632-1.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/after/exit.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/after/owner.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/after/stderr.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/after/stdout.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/after/backend-2026-10-13T181017-48688-1.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/final/auth-readonly-input.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/auth-readonly-qualification.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/cleanup-readonly-fired.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/cleanup-readonly-input.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/exit.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/fault-arm-1791915705339.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/fault-arm.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/fault-prepare.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/fault-restore-1791915803408.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/fault-restore.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-auth-fast-ready.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-auth-fast-terminal.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-auth-ready.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-auth-terminal.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-config-fast-ready.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-config-fast-terminal.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-config-ready.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-cancel-config-terminal.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-scope-auth-ready.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/lease-scope-auth-terminal.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/log-committed-consumer.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/outcomes.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/owner.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/partial-read-fired.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/partial-read-http.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/participant-requests.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/probe-cleanup-failed.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/probe-cleanup-restored.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/probe-lifecycle-timeout-settlement.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/probe-project-auth-failed.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/probe-project-committed409.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/project-label.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/ready.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/scope-accepted-original.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/stderr.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/final/stdout.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "runtime/final/terminal.json",
+      "boundary": "Known fictional credential bytes masked; original logical text"
+    },
+    {
+      "path": "runtime/final/backend-2026-10-13T181211-81052-1.log.gz",
+      "boundary": "Original whitespace preserved; known fictional credential bytes masked; gzip container only"
+    },
+    {
+      "path": "screenshots/after-cancel-reopen-current-auth-busy.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-cancel-reopen-current-completed.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-cancel-reopen-input-timeout.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-cleanup-details-zh.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-cleanup-failure-zh.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-cleanup-restored-zh.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-committed-log-consumer.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-committed409-details-zh.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-committed409-zh.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-env-model.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-no-key.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-global-partial-read-zh.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-project-auth-failure.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-project-committed409-details.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-project-committed409.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-project-inline-key-failure.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-project-inline-key-restored.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-project-no-key.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-scope-aba-current-draft-retained.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/after-scope-original-auth-pending.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/before-project-committed409.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "screenshots/before-project-no-key.png",
+      "boundary": "Original screenshot personally viewed in CUA; no transformations or automated assertions"
+    },
+    {
+      "path": "checks/archive.exit",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/tests-current-head.log.gz",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/tests-current-head.exit",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/tests-current-head-exact.log.gz",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/tests-current-head-exact.exit",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/types-current-head.log.gz",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/types-current-head.exit",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/docs-final.log.gz",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "checks/docs-final.exit",
+      "boundary": "Original check output; known generated credential bytes masked"
+    },
+    {
+      "path": "inputs/intake-batch13-ui.md",
+      "boundary": "Next-batch read-only candidate audit; not qualified implementation"
+    },
+    {
+      "path": "inputs/intake-batch13-functionality.md",
+      "boundary": "Next-batch read-only candidate audit; not qualified implementation"
+    }
+  ],
+  "finalChecks": {
+    "tests": {
+      "exec": "bda798",
+      "actualExit": 0,
+      "files": 6,
+      "positive": 79,
+      "assertions": 242
+    },
+    "typecheck": {
+      "session": 86481,
+      "completion": "497837",
+      "actualExit": 0
+    },
+    "docs": {
+      "exec": "5eba38",
+      "actualExit": 0,
+      "operations": 345,
+      "groups": 26
+    },
+    "priorFilter": {
+      "exec": "313cd9",
+      "actualExit": 0,
+      "files": 5,
+      "positive": 76,
+      "boundary": "Misspelled explicit test path was ignored by Bun; corrected exact six-file command is retained separately"
+    }
+  }
+}

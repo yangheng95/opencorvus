@@ -1,0 +1,130 @@
+{
+  "batch": 11,
+  "commit": "f757ca4791155569bc0679cb65f8ec1eddb6faff",
+  "parent": "eadff8e312ded8c369254e9aa878b423c564755e",
+  "scopedPaths": 172,
+  "branch": "main",
+  "upstream": "origin/main",
+  "sharedPrimitivesAlreadyIntegrated": "9438501d5d6eaa627cd7276d481f1dfc2696b7b1",
+  "standardCommit": {
+    "gitExit": 0,
+    "originalWrapperExec": 18686,
+    "wrapperExit": 1,
+    "boundary": "Git commit succeeded; later ordinary index alignment collided with active peer Git lock",
+    "indexRecovery": {
+      "firstExec": 58058,
+      "actualExit": 0,
+      "batchedExec": 38874,
+      "noLockDeleted": true
+    }
+  },
+  "push": {
+    "originalExec": 73415,
+    "actualExit": 0,
+    "gitExit": 0,
+    "capturedHead": "5107ed64bc1c63b76a247d952b1f526a6c5da152",
+    "remote": "5107ed64bc1c63b76a247d952b1f526a6c5da152",
+    "ownedCommitRemoteAncestor": true,
+    "freshFetchAndUpstreamMerge": true,
+    "pendingReviewed": {
+      "capturedHead": "5107ed64bc1c63b76a247d952b1f526a6c5da152",
+      "pending": [],
+      "freshFetch": true,
+      "merge": "Already up to date.",
+      "ownership": [
+        {
+          "commit": "f757ca4791155569bc0679cb65f8ec1eddb6faff",
+          "scope": "Provider empty declarations,172 paths; exact Provider locale/architecture/spec scope; primitive already integrated943",
+          "validation": "48 tests159assertions,30 personally viewed screenshots,20 actual after TCP+6 Session contracts,4 real Sol200 stream eof,format/docs0"
+        },
+        {
+          "commit": "eadff8e312ded8c369254e9aa878b423c564755e",
+          "scope": "Separate authorized spreadsheet hover batch398,78 paths,4 distribution class changes",
+          "validation": "19 manually viewed JPEG,actual dark ordinary/fullscreen/light and bilingual facts,typecheck/build/frozen install0,before/after join0",
+          "evidence": "specs/artifacts/2026-10-13-spreadsheet-permission-hover-398/README.md"
+        },
+        {
+          "commit": "7f11e61908bce4556c33f591a249034157e0eb13",
+          "scope": "Separate authorized ACP canonical failures/cancellation batch393,44 paths,exact Session prompt owner cleanup",
+          "validation": "39 positive backend contracts including14actual ACP→HTTP→Session/streaming Provider,12typed conversion,13existing input/concurrency/recovery contracts; repaired first cancellation/type failures preserved; type/docs/architecture0; explicit broader recovery limits retained",
+          "evidence": "specs/artifacts/2026-10-05-connection-workspace-authority/acp-prompt-terminal-393/README.md"
+        },
+        {
+          "commit": "1797970654641338fcdb544935c3b9c9e3bec6ee",
+          "scope": "Authorized next Dialog Close localization analysis/plan only,3 spec/index paths,176 insertions; no implementation",
+          "validation": "Exact paths inspected,Recall/root/impact/remaining boundaries read,git diff check0; ordinary prepush docs required",
+          "evidence": "specs/records/2026-10/2026-10-14-design-dialog-close-locale-401.md"
+        },
+        {
+          "commit": "f64daf821677f46e864451d6983a1e23ac57a06c",
+          "scope": "Authorized compaction open execution Message/canonical late-Part coverage,31 paths,SDK and project-memory contract synchronized",
+          "validation": "53 distinct8-file positive contracts; actual local streamed transport and real Task ingress with existing in-process driver hook, not native process qualification; shared Mission regression contracts; captured late Tool/diagnostic/source/copy/reopen/pruning outputs; typecheck/SDK0; no extra paid calls, broader native recovery and semantic policy benchmark explicitly open; git diff check0",
+          "evidence": "specs/artifacts/2026-10-13-compaction-stress/README.md#open-execution-message-coverage",
+          "boundaryCorrection": "Earlier review metadata used Native too broadly; corrected after direct final artifact read, no native-process or full Task/Mission E2E claim"
+        },
+        {
+          "commit": "5107ed64bc1c63b76a247d952b1f526a6c5da152",
+          "scope": "Authorized Explorer directory display,3 UI source fields and owned evidence/docs; related Capsule/publication investigation remains analysis only",
+          "validation": "29 actual positive File GET/content/list/search checks;23 original desktop JPEG with one empty frame excluded; English/Chinese root/Unicode/Copy/Move/failure/recovery/two projects manually inspected; first deadline1 preserved,independent normal shutdown200/full original joins0; typecheck/build0; explicit remaining boundaries retained; git diff check0",
+          "evidence": "specs/artifacts/2026-10-14-explorer-directory-label/README.md"
+        }
+      ],
+      "index": "Batched exact committed-file verification and own index reconciliation38874 exit0; prior postcommit lock failures preserved, no lock removed",
+      "normalPush": "Standard hooks, no bypass, exact captured branch tip",
+      "at": "2026-10-13T17:23:57.628Z"
+    },
+    "normalHooks": true,
+    "noBypass": true,
+    "terminal": "Everything up-to-date; concurrent owners had advanced same remote tip before final normal push",
+    "previousAttempts": [
+      {
+        "exec": 18912,
+        "actualExit": 1,
+        "reason": "Parallel unfinished type narrowing; owner corrected"
+      },
+      {
+        "exec": 60363,
+        "actualExit": 1,
+        "reason": "Parallel source Schema ahead of generated OpenAPI; owner regenerated"
+      },
+      {
+        "exec": 70484,
+        "actualExit": 1,
+        "reason": "All hooks passed; concurrent remote already at captured7f11e619"
+      },
+      {
+        "exec": 99689,
+        "actualExit": 1,
+        "reason": "All hooks passed; concurrent remote already at captured179797065"
+      }
+    ]
+  },
+  "checks": {
+    "positiveTests": 48,
+    "assertions": 159,
+    "currentHeadFocusedRerunExec": 23333,
+    "rerunExit": 0,
+    "desktopScreenshots": 30,
+    "sol": {
+      "originalExec": 58357,
+      "actualExit": 0,
+      "physicalRequests": 4,
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled/eof",
+      "pairedCredentialsAndCatalogRemovedAfterActualExit": true
+    },
+    "format": 0,
+    "docs": "348operations/26groups",
+    "hook": "8 typechecks,35 route files,docs,18lease owners,19architecture docs,10workspace packages,tracked-source secret scan0",
+    "exactCapturedTree": "5107ed64 release5 authorities/module1155nodes5919edges/4 clean imports, original module56763 exit0 and release d063de exit0; explicitly run because final no-update push had empty ref stdin"
+  },
+  "ownedPhysical": "before86586/after61692/Sol58357 actualexit0; tabs24/25closed;18590/18591/18592listeners0",
+  "ownUncommitted": false,
+  "pendingAfter": "",
+  "evidence": "specs/artifacts/2026-10-13-provider-empty-declarations/README.md",
+  "next": "Batch12 parallel readonly UI/functionality reports completed. Current-catalog post-config save and committed409 consumer require formal Recall/root-impact plan before implementation; no next-batch product changes yet",
+  "goalStatus": "active",
+  "at": "2026-10-13T17:32:42.130Z"
+}

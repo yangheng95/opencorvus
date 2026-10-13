@@ -1,0 +1,37 @@
+{
+  "scope": "project",
+  "id": "owned-new-auth-failed",
+  "label": "project-auth-failed",
+  "config": {
+    "status": 200,
+    "requestID": "67ef814b-9866-4d01-8eb0-1c618d1c0093",
+    "provider": {
+      "api": "http://127.0.0.1:18603/auth-failed/v1",
+      "name": "Owned saved config, failed key",
+      "env": [],
+      "models": {}
+    },
+    "source": {
+      "name": "Owned saved config, failed key",
+      "api": "http://127.0.0.1:18603/auth-failed/v1",
+      "env": [],
+      "models": {}
+    }
+  },
+  "catalog": {
+    "status": 200,
+    "requestID": "7707281b-287b-414d-9f6f-c9c97922e17b",
+    "provider": {
+      "id": "owned-new-auth-failed",
+      "name": "Owned saved config, failed key",
+      "modelIDs": [],
+      "apiKeyConfigured": false
+    },
+    "issues": []
+  },
+  "auth": {
+    "type": null,
+    "keyMatchesOwnedParticipant": false
+  },
+  "boundary": "Production TCP and exact own canonical source, known fictional credentials masked; no inference calls"
+}

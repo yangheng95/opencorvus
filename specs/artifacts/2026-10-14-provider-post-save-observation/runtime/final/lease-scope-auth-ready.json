@@ -1,0 +1,23 @@
+{
+  "pid": 88384,
+  "kind": "auth",
+  "target": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-post-save-01a133\\final\\runtime\\data\\auth.json",
+  "label": "scope-auth",
+  "at": 1791917084737,
+  "credentialGenerations": {
+    "owned-bootstrap": "173d99a8-a3c7-4460-b94d-5d557d2592c1",
+    "owned-ready": "e5f1056c-95a5-44bf-b8c8-01f99abdd117",
+    "opencorvus": "508fb17c-e0eb-4303-84f9-0d5f500eb34c",
+    "owned-inherited": "219e4f4e-f272-471d-81ca-d2ca3aab0069",
+    "owned-clear": "b78d2e73-9a95-45de-879a-c33b0d41181f",
+    "owned-referenced": "e47685a2-0e7c-442b-be19-c550a62d4e12",
+    "owned-overlap": "2243328e-1608-4ecb-9e82-d5a4ad0bee63",
+    "openai": "ba2cd453-030d-4d06-bece-7a8935f7a041",
+    "owned-new-no-key": "20d5f51b-53df-4bf1-a532-ab83fadac55a",
+    "owned-new-auth-failed": "6ad7dd79-3662-4b5f-bee2-55eb8994f33a",
+    "owned-global-no-key": "5bccfdb8-abd6-4dea-b7f4-966e1e549f3c",
+    "owned-configzero": "01e881b7-9819-4054-bb44-8def3ab07de5",
+    "owned-global-partial": "88a3cb76-37fc-4eb9-8954-f34b528f2769"
+  },
+  "boundary": "Real production process lock on own canonical input; actual HTTP writer queues naturally"
+}

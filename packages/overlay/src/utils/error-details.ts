@@ -1,7 +1,11 @@
+import { configMutationReceiptDiagnostic, readConfigMutationReceipt } from "../services/config-mutation-receipt"
+
 /**
  * Render a thrown value into a multi-line detail string suitable for the
  * notification's collapsible details block. Pulls stack, and when the error is
- * an ApiError, the HTTP status, path, and response body.
+ * an ApiError, the HTTP status, path, and response body. Committed configuration
+ * receipts expose their reconciliation details while retaining the snapshot
+ * exclusively on the original error.
  */
 export function formatErrorDetails(err: unknown): string {
   if (err == null) return ""
@@ -18,13 +22,15 @@ export function formatErrorDetails(err: unknown): string {
       parts.push(`HTTP ${typeof meta.method === "string" ? `${meta.method} ` : ""}${meta.status} ${meta.path}`)
     }
     if (typeof meta.requestID === "string" && meta.requestID) parts.push(`Request ID: ${meta.requestID}`)
-    parts.push(err.stack || `${err.name}: ${err.message}`)
-    if (meta.body !== undefined) {
+    const receipt = readConfigMutationReceipt(meta.body)
+    parts.push(receipt ? `${receipt.name}: ${receipt.data.message}` : err.stack || `${err.name}: ${err.message}`)
+    const body = receipt ? configMutationReceiptDiagnostic(receipt) : meta.body
+    if (body !== undefined) {
       let rendered: string
       try {
-        rendered = typeof meta.body === "string" ? meta.body : JSON.stringify(meta.body, null, 2)
+        rendered = typeof body === "string" ? body : JSON.stringify(body, null, 2)
       } catch {
-        rendered = String(meta.body)
+        rendered = String(body)
       }
       if (rendered) parts.push(`response body:\n${rendered}`)
     }
@@ -32,7 +38,8 @@ export function formatErrorDetails(err: unknown): string {
   }
   if (typeof err === "string") return err
   try {
-    return JSON.stringify(err, null, 2)
+    const receipt = readConfigMutationReceipt(err)
+    return JSON.stringify(receipt ? configMutationReceiptDiagnostic(receipt) : err, null, 2)
   } catch {
     return String(err)
   }

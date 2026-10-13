@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Provider 保存与目录观察](2026-10-14-provider-post-save-observation.md)：commit receipt、保存后真实目录与诊断投影。
+
 - [SQLite 当前基线与自动迁移](2026-10-14-sqlite-automatic-migrations.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。
 
 - [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation.md)：独立列表target合同、别名移动与相对链接范围前检。

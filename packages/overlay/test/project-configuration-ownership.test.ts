@@ -131,7 +131,7 @@ test("retained project options keep their captured selection even when passed af
 test("a committed reconciliation error preserves its original receipt after project ABA", async () => {
   const pending = Promise.withResolvers<TransportResponse<unknown>>()
   reply = () => pending.promise
-  const body = { name: "ProjectConfigCommittedReconcileError", data: { committed: true, config: { marker: "accepted-old-A" }, failures: ["runtime reconciliation failed"] } }
+  const body = { name: "ProjectConfigCommittedReconcileError", data: { committed: true, message: "Project configuration committed, but its runtime projection did not fully settle", config: { marker: "accepted-old-A" }, failures: ["runtime reconciliation failed"] } }
   const operation = patchConfig({ marker: "accepted-old-A" }, currentProjectConfigRequestOptions())
   await projectABA()
   setAppStore("config", { marker: "current-new-A" })

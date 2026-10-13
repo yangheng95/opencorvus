@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Provider 保存与目录观察](2026-10-14-provider-post-save-observation/README.md)：前态资格、并行调查和分阶段保存证据。
+
 - [SQLite 当前基线与自动迁移](2026-10-14-sqlite-automatic-migrations/README.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。
 
 - [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation/README.md)：独立分析、真实predicate/文件准入、原活动与桌面资格。

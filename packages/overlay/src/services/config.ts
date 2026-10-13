@@ -2,6 +2,7 @@
 // Check config accessors and config update helpers.
 
 import { ApiError, apiJson, configure as configureApi } from "./api"
+import { readConfigMutationReceipt } from "./config-mutation-receipt"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { appStore, setAppStore, type ProjectLoadIssue } from "../store/app"
 import { settingsStore } from "../store/settings"
@@ -136,13 +137,9 @@ function configResponseStillOwned(options: ConfigRequestOptions, selectionEpoch:
   return ownsDirectory && (!options.ownsResponse || options.ownsResponse())
 }
 
-function committedConfigFromError(error: unknown): Record<string, any> | undefined {
-  if (!(error instanceof ApiError) || !error.body || typeof error.body !== "object") return undefined
-  const data = (error.body as { data?: unknown }).data
-  if (!data || typeof data !== "object") return undefined
-  const receipt = data as { committed?: unknown; config?: unknown }
-  if (receipt.committed !== true || !receipt.config || typeof receipt.config !== "object") return undefined
-  return receipt.config as Record<string, any>
+export function committedConfigFromError(error: unknown): Record<string, any> | undefined {
+  if (!(error instanceof ApiError)) return undefined
+  return readConfigMutationReceipt(error.body)?.data.config
 }
 
 /**

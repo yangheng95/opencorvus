@@ -1,0 +1,41 @@
+{
+  "scope": "global",
+  "id": "owned-configzero",
+  "label": "cleanup-failed",
+  "config": {
+    "status": 200,
+    "requestID": "7003778b-5984-43ab-ba47-26207ed0d133",
+    "provider": {
+      "api": "http://127.0.0.1:18603/config/v1",
+      "name": "Owned cleanup write fault",
+      "models": {},
+      "options": {
+        "apiKey": "[OWNED SAMPLE CREDENTIAL]"
+      }
+    },
+    "source": {
+      "name": "Owned cleanup write fault",
+      "api": "http://127.0.0.1:18603/config/v1",
+      "options": {
+        "apiKey": "[OWNED SAMPLE CREDENTIAL]"
+      },
+      "models": {}
+    }
+  },
+  "catalog": {
+    "status": 200,
+    "requestID": "1f74ebe9-5550-4d86-8260-ba2f76684959",
+    "provider": {
+      "id": "owned-configzero",
+      "name": "Owned cleanup write fault",
+      "modelIDs": [],
+      "apiKeyConfigured": true
+    },
+    "issues": []
+  },
+  "auth": {
+    "type": "api",
+    "keyMatchesOwnedParticipant": true
+  },
+  "boundary": "Production TCP and exact own canonical source, known fictional credentials masked; no inference calls"
+}

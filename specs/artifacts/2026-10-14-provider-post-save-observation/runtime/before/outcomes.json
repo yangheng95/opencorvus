@@ -1,0 +1,268 @@
+{
+  "boundary": "Production HTTP with isolated generated sample Auth and own registry/model participant; key bytes excluded; no online inference",
+  "outcomes": {
+    "globalCatalog": {
+      "status": 200,
+      "body": {
+        "connected": [
+          "owned-ready",
+          "owned-inherited",
+          "owned-clear",
+          "owned-referenced",
+          "owned-overlap"
+        ],
+        "issues": [],
+        "providers": [
+          {
+            "id": "openai",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "opencorvus",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "kilo",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-inherited",
+            "models": [
+              "catalog-one",
+              "catalog-two"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-bootstrap",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-empty",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-configzero",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-ready",
+            "models": [
+              "ready-known"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-env",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-absent",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-models-only",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-clear",
+            "models": [
+              "custom-one"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-referenced",
+            "models": [
+              "reference-one"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-overlap",
+            "models": [
+              "shared-one"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          }
+        ]
+      }
+    },
+    "projectCatalog": {
+      "status": 200,
+      "body": {
+        "connected": [
+          "owned-ready",
+          "owned-inherited",
+          "owned-clear",
+          "owned-referenced",
+          "owned-overlap",
+          "owned-project-clear"
+        ],
+        "issues": [],
+        "providers": [
+          {
+            "id": "openai",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "opencorvus",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "kilo",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-inherited",
+            "models": [
+              "catalog-one",
+              "catalog-two"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-bootstrap",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-empty",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-configzero",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-ready",
+            "models": [
+              "ready-known"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-env",
+            "models": [],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-absent",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-models-only",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-clear",
+            "models": [
+              "custom-one"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-referenced",
+            "models": [
+              "reference-one"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-overlap",
+            "models": [
+              "shared-one"
+            ],
+            "apiKeyConfigured": true,
+            "rawKeyPresent": true
+          },
+          {
+            "id": "owned-project-absent",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-project-models-only",
+            "models": [],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          },
+          {
+            "id": "owned-project-clear",
+            "models": [
+              "project-custom-one"
+            ],
+            "apiKeyConfigured": false,
+            "rawKeyPresent": false
+          }
+        ]
+      }
+    },
+    "globalSavedZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "global-discovered-a",
+          "global-discovered-b"
+        ],
+        "count": 2
+      }
+    },
+    "projectSavedZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "project-discovered-a",
+          "project-discovered-b"
+        ],
+        "count": 2
+      }
+    }
+  }
+}

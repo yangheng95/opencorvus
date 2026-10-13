@@ -1,0 +1,12 @@
+{
+  "status": 500,
+  "requestID": "d82c39bf-12bd-4210-887f-05bcfd22d9f9",
+  "body": {
+    "name": "UnknownError",
+    "data": {
+      "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+    }
+  },
+  "persistedCredential": null,
+  "boundary": "Actual production PUT against own readonly store; qualification only, not browser response substitution"
+}

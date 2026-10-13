@@ -7,11 +7,12 @@ import { Feedback } from "../ui/Feedback"
 import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
 import { t, tc } from "../../utils/i18n"
 import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
-import { updateConfig, updateGlobalConfig } from "../../services/config"
+import { committedConfigFromError, updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { boardStore } from "../../store/board"
 import { loadProviderInfo } from "../../services/config-load"
 import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
+import { settleProviderSaveFollowups, type ProviderSaveFollowup, type ProviderSaveIssue } from "../../services/provider-save"
 import {
   applyProviderForm,
   ProviderFormApiError,
@@ -67,8 +68,8 @@ function ProviderMessages(props: { messages: ProviderFeedback[]; testID?: string
   )
 }
 
-function describeProviderIssue(issue: { phase?: string; providerID?: string; message: string }): string {
-  const owner = [issue.providerID, issue.phase].filter(Boolean).join(" · ")
+function describeProviderIssue(issue: ProviderSaveIssue): string {
+  const owner = [issue.providerID, issue.stage, issue.resource, issue.phase].filter(Boolean).join(" · ")
   return owner ? `${owner}: ${issue.message}` : issue.message
 }
 
@@ -364,7 +365,7 @@ export default function ProvidersPanel() {
   })
 
   async function refreshAuthState(options: ReturnType<typeof providerLoadOptions>) {
-    if (options.isCurrentDirectory(options.directory)) await loadProviderInfo(undefined, options)
+    return options.isCurrentDirectory(options.directory) ? await loadProviderInfo(undefined, options) : []
   }
 
   async function handleAuth(providerId: string) {
@@ -645,57 +646,69 @@ export default function ProvidersPanel() {
     const ownsForm = () => occurrence === formOccurrence && options.isCurrentDirectory(directory)
     invalidateDiscovery()
     setSaving(true)
-    let configCommitted = false
-    let credentialIssues: AuthMutationResult["issues"] = []
+    const issues: ProviderSaveIssue[] = []
     try {
-      await updateActiveProviderConfig(
-        directory,
-        (cfg) => {
-          removeDisabledProvider(cfg, id)
-          cfg.provider = cfg.provider || {}
-          cfg.provider[id] = applyProviderForm({ id, current: cfg.provider[id], initial, values })
-        },
-        options,
-      )
-      configCommitted = true
-      if (apiKey) {
-        const authResult = (await apiJson(`auth/${id}`, {
-          authority: options.authority,
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: "api", key: apiKey }),
-        })) as AuthMutationResult
-        credentialIssues = authResult.issues
-        await updateActiveProviderConfig(directory, (cfg) => removeProjectApiKeyOverride(cfg, id), options)
-        await refreshAuthState(options)
+      try {
+        await updateActiveProviderConfig(
+          directory,
+          (cfg) => {
+            removeDisabledProvider(cfg, id)
+            cfg.provider = cfg.provider || {}
+            cfg.provider[id] = applyProviderForm({ id, current: cfg.provider[id], initial, values })
+          },
+          options,
+        )
+      } catch (error) {
+        if (!committedConfigFromError(error)) throw error
+        issues.push({ stage: "config.reconcile", message: formatErrorDetails(error) })
       }
+      const followups: ProviderSaveFollowup[] = []
+      if (apiKey) {
+        let credentialCommitted = false
+        followups.push(
+          {
+            phase: "auth.save",
+            run: async () => {
+              const result = (await apiJson(`auth/${id}`, {
+                authority: options.authority,
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type: "api", key: apiKey }),
+              })) as AuthMutationResult
+              credentialCommitted = true
+              return result.issues
+            },
+          },
+          {
+            phase: "config.credential-cleanup",
+            run: async () => {
+              if (credentialCommitted) {
+                await updateActiveProviderConfig(directory, (cfg) => removeProjectApiKeyOverride(cfg, id), options)
+              }
+            },
+          },
+        )
+      }
+      followups.push({ phase: "provider.reload", run: () => refreshAuthState(options) })
+      issues.push(...(await settleProviderSaveFollowups(followups, ownsForm)))
 
       if (!ownsForm()) return
       setShowAdd(false)
       resetForm()
       setEditing(null)
-      if (credentialIssues.length > 0) {
-        setFormError(
-          feedback("provider.api_key.saved_with_issues", credentialIssues.map(describeProviderIssue).join("\n")),
-        )
+      if (issues.length > 0) {
+        setFormError(feedback("provider.form.saved_with_issues", issues.map(describeProviderIssue).join("\n")))
       }
     } catch (e) {
-      console.error("[providers] save failed", e)
+      console.error("[providers] save failed", formatErrorDetails(e))
       if (!ownsForm()) return
-      if (configCommitted) {
-        setShowAdd(false)
-        resetForm()
-        setEditing(null)
-        setFormError(feedback("provider.form.saved_with_issues", formatErrorDetails(e)))
-      } else {
-        setFormError(
-          e instanceof ProviderFormApiError
-            ? feedback(
-                e.code === "PROVIDER_API_REQUIRED" ? "provider.form.error.api_required" : "provider.form.api_invalid",
-              )
-            : feedback("provider.form.error.save_failed", formatErrorDetails(e)),
-        )
-      }
+      setFormError(
+        e instanceof ProviderFormApiError
+          ? feedback(
+              e.code === "PROVIDER_API_REQUIRED" ? "provider.form.error.api_required" : "provider.form.api_invalid",
+            )
+          : feedback("provider.form.error.save_failed", formatErrorDetails(e)),
+      )
     } finally {
       if (ownsForm()) setSaving(false)
     }
@@ -764,52 +777,48 @@ export default function ProvidersPanel() {
     setFormError(null)
     setSavingKey((prev) => new Set(prev).add(providerId))
     try {
-      const authResult = (await apiJson(`auth/${providerId}`, {
-        authority: options.authority,
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "api", key: value }),
-      })) as AuthMutationResult
-      if (owns()) clearApiKeyInput(providerId)
-      const followups: Array<{ phase: string; run: () => Promise<unknown> }> = [
+      let authResult: AuthMutationResult | undefined
+      const followups: ProviderSaveFollowup[] = [
+        {
+          phase: "auth.save",
+          run: async () => {
+            authResult = (await apiJson(`auth/${providerId}`, {
+              authority: options.authority,
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ type: "api", key: value }),
+            })) as AuthMutationResult
+            if (owns()) clearApiKeyInput(providerId)
+            return authResult.issues
+          },
+        },
         {
           phase: "config.credential-cleanup",
-          run: () =>
-            updateActiveProviderConfig(
+          run: async () => {
+            if (!authResult) return
+            await updateActiveProviderConfig(
               directory,
               (cfg) => {
                 removeProjectApiKeyOverride(cfg, providerId)
               },
               options,
-            ),
+            )
+          },
         },
         {
           phase: "provider.reload",
           run: () => refreshAuthState(options),
         },
       ]
-      const settled: PromiseSettledResult<unknown>[] = []
-      for (const operation of followups) {
-        try {
-          settled.push({ status: "fulfilled", value: await operation.run() })
-        } catch (reason) {
-          settled.push({ status: "rejected", reason })
-        }
-      }
-      const followupIssues = settled.flatMap((result, index) =>
-        result.status === "rejected"
-          ? [
-              {
-                phase: followups[index]?.phase,
-                message: formatErrorDetails(result.reason),
-              },
-            ]
-          : [],
-      )
-      const issues = [...authResult.issues, ...followupIssues]
+      const issues = await settleProviderSaveFollowups(followups, owns)
       if (!owns()) return
       if (issues.length > 0) {
-        setFormError(feedback("provider.api_key.saved_with_issues", issues.map(describeProviderIssue).join("\n")))
+        setFormError(
+          feedback(
+            authResult ? "provider.api_key.saved_with_issues" : "provider.api_key.save_failed",
+            issues.map(describeProviderIssue).join("\n"),
+          ),
+        )
       }
     } catch (e) {
       if (!owns()) return

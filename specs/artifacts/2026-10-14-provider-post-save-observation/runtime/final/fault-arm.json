@@ -1,0 +1,484 @@
+{
+  "boundary": "Actual public production HTTP, own malformed credential-free MCP input; no listener stub or browser interception",
+  "records": [
+    {
+      "mode": "arm",
+      "input": "Owned mcp-auth JSON syntax {",
+      "containsCredentials": false
+    },
+    {
+      "route": "/global/providers",
+      "method": "GET",
+      "status": 200,
+      "requestID": "9d52d33e-bf2b-495d-9930-1889091257c6",
+      "body": {
+        "catalog": {
+          "all": [
+            {
+              "id": "openai",
+              "source": "custom",
+              "name": "OpenAI OAuth only",
+              "env": [
+                "OPENAI_API_KEY"
+              ],
+              "options": {},
+              "models": {},
+              "apiKeyConfigured": false
+            },
+            {
+              "id": "opencorvus",
+              "source": "custom",
+              "name": "OpenCorvus",
+              "env": [],
+              "options": {},
+              "models": {},
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "kilo",
+              "source": "custom",
+              "name": "Kilo Gateway",
+              "env": [],
+              "options": {},
+              "models": {},
+              "apiKeyConfigured": false
+            },
+            {
+              "id": "owned-inherited",
+              "name": "Inherited declaration",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {
+                "catalog-one": {
+                  "id": "catalog-one",
+                  "providerID": "owned-inherited",
+                  "name": "catalog-one",
+                  "api": {
+                    "id": "catalog-one",
+                    "url": "http://127.0.0.1:18603/inherited/v1",
+                    "npm": "@ai-sdk/openai-compatible"
+                  },
+                  "status": "active",
+                  "headers": {},
+                  "options": {},
+                  "cost": {
+                    "available": true,
+                    "input": 1,
+                    "output": 2,
+                    "cache": {
+                      "read": 0,
+                      "write": 0
+                    }
+                  },
+                  "limit": {
+                    "context": 10000,
+                    "output": 1000
+                  },
+                  "capabilities": {
+                    "temperature": true,
+                    "reasoning": false,
+                    "attachment": false,
+                    "toolcall": true,
+                    "input": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "output": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "interleaved": false
+                  },
+                  "release_date": "2026-10-13",
+                  "variants": {}
+                },
+                "catalog-two": {
+                  "id": "catalog-two",
+                  "providerID": "owned-inherited",
+                  "name": "catalog-two",
+                  "api": {
+                    "id": "catalog-two",
+                    "url": "http://127.0.0.1:18603/inherited/v1",
+                    "npm": "@ai-sdk/openai-compatible"
+                  },
+                  "status": "active",
+                  "headers": {},
+                  "options": {},
+                  "cost": {
+                    "available": true,
+                    "input": 1,
+                    "output": 2,
+                    "cache": {
+                      "read": 0,
+                      "write": 0
+                    }
+                  },
+                  "limit": {
+                    "context": 10000,
+                    "output": 1000
+                  },
+                  "capabilities": {
+                    "temperature": true,
+                    "reasoning": false,
+                    "attachment": false,
+                    "toolcall": true,
+                    "input": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "output": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "interleaved": false
+                  },
+                  "release_date": "2026-10-13",
+                  "variants": {}
+                }
+              },
+              "key": "[OWNED SAMPLE CREDENTIAL]",
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "owned-bootstrap",
+              "name": "Saved key before models",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {},
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "owned-empty",
+              "name": "Global committed receipt baseline",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {},
+              "apiKeyConfigured": false
+            },
+            {
+              "id": "owned-configzero",
+              "name": "Config key without models",
+              "env": [],
+              "options": {
+                "apiKey": "[OWNED SAMPLE CREDENTIAL]"
+              },
+              "source": "config",
+              "models": {},
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "owned-ready",
+              "name": "Known model provider",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {
+                "ready-known": {
+                  "id": "ready-known",
+                  "api": {
+                    "id": "ready-known",
+                    "npm": "@ai-sdk/openai-compatible",
+                    "url": "http://127.0.0.1:18603/ready/v1"
+                  },
+                  "status": "active",
+                  "name": "ready-known",
+                  "providerID": "owned-ready",
+                  "capabilities": {
+                    "temperature": true,
+                    "reasoning": false,
+                    "attachment": false,
+                    "toolcall": true,
+                    "input": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "output": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "interleaved": false
+                  },
+                  "cost": {
+                    "available": true,
+                    "input": 1,
+                    "output": 2,
+                    "cache": {
+                      "read": 0,
+                      "write": 0
+                    }
+                  },
+                  "options": {},
+                  "limit": {
+                    "context": 10000,
+                    "output": 1000
+                  },
+                  "headers": {},
+                  "family": "",
+                  "release_date": "2026-10-13",
+                  "variants": {}
+                }
+              },
+              "key": "[OWNED SAMPLE CREDENTIAL]",
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "owned-env",
+              "name": "Single environment key",
+              "env": [
+                "OWNED_PROVIDER_API_KEY"
+              ],
+              "options": {},
+              "source": "config",
+              "models": {},
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "owned-absent",
+              "name": "API-only declaration",
+              "env": [
+                "OWNED_ABSENT_KEY"
+              ],
+              "options": {
+                "timeout": 42000
+              },
+              "source": "config",
+              "models": {},
+              "apiKeyConfigured": false
+            },
+            {
+              "id": "owned-models-only",
+              "name": "Models-only declaration",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {},
+              "apiKeyConfigured": false
+            },
+            {
+              "id": "owned-clear",
+              "name": "Clear custom declaration",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {
+                "custom-one": {
+                  "id": "custom-one",
+                  "api": {
+                    "id": "custom-one",
+                    "npm": "@ai-sdk/openai-compatible",
+                    "url": "http://127.0.0.1:18603/clear/v1"
+                  },
+                  "status": "active",
+                  "name": "Custom metadata",
+                  "providerID": "owned-clear",
+                  "capabilities": {
+                    "temperature": true,
+                    "reasoning": false,
+                    "attachment": false,
+                    "toolcall": false,
+                    "input": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "output": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "interleaved": false
+                  },
+                  "cost": {
+                    "available": true,
+                    "input": 1,
+                    "output": 2,
+                    "cache": {
+                      "read": 0,
+                      "write": 0
+                    }
+                  },
+                  "options": {},
+                  "limit": {
+                    "context": 10000,
+                    "output": 1000
+                  },
+                  "headers": {},
+                  "family": "",
+                  "release_date": "2026-10-13",
+                  "variants": {}
+                }
+              },
+              "key": "[OWNED SAMPLE CREDENTIAL]",
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "owned-referenced",
+              "name": "Referenced declaration",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {
+                "reference-one": {
+                  "id": "reference-one",
+                  "api": {
+                    "id": "reference-one",
+                    "npm": "@ai-sdk/openai-compatible",
+                    "url": "http://127.0.0.1:18603/ref/v1"
+                  },
+                  "status": "active",
+                  "name": "reference-one",
+                  "providerID": "owned-referenced",
+                  "capabilities": {
+                    "temperature": true,
+                    "reasoning": false,
+                    "attachment": false,
+                    "toolcall": true,
+                    "input": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "output": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "interleaved": false
+                  },
+                  "cost": {
+                    "available": true,
+                    "input": 1,
+                    "output": 2,
+                    "cache": {
+                      "read": 0,
+                      "write": 0
+                    }
+                  },
+                  "options": {},
+                  "limit": {
+                    "context": 10000,
+                    "output": 1000
+                  },
+                  "headers": {},
+                  "family": "",
+                  "release_date": "2026-10-13",
+                  "variants": {}
+                }
+              },
+              "key": "[OWNED SAMPLE CREDENTIAL]",
+              "apiKeyConfigured": true
+            },
+            {
+              "id": "owned-overlap",
+              "name": "Global overlay base",
+              "env": [],
+              "options": {},
+              "source": "config",
+              "models": {
+                "shared-one": {
+                  "id": "shared-one",
+                  "api": {
+                    "id": "shared-one",
+                    "npm": "@ai-sdk/openai-compatible",
+                    "url": "http://127.0.0.1:18603/overlap/v1"
+                  },
+                  "status": "active",
+                  "name": "Global shared metadata",
+                  "providerID": "owned-overlap",
+                  "capabilities": {
+                    "temperature": true,
+                    "reasoning": false,
+                    "attachment": false,
+                    "toolcall": true,
+                    "input": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "output": {
+                      "text": true,
+                      "audio": false,
+                      "image": false,
+                      "video": false,
+                      "pdf": false
+                    },
+                    "interleaved": false
+                  },
+                  "cost": {
+                    "available": true,
+                    "input": 1,
+                    "output": 2,
+                    "cache": {
+                      "read": 0,
+                      "write": 0
+                    }
+                  },
+                  "options": {},
+                  "limit": {
+                    "context": 10000,
+                    "output": 1000
+                  },
+                  "headers": {},
+                  "family": "",
+                  "release_date": "2026-10-13",
+                  "variants": {}
+                }
+              },
+              "key": "[OWNED SAMPLE CREDENTIAL]",
+              "apiKeyConfigured": true
+            }
+          ],
+          "default": {
+            "owned-inherited": "catalog-two",
+            "owned-ready": "ready-known",
+            "owned-clear": "custom-one",
+            "owned-referenced": "reference-one",
+            "owned-overlap": "shared-one"
+          },
+          "connected": [
+            "owned-ready",
+            "owned-inherited",
+            "owned-clear",
+            "owned-referenced",
+            "owned-overlap"
+          ],
+          "accountUsage": {
+            "openai": "rate_limits"
+          },
+          "issues": []
+        }
+      }
+    }
+  ]
+}

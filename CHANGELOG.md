@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 服务商保存配置后立即重读当前目录，即使没有填写密钥；已提交但协调失败的配置保留保存事实，密钥、清理和目录问题分阶段显示。原操作完成不会覆盖取消重开或跨作用域后的新表单。已提交配置回执的完整快照不再进入错误详情或持久诊断，业务读取仍保留原配置。
+
 - 服务商允许保存空模型声明，并可稍后添加或发现模型；名称、地址和环境变量编辑保留当前声明及并行新增模型。项目覆盖删除可恢复全局模型，仍被引用的自定义模型保持明确错误。配置合并正确持久化空对象并归一化嵌套删除标记。
 
 - 配置语法错误仅显示错误码与行列位置，避免将配置全文及展开的环境变量或文件内容带入诊断；保留配置路径、原解析顺序和读写语义。服务商操作使用简短的当前语言摘要与可展开详情，准确保留已保存及后续失败的事实，两个刷新入口各自恢复。
@@ -83,6 +85,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Provider configuration saves immediately reread the current catalog, including saves without a key. Committed configurations retain their saved outcome when reconciliation fails, with credential, cleanup and read issues reported separately. Older completions preserve reopened forms and returning scopes. Full committed-configuration snapshots stay out of error details and retained diagnostics while business consumers keep the original configuration.
 
 - Providers accept empty model declarations so models can be added or discovered later. Name, endpoint and environment edits preserve current declarations and concurrent additions. Removing a project override can restore global models; referenced custom models retain their explicit error contract. Configuration merges persist empty objects and normalize nested deletion markers.
 

@@ -1,0 +1,10 @@
+{
+  "boundary": "Original UI General permission-mode call → typed config409 → shared formatter → AppLog POST → real backend retained log; no injected diagnostic message",
+  "permission_mode": "ask",
+  "entries": [
+    {
+      "file": "2026-10-13T181211-81052-1.log",
+      "line": "{\"level\":\"error\",\"time\":\"2026-10-13T18:18:23.905Z\",\"service\":\"overlay:ui\",\"logDomain\":\"non-session\",\"data\":{\"diagnosticID\":\"permissions:mode\",\"message\":\"API 409 global/config: Global configuration committed, but one or more project runtime projections did not fully settle\",\"details\":\"HTTP PATCH 409 global/config\\\\x0a\\\\x0aRequest ID: b666fc7a-bc6c-433b-a28c-da2357ad53c3\\\\x0a\\\\x0aGlobalConfigCommittedReconcileError: Global configuration committed, but one or more project runtime projections did not fully settle\\\\x0a\\\\x0aresponse body:\\\\x0a{\\\\x0a  \\\"name\\\": \\\"GlobalConfigCommittedReconcileError\\\",\\\\x0a  \\\"data\\\": {\\\\x0a    \\\"committed\\\": true,\\\\x0a    \\\"message\\\": \\\"Global configuration committed, but one or more project runtime projections did not fully settle\\\",\\\\x0a    \\\"failures\\\": [\\\\x0a      \\\"Project configuration committed, but its runtime projection did not fully settle\\\"\\\\x0a    ]\\\\x0a  }\\\\x0a}\",\"taskID\":\"\",\"taskDirectory\":\"\",\"taskTitle\":\"\"},\"message\":\"Permissions\"}"
+    }
+  ]
+}

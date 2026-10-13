@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Provider 保存与目录观察](records/2026-10/2026-10-14-provider-post-save-observation.md)：已保存事实、后续结果与诊断边界。
+
 - [SQLite 当前基线与自动迁移](records/2026-10/2026-10-14-sqlite-automatic-migrations.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。
 
 - [目录链接浏览与别名目的地](records/2026-10/2026-10-14-directory-target-navigation.md)：entry与目标事实、物理准入、有限真实调查和完整浏览方案。
