@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件链接条目与回执](records/2026-10/2026-10-13-file-link-entry-contract.md)：终端链接事实、权限与真实移动复制删除。
+
 - [391 表格本地编辑说明](records/2026-10/2026-10-13-spreadsheet-local-edit-guidance-391.md)：编辑寿命、CSV下载提示与同实例布局验收。
 
 - [模型数量与服务商搜索计数](records/2026-10/2026-10-13-provider-count-projection.md)：可见集合、复数目录与真实桌面。

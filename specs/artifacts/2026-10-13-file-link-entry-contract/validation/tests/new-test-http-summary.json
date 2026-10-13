@@ -1,0 +1,23 @@
+{
+  "source": "functional-first.log, actual [link entry HTTP] lines",
+  "requests": 99,
+  "statuses": [
+    {
+      "status": 200,
+      "count": 69
+    },
+    {
+      "status": 400,
+      "count": 7
+    },
+    {
+      "status": 404,
+      "count": 21
+    },
+    {
+      "status": 409,
+      "count": 2
+    }
+  ],
+  "projects": 21
+}

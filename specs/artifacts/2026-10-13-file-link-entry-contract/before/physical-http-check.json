@@ -1,0 +1,61 @@
+{
+  "entry": {
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\moved-relative.md",
+    "inode": "1125899910929190",
+    "device": "382532482",
+    "linkText": "target.md"
+  },
+  "original": {
+    "file": "link-cases/missing/relative-file.md",
+    "full": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\link-cases\\missing\\relative-file.md",
+    "type": {
+      "directory": false,
+      "file": false,
+      "link": true
+    },
+    "inode": "1125899910929190",
+    "device": "382532482",
+    "linkText": "target.md"
+  },
+  "requests": [
+    {
+      "file": "link-cases/missing/relative-file.md",
+      "status": 404,
+      "requestID": "0cd49106-df8c-4d3e-9bf7-2ba957fcb8b5",
+      "rawBody": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"link-cases/missing/relative-file.md\",\"message\":\"File entry not found: link-cases/missing/relative-file.md\"}}",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "link-cases/missing/relative-file.md",
+          "message": "File entry not found: link-cases/missing/relative-file.md"
+        }
+      }
+    },
+    {
+      "file": "moved-relative.md",
+      "status": 404,
+      "requestID": "177835ad-96fc-4544-8c63-d7a39563a6ad",
+      "rawBody": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"moved-relative.md\",\"message\":\"File entry not found: moved-relative.md\"}}",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "moved-relative.md",
+          "message": "File entry not found: moved-relative.md"
+        }
+      }
+    },
+    {
+      "file": "link-cases/missing/target.md",
+      "status": 200,
+      "requestID": "66ba0fef-615f-4c73-a711-15f51346721f",
+      "rawBody": "{\"type\":\"text\",\"content\":\"MISSING MOVE OLD 资料\\r\\n\",\"revision\":\"d85c177a28228930fe4d59d013a73d7eb005e04893e4ebd06419f6031bc454d0\"}",
+      "body": {
+        "type": "text",
+        "content": "MISSING MOVE OLD 资料\r\n",
+        "revision": "d85c177a28228930fe4d59d013a73d7eb005e04893e4ebd06419f6031bc454d0"
+      }
+    }
+  ],
+  "bytesBase64": "TUlTU0lORyBNT1ZFIE9MRCDotYTmlpkNCg==",
+  "boundary": "Published link entry retains identity/text while both old and dangling new content return true 404; original target complete bytes retained"
+}

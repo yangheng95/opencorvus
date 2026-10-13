@@ -1,0 +1,150 @@
+{
+  "owner": {
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project",
+    "nativeTarget": {
+      "pid": 84596,
+      "processInstanceID": "win32:639274900641675104",
+      "occurrenceID": "563a56c7-e947-47c3-9b51-37e607233a13"
+    },
+    "port": 18447,
+    "occurrence": "before-4d600d14-ec62-40b0-87cb-2e7e53e118e5",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\runtime",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\evidence",
+    "evidencePrefix": "before",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\.tmp-codex-link-plan-01a133\\before",
+    "owner": {
+      "ProcessId": 84596,
+      "processInstanceID": "win32:639274900641675104"
+    },
+    "host": {
+      "pid": 34328,
+      "processInstanceID": "win32:639274900633447101",
+      "occurrenceID": "e2d64cd3-a38e-475d-9073-cf2cbd6121f8"
+    },
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133",
+    "nativeDeadline": 1791894163215,
+    "targetBirthAtMs": 1791893264167
+  },
+  "files": {
+    "link-cases/missing/target.md": "MISSING MOVE OLD 资料\r\n",
+    "link-cases/retarget/new-target.md": "RETARGET OLD 资料\r\n",
+    "new-target.md": "RETARGET NEW 资料\r\n",
+    "targets/dir/marker.md": "JUNCTION TARGET RETAINED\r\n",
+    "link-cases/copy-target.md": "COPY LINK TARGET\r\n"
+  },
+  "links": [
+    [
+      "link-cases/missing/relative-file.md",
+      "target.md",
+      "file"
+    ],
+    [
+      "link-cases/retarget/retarget-file.md",
+      "new-target.md",
+      "file"
+    ],
+    [
+      "link-cases/healthy-junction",
+      "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\targets\\dir",
+      "junction"
+    ],
+    [
+      "link-cases/broken-file.md",
+      "missing-owned-target.md",
+      "file"
+    ],
+    [
+      "link-cases/copy-file.md",
+      "copy-target.md",
+      "file"
+    ]
+  ],
+  "entries": [
+    {
+      "file": "link-cases/missing/relative-file.md",
+      "full": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\link-cases\\missing\\relative-file.md",
+      "type": {
+        "directory": false,
+        "file": false,
+        "link": true
+      },
+      "inode": "1125899910929190",
+      "device": "382532482",
+      "linkText": "target.md"
+    },
+    {
+      "file": "link-cases/retarget/retarget-file.md",
+      "full": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\link-cases\\retarget\\retarget-file.md",
+      "type": {
+        "directory": false,
+        "file": false,
+        "link": true
+      },
+      "inode": "844424934218535",
+      "device": "382532482",
+      "linkText": "new-target.md"
+    },
+    {
+      "file": "link-cases/healthy-junction",
+      "full": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\link-cases\\healthy-junction",
+      "type": {
+        "directory": false,
+        "file": false,
+        "link": true
+      },
+      "inode": "844424934218536",
+      "device": "382532482",
+      "linkText": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\targets\\dir"
+    },
+    {
+      "file": "link-cases/broken-file.md",
+      "full": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\link-cases\\broken-file.md",
+      "type": {
+        "directory": false,
+        "file": false,
+        "link": true
+      },
+      "inode": "1125899910929193",
+      "device": "382532482",
+      "linkText": "missing-owned-target.md"
+    },
+    {
+      "file": "link-cases/copy-file.md",
+      "full": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project\\link-cases\\copy-file.md",
+      "type": {
+        "directory": false,
+        "file": false,
+        "link": true
+      },
+      "inode": "1125899910929194",
+      "device": "382532482",
+      "linkText": "copy-target.md"
+    }
+  ],
+  "chat": {
+    "status": 201,
+    "requestID": "8ccf7c07-ec0a-41f8-b461-ed4389296029",
+    "rawBody": "{\"session\":{\"id\":\"ses_-zUS4EOwFzzNfPpfAtYI\",\"slug\":\"lucky-circuit\",\"version\":\"local\",\"projectID\":\"prj_htwHGWtL93CWPumZBwTg\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-before-01a133\\\\project\\\\scoped-project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791893281588,\"updated\":1791893281588}}}",
+    "body": {
+      "session": {
+        "id": "ses_-zUS4EOwFzzNfPpfAtYI",
+        "slug": "lucky-circuit",
+        "version": "local",
+        "projectID": "prj_htwHGWtL93CWPumZBwTg",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project",
+        "title": "Chat",
+        "kind": "assistant",
+        "metadata": {
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1791893281588,
+          "updated": 1791893281588
+        }
+      }
+    }
+  }
+}

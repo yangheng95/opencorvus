@@ -1,0 +1,40 @@
+{
+  "occurrence": "before-4d600d14-ec62-40b0-87cb-2e7e53e118e5",
+  "outcome": "ready",
+  "host": {
+    "pid": 34328,
+    "processInstanceID": "win32:639274900633447101",
+    "occurrenceID": "e2d64cd3-a38e-475d-9073-cf2cbd6121f8"
+  },
+  "parent": {
+    "pid": 80932,
+    "processInstanceID": "win32:639274900610455084",
+    "occurrenceID": "edd1a0aa-8fd3-4ac8-9d84-ece0b9b9c038"
+  },
+  "target": {
+    "pid": 84596,
+    "processInstanceID": "win32:639274900641675104",
+    "occurrenceID": "563a56c7-e947-47c3-9b51-37e607233a13"
+  },
+  "targetBirthAtMs": 1791893264167,
+  "deadlineAt": 1791894163215,
+  "observedAtUtc": "2026-10-13T12:07:44.193Z",
+  "executable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-link-plan-01a133\\bundle\\bin\\bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18447",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\project\\scoped-project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-before-01a133\\startup.json",
+    "--startup-occurrence",
+    "before-4d600d14-ec62-40b0-87cb-2e7e53e118e5",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

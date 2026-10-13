@@ -498,6 +498,24 @@ current directory root or its Git worktree root, through lexical or physical
 aliases. Independently addressable terminal symlink entries retain their own
 move/delete semantics; an ancestor link does not make an entity root mutable.
 
+File Node type describes the entry: an actual directory entry is `directory`,
+and other entries, including terminal symbolic links and junctions, are `file`.
+Listing and mutation receipts use the same entry projection and ignore-directory
+hint. A successful entry receipt does not prove that its target content is
+readable. The existing editor owner commits a successful move's new path, then
+the content API determines its actual bytes, revision or original read error.
+This contract does not introduce directory-link navigation or physical alias
+tracking into the file workbench.
+
+Move/copy validate each link's declared source and relocated destination targets
+through the current project path authority; an in-scope missing target remains
+a valid link entry. Native rename retains the link text. Copy retains it with
+verbatim symlink copying and the existing strict staged tree validation.
+Recursion and self-directory protection apply to actual directory entries.
+Delete retains the existing source authority and unlinks admitted terminal
+entries without requiring their targets to exist. Unknown filesystem errors
+remain errors; only known missing paths map to the public missing-path contract.
+
 File listing and mutation receipts share one current-worktree root ignore-rule
 loader and entry matcher. Public Node paths stay directory-relative; rule
 coordinates retain the logical worktree entry, including internal and terminal

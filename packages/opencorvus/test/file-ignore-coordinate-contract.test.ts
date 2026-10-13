@@ -47,7 +47,7 @@ async function api(directory: string) {
   const server = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
-    fetch: (request) => Instance.provide({ directory, fn: () => app.fetch(request) }),
+    fetch: async (request) => Instance.provide({ directory, fn: () => app.fetch(request) }),
   })
   return {
     scope,
@@ -233,7 +233,7 @@ test("external root and ancestor junctions map rules while preserving original n
   expect(await fs.readFile(path.join(aliasedChild, "note.md"), "utf8")).toBe(bytes)
 }, 90_000)
 
-test("terminal links retain their names and the consumers' existing directory hints", async () => {
+test("terminal links retain their names and one entry-based directory hint across receipts and lists", async () => {
   await using fixture = await project("ignore-terminal-links")
   await fs.mkdir(path.join(fixture.path, "target"))
   await fs.writeFile(path.join(fixture.path, "target", "note.md"), bytes)
@@ -254,7 +254,7 @@ test("terminal links retain their names and the consumers' existing directory hi
     body: {
       previousPath: "terminal-dir",
       path: "moved-terminal",
-      node: node(fixture.path, path.join(fixture.path, "moved-terminal"), true, "directory"),
+      node: node(fixture.path, path.join(fixture.path, "moved-terminal"), false),
     },
   })
   listed(await http.list(), [node(fixture.path, path.join(fixture.path, "moved-terminal"), false)])

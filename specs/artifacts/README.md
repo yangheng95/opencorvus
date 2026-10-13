@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件链接条目证据](2026-10-13-file-link-entry-contract/README.md)：原HTTP、链接身份、桌面截图与完整收尾。
+
 - [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391/README.md)：中英文普通/全屏提示、编辑与发布值CSV下载及页面收尾。
 
 - [模型数量与服务商搜索计数](2026-10-13-provider-count-projection/README.md)：生产目录、实际协议输入与实页截图。

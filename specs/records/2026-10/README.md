@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件链接条目与回执](2026-10-13-file-link-entry-contract.md)：entry与target边界、根因及验收。
+
 - [391 表格本地编辑说明](2026-10-13-spreadsheet-local-edit-guidance-391.md)：现有数据合同、可见提示和真实桌面交付。
 
 - [模型数量与服务商搜索计数](2026-10-13-provider-count-projection.md)：根因、作用域与双语验收。

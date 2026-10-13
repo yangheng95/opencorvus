@@ -1136,7 +1136,10 @@ export namespace File {
     if (!(await isPathAllowed(parent))) {
       throw fileInvalidPath({ path: input.file, message: `Access denied: parent path escapes project directory` })
     }
-    const parentStat = await fs.promises.stat(parent).catch(() => undefined)
+    const parentStat = await fs.promises.stat(parent).catch((error) => {
+      if (isMissingPathError(error)) return undefined
+      throw error
+    })
     if (!parentStat?.isDirectory()) {
       throw fileInvalidPath({
         path: input.file,
@@ -1149,7 +1152,7 @@ export namespace File {
     action: "copy" | "move" | "delete"
     source: { file: string; fullPath: string }
     target?: { file: string; fullPath: string }
-  }): Promise<void> {
+  }): Promise<fs.Stats> {
     const rootError = () =>
       fileInvalidPath({
         path: input.source.file,
@@ -1170,26 +1173,36 @@ export namespace File {
       throw error
     })
     // Use the actual operation path: a terminal link is an entry, while an ancestor link can re-enter a root.
-    if (entry.isSymbolicLink()) return
+    if (entry.isSymbolicLink()) return entry
     const [source, ...physicalRoots] = await Promise.all([
       canonicalPath(input.source.fullPath),
       ...roots.map((root) => canonicalPath(root)),
     ])
     if (physicalRoots.includes(source)) throw rootError()
+    return entry
+  }
+
+  function nodeForEntry(
+    fullPath: string,
+    directory: boolean,
+    ignored: (fullPath: string, directory: boolean) => boolean,
+  ): Node {
+    return {
+      name: path.basename(fullPath),
+      path: relativePathFor(fullPath),
+      absolute: fullPath,
+      type: directory ? "directory" : "file",
+      ignored: ignored(fullPath, directory),
+    }
   }
 
   async function nodeForPath(fullPath: string): Promise<Node> {
-    const stat = await fs.promises.stat(fullPath).catch(() => undefined)
-    if (!stat) throw fileNotFound({ path: relativePathFor(fullPath) })
-    const relativePath = relativePathFor(fullPath)
+    const entry = await fs.promises.lstat(fullPath).catch((error) => {
+      if (isMissingPathError(error)) throw fileNotFound({ path: relativePathFor(fullPath) })
+      throw error
+    })
     const ignored = await createIgnoreMatcher(path.dirname(fullPath))
-    return {
-      name: path.basename(fullPath),
-      path: relativePath,
-      absolute: fullPath,
-      type: stat.isDirectory() ? "directory" : "file",
-      ignored: ignored(fullPath, stat.isDirectory()),
-    }
+    return nodeForEntry(fullPath, entry.isDirectory(), ignored)
   }
 
   async function assertRelocatedSymlinkTargetsAllowed(input: {
@@ -1205,17 +1218,16 @@ export namespace File {
         throw error
       })
       if (stat.isSymbolicLink()) {
-        const sourceTarget = await realpathIfExists(current.fullPath)
-        if (!sourceTarget) {
-          throw fileInvalidPath({ path: current.file, message: `Cannot copy broken symlink: ${current.file}` })
-        }
+        const linkText = await fs.promises.readlink(current.fullPath)
+        const sourceTarget = path.isAbsolute(linkText)
+          ? linkText
+          : path.resolve(path.dirname(current.fullPath), linkText)
         if (!(await isPathAllowed(sourceTarget))) {
           throw fileInvalidPath({
             path: current.file,
             message: `Cannot relocate symlink target outside the project directory: ${current.file}`,
           })
         }
-        const linkText = await fs.promises.readlink(current.fullPath)
         const targetLocation = path.join(input.targetRoot, path.relative(input.sourceRoot, current.fullPath))
         const relocatedTarget = path.isAbsolute(linkText)
           ? linkText
@@ -1373,8 +1385,6 @@ export namespace File {
       target: { file: target, fullPath: targetFull },
     })
 
-    const sourceStat = await fs.promises.stat(sourceFull).catch(() => undefined)
-    if (!sourceStat) throw fileNotFound({ path: source })
     if (await Filesystem.exists(targetFull)) {
       throw fileConflict({ path: target })
     }
@@ -1406,15 +1416,13 @@ export namespace File {
     const target = input.newPath
     const sourceFull = path.join(Instance.directory, source)
     const targetFull = path.join(Instance.directory, target)
-    await assertFileMutationPaths({
+    const sourceEntry = await assertFileMutationPaths({
       action: "copy",
       source: { file: source, fullPath: sourceFull },
       target: { file: target, fullPath: targetFull },
     })
 
-    const sourceStat = await fs.promises.stat(sourceFull).catch(() => undefined)
-    if (!sourceStat) throw fileNotFound({ path: source })
-    if (sourceStat.isDirectory()) {
+    if (sourceEntry.isDirectory()) {
       const [sourceCanonical, targetCanonical] = await Promise.all([
         canonicalPath(sourceFull),
         canonicalPath(targetFull),
@@ -1439,10 +1447,11 @@ export namespace File {
     let published = false
     try {
       await fs.promises.cp(sourceFull, stagingPath, {
-        recursive: sourceStat.isDirectory(),
+        recursive: sourceEntry.isDirectory(),
         errorOnExist: true,
         force: false,
         dereference: false,
+        verbatimSymlinks: true,
       })
       await validateCopiedTree(sourceFull, stagingPath)
       await Filesystem.renameNoReplace(stagingPath, targetFull)
@@ -1491,11 +1500,9 @@ export namespace File {
     using _ = log.time("remove", { path: input.path })
     const file = input.path
     const full = path.join(Instance.directory, file)
-    await assertFileMutationPaths({ action: "delete", source: { file, fullPath: full } })
-    const stat = await fs.promises.stat(full).catch(() => undefined)
-    if (!stat) throw fileNotFound({ path: file })
+    const entry = await assertFileMutationPaths({ action: "delete", source: { file, fullPath: full } })
 
-    if (stat.isDirectory()) {
+    if (entry.isDirectory()) {
       await fs.promises.rm(full, { recursive: true, force: false })
     } else {
       await fs.promises.unlink(full)
@@ -1646,15 +1653,7 @@ export namespace File {
     for (const entry of entries) {
       if (exclude.includes(entry.name)) continue
       const fullPath = path.join(resolved, entry.name)
-      const relativePath = path.relative(Instance.directory, fullPath)
-      const type = entry.isDirectory() ? "directory" : "file"
-      nodes.push({
-        name: entry.name,
-        path: relativePath,
-        absolute: fullPath,
-        type,
-        ignored: ignored(fullPath, type === "directory"),
-      })
+      nodes.push(nodeForEntry(fullPath, entry.isDirectory(), ignored))
     }
     return nodes.sort((a, b) => {
       if (a.type !== b.type) {

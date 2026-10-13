@@ -1,0 +1,857 @@
+[
+  {
+    "label": "cp primitive",
+    "name": "relative-file",
+    "verbatimSymlinks": false,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\relative-file",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480590"
+      },
+      "linkText": "file 资料.md",
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "3659174701323205"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\relative-file-false",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480591"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "3659174701323205"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "relative-file",
+    "verbatimSymlinks": true,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\relative-file",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480590"
+      },
+      "linkText": "file 资料.md",
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "3659174701323205"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\relative-file-true",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191248"
+      },
+      "linkText": "file 资料.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\relative-file-true'"
+      }
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "broken-file",
+    "verbatimSymlinks": false,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-file",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191249"
+      },
+      "linkText": "missing 资料.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-file'"
+      }
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-false",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480594"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\missing 资料.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-false'"
+      }
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "broken-file",
+    "verbatimSymlinks": true,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-file",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191249"
+      },
+      "linkText": "missing 资料.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-file'"
+      }
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-true",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480595"
+      },
+      "linkText": "missing 资料.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-true'"
+      }
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "relative-dir",
+    "verbatimSymlinks": false,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\relative-dir",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480596"
+      },
+      "linkText": "local-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "4503599631455157"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\local-dir",
+      "names": [
+        "marker.md"
+      ]
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\relative-dir-false",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191253"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\local-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "4503599631455157"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\local-dir",
+      "names": [
+        "marker.md"
+      ]
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "relative-dir",
+    "verbatimSymlinks": true,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\relative-dir",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480596"
+      },
+      "linkText": "local-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "4503599631455157"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\local-dir",
+      "names": [
+        "marker.md"
+      ]
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\relative-dir-true",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191254"
+      },
+      "linkText": "local-dir",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\relative-dir-true'"
+      }
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "absolute-junction",
+    "verbatimSymlinks": false,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\absolute-junction",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480599"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "3940649678033852"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "names": [
+        "marker.md"
+      ]
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\absolute-junction-false",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191256"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "3940649678033852"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "names": [
+        "marker.md"
+      ]
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "absolute-junction",
+    "verbatimSymlinks": true,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\absolute-junction",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480599"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "3940649678033852"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "names": [
+        "marker.md"
+      ]
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\absolute-junction-true",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191257"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "3940649678033852"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\absolute-dir",
+      "names": [
+        "marker.md"
+      ]
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "broken-junction",
+    "verbatimSymlinks": false,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-junction",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480602"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\missing-dir",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-junction'"
+      }
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-false",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480603"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\missing-dir",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-false'"
+      }
+    }
+  },
+  {
+    "label": "cp primitive",
+    "name": "broken-junction",
+    "verbatimSymlinks": true,
+    "outcome": {
+      "status": "copied"
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-junction",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480602"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\missing-dir",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-junction'"
+      }
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-true",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191260"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\missing-dir",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-true'"
+      }
+    }
+  },
+  {
+    "label": "broken external declared target API",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy",
+      "projectID": "prj_hdftM6H77J3em5IepEaI"
+    },
+    "action": "move",
+    "input": {
+      "path": "broken-external-move",
+      "newPath": "result-move"
+    },
+    "response": {
+      "status": 404,
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "broken-external-move",
+          "message": "File entry not found: broken-external-move"
+        }
+      },
+      "requestID": "61234bb3-43ac-420b-965b-a7405df362b8",
+      "errors": [
+        {
+          "name": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry not found: broken-external-move"
+        }
+      ]
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\broken-external-move",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "6473924468429818"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-BpTBnH\\missing-external.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\broken-external-move'"
+      }
+    },
+    "target": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-move",
+      "entryError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, lstat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-move'"
+      },
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-move'"
+      }
+    }
+  },
+  {
+    "label": "broken external declared target API",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy",
+      "projectID": "prj_hdftM6H77J3em5IepEaI"
+    },
+    "action": "copy",
+    "input": {
+      "path": "broken-external-copy",
+      "newPath": "result-copy"
+    },
+    "response": {
+      "status": 404,
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "broken-external-copy",
+          "message": "File entry not found: broken-external-copy"
+        }
+      },
+      "requestID": "6918cae9-20f7-42e1-8ca4-0b14e836749f",
+      "errors": [
+        {
+          "name": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry not found: broken-external-copy"
+        }
+      ]
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\broken-external-copy",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "6473924468429819"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-BpTBnH\\missing-external.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\broken-external-copy'"
+      }
+    },
+    "target": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-copy",
+      "entryError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, lstat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-copy'"
+      },
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-copy'"
+      }
+    }
+  },
+  {
+    "label": "broken external declared target API",
+    "scope": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy",
+      "projectID": "prj_hdftM6H77J3em5IepEaI"
+    },
+    "action": "delete",
+    "input": {
+      "path": "broken-external-delete",
+      "newPath": "result-delete"
+    },
+    "response": {
+      "status": 404,
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "broken-external-delete",
+          "message": "File entry not found: broken-external-delete"
+        }
+      },
+      "requestID": "6798fd81-7dfb-4f4e-8579-b357e5aca22f",
+      "errors": [
+        {
+          "name": "FileNotFoundError",
+          "message": "FileNotFoundError: File entry not found: broken-external-delete"
+        }
+      ]
+    },
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\broken-external-delete",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "4785074608165884"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-BpTBnH\\missing-external.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\broken-external-delete'"
+      }
+    },
+    "target": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-delete",
+      "entryError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, lstat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-delete'"
+      },
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\result-delete'"
+      }
+    }
+  },
+  {
+    "label": "native dangling rename then unlink",
+    "name": "broken-file",
+    "before": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-file",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191249"
+      },
+      "linkText": "missing 资料.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-file'"
+      }
+    },
+    "moved": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-native",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2814749771191249"
+      },
+      "linkText": "missing 资料.md",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-native'"
+      }
+    },
+    "removed": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-native",
+      "entryError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, lstat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-native'"
+      },
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-file-native'"
+      }
+    },
+    "marker": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "entry": {
+        "directory": false,
+        "file": true,
+        "link": false,
+        "device": "382532482",
+        "inode": "3659174701323205"
+      },
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "3659174701323205"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    }
+  },
+  {
+    "label": "native dangling rename then unlink",
+    "name": "broken-junction",
+    "before": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-junction",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480602"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\missing-dir",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\broken-junction'"
+      }
+    },
+    "moved": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-native",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "2533274794480602"
+      },
+      "linkText": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\missing-dir",
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-native'"
+      }
+    },
+    "removed": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-native",
+      "entryError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, lstat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-native'"
+      },
+      "targetError": {
+        "code": "ENOENT",
+        "message": "ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\broken-junction-native'"
+      }
+    },
+    "marker": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "entry": {
+        "directory": false,
+        "file": true,
+        "link": false,
+        "device": "382532482",
+        "inode": "3659174701323205"
+      },
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "3659174701323205"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料\\file 资料.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    }
+  },
+  {
+    "label": "complete folder verbatim copy",
+    "source": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料",
+      "entry": {
+        "directory": true,
+        "file": false,
+        "link": false,
+        "device": "382532482",
+        "inode": "5348024561587061"
+      },
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "5348024561587061"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\source 资料",
+      "names": [
+        "absolute-junction",
+        "file 资料.md",
+        "local-dir",
+        "relative-dir",
+        "relative-file"
+      ]
+    },
+    "copied": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder",
+      "entry": {
+        "directory": true,
+        "file": false,
+        "link": false,
+        "device": "382532482",
+        "inode": "3096224747901905"
+      },
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "3096224747901905"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder",
+      "names": [
+        "absolute-junction",
+        "file 资料.md",
+        "local-dir",
+        "relative-dir",
+        "relative-file"
+      ]
+    },
+    "relativeLink": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\relative-file",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "6473924468429825"
+      },
+      "linkText": "file 资料.md",
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "6192449491719165"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\file 资料.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    },
+    "marker": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\file 资料.md",
+      "entry": {
+        "directory": false,
+        "file": true,
+        "link": false,
+        "device": "382532482",
+        "inode": "6192449491719165"
+      },
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "6192449491719165"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\file 资料.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    },
+    "relativeDirectoryLink": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\relative-dir",
+      "entry": {
+        "directory": false,
+        "file": false,
+        "link": true,
+        "device": "382532482",
+        "inode": "6473924468429824"
+      },
+      "linkText": "local-dir",
+      "target": {
+        "directory": true,
+        "file": false,
+        "device": "382532482",
+        "inode": "6473924468429822"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\local-dir",
+      "names": [
+        "marker.md"
+      ]
+    },
+    "directoryMarker": {
+      "full": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\relative-dir\\marker.md",
+      "entry": {
+        "directory": false,
+        "file": true,
+        "link": false,
+        "device": "382532482",
+        "inode": "6192449491719167"
+      },
+      "target": {
+        "directory": false,
+        "file": true,
+        "device": "382532482",
+        "inode": "6192449491719167"
+      },
+      "physical": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2vZBGe\\test-79068-6yEeSt\\fixtures\\memory-eVEmIy\\destination 资料\\complete-folder\\local-dir\\marker.md",
+      "bytesBase64": "TGluayBwbGFuIGV4YWN0IOi1hOaWmQ0K"
+    }
+  }
+]

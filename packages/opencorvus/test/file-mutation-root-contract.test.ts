@@ -56,7 +56,7 @@ async function api(directory: string) {
   const server = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
-    fetch: (request) => Instance.provide({ directory, fn: () => app.fetch(request) }),
+    fetch: async (request) => Instance.provide({ directory, fn: () => app.fetch(request) }),
   })
   return {
     scope,
@@ -222,7 +222,7 @@ test.each(["move", "delete"] as const)(
                     name: "changed-link",
                     path: "changed-link",
                     absolute: path.join(project.path, "changed-link"),
-                    type: "directory",
+                    type: "file",
                     ignored: false,
                   },
                 },

@@ -1,0 +1,13 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "types": ["../packages/opencorvus/node_modules/@types/bun"]
+  },
+  "include": [
+    "../packages/opencorvus/src/**/*.ts",
+    "../packages/opencorvus/test/file-link-entry-contract.test.ts",
+    "../packages/opencorvus/test/file-mutation-root-contract.test.ts",
+    "../packages/opencorvus/test/file-ignore-coordinate-contract.test.ts"
+  ],
+  "exclude": ["../packages/opencorvus/src/skill/builtin/**/*"]
+}

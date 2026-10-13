@@ -1,0 +1,426 @@
+{
+  "entries": [
+    {
+      "originalPath": "link-cases/missing/relative-file.md",
+      "target": "moved-relative.md",
+      "inode": "844424934225683",
+      "device": "382532482",
+      "text": "target.md",
+      "node": {
+        "name": "moved-relative.md",
+        "path": "moved-relative.md",
+        "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\moved-relative.md",
+        "type": "file",
+        "ignored": false
+      }
+    },
+    {
+      "originalPath": "link-cases/retarget/retarget-file.md",
+      "target": "moved-retarget.md",
+      "inode": "844424934225684",
+      "device": "382532482",
+      "text": "new-target.md",
+      "node": {
+        "name": "moved-retarget.md",
+        "path": "moved-retarget.md",
+        "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\moved-retarget.md",
+        "type": "file",
+        "ignored": false
+      }
+    },
+    {
+      "originalPath": "link-cases/healthy-junction",
+      "target": "moved-junction",
+      "inode": "844424934225685",
+      "device": "382532482",
+      "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\targets\\dir",
+      "node": {
+        "name": "moved-junction",
+        "path": "moved-junction",
+        "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\moved-junction",
+        "type": "file",
+        "ignored": false
+      }
+    },
+    {
+      "target": "copied-file.md",
+      "text": "copy-target.md",
+      "sourceText": "copy-target.md"
+    }
+  ],
+  "files": [
+    {
+      "file": "link-cases/missing/target.md",
+      "bytesBase64": "TUlTU0lORyBNT1ZFIE9MRCDotYTmlpkNCg==",
+      "content": {
+        "type": "text",
+        "content": "MISSING MOVE OLD 资料\r\n",
+        "revision": "37546f5b9da745b6151acf890aa0a2f4d740f4437bc6adac8a3bd0c1ca214e45"
+      }
+    },
+    {
+      "file": "link-cases/retarget/new-target.md",
+      "bytesBase64": "UkVUQVJHRVQgT0xEIOi1hOaWmQ0K",
+      "content": {
+        "type": "text",
+        "content": "RETARGET OLD 资料\r\n",
+        "revision": "aae351e865e98caf49d7acff79906417587edfcb64a492296d06fec0cd0ff5fd"
+      }
+    },
+    {
+      "file": "new-target.md",
+      "bytesBase64": "UkVUQVJHRVQgTkVXIOi1hOaWmQ0K",
+      "content": {
+        "type": "text",
+        "content": "RETARGET NEW 资料\r\n",
+        "revision": "66e3bd1ba9c3f8981a920703adb275d60f17f18cfe3bf5663335684d77a34463"
+      }
+    },
+    {
+      "file": "targets/dir/marker.md",
+      "bytesBase64": "SlVOQ1RJT04gVEFSR0VUIFJFVEFJTkVEDQo=",
+      "content": {
+        "type": "text",
+        "content": "JUNCTION TARGET RETAINED\r\n",
+        "revision": "8ba6a03658d68bcf5199722a28be0408d0e6ecc13193ef2169785f231ec70c6d"
+      }
+    },
+    {
+      "file": "link-cases/copy-target.md",
+      "bytesBase64": "Q09QWSBMSU5LIFRBUkdFVA0K",
+      "content": {
+        "type": "text",
+        "content": "COPY LINK TARGET\r\n",
+        "revision": "7b7c6156f6e6f048191b98e6dd5c114a3f74f3ef3272c76c883b1b61cf3c8aae"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "route": "file",
+      "params": {
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "6fca841b-70d2-40f7-9969-98d64ee6becf",
+      "rawBody": "[{\"name\":\".opencorvus\",\"path\":\".opencorvus\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\.opencorvus\",\"type\":\"directory\",\"ignored\":false},{\"name\":\"copy-case\",\"path\":\"copy-case\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\copy-case\",\"type\":\"directory\",\"ignored\":false},{\"name\":\"delete-case\",\"path\":\"delete-case\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\delete-case\",\"type\":\"directory\",\"ignored\":false},{\"name\":\"link-cases\",\"path\":\"link-cases\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\link-cases\",\"type\":\"directory\",\"ignored\":false},{\"name\":\"move-case\",\"path\":\"move-case\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\move-case\",\"type\":\"directory\",\"ignored\":false},{\"name\":\"quarantine\",\"path\":\"quarantine\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\quarantine\",\"type\":\"directory\",\"ignored\":false},{\"name\":\"targets\",\"path\":\"targets\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\targets\",\"type\":\"directory\",\"ignored\":false},{\"name\":\".gitattributes\",\"path\":\".gitattributes\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\.gitattributes\",\"type\":\"file\",\"ignored\":false},{\"name\":\".gitignore\",\"path\":\".gitignore\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\.gitignore\",\"type\":\"file\",\"ignored\":false},{\"name\":\"child-ignore.txt\",\"path\":\"child-ignore.txt\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\child-ignore.txt\",\"type\":\"file\",\"ignored\":true},{\"name\":\"conflict.md\",\"path\":\"conflict.md\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\conflict.md\",\"type\":\"file\",\"ignored\":false},{\"name\":\"copied-file.md\",\"path\":\"copied-file.md\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\copied-file.md\",\"type\":\"file\",\"ignored\":false},{\"name\":\"move.md\",\"path\":\"move.md\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\move.md\",\"type\":\"file\",\"ignored\":false},{\"name\":\"moved-junction\",\"path\":\"moved-junction\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\moved-junction\",\"type\":\"file\",\"ignored\":false},{\"name\":\"moved-relative.md\",\"path\":\"moved-relative.md\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\moved-relative.md\",\"type\":\"file\",\"ignored\":false},{\"name\":\"moved-retarget.md\",\"path\":\"moved-retarget.md\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\moved-retarget.md\",\"type\":\"file\",\"ignored\":false},{\"name\":\"new-target.md\",\"path\":\"new-target.md\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\new-target.md\",\"type\":\"file\",\"ignored\":false},{\"name\":\"note.md\",\"path\":\"note.md\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-13\\\\file-links-after-01a133\\\\project\\\\scoped-project\\\\note.md\",\"type\":\"file\",\"ignored\":false}]",
+      "body": [
+        {
+          "name": ".opencorvus",
+          "path": ".opencorvus",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\.opencorvus",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "copy-case",
+          "path": "copy-case",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\copy-case",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "delete-case",
+          "path": "delete-case",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\delete-case",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "link-cases",
+          "path": "link-cases",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\link-cases",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "move-case",
+          "path": "move-case",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\move-case",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "quarantine",
+          "path": "quarantine",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\quarantine",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": "targets",
+          "path": "targets",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\targets",
+          "type": "directory",
+          "ignored": false
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\.gitattributes",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\.gitignore",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "child-ignore.txt",
+          "path": "child-ignore.txt",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\child-ignore.txt",
+          "type": "file",
+          "ignored": true
+        },
+        {
+          "name": "conflict.md",
+          "path": "conflict.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\conflict.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "copied-file.md",
+          "path": "copied-file.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\copied-file.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "move.md",
+          "path": "move.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\move.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved-junction",
+          "path": "moved-junction",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\moved-junction",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved-relative.md",
+          "path": "moved-relative.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\moved-relative.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "moved-retarget.md",
+          "path": "moved-retarget.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\moved-retarget.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "new-target.md",
+          "path": "new-target.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\new-target.md",
+          "type": "file",
+          "ignored": false
+        },
+        {
+          "name": "note.md",
+          "path": "note.md",
+          "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project\\note.md",
+          "type": "file",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "link-cases/missing/target.md"
+      },
+      "status": 200,
+      "requestID": "5b698589-5309-4cf8-a073-cf2fd40435f8",
+      "rawBody": "{\"type\":\"text\",\"content\":\"MISSING MOVE OLD 资料\\r\\n\",\"revision\":\"37546f5b9da745b6151acf890aa0a2f4d740f4437bc6adac8a3bd0c1ca214e45\"}",
+      "body": {
+        "type": "text",
+        "content": "MISSING MOVE OLD 资料\r\n",
+        "revision": "37546f5b9da745b6151acf890aa0a2f4d740f4437bc6adac8a3bd0c1ca214e45"
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "link-cases/retarget/new-target.md"
+      },
+      "status": 200,
+      "requestID": "d6813ece-88e0-4756-8814-9bafd3fbf0eb",
+      "rawBody": "{\"type\":\"text\",\"content\":\"RETARGET OLD 资料\\r\\n\",\"revision\":\"aae351e865e98caf49d7acff79906417587edfcb64a492296d06fec0cd0ff5fd\"}",
+      "body": {
+        "type": "text",
+        "content": "RETARGET OLD 资料\r\n",
+        "revision": "aae351e865e98caf49d7acff79906417587edfcb64a492296d06fec0cd0ff5fd"
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "new-target.md"
+      },
+      "status": 200,
+      "requestID": "aada5cdd-24ce-44a2-98d0-57f38cc97576",
+      "rawBody": "{\"type\":\"text\",\"content\":\"RETARGET NEW 资料\\r\\n\",\"revision\":\"66e3bd1ba9c3f8981a920703adb275d60f17f18cfe3bf5663335684d77a34463\"}",
+      "body": {
+        "type": "text",
+        "content": "RETARGET NEW 资料\r\n",
+        "revision": "66e3bd1ba9c3f8981a920703adb275d60f17f18cfe3bf5663335684d77a34463"
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "targets/dir/marker.md"
+      },
+      "status": 200,
+      "requestID": "b26fc301-c830-4e1d-9e5c-3f47c9cf6716",
+      "rawBody": "{\"type\":\"text\",\"content\":\"JUNCTION TARGET RETAINED\\r\\n\",\"revision\":\"8ba6a03658d68bcf5199722a28be0408d0e6ecc13193ef2169785f231ec70c6d\"}",
+      "body": {
+        "type": "text",
+        "content": "JUNCTION TARGET RETAINED\r\n",
+        "revision": "8ba6a03658d68bcf5199722a28be0408d0e6ecc13193ef2169785f231ec70c6d"
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "link-cases/copy-target.md"
+      },
+      "status": 200,
+      "requestID": "c7a6dd85-2350-4235-810e-ec3e761b550e",
+      "rawBody": "{\"type\":\"text\",\"content\":\"COPY LINK TARGET\\r\\n\",\"revision\":\"7b7c6156f6e6f048191b98e6dd5c114a3f74f3ef3272c76c883b1b61cf3c8aae\"}",
+      "body": {
+        "type": "text",
+        "content": "COPY LINK TARGET\r\n",
+        "revision": "7b7c6156f6e6f048191b98e6dd5c114a3f74f3ef3272c76c883b1b61cf3c8aae"
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "moved-retarget.md"
+      },
+      "status": 200,
+      "requestID": "ffcc056d-2d9d-4b10-9278-84cb21ba48b8",
+      "rawBody": "{\"type\":\"text\",\"content\":\"RETARGET NEW 资料\\r\\n\",\"revision\":\"66e3bd1ba9c3f8981a920703adb275d60f17f18cfe3bf5663335684d77a34463\"}",
+      "body": {
+        "type": "text",
+        "content": "RETARGET NEW 资料\r\n",
+        "revision": "66e3bd1ba9c3f8981a920703adb275d60f17f18cfe3bf5663335684d77a34463"
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "link-cases/missing/relative-file.md"
+      },
+      "status": 404,
+      "requestID": "4d4e1d4c-e6f8-4beb-a112-e6dc56f6ee23",
+      "rawBody": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"link-cases/missing/relative-file.md\",\"message\":\"File entry not found: link-cases/missing/relative-file.md\"}}",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "link-cases/missing/relative-file.md",
+          "message": "File entry not found: link-cases/missing/relative-file.md"
+        }
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "moved-relative.md"
+      },
+      "status": 404,
+      "requestID": "2f511bfe-2005-4404-ac05-c370cc268648",
+      "rawBody": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"moved-relative.md\",\"message\":\"File entry not found: moved-relative.md\"}}",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "moved-relative.md",
+          "message": "File entry not found: moved-relative.md"
+        }
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "copied-file.md"
+      },
+      "status": 404,
+      "requestID": "30922e03-d1d1-48b0-bd36-58d1936a9f69",
+      "rawBody": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"copied-file.md\",\"message\":\"File entry not found: copied-file.md\"}}",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "copied-file.md",
+          "message": "File entry not found: copied-file.md"
+        }
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "link-cases/renamed-broken.md"
+      },
+      "status": 404,
+      "requestID": "fb631c38-2b58-430d-b64f-c6a489c29f47",
+      "rawBody": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"link-cases/renamed-broken.md\",\"message\":\"File entry not found: link-cases/renamed-broken.md\"}}",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "link-cases/renamed-broken.md",
+          "message": "File entry not found: link-cases/renamed-broken.md"
+        }
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "link-cases/broken-file.md"
+      },
+      "status": 404,
+      "requestID": "53f190ed-c6ae-446a-bbc8-e846712751e2",
+      "rawBody": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"link-cases/broken-file.md\",\"message\":\"File entry not found: link-cases/broken-file.md\"}}",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "link-cases/broken-file.md",
+          "message": "File entry not found: link-cases/broken-file.md"
+        }
+      }
+    },
+    {
+      "route": "file/content",
+      "params": {
+        "path": "moved-junction/marker.md"
+      },
+      "status": 200,
+      "requestID": "3b7d568e-a607-4ef3-993e-669565797615",
+      "rawBody": "{\"type\":\"text\",\"content\":\"JUNCTION TARGET RETAINED\\r\\n\",\"revision\":\"8ba6a03658d68bcf5199722a28be0408d0e6ecc13193ef2169785f231ec70c6d\"}",
+      "body": {
+        "type": "text",
+        "content": "JUNCTION TARGET RETAINED\r\n",
+        "revision": "8ba6a03658d68bcf5199722a28be0408d0e6ecc13193ef2169785f231ec70c6d"
+      }
+    }
+  ],
+  "retarget": {
+    "type": "text",
+    "content": "RETARGET NEW 资料\r\n",
+    "revision": "66e3bd1ba9c3f8981a920703adb275d60f17f18cfe3bf5663335684d77a34463"
+  },
+  "through": {
+    "type": "text",
+    "content": "JUNCTION TARGET RETAINED\r\n",
+    "revision": "8ba6a03658d68bcf5199722a28be0408d0e6ecc13193ef2169785f231ec70c6d"
+  },
+  "boundary": "Exact moved entry identity/readlink, copied original text, original and new target complete bytes, list-entry flags and separate current-content contracts; no mutation replay"
+}

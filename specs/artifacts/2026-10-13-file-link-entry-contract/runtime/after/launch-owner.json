@@ -1,0 +1,26 @@
+{
+  "host": {
+    "pid": 70872,
+    "processInstanceID": "win32:639274905090594101",
+    "occurrenceID": "08c89b9f-cddb-4386-ac3e-6a046ae6b1eb"
+  },
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\evidence",
+  "occurrence": "after-875efbe4-4248-46ad-b761-4a8868d1cef4",
+  "evidencePrefix": "after",
+  "nativeTarget": {
+    "pid": 86576,
+    "processInstanceID": "win32:639274905102373825",
+    "occurrenceID": "cfdb3963-be0c-4051-ab68-f56d0907b517"
+  },
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\project\\scoped-project",
+  "port": 18448,
+  "owner": {
+    "processInstanceID": "win32:639274905102373825",
+    "ProcessId": 86576
+  },
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\.tmp-codex-link-plan-01a133\\after",
+  "targetBirthAtMs": 1791893710237,
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133\\runtime",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-links-after-01a133",
+  "nativeDeadline": 1791894608954
+}
