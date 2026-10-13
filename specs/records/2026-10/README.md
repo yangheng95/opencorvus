@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [385 权限续行消息结算](2026-10-13-permission-message-settlement-385.md)：所有权交接、请求身份与Task/Mission恢复。
+
 - [文件规则坐标与操作提示](2026-10-13-file-metadata-feedback.md)：单一忽略规则、真实回执和桌面反馈。
 
 - [388 MCP 结构化结果与空资源](2026-10-13-mcp-structured-result-388.md)：协议根因、真实Task调用与大结果补读。

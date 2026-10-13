@@ -1,0 +1,44 @@
+# 385 权限续行所有权与消息结算
+
+## Recall
+
+持续目标保持，最新用户要求只用单 agent。384是progress：32852a1d7已在origin/main，两个真实失败合同证明单Tool续行提前完成Message，以及live peer被改写。383的完整结果提交/Source恢复已落地，不回退；381/383真实Sol未完成边界保留。本轮开始保留Provider设置、Explorer、语言、样式及共享文档等其他任务修改；未委托，不创建分支/worktree。
+
+已重读384 Recall/完整证据、当前resumePermissionContinuation、PermissionAuthority全部resumeRequest调用（reply、项目scan和MCP结果接续）、精确AsyncLocalStorage权限上下文、SessionPromptState/Owner及物理释放、Message canonical writer、Tool/Provider request/outcome、普通processor的park/handoff控制、Task-root/Mission恢复和既有进程测试。源码仍是384复现时的共享行为，两个根因未被其他修改覆盖。
+
+## 影响分析与实施决定
+
+恢复单位有三层：原Permission invocation决定效果和receipt；Message决定全部Tool/Provider结果是否结束；Prompt物理owner决定哪个进程可以推进。当前把三层混在单request函数内，只有进程内messageOwner检查，三个分支各自写assistant.completed。exactContinuation还包住随后loop，使新一轮工具可能继承旧request限制；该附加运行风险仍须通过真实流式路径验证。
+
+1. PermissionAuthority保留唯一的请求候选判断和退休实现。将精确request上下文收窄到一次实际Tool恢复，reply/项目scan/MCP共同进入SessionLoop的物理准入；同Message已批准的其他请求从既有ledger读取，不建队列或影子状态。失败请求在单轮访问集合中只尝试一次，瞬时错误保持可重试。
+2. SessionLoop复用SessionPromptState.start/finish，持有既有SQLite/OS occurrence的Prompt所有权；本地或peer已有owner时返回live。获准者只在exactContinuation内恢复当前Tool，完整receipt沿383 writer投影；没有receipt时仍重建原正式工具面并执行原授权调用。同Message可执行续行依次收敛。释放owner后重读已批准但本轮尚未访问的事实，覆盖决定在最后检查与物理释放之间到达的交接；新决定在释放后到达则可自行取得owner。不得仅忙时跳过而丢掉已批准执行。
+3. Session canonical writer增加一个消息恢复结算事务：重读当前Message、全部Tool/Provider事实及当前owner generation。只在所有已接受Tool有结果时完成，已有completed保持原事实；等待批准/执行的工具让Message保持开放。按全Message结果归约park/handoff，使用新鲜信息与唯一完成时间。成功Tool及Sources原事实不改。
+4. 原Provider因owner死亡缺少终态时，沿既有abandoned-provider事实写入真实aborted，并保留助手中断语义；不能凭工具成功伪造原Provider成功。模型继续发生在退出精确权限上下文后，并复用仍持有的Prompt owner；临时重建的Task/worker runtime保持其既有后续执行责任，Mission recovery fence不绕过。
+
+原384第一probe选择“等待另一工具自行结算”作为一个正确状态。扩展用真正未批准的第二个调用验证必须等待；对已有成功receipt的同Message同行允许完整恢复后结束，但结束时所有工具/来源必须真实完整。这扩大正确行为覆盖，不把旧completed/running违约改成通过。live-peer原始合同保持。
+
+## 验收与交付
+
+恢复原probe，保存384原失败，验证真实Read/Permission/SQLite；追加串行/并行决定、owner释放间隙、重复请求、全Message park/handoff、失败/Provider终态、不同Message/Project、实际live/dead进程、Task/Mission围栏。使用真实checker及聚焦正向合同，受控流式Provider与真实Sol分别标识；本轮尚不涉及UI代码，UI验收不得用自动化。公共接口/调用点及旧测试按当前合同统一更新，不保留两个恢复实现。是否需要schema改变以实现事实判断，当前计划只复用既有表。文档/索引同步，范围提交，fresh fetch/merge，完整待推送集合检查及正常push；未满足项明确保留，持续goal不结束。
+
+## Task 进程回归揭示的请求事实重复
+
+5项消息恢复合同已通过，包括实际HTTP流式续行并执行新read、并行同Message恢复、释放间隙批准和真实live peer。Task wait的result/part OS边界却失败；完整账本显示不是两个效果或不同请求，而是同一requestID、相同身份和scope出现两条requested，只有一个attempt/result、一个真实wait registration。
+
+根因已追到PermissionAuthority.authorize：它用“仍未决定的pendingRequest”判断是否需要写requested，批准后的重放因此再次追加owner；读成功receipt按requested行迭代，又把同一attempt计为多次成功。这个入口被所有Provider、Full access/Ask me、跨进程重放和MCP接续共享。修复必须同时在immediate事务内按真实request是否已存在决定首写（与身份检查同事务），以及按distinct request identity读取receipt，保留多个不同成功attempt的完整性错误；不能删除历史ledger或以取第一条结果忽略歧义。不新增schema或兼容协议。
+
+## Mission 正式恢复入口的先后顺序
+
+追加真实Mission死亡进程、一个已完成Read和另一个等待批准的Tool。初版385虽保持Message开放，却在通用Prompt恢复释放时消费了Mission唯一旧owner，正式recoverMissionProcessSession随后报interrupted frontier缺少exact dead Prompt owner；这是初版实现衔接缺陷，不归为模型或偶发。
+
+现有Mission架构由recoverMissionProcessSession独占中断frontier、真实recovery Message和wake的收敛，host-recovery也直接使用该入口。权限恢复必须先交给这个既有入口，不能用通用Prompt取得并删除其证据。live/owned保留请求；正式恢复后仅依据原Tool的completed/error事实退休原请求，关闭或不再属于可恢复frontier的调用给typed stale。进入新Mission模型轮发生在exactContinuation之外。独立Session与Task的物理Prompt/activation机制保持其正式入口；本轮不建立第二Mission状态机、不复制恢复协议，也不放宽围栏。
+
+## 请求退休与 Message 完成的崩溃边界
+
+每个Tool成功就退休request会丢失Tool完成到Message提交之间的startup入口。成功续行必须等规范Message已完成后才退休；Message先完成而退休前退出仍可由startup幂等退休，反向顺序不安全。唯一retireMessageContinuations读取完成Message及真实Tool outcome，在同一事务退休其可结算请求。Task进程worker的recover观测改为先拍真实Instance初始化scan的结果，再显式重放，防止测试手动调用掩盖startup漏读。
+
+## 当前验收收敛
+
+72项去重后台合同、289个断言通过，规范日志复核器核对实际Source→新Tool/Message绑定、两个受控流式请求、活跃peer不被接管、释放窗口的实际新generation、Task两处退出的startup恢复、Mission正式wake及旧未执行Tool的真实中断。受控流式前态补齐有效coding/mission角色、用户TextPart和隔离清理；不是产品模型/凭据故障。所有原失败日志保留。自有测试worker已物理结束。
+
+当前没有界面代码或真实Sol验收，没有新schema/迁移、用户进程操作或凭据复制。真实MCP长期任务服务、各插件及真实Sol崩溃恢复完整旅程不外推通过；383刷新和旧schema限制、381请求预算失败保持。归档/文档检查、范围提交与正常上游同步随后收尾，持续goal保持active。

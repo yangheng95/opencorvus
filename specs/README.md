@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [385 权限续行消息结算](records/2026-10/2026-10-13-permission-message-settlement-385.md)：物理所有权、完整消息收尾与72项后台合同。
+
 - [文件规则坐标与操作提示](records/2026-10/2026-10-13-file-metadata-feedback.md)：父工作树回执与当前语言事实投影。
 
 - [388 MCP 结构化结果与空资源](records/2026-10/2026-10-13-mcp-structured-result-388.md)：共享物化修复、正式正向测试和真实Sol完整文件恢复验收。

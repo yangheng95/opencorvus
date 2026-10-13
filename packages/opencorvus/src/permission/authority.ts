@@ -23,6 +23,7 @@ import {
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
 import { durableExecutionResult, resultFromDurable } from "./execution-result"
+import { MessageTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import {
   acquireControlLease,
   assertControlLeaseInTransaction,
@@ -795,12 +796,14 @@ export namespace PermissionAuthority {
   }
 
   async function authorize(request: Request): Promise<LedgerRow> {
-    assertRequestIdentity(request)
-    const pending = pendingRequest(request.id)
-    if (!pending)
-      appendEvent(request, "requested", {
-        metadata: { choices: request.choices, projectGrantEligible: request.projectGrantEligible },
-      })
+    Database.immediateTransaction(() => {
+      assertRequestIdentity(request)
+      if (!pendingOrRequestedRequest(request.id)) {
+        appendEvent(request, "requested", {
+          metadata: { choices: request.choices, projectGrantEligible: request.projectGrantEligible },
+        })
+      }
+    })
     if (request.mode === "full_access") {
       const existing = decisionFor(request.id)
       if (existing) return existing
@@ -1179,7 +1182,7 @@ export namespace PermissionAuthority {
       })
     const waiterCount = await releaseDecisionWaiters(request, settled)
     if (wonDecision && !["denied", "cancelled", "stale"].includes(settled.event_type) && waiterCount === 0) {
-      await resumeRequestWithStaleRetirement(request)
+      await resumeRequest(request)
     }
     return Resolution.parse({
       request: requestFromRow(requested),
@@ -1192,15 +1195,25 @@ export namespace PermissionAuthority {
   export const replyUser = fn(UserReply, async (input) => replyValidated({ ...input, autoReply: false }))
 
   export async function list(): Promise<Request[]> {
-    const requested = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(eq(PermissionLedgerTable.event_type, "requested"))
-        .orderBy(asc(sql`rowid`))
-        .all(),
-    )
+    const requested = requestedRows()
     return requested.filter((row) => !decisionFor(row.request_id)).map(requestFromRow)
+  }
+
+  /** The request identity, not the number of observed ledger events, owns an
+   * invocation. Keep its first immutable owner and retain the full audit log. */
+  function requestedRows(input: { projectID?: string; sessionID?: string; messageID?: string } = {}): LedgerRow[] {
+    const rows = Database.use((db) => db.select().from(PermissionLedgerTable).where(and(
+      eq(PermissionLedgerTable.event_type, "requested"),
+      input.projectID === undefined ? undefined : eq(PermissionLedgerTable.project_id, input.projectID),
+      input.sessionID === undefined ? undefined : eq(PermissionLedgerTable.session_id, input.sessionID),
+      input.messageID === undefined ? undefined : eq(PermissionLedgerTable.message_id, input.messageID),
+    )).orderBy(asc(sql`rowid`)).all())
+    const seen = new Set<string>()
+    return rows.filter((row) => {
+      if (seen.has(row.request_id)) return false
+      seen.add(row.request_id)
+      return true
+    })
   }
 
   function pendingOrRequestedRequest(requestIDValue: string): Request | undefined {
@@ -1218,25 +1231,55 @@ export namespace PermissionAuthority {
 
   async function resumeRequest(request: Request): Promise<SessionLoopContinuationOutcome> {
     const { SessionLoop } = await import("@/session/loop")
-    const outcome = await exactContinuation.run(request.id, () => SessionLoop.resumePermissionContinuation(request))
+    return SessionLoop.resumePermissionContinuation(request)
+  }
+
+  /** Exact approval identity belongs to one invocation, not its next model Turn. */
+  export async function resumeExactContinuation(
+    request: Request,
+    resume: () => Promise<SessionLoopContinuationOutcome>,
+  ): Promise<SessionLoopContinuationOutcome> {
+    let outcome: SessionLoopContinuationOutcome
+    try {
+      outcome = await exactContinuation.run(request.id, resume)
+    } catch (error) {
+      if (error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError) {
+        retireContinuation(request, error.message)
+      }
+      throw error
+    }
     if (outcome === "unresumable") {
       retireContinuation(request, "The persisted ToolPart is already terminal; no continuation can advance it")
       return outcome
     }
-    // `live` is not a conclusion: the owning in-process Turn is still writing.
+    // `live` is not a conclusion: the owning Prompt is still writing.
     // The request stays open so a scan after the Turn releases ownership can
     // settle it; retiring here would discard a continuation the owner may
     // still need recovered if it dies before persisting the outcome.
     if (outcome === "live") return outcome
-    // `resumed` means the continuation reached its persisted conclusion, so it
-    // is as finished as `unresumable` is and must be retired for the same
-    // reason. Without this the request stays a replay candidate forever: every
-    // later project open re-derives the same conclusion and writes nothing,
-    // which is a non-convergent recovery whose cost is linear in the project's
-    // whole approved history. A replay interrupted before its conclusion throws
-    // instead of returning, and is left open on purpose.
-    retireContinuation(request, "The continuation reached its persisted conclusion")
+    // The Tool can settle before its Message. Keep the request discoverable
+    // across that process cut; the completed Message makes retirement safe.
+    retireMessageContinuations(request)
     return outcome
+  }
+
+  export function retireMessageContinuations(input: { sessionID: string; messageID: string }): void {
+    Database.immediateTransaction((db) => {
+      const message = db.select({ data: MessageTable.data }).from(MessageTable).where(and(
+        eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID),
+      )).get()
+      const data = message?.data as { role?: string; time?: { completed?: number } } | undefined
+      if (data?.role !== "assistant" || data.time?.completed === undefined) return
+      for (const row of requestedRows({ ...input, projectID: Instance.project.id })) {
+        if (!continuationReady(row)) continue
+        const outcome = db.select({ data: ToolPartOutcomeTable.data }).from(ToolPartRequestTable)
+          .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, ToolPartRequestTable.id))
+          .where(and(eq(ToolPartRequestTable.message_id, input.messageID),
+            eq(sql<string>`json_extract(${ToolPartRequestTable.data}, '$.callID')`, row.tool_call_id!),
+            eq(sql<string>`json_extract(${ToolPartRequestTable.data}, '$.tool')`, row.tool_name!))).get()
+        if (outcome) retireContinuation(requestFromRow(row), "The continuation reached its persisted conclusion")
+      }
+    })
   }
 
   /**
@@ -1257,15 +1300,22 @@ export namespace PermissionAuthority {
     }
   }
 
-  async function resumeRequestWithStaleRetirement(request: Request): Promise<SessionLoopContinuationOutcome> {
-    try {
-      return await resumeRequest(request)
-    } catch (error) {
-      if (error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError) {
-        retireContinuation(request, error.message)
-      }
-      throw error
-    }
+  function continuationReady(row: LedgerRow): boolean {
+    if (staleFor(row.request_id)) return false
+    const decision = decisionFor(row.request_id)
+    if (!decision || ["denied", "cancelled", "stale"].includes(decision.event_type)) return false
+    const attempt = attemptID(row.request_id)
+    const started = Database.use((db) => db.select({ id: PermissionLedgerTable.id }).from(PermissionLedgerTable)
+      .where(and(eq(PermissionLedgerTable.attempt_id, attempt), eq(PermissionLedgerTable.event_type, "execution_started"))).get())
+    if (!started) return true
+    const outcome = Database.use((db) => db.select().from(PermissionLedgerTable)
+      .where(eq(PermissionLedgerTable.outcome_slot, attempt)).get())
+    return outcome?.event_type === "execution_succeeded" || (!outcome && Boolean(currentTaskForAttempt(attempt)))
+  }
+
+  /** Read the startup replay facts narrowed to the current Project and Message. */
+  export function approvedMessageContinuations(input: { sessionID: string; messageID: string }): Request[] {
+    return requestedRows({ ...input, projectID: Instance.project.id }).filter(continuationReady).map(requestFromRow)
   }
 
   /**
@@ -1289,7 +1339,7 @@ export namespace PermissionAuthority {
    */
   async function recoverContinuation(request: Request): Promise<SessionLoopContinuationOutcome | "failed"> {
     try {
-      return await resumeRequestWithStaleRetirement(request)
+      return await resumeRequest(request)
     } catch (error) {
       const stale = error instanceof StaleContinuationError || error instanceof TaskRootActivationSupersededError
       log.error("permission continuation recovery failed", {
@@ -1314,22 +1364,15 @@ export namespace PermissionAuthority {
    * nothing. The summary below is the observable that says whether it converged
    * — a `replayed` count that does not fall to zero across restarts is the
    * signature of a continuation class that concludes without being retired.
-   * `live` replays are the one intentional exception: a request whose assistant
-   * Message is owned by a prompt Turn running in this process is skipped
-   * without retirement, because the owning Turn — not recovery — is the sole
-   * writer; it converges on the first scan after that Turn releases ownership.
+   * A live physical Prompt leaves its requests open. A completed Tool also
+   * remains discoverable until its Message closes, so a process cut between
+   * these two commits cannot strand the Message. Pending authorization is a
+   * real unfinished frontier; terminal Messages converge to retired requests.
    */
   export async function resumeApprovedContinuations(): Promise<number> {
     const scanStarted = Date.now()
     const projectID = Instance.project.id
-    const requested = Database.use((db) =>
-      db
-        .select()
-        .from(PermissionLedgerTable)
-        .where(and(eq(PermissionLedgerTable.event_type, "requested"), eq(PermissionLedgerTable.project_id, projectID)))
-        .orderBy(asc(sql`rowid`))
-        .all(),
-    )
+    const requested = requestedRows({ projectID })
     let resumed = 0
     let replayed = 0
     let live = 0
@@ -1340,34 +1383,7 @@ export namespace PermissionAuthority {
       if (outcome === "live") live += 1
     }
     for (const row of requested) {
-      if (staleFor(row.request_id)) continue
-      const decision = decisionFor(row.request_id)
-      if (!decision || ["denied", "cancelled", "stale"].includes(decision.event_type)) continue
-      const attempt = attemptID(row.request_id)
-      const started = Database.use((db) =>
-        db
-          .select({ id: PermissionLedgerTable.id })
-          .from(PermissionLedgerTable)
-          .where(
-            and(
-              eq(PermissionLedgerTable.attempt_id, attempt),
-              eq(PermissionLedgerTable.event_type, "execution_started"),
-            ),
-          )
-          .get(),
-      )
-      if (started) {
-        const outcome = Database.use((db) =>
-          db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.outcome_slot, attempt)).get(),
-        )
-        if (outcome?.event_type === "execution_succeeded") {
-          await replay(row)
-          continue
-        }
-        if (!outcome && currentTaskForAttempt(attempt)) await replay(row)
-        continue
-      }
-      await replay(row)
+      if (continuationReady(row)) await replay(row)
     }
     log.info("permission continuation recovery", {
       projectID,
@@ -1613,7 +1629,7 @@ export namespace PermissionAuthority {
           if (["denied", "cancelled", "stale"].includes(settled.event_type)) continue
           if (waiterCount === 0) {
             await awaitWithinSessionDeletionDeadline(
-              resumeRequestWithStaleRetirement(request),
+              resumeRequest(request),
               options.deadline,
               `resuming Permission request ${request.id}`,
             )

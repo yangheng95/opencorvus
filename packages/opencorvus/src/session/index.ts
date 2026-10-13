@@ -17,6 +17,7 @@ import {
   MessageTable,
   PartTable,
   ProviderActivityRequestTable,
+  ProviderActivityOutcomeTable,
   ToolPartRequestTable,
   ToolPartProgressTable,
   ToolPartOutcomeTable,
@@ -78,6 +79,9 @@ import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { normalizeToolResult } from "./tool-result-normalization"
 import { completedToolExecutionResult } from "./tool-outcome-facts"
+import { toolResultControl, toolResultDisposition, type ToolResultDisposition } from "./tool-result-control"
+import { SessionPromptOwner } from "./prompt/owner"
+import { settleAbandonedProviderActivity } from "./provider-activity-facts"
 import { assertSessionDeletionAdmissionInTransaction } from "./deletion-cleanup"
 import { sideChatIdentity, SideChatSourceError } from "@/chat/side-chat-identity"
 import { EffectiveConfig } from "@/config/effective"
@@ -1501,6 +1505,61 @@ export namespace Session {
   export const updateMessage = fn(Message.Info, async (msg) => {
     return upsertMessageRow(msg, { publishCreated: true, publishUpdated: true })
   })
+
+  /** Close a recovered assistant from its current complete invocation facts.
+   * The caller holds the existing physical Prompt owner through model handoff. */
+  export function completeRecoveredToolMessage(input: {
+    sessionID: string
+    messageID: string
+    owner: SessionPromptOwner.Authority
+  }): { status: "waiting" | "settled" | "completed"; info: Message.Assistant; disposition: ToolResultDisposition } {
+    return Database.immediateTransaction((db) => {
+      const owner = SessionPromptOwner.currentInTransaction(db, input.sessionID)
+      if (input.owner.session_id !== input.sessionID || owner?.generation !== input.owner.generation) {
+        throw new HostProcessingFaultError(`Session ${input.sessionID} permission recovery owner changed before settlement`)
+      }
+      const row = db.select().from(MessageTable).where(and(
+        eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID),
+      )).get()
+      if (!row) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+      const info = Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.session_id })
+      if (info.time.completed !== undefined) return { status: "settled", info, disposition: "continue" }
+      const tools = db.select({ outcome: ToolPartOutcomeTable.data }).from(ToolPartRequestTable)
+        .leftJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, ToolPartRequestTable.id))
+        .where(eq(ToolPartRequestTable.message_id, info.id)).all()
+      if (tools.some((tool) => !tool.outcome)) return { status: "waiting", info, disposition: "continue" }
+      let disposition: ToolResultDisposition = "continue"
+      let handoff: Extract<ReturnType<typeof toolResultControl>, { kind: "handoff_drain" }> | undefined
+      for (const { outcome } of tools) {
+        if (outcome?.outcome !== "completed") continue
+        const control = toolResultControl(outcome.metadata)
+        if (control?.kind === "handoff_drain") {
+          if (handoff && (handoff.request_id !== control.request_id || handoff.dispatch_lineage_id !== control.dispatch_lineage_id)) {
+            throw new HostProcessingFaultError("Conflicting coordination handoff tool results in one assistant turn")
+          }
+          handoff = control
+        }
+        const next = toolResultDisposition(control)
+        if (next === "park" || (next === "handoff" && disposition === "continue")) disposition = next
+      }
+      const now = Date.now()
+      settleAbandonedProviderActivity({ assistantMessageID: info.id, now,
+        reason: `Previous Prompt owner ended before Provider activity for Message ${info.id} completed` })
+      const providerFailure = db.select({ data: ProviderActivityOutcomeTable.data }).from(ProviderActivityRequestTable)
+        .innerJoin(ProviderActivityOutcomeTable, eq(ProviderActivityOutcomeTable.request_id, ProviderActivityRequestTable.id))
+        .where(eq(ProviderActivityRequestTable.assistant_message_id, info.id)).all()
+        .find(({ data }) => data.outcome !== "done")
+      if (providerFailure && !info.error) {
+        const error = new Error(providerFailure.data.error?.message ?? `Provider activity ${providerFailure.data.outcome}`)
+        error.name = providerFailure.data.error?.name ?? "ProcessExecutionInterruptedError"
+        info.error = Message.fromError(error, { providerID: info.providerID })
+      }
+      info.finish = info.error ? "error" : "tool-calls"
+      info.time.completed = now
+      const completed = upsertMessageRow(info, { publishCreated: false, publishUpdated: true }) as Message.Assistant
+      return { status: "completed", info: completed, disposition }
+    })
+  }
 
   /**
    * Persist one assistant Turn, consume its accepted delivery batch, and

@@ -201,7 +201,7 @@ import {
   orchestratorCommittedDecisionInParts,
   type OrchestratorDecisionToolName,
 } from "@/orchestrator/decision-tool-names"
-import { assertToolResultControlPreserved, toolResultControl, toolResultDisposition } from "./tool-result-control"
+import { assertToolResultControlPreserved, toolResultControl } from "./tool-result-control"
 import {
   completedReplyToUserMessage,
   isCompletedReplyToUserMessage,
@@ -4716,13 +4716,95 @@ export namespace SessionLoop {
   export async function resumePermissionContinuation(
     request: PermissionAuthority.Request,
   ): Promise<PermissionContinuationOutcome> {
-    // Recovery exists for turns no process owns. An assistant Message bound to
-    // a live in-process prompt owner is mid-Turn: settling it here would stamp
-    // `time.completed` under an active provider stream, fault every later part
-    // write, and kill the Turn (a worktree child project open did exactly that
-    // to its own dispatching Orchestrator, 2026-08-17).
-    if (SessionPromptState.messageOwner(request.sessionID, request.messageID)) return "live"
     const session = await Session.get(request.sessionID)
+    if (request.projectID !== Instance.project.id || session.projectID !== request.projectID) {
+      throw new Error(`Permission continuation ${request.id} belongs to a different Project`)
+    }
+    const initial = await permissionInvocation(request)
+    if (initial.assistant.time.completed !== undefined &&
+      (initial.toolPart.state.status === "completed" || initial.toolPart.state.status === "error")) {
+      return PermissionAuthority.resumeExactContinuation(request, async () =>
+        initial.toolPart.state.status === "completed" ? "resumed" : "unresumable")
+    }
+    if (session.kind === "mission") {
+      // Mission owns its interrupted frontier and recovery wake. Claiming a
+      // generic Prompt here would consume its sole dead-owner evidence.
+      const { recoverMissionProcessSession } = await import("@/mission/process-recovery")
+      const recovery = await recoverMissionProcessSession(session.id)
+      if (recovery.status === "live" || recovery.status === "owned") return "live"
+      const recovered = await permissionInvocation(request)
+      return PermissionAuthority.resumeExactContinuation(request, async () => {
+        if (recovered.toolPart.state.status === "completed") return "resumed"
+        if (recovered.toolPart.state.status === "error") return "unresumable"
+        throw new PermissionAuthority.StaleContinuationError(request.id,
+          "Mission no longer owns a recoverable permission invocation")
+      })
+    }
+    const visited = new Set<string>()
+    const nextReady = () => PermissionAuthority.approvedMessageContinuations(request)
+      .find((candidate) => !visited.has(candidate.id))
+    let next: PermissionAuthority.Request | undefined = request
+    let primary: PermissionContinuationOutcome | undefined
+    let primaryFailure: { error: unknown } | undefined
+    let recoveredAny = false
+    while (next) {
+      if (SessionPromptState.hasOwnedPromptInAnyDirectory(session.id)) {
+        if (primaryFailure) throw primaryFailure.error
+        return primary ?? "live"
+      }
+      const abort = SessionPromptState.start(session.id, session.directory)
+      if (!abort) {
+        if (primaryFailure) throw primaryFailure.error
+        return primary ?? "live"
+      }
+      try {
+        const owner = SessionPromptOwner.current(session.id)
+        if (!owner) throw new Error(`Session ${session.id} recovered Prompt has no durable owner`)
+        SessionPromptState.bindMessageOwner(session.id, request.messageID, abort)
+        while (next) {
+          abort.throwIfAborted()
+          const current = next
+          visited.add(current.id)
+          try {
+            const outcome = await PermissionAuthority.resumeExactContinuation(current,
+              () => resumeOwnedPermissionInvocation(current, session, abort))
+            if (current.id === request.id) primary = outcome
+            if (outcome === "resumed") recoveredAny = true
+          } catch (error) {
+            if (current.id === request.id) primaryFailure = { error }
+            else log.error("peer permission continuation recovery failed", {
+              requestID: current.id, sessionID: session.id, messageID: current.messageID,
+              error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+            })
+          }
+          next = nextReady()
+        }
+        abort.throwIfAborted()
+        const settled = Session.completeRecoveredToolMessage({ sessionID: session.id, messageID: request.messageID, owner })
+        if (settled.status !== "waiting") PermissionAuthority.retireMessageContinuations(request)
+        if (recoveredAny && !primaryFailure && settled.status === "completed" && settled.disposition === "continue") {
+          const config = await EffectiveConfig.effective({ sessionID: session.id })
+          const recoveredRuntime = SessionRuntimeContractStore.get(session.id) ? undefined
+            : await reconstructProjectedPermissionRuntime({ session, request, assistant: settled.info, config })
+          await using _recoveredRuntime = recoveredRuntime
+          if (!recoveredRuntime) await loop({ sessionID: session.id, resume_existing: true })
+        }
+      } catch (error) {
+        primaryFailure ??= { error }
+      } finally {
+        await SessionPromptState.finish(session.id, abort, session.directory)
+      }
+      // An approval may commit after the last owned scan but before physical
+      // owner release. Re-read durable facts here; later approvals can acquire
+      // the now-free Prompt themselves. The visited set only bounds faults in
+      // this attempt, never retires a request or serves as a recovery queue.
+      next = nextReady()
+    }
+    if (primaryFailure) throw primaryFailure.error
+    return primary ?? "live"
+  }
+
+  async function permissionInvocation(request: PermissionAuthority.Request) {
     const persistedAssistant = await MessageStore.get({
       sessionID: request.sessionID,
       messageID: request.messageID,
@@ -4740,9 +4822,15 @@ export namespace SessionLoop {
     if (toolPart.tool !== request.toolName) {
       throw new Error(`Permission continuation ${request.id} Tool changed from ${request.toolName} to ${toolPart.tool}`)
     }
-    const completedToolControl =
-      toolPart.state.status === "completed" ? toolResultControl(toolPart.state.metadata) : undefined
-    const assistantWasCompleted = assistant.time.completed !== undefined
+    return { assistant, toolPart }
+  }
+
+  async function resumeOwnedPermissionInvocation(
+    request: PermissionAuthority.Request,
+    session: Session.Info,
+    abort: AbortSignal,
+  ): Promise<PermissionContinuationOutcome> {
+    const { assistant, toolPart } = await permissionInvocation(request)
     // A terminal Tool error is a legitimate persisted conclusion, not a broken
     // invariant. The invocation can never continue from here, so recovery
     // reports it as unresumable and the caller retires the ledger request.
@@ -4750,24 +4838,8 @@ export namespace SessionLoop {
     if (!assistant.parentID) {
       throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
     }
-    // A completed ToolPart leaves nothing to advance once either the disposition
-    // ends the Turn or the assistant Message is already completed: both cases
-    // below reduce to "resumed" without writing anything. Deciding that here,
-    // before the parent read and the projected-runtime reconstruction, keeps
-    // recovery off the expensive path — reconstructing a Worker Turn projection
-    // per request is what let a few hundred already-concluded continuations hold
-    // project open, and with it the first project-scoped request, for minutes.
-    if (
-      toolPart.state.status === "completed" &&
-      (assistantWasCompleted || toolResultDisposition(completedToolControl) !== "continue")
-    ) {
-      if (!assistantWasCompleted) {
-        assistant.finish = "tool-calls"
-        assistant.time.completed = Date.now()
-        await Session.updateMessage(assistant)
-      }
-      return "resumed"
-    }
+    if (toolPart.state.status === "completed") return "resumed"
+    if (await recoverCompletedToolResult(toolPart)) return "resumed"
     const persistedUser = await MessageStore.get({ sessionID: request.sessionID, messageID: assistant.parentID })
     if (persistedUser.info.role !== "user") {
       throw new Error(`Permission continuation ${request.id} parent ${assistant.parentID} is not a user message`)
@@ -4778,33 +4850,17 @@ export namespace SessionLoop {
       ? undefined
       : await reconstructProjectedPermissionRuntime({ session, request, assistant, config })
     await using _recoveredRuntime = recoveredRuntimeContract
-    if (toolPart.state.status === "completed") {
-      if (!assistantWasCompleted) {
-        assistant.finish = "tool-calls"
-        assistant.time.completed = Date.now()
-        await Session.updateMessage(assistant)
-      }
-      if (
-        !assistantWasCompleted &&
-        !recoveredRuntimeContract &&
-        toolResultDisposition(completedToolControl) === "continue"
-      ) {
-        await loop({ sessionID: request.sessionID })
-      }
-      return "resumed"
-    }
     const model = await Provider.getModel(assistant.providerID, assistant.modelID, { config })
     const messageIdentity = await resolveSessionMessageIdentity({
       session,
       requestedAgentID: assistant.agent,
       config,
     })
-    const abortController = new AbortController()
     const processor = SessionProcessor.create({
       assistantMessage: assistant,
       sessionID: request.sessionID,
       model,
-      abort: abortController.signal,
+      abort,
     })
     const messages = await Session.messages({ sessionID: request.sessionID })
     const recoveredStructuredOutput = structuredOutputReservation({
@@ -4905,7 +4961,7 @@ export namespace SessionLoop {
         toolCallId: request.toolCallID,
         messages: [],
         context: {},
-        abortSignal: abortController.signal,
+        abortSignal: abort,
       })
     } catch (error) {
       const recoveredFailure =
@@ -4937,7 +4993,7 @@ export namespace SessionLoop {
     // failure must leave the ToolPart open so startup recovery can replay the
     // durable result; it must not rewrite the completed effect as a Tool error.
     const output = normalizeToolResult(raw)
-    const recoveredControl = await processor.completeRecoveredToolPart({
+    await processor.completeRecoveredToolPart({
       toolCallID: request.toolCallID,
       toolInput: toolPart.state.input,
       output: {
@@ -4951,12 +5007,7 @@ export namespace SessionLoop {
           : {}),
       },
     })
-    assistant.finish = "tool-calls"
-    assistant.time.completed = Date.now()
-    await Session.updateMessage(assistant)
-    if (!recoveredRuntimeContract && toolResultDisposition(recoveredControl) === "continue") {
-      await loop({ sessionID: request.sessionID })
-    }
+    if (assistant.structured !== undefined && assistant.time.completed === undefined) await Session.updateMessage(assistant)
     return "resumed"
   }
 

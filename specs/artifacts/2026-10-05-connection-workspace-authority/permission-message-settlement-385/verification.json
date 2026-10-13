@@ -1,0 +1,129 @@
+{
+  "qualification": "backend-contracts-passed",
+  "contracts": [
+    {
+      "file": "test/session/tool-result-process-recovery.test.ts",
+      "passed": 3,
+      "assertions": 25,
+      "log": "process-contracts.log"
+    },
+    {
+      "file": "test/session/tool-result-recovery-scopes.test.ts",
+      "passed": 1,
+      "assertions": 5,
+      "log": "process-contracts.log"
+    },
+    {
+      "file": "test/session/permission-message-settlement.test.ts",
+      "passed": 10,
+      "assertions": 22,
+      "log": "contracts-retirement.log"
+    },
+    {
+      "file": "test/session/tool-result-recovery.test.ts",
+      "passed": 11,
+      "assertions": 44,
+      "log": "regression-contracts.log"
+    },
+    {
+      "file": "test/permission-continuation-recovery.test.ts",
+      "passed": 8,
+      "assertions": 25,
+      "log": "contracts-retirement.log"
+    },
+    {
+      "file": "test/session/processor-producer-boundary.test.ts",
+      "passed": 12,
+      "assertions": 45,
+      "log": "regression-contracts.log"
+    },
+    {
+      "file": "test/permission-two-mode.test.ts",
+      "passed": 17,
+      "assertions": 56,
+      "log": "contracts-final.log"
+    },
+    {
+      "file": "test/permission-transport-hydration.test.ts",
+      "passed": 1,
+      "assertions": 4,
+      "log": "contracts-final.log"
+    },
+    {
+      "file": "test/session/permission-message-process-recovery.test.ts",
+      "passed": 3,
+      "assertions": 24,
+      "log": "contracts-final.log"
+    },
+    {
+      "file": "test/session/permission-message-recovery.test.ts",
+      "passed": 6,
+      "assertions": 39,
+      "log": "stream-interruption.log"
+    }
+  ],
+  "tests": 72,
+  "assertions": 289,
+  "streaming": [
+    {
+      "abandonedProvider": false,
+      "originalMessageID": "msg_g0VXvNmYX00ZmNfQufL8",
+      "originalFinish": "tool-calls",
+      "nextToolID": "prt_g0VXvNo4W00Ps2O2rK0q",
+      "nextMessageID": "msg_g0VXvNmh600ApX761m3u",
+      "sourceID": "prt_g0VXvNo5E00eJ2NwkD36",
+      "requests": 2
+    },
+    {
+      "abandonedProvider": true,
+      "originalMessageID": "msg_g0VXvNp1200KE3IzeGzy",
+      "originalFinish": "error",
+      "nextToolID": "prt_g0VXvNpju00s6P03zfg8",
+      "nextMessageID": "msg_g0VXvNp6S00Y3pDFe9US",
+      "sourceID": "prt_g0VXvNpkL006FtCbUN7F",
+      "requests": 2
+    }
+  ],
+  "task": [
+    {
+      "cut": "result",
+      "toolID": "prt_g0VXvMUnu00PCImGEgBI",
+      "completedAt": 1791887306537,
+      "effects": 1,
+      "requestOwners": 1
+    },
+    {
+      "cut": "part",
+      "toolID": "prt_g0VXvMYV300B5dkUXgya",
+      "completedAt": 1791887320388,
+      "effects": 1,
+      "requestOwners": 1
+    }
+  ],
+  "mission": {
+    "sessionID": "ses_-zUS4dOgYzzNohb4NTBR",
+    "ownerPID": 79572,
+    "recoveredToolID": "prt_g0VXvMbZD00plFYiar9V",
+    "interruptedToolID": "prt_g0VXvMbdH00OoILtnhjc",
+    "wake": {
+      "status": "woken",
+      "sessionID": "ses_-zUS4dOgYzzNohb4NTBR",
+      "occurrenceID": "sctl_hGRtl4ECU9KOa8lJi71",
+      "attempt": 1,
+      "wakeMessageID": "msg_hjMk6ufUQQH3DGOX5SSU"
+    }
+  },
+  "livePeer": {
+    "sessionID": "ses_-zUS4c4XnzzVVUivmhIY",
+    "ownerPID": 76040,
+    "outcome": "live"
+  },
+  "approvalDuringRelease": {
+    "generations": [
+      "cal_g0VXvNqy000sWRxGrNy6",
+      "cal_g0VXvNqyb00hD3xq36yF"
+    ],
+    "peerOutcome": "live"
+  },
+  "boundary": "Real Tool/Permission/SQLite and controlled HTTP streaming SDK contracts; actual OS exit/restart and live peer. Provider interruption in the streaming fixture is injected canonical activity evidence. This is not real Sol or UI qualification."
+}

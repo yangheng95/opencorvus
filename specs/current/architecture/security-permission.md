@@ -40,6 +40,25 @@ Recovery materializes the original result and atomically commits its Tool outcom
 and Sources through the Session writer; it never executes the effect again. The assistant's
 interrupted state remains truthful. See [Tool result persistence](02-data.md).
 
+Request-owner admission uses one immediate transaction for identity validation and the first
+`requested` fact, including replay after a decision. Readers count distinct request identities;
+repeated observations in the retained ledger do not imply additional successful executions.
+
+Permission reply, startup scanning and asynchronous Tool completion share physical Prompt
+admission. A live local or peer owner keeps its authority. The admitted recovery drains the
+same Message's approved invocations, bounds each fault to one attempt, and rechecks durable
+approvals after release so a decision arriving during release remains actionable. The exact
+permission context ends before a subsequent model Turn begins.
+
+Message completion reads every accepted Tool outcome and the current Prompt generation in
+one writer transaction. Pending Tools keep the Message open. Park/handoff control is derived
+from the whole Message; abandoned Provider activity retains its actual interruption. Successful
+requests remain discoverable until Message completion is durable, then the canonical retirement
+writer closes them. A process cut after the Tool result therefore still has a startup entry.
+Mission interruption uses its existing process-recovery owner, frontier and wake protocol before
+retiring the original Tool request; generic Prompt acquisition cannot consume Mission's dead-owner
+evidence. This adds no permission queue, schema migration or second Mission recovery protocol.
+
 ## Transport contract
 
 The Overlay, Application Client Protocol (ACP), command-line interface, channel runtime, protocol mirror, server routes, and generated Software Development Kit share the same request identity and decisions. Presentation adapters may translate labels, but they cannot invent approval scopes or settle outside the canonical reply/revoke APIs.

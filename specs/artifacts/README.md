@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [385 权限续行消息结算](2026-10-05-connection-workspace-authority/permission-message-settlement-385/README.md)：受控流式新工具、实际进程恢复与完整失败/成功证据。
+
 - [文件规则坐标与操作提示](2026-10-13-file-metadata-feedback/README.md)：真实API、前后截图与运行资格。
 
 - [388 MCP 结构化结果](2026-10-13-mcp-structured-result-388/README.md)：后台红绿、12次真实Sol流式请求、页面截图与正常收尾。

@@ -13,7 +13,7 @@ import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { createExactOrchestratorTool } from "@/orchestrator/tools"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { PermissionAuthority } from "@/permission/authority"
-import { PermissionExecutionResultTable } from "@/permission/permission.sql"
+import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
@@ -21,7 +21,9 @@ import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { Session } from "@/session"
 import { LLM } from "@/session/llm"
 import { SessionLoop } from "@/session/loop"
-import { MessageStore } from "@/session/message-store"
+import { MessageTable, ToolPartRequestTable } from "@/session/session.sql"
+import { projectToolPartInTransaction } from "@/session/tool-part-facts"
+import { Message } from "@/session/message"
 import { SessionProcessor } from "@/session/processor"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { createRuntimeToolOwner } from "@/session/runtime-tool-owner"
@@ -70,45 +72,59 @@ function installProviderModel() {
   Provider.getModel = (async () => model) as typeof Provider.getModel
 }
 
-async function snapshot(state: State) {
-  const message = await MessageStore.get({ sessionID: state.sessionID, messageID: state.assistantID })
-  const part = message.parts.find((candidate) => candidate.type === "tool" && candidate.callID === state.callID)
-  const history = await PermissionAuthority.history()
-  const results = Database.use((db) =>
-    db.select().from(PermissionExecutionResultTable).all(),
-  )
-  const durableValue = results[0]?.result.kind === "json" ? results[0].result.value : undefined
-  return {
-    assistant: message.info.role === "assistant"
-      ? { finish: message.info.finish, completed: message.info.time.completed }
-      : undefined,
-    part: part?.type === "tool"
-      ? {
-          id: part.id,
-          status: part.state.status,
-          control: part.state.status === "completed" ? toolResultControl(part.state.metadata) : undefined,
-        }
-      : undefined,
-    durableControl:
-      durableValue && typeof durableValue === "object" && !Array.isArray(durableValue)
-        ? toolResultControl((durableValue as { metadata?: unknown }).metadata)
-        : undefined,
-    resultCount: results.length,
-    automationCount: Database.use((db) =>
-      db.select().from(EngineTaskWaitRegistrationTable)
-        .where(eq(EngineTaskWaitRegistrationTable.task_id, state.taskID)).all(),
-    ).length,
-    executionStarts: history.filter(
-      (event) => event.request_id === state.request.id && event.event_type === "execution_started",
-    ).length,
-    executionSuccesses: history.filter(
-      (event) => event.request_id === state.request.id && event.event_type === "execution_succeeded",
-    ).length,
-  }
+function snapshot(state: State) {
+  return Database.immediateTransaction((db) => {
+    const row = db.select().from(MessageTable).where(eq(MessageTable.id, state.assistantID)).get()!
+    const info = Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.session_id })
+    const request = db
+      .select()
+      .from(ToolPartRequestTable)
+      .where(eq(ToolPartRequestTable.message_id, row.id))
+      .all()
+      .find((candidate) => candidate.data.callID === state.callID)
+    const part = request ? projectToolPartInTransaction(db, request) : undefined
+    const history = db
+      .select()
+      .from(PermissionLedgerTable)
+      .where(eq(PermissionLedgerTable.request_id, state.request.id))
+      .all()
+    const results = db.select().from(PermissionExecutionResultTable).all()
+    const durableValue = results[0]?.result.kind === "json" ? results[0].result.value : undefined
+    return {
+      assistant: { finish: info.finish, completed: info.time.completed },
+      part:
+        part?.type === "tool"
+          ? {
+              id: part.id,
+              status: part.state.status,
+              control: part.state.status === "completed" ? toolResultControl(part.state.metadata) : undefined,
+            }
+          : undefined,
+      durableControl:
+        durableValue && typeof durableValue === "object" && !Array.isArray(durableValue)
+          ? toolResultControl((durableValue as { metadata?: unknown }).metadata)
+          : undefined,
+      resultCount: results.length,
+      automationCount: db
+        .select()
+        .from(EngineTaskWaitRegistrationTable)
+        .where(eq(EngineTaskWaitRegistrationTable.task_id, state.taskID))
+        .all().length,
+      executionStarts: history.filter(
+        (event) => event.request_id === state.request.id && event.event_type === "execution_started",
+      ).length,
+      executionSuccesses: history.filter(
+        (event) => event.request_id === state.request.id && event.event_type === "execution_succeeded",
+      ).length,
+      requestFacts: db.select().from(PermissionLedgerTable).all(),
+      resultFacts: results,
+      toolRequest: request,
+    }
+  })
 }
 
-async function emitAndExit(state: State, exitCode: number): Promise<never> {
-  process.stdout.write(JSON.stringify(await snapshot(state)))
+function emitAndExit(state: State, exitCode: number): never {
+  process.stdout.write(JSON.stringify(snapshot(state)))
   process.exit(exitCode)
 }
 
@@ -155,7 +171,9 @@ async function initializeCut(): Promise<never> {
         }),
       })
       const ingress = Database.use((db) =>
-        db.select().from(EngineTaskRootIngressTable)
+        db
+          .select()
+          .from(EngineTaskRootIngressTable)
           .where(eq(EngineTaskRootIngressTable.task_id, taskID))
           .orderBy(EngineTaskRootIngressTable.sequence, EngineTaskRootIngressTable.id)
           .get(),
@@ -168,18 +186,14 @@ async function initializeCut(): Promise<never> {
         leaseMilliseconds: 120_000,
         assertControlOwnerInTransaction: () => undefined,
       })
-      if (!activation.acquired) throw new Error(`Cross-process Tool-result Task ${taskID} could not acquire its ingress`)
+      if (!activation.acquired)
+        throw new Error(`Cross-process Tool-result Task ${taskID} could not acquire its ingress`)
       const session = await Session.create({
         kind: "orchestrator",
         parentID: root.id,
         title: "Cross-process Tool-result permission occurrence",
       })
-      const control = currentOrchestratorControlMessage(
-        { taskCreation: { taskID } },
-        taskID,
-        ingress.id,
-        ingress.id,
-      )
+      const control = currentOrchestratorControlMessage({ taskCreation: { taskID } }, taskID, ingress.id, ingress.id)
       if (!control) throw new Error(`Cross-process Tool-result Task ${taskID} has no control Message`)
       const user = await Session.updateMessage({
         id: control.messageID,
@@ -292,10 +306,12 @@ async function initializeCut(): Promise<never> {
       let resolveAsked!: (request: PermissionAuthority.Request) => void
       const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
       const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))
-      void wait.execute(
-        { duration_ms: 1_000, reason: "verify cross-process Tool-result recovery" },
-        { toolCallId: "call_process_permission_wait", messages: [], abortSignal: abort },
-      ).catch(() => undefined)
+      void wait
+        .execute(
+          { duration_ms: 1_000, reason: "verify cross-process Tool-result recovery" },
+          { toolCallId: "call_process_permission_wait", messages: [], abortSignal: abort },
+        )
+        .catch(() => undefined)
       const request = await asked
       stopAsked()
       const state = { request, taskID, sessionID: session.id, assistantID: assistant.id, callID: request.toolCallID }
@@ -318,13 +334,11 @@ async function runCut(state: State, cut: "result" | "part"): Promise<never> {
       return processor
     }) as typeof SessionProcessor.create
   } else {
-    const originalUpdateMessage = Session.updateMessage
-    Session.updateMessage = (async (input: Parameters<typeof originalUpdateMessage>[0]) => {
-      if (input.id === state.assistantID && input.role === "assistant" && input.time.completed !== undefined) {
-        return emitAndExit(state, 88)
-      }
-      return originalUpdateMessage(input)
-    }) as typeof Session.updateMessage
+    const originalSettle = Session.completeRecoveredToolMessage
+    Session.completeRecoveredToolMessage = ((input: Parameters<typeof originalSettle>[0]) => {
+      if (input.messageID === state.assistantID) return emitAndExit(state, 88)
+      return originalSettle(input)
+    }) as typeof originalSettle
   }
   return Instance.provide({
     directory: projectDirectory,
@@ -351,7 +365,8 @@ async function recover(state: State) {
     init: async () => {},
     fn: async () => {
       Database.Client()
-      await SessionLoop.resumePermissionContinuation(state.request)
+      // Instance initialization already ran the production continuation scan.
+      // Capture that result before an explicit idempotent replay can repair it.
       const first = await snapshot(state)
       await SessionLoop.resumePermissionContinuation(state.request)
       return { first, second: await snapshot(state) }

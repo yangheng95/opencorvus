@@ -24,6 +24,14 @@
 提交；恢复不再次执行工具，也不伪造助手成功。Full access continuation 已退休仍可恢复。
 当前触发器属于严格 schema 准入，旧定义返回 `SCHEMA_RESET_REQUIRED`；无自动迁移或重置。
 
+权限恢复的 Message 收尾使用 `Session.completeRecoveredToolMessage`，在单一写事务中
+验证现有 Prompt generation，并重读全部 Tool/Provider 请求结果；未结束的 Tool 保持
+Message 开放，终态重放保留原 completed 时间。各 Tool 的 park/handoff 共同决定后续
+行为，已死亡 Provider 的 aborted 事实与助手错误保持真实。`retireMessageContinuations`
+以完成 Message 和规范 Tool outcome 为退休依据；成功 Tool 与 Message 完成之间的
+进程退出不会移除启动恢复入口。权限请求首写与身份检查同事务，读取按 request identity
+而非 requested 事件条数计数。Mission 的中断归属仍由正式 process-recovery 协议结算。
+
 ## 运行时目录根
 
 Continuous goal（持续目标）与既有 Delivery Slice Goal（交付切片）是不同合同。

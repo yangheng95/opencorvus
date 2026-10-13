@@ -47,7 +47,7 @@ export function completedToolExecutionResult(db: Database.TxOrDb, part: Message.
   if (!owner || owner.request.callID !== part.callID || owner.request.tool !== part.tool) {
     throw new HostProcessingFaultError(`Tool ${part.id} has no accepted invocation owner`)
   }
-  const requests = db.select({ id: PermissionLedgerTable.request_id }).from(PermissionLedgerTable).where(and(
+  const requests = db.selectDistinct({ id: PermissionLedgerTable.request_id }).from(PermissionLedgerTable).where(and(
     eq(PermissionLedgerTable.event_type, "requested"), eq(PermissionLedgerTable.project_id, owner.projectID),
     eq(PermissionLedgerTable.session_id, part.sessionID), eq(PermissionLedgerTable.message_id, part.messageID),
     eq(PermissionLedgerTable.tool_call_id, part.callID), eq(PermissionLedgerTable.tool_name, part.tool),

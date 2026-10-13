@@ -9,6 +9,7 @@ import { Session } from "@/session"
 import { SessionLoop } from "@/session/loop"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
+import { recoverCompletedToolResult } from "@/session/tool-result-recovery"
 import { SessionPromptState } from "@/session/prompt/state"
 import { TOOL_RESULT_CONTROL_METADATA_KEY } from "@/session/tool-result-control"
 import { Database, and, eq } from "@/storage/db"
@@ -111,6 +112,16 @@ function ledgerEvents(eventType: (typeof PermissionLedgerTable.$inferSelect)["ev
   )
 }
 
+async function settleFixtureInvocation(request: PermissionAuthority.Request) {
+  const message = await MessageStore.get({ sessionID: request.sessionID, messageID: request.messageID })
+  if (message.info.role !== "assistant") throw new Error("Fixture assistant required")
+  const part = message.parts.find((part) => part.type === "tool" && part.callID === request.toolCallID)
+  if (part?.type !== "tool") throw new Error("Fixture invocation required")
+  await recoverCompletedToolResult(part)
+  await Session.updateMessage({ ...message.info, finish: "tool-calls", time: { ...message.info.time, completed: Date.now() } })
+  return "resumed" as const
+}
+
 const TERMINAL_FAILURE = {
   kind: "tool-execution",
   name: "Error",
@@ -126,9 +137,11 @@ describe("Permission continuation recovery", () => {
       directory: project.path,
       fn: async () => {
         await approvedInvocation({ directory: project.path, callID: "collector-reducer-drift" })
-        const resume = spyOn(SessionLoop, "resumePermissionContinuation").mockImplementation(async (request) => {
-          throw new DispatchStageRecoveryAuthorityError(request.id, "collector reducer output changed")
-        })
+        const resume = spyOn(SessionLoop, "resumePermissionContinuation").mockImplementation((request) =>
+          PermissionAuthority.resumeExactContinuation(request, async () => {
+            throw new DispatchStageRecoveryAuthorityError(request.id, "collector reducer output changed")
+          }),
+        )
         try {
           expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(0)
           expect(ledgerEvents("stale")).toMatchObject([
@@ -180,10 +193,10 @@ describe("Permission continuation recovery", () => {
         const faulting = await approvedInvocation({ directory: project.path, callID: "transient-fault" })
         await approvedInvocation({ directory: project.path, callID: "healthy-continuation" })
 
-        const resume = spyOn(SessionLoop, "resumePermissionContinuation").mockImplementation(async (request) =>
-          request.sessionID === faulting.session.id
+        const resume = spyOn(SessionLoop, "resumePermissionContinuation").mockImplementation((request) =>
+          PermissionAuthority.resumeExactContinuation(request, async () => request.sessionID === faulting.session.id
             ? Promise.reject(new Error("the continuation store is briefly unavailable"))
-            : "resumed",
+            : settleFixtureInvocation(request)),
         )
         try {
           // The fault neither ends the scan nor retires a continuation that a
@@ -197,7 +210,8 @@ describe("Permission continuation recovery", () => {
         expect(ledgerEvents("stale")).toMatchObject([
           { reason: expect.stringContaining("persisted conclusion") },
         ])
-        const retry = spyOn(SessionLoop, "resumePermissionContinuation").mockResolvedValue("resumed")
+        const retry = spyOn(SessionLoop, "resumePermissionContinuation").mockImplementation((request) =>
+          PermissionAuthority.resumeExactContinuation(request, () => settleFixtureInvocation(request)))
         try {
           expect(await PermissionAuthority.resumeApprovedContinuations()).toBe(1)
         } finally {
@@ -321,7 +335,7 @@ describe("Permission continuation recovery", () => {
             sessionID: invocation.session.id,
             messageID: invocation.assistant.id,
           })
-          expect(held.info.time.completed).toBeUndefined()
+          expect(held.info).toEqual(invocation.assistant)
         } finally {
           await SessionPromptState.release(invocation.session.id)
         }

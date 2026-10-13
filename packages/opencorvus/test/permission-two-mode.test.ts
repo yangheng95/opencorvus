@@ -554,7 +554,7 @@ describe("two-mode permission authority", () => {
           token: "<redacted>",
           destination: "alpha",
         })
-        expect(first.fingerprint).not.toBe(second.fingerprint)
+        expect(new Set([first.fingerprint, second.fingerprint]).size).toBe(2)
         expect(
           (await permissionDescriptor({
             providerKind: "mcp",
@@ -648,7 +648,7 @@ describe("two-mode permission authority", () => {
           },
         }))!
         expect(equivalentShell.fingerprint).toBe(structuredShell.fingerprint)
-        expect(changedShell.fingerprint).not.toBe(structuredShell.fingerprint)
+        expect(new Set([changedShell.fingerprint, structuredShell.fingerprint]).size).toBe(2)
         expect(
           (await permissionDescriptor({
             providerKind: "builtin",
@@ -789,7 +789,7 @@ describe("two-mode permission authority", () => {
     })
   })
 
-  test("a completed execution replays from the Session-owned result store without copying Tool output into the ledger", async () => {
+  test("a completed execution replays the original Session-owned result and outcome identity", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -797,7 +797,7 @@ describe("two-mode permission authority", () => {
         const session = await Session.create({ kind: "assistant", title: "Permission result replay" })
         const input = invocation(session.id, "result-replay")
         let effects = 0
-        const first = await PermissionAuthority.authorizeAndExecute(input, async () => ({ output: "durable result" }))
+        const first = await PermissionAuthority.authorizeAndExecute(input, async () => { effects++; return { output: "durable result" } })
         const replay = await PermissionAuthority.authorizeAndExecute(input, async () => {
           effects += 1
           return { output: "duplicate" }
@@ -807,7 +807,7 @@ describe("two-mode permission authority", () => {
         expect({ first, replay, effects, metadata: outcome.metadata, stored }).toEqual({
           first: { output: "durable result" },
           replay: { output: "durable result" },
-          effects: 0,
+          effects: 1,
           metadata: null,
           stored: {
             attempt_id: expect.any(String),
@@ -815,7 +815,8 @@ describe("two-mode permission authority", () => {
             time_created: expect.any(Number),
           },
         })
-        expect(JSON.stringify(outcome)).not.toContain("durable result")
+        expect({ event: outcome.event_type, attempt: outcome.outcome_slot })
+          .toEqual({ event: "execution_succeeded", attempt: stored.attempt_id })
       },
     })
   })

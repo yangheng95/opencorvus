@@ -57,17 +57,21 @@ export async function completedReadResult(input: {
   session?: Session.Info
   message?: Message.Assistant
   taskID?: string
+  approve?: (request: PermissionAuthority.Request) => Promise<void>
 } & ({ filePath: string; url?: never } | { url: string; filePath?: never })) {
   await Config.updateProjectPatch({ permission_mode: input.mode })
   const session = input.session ?? await Session.create({ kind: "assistant", title: "Tool result recovery" })
   const model = resultRecoveryModel
+  const agent = input.message?.agent ?? (session.kind === "mission" ? "mission" : "coding")
   const user = input.message ? undefined : await Session.updateMessage({
-    id: Identifier.ascending("message"), sessionID: session.id, role: "user", author: "user", agent: "build",
+    id: Identifier.ascending("message"), sessionID: session.id, role: "user", author: "user", agent,
     time: { created: Date.now() }, model: { providerID: model.providerID, modelID: model.id },
   })
+  if (user) await Session.updatePart({ id: Identifier.ascending("part"), sessionID: session.id, messageID: user.id,
+    type: "text", text: "Read the accepted recovery input and report its contents." })
   const assistant = input.message ?? await Session.updateMessage({
     id: Identifier.ascending("message"), sessionID: session.id, parentID: user!.id,
-    role: "assistant", author: "build", agent: "build", time: { created: Date.now() },
+    role: "assistant", author: agent, agent, time: { created: Date.now() },
     modelID: model.id, providerID: model.providerID, path: { cwd: Instance.directory, root: Instance.directory },
     cost: 0, tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
   })
@@ -81,7 +85,7 @@ export async function completedReadResult(input: {
   const part = await processor.ensureToolPart(callID, toolName, args)
   const executionSurface = Tool.executionSurface([toolName], [])
   const context: Tool.Context = {
-    sessionID: session.id, messageID: assistant.id, callID, agent: "build", abort, messages: [],
+    sessionID: session.id, messageID: assistant.id, callID, agent, abort, messages: [],
     executionSurface, metadata() {}, executionAuthority: await resolveSessionExecutionAuthority({
       sessionID: session.id, projectID: Instance.project.id,
       expected: input.taskID ? { kind: "task", taskID: input.taskID } : { kind: "conversation" },
@@ -103,7 +107,8 @@ export async function completedReadResult(input: {
     }, executionSurface, async () => { executeCount++; return execute() })
     if (input.mode === "ask") {
       const request = await asked
-      await PermissionAuthority.reply({ requestID: request.id, decision: "allow_once", actorID: "owned-recovery-contract" })
+      if (input.approve) await input.approve(request)
+      else await PermissionAuthority.reply({ requestID: request.id, decision: "allow_once", actorID: "owned-recovery-contract" })
     }
     const result = await pending
     return { session, assistant, processor, part, args, callID, result, executeCount: () => executeCount }

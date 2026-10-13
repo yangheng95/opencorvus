@@ -22,7 +22,11 @@ export type ControlledProviderRequest = {
 /** OpenAI-compatible streaming Provider whose physical replies are released by
  * the owning test. Memory requests settle immediately so they cannot become a
  * scheduling barrier or pollute Prompt request assertions. */
-export function startControlledStreamingProvider(options?: { failPromptFrom?: number; memoryModelID?: string }) {
+export function startControlledStreamingProvider(options?: {
+  failPromptFrom?: number
+  memoryModelID?: string
+  firstPromptToolCall?: { name: string; arguments: Record<string, unknown> }
+}) {
   const requests: ControlledProviderRequest[] = []
   const server = Bun.serve({
     hostname: "127.0.0.1",
@@ -65,6 +69,7 @@ export function startControlledStreamingProvider(options?: { failPromptFrom?: nu
         kind === "memory"
           ? JSON.stringify({ baseRevision: 0, coveredOccurrenceIDs, disposition: "organized", markdown: "" })
           : `provider reply ${requests.filter((candidate) => candidate.kind === "prompt").length}`
+      const toolCall = kind === "prompt" && promptOrdinal === 1 ? options?.firstPromptToolCall : undefined
       const chunks = [
         {
           id,
@@ -78,14 +83,15 @@ export function startControlledStreamingProvider(options?: { failPromptFrom?: nu
           object: "chat.completion.chunk",
           created,
           model: "session-prompt-owner-model",
-          choices: [{ index: 0, delta: { content }, finish_reason: null }],
+          choices: [{ index: 0, delta: toolCall ? { tool_calls: [{ index: 0, id: "call_controlled_recovery_next",
+            type: "function", function: { name: toolCall.name, arguments: JSON.stringify(toolCall.arguments) } }] } : { content }, finish_reason: null }],
         },
         {
           id,
           object: "chat.completion.chunk",
           created,
           model: "session-prompt-owner-model",
-          choices: [{ index: 0, delta: {}, finish_reason: "stop" }],
+          choices: [{ index: 0, delta: {}, finish_reason: toolCall ? "tool_calls" : "stop" }],
         },
       ]
       const payload = `${chunks.map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`).join("")}data: [DONE]\n\n`
