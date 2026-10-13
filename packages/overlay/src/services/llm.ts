@@ -13,6 +13,7 @@
 import { appStore } from "../store/app"
 import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 import type { ProviderAccountUsageCapability } from "./config"
+import type { ProviderConnectionTestResult } from "@opencorvus-ai/sdk"
 import { t } from "../utils/i18n"
 
 // ── Local helpers ──
@@ -74,9 +75,23 @@ export interface LlmSelection {
   apiKey: string
 }
 
-export interface ProviderTestResult {
-  ok: boolean
-  message?: string
+export type ProviderTestResult = ProviderConnectionTestResult
+
+/** Read a connection result carried by an HTTP error without changing that error. */
+export function readProviderTestResult(value: unknown): ProviderTestResult | undefined {
+  if (
+    !record(value) ||
+    typeof value.ok !== "boolean" ||
+    (value.status !== "connected" && value.status !== "error") ||
+    !["connected", "provider_unavailable", "no_models", "request_failed"].includes(value.code) ||
+    typeof value.providerID !== "string" ||
+    typeof value.modelID !== "string" ||
+    typeof value.message !== "string" ||
+    typeof value.output !== "string"
+  ) {
+    return undefined
+  }
+  return value as ProviderTestResult
 }
 
 /** Prompt descriptor returned by providerAuthPrompt */
@@ -422,10 +437,10 @@ export function defaultModelForProvider(providerID: string, config?: any): strin
 
 // ── Provider connection test ──
 
-/** Test connectivity for a (providerID, modelID) pair via the server API. */
+/** Test the selected model, or let the server select from the effective catalog. */
 export async function testProviderConnection(
   providerID: string,
-  modelID: string,
+  modelID: string | undefined,
   options: ProviderRequestOptions = {},
 ): Promise<ProviderTestResult> {
   const authority = options.authority ?? captureApiAuthority()

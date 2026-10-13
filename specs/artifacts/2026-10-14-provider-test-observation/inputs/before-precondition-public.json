@@ -1,0 +1,77 @@
+{
+  "boundary": "Actual public routes before implementation; saved-key presence and effective models are independent of config declarations; no mocked response",
+  "facts": [
+    {
+      "scope": "global",
+      "path": "/global/providers/owned-zero/test",
+      "status": 400,
+      "requestID": null,
+      "body": {
+        "ok": false,
+        "status": "error",
+        "providerID": "owned-zero",
+        "modelID": "",
+        "message": "Provider is not configured. Set API key or auth first."
+      }
+    },
+    {
+      "scope": "project",
+      "path": "/provider/owned-zero/test?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-provider-test-observation-01a133%5Cbefore%5Cproject",
+      "status": 400,
+      "requestID": null,
+      "body": {
+        "ok": false,
+        "status": "error",
+        "providerID": "owned-zero",
+        "modelID": "",
+        "message": "Provider is not configured. Set API key or auth first."
+      }
+    },
+    {
+      "scope": "global-missing",
+      "path": "/global/providers/owned-missing/test",
+      "status": 400,
+      "requestID": null,
+      "body": {
+        "ok": false,
+        "status": "error",
+        "providerID": "owned-missing",
+        "modelID": "",
+        "message": "Provider is not configured. Set API key or auth first."
+      }
+    }
+  ],
+  "catalog": {
+    "status": 200,
+    "providers": [
+      {
+        "id": "openai",
+        "models": [
+          "gpt-6.1-sol"
+        ],
+        "apiKeyConfigured": false
+      },
+      {
+        "id": "owned-zero",
+        "models": [],
+        "apiKeyConfigured": true
+      }
+    ]
+  },
+  "audit": [
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

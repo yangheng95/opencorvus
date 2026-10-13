@@ -1,0 +1,37 @@
+{
+  "status": 200,
+  "providers": [
+    {
+      "id": "openai",
+      "name": "Owned Sol inherited declaration",
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "apiKeyConfigured": false
+    },
+    {
+      "id": "opencorvus",
+      "name": "Owned live model refresh",
+      "models": [],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-zero",
+      "name": "Owned zero models with saved key",
+      "models": [],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-failure",
+      "name": "Owned complete HTTP failure",
+      "models": [
+        "owned-failure-model"
+      ],
+      "apiKeyConfigured": true
+    }
+  ],
+  "connected": [
+    "owned-failure",
+    "openai"
+  ]
+}

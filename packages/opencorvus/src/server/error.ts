@@ -31,7 +31,7 @@ const BAD_REQUEST_ISSUE_SCHEMA = z
   })
   .strict()
 
-const BAD_REQUEST_SCHEMA = z
+export const BAD_REQUEST_SCHEMA = z
   .object({
     data: z.object({ message: z.string() }).strict(),
     error: z.array(BAD_REQUEST_ISSUE_SCHEMA),

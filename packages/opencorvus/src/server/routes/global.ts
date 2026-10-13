@@ -18,13 +18,14 @@ import { Provider } from "../../provider/provider"
 import { ProviderAuth } from "../../provider/auth"
 import { ProviderOAuthFlowStore } from "../../provider/oauth-flow-store"
 import { ProviderRemovalReceipt, removeProvider } from "../../provider/removal"
-import { discoverProviderModels, testProviderConnection } from "../../provider/operations"
+import { discoverProviderModels, ProviderConnectionTestResult, testProviderConnection } from "../../provider/operations"
 import { updateGlobalConfigPatch } from "../../config/update-global"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { NativeAgentInfoSchema } from "@/agent/native-agent-info"
 import { Database } from "../../storage/db"
 import {
   AuthReadUnavailableResponse,
+  BAD_REQUEST_SCHEMA,
   OwnedPromptControllersResponse,
   badRequestBody,
   badRequestOrNamedErrorResponse,
@@ -877,19 +878,18 @@ export const GlobalRoutes = lazy(() =>
             description: "Provider connection result",
             content: {
               "application/json": {
-                schema: resolver(
-                  z.object({
-                    ok: z.boolean(),
-                    status: z.enum(["connected", "error"]),
-                    providerID: z.string(),
-                    modelID: z.string(),
-                    message: z.string(),
-                  }),
-                ),
+                schema: resolver(ProviderConnectionTestResult),
               },
             },
           },
-          ...errors(400),
+          400: {
+            description: "Invalid request or Provider test precondition",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([BAD_REQUEST_SCHEMA, ProviderConnectionTestResult])),
+              },
+            },
+          },
           503: AuthReadUnavailableResponse,
         },
       }),

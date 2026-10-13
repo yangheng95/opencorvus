@@ -4341,6 +4341,19 @@ export type ProviderConfig = {
   whitelist?: Array<string>
 }
 
+export type ProviderConnectionTestResult = {
+  code: "connected" | "provider_unavailable" | "no_models" | "request_failed"
+  message: string
+  modelID: string
+  ok: boolean
+  /**
+   * Actual generated text, including text received before a failed test.
+   */
+  output: string
+  providerID: string
+  status: "connected" | "error"
+}
+
 export type ProviderMonetaryBalanceUsage = {
   currency: "USD"
   exceeded: boolean
@@ -21918,9 +21931,9 @@ export type GlobalProvidersTestData = {
 
 export type GlobalProvidersTestErrors = {
   /**
-   * Bad request
+   * Invalid request or Provider test precondition
    */
-  400: BadRequestError
+  400: BadRequestError | ProviderConnectionTestResult
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -21933,13 +21946,7 @@ export type GlobalProvidersTestResponses = {
   /**
    * Provider connection result
    */
-  200: {
-    message: string
-    modelID: string
-    ok: boolean
-    providerID: string
-    status: "connected" | "error"
-  }
+  200: ProviderConnectionTestResult
 }
 
 export type GlobalProvidersTestResponse = GlobalProvidersTestResponses[keyof GlobalProvidersTestResponses]
@@ -27219,9 +27226,9 @@ export type ProviderTestData = {
 
 export type ProviderTestErrors = {
   /**
-   * Bad request
+   * Invalid request or Provider test precondition
    */
-  400: BadRequestError
+  400: BadRequestError | ProviderConnectionTestResult
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -27234,13 +27241,7 @@ export type ProviderTestResponses = {
   /**
    * Provider test result
    */
-  200: {
-    message: string
-    modelID: string
-    ok: boolean
-    providerID: string
-    status: "connected" | "error"
-  }
+  200: ProviderConnectionTestResult
 }
 
 export type ProviderTestResponse = ProviderTestResponses[keyof ProviderTestResponses]

@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 服务商连接测试从有效目录选择默认模型，空模型声明继续可测试；零有效模型与配置不可用保持明确原因。结果使用当前语言摘要、实际模型身份和可展开的原始模型回复或完整诊断；保存配置、Key、删除及目录刷新后退休对应旧结果和在途回写。
+
 - 独立 Chat 与侧聊显示真实待批准权限，冷加载和重连恢复同一请求；实时事件保留原请求说明和时间，取消或失效按真实账本清理卡片。回复后仅刷新仍被选中的原 Task。
 
 - 拒绝工具操作后，将真实工具错误交给下一次流式模型请求形成正常回复，修复会话停止在 tool-calls 并报缺持久回复的问题；删除旧 continue_loop_on_deny 停止选项，现有权限和取消契约保持。
@@ -91,6 +93,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Provider connection tests select the default model from the effective catalog, including inherited models with an empty declaration, and distinguish unavailable configurations from zero models. Results show localized summaries, actual model identity and expandable original model output or complete diagnostics; accepted configuration, key, deletion and catalog changes retire the corresponding observations and late completions.
 
 - Standalone Chat and Side Chat show real pending permissions and restore the same requests after cold loading or reconnection. Live events preserve the original request summary and time; ledger-backed cancellation or staleness retires the card. Replies refresh a Task only while its original selection remains current.
 

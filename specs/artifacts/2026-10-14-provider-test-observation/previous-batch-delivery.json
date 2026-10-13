@@ -1,0 +1,62 @@
+{
+  "batch": 12,
+  "commit": {
+    "commit": "2494f5da532487059d4e4c1215840716c19814fe",
+    "parent": "fdf86894e9463987be9fa801190b6724cdec2ca9",
+    "scopedPaths": 186,
+    "normalGitCommitExit": 0,
+    "indexReconciliation": "Exact committed blobs checked in one batch; only own source and shared insertions applied; peer staging preserved",
+    "at": "2026-10-13T19:42:54.184Z"
+  },
+  "pending": {
+    "head": "2494f5da532487059d4e4c1215840716c19814fe",
+    "pending": [
+      "2494f5da532487059d4e4c1215840716c19814fe fix(provider): preserve saved outcomes and observe current catalog"
+    ],
+    "freshFetch": {
+      "exec": "89185a",
+      "actualExit": 0
+    },
+    "upstreamMerge": {
+      "exec": "b72975",
+      "actualExit": 0,
+      "result": "Already up to date"
+    },
+    "ownership": [
+      {
+        "commit": "2494f5da532487059d4e4c1215840716c19814fe",
+        "scopedPaths": 186,
+        "validation": "79 positive contracts/242 assertions,22 original desktop screenshots personally viewed including one failed qualifier,real public config/Auth/catalog faults and recovery,types/docs/build0; no new inference calls",
+        "evidence": "specs/artifacts/2026-10-14-provider-post-save-observation/README.md"
+      }
+    ],
+    "commit": {
+      "normalGitCommitExit": 0,
+      "wrapper": {
+        "session": 17644,
+        "completion": "5e14dc",
+        "actualExit": 1,
+        "reason": "Shared standard index concurrently locked after successful commit"
+      },
+      "reconciliation": {
+        "exec": "61bab6",
+        "actualExit": 0,
+        "noLockDeleted": true
+      }
+    },
+    "at": "2026-10-13T19:43:34.273Z"
+  },
+  "push": {
+    "capturedHead": "2494f5da532487059d4e4c1215840716c19814fe",
+    "normalGitPushExit": 0,
+    "normalHooks": true,
+    "noBypass": true,
+    "at": "2026-10-13T19:47:18.082Z"
+  },
+  "outerPush": {
+    "session": 23419,
+    "completion": "4235b0",
+    "actualExit": 0
+  },
+  "status": "Own product/spec/architecture/changelog paths clean; peers retained"
+}

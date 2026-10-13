@@ -2800,6 +2800,18 @@ squads. `prompt_profile.active` remains the only active expert-squad selection
 source. Settings does not define agent-team order, a package workflow, or a
 second active profile.
 
+Provider connection Test delegates an omitted model ID to the backend's
+effective catalog. One per-provider observation map retains the generated
+result or the original HTTP error. Its short summary uses the current interface
+language and actual model identity; native disclosure exposes the original
+model output or complete technical diagnostic without translating the source.
+Accepted configuration, credential, cleanup and deletion mutations retire that
+provider's Test generation, result and busy state. Successful registry refresh
+retires all current observations; live model refresh uses its returned provider
+IDs. Scope, authority, selection and unmount fencing keep their existing owners.
+Opening, cancelling or failing an uncommitted edit is not an accepted mutation.
+Retiring a Test does not advance the shared owner used by Save, Auth or reads.
+
 Provider authoring uses one pure endpoint-edit validator for localized field
 feedback, save/discovery actions and the canonical form writer. New or explicit
 API edits require a parseable absolute HTTP(S) address without URL userinfo;

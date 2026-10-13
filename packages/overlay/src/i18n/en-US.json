@@ -486,7 +486,7 @@
   "provider.test.testing": "Testing…",
   "provider.test.success": "Connection OK",
   "provider.test.failed": "Connection failed",
-  "provider.test.no_models": "No models configured — add at least one model before testing.",
+  "provider.test.no_models": "No models are available for this test. Check the provider's model configuration and filters.",
   "provider.form.error.id_required": "Provider ID is required (letters, digits, '-' or '_' only).",
   "provider.form.error.api_required": "API URL is required.",
   "provider.form.saved_with_issues": "Provider configuration saved, but a local follow-up failed.",

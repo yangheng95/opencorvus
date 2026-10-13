@@ -1,0 +1,38 @@
+[
+  {
+    "method": "POST",
+    "path": "/failure/v1/chat/completions",
+    "at": 1791925032024,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/product/v1/model/info",
+    "at": 1791925238285,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/product/v1/models",
+    "at": 1791925238285,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "GET",
+    "path": "/api.json",
+    "at": 1791925265882,
+    "sampleCredentialMatched": false
+  },
+  {
+    "method": "POST",
+    "path": "/failure/v1/chat/completions",
+    "at": 1791925294119,
+    "sampleCredentialMatched": true
+  },
+  {
+    "method": "POST",
+    "path": "/failure/v1/chat/completions",
+    "at": 1791925405130,
+    "sampleCredentialMatched": true
+  }
+]

@@ -51,7 +51,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`, `ProviderAuthMethodAuthorizationTypeMismatch`, `ProviderAuthMethodNotFound`, `ProviderAuthOAuthExchangeActiveError`, `ProviderAuthProviderNotFound`. | `global.providers.oauth.authorize` |
 | POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization Body: `code`, `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`, `ProviderAuthOAuthExchangeActiveError`, `ProviderAuthOAuthExchangeUncertainError`, `ProviderCredentialExchangeFailedError`, `ProviderCredentialExchangeReplacedError`. | `global.providers.oauth.callback` |
 | POST | `/global/providers/{providerID}/oauth/cancel` | Cancel pending Provider authorization Body: `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`, `ProviderAuthOAuthExchangeActiveError`. | `global.providers.oauth.cancel` |
-| POST | `/global/providers/{providerID}/test` | Test a global Provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
+| POST | `/global/providers/{providerID}/test` | Test a global Provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`, `ProviderConnectionTestResult`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source Body: `kind`, `policy`, `value`; Errors: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
 | GET | `/global/skill/market/detail` | Inspect a global Skill Market candidate Errors: `BadRequestError`, `SkillMarketUpstreamError`. | `global.skill.market.detail` |
@@ -426,7 +426,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize Body: `inputs`, `method`; Errors: `AuthReadError`, `BadRequestError`, `ProviderAuthMethodAuthorizationTypeMismatch`, `ProviderAuthMethodNotFound`, `ProviderAuthOAuthExchangeActiveError`, `ProviderAuthProviderNotFound`. | `provider.oauth.authorize` |
 | POST | `/provider/{providerID}/oauth/callback` | OAuth callback Body: `code`, `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`, `ProviderAuthOAuthExchangeActiveError`, `ProviderAuthOAuthExchangeUncertainError`, `ProviderCredentialExchangeFailedError`, `ProviderCredentialExchangeReplacedError`. | `provider.oauth.callback` |
 | POST | `/provider/{providerID}/oauth/cancel` | Cancel pending Provider authorization Body: `flowID`, `method`; Errors: `AuthReadError`, `BadRequestError`, `ProviderAuthOAuthExchangeActiveError`. | `provider.oauth.cancel` |
-| POST | `/provider/{providerID}/test` | Test provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`. | `provider.test` |
+| POST | `/provider/{providerID}/test` | Test provider connection Body: `modelID`; Errors: `AuthReadError`, `BadRequestError`, `ProviderConnectionTestResult`. | `provider.test` |
 
 ### Question
 

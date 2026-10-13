@@ -386,6 +386,12 @@ Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 
 - 打开 Providers 配置页时只按当前 project/global scope 读取稳定的 Provider catalog、Auth method 和 config owner；不得隐式执行网络刷新。Provider 目录刷新和实时模型刷新只由两个显式按钮分别触发，各自完成后重读 Provider owner，各自拥有独立错误面。
 - 没有活动项目目录的桌面首次启动使用 `/global/providers`、`/global/providers/refresh`、`/global/providers/models/refresh`、`/global/providers/discover-models` 和 `/global/providers/:providerID/test`；这些路由把 `Config.getGlobal()` 显式传入与项目路由共用的 Provider 实现。`/auth/:providerID` 仍是唯一 API credential 写入面，项目目录不是新增 Provider、保存 API key、发现模型、测试连接或使用内置 Provider OAuth 的前置条件。`Plugin.listGlobalProviderHooks()` 是唯一 project-independent built-in hook catalog，同时投影 auth method、OAuth loader 和 Provider model projection；installed project plugins 仍只由真实 Project `Instance` 的 `Plugin.list()` 拥有。
 
+### Provider 连接测试回执
+
+项目 `/provider/:providerID/test` 与全局 `/global/providers/:providerID/test` 共用 `testProviderConnection` 和唯一 `ProviderConnectionTestResult`。`modelID` 可省略，默认选择从当前配置的有效模型目录按原排序派生；空声明不阻止测试。当前配置不可用与零有效模型分别返回 HTTP400 `provider_unavailable`、`no_models`，不从这两个条件推断凭据缺失。原 validator BadRequest400 与 AuthReadError503 保持其明确合同；识别出的嵌套 AuthReadError 使用原 cause，而不是 SDK 初始化包装。
+
+流式请求保持原模型解析、认证、错误脱敏与30秒取消边界。回执包含实际 providerID/modelID、status/code/message 及单个流收到的 `output` 文本；错误前的部分文本也保留。`connected` 只证明本次选中模型的实际请求，不代表整个服务商或其他模型永久有效。测试不创建 Session/Task/Mission，不新增持久测试状态或第二模型/凭据事实来源。
+
 ### Provider 声明与可运行模型
 
 `config.provider[id].models` 是可选配置覆盖，明确空对象也是合法声明。保存声明、名称、地址或环境变量不以 textarea 至少有一个 ID 为前提；模型可稍后添加或发现。Provider state 仍从 canonical catalog、配置和 Auth 派生，模型执行保持现有 loader、过滤与模型引用校验。零声明数量不能用作可运行模型数量。

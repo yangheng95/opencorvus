@@ -15230,6 +15230,52 @@
         },
         "type": "object"
       },
+      "ProviderConnectionTestResult": {
+        "properties": {
+          "code": {
+            "enum": [
+              "connected",
+              "provider_unavailable",
+              "no_models",
+              "request_failed"
+            ],
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "modelID": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "output": {
+            "description": "Actual generated text, including text received before a failed test.",
+            "type": "string"
+          },
+          "providerID": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "connected",
+              "error"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "status",
+          "code",
+          "providerID",
+          "modelID",
+          "message",
+          "output"
+        ],
+        "type": "object"
+      },
       "ProviderMonetaryBalanceUsage": {
         "properties": {
           "currency": {
@@ -81075,35 +81121,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "modelID": {
-                      "type": "string"
-                    },
-                    "ok": {
-                      "type": "boolean"
-                    },
-                    "providerID": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "enum": [
-                        "connected",
-                        "error"
-                      ],
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "ok",
-                    "status",
-                    "providerID",
-                    "modelID",
-                    "message"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/ProviderConnectionTestResult"
                 }
               }
             },
@@ -81113,11 +81131,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProviderConnectionTestResult"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid request or Provider test precondition"
           },
           "503": {
             "content": {
@@ -96107,35 +96132,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "modelID": {
-                      "type": "string"
-                    },
-                    "ok": {
-                      "type": "boolean"
-                    },
-                    "providerID": {
-                      "type": "string"
-                    },
-                    "status": {
-                      "enum": [
-                        "connected",
-                        "error"
-                      ],
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "ok",
-                    "status",
-                    "providerID",
-                    "modelID",
-                    "message"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/ProviderConnectionTestResult"
                 }
               }
             },
@@ -96145,11 +96142,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProviderConnectionTestResult"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid request or Provider test precondition"
           },
           "503": {
             "content": {

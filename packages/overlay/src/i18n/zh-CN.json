@@ -486,7 +486,7 @@
   "provider.test.testing": "测试中…",
   "provider.test.success": "连接正常",
   "provider.test.failed": "连接失败",
-  "provider.test.no_models": "未配置模型 — 请至少添加一个模型后再测试。",
+  "provider.test.no_models": "没有可用于本次测试的模型，请检查服务商的模型配置和筛选。",
   "provider.form.error.id_required": "请输入有效的 Provider ID（仅字母、数字、'-' 或 '_'）。",
   "provider.form.error.api_required": "请输入 API URL。",
   "provider.form.saved_with_issues": "Provider 配置已保存，但后续更新失败。",

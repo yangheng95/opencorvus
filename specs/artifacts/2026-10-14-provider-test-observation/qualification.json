@@ -1,0 +1,647 @@
+{
+  "batch": 13,
+  "owner": "Root; all child agents stopped at user instruction",
+  "tests": {
+    "positive": 84,
+    "assertions": 219,
+    "backend": {
+      "tests": 20,
+      "assertions": 42,
+      "boundary": "Production routes and native loopback TCP/SSE participant; local contract qualification, not genuine Provider or visual acceptance"
+    },
+    "services": {
+      "tests": 64,
+      "assertions": 177,
+      "boundary": "Business and transport contracts only"
+    }
+  },
+  "exits": {
+    "after-privacy.exit": 0,
+    "backend-tests-after.exit": 0,
+    "backend-tests-first.exit": 1,
+    "backend-typecheck-after.exit": 0,
+    "backend-typecheck.exit": 0,
+    "docs-final-repaired.exit": 0,
+    "docs-final.exit": 1,
+    "docs-plan.exit": 0,
+    "docs-render-final.exit": 0,
+    "final-backend-tests-repaired.exit": 0,
+    "final-backend-tests.exit": 1,
+    "final-backend-types.exit": 0,
+    "final-overlay-types-repaired.exit": 0,
+    "final-overlay-types.exit": 1,
+    "final-service-tests.exit": 0,
+    "final-ui-build.exit": 0,
+    "precondition-before.exit": 0,
+    "root-backend-tests.exit": 0,
+    "root-format.exit": 1,
+    "root-overlay-types.exit": 0,
+    "root-service-tests.exit": 0,
+    "root-ui-build.exit": 0,
+    "sdk-build.exit": 0,
+    "sdk-final.exit": 0
+  },
+  "screenshots": 24,
+  "requests": [
+    {
+      "stage": "before",
+      "count": 3,
+      "pid": 70552,
+      "actualExit": 0,
+      "normalCleanup": {
+        "pid": 70552,
+        "listeners": 0,
+        "pair": [
+          {
+            "removed": true,
+            "name": "auth.json"
+          },
+          {
+            "removed": true,
+            "name": "models.json"
+          }
+        ],
+        "actualExit": 0
+      },
+      "privacy": {
+        "boundary": "Actual credential bytes retained only in memory; completed original logs scanned after physical exit and pair cleanup",
+        "files": [
+          {
+            "file": "stdout.log",
+            "bytes": 0,
+            "rawContainsKnownCredential": false,
+            "archivedContainsKnownCredential": false
+          },
+          {
+            "file": "stderr.log",
+            "bytes": 4243,
+            "rawContainsKnownCredential": false,
+            "archivedContainsKnownCredential": false
+          },
+          {
+            "file": "runtime\\log\\2026-10-13T195802-70552-1.log",
+            "bytes": 163537,
+            "rawContainsKnownCredential": false,
+            "archivedContainsKnownCredential": false
+          }
+        ]
+      }
+    },
+    {
+      "stage": "after",
+      "count": 6,
+      "pid": 76036,
+      "actualExit": 0,
+      "normalCleanup": {
+        "actualExit": 0,
+        "pair": [
+          {
+            "name": "auth.json",
+            "removed": true
+          },
+          {
+            "name": "models.json",
+            "removed": true
+          }
+        ],
+        "listeners": 0,
+        "pid": 76036
+      },
+      "privacy": {
+        "boundary": "Actual credential bytes retained only in memory; completed original logs scanned after physical exit and pair cleanup",
+        "files": [
+          {
+            "file": "stdout.log",
+            "bytes": 0,
+            "rawContainsKnownCredential": false,
+            "archivedContainsKnownCredential": false
+          },
+          {
+            "file": "stderr.log",
+            "bytes": 14887,
+            "rawContainsKnownCredential": false,
+            "archivedContainsKnownCredential": false
+          },
+          {
+            "file": "runtime\\log\\2026-10-13T205411-76036-1.log",
+            "bytes": 201133,
+            "rawContainsKnownCredential": false,
+            "archivedContainsKnownCredential": false
+          }
+        ]
+      }
+    }
+  ],
+  "realSolRequests": 9,
+  "tabs": {
+    "before": "3",
+    "after": "4",
+    "bothClosed": true
+  },
+  "inflight": {
+    "boundary": "Actual Config file write after Sol response received and before EOF; current UI retained accepted configuration after completion",
+    "evidence": "runtime/after/inflight-save-observation.json"
+  },
+  "visualLimits": {
+    "after-inherited-testing-en.png": "Capture already shows completed success; earlier AX showed busy",
+    "after-sol-accepted-save-retired-zh.png": "Capture shows Saving form; completed row is in after-sol-completed-save-row-zh.png",
+    "after-project-delete-retired-zh.png": "Failed qualification: confirmation expired and row/result remained; accepted global deletion separately captured"
+  },
+  "unqualified": [
+    "Fresh OAuth authentication mutation",
+    "Concurrent distinct Provider Test requests in flight",
+    "In-flight delete/recreate or Key-save completion",
+    "Restart persistence, backend authority replacement and full multi-project scheduler/capacity matrix",
+    "External-window configuration propagation"
+  ],
+  "inventory": [
+    {
+      "path": "checks/after-privacy.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/after-privacy.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/backend-tests-after.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/backend-tests-after.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/backend-tests-first.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/backend-tests-first.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/backend-typecheck-after.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/backend-typecheck-after.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/backend-typecheck.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/backend-typecheck.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/docs-final-repaired.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/docs-final-repaired.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/docs-final.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/docs-final.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/docs-plan.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/docs-plan.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/docs-render-final.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/docs-render-final.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/final-backend-tests-repaired.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/final-backend-tests-repaired.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/final-backend-tests.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/final-backend-tests.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/final-backend-types.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/final-backend-types.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/final-overlay-types-repaired.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/final-overlay-types-repaired.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/final-overlay-types.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/final-overlay-types.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/final-service-tests.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/final-service-tests.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/final-ui-build.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/final-ui-build.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "inputs/finish-record.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/fix-doc-placement.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/format-owned.json",
+      "boundary": "Root reviewed source and shared mechanism evidence"
+    },
+    {
+      "path": "inputs/format-owned.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/launch.ps1",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/make-launch.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "checks/precondition-before.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/precondition-before.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "inputs/prepare-after.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/prepare.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/privacy-after-exit.ts",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/probe-after.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "inputs/probe-before.mjs",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "checks/root-backend-tests.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/root-backend-tests.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/root-format.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/root-format.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/root-overlay-types.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/root-overlay-types.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/root-service-tests.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/root-service-tests.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/root-ui-build.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/root-ui-build.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "inputs/runtime.ts",
+      "boundary": "Executable qualification input, no credential bytes"
+    },
+    {
+      "path": "checks/sdk-build.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/sdk-build.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "checks/sdk-final.exit",
+      "boundary": "Actual captured exit, including failures"
+    },
+    {
+      "path": "checks/sdk-final.log.gz",
+      "boundary": "Original completed checker output; gzip only"
+    },
+    {
+      "path": "inputs/shared-test-observation-audit.md",
+      "boundary": "Root reviewed source and shared mechanism evidence"
+    },
+    {
+      "path": "runtime/before/authority-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/exit.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/launch.ps1",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/owner.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/participant-requests.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/physical-pair-cleanup.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/precondition-public-before.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/preflight-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/privacy-qualified.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/privacy-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/projection-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/provider-audit-final.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/provider-audit.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/runtime.ts",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/terminal.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/before/logs/2026-10-13T195802-70552-1.log.gz",
+      "boundary": "Completed full original log scanned with actual in-memory credentials; redactor and gzip only"
+    },
+    {
+      "path": "runtime/before/logs/stderr.log.gz",
+      "boundary": "Completed full original log scanned with actual in-memory credentials; redactor and gzip only"
+    },
+    {
+      "path": "runtime/before/logs/stdout.log.gz",
+      "boundary": "Completed full original log scanned with actual in-memory credentials; redactor and gzip only"
+    },
+    {
+      "path": "runtime/after/authority-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/exit.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/inflight-save-observation.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/owner.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/participant-requests.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/physical-pair-cleanup.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/precondition-public-after.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/preflight-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/privacy-qualified.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/privacy-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/projection-ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/provider-audit-final.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/provider-audit.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/ready.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/terminal.json",
+      "boundary": "Actual runtime receipt or executed input, paired credentials excluded"
+    },
+    {
+      "path": "runtime/after/logs/2026-10-13T205411-76036-1.log.gz",
+      "boundary": "Completed full original log scanned with actual in-memory credentials; redactor and gzip only"
+    },
+    {
+      "path": "runtime/after/logs/stderr.log.gz",
+      "boundary": "Completed full original log scanned with actual in-memory credentials; redactor and gzip only"
+    },
+    {
+      "path": "runtime/after/logs/stdout.log.gz",
+      "boundary": "Completed full original log scanned with actual in-memory credentials; redactor and gzip only"
+    },
+    {
+      "path": "screenshots/after-global-delete-accepted-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-inflight-sol-save-settled-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-inherited-testing-en.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-key-accepted-retired-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-live-model-refresh-retired-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-live-refresh-other-sol-retained-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-long-failure-details-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-long-failure-summary-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-new-endpoint-failure-details-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-project-delete-retired-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-project-endpoint-save-retired-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-project-sol-original-output-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-registry-refresh-retired-sol-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-return-global-current-row-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-sol-accepted-save-retired-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-sol-completed-save-row-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-sol-original-output-details-en.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-sol-original-output-details-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/after-zero-models-http-details-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/before-inherited-model-blocked-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/before-long-failure-main-copy-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/before-old-failure-after-endpoint-save-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/before-old-no-models-after-save-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    },
+    {
+      "path": "screenshots/before-sol-success-english-in-zh.png",
+      "boundary": "Original desktop image personally viewed by Root in CUA; no automated visual assertions or transforms"
+    }
+  ]
+}

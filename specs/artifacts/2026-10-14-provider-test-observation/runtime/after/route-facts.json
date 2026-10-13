@@ -1,0 +1,261 @@
+{
+  "boundary": "Derived only from completed original redacted server log; full original retained beside it",
+  "entries": [
+    {
+      "time": "2026-10-13T20:55:16.897Z",
+      "requestID": "65464e61-2912-440d-a46b-1cdf175b7c34",
+      "method": "POST",
+      "path": "/global/providers/openai/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T20:55:19.019Z",
+      "requestID": "65464e61-2912-440d-a46b-1cdf175b7c34",
+      "method": "POST",
+      "path": "/global/providers/openai/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2122
+    },
+    {
+      "time": "2026-10-13T20:56:18.715Z",
+      "requestID": "37fcab22-809d-4262-8a34-c32a58ed5833",
+      "method": "POST",
+      "path": "/global/providers/openai/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T20:56:20.753Z",
+      "requestID": "37fcab22-809d-4262-8a34-c32a58ed5833",
+      "method": "POST",
+      "path": "/global/providers/openai/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2038
+    },
+    {
+      "time": "2026-10-13T20:56:54.794Z",
+      "requestID": "91289482-8b83-4740-9efa-80b6b327a487",
+      "method": "POST",
+      "path": "/global/providers/owned-zero/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T20:56:54.795Z",
+      "requestID": "91289482-8b83-4740-9efa-80b6b327a487",
+      "method": "POST",
+      "path": "/global/providers/owned-zero/test",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-13T20:57:11.846Z",
+      "requestID": "96857a52-4236-4999-81cf-dd1220654c18",
+      "method": "POST",
+      "path": "/global/providers/owned-failure/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T20:57:12.031Z",
+      "requestID": "96857a52-4236-4999-81cf-dd1220654c18",
+      "method": "POST",
+      "path": "/global/providers/owned-failure/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 185
+    },
+    {
+      "time": "2026-10-13T20:57:44.611Z",
+      "requestID": "b7c2ce28-2f48-4841-84b6-ad2346c72fcc",
+      "method": "POST",
+      "path": "/global/providers/openai/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T20:57:46.381Z",
+      "requestID": "b7c2ce28-2f48-4841-84b6-ad2346c72fcc",
+      "method": "POST",
+      "path": "/global/providers/openai/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1770
+    },
+    {
+      "time": "2026-10-13T20:59:05.752Z",
+      "requestID": "fef624c2-63a5-48df-8972-548a2199d938",
+      "method": "POST",
+      "path": "/provider/openai/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T20:59:07.849Z",
+      "requestID": "fef624c2-63a5-48df-8972-548a2199d938",
+      "method": "POST",
+      "path": "/provider/openai/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2097
+    },
+    {
+      "time": "2026-10-13T21:00:29.559Z",
+      "requestID": "b5a86523-25d5-40a9-9a61-948487286284",
+      "method": "POST",
+      "path": "/provider/opencorvus/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:00:29.561Z",
+      "requestID": "b5a86523-25d5-40a9-9a61-948487286284",
+      "method": "POST",
+      "path": "/provider/opencorvus/test",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 2
+    },
+    {
+      "time": "2026-10-13T21:00:38.085Z",
+      "requestID": "669379d8-8062-4fdd-8e5a-65880c015944",
+      "method": "POST",
+      "path": "/provider/models/refresh",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:00:38.525Z",
+      "requestID": "669379d8-8062-4fdd-8e5a-65880c015944",
+      "method": "POST",
+      "path": "/provider/models/refresh",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 440
+    },
+    {
+      "time": "2026-10-13T21:01:05.699Z",
+      "requestID": "e142b809-a381-440f-97d3-dd38e1959dc9",
+      "method": "POST",
+      "path": "/provider/refresh",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:01:06.387Z",
+      "requestID": "e142b809-a381-440f-97d3-dd38e1959dc9",
+      "method": "POST",
+      "path": "/provider/refresh",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 688
+    },
+    {
+      "time": "2026-10-13T21:01:34.103Z",
+      "requestID": "ed58a04b-de99-4eca-9883-c64f65001521",
+      "method": "POST",
+      "path": "/provider/owned-failure/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:01:34.123Z",
+      "requestID": "ed58a04b-de99-4eca-9883-c64f65001521",
+      "method": "POST",
+      "path": "/provider/owned-failure/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 20
+    },
+    {
+      "time": "2026-10-13T21:01:48.160Z",
+      "requestID": "4a37f88c-a6bc-43a1-a410-a43e3fbc3ab1",
+      "method": "POST",
+      "path": "/provider/owned-failure/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:01:51.473Z",
+      "requestID": "4a37f88c-a6bc-43a1-a410-a43e3fbc3ab1",
+      "method": "POST",
+      "path": "/provider/owned-failure/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3313
+    },
+    {
+      "time": "2026-10-13T21:02:58.280Z",
+      "requestID": "db43f05b-1469-47c1-9eb0-21bab5f74a2d",
+      "method": "POST",
+      "path": "/global/providers/owned-zero/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:02:58.323Z",
+      "requestID": "db43f05b-1469-47c1-9eb0-21bab5f74a2d",
+      "method": "POST",
+      "path": "/global/providers/owned-zero/test",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 43
+    },
+    {
+      "time": "2026-10-13T21:02:58.331Z",
+      "requestID": "9525b311-42cb-4381-a758-bb8f1a07713b",
+      "method": "POST",
+      "path": "/provider/owned-zero/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:02:58.365Z",
+      "requestID": "9525b311-42cb-4381-a758-bb8f1a07713b",
+      "method": "POST",
+      "path": "/provider/owned-zero/test",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 34
+    },
+    {
+      "time": "2026-10-13T21:02:58.367Z",
+      "requestID": "12764896-12da-4096-accc-31698447d8c3",
+      "method": "POST",
+      "path": "/global/providers/owned-missing/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:02:58.368Z",
+      "requestID": "12764896-12da-4096-accc-31698447d8c3",
+      "method": "POST",
+      "path": "/global/providers/owned-missing/test",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-13T21:03:25.122Z",
+      "requestID": "d1903546-cfa9-4e3c-8c28-58311a2955c2",
+      "method": "POST",
+      "path": "/global/providers/owned-failure/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:03:25.134Z",
+      "requestID": "d1903546-cfa9-4e3c-8c28-58311a2955c2",
+      "method": "POST",
+      "path": "/global/providers/owned-failure/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 12
+    },
+    {
+      "time": "2026-10-13T21:03:31.220Z",
+      "requestID": "e5854fb3-26bb-442d-8712-4b4a74335cec",
+      "method": "DELETE",
+      "path": "/global/providers/owned-failure",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:03:32.114Z",
+      "requestID": "e5854fb3-26bb-442d-8712-4b4a74335cec",
+      "method": "DELETE",
+      "path": "/global/providers/owned-failure",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 894
+    }
+  ]
+}

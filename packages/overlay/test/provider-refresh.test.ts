@@ -1,15 +1,21 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import { configure } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
-import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../src/services/provider-refresh"
+import {
+  HOST_CAPABILITIES,
+  type HostTransport,
+  type TransportRequest,
+  type TransportResponse,
+} from "../src/services/host-transport"
+import {
+  requestProviderCatalogRefresh,
+  requestProviderModelsRefresh,
+  type ProviderRefreshResult,
+} from "../src/services/provider-refresh"
 import { setAppStore } from "../src/store/app"
 import { AppLog } from "../src/utils/log"
 
-function fakeTransport(
-  requests: TransportRequest[],
-  response: { ok: boolean; error?: string; issues?: Array<{ message: string }> },
-): HostTransport {
+function fakeTransport(requests: TransportRequest[], response: ProviderRefreshResult): HostTransport {
   return {
     kind: "tauri",
     capabilities: HOST_CAPABILITIES.tauri,
@@ -40,9 +46,14 @@ afterEach(() => {
 describe("provider refresh requests", () => {
   test("refreshes project models through the directory-scoped route", async () => {
     const requests: TransportRequest[] = []
-    __setHostTransportForTest(fakeTransport(requests, { ok: true }))
+    const response = {
+      ok: true,
+      fetchedAt: 1_791_921_801_000,
+      providers: [{ providerID: "opencorvus", count: 2, ids: ["live-a", "live-b"] }],
+    }
+    __setHostTransportForTest(fakeTransport(requests, response))
 
-    await requestProviderModelsRefresh("D:/work/project one")
+    await expect(requestProviderModelsRefresh("D:/work/project one")).resolves.toEqual(response)
 
     expect(requests).toHaveLength(1)
     expect(requests[0]).toMatchObject({

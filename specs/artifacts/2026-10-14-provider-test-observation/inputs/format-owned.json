@@ -1,0 +1,37 @@
+[
+  {
+    "file": "packages/opencorvus/src/provider/operations.ts",
+    "applied": 0,
+    "untouchedBaseline": 0
+  },
+  {
+    "file": "packages/opencorvus/test/provider-connection-test.test.ts",
+    "applied": 1,
+    "untouchedBaseline": 0
+  },
+  {
+    "file": "packages/overlay/src/components/settings/ProvidersPanel.tsx",
+    "applied": 0,
+    "untouchedBaseline": 2
+  },
+  {
+    "file": "packages/overlay/src/services/llm.ts",
+    "applied": 0,
+    "untouchedBaseline": 1
+  },
+  {
+    "file": "packages/overlay/src/services/provider-refresh.ts",
+    "applied": 0,
+    "untouchedBaseline": 3
+  },
+  {
+    "file": "packages/overlay/test/llm-provider-operation-scope.test.ts",
+    "applied": 0,
+    "untouchedBaseline": 0
+  },
+  {
+    "file": "packages/overlay/test/provider-refresh.test.ts",
+    "applied": 0,
+    "untouchedBaseline": 0
+  }
+]
