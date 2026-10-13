@@ -1,0 +1,30 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 312-314, 316-317
++									312 container
++										313 text 用户
++										314 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为Item，B1为Quantity，A2为Notebook，B2为7，A3为Pen，B3为5，A4为Total，B4公式为=SUM(B2:B3)，计算值为12。请用真实产物发布工具完成，保留这些原始标题和数据，成功后简短说明即可。
+~																315 text 保护区域
++																316 container
++																	317 image univer-doc-main-canvas
++																	318 image
++																319 text 权限描述
++																320 text field (settable)
++																321 text 编辑权限
++																322 container
++																	323 radio button (settable, integer) Description: 仅我可以编辑, Value: 1
++																	324 text 仅我可以编辑
++																325 container
++																	326 radio button (settable, integer) Description: 指定用户可以编辑, Value: 0
++																	327 text 指定用户可以编辑
++																328 text 查看权限
++																329 container
++																	330 radio button (settable, integer) Description: 其他人可以查看, Value: 1
++																	331 text 其他人可以查看
++																332 container
++																	333 radio button (settable, integer) Description: 其他人不可以查看, Value: 0
++																	334 text 其他人不可以查看
++																335 button 确认
++																336 button 取消
++													337 container
+The focused UI element is 337 container

@@ -23,6 +23,8 @@
 
 - 鼠标点击表格侧栏按钮并交回编辑焦点时保留聊天读位，修复普通视图跳回上方导致点击未完成的问题；现有内部导航、编辑和当前视图 CSV 导出继续可用。
 
+- 表格原生按钮保留激活前的键盘焦点，可通过Tab、Enter和Space操作权限详情、范围弹窗、缩放与工作表菜单；原有菜单执行后的编辑回焦继续有效。
+
 - 表格权限面板的新增详情和确认返回列表保留当前语言标题；范围校验信息随语言切换更新，原范围、说明和权限选项继续保留。
 
 - 可编辑表格明确提示编辑仅保留在当前视图，离开或折叠前可下载修改后的工作表；说明 CSV 仅保留单元格值。提示随语言切换，全屏仍保留完整工作表操作区域。
@@ -81,6 +83,8 @@
 - Spreadsheet sheet-tab, Sidebar and notification names follow the interface language. Open protection-range lists refresh their title and content while retaining workbook edits, selected panel options and width.
 
 - Mouse clicks on spreadsheet Sidebar buttons retain the Chat reading position when focus returns to the editor, fixing incomplete clicks caused by the ordinary view scrolling upward. Existing internal navigation, editing and current-view CSV export remain usable.
+
+- Native spreadsheet buttons retain keyboard focus before activation, enabling Tab, Enter and Space for permission details, range dialogs, zoom and sheet menus. Existing editor focus after menu actions remains effective.
 
 - Spreadsheet permission details opened from Add and lists returned from Confirm retain current-language titles. Range validation messages update with the language while preserving entered ranges, descriptions and permission choices.
 

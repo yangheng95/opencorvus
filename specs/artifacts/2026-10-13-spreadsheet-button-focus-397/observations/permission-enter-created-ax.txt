@@ -1,0 +1,17 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 301, 315-336
++															340 container
++																341 image univer-doc-main-canvas
++																342 image
++																343 text 当前工作表
++																344 text 所有工作表
++																345 text 清单(A1)
++																346 text 创建 我可以编辑 查看权限 我可以查看
++																347 text FOCUS-397 temporary
++																348 button + 添加新权限
++																	349 text +
++																	350 text 添加新权限
+~																278 tab (selected, settable, boolean) 清单, Value: 1
+清单
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18505/ui/

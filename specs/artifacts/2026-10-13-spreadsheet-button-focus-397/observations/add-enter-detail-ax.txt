@@ -1,0 +1,27 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 183-188
++																192 text Protected Range
++																193 container
++																	194 image univer-doc-main-canvas
++																	195 image
++																196 text Permission Description
++																197 text field (settable)
++																198 text Edit Permissions
++																199 container
++																	200 radio button (settable, integer) Description: Only I can edit, Value: 1
++																	201 text Only I can edit
++																202 container
++																	203 radio button (settable, integer) Description: Specified users can edit, Value: 0
++																	204 text Specified users can edit
++																205 text View Permissions
++																206 container
++																	207 radio button (settable, integer) Description: Others can view, Value: 1
++																	208 text Others can view
++																209 container
++																	210 radio button (settable, integer) Description: No one else can view, Value: 0
++																	211 text No one else can view
++																212 button Confirm
++																213 button Cancel
++													214 container
+The focused UI element is 214 container

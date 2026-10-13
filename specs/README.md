@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [397 表格按钮键盘焦点](records/2026-10/2026-10-13-spreadsheet-button-focus-397.md)：原生按钮激活前被夺焦的共性机制与完整消费者审查。
+
 - [391 历史活动与交接输入](artifacts/2026-10-05-connection-workspace-authority/activity-input-projection-plan-391.md)：真实消息角色、进展与交接上下文的读取合同。
 
 - [Config JSONC 诊断与 Provider 反馈](records/2026-10/2026-10-13-config-jsonc-diagnostics.md)：安全producer、真实错误与当前语言反馈。

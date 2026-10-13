@@ -2469,6 +2469,12 @@ position. Docs and Sheets retain their explicit internal cursor and selection
 reveal controllers; visible controls retain their own native focus behavior.
 This contract concerns ancestor scrolling, while button activation focus is a
 separate policy.
+Native buttons retain focus before activation: the shared layout listener returns
+only layout/canvas proxies to the editing input. Generic Design buttons and
+SheetBar buttons use their existing native activation and context updates.
+Explicit menu/command calls to the layout focus service still return to editing
+after their actions; dialog return-focus and non-button links keep their own
+existing contracts.
 The protection panel keeps the locale key in both List Add and successful Detail
 Confirm title producers. Its range error is derived from the current ranges by
 the existing checker at render time, and that same result governs display and

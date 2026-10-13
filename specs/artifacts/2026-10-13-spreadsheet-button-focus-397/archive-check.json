@@ -1,0 +1,224 @@
+{
+  "kind": "Archive evidence byte preservation, bounded credential patterns and local links only; not product/UI acceptance",
+  "selection": {
+    "allowlistedSourceFiles": 76,
+    "screenshots": 17,
+    "observations": 40,
+    "fullRuntimeOrCredentialDirectoriesCopied": false
+  },
+  "gzipRestoration": [
+    {
+      "path": "logs/patch-prepare.log.gz",
+      "decodedBytes": 356,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/patch-commit.log.gz",
+      "decodedBytes": 137,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/install.log.gz",
+      "decodedBytes": 178,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/install-final.log.gz",
+      "decodedBytes": 143,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/typecheck.log.gz",
+      "decodedBytes": 16,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/build.log.gz",
+      "decodedBytes": 69034,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/docs-plan.log.gz",
+      "decodedBytes": 106,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "implementation/ui-final.patch.gz",
+      "decodedBytes": 688134,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "implementation/ui-rejected-empty-cache.patch.gz",
+      "decodedBytes": 688337,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "downloads/edited-normal.csv.gz",
+      "decodedBytes": 61,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/final/owner.json.gz",
+      "decodedBytes": 154,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/final/ready.json.gz",
+      "decodedBytes": 343,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/final/terminal.json.gz",
+      "decodedBytes": 211,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/final/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/final/stderr.log.gz",
+      "decodedBytes": 115784,
+      "matchesSourceBytes": true
+    }
+  ],
+  "images": [
+    {
+      "path": "screenshots/add-enter-detail.jpg",
+      "sourceFilename": "add-enter-detail.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/add-real-tab-focused.jpg",
+      "sourceFilename": "add-real-tab-focused.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/add-space-detail.jpg",
+      "sourceFilename": "add-space-detail.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/color-cancel-tab-focused.jpg",
+      "sourceFilename": "color-cancel-tab-focused.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/context-return-edit-9-5-14.jpg",
+      "sourceFilename": "context-return-edit-9-5-14.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/fullscreen-add-space-detail.jpg",
+      "sourceFilename": "fullscreen-add-space-detail.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/permission-created-visible.jpg",
+      "sourceFilename": "permission-created-visible.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/permission-enter-created.jpg",
+      "sourceFilename": "permission-enter-created.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/range-confirm-tab-focused.jpg",
+      "sourceFilename": "range-confirm-tab-focused.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/range-space-confirm-overlap.jpg",
+      "sourceFilename": "range-space-confirm-overlap.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/sheet-add-space-created.jpg",
+      "sourceFilename": "sheet-add-space-created.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/sheet-menu-enter-open.jpg",
+      "sourceFilename": "sheet-menu-enter-open.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/sheet-menu-real-tab-focused.jpg",
+      "sourceFilename": "sheet-menu-real-tab-focused.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/sheet-menu-tab-focused.jpg",
+      "sourceFilename": "sheet-menu-tab-focused.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/zh-overlap-preserved.jpg",
+      "sourceFilename": "zh-overlap-preserved.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/zoom-enter-menu.jpg",
+      "sourceFilename": "zoom-enter-menu.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "screenshots/zoom-tab-focused.jpg",
+      "sourceFilename": "zoom-tab-focused.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    }
+  ],
+  "csv": {
+    "path": "downloads/edited-normal.csv.gz",
+    "decodedBytes": 61,
+    "sourceBytesPreserved": true,
+    "exactExpectedBytes": true,
+    "values": [
+      9,
+      5,
+      14
+    ],
+    "utf8BOM": true,
+    "crlfCount": 3,
+    "terminalNewline": false
+  },
+  "historicalReview": {
+    "reviewedAt": "2026-10-13T15:20:05.027Z",
+    "sourceBytesPreserved": true,
+    "originalFinalReviewScriptRerun": false
+  },
+  "credentialScan": {
+    "textFilesInspected": 62,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "qualification": "Bounded pattern scan of selected evidence and current spec, not universal secret detection. Auth/models were not read or copied."
+  },
+  "localLinks": {
+    "count": 89,
+    "broken": 0
+  }
+}

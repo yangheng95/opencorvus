@@ -1,0 +1,179 @@
+{
+  "iteration": 397,
+  "reviewer": "audit_ui",
+  "reviewType": "Independent read-only static implementation and installed consumer audit; no UI test or real-page acceptance",
+  "preset": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+preset-sheets-core@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/preset-sheets-core/package.json",
+  "actualEntry": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/ui/lib/cjs/index.js",
+  "runtime": [
+    {
+      "file": "lib/index.js",
+      "variable": "givingBackFocusElements",
+      "before": [
+        "app-layout",
+        "button",
+        "sheet-bar-append-button",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "after": [
+        "app-layout",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "declarations": 1,
+      "parseDiagnostics": 0,
+      "outsideArrayIdentical": true,
+      "actualConsumerMatchesPatchWorkcopy": true
+    },
+    {
+      "file": "lib/es/index.js",
+      "variable": "givingBackFocusElements",
+      "before": [
+        "app-layout",
+        "button",
+        "sheet-bar-append-button",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "after": [
+        "app-layout",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "declarations": 1,
+      "parseDiagnostics": 0,
+      "outsideArrayIdentical": true,
+      "actualConsumerMatchesPatchWorkcopy": true
+    },
+    {
+      "file": "lib/cjs/index.js",
+      "variable": "givingBackFocusElements",
+      "before": [
+        "app-layout",
+        "button",
+        "sheet-bar-append-button",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "after": [
+        "app-layout",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "declarations": 1,
+      "parseDiagnostics": 0,
+      "outsideArrayIdentical": true,
+      "actualConsumerMatchesPatchWorkcopy": true
+    },
+    {
+      "file": "lib/umd/index.js",
+      "variable": "Ri",
+      "before": [
+        "app-layout",
+        "button",
+        "sheet-bar-append-button",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "after": [
+        "app-layout",
+        "render-canvas",
+        "workbench-layout"
+      ],
+      "declarations": 1,
+      "parseDiagnostics": 0,
+      "outsideArrayIdentical": true,
+      "actualConsumerMatchesPatchWorkcopy": true
+    }
+  ],
+  "patch": {
+    "file": "patches/@univerjs%2Fui@0.25.1.patch",
+    "headers": [
+      "lib/cjs/index.js",
+      "lib/cjs/locale/en-US.js",
+      "lib/cjs/locale/zh-CN.js",
+      "lib/es/index.js",
+      "lib/es/locale/en-US.js",
+      "lib/es/locale/zh-CN.js",
+      "lib/index.js",
+      "lib/locale/en-US.js",
+      "lib/locale/zh-CN.js",
+      "lib/types/locale/en-US.d.ts",
+      "lib/umd/index.js",
+      "lib/umd/locale/en-US.js",
+      "lib/umd/locale/zh-CN.js"
+    ],
+    "count": 13,
+    "cacheSections": 0,
+    "unchangedNonRuntime": [
+      {
+        "file": "lib/cjs/locale/en-US.js",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/cjs/locale/zh-CN.js",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/es/locale/en-US.js",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/es/locale/zh-CN.js",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/locale/en-US.js",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/locale/zh-CN.js",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/types/locale/en-US.d.ts",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/umd/locale/en-US.js",
+        "patchSectionIdentical": true
+      },
+      {
+        "file": "lib/umd/locale/zh-CN.js",
+        "patchSectionIdentical": true
+      }
+    ]
+  },
+  "notes": [
+    "Actual source outside each one focus-category array matches saved pre-397 runtime, preserving 389 portal/menu ownership and 392 locale lifecycle and memo changes.",
+    "UMD Ri is the unique three-value array consumed by original zi._initUniverFocusListener; no new binding/import/signature or lifecycle branch.",
+    "App-layout, render-canvas and workbench-layout focus proxies remain in original order; native button and sheet-bar-append-button now reach the existing focus-context branch.",
+    "Business focus calls and shortcut focus contracts remain unchanged because full runtime outside each exact array is identical.",
+    "Initial review found an empty .bun-tag cache diff; root removed the exact three-line section, saved the original and ran frozen install again. Final patch has only original thirteen runtime/locale/type sections."
+  ],
+  "qualification": [
+    "Root owns private build and real desktop Tab/Enter/Space, range/dialog and SheetBar acceptance.",
+    "Static source identity supports preservation of unaffected contracts; does not establish UI behavior, full input-method or independent Docs/mobile coverage."
+  ],
+  "untouched": [
+    "Production files and patches",
+    "Shared documents",
+    "Browsers, services, models and credentials",
+    "UI automation and commits"
+  ],
+  "builtAsset": {
+    "file": ".tmp-spreadsheet-button-focus-397/ui-after/assets/SpreadsheetArtifact-CwAEJkjF.js",
+    "arrays": [
+      {
+        "binding": "Bst",
+        "code": "Bst=[\"app-layout\",\"render-canvas\",\"workbench-layout\"]"
+      }
+    ],
+    "listeners": [
+      "_initUniverFocusListener(){this.disposeWithMe(Bl(window,\"focusin\").subscribe(e=>{var n;const r=e.target;if(!((n=this._rootContainerElement)===null||n===void 0)&&n.contains(r)&&Bst.some(i=>r.dataset.uComp===i)){queueMicrotask(()=>this.focus());return}r&&this.checkElementInCurrentContainers(r)?this._isFocused=!0:this._isFocused=!1,this._contextService.setContextValue(kst,this._isFocused),this._contextService.setContextValue(Ql,sK())}))}",
+      "_initUniverFocusListener(){this.disposeWithMe(Bl(window,\"focusin\").subscribe(e=>{const n=e.target;this._blurSheetEditor(n)}))}"
+    ],
+    "qualification": "Manual static reading of actual built artifact; demonstrates emitted focus list/consumer matches intended runtime semantics, not real interaction acceptance."
+  },
+  "finalInstallLog": ".tmp-spreadsheet-button-focus-397/install-final.log"
+}

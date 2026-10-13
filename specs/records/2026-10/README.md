@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [397 表格按钮键盘焦点](2026-10-13-spreadsheet-button-focus-397.md)：原生按钮焦点、键盘快捷键与动作后编辑回焦。
+
 - [391 历史活动与交接输入](2026-10-13-activity-input-projection-391.md)：两历史读取、真实刷新/Sources及原委派错误事实。
 
 - [Config JSONC 诊断与 Provider 反馈](2026-10-13-config-jsonc-diagnostics.md)：两解析入口、原输入边界和实页资格。

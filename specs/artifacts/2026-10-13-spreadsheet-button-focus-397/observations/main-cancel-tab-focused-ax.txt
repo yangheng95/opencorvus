@@ -1,0 +1,93 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 229-312
+~									228 container
++										229 text 用户
++										230 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为Item，B1为Quantity，A2为Notebook，B2为7，A3为Pen，B3为5，A4为Total，B4公式为=SUM(B2:B3)，计算值为12。请用真实产物发布工具完成，保留这些原始标题和数据，成功后简短说明即可。
++									231 container
++										232 text chat
++										233 text 33 秒
++										234 button (collapsed) Secondary Actions: Expand, Description: publish_interactive_artifact · AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
++											235 text publish_interactive_artifact
++											236 text AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
++											237 text 1 个失败
++										238 container
++											239 button (collapsed) Description: publish_interactive_artifact · Desk budget, Secondary Actions: Expand
++												240 text publish_interactive_artifact
++												241 text Desk budget
++												242 image
++											243 container Desk budget
++												244 container
++													245 text 电子表格
++													246 heading Desk budget, Value: 3
++														247 text Desk budget
++													248 button 复制文本
++													249 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-251-trigger, Secondary Actions: Expand
++													250 button 在作品视图中打开 Desk budget
++												251 text 编辑仅保留在当前视图。离开或折叠前，请下载修改后的工作表 CSV；CSV 仅保留单元格值，不保留公式和格式。
++												252 container Desk budget
++													253 container
++														254 container
++															255 container
++																256 text field (settable) A1
++																257 link (collapsed) Secondary Actions: Expand
++																	258 image
++															259 image univer-doc-main-canvas
++															260 button
++																261 image
++															262 image univer-doc-main-canvas
++															263 image univer-sheet-main-canvas_interactive-artifact-Desk budget
++														264 container 侧边栏面板
++															265 splitter Description: 调整侧边栏宽度, Value: 50
++															266 container
++																267 text 保护行列
++																268 button 关闭侧边栏
++																	269 image
++																270 text 保护区域
++																271 container
++																	272 image univer-doc-main-canvas
++																	273 image
++																274 text 范围不能重叠
++																275 text 权限描述
++																276 text field (settable)
++																277 text 编辑权限
++																278 container
++																	279 radio button (settable, integer) Description: 仅我可以编辑, Value: 1
++																	280 text 仅我可以编辑
++																281 container
++																	282 radio button (settable, integer) Description: 指定用户可以编辑, Value: 0
++																	283 text 指定用户可以编辑
++																284 text 查看权限
++																285 container
++																	286 radio button (settable, integer) Description: 其他人可以查看, Value: 1
++																	287 text 其他人可以查看
++																288 container
++																	289 radio button (settable, integer) Description: 其他人不可以查看, Value: 0
++																	290 text 其他人不可以查看
++																291 button 确认
++																292 button 取消
++														293 container
++															294 button
++																295 image
++															296 button
++																297 image
++															298 tab group 工作表标签
++																299 tab (selected, settable, boolean) 清单, Value: 1
++															300 button
++																301 image
++															302 button
++																303 image
++															304 container
++																305 button
++															306 button
++																307 image
++															308 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
++													309 container 通知 alt+T
++													310 container 通知 alt+T
++										311 container
++											312 text 已发布可编辑的  Desk budget ：仅含“清单”工作表，20行6列，首行冻结；原始数据及 B4 公式均已保留，计算值为12。可直接在表格中编辑。
++										313 button 复制消息
++										314 button (collapsed) Description: 添加局部指令, Secondary Actions: Expand
++										315 pop up button (collapsed) Description: 查看本轮模型用量：94K Token, Secondary Actions: Expand
++										316 text 10月13日 17:22
+The focused UI element is 292 button 取消

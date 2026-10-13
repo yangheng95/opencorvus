@@ -1,0 +1,30 @@
+[
+  {
+    "path": "node_modules/@univerjs/ui/lib/index.js",
+    "file": "lib/index.js",
+    "name": "givingBackFocusElements",
+    "before": "[\n\t\"app-layout\",\n\t\"button\",\n\t\"sheet-bar-append-button\",\n\t\"render-canvas\",\n\t\"workbench-layout\"\n]",
+    "after": "[\n\t\"app-layout\",\n\t\"render-canvas\",\n\t\"workbench-layout\"\n]"
+  },
+  {
+    "path": "node_modules/@univerjs/ui/lib/es/index.js",
+    "file": "lib/es/index.js",
+    "name": "givingBackFocusElements",
+    "before": "[\n\t\"app-layout\",\n\t\"button\",\n\t\"sheet-bar-append-button\",\n\t\"render-canvas\",\n\t\"workbench-layout\"\n]",
+    "after": "[\n\t\"app-layout\",\n\t\"render-canvas\",\n\t\"workbench-layout\"\n]"
+  },
+  {
+    "path": "node_modules/@univerjs/ui/lib/cjs/index.js",
+    "file": "lib/cjs/index.js",
+    "name": "givingBackFocusElements",
+    "before": "[\n\t\"app-layout\",\n\t\"button\",\n\t\"sheet-bar-append-button\",\n\t\"render-canvas\",\n\t\"workbench-layout\"\n]",
+    "after": "[\n\t\"app-layout\",\n\t\"render-canvas\",\n\t\"workbench-layout\"\n]"
+  },
+  {
+    "path": "node_modules/@univerjs/ui/lib/umd/index.js",
+    "file": "lib/umd/index.js",
+    "name": "Ri",
+    "before": "[`app-layout`,`button`,`sheet-bar-append-button`,`render-canvas`,`workbench-layout`]",
+    "after": "[`app-layout`,`render-canvas`,`workbench-layout`]"
+  }
+]

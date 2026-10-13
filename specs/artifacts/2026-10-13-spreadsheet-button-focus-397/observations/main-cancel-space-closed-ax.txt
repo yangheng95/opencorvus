@@ -1,0 +1,57 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 240-316
+~										238 button (collapsed) Description: publish_interactive_artifact · Desk budget, Secondary Actions: Expand
+~											239 text publish_interactive_artifact
++											240 text Desk budget
++											241 image
++										242 container Desk budget
++											243 container
++												244 text 电子表格
++												245 heading Desk budget, Value: 3
++													246 text Desk budget
++												247 button 复制文本
++												248 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-251-trigger, Secondary Actions: Expand
++												249 button 在作品视图中打开 Desk budget
++											250 text 编辑仅保留在当前视图。离开或折叠前，请下载修改后的工作表 CSV；CSV 仅保留单元格值，不保留公式和格式。
++											251 container Desk budget
++												252 container
++													253 container
++														254 container
++															255 container
++																256 text field (settable) A1
++																257 link (collapsed) Secondary Actions: Expand
++																	258 image
++															259 image univer-doc-main-canvas
++															260 image
++															261 button
++																262 image
++														263 container
++															264 image univer-doc-main-canvas
++															265 image univer-sheet-main-canvas_interactive-artifact-Desk budget
++														266 container 侧边栏面板
++															267 container
++																268 text 保护行列
++																269 button 关闭侧边栏
++																	270 image
++													271 container
++														272 button
++															273 image
++														274 button
++															275 image
++														276 tab group 工作表标签
++															277 tab (selected, settable, boolean) 清单, Value: 1
++														278 button
++															279 image
++														280 button
++															281 image
++														282 container
++															283 button
++														284 button
++															285 image
++														286 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
++												287 container 通知 alt+T
++												288 container 通知 alt+T
++										289 container
++											290 text 已发布可编辑的  Desk budget ：仅含“清单”工作表，20行6列，首行冻结；原始数据及 B4 公式均已保留，计算值为12。可直接在表格中编辑。
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18505/ui/

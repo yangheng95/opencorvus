@@ -1,0 +1,185 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18505/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					65 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-340-trigger, Secondary Actions: Expand
+					66 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-342-trigger, Secondary Actions: Expand
+					67 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-344-trigger, Secondary Actions: Expand
+					68 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-346-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: 对话快捷入口, ID: workspaceNavigation
+					12 container 对话快捷入口
+						13 button 对话
+						14 button Mission 看板
+						15 button 定时
+						16 button 专家团
+						17 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-120-trigger, Secondary Actions: Expand
+						18 button 设置
+					19 button 关于
+					20 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				69 container workspacePageStack
+					70 container leftActivityShell
+						71 container workspaceContextbar
+							72 link Description: OpenCorvus 官网, Value: opencorvus.com/zh-cn/
+							73 button 搜索任务或运行命令
+							74 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						75 container sidebar
+							76 container workLedgerPanel
+								77 container 对话导航
+									78 button 新对话
+								79 container workLedgerProjectsScroll
+									80 text 项目
+									81 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									82 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									83 container
+										84 button (expanded) Description: 收起 匿名项目 c846f4, Secondary Actions: Collapse
+										85 container
+											86 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											87 button 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+											88 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-188-trigger, Secondary Actions: Expand
+										89 button (expanded) Description: 收起 匿名项目 bb5ca9, Secondary Actions: Collapse
+										90 container
+											91 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											92 button Reply with OK.
+											93 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+										94 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+									95 container 最近
+										96 text 最近
+										97 container
+											98 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											99 button 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+											100 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-214-trigger, Secondary Actions: Expand
+										101 container
+											102 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											103 button Reply with OK.
+											104 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-220-trigger, Secondary Actions: Expand
+							105 container 连接诊断
+								106 container Description: 连接诊断 · 在线 · 端口 18505, ID: connBadge
+									107 text 在线
+					108 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					109 container chatSection
+						110 container Description: 正在加载 Task, ID: taskSwitchProgress
+						111 container
+							112 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+							113 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-230-trigger, Secondary Actions: Expand
+							114 container Description: 非进行中, ID: taskStatus
+								115 text 非进行中
+							116 button 侧聊
+							117 container solidChatHeaderRuntimeActions
+								118 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+								119 checkbox Description: 打开右侧面板, Value: 0
+						120 container
+							121 container Description: 对话, ID: chatScroll
+								122 container
+									123 container
+										124 text 用户
+										125 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为Item，B1为Quantity，A2为Notebook，B2为7，A3为Pen，B3为5，A4为Total，B4公式为=SUM(B2:B3)，计算值为12。请用真实产物发布工具完成，保留这些原始标题和数据，成功后简短说明即可。
+									126 container
+										127 text chat
+										128 text 33 秒
+										129 button (collapsed) Secondary Actions: Expand, Description: publish_interactive_artifact · AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
+											130 text publish_interactive_artifact
+											131 text AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
+											132 text 1 个失败
+										133 button (collapsed) Description: publish_interactive_artifact · Desk budget, Secondary Actions: Expand
+											134 text publish_interactive_artifact
+											135 text Desk budget
+											136 image
+										137 container Desk budget
+											138 container
+												139 text 电子表格
+												140 heading Desk budget, Value: 3
+													141 text Desk budget
+												142 button 复制文本
+												143 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-251-trigger, Secondary Actions: Expand
+												144 button 在作品视图中打开 Desk budget
+											145 text 编辑仅保留在当前视图。离开或折叠前，请下载修改后的工作表 CSV；CSV 仅保留单元格值，不保留公式和格式。
+											146 container Desk budget
+												147 container
+													148 container
+														149 container
+															150 text field (settable) A1
+															151 link (collapsed) Secondary Actions: Expand
+																152 image
+														153 image univer-doc-main-canvas
+														154 button
+															155 image
+														156 image univer-doc-main-canvas
+														157 image univer-sheet-main-canvas_interactive-artifact-Desk budget
+													158 container 侧边栏面板
+														159 splitter Description: 调整侧边栏宽度, Value: 50
+														160 container
+															161 text 保护行列
+															162 button 关闭侧边栏
+																163 image
+															164 text 保护区域
+															165 container
+																166 image univer-doc-main-canvas
+																167 image
+															168 text 范围不能重叠
+															169 text 权限描述
+															170 text field (settable)
+															171 text 编辑权限
+															172 container
+																173 radio button (settable, integer) Description: 仅我可以编辑, Value: 1
+																174 text 仅我可以编辑
+															175 container
+																176 radio button (settable, integer) Description: 指定用户可以编辑, Value: 0
+																177 text 指定用户可以编辑
+															178 text 查看权限
+															179 container
+																180 radio button (settable, integer) Description: 其他人可以查看, Value: 1
+																181 text 其他人可以查看
+															182 container
+																183 radio button (settable, integer) Description: 其他人不可以查看, Value: 0
+																184 text 其他人不可以查看
+															185 button 确认
+															186 button 取消
+													187 container
+														188 button
+															189 image
+														190 button
+															191 image
+														192 tab group 工作表标签
+															193 tab (selected, settable, boolean) 清单, Value: 1
+														194 button
+															195 image
+														196 button
+															197 image
+														198 container
+															199 button
+														200 button
+															201 image
+														202 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
+												203 container 通知 alt+T
+												204 container 通知 alt+T
+										205 container
+											206 text 已发布可编辑的  Desk budget ：仅含“清单”工作表，20行6列，首行冻结；原始数据及 B4 公式均已保留，计算值为12。可直接在表格中编辑。
+							207 container chatHomeComposition
+								208 container solidChatComposer
+									209 container
+										210 text 模型配置暂不可用
+										211 text 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+										212 button (collapsed) 详细信息, Secondary Actions: Expand
+											213 text 详细信息
+										214 button 重试
+										215 container chatForm
+											216 splitter Description: 拖拽调整消息输入框大小, Value: 42
+											217 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+											218 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											219 text Code
+											220 text Chat
+											221 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											222 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											223 pop up button (collapsed) Description: OpenCorvus 模型 选择模型，点击切换, Help: OpenCorvus 模型：选择模型, Secondary Actions: Expand
+												224 text 选择模型
+											225 button (disabled) Description: 发送, Help: 请先选择模型，再发送消息。, ID: chatSend
+									226 button 滚动到底部
+		227 container 设置 设置, ID: tooltip-cl-123-content
+			228 text 设置
+			229 text 设置
+
+The focused UI element is 18 button 设置

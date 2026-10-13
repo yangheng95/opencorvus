@@ -1,0 +1,653 @@
+{
+  "iteration": 397,
+  "selection": "Explicit allowlist: 17 screenshot files, all 40 named observations, four implementation/review records, named patch/build/install logs, final and rejected-cache patch snapshots, actual CSV and five own scope records. No UI build, full vendor, runtime database, environment, auth or models.",
+  "historicalReview": "final-review.mjs was archived without rerunning it; original reviewedAt and observations remain unchanged.",
+  "generatedDocuments": [
+    "README.md",
+    "archive-check.json"
+  ],
+  "files": [
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/add-enter-detail.jpg",
+      "path": "screenshots/add-enter-detail.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 76781,
+      "archivedBytes": 76781,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "add-enter-detail.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/add-real-tab-focused.jpg",
+      "path": "screenshots/add-real-tab-focused.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 76985,
+      "archivedBytes": 76985,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "add-real-tab-focused.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/add-space-detail.jpg",
+      "path": "screenshots/add-space-detail.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 73551,
+      "archivedBytes": 73551,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "add-space-detail.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/color-cancel-tab-focused.jpg",
+      "path": "screenshots/color-cancel-tab-focused.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 39343,
+      "archivedBytes": 39343,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "color-cancel-tab-focused.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/context-return-edit-9-5-14.jpg",
+      "path": "screenshots/context-return-edit-9-5-14.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 73413,
+      "archivedBytes": 73413,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "context-return-edit-9-5-14.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/fullscreen-add-space-detail.jpg",
+      "path": "screenshots/fullscreen-add-space-detail.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 71788,
+      "archivedBytes": 71788,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "fullscreen-add-space-detail.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/permission-created-visible.jpg",
+      "path": "screenshots/permission-created-visible.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 74420,
+      "archivedBytes": 74420,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "permission-created-visible.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/permission-enter-created.jpg",
+      "path": "screenshots/permission-enter-created.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 69675,
+      "archivedBytes": 69675,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "permission-enter-created.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/range-confirm-tab-focused.jpg",
+      "path": "screenshots/range-confirm-tab-focused.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 82817,
+      "archivedBytes": 82817,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "range-confirm-tab-focused.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/range-space-confirm-overlap.jpg",
+      "path": "screenshots/range-space-confirm-overlap.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 83045,
+      "archivedBytes": 83045,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "range-space-confirm-overlap.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/sheet-add-space-created.jpg",
+      "path": "screenshots/sheet-add-space-created.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 69609,
+      "archivedBytes": 69609,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "sheet-add-space-created.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/sheet-menu-enter-open.jpg",
+      "path": "screenshots/sheet-menu-enter-open.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 68303,
+      "archivedBytes": 68303,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "sheet-menu-enter-open.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/sheet-menu-real-tab-focused.jpg",
+      "path": "screenshots/sheet-menu-real-tab-focused.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 68845,
+      "archivedBytes": 68845,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "sheet-menu-real-tab-focused.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/sheet-menu-tab-focused.jpg",
+      "path": "screenshots/sheet-menu-tab-focused.jpg",
+      "compression": "none",
+      "qualification": "Retained initial BODY focus failure; success is separately named sheet-menu-real-tab-focused.jpg",
+      "sourceBytes": 71443,
+      "archivedBytes": 71443,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "sheet-menu-tab-focused.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/zh-overlap-preserved.jpg",
+      "path": "screenshots/zh-overlap-preserved.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 77641,
+      "archivedBytes": 77641,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "zh-overlap-preserved.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/zoom-enter-menu.jpg",
+      "path": "screenshots/zoom-enter-menu.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 72946,
+      "archivedBytes": 72946,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "zoom-enter-menu.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/screenshots/zoom-tab-focused.jpg",
+      "path": "screenshots/zoom-tab-focused.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG pixels; Root manually reviewed screenshot",
+      "sourceBytes": 71312,
+      "archivedBytes": 71312,
+      "mediaType": "image/jpeg",
+      "sourceFilename": "zoom-tab-focused.jpg"
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/add-enter-detail-ax.txt",
+      "path": "observations/add-enter-detail-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 1444,
+      "archivedBytes": 1444
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/add-enter-detail.json",
+      "path": "observations/add-enter-detail.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 90,
+      "archivedBytes": 90
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/add-real-tab-focused-ax.txt",
+      "path": "observations/add-real-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 791,
+      "archivedBytes": 791
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/add-real-tab-focused.json",
+      "path": "observations/add-real-tab-focused.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 113,
+      "archivedBytes": 113
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/add-space-detail-ax.txt",
+      "path": "observations/add-space-detail-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 1919,
+      "archivedBytes": 1919
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/add-space-tab-focused-ax.txt",
+      "path": "observations/add-space-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 330,
+      "archivedBytes": 330
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/color-cancel-tab-focused-ax.txt",
+      "path": "observations/color-cancel-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 1070,
+      "archivedBytes": 1070
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/color-first-escape-ax.txt",
+      "path": "observations/color-first-escape-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 5383,
+      "archivedBytes": 5383
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/color-space-cancel-ax.txt",
+      "path": "observations/color-space-cancel-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 12644,
+      "archivedBytes": 12644
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/context-copy-navigation-A3-ax.txt",
+      "path": "observations/context-copy-navigation-A3-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 333,
+      "archivedBytes": 333
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/context-copy-return-focus-ax.txt",
+      "path": "observations/context-copy-return-focus-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 315,
+      "archivedBytes": 315
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/context-copy-return-focus.json",
+      "path": "observations/context-copy-return-focus.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 127,
+      "archivedBytes": 127
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/context-return-edit-9-5-14-ax.txt",
+      "path": "observations/context-return-edit-9-5-14-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 333,
+      "archivedBytes": 333
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/csv-byte-review.json",
+      "path": "observations/csv-byte-review.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 299,
+      "archivedBytes": 299
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/csv-download.json",
+      "path": "observations/csv-download.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 187,
+      "archivedBytes": 187
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/final-en-ax.txt",
+      "path": "observations/final-en-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 11750,
+      "archivedBytes": 11750
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/final-review.json",
+      "path": "observations/final-review.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 5753,
+      "archivedBytes": 5753
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/fullscreen-add-space-detail-ax.txt",
+      "path": "observations/fullscreen-add-space-detail-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 1192,
+      "archivedBytes": 1192
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/fullscreen-add-tab-focused-ax.txt",
+      "path": "observations/fullscreen-add-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 178,
+      "archivedBytes": 178
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/fullscreen-range-cancel-enter-ax.txt",
+      "path": "observations/fullscreen-range-cancel-enter-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 415,
+      "archivedBytes": 415
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/fullscreen-range-cancel-focused-ax.txt",
+      "path": "observations/fullscreen-range-cancel-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 168,
+      "archivedBytes": 168
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/main-cancel-space-closed-ax.txt",
+      "path": "observations/main-cancel-space-closed-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 2772,
+      "archivedBytes": 2772
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/main-cancel-tab-focused-ax.txt",
+      "path": "observations/main-cancel-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 6930,
+      "archivedBytes": 6930
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/page-closed.json",
+      "path": "observations/page-closed.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 279,
+      "archivedBytes": 279
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/permission-confirm-focused-ax.txt",
+      "path": "observations/permission-confirm-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 849,
+      "archivedBytes": 849
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/permission-enter-created-ax.txt",
+      "path": "observations/permission-enter-created-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 904,
+      "archivedBytes": 904
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/range-add-tab-focused-ax.txt",
+      "path": "observations/range-add-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 329,
+      "archivedBytes": 329
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/range-confirm-tab-focused-ax.txt",
+      "path": "observations/range-confirm-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 169,
+      "archivedBytes": 169
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/range-space-confirm-overlap-ax.txt",
+      "path": "observations/range-space-confirm-overlap-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 397,
+      "archivedBytes": 397
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/sheet-add-shift-tab-focused-ax.txt",
+      "path": "observations/sheet-add-shift-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 161,
+      "archivedBytes": 161
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/sheet-add-space-created-ax.txt",
+      "path": "observations/sheet-add-space-created-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 511,
+      "archivedBytes": 511
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/sheet-menu-enter-open-ax.txt",
+      "path": "observations/sheet-menu-enter-open-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 379,
+      "archivedBytes": 379
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/sheet-menu-real-tab-focused-ax.txt",
+      "path": "observations/sheet-menu-real-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 161,
+      "archivedBytes": 161
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/sheet-menu-real-tab-focused.json",
+      "path": "observations/sheet-menu-real-tab-focused.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 110,
+      "archivedBytes": 110
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/temporary-rule-cleaned-ax.txt",
+      "path": "observations/temporary-rule-cleaned-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 563,
+      "archivedBytes": 563
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/temporary-sheet-cleaned-ax.txt",
+      "path": "observations/temporary-sheet-cleaned-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 11900,
+      "archivedBytes": 11900
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/zh-overlap-preserved-ax.txt",
+      "path": "observations/zh-overlap-preserved-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 12752,
+      "archivedBytes": 12752
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/zoom-enter-menu-ax.txt",
+      "path": "observations/zoom-enter-menu-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 626,
+      "archivedBytes": 626
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/zoom-tab-focused-ax.txt",
+      "path": "observations/zoom-tab-focused-ax.txt",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 228,
+      "archivedBytes": 228
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/observations/zoom-tab-focused.json",
+      "path": "observations/zoom-tab-focused.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 96,
+      "archivedBytes": 96
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/apply-vendor.mjs",
+      "path": "implementation/apply-vendor.mjs",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 2242,
+      "archivedBytes": 2242
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/vendor-files.json",
+      "path": "implementation/vendor-files.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 1347,
+      "archivedBytes": 1347
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/independent-review.json",
+      "path": "implementation/independent-review.json",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 6321,
+      "archivedBytes": 6321
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/final-review.mjs",
+      "path": "implementation/final-review.mjs",
+      "compression": "none",
+      "qualification": "Original evidence",
+      "sourceBytes": 4841,
+      "archivedBytes": 4841
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/patch-prepare.log",
+      "path": "logs/patch-prepare.log.gz",
+      "compression": "gzip",
+      "qualification": "Original evidence",
+      "sourceBytes": 356,
+      "archivedBytes": 258
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/patch-commit.log",
+      "path": "logs/patch-commit.log.gz",
+      "compression": "gzip",
+      "qualification": "Original evidence",
+      "sourceBytes": 137,
+      "archivedBytes": 138
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/install.log",
+      "path": "logs/install.log.gz",
+      "compression": "gzip",
+      "qualification": "Original evidence",
+      "sourceBytes": 178,
+      "archivedBytes": 164
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/install-final.log",
+      "path": "logs/install-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original evidence",
+      "sourceBytes": 143,
+      "archivedBytes": 138
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/typecheck.log",
+      "path": "logs/typecheck.log.gz",
+      "compression": "gzip",
+      "qualification": "Original evidence",
+      "sourceBytes": 16,
+      "archivedBytes": 36
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/build.log",
+      "path": "logs/build.log.gz",
+      "compression": "gzip",
+      "qualification": "Original evidence",
+      "sourceBytes": 69034,
+      "archivedBytes": 10853
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/docs-plan.log",
+      "path": "logs/docs-plan.log.gz",
+      "compression": "gzip",
+      "qualification": "Original evidence",
+      "sourceBytes": 106,
+      "archivedBytes": 115
+    },
+    {
+      "source": "patches/@univerjs%2Fui@0.25.1.patch",
+      "path": "implementation/ui-final.patch.gz",
+      "compression": "gzip",
+      "qualification": "Final thirteen-file UI patch, including inherited 389/392 changes",
+      "sourceBytes": 688134,
+      "archivedBytes": 182242
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/ui.patch-with-empty-cache",
+      "path": "implementation/ui-rejected-empty-cache.patch.gz",
+      "compression": "gzip",
+      "qualification": "Intermediate patch with unwanted empty cache section; retained as rejected review evidence, not final installation",
+      "sourceBytes": 688337,
+      "archivedBytes": 182348
+    },
+    {
+      "source": ".tmp-spreadsheet-button-focus-397/edited-normal.csv",
+      "path": "downloads/edited-normal.csv.gz",
+      "compression": "gzip",
+      "qualification": "Actual browser download, exact 61 bytes; UTF-8 BOM, three CRLF, no terminal newline",
+      "sourceBytes": 61,
+      "archivedBytes": 77
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/397-after/owner.json",
+      "path": "logs/final/owner.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless 397-after scope; no environment or credential directories",
+      "sourceBytes": 154,
+      "archivedBytes": 149
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/397-after/ready.json",
+      "path": "logs/final/ready.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless 397-after scope; no environment or credential directories",
+      "sourceBytes": 343,
+      "archivedBytes": 252
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/397-after/terminal.json",
+      "path": "logs/final/terminal.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless 397-after scope; no environment or credential directories",
+      "sourceBytes": 211,
+      "archivedBytes": 170
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/397-after/stdout.log",
+      "path": "logs/final/stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless 397-after scope; no environment or credential directories",
+      "sourceBytes": 51,
+      "archivedBytes": 69
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/397-after/stderr.log",
+      "path": "logs/final/stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless 397-after scope; no environment or credential directories",
+      "sourceBytes": 115784,
+      "archivedBytes": 10155
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [397 表格按钮键盘焦点](2026-10-13-spreadsheet-button-focus-397/README.md)：真实Tab/Enter/Space、范围/规则、菜单回焦、CSV与正常owner收尾。
+
 - [391 历史活动与交接输入](2026-10-05-connection-workspace-authority/activity-input-projection-391/README.md)：数据库、公开投影和实际刷新截图。
 
 - [Config JSONC 诊断与 Provider 反馈](2026-10-13-config-jsonc-diagnostics/README.md)：真实HTTP、正向诊断与桌面故障/恢复。

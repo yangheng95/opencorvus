@@ -1,0 +1,7 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~																	184 text field (settable) A1
+~																205 tab (selectable, settable, boolean) 清单, Value: 0
++																223 tab (selected, settable, boolean) 工作表1, Value: 1
++													224 container
+The focused UI element is 224 container
