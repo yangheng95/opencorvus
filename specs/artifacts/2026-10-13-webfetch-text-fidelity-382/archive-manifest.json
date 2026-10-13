@@ -1,0 +1,262 @@
+{
+  "source": ".tmp-webfetch-text-fidelity-382/archive-allowlist.json",
+  "sourceBoundary": "Exact allowlist only. No auth.json, models.json, database, attachment store, home, configuration directory or whole runtime directory is authorized for archive. Runtime dev.log is a separately selected redacted compressed text export.",
+  "entries": [
+    {
+      "name": "before.log.gz",
+      "bytes": 1486
+    },
+    {
+      "name": "before.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "after.log.gz",
+      "bytes": 5257
+    },
+    {
+      "name": "after.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "recheck-link-base.log.gz",
+      "bytes": 588
+    },
+    {
+      "name": "recheck-link-base.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "diff-check.log.gz",
+      "bytes": 20
+    },
+    {
+      "name": "diff-check.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "builtin.json",
+      "bytes": 53
+    },
+    {
+      "name": "resource-documents.json",
+      "bytes": 929
+    },
+    {
+      "name": "resource-documents-02.json",
+      "bytes": 929
+    },
+    {
+      "name": "resource-server.log.gz",
+      "bytes": 358
+    },
+    {
+      "name": "resource-server.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "resource-server-02.log.gz",
+      "bytes": 145
+    },
+    {
+      "name": "resource-server-02.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "resource-owner.json",
+      "bytes": 192
+    },
+    {
+      "name": "resource-settled.json",
+      "bytes": 484
+    },
+    {
+      "name": "resource-shutdown.json",
+      "bytes": 20
+    },
+    {
+      "name": "resources.mjs",
+      "bytes": 3040
+    },
+    {
+      "name": "start-chat.mjs",
+      "bytes": 1733
+    },
+    {
+      "name": "observe-chat.mjs",
+      "bytes": 1096
+    },
+    {
+      "name": "check-live.ts",
+      "bytes": 6649
+    },
+    {
+      "name": "chat-input.json",
+      "bytes": 458
+    },
+    {
+      "name": "chat-accepted.json",
+      "bytes": 3792
+    },
+    {
+      "name": "chat-start.log.gz",
+      "bytes": 272
+    },
+    {
+      "name": "chat-start.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "live-canonical.json",
+      "bytes": 13189
+    },
+    {
+      "name": "live-provider-audit.json",
+      "bytes": 105540
+    },
+    {
+      "name": "live-check.json",
+      "bytes": 1158
+    },
+    {
+      "name": "live-check.log.gz",
+      "bytes": 612
+    },
+    {
+      "name": "live-check.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "provider-launcher.log.gz",
+      "bytes": 373
+    },
+    {
+      "name": "provider-launcher.exit.txt",
+      "bytes": 0
+    },
+    {
+      "name": "provider-shutdown.log.gz",
+      "bytes": 91
+    },
+    {
+      "name": "provider-shutdown.exit.txt",
+      "bytes": 3
+    },
+    {
+      "name": "owner-handle-joins.json",
+      "bytes": 643
+    },
+    {
+      "name": "provider-run/startup.json",
+      "bytes": 170
+    },
+    {
+      "name": "provider-run/launch-owner.json",
+      "bytes": 3261
+    },
+    {
+      "name": "provider-run/stdout.log.gz",
+      "bytes": 355
+    },
+    {
+      "name": "provider-run/stderr.log.gz",
+      "bytes": 753
+    },
+    {
+      "name": "provider-run/runtime/log/dev.log.gz",
+      "bytes": 110343
+    },
+    {
+      "name": "provider-run/evidence/authority-ready.json",
+      "bytes": 15802
+    },
+    {
+      "name": "provider-run/evidence/managed-parent-ready.json",
+      "bytes": 520
+    },
+    {
+      "name": "provider-run/evidence/native-host-ready.json",
+      "bytes": 1770
+    },
+    {
+      "name": "provider-run/evidence/native-host-settled.json",
+      "bytes": 939
+    },
+    {
+      "name": "provider-run/evidence/owned-config-hierarchy.json",
+      "bytes": 714
+    },
+    {
+      "name": "provider-run/evidence/preflight-ready.json",
+      "bytes": 709
+    },
+    {
+      "name": "provider-run/evidence/profile-selection-admitted.json",
+      "bytes": 247
+    },
+    {
+      "name": "provider-run/evidence/project-baseline.json",
+      "bytes": 443
+    },
+    {
+      "name": "provider-run/evidence/provider-pair-staging.json",
+      "bytes": 1653
+    },
+    {
+      "name": "provider-live/webfetch-text-fidelity-382-live-final-provider-audit.json",
+      "bytes": 109184
+    },
+    {
+      "name": "provider-live/webfetch-text-fidelity-382-live-physical-terminal-and-pair-cleanup.json",
+      "bytes": 2437
+    },
+    {
+      "name": "provider-live/webfetch-text-fidelity-382-live-qualified-surface-completion.json",
+      "bytes": 361
+    },
+    {
+      "name": "provider-live/webfetch-text-fidelity-382-live-settlement-owner.json",
+      "bytes": 465
+    },
+    {
+      "name": "provider-live/webfetch-text-fidelity-382-live-shutdown-admission.json",
+      "bytes": 547
+    },
+    {
+      "name": "screenshots/html-tool-output.png",
+      "bytes": 54980
+    },
+    {
+      "name": "screenshots/markdown-blank-lines.png",
+      "bytes": 76179
+    },
+    {
+      "name": "screenshots/markdown-complete-output.png",
+      "bytes": 53967
+    },
+    {
+      "name": "screenshots/markdown-tool-output.png",
+      "bytes": 59097
+    },
+    {
+      "name": "screenshots/sol-completed.png",
+      "bytes": 85382
+    }
+  ],
+  "entryCount": 60,
+  "standalone": {
+    "check-live.ts": "check-live.ts",
+    "live-check.json": "live-check.json",
+    "live-check.exit.txt": "live-check.exit.txt",
+    "live-canonical.json": "live-canonical.json",
+    "resource-documents-02.json": "resource-documents.json",
+    "provider-live/webfetch-text-fidelity-382-live-qualified-surface-completion.json": "runtime-completion.json",
+    "provider-live/webfetch-text-fidelity-382-live-physical-terminal-and-pair-cleanup.json": "physical-cleanup.json",
+    "screenshots/html-tool-output.png": "html-tool-output.png",
+    "screenshots/markdown-complete-output.png": "markdown-complete-output.png",
+    "screenshots/markdown-blank-lines.png": "markdown-blank-lines.png"
+  },
+  "validation": "Exact entry inventory and decompressed bytes equal the 60 selected archive-safe files; packing validation only, not functional acceptance.",
+  "screenshots": "Root owns visual review; clipboard read returned empty and is not qualified.",
+  "sourceKnownCredentialScan": "passed after in-memory redaction; credential values never emitted"
+}

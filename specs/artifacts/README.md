@@ -2,6 +2,8 @@
 
 - [持续目标模式验收](2026-10-13-continuous-goal-mode/README.md)：三种真实模型执行、Task 跨轮次重开、计量与最终桌面截图。
 
+- [网页读取的语义空白保真](2026-10-13-webfetch-text-fidelity-382/README.md)：聚焦正向测试、真实流式模型、持久化正文与桌面截图。
+
 - [PDF 文档链接](2026-10-13-pdf-links-381/README.md)：真实输入、目的地正向合同、双语桌面交互和截图复核。
 
 - [用量时间边界与键盘操作](2026-10-13-usage-time-boundaries/README.md)：真实双语桌面截图、32项正向测试与生产HTTP统计。

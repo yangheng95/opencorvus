@@ -3,6 +3,8 @@
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
 - [持续目标验收证据](../../artifacts/2026-10-13-continuous-goal-mode/README.md)：流式模型事实、Task 重开和桌面视觉复核。
 
+- [382 网页读取的语义空白保真](2026-10-13-webfetch-text-fidelity-382.md)：硬换行、代码缩进与原始文本输出边界。
+
 - [382 工具结果恢复断点](2026-10-13-source-result-recovery-382.md)：真实读取、持久化中断边界及共享恢复入口审计。
 
 - [用量自然周期、时间桶与控件生命周期](2026-10-13-usage-time-boundaries.md)：共享边界根因、正向统计合同和真实桌面验收。
