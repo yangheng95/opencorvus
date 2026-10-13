@@ -36,6 +36,8 @@ Root独立全文解析首轮和最终原日志，报告与逐请求清单见[gua
 
 ### 本次 current Move 修复的冻结合同与影响
 
+当前修复与完整新证据已经范围提交9a8c1a856759009c0f1f461a3c8a9c51732c5bce，266文件；real index仅精确收回own patch后为空，产品三个文件clean，私有index中的613件本目录不可变原件与工作区逐字节相同。随后Root发现归档器统一大文件gzip使11张原JPEG不能直接打开，限定转为同原bytes的native JPEG并更新准确manifest/本README；旧压缩表示在Git历史保存，不保双表示或改图。该纯归档呈现修正不改变已资格产品/source，不重复功能运行；文档与正常hooks仍需当前最终检查。最新upstream合并、完整待推送集合核查和push尚待原结果，不把此前020检查点push借为产品交付。
+
 Root完成当前实现/归档/三个共享索引owned条目及07-panel精确合同更新后，当前package.json文档checker真实0（345 operations、26 groups），architecture-index真实0（19 current documents）；原完整log/exit另保guard/validation。共享README/07-panel其余owner差异先保存并审阅，提交只用最新HEAD加本任务条目/段落，不能把Provider或权限并行改动混入。
 
 独立code review全文核未发现P0/P1/P2功能阻断，指出两诊断边界。Root采最小修正：post/addressed两原lstat以成熟allSettled收齐首错/第二错；native只有CreateFileW的已资格Win322/3映射ENOENT，Tag/name/Close同码保原WIN32_x不猜missing，避免unknown观察错误变400/404。没有注入未知I/O/native/close失败实验，真实失败分支仍未验。首聚焦实际link30/root18共48pass0fail且runner原0/typecheck0已保，修正后重跑直接受影响linkchecker与类型；root准入语义不变，不借首0覆盖修后版本。
