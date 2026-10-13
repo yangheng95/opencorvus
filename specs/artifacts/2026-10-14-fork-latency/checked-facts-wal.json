@@ -1,0 +1,251 @@
+{
+  "databaseVersion": 1,
+  "mainSessionID": "ses_-zUS2EY0ezzjFidQwBy1",
+  "main": {
+    "messages": 38,
+    "completedAssistantBodies": 37,
+    "distinctBodies": 37,
+    "completedReadTools": 36,
+    "sources": 36
+  },
+  "sides": [
+    {
+      "sessionID": "ses_-zUS2E8Z9zzV803ehiiw",
+      "inheritedMessages": 0,
+      "creationBoundary": "Prior batch: before the first completed source reply"
+    },
+    {
+      "sessionID": "ses_-zUS2D0OTzz6DReA7jYC",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS250DzzzAkXuwQ0h8",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS23bjwzzk60qsn78D",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1xW3Jzzy7kQnG09z",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1xHuozzyYICkmJf0",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1vYAQzzJO3JPoVhP",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1raAkzznMOckYhdU",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1rAI8zzEXyqikZwg",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1oUv0zzek4hkt0vD",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1oGt6zzqusQDo5v1",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1nE3ozzM6MU4PF3g",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS1kIimzzXLddt8IC0",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "Exact payload equality with message/tool identity remap"
+    }
+  ],
+  "audits": [
+    {
+      "name": "before",
+      "requests": 4,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF for each actual request",
+      "physicalExit": 0,
+      "pairCleanup": true
+    },
+    {
+      "name": "timing",
+      "requests": 0,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF for each actual request",
+      "physicalExit": 1,
+      "pairCleanup": true
+    },
+    {
+      "name": "timing-02",
+      "requests": 3,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF for each actual request",
+      "physicalExit": 0,
+      "pairCleanup": true
+    },
+    {
+      "name": "after",
+      "requests": 4,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF for each actual request",
+      "physicalExit": 0,
+      "pairCleanup": true
+    },
+    {
+      "name": "after-256",
+      "requests": 4,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF for each actual request",
+      "physicalExit": 0,
+      "pairCleanup": true
+    },
+    {
+      "name": "commit",
+      "requests": 3,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF for each actual request",
+      "physicalExit": 0,
+      "pairCleanup": true
+    },
+    {
+      "name": "wal",
+      "requests": 3,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF for each actual request",
+      "physicalExit": 0,
+      "pairCleanup": true
+    }
+  ],
+  "totalModelRequests": 21,
+  "observations": [
+    {
+      "name": "after",
+      "target": "ses_-zUS1raAkzznMOckYhdU",
+      "copyMs": 7490.045800000001,
+      "settledMs": 7603.7429,
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "healthMaximumMs": 374.3674
+    },
+    {
+      "name": "256",
+      "target": "ses_-zUS1oUv0zzek4hkt0vD",
+      "copyMs": 7659.5873,
+      "settledMs": 7745.276,
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "healthMaximumMs": 614.4863
+    },
+    {
+      "name": "commit",
+      "target": "ses_-zUS1nE3ozzM6MU4PF3g",
+      "copyMs": 9094.9784,
+      "settledMs": 9187.282700000002,
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "healthMaximumMs": 804.0587
+    },
+    {
+      "name": "wal",
+      "target": "ses_-zUS1kIimzzXLddt8IC0",
+      "copyMs": 9677.6644,
+      "settledMs": 9774.668899999999,
+      "receipt": {
+        "publications": 263,
+        "phases": 789
+      },
+      "healthMaximumMs": 907.9021
+    }
+  ],
+  "boundary": "Actual read-only SQLite and public HTTP/source/provider/physical facts. UI screenshots separately establish visual scope. Side copies add no new read executions or sources; total copy latency remains above the 5000ms target."
+}

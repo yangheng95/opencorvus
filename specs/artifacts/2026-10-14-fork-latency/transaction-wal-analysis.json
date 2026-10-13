@@ -1,0 +1,385 @@
+{
+  "pragma": {
+    "journal_mode": {
+      "journal_mode": "wal"
+    },
+    "synchronous": {
+      "synchronous": 1
+    },
+    "wal_autocheckpoint": {
+      "wal_autocheckpoint": 1000
+    },
+    "cache_size": {
+      "cache_size": -64000
+    },
+    "auto_vacuum": {
+      "auto_vacuum": 2
+    }
+  },
+  "commits": [
+    {
+      "beganAt": 1791930008498,
+      "durationMs": 386.9591999999975,
+      "beginMs": 0.2871000000013737,
+      "bodyMs": 104.74519999999757,
+      "commitMs": 281.92689999999857,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 47000,
+        "system": 203000
+      },
+      "walBefore": {
+        "bytes": 4161232,
+        "modifiedAt": 1791930008358.034
+      },
+      "walAfter": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930008609.5396
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 898,
+        "nPage": 12815,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade2fb9df3c84"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1376,
+        "nPage": 12848,
+        "nBackfill": 1376,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade2fb9df3c84"
+      }
+    },
+    {
+      "beganAt": 1791930009156,
+      "durationMs": 540.8380000000034,
+      "beginMs": 0.27660000000469154,
+      "bodyMs": 122.90909999999712,
+      "commitMs": 417.65230000000156,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 94000,
+        "system": 313000
+      },
+      "walBefore": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930009090.7598
+      },
+      "walAfter": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930009285.8997
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 479,
+        "nPage": 12877,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade30899ee3d0"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1079,
+        "nPage": 12921,
+        "nBackfill": 1079,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade30899ee3d0"
+      }
+    },
+    {
+      "beganAt": 1791930010104,
+      "durationMs": 503.79819999999745,
+      "beginMs": 0.5718999999953667,
+      "bodyMs": 131.9441999999981,
+      "commitMs": 371.282100000004,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 31000,
+        "system": 328000
+      },
+      "walBefore": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930010078.6045
+      },
+      "walAfter": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930010239.4749
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 574,
+        "nPage": 12960,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade31efcceddb"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1097,
+        "nPage": 12988,
+        "nBackfill": 1097,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade31efcceddb"
+      }
+    },
+    {
+      "beganAt": 1791930010815,
+      "durationMs": 494.91799999999785,
+      "beginMs": 0.3070000000006985,
+      "bodyMs": 55.64650000000256,
+      "commitMs": 438.9644999999946,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 15000,
+        "system": 375000
+      },
+      "walBefore": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930010768.3962
+      },
+      "walAfter": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930010879.2544
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 548,
+        "nPage": 13019,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade32564cb77f"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1237,
+        "nPage": 13049,
+        "nBackfill": 1237,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade32564cb77f"
+      }
+    },
+    {
+      "beganAt": 1791930011566,
+      "durationMs": 592.5467999999964,
+      "beginMs": 0.26009999999951106,
+      "bodyMs": 112.1652000000031,
+      "commitMs": 480.12149999999383,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 16000,
+        "system": 406000
+      },
+      "walBefore": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930011479.1226
+      },
+      "walAfter": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930011684.4182
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 688,
+        "nPage": 13084,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade33c69d32d8"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1375,
+        "nPage": 13107,
+        "nBackfill": 1375,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade33c69d32d8"
+      }
+    },
+    {
+      "beganAt": 1791930012328,
+      "durationMs": 753.9614000000001,
+      "beginMs": 0.41759999999339925,
+      "bodyMs": 116.99410000000353,
+      "commitMs": 636.5497000000032,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 16000,
+        "system": 594000
+      },
+      "walBefore": {
+        "bytes": 5669152,
+        "modifiedAt": 1791930012293.9358
+      },
+      "walAfter": {
+        "bytes": 6740352,
+        "modifiedAt": 1791930012456.3806
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 866,
+        "nPage": 13155,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade3416a4ba02"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1636,
+        "nPage": 13181,
+        "nBackfill": 1636,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade3416a4ba02"
+      }
+    },
+    {
+      "beganAt": 1791930013188,
+      "durationMs": 516.3389000000025,
+      "beginMs": 0.22280000000318978,
+      "bodyMs": 129.59410000000207,
+      "commitMs": 386.5219999999972,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 109000,
+        "system": 297000
+      },
+      "walBefore": {
+        "bytes": 6740352,
+        "modifiedAt": 1791930013167.4817
+      },
+      "walAfter": {
+        "bytes": 6740352,
+        "modifiedAt": 1791930013325.5544
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 349,
+        "nPage": 13193,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade35c7e53457"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1184,
+        "nPage": 13259,
+        "nBackfill": 1184,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade35c7e53457"
+      }
+    },
+    {
+      "beganAt": 1791930013852,
+      "durationMs": 716.4003999999986,
+      "beginMs": 0.37629999999626307,
+      "bodyMs": 127.44740000000456,
+      "commitMs": 588.5766999999978,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 63000,
+        "system": 500000
+      },
+      "walBefore": {
+        "bytes": 6740352,
+        "modifiedAt": 1791930013831.7017
+      },
+      "walAfter": {
+        "bytes": 7210032,
+        "modifiedAt": 1791930013988.7354
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 920,
+        "nPage": 13307,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade36e78b2341"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1750,
+        "nPage": 13354,
+        "nBackfill": 1750,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade36e78b2341"
+      }
+    },
+    {
+      "beganAt": 1791930014729,
+      "durationMs": 634.9445999999953,
+      "beginMs": 0.36019999999552965,
+      "bodyMs": 103.75990000000456,
+      "commitMs": 530.8244999999952,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 16000,
+        "system": 406000
+      },
+      "walBefore": {
+        "bytes": 7210032,
+        "modifiedAt": 1791930014701.306
+      },
+      "walAfter": {
+        "bytes": 7210032,
+        "modifiedAt": 1791930014838.2039
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 933,
+        "nPage": 13411,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade37d72c8f28"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1744,
+        "nPage": 13451,
+        "nBackfill": 1744,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade37d72c8f28"
+      }
+    },
+    {
+      "beganAt": 1791930015522,
+      "durationMs": 681.7646999999997,
+      "beginMs": 0.2573000000047614,
+      "bodyMs": 113.24559999999474,
+      "commitMs": 568.2618000000002,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 16000,
+        "system": 500000
+      },
+      "walBefore": {
+        "bytes": 7210032,
+        "modifiedAt": 1791930015500.2405
+      },
+      "walAfter": {
+        "bytes": 7263592,
+        "modifiedAt": 1791930015641.1504
+      },
+      "indexBefore": {
+        "state": "observed",
+        "mxFrame": 969,
+        "nPage": 13508,
+        "nBackfill": 0,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade380c169667"
+      },
+      "indexAfter": {
+        "state": "observed",
+        "mxFrame": 1763,
+        "nPage": 13539,
+        "nBackfill": 1763,
+        "headerCopiesAgree": true,
+        "salt": "1a0ade380c169667"
+      }
+    }
+  ],
+  "summary": {
+    "slow": 10,
+    "fast": 281
+  }
+}
