@@ -57,9 +57,11 @@ const resume = await (async () => {
   assert.equal(previous.model, exactModel, "Resume the same exact model")
   assert.equal(previous.status, "failed", "Resume an unfinished run")
   const last = previous.cases.at(-1)
+  assert(last && last.status === "error", "Resume an unfinished policy round")
+  const probe = last.checkpoint !== undefined && last.lanes !== undefined
   assert(
-    last && last.status === "error" && last.lanes === undefined && last.checkpoint === undefined,
-    "Resume only a compaction interrupted before its paired probes",
+    probe || (last.lanes === undefined && last.checkpoint === undefined),
+    "Resume a complete checkpoint or interrupted compaction",
   )
   assert(CompactionPolicyCase.names.includes(last.name), "Resume a policy-action case")
   const descriptor = CompactionPolicyCase.Resume.parse({
@@ -97,7 +99,14 @@ const resume = await (async () => {
       "Previous credential/catalog copies must already be removed",
     )
   assert((await fs.stat(path.join(root, "runtime/data/opencorvus.db"))).isFile(), "Keep the original persisted history")
-  return { reportPath: path.resolve(reportPath), root, name: last.name as CompactionPolicyCase.Name, nonce, descriptor }
+  return {
+    reportPath: path.resolve(reportPath),
+    root,
+    name: last.name as CompactionPolicyCase.Name,
+    nonce,
+    descriptor,
+    probe: probe ? last : undefined,
+  }
 })()
 const selectedCases = (env("CASES") ?? resume?.name ?? "text-start,text-middle,text-end,tool-evidence").split(",")
 if (resume) assert.deepEqual(selectedCases, [resume.name], "Resume only the original unfinished case")
@@ -283,6 +292,7 @@ try {
             rounds,
             compareNative,
             resume: resume?.descriptor,
+            resumeProbe: resume?.probe,
             project,
             model,
             inactive,

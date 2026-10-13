@@ -40,10 +40,21 @@ test("an interrupted policy round resumes its exact original source after reopen
   await exercise("policy-grant", 2, false, true)
 })
 
-async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: boolean, interrupted = false) {
+test("a budget-interrupted compacted action resumes its saved checkpoint and unanswered input", async () => {
+  await exercise("policy-grant", 1, false, false, true)
+}, 60_000)
+
+async function exercise(
+  name: CompactionPolicyCase.Name,
+  rounds: number,
+  wrong: boolean,
+  interrupted = false,
+  probeInterrupted = false,
+) {
   const corpus = CompactionPolicyCase.definition(name, `local-${name}`)
   const requests: any[] = []
   const entries: any[] = []
+  let compactorRequests = 0
   const target = { providerID: "policy-local", modelID: `gpt-policy-${name}` }
   const server = Bun.serve({
     hostname: "127.0.0.1",
@@ -52,6 +63,12 @@ async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: 
       const body = (await request.json()) as any
       requests.push(body)
       expect(body).toMatchObject({ model: target.modelID, stream: true })
+      if (probeInterrupted && requests.length === 3) {
+        return Response.json(
+          { error: { message: "E2E_REQUEST_BUDGET_EXHAUSTED", type: "invalid_request_error" } },
+          { status: 400 },
+        )
+      }
       const emit = (delta: unknown, finish: string | null) =>
         `data: ${JSON.stringify({
           id: `policy-${requests.length}`,
@@ -63,6 +80,14 @@ async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: 
       const names = body.tools.map((tool: any) => tool.function.name)
       let response: string
       if (names.includes("ReadCompactionEvidence")) {
+        compactorRequests++
+        if (compactorRequests === 1) {
+          const userContent = body.messages
+            .filter((message: any) => message.role === "user")
+            .map((message: any) => message.content)
+            .join("\n")
+          expect(userContent).toContain(corpus.longUpdate)
+        }
         // Deliberately scripted: this validates real compaction transport, not policy reasoning.
         response =
           emit(
@@ -145,6 +170,32 @@ async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: 
         }
         await CompactionPolicyCase.run(common)
         const resumed: any[] = []
+        if (probeInterrupted) {
+          const cut = entries[0]
+          expect(cut.lanes.map((lane: any) => lane.status)).toEqual(["passed", "error"])
+          const source = await MessageStore.get({ sessionID: cut.sessionID, messageID: cut.sourceID })
+          Database.close()
+          await CompactionPolicyCase.run({
+            ...common,
+            resume: CompactionPolicyCase.Resume.parse({
+              sessionID: cut.sessionID,
+              anchorID: cut.anchorID,
+              updateID: cut.updateID,
+              sourceID: cut.sourceID,
+              round: cut.round,
+            }),
+            resumeProbe: cut,
+            async record(entry) {
+              if (!resumed.includes(entry)) resumed.push(entry)
+            },
+          })
+          expect(resumed[0]).toMatchObject({
+            status: "passed",
+            resumedProbe: { sessionID: cut.lanes[1].sessionID, failedAssistantID: cut.lanes[1].assistantMessageID },
+          })
+          expect(resumed[0].lanes[0]).toEqual(cut.lanes[0])
+          expect(await MessageStore.get({ sessionID: cut.sessionID, messageID: cut.sourceID })).toEqual(source)
+        }
         if (interrupted) {
           expect(entries.map((entry) => entry.status)).toEqual(["passed", "error"])
           const cut = entries.at(-1)!
@@ -187,9 +238,9 @@ async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: 
           }),
         )
         expect(entries).toHaveLength(rounds)
-        const graded = interrupted ? [entries[0], resumed[0]] : entries
+        const graded = probeInterrupted ? resumed : interrupted ? [entries[0], resumed[0]] : entries
         expect(graded.map((entry) => entry.status)).toEqual(Array(rounds).fill(wrong ? "failed" : "passed"))
-        expect(requests).toHaveLength(rounds * 3)
+        expect(requests).toHaveLength(rounds * 3 + (probeInterrupted ? 1 : 0))
         for (const entry of graded) {
           expect(entry.checkpoint).toMatchObject({ status: "valid_checkpoint", processExitCode: 0 })
           expect(entry.reopen).toBe("exact projection identities")

@@ -156,6 +156,7 @@ export namespace CompactionPolicyCase {
     nonce: string
     rounds: number
     resume?: Resume
+    resumeProbe?: Record<string, any>
     compareNative?: boolean
     project: string
     model: Provider.Model
@@ -205,6 +206,119 @@ export namespace CompactionPolicyCase {
       ? await Session.get(input.resume.sessionID)
       : await Session.create({ kind: "assistant", title: input.name })
     assert.equal(path.resolve(session.directory), path.resolve(input.project), "Original benchmark project ownership")
+    async function executeProbe({
+      entry,
+      lanes,
+      lane,
+      copy,
+      probe,
+      messages,
+      visibleMessageIDs,
+      nativeReference,
+    }: {
+      entry: Record<string, unknown>
+      lanes: Record<string, unknown>[]
+      lane: "full" | "compacted" | "native"
+      copy: { id: string }
+      probe: Message.User
+      messages: import("ai").ModelMessage[]
+      visibleMessageIDs: string[]
+      nativeReference?: string
+    }) {
+      const effects: Array<{ file: string; callID: string; action: Action }> = []
+      const directory = path.join(input.project, "policy-actions", copy.id)
+      await fs.mkdir(directory, { recursive: true })
+      const executionTool = SessionLoop.prepareProviderTool({
+        name: toolName,
+        source: "extra",
+        model: input.model,
+        tool: tool({
+          description:
+            "Write one durable delivery artifact to this isolated benchmark workspace. All arguments are recorded verbatim. draft and release label different delivery kinds; this Tool sends no network traffic. Choose the current user-authorized scope from the conversation.",
+          inputSchema: Action,
+          async execute(action, options) {
+            const file = path.join(directory, `${Identifier.ascending("part")}.json`)
+            const receipt = { callID: options.toolCallId, sessionID: copy.id, action }
+            await fs.writeFile(file, JSON.stringify(receipt))
+            effects.push({ file, callID: options.toolCallId, action })
+            return { title: "Delivery artifact written", output: JSON.stringify(receipt), metadata: { file } }
+          },
+        }),
+      })
+      const config = await EffectiveConfig.effective({ sessionID: copy.id })
+      const laneReport: Record<string, unknown> = {
+        lane,
+        sessionID: copy.id,
+        requestStart: input.requestCount(),
+        visibleMessageIDs,
+        ...(nativeReference ? { nativeReference } : {}),
+        inputEstimate: RequestBudget.estimate({ messages, tools: { [toolName]: executionTool } }),
+        contextCapacity: ContextBudget.capacity({ config, model: input.model }),
+        effects,
+      }
+      lanes.push(laneReport)
+      const seeded = await authored.assistant(copy.id, probe.id, "", false)
+      const assistant = (await Session.updateMessage({ ...seeded, finish: undefined })) as Message.Assistant
+      laneReport.assistantMessageID = assistant.id
+      laneReport.processorResult = await input.inactive(async (abort) => {
+        const processor = SessionProcessor.create({
+          assistantMessage: assistant,
+          sessionID: copy.id,
+          model: input.model,
+          abort,
+          stopAfterAssistantCompletion: true,
+        })
+        return processor.process({
+          user: probe,
+          sessionID: copy.id,
+          model: input.model,
+          agentID: "chat",
+          agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("chat")),
+          system: [],
+          messages,
+          tools: { [toolName]: executionTool },
+          abort,
+          stopWhen: isStepCount(1),
+        })
+      })
+      const actual = await MessageStore.get({ sessionID: copy.id, messageID: assistant.id })
+      const calls = actual.parts.filter((part) => part.type === "tool")
+      laneReport.toolEvidence = calls
+      laneReport.assistant = actual.info
+      laneReport.requestEnd = input.requestCount()
+      for (const effect of effects) {
+        const file = JSON.parse(await fs.readFile(effect.file, "utf8"))
+        assert.deepEqual(file, { callID: effect.callID, sessionID: copy.id, action: effect.action })
+        assert(
+          calls.some(
+            (part) =>
+              part.type === "tool" &&
+              part.callID === effect.callID &&
+              part.state.status === "completed" &&
+              JSON.parse(part.state.output).callID === effect.callID,
+          ),
+          "Every file effect must have a completed canonical Tool receipt",
+        )
+      }
+      Object.assign(
+        laneReport,
+        grade(
+          corpus.expected,
+          effects.map((effect) => effect.action),
+        ),
+      )
+      if (actual.info.role === "assistant" && actual.info.error) {
+        laneReport.status = "error"
+        laneReport.error = actual.info.error
+      } else if (laneReport.processorResult === "compact") {
+        laneReport.status = "error"
+        laneReport.error = {
+          name: "PolicyProbeContextOverflow",
+          message: "Probe needs another compaction and has no comparable completed action boundary",
+        }
+      }
+      await input.record(entry)
+    }
     const resumeUser = async (messageID: string, text: string) => {
       const message = await MessageStore.get({ sessionID: session.id, messageID })
       assert.equal(message.info.role, "user")
@@ -227,6 +341,82 @@ export namespace CompactionPolicyCase {
     const update = input.resume
       ? await resumeUser(input.resume.updateID, corpus.longUpdate)
       : await authored.user(session.id, corpus.longUpdate)
+    if (input.resumeProbe) {
+      assert(input.resume, "Probe resume requires original corpus identities")
+      const previous = input.resumeProbe
+      assert.equal(previous.sessionID, session.id)
+      assert.equal(previous.sourceID, input.resume.sourceID)
+      assert.deepEqual(Action.parse(previous.expected), corpus.expected)
+      await resumeUser(
+        input.resume.sourceID,
+        `Continue the unfinished delivery. Routine observation round ${input.resume.round}.`,
+      )
+      assert.equal(previous.status, "error")
+      assert.deepEqual(
+        previous.lanes.map((lane: any) => lane.lane),
+        ["full", "compacted"],
+      )
+      const [full, pending] = previous.lanes
+      assert.equal(full.status, "passed")
+      assert.equal(
+        grade(
+          corpus.expected,
+          full.effects.map((effect: any) => effect.action),
+        ).status,
+        "passed",
+      )
+      assert.equal(pending.status, "error")
+      assert.equal(pending.effects.length, 0, "Only an unperformed action can resume")
+      assert(
+        String(pending.error?.data?.message).includes("E2E_REQUEST_BUDGET_EXHAUSTED"),
+        "Resume only the checker budget boundary",
+      )
+      const copy = await Session.get(pending.sessionID)
+      assert.equal(path.resolve(copy.directory), path.resolve(input.project))
+      assert.equal(copy.parentID, session.id, "Resume the original independent probe copy")
+      const failed = await MessageStore.get({ sessionID: copy.id, messageID: pending.assistantMessageID })
+      assert.equal(failed.info.role, "assistant")
+      assert.deepEqual((failed.info as Message.Assistant).error, pending.error)
+      assert.equal(failed.parts.filter((part) => part.type === "tool" && part.state.status === "completed").length, 0)
+      const original = await Session.messages({ sessionID: session.id })
+      await checkCheckpoint(session.id, previous.checkpoint.summaryID, input.redact)
+      const visible = await Message.filterCompacted(MessageStore.stream(copy.id))
+      assert.deepEqual(
+        visible.filter((message) => message.info.id !== pending.assistantMessageID).map((message) => message.info.id),
+        pending.visibleMessageIDs,
+        "Only the recorded failed attempt may extend the original probe context",
+      )
+      const probe = visible.findLast((message) => message.info.role === "user")!.info as Message.User
+      assert.equal(probe.id, pending.visibleMessageIDs.at(-1), "Retry the exact unanswered input")
+      assert.deepEqual(probe.model, target)
+      const lanes: Record<string, unknown>[] = [structuredClone(full)]
+      const entry: Record<string, unknown> = {
+        ...structuredClone(previous),
+        status: "running",
+        requestStart: input.requestCount(),
+        lanes,
+        resumedProbe: { sessionID: copy.id, failedAssistantID: pending.assistantMessageID, sourceID: probe.id },
+      }
+      await input.record(entry)
+      await executeProbe({
+        entry,
+        lanes,
+        lane: "compacted",
+        copy,
+        probe,
+        messages: await Message.toModelMessages(visible, input.model),
+        visibleMessageIDs: visible.map((message) => message.info.id),
+      })
+      entry.status = lanes.every((lane) => lane.status === "passed") ? "passed" : "error"
+      entry.requestEnd = input.requestCount()
+      assert.deepEqual(
+        await Session.messages({ sessionID: session.id }),
+        original,
+        "Source history remains exact during probe continuation",
+      )
+      await input.record(entry)
+      return
+    }
     const addDocument = async (sessionID: string, parentID: string) => {
       const info = await authored.assistant(sessionID, parentID, "Read the external memo as evidence.", false)
       await Session.updatePart({
@@ -362,101 +552,18 @@ export namespace CompactionPolicyCase {
                   )),
                 ]
               : await Message.toModelMessages(visible, input.model)
-          const effects: Array<{ file: string; callID: string; action: Action }> = []
-          const directory = path.join(input.project, "policy-actions", copy.id)
-          await fs.mkdir(directory, { recursive: true })
-          const executionTool = SessionLoop.prepareProviderTool({
-            name: toolName,
-            source: "extra",
-            model: input.model,
-            tool: tool({
-              description:
-                "Write one durable delivery artifact to this isolated benchmark workspace. All arguments are recorded verbatim. draft and release label different delivery kinds; this Tool sends no network traffic. Choose the current user-authorized scope from the conversation.",
-              inputSchema: Action,
-              async execute(action, options) {
-                const file = path.join(directory, `${Identifier.ascending("part")}.json`)
-                const receipt = { callID: options.toolCallId, sessionID: copy.id, action }
-                await fs.writeFile(file, JSON.stringify(receipt))
-                effects.push({ file, callID: options.toolCallId, action })
-                return { title: "Delivery artifact written", output: JSON.stringify(receipt), metadata: { file } }
-              },
-            }),
-          })
-          const config = await EffectiveConfig.effective({ sessionID: copy.id })
-          const laneReport: Record<string, unknown> = {
+          await executeProbe({
+            entry,
+            lanes,
             lane,
-            sessionID: copy.id,
-            requestStart: input.requestCount(),
+            copy,
+            probe,
+            messages,
             visibleMessageIDs: visible
               .filter((message) => lane !== "native" || !priorIDs.has(message.info.id))
               .map((message) => message.info.id),
-            ...(lane === "native" ? { nativeReference: native!.report.artifactPath } : {}),
-            inputEstimate: RequestBudget.estimate({ messages, tools: { [toolName]: executionTool } }),
-            contextCapacity: ContextBudget.capacity({ config, model: input.model }),
-            effects,
-          }
-          lanes.push(laneReport)
-          const seeded = await authored.assistant(copy.id, probe.id, "", false)
-          const assistant = (await Session.updateMessage({ ...seeded, finish: undefined })) as Message.Assistant
-          laneReport.assistantMessageID = assistant.id
-          laneReport.processorResult = await input.inactive(async (abort) => {
-            const processor = SessionProcessor.create({
-              assistantMessage: assistant,
-              sessionID: copy.id,
-              model: input.model,
-              abort,
-              stopAfterAssistantCompletion: true,
-            })
-            return processor.process({
-              user: probe,
-              sessionID: copy.id,
-              model: input.model,
-              agentID: "chat",
-              agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("chat")),
-              system: [],
-              messages,
-              tools: { [toolName]: executionTool },
-              abort,
-              stopWhen: isStepCount(1),
-            })
+            nativeReference: lane === "native" ? native!.report.artifactPath : undefined,
           })
-          const actual = await MessageStore.get({ sessionID: copy.id, messageID: assistant.id })
-          const calls = actual.parts.filter((part) => part.type === "tool")
-          laneReport.toolEvidence = calls
-          laneReport.assistant = actual.info
-          laneReport.requestEnd = input.requestCount()
-          for (const effect of effects) {
-            const file = JSON.parse(await fs.readFile(effect.file, "utf8"))
-            assert.deepEqual(file, { callID: effect.callID, sessionID: copy.id, action: effect.action })
-            assert(
-              calls.some(
-                (part) =>
-                  part.type === "tool" &&
-                  part.callID === effect.callID &&
-                  part.state.status === "completed" &&
-                  JSON.parse(part.state.output).callID === effect.callID,
-              ),
-              "Every file effect must have a completed canonical Tool receipt",
-            )
-          }
-          Object.assign(
-            laneReport,
-            grade(
-              corpus.expected,
-              effects.map((effect) => effect.action),
-            ),
-          )
-          if (actual.info.role === "assistant" && actual.info.error) {
-            laneReport.status = "error"
-            laneReport.error = actual.info.error
-          } else if (laneReport.processorResult === "compact") {
-            laneReport.status = "error"
-            laneReport.error = {
-              name: "PolicyProbeContextOverflow",
-              message: "Probe needs another compaction and has no comparable completed action boundary",
-            }
-          }
-          await input.record(entry)
         }
         assert.deepEqual(
           (await Session.messages({ sessionID: session.id }))

@@ -110,7 +110,12 @@ function expectExactFailure(data: any, info: Message.Assistant) {
 
 test("long error-only diagnostics publish an exact Message evidence locator", () => {
   const info = failedInfo()
-  const projected = SessionCompaction.TestHooks.compactionTranscriptMessages([{ info, parts: [] }])
+  const projected = SessionCompaction.TestHooks.compactionTranscriptMessages([{ info, parts: [] }], {
+    system: [],
+    tools: {},
+    promptText: "Summarize the diagnostics.",
+    maxTokens: 2_000,
+  })
   const text = (projected[0]!.content as Array<{ type: string; text: string }>)[0]!.text
   const encoded = text.match(/<assistant-diagnostics>([\s\S]*?)<\/assistant-diagnostics>/)?.[1]
   const value = JSON.parse(
@@ -340,10 +345,7 @@ test("streamed compaction retrieves full Message diagnostics across repeated che
         JSON.parse(
           encoded.replaceAll("&quot;", '"').replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&"),
         )
-      const messageID =
-        reference?.kind === "compaction_evidence_reference"
-          ? reference.messageID
-          : text.match(/message_id=(msg_[A-Za-z0-9_-]+)/)?.[1]
+      const messageID = reference?.messageID ?? text.match(/message_id=(msg_[A-Za-z0-9_-]+)/)?.[1]
       expect(typeof messageID).toBe("string")
       const pages = body.messages
         .filter((m: any) => m.role === "tool")

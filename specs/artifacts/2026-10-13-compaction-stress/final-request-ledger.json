@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 271,
-  "authorizedTotal": 300,
+  "total": 322,
+  "authorizedTotal": 350,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -253,6 +253,40 @@
       "passedActions": 6,
       "passedFields": 30,
       "summary": "native-policy-real-summary.json"
+    },
+    {
+      "name": "transcript-budget-policy-real",
+      "status": "budget_incomplete",
+      "requests": 50,
+      "completedCompactions": 10,
+      "completedRounds": 9,
+      "passedActions": 19,
+      "passedFields": 95,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      }
+    },
+    {
+      "name": "transcript-budget-policy-real-resume",
+      "status": "passed",
+      "requests": 1,
+      "streamedRequests": 1,
+      "settledReaders": 1,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedRounds": 1,
+      "passedActions": 1,
+      "passedFields": 5,
+      "summary": "transcript-budget-policy-real-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -262,7 +296,7 @@
     "plannedRounds": 10,
     "passedActions": 20,
     "passedFields": 100,
-    "requests": 92,
-    "summary": "policy-actions-real-summary.json"
+    "requests": 51,
+    "summary": "transcript-budget-policy-real-summary.json"
   }
 }

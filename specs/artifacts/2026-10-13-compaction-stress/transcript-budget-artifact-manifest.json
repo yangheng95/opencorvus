@@ -1,0 +1,27 @@
+{
+  "archives": [
+    "transcript-budget-baseline.log.gz",
+    "transcript-budget-docs-delivery.log.gz",
+    "transcript-budget-docs-preflight.log.gz",
+    "transcript-budget-final-contracts.log.gz",
+    "transcript-budget-fixture-regression.log.gz",
+    "transcript-budget-focused.log.gz",
+    "transcript-budget-memory-final.log.gz",
+    "transcript-budget-minimal-reference.log.gz",
+    "transcript-budget-policy-real-resume.log.gz",
+    "transcript-budget-policy-real.log.gz",
+    "transcript-budget-repair.log.gz",
+    "transcript-budget-required-context.log.gz",
+    "transcript-budget-resume-final.log.gz",
+    "transcript-budget-resume-local.log.gz",
+    "transcript-budget-typecheck-complete.log.gz",
+    "transcript-budget-typecheck-delivery.log.gz",
+    "transcript-budget-typecheck-final.log.gz",
+    "transcript-budget-typecheck-repair.log.gz",
+    "transcript-budget-typecheck-resume.log.gz",
+    "transcript-budget-typecheck.log.gz"
+  ],
+  "preservation": "Each gzip decompresses to the original recorded bytes; failed logs remain evidence, not substituted with passing output.",
+  "localDistinctTests": 89,
+  "scope": "Portable whole-request transcript packing and exact pending-probe benchmark continuation; no UI automation."
+}

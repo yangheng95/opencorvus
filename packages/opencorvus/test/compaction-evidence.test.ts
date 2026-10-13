@@ -71,6 +71,7 @@ function history() {
 async function read(reader: ReturnType<typeof CompactionEvidenceReader.create>, input: Record<string, unknown>) {
   const result = (await reader.execute!(input, {
     toolCallId: "call_reader",
+    context: {},
     messages: [],
     abortSignal: new AbortController().signal,
   })) as { output: string }
@@ -93,20 +94,22 @@ describe("compaction evidence fidelity", () => {
             id: Identifier.ascending("message"),
             sessionID: session.id,
           })
-          const assistant = await Session.updateMessage({
-            id: Identifier.ascending("message"),
-            sessionID: session.id,
-            parentID: source.id,
-            role: "assistant",
-            author: "chat",
-            agent: "chat",
-            time: { created: Date.now() },
-            path: { cwd: project.path, root: project.path },
-            modelID: "evidence",
-            providerID: "local",
-            cost: 0,
-            tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
-          })
+          const assistant = Message.Assistant.parse(
+            await Session.updateMessage({
+              id: Identifier.ascending("message"),
+              sessionID: session.id,
+              parentID: source.id,
+              role: "assistant",
+              author: "chat",
+              agent: "chat",
+              time: { created: Date.now() },
+              path: { cwd: project.path, root: project.path },
+              modelID: "evidence",
+              providerID: "local",
+              cost: 0,
+              tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+            }),
+          )
           const full = `project-${index}:中文😀\n`.repeat(60_000)
           const outputPath = path.join(project.path, "exact-result.txt")
           await fs.writeFile(outputPath, full)
@@ -165,7 +168,14 @@ describe("compaction evidence fidelity", () => {
   })
   test("exposes exact text, input and trace locators in the bounded transcript", () => {
     const { messages } = history()
-    const transcript = JSON.stringify(SessionCompaction.TestHooks.compactionTranscriptMessages(messages))
+    const transcript = JSON.stringify(
+      SessionCompaction.TestHooks.compactionTranscriptMessages(messages, {
+        system: [],
+        tools: {},
+        promptText: "Summarize the evidence.",
+        maxTokens: 2_000,
+      }),
+    )
     for (const value of [
       "prt_text",
       "prt_tool",
@@ -218,7 +228,7 @@ describe("compaction evidence fidelity", () => {
     const reader = CompactionEvidenceReader.create(messages)
     let offset = 0
     let restored = ""
-    const cursors = []
+    const cursors: Array<number | null> = []
     while (true) {
       const page = await read(reader, { part_id: "prt_text", field: "text", offset, limit: 2 })
       expect(page).toMatchObject({ originalRole: "user", originalAuthor: "user", offset })

@@ -45,8 +45,16 @@ export namespace Token {
 
   export function estimate(input: string): number {
     if (!input) return 0
-    const { dense, latin } = countScripts(input)
-    return Math.round(dense / CHARS_PER_TOKEN_DENSE + latin / CHARS_PER_TOKEN_LATIN)
+    return estimateCounts(countScripts(input))
+  }
+
+  /** Unrounded weight supports additive accounting without per-fragment rounding drift. */
+  export function weightCounts({ dense, latin }: ReturnType<typeof countScripts>): number {
+    return dense / CHARS_PER_TOKEN_DENSE + latin / CHARS_PER_TOKEN_LATIN
+  }
+
+  export function estimateCounts(counts: ReturnType<typeof countScripts>): number {
+    return Math.round(weightCounts(counts))
   }
 
   /**

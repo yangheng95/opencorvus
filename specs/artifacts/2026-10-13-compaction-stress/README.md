@@ -490,3 +490,12 @@ progress-only native state returns an explicit failure without a text substitute
 [documentation/index checks](native-reference-docs.log) pass. Earlier typing
 receipts retain the transient concurrent Permission edit failure and its
 successful recheck; this task changed no Permission source.
+
+
+## Request-budget-aware transcript packing
+
+[Combined real results](transcript-budget-policy-real-summary.json) record both authorization changes through five portable checkpoints: 20 actual actions / 100 fields pass in 51 real requests. Cumulative use is **322**. The [original 50-call batch](transcript-budget-policy-real.json) preserves its final budget interruption; the [exact pending-probe continuation](transcript-budget-policy-real-resume.json) completes the missing action from the same fifth checkpoint. Their matching request sidecars and canonical usage receipts retain exact accounting. Credential and catalog copies are removed.
+
+Complete fields now enter the compactor when the whole request can fit them; omitted fields retain exact references and optional budgeted previews. No file-backed preview is treated as complete. The first round takes one compactor call in each case; later rounds may reread original evidence. This is not native product integration or a guarantee of perfect compression.
+
+The [artifact manifest](transcript-budget-artifact-manifest.json) lists exact gzip copies of baseline failures, local repairs, real execution and checks. The baseline reproduced premature omission and request overflow; the final nine suites pass 89 distinct contracts. Final [fixture regressions](transcript-budget-fixture-regression.log.gz), [policy continuation](transcript-budget-resume-final.log.gz), [native regression](transcript-budget-resume-local.log.gz), [TypeScript](transcript-budget-typecheck-delivery.log.gz) and [documentation checks](transcript-budget-docs-delivery.log.gz) retain their raw output. Immutable source/file equality and actual actions establish correctness; hashes are not an acceptance substitute.
