@@ -56,6 +56,49 @@ test("external citations and explicitly opened attachments retain exact source i
 })
 
 test.each([
+  ["/repo", "./notes.md"],
+  ["/repo", "folder/../notes.md"],
+  ["/repo", "../repo/notes.md"],
+  ["/repo", "../../repo/notes.md"],
+  ["/repo", "/repo/folder/../notes.md"],
+  ["/repo", "/repo-other/../repo/notes.md"],
+  ["C:/repo", ".\\notes.md"],
+  ["C:/repo", "..\\repo\\notes.md"],
+  ["C:/Repo", "../repo/notes.md"],
+  ["//Host/Share/Repo", "../repo/notes.md"],
+  ["C:/repo", "c:/REPO/folder/../notes.md"],
+  ["//host/share/repo", "../../repo/notes.md"],
+])("same-file lexical references preserve the current draft owner in %s / %s", async (directory, reference) => {
+  const scope = { directory }
+  await openFileEditor("notes.md", scope)
+  const release = registerFileEditorBeforeNavigate({
+    confirmLeave: async () => null,
+    getRevision: () => 7,
+    isBusy: () => false,
+    isDirty: () => true,
+  })
+  try {
+    const reveal = fileEditorRevealRevision()
+    const range = { startLine: 2, endLine: 2, startColumn: 9 }
+    expect(await openFileReference(reference, scope, range)).toBe(true)
+    expect({ target: selectedFileTarget(), reveal: fileEditorRevealRevision() }).toEqual({
+      target: { ...scope, path: "notes.md", range }, reveal: reveal + 1,
+    })
+  } finally {
+    release()
+  }
+})
+
+test.each([
+  ["/repo", "/repo/../outside.md"],
+  ["C:/repo", "C:/repo/../outside.md"],
+  ["//host/share/repo", "//host/share/repo/../outside.md"],
+])("absolute references outside the reduced project keep their exact source target in %s", async (directory, path) => {
+  expect(await openFileReference(path, { directory })).toBe(true)
+  expect(selectedFileTarget()).toEqual({ directory, path, sourceAbsolutePath: path })
+})
+
+test.each([
   ["C:/project", " Source note.md", " Source note.md"],
   ["C:\\project", "dir\\ Source note.md", "dir/ Source note.md"],
   ["/repo", "file\\name.ts", "file\\name.ts"],

@@ -1,0 +1,7 @@
+{
+  "observedAtUtc": "2026-10-13T06:26:05.9822028Z",
+  "boundary": "Settlement failed; first wrapper failure preserved; paired cleanup qualified only by its exact physical receipt; no kill",
+  "occurrence": "before-8a31c575-fefe-4e8c-ab64-23c41ead163f",
+  "message": "Whole native Job/output/request and Host/port settlement incomplete; retain copied pair",
+  "errorType": "RuntimeException"
+}

@@ -70,6 +70,86 @@ test("rename resolves the shared decision at the original target before applying
   expect(fileWorkbenchRevision()).toBe(revision + 1)
 })
 
+test.each(["./notes.md", "folder/../notes.md", "../repo/notes.md"])(
+  "rename admits the canonical draft before transport for %s", async (alias) => {
+    await openFileEditor(alias, { directory: "/repo" }, { startLine: 2, endLine: 2, startColumn: 4 })
+    const steps: unknown[] = []
+    unregister = registerDecision(async () => {
+      steps.push({ decisionTarget: selectedFileTarget()?.path })
+      return true
+    })
+    const receipt = moved("folder/../notes.md", "temporary/../renamed.md")
+    transport((request) => {
+      steps.push({ method: request.method, targetAtRequest: selectedFileTarget()?.path })
+      return { body: receipt }
+    })
+    expect(await moveFileItem("./notes.md", "temporary/../renamed.md", { directory: "/repo" })).toEqual(receipt)
+    expect(steps).toEqual([{ decisionTarget: "notes.md" }, { method: "PATCH", targetAtRequest: "notes.md" }])
+    expect(selectedFileTarget()).toEqual({
+      directory: "/repo", path: "renamed.md", range: { startLine: 2, endLine: 2, startColumn: 4 },
+    })
+  },
+)
+
+test("an aliased ancestor move admits its canonical descendant and reconciles the returned location", async () => {
+  await openFileEditor("./src/missing/../nested/notes.md", { directory: "/repo" })
+  const steps: unknown[] = []
+  unregister = registerDecision(async () => {
+    steps.push({ decisionTarget: selectedFileTarget()?.path })
+    return true
+  })
+  const receipt = moved("./src", "temporary/../lib")
+  transport((request) => {
+    steps.push({ method: request.method, targetAtRequest: selectedFileTarget()?.path })
+    return { body: receipt }
+  })
+  expect(await moveFileItem("missing/../src", "temporary/../lib", { directory: "/repo" })).toEqual(receipt)
+  expect(steps).toEqual([
+    { decisionTarget: "src/nested/notes.md" }, { method: "PATCH", targetAtRequest: "src/nested/notes.md" },
+  ])
+  expect(selectedFileTarget()).toEqual({ directory: "/repo", path: "lib/nested/notes.md" })
+})
+
+test.each(["C:/Repo", "//Host/Share/Repo"])(
+  "a differently cased directory reentry admits the filename's original case in %s", async (directory) => {
+    await openFileEditor("../repo/Note.MD", { directory })
+    const steps: unknown[] = []
+    unregister = registerDecision(async () => {
+      steps.push({ decisionTarget: selectedFileTarget()?.path })
+      return true
+    })
+    const receipt = moved("Note.MD", "Updated.MD")
+    receipt.node.absolute = `${directory}/Updated.MD`
+    transport((request) => {
+      steps.push({ method: request.method, targetAtRequest: selectedFileTarget()?.path })
+      return { body: receipt }
+    })
+    expect(await moveFileItem("Note.MD", "Updated.MD", { directory })).toEqual(receipt)
+    expect(steps).toEqual([{ decisionTarget: "Note.MD" }, { method: "PATCH", targetAtRequest: "Note.MD" }])
+    expect(selectedFileTarget()).toEqual({ directory, path: "Updated.MD" })
+  },
+)
+
+test("deleting an aliased file admits its canonical draft before publishing the closed target", async () => {
+  await openFileEditor("folder/../notes.md", { directory: "/repo" })
+  const steps: unknown[] = []
+  unregister = registerDecision(async () => {
+    steps.push({ decisionTarget: selectedFileTarget()?.path })
+    return true
+  })
+  const receipt = { path: "./notes.md" }
+  transport((request) => {
+    steps.push({ method: request.method, targetAtRequest: selectedFileTarget()?.path })
+    return { body: receipt }
+  })
+  const revision = fileWorkbenchRevision()
+  expect(await deleteFileItem("./notes.md", { directory: "/repo" })).toEqual(receipt)
+  expect(steps).toEqual([{ decisionTarget: "notes.md" }, { method: "DELETE", targetAtRequest: "notes.md" }])
+  expect({ target: selectedFileTarget(), open: fileWorkbenchOpen(), revision: fileWorkbenchRevision() }).toEqual({
+    target: null, open: false, revision: revision + 1,
+  })
+})
+
 test("cancelling an affected mutation returns AbortError and retains the authored resource target", async () => {
   await openFileEditor("notes.md", { directory: "/repo" })
   unregister = registerDecision(async () => false)

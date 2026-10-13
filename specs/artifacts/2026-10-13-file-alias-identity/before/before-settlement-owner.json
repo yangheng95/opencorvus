@@ -1,0 +1,20 @@
+{
+  "ownerPID": 82936,
+  "evidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-13-file-alias-identity\\before",
+  "evidencePrefix": "before",
+  "supervision": {
+    "preparationDeadlineMs": 1791873315531,
+    "boundary": "Winning immutable settlement owner publishes supervisor error; physical observation remains independently required",
+    "observedAtUtc": "2026-10-13T06:25:16.4918569Z",
+    "reason": "supervisor-error",
+    "totalDeadlineMs": null,
+    "pinned": null,
+    "occurrence": "before-8a31c575-fefe-4e8c-ab64-23c41ead163f",
+    "pid": 78708,
+    "firstFailedPath": null
+  },
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\file-alias-before-01a133",
+  "admittedAt": "2026-10-13T06:25:16.5644266Z",
+  "occurrence": "before-8a31c575-fefe-4e8c-ab64-23c41ead163f",
+  "reason": "supervisor-error"
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [项目文件点段身份](2026-10-13-file-alias-identity.md)：全入口影响、真实服务与桌面验收。
+
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
 - [持续目标验收证据](../../artifacts/2026-10-13-continuous-goal-mode/README.md)：流式模型事实、Task 重开和桌面视觉复核。
 

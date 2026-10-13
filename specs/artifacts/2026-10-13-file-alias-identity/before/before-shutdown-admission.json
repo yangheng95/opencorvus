@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-10-13T06:25:19.7739501Z",
+  "occurrence": "before-8a31c575-fefe-4e8c-ab64-23c41ead163f",
+  "owner": {
+    "pid": 78708,
+    "processInstanceID": "win32:639274695155314945",
+    "occurrenceID": "098e2019-5525-4ca2-9d72-3aa18a43e5e3"
+  },
+  "pageClosed": false,
+  "dispatch": false,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "reason": "Original Target live without listener; no public stop dispatched; await the same native physical settlement"
+}

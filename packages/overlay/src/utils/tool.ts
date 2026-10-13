@@ -3,7 +3,7 @@
 
 import type { IconName } from "../components/ui/Icon"
 import { t, tc } from "./i18n"
-import { isWindowsPath, pathWithForwardSeparators } from "./server-path"
+import { isWindowsPath, normalizeServerPath } from "./server-path"
 import { ReadToolResultFacts, ToolFailureCause, renderToolFailureCause } from "@opencorvus-ai/transport-protocol"
 
 // ── ANSI stripping ──
@@ -323,9 +323,9 @@ export function relativePathFrom(base: string, target: string): string {
   if (typeof base !== "string" || typeof target !== "string" || !base || !target) return ""
   // The server's path syntax, rather than the browser's platform, owns this comparison.
   const windows = isWindowsPath(base)
-  const basePath = pathWithForwardSeparators(base, base)
+  const basePath = normalizeServerPath(base, windows)
   const baseText = basePath.replace(/\/+$/, "") || (basePath.startsWith("/") ? "/" : "")
-  const targetText = pathWithForwardSeparators(target, base).replace(/\/+$/, "")
+  const targetText = normalizeServerPath(target, windows).replace(/\/+$/, "")
   const prefix = baseText === "/" ? "/" : baseText + "/"
   const comparablePrefix = windows ? prefix.toLowerCase() : prefix
   const comparableTarget = windows ? targetText.toLowerCase() : targetText

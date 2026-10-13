@@ -928,6 +928,93 @@ export namespace File {
     return readResolvedContent(file, path.resolve(file))
   }
 
+  async function readGitFileBaseline(file: string, full: string): Promise<string | undefined> {
+    const gitPath = path.relative(Instance.worktree, full).split(path.sep).join("/")
+    const git = async (args: string[], operation: string) => {
+      const result = await hostGit(["--literal-pathspecs", "-c", "core.fsmonitor=false", ...args], {
+        cwd: Instance.worktree,
+        timeoutProfile: "default",
+      })
+      if (result.exitCode !== 0) {
+        throw new Error(
+          `Git ${operation} failed for file ${file}: ${result.stderr.toString().trim() || `exit ${result.exitCode}`}`,
+        )
+      }
+      return result.text()
+    }
+    const status = await git(
+      ["--no-optional-locks", "status", "--porcelain=v2", "--branch", "-z", "--untracked-files=no", "--", gitPath],
+      "file status",
+    )
+    const records = status.split("\0")
+    if (records.pop() !== "") throw new Error(`Invalid Git file status for ${file}: unterminated record`)
+    let head: string | undefined
+    let changed = false
+    for (let index = 0; index < records.length; index++) {
+      const record = records[index]!
+      if (record.startsWith("# ")) {
+        const separator = record.indexOf(" ", 2)
+        if (separator < 0) throw new Error(`Invalid Git file status header for ${file}`)
+        if (record.slice(2, separator) === "branch.oid") {
+          const value = record.slice(separator + 1)
+          if (head !== undefined || (value !== "(initial)" && !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(value))) {
+            throw new Error(`Invalid Git HEAD status for ${file}`)
+          }
+          head = value
+        }
+        continue
+      }
+      const kind = record.slice(0, 2)
+      const fields = kind === "1 " ? 8 : kind === "2 " ? 9 : kind === "u " ? 10 : kind === "? " || kind === "! " ? 1 : 0
+      if (!fields) throw new Error(`Invalid Git file status entry for ${file}`)
+      let pathStart = 0
+      for (let field = 0; field < fields; field++) {
+        const separator = record.indexOf(" ", pathStart)
+        if (separator <= pathStart) throw new Error(`Invalid Git file status fields for ${file}`)
+        pathStart = separator + 1
+      }
+      const currentPath = record.slice(pathStart)
+      if (!currentPath) throw new Error(`Invalid Git file status path for ${file}`)
+      let originalPath: string | undefined
+      if (kind === "2 ") {
+        originalPath = records[++index]
+        if (!originalPath) throw new Error(`Invalid Git rename source for ${file}`)
+      }
+      if (kind !== "? " && kind !== "! " && (currentPath === gitPath || originalPath === gitPath)) changed = true
+    }
+    if (head === undefined) throw new Error(`Git file status omitted HEAD for ${file}`)
+    if (!changed) return undefined
+    // The protocol identifies an unborn branch; a failed object read does not.
+    if (head === "(initial)") return ""
+    const tree = await git(["ls-tree", "-z", "--full-tree", head, "--", gitPath], "file tree read")
+    const entries = tree.split("\0")
+    if (entries.pop() !== "") throw new Error(`Invalid Git file tree for ${file}`)
+    let object: string | null | undefined
+    for (const entry of entries) {
+      const separator = entry.indexOf("\t")
+      if (separator < 0) throw new Error(`Invalid Git file tree entry for ${file}`)
+      if (entry.slice(separator + 1) !== gitPath) continue
+      const [mode, type, candidate, extra] = entry.slice(0, separator).split(" ")
+      if (
+        object !== undefined ||
+        extra !== undefined ||
+        !candidate ||
+        !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(candidate)
+      ) {
+        throw new Error(`Invalid Git HEAD file entry: ${file}`)
+      }
+      if (type === "blob" && (mode === "100644" || mode === "100755" || mode === "120000")) {
+        object = candidate
+      } else if ((type === "tree" && mode === "040000") || (type === "commit" && mode === "160000")) {
+        object = null
+      } else {
+        throw new Error(`Invalid Git HEAD file mode and type: ${file}`)
+      }
+    }
+    // A successful tree query proves whether an old file blob existed at this path.
+    return object == null ? "" : git(["cat-file", "blob", object], "file blob read")
+  }
+
   export async function read(file: string): Promise<Content> {
     using _ = log.time("read", { file })
     const full = path.join(Instance.directory, file)
@@ -954,17 +1041,8 @@ export namespace File {
     const content = result.content
 
     if (Project.isGitRepo(Instance.directory)) {
-      let diff = (await hostGit(["-c", "core.fsmonitor=false", "diff", "--", file], {
-        cwd: Instance.directory, timeoutProfile: "default",
-      })).text()
-      if (!diff.trim())
-        diff = (await hostGit(["-c", "core.fsmonitor=false", "diff", "--staged", "--", file], {
-          cwd: Instance.directory, timeoutProfile: "default",
-        })).text()
-      if (diff.trim()) {
-        const original = (await hostGit(["show", `HEAD:${file}`], {
-          cwd: Instance.directory, timeoutProfile: "default",
-        })).text()
+      const original = await readGitFileBaseline(file, full)
+      if (original !== undefined) {
         const patch = structuredPatch(file, file, original, content, "old", "new", {
           context: Infinity,
           ignoreWhitespace: true,
