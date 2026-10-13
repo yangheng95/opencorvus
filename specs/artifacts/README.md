@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle/README.md)：原始矩阵、截图及前批正常交付回执。
+
 - [长正文与来源阅读](2026-10-14-long-source-reading/README.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
 
 - [Provider Test 的结果事实](2026-10-14-provider-test-observation/README.md)：前态、正向合同与实际模型/页面资格。

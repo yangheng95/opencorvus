@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Provider Test 在途生命周期](records/2026-10/2026-10-14-provider-test-lifecycle.md)：独立补验并行、Key、删除重建与作用域接受边界。
+
 - [404 Task Git 与 Question 重连](records/2026-10/2026-10-14-task-git-question-reconnect-404.md)：冻结 Git 目录实证、同页草稿重连与合法 Work/Mission 后续验收。
 
 - [长正文与来源阅读](records/2026-10/2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。

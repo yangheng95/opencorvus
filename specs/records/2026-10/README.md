@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle.md)：独立真实矩阵与全局Auth接受影响调查。
+
 - [404 Task Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404.md)：真实长目录与同 Request 断流，先补证再修复。
 
 - [长正文与来源阅读](2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
