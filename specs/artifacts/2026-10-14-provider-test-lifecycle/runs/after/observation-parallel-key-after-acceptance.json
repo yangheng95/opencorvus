@@ -1,0 +1,65 @@
+{
+  "observedAt": 1791927480062,
+  "auth": {
+    "mtimeMs": 1791927456967.4575,
+    "providers": [
+      {
+        "id": "owned-lifecycle-a",
+        "generation": "4d8ebeeb-9d3b-426e-a09e-8b1c32b4b1ab",
+        "credentialKind": "api"
+      },
+      {
+        "id": "owned-lifecycle-b",
+        "generation": "e9504ca0-6551-44f1-885e-cef640261b09",
+        "credentialKind": "api"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "id": 1,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791927382407,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": true,
+      "respondedAt": 1791927392409,
+      "status": 400
+    },
+    {
+      "id": 2,
+      "method": "POST",
+      "path": "/owned-lifecycle-b/v1/chat/completions",
+      "receivedAt": 1791927382421,
+      "model": "owned-lifecycle-b-model",
+      "streaming": true,
+      "initialCredentialMatched": true,
+      "respondedAt": 1791927392423,
+      "status": 400
+    },
+    {
+      "id": 3,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791927456269,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791927466276,
+      "status": 400
+    },
+    {
+      "id": 4,
+      "method": "POST",
+      "path": "/owned-lifecycle-b/v1/chat/completions",
+      "receivedAt": 1791927456534,
+      "model": "owned-lifecycle-b-model",
+      "streaming": true,
+      "initialCredentialMatched": true,
+      "respondedAt": 1791927466535,
+      "status": 400
+    }
+  ],
+  "boundary": "Actual owned Auth file metadata/generations and physical native HTTP request receipts; no credential values or UI assertions"
+}

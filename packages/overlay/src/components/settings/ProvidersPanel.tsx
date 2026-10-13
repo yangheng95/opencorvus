@@ -1,4 +1,5 @@
 import { Feedback } from "../ui/Feedback"
+import type { ProviderRemovalReceipt } from "@opencorvus-ai/sdk"
 // ── ProvidersPanel ──
 // Solid.js component for managing custom LLM providers.
 // Allows adding, editing, and removing OpenAI-compatible providers
@@ -13,6 +14,7 @@ import { boardStore } from "../../store/board"
 import { loadProviderInfo } from "../../services/config-load"
 import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
 import { settleProviderSaveFollowups, type ProviderSaveFollowup, type ProviderSaveIssue } from "../../services/provider-save"
+import { onProviderMutation, providerMutationScope, publishProviderMutation } from "../../services/provider-mutation"
 import {
   applyProviderForm,
   ProviderFormApiError,
@@ -191,17 +193,21 @@ export default function ProvidersPanel() {
     mutator: (config: Record<string, any>) => void,
     options: ReturnType<typeof providerLoadOptions>,
   ): Promise<any> {
-    const retire = () => {
-      if (options.isCurrentDirectory(directory)) retireProviderTest(providerID)
+    const observeCommit = () => {
+      publishProviderMutation({
+        authority: options.authority,
+        scope: providerMutationScope(directory),
+        providerIDs: [providerID],
+      })
     }
     try {
       const result = directory.trim()
         ? await updateConfig(mutator, options)
         : await updateGlobalConfig(mutator, options.authority)
-      retire()
+      observeCommit()
       return result
     } catch (error) {
-      if (committedConfigFromError(error)) retire()
+      if (committedConfigFromError(error)) observeCommit()
       throw error
     }
   }
@@ -238,6 +244,15 @@ export default function ProvidersPanel() {
     for (const providerID of providerTestGenerations.keys()) retireProviderTest(providerID)
   }
 
+  onCleanup(
+    onProviderMutation((mutation) => {
+      if (!isApiAuthorityCurrent(mutation.authority)) return
+      if (mutation.scope.kind === "project" && mutation.scope.directory !== activeDirectory().trim()) return
+      if (mutation.providerIDs === "all") retireAllProviderTests()
+      else for (const providerID of mutation.providerIDs) retireProviderTest(providerID)
+    }),
+  )
+
   async function refreshProviderCatalog(
     directory: string,
     options: ReturnType<typeof providerLoadOptions>,
@@ -247,12 +262,13 @@ export default function ProvidersPanel() {
     setRefreshingProviders(true)
     try {
       const result = await requestProviderCatalogRefresh(directory, options.authority)
+      if (result.ok)
+        publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: "all" })
       if (sequence !== providerRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
         setProviderRefreshError(feedback("provider.catalog_refresh.failed", result.error))
         return
       }
-      retireAllProviderTests()
       setLastProvidersRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
         setProviderRefreshError(
@@ -280,13 +296,16 @@ export default function ProvidersPanel() {
     setRefreshingModels(true)
     try {
       const result = await requestProviderModelsRefresh(directory, options.authority)
+      if (result.ok && result.providers)
+        publishProviderMutation({
+          authority: options.authority,
+          scope: { kind: "global" },
+          providerIDs: result.providers.map((provider) => provider.providerID),
+        })
       if (sequence !== modelRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
         setModelRefreshError(feedback("provider.model_refresh.failed", result.error))
         return
-      }
-      if (result.providers) {
-        for (const provider of result.providers) retireProviderTest(provider.providerID)
       }
       setLastModelsRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
@@ -427,8 +446,8 @@ export default function ProvidersPanel() {
     setAuthing((prev) => new Set(prev).add(providerId))
     try {
       const ok = await authenticateSelectedProvider(providerId, authCallbacks(owns), options)
+      if (ok) publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: "all" })
       if (ok && owns()) {
-        retireProviderTest(providerId)
         try {
           await refreshAuthState(options)
           if (!owns()) return
@@ -728,7 +747,7 @@ export default function ProvidersPanel() {
                 body: JSON.stringify({ type: "api", key: apiKey }),
               })) as AuthMutationResult
               credentialCommitted = true
-              if (options.isCurrentDirectory(directory)) retireProviderTest(id)
+              publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: [id] })
               return result.issues
             },
           },
@@ -841,8 +860,12 @@ export default function ProvidersPanel() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ type: "api", key: value }),
             })) as AuthMutationResult
+            publishProviderMutation({
+              authority: options.authority,
+              scope: { kind: "global" },
+              providerIDs: [providerId],
+            })
             if (owns()) {
-              retireProviderTest(providerId)
               clearApiKeyInput(providerId)
             }
             return authResult.issues
@@ -931,10 +954,18 @@ export default function ProvidersPanel() {
       const path = directory
         ? providerScopedPath(`provider/${encodeURIComponent(id)}`, directory)
         : `global/providers/${encodeURIComponent(id)}`
-      const receipt = (await apiJson(path, { method: "DELETE", authority: options.authority })) as {
-        status: "committed" | "committed_with_residue"
-        residue: Array<{ owner: string; message: string }>
-      }
+      const receipt = (await apiJson(path, {
+        method: "DELETE",
+        authority: options.authority,
+      })) as ProviderRemovalReceipt
+      publishProviderMutation({
+        authority: options.authority,
+        scope:
+          receipt.scope === "global" || receipt.credential === "removed" || receipt.credential === "absent"
+            ? { kind: "global" }
+            : providerMutationScope(directory),
+        providerIDs: [receipt.providerID],
+      })
       if (!owns()) return
       const residueNotice =
         receipt.status === "committed_with_residue"
@@ -946,7 +977,6 @@ export default function ProvidersPanel() {
           : null
       if (residueNotice) setFormError(residueNotice)
       clearApiKeyInput(id)
-      retireProviderTest(id)
       try {
         await refreshAuthState(options)
       } catch (error) {

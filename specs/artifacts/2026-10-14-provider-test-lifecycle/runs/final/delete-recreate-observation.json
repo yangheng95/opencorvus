@@ -1,0 +1,40 @@
+{
+  "observedAt": 1791928409353,
+  "authMtimeMs": 1791928358585.354,
+  "configMtimeMs": 1791928358526.6875,
+  "requests": [
+    {
+      "id": 1,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928158433,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": true,
+      "respondedAt": 1791928168435,
+      "status": 400
+    },
+    {
+      "id": 2,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928341788,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791928351789,
+      "status": 400
+    },
+    {
+      "id": 3,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928366579,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791928376580,
+      "status": 400
+    }
+  ]
+}

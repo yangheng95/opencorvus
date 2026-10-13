@@ -50,6 +50,16 @@ can retain both messages. A successful refresh clears its own operation feedback
 Existing API authority, directory selection and operation generation govern publication
 and retirement, without a second state owner or automatic mutation retry.
 
+Accepted Provider mutations publish their captured API authority, actual global or
+project scope and affected Provider IDs to current subscribers, independently of
+the initiating form's lifetime. Shared registry outcomes explicitly address all
+observations. The current panel retires its existing per-ID Test generations and
+result Map; project outcomes apply only to their exact directory. The notification
+stores listeners only, with no replay queue, credential or second result store.
+Drafts and reads retain their original selection ownership. This covers accepted
+responses in the current frontend process; external writers and responses lost to
+transport timeout require separate qualification.
+
 Child transcript keys include the same captured API authority beside the actual
 source, child Session and directory. The existing resource and refresh generation
 retire queued reads/live frames on key change; loader and ordered snapshot parser

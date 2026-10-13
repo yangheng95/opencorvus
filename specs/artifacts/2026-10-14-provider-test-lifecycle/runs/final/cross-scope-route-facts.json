@@ -1,0 +1,165 @@
+{
+  "boundary": "Selected request metadata from the original current backend log; whole flushed log qualifies only after exit",
+  "rows": [
+    {
+      "time": "2026-10-13T21:49:18.409Z",
+      "requestID": "1fdc3db9-3a2f-4483-8b9e-6123a577c9cf",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:49:28.440Z",
+      "requestID": "1fdc3db9-3a2f-4483-8b9e-6123a577c9cf",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10031
+    },
+    {
+      "time": "2026-10-13T21:50:47.676Z",
+      "requestID": "7944276c-b603-4108-9d7d-8f716bb4ea40",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:50:47.685Z",
+      "requestID": "7944276c-b603-4108-9d7d-8f716bb4ea40",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 9
+    },
+    {
+      "time": "2026-10-13T21:52:21.774Z",
+      "requestID": "9917ea45-f80c-4c60-bb5a-2620afb56191",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:52:31.792Z",
+      "requestID": "9917ea45-f80c-4c60-bb5a-2620afb56191",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10018
+    },
+    {
+      "time": "2026-10-13T21:52:38.581Z",
+      "requestID": "618b82cf-603d-4e57-a4ae-21f115f3dc5f",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:52:38.587Z",
+      "requestID": "618b82cf-603d-4e57-a4ae-21f115f3dc5f",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 6
+    },
+    {
+      "time": "2026-10-13T21:52:46.428Z",
+      "requestID": "a9158b81-4c79-4238-bef0-90879cc3aaeb",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:52:56.583Z",
+      "requestID": "a9158b81-4c79-4238-bef0-90879cc3aaeb",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10155
+    },
+    {
+      "time": "2026-10-13T21:55:22.358Z",
+      "requestID": "92c00307-ff39-4d18-bc88-0e7dd56f8d09",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:55:25.279Z",
+      "requestID": "8376437e-ce10-41d0-be8e-cafffac8ba28",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:55:25.284Z",
+      "requestID": "8376437e-ce10-41d0-be8e-cafffac8ba28",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 5
+    },
+    {
+      "time": "2026-10-13T21:55:25.763Z",
+      "requestID": "e6f3f5c5-d6ff-48f5-a47c-07e11b2c555b",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T21:55:32.368Z",
+      "requestID": "92c00307-ff39-4d18-bc88-0e7dd56f8d09",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10010
+    },
+    {
+      "time": "2026-10-13T21:55:35.779Z",
+      "requestID": "e6f3f5c5-d6ff-48f5-a47c-07e11b2c555b",
+      "method": "POST",
+      "path": "/global/providers/owned-lifecycle-a/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10016
+    },
+    {
+      "time": "2026-10-13T22:04:58.407Z",
+      "requestID": "e98c270b-c563-4f80-b123-ea231bf84b55",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T22:05:28.040Z",
+      "requestID": "d8180660-f3f7-41a3-a1e4-eaff3879ff1e",
+      "method": "POST",
+      "path": "/provider/owned-lifecycle-a/test",
+      "status": "started"
+    },
+    {
+      "time": "2026-10-13T22:05:38.055Z",
+      "requestID": "d8180660-f3f7-41a3-a1e4-eaff3879ff1e",
+      "method": "POST",
+      "path": "/provider/owned-lifecycle-a/test",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10015
+    },
+    {
+      "time": "2026-10-13T22:05:42.037Z",
+      "requestID": "e98c270b-c563-4f80-b123-ea231bf84b55",
+      "method": "PUT",
+      "path": "/auth/owned-lifecycle-a",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 43630
+    }
+  ]
+}

@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 服务商全局凭据保存跨项目完成后，当前面板按实际服务商清除过期连接测试；项目配置保持目录范围，并行服务商测试独立收敛。此项覆盖当前前端实际收到的接受回执。
+
 - 服务商连接测试从有效目录选择默认模型，空模型声明继续可测试；零有效模型与配置不可用保持明确原因。结果使用当前语言摘要、实际模型身份和可展开的原始模型回复或完整诊断；保存配置、Key、删除及目录刷新后退休对应旧结果和在途回写。
 
 - 独立 Chat 与侧聊显示真实待批准权限，冷加载和重连恢复同一请求；实时事件保留原请求说明和时间，取消或失效按真实账本清理卡片。回复后仅刷新仍被选中的原 Task。
@@ -93,6 +95,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Accepted global provider credential saves retire the affected connection test across project navigation. Project configuration retains its directory scope, and parallel provider tests settle independently. This covers accepted responses received by the current frontend.
 
 - Provider connection tests select the default model from the effective catalog, including inherited models with an empty declaration, and distinguish unavailable configurations from zero models. Results show localized summaries, actual model identity and expandable original model output or complete diagnostics; accepted configuration, key, deletion and catalog changes retire the corresponding observations and late completions.
 

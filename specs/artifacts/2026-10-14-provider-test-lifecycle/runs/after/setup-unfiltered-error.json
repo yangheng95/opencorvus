@@ -1,0 +1,13 @@
+{
+  "status": 409,
+  "body": {
+    "name": "NonCanonicalConfigFileError",
+    "data": {
+      "canonical": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc",
+      "conflicts": [
+        "D:\\myhexin-local\\opencorvus\\.opencorvus\\opencorvus.jsonc"
+      ],
+      "message": "OpenCorvus configuration has one canonical file: D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\after\\project\\.opencorvus\\opencorvus.jsonc. Remove the non-canonical configuration source: D:\\myhexin-local\\opencorvus\\.opencorvus\\opencorvus.jsonc"
+    }
+  }
+}

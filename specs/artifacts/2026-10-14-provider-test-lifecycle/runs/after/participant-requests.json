@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "method": "POST",
+    "path": "/owned-lifecycle-a/v1/chat/completions",
+    "receivedAt": 1791927382407,
+    "model": "owned-lifecycle-a-model",
+    "streaming": true,
+    "initialCredentialMatched": true,
+    "respondedAt": 1791927392409,
+    "status": 400
+  },
+  {
+    "id": 2,
+    "method": "POST",
+    "path": "/owned-lifecycle-b/v1/chat/completions",
+    "receivedAt": 1791927382421,
+    "model": "owned-lifecycle-b-model",
+    "streaming": true,
+    "initialCredentialMatched": true,
+    "respondedAt": 1791927392423,
+    "status": 400
+  },
+  {
+    "id": 3,
+    "method": "POST",
+    "path": "/owned-lifecycle-a/v1/chat/completions",
+    "receivedAt": 1791927456269,
+    "model": "owned-lifecycle-a-model",
+    "streaming": true,
+    "initialCredentialMatched": false,
+    "respondedAt": 1791927466276,
+    "status": 400
+  },
+  {
+    "id": 4,
+    "method": "POST",
+    "path": "/owned-lifecycle-b/v1/chat/completions",
+    "receivedAt": 1791927456534,
+    "model": "owned-lifecycle-b-model",
+    "streaming": true,
+    "initialCredentialMatched": true,
+    "respondedAt": 1791927466535,
+    "status": 400
+  }
+]
