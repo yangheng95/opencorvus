@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [377 语言资源与启动失败](locale-bootstrap-plan-377.md)：[真实页面与运行证据](locale-bootstrap-377/README.md)。
+
 - [376 前端资源快照](ui-resource-snapshot-plan-376.md)：旧页面资源生命周期修复与[真实重建证据](ui-resource-snapshot-376/README.md)。
 
 - [375 附件原名与图片引用](attachment-display-plan-375.md)：原始名称投影、媒体引用入口与[12图实页证据](attachment-display-375/README.md)。

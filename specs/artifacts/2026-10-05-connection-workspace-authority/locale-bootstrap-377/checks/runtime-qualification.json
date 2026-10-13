@@ -1,0 +1,222 @@
+{
+  "scopes": [
+    {
+      "scope": "after",
+      "requests": 5,
+      "elapsedMs": 88720,
+      "source": {
+        "id": "prt_g0VXtp1Ni00osb2CRfQe",
+        "messageID": "msg_g0VXtozsi00FA0Nmli77",
+        "type": "source-file",
+        "sourceId": "4e00b690042d7fa96bb2d32b5e210940cdb70504736707c4b25b6d685939cdaa",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-after\\project\\嵌套页面.txt",
+        "title": "嵌套页面.txt",
+        "range": {
+          "startLine": 2,
+          "endLine": 3
+        },
+        "provider": "opencorvus-read"
+      },
+      "locales": [
+        {
+          "level": "info",
+          "time": "2026-10-13T04:08:39.546Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "b050fb3a-c6c7-4956-8f46-21513fc2aa0d",
+            "method": "GET",
+            "path": "/ui/i18n/zh-CN.json",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          },
+          "message": "request"
+        },
+        {
+          "level": "info",
+          "time": "2026-10-13T04:08:39.547Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "92b25372-be93-49ef-97be-a51dc514729c",
+            "method": "GET",
+            "path": "/ui/i18n/en-US.json",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          },
+          "message": "request"
+        },
+        {
+          "level": "info",
+          "time": "2026-10-13T04:09:23.117Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "cd7e9ac0-9735-4c0d-8f09-1b436bd1fab9",
+            "method": "GET",
+            "path": "/ui/i18n/zh-CN.json",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          },
+          "message": "request"
+        },
+        {
+          "level": "info",
+          "time": "2026-10-13T04:09:23.124Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "f1279ca5-bfe2-44d2-8678-420a789e6edc",
+            "method": "GET",
+            "path": "/ui/i18n/en-US.json",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          },
+          "message": "request"
+        }
+      ],
+      "settled": {
+        "occurrence": "locale-bootstrap-377-after-e8fc4a55-5420-4e84-aa65-21b6d6929736",
+        "outcome": "settled",
+        "host": {
+          "pid": 77152,
+          "processInstanceID": "win32:639274612975005123",
+          "occurrenceID": "ddfbe8fc-aa90-44fb-a31e-369821566c79"
+        },
+        "target": {
+          "pid": 80308,
+          "processInstanceID": "win32:639274612982856900",
+          "occurrenceID": "2e800a37-9be3-4fae-afcf-6c4e8daa2902"
+        },
+        "observedAtUtc": "2026-10-13T04:09:47.005Z",
+        "deadlineAt": 1791865097483,
+        "terminal": {
+          "occurrenceID": "locale-bootstrap-377-after-e8fc4a55-5420-4e84-aa65-21b6d6929736",
+          "pid": 80308,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "providerEOFRequests": 5,
+        "physicalCompletion": true,
+        "cancellation": null,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "qualification": "NativeService",
+        "providerUserCancelledRequests": 0
+      }
+    },
+    {
+      "scope": "failure",
+      "requests": 2,
+      "elapsedMs": 51374,
+      "locales": [
+        {
+          "level": "info",
+          "time": "2026-10-13T04:10:26.810Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "093f3c65-fd53-4ceb-b1d9-f327650a2048",
+            "method": "GET",
+            "path": "/ui/i18n/zh-CN.json",
+            "status": "completed",
+            "statusCode": 404,
+            "duration": 0
+          },
+          "message": "request"
+        },
+        {
+          "level": "info",
+          "time": "2026-10-13T04:10:26.811Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "de6a47f6-5583-4537-9529-25813c5a6884",
+            "method": "GET",
+            "path": "/ui/i18n/en-US.json",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          },
+          "message": "request"
+        },
+        {
+          "level": "info",
+          "time": "2026-10-13T04:10:34.767Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "4a25ed97-410a-47e4-bd7a-4a9a144a74e8",
+            "method": "GET",
+            "path": "/ui/i18n/zh-CN.json",
+            "status": "completed",
+            "statusCode": 404,
+            "duration": 0
+          },
+          "message": "request"
+        },
+        {
+          "level": "info",
+          "time": "2026-10-13T04:10:34.767Z",
+          "service": "server",
+          "logDomain": "non-session",
+          "data": {
+            "requestID": "fb726ee1-0fa2-42e5-a21a-8a69c123422c",
+            "method": "GET",
+            "path": "/ui/i18n/en-US.json",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          },
+          "message": "request"
+        }
+      ],
+      "settled": {
+        "occurrence": "locale-bootstrap-377-failure-c17863ff-98a1-4b53-9274-6f19e7d7c4ff",
+        "outcome": "settled",
+        "host": {
+          "pid": 75052,
+          "processInstanceID": "win32:639274614052968355",
+          "occurrenceID": "63079392-c1b4-4d4e-8b65-3dc97ed23f33"
+        },
+        "target": {
+          "pid": 27912,
+          "processInstanceID": "win32:639274614060830201",
+          "occurrenceID": "4cadaee2-7cdd-4411-a57e-bb9d73b8742f"
+        },
+        "observedAtUtc": "2026-10-13T04:10:57.457Z",
+        "deadlineAt": 1791865205275,
+        "terminal": {
+          "occurrenceID": "locale-bootstrap-377-failure-c17863ff-98a1-4b53-9274-6f19e7d7c4ff",
+          "pid": 27912,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "physicalCompletion": true,
+        "qualification": "NativeService",
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "providerEOFRequests": 2,
+        "cancellation": null,
+        "providerUserCancelledRequests": 0
+      }
+    }
+  ],
+  "boundary": "Actual HTTP requests, canonical Source/ToolOutcome, complete file bytes, Provider and Native settlement; five screenshots manually reviewed separately. No DOM, UI text, rendering or screenshot assertions."
+}

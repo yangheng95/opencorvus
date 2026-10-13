@@ -335,6 +335,10 @@ function isBrowserResizeObserverDeliveryError(error: unknown): boolean {
 }
 
 function reportOverlayRuntimeError(scope: string, error: unknown): void {
+  if (!appStore.i18nReady) {
+    console.error(`[${scope}]`, error)
+    return
+  }
   const details = formatErrorDetails(error)
   const message = runtimeErrorMessage(error)
   const diagnosticDetails = details ? `source: ${scope}\n\n${details}` : `source: ${scope}`
@@ -2986,14 +2990,16 @@ function firstPaintedFrame(): Promise<void> {
 
 const overlayAppHost = document.getElementById("overlayAppHost")
 if (!overlayAppHost) throw new Error("Overlay application host is missing from index.html")
-const startupReady = (window as Window & { __opencorvusStartupReady?: Promise<void> }).__opencorvusStartupReady
-if (!startupReady) throw new Error("Overlay startup readiness contract is missing from index.html")
-await startupReady
+const startup = (window as Window & { __opencorvusStartup?: { ready: Promise<void>; mounted: () => void } })
+  .__opencorvusStartup
+if (!startup) throw new Error("Overlay startup lifecycle contract is missing from index.html")
+await startup.ready
 // The static loading surface is present before this module is evaluated so the
 // native window never exposes an empty WebView. Solid appends to its host, so
 // remove that one pre-mount child before the application takes ownership.
 overlayAppHost.replaceChildren()
 disposers.push(render(() => <OverlayRoot />, overlayAppHost))
+startup.mounted()
 await firstPaintedFrame()
 await showOverlayWindow()
 disposers.push(installExpertSquadInstallHandoffBridge())

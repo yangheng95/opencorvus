@@ -1,0 +1,26 @@
+[
+  {
+    "level": "error",
+    "message": "[window.error] Error: Failed to load locale zh-CN: HTTP 404 http://localhost:18385/ui/i18n/zh-CN.json\n    at AM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:13803)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:2:14382\n    at async Promise.all (index 0)\n    at async PM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:14339)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:231:25445",
+    "timestamp": "2026-10-13T04:10:26.821Z",
+    "url": "http://localhost:18385/ui/assets/main-BuketuB2.js"
+  },
+  {
+    "level": "error",
+    "message": "Error: Failed to load locale zh-CN: HTTP 404 http://localhost:18385/ui/i18n/zh-CN.json\n    at AM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:13803)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:2:14382\n    at async Promise.all (index 0)\n    at async PM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:14339)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:231:25445",
+    "timestamp": "2026-10-13T04:10:26.822Z",
+    "url": "http://localhost:18385/ui/assets/main-BuketuB2.js"
+  },
+  {
+    "level": "error",
+    "message": "[window.error] Error: Failed to load locale zh-CN: HTTP 404 http://localhost:18385/ui/i18n/zh-CN.json\n    at AM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:13803)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:2:14382\n    at async Promise.all (index 0)\n    at async PM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:14339)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:231:25445",
+    "timestamp": "2026-10-13T04:10:34.774Z",
+    "url": "http://localhost:18385/ui/assets/main-BuketuB2.js"
+  },
+  {
+    "level": "error",
+    "message": "Error: Failed to load locale zh-CN: HTTP 404 http://localhost:18385/ui/i18n/zh-CN.json\n    at AM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:13803)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:2:14382\n    at async Promise.all (index 0)\n    at async PM (http://localhost:18385/ui/assets/main-BuketuB2.js:2:14339)\n    at async http://localhost:18385/ui/assets/main-BuketuB2.js:231:25445",
+    "timestamp": "2026-10-13T04:10:34.775Z",
+    "url": "http://localhost:18385/ui/assets/main-BuketuB2.js"
+  }
+]

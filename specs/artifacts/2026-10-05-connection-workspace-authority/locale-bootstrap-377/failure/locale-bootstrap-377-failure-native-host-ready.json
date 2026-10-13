@@ -1,0 +1,38 @@
+{
+  "occurrence": "locale-bootstrap-377-failure-c17863ff-98a1-4b53-9274-6f19e7d7c4ff",
+  "outcome": "ready",
+  "host": {
+    "pid": 75052,
+    "processInstanceID": "win32:639274614052968355",
+    "occurrenceID": "63079392-c1b4-4d4e-8b65-3dc97ed23f33"
+  },
+  "parent": {
+    "pid": 80080,
+    "processInstanceID": "win32:639274614011749927",
+    "occurrenceID": "1d3bcd0e-8004-4d3b-a818-1f02c1f5563d"
+  },
+  "target": {
+    "pid": 27912,
+    "processInstanceID": "win32:639274614060830201",
+    "occurrenceID": "4cadaee2-7cdd-4411-a57e-bb9d73b8742f"
+  },
+  "targetBirthAtMs": 1791864606083,
+  "deadlineAt": 1791865205275,
+  "observedAtUtc": "2026-10-13T04:10:06.121Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/locale-bootstrap-377-bundle/failure/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-failure\\runtime",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-failure\\project",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-failure\\evidence",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-failure\\startup.json",
+    "18385",
+    "locale-bootstrap-377-failure-c17863ff-98a1-4b53-9274-6f19e7d7c4ff",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-failure\\task-selection.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\locale-bootstrap-377\\failure\\builtin.json",
+    "12",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

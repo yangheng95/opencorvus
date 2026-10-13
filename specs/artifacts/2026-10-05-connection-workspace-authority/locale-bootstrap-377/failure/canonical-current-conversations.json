@@ -1,0 +1,77 @@
+{
+  "observedAtUtc": "2026-10-13T04:11:03.884Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hZhEd9xCAh9M5DAAAqjQ",
+      "project_id": "prj_hKS9F54pSOQBUVlEINTu",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-failure\\runtime\\data\\projects\\2026\\10\\13\\341978ae-b969-4f85-90a7-2eb31e19b536",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"c896708d-2a68-4123-9918-2a60858868c4\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_ht00NEVbmxwh1JLaupN4\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_ht00NEVbmxwh1JLaupN4",
+      "sessionID": "ses_hZhEd9xCAh9M5DAAAqjQ",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791864614204
+      }
+    },
+    {
+      "id": "msg_g0VXtpJSl00zZy5O02Oq",
+      "sessionID": "ses_hZhEd9xCAh9M5DAAAqjQ",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791864614587,
+        "completed": 1791864618742
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hUFOABnArpZz7q9vpXTe",
+      "messageID": "msg_ht00NEVbmxwh1JLaupN4",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXtpJeA00uJosuTmKz",
+      "messageID": "msg_g0VXtpJSl00zZy5O02Oq",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXtpKNK00m3KiHKREV",
+      "messageID": "msg_g0VXtpJSl00zZy5O02Oq",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791864618094,
+        "end": 1791864618351
+      }
+    },
+    {
+      "id": "prt_g0VXtpKWu00OkYeDNMB4",
+      "messageID": "msg_g0VXtpJSl00zZy5O02Oq",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [],
+  "outcomes": []
+}

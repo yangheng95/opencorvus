@@ -6,13 +6,8 @@
       // Keep this validation list aligned with OVERLAY_THEME_IDS.
       const ocThemeIDs = ["dark", "vscode-dark", "light", "system", "ivory", "sage", "mist", "graphite"]
       const ocStartupThemeQuery = matchMedia("(prefers-color-scheme: light)")
-      const ocStartupTheme = new URLSearchParams(location.search).get("acceptance-startup-theme")
       const ocNativeStartupTheme = globalThis.__OPENCORVUS_STARTUP_THEME__ || ""
-      const ocRequestedStartupTheme = ocThemeIDs.includes(ocStartupTheme)
-        ? ocStartupTheme
-        : ocThemeIDs.includes(ocNativeStartupTheme)
-          ? ocNativeStartupTheme
-          : "system"
+      const ocRequestedStartupTheme = ocThemeIDs.includes(ocNativeStartupTheme) ? ocNativeStartupTheme : "system"
       // The requested policy and its effective palette are different facts:
       // `system` must survive module mount while data-theme carries light/dark.
       document.documentElement.dataset.opencorvusStartupTheme = ocRequestedStartupTheme
@@ -406,7 +401,7 @@
           document.documentElement.dataset.theme = event.matches ? "light" : "dark"
         }
         startupThemeQuery.addEventListener("change", syncStartupTheme)
-        window.__opencorvusStartupReady = new Promise((resolve) => {
+        const ready = new Promise((resolve) => {
           resolveApplicationReady = resolve
         })
 
@@ -425,7 +420,7 @@
           const failed = value.phase === "failed"
           title.textContent = failed ? "OpenCorvus could not start" : "Preparing Environment"
           description.textContent = failed
-            ? "The runtime environment could not be prepared. Review the diagnostic below, then retry."
+            ? "Review the diagnostic below, then retry."
             : "Preparing the runtime environment. OpenCorvus will open automatically when ready."
           status.textContent = value.message || (failed ? "OpenCorvus could not start" : "Preparing OpenCorvus…")
           if (total > 0) {
@@ -444,19 +439,29 @@
           if (value.phase === "ready") loadApplication()
         }
         const tauri = window.__TAURI__
-        const acceptanceStartup = new URLSearchParams(location.search).get("acceptance-startup")
-        if (acceptanceStartup === "failed") {
-          update({ payload: { phase: "failed", message: "OpenCorvus could not start", logPath: "acceptance.log" } })
-          return
+        let frontendFailed = false
+        const failFrontend = (error) => {
+          frontendFailed = true
+          update({ payload: { phase: "failed", message: error instanceof Error ? error.message : String(error) } })
         }
-        if (acceptanceStartup === "loading") return
-        if (!tauri) {
-          loadApplication()
-          return
-        }
+        const onError = (event) => failFrontend(event.error ?? event.message)
+        const onRejection = (event) => failFrontend(event.reason)
+        window.addEventListener("error", onError)
+        window.addEventListener("unhandledrejection", onRejection)
+        window.__opencorvusStartup = Object.freeze({
+          ready,
+          mounted() {
+            window.removeEventListener("error", onError)
+            window.removeEventListener("unhandledrejection", onRejection)
+          },
+        })
         const invoke = (command, args) => tauri.core.invoke(command, args)
 
         retry.addEventListener("click", () => {
+          if (frontendFailed) {
+            location.reload()
+            return
+          }
           startupSurface.dataset.failed = "false"
           startupSurface.setAttribute("aria-busy", "true")
           title.textContent = "Preparing Environment"
@@ -473,7 +478,13 @@
           })
         })
         log.addEventListener("click", () => invoke("overlay_startup_open_log", { path: logPath }))
-        await tauri.event.listen(eventName, update)
+        if (!tauri) {
+          loadApplication()
+          return
+        }
+        await tauri.event.listen(eventName, (event) => {
+          if (!frontendFailed) update(event)
+        })
       })()
     </script>
     <script type="module" src="/main.tsx"></script>

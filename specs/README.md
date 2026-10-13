@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [377 语言资源与启动失败](records/2026-10/2026-10-13-locale-bootstrap-377.md)：嵌套页面资源定位与真实失败诊断。
+
 - [376 前端资源快照](records/2026-10/2026-10-13-ui-resource-snapshot-376.md)：重建后保留运行中页面资源，真实私有构建替换与保存验收。
 
 - [375 附件原名与图片引用](records/2026-10/2026-10-13-attachment-display-375.md)：同名附件、图片/PDF呈现，补齐正文图片链接及12图验收。

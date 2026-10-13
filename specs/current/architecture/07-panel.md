@@ -6,6 +6,15 @@ Rebuilding an input directory does not switch a running page's module version;
 new server processes capture the new publication. Project and conversation data
 continue through their existing dynamic readers and subscriptions.
 
+Locale catalogs resolve relative to the executing module, whose source `utils`
+and published `assets` directories both sit beside the `i18n` directory. The
+document route does not supply the locale resource base. The static startup
+surface owns real frontend errors and unhandled rejections until the renderer
+mounts, retaining the original diagnostic and a page reload action. Native
+environment preparation failures keep their existing native retry command.
+One startup lifecycle hands readiness and listener disposal to the renderer;
+pre-catalog error reporting does not query unavailable translations.
+
 ## Composer availability
 
 Project file listing, content/source-content, file status and text/file search

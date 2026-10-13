@@ -44,6 +44,6 @@ freeze只保存目录路径、部分index内容和摘要；请求仍执行Bun.fi
 
 page201的01–05共5图已逐张人工查看：01真实read/Source与自然终答；02重建后reload和重新选择同一会话正常显示；03首次加载旧版CodeEditor成功并Ctrl+S保存x，实际项目文件65字节、CRLF保持；05返回/ui根入口再次正常显示。项目文件动态保存没有被冻结。
 
-04是额外探查的未解决项：/ui/inspect/resource/的脚本/CSS地址已正确回到/ui/assets，但客户端继续GET /ui/inspect/resource/i18n/zh-CN.json和en-US.json，收到文档200并解析失败，随后MissingI18nKeyError阻断错误展示。保存了截图、console和实际HTTP证据；不宣称嵌套文档初始化已通过，也不把它归为原资源快照失效。下一轮审查客户端资源基址与bootstrap失败呈现的共享入口。
+04是额外探查的未解决项：/ui/inspect/resource/的脚本/CSS地址已正确回到/ui/assets，但客户端继续GET /ui/inspect/resource/i18n/zh-CN.json和en-US.json，收到文档200并解析失败，错误日志又记录MissingI18nKeyError。377代码复核纠正：MissingI18nKeyError只打印并返回key，真正中断是原JSON解析拒绝；启动画面未处理该拒绝。保存了截图、console和实际HTTP证据；不宣称嵌套文档初始化已通过，也不把它归为原资源快照失效。下一轮审查客户端资源基址与bootstrap失败呈现的共享入口。
 
 原84566及shutdown实际exit0，Native578003ms（原600000内），5次Sol流式HTTP200/EOF、1个真实read及自然终答（另有预检终答）。全部Host/Native/output/request/端口、临时auth/models和页面201闭合，IAB为空。源共享dist与用户窗口/进程均未操作；只重建私有副本。编译embedded实际二进制运行尚未执行，此轮为真实CLI目录来源验收，embedded走同一捕获与服务实现并经代码/类型复核。范围提交、fresh upstream合并及普通push后继续goal。

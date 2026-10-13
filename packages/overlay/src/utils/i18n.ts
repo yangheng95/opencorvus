@@ -12,7 +12,7 @@ let messages: Record<string, any> = {}
 
 // ── Helpers ──
 
-function record(value: any): boolean {
+function record(value: unknown): value is Record<string, any> {
   return !!value && typeof value === "object" && !Array.isArray(value)
 }
 
@@ -137,20 +137,23 @@ export function getLocale(): string {
 // ── Locale loading ──
 
 function i18nAssetUrl(path: string): string {
-  const assetBase = typeof globalThis !== "undefined" ? (globalThis as any).__OPENCORVUS_ASSET_BASE__ : ""
-  if (typeof assetBase === "string" && assetBase.trim()) {
-    return new URL(path, assetBase).toString()
-  }
-  return path
+  // Both the source utils directory and the published assets directory sit
+  // beside i18n. Resolve from the module, independently of the document route.
+  return new URL(path, import.meta.url).href
 }
 
 async function fetchLocaleData(locale: string): Promise<Record<string, any>> {
-  const url = i18nAssetUrl(`i18n/${locale}.json`)
+  const url = i18nAssetUrl(`../i18n/${locale}.json`)
   const res = await fetch(url)
   if (!res.ok) {
     throw new Error(`Failed to load locale ${locale}: HTTP ${res.status} ${url}`)
   }
-  const data = await res.json()
+  let data: unknown
+  try {
+    data = await res.json()
+  } catch (cause) {
+    throw new Error(`Failed to load locale ${locale}: invalid JSON from ${url}`, { cause })
+  }
   if (!record(data)) {
     throw new Error(`Failed to load locale ${locale}: expected JSON object from ${url}`)
   }

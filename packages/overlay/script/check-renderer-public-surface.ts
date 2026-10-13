@@ -25,10 +25,10 @@ const SOURCE_ROOT = path.resolve(import.meta.dir, "../src")
  * cannot carry it.
  */
 const DECLARED_RENDERER_GLOBALS: Record<string, string> = {
-  __opencorvusStartupReady:
+  __opencorvusStartup:
     "index.html paints a startup surface before the module bundle exists, so the native window is never empty. " +
-    "An inline document script and a module bundle share no import graph; this Promise is the handoff that lets " +
-    "the renderer take over the host element.",
+    "An inline document script and a module bundle share no import graph; this lifecycle provides the readiness " +
+    "Promise and releases startup error listeners when the renderer takes over the host element.",
 }
 
 // Matches `window.x =`, `globalThis.x =`, `(window as any).x =`,

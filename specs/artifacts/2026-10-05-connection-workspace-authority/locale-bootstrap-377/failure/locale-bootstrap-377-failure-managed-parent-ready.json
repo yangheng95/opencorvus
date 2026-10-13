@@ -1,0 +1,15 @@
+{
+  "pid": 27912,
+  "occurrence": "locale-bootstrap-377-failure-c17863ff-98a1-4b53-9274-6f19e7d7c4ff",
+  "owner": {
+    "pid": 27912,
+    "processInstanceID": "win32:639274614060830201",
+    "occurrenceID": "56d08004-340e-4eaa-9a4f-df6b09468e61"
+  },
+  "parent": {
+    "pid": 80868,
+    "processInstanceID": "win32:639274614060400219",
+    "occurrenceID": "5668b336-c451-46b7-81be-a086d0a6695a"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
