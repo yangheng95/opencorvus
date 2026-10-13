@@ -44,6 +44,7 @@ import { Feedback } from "./ui/Feedback"
 import { Disclosure } from "./ui/Disclosure"
 import { SelectControl } from "./ui/SelectControl"
 import { InteractionCard, type InteractionData } from "./InteractionCard"
+import { ContinuousGoalControl } from "./ContinuousGoalControl"
 
 export interface SideChatRequest {
   source: SideChatSource
@@ -64,9 +65,10 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
       kind: "agent" as const,
       sessionID: message.sessionID,
       messageID: message.messageID,
-      agentID: user ? "user" : message.agentID,
-      role: user ? "user" : message.stage,
-      stage: user ? "user" : message.stage,
+      agentID: user && message.info.author === "user" ? "user" : message.agentID,
+      author: String(message.info.author),
+      role: message.stage,
+      stage: message.stage,
       title: message.agentID,
       parts: message.parts.filter(isCardBodyMessagePart),
       childIDs: [],
@@ -393,6 +395,13 @@ export function SideChatPanel(props: {
         </Button>
       </div>
       <p class="side-chat-panel__hint">{t("side_chat.description")}</p>
+      <Show when={selected() && props.source}>
+        <ContinuousGoalControl
+          compact
+          selectionEpoch={boardStore.selectEpoch}
+          owner={{ kind: "chat", id: selected(), directory: props.source!.directory }}
+        />
+      </Show>
       <Show when={error()}>
         <Feedback
           tone="error"

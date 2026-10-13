@@ -15,6 +15,7 @@ import { SidebarVersionLabel } from "./SidebarVersionLabel"
 import { SidebarUpdateButton } from "./SidebarUpdateButton"
 import { SessionDialogHost } from "./SessionDialogHost"
 import { TaskStatusHeader } from "./TaskStatusHeader"
+import { ContinuousGoalControl } from "./ContinuousGoalControl"
 import { TaskOutcomeBadge } from "./TaskOutcomeBadge"
 import { TitlebarBrand } from "./titlebar/TitlebarBrand"
 import { TitlebarMenubar } from "./titlebar/TitlebarMenubar"
@@ -517,6 +518,15 @@ export function App(props: AppProps) {
                                 </div>
                               </div>
                             </header>
+                            <ContinuousGoalControl
+                              selectionEpoch={boardStore.selectEpoch}
+                              owner={(() => {
+                                const item = props.conversationItem()
+                                return item
+                                  ? { kind: item.kind, id: item.kind === "task" ? item.id : item.sessionID, directory: item.directory }
+                                  : undefined
+                              })()}
+                            />
                             <div class="chat-content-frame" id="chatContentFrame">
                               <div class="chat-message-pane" id="chatMessagePane">
                                 <div class="conversation-body" id="conversationBody">

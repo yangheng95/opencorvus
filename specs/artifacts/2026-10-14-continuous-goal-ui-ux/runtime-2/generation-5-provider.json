@@ -1,0 +1,146 @@
+{
+  "pid": 63920,
+  "remainingRequests": 77,
+  "observedAt": 1791925968630,
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791925740411,
+        "boundAt": 1791925740414,
+        "chunkCount": 47,
+        "byteCount": 101372,
+        "firstByteReadAt": 1791925740415,
+        "lastByteReadAt": 1791925746530,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "streamRequest": {
+            "requestID": "msg_g0VXxxmUt04edul9Lgn4",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxxmmZ00lAPucxMF1",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791925746566
+        }
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791925915555,
+        "boundAt": 1791925915570,
+        "chunkCount": 93,
+        "byteCount": 215107,
+        "firstByteReadAt": 1791925915570,
+        "lastByteReadAt": 1791925933758,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "streamRequest": {
+            "requestID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxyWEc00QYdqwsLjo",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791925933799
+        }
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791925922601,
+        "boundAt": 1791925922603,
+        "chunkCount": 8,
+        "byteCount": 522029,
+        "firstByteReadAt": 1791925922885,
+        "lastByteReadAt": 1791925923816,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "streamRequest": {
+            "requestID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxyY5a00Sd2a6TfWa",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VXxyWGH00gyACxgh1x"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791925924011
+        }
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791925966492,
+        "boundAt": 1791925966494,
+        "chunkCount": 27,
+        "byteCount": 531987,
+        "firstByteReadAt": 1791925966513,
+        "lastByteReadAt": 1791925968480,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "streamRequest": {
+            "requestID": "msg_hNONYemJoPUFYc4hPxkp",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxyjfJ00qwqRvq00t",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VXxyjY8002A5cM72K0"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791925968630
+        }
+      },
+      "status": 200
+    }
+  ],
+  "exhausted": false
+}

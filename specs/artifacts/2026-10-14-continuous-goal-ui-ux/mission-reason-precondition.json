@@ -1,0 +1,30 @@
+{
+  "precondition": "Public API setup for reason-preservation retest",
+  "input": {
+    "expectedRevision": "pev_g0VXxwrpS00Jl4a0ucJ7",
+    "reason": "公开 API 设置的 UI 原因保留验收前置条件：等待人工核对预算，不代表真实外部阻塞。",
+    "status": "blocked",
+    "requestID": "b8e35cc1-d331-4ec7-a22a-243d13ce368c",
+    "goalID": "pev_g0VXxvNu000P49lk5Wkk"
+  },
+  "result": {
+    "id": "pev_g0VXxvNu000P49lk5Wkk",
+    "revision": "pev_g0VXxxPAC001WhKdhlYY",
+    "owner": {
+      "kind": "mission",
+      "id": "ses_-zUS25c9kzz9kzxUX96u"
+    },
+    "objective": "Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。",
+    "status": "blocked",
+    "reason": "公开 API 设置的 UI 原因保留验收前置条件：等待人工核对预算，不代表真实外部阻塞。",
+    "tokenBudget": 150000,
+    "turnBudget": 2,
+    "tokensUsed": 83487,
+    "turnsAccepted": 2,
+    "createdAt": 1791925166964,
+    "updatedAt": 1791925648467,
+    "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+    "projectID": "prj_hQfngmGbzvaDqdOLKamq",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+  }
+}

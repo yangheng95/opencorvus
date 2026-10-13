@@ -2891,6 +2891,17 @@ locale while retaining the selected version. Locale readers subscribe to the
 existing locale-resource sequence so localized formatting also updates without
 requiring unrelated content changes.
 
+## Continuous-goal presentation
+
+The shared Chat/Task/Mission conversation area and an opened SideChat expose the
+current continuous-goal HTTP projection and explicit create, pause, resume, budget
+and completion controls. Scope, request lifetime, conflict behavior and budget
+semantics follow [continuous-goal](continuous-goal.md#user-controls). Delivery Slice
+Goal controls retain their separate existing meaning. Goal-controller messages are
+real orchestration participants with localized headers and preserved canonical authors.
+Manual interaction and screenshot review on the formal development `/ui` surface
+provide UI acceptance; API contract checks do not substitute for visual evidence.
+
 ## Current diagnostic log viewer
 
 LogViewer reads the current backend event envelope and preserves nested subject `data`, actual ambient bindings and original raw record in Details. Elapsed duration comes from `data.duration`; subject time/level/service do not change the row header. Historical non-string event time has unknown chronology and its original value remains in details/raw. Unparsed output remains the actual raw diagnostic line without a parallel plaintext interpretation. The live component owns current aggregation/copy behavior; unused duplicate utility aggregation is retired.

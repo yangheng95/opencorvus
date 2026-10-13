@@ -1,0 +1,78 @@
+{
+  "pid": 70740,
+  "remainingRequests": 79,
+  "observedAt": 1791925584247,
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791925524002,
+        "boundAt": 1791925524004,
+        "chunkCount": 40,
+        "byteCount": 711490,
+        "firstByteReadAt": 1791925524016,
+        "lastByteReadAt": 1791925528322,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "streamRequest": {
+            "requestID": "msg_hV1nZO9FP09Of6CBjjFK",
+            "agentID": "mission",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxwsTw00fntsymWWN",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VXxwry300qaePyGruw"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791925528389
+        }
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791925581465,
+        "boundAt": 1791925581467,
+        "chunkCount": 27,
+        "byteCount": 522823,
+        "firstByteReadAt": 1791925581467,
+        "lastByteReadAt": 1791925584166,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hoBTh34EfAdM4iShjpoQ",
+          "streamRequest": {
+            "requestID": "msg_hlZKEYJXUyD31RdV3Sra",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxx7V800tW5ZZ4xGU",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VXxx7PD00BP6S43zFS"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791925584247
+        }
+      },
+      "status": 200
+    }
+  ],
+  "exhausted": false
+}

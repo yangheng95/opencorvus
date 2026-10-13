@@ -1,0 +1,73 @@
+{
+  "pid": 86708,
+  "remainingRequests": 96,
+  "observedAt": 1791922805903,
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "reading",
+        "receivedAt": 1791922801788,
+        "boundAt": 1791922801791,
+        "chunkCount": 10,
+        "byteCount": 27069,
+        "firstByteReadAt": 1791922801793,
+        "lastByteReadAt": 1791922805878,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hKDcF7V1MO8EtABSS7oW",
+          "streamRequest": {
+            "requestID": "msg_huqMCeapQAWPiHgZl71d",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxlSKz00QwDmLqSK9",
+            "attempt": 0
+          }
+        }
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791922804214,
+        "boundAt": 1791922804216,
+        "chunkCount": 38,
+        "byteCount": 515068,
+        "firstByteReadAt": 1791922804217,
+        "lastByteReadAt": 1791922805485,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hKDcF7V1MO8EtABSS7oW",
+          "streamRequest": {
+            "requestID": "msg_huqMCeapQAWPiHgZl71d",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXxlSvr00BIAA6tDMX",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VXxlSM900vSv72oovi"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791922805592
+        }
+      },
+      "status": 200
+    }
+  ],
+  "exhausted": false
+}

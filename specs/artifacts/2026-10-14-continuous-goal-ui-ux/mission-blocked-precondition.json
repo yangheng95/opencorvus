@@ -1,0 +1,31 @@
+{
+  "precondition": "Public API setup while an existing UI draft is open",
+  "result": {
+    "id": "pev_g0VXxvNu000P49lk5Wkk",
+    "revision": "pev_g0VXxvtDt00PYN8H8MZz",
+    "owner": {
+      "kind": "mission",
+      "id": "ses_-zUS25c9kzz9kzxUX96u"
+    },
+    "objective": "Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。",
+    "status": "blocked",
+    "reason": "隔离 UI 验收前置条件：等待操作者复核预算。此状态由公开 API 设置，用于验证阻塞显示与并发冲突，不代表模型发现外部阻塞。",
+    "tokenBudget": 100000,
+    "turnBudget": 1,
+    "tokensUsed": 41629,
+    "turnsAccepted": 1,
+    "createdAt": 1791925166964,
+    "updatedAt": 1791925287361,
+    "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+    "projectID": "prj_hQfngmGbzvaDqdOLKamq",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+  },
+  "input": {
+    "requestID": "55a5fb8f-63de-4269-b18a-22977d9688a4",
+    "goalID": "pev_g0VXxvNu000P49lk5Wkk",
+    "reason": "隔离 UI 验收前置条件：等待操作者复核预算。此状态由公开 API 设置，用于验证阻塞显示与并发冲突，不代表模型发现外部阻塞。",
+    "status": "blocked",
+    "expectedRevision": "pev_g0VXxvNu000P49lk5Wkk"
+  },
+  "observedAt": 1791925287365
+}

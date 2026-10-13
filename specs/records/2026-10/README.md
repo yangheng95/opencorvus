@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标 UI/UX](2026-10-14-continuous-goal-ui-ux.md)：目标控制、状态反馈、双语与真实页面复核。
+
 - [当前基线 Sources 阅读](2026-10-14-source-reading-current-baseline.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。
 
 - [Provider 保存与目录观察](2026-10-14-provider-post-save-observation.md)：commit receipt、保存后真实目录与诊断投影。

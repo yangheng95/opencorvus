@@ -1,0 +1,21 @@
+{
+  "kind": "mission",
+  "id": "ses_-zUS25c9kzz9kzxUX96u",
+  "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+  "input": {
+    "requestID": "68d2a43c-98cb-46b7-8dbd-4ab5c6e00e60",
+    "productPillar": "work",
+    "text": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。",
+    "model": "openai/gpt-6.1-sol",
+    "expertSquadIDs": [
+      "base"
+    ]
+  },
+  "result": {
+    "missionID": "0d6df3b569bfe394",
+    "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+    "created": true,
+    "productPillar": "work"
+  }
+}

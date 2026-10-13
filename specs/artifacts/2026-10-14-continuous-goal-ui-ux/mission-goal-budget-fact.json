@@ -1,0 +1,361 @@
+{
+  "observedAt": 1791925203653,
+  "owner": {
+    "kind": "mission",
+    "id": "ses_-zUS25c9kzz9kzxUX96u",
+    "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+    "input": {
+      "requestID": "68d2a43c-98cb-46b7-8dbd-4ab5c6e00e60",
+      "productPillar": "work",
+      "text": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。",
+      "model": "openai/gpt-6.1-sol",
+      "expertSquadIDs": [
+        "base"
+      ]
+    },
+    "result": {
+      "missionID": "0d6df3b569bfe394",
+      "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "goal": {
+    "id": "pev_g0VXxvNu000P49lk5Wkk",
+    "revision": "pev_g0VXxvNu000P49lk5Wkk",
+    "owner": {
+      "kind": "mission",
+      "id": "ses_-zUS25c9kzz9kzxUX96u"
+    },
+    "objective": "Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。",
+    "status": "budget_limited",
+    "reason": "turn_budget",
+    "tokenBudget": 100000,
+    "turnBudget": 1,
+    "tokensUsed": 41629,
+    "turnsAccepted": 1,
+    "createdAt": 1791925166964,
+    "updatedAt": 1791925166964,
+    "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+    "projectID": "prj_hQfngmGbzvaDqdOLKamq",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+  },
+  "messages": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791924928471
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "mission.operator",
+            "missionID": "0d6df3b569bfe394",
+            "requestID": "68d2a43c-98cb-46b7-8dbd-4ab5c6e00e60",
+            "requestFingerprint": "d4330f75924603b8825020b4b56565d295f792a7c7260ffddc95afe5053d3abd",
+            "openedEventID": "pev_hLNnvrUd6XVxGAn3ei4Z"
+          },
+          "surface": "panel",
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "mission.operator",
+            "literalText": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。"
+          }
+        },
+        "orderKey": "v1:0001791924928471:0000000000000030:0000000000000000:message:msg_hBYMIH9bZIHGFwNnCtgC",
+        "id": "msg_hBYMIH9bZIHGFwNnCtgC",
+        "sessionID": "ses_-zUS25c9kzz9kzxUX96u"
+      },
+      "parts": [
+        {
+          "id": "prt_hhpWHdEjFKgZ95nBxHCv",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_hBYMIH9bZIHGFwNnCtgC",
+          "orderKey": "v1:0001791924928476:0000000000000031:0000000000000000:part:prt_hhpWHdEjFKgZ95nBxHCv",
+          "type": "text",
+          "text": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+            "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791924928734,
+          "completed": 1791924934990
+        },
+        "parentID": "msg_hBYMIH9bZIHGFwNnCtgC",
+        "acceptedInputMessageIDs": [
+          "msg_hBYMIH9bZIHGFwNnCtgC"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 40813,
+          "input": 40807,
+          "output": 6,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791924928734:0000000000000030:0000000000000000:message:msg_g0VXxuNva00NIVVHR2y2",
+        "id": "msg_g0VXxuNva00NIVVHR2y2",
+        "sessionID": "ses_-zUS25c9kzz9kzxUX96u"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxuOSs00XYRtAHBhq",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_g0VXxuNva00NIVVHR2y2",
+          "orderKey": "v1:0001791924930798:0000000000000031:0000000000000000:part:prt_g0VXxuOSs00XYRtAHBhq",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXxuPRb00OeUHvAAYD",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_g0VXxuNva00NIVVHR2y2",
+          "orderKey": "v1:0001791924934563:0000000000000031:0000000000000000:part:prt_g0VXxuPRb00OeUHvAAYD",
+          "type": "text",
+          "text": "准备好了",
+          "time": {
+            "start": 1791924934563,
+            "end": 1791924934693
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0e3870c2dde440e4016ace9ac671bc8191abce22dcab7559dd",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXxuPXZ00qJov3v4Tb",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_g0VXxuNva00NIVVHR2y2",
+          "orderKey": "v1:0001791924934938:0000000000000031:0000000000000000:part:prt_g0VXxuPXZ00qJov3v4Tb",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 40813,
+            "input": 40807,
+            "output": 6,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "goal-controller",
+        "role": "user",
+        "time": {
+          "created": 1791925167396
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "continuous_goal",
+            "goalID": "pev_g0VXxvNu000P49lk5Wkk",
+            "revision": "pev_g0VXxvNu000P49lk5Wkk",
+            "requestID": "pev_hs36BvsHbQinfP8ZZgvo"
+          },
+          "surface": "panel"
+        },
+        "orderKey": "v1:0001791925167396:0000000000000030:0000000000000000:message:msg_hX0PK3hjqOJwuui8AKak",
+        "id": "msg_hX0PK3hjqOJwuui8AKak",
+        "sessionID": "ses_-zUS25c9kzz9kzxUX96u"
+      },
+      "parts": [
+        {
+          "id": "prt_hkrfgkXEuaKrvBmyMoZB",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_hX0PK3hjqOJwuui8AKak",
+          "orderKey": "v1:0001791925167403:0000000000000031:0000000000000000:part:prt_hkrfgkXEuaKrvBmyMoZB",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。\nGoal: pev_g0VXxvNu000P49lk5Wkk; prior settled frontier: msg_g0VXxuNva00NIVVHR2y2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+            "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791925167502,
+          "completed": 1791925172950
+        },
+        "parentID": "msg_hX0PK3hjqOJwuui8AKak",
+        "acceptedInputMessageIDs": [
+          "msg_hX0PK3hjqOJwuui8AKak"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41629,
+          "input": 15123,
+          "output": 10,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791925167502:0000000000000030:0000000000000000:message:msg_g0VXxvO2f00rIgIJtsPj",
+        "id": "msg_g0VXxvO2f00rIgIJtsPj",
+        "sessionID": "ses_-zUS25c9kzz9kzxUX96u"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxvOYR00Z02Y6fJ6K",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_g0VXxvO2f00rIgIJtsPj",
+          "orderKey": "v1:0001791925169471:0000000000000031:0000000000000000:part:prt_g0VXxvOYR00Z02Y6fJ6K",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXxvPK000Wnf49VtH4",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_g0VXxvO2f00rIgIJtsPj",
+          "orderKey": "v1:0001791925172420:0000000000000031:0000000000000000:part:prt_g0VXxvPK000Wnf49VtH4",
+          "type": "text",
+          "text": "Mission 验收持续中",
+          "time": {
+            "start": 1791925172420,
+            "end": 1791925172616
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0cb2d6649761f1f8016ace9bb44964819198488ab91cb271d1",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXxvPRB00H8beKFwNS",
+          "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+          "messageID": "msg_g0VXxvO2f00rIgIJtsPj",
+          "orderKey": "v1:0001791925172868:0000000000000031:0000000000000000:part:prt_g0VXxvPRB00H8beKFwNS",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 41629,
+            "input": 15123,
+            "output": 10,
+            "reasoning": 0,
+            "cache": {
+              "read": 26496,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    }
+  ],
+  "ledger": {
+    "rows": [
+      {
+        "kind": "mission",
+        "id": "0d6df3b569bfe394",
+        "missionID": "0d6df3b569bfe394",
+        "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+        "title": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定...",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791924928403,
+        "started": 1791924928403,
+        "updated": 1791925172907,
+        "pinned": false,
+        "interruptible": false,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      },
+      {
+        "kind": "task",
+        "id": "tsk_g00VXxuNbm00NRzyIxQA",
+        "title": "持续目标 UI Task 验收",
+        "description": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 本 Task 当前负责人用 no_action 结算这次准备输入，稍后用户从界面设置目标。",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791924927506,
+        "started": 1791924927506,
+        "updated": 1791924927506,
+        "pinned": false,
+        "lifecycleStatus": "active",
+        "cancellationStatus": "none",
+        "activityStatus": "inactive",
+        "priority": "normal",
+        "source": "continuous-goal-ui-acceptance",
+        "productPillar": "code",
+        "pendingInteractions": 0
+      },
+      {
+        "kind": "project",
+        "id": "prj_hQfngmGbzvaDqdOLKamq",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791922893316,
+        "updated": 1791922893316,
+        "pinned": false
+      }
+    ],
+    "nextCursor": null
+  }
+}

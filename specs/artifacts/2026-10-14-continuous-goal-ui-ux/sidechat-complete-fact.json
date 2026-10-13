@@ -1,0 +1,2111 @@
+{
+  "observedAt": 1791926543685,
+  "owner": {
+    "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+    "kind": "chat",
+    "provenance": "Created and prompted through actual SideChat UI",
+    "sourceSessionID": "ses_-zUS25c9kzz9kzxUX96u",
+    "id": "ses_-zUS22DVAzzSRCv41wwh"
+  },
+  "goal": {
+    "id": "pev_g0VXxyjQ6005nXuD3u22",
+    "revision": "pev_g0VXy0xoh00odIHjOnE2",
+    "owner": {
+      "kind": "chat",
+      "id": "ses_-zUS22DVAzzSRCv41wwh"
+    },
+    "objective": "侧聊持续目标验收：每个自动轮次只回复“侧聊目标持续中”，保持目标 active 等我从界面完成。禁止其他目标、委派 Agent、子 Task、定时等待、外部网站、文件修改、部署、凭据及权限操作。",
+    "status": "complete",
+    "reason": "Actual SideChat UI created this Chat goal and displayed its separate controller participant. Its one automatic turn replied “侧聊目标持续中”, with 32,451 tokens and 1/1 turns. The main Mission remained blocked with its own usage and reason. Manual side-chat acceptance is complete.",
+    "tokenBudget": 100000,
+    "turnBudget": 1,
+    "tokensUsed": 32451,
+    "turnsAccepted": 1,
+    "createdAt": 1791925964662,
+    "updatedAt": 1791926496659,
+    "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+    "projectID": "prj_hQfngmGbzvaDqdOLKamq",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+  },
+  "messages": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791924928471
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "mission.operator",
+            "missionID": "0d6df3b569bfe394",
+            "requestID": "68d2a43c-98cb-46b7-8dbd-4ab5c6e00e60",
+            "requestFingerprint": "d4330f75924603b8825020b4b56565d295f792a7c7260ffddc95afe5053d3abd",
+            "openedEventID": "pev_hLNnvrUd6XVxGAn3ei4Z"
+          },
+          "surface": "panel",
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "mission.operator",
+            "literalText": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VXxxmUt00ixCUZumNN",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                "messageID": "msg_hBYMIH9bZIHGFwNnCtgC",
+                "partID": "prt_hhpWHdEjFKgZ95nBxHCv",
+                "sha256": "1b6495f93cfa3372085c1f5efa9d5d3047858a486b013f7228936f4ca361b97d"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001791924928471:0000000000000030:0000000000000000:message:msg_g0VXxxmUt00xMvH5d9Nj",
+        "id": "msg_g0VXxxmUt00xMvH5d9Nj",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxxmUt00ixCUZumNN",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "orderKey": "v1:0001791925738178:0000000000000031:0000000000000000:part:prt_g0VXxxmUt00ixCUZumNN",
+          "type": "text",
+          "text": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+            "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791924928734,
+          "completed": 1791924934990
+        },
+        "parentID": "msg_g0VXxxmUt00xMvH5d9Nj",
+        "acceptedInputMessageIDs": [
+          "msg_g0VXxxmUt00xMvH5d9Nj"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 40813,
+          "input": 40807,
+          "output": 6,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VXxxmUt02ZGH7O7TDW",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                "messageID": "msg_g0VXxuNva00NIVVHR2y2",
+                "partID": "prt_g0VXxuPRb00OeUHvAAYD",
+                "sha256": "c716779ac934f81d53538d4f38a845ab73249e944a34dbc61c551e9e24dd1ec3"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001791924928734:0000000000000030:0000000000000000:message:msg_g0VXxxmUt014KDJrmSag",
+        "id": "msg_g0VXxxmUt014KDJrmSag",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxxmUt01Gllxq0AbL",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt014KDJrmSag",
+          "orderKey": "v1:0001791925738219:0000000000000031:0000000000000000:part:prt_g0VXxxmUt01Gllxq0AbL",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXxxmUt02ZGH7O7TDW",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt014KDJrmSag",
+          "orderKey": "v1:0001791925738220:0000000000000031:0000000000000000:part:prt_g0VXxxmUt02ZGH7O7TDW",
+          "type": "text",
+          "text": "准备好了",
+          "time": {
+            "start": 1791924934563,
+            "end": 1791924934693
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0e3870c2dde440e4016ace9ac671bc8191abce22dcab7559dd",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXxxmUt03iijf0ZE4D",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt014KDJrmSag",
+          "orderKey": "v1:0001791925738222:0000000000000031:0000000000000000:part:prt_g0VXxxmUt03iijf0ZE4D",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 40813,
+            "input": 40807,
+            "output": 6,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "goal-controller",
+        "role": "user",
+        "time": {
+          "created": 1791925167396
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "continuous_goal",
+            "goalID": "pev_g0VXxvNu000P49lk5Wkk",
+            "revision": "pev_g0VXxvNu000P49lk5Wkk",
+            "requestID": "pev_hs36BvsHbQinfP8ZZgvo"
+          },
+          "surface": "panel"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VXxxmUt0457Cfwzl0p",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                "messageID": "msg_hX0PK3hjqOJwuui8AKak",
+                "partID": "prt_hkrfgkXEuaKrvBmyMoZB",
+                "sha256": "fbd618f670a6be39c88c6247da8ac18e7d16194e731c022df7c13f189e3a0f27"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001791925167396:0000000000000030:0000000000000000:message:msg_g0VXxxmUt02Y7YHHkcgK",
+        "id": "msg_g0VXxxmUt02Y7YHHkcgK",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxxmUt0457Cfwzl0p",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "orderKey": "v1:0001791925738199:0000000000000031:0000000000000000:part:prt_g0VXxxmUt0457Cfwzl0p",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。\nGoal: pev_g0VXxvNu000P49lk5Wkk; prior settled frontier: msg_g0VXxuNva00NIVVHR2y2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+            "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791925167502,
+          "completed": 1791925172950
+        },
+        "parentID": "msg_g0VXxxmUt02Y7YHHkcgK",
+        "acceptedInputMessageIDs": [
+          "msg_g0VXxxmUt02Y7YHHkcgK"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41629,
+          "input": 15123,
+          "output": 10,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VXxxmUt06ZLNt2RDww",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                "messageID": "msg_g0VXxvO2f00rIgIJtsPj",
+                "partID": "prt_g0VXxvPK000Wnf49VtH4",
+                "sha256": "4f9de153897d8f9b042856d3f1a0a8e1a2ba4bf6a20bbb63ff151e4c8583f98b"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001791925167502:0000000000000030:0000000000000000:message:msg_g0VXxxmUt03xPC2q2uSt",
+        "id": "msg_g0VXxxmUt03xPC2q2uSt",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxxmUt05rKcM7KnsV",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+          "orderKey": "v1:0001791925738230:0000000000000031:0000000000000000:part:prt_g0VXxxmUt05rKcM7KnsV",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXxxmUt06ZLNt2RDww",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+          "orderKey": "v1:0001791925738232:0000000000000031:0000000000000000:part:prt_g0VXxxmUt06ZLNt2RDww",
+          "type": "text",
+          "text": "Mission 验收持续中",
+          "time": {
+            "start": 1791925172420,
+            "end": 1791925172616
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0cb2d6649761f1f8016ace9bb44964819198488ab91cb271d1",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXxxmUt07OzL7FU5zq",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+          "orderKey": "v1:0001791925738233:0000000000000031:0000000000000000:part:prt_g0VXxxmUt07OzL7FU5zq",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 41629,
+            "input": 15123,
+            "output": 10,
+            "reasoning": 0,
+            "cache": {
+              "read": 26496,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "goal-controller",
+        "role": "user",
+        "time": {
+          "created": 1791925520747
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "continuous_goal",
+            "goalID": "pev_g0VXxvNu000P49lk5Wkk",
+            "revision": "pev_g0VXxwrpS00Jl4a0ucJ7",
+            "requestID": "pev_hEdaLxRLpULBwlYQpuKA"
+          },
+          "surface": "panel"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VXxxmUt08lyEgXaIK6",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                "messageID": "msg_hV1nZO9FP09Of6CBjjFK",
+                "partID": "prt_h5w75GBqFlf9OOU2xhup",
+                "sha256": "e4453bd6e66329f2a3c0b4e9ef3c0b89fabdc2004cdfdabd86912eb3bd472e17"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001791925520747:0000000000000030:0000000000000000:message:msg_g0VXxxmUt04edul9Lgn4",
+        "id": "msg_g0VXxxmUt04edul9Lgn4",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxxmUt08lyEgXaIK6",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt04edul9Lgn4",
+          "orderKey": "v1:0001791925738208:0000000000000031:0000000000000000:part:prt_g0VXxxmUt08lyEgXaIK6",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 2.\nThe user authorized this ongoing objective: Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。\nGoal: pev_g0VXxvNu000P49lk5Wkk; prior settled frontier: msg_g0VXxvO2f00rIgIJtsPj.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 41629; token budget: 150000.\nThis message is authored by the goal controller, not a new user instruction.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+            "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791925520863,
+          "completed": 1791925528559
+        },
+        "parentID": "msg_g0VXxxmUt04edul9Lgn4",
+        "acceptedInputMessageIDs": [
+          "msg_g0VXxxmUt04edul9Lgn4"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41858,
+          "input": 15352,
+          "output": 10,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VXxxmUt0A4GM9l3m8p",
+            "sources": [
+              {
+                "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                "messageID": "msg_g0VXxwry300qaePyGruw",
+                "partID": "prt_g0VXxwtpa00uMr1vSY2q",
+                "sha256": "4fdc45c6c1079a4ac0e8a8ea50d3a98162249b985fa5a9055c20c10242ee71da"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001791925520863:0000000000000030:0000000000000000:message:msg_g0VXxxmUt05A7quhg2rm",
+        "id": "msg_g0VXxxmUt05A7quhg2rm",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxxmUt09A3bFS1EVT",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+          "orderKey": "v1:0001791925738238:0000000000000031:0000000000000000:part:prt_g0VXxxmUt09A3bFS1EVT",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXxxmUt0A4GM9l3m8p",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+          "orderKey": "v1:0001791925738240:0000000000000031:0000000000000000:part:prt_g0VXxxmUt0A4GM9l3m8p",
+          "type": "text",
+          "text": "Mission 验收持续中",
+          "time": {
+            "start": 1791925528026,
+            "end": 1791925528265
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_00ed3834ba89d11f016ace9d17f08881919b7a73d142f3b308",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXxxmUt0Bf94ZZbU5M",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+          "orderKey": "v1:0001791925738241:0000000000000031:0000000000000000:part:prt_g0VXxxmUt0Bf94ZZbU5M",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 41858,
+            "input": 15352,
+            "output": 10,
+            "reasoning": 0,
+            "cache": {
+              "read": 26496,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791925913328
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "侧聊持续目标 UI/UX 隔离验收准备。本轮只回复“侧聊准备好了”并结束本轮，暂不创建目标。禁止委派 Agent、子 Task、其他目标、定时等待、外部网站、文件修改、部署、凭据和权限操作。"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "8aaa272b5630a357dcea1d01f64a20116a34aee1b1ad24bf5ed57a53fd40f13c"
+          }
+        },
+        "orderKey": "v1:0001791925913328:0000000000000030:0000000000000000:message:msg_62634646-e740-41c2-8533-623c182e5ea1",
+        "id": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxyW4900kYe6HBJ83",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "orderKey": "v1:0001791925913336:0000000000000031:0000000000000000:part:prt_g0VXxyW4900kYe6HBJ83",
+          "type": "text",
+          "text": "侧聊持续目标 UI/UX 隔离验收准备。本轮只回复“侧聊准备好了”并结束本轮，暂不创建目标。禁止委派 Agent、子 Task、其他目标、定时等待、外部网站、文件修改、部署、凭据和权限操作。",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c.json",
+            "catalog_snapshot_hash": "9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791925914081,
+          "completed": 1791925924214
+        },
+        "parentID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+        "acceptedInputMessageIDs": [
+          "msg_62634646-e740-41c2-8533-623c182e5ea1"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 31517,
+          "input": 31509,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791925914081:0000000000000030:0000000000000000:message:msg_g0VXxyWGH00gyACxgh1x",
+        "id": "msg_g0VXxyWGH00gyACxgh1x",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxyY7j00wskHL4vWm",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+          "orderKey": "v1:0001791925921240:0000000000000031:0000000000000000:part:prt_g0VXxyY7j00wskHL4vWm",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXxyYmJ00u1yPFoa7i",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+          "orderKey": "v1:0001791925923755:0000000000000031:0000000000000000:part:prt_g0VXxyYmJ00u1yPFoa7i",
+          "type": "text",
+          "text": "侧聊准备好了",
+          "time": {
+            "start": 1791925923755,
+            "end": 1791925923808
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_032dce78a0f3ba75016ace9ea39a008191ae846611beb239f4",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXxyYqd00sz6tvncY8",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+          "orderKey": "v1:0001791925924056:0000000000000031:0000000000000000:part:prt_g0VXxyYqd00sz6tvncY8",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 31517,
+            "input": 31509,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "goal-controller",
+        "role": "user",
+        "time": {
+          "created": 1791925965086
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "continuous_goal",
+            "goalID": "pev_g0VXxyjQ6005nXuD3u22",
+            "revision": "pev_g0VXxyjQ6005nXuD3u22",
+            "requestID": "pev_hk1sJvAImiV70fnSYCFj"
+          }
+        },
+        "orderKey": "v1:0001791925965086:0000000000000030:0000000000000000:message:msg_hNONYemJoPUFYc4hPxkp",
+        "id": "msg_hNONYemJoPUFYc4hPxkp",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_hvvKb4sec6fWWbFMDJEm",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "orderKey": "v1:0001791925965093:0000000000000031:0000000000000000:part:prt_hvvKb4sec6fWWbFMDJEm",
+          "type": "text",
+          "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 侧聊持续目标验收：每个自动轮次只回复“侧聊目标持续中”，保持目标 active 等我从界面完成。禁止其他目标、委派 Agent、子 Task、定时等待、外部网站、文件修改、部署、凭据及权限操作。\nGoal: pev_g0VXxyjQ6005nXuD3u22; prior settled frontier: msg_g0VXxyWGH00gyACxgh1x.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c.json",
+            "catalog_snapshot_hash": "9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791925965160,
+          "completed": 1791925968732
+        },
+        "parentID": "msg_hNONYemJoPUFYc4hPxkp",
+        "acceptedInputMessageIDs": [
+          "msg_hNONYemJoPUFYc4hPxkp"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 32451,
+          "input": 10042,
+          "output": 9,
+          "reasoning": 0,
+          "cache": {
+            "read": 22400,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791925965160:0000000000000030:0000000000000000:message:msg_g0VXxyjY8002A5cM72K0",
+        "id": "msg_g0VXxyjY8002A5cM72K0",
+        "sessionID": "ses_-zUS22DVAzzSRCv41wwh"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VXxyjfc00vpNFMGIDv",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxyjY8002A5cM72K0",
+          "orderKey": "v1:0001791925965624:0000000000000031:0000000000000000:part:prt_g0VXxyjfc00vpNFMGIDv",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXxykO700XucIoOSeW",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxyjY8002A5cM72K0",
+          "orderKey": "v1:0001791925968383:0000000000000031:0000000000000000:part:prt_g0VXxykO700XucIoOSeW",
+          "type": "text",
+          "text": "侧聊目标持续中",
+          "time": {
+            "start": 1791925968383,
+            "end": 1791925968452
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0ea642761b8b0c3e016ace9ed047c881919b32052c6bbca0f1",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXxykS900KJi9aeqaL",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "messageID": "msg_g0VXxyjY8002A5cM72K0",
+          "orderKey": "v1:0001791925968635:0000000000000031:0000000000000000:part:prt_g0VXxykS900KJi9aeqaL",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 32451,
+            "input": 10042,
+            "output": 9,
+            "reasoning": 0,
+            "cache": {
+              "read": 22400,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    }
+  ],
+  "conversation": {
+    "board": {
+      "kind": "session",
+      "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+      "status": "idle",
+      "composerReferences": {
+        "skillNames": [],
+        "missionSkillNames": [],
+        "expertSquadIDs": []
+      },
+      "title": "Side chat · 持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定...",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+      "changes": []
+    },
+    "pendingQuestions": [],
+    "transcript": [
+      {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1791924928471
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "mission.operator",
+              "missionID": "0d6df3b569bfe394",
+              "requestID": "68d2a43c-98cb-46b7-8dbd-4ab5c6e00e60",
+              "requestFingerprint": "d4330f75924603b8825020b4b56565d295f792a7c7260ffddc95afe5053d3abd",
+              "openedEventID": "pev_hLNnvrUd6XVxGAn3ei4Z"
+            },
+            "surface": "panel",
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "mission.operator",
+              "literalText": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。"
+            }
+          },
+          "copySources": [
+            {
+              "partID": "prt_g0VXxxmUt00ixCUZumNN",
+              "sources": [
+                {
+                  "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                  "messageID": "msg_hBYMIH9bZIHGFwNnCtgC",
+                  "partID": "prt_hhpWHdEjFKgZ95nBxHCv",
+                  "sha256": "1b6495f93cfa3372085c1f5efa9d5d3047858a486b013f7228936f4ca361b97d"
+                }
+              ]
+            }
+          ],
+          "orderKey": "v1:0001791924928471:0000000000000030:0000000000000000:message:msg_g0VXxxmUt00xMvH5d9Nj",
+          "id": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "user",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": "mission.operator"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxxmUt00ixCUZumNN",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+            "orderKey": "v1:0001791925738178:0000000000000031:0000000000000000:part:prt_g0VXxxmUt00ixCUZumNN",
+            "type": "text",
+            "text": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+              "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "mission",
+          "role": "assistant",
+          "time": {
+            "created": 1791924928734,
+            "completed": 1791924934990
+          },
+          "parentID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "acceptedInputMessageIDs": [
+            "msg_g0VXxxmUt00xMvH5d9Nj"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "mission",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 40813,
+            "input": 40807,
+            "output": 6,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "copySources": [
+            {
+              "partID": "prt_g0VXxxmUt02ZGH7O7TDW",
+              "sources": [
+                {
+                  "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                  "messageID": "msg_g0VXxuNva00NIVVHR2y2",
+                  "partID": "prt_g0VXxuPRb00OeUHvAAYD",
+                  "sha256": "c716779ac934f81d53538d4f38a845ab73249e944a34dbc61c551e9e24dd1ec3"
+                }
+              ]
+            }
+          ],
+          "orderKey": "v1:0001791924928734:0000000000000030:0000000000000000:message:msg_g0VXxxmUt014KDJrmSag",
+          "id": "msg_g0VXxxmUt014KDJrmSag",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "mission",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxxmUt01Gllxq0AbL",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt014KDJrmSag",
+            "orderKey": "v1:0001791925738219:0000000000000031:0000000000000000:part:prt_g0VXxxmUt01Gllxq0AbL",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXxxmUt02ZGH7O7TDW",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt014KDJrmSag",
+            "orderKey": "v1:0001791925738220:0000000000000031:0000000000000000:part:prt_g0VXxxmUt02ZGH7O7TDW",
+            "type": "text",
+            "text": "准备好了",
+            "time": {
+              "start": 1791924934563,
+              "end": 1791924934693
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_0e3870c2dde440e4016ace9ac671bc8191abce22dcab7559dd",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXxxmUt03iijf0ZE4D",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt014KDJrmSag",
+            "orderKey": "v1:0001791925738222:0000000000000031:0000000000000000:part:prt_g0VXxxmUt03iijf0ZE4D",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 40813,
+              "input": 40807,
+              "output": 6,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "goal-controller",
+          "role": "user",
+          "time": {
+            "created": 1791925167396
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "continuous_goal",
+              "goalID": "pev_g0VXxvNu000P49lk5Wkk",
+              "revision": "pev_g0VXxvNu000P49lk5Wkk",
+              "requestID": "pev_hs36BvsHbQinfP8ZZgvo"
+            },
+            "surface": "panel"
+          },
+          "copySources": [
+            {
+              "partID": "prt_g0VXxxmUt0457Cfwzl0p",
+              "sources": [
+                {
+                  "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                  "messageID": "msg_hX0PK3hjqOJwuui8AKak",
+                  "partID": "prt_hkrfgkXEuaKrvBmyMoZB",
+                  "sha256": "fbd618f670a6be39c88c6247da8ac18e7d16194e731c022df7c13f189e3a0f27"
+                }
+              ]
+            }
+          ],
+          "orderKey": "v1:0001791925167396:0000000000000030:0000000000000000:message:msg_g0VXxxmUt02Y7YHHkcgK",
+          "id": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "goal-controller",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": "continuous_goal"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxxmUt0457Cfwzl0p",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+            "orderKey": "v1:0001791925738199:0000000000000031:0000000000000000:part:prt_g0VXxxmUt0457Cfwzl0p",
+            "type": "text",
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。\nGoal: pev_g0VXxvNu000P49lk5Wkk; prior settled frontier: msg_g0VXxuNva00NIVVHR2y2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+              "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "mission",
+          "role": "assistant",
+          "time": {
+            "created": 1791925167502,
+            "completed": 1791925172950
+          },
+          "parentID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "acceptedInputMessageIDs": [
+            "msg_g0VXxxmUt02Y7YHHkcgK"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "mission",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 41629,
+            "input": 15123,
+            "output": 10,
+            "reasoning": 0,
+            "cache": {
+              "read": 26496,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "copySources": [
+            {
+              "partID": "prt_g0VXxxmUt06ZLNt2RDww",
+              "sources": [
+                {
+                  "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                  "messageID": "msg_g0VXxvO2f00rIgIJtsPj",
+                  "partID": "prt_g0VXxvPK000Wnf49VtH4",
+                  "sha256": "4f9de153897d8f9b042856d3f1a0a8e1a2ba4bf6a20bbb63ff151e4c8583f98b"
+                }
+              ]
+            }
+          ],
+          "orderKey": "v1:0001791925167502:0000000000000030:0000000000000000:message:msg_g0VXxxmUt03xPC2q2uSt",
+          "id": "msg_g0VXxxmUt03xPC2q2uSt",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "mission",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxxmUt05rKcM7KnsV",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+            "orderKey": "v1:0001791925738230:0000000000000031:0000000000000000:part:prt_g0VXxxmUt05rKcM7KnsV",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXxxmUt06ZLNt2RDww",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+            "orderKey": "v1:0001791925738232:0000000000000031:0000000000000000:part:prt_g0VXxxmUt06ZLNt2RDww",
+            "type": "text",
+            "text": "Mission 验收持续中",
+            "time": {
+              "start": 1791925172420,
+              "end": 1791925172616
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_0cb2d6649761f1f8016ace9bb44964819198488ab91cb271d1",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXxxmUt07OzL7FU5zq",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+            "orderKey": "v1:0001791925738233:0000000000000031:0000000000000000:part:prt_g0VXxxmUt07OzL7FU5zq",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 41629,
+              "input": 15123,
+              "output": 10,
+              "reasoning": 0,
+              "cache": {
+                "read": 26496,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "goal-controller",
+          "role": "user",
+          "time": {
+            "created": 1791925520747
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "continuous_goal",
+              "goalID": "pev_g0VXxvNu000P49lk5Wkk",
+              "revision": "pev_g0VXxwrpS00Jl4a0ucJ7",
+              "requestID": "pev_hEdaLxRLpULBwlYQpuKA"
+            },
+            "surface": "panel"
+          },
+          "copySources": [
+            {
+              "partID": "prt_g0VXxxmUt08lyEgXaIK6",
+              "sources": [
+                {
+                  "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                  "messageID": "msg_hV1nZO9FP09Of6CBjjFK",
+                  "partID": "prt_h5w75GBqFlf9OOU2xhup",
+                  "sha256": "e4453bd6e66329f2a3c0b4e9ef3c0b89fabdc2004cdfdabd86912eb3bd472e17"
+                }
+              ]
+            }
+          ],
+          "orderKey": "v1:0001791925520747:0000000000000030:0000000000000000:message:msg_g0VXxxmUt04edul9Lgn4",
+          "id": "msg_g0VXxxmUt04edul9Lgn4",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "goal-controller",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": "continuous_goal"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxxmUt08lyEgXaIK6",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt04edul9Lgn4",
+            "orderKey": "v1:0001791925738208:0000000000000031:0000000000000000:part:prt_g0VXxxmUt08lyEgXaIK6",
+            "type": "text",
+            "text": "Continuous goal controller — automatic continuation 2.\nThe user authorized this ongoing objective: Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。\nGoal: pev_g0VXxvNu000P49lk5Wkk; prior settled frontier: msg_g0VXxvO2f00rIgIJtsPj.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 41629; token budget: 150000.\nThis message is authored by the goal controller, not a new user instruction.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912.json",
+              "catalog_snapshot_hash": "20a4b36452571c5f60ea0060b73a1742736930e34aa679e86b84795c7a70e912"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "mission",
+          "role": "assistant",
+          "time": {
+            "created": 1791925520863,
+            "completed": 1791925528559
+          },
+          "parentID": "msg_g0VXxxmUt04edul9Lgn4",
+          "acceptedInputMessageIDs": [
+            "msg_g0VXxxmUt04edul9Lgn4"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "mission",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 41858,
+            "input": 15352,
+            "output": 10,
+            "reasoning": 0,
+            "cache": {
+              "read": 26496,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "copySources": [
+            {
+              "partID": "prt_g0VXxxmUt0A4GM9l3m8p",
+              "sources": [
+                {
+                  "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+                  "messageID": "msg_g0VXxwry300qaePyGruw",
+                  "partID": "prt_g0VXxwtpa00uMr1vSY2q",
+                  "sha256": "4fdc45c6c1079a4ac0e8a8ea50d3a98162249b985fa5a9055c20c10242ee71da"
+                }
+              ]
+            }
+          ],
+          "orderKey": "v1:0001791925520863:0000000000000030:0000000000000000:message:msg_g0VXxxmUt05A7quhg2rm",
+          "id": "msg_g0VXxxmUt05A7quhg2rm",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "mission",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxxmUt09A3bFS1EVT",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+            "orderKey": "v1:0001791925738238:0000000000000031:0000000000000000:part:prt_g0VXxxmUt09A3bFS1EVT",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXxxmUt0A4GM9l3m8p",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+            "orderKey": "v1:0001791925738240:0000000000000031:0000000000000000:part:prt_g0VXxxmUt0A4GM9l3m8p",
+            "type": "text",
+            "text": "Mission 验收持续中",
+            "time": {
+              "start": 1791925528026,
+              "end": 1791925528265
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_00ed3834ba89d11f016ace9d17f08881919b7a73d142f3b308",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXxxmUt0Bf94ZZbU5M",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+            "orderKey": "v1:0001791925738241:0000000000000031:0000000000000000:part:prt_g0VXxxmUt0Bf94ZZbU5M",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 41858,
+              "input": 15352,
+              "output": 10,
+              "reasoning": 0,
+              "cache": {
+                "read": 26496,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1791925913328
+          },
+          "agent": "chat",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "session.prompt",
+              "literalText": "侧聊持续目标 UI/UX 隔离验收准备。本轮只回复“侧聊准备好了”并结束本轮，暂不创建目标。禁止委派 Agent、子 Task、其他目标、定时等待、外部网站、文件修改、部署、凭据和权限操作。"
+            },
+            "publicSessionPromptIdentity": {
+              "version": 1,
+              "fingerprint": "8aaa272b5630a357dcea1d01f64a20116a34aee1b1ad24bf5ed57a53fd40f13c"
+            }
+          },
+          "orderKey": "v1:0001791925913328:0000000000000030:0000000000000000:message:msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "id": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "user",
+          "agentID": "chat",
+          "sessionAgentID": "chat",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxyW4900kYe6HBJ83",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+            "orderKey": "v1:0001791925913336:0000000000000031:0000000000000000:part:prt_g0VXxyW4900kYe6HBJ83",
+            "type": "text",
+            "text": "侧聊持续目标 UI/UX 隔离验收准备。本轮只回复“侧聊准备好了”并结束本轮，暂不创建目标。禁止委派 Agent、子 Task、其他目标、定时等待、外部网站、文件修改、部署、凭据和权限操作。",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c.json",
+              "catalog_snapshot_hash": "9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "chat",
+          "role": "assistant",
+          "time": {
+            "created": 1791925914081,
+            "completed": 1791925924214
+          },
+          "parentID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "acceptedInputMessageIDs": [
+            "msg_62634646-e740-41c2-8533-623c182e5ea1"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "chat",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 31517,
+            "input": 31509,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001791925914081:0000000000000030:0000000000000000:message:msg_g0VXxyWGH00gyACxgh1x",
+          "id": "msg_g0VXxyWGH00gyACxgh1x",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "chat",
+          "agentID": "chat",
+          "sessionAgentID": "chat",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxyY7j00wskHL4vWm",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+            "orderKey": "v1:0001791925921240:0000000000000031:0000000000000000:part:prt_g0VXxyY7j00wskHL4vWm",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXxyYmJ00u1yPFoa7i",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+            "orderKey": "v1:0001791925923755:0000000000000031:0000000000000000:part:prt_g0VXxyYmJ00u1yPFoa7i",
+            "type": "text",
+            "text": "侧聊准备好了",
+            "time": {
+              "start": 1791925923755,
+              "end": 1791925923808
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_032dce78a0f3ba75016ace9ea39a008191ae846611beb239f4",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXxyYqd00sz6tvncY8",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+            "orderKey": "v1:0001791925924056:0000000000000031:0000000000000000:part:prt_g0VXxyYqd00sz6tvncY8",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 31517,
+              "input": 31509,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "goal-controller",
+          "role": "user",
+          "time": {
+            "created": 1791925965086
+          },
+          "agent": "chat",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "continuous_goal",
+              "goalID": "pev_g0VXxyjQ6005nXuD3u22",
+              "revision": "pev_g0VXxyjQ6005nXuD3u22",
+              "requestID": "pev_hk1sJvAImiV70fnSYCFj"
+            }
+          },
+          "orderKey": "v1:0001791925965086:0000000000000030:0000000000000000:message:msg_hNONYemJoPUFYc4hPxkp",
+          "id": "msg_hNONYemJoPUFYc4hPxkp",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "goal-controller",
+          "agentID": "chat",
+          "sessionAgentID": "chat",
+          "originSource": "continuous_goal"
+        },
+        "parts": [
+          {
+            "id": "prt_hvvKb4sec6fWWbFMDJEm",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_hNONYemJoPUFYc4hPxkp",
+            "orderKey": "v1:0001791925965093:0000000000000031:0000000000000000:part:prt_hvvKb4sec6fWWbFMDJEm",
+            "type": "text",
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 侧聊持续目标验收：每个自动轮次只回复“侧聊目标持续中”，保持目标 active 等我从界面完成。禁止其他目标、委派 Agent、子 Task、定时等待、外部网站、文件修改、部署、凭据及权限操作。\nGoal: pev_g0VXxyjQ6005nXuD3u22; prior settled frontier: msg_g0VXxyWGH00gyACxgh1x.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hQfngmGbzvaDqdOLKamq/9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c.json",
+              "catalog_snapshot_hash": "9aca586b9bf33a16f440f2cab8087774b48bb871328f8a397c9c682b2754de7c"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "chat",
+          "role": "assistant",
+          "time": {
+            "created": 1791925965160,
+            "completed": 1791925968732
+          },
+          "parentID": "msg_hNONYemJoPUFYc4hPxkp",
+          "acceptedInputMessageIDs": [
+            "msg_hNONYemJoPUFYc4hPxkp"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "chat",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 32451,
+            "input": 10042,
+            "output": 9,
+            "reasoning": 0,
+            "cache": {
+              "read": 22400,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001791925965160:0000000000000030:0000000000000000:message:msg_g0VXxyjY8002A5cM72K0",
+          "id": "msg_g0VXxyjY8002A5cM72K0",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "resolvedRole": "chat",
+          "agentID": "chat",
+          "sessionAgentID": "chat",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXxyjfc00vpNFMGIDv",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxyjY8002A5cM72K0",
+            "orderKey": "v1:0001791925965624:0000000000000031:0000000000000000:part:prt_g0VXxyjfc00vpNFMGIDv",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXxykO700XucIoOSeW",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxyjY8002A5cM72K0",
+            "orderKey": "v1:0001791925968383:0000000000000031:0000000000000000:part:prt_g0VXxykO700XucIoOSeW",
+            "type": "text",
+            "text": "侧聊目标持续中",
+            "time": {
+              "start": 1791925968383,
+              "end": 1791925968452
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_0ea642761b8b0c3e016ace9ed047c881919b32052c6bbca0f1",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXxykS900KJi9aeqaL",
+            "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+            "messageID": "msg_g0VXxyjY8002A5cM72K0",
+            "orderKey": "v1:0001791925968635:0000000000000031:0000000000000000:part:prt_g0VXxykS900KJi9aeqaL",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 32451,
+              "input": 10042,
+              "output": 9,
+              "reasoning": 0,
+              "cache": {
+                "read": 22400,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "event_id": "pev_g0VXxyYvG00BPXdiJSp7",
+        "session_id": "ses_-zUS22DVAzzSRCv41wwh",
+        "orderKey": "v1:0001791925913328:0000000000000050:0000000000000000:session:msg_62634646-e740-41c2-8533-623c182e5ea1",
+        "emittedAt": 1791925924309,
+        "timestamp": 1791925924309,
+        "sequence": 3,
+        "summary": "agent.execution.lifecycle",
+        "type": "agent.execution.lifecycle",
+        "payload": {
+          "inputMessageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "status": {
+            "type": "idle"
+          },
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "agentID": "chat",
+          "orderKey": "v1:0001791925913328:0000000000000050:0000000000000000:session:msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "resolvedRole": "chat"
+        }
+      },
+      {
+        "event_id": "pev_g0VXxykU900QACP6vZoI",
+        "session_id": "ses_-zUS22DVAzzSRCv41wwh",
+        "orderKey": "v1:0001791925965086:0000000000000050:0000000000000000:session:msg_hNONYemJoPUFYc4hPxkp",
+        "emittedAt": 1791925968757,
+        "timestamp": 1791925968757,
+        "sequence": 8,
+        "summary": "agent.execution.lifecycle",
+        "type": "agent.execution.lifecycle",
+        "payload": {
+          "inputMessageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "status": {
+            "type": "idle"
+          },
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "channel": "assistant",
+          "agentID": "chat",
+          "orderKey": "v1:0001791925965086:0000000000000050:0000000000000000:session:msg_hNONYemJoPUFYc4hPxkp",
+          "resolvedRole": "chat"
+        }
+      }
+    ],
+    "view": {
+      "topLevelSessionIDs": [
+        "ses_-zUS22DVAzzSRCv41wwh"
+      ],
+      "sessions": [
+        {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "agentID": "chat",
+          "orderKey": "v1:0001791924928471:0000000000000050:0000000000000000:session:ses_-zUS22DVAzzSRCv41wwh",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_g0VXxxmUt00xMvH5d9Nj",
+            "msg_g0VXxxmUt014KDJrmSag",
+            "msg_g0VXxxmUt02Y7YHHkcgK",
+            "msg_g0VXxxmUt03xPC2q2uSt",
+            "msg_g0VXxxmUt04edul9Lgn4",
+            "msg_g0VXxxmUt05A7quhg2rm",
+            "msg_62634646-e740-41c2-8533-623c182e5ea1",
+            "msg_g0VXxyWGH00gyACxgh1x",
+            "msg_hNONYemJoPUFYc4hPxkp",
+            "msg_g0VXxyjY8002A5cM72K0"
+          ],
+          "lastDisplayMessageID": "msg_g0VXxyjY8002A5cM72K0",
+          "firstMessageTime": 1791924928471,
+          "lastMessageTime": 1791925965160,
+          "firstObservedAt": 1791924928471,
+          "lastObservedAt": 1791924928471,
+          "activity": [],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "inputPreview": {
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 侧聊持续目标验收：每个自动轮次只回复“侧聊目标持续中”，保持目标 active 等我从界面完成。禁止其他目标、委派 Agent、子 Task、定时等待、外部网站、文件修改、部署、凭据及权限操作。\nGoal: pev_g0VXxyjQ6005nXuD3u22; prior settled frontier: msg_g0VXxyWGH00gyACxgh1x.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+            "messageID": "msg_hNONYemJoPUFYc4hPxkp",
+            "observedAt": 1791925965086,
+            "source": "user_message"
+          },
+          "placement": "top_level"
+        }
+      ],
+      "messages": [
+        {
+          "messageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "inputMessageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "orderKey": "v1:0001791924928471:0000000000000030:0000000000000000:message:msg_g0VXxxmUt00xMvH5d9Nj",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791924928471,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt014KDJrmSag",
+          "inputMessageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "orderKey": "v1:0001791924928734:0000000000000030:0000000000000000:message:msg_g0VXxxmUt014KDJrmSag",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "assistant",
+          "time": 1791924928734,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "inputMessageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "orderKey": "v1:0001791925167396:0000000000000030:0000000000000000:message:msg_g0VXxxmUt02Y7YHHkcgK",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791925167396,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+          "inputMessageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "orderKey": "v1:0001791925167502:0000000000000030:0000000000000000:message:msg_g0VXxxmUt03xPC2q2uSt",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "assistant",
+          "time": 1791925167502,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt04edul9Lgn4",
+          "inputMessageID": "msg_g0VXxxmUt04edul9Lgn4",
+          "orderKey": "v1:0001791925520747:0000000000000030:0000000000000000:message:msg_g0VXxxmUt04edul9Lgn4",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791925520747,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+          "inputMessageID": "msg_g0VXxxmUt04edul9Lgn4",
+          "orderKey": "v1:0001791925520863:0000000000000030:0000000000000000:message:msg_g0VXxxmUt05A7quhg2rm",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "assistant",
+          "time": 1791925520863,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "inputMessageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "orderKey": "v1:0001791925913328:0000000000000030:0000000000000000:message:msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "user",
+          "time": 1791925913328,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+          "inputMessageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "orderKey": "v1:0001791925914081:0000000000000030:0000000000000000:message:msg_g0VXxyWGH00gyACxgh1x",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "assistant",
+          "time": 1791925914081,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "inputMessageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "orderKey": "v1:0001791925965086:0000000000000030:0000000000000000:message:msg_hNONYemJoPUFYc4hPxkp",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "user",
+          "time": 1791925965086,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxyjY8002A5cM72K0",
+          "inputMessageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "orderKey": "v1:0001791925965160:0000000000000030:0000000000000000:message:msg_g0VXxyjY8002A5cM72K0",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "assistant",
+          "time": 1791925965160,
+          "placement": "top_level"
+        }
+      ]
+    },
+    "turnArtifacts": [],
+    "agentView": {
+      "topLevelExecutionIDs": [
+        "msg_g0VXxxmUt00xMvH5d9Nj",
+        "msg_g0VXxxmUt02Y7YHHkcgK",
+        "msg_g0VXxxmUt04edul9Lgn4",
+        "msg_62634646-e740-41c2-8533-623c182e5ea1",
+        "msg_hNONYemJoPUFYc4hPxkp"
+      ],
+      "sessions": [
+        {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "agentID": "chat",
+          "orderKey": "v1:0001791924928471:0000000000000030:0000000000000000:message:msg_g0VXxxmUt00xMvH5d9Nj",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_g0VXxxmUt00xMvH5d9Nj",
+            "msg_g0VXxxmUt014KDJrmSag"
+          ],
+          "firstMessageTime": 1791924928471,
+          "lastMessageTime": 1791924928471,
+          "firstObservedAt": 1791924928471,
+          "lastObservedAt": 1791924928471,
+          "status": "pending",
+          "activity": [
+            {
+              "id": "prt_g0VXxxmUt02ZGH7O7TDW",
+              "messageID": "msg_g0VXxxmUt014KDJrmSag",
+              "orderKey": "v1:0001791925738220:0000000000000031:0000000000000000:part:prt_g0VXxxmUt02ZGH7O7TDW",
+              "type": "text",
+              "text": "准备好了"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXxxmUt014KDJrmSag",
+          "inputPreview": {
+            "text": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 保持本 Mission opened，不调用完成 Mission；稍后用户从界面设置目标。",
+            "messageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+            "observedAt": 1791924928471,
+            "source": "user_message"
+          },
+          "executionID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "inputMessageID": "msg_g0VXxxmUt00xMvH5d9Nj"
+        },
+        {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "agentID": "chat",
+          "orderKey": "v1:0001791925167396:0000000000000030:0000000000000000:message:msg_g0VXxxmUt02Y7YHHkcgK",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_g0VXxxmUt02Y7YHHkcgK",
+            "msg_g0VXxxmUt03xPC2q2uSt"
+          ],
+          "firstMessageTime": 1791925167396,
+          "lastMessageTime": 1791925167396,
+          "firstObservedAt": 1791925167396,
+          "lastObservedAt": 1791925167396,
+          "status": "pending",
+          "activity": [
+            {
+              "id": "prt_g0VXxxmUt06ZLNt2RDww",
+              "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+              "orderKey": "v1:0001791925738232:0000000000000031:0000000000000000:part:prt_g0VXxxmUt06ZLNt2RDww",
+              "type": "text",
+              "text": "Mission 验收持续中"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXxxmUt03xPC2q2uSt",
+          "inputPreview": {
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。\nGoal: pev_g0VXxvNu000P49lk5Wkk; prior settled frontier: msg_g0VXxuNva00NIVVHR2y2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+            "messageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+            "observedAt": 1791925167396,
+            "source": "user_message"
+          },
+          "executionID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "inputMessageID": "msg_g0VXxxmUt02Y7YHHkcgK"
+        },
+        {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "agentID": "chat",
+          "orderKey": "v1:0001791925520747:0000000000000030:0000000000000000:message:msg_g0VXxxmUt04edul9Lgn4",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_g0VXxxmUt04edul9Lgn4",
+            "msg_g0VXxxmUt05A7quhg2rm"
+          ],
+          "firstMessageTime": 1791925520747,
+          "lastMessageTime": 1791925520747,
+          "firstObservedAt": 1791925520747,
+          "lastObservedAt": 1791925520747,
+          "status": "pending",
+          "activity": [
+            {
+              "id": "prt_g0VXxxmUt0A4GM9l3m8p",
+              "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+              "orderKey": "v1:0001791925738240:0000000000000031:0000000000000000:part:prt_g0VXxxmUt0A4GM9l3m8p",
+              "type": "text",
+              "text": "Mission 验收持续中"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXxxmUt05A7quhg2rm",
+          "inputPreview": {
+            "text": "Continuous goal controller — automatic continuation 2.\nThe user authorized this ongoing objective: Mission 持续目标界面验收：每个自动轮次只回复“Mission 验收持续中”，正常结束本轮并保持目标 active、Mission opened，直到我从界面标记完成。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据和权限操作。\nGoal: pev_g0VXxvNu000P49lk5Wkk; prior settled frontier: msg_g0VXxvO2f00rIgIJtsPj.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 41629; token budget: 150000.\nThis message is authored by the goal controller, not a new user instruction.",
+            "messageID": "msg_g0VXxxmUt04edul9Lgn4",
+            "observedAt": 1791925520747,
+            "source": "user_message"
+          },
+          "executionID": "msg_g0VXxxmUt04edul9Lgn4",
+          "inputMessageID": "msg_g0VXxxmUt04edul9Lgn4"
+        },
+        {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "agentID": "chat",
+          "orderKey": "v1:0001791925913328:0000000000000030:0000000000000000:message:msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_62634646-e740-41c2-8533-623c182e5ea1",
+            "msg_g0VXxyWGH00gyACxgh1x"
+          ],
+          "firstMessageTime": 1791925913328,
+          "lastMessageTime": 1791925913328,
+          "firstObservedAt": 1791925913328,
+          "lastObservedAt": 1791925924309,
+          "status": "idle",
+          "activity": [
+            {
+              "id": "prt_g0VXxyYmJ00u1yPFoa7i",
+              "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+              "orderKey": "v1:0001791925923755:0000000000000031:0000000000000000:part:prt_g0VXxyYmJ00u1yPFoa7i",
+              "type": "text",
+              "text": "侧聊准备好了"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXxyWGH00gyACxgh1x",
+          "inputPreview": {
+            "text": "侧聊持续目标 UI/UX 隔离验收准备。本轮只回复“侧聊准备好了”并结束本轮，暂不创建目标。禁止委派 Agent、子 Task、其他目标、定时等待、外部网站、文件修改、部署、凭据和权限操作。",
+            "messageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+            "observedAt": 1791925913328,
+            "source": "user_message"
+          },
+          "executionID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "inputMessageID": "msg_62634646-e740-41c2-8533-623c182e5ea1"
+        },
+        {
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "agentID": "chat",
+          "orderKey": "v1:0001791925965086:0000000000000030:0000000000000000:message:msg_hNONYemJoPUFYc4hPxkp",
+          "stage": "assistant",
+          "messageIDs": [
+            "msg_hNONYemJoPUFYc4hPxkp",
+            "msg_g0VXxyjY8002A5cM72K0"
+          ],
+          "firstMessageTime": 1791925965086,
+          "lastMessageTime": 1791925965086,
+          "firstObservedAt": 1791925965086,
+          "lastObservedAt": 1791925968757,
+          "status": "idle",
+          "activity": [
+            {
+              "id": "prt_g0VXxykO700XucIoOSeW",
+              "messageID": "msg_g0VXxyjY8002A5cM72K0",
+              "orderKey": "v1:0001791925968383:0000000000000031:0000000000000000:part:prt_g0VXxykO700XucIoOSeW",
+              "type": "text",
+              "text": "侧聊目标持续中"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXxyjY8002A5cM72K0",
+          "inputPreview": {
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 侧聊持续目标验收：每个自动轮次只回复“侧聊目标持续中”，保持目标 active 等我从界面完成。禁止其他目标、委派 Agent、子 Task、定时等待、外部网站、文件修改、部署、凭据及权限操作。\nGoal: pev_g0VXxyjQ6005nXuD3u22; prior settled frontier: msg_g0VXxyWGH00gyACxgh1x.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: 100000.\nThis message is authored by the goal controller, not a new user instruction.",
+            "messageID": "msg_hNONYemJoPUFYc4hPxkp",
+            "observedAt": 1791925965086,
+            "source": "user_message"
+          },
+          "executionID": "msg_hNONYemJoPUFYc4hPxkp",
+          "inputMessageID": "msg_hNONYemJoPUFYc4hPxkp"
+        }
+      ],
+      "messages": [
+        {
+          "messageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "inputMessageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "orderKey": "v1:0001791924928471:0000000000000030:0000000000000000:message:msg_g0VXxxmUt00xMvH5d9Nj",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791924928471,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt014KDJrmSag",
+          "inputMessageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+          "orderKey": "v1:0001791924928734:0000000000000030:0000000000000000:message:msg_g0VXxxmUt014KDJrmSag",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "assistant",
+          "time": 1791924928734,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "inputMessageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "orderKey": "v1:0001791925167396:0000000000000030:0000000000000000:message:msg_g0VXxxmUt02Y7YHHkcgK",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791925167396,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt03xPC2q2uSt",
+          "inputMessageID": "msg_g0VXxxmUt02Y7YHHkcgK",
+          "orderKey": "v1:0001791925167502:0000000000000030:0000000000000000:message:msg_g0VXxxmUt03xPC2q2uSt",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "assistant",
+          "time": 1791925167502,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt04edul9Lgn4",
+          "inputMessageID": "msg_g0VXxxmUt04edul9Lgn4",
+          "orderKey": "v1:0001791925520747:0000000000000030:0000000000000000:message:msg_g0VXxxmUt04edul9Lgn4",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791925520747,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxxmUt05A7quhg2rm",
+          "inputMessageID": "msg_g0VXxxmUt04edul9Lgn4",
+          "orderKey": "v1:0001791925520863:0000000000000030:0000000000000000:message:msg_g0VXxxmUt05A7quhg2rm",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "assistant",
+          "time": 1791925520863,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "inputMessageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "orderKey": "v1:0001791925913328:0000000000000030:0000000000000000:message:msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "user",
+          "time": 1791925913328,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxyWGH00gyACxgh1x",
+          "inputMessageID": "msg_62634646-e740-41c2-8533-623c182e5ea1",
+          "orderKey": "v1:0001791925914081:0000000000000030:0000000000000000:message:msg_g0VXxyWGH00gyACxgh1x",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "assistant",
+          "time": 1791925914081,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "inputMessageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "orderKey": "v1:0001791925965086:0000000000000030:0000000000000000:message:msg_hNONYemJoPUFYc4hPxkp",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "user",
+          "time": 1791925965086,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXxyjY8002A5cM72K0",
+          "inputMessageID": "msg_hNONYemJoPUFYc4hPxkp",
+          "orderKey": "v1:0001791925965160:0000000000000030:0000000000000000:message:msg_g0VXxyjY8002A5cM72K0",
+          "sessionID": "ses_-zUS22DVAzzSRCv41wwh",
+          "sessionAgentID": "chat",
+          "agentID": "chat",
+          "stage": "assistant",
+          "time": 1791925965160,
+          "placement": "top_level"
+        }
+      ]
+    },
+    "history": {
+      "oldestTimestamp": 1791924928471,
+      "oldestOrderKey": "v1:0001791924928471:0000000000000030:0000000000000000:message:msg_g0VXxxmUt00xMvH5d9Nj",
+      "oldestMessageID": "msg_g0VXxxmUt00xMvH5d9Nj",
+      "hasMore": false,
+      "limit": 80
+    }
+  },
+  "ledger": {
+    "rows": [
+      {
+        "kind": "mission",
+        "id": "0d6df3b569bfe394",
+        "missionID": "0d6df3b569bfe394",
+        "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+        "title": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定...",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791924928403,
+        "started": 1791924928403,
+        "updated": 1791925528435,
+        "pinned": false,
+        "interruptible": false,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      },
+      {
+        "kind": "task",
+        "id": "tsk_g00VXxuNbm00NRzyIxQA",
+        "title": "持续目标 UI Task 验收",
+        "description": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 本 Task 当前负责人用 no_action 结算这次准备输入，稍后用户从界面设置目标。",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791924927506,
+        "started": 1791924927506,
+        "updated": 1791924927506,
+        "pinned": false,
+        "lifecycleStatus": "active",
+        "cancellationStatus": "none",
+        "activityStatus": "inactive",
+        "priority": "normal",
+        "source": "continuous-goal-ui-acceptance",
+        "productPillar": "code",
+        "pendingInteractions": 0
+      },
+      {
+        "kind": "project",
+        "id": "prj_hQfngmGbzvaDqdOLKamq",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791922893316,
+        "updated": 1791922893316,
+        "pinned": false
+      }
+    ],
+    "nextCursor": null
+  }
+}

@@ -53,8 +53,10 @@ restart. Durable facts, rather than an in-memory queue, determine ownership. Eac
 continuation binds goal identity, current intent revision and settled execution frontier.
 It derives exact Message/Part/control identities and commits its receipt with the real,
 visible goal-controller Message. That participant never impersonates a human.
-Overlay preserves the persisted author separately from transport role. Main-channel
-message headers and adjacent segments retain the exact non-human participant identity.
+Overlay preserves the persisted author separately from transport role. The shared
+conversation display projection presents goal-controller inputs as independent
+participants in both main and native Chat/Mission channels. Localized headers retain
+the exact author identity and original message body; SideChat follows the same projection.
 
 SessionPromptOwner observes physical execution across processes. Outstanding Task
 ingress, Interaction, worker dispatch settlement and scheduled wait facts keep their
@@ -97,6 +99,31 @@ resumes it. The boundary uses event sequence, including same-millisecond decisio
 Session/Task archive transactions also append the same goal's paused revision with
 owner-control authorship. Restoring visibility retains that pause; child Session
 archives affect only goals whose exact owner is that Session.
+
+## User controls
+
+The common conversation surface and an opened SideChat expose one continuous-goal
+control. Task binds its Task ID; Chat and Mission bind their canonical Session ID.
+Every request also binds project directory, current API authority and selection lifetime.
+The single HTTP projection carries its request source key; a different owner cannot
+temporarily display the previous owner's goal. Visible controls refresh read-only data
+every five seconds and on focus, and re-read after explicit mutations. They do not
+schedule execution or maintain a second goal store.
+
+The status strip shows objective, current state, cumulative tokens and accepted turns.
+Details expose the complete objective, original reason/evidence, localized date and
+budget controls. Creation allows unspecified budgets. Once set, a budget requires a
+positive whole number; changes retain cumulative usage. Paused/blocked goals whose
+limits are exhausted use the same Adjust & resume form as budget_limited goals.
+Pausing admits no new automatic input and leaves accepted work to settle; the existing
+conversation Stop operation retains its own meaning.
+
+Completion requires the operator's evidence. A completed goal remains readable and
+offers a new goal with a new identity. Form drafts survive revision conflicts; the
+operator explicitly reviews the current revision before resubmitting. Owner/service
+selection retires the dialog and pending UI feedback. Request IDs bind the same
+submission content. Product labels, errors and number/date formatting follow the
+current locale; user/model originals and technical identities retain their actual values.
 
 ## Verification
 

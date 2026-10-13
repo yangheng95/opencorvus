@@ -1,0 +1,20 @@
+{
+  "endedAt": 1791922806086,
+  "totalRequests": 2,
+  "processes": [
+    {
+      "pid": 86708,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    }
+  ],
+  "ports": [
+    {
+      "url": "http://127.0.0.1:7878",
+      "reachable": false
+    }
+  ],
+  "credentialPairRemoved": true,
+  "cleanupErrors": []
+}

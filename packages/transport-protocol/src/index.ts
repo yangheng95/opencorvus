@@ -596,7 +596,9 @@ export interface ConversationMessageOrigin {
 export function isDelegatedContextMessage(origin: ConversationMessageOrigin): boolean {
   const author = String(origin.author || "").trim()
   if (!author) throw new Error("conversation message origin is missing author")
-  return origin.role === "user" && origin.channel !== "main" && author !== "user"
+  // A goal controller is an independent orchestration participant, even when
+  // its continuation is delivered to a non-main native conversation.
+  return origin.role === "user" && origin.channel !== "main" && author !== "user" && author !== "goal-controller"
 }
 
 /** Single display-ownership projection shared by the server conversation view

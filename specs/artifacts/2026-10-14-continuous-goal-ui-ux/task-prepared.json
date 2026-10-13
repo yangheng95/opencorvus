@@ -1,0 +1,130 @@
+{
+  "observedAt": 1791924953103,
+  "owner": {
+    "kind": "task",
+    "id": "tsk_g00VXxuNbm00NRzyIxQA",
+    "sessionID": "ses_-zUS25cF8zz515hKEWww",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+    "input": {
+      "requestID": "c3b029f4-e162-473d-831d-577c923f89f8",
+      "productPillar": "code",
+      "title": "持续目标 UI Task 验收",
+      "source": "continuous-goal-ui-acceptance",
+      "promptProfile": "base",
+      "request": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 本 Task 当前负责人用 no_action 结算这次准备输入，稍后用户从界面设置目标。",
+      "model": "openai/gpt-6.1-sol"
+    },
+    "result": {
+      "task_id": "tsk_g00VXxuNbm00NRzyIxQA",
+      "project_id": "prj_hQfngmGbzvaDqdOLKamq",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project"
+    },
+    "board": {
+      "id": "tsk_g00VXxuNbm00NRzyIxQA",
+      "orderKey": "v1:0001791924927506:0000000000000010:0000000000000000:task:tsk_g00VXxuNbm00NRzyIxQA",
+      "projectID": "prj_hQfngmGbzvaDqdOLKamq",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+      "sessionID": "ses_-zUS25cF8zz515hKEWww",
+      "requestID": "c3b029f4-e162-473d-831d-577c923f89f8",
+      "source": "continuous-goal-ui-acceptance",
+      "productPillar": "code",
+      "title": "持续目标 UI Task 验收",
+      "request": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 本 Task 当前负责人用 no_action 结算这次准备输入，稍后用户从界面设置目标。",
+      "status": "active",
+      "executionLifecycle": {
+        "taskID": "tsk_g00VXxuNbm00NRzyIxQA",
+        "epoch": 1,
+        "openedEventID": "pev_g0VXxuNlY00S7UeG7bXT",
+        "openedAt": 1791924927506,
+        "status": "active"
+      },
+      "priority": "normal",
+      "packageRevisionBinding": {
+        "scope": "built_in",
+        "project_id": null,
+        "namespace": "builtin",
+        "id": "base",
+        "version": "2026.10.12.1",
+        "package_digest": "7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be"
+      },
+      "metadata": {
+        "actor": "user",
+        "checks": {
+          "artifact": {
+            "require_changed_files": true,
+            "require_diff": true,
+            "mode": "strict"
+          },
+          "judge": {
+            "enabled": true,
+            "mode": "strict"
+          },
+          "spec_check": {
+            "enabled": true,
+            "mode": "strict"
+          }
+        }
+      },
+      "time": {
+        "created": 1791924927506,
+        "updated": 1791924927506,
+        "started": 1791924927506
+      }
+    }
+  },
+  "goal": null,
+  "messages": [],
+  "ledger": {
+    "rows": [
+      {
+        "kind": "mission",
+        "id": "0d6df3b569bfe394",
+        "missionID": "0d6df3b569bfe394",
+        "sessionID": "ses_-zUS25c9kzz9kzxUX96u",
+        "title": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定...",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791924928403,
+        "started": 1791924928403,
+        "updated": 1791924934963,
+        "pinned": false,
+        "interruptible": false,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      },
+      {
+        "kind": "task",
+        "id": "tsk_g00VXxuNbm00NRzyIxQA",
+        "title": "持续目标 UI Task 验收",
+        "description": "持续目标 UI/UX 隔离验收准备。本轮只回复‘准备好了’并正常结束当前输入，暂不创建持续目标，保持会话可继续。禁止委派 Agent、创建子 Task、定时等待、外部网站、文件修改、部署、凭据或权限操作。 本 Task 当前负责人用 no_action 结算这次准备输入，稍后用户从界面设置目标。",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791924927506,
+        "started": 1791924927506,
+        "updated": 1791924927506,
+        "pinned": false,
+        "lifecycleStatus": "active",
+        "cancellationStatus": "none",
+        "activityStatus": "inactive",
+        "priority": "normal",
+        "source": "continuous-goal-ui-acceptance",
+        "productPillar": "code",
+        "pendingInteractions": 0
+      },
+      {
+        "kind": "project",
+        "id": "prj_hQfngmGbzvaDqdOLKamq",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nRXytF\\runner-88200-iWZZo2\\project",
+        "created": 1791922893316,
+        "updated": 1791922893316,
+        "pinned": false
+      }
+    ],
+    "nextCursor": null
+  }
+}

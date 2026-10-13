@@ -1,0 +1,56 @@
+{
+  "endedAt": 1791928252106,
+  "totalRequests": 24,
+  "processes": [
+    {
+      "pid": 85760,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    },
+    {
+      "pid": 83028,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    },
+    {
+      "pid": 81152,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    },
+    {
+      "pid": 70740,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    },
+    {
+      "pid": 63920,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    },
+    {
+      "pid": 68024,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    },
+    {
+      "pid": 50448,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM"
+    }
+  ],
+  "ports": [
+    {
+      "url": "http://127.0.0.1:7878",
+      "reachable": false
+    }
+  ],
+  "credentialPairRemoved": true,
+  "cleanupErrors": []
+}

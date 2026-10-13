@@ -297,6 +297,14 @@ describe("stream lifecycle evidence identity", () => {
 })
 
 describe("conversation message display ownership", () => {
+  test("projects goal-controller continuations as independent participants in every native channel", () => {
+    for (const channel of ["main", "chat", "assistant", "mission", "orchestrator"]) {
+      expect(
+        conversationMessageDisplayStage({ role: "user", author: "goal-controller", channel, source: "continuous_goal" }),
+      ).toBe("user")
+    }
+  })
+
   test("assigns delegated provider user prompts to the receiving agent channel", () => {
     const origin = { role: "user", author: "orchestrator", channel: "architect", source: "" }
     expect(isDelegatedContextMessage(origin)).toBe(true)
