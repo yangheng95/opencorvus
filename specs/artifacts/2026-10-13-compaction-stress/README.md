@@ -18,9 +18,10 @@ full browser, Task/Mission scheduling, or native Codex comparison benchmark.
 | [tool-three-rounds](tool-three-rounds.json) | 21 | Three consecutive Tool-evidence rounds pass, 30/30 exact fields. |
 | [file-failure-final](file-failure-final.json) | 13 | Full-file case passes 10/10. Failed-Tool checkpoint is valid, but continuation receives Provider overload; that case remains an error. |
 | [failure-retry](failure-retry.json) | 5 | Fresh failed-Tool case passes 11/11, including original failure name, trace and cursor. |
+| [message-diagnostics-real](message-diagnostics-real.json) | 5 | Model reads all 78,303 diagnostic characters in three pages; 12/12 continuation fields pass with production Tool preparation. |
 
-Total: **154/160** authorized real requests, with **6 remaining**. The final
-accepted text/Tool/file/failure cases score **66/66** fields over eight completed
+Total: **159/160** authorized real requests, with **1 remaining**. The final
+accepted text/Tool/file/failure/diagnostic cases score **78/78** fields over nine completed
 rounds; this finite, single-model corpus is not a general reliability estimate.
 [Final request accounting](final-request-ledger.json) reconciles all new sidecars
 and confirms completed-run credential/catalog cleanup.
@@ -294,6 +295,38 @@ additional distinct coverage. The
 the model-facing Tool result is already page JSON, not the internal wrapper the
 first checker expected. Raw compressed failures preserve their original bytes.
 
-Total remote use remains **154/160**. Full Task/Mission orchestration, native
+At this local-only stage, remote use was **154/160**. Full Task/Mission orchestration, native
 compaction comparison, multi-model distribution and OS power-loss behavior
 remain unverified; no perfect-compression or Codex-equivalence claim is made.
+
+## Real-model Message diagnostics
+
+The [real report](message-diagnostics-real.json),
+[request sidecar](message-diagnostics-real.json.requests.json) and
+[terminal log](message-diagnostics-real.log) record five completed streaming
+requests on the exact configured model. The model calls the Message reader
+three times and receives offsets 0–30000, 30000–60000 and 60000–78303. Its
+published summary and held-out answer retain all 12 exact fields, including
+original occurrence, evidence, trace, source cursor, unfinished persistence,
+observation and denied deployment. The quoted hostile diagnostic does not
+change the answer. Checkpoint validation, original-source comparison and
+reopened projection identity all pass. No new production repair was needed.
+
+This run now uses SessionLoop.prepareProviderTool, including the production
+schema/execution adapter. Earlier real runs used the same compactor with an
+identity callback at that boundary and remain scoped accordingly. The runner
+also closes a startup cleanup gap for partial credential/catalog copies.
+[Startup failure evidence](diagnostic-model-startup.json) and its
+[log](diagnostic-model-startup.log) use an empty authored auth object and no
+model catalog: the exact error is copy-models.json/ENOENT, before Provider
+initialization, with awaited credential-removal receipts. The probe runtime
+has already been reclaimed by its outer runner at post-exit inspection.
+The real run's still-present runtime/data directory is independently inspected
+for credential/catalog cleanup in the [ledger](final-request-ledger.json).
+
+[Narrow script typecheck](diagnostic-model-typecheck-final.log) passes after
+explicit role/input narrowing; the [initial diagnostics](diagnostic-model-typecheck.log)
+remain preserved. The request ledger now totals **159/160**. This is one seeded
+semantic run, not five-round policy-update behavior, an action benchmark or a
+native-Codex quality comparison. The research update and precise next acceptance
+dimensions are in the main investigation record.

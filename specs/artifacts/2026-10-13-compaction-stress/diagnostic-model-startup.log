@@ -1,0 +1,12 @@
+{"stage":"copy-models.json","runtime":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-PigsQR\\runner-89468-Kp3z5L\\runtime-root\\tmp\\opencorvus-test-run-VscsA8\\runner-84296-TrCI8C\\runtime-root\\tmp\\opencorvus-compaction-stress-RiK6KV","credentialCopiesRemoved":true,"errorName":"Error","code":"ENOENT"}
+103 |         credentialCopiesRemoved: true,
+104 |         errorName: error instanceof Error ? error.name : "UnknownStartupError",
+105 |         code: error && typeof error === "object" && "code" in error ? String(error.code) : undefined,
+106 |       }),
+107 |     )
+108 |     throw new Error("Isolated credential/catalog initialization failed; copied credential files were removed.")
+                    ^
+error: Isolated credential/catalog initialization failed; copied credential files were removed.
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\script\compaction-stress.ts:108:15)
+
+Bun v1.4.0 (Windows x64)

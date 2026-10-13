@@ -1,0 +1,16 @@
+{
+  "scope": "empty authored credential fixture; failure before Provider initialization",
+  "exitCode": 1,
+  "runtimeInspection": {
+    "perFileEvidence": "startup receipt is emitted only after both awaited filesystem removals complete; parent cleanup has already reclaimed the runtime",
+    "boundary": "after isolated child process exit",
+    "state": "reclaimed by isolated runner"
+  },
+  "receipt": {
+    "stage": "copy-models.json",
+    "runtime": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-PigsQR\\runner-89468-Kp3z5L\\runtime-root\\tmp\\opencorvus-test-run-VscsA8\\runner-84296-TrCI8C\\runtime-root\\tmp\\opencorvus-compaction-stress-RiK6KV",
+    "credentialCopiesRemoved": true,
+    "errorName": "Error",
+    "code": "ENOENT"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "priorRequests": 99,
-  "total": 154,
+  "total": 159,
   "authorizedTotal": 160,
   "runs": [
     {
@@ -96,6 +96,29 @@
           "status": "passed",
           "passedFields": 11,
           "fields": 11
+        }
+      ]
+    },
+    {
+      "name": "message-diagnostics-real",
+      "status": "passed",
+      "requests": 5,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "authPresent": false,
+        "dataPresent": true,
+        "catalogPresent": false
+      },
+      "streamedRequests": 5,
+      "settledReaders": 5,
+      "cases": [
+        {
+          "name": "message-diagnostics",
+          "round": 1,
+          "status": "passed",
+          "passedFields": 12,
+          "fields": 12
         }
       ]
     }
