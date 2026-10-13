@@ -1,0 +1,24 @@
+$ bun script/run-tests.ts test/continuous-goal.test.ts
+[1/1] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [2195.86ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [1745.24ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [1783.93ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [1772.72ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [1749.88ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [2087.98ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [1622.60ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [4021.23ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [2494.42ms]
+(pass) durable continuous goal contracts > chat reopening preserves cancellation until an explicit goal revision [2680.30ms]
+(pass) durable continuous goal contracts > mission reopening preserves cancellation until an explicit goal revision [2000.92ms]
+(pass) durable continuous goal contracts > archive and restore retain one paused goal on the exact owner [2019.65ms]
+(pass) durable continuous goal contracts > the production Task archive entry retains pause when a completed Task is restored [2035.38ms]
+
+ 13 pass
+ 0 fail
+ 60 expect() calls
+Ran 13 tests across 1 file. [33.71s]
+[1/1] DONE test/continuous-goal.test.ts exit=0 duration=34.56s

@@ -64,6 +64,12 @@ Pause stops new automatic Message admission. Already committed input may settle 
 its normal owner; uncommitted candidates must revalidate current intent and frontier.
 Goal state does not discard requested external effects or replace Task/Mission completion.
 Archived/deleted owners and closed Mission occurrences are not silently reopened.
+Cancellation/closure after the last explicit goal revision keeps that goal paused
+even when an operator later reopens the owner. Only an explicit active revision
+resumes it. The boundary uses event sequence, including same-millisecond decisions.
+Session/Task archive transactions also append the same goal's paused revision with
+owner-control authorship. Restoring visibility retains that pause; child Session
+archives affect only goals whose exact owner is that Session.
 
 ## Verification
 

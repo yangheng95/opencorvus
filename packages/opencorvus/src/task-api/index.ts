@@ -2540,7 +2540,9 @@ export namespace EngineService {
           options,
         )
         const timeUpdated = Date.now()
+        const { pauseContinuousGoalForArchive } = await import("@/continuous-goal/store")
         Database.transaction((db) => {
+          pauseContinuousGoalForArchive({ taskID })
           setEngineTaskArchived(db, {
             taskID,
             timeArchived: timeUpdated,

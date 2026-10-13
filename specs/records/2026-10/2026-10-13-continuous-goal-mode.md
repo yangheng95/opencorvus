@@ -141,7 +141,7 @@ active 的预算派生。三种 owner 共用同一归约器和恢复入口；增
 - 实际模型均为 openai/gpt-6.1-sol，实际请求为流式。Chat 133432 token、Task 318405 token、Mission 506000 token，各接受 2 次自动续跑后明确 complete。Task 首场设置180000预算，超出来自已获准的在途轮次；未提高预算，不能描述为硬预算内完成。
 - 同一 Task 在上个目标完成后接受新目标，真实 task.execution.reopened 将 epoch=1 推进到2，再完成；目标消耗169443 token、1次自动续跑。记录包括精确旧 terminal 与新 opened event identity。
 - Mission 首次180000预算场景在1次自动轮次后实际达到313606，派生 budget_limited；后续独立600000预算场景完成。Provider 首次 Chat 预检过载、checker 初次 Session.tree 返回类型误读、Task 请求缺少 promptProfile、review 进程根配置错误均保留为失败，不计入成功场景。
-- 正向测试最终9项核心44断言、1项多进程4断言、2项既有流式用量4断言、12项既有 Task ingress17断言。新增批处理输入测试最初违反 parentID 必须等于 acceptedInputMessageIDs 尾项的既有合同，修正测试数据后通过，没有修改该公共约束。
+- 正向测试最终13项核心60断言、1项多进程4断言、2项既有流式用量4断言、12项既有 Task ingress17断言。新增批处理输入测试最初违反 parentID 必须等于 acceptedInputMessageIDs 尾项的既有合同，修正测试数据后通过，没有修改该公共约束。
 - 本机默认 Bun1.3.14 已用于早期验收；按 packageManager 要求改用隔离 npm Bun1.4.0 重新执行聚焦测试和提交检查，不修改用户全局运行时。
 - 后端/Overlay typecheck、Overlay build、check:module-topology、check:ai-runtime、api:routes-check、docs:check、check:architecture-index 均通过。没有新增或运行 UI 自动化测试；视觉结论来自真实 /ui 页面的点击、滚动和截图。
 - [可审查证据](../../artifacts/2026-10-13-continuous-goal-mode/README.md)保存脱敏运行摘要、真实 Provider 请求模型/流式/结算事实、Task 重开事件和最终桌面截图。
@@ -159,3 +159,11 @@ active 的预算派生。三种 owner 共用同一归约器和恢复入口；增
 实现提交56e1c0a06；合并 origin/main 至2fcaa85d6，仅文档索引有新增条目冲突，逐项保留双方内容；UsageLedger 的目标关联事务与远端时间统计改动自动合并后复核并重跑11项核心/流式用量测试通过。全工作区8个类型检查成功；对已提交612357ef5执行的模块拓扑为1146模块、5863运行时边和4项 clean import，通过，区别于早期默认 HEAD 检查的基线结果。
 
 main 已快进至9ab8687f5。主工作区三个重叠索引的未提交差异已先保存、核对并保留；其他并行文件没有纳入本任务提交。待推送集合只有本任务实现、正常 upstream merge 和本次验收记录，未使用 rebase、force 或跳过 hook。隔离验收服务全部正常关闭，三个最终复查进程均0模型请求且凭据/模型目录副本已删除。
+
+### 取消后重新打开的边界复核
+
+最终横向审计发现：owner boundary 原先只看 Task/Mission 当前生命周期或 Chat 最后一条状态事件；新 operator 输入重新打开 owner 后，旧 active intent 的暂停投影可能消失。根因为停止边界没有绑定目标最后一次显式 revision。统一以 protocol event seq 保留该 revision 之后的 Chat aborted、Task cancelled、Mission closing/closed 事实；重开 owner 不清除旧目标暂停，显式 update active 才建立新 revision 并重新准入。使用事件顺序而非毫秒时间避免同毫秒取消/恢复混淆。三种入口共用此规则，不增加暂停影子字段。
+
+同次审计覆盖归档：Session.setArchived 和 EngineService.setTaskArchived 在终态归档时可只改当前 archived 字段，restore 又清除它，故不能依赖 cancellation 一定存在。归档写入事务中同步追加原有 continuous_goal.updated paused 意图，author=owner-control、reason=owner_archived；恢复列表可见性不恢复持续目标。精确主 Session/Task 匹配，归档子 Session 不暂停整个父目标；沿用既有 goal revision，不建立平行 archive 事件协议。删除保持 owner unavailable，新身份不继承旧目标。
+
+新增回归最终13项、60断言全部通过，包括真实 SessionStatus/消息 bridge 写入的 Chat 取消、Task epoch2 和 Mission 重开、真实 Session/Task 归档入口与恢复、子 Session 归档、重复归档和显式恢复。最初测试未初始化生命周期 bridge 且手工输入缺少既有 order_key/inputMessageID 合同，改为真实生命周期发布链后验证，不削弱生产约束。所有正向合同合计28项、85断言。第一批实现及集成记录已正常推送至f452ed44d；此补充以独立修复提交交付，并再次执行原 pre-push 检查。

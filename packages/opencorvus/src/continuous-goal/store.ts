@@ -136,26 +136,31 @@ function append(owner: GoalOwner, type: string, payload: Record<string, unknown>
   })
 }
 
-export function goalOwnerBoundary(owner: GoalOwner, since?: number): string | undefined {
+export function goalOwnerBoundary(owner: GoalOwner, afterRevisionSeq?: number): string | undefined {
   return Database.use((db) => {
     const session = db.select().from(SessionTable).where(eq(SessionTable.id, owner.sessionID)).get()
     if (!session || session.time_archived) return "owner_unavailable"
-    if (owner.kind === "chat" && since !== undefined) {
-      const terminal = db
+    if (afterRevisionSeq !== undefined) {
+      const stopped = db
         .select()
         .from(ProtocolEventTable)
         .where(
           and(
-            eq(ProtocolEventTable.aggregate_type, "session"),
-            eq(ProtocolEventTable.aggregate_id, owner.sessionID),
-            eq(ProtocolEventTable.type, "agent.execution.lifecycle"),
-            sql`${ProtocolEventTable.emitted_at} >= ${since}`,
+            eq(ProtocolEventTable.aggregate_type, owner.kind === "task" ? "task" : "session"),
+            eq(ProtocolEventTable.aggregate_id, owner.id),
+            sql`${ProtocolEventTable.seq} > ${afterRevisionSeq}`,
+            owner.kind === "chat"
+              ? sql`${ProtocolEventTable.type}='agent.execution.lifecycle' AND
+                  json_extract(${ProtocolEventTable.payload}, '$.status.type')='terminal' AND
+                  json_extract(${ProtocolEventTable.payload}, '$.status.reason')='aborted'`
+              : owner.kind === "task"
+                ? eq(ProtocolEventTable.type, "task.cancelled")
+                : inArray(ProtocolEventTable.type, ["mission.execution.closing", "mission.execution.closed"]),
           ),
         )
         .orderBy(sql`${ProtocolEventTable.seq} DESC`)
         .get()
-      const status = terminal?.payload?.status as { type?: string; reason?: string } | undefined
-      if (status?.type === "terminal" && status.reason === "aborted") return "owner_cancelled"
+      if (stopped) return owner.kind === "mission" ? "mission_closed" : "owner_cancelled"
     }
     if (owner.kind === "task") {
       const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, owner.id)).get()
@@ -199,7 +204,7 @@ function project(owner: GoalOwner, rows: Event[], goalID?: string): ContinuousGo
   let status: ContinuousGoalView["status"] = update?.status ?? "active"
   let reason = update?.reason
   if (status !== "complete") {
-    const boundary = goalOwnerBoundary(owner, last?.emitted_at ?? created.emitted_at)
+    const boundary = goalOwnerBoundary(owner, last?.seq ?? created.seq)
     if (boundary) {
       status = "paused"
       reason = boundary
@@ -341,6 +346,51 @@ export function inheritedContinuousGoal(sessionID: string): ContinuousGoalView |
     if (goal && goal.status !== "complete" && goalScopeSessionIDs(owner).includes(sessionID)) return goal
   }
   return undefined
+}
+
+/** Archiving is explicit owner control. Persist its pause atomically before the owner becomes unavailable. */
+export function pauseContinuousGoalForArchive(target: { taskID: string } | { sessionID: string }) {
+  Database.requireActiveTransaction("pauseContinuousGoalForArchive")
+  for (const candidate of projectGoalOwners()) {
+    const matches =
+      "taskID" in target
+        ? candidate.kind === "task" && candidate.id === target.taskID
+        : candidate.kind === "task"
+          ? Database.use(
+              (db) =>
+                db
+                  .select({ sessionID: EngineTaskTable.session_id })
+                  .from(EngineTaskTable)
+                  .where(eq(EngineTaskTable.id, candidate.id))
+                  .get()?.sessionID,
+            ) === target.sessionID
+          : candidate.id === target.sessionID
+    if (!matches) continue
+    let owner: GoalOwner
+    try {
+      owner = resolveGoalOwner(candidate)
+    } catch (error) {
+      if (
+        ContinuousGoalError.isInstance(error as Error) &&
+        (error as InstanceType<typeof ContinuousGoalError>).data.code === "owner_unavailable"
+      )
+        continue
+      throw error
+    }
+    const goal = readContinuousGoal(owner)
+    if (!goal || goal.status === "complete") continue
+    updateContinuousGoal(
+      owner,
+      {
+        requestID: "archive:" + goal.revision,
+        goalID: goal.id,
+        expectedRevision: goal.revision,
+        status: "paused",
+        reason: "owner_archived",
+      },
+      "owner-control",
+    )
+  }
 }
 
 export function continuousGoalSystem(sessionID?: string): string[] {

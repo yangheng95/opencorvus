@@ -6,9 +6,11 @@ import { Session } from "@/session"
 import { Database } from "@/storage/db"
 import { ensureMissionSession } from "@/mission/session"
 import { EngineTaskTable } from "@/engine/engine.sql"
-import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
+import { appendTaskOpenedInTransaction, appendTaskReopenedInTransaction } from "@/engine/task-lifecycle"
 import { ProtocolStore } from "@/protocol/store"
 import { Identifier } from "@/id/id"
+import { SessionStatus } from "@/session/status"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { UsageLedger } from "@/usage"
 import { ContinuousGoalError } from "@/continuous-goal/schema"
 import {
@@ -285,6 +287,30 @@ describe("durable continuous goal contracts", () => {
           }),
         )
         expect(readContinuousGoal(owner)).toMatchObject({ id: goal.id, status: "paused", reason: "owner_cancelled" })
+        const reopened = Database.immediateTransaction((db) =>
+          appendTaskReopenedInTransaction({
+            db,
+            taskID: owner.id,
+            sessionID: root.id,
+            now: Date.now(),
+            source: "test.operator",
+          }),
+        )
+        expect(reopened).toMatchObject({ epoch: 2, status: "active" })
+        expect(readContinuousGoal(owner)).toMatchObject({ status: "paused", reason: "owner_cancelled" })
+        expect(await reconcileContinuousGoal(owner)).toBe("paused")
+        const resumed = updateContinuousGoal(
+          owner,
+          {
+            requestID: "resume",
+            goalID: goal.id,
+            expectedRevision: goal.revision,
+            status: "active",
+            reason: "User explicitly resumed the goal after reopening the Task",
+          },
+          "user",
+        )
+        expect(resumed).toMatchObject({ id: goal.id, status: "active" })
       },
     })
   })
@@ -507,4 +533,157 @@ describe("durable continuous goal contracts", () => {
       },
     })
   })
+
+  for (const kind of ["chat", "mission"] as const)
+    test(`${kind} reopening preserves cancellation until an explicit goal revision`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const selected =
+            kind === "mission"
+              ? await missionOwner()
+              : await (async () => {
+                  const session = await Session.create({ kind: "assistant" })
+                  return { session, owner: resolveGoalOwner({ kind: "chat", id: session.id }), missionID: undefined }
+                })()
+          const { owner, session, missionID } = selected
+          const goal = createContinuousGoal(
+            owner,
+            { requestID: "create", objective: "Remain paused until the user resumes this objective" },
+            "user",
+          )
+          if (kind === "chat") {
+            ensureTaskMessageProtocolBridge()
+            for (const status of [{ type: "terminal", reason: "aborted" }, { type: "idle" }] as const) {
+              const inputMessageID = Identifier.ascending("message")
+              await Session.updateMessage({
+                id: inputMessageID,
+                sessionID: session.id,
+                role: "user",
+                author: "user",
+                agent: "chat",
+                model: { providerID: "contract-provider", modelID: "contract-model" },
+                time: { created: Date.now() },
+              })
+              await SessionStatus.set(session.id, status, { inputMessageID })
+            }
+          } else
+            Database.immediateTransaction(() => {
+              const append = (type: string, payload: Record<string, unknown>, source: string) =>
+                ProtocolStore.appendEventInTransaction({
+                  kind: "event",
+                  type,
+                  aggregate: "session",
+                  aggregate_id: session.id,
+                  source,
+                  correlation_id: randomUUID(),
+                  emitted_at: goal.createdAt,
+                  payload,
+                })
+              append(
+                "mission.execution.closed",
+                {
+                  missionID,
+                  requestID: "close",
+                  provenance: { kind: "request", surface: "api", reason: "User cancelled" },
+                },
+                "mission.abort",
+              )
+              append(
+                "mission.execution.opened",
+                { missionID, requestID: "reopen", requestFingerprint: "b".repeat(64) },
+                "mission.wake",
+              )
+            })
+          expect(readContinuousGoal(owner)).toMatchObject({
+            id: goal.id,
+            status: "paused",
+            reason: kind === "chat" ? "owner_cancelled" : "mission_closed",
+          })
+          expect(await reconcileContinuousGoal(owner)).toBe("paused")
+          const resumed = updateContinuousGoal(
+            owner,
+            {
+              requestID: "resume",
+              goalID: goal.id,
+              expectedRevision: goal.revision,
+              status: "active",
+              reason: "User explicitly resumed the continuous goal",
+            },
+            "user",
+          )
+          expect(resumed).toMatchObject({ id: goal.id, status: "active", turnsAccepted: 0, tokensUsed: 0 })
+        },
+      })
+    })
+
+  test("archive and restore retain one paused goal on the exact owner", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant" })
+        const child = await Session.create({ kind: "assistant", parentID: session.id })
+        const owner = resolveGoalOwner({ kind: "chat", id: session.id })
+        const goal = createContinuousGoal(
+          owner,
+          { requestID: "create", objective: "Resume only explicitly after archive" },
+          "user",
+        )
+        await Session.setArchived({ sessionID: child.id, time: Date.now() })
+        expect(readContinuousGoal(owner)).toMatchObject({ id: goal.id, status: "active", revision: goal.revision })
+        await Session.setArchived({ sessionID: session.id, time: Date.now() })
+        await Session.setArchived({ sessionID: session.id, time: Date.now() })
+        await Session.setArchived({ sessionID: session.id, time: null })
+        const restored = readContinuousGoal(owner)!
+        expect(restored).toMatchObject({ id: goal.id, status: "paused", reason: "owner_archived" })
+        expect(await reconcileContinuousGoal(owner)).toBe("paused")
+        expect(
+          updateContinuousGoal(
+            owner,
+            {
+              requestID: "resume",
+              goalID: goal.id,
+              expectedRevision: restored.revision,
+              status: "active",
+              reason: "User resumed the archived objective",
+            },
+            "user",
+          ),
+        ).toMatchObject({ status: "active", id: goal.id })
+      },
+    })
+  })
+
+  test("the production Task archive entry retains pause when a completed Task is restored", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { owner, root } = await taskOwner()
+        const goal = createContinuousGoal(
+          owner,
+          { requestID: "create", objective: "Continue only after explicit resume" },
+          "user",
+        )
+        Database.immediateTransaction(() =>
+          ProtocolStore.appendEventInTransaction({
+            kind: "event",
+            type: "task.completed",
+            aggregate: "task",
+            aggregate_id: owner.id,
+            session_id: root.id,
+            source: "test",
+            payload: { execution_epoch: 1 },
+          }),
+        )
+        const { EngineService } = await import("@/task-api")
+        await EngineService.setTaskArchived(owner.id, true)
+        await EngineService.setTaskArchived(owner.id, false)
+        expect(readContinuousGoal(owner)).toMatchObject({ id: goal.id, status: "paused", reason: "owner_archived" })
+        expect(await reconcileContinuousGoal(owner)).toBe("paused")
+      },
+    })
+  }, 20_000)
 })

@@ -863,8 +863,12 @@ export namespace Session {
       time: z.number().nullable(),
     }),
     async (input) => {
+      const pauseGoal = input.time !== null
+        ? (await import("@/continuous-goal/store")).pauseContinuousGoalForArchive
+        : undefined
       return Database.immediateTransaction((db) => {
         assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        pauseGoal?.({ sessionID: input.sessionID })
         const row = db
           .update(SessionTable)
           .set({ time_archived: input.time, time_updated: Date.now() })
