@@ -1,0 +1,650 @@
+{
+  "iteration": 401,
+  "selection": "Explicit own observations, scoped implementation/audit, named logs and two own service scopes; no database/runtime/auth/models/UI build/full vendor/UMD or whole patch. Current production patch is Git-reviewed source, not duplicated as an artifact.",
+  "generatedDocuments": [
+    "README.md",
+    "archive-check.json"
+  ],
+  "files": [
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-delete-enter-closed.ax.txt",
+      "path": "observations/after-en-delete-enter-closed.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 11700,
+      "archivedBytes": 11700
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-delete-fullscreen.ax.txt",
+      "path": "observations/after-en-delete-fullscreen.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 574,
+      "archivedBytes": 574
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-delete-fullscreen.jpg",
+      "path": "observations/after-en-delete-fullscreen.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 31712,
+      "archivedBytes": 31712
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-delete-mouse-closed.ax.txt",
+      "path": "observations/after-en-delete-mouse-closed.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 1727,
+      "archivedBytes": 1727
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-delete-normal.ax.txt",
+      "path": "observations/after-en-delete-normal.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 1163,
+      "archivedBytes": 1163
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-delete-normal.jpg",
+      "path": "observations/after-en-delete-normal.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 32453,
+      "archivedBytes": 32453
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-range-fullscreen.ax.txt",
+      "path": "observations/after-en-range-fullscreen.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 776,
+      "archivedBytes": 776
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-range-fullscreen.jpg",
+      "path": "observations/after-en-range-fullscreen.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 65587,
+      "archivedBytes": 65587
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-range-normal-draft.ax.txt",
+      "path": "observations/after-en-range-normal-draft.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 13384,
+      "archivedBytes": 13384
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-en-range-normal-draft.jpg",
+      "path": "observations/after-en-range-normal-draft.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 78447,
+      "archivedBytes": 78447
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-final-normal.ax.txt",
+      "path": "observations/after-final-normal.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 11977,
+      "archivedBytes": 11977
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-original-workbook-restored.jpg",
+      "path": "observations/after-original-workbook-restored.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 43360,
+      "archivedBytes": 43360
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-own-sheet-cleaned.ax.txt",
+      "path": "observations/after-own-sheet-cleaned.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 1641,
+      "archivedBytes": 1641
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-page-closed.json",
+      "path": "observations/after-page-closed.json",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 538,
+      "archivedBytes": 538
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-delete-fullscreen.ax.txt",
+      "path": "observations/after-zh-delete-fullscreen.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 557,
+      "archivedBytes": 557
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-delete-fullscreen.jpg",
+      "path": "observations/after-zh-delete-fullscreen.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 30140,
+      "archivedBytes": 30140
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-delete-normal.ax.txt",
+      "path": "observations/after-zh-delete-normal.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 1107,
+      "archivedBytes": 1107
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-delete-normal.jpg",
+      "path": "observations/after-zh-delete-normal.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 30222,
+      "archivedBytes": 30222
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-range-fullscreen-draft.ax.txt",
+      "path": "observations/after-zh-range-fullscreen-draft.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 2863,
+      "archivedBytes": 2863
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-range-fullscreen-draft.jpg",
+      "path": "observations/after-zh-range-fullscreen-draft.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 54361,
+      "archivedBytes": 54361
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-range-normal-draft.ax.txt",
+      "path": "observations/after-zh-range-normal-draft.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 13125,
+      "archivedBytes": 13125
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-range-normal-draft.jpg",
+      "path": "observations/after-zh-range-normal-draft.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 75922,
+      "archivedBytes": 75922
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-same-open-range-settings.ax.txt",
+      "path": "observations/after-zh-same-open-range-settings.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 4718,
+      "archivedBytes": 4718
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/after-zh-same-open-range-settings.jpg",
+      "path": "observations/after-zh-same-open-range-settings.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 38664,
+      "archivedBytes": 38664
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-page-closed.json",
+      "path": "observations/before-page-closed.json",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 395,
+      "archivedBytes": 395
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-settings-restored.ax.txt",
+      "path": "observations/before-settings-restored.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 4309,
+      "archivedBytes": 4309
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-delete-fullscreen.ax.txt",
+      "path": "observations/before-zh-delete-fullscreen.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 555,
+      "archivedBytes": 555
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-delete-fullscreen.jpg",
+      "path": "observations/before-zh-delete-fullscreen.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 30140,
+      "archivedBytes": 30140
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-delete-normal.ax.txt",
+      "path": "observations/before-zh-delete-normal.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 1105,
+      "archivedBytes": 1105
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-delete-normal.jpg",
+      "path": "observations/before-zh-delete-normal.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 30200,
+      "archivedBytes": 30200
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-permission-detail.jpg",
+      "path": "observations/before-zh-permission-detail.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 53879,
+      "archivedBytes": 53879
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-range-fullscreen.ax.txt",
+      "path": "observations/before-zh-range-fullscreen.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 798,
+      "archivedBytes": 798
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-range-fullscreen.jpg",
+      "path": "observations/before-zh-range-fullscreen.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 60336,
+      "archivedBytes": 60336
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-range-normal.ax.txt",
+      "path": "observations/before-zh-range-normal.ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 783,
+      "archivedBytes": 783
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-range-normal.jpg",
+      "path": "observations/before-zh-range-normal.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 75436,
+      "archivedBytes": 75436
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/before-zh-workbook.jpg",
+      "path": "observations/before-zh-workbook.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG manually viewed by Root; no image editing",
+      "sourceBytes": 73125,
+      "archivedBytes": 73125
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/observations/final-review.json",
+      "path": "observations/final-review.json",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff, or manual observation",
+      "sourceBytes": 9981,
+      "archivedBytes": 9981
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/installed-review.json",
+      "path": "implementation/installed-review.json.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 16035,
+      "archivedBytes": 1711
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/locale-audit.json",
+      "path": "implementation/locale-audit.json.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 4286,
+      "archivedBytes": 952
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/dialog-consumers.json",
+      "path": "implementation/dialog-consumers.json.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3402,
+      "archivedBytes": 959
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/service-consumers.json",
+      "path": "implementation/service-consumers.json.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 25740,
+      "archivedBytes": 3799
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/runtime-close-evidence.json",
+      "path": "implementation/runtime-close-evidence.json.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 7327,
+      "archivedBytes": 1102
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/apply-vendor.mjs",
+      "path": "implementation/apply-vendor.mjs.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 2170,
+      "archivedBytes": 932
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/prepare-vendor.mjs",
+      "path": "implementation/prepare-vendor.mjs.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 11081,
+      "archivedBytes": 3741
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/review-plan.mjs",
+      "path": "implementation/review-plan.mjs.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3413,
+      "archivedBytes": 1448
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/final-installed-review.mjs",
+      "path": "implementation/final-installed-review.mjs.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 2547,
+      "archivedBytes": 1071
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/root-read-distribution.mjs",
+      "path": "implementation/root-read-distribution.mjs.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 1260,
+      "archivedBytes": 669
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/record-root-review.mjs",
+      "path": "implementation/record-root-review.mjs.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3891,
+      "archivedBytes": 1970
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/independent-visual-review.md",
+      "path": "implementation/independent-visual-review.md.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 2935,
+      "archivedBytes": 1851
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/delivery-tooling-failures.json",
+      "path": "implementation/delivery-tooling-failures.json.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 616,
+      "archivedBytes": 379
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/patch-prepare.log",
+      "path": "logs/patch-prepare.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 348,
+      "archivedBytes": 250
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/patch-prepare-1.4.log",
+      "path": "logs/patch-prepare-1.4.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 368,
+      "archivedBytes": 262
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/patch-commit.log",
+      "path": "logs/patch-commit.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 137,
+      "archivedBytes": 138
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/install-final.log",
+      "path": "logs/install-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 139,
+      "archivedBytes": 136
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/typecheck-root.log",
+      "path": "logs/typecheck-root.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 16,
+      "archivedBytes": 36
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/build-root.log",
+      "path": "logs/build-root.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 69908,
+      "archivedBytes": 10848
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/docs-plan.log",
+      "path": "logs/docs-plan.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 106,
+      "archivedBytes": 115
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/docs-final.log",
+      "path": "logs/docs-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 106,
+      "archivedBytes": 115
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/patch-prepare.exit",
+      "path": "logs/patch-prepare.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/patch-prepare-1.4.exit",
+      "path": "logs/patch-prepare-1.4.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/patch-commit.exit",
+      "path": "logs/patch-commit.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/install-final.exit",
+      "path": "logs/install-final.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/typecheck-root.exit",
+      "path": "logs/typecheck-root.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/build-root.exit",
+      "path": "logs/build-root.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/docs-plan.exit",
+      "path": "logs/docs-plan.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-design-dialog-close-locale-401/docs-final.exit",
+      "path": "logs/docs-final.exit.gz",
+      "compression": "gzip",
+      "qualification": "Original scoped evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-before/owner.json",
+      "path": "scopes/before/owner.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 154,
+      "archivedBytes": 149
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-before/ready.json",
+      "path": "scopes/before/ready.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 343,
+      "archivedBytes": 254
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-before/terminal.json",
+      "path": "scopes/before/terminal.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 210,
+      "archivedBytes": 172
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-before/stop-requested",
+      "path": "scopes/before/stop-requested.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 118,
+      "archivedBytes": 120
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-before/stdout.log",
+      "path": "scopes/before/stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 51,
+      "archivedBytes": 69
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-before/stderr.log",
+      "path": "scopes/before/stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 71886,
+      "archivedBytes": 6904
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-after/owner.json",
+      "path": "scopes/after/owner.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 154,
+      "archivedBytes": 148
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-after/ready.json",
+      "path": "scopes/after/ready.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 343,
+      "archivedBytes": 254
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-after/terminal.json",
+      "path": "scopes/after/terminal.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 210,
+      "archivedBytes": 170
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-after/stop-requested",
+      "path": "scopes/after/stop-requested.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 123,
+      "archivedBytes": 128
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-after/stdout.log",
+      "path": "scopes/after/stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 51,
+      "archivedBytes": 69
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/401-after/stderr.log",
+      "path": "scopes/after/stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless service, original canonical runtime reused; ready.source wording fresh is inaccurate",
+      "sourceBytes": 76776,
+      "archivedBytes": 7224
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/launch-review.ps1",
+      "path": "implementation/launch-review.ps1.gz",
+      "compression": "gzip",
+      "qualification": "Mature original source preserved, not copied into a new implementation",
+      "sourceBytes": 3530,
+      "archivedBytes": 1343
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/review-server.ts",
+      "path": "implementation/review-server.ts.gz",
+      "compression": "gzip",
+      "qualification": "Mature original source preserved, not copied into a new implementation",
+      "sourceBytes": 2108,
+      "archivedBytes": 909
+    }
+  ]
+}

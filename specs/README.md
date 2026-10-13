@@ -4,7 +4,7 @@
 
 - [Capsule 准备与部署权属](records/2026-10/2026-10-14-capsule-preparation-authority.md)：唯一描述输入、原准备能力、终态资源与恢复缺口。
 
-- [401 Dialog关闭名称语言](records/2026-10/2026-10-14-design-dialog-close-locale-401.md)：共享ConfigProvider默认语言、完整资源与真实桌面关闭名称。
+- [401 Dialog关闭名称语言](records/2026-10/2026-10-14-design-dialog-close-locale-401.md)：19语言单源、真实中英普通/全屏关闭与同实例草稿，16张原始截图。
 
 - [393 ACP提示结果](artifacts/2026-10-05-connection-workspace-authority/acp-prompt-terminal-plan-393.md)：普通提示、命令、模型错误与结束原因。
 

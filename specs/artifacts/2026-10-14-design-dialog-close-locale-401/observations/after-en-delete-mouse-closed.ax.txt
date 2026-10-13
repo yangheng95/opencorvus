@@ -1,0 +1,52 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/
+	1 container Desk budget
+		49 container
+			50 text Spreadsheet
+			51 heading Desk budget, Value: 3
+				52 text Desk budget
+			53 button Copy text
+			54 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-254-trigger, Secondary Actions: Expand
+			55 button Close Desk budget artifact workspace
+		56 text Edits stay in this view. Before leaving or collapsing it, download the edited sheets as CSV. CSV keeps cell values, not formulas or formatting.
+		10 container Desk budget
+			57 container
+				58 container
+					59 container
+						60 container
+							61 text field (settable) A1
+							62 link (collapsed) Secondary Actions: Expand
+								63 image
+						64 image univer-doc-main-canvas
+						65 image
+						66 button
+							67 image
+					68 container
+						69 image univer-doc-main-canvas
+						70 image univer-sheet-main-canvas_interactive-artifact-Desk budget
+					71 container Sidebar panel
+						72 container
+							73 text Protect Rows and Columns
+							74 button Close sidebar
+								75 image
+				76 container
+					77 button
+						78 image
+					79 button
+						80 image
+					81 tab group Sheet tabs
+						82 tab (selectable, settable, boolean) 清单, Value: 0
+						83 tab (selected, settable, boolean) 工作表1, Value: 1
+					84 button
+						85 image
+					86 button
+						87 image
+					88 container
+						89 button
+					90 button
+						91 image
+					92 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
+			47 container Notifications alt+T
+			48 container Notifications alt+T
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401/README.md)：37个原观察、16个JPEG和中英同实例Dialog及正常物理收尾。
+
 - [Explorer 根目录展示](2026-10-14-explorer-directory-label/README.md)：原前态与独立调查、真实目录回执和人工页面证据。
 
 - [Capsule 准备与部署权属](2026-10-14-capsule-preparation-authority/README.md)：完整只读生产调用、期限、持久事实与真实资格审计。

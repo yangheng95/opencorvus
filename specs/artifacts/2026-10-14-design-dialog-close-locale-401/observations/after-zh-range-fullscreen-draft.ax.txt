@@ -1,0 +1,85 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/
+	1 container Desk budget
+		2 container
+			3 text 电子表格
+			4 heading Desk budget, Value: 3
+				5 text Desk budget
+			6 button 复制文本
+			7 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-254-trigger, Secondary Actions: Expand
+			8 button 关闭 Desk budget 作品视图
+		9 text 编辑仅保留在当前视图。离开或折叠前，请下载修改后的工作表 CSV；CSV 仅保留单元格值，不保留公式和格式。
+		10 container Desk budget
+			11 container
+				12 container
+					13 container
+						14 text field (settable) A1
+						15 link (collapsed) Secondary Actions: Expand
+							16 image
+					17 image univer-doc-main-canvas
+					18 button
+						19 image
+					20 image univer-doc-main-canvas
+					21 image univer-sheet-main-canvas_interactive-artifact-Desk budget
+				22 container 侧边栏面板
+					23 splitter Description: 调整侧边栏宽度, Value: 50
+					24 container
+						25 text 保护行列
+						26 button 关闭侧边栏
+							27 image
+						28 text 保护区域
+						29 container
+							30 image univer-doc-main-canvas
+							31 image
+						32 text 权限描述
+						33 text field (settable)
+						34 text 编辑权限
+						35 container
+							36 radio button (settable, integer) Description: 仅我可以编辑, Value: 1
+							37 text 仅我可以编辑
+						38 container
+							39 radio button (settable, integer) Description: 指定用户可以编辑, Value: 0
+							40 text 指定用户可以编辑
+						41 text 查看权限
+						42 container
+							43 radio button (settable, integer) Description: 其他人可以查看, Value: 1
+							44 text 其他人可以查看
+						45 container
+							46 radio button (settable, integer) Description: 其他人不可以查看, Value: 0
+							47 text 其他人不可以查看
+						48 button 确认
+						49 button 取消
+				50 container
+					51 button
+						52 image
+					53 button
+						54 image
+					55 tab group 工作表标签
+						56 tab (selected, settable, boolean) 清单, Value: 1
+					57 button
+						58 image
+					59 button
+						60 image
+					61 container
+						62 button
+					63 button
+						64 image
+					65 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
+			66 container 通知 alt+T
+			67 container 通知 alt+T
+		68 container
+			69 container 选择一个数据范围, ID: radix-_r_8_
+				70 heading 选择一个数据范围, Value: 2, ID: radix-_r_9_
+					71 text 选择一个数据范围
+				72 text field (settable) A1:B2
+				73 button 添加范围
+					74 image
+					75 text 添加范围
+				76 container
+					77 button 取消
+					78 button 确认
+				79 button 关闭
+					80 image
+					81 text 关闭
+
+The focused UI element is 8 button 关闭 Desk budget 作品视图

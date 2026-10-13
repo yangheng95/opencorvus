@@ -1,0 +1,31 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/
+	1 container
+		2 container workspacePageStack
+			3 container Connection Diagnostics
+				4 container Description: Connection Diagnostics · Online · Port 18505, ID: connBadge
+					5 text Online
+			6 container chatSection
+				7 container
+					8 container Description: Conversation, ID: chatScroll
+						9 container Desk budget
+							10 container Desk budget
+								11 container Notifications alt+T
+								12 container Notifications alt+T
+					13 container
+						14 text Model configuration unavailable You can still read this conversation. Review the details or choose a model before sending a message.
+						15 button (collapsed) Details, Secondary Actions: Expand
+							16 text Details
+						17 button Retry
+		18 container Delete worksheet, ID: radix-_r_h_
+			19 heading Delete worksheet, Value: 2, ID: radix-_r_i_
+				20 text Delete worksheet
+			21 text Confirm to delete this worksheet?
+			22 container
+				23 button Cancel
+				24 button OK
+			25 button Close
+				26 image
+				27 text Close
+
+The focused UI element is 23 button Cancel

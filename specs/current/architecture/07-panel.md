@@ -2492,6 +2492,12 @@ use the same theme’s dark foreground variant. The mounted list and ThemeServic
 supply these variants in ordinary and fullscreen views while retaining the
 existing rule identity, actions, locale and range drawing. No Host colour
 override or separate theme state supplies the protection card.
+Design Dialog close names consume the existing ConfigContext locale projection.
+ConfigProvider resolves optional locale input from the complete published en-US
+design resource and supplies Dialog.close; all nineteen language resources
+declare that field in each published format. A mounted Dialog reads that same
+Context on language changes, retaining its input and existing Radix close action.
+No Host dictionary, extra locale subscription or renderer remount supplies it.
 
 Shared artifact action controls preserve native focus while an operation owns
 their busy state. Native disabled is reserved for genuinely unavailable actions;

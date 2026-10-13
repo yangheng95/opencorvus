@@ -29,6 +29,8 @@
 
 - 修复深色主题下保护范围卡片悬停时浅底白字难以阅读的问题；编辑、删除悬停区和规则说明使用既有主题配色，普通与全屏视图保留当前规则及界面语言。
 
+- 表格范围选择与删除确认框的关闭名称跟随当前界面语言；已打开的范围框切换中英文时保留草稿、布局及原有鼠标和键盘关闭行为。
+
 - 稀疏项目配置继续继承未声明的全局设置，修复保存无关字段会覆盖提示配置、授权模式和嵌套默认值的问题；明确项目覆盖保持有效，读取、保存候选与可写源使用同一配置契约，已保存的任务与权限策略保持其原事实。
 
 - 表格权限面板的新增详情和确认返回列表保留当前语言标题；范围校验信息随语言切换更新，原范围、说明和权限选项继续保留。
@@ -95,6 +97,8 @@
 - Native spreadsheet buttons retain keyboard focus before activation, enabling Tab, Enter and Space for permission details, range dialogs, zoom and sheet menus. Existing editor focus after menu actions remains effective.
 
 - Fixed unreadable white text on light hover backgrounds in dark spreadsheet protection cards. Edit/Delete hover regions and rule descriptions use existing theme colours, retaining current rules and interface language in ordinary and fullscreen views.
+
+- Spreadsheet range and deletion dialogs use the current interface language for their close names. Open range dialogs retain drafts, layout, and existing mouse and keyboard close actions when switching English and Chinese.
 
 - Sparse project configuration inherits undeclared global settings, fixing unrelated saves that overwrote prompt selection, authorization mode and nested defaults. Explicit project overrides remain effective; reads, write candidates and writable sources share one contract, while existing task and permission records retain their original facts.
 

@@ -1,0 +1,20 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 85
++		85 container
++			86 container Select data range
++				87 text Select data range
++			88 container Select a data range, ID: radix-_r_8_
++				89 heading Select a data range, Value: 2, ID: radix-_r_9_
++					90 text Select a data range
++				91 text field (settable) A1
++				92 button Add range
++					93 image
++					94 text Add range
++				95 container
++					96 button Cancel
++					97 button Confirm
++				98 button Close
++					99 image
++					100 text Close
+The focused UI element is 91 text field (settable) A1

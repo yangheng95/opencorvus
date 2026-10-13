@@ -1,0 +1,18 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/
+	1 container Desk budget
+		10 container Desk budget
+			47 container Notifications alt+T
+			48 container Notifications alt+T
+		49 container Delete worksheet, ID: radix-_r_k_
+			50 heading Delete worksheet, Value: 2, ID: radix-_r_l_
+				51 text Delete worksheet
+			52 text Confirm to delete this worksheet?
+			53 container
+				54 button Cancel
+				55 button OK
+			56 button Close
+				57 image
+				58 text Close
+
+The focused UI element is 54 button Cancel

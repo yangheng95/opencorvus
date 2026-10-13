@@ -1,0 +1,324 @@
+{
+  "kind": "Preservation of exact captured artifacts and links; no source hash gate or UI/functionality acceptance",
+  "sourceFiles": 80,
+  "archiveFiles": 83,
+  "jpeg": 16,
+  "gzip": 43,
+  "bytes": 977659,
+  "reviewedAt": "2026-10-13T17:35:16.249Z",
+  "manualReviewRerun": false,
+  "restored": [
+    {
+      "path": "implementation/installed-review.json.gz",
+      "sourceBytes": 16035,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/locale-audit.json.gz",
+      "sourceBytes": 4286,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/dialog-consumers.json.gz",
+      "sourceBytes": 3402,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/service-consumers.json.gz",
+      "sourceBytes": 25740,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/runtime-close-evidence.json.gz",
+      "sourceBytes": 7327,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/apply-vendor.mjs.gz",
+      "sourceBytes": 2170,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/prepare-vendor.mjs.gz",
+      "sourceBytes": 11081,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/review-plan.mjs.gz",
+      "sourceBytes": 3413,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-installed-review.mjs.gz",
+      "sourceBytes": 2547,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/root-read-distribution.mjs.gz",
+      "sourceBytes": 1260,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/record-root-review.mjs.gz",
+      "sourceBytes": 3891,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/independent-visual-review.md.gz",
+      "sourceBytes": 2935,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/delivery-tooling-failures.json.gz",
+      "sourceBytes": 616,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/patch-prepare.log.gz",
+      "sourceBytes": 348,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/patch-prepare-1.4.log.gz",
+      "sourceBytes": 368,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/patch-commit.log.gz",
+      "sourceBytes": 137,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/install-final.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/typecheck-root.log.gz",
+      "sourceBytes": 16,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/build-root.log.gz",
+      "sourceBytes": 69908,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/docs-plan.log.gz",
+      "sourceBytes": 106,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/docs-final.log.gz",
+      "sourceBytes": 106,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/patch-prepare.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/patch-prepare-1.4.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/patch-commit.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/install-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/typecheck-root.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/build-root.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/docs-plan.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "logs/docs-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/before/owner.json.gz",
+      "sourceBytes": 154,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/before/ready.json.gz",
+      "sourceBytes": 343,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/before/terminal.json.gz",
+      "sourceBytes": 210,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/before/stop-requested.gz",
+      "sourceBytes": 118,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/before/stdout.log.gz",
+      "sourceBytes": 51,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/before/stderr.log.gz",
+      "sourceBytes": 71886,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/after/owner.json.gz",
+      "sourceBytes": 154,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/after/ready.json.gz",
+      "sourceBytes": 343,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/after/terminal.json.gz",
+      "sourceBytes": 210,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/after/stop-requested.gz",
+      "sourceBytes": 123,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/after/stdout.log.gz",
+      "sourceBytes": 51,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "scopes/after/stderr.log.gz",
+      "sourceBytes": 76776,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/launch-review.ps1.gz",
+      "sourceBytes": 3530,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/review-server.ts.gz",
+      "sourceBytes": 2108,
+      "decodedMatchesOriginal": true
+    }
+  ],
+  "images": [
+    {
+      "path": "observations/after-en-delete-fullscreen.jpg",
+      "bytes": 31712,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-en-delete-normal.jpg",
+      "bytes": 32453,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-en-range-fullscreen.jpg",
+      "bytes": 65587,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-en-range-normal-draft.jpg",
+      "bytes": 78447,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-original-workbook-restored.jpg",
+      "bytes": 43360,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-zh-delete-fullscreen.jpg",
+      "bytes": 30140,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-zh-delete-normal.jpg",
+      "bytes": 30222,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-zh-range-fullscreen-draft.jpg",
+      "bytes": 54361,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-zh-range-normal-draft.jpg",
+      "bytes": 75922,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/after-zh-same-open-range-settings.jpg",
+      "bytes": 38664,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/before-zh-delete-fullscreen.jpg",
+      "bytes": 30140,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/before-zh-delete-normal.jpg",
+      "bytes": 30200,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/before-zh-permission-detail.jpg",
+      "bytes": 53879,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/before-zh-range-fullscreen.jpg",
+      "bytes": 60336,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/before-zh-range-normal.jpg",
+      "bytes": 75436,
+      "matchesOriginal": true
+    },
+    {
+      "path": "observations/before-zh-workbook.jpg",
+      "bytes": 73125,
+      "matchesOriginal": true
+    }
+  ],
+  "credentialScan": {
+    "inspected": 67,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "limitation": "Bounded patterns only; no credential/model authority file read"
+  },
+  "localLinks": {
+    "count": 92,
+    "broken": 0
+  }
+}
