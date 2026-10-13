@@ -29,3 +29,8 @@ completion/ 保存正式Git16/215、Question40/240、Overlay纯transport36/90、
 - [空header中文Question](completion/question-empty-expiry01/empty-header-pending-zh.jpg)
 - [正式后台交接](completion/question-implementation/session-final-handoff/README.md.gz)
 - [Task恢复权威未满足](completion/task-question-recovery-authority-review.md.gz)
+
+404范围提交e70e3dc55已正常推送main，fresh fetch确认upstream祖先。首终端Bun版本错误由正常hook拒绝，切1.4后完整重新同步/检查/推送。
+
+- [正常推送原日志](delivery/completion-push02.log.gz)
+- [提交与上游回执](delivery/result.json)

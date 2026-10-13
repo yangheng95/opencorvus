@@ -1,0 +1,14 @@
+{
+  "commit": "e70e3dc55cc7c9627b81fc3f6b12274394240f64",
+  "push02Exit": 0,
+  "range": "7897d1bd1..e70e3dc55 main -> main",
+  "freshFetchAncestorExit": 0,
+  "firstPush": {
+    "toolChunk": "e5d828",
+    "exit": 1,
+    "reason": "Normal pre-push required Bun ^1.4.0; terminal default was 1.3.14",
+    "repair": "Use existing validated Bun 1.4.0, then fresh fetch/merge/full pending-set review/normal push"
+  },
+  "scope": "967 own files; unrelated working changes retained",
+  "boundary": "No version, Release, tag or external publication"
+}

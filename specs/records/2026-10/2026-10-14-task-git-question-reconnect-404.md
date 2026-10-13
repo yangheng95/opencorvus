@@ -175,3 +175,5 @@ Root实际publicTask02采用上述合法Research Studio输入，两目录各cata
 completion/新增630原始公开对象（623gzip文本、7原JPEG、23837452原字节），包含Git正式红绿、最终后台/Overlay/SDK原回执和精确来源、崩溃红态01–07、publicTask01/02、空header期限与helper首错。before/及manual-after/历史冻结保持；合计归档24原JPEG。所有凭据family扫描0，公开fixture字面值单列，排除auth/models、DB、runtime、二进制、private UI bundle和真实Provider原payload。字节相等只证明保存对象身份，非功能/视觉门槛。
 
 未满足：Task source-only恢复及物理执行owner权威；ASCII310原native cwd267；Task正常业务完成/result checkpoint；Work/Mission独立页面Question、所有生产入口实机、UNC/POSIX。SideChat网络attention残留、空header历史泛化caption作为有证据的下一批候选，尚未修复。旧Git失败epoch/outcome不改写，source-only Task不能以Session过滤遮蔽。下一批405单层两agent调查明确Task原activation/dispatch进程存活与普通Tool/durable A2A接续合同，Root先落新spec再实施。
+
+交付Git事实：范围提交e70e3dc55cc7c9627b81fc3f6b12274394240f64（967自有文件）正常push02退出0，日志7897d1bd1..e70e3dc55 main→main；fresh fetch确认ancestor返回0/currentmain同步。首push01因终端默认Bun1.3.14被正常hook拒绝，未绕过，采用已有正式1.4.0重新fetch/merge/待推集合核对后完整push。八包typecheck及routes/docs/control-lease/architecture/package/module/release topology/secret-scan0均通过；其余workspace改动保留。未创建版本/tag/Release/PR。已自主进入405，Task恢复未满足仍列原失败。

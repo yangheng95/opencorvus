@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [405 Question恢复与终态反馈](2026-10-14-task-question-recovery-405.md)：原Asked发现、physical owner与真实中断，先调查实证再实施。
+
 - [资源管理反馈](2026-10-14-resource-feedback.md)：共享资源页唯一反馈状态、真实中英错误/警告和本地安装读回资格。
 
 - [Provider 模型摘要](2026-10-14-provider-model-summary.md)：空/部分覆盖继承、10模型完整搜索与中英未知状态的真实修后资格。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [405 Question恢复与终态反馈](records/2026-10/2026-10-14-task-question-recovery-405.md)：普通Tool/A2A执行权威、真实入口红态及Side/超时展示调查。
+
 - [资源管理反馈](records/2026-10/2026-10-14-resource-feedback.md)：中英短摘要、原诊断/真实请求ID和14张原图；Skill目录500问题单列。
 
 - [404 原始 Git 与 Question 证据](artifacts/2026-10-14-task-git-question-reconnect-404/README.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。

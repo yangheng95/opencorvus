@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [405 恢复权威与终态反馈](2026-10-14-task-question-recovery-405/README.md)：实施前只读源证据及404原图边界，尚未405验收。
+
 - [资源管理反馈](2026-10-14-resource-feedback/README.md)：14张原图、真实Skill接受与checker原失败、完整日志和第15批正常交付原件。
 
 - [404 Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404/README.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
