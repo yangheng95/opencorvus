@@ -1,0 +1,1162 @@
+{
+  "name": "read-pressure-file-receipts",
+  "status": "passed",
+  "model": "openai/gpt-6.1-sol",
+  "contextTokens": 19000,
+  "requests": 20,
+  "cleanup": {
+    "runtimePresent": true,
+    "dataPresent": true,
+    "authPresent": false,
+    "catalogPresent": false
+  },
+  "cases": [
+    {
+      "name": "tool-file",
+      "status": "passed",
+      "metrics": {
+        "region": {
+          "expected": "REGION-72e51f8b1157-tool-file",
+          "actual": "REGION-72e51f8b1157-tool-file",
+          "pass": true
+        },
+        "evidence": {
+          "expected": "EVIDENCE-72e51f8b1157-tool-file",
+          "actual": "EVIDENCE-72e51f8b1157-tool-file",
+          "pass": true
+        },
+        "input_reference": {
+          "expected": "INPUT-72e51f8b1157-tool-file",
+          "actual": "INPUT-72e51f8b1157-tool-file",
+          "pass": true
+        },
+        "trace_id": {
+          "expected": "TRACE-72e51f8b1157-tool-file",
+          "actual": "TRACE-72e51f8b1157-tool-file",
+          "pass": true
+        },
+        "call_id": {
+          "expected": "call_72e51f8b1157-tool-file",
+          "actual": "call_72e51f8b1157-tool-file",
+          "pass": true
+        },
+        "part_id": {
+          "expected": "prt_g0VXy2ZNn00LfVd32zL5",
+          "actual": "prt_g0VXy2ZNn00LfVd32zL5",
+          "pass": true
+        },
+        "next_offset": {
+          "expected": 17031,
+          "actual": 17031,
+          "pass": true
+        },
+        "permission": {
+          "expected": "denied",
+          "actual": "denied",
+          "pass": true
+        },
+        "validation": {
+          "expected": "pending",
+          "actual": "pending",
+          "pass": true
+        },
+        "rollback_owner": {
+          "expected": "unknown",
+          "actual": "unknown",
+          "pass": true
+        }
+      },
+      "notes": [
+        {
+          "partID": "prt_g0VXy2c2G00Cy2O5uFrH",
+          "messageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "callID": "call_e2ca5d23ef644739bad02ff40cfe84a4",
+          "notes": "Need engineering continuation summary. Anchor visible msg_g0VXy2ZMo00ywWyqUyTl denies deployment, permits analysis, unknown stay unknown; don't duplicate anchor unnecessarily. User correction fully read msg_g0VXy2ZNQ000GsgyCOJ6 Part prt_g0VXy2ZNX00OpcivWFaF: current region REGION-72e51f8b1157-tool-file supersedes OLD-REGION; inspect latest tool exact input request_reference, output/failure, metadata trace, call and Part. Unfinished read preserve next_offset exactly and failure name if failed. Validation pending, rollback owner unknown. Latest user msg_g0VXy2ZNy00Fs29cpGxX says continue engineering delivery using established record. Tool read original msg_g0VXy2ZNd003hjAH7Trn Part prt_g0VXy2ZNn00LfVd32zL5 call_72e51f8b1157-tool-file status completed: output total70492 read UTF16 [0,23497) only repetitive Historical log so far, next reader offset23497. Must continue output from23497; need input metadata failure relevant fields. Assistant prior text msg_g0VXy2ZN9000oVgmGOU3 Part prt_g0VXy2ZNI00mI7bP3dvE total15500 read[0,4601) repetitive Initial investigation started; continue at4601 if needed to find memory facts. No actual MEMORY.MD yet found. No observed verification success. Need any diagnostics if relevant errors discovered. Distinguish reader cursors from original result next_offset.",
+          "receipt": {
+            "status": "saved",
+            "notes_call_id": "call_e2ca5d23ef644739bad02ff40cfe84a4",
+            "source_reads": [
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+                "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+                "field": "output",
+                "source": "truncation-file",
+                "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+                "totalChars": 70492,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "callID": "call_72e51f8b1157-tool-file",
+                "tool": "read",
+                "ranges": [
+                  [
+                    0,
+                    23497
+                  ]
+                ],
+                "readerCalls": [
+                  "call_6a5f288ce6c64b51838774a9a3fa0222"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": 23497
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNQ000GsgyCOJ6",
+                "partID": "prt_g0VXy2ZNX00OpcivWFaF",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "f868962ce95ea45d3e28f78b7bfadf7cffd43bcff45108ee82c268ba26c638e9",
+                "totalChars": 314,
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "ranges": [
+                  [
+                    0,
+                    314
+                  ]
+                ],
+                "readerCalls": [
+                  "call_a15a5f6d35ab4f87a9d3d595222a065a"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZN9000oVgmGOU3",
+                "partID": "prt_g0VXy2ZNI00mI7bP3dvE",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "c2585643bc7807f5b02c363eea482f631924d610362b8005ed04259817165f9c",
+                "totalChars": 15500,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "ranges": [
+                  [
+                    0,
+                    4601
+                  ]
+                ],
+                "readerCalls": [
+                  "call_b6bb82c415da482cbb21180fa0e24c1c"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": 4601
+              }
+            ]
+          }
+        },
+        {
+          "partID": "prt_g0VXy2fQl00DPc3e8VpH",
+          "messageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "callID": "call_8472021d04df4d3bb0febc8447864806",
+          "notes": "Engineering continuation required. Visible anchor msg_g0VXy2ZMo00ywWyqUyTl denies deployment, analysis allowed, unknown remain unknown. User correction fully read msg_g0VXy2ZNQ000GsgyCOJ6 Part prt_g0VXy2ZNX00OpcivWFaF: REGION-72e51f8b1157-tool-file supersedes OLD-REGION; inspect latest tool exact request_reference input, output/failure, metadata trace, call/Part; preserve next_offset exactly; validation pending rollback owner unknown. Latest user msg_g0VXy2ZNy00Fs29cpGxX continue engineering using established record. Tool read original msg_g0VXy2ZNd003hjAH7Trn Part prt_g0VXy2ZNn00LfVd32zL5 call_72e51f8b1157-tool-file status completed output total70492 now read [0,43529) UTF16. Mostly Historical log but discovered evidence EVIDENCE-72e51f8b1157-tool-file and ORIGINAL next_offset=17031 (units not yet established), distinct from evidence reader nextOffset43529. Continue output at43529. Need input metadata failure fields for request ref trace artifact. Prior assistant text msg_g0VXy2ZN9000oVgmGOU3 Part prt_g0VXy2ZNI00mI7bP3dvE total15500 read [0,4601) repetitive Initial investigation started; continue4601 for possible memory. No actual MEMORY.MD yet found or verification success. Any relevant diagnostics if errors discovered. Preserve original result cursor not reader cursor in final.",
+          "receipt": {
+            "status": "saved",
+            "notes_call_id": "call_8472021d04df4d3bb0febc8447864806",
+            "source_reads": [
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+                "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+                "field": "output",
+                "source": "truncation-file",
+                "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+                "totalChars": 70492,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "callID": "call_72e51f8b1157-tool-file",
+                "tool": "read",
+                "ranges": [
+                  [
+                    0,
+                    43529
+                  ]
+                ],
+                "readerCalls": [
+                  "call_6a5f288ce6c64b51838774a9a3fa0222",
+                  "call_b1c5057931bd4f28826399c80ef42cb1"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": 43529
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNQ000GsgyCOJ6",
+                "partID": "prt_g0VXy2ZNX00OpcivWFaF",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "f868962ce95ea45d3e28f78b7bfadf7cffd43bcff45108ee82c268ba26c638e9",
+                "totalChars": 314,
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "ranges": [
+                  [
+                    0,
+                    314
+                  ]
+                ],
+                "readerCalls": [
+                  "call_a15a5f6d35ab4f87a9d3d595222a065a"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZN9000oVgmGOU3",
+                "partID": "prt_g0VXy2ZNI00mI7bP3dvE",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "c2585643bc7807f5b02c363eea482f631924d610362b8005ed04259817165f9c",
+                "totalChars": 15500,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "ranges": [
+                  [
+                    0,
+                    4601
+                  ]
+                ],
+                "readerCalls": [
+                  "call_b6bb82c415da482cbb21180fa0e24c1c"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": 4601
+              }
+            ]
+          }
+        },
+        {
+          "partID": "prt_g0VXy2jTe00oR3ZUm6Wd",
+          "messageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "callID": "call_0c9c3489e8f24230a8c39fdf23d143d8",
+          "notes": "Engineering continuation required. Anchor msg_g0VXy2ZMo00ywWyqUyTl denies deployment, analysis allowed, unknown remain unknown. Fully read user correction msg_g0VXy2ZNQ000GsgyCOJ6 Part prt_g0VXy2ZNX00OpcivWFaF: REGION-72e51f8b1157-tool-file supersedes OLD-REGION; inspect latest tool exact request_reference input, output/failure, metadata trace, call/Part; preserve next_offset exactly; validation pending rollback owner unknown. Latest user msg_g0VXy2ZNy00Fs29cpGxX continue engineering using established record. Original tool read msg_g0VXy2ZNd003hjAH7Trn Part prt_g0VXy2ZNn00LfVd32zL5 call_72e51f8b1157-tool-file status completed output total70492 now read [0,69469) UTF16. Mostly Historical log; earlier prefix contained EVIDENCE-72e51f8b1157-tool-file and ORIGINAL next_offset=17031 (units unknown), distinct from evidence reader nextOffset69469. Continue output at69469. Need input metadata failure fields for request ref trace artifact. Prior assistant text msg_g0VXy2ZN9000oVgmGOU3 Part prt_g0VXy2ZNI00mI7bP3dvE total15500 read [0,4601) repetitive Initial investigation started; continue4601 for possible memory. No actual MEMORY.MD yet found or verification success. Any relevant diagnostics if errors discovered. Preserve original result cursor not reader cursor in final.",
+          "receipt": {
+            "status": "saved",
+            "notes_call_id": "call_0c9c3489e8f24230a8c39fdf23d143d8",
+            "source_reads": [
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+                "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+                "field": "output",
+                "source": "truncation-file",
+                "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+                "totalChars": 70492,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "callID": "call_72e51f8b1157-tool-file",
+                "tool": "read",
+                "ranges": [
+                  [
+                    0,
+                    69469
+                  ]
+                ],
+                "readerCalls": [
+                  "call_6a5f288ce6c64b51838774a9a3fa0222",
+                  "call_b1c5057931bd4f28826399c80ef42cb1",
+                  "call_4020a7d6ca70413dac53730e30325ede",
+                  "call_834201c0d66d4e3fa203ea6dab8a397a"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": 69469
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNQ000GsgyCOJ6",
+                "partID": "prt_g0VXy2ZNX00OpcivWFaF",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "f868962ce95ea45d3e28f78b7bfadf7cffd43bcff45108ee82c268ba26c638e9",
+                "totalChars": 314,
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "ranges": [
+                  [
+                    0,
+                    314
+                  ]
+                ],
+                "readerCalls": [
+                  "call_a15a5f6d35ab4f87a9d3d595222a065a"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZN9000oVgmGOU3",
+                "partID": "prt_g0VXy2ZNI00mI7bP3dvE",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "c2585643bc7807f5b02c363eea482f631924d610362b8005ed04259817165f9c",
+                "totalChars": 15500,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "ranges": [
+                  [
+                    0,
+                    4601
+                  ]
+                ],
+                "readerCalls": [
+                  "call_b6bb82c415da482cbb21180fa0e24c1c"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": 4601
+              }
+            ]
+          }
+        },
+        {
+          "partID": "prt_g0VXy2q3I00Vll9WInBu",
+          "messageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "callID": "call_af5cb2c07df34126ba46e610c3ae1c77",
+          "notes": "Cumulative continuation facts: User msg_g0VXy2ZNQ000GsgyCOJ6 Part prt_g0VXy2ZNX00OpcivWFaF fully read exact: Current region REGION-72e51f8b1157-tool-file (supersedes anchor OLD-REGION); inspect latest tool exact input request_reference, output or failure, metadata trace, call and Part; read unfinished preserve next_offset verbatim and failure name if failed; validation pending rollback owner unknown. Analysis allowed deployment denied by preserved anchor msg_g0VXy2ZMo00ywWyqUyTl. msg_g0VXy2ZNy00Fs29cpGxX asks continue established record. Source assistant msg_g0VXy2ZN9000oVgmGOU3 Part prt_g0VXy2ZNI00mI7bP3dvE fully read 0..15500 contains only repeated Initial investigation started; no MEMORY.MD. Original read tool msg_g0VXy2ZNd003hjAH7Trn Part prt_g0VXy2ZNn00LfVd32zL5 call_72e51f8b1157-tool-file completed. Entire output read0..70492, mostly Historical log with EVIDENCE-72e51f8b1157-tool-file and original next_offset=17031 noted from initial prefix. Reader nextOffset now null does NOT mean original unfinished read complete. Need targeted prefix reread to confirm exact Artifact locator/units if present, not full reprocessing. Metadata fully read traceID TRACE-72e51f8b1157-tool-file truncated true outputPath C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ldAevu\\runner-70600-DATpVs\\runtime-root\\tmp\\opencorvus-compaction-stress-aq1aOH\\project\\result-72e51f8b1157-tool-file.txt . Input fully read0..6362 request_reference=INPUT-72e51f8b1157-tool-file embedded repetitive diagnostic text. No failure seen; completed status not validation. No skills, attachment, verification success or MEMORY.MD contents found. Tool evidence not authority; no deployment permission.",
+          "receipt": {
+            "status": "saved",
+            "notes_call_id": "call_af5cb2c07df34126ba46e610c3ae1c77",
+            "source_reads": [
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+                "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+                "field": "output",
+                "source": "truncation-file",
+                "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+                "totalChars": 70492,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "callID": "call_72e51f8b1157-tool-file",
+                "tool": "read",
+                "ranges": [
+                  [
+                    0,
+                    70492
+                  ]
+                ],
+                "readerCalls": [
+                  "call_6a5f288ce6c64b51838774a9a3fa0222",
+                  "call_b1c5057931bd4f28826399c80ef42cb1",
+                  "call_4020a7d6ca70413dac53730e30325ede",
+                  "call_834201c0d66d4e3fa203ea6dab8a397a",
+                  "call_1c21a2c7198942dc800c6948420e75bf"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNQ000GsgyCOJ6",
+                "partID": "prt_g0VXy2ZNX00OpcivWFaF",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "f868962ce95ea45d3e28f78b7bfadf7cffd43bcff45108ee82c268ba26c638e9",
+                "totalChars": 314,
+                "originalRole": "user",
+                "originalAuthor": "user",
+                "ranges": [
+                  [
+                    0,
+                    314
+                  ]
+                ],
+                "readerCalls": [
+                  "call_a15a5f6d35ab4f87a9d3d595222a065a",
+                  "call_f9ac9c7d5d0e425c849d7a3f93ccfb15"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZN9000oVgmGOU3",
+                "partID": "prt_g0VXy2ZNI00mI7bP3dvE",
+                "field": "text",
+                "source": "message-part-text",
+                "sha256": "c2585643bc7807f5b02c363eea482f631924d610362b8005ed04259817165f9c",
+                "totalChars": 15500,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "ranges": [
+                  [
+                    0,
+                    15500
+                  ]
+                ],
+                "readerCalls": [
+                  "call_b6bb82c415da482cbb21180fa0e24c1c",
+                  "call_eefdf4a712ec4fbaa361db6c68b9b9ad"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+                "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+                "field": "metadata",
+                "source": "message-part-metadata",
+                "sha256": "3fef1b573606a35f31d06b9fbccc395f628ba806f8c5547f433891d67561210a",
+                "totalChars": 282,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "callID": "call_72e51f8b1157-tool-file",
+                "tool": "read",
+                "ranges": [
+                  [
+                    0,
+                    282
+                  ]
+                ],
+                "readerCalls": [
+                  "call_a5805ec1c4b24bf285bfdaf97e158674"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              },
+              {
+                "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+                "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+                "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+                "field": "input",
+                "source": "message-part-input",
+                "sha256": "c576af32b104a6f845c6152ce43f5f518ec2e587b295576dd04f666107de6c2a",
+                "totalChars": 6362,
+                "originalRole": "assistant",
+                "originalAuthor": "chat",
+                "callID": "call_72e51f8b1157-tool-file",
+                "tool": "read",
+                "ranges": [
+                  [
+                    0,
+                    6362
+                  ]
+                ],
+                "readerCalls": [
+                  "call_c156f34958174dfcac910c3d89e5b8d6"
+                ],
+                "offsetUnit": "utf16_code_units",
+                "nextUnreadOffset": null
+              }
+            ]
+          }
+        }
+      ],
+      "sourceCoverage": [
+        {
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "field": "output",
+          "totalChars": 70492,
+          "ranges": [
+            [
+              0,
+              70492
+            ]
+          ],
+          "complete": true
+        },
+        {
+          "messageID": "msg_g0VXy2ZNQ000GsgyCOJ6",
+          "partID": "prt_g0VXy2ZNX00OpcivWFaF",
+          "field": "text",
+          "totalChars": 314,
+          "ranges": [
+            [
+              0,
+              314
+            ]
+          ],
+          "complete": true
+        },
+        {
+          "messageID": "msg_g0VXy2ZN9000oVgmGOU3",
+          "partID": "prt_g0VXy2ZNI00mI7bP3dvE",
+          "field": "text",
+          "totalChars": 15500,
+          "ranges": [
+            [
+              0,
+              15500
+            ]
+          ],
+          "complete": true
+        },
+        {
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "field": "metadata",
+          "totalChars": 282,
+          "ranges": [
+            [
+              0,
+              282
+            ]
+          ],
+          "complete": true
+        },
+        {
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "field": "input",
+          "totalChars": 6362,
+          "ranges": [
+            [
+              0,
+              6362
+            ]
+          ],
+          "complete": true
+        }
+      ],
+      "readPages": [
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "output",
+          "source": "truncation-file",
+          "totalChars": 70492,
+          "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+          "offset": 0,
+          "end": 23497,
+          "nextOffset": 23497,
+          "workingContext": {
+            "readWindowTokensBeforePage": 6057,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2ZuB00j7SMyE1EP",
+          "readerCallID": "call_6a5f288ce6c64b51838774a9a3fa0222"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNQ000GsgyCOJ6",
+          "partID": "prt_g0VXy2ZNX00OpcivWFaF",
+          "originalRole": "user",
+          "originalAuthor": "user",
+          "field": "text",
+          "source": "message-part-text",
+          "totalChars": 314,
+          "sha256": "f868962ce95ea45d3e28f78b7bfadf7cffd43bcff45108ee82c268ba26c638e9",
+          "offset": 0,
+          "end": 314,
+          "nextOffset": null,
+          "workingContext": {
+            "readWindowTokensBeforePage": 1662,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2abk00mFRcyvIHY",
+          "readerCallID": "call_a15a5f6d35ab4f87a9d3d595222a065a"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZN9000oVgmGOU3",
+          "partID": "prt_g0VXy2ZNI00mI7bP3dvE",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "field": "text",
+          "source": "message-part-text",
+          "totalChars": 15500,
+          "sha256": "c2585643bc7807f5b02c363eea482f631924d610362b8005ed04259817165f9c",
+          "offset": 0,
+          "end": 4601,
+          "nextOffset": 4601,
+          "workingContext": {
+            "readWindowTokensBeforePage": 1315,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2bKD00PtEFedkiZ",
+          "readerCallID": "call_b6bb82c415da482cbb21180fa0e24c1c"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "output",
+          "source": "truncation-file",
+          "totalChars": 70492,
+          "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+          "offset": 23497,
+          "end": 43529,
+          "nextOffset": 43529,
+          "workingContext": {
+            "readWindowTokensBeforePage": 5197,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2emj00rR7xboeIm",
+          "readerCallID": "call_b1c5057931bd4f28826399c80ef42cb1"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "output",
+          "source": "truncation-file",
+          "totalChars": 70492,
+          "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+          "offset": 43529,
+          "end": 63555,
+          "nextOffset": 63555,
+          "workingContext": {
+            "readWindowTokensBeforePage": 5188,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2hvs00XqEmuNjXU",
+          "readerCallID": "call_4020a7d6ca70413dac53730e30325ede"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "output",
+          "source": "truncation-file",
+          "totalChars": 70492,
+          "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+          "offset": 63555,
+          "end": 69469,
+          "nextOffset": 69469,
+          "workingContext": {
+            "readWindowTokensBeforePage": 1660,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2ijB00Q6s8zJ8UD",
+          "readerCallID": "call_834201c0d66d4e3fa203ea6dab8a397a"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "output",
+          "source": "truncation-file",
+          "totalChars": 70492,
+          "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+          "offset": 69469,
+          "end": 70492,
+          "nextOffset": null,
+          "workingContext": {
+            "readWindowTokensBeforePage": 5171,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2lbE00WZA6v88g5",
+          "readerCallID": "call_1c21a2c7198942dc800c6948420e75bf"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "metadata",
+          "source": "message-part-metadata",
+          "totalChars": 282,
+          "sha256": "3fef1b573606a35f31d06b9fbccc395f628ba806f8c5547f433891d67561210a",
+          "offset": 0,
+          "end": 282,
+          "nextOffset": null,
+          "workingContext": {
+            "readWindowTokensBeforePage": 4626,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2mMf00QE7CWZoh3",
+          "readerCallID": "call_a5805ec1c4b24bf285bfdaf97e158674"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZN9000oVgmGOU3",
+          "partID": "prt_g0VXy2ZNI00mI7bP3dvE",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "field": "text",
+          "source": "message-part-text",
+          "totalChars": 15500,
+          "sha256": "c2585643bc7807f5b02c363eea482f631924d610362b8005ed04259817165f9c",
+          "offset": 4601,
+          "end": 15500,
+          "nextOffset": null,
+          "workingContext": {
+            "readWindowTokensBeforePage": 4240,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2nEy00wAEWXCB3C",
+          "readerCallID": "call_eefdf4a712ec4fbaa361db6c68b9b9ad"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "input",
+          "source": "message-part-input",
+          "totalChars": 6362,
+          "sha256": "c576af32b104a6f845c6152ce43f5f518ec2e587b295576dd04f666107de6c2a",
+          "offset": 0,
+          "end": 6362,
+          "nextOffset": null,
+          "workingContext": {
+            "readWindowTokensBeforePage": 2530,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2nxz00PVbxIQGx0",
+          "readerCallID": "call_c156f34958174dfcac910c3d89e5b8d6"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNQ000GsgyCOJ6",
+          "partID": "prt_g0VXy2ZNX00OpcivWFaF",
+          "originalRole": "user",
+          "originalAuthor": "user",
+          "field": "text",
+          "source": "message-part-text",
+          "totalChars": 314,
+          "sha256": "f868962ce95ea45d3e28f78b7bfadf7cffd43bcff45108ee82c268ba26c638e9",
+          "offset": 0,
+          "end": 314,
+          "nextOffset": null,
+          "workingContext": {
+            "readWindowTokensBeforePage": 651,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2owi00lDlCHGLKh",
+          "readerCallID": "call_f9ac9c7d5d0e425c849d7a3f93ccfb15"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "output",
+          "source": "truncation-file",
+          "totalChars": 70492,
+          "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+          "offset": 0,
+          "end": 1800,
+          "nextOffset": 1800,
+          "workingContext": {
+            "readWindowTokensBeforePage": 4276,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2tIT00g7KpKH4N8",
+          "readerCallID": "call_eb5cf88154334e3b81f84260c31b0ff7"
+        },
+        {
+          "sessionID": "ses_-zUS1xQdOzzhuEgqryht",
+          "messageID": "msg_g0VXy2ZNd003hjAH7Trn",
+          "partID": "prt_g0VXy2ZNn00LfVd32zL5",
+          "originalRole": "assistant",
+          "originalAuthor": "chat",
+          "callID": "call_72e51f8b1157-tool-file",
+          "tool": "read",
+          "field": "output",
+          "source": "truncation-file",
+          "totalChars": 70492,
+          "sha256": "ebf93657ad6d61687fc19ea7f4430a13037d3ac8600b437eb717431eca96b5e7",
+          "offset": 28000,
+          "end": 36000,
+          "nextOffset": 36000,
+          "workingContext": {
+            "readWindowTokensBeforePage": 4874,
+            "noteTokenLimit": 7825
+          },
+          "readerMessageID": "msg_g0VXy2ZP300UMjO4J2O8",
+          "readerPartID": "prt_g0VXy2uDN00NjtCAPlML",
+          "readerCallID": "call_f3eb3bc268b24a358174e00fe283b38b"
+        }
+      ]
+    }
+  ],
+  "usageRecords": [
+    {
+      "id": "pvu_g0VXy2a6s00LzrHYsHM9",
+      "occurred_at": 1791926882186,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4249,
+      "output_tokens": 40,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4289,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2alq00nvKe5Xr1U",
+      "occurred_at": 1791926884726,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 7566,
+      "output_tokens": 47,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 7613,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2bX000orWFpbMyc",
+      "occurred_at": 1791926887650,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 426,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7424,
+      "cache_write_tokens": 0,
+      "total_tokens": 7900,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2e9400ZBMMok7nA",
+      "occurred_at": 1791926897698,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 8667,
+      "output_tokens": 362,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 9029,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2eyd00Bmu174hWm",
+      "occurred_at": 1791926900895,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1095,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 4096,
+      "cache_write_tokens": 0,
+      "total_tokens": 5241,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2hUd00TXYsmUzLG",
+      "occurred_at": 1791926910567,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 5186,
+      "output_tokens": 367,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 8241,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2iAh00LrZj861K7",
+      "occurred_at": 1791926913175,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1120,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 4096,
+      "cache_write_tokens": 0,
+      "total_tokens": 5266,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2ivL00fD5pliCIY",
+      "occurred_at": 1791926916067,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 5195,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 7933,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2l4y00jz6lmJUoC",
+      "occurred_at": 1791926924352,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1558,
+      "output_tokens": 365,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7680,
+      "cache_write_tokens": 0,
+      "total_tokens": 9603,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2lpJ00du3uXXFsb",
+      "occurred_at": 1791926927225,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1164,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 4096,
+      "cache_write_tokens": 0,
+      "total_tokens": 5310,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2mYX00eyXnA2tER",
+      "occurred_at": 1791926930029,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 5698,
+      "output_tokens": 40,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 5738,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2nSE00nIEcM8vB4",
+      "occurred_at": 1791926933482,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 536,
+      "output_tokens": 53,
+      "reasoning_tokens": 18,
+      "cache_read_tokens": 5504,
+      "cache_write_tokens": 0,
+      "total_tokens": 6111,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2o7p005c4L1tAPf",
+      "occurred_at": 1791926936061,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 3671,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 6408,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2pE200GqZX9GOzc",
+      "occurred_at": 1791926940290,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1677,
+      "output_tokens": 49,
+      "reasoning_tokens": 38,
+      "cache_read_tokens": 6144,
+      "cache_write_tokens": 0,
+      "total_tokens": 7908,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2soh00JZqpv0Iem",
+      "occurred_at": 1791926954095,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 464,
+      "output_tokens": 491,
+      "reasoning_tokens": 19,
+      "cache_read_tokens": 7680,
+      "cache_write_tokens": 0,
+      "total_tokens": 8654,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2tT600yk3hiU8yF",
+      "occurred_at": 1791926956600,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1747,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 4096,
+      "cache_write_tokens": 0,
+      "total_tokens": 5892,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2uUB00VdnDB1Hp2",
+      "occurred_at": 1791926960511,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 5518,
+      "output_tokens": 52,
+      "reasoning_tokens": 31,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 5601,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2vHT004uE0mS5j4",
+      "occurred_at": 1791926963567,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4197,
+      "output_tokens": 46,
+      "reasoning_tokens": 12,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 6943,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy2ydh00ePg59UZAs",
+      "occurred_at": 1791926976477,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 339,
+      "output_tokens": 507,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 6656,
+      "cache_write_tokens": 0,
+      "total_tokens": 7502,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXy31Fm00cx4Jajoq7",
+      "occurred_at": 1791926986526,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6769,
+      "output_tokens": 160,
+      "reasoning_tokens": 21,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 6950,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS1xQdOzzhuEgqryht",
+      "agent_id": "chat"
+    }
+  ],
+  "usage": {
+    "uncachedInput": 66842,
+    "cachedInput": 68224,
+    "output": 2927
+  },
+  "limitations": [
+    "One authored case and one model; source ranges attest delivery, not semantic truth.",
+    "Canonical Tool identities and literal pagination/continuation metrics provide acceptance; source digests identify the immutable field version only."
+  ]
+}

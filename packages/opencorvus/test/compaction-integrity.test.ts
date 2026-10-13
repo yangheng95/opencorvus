@@ -8,6 +8,7 @@ import { Provider } from "@/provider/provider"
 import { Session } from "@/session"
 import { SessionCompaction } from "@/session/compaction"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
+import { CompactionWorkingContext } from "@/session/compaction-working-context"
 import { ContextBudget } from "@/session/context-budget"
 import { RequestBudget } from "@/session/request-budget"
 import { SessionControl } from "@/session/control"
@@ -146,19 +147,14 @@ describe("compaction request and continuation contracts", () => {
       tools: { reader: tool({ description: "Read the persisted result", inputSchema: z.object({ id: z.string() }) }) },
     }
     const estimate = RequestBudget.estimate(request)
-    const measured = SessionCompaction.requestBudget({
-      ...request,
+    const capacity = ContextBudget.capacity({
       config: Config.Info.parse({}),
       model: limitModel({ context: 2_000, output: 500 }),
     })
     expect(estimate.mediaCounts).toEqual({ image: 1, pdf: 0, audio: 0, video: 0 })
     expect(estimate.messagePayloadChars).toBeLessThan(500)
-    expect(measured).toMatchObject({
-      ...estimate,
-      estimatedTokens: estimate.totalTokensEst,
-      usableBudget: 1_500,
-      exceeds: true,
-    })
+    expect(capacity).toEqual({ status: "known", tokens: 1_500 })
+    expect(estimate.totalTokensEst).toBeGreaterThan(capacity.tokens)
     expect(estimate.totalTokensEst).toBe(
       estimate.systemTokensEst +
         estimate.toolSchemaTokensEst +
@@ -595,6 +591,9 @@ describe("real local streaming compaction transport", () => {
               tools: [
                 expect.objectContaining({
                   function: expect.objectContaining({ name: CompactionEvidenceReader.TOOL_NAME }),
+                }),
+                expect.objectContaining({
+                  function: expect.objectContaining({ name: CompactionWorkingContext.TOOL_NAME }),
                 }),
               ],
             })

@@ -7,7 +7,7 @@ import { SessionCompaction } from "@/session/compaction"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
 import { AssistantDiagnostics } from "@/session/assistant-diagnostics"
 import { RequestBudget } from "@/session/request-budget"
-import type { Message } from "@/session/message"
+import { Message } from "@/session/message"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { Instance } from "@/project/instance"
 import { Config } from "@/config/config"
@@ -64,22 +64,23 @@ test("mandatory context overflow persists a typed failure and the original sourc
       } catch (error) {
         failure = error
       }
-      expect(failure).toMatchObject({
-        name: "ContextOverflowError",
-        data: { message: expect.stringContaining("usable budget 100") },
-      })
+      expect(failure instanceof Error).toBe(true)
+      expect((failure as Error).name).toBe("ContextOverflowError")
       Database.close()
       const reopened = await Session.messages({ sessionID: session.id })
+      expect(Message.fromError(failure, { providerID: target.providerID })).toEqual(
+        (reopened.at(-1)?.info as Message.Assistant).error!,
+      )
       expect(reopened.filter((message) => original.some((item) => item.info.id === message.info.id))).toEqual(original)
       expect(reopened.at(-1)?.info).toMatchObject({
         role: "assistant",
         finish: "error",
         time: { completed: expect.any(Number) },
-        error: { name: "ContextOverflowError", data: { message: expect.stringContaining("usable budget 100") } },
+        error: { name: "ContextOverflowError", data: { message: expect.stringContaining("capacity 100") } },
       })
       expect(SessionControl.get(control.id)).toMatchObject({
         status: "failed",
-        payload: { error: expect.stringContaining("usable budget 100") },
+        payload: { error: expect.stringContaining("capacity 100") },
       })
     },
   })

@@ -18,6 +18,7 @@ import { Server } from "../../src/server/server"
 import { Session } from "../../src/session"
 import { SessionCompaction } from "../../src/session/compaction"
 import { CompactionEvidenceReader } from "../../src/session/compaction-evidence-reader"
+import { CompactionWorkingContext } from "../../src/session/compaction-working-context"
 import { SessionControl } from "../../src/session/control"
 import { LLM } from "../../src/session/llm"
 import { SessionLoop } from "../../src/session/loop"
@@ -356,7 +357,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
     })
   })
 
-  test("runs the real compaction integration and exposes its checkpoint to the next compaction only", async () => {
+  test("publishes a scripted checkpoint and projects it into the next compaction", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -470,7 +471,10 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           return {
             message: assistant,
             async process(processInput: any) {
-              expect(Object.keys(processInput.tools)).toEqual([CompactionEvidenceReader.TOOL_NAME])
+              expect(Object.keys(processInput.tools)).toEqual([
+                CompactionEvidenceReader.TOOL_NAME,
+                CompactionWorkingContext.TOOL_NAME,
+              ])
               expect(processInput.stopWhen).toHaveLength(2)
               await Session.updatePart({
                 id: Identifier.ascending("part"),

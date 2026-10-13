@@ -1,0 +1,77 @@
+{
+  "scope": "Compactor near-capacity working-context stress, 2026-10-14",
+  "archives": [
+    "read-pressure-audit-delivery.log.gz",
+    "read-pressure-audit-repair.log.gz",
+    "read-pressure-baseline-calibrated.log.gz",
+    "read-pressure-baseline.log.gz",
+    "read-pressure-cancellation.log.gz",
+    "read-pressure-diagnostics-receipts.log.gz",
+    "read-pressure-docs-delivery.log.gz",
+    "read-pressure-error-roundtrip-final.log.gz",
+    "read-pressure-error-roundtrip.log.gz",
+    "read-pressure-errors-final.log.gz",
+    "read-pressure-file-receipts.log.gz",
+    "read-pressure-final-boundaries.log.gz",
+    "read-pressure-final-regression.log.gz",
+    "read-pressure-first-repair.log.gz",
+    "read-pressure-focused-repair.log.gz",
+    "read-pressure-matcher-observation.log.gz",
+    "read-pressure-real.log.gz",
+    "read-pressure-receipts-local.log.gz",
+    "read-pressure-regression.log.gz",
+    "read-pressure-reopen.log.gz",
+    "read-pressure-typecheck-complete.log.gz",
+    "read-pressure-typecheck-delivery.log.gz",
+    "read-pressure-typecheck-final.log.gz",
+    "read-pressure-typecheck-receipts.log.gz",
+    "read-pressure-typecheck.log.gz",
+    "read-pressure-wire-baseline.log.gz",
+    "read-pressure-working-final.log.gz"
+  ],
+  "reports": [
+    "read-pressure-diagnostics-receipts-summary.json",
+    "read-pressure-diagnostics-receipts.json",
+    "read-pressure-diagnostics-receipts.json.requests.json",
+    "read-pressure-file-receipts-summary.json",
+    "read-pressure-file-receipts.json",
+    "read-pressure-file-receipts.json.requests.json",
+    "read-pressure-real-observed.json",
+    "read-pressure-real-progress.json",
+    "read-pressure-real.json",
+    "read-pressure-real.json.requests.json"
+  ],
+  "verification": {
+    "distinctPassingTests": 150,
+    "regression": {
+      "file": "read-pressure-final-regression.log.gz",
+      "tests": 112
+    },
+    "workingAndReopen": {
+      "file": "read-pressure-receipts-local.log.gz",
+      "tests": 14
+    },
+    "audit": {
+      "file": "read-pressure-audit-delivery.log.gz",
+      "tests": 24
+    },
+    "typecheck": "read-pressure-typecheck-delivery.log.gz",
+    "docs": "read-pressure-docs-delivery.log.gz"
+  },
+  "paid": {
+    "total": 414,
+    "phaseRequests": 92,
+    "candidateRequests": 54,
+    "fileRepairRequests": 20,
+    "diagnosticRepairRequests": 18,
+    "acceptedFields": 22,
+    "contextTokens": 19000,
+    "helperSteps": 20
+  },
+  "notes": [
+    "Gzip copies preserve each original log byte; failed and calibration logs remain separate.",
+    "read-pressure-real.json intentionally preserves the original invalid JSON. Its explicitly labeled observed view quotes one invalid redaction marker without reconstructing a numeric value.",
+    "Test count includes each distinct test once, not repeated runs.",
+    "Scripted local HTTP streams prove mechanics; real Provider probes supply bounded semantic observations."
+  ]
+}

@@ -28,7 +28,7 @@ export namespace ProviderError {
     "oauth",
   ])
 
-  function isStructuredCredentialField(name: string): boolean {
+  export function isStructuredCredentialField(name: string): boolean {
     return STRUCTURED_CREDENTIAL_FIELD_NAMES.has(name.replace(/[-_ ]/g, "").toLowerCase())
   }
 

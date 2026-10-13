@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 322,
-  "authorizedTotal": 350,
+  "total": 414,
+  "authorizedTotal": 430,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -287,6 +287,47 @@
       "passedActions": 1,
       "passedFields": 5,
       "summary": "transcript-budget-policy-real-summary.json"
+    },
+    {
+      "name": "read-pressure-real",
+      "status": "failed",
+      "requests": 54,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "reportFormat": "raw report contains one invalid unquoted redaction marker; original bytes retained",
+      "derivedView": "read-pressure-real-observed.json",
+      "progressEvidence": "read-pressure-real-progress.json"
+    },
+    {
+      "name": "read-pressure-file-receipts",
+      "status": "passed",
+      "requests": 20,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "summary": "read-pressure-file-receipts-summary.json"
+    },
+    {
+      "name": "read-pressure-diagnostics-receipts",
+      "status": "passed",
+      "requests": 18,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "summary": "read-pressure-diagnostics-receipts-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",

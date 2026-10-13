@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
+import { ProviderError } from "../src/provider/error"
 import { registerProviderResponseObserver, type ProviderRequestContext } from "../src/util/provider-response-observation"
 import type { ReadableStreamActivitySettlement, ReadableStreamErrorFacts } from "../src/util/stream-activity"
 
@@ -451,7 +452,12 @@ export class CredentialRedactor {
   collect(value: unknown): void {
     if (!value || typeof value !== "object") return
     for (const [key, item] of Object.entries(value)) {
-      if (/key|token|access|refresh|secret|password/i.test(key) && typeof item === "string" && item.length > 0) {
+      const segments = key.replace(/([a-z0-9])([A-Z])/g, "$1_$2").split(/[^a-zA-Z0-9]+/).filter(Boolean)
+      const credentialField = segments.some((_, index) => {
+        const suffix = segments.slice(index).join("_")
+        return ProviderError.isStructuredCredentialField(suffix) || ["key", "access", "refresh"].includes(suffix.toLowerCase())
+      })
+      if (credentialField && typeof item === "string" && item.length > 0) {
         this.#values.add(item)
       } else if (item && typeof item === "object") this.collect(item)
     }
@@ -474,5 +480,13 @@ export class CredentialRedactor {
   redact(text: string): string {
     for (const value of this.encodings()) text = text.replaceAll(value, "[REDACTED]")
     return text
+  }
+
+  /** Audit field names are schema-owned. Redact their string values before JSON
+   * escaping, preserving typed counters and valid syntax even for numeric secrets. */
+  serialize(value: unknown, space?: number): string {
+    const serialized = JSON.stringify(value, (_key, item) => typeof item === "string" ? this.redact(item) : item, space)
+    if (serialized === undefined) throw new Error("Audit output must be JSON serializable")
+    return serialized
   }
 }

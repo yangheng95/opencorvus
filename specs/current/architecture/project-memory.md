@@ -76,6 +76,34 @@ Project memory has three explicitly scoped authorities:
    still apply, including on later evidence-read steps. Required context that
    cannot fit produces a durable ContextOverflowError rather than a checkpoint.
    Token estimates do not guarantee fit under every model's exact tokenizer.
+   Initial packing runs after the shared LLM entry has composed request language,
+   plugin transformations, parameters and actual Tool declarations. This final
+   envelope supplies the same input ceiling used by the ordinary request checks.
+   Discretionary compactor space reserves a model-response allowance and a read
+   exchange before expanding source fields. Each read is fitted to the remaining
+   shared window, including parallel results and JSON projection overhead. The
+   reader derives original contents and identities itself; fitting selects only
+   a valid Unicode endpoint. Exhausted windows return
+   `COMPACTION_EVIDENCE_WINDOW_FULL`; invalid endpoints return
+   `COMPACTION_EVIDENCE_INVALID_WINDOW`.
+
+   The helper may call `SaveCompactionNotes` with cumulative natural-language
+   working notes. These are ordinary visible, processor-owned Tool input/result
+   Parts. A successful note retains its complete call/result group and later
+   evidence in subsequent request views, while earlier reads remain canonical
+   and retrievable. Failed notes leave the prior working view intact. The note
+   result derives `source_reads` from actual read result frames and earlier note
+   receipts, merging ranges only for the same exact field/version/provenance.
+   It preserves original source identity, role/author, UTF-16 ranges, reader call
+   references and the first unread offset. This receipt proves delivery, not the
+   truth or authority of the content or the model's interpretation. The model
+   authors the notes; the host derives only factual read accounting. The note
+   exchange, including its receipt, must fit its reserved budget. There is no
+   additional durable memory store or host-selected Tool workflow. A restarted
+   compaction reads the prior attempt's actual notes and failure as source facts;
+   only a completed final summary can publish the Session checkpoint. Existing
+   helper step limits and capacity failures remain explicit resource boundaries.
+
    Omitted fields keep `ReadCompactionEvidence` references. The one reader resolves text, input,
    output, structured failure and provenance metadata from the Session snapshot
    bound when compaction dispatches, including original Parts referenced by older

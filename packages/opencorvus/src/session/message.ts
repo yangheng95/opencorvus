@@ -1707,6 +1707,10 @@ export namespace Message {
   }
 
   export function fromError(e: unknown, ctx: { providerID: string }) {
+    // Persisted failures and reconstructed exceptions share the same wire
+    // contract. A matching name alone does not imply a toObject method exists.
+    const canonical = Assistant.shape.error.unwrap().safeParse(e)
+    if (canonical.success) return Assistant.shape.error.unwrap().parse(ProviderError.redactSensitiveProviderValue(canonical.data))
     switch (true) {
       case e instanceof ExecutionCancellationError:
         return new Message.AbortedError(
@@ -1724,26 +1728,6 @@ export namespace Message {
         ).toObject()
       case e instanceof Error && e.name === "ProcessExecutionInterruptedError":
         return new Message.ProcessExecutionInterruptedError({ message: e.message }, { cause: e }).toObject()
-      case Message.ProcessExecutionInterruptedError.isInstance(e):
-        return e
-      case Message.OutputLengthError.isInstance(e):
-        return e
-      case Message.StructuredOutputPayloadError.isInstance(e):
-        return e.toObject()
-      case Message.ContextOverflowError.isInstance(e):
-        return e.toObject()
-      case Message.CompactionContinuationMissingError.isInstance(e):
-        return e.toObject()
-      case Message.CompactionSummaryInvalidError.isInstance(e):
-        return e.toObject()
-      case CompactionCoverage.IntegrityError.isInstance(e):
-        return e.toObject()
-      case ModelImageInputTooLargeError.isInstance(e):
-        return e.toObject()
-      case SnapshotEmptyTreeError.isInstance(e):
-        return e.toObject()
-      case SnapshotIntegrityError.isInstance(e):
-        return e.toObject()
       case LoadAPIKeyError.isInstance(e):
         return new Message.AuthError(
           {

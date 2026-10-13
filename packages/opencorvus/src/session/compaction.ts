@@ -19,7 +19,6 @@ import { EffectiveConfig } from "@/config/effective"
 import { resolveAgentModel } from "@/agent/model"
 import { ContextBudget } from "./context-budget"
 import { RequestBudget } from "./request-budget"
-import { LLM } from "./llm"
 import { CompactionHandoff } from "./compaction-handoff"
 import { CompactionCoverage } from "./compaction-coverage"
 import { InstructionPrompt } from "./instruction"
@@ -32,6 +31,8 @@ import { SessionControl } from "./control"
 import { createHash } from "node:crypto"
 import { CompactionEvidenceReader } from "./compaction-evidence-reader"
 import { AssistantDiagnostics } from "./assistant-diagnostics"
+import { CompactionWorkingContext } from "./compaction-working-context"
+import { NamedError } from "@opencorvus-ai/util/error"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
 
 type CompactionProcessRuntime = {
@@ -88,13 +89,22 @@ export namespace SessionCompaction {
 
   function processFailureError(error: unknown): Error {
     if (error instanceof Error) return error
-    if (error && typeof error === "object") {
-      const value = error as { name?: unknown; data?: { message?: unknown } }
-      if (typeof value.name === "string" && typeof value.data?.message === "string") {
-        const result = new Error(value.data.message, { cause: error })
-        result.name = value.name
-        return result
-      }
+    const canonical = Message.Assistant.shape.error.unwrap().safeParse(error)
+    if (canonical.success) {
+      const value = canonical.data
+      return new (class extends NamedError {
+        override readonly name = value.name
+        readonly data = value.data
+        constructor() {
+          super("message" in value.data ? String(value.data.message) : JSON.stringify(value.data), { cause: error })
+        }
+        schema() {
+          return Message.Assistant.shape.error.unwrap()
+        }
+        toObject() {
+          return value
+        }
+      })()
     }
     return new Error(String(error), { cause: error })
   }
@@ -614,23 +624,6 @@ export namespace SessionCompaction {
       .join("\n\n")
   }
 
-  export function requestBudget(input: {
-    messages: ModelMessage[]
-    system: string[]
-    tools: Record<string, AITool>
-    config: Config.Info
-    model: Provider.Model
-  }) {
-    const estimate = RequestBudget.estimate(input)
-    const capacity = ContextBudget.capacity(input)
-    return {
-      ...estimate,
-      estimatedTokens: estimate.totalTokensEst,
-      usableBudget: capacity.tokens,
-      exceeds: estimate.totalTokensEst > capacity.tokens,
-    }
-  }
-
   function turns(messages: Message.WithParts[]) {
     const result: Turn[] = []
     for (let i = 0; i < messages.length; i++) {
@@ -1060,37 +1053,23 @@ export namespace SessionCompaction {
       dispatchAnchor,
     })
     await CompactionEvidenceReader.assertSources(selected.head)
+    const working = CompactionWorkingContext.create({
+      render: (request, maxTokens) =>
+        compactionTranscriptMessages(selected.head, { ...request, promptText, maxTokens }),
+    })
     const tools = {
       [CompactionEvidenceReader.TOOL_NAME]: processRuntime.prepareProviderTool({
         name: CompactionEvidenceReader.TOOL_NAME,
         source: "extra",
         model,
-        tool: CompactionEvidenceReader.create(await Session.messages({ sessionID: input.sessionID })),
+        tool: CompactionEvidenceReader.create(await Session.messages({ sessionID: input.sessionID }), working.fitPage),
       }),
-    }
-    const system = await LLM.composeSystem({
-      agentID: agent.name,
-      agent: sessionRuntimeFromNativeAgent(agent),
-      model,
-      system: [],
-      sessionID: input.sessionID,
-    })
-    const providerMessages = compactionTranscriptMessages(selected.head, {
-      system,
-      tools,
-      promptText,
-      maxTokens: ContextBudget.capacity({ config, model }).tokens,
-    })
-    const budget = requestBudget({ messages: providerMessages, system, tools, config, model })
-    if (budget.exceeds) {
-      const error = new Message.ContextOverflowError({
-        message: `Compaction request exceeds model context budget before provider call: estimated ${budget.estimatedTokens} tokens, usable budget ${budget.usableBudget}.`,
-      })
-      processor.message.error = error.toObject()
-      processor.message.finish = "error"
-      processor.message.time.completed = Date.now()
-      await Session.updateMessage(processor.message)
-      return { status: "failed", error } satisfies ProcessFailure
+      [CompactionWorkingContext.TOOL_NAME]: processRuntime.prepareProviderTool({
+        name: CompactionWorkingContext.TOOL_NAME,
+        source: "extra",
+        model,
+        tool: working.noteTool,
+      }),
     }
     const result = await processor.process({
       user: userMessage,
@@ -1100,7 +1079,9 @@ export namespace SessionCompaction {
       sessionID: input.sessionID,
       tools,
       system: [],
-      messages: providerMessages,
+      messages: compactionTranscriptMessages(selected.head, { system: [], tools: {}, promptText, maxTokens: 0 }),
+      prepareMessages: working.prepare,
+      prepareStep: (step) => ({ messages: working.project(step.messages) }),
       model,
       stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", isStepCount(agent.steps)],
     })
