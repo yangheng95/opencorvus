@@ -1480,11 +1480,13 @@ function surfaceUnconvergedTaskBoundary(input: {
  * Only descriptor-backed accepted workers enter this reconciler. Within that
  * durable boundary two cases are provable:
  *
- *   1. the worker reached a terminal lifecycle but its delivery was lost — the
- *      outcome exists, so replaying delivery is idempotent gap-closing;
+ *   1. the worker reached a terminal lifecycle and its delivery owner is gone —
+ *      recover its missing domain outcome and replay delivery idempotently;
  *   2. the accepted worker has no terminal lifecycle and its exact process
  *      owner is dead — the run is abandoned, so its interruption is recorded
  *      as an infrastructure outcome and handed back to the Orchestrator.
+ * An existing domain outcome can be delivered directly. A terminal lifecycle
+ * alone cannot replace a live adapter's pending post-turn domain settlement.
  *
  * A lineage without its exact Worker Turn descriptor is only a write-ahead
  * admission request. Its dispatch_admission lease/takeover loop is the sole
@@ -1523,6 +1525,13 @@ async function reconcileAbandonedDispatches(
         recovered += await recoverSettledUndeliveredDispatch({ taskID, lineage })
         continue
       }
+      // Session terminalization precedes adapter domain settlement. The live
+      // delivery owner still owns that outcome, including post-turn effects.
+      const ownerWakeAt = await dispatchDeliveryOwnerRecheckAt(lineage, Date.now(), observeProcess)
+      if (ownerWakeAt !== undefined) {
+        wakeAt = wakeAt === undefined ? ownerWakeAt : Math.min(wakeAt, ownerWakeAt)
+        continue
+      }
       const delivery = await reconcileTerminalAgentLifecycleDelivery({
         taskID,
         sessionID: childSessionID,
@@ -1549,11 +1558,6 @@ async function reconcileAbandonedDispatches(
           event: collection.event,
         })
         if (collectionDelivery === "delivered") recovered += 1
-        continue
-      }
-      const ownerWakeAt = await dispatchDeliveryOwnerRecheckAt(lineage, Date.now(), observeProcess)
-      if (ownerWakeAt !== undefined) {
-        wakeAt = wakeAt === undefined ? ownerWakeAt : Math.min(wakeAt, ownerWakeAt)
         continue
       }
       if (await settleAbandonedDispatch({ taskID, lineage })) recovered += 1

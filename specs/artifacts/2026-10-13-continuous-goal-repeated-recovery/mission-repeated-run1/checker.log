@@ -1,0 +1,6 @@
+{"stage":"server_ready","kind":"mission","phase":"before","pid":67152,"url":"http://127.0.0.1:7878"}
+{"stage":"crashed","kind":"mission","generation":1,"pid":67152,"requests":12,"continuationID":"pev_hPvqbLYDVDP4ExgyfFuY","partial":[{"id":"prt_g0VXvzQGj00tO3LvEKne","type":"text","characters":6}]}
+{"stage":"server_ready","kind":"mission","phase":"generation-2","pid":85220,"url":"http://127.0.0.1:7878"}
+{"stage":"crashed","kind":"mission","generation":2,"pid":85220,"requests":13,"continuationID":"pev_hPvqbLYDVDP4ExgyfFuY","partial":[{"id":"prt_g0VXvzSpK00PCc1XF0Ol","type":"text","characters":2}]}
+{"stage":"server_ready","kind":"mission","phase":"generation-3","pid":58308,"url":"http://127.0.0.1:7878"}
+Error: automatic formal startup recovery: no real activity for 180000ms

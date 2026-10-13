@@ -1,0 +1,33 @@
+{
+  "processes": [
+    {
+      "pid": 67152,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGKILL",
+      "forcedCleanup": false
+    },
+    {
+      "pid": 85220,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGKILL",
+      "forcedCleanup": false
+    },
+    {
+      "pid": 58308,
+      "exited": true,
+      "exitCode": null,
+      "signalCode": "SIGTERM",
+      "forcedCleanup": false
+    }
+  ],
+  "ports": [
+    {
+      "url": "http://127.0.0.1:7878",
+      "reachable": false
+    }
+  ],
+  "credentialPairRemoved": true,
+  "endedAt": 1791896893283
+}

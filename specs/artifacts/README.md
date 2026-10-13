@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标重复恢复证据](2026-10-13-continuous-goal-repeated-recovery/README.md)：逐代中断事实、真实模型请求和独立二次复核。
+
 - [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392/README.md)：五个名称、侧栏正文双向语言、状态/宽度保留与真实CSV下载。
 
 - [文件链接条目证据](2026-10-13-file-link-entry-contract/README.md)：原HTTP、链接身份、桌面截图与完整收尾。

@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "kind": "mission",
+  "goalID": "pev_g0VXwD29900rrvj5dD3B",
+  "continuationID": "pev_hg9UNMOPvlyfEHLRXNZ9",
+  "childTaskID": "tsk_g00VXwDWps00q3xF6qSs",
+  "childTokens": 1270875,
+  "acceptedChildTerminal": {
+    "terminalEventID": "pev_g0VXwG0fh00sROQKq1Fl"
+  },
+  "generations": [
+    {
+      "generation": 1,
+      "pid": 79780,
+      "requests": 14,
+      "interruptedAssistantID": "msg_hrwBRjRs0ZWBzX31pKFW"
+    },
+    {
+      "generation": 2,
+      "pid": 85072,
+      "requests": 36,
+      "recoveryKind": "task_ingress",
+      "recoveryInputID": "msg_task-root-control_art_hv99Od77pBuobdSh72aD_msg_hrwBRjRs0ZWBzX31pKFW"
+    }
+  ],
+  "totalRequests": 50,
+  "tokensUsed": 2110219,
+  "recoveredUsageIDs": [
+    "pvu_g0VXwDdNG00M9MbG71xC",
+    "pvu_g0VXwE4V600DrBk3O1wJ",
+    "pvu_g0VXwECgG00J36fHlgzR",
+    "pvu_g0VXwEXTg00zMAfKgJYX",
+    "pvu_g0VXwEZK800MAXsrLVzY",
+    "pvu_g0VXwEbYB00fF8X4U0PW",
+    "pvu_g0VXwEfI800Vt7UD1iDZ",
+    "pvu_g0VXwEodR00rNx0HWAhw",
+    "pvu_g0VXwEqVP00hrVU2xifl",
+    "pvu_g0VXwEtGt00e0z8GmJj7",
+    "pvu_g0VXwEvm300R4JQ98LaS",
+    "pvu_g0VXwEyL900lm5Bd34Nn",
+    "pvu_g0VXwF1EO00KIGCCj0Tf",
+    "pvu_g0VXwF4Fd00iqN79fIn0",
+    "pvu_g0VXwF7PR00ca8xLDWWD",
+    "pvu_g0VXwFS6Q00O7n4awsWx",
+    "pvu_g0VXwFTmc00udH3sc8IB",
+    "pvu_g0VXwFUx000E2QjOKXyn",
+    "pvu_g0VXwFcYq005GnvQGdWe",
+    "pvu_g0VXwFeeM00K07F8XJYt",
+    "pvu_g0VXwFgBf00KPHUFJ5HY",
+    "pvu_g0VXwFj0k00JLquuFoAI",
+    "pvu_g0VXwFoYk00OhzZJrHZX",
+    "pvu_g0VXwFqvR001Qpf3ZPDM",
+    "pvu_g0VXwG0kM00r1KV5Otts",
+    "pvu_g0VXwG42d00q4cWYgxcG",
+    "pvu_g0VXwG6Xq00hhllJINla",
+    "pvu_g0VXwG8rs000lD9OoBhF",
+    "pvu_g0VXwGBKJ00i32R1VFpx",
+    "pvu_g0VXwGDRm00yjEeSKPQ0",
+    "pvu_g0VXwGFTr00H5ihINYCS",
+    "pvu_g0VXwGSw800zjfeY0XpS",
+    "pvu_g0VXwGWl900rin3U0QOW"
+  ],
+  "visibleMessageIDs": [
+    "msg_g0VXwCwpH00n0aq7FpAX",
+    "msg_g0VXwD2Am00C6WLHbSxK",
+    "msg_g0VXwD60600sTOZtkRhF",
+    "msg_g0VXwDX1600lSXEcexC2",
+    "msg_g0VXwDayo000oRtlqoXG",
+    "msg_g0VXwG0im00u1p4Bm1GA",
+    "msg_g0VXwGFUr00d5qGKxKV1",
+    "msg_g0VXwGm8b00NqtBC4ydI",
+    "msg_hrwBRjRs0ZWBzX31pKFW",
+    "msg_hXRpklJtD24bHekdVUqt",
+    "msg_h1U0HCAKqyLYaG7en5zj",
+    "msg_g0VXwEqYl00BKkqRKq5V",
+    "msg_g0VXwF7Sc00ggul9ecu0",
+    "msg_g0VXwFUz400AwpPBj1VQ"
+  ],
+  "interruptedUnreportedUsage": "unknown",
+  "reviewedAt": "2026-10-13T14:13:27.543Z"
+}

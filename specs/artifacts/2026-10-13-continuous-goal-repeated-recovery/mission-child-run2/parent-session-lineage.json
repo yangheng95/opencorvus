@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ses_-zUS3mS4UzzRSiD1jmaP",
+    "parent_id": "ses_-zUS3mT2szzZ7QhVecnR",
+    "project_id": "prj_hxUDn8Ot6nTCB2vtQ4Nt",
+    "kind": "orchestrator"
+  },
+  {
+    "id": "ses_-zUS3mT2szzZ7QhVecnR",
+    "parent_id": null,
+    "project_id": "prj_hxUDn8Ot6nTCB2vtQ4Nt",
+    "kind": "root"
+  },
+  {
+    "id": "ses_-zUS3n3EuzzVWREGwYlM",
+    "parent_id": null,
+    "project_id": "prj_hxUDn8Ot6nTCB2vtQ4Nt",
+    "kind": "mission"
+  },
+  {
+    "id": "ses_hkFVuqzs3j7z4urvBpwl",
+    "parent_id": "ses_-zUS3mS4UzzRSiD1jmaP",
+    "project_id": "prj_hxUDn8Ot6nTCB2vtQ4Nt",
+    "kind": "delegated-worker"
+  }
+]

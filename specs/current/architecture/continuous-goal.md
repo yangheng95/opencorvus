@@ -71,8 +71,21 @@ Message, binding that opened event, generation and interrupted assistant frontie
 Both triggers share the durable SessionPromptOwner authority; exact dead-generation
 release and recovery admission fences prevent a stale claimant from replacing a live
 successor. Recovery evidence follows whichever persisted input acquired the new owner.
-The original goal identity, continuation receipt and accepted-turn count remain fixed;
-a runtime recovery Message is not an extra goal continuation.
+Recovery preserves the original goal identity and accepted continuation receipt;
+replaying that input does not increment the accepted-turn count. A runtime recovery
+Message is not an extra goal continuation. A later, independently eligible execution
+frontier may admit another goal-controller continuation through the same authoritative
+counter and budget checks, including after a Mission child Task completes.
+
+The Mission recovery deadline bounds reconciliation and physical Prompt admission.
+After activation, the existing execution activity policy governs the model reply;
+the recovery admission timer cannot cancel an active reply. Caller cancellation and
+loss of the exact recovery lease remain connected until completion. SessionWake
+preserves a typed caller cancellation origin, identifies an untyped caller abort as
+runtime Prompt-owner cancellation, and reserves process-shutdown attribution for
+runtime settlement cancellation. A later crash may replay the same actionable
+runtime recovery Message with its immutable original reason while terminalizing the
+newly interrupted frontier under a new physical Prompt generation.
 
 Pause stops new automatic Message admission. Already committed input may settle through
 its normal owner; uncommitted candidates must revalidate current intent and frontier.

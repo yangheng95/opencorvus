@@ -32,7 +32,12 @@ function startWorker(
   mode: WorkerMode,
   input: ReturnType<typeof fixture>,
   apiURL: string,
-  options: { label?: string; deadlineMilliseconds?: number; callerAbortMilliseconds?: number } = {},
+  options: {
+    label?: string
+    deadlineMilliseconds?: number
+    callerAbortMilliseconds?: number
+    callerAbortKind?: "typed"
+  } = {},
 ) {
   const child = Bun.spawn(
     [
@@ -46,6 +51,7 @@ function startWorker(
       options.label ?? "first",
       String(options.deadlineMilliseconds ?? 0),
       String(options.callerAbortMilliseconds ?? 0),
+      options.callerAbortKind ?? "ordinary",
     ],
     {
       cwd: path.resolve(import.meta.dir, "../../.."),
@@ -552,6 +558,81 @@ test(
   () => verifyHungRecoveryOwnerTakeover("caller-abort"),
   120_000,
 )
+
+for (const mode of ["admission-deadline", "caller-abort", "typed-caller-abort"] as const) {
+  test(`an admitted Mission recovery ${mode === "admission-deadline" ? "completes beyond its admission deadline" : `settles its ${mode} origin`}`, async () => {
+    const input = fixture(`admitted-${mode}`)
+    const provider = startControlledStreamingProvider()
+    let owner: ReturnType<typeof startWorker> | undefined
+    let recovery: ReturnType<typeof startWorker> | undefined
+    try {
+      owner = startWorker("live-owner", input, provider.apiURL)
+      await waitForFile(path.join(input.barrier, "owner-ready.json"), owner)
+      const { sessionID } = JSON.parse(fs.readFileSync(path.join(input.barrier, "owner-ready.json"), "utf8"))
+      await waitForProviderRequests(provider, 1, owner)
+      owner.child.kill()
+      await owner.child.exited
+      recovery = startWorker("recovery-run", input, provider.apiURL, {
+        ...(mode === "admission-deadline" ? { deadlineMilliseconds: 3000 } : { callerAbortMilliseconds: 1 }),
+        ...(mode === "typed-caller-abort" ? { callerAbortKind: "typed" as const } : {}),
+      })
+      await waitForProviderRequests(provider, 2, recovery)
+      if (mode === "admission-deadline") {
+        await Bun.sleep(3200)
+        provider.promptRequests()[1]!.release()
+        await waitForFile(path.join(input.barrier, "recovery-ready.json"), recovery)
+        const settled = await waitForRecoveryReplySettlement(input, sessionID, recovery)
+        expect(settled).toMatchObject({
+          recoveryReplies: [{ data: { finish: "stop", time: { completed: expect.any(Number) } } }],
+          incompleteAssistants: 0,
+        })
+        fs.writeFileSync(path.join(input.barrier, "recovery-exit"), "exit")
+        await finishWorker(recovery, "recovery-run")
+      } else {
+        fs.writeFileSync(path.join(input.barrier, "caller-abort"), "abort admitted Provider request")
+        expect(await recovery.child.exited).toBe(1)
+        expect(recoveryFacts(input.databasePath, sessionID)).toMatchObject({
+          recoveryReplies: [
+            {
+              data: {
+                finish: "error",
+                error: {
+                  name: "MessageAbortedError",
+                  data: {
+                    cancellation: {
+                      ...(mode === "typed-caller-abort"
+                        ? {
+                            actor: "user",
+                            source: "session.abort",
+                            surface: "api",
+                            requestID: "exact-caller-cancellation",
+                          }
+                        : { actor: "runtime", source: "runtime.prompt_owner", surface: "session-wake-loop" }),
+                      targetSessionID: sessionID,
+                      reason: "Mission recovery fixture caller aborted",
+                    },
+                  },
+                },
+                time: { completed: expect.any(Number) },
+              },
+            },
+          ],
+          incompleteAssistants: 0,
+        })
+      }
+    } finally {
+      for (const request of provider.promptRequests()) request.release()
+      provider.server.stop(true)
+      for (const worker of [owner, recovery]) {
+        if (worker?.child.exitCode === null) {
+          worker.child.kill()
+          await worker.child.exited
+        }
+      }
+      removeFixture(input.root)
+    }
+  }, 120_000)
+}
 
 test("the live Project driver preserves a peer owner and takes over after that owner dies without restart", async () => {
   const input = fixture("continuous-driver")

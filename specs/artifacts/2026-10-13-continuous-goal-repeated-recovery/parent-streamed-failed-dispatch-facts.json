@@ -1,0 +1,346 @@
+[
+  {
+    "kind": "build_host_observation",
+    "id": "art_hBiteDBodiBmxXnrF7mn",
+    "created": 1791898635624,
+    "payload": {
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "final_message_id": "msg_g0VXw83NQ00lrgpFq3z3",
+      "execution_mode": "current_project",
+      "contribution_commit_ref": null,
+      "published_commit_ref": null,
+      "primary_base_commit_ref": "9f1b5e6d4865",
+      "primary_terminal_commit_ref": "9f1b5e6d4865",
+      "diff_base_ref": "6c676fd4b04759f74acc6755d195f2910e279b3d",
+      "diff_head_ref": "6c676fd4b04759f74acc6755d195f2910e279b3d",
+      "diffs": [],
+      "observed_artifact_locators": [],
+      "source_artifact_locators": []
+    }
+  },
+  {
+    "kind": "build_host_observation",
+    "id": "art_hilBBzd3UqSKMuJ6QMHJ",
+    "created": 1791898641404,
+    "payload": {
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "final_message_id": "msg_g0VXw84bJ00BxgpR3M2x",
+      "execution_mode": "current_project",
+      "contribution_commit_ref": null,
+      "published_commit_ref": null,
+      "primary_base_commit_ref": "9f1b5e6d4865",
+      "primary_terminal_commit_ref": "9f1b5e6d4865",
+      "diff_base_ref": "6c676fd4b04759f74acc6755d195f2910e279b3d",
+      "diff_head_ref": "6c676fd4b04759f74acc6755d195f2910e279b3d",
+      "diffs": [],
+      "observed_artifact_locators": [],
+      "source_artifact_locators": []
+    }
+  },
+  {
+    "kind": "dispatch_lineage",
+    "id": "art_g0VXw7yab007gV91oFht",
+    "created": 1791898615253,
+    "payload": {
+      "dispatch_id": "art_hxYbLOXvlBaJdOFL64Oq",
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "execution_epoch": 1,
+      "orchestrator_session_id": "ses_-zUS3s1jTzzf5bTyv2V2",
+      "orchestrator_message_id": "msg_hiY4teHFeX3iMN9I2dkD",
+      "tool_part_id": "prt_g0VXw7yaH00fzSJxnDno",
+      "tool_call_id": "recovery-2",
+      "tool_name": "dispatch_agent",
+      "child_session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "target_agent_id": "base-developer",
+      "projected_worker_identity": {
+        "agentID": "base-developer",
+        "baseRole": "build",
+        "sessionKind": "build",
+        "dispatchAdapterID": "build",
+        "runtimeTemplateABIVersion": 1,
+        "dispatchAdapterABIVersion": 1,
+        "projectionHash": "1badf6632405eefaf93b8ff976ac2c805d470b6221ba3a81384b9b74bd8b85a5"
+      },
+      "work_scope": {
+        "kind": "task"
+      },
+      "delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "virtual_workflow",
+        "workflow_id": "execution-verification",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hRnBgalC1G5NOqZLt8RR",
+          "namespace": "test",
+          "id": "recovery-contract",
+          "version": "2026.09.30.1",
+          "package_digest": "35b1347a12aa08e7ca995ee57721d478d00f26a159cfd710e34898767fd2b939"
+        },
+        "nodes": [
+          {
+            "node_id": "base-developer",
+            "agent_id": "base-developer",
+            "depends_on": []
+          },
+          {
+            "node_id": "base-tester",
+            "agent_id": "base-tester",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        ]
+      },
+      "workflow_node_id": "base-developer",
+      "workflow_occurrence_id": "art_hxYbLOXvlBaJdOFL64Oq",
+      "delivery_owner": {
+        "kind": "runtime_process",
+        "process_occurrence_id": "test-runtime:76432"
+      },
+      "adapter_input": {
+        "goal_ids": [],
+        "reason": "Complete the requested result."
+      },
+      "time_created": 1791898615253
+    }
+  },
+  {
+    "kind": "dispatch_lineage",
+    "id": "art_g0VXw82Xx00Is96kiQIm",
+    "created": 1791898630465,
+    "payload": {
+      "dispatch_id": "art_hzz8BsI9bPI73QNKONOy",
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "execution_epoch": 2,
+      "orchestrator_session_id": "ses_-zUS3s1jTzzf5bTyv2V2",
+      "orchestrator_message_id": "msg_htHqfxV402heLl54Xf9i",
+      "tool_part_id": "prt_g0VXw82WP00Dc12Snwj3",
+      "tool_call_id": "recovery-9",
+      "tool_name": "dispatch_agent",
+      "child_session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "target_agent_id": "base-developer",
+      "projected_worker_identity": {
+        "agentID": "base-developer",
+        "baseRole": "build",
+        "sessionKind": "build",
+        "dispatchAdapterID": "build",
+        "runtimeTemplateABIVersion": 1,
+        "dispatchAdapterABIVersion": 1,
+        "projectionHash": "1badf6632405eefaf93b8ff976ac2c805d470b6221ba3a81384b9b74bd8b85a5"
+      },
+      "work_scope": {
+        "kind": "task"
+      },
+      "delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "virtual_workflow",
+        "workflow_id": "execution-verification",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hRnBgalC1G5NOqZLt8RR",
+          "namespace": "test",
+          "id": "recovery-contract",
+          "version": "2026.09.30.1",
+          "package_digest": "35b1347a12aa08e7ca995ee57721d478d00f26a159cfd710e34898767fd2b939"
+        },
+        "nodes": [
+          {
+            "node_id": "base-developer",
+            "agent_id": "base-developer",
+            "depends_on": []
+          },
+          {
+            "node_id": "base-tester",
+            "agent_id": "base-tester",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        ]
+      },
+      "workflow_node_id": "base-developer",
+      "workflow_occurrence_id": "art_hxYbLOXvlBaJdOFL64Oq",
+      "continuation_of_dispatch_id": "art_hxYbLOXvlBaJdOFL64Oq",
+      "delivery_owner": {
+        "kind": "runtime_process",
+        "process_occurrence_id": "test-runtime:76432"
+      },
+      "adapter_input": {
+        "goal_ids": [],
+        "reason": "Complete the requested result."
+      },
+      "time_created": 1791898630465
+    }
+  },
+  {
+    "kind": "dispatch_lineage",
+    "id": "art_g0VXw84DV00lyy2LlLcc",
+    "created": 1791898636885,
+    "payload": {
+      "dispatch_id": "art_hQDYkP29g59aZWOHvFh4",
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "execution_epoch": 2,
+      "orchestrator_session_id": "ses_-zUS3s1jTzzf5bTyv2V2",
+      "orchestrator_message_id": "msg_hJjpQp9fsL5Nk7bHXSqf",
+      "tool_part_id": "prt_g0VXw84DD002bvW254Td",
+      "tool_call_id": "recovery-12",
+      "tool_name": "dispatch_agent",
+      "child_session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "target_agent_id": "base-developer",
+      "projected_worker_identity": {
+        "agentID": "base-developer",
+        "baseRole": "build",
+        "sessionKind": "build",
+        "dispatchAdapterID": "build",
+        "runtimeTemplateABIVersion": 1,
+        "dispatchAdapterABIVersion": 1,
+        "projectionHash": "1badf6632405eefaf93b8ff976ac2c805d470b6221ba3a81384b9b74bd8b85a5"
+      },
+      "work_scope": {
+        "kind": "task"
+      },
+      "delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "virtual_workflow",
+        "workflow_id": "execution-verification",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hRnBgalC1G5NOqZLt8RR",
+          "namespace": "test",
+          "id": "recovery-contract",
+          "version": "2026.09.30.1",
+          "package_digest": "35b1347a12aa08e7ca995ee57721d478d00f26a159cfd710e34898767fd2b939"
+        },
+        "nodes": [
+          {
+            "node_id": "base-developer",
+            "agent_id": "base-developer",
+            "depends_on": []
+          },
+          {
+            "node_id": "base-tester",
+            "agent_id": "base-tester",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        ]
+      },
+      "workflow_node_id": "base-developer",
+      "workflow_occurrence_id": "art_hxYbLOXvlBaJdOFL64Oq",
+      "continuation_of_dispatch_id": "art_hzz8BsI9bPI73QNKONOy",
+      "delivery_owner": {
+        "kind": "runtime_process",
+        "process_occurrence_id": "test-runtime:76432"
+      },
+      "adapter_input": {
+        "goal_ids": [],
+        "reason": "Complete the requested result."
+      },
+      "time_created": 1791898636885
+    }
+  },
+  {
+    "kind": "dispatch_settlement",
+    "id": "art_g0VXw7zrE00e3NcN0D3k",
+    "created": 1791898620127,
+    "payload": {
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "dispatch_lineage_id": "art_g0VXw7yab007gV91oFht",
+      "dispatch_id": "art_hxYbLOXvlBaJdOFL64Oq",
+      "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "outcome": {
+        "kind": "infrastructure_failure",
+        "operation": "execute-detached-worker",
+        "message": "Projected agent \"base-developer\" failed via adapter \"build\": [build] LLM error during base-developer: UnknownError: ProcessorUnsafeRetryError: SessionProcessor cannot retry activity attempt 0 inside the same assistant message after tool execution started. Created parts: prt_g0VXw7zEi00YKzMBP3zR, prt_g0VXw7zEu00FAbDV7jJT. Retry cause: Error: socket connection was closed unexpectedly",
+        "recovery_authority": {
+          "occurrence_status": "occurrence_committed",
+          "dispatch_lineage_id": "art_g0VXw7yab007gV91oFht",
+          "dispatch_id": "art_hxYbLOXvlBaJdOFL64Oq"
+        },
+        "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+        "error_name": "Error",
+        "infrastructure_error": {
+          "source": "engine_artifact",
+          "artifact_id": "art_g0VXw7zqq00URlWcK0Pf",
+          "catalog_revision": 7,
+          "expected_sha256": "7b3c7f62d521c1cfab14ccebda1055b77c113b904eab3b8fe83d74ac99452108"
+        },
+        "worker_turn": {
+          "descriptor_id": "wtd_g0VXw7z2400U0rJNZawN",
+          "descriptor_hash": "f4fe4b90b815745c713e0ea981e4878d96be9a7abb0e0476d19bac5feb9206c8",
+          "input_message_id": "msg_g0VXw7z1t00KgcT05bUB",
+          "current_dispatch_id": "art_hxYbLOXvlBaJdOFL64Oq"
+        }
+      },
+      "time_created": 1791898620127
+    }
+  },
+  {
+    "kind": "dispatch_settlement",
+    "id": "art_g0VXw83tU00V0de1gCoL",
+    "created": 1791898635644,
+    "payload": {
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "dispatch_lineage_id": "art_g0VXw82Xx00Is96kiQIm",
+      "dispatch_id": "art_hzz8BsI9bPI73QNKONOy",
+      "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "outcome": {
+        "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+        "final_message_id": "msg_g0VXw83NQ00lrgpFq3z3",
+        "kind": "terminal_success"
+      },
+      "time_created": 1791898635644
+    }
+  },
+  {
+    "kind": "dispatch_settlement",
+    "id": "art_g0VXw84s000yGRKp0Q29",
+    "created": 1791898639396,
+    "payload": {
+      "task_id": "tsk_g00VXw7y4V006pFg23iy",
+      "dispatch_lineage_id": "art_g0VXw84DV00lyy2LlLcc",
+      "dispatch_id": "art_hQDYkP29g59aZWOHvFh4",
+      "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+      "outcome": {
+        "session_id": "ses_hWIF75nOgcWVLkmRdzfK",
+        "final_message_id": "msg_g0VXw84bJ00BxgpR3M2x",
+        "kind": "partial",
+        "failed_operation": "recover_dispatch_domain_settlement"
+      },
+      "time_created": 1791898639396
+    }
+  },
+  {
+    "kind": "task-infrastructure-error",
+    "id": "art_hTTBfWLO67xN7MxYKYPu",
+    "created": 1791898619328,
+    "payload": {
+      "component": "build-host-observation",
+      "operation": "collect-git-workspace",
+      "reason": "Build Turn failed: [build] LLM error during base-developer: UnknownError: ProcessorUnsafeRetryError: SessionProcessor cannot retry activity attempt 0 inside the same assistant message after tool execution started. Created parts: prt_g0VXw7zEi00YKzMBP3zR, prt_g0VXw7zEu00FAbDV7jJT. Retry cause: Error: socket connection was closed unexpectedly",
+      "sessionID": "ses_hWIF75nOgcWVLkmRdzfK",
+      "context": {
+        "observation_id": "art_hTTBfWLO67xN7MxYKYPu"
+      }
+    }
+  },
+  {
+    "kind": "task-infrastructure-error",
+    "id": "art_g0VXw7zqq00URlWcK0Pf",
+    "created": 1791898620104,
+    "payload": {
+      "component": "dispatch-agent",
+      "operation": "execute-detached-worker",
+      "reason": "Error: Projected agent \"base-developer\" failed via adapter \"build\": [build] LLM error during base-developer: UnknownError: ProcessorUnsafeRetryError: SessionProcessor cannot retry activity attempt 0 inside the same assistant message after tool execution started. Created parts: prt_g0VXw7zEi00YKzMBP3zR, prt_g0VXw7zEu00FAbDV7jJT. Retry cause: Error: socket connection was closed unexpectedly",
+      "errorName": "Error",
+      "sessionID": "ses_hWIF75nOgcWVLkmRdzfK",
+      "context": {
+        "target": "base-developer",
+        "dispatchID": "art_hxYbLOXvlBaJdOFL64Oq"
+      }
+    }
+  }
+]

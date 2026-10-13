@@ -1,0 +1,3992 @@
+{
+  "session": {
+    "id": "ses_-zUS3xSH1zzY6c8mw6y2",
+    "project_id": "prj_hIJIFA0njh8EPNHaL59g",
+    "parent_id": null,
+    "slug": "proud-star",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+    "title": "请执行有限持续目标验收。用户明确授权创建持续目标，tokenBudget=1200000，turnBudget=3。目标是交付一份含六项具体核对标准的两阶...",
+    "version": "local",
+    "kind": "mission",
+    "share_url": null,
+    "summary_additions": 0,
+    "summary_deletions": 0,
+    "summary_files": 0,
+    "permission": null,
+    "metadata": "{\"mission\":{\"id\":\"a1c4bb3852bbd96b\",\"channelKey\":\"mission:a1c4bb3852bbd96b\",\"cwd\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-xbGzOq\\\\runner-85684-BXSceu\\\\project\",\"productPillar\":\"work\",\"visibleExpertSquadIDs\":[\"base\"]},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\"}}",
+    "time_created": 1791897320344,
+    "time_updated": 1791897656869,
+    "time_archived": null,
+    "time_pinned": null
+  },
+  "ids": [
+    "ses_-zUS3xSH1zzY6c8mw6y2"
+  ],
+  "messages": [
+    {
+      "id": "msg_heUKkzKmJFvBL0TpBZ4S",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897320411,
+      "time_updated": 1791897320420,
+      "data": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791897320411
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "mission.operator",
+            "missionID": "a1c4bb3852bbd96b",
+            "requestID": "ba5a56c6-5a83-4c98-9524-248be998e411",
+            "requestFingerprint": "d6e45ebddba0516ab5ddea45e67be2fe30976ca1d4bded2092211abfd9b5774e",
+            "openedEventID": "pev_hrXEgU7LitI74TaTJLnU"
+          },
+          "surface": "panel",
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "mission.operator",
+            "literalText": "请执行有限持续目标验收。用户明确授权创建持续目标，tokenBudget=1200000，turnBudget=3。目标是交付一份含六项具体核对标准的两阶段验收说明。\n首次输入这一轮：创建目标，简要说明阶段一需求核对、阶段二验收核对，然后结束当前输入，保持目标active。\n第一个goal-controller自动轮次：实际输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；写完六项后核对实际消息，调用update_continuous_goal标记complete并引用证据，再完成当前模式的正常完成合同。\n本验收可能在自动轮次及恢复过程中多次发生真实进程中断。请核对已有持久化输入和结果，从同一六项标准的安全边界继续，避免重复已完成工作；不创建新目标，不要求用户再说继续。\n不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待。本有限说明由当前负责人直接交付，无需子agent或子Task。\n这是无子Task的有限Mission协调；最后使用现有panel_complete_mission完成，task_acceptances=[]。"
+          }
+        },
+        "orderKey": "v1:0001791897320411:0000000000000030:0000000000000000:message:msg_heUKkzKmJFvBL0TpBZ4S"
+      }
+    },
+    {
+      "id": "msg_g0VXw2Xqp00FVDGHn0iZ",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897320831,
+      "time_updated": 1791897332536,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897320831,
+          "completed": 1791897332534
+        },
+        "parentID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "acceptedInputMessageIDs": [
+          "msg_heUKkzKmJFvBL0TpBZ4S"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41083,
+          "input": 40982,
+          "output": 101,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897320831:0000000000000030:0000000000000000:message:msg_g0VXw2Xqp00FVDGHn0iZ"
+      }
+    },
+    {
+      "id": "msg_g0VXw2aty00RgV2P4FCW",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897332558,
+      "time_updated": 1791897338698,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897332558,
+          "completed": 1791897338697
+        },
+        "parentID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "acceptedInputMessageIDs": [
+          "msg_heUKkzKmJFvBL0TpBZ4S"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41506,
+          "input": 653,
+          "output": 21,
+          "reasoning": 0,
+          "cache": {
+            "read": 40832,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897332558:0000000000000030:0000000000000000:message:msg_g0VXw2aty00RgV2P4FCW"
+      }
+    },
+    {
+      "id": "msg_g0VXw2cVS00hII4P3udH",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897338726,
+      "time_updated": 1791897347246,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897338726,
+          "completed": 1791897347245
+        },
+        "parentID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "acceptedInputMessageIDs": [
+          "msg_heUKkzKmJFvBL0TpBZ4S"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41653,
+          "input": 292,
+          "output": 17,
+          "reasoning": 0,
+          "cache": {
+            "read": 41344,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897338726:0000000000000030:0000000000000000:message:msg_g0VXw2cVS00hII4P3udH"
+      }
+    },
+    {
+      "id": "msg_g0VXw2ejD00uRnCSZigk",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897347267,
+      "time_updated": 1791897353256,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897347267,
+          "completed": 1791897353256
+        },
+        "parentID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "acceptedInputMessageIDs": [
+          "msg_heUKkzKmJFvBL0TpBZ4S"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41683,
+          "input": 196,
+          "output": 15,
+          "reasoning": 0,
+          "cache": {
+            "read": 41472,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897347267:0000000000000030:0000000000000000:message:msg_g0VXw2ejD00uRnCSZigk"
+      }
+    },
+    {
+      "id": "msg_g0VXw2gIM003JJUFiTvL",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897353290,
+      "time_updated": 1791897372388,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897353290,
+          "completed": 1791897372388
+        },
+        "parentID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "acceptedInputMessageIDs": [
+          "msg_heUKkzKmJFvBL0TpBZ4S"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41970,
+          "input": 41711,
+          "output": 212,
+          "reasoning": 47,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897353290:0000000000000030:0000000000000000:message:msg_g0VXw2gIM003JJUFiTvL"
+      }
+    },
+    {
+      "id": "msg_g0VXw2lGl00AofeS7VWz",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897372411,
+      "time_updated": 1791897405700,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897372411,
+          "completed": 1791897405699
+        },
+        "parentID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "acceptedInputMessageIDs": [
+          "msg_heUKkzKmJFvBL0TpBZ4S"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 44025,
+          "input": 16734,
+          "output": 795,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897372411:0000000000000030:0000000000000000:message:msg_g0VXw2lGl00AofeS7VWz"
+      }
+    },
+    {
+      "id": "msg_g0VXw2tw900tjJit6Us2",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897405729,
+      "time_updated": 1791897416910,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897405729,
+          "completed": 1791897416909
+        },
+        "parentID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "acceptedInputMessageIDs": [
+          "msg_heUKkzKmJFvBL0TpBZ4S"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 44227,
+          "input": 17614,
+          "output": 117,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791897405729:0000000000000030:0000000000000000:message:msg_g0VXw2tw900tjJit6Us2"
+      }
+    },
+    {
+      "id": "msg_hVhcT8doceBJzEkOnxR4",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897417445,
+      "time_updated": 1791897417846,
+      "data": {
+        "author": "goal-controller",
+        "role": "user",
+        "time": {
+          "created": 1791897417445
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "continuous_goal",
+            "goalID": "pev_g0VXw2lET00qY0JI8kGY",
+            "revision": "pev_g0VXw2lET00qY0JI8kGY",
+            "requestID": "pev_hfJmVpx8Hpv574TABJLl"
+          },
+          "surface": "panel"
+        },
+        "orderKey": "v1:0001791897417445:0000000000000030:0000000000000000:message:msg_hVhcT8doceBJzEkOnxR4"
+      }
+    },
+    {
+      "id": "msg_g0VXw2x0S00A77Y1Y2lX",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897417528,
+      "time_updated": 1791897430653,
+      "data": {
+        "orderKey": "v1:0001791897417528:0000000000000030:0000000000000000:message:msg_g0VXw2x0S00A77Y1Y2lX",
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897417528,
+          "completed": 1791897430647
+        },
+        "error": {
+          "name": "ProcessExecutionInterruptedError",
+          "data": {
+            "message": "Previous process ended before Session ses_-zUS3xSH1zzY6c8mw6y2 completed assistant message msg_g0VXw2x0S00A77Y1Y2lX"
+          }
+        },
+        "parentID": "msg_hVhcT8doceBJzEkOnxR4",
+        "acceptedInputMessageIDs": [
+          "msg_hVhcT8doceBJzEkOnxR4"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 0,
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "finish": "error"
+      }
+    },
+    {
+      "id": "msg_g0VXw30Rb00oSTSdF779",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897430743,
+      "time_updated": 1791897446367,
+      "data": {
+        "orderKey": "v1:0001791897430743:0000000000000030:0000000000000000:message:msg_g0VXw30Rb00oSTSdF779",
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897430743,
+          "completed": 1791897446262
+        },
+        "error": {
+          "name": "ProcessExecutionInterruptedError",
+          "data": {
+            "message": "Previous process ended before Session ses_-zUS3xSH1zzY6c8mw6y2 completed assistant message msg_g0VXw30Rb00oSTSdF779"
+          }
+        },
+        "parentID": "msg_hVhcT8doceBJzEkOnxR4",
+        "acceptedInputMessageIDs": [
+          "msg_hVhcT8doceBJzEkOnxR4"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 0,
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "finish": "error"
+      }
+    },
+    {
+      "id": "msg_hjJARLdBUS16HyAnC5J0",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897446299,
+      "time_updated": 1791897446310,
+      "data": {
+        "author": "OpenCorvus runtime recovery",
+        "role": "user",
+        "time": {
+          "created": 1791897446299
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "mission.process_recovery",
+            "version": 3,
+            "missionID": "a1c4bb3852bbd96b",
+            "occurrenceID": "sctl_hbf6A95oQo2tISvfdEd",
+            "openedEventID": "pev_hrXEgU7LitI74TaTJLnU",
+            "deadOwnerGeneration": "cal_g0VXw30Po001kTrrdeH7",
+            "interruptedFrontierDigest": "4295a6b3b382c28868abd75a41e98d20f6bab79e1e9ff8161b31c70127ee2ff7",
+            "interruptedAssistantMessageIDs": [
+              "msg_g0VXw30Rb00oSTSdF779"
+            ]
+          },
+          "surface": "panel"
+        },
+        "orderKey": "v1:0001791897446299:0000000000000030:0000000000000000:message:msg_hjJARLdBUS16HyAnC5J0"
+      }
+    },
+    {
+      "id": "msg_g0VXw34Wi001jP6T3AGM",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897446436,
+      "time_updated": 1791897457643,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897446436,
+          "completed": 1791897457642
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 44657,
+          "input": 176,
+          "output": 65,
+          "reasoning": 0,
+          "cache": {
+            "read": 44416,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897446436:0000000000000030:0000000000000000:message:msg_g0VXw34Wi001jP6T3AGM"
+      }
+    },
+    {
+      "id": "msg_g0VXw37Rs00hWXq0HMc7",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897457668,
+      "time_updated": 1791897467361,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897457668,
+          "completed": 1791897467361
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 45498,
+          "input": 18987,
+          "output": 15,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897457668:0000000000000030:0000000000000000:message:msg_g0VXw37Rs00hWXq0HMc7"
+      }
+    },
+    {
+      "id": "msg_g0VXw39yY00rvpBV7Izz",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897467383,
+      "time_updated": 1791897478956,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897467383,
+          "completed": 1791897478955
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 45519,
+          "input": 19006,
+          "output": 17,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897467383:0000000000000030:0000000000000000:message:msg_g0VXw39yY00rvpBV7Izz"
+      }
+    },
+    {
+      "id": "msg_g0VXw3D0C001pIinccUD",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897479017,
+      "time_updated": 1791897489224,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897479017,
+          "completed": 1791897489223
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 45960,
+          "input": 19409,
+          "output": 39,
+          "reasoning": 16,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897479017:0000000000000030:0000000000000000:message:msg_g0VXw3D0C001pIinccUD"
+      }
+    },
+    {
+      "id": "msg_g0VXw3FfV00IV71v4SPL",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897489265,
+      "time_updated": 1791897500564,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897489265,
+          "completed": 1791897500563
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 46603,
+          "input": 20042,
+          "output": 38,
+          "reasoning": 27,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897489265:0000000000000030:0000000000000000:message:msg_g0VXw3FfV00IV71v4SPL"
+      }
+    },
+    {
+      "id": "msg_g0VXw3IcD00JhyG4XhC5",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897500593,
+      "time_updated": 1791897576010,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897500593,
+          "completed": 1791897576010
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 48643,
+          "input": 21215,
+          "output": 893,
+          "reasoning": 39,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897500593:0000000000000030:0000000000000000:message:msg_g0VXw3IcD00JhyG4XhC5"
+      }
+    },
+    {
+      "id": "msg_g0VXw3cF100f0EOhFCKO",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897576035,
+      "time_updated": 1791897605115,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897576035,
+          "completed": 1791897605113
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 49560,
+          "input": 22230,
+          "output": 822,
+          "reasoning": 12,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897576035:0000000000000030:0000000000000000:message:msg_g0VXw3cF100f0EOhFCKO"
+      }
+    },
+    {
+      "id": "msg_g0VXw3joi00cyTZjKUrM",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897605156,
+      "time_updated": 1791897635993,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897605156,
+          "completed": 1791897635992
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 50535,
+          "input": 1135,
+          "output": 888,
+          "reasoning": 0,
+          "cache": {
+            "read": 48512,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897605156:0000000000000030:0000000000000000:message:msg_g0VXw3joi00cyTZjKUrM"
+      }
+    },
+    {
+      "id": "msg_g0VXw3rqr00rxHueAX2C",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897636041,
+      "time_updated": 1791897647211,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897636041,
+          "completed": 1791897647210
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 50687,
+          "input": 1038,
+          "output": 113,
+          "reasoning": 0,
+          "cache": {
+            "read": 49536,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791897636041:0000000000000030:0000000000000000:message:msg_g0VXw3rqr00rxHueAX2C"
+      }
+    },
+    {
+      "id": "msg_g0VXw3ulT008x1xger0X",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "time_created": 1791897647239,
+      "time_updated": 1791897656886,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791897647239,
+          "completed": 1791897656885
+        },
+        "parentID": "msg_hjJARLdBUS16HyAnC5J0",
+        "acceptedInputMessageIDs": [
+          "msg_hjJARLdBUS16HyAnC5J0"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 51032,
+          "input": 482,
+          "output": 118,
+          "reasoning": 0,
+          "cache": {
+            "read": 50432,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791897647239:0000000000000030:0000000000000000:message:msg_g0VXw3ulT008x1xger0X"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hEJWgYWcN8CxOvPcEEuJ",
+      "message_id": "msg_heUKkzKmJFvBL0TpBZ4S",
+      "time_created": 1791897320418,
+      "time_updated": 1791897323503,
+      "data": {
+        "type": "text",
+        "text": "请执行有限持续目标验收。用户明确授权创建持续目标，tokenBudget=1200000，turnBudget=3。目标是交付一份含六项具体核对标准的两阶段验收说明。\n首次输入这一轮：创建目标，简要说明阶段一需求核对、阶段二验收核对，然后结束当前输入，保持目标active。\n第一个goal-controller自动轮次：实际输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；写完六项后核对实际消息，调用update_continuous_goal标记complete并引用证据，再完成当前模式的正常完成合同。\n本验收可能在自动轮次及恢复过程中多次发生真实进程中断。请核对已有持久化输入和结果，从同一六项标准的安全边界继续，避免重复已完成工作；不创建新目标，不要求用户再说继续。\n不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待。本有限说明由当前负责人直接交付，无需子agent或子Task。\n这是无子Task的有限Mission协调；最后使用现有panel_complete_mission完成，task_acceptances=[]。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hIJIFA0njh8EPNHaL59g/7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388.json",
+          "catalog_snapshot_hash": "7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2YcP00Ah1FCzsQz",
+      "message_id": "msg_g0VXw2Xqp00FVDGHn0iZ",
+      "time_created": 1791897323781,
+      "time_updated": 1791897323782,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2ZwC00TFGcEbt27",
+      "message_id": "msg_g0VXw2Xqp00FVDGHn0iZ",
+      "time_created": 1791897328853,
+      "time_updated": 1791897331617,
+      "data": {
+        "type": "text",
+        "text": "我会先建立你授权的有限持续目标。本轮只说明两个阶段：阶段一核对需求是否明确、完整且可执行；阶段二核对交付证据是否齐全、通过条件是否满足。下一自动轮次将给出每阶段三项、共六项具体标准，并在核对实际输出后完成验收。",
+        "time": {
+          "start": 1791897328853,
+          "end": 1791897331616
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_022ee3b6fcbc4818016ace2ef0cb9c8191832a31ae8384c0b0",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2asU00HVqBTISFP",
+      "message_id": "msg_g0VXw2Xqp00FVDGHn0iZ",
+      "time_created": 1791897332468,
+      "time_updated": 1791897332469,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 41083,
+          "input": 40982,
+          "output": 101,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2b0T00oMasiBudS",
+      "message_id": "msg_g0VXw2aty00RgV2P4FCW",
+      "time_created": 1791897332961,
+      "time_updated": 1791897332961,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2cTT00TV2KjIhOW",
+      "message_id": "msg_g0VXw2aty00RgV2P4FCW",
+      "time_created": 1791897338604,
+      "time_updated": 1791897338605,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 41506,
+          "input": 653,
+          "output": 21,
+          "reasoning": 0,
+          "cache": {
+            "read": 40832,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2cbE00q6eidt2r8",
+      "message_id": "msg_g0VXw2cVS00hII4P3udH",
+      "time_created": 1791897339084,
+      "time_updated": 1791897339085,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2eh600mwJHTzddi",
+      "message_id": "msg_g0VXw2cVS00hII4P3udH",
+      "time_created": 1791897347137,
+      "time_updated": 1791897347138,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 41653,
+          "input": 292,
+          "output": 17,
+          "reasoning": 0,
+          "cache": {
+            "read": 41344,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2eng00bueIlZnRN",
+      "message_id": "msg_g0VXw2ejD00uRnCSZigk",
+      "time_created": 1791897347545,
+      "time_updated": 1791897347545,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2gFu00ekgyih3pe",
+      "message_id": "msg_g0VXw2ejD00uRnCSZigk",
+      "time_created": 1791897353141,
+      "time_updated": 1791897353141,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 41683,
+          "input": 196,
+          "output": 15,
+          "reasoning": 0,
+          "cache": {
+            "read": 41472,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2gMu00wpa1A7G7x",
+      "message_id": "msg_g0VXw2gIM003JJUFiTvL",
+      "time_created": 1791897353572,
+      "time_updated": 1791897353573,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2itR00ZBp0M1Rlq",
+      "message_id": "msg_g0VXw2gIM003JJUFiTvL",
+      "time_created": 1791897363278,
+      "time_updated": 1791897366605,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXw2lEn00XT0ZocJRt",
+      "message_id": "msg_g0VXw2gIM003JJUFiTvL",
+      "time_created": 1791897372291,
+      "time_updated": 1791897372292,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 41970,
+          "input": 41711,
+          "output": 212,
+          "reasoning": 47,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2lLD00wz11Hc0oz",
+      "message_id": "msg_g0VXw2lGl00AofeS7VWz",
+      "time_created": 1791897372687,
+      "time_updated": 1791897372690,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2ttw00AqdTKs5m6",
+      "message_id": "msg_g0VXw2lGl00AofeS7VWz",
+      "time_created": 1791897405596,
+      "time_updated": 1791897405597,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 44025,
+          "input": 16734,
+          "output": 795,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2u2300W0j0PL6MF",
+      "message_id": "msg_g0VXw2tw900tjJit6Us2",
+      "time_created": 1791897406095,
+      "time_updated": 1791897406096,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2vrL00YqneakHgR",
+      "message_id": "msg_g0VXw2tw900tjJit6Us2",
+      "time_created": 1791897413119,
+      "time_updated": 1791897416587,
+      "data": {
+        "type": "text",
+        "text": "已创建持续目标，预算为 **1,200,000 tokens、3 个自动轮次**，本轮结束后保持进行中。\n\n- **阶段一：需求核对**——确认交付范围、标准结构与执行约束。\n- **阶段二：验收核对**——检查实际交付的六项标准、可观察证据与通过条件。\n\n第一个自动轮次将正式输出每阶段三项标准，核对实际消息后完成目标及最终验收。无需你再说“继续”。",
+        "time": {
+          "start": 1791897413119,
+          "end": 1791897416586
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0f620a84c8b4212e016ace2f4503208191a7a844ccbffc4a48",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2wpq00Xg1miINWB",
+      "message_id": "msg_g0VXw2tw900tjJit6Us2",
+      "time_created": 1791897416872,
+      "time_updated": 1791897416873,
+      "data": {
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 44227,
+          "input": 17614,
+          "output": 117,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_hDyR232aENRuqgZGioJl",
+      "message_id": "msg_hVhcT8doceBJzEkOnxR4",
+      "time_created": 1791897417452,
+      "time_updated": 1791897417848,
+      "data": {
+        "type": "text",
+        "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。\nGoal: pev_g0VXw2lET00qY0JI8kGY; prior settled frontier: msg_g0VXw2tw900tjJit6Us2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 88252; token budget: 1200000.\nThis message is authored by the goal controller, not a new user instruction.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hIJIFA0njh8EPNHaL59g/7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388.json",
+          "catalog_snapshot_hash": "7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw2xAc00IWFGqDaaN",
+      "message_id": "msg_g0VXw2x0S00A77Y1Y2lX",
+      "time_created": 1791897418158,
+      "time_updated": 1791897418159,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw2z6100QHAnTK1dM",
+      "message_id": "msg_g0VXw2x0S00A77Y1Y2lX",
+      "time_created": 1791897425561,
+      "time_updated": 1791897425771,
+      "data": {
+        "type": "text",
+        "text": "现在",
+        "time": {
+          "start": 1791897425561
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_024203afc6fd8544016ace2f5182488191bbb3bebcf7265ca4",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw30cN00zwe2jDULm",
+      "message_id": "msg_g0VXw30Rb00oSTSdF779",
+      "time_created": 1791897431412,
+      "time_updated": 1791897431413,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw33BK000JG9EzaEt",
+      "message_id": "msg_g0VXw30Rb00oSTSdF779",
+      "time_created": 1791897441266,
+      "time_updated": 1791897441472,
+      "data": {
+        "type": "text",
+        "text": "本轮将正式交付六项核",
+        "time": {
+          "start": 1791897441266
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_037e82bab5b6463b016ace2f613d9c87d089f4360e4d59d52a",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_hQjY6HwMkXTUNxrG6dXk",
+      "message_id": "msg_hjJARLdBUS16HyAnC5J0",
+      "time_created": 1791897446307,
+      "time_updated": 1791897448157,
+      "data": {
+        "type": "text",
+        "text": "The backend process ended while 1 assistant turn was still executing. Inspect the persisted process-interruption facts, reconcile durable Mission state, and continue from the last safe boundary without duplicating completed work.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hIJIFA0njh8EPNHaL59g/7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388.json",
+          "catalog_snapshot_hash": "7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw354700D1o64vk5D",
+      "message_id": "msg_g0VXw34Wi001jP6T3AGM",
+      "time_created": 1791897448507,
+      "time_updated": 1791897448508,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw36ua000PiU0vD1S",
+      "message_id": "msg_g0VXw34Wi001jP6T3AGM",
+      "time_created": 1791897455604,
+      "time_updated": 1791897456759,
+      "data": {
+        "type": "text",
+        "text": "我会先核对已保存的交付记录，确认中断前完成到了哪里，再从尚未完成的部分继续，避免重复创建目标或重复交付。",
+        "time": {
+          "start": 1791897455604,
+          "end": 1791897456758
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0c04f6ae369546a6016ace2f6f8cc081918859db08d2e5f651",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw37Qn00fojzGWXjE",
+      "message_id": "msg_g0VXw34Wi001jP6T3AGM",
+      "time_created": 1791897457604,
+      "time_updated": 1791897457605,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 44657,
+          "input": 176,
+          "output": 65,
+          "reasoning": 0,
+          "cache": {
+            "read": 44416,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw37XQ00hGsJqw1fk",
+      "message_id": "msg_g0VXw37Rs00hWXq0HMc7",
+      "time_created": 1791897458012,
+      "time_updated": 1791897458012,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw39xf00pdh25ed7m",
+      "message_id": "msg_g0VXw37Rs00hWXq0HMc7",
+      "time_created": 1791897467329,
+      "time_updated": 1791897467329,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 45498,
+          "input": 18987,
+          "output": 15,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3A3D00LPsGOJvX8",
+      "message_id": "msg_g0VXw39yY00rvpBV7Izz",
+      "time_created": 1791897467671,
+      "time_updated": 1791897467671,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3CxH007z8cfCang",
+      "message_id": "msg_g0VXw39yY00rvpBV7Izz",
+      "time_created": 1791897478838,
+      "time_updated": 1791897478839,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 45519,
+          "input": 19006,
+          "output": 17,
+          "reasoning": 0,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3DCJ00yN4wfyDGr",
+      "message_id": "msg_g0VXw3D0C001pIinccUD",
+      "time_created": 1791897479767,
+      "time_updated": 1791897479768,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3FCx009pymcgg41",
+      "message_id": "msg_g0VXw3D0C001pIinccUD",
+      "time_created": 1791897487496,
+      "time_updated": 1791897487503,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXw3Fds008n2OXBdlk",
+      "message_id": "msg_g0VXw3D0C001pIinccUD",
+      "time_created": 1791897489167,
+      "time_updated": 1791897489168,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 45960,
+          "input": 19409,
+          "output": 39,
+          "reasoning": 16,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3FmP00BjnYTIKyt",
+      "message_id": "msg_g0VXw3FfV00IV71v4SPL",
+      "time_created": 1791897489693,
+      "time_updated": 1791897489694,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3IAA00Z50InFh8v",
+      "message_id": "msg_g0VXw3FfV00IV71v4SPL",
+      "time_created": 1791897498854,
+      "time_updated": 1791897498860,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXw3Ib5009Yj2VN4ml",
+      "message_id": "msg_g0VXw3FfV00IV71v4SPL",
+      "time_created": 1791897500525,
+      "time_updated": 1791897500526,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 46603,
+          "input": 20042,
+          "output": 38,
+          "reasoning": 27,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3Rv900V4ZRJU07X",
+      "message_id": "msg_g0VXw3IcD00JhyG4XhC5",
+      "time_created": 1791897536363,
+      "time_updated": 1791897536364,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3UhG00BRNwl1I6i",
+      "message_id": "msg_g0VXw3IcD00JhyG4XhC5",
+      "time_created": 1791897547034,
+      "time_updated": 1791897547559,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXw3Upq00cVK1T8OAu",
+      "message_id": "msg_g0VXw3IcD00JhyG4XhC5",
+      "time_created": 1791897547566,
+      "time_updated": 1791897565711,
+      "data": {
+        "type": "text",
+        "text": "已确认：目标已创建，首次阶段简介已交付，保存的记录中尚无六项标准或最终完成结果。以下补齐正式说明。\n\n## 阶段一：需求核对\n\n### 1. 交付范围明确\n- **可观察证据**：原始要求明确指定“阶段一需求核对、阶段二验收核对”，共六项标准。\n- **通过条件**：说明仅包含这两个阶段，每阶段恰好三项；不增加第三阶段或额外核对项。\n\n### 2. 每项标准可判定\n- **可观察证据**：逐项查看说明，每项均列出“可观察证据”和“通过条件”。\n- **通过条件**：六项均能根据具体记录或实际输出判定是否满足；不能只写“质量良好”“符合预期”等无法核对的表述。\n\n### 3. 执行边界保持一致\n- **可观察证据**：授权预算为 tokenBudget=1200000、turnBudget=3；本次执行记录显示由当前负责人直接交付，未创建子任务。\n- **通过条件**：不扩大预算、不新建替代目标、不要求用户再次说“继续”；不访问网站、不部署、不读取凭据、不改变权限、不创建计划定时等待，也不委派子代理或子任务。\n\n## 阶段二：验收核对\n\n### 4. 实际交付完整\n- **可观察证据**：当前对话中可直接阅读编号1—6的正式说明，其中1—3属于需求核对，4—6属于验收核对。\n- **通过条件**：实际输出确有六项，每阶段三项，且每项都有证据和通过条件；仅有交付计划或完成宣称不能通过。\n\n### 5. 顺序与完成记录吻合\n- **可观察证据**：首次输入的目标创建结果和阶段简介、当前自动续接轮次的六项实际输出，以及随后保存的目标完成结果。\n- **通过条件**：首次输入结束时目标仍进行中；六项在首个自动轮次及其中断恢复过程中交付；先核对实际输出，再引用该输出记录目标完成，不提前宣告完成。\n\n### 6. 中断恢复与最终交付可核对\n- **可观察证据**：恢复时读取的既有目标和保存记录、最终可打开的互动说明，以及无子任务的最终验收完成结果。\n- **通过条件**：恢复只补做缺失动作，不重复创建目标或重复已完成工作；最终互动说明包含完整六项及验收结论，并在其成功发布后完成本次无子任务验收。",
+        "time": {
+          "start": 1791897547566,
+          "end": 1791897565710
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0b30ce9a5bea1aac016ace2fcb88dc87d08d41a378a7aa9063",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3ZYX0098hQ0s32t",
+      "message_id": "msg_g0VXw3IcD00JhyG4XhC5",
+      "time_created": 1791897565713,
+      "time_updated": 1791897566817,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXw3cDL006ziqGfiEx",
+      "message_id": "msg_g0VXw3IcD00JhyG4XhC5",
+      "time_created": 1791897575933,
+      "time_updated": 1791897575934,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 48643,
+          "input": 21215,
+          "output": 893,
+          "reasoning": 39,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3cIr00bCL6JNnU1",
+      "message_id": "msg_g0VXw3cF100f0EOhFCKO",
+      "time_created": 1791897576273,
+      "time_updated": 1791897576273,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3eCG003HoWaCG4X",
+      "message_id": "msg_g0VXw3cF100f0EOhFCKO",
+      "time_created": 1791897583552,
+      "time_updated": 1791897583557,
+      "data": {
+        "type": "reasoning",
+        "characters": 0
+      }
+    },
+    {
+      "id": "prt_g0VXw3jlq007xRTpKQgg",
+      "message_id": "msg_g0VXw3cF100f0EOhFCKO",
+      "time_created": 1791897604981,
+      "time_updated": 1791897604982,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 49560,
+          "input": 22230,
+          "output": 822,
+          "reasoning": 12,
+          "cache": {
+            "read": 26496,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3jvO00T734EVD83",
+      "message_id": "msg_g0VXw3joi00cyTZjKUrM",
+      "time_created": 1791897605570,
+      "time_updated": 1791897605570,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3rmM00RFh6jvTld",
+      "message_id": "msg_g0VXw3joi00cyTZjKUrM",
+      "time_created": 1791897635771,
+      "time_updated": 1791897635772,
+      "data": {
+        "type": "interactive-artifact",
+        "artifactID": "art_g0VXw3rmL00IeXBo585P",
+        "toolPartID": "prt_g0VXw3ltW00wIAJqfZME"
+      }
+    },
+    {
+      "id": "prt_g0VXw3rnQ002I4d0kFZk",
+      "message_id": "msg_g0VXw3joi00cyTZjKUrM",
+      "time_created": 1791897635832,
+      "time_updated": 1791897635833,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 50535,
+          "input": 1135,
+          "output": 888,
+          "reasoning": 0,
+          "cache": {
+            "read": 48512,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3s0G00t1mz6EsDR",
+      "message_id": "msg_g0VXw3rqr00rxHueAX2C",
+      "time_created": 1791897636624,
+      "time_updated": 1791897636625,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3ujP00v07QFUwDh",
+      "message_id": "msg_g0VXw3rqr00rxHueAX2C",
+      "time_created": 1791897647113,
+      "time_updated": 1791897647114,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 50687,
+          "input": 1038,
+          "output": 113,
+          "reasoning": 0,
+          "cache": {
+            "read": 49536,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3uqM00t7dTpi3Ia",
+      "message_id": "msg_g0VXw3ulT008x1xger0X",
+      "time_created": 1791897647542,
+      "time_updated": 1791897647543,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VXw3wOo007eQXnbEGR",
+      "message_id": "msg_g0VXw3ulT008x1xger0X",
+      "time_created": 1791897653522,
+      "time_updated": 1791897656607,
+      "data": {
+        "type": "text",
+        "text": "已完成本次有限持续目标验收。\n\n- 六项标准已交付并核对：两阶段各三项，每项均包含可观察证据和通过条件。\n- 持续目标与本次整体验收均已记录完成，未创建子任务。\n- 可打开上方 **《两阶段验收说明：六项具体核对标准》**，集中查看完整标准、交付路径及验证限制。\n\n中断后沿用原目标继续，未重新创建目标，无需你再次说“继续”。",
+        "time": {
+          "start": 1791897653522,
+          "end": 1791897656606
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_09e68dbc769fed35016ace3035782881918d25aa3a613d8f57",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXw3xGR00Luo41f1oh",
+      "message_id": "msg_g0VXw3ulT008x1xger0X",
+      "time_created": 1791897656848,
+      "time_updated": 1791897656849,
+      "data": {
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 51032,
+          "input": 482,
+          "output": 118,
+          "reasoning": 0,
+          "cache": {
+            "read": 50432,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXw2aeq00AgaBb0eFO",
+      "message_id": "msg_g0VXw2Xqp00FVDGHn0iZ",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_2e7b9b5ffeb244ea86a993efed688e34",
+        "tool": "mission_skill",
+        "input": {
+          "name": "general"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_022ee3b6fcbc4818016ace2ef3956c8191a2121557616edc51"
+          }
+        },
+        "time": {
+          "start": 1791897331620
+        }
+      },
+      "time_created": 1791897331829
+    },
+    {
+      "id": "prt_g0VXw2cLT00FARXOznuS",
+      "message_id": "msg_g0VXw2aty00RgV2P4FCW",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_d7190e8c32ed4a1f9e90227e78c2654a",
+        "tool": "mission_state",
+        "input": {
+          "action": "snapshot"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_068502c3f0b39958016ace2efa0f208191a9d0deba72778e88"
+          }
+        },
+        "time": {
+          "start": 1791897338107
+        }
+      },
+      "time_created": 1791897338329
+    },
+    {
+      "id": "prt_g0VXw2eYW00sNHfBhFRX",
+      "message_id": "msg_g0VXw2cVS00hII4P3udH",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_360dfc8335bc4c88a38f63669332634f",
+        "tool": "get_continuous_goal",
+        "input": {},
+        "metadata": {
+          "openai": {
+            "itemId": "fc_01196a9f850b7de9016ace2f02715c81919d5e7e036ee140f7"
+          }
+        },
+        "time": {
+          "start": 1791897346604
+        }
+      },
+      "time_created": 1791897346704
+    },
+    {
+      "id": "prt_g0VXw2g9y00CkNzKolFg",
+      "message_id": "msg_g0VXw2ejD00uRnCSZigk",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_6feb875fff114db18ba4ae5f3ddf0362",
+        "tool": "panel_query_task",
+        "input": {},
+        "metadata": {
+          "openai": {
+            "itemId": "fc_04e64f52a5623ff8016ace2f08b7408191b7216220e31d051a"
+          }
+        },
+        "time": {
+          "start": 1791897352770
+        }
+      },
+      "time_created": 1791897352868
+    },
+    {
+      "id": "prt_g0VXw2jlB00Egb9oji7l",
+      "message_id": "msg_g0VXw2gIM003JJUFiTvL",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_u5kw3Pjli9FlF2d0i9rJjnid",
+        "tool": "create_continuous_goal",
+        "input": {
+          "tokenBudget": 1200000,
+          "turnBudget": 3,
+          "objective": "交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_06f8862741bd751b016ace2f16630c87d0b8fa67b3b95469a3"
+          }
+        },
+        "time": {
+          "start": 1791897366609
+        }
+      },
+      "time_created": 1791897372024
+    },
+    {
+      "id": "prt_g0VXw2nYs00PAGNfcCsi",
+      "message_id": "msg_g0VXw2lGl00AofeS7VWz",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_HLiwgGlcQIcYw2LNqMD6QkUG",
+        "tool": "mission_state",
+        "input": {
+          "action": "commit",
+          "base_revision": "d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70",
+          "updates": [
+            {
+              "file": "frontier.md",
+              "content": "## Mission contract\nObjective: 直接交付中文两阶段验收说明，恰好六项具体核对标准，每阶段三项，每项含可观察证据和通过条件。\nIn scope: 有限持续目标创建；首次输入阶段简介；第一个自动轮次六项交付与实际消息核对；目标完成；最终互动说明与无子Task Mission完成。\nOut of scope: 子agent、子Task、网站访问、部署、凭据读取、权限修改、计划定时等待。\nHard constraints: tokenBudget=1200000，turnBudget=3；首次输入结束时保持目标active；恢复核对持久化结果，不重复完成工作，不新建目标，不要求用户继续。\nDone when:\n- Done-1: 首次输入已创建授权目标并仅简述需求核对和验收核对两个阶段。\n- Done-2: 第一个goal-controller自动轮次实际交付两阶段各三项，恰好六项，每项有可观察证据和通过条件，并核对实际输出。\n- Done-3: 用实际输出证据将持续目标complete，发布最终互动说明，panel_complete_mission(task_acceptances=[])成功。\n\n## Ownership\n这是用户明确指定的无子Task有限Mission协调，由当前负责人直接交付，无Squad或Task执行边界。\n\n## Stage explanation: 两阶段验收说明\nSatisfies: Done-1, Done-2, Done-3\nOutcome: 中文六项验收说明交付并核对。\nOwner: Mission当前负责人（无子Task）\nDepends on: 首次输入完成后第一个goal-controller自动轮次。\nOwned surfaces/resources: 当前对话及最终互动说明。\nDeliverables: 两阶段各三项核对标准；每项证据和通过条件。\nAcceptance evidence: 首次输入授权创建结果；六项实际消息与最终出版结果尚待自动轮次。\nTask: 无，不创建。\nNext consumers: 最终Mission验收。\n"
+            },
+            {
+              "file": "tasks.md",
+              "content": "# Task bindings\n无子Task：用户明确要求当前负责人直接完成有限Mission协调。\n"
+            },
+            {
+              "file": "handoff.md",
+              "content": "# Next action\n首次输入在目标创建和阶段简介后结束，保持active。第一个goal-controller自动轮次先核对当前目标和Mission持久化结果；输出恰好六项标准，阶段一需求核对三项、阶段二验收核对三项，每项有可观察证据和通过条件。核对实际输出消息，以实际交付为证据更新目标complete。发布最终互动说明，然后调用panel_complete_mission，task_acceptances=[]。恢复时只续接缺失动作，不重复交付或创建目标。\n"
+            },
+            {
+              "file": "notes.md",
+              "content": "# Decisions\n用户明确授权tokenBudget=1200000、turnBudget=3。实际get_continuous_goal返回null后创建成功，目标id/revision=pev_g0VXw2lET00qY0JI8kGY。panel_query_task证实无子Task。当前输入只作阶段简介，不提前输出六项或提前完成目标。禁用网站、部署、凭据读取、权限更改与定时等待。执行与完成均由当前负责人直接承担。\n"
+            }
+          ]
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0e681041904f6940016ace2f25343c87d0a24c074d8b03c4ef"
+          }
+        },
+        "time": {
+          "start": 1791897381222
+        }
+      },
+      "time_created": 1791897404998
+    },
+    {
+      "id": "prt_g0VXw37DG00NDsrAR5DO",
+      "message_id": "msg_g0VXw34Wi001jP6T3AGM",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_249f2d90c16d4ea38094ce3de42e74fc",
+        "tool": "mission_state",
+        "input": {
+          "action": "snapshot"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0c04f6ae369546a6016ace2f70beb48191884143155dc562cf"
+          }
+        },
+        "time": {
+          "start": 1791897456762
+        }
+      },
+      "time_created": 1791897457058
+    },
+    {
+      "id": "prt_g0VXw39ZL00DY93Qa7q8",
+      "message_id": "msg_g0VXw37Rs00hWXq0HMc7",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_mCkSq455FYh3AcMcsrt9qh9N",
+        "tool": "panel_query_task",
+        "input": {},
+        "metadata": {
+          "openai": {
+            "itemId": "fc_098af2543a7ed812016ace2f79cd7487d09512f1de0f332e0b"
+          }
+        },
+        "time": {
+          "start": 1791897465819
+        }
+      },
+      "time_created": 1791897467019
+    },
+    {
+      "id": "prt_g0VXw3CmV000yxNWHvpu",
+      "message_id": "msg_g0VXw39yY00rvpBV7Izz",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_673a1dcf4c84486cb4e591ffa7dfa342",
+        "tool": "get_continuous_goal",
+        "input": {},
+        "metadata": {
+          "openai": {
+            "itemId": "fc_05969b244c748814016ace2f861cb88191a46506d27ecffa08"
+          }
+        },
+        "time": {
+          "start": 1791897478167
+        }
+      },
+      "time_created": 1791897478290
+    },
+    {
+      "id": "prt_g0VXw3FHV00IMm0JG3w6",
+      "message_id": "msg_g0VXw3D0C001pIinccUD",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_415cbda9b9d240c8ad209f6b233a6324",
+        "tool": "capability_search",
+        "input": {
+          "queries": [
+            "read persisted process interruption facts current session messages"
+          ],
+          "kinds": [
+            "tool"
+          ],
+          "exact_refs": [],
+          "deactivate_refs": [],
+          "limit": 2
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0bbcc47afa711b98016ace2f8fc3e48191b8c351eaa7100b3b"
+          }
+        },
+        "time": {
+          "start": 1791897487777
+        }
+      },
+      "time_created": 1791897488540
+    },
+    {
+      "id": "prt_g0VXw3IEq00WgDpXVo70",
+      "message_id": "msg_g0VXw3FfV00IV71v4SPL",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_143e8eda94fb4eafaa06f1f44ab946c9",
+        "tool": "capability_search",
+        "input": {
+          "queries": [
+            "read_agent_message",
+            "process_interruption"
+          ],
+          "kinds": [
+            "tool"
+          ],
+          "exact_refs": [],
+          "deactivate_refs": [],
+          "limit": 5
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_03422179d7e4d9fb016ace2f9b21cc8191805635b7265c1913"
+          }
+        },
+        "time": {
+          "start": 1791897499144
+        }
+      },
+      "time_created": 1791897500017
+    },
+    {
+      "id": "prt_g0VXw3ZqO00HfEO2a5K7",
+      "message_id": "msg_g0VXw3IcD00JhyG4XhC5",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_rSIfuXuJkTbgC8su9zwbMaHv",
+        "tool": "update_continuous_goal",
+        "input": {
+          "goalID": "pev_g0VXw2lET00qY0JI8kGY",
+          "expectedRevision": "pev_g0VXw2lET00qY0JI8kGY",
+          "status": "complete",
+          "reason": "已在第一个goal-controller自动轮次的中断恢复续接中实际输出中文两阶段六项标准：阶段一1交付范围明确、2每项标准可判定、3执行边界保持一致；阶段二4实际交付完整、5顺序与完成记录吻合、6中断恢复与最终交付可核对。核对本次已发送的完整说明：编号1—6，两个阶段各三项，每项均有“可观察证据”和“通过条件”，没有第七项。此前mission_state保存的首次简介及create_continuous_goal成功结果和本次get_continuous_goal证明目标仍active且turnsAccepted=1；panel_query_task返回空集合。未新建目标、未创建子Task，未进行禁止的外部操作。以本次实际六项消息为交付证据记录目标complete；随后发布同一说明的最终互动展示并履行panel_complete_mission(task_acceptances=[])，不以目标更新替代Mission完成。"
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0b30ce9a5bea1aac016ace2fdeb8c087d090b405e1b56ebb1a"
+          }
+        },
+        "time": {
+          "start": 1791897566820
+        }
+      },
+      "time_created": 1791897575398
+    },
+    {
+      "id": "prt_g0VXw3eFx00j8Xn4k2p8",
+      "message_id": "msg_g0VXw3cF100f0EOhFCKO",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_11c4f68e20fa4ce4b9bfee1d746eac89",
+        "tool": "mission_state",
+        "input": {
+          "action": "commit",
+          "base_revision": "694685cc7b8c2526f0fef812fdbf055e9847470b2b52cfbafbe6e32d9d24a51c",
+          "updates": [
+            {
+              "file": "frontier.md",
+              "content": "## Mission contract\nObjective: 直接交付中文两阶段验收说明，恰好六项具体核对标准，每阶段三项，每项含可观察证据和通过条件。\nIn scope: 授权目标创建，首次阶段简介，首个自动轮次及其中断恢复六项交付和实际消息核对，目标完成，最终互动说明与无子Task Mission完成。\nOut of scope: 子agent、子Task、网站访问、部署、凭据读取、权限修改、计划定时等待。\nHard constraints: tokenBudget=1200000，turnBudget=3；首次输入保持active；恢复不重复完成工作、不新建目标、不要求用户继续。\nDone when:\n- Done-1: 已满足：授权目标创建与首次阶段简介已交付。\n- Done-2: 已满足：首个自动轮次恢复中实际输出编号1—6，两阶段各三项，每项均有可观察证据和通过条件。已核对本次实际发送说明。\n- Done-3: 目标complete更新成功；最终互动说明发布与panel_complete_mission(task_acceptances=[])为本轮下一动作。\n\n## Ownership and topology\n直接Mission协调，无Squad、无子Task。阶段一需求核对→阶段二验收核对→最终展示与完成；无独立并行分支。\nOwner: 当前负责人，用户明确要求直接交付。\nOwned resources: 对话说明和消息所属互动展示。\nAcceptance evidence: 初次创建目标结果与首次简介；本轮已发送的六项说明；get_continuous_goal确认此前active、turnsAccepted=1；panel_query_task返回tasks=[]；update_continuous_goal成功返回complete。\n六项标题：交付范围明确；每项标准可判定；执行边界保持一致；实际交付完整；顺序与完成记录吻合；中断恢复与最终交付可核对。\n"
+            },
+            {
+              "file": "handoff.md",
+              "content": "# Next safe action\n六项已实际发送并核对，持续目标已complete，勿重复创建目标或重新输出正文。接下来发布同一六项说明的最终互动展示，随后panel_complete_mission(task_acceptances=[])。若在这两动作中断，核对实际发布/完成回执，仅补做尚缺动作。无子Task，不读取任务证据。\n"
+            },
+            {
+              "file": "notes.md",
+              "content": "# Evidence and recovery\n用户报告后端在一个助手轮次执行中结束。本轮实际snapshot仍为首次简介记录，目标get结果仍active，turnsAccepted=1，无子Task。本轮从六项未交付的保存边界继续；未访问网站、部署、读凭据、改权限或定时等待。当前可用工具没有通用历史消息/中断事实读取入口，因此未声称检查不可访问的后台日志；依据可见中断通知与权威目标/Mission记录续接。\n本轮已实际发送并核对六项正式说明（1—3需求核对，4—6验收核对；六项均含证据与通过条件）。update_continuous_goal成功，goalID=pev_g0VXw2lET00qY0JI8kGY，新revision=pev_g0VXw3cD500VrgEJuhKb，status=complete。最终互动出版及Mission完成仍由本轮紧接执行。\n"
+            }
+          ]
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0c1d83210011fe29016ace2fefc3608191b518802986b4e5e7"
+          }
+        },
+        "time": {
+          "start": 1791897583781
+        }
+      },
+      "time_created": 1791897604729
+    },
+    {
+      "id": "prt_g0VXw3ltW00wIAJqfZME",
+      "message_id": "msg_g0VXw3joi00cyTZjKUrM",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_f7b8a36e95214c2da876dd3af8c5f0d9",
+        "tool": "publish_interactive_artifact",
+        "input": {
+          "artifact": {
+            "schemaVersion": "1",
+            "title": "两阶段验收说明：六项具体核对标准",
+            "content": {
+              "renderer": "document@1",
+              "markdown": "## 目标与验收结论\n交付恰好六项具体核对标准，阶段一、阶段二各三项，每项包含可观察证据和通过条件。六项正文已在对话中实际交付并核对，持续目标已记录完成。本说明是最终互动展示；整体验收完成以随后保存的完成结果为准。\n\n## 阶段一：需求核对\n### 1. 交付范围明确\n**可观察证据**：原始要求指定“阶段一需求核对、阶段二验收核对”，共六项标准。\n**通过条件**：仅包含这两个阶段，每阶段恰好三项；没有第三阶段或额外核对项。\n\n### 2. 每项标准可判定\n**可观察证据**：逐项查看实际说明，每项均列出“可观察证据”和“通过条件”。\n**通过条件**：六项均能依据具体记录或实际输出判定；不能仅使用“质量良好”“符合预期”等无法核对的表述。\n\n### 3. 执行边界保持一致\n**可观察证据**：授权预算为 tokenBudget=1200000、turnBudget=3；执行记录显示由当前负责人直接交付，未创建子任务。\n**通过条件**：不扩大预算、不新建替代目标、不要求用户再次说“继续”；不访问网站、不部署、不读凭据、不改权限、不创建计划定时等待，也不委派子代理或子任务。\n\n## 阶段二：验收核对\n### 4. 实际交付完整\n**可观察证据**：对话中的正式说明有编号1—6，1—3为需求核对，4—6为验收核对；本展示提供同一说明的集中阅读版本。\n**通过条件**：实际输出确有六项，每阶段三项，每项均有证据和通过条件；仅有计划或完成宣称不能通过。\n\n### 5. 顺序与完成记录吻合\n**可观察证据**：首次输入的目标创建结果和阶段简介，首个自动轮次及其恢复中的六项实际输出，随后成功保存的目标完成结果。\n**通过条件**：首次输入结束时目标仍进行中；六项在首个自动轮次及其中断恢复中交付；先核对实际输出，再引用该输出记录目标完成。\n\n### 6. 中断恢复与最终交付可核对\n**可观察证据**：恢复时读取的既有目标与保存记录，本次可打开的互动说明，以及随后保存的无子任务最终验收结果。\n**通过条件**：恢复只补做缺失动作，不重复创建目标或已完成工作；最终展示包含完整六项和验收结论，成功发布后完成无子任务验收。\n\n## 交付路径与责任\n**路径**：需求核对 → 验收核对 → 最终展示与完成。两阶段属于同一份说明，不存在并行交付分支。\n**负责人**：当前负责人直接编写、核对并交付全部内容；不使用专家团队或子任务。\n**交付入口**：本互动说明及上方六项正式消息，无另行文件或任务证据链接。\n\n## 验证与限制\n已核对阶段数、项目数和六项证据/通过条件的完整性；已确认既有目标未被重复创建，目标完成结果已保存，无子任务。中断事实来自本次恢复通知；未访问不可用的后台进程日志，不能据此断言中断的技术原因。该限制不影响六项说明的交付。无待决定的用户事项。"
+            }
+          }
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0408d9f162342651016ace300ce4648191a6791d22293c8227"
+          }
+        },
+        "time": {
+          "start": 1791897613142
+        }
+      },
+      "time_created": 1791897635456
+    },
+    {
+      "id": "prt_g0VXw3to100a3WFLNuZa",
+      "message_id": "msg_g0VXw3rqr00rxHueAX2C",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_74852f593f8a44c59d0b4c198ccc105b",
+        "tool": "panel_complete_mission",
+        "input": {
+          "summary": "已直接交付两阶段各三项、共六项具体核对标准，每项包含可观察证据和通过条件。已核对实际输出，并引用六项消息成功记录持续目标完成；最终互动说明已发布。中断恢复沿用既有目标，仅补做缺失交付；未创建子代理或子任务，未执行禁止操作。完成本次无子Task有限Mission协调。",
+          "task_acceptances": []
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_06b67640e8dc8ecf016ace302b805481919fd88bcf7f428f9a"
+          }
+        },
+        "time": {
+          "start": 1791897643553
+        }
+      },
+      "time_created": 1791897646746
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "prt_hkMSKm2axs44nXS1oZKA",
+      "request_part_id": "prt_g0VXw2aeq00AgaBb0eFO",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hqdwPXlNlNba6YzOCBUY",
+        "title": "Loaded Mission Skill: general",
+        "metadata": {
+          "query": "",
+          "count": 1,
+          "total": 1,
+          "names": [
+            "general"
+          ],
+          "name": "general",
+          "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\runtime-root\\cache\\builtin-mission-skills\\0feae16d55365acf07fe9f909834361ba6ee606854746539230bdc84a6a24cee",
+          "agent": "mission",
+          "scope": "session",
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897332449
+        }
+      },
+      "time_created": 1791897332450
+    },
+    {
+      "id": "prt_hpZgNewNhff5nhveUvSl",
+      "request_part_id": "prt_g0VXw2cLT00FARXOznuS",
+      "data": {
+        "outcome": "completed",
+        "output": "{\"revision\":\"d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70\",\"files\":[{\"file\":\"frontier.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"tasks.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"handoff.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"notes.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"}]}",
+        "title": "mission_state snapshot a1c4bb3852bbd96b",
+        "metadata": {
+          "missionID": "a1c4bb3852bbd96b",
+          "revision": "d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70",
+          "count": 0,
+          "bytes": 0,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897338590
+        }
+      },
+      "time_created": 1791897338590
+    },
+    {
+      "id": "prt_hcc2zcVWpllL6yBtqf0d",
+      "request_part_id": "prt_g0VXw2eYW00sNHfBhFRX",
+      "data": {
+        "outcome": "completed",
+        "output": "null",
+        "title": "get_continuous_goal",
+        "metadata": {
+          "continuousGoal": null,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897347117
+        }
+      },
+      "time_created": 1791897347118
+    },
+    {
+      "id": "prt_h7Vlokq3NmM73B52fmXO",
+      "request_part_id": "prt_g0VXw2g9y00CkNzKolFg",
+      "data": {
+        "outcome": "completed",
+        "output": "{\"tasks\":[]}",
+        "title": "Mission Tasks",
+        "metadata": {
+          "truncated": false,
+          "count": 0,
+          "missionID": "a1c4bb3852bbd96b"
+        },
+        "time": {
+          "end": 1791897353125
+        }
+      },
+      "time_created": 1791897353125
+    },
+    {
+      "id": "prt_hfotChShIRKvSfp38OPB",
+      "request_part_id": "prt_g0VXw2jlB00Egb9oji7l",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hfRtJNVmabnwPNVUnAEl",
+        "title": "create_continuous_goal",
+        "metadata": {
+          "continuousGoal": {
+            "id": "pev_g0VXw2lET00qY0JI8kGY",
+            "revision": "pev_g0VXw2lET00qY0JI8kGY",
+            "owner": {
+              "kind": "mission",
+              "id": "ses_-zUS3xSH1zzY6c8mw6y2"
+            },
+            "objective": "交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。",
+            "status": "active",
+            "tokenBudget": 1200000,
+            "turnBudget": 3,
+            "tokensUsed": 0,
+            "turnsAccepted": 0,
+            "createdAt": 1791897372269,
+            "updatedAt": 1791897372269,
+            "sessionID": "ses_-zUS3xSH1zzY6c8mw6y2",
+            "projectID": "prj_hIJIFA0njh8EPNHaL59g",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+          },
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897372274
+        }
+      },
+      "time_created": 1791897372275
+    },
+    {
+      "id": "prt_hU50FBOD4i4BtJMhmgst",
+      "request_part_id": "prt_g0VXw2nYs00PAGNfcCsi",
+      "data": {
+        "outcome": "completed",
+        "output": "{\"revision\":\"694685cc7b8c2526f0fef812fdbf055e9847470b2b52cfbafbe6e32d9d24a51c\",\"files\":[{\"file\":\"frontier.md\",\"bytes\":1771},{\"file\":\"tasks.md\",\"bytes\":97},{\"file\":\"handoff.md\",\"bytes\":524},{\"file\":\"notes.md\",\"bytes\":399}]}",
+        "title": "mission_state commit a1c4bb3852bbd96b",
+        "metadata": {
+          "missionID": "a1c4bb3852bbd96b",
+          "revision": "694685cc7b8c2526f0fef812fdbf055e9847470b2b52cfbafbe6e32d9d24a51c",
+          "count": 4,
+          "bytes": 2791,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897405570
+        }
+      },
+      "time_created": 1791897405570
+    },
+    {
+      "id": "prt_hAI7oFtgYO1KkYCyT6Qd",
+      "request_part_id": "prt_g0VXw37DG00NDsrAR5DO",
+      "data": {
+        "outcome": "completed",
+        "output": "{\"revision\":\"694685cc7b8c2526f0fef812fdbf055e9847470b2b52cfbafbe6e32d9d24a51c\",\"files\":[{\"file\":\"frontier.md\",\"exists\":true,\"bytes\":1771,\"content\":\"## Mission contract\\nObjective: 直接交付中文两阶段验收说明，恰好六项具体核对标准，每阶段三项，每项含可观察证据和通过条件。\\nIn scope: 有限持续目标创建；首次输入阶段简介；第一个自动轮次六项交付与实际消息核对；目标完成；最终互动说明与无子Task Mission完成。\\nOut of scope: 子agent、子Task、网站访问、部署、凭据读取、权限修改、计划定时等待。\\nHard constraints: tokenBudget=1200000，turnBudget=3；首次输入结束时保持目标active；恢复核对持久化结果，不重复完成工作，不新建目标，不要求用户继续。\\nDone when:\\n- Done-1: 首次输入已创建授权目标并仅简述需求核对和验收核对两个阶段。\\n- Done-2: 第一个goal-controller自动轮次实际交付两阶段各三项，恰好六项，每项有可观察证据和通过条件，并核对实际输出。\\n- Done-3: 用实际输出证据将持续目标complete，发布最终互动说明，panel_complete_mission(task_acceptances=[])成功。\\n\\n## Ownership\\n这是用户明确指定的无子Task有限Mission协调，由当前负责人直接交付，无Squad或Task执行边界。\\n\\n## Stage explanation: 两阶段验收说明\\nSatisfies: Done-1, Done-2, Done-3\\nOutcome: 中文六项验收说明交付并核对。\\nOwner: Mission当前负责人（无子Task）\\nDepends on: 首次输入完成后第一个goal-controller自动轮次。\\nOwned surfaces/resources: 当前对话及最终互动说明。\\nDeliverables: 两阶段各三项核对标准；每项证据和通过条件。\\nAcceptance evidence: 首次输入授权创建结果；六项实际消息与最终出版结果尚待自动轮次。\\nTask: 无，不创建。\\nNext consumers: 最终Mission验收。\\n\"},{\"file\":\"tasks.md\",\"exists\":true,\"bytes\":97,\"content\":\"# Task bindings\\n无子Task：用户明确要求当前负责人直接完成有限Mission协调。\\n\"},{\"file\":\"handoff.md\",\"exists\":true,\"bytes\":524,\"content\":\"# Next action\\n首次输入在目标创建和阶段简介后结束，保持active。第一个goal-controller自动轮次先核对当前目标和Mission持久化结果；输出恰好六项标准，阶段一需求核对三项、阶段二验收核对三项，每项有可观察证据和通过条件。核对实际输出消息，以实际交付为证据更新目标complete。发布最终互动说明，然后调用panel_complete_mission，task_acceptances=[]。恢复时只续接缺失动作，不重复交付或创建目标。\\n\"},{\"file\":\"notes.md\",\"exists\":true,\"bytes\":399,\"content\":\"# Decisions\\n用户明确授权tokenBudget=1200000、turnBudget=3。实际get_continuous_goal返回null后创建成功，目标id/revision=pev_g0VXw2lET00qY0JI8kGY。panel_query_task证实无子Task。当前输入只作阶段简介，不提前输出六项或提前完成目标。禁用网站、部署、凭据读取、权限更改与定时等待。执行与完成均由当前负责人直接承担。\\n\"}]}",
+        "title": "mission_state snapshot a1c4bb3852bbd96b",
+        "metadata": {
+          "missionID": "a1c4bb3852bbd96b",
+          "revision": "694685cc7b8c2526f0fef812fdbf055e9847470b2b52cfbafbe6e32d9d24a51c",
+          "count": 4,
+          "bytes": 2791,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897457586
+        }
+      },
+      "time_created": 1791897457586
+    },
+    {
+      "id": "prt_hTgC2rnZewiWvG2o4dZx",
+      "request_part_id": "prt_g0VXw39ZL00DY93Qa7q8",
+      "data": {
+        "outcome": "completed",
+        "output": "{\"tasks\":[]}",
+        "title": "Mission Tasks",
+        "metadata": {
+          "truncated": false,
+          "count": 0,
+          "missionID": "a1c4bb3852bbd96b"
+        },
+        "time": {
+          "end": 1791897467316
+        }
+      },
+      "time_created": 1791897467316
+    },
+    {
+      "id": "prt_hzouldJyU9zjkv9dcyFe",
+      "request_part_id": "prt_g0VXw3CmV000yxNWHvpu",
+      "data": {
+        "outcome": "completed",
+        "output": "{\"id\":\"pev_g0VXw2lET00qY0JI8kGY\",\"revision\":\"pev_g0VXw2lET00qY0JI8kGY\",\"owner\":{\"kind\":\"mission\",\"id\":\"ses_-zUS3xSH1zzY6c8mw6y2\"},\"objective\":\"交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。\",\"status\":\"active\",\"tokenBudget\":1200000,\"turnBudget\":3,\"tokensUsed\":178407,\"turnsAccepted\":1,\"createdAt\":1791897372269,\"updatedAt\":1791897372269,\"sessionID\":\"ses_-zUS3xSH1zzY6c8mw6y2\",\"projectID\":\"prj_hIJIFA0njh8EPNHaL59g\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-xbGzOq\\\\runner-85684-BXSceu\\\\project\"}",
+        "title": "get_continuous_goal",
+        "metadata": {
+          "continuousGoal": {
+            "id": "pev_g0VXw2lET00qY0JI8kGY",
+            "revision": "pev_g0VXw2lET00qY0JI8kGY",
+            "owner": {
+              "kind": "mission",
+              "id": "ses_-zUS3xSH1zzY6c8mw6y2"
+            },
+            "objective": "交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。",
+            "status": "active",
+            "tokenBudget": 1200000,
+            "turnBudget": 3,
+            "tokensUsed": 178407,
+            "turnsAccepted": 1,
+            "createdAt": 1791897372269,
+            "updatedAt": 1791897372269,
+            "sessionID": "ses_-zUS3xSH1zzY6c8mw6y2",
+            "projectID": "prj_hIJIFA0njh8EPNHaL59g",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+          },
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897478729
+        }
+      },
+      "time_created": 1791897478729
+    },
+    {
+      "id": "prt_hmzTFQFn5TUrjvvFY37G",
+      "request_part_id": "prt_g0VXw3FHV00IMm0JG3w6",
+      "data": {
+        "outcome": "completed",
+        "output": "{\n  \"catalog_snapshot_hash\": \"7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388\",\n  \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n  \"caller\": \"mission\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 149676,\n  \"active_payload_tokens\": 36749,\n  \"visible_expert_squad_count\": 1,\n  \"held_expert_squad_count\": 1,\n  \"product_pillar\": \"work\",\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 38,\n    \"matched_count\": 6,\n    \"returned_count\": 2,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"tool-registry\",\n        \"local_ref\": \"read\"\n      },\n      \"name\": \"read\",\n      \"description\": \"Read is available from tool-registry.\",\n      \"aliases\": [\n        \"Read\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"read\"\n      },\n      \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n      \"score\": 0.828136\n    },\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"tool-registry\",\n        \"local_ref\": \"panel_respond_interaction\"\n      },\n      \"name\": \"panel_respond_interaction\",\n      \"description\": \"Panel Respond Interaction is available from tool-registry.\",\n      \"aliases\": [\n        \"Panel Respond Interaction\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"panel_respond_interaction\"\n      },\n      \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n      \"score\": 0.307302\n    }\n  ]\n}",
+        "title": "Capability search",
+        "metadata": {
+          "catalog_snapshot_hash": "7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388",
+          "catalog_revision": "687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896",
+          "caller": "mission",
+          "result_count": 2,
+          "reveal_revision": 1,
+          "active_ref_count": 0,
+          "active_payload_chars": 149676,
+          "active_payload_tokens": 36749,
+          "visible_expert_squad_count": 1,
+          "held_expert_squad_count": 1,
+          "product_pillar": "work",
+          "opencorvus_capability_reveal_v2": {
+            "schema_version": 2,
+            "occurrence_id": "msg_hjJARLdBUS16HyAnC5J0",
+            "search_call_id": "call_415cbda9b9d240c8ad209f6b233a6324",
+            "prior_revision": 0,
+            "revision": 1,
+            "harness_projection_hash": "7300fdc0bee5747235949991576de3d673a7eea37e68321e45f45cf767c5ed8b",
+            "catalog_snapshot_ref": "/attachment/prj_hIJIFA0njh8EPNHaL59g/7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388.json",
+            "catalog_snapshot_hash": "7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388",
+            "materialization_fingerprint": "a50bb730e6404cce6004ce39138470bfbc857ca82196c7f4e7be7907ab939ce0",
+            "result_refs": [
+              {
+                "kind": "tool",
+                "source": "platform",
+                "owner_ref": "tool-registry",
+                "local_ref": "panel_respond_interaction"
+              },
+              {
+                "kind": "tool",
+                "source": "platform",
+                "owner_ref": "tool-registry",
+                "local_ref": "read"
+              }
+            ],
+            "deactivate_refs": [],
+            "activated": [],
+            "active_refs": [],
+            "active_definition_digest": "68f1cb646a6ffbc4bda7a7156fa64985e11c66d3a9ade3845ad9e70bafd1a3ef",
+            "active_payload_chars": 149676,
+            "active_payload_tokens": 36749
+          },
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897489103
+        }
+      },
+      "time_created": 1791897489103
+    },
+    {
+      "id": "prt_h8RLuiKmrCClxYypm47u",
+      "request_part_id": "prt_g0VXw3IEq00WgDpXVo70",
+      "data": {
+        "outcome": "completed",
+        "output": "{\n  \"catalog_snapshot_hash\": \"7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388\",\n  \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n  \"caller\": \"mission\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 149676,\n  \"active_payload_tokens\": 36749,\n  \"visible_expert_squad_count\": 1,\n  \"held_expert_squad_count\": 1,\n  \"product_pillar\": \"work\",\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 38,\n    \"matched_count\": 13,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"tool-registry\",\n        \"local_ref\": \"read\"\n      },\n      \"name\": \"read\",\n      \"description\": \"Read is available from tool-registry.\",\n      \"aliases\": [\n        \"Read\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"read\"\n      },\n      \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n      \"score\": 0.85\n    },\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"tool-registry\",\n        \"local_ref\": \"panel_read_task_message\"\n      },\n      \"name\": \"panel_read_task_message\",\n      \"description\": \"Panel Read Task Message is available from tool-registry.\",\n      \"aliases\": [\n        \"Panel Read Task Message\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"panel_read_task_message\"\n      },\n      \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n      \"score\": 0.6\n    },\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"tool-registry\",\n        \"local_ref\": \"scheduler_message\"\n      },\n      \"name\": \"scheduler_message\",\n      \"description\": \"Scheduler Message is available from tool-registry.\",\n      \"aliases\": [\n        \"Scheduler Message\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"scheduler_message\"\n      },\n      \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n      \"score\": 0.377143\n    },\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"tool-registry\",\n        \"local_ref\": \"panel_respond_interaction\"\n      },\n      \"name\": \"panel_respond_interaction\",\n      \"description\": \"Panel Respond Interaction is available from tool-registry.\",\n      \"aliases\": [\n        \"Panel Respond Interaction\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"panel_respond_interaction\"\n      },\n      \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n      \"score\": 0.361026\n    },\n    {\n      \"ref\": {\n        \"kind\": \"tool\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"tool-registry\",\n        \"local_ref\": \"mission_state\"\n      },\n      \"name\": \"mission_state\",\n      \"description\": \"Mission State is available from tool-registry.\",\n      \"aliases\": [\n        \"Mission State\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"mission_state\"\n      },\n      \"catalog_revision\": \"687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896\",\n      \"score\": 0.303448\n    }\n  ]\n}",
+        "title": "Capability search",
+        "metadata": {
+          "catalog_snapshot_hash": "7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388",
+          "catalog_revision": "687be465d1fb6ec629104acadd26e8fc5beb91304b609efcfb62959705681896",
+          "caller": "mission",
+          "result_count": 5,
+          "reveal_revision": 2,
+          "active_ref_count": 0,
+          "active_payload_chars": 149676,
+          "active_payload_tokens": 36749,
+          "visible_expert_squad_count": 1,
+          "held_expert_squad_count": 1,
+          "product_pillar": "work",
+          "opencorvus_capability_reveal_v2": {
+            "schema_version": 2,
+            "occurrence_id": "msg_hjJARLdBUS16HyAnC5J0",
+            "search_call_id": "call_143e8eda94fb4eafaa06f1f44ab946c9",
+            "prior_revision": 1,
+            "revision": 2,
+            "harness_projection_hash": "7300fdc0bee5747235949991576de3d673a7eea37e68321e45f45cf767c5ed8b",
+            "catalog_snapshot_ref": "/attachment/prj_hIJIFA0njh8EPNHaL59g/7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388.json",
+            "catalog_snapshot_hash": "7c7baa82f79b3e91fae404a284c839e78e3e26913b55252bfc22182a563ef388",
+            "materialization_fingerprint": "b4ccf3b036c4f0f6875887256d6569df10ecfc9070503b08a183bfed6a66549e",
+            "result_refs": [
+              {
+                "kind": "tool",
+                "source": "platform",
+                "owner_ref": "tool-registry",
+                "local_ref": "mission_state"
+              },
+              {
+                "kind": "tool",
+                "source": "platform",
+                "owner_ref": "tool-registry",
+                "local_ref": "panel_read_task_message"
+              },
+              {
+                "kind": "tool",
+                "source": "platform",
+                "owner_ref": "tool-registry",
+                "local_ref": "panel_respond_interaction"
+              },
+              {
+                "kind": "tool",
+                "source": "platform",
+                "owner_ref": "tool-registry",
+                "local_ref": "read"
+              },
+              {
+                "kind": "tool",
+                "source": "platform",
+                "owner_ref": "tool-registry",
+                "local_ref": "scheduler_message"
+              }
+            ],
+            "deactivate_refs": [],
+            "activated": [],
+            "active_refs": [],
+            "active_definition_digest": "68f1cb646a6ffbc4bda7a7156fa64985e11c66d3a9ade3845ad9e70bafd1a3ef",
+            "active_payload_chars": 149676,
+            "active_payload_tokens": 36749
+          },
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897500445
+        }
+      },
+      "time_created": 1791897500445
+    },
+    {
+      "id": "prt_hnkdxLRbisFZSo7kIozN",
+      "request_part_id": "prt_g0VXw3ZqO00HfEO2a5K7",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hbeFQFjZwLPpZxxtVZAr",
+        "title": "update_continuous_goal",
+        "metadata": {
+          "continuousGoal": {
+            "id": "pev_g0VXw2lET00qY0JI8kGY",
+            "revision": "pev_g0VXw3cD500VrgEJuhKb",
+            "owner": {
+              "kind": "mission",
+              "id": "ses_-zUS3xSH1zzY6c8mw6y2"
+            },
+            "objective": "交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。",
+            "status": "complete",
+            "reason": "已在第一个goal-controller自动轮次的中断恢复续接中实际输出中文两阶段六项标准：阶段一1交付范围明确、2每项标准可判定、3执行边界保持一致；阶段二4实际交付完整、5顺序与完成记录吻合、6中断恢复与最终交付可核对。核对本次已发送的完整说明：编号1—6，两个阶段各三项，每项均有“可观察证据”和“通过条件”，没有第七项。此前mission_state保存的首次简介及create_continuous_goal成功结果和本次get_continuous_goal证明目标仍active且turnsAccepted=1；panel_query_task返回空集合。未新建目标、未创建子Task，未进行禁止的外部操作。以本次实际六项消息为交付证据记录目标complete；随后发布同一说明的最终互动展示并履行panel_complete_mission(task_acceptances=[])，不以目标更新替代Mission完成。",
+            "tokenBudget": 1200000,
+            "turnBudget": 3,
+            "tokensUsed": 316489,
+            "turnsAccepted": 1,
+            "createdAt": 1791897372269,
+            "updatedAt": 1791897575915,
+            "sessionID": "ses_-zUS3xSH1zzY6c8mw6y2",
+            "projectID": "prj_hIJIFA0njh8EPNHaL59g",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project"
+          },
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897575919
+        }
+      },
+      "time_created": 1791897575919
+    },
+    {
+      "id": "prt_hn47E1iZd5DF7YbPPCST",
+      "request_part_id": "prt_g0VXw3eFx00j8Xn4k2p8",
+      "data": {
+        "outcome": "completed",
+        "output": "{\"revision\":\"4ea574d1219223b8eb0cd6b71847a2a316440ff750e327b7e1bf36f0fa951f58\",\"files\":[{\"file\":\"frontier.md\",\"bytes\":1718},{\"file\":\"handoff.md\",\"bytes\":355},{\"file\":\"notes.md\",\"bytes\":798}]}",
+        "title": "mission_state commit a1c4bb3852bbd96b",
+        "metadata": {
+          "missionID": "a1c4bb3852bbd96b",
+          "revision": "4ea574d1219223b8eb0cd6b71847a2a316440ff750e327b7e1bf36f0fa951f58",
+          "count": 3,
+          "bytes": 2871,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897604954
+        }
+      },
+      "time_created": 1791897604954
+    },
+    {
+      "id": "prt_hdhJPzJ93pLbVHxMoyHe",
+      "request_part_id": "prt_g0VXw3ltW00wIAJqfZME",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h3lLMIPZYYhFdbCAzLoE",
+        "title": "两阶段验收说明：六项具体核对标准",
+        "metadata": {
+          "artifactID": "art_g0VXw3rmL00IeXBo585P",
+          "renderer": "document@1",
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897635767
+        }
+      },
+      "time_created": 1791897635768
+    },
+    {
+      "id": "prt_h4gbOH6eMIOx8jEaDgLC",
+      "request_part_id": "prt_g0VXw3to100a3WFLNuZa",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h9cddaZh9ewk0hqR2tu5",
+        "title": "Mission completed",
+        "metadata": {
+          "truncated": false
+        },
+        "time": {
+          "end": 1791897647093
+        }
+      },
+      "time_created": 1791897647093
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_hrXEgU7LitI74TaTJLnU",
+      "kind": "event",
+      "type": "mission.execution.opened",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "mission.wake",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": "c0afecda-0b0f-5e4d-8066-2ac6698bb720",
+      "reply_to": null,
+      "seq": 1,
+      "deadline_ms": null,
+      "emitted_at": 1791897320413,
+      "payload": {
+        "missionID": "a1c4bb3852bbd96b",
+        "requestID": "ba5a56c6-5a83-4c98-9524-248be998e411",
+        "requestFingerprint": "d6e45ebddba0516ab5ddea45e67be2fe30976ca1d4bded2092211abfd9b5774e"
+      }
+    },
+    {
+      "id": "pev_g0VXw2Ybk00JaBRyq8aC",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 2,
+      "deadline_ms": null,
+      "emitted_at": 1791897323740,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2YcN00pEC62Unu2",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 3,
+      "deadline_ms": null,
+      "emitted_at": 1791897323779,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2azQ00u7Q3fcSGr",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 4,
+      "deadline_ms": null,
+      "emitted_at": 1791897332895,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2b0R00IGd1pVWuJ",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 5,
+      "deadline_ms": null,
+      "emitted_at": 1791897332958,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2can00PQ0e1onB2",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 6,
+      "deadline_ms": null,
+      "emitted_at": 1791897339057,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2cbD00pcp4vdVMw",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 7,
+      "deadline_ms": null,
+      "emitted_at": 1791897339082,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2enK001FwSz5UC7",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 8,
+      "deadline_ms": null,
+      "emitted_at": 1791897347522,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2enf00Awd03Uag0",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 9,
+      "deadline_ms": null,
+      "emitted_at": 1791897347543,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2gMX00mMrObXzB6",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 10,
+      "deadline_ms": null,
+      "emitted_at": 1791897353549,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2gMt00EtZY9P4hn",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 11,
+      "deadline_ms": null,
+      "emitted_at": 1791897353570,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2lET00qY0JI8kGY",
+      "kind": "event",
+      "type": "continuous_goal.created",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 12,
+      "deadline_ms": null,
+      "emitted_at": 1791897372269,
+      "payload": {
+        "owner": {
+          "kind": "mission",
+          "id": "ses_-zUS3xSH1zzY6c8mw6y2"
+        },
+        "request_id": "msg_g0VXw2gIM003JJUFiTvL:call_u5kw3Pjli9FlF2d0i9rJjnid",
+        "input": {
+          "tokenBudget": 1200000,
+          "turnBudget": 3,
+          "requestID": "msg_g0VXw2gIM003JJUFiTvL:call_u5kw3Pjli9FlF2d0i9rJjnid",
+          "objective": "交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。"
+        },
+        "author": "ses_-zUS3xSH1zzY6c8mw6y2"
+      }
+    },
+    {
+      "id": "pev_g0VXw2lKi009x3qkFHWW",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 13,
+      "deadline_ms": null,
+      "emitted_at": 1791897372656,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2lLB00iYQEW50qy",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 14,
+      "deadline_ms": null,
+      "emitted_at": 1791897372685,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2u1V00RlRcDf72j",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 15,
+      "deadline_ms": null,
+      "emitted_at": 1791897406061,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2u2100LisLmHnj3",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 16,
+      "deadline_ms": null,
+      "emitted_at": 1791897406093,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2ws1002zhp4CPuo",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 17,
+      "deadline_ms": null,
+      "emitted_at": 1791897417004,
+      "payload": {
+        "inputMessageID": "msg_heUKkzKmJFvBL0TpBZ4S",
+        "status": {
+          "type": "idle"
+        }
+      }
+    },
+    {
+      "id": "pev_hfJmVpx8Hpv574TABJLl",
+      "kind": "event",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 18,
+      "deadline_ms": null,
+      "emitted_at": 1791897417451,
+      "payload": {
+        "goal_id": "pev_g0VXw2lET00qY0JI8kGY",
+        "revision": "pev_g0VXw2lET00qY0JI8kGY",
+        "frontier": "msg_g0VXw2tw900tjJit6Us2",
+        "number": 1
+      }
+    },
+    {
+      "id": "pev_g0VXw2x9t00EFYDeW0VI",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 19,
+      "deadline_ms": null,
+      "emitted_at": 1791897418113,
+      "payload": {
+        "inputMessageID": "msg_hVhcT8doceBJzEkOnxR4",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw2xAb00MHJHFIuAV",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 20,
+      "deadline_ms": null,
+      "emitted_at": 1791897418156,
+      "payload": {
+        "inputMessageID": "msg_hVhcT8doceBJzEkOnxR4",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw30aN00kGarhgd9a",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 21,
+      "deadline_ms": null,
+      "emitted_at": 1791897431287,
+      "payload": {
+        "inputMessageID": "msg_hVhcT8doceBJzEkOnxR4",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw30cK00jWTESrxyN",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 22,
+      "deadline_ms": null,
+      "emitted_at": 1791897431407,
+      "payload": {
+        "inputMessageID": "msg_hVhcT8doceBJzEkOnxR4",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw352j00s7wgM3s30",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 23,
+      "deadline_ms": null,
+      "emitted_at": 1791897448420,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3545007AE4t5ZUo",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 24,
+      "deadline_ms": null,
+      "emitted_at": 1791897448504,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw37Wq00jkHy5ZaLL",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 25,
+      "deadline_ms": null,
+      "emitted_at": 1791897457975,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw37XO007BM6zIA6P",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 26,
+      "deadline_ms": null,
+      "emitted_at": 1791897458010,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3A29000QDT1HQRy",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 27,
+      "deadline_ms": null,
+      "emitted_at": 1791897467604,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3A3900jYAAMWi4V",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 28,
+      "deadline_ms": null,
+      "emitted_at": 1791897467667,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3DAd00dMgWJqUis",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 29,
+      "deadline_ms": null,
+      "emitted_at": 1791897479663,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3DCG0002zY2Dg9U",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 30,
+      "deadline_ms": null,
+      "emitted_at": 1791897479764,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3Flh00gb4G6uE1d",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 31,
+      "deadline_ms": null,
+      "emitted_at": 1791897489649,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3FmN00NeAf4fnmL",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 32,
+      "deadline_ms": null,
+      "emitted_at": 1791897489690,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3IhB00XwXtvn6SC",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 33,
+      "deadline_ms": null,
+      "emitted_at": 1791897500900,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3Ihj00aEpfWxyM0",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 34,
+      "deadline_ms": null,
+      "emitted_at": 1791897500935,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3Red00LlPmdZswI",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 35,
+      "deadline_ms": null,
+      "emitted_at": 1791897535339,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "retry",
+          "attempt": 1,
+          "message": "network: backoff 1004.7583584713279ms; last heartbeat text-delta@2026-10-13T13:18:50.438Z",
+          "next": 1791897536225.7583
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3Rv800U6IeoNgLc",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 36,
+      "deadline_ms": null,
+      "emitted_at": 1791897536362,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3cD500VrgEJuhKb",
+      "kind": "event",
+      "type": "continuous_goal.updated",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 37,
+      "deadline_ms": null,
+      "emitted_at": 1791897575915,
+      "payload": {
+        "goal_id": "pev_g0VXw2lET00qY0JI8kGY",
+        "request_id": "msg_g0VXw3IcD00JhyG4XhC5:call_rSIfuXuJkTbgC8su9zwbMaHv",
+        "input": {
+          "requestID": "msg_g0VXw3IcD00JhyG4XhC5:call_rSIfuXuJkTbgC8su9zwbMaHv",
+          "goalID": "pev_g0VXw2lET00qY0JI8kGY",
+          "expectedRevision": "pev_g0VXw2lET00qY0JI8kGY",
+          "status": "complete",
+          "reason": "已在第一个goal-controller自动轮次的中断恢复续接中实际输出中文两阶段六项标准：阶段一1交付范围明确、2每项标准可判定、3执行边界保持一致；阶段二4实际交付完整、5顺序与完成记录吻合、6中断恢复与最终交付可核对。核对本次已发送的完整说明：编号1—6，两个阶段各三项，每项均有“可观察证据”和“通过条件”，没有第七项。此前mission_state保存的首次简介及create_continuous_goal成功结果和本次get_continuous_goal证明目标仍active且turnsAccepted=1；panel_query_task返回空集合。未新建目标、未创建子Task，未进行禁止的外部操作。以本次实际六项消息为交付证据记录目标complete；随后发布同一说明的最终互动展示并履行panel_complete_mission(task_acceptances=[])，不以目标更新替代Mission完成。"
+        },
+        "author": "ses_-zUS3xSH1zzY6c8mw6y2"
+      }
+    },
+    {
+      "id": "pev_g0VXw3cIO004A8ha8FFp",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 38,
+      "deadline_ms": null,
+      "emitted_at": 1791897576244,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3cIp00pXaHo07oJ",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 39,
+      "deadline_ms": null,
+      "emitted_at": 1791897576271,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3juf004Y5kMkWCZ",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 40,
+      "deadline_ms": null,
+      "emitted_at": 1791897605525,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3jvL00DQn9iAHbQ",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 41,
+      "deadline_ms": null,
+      "emitted_at": 1791897605567,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3rz200148nLXhGO",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 42,
+      "deadline_ms": null,
+      "emitted_at": 1791897636547,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3s0C00X3BzUTMJk",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 43,
+      "deadline_ms": null,
+      "emitted_at": 1791897636619,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3upn00c0QactfwJ",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 44,
+      "deadline_ms": null,
+      "emitted_at": 1791897647506,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    },
+    {
+      "id": "pev_g0VXw3uqJ00SFdPllbsw",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 45,
+      "deadline_ms": null,
+      "emitted_at": 1791897647539,
+      "payload": {
+        "inputMessageID": "msg_hjJARLdBUS16HyAnC5J0",
+        "status": {
+          "type": "streaming"
+        }
+      }
+    }
+  ],
+  "created": {
+    "id": "pev_g0VXw2lET00qY0JI8kGY",
+    "kind": "event",
+    "type": "continuous_goal.created",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "continuous-goal",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 12,
+    "deadline_ms": null,
+    "emitted_at": 1791897372269,
+    "payload": {
+      "owner": {
+        "kind": "mission",
+        "id": "ses_-zUS3xSH1zzY6c8mw6y2"
+      },
+      "request_id": "msg_g0VXw2gIM003JJUFiTvL:call_u5kw3Pjli9FlF2d0i9rJjnid",
+      "input": {
+        "tokenBudget": 1200000,
+        "turnBudget": 3,
+        "requestID": "msg_g0VXw2gIM003JJUFiTvL:call_u5kw3Pjli9FlF2d0i9rJjnid",
+        "objective": "交付中文两阶段验收说明，共六项具体核对标准：阶段一需求核对三项，阶段二验收核对三项；每项包含可观察证据和通过条件。首次输入仅创建本目标并简述两个阶段，结束输入，保持active。第一个goal-controller自动轮次实际输出六项后核对实际消息，以该输出为证据将本目标标记complete，并发布最终互动说明，调用panel_complete_mission(task_acceptances=[])完成无子Task的有限Mission协调合同。恢复时核对持久化输入与已有结果，从同一六项标准安全边界续接，不重复完成工作，不新建目标，不要求用户继续。禁止访问网站、部署、读取凭据、改变权限、创建计划定时等待；不创建子agent或子Task。"
+      },
+      "author": "ses_-zUS3xSH1zzY6c8mw6y2"
+    }
+  },
+  "updates": [
+    {
+      "id": "pev_g0VXw3cD500VrgEJuhKb",
+      "kind": "event",
+      "type": "continuous_goal.updated",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 37,
+      "deadline_ms": null,
+      "emitted_at": 1791897575915,
+      "payload": {
+        "goal_id": "pev_g0VXw2lET00qY0JI8kGY",
+        "request_id": "msg_g0VXw3IcD00JhyG4XhC5:call_rSIfuXuJkTbgC8su9zwbMaHv",
+        "input": {
+          "requestID": "msg_g0VXw3IcD00JhyG4XhC5:call_rSIfuXuJkTbgC8su9zwbMaHv",
+          "goalID": "pev_g0VXw2lET00qY0JI8kGY",
+          "expectedRevision": "pev_g0VXw2lET00qY0JI8kGY",
+          "status": "complete",
+          "reason": "已在第一个goal-controller自动轮次的中断恢复续接中实际输出中文两阶段六项标准：阶段一1交付范围明确、2每项标准可判定、3执行边界保持一致；阶段二4实际交付完整、5顺序与完成记录吻合、6中断恢复与最终交付可核对。核对本次已发送的完整说明：编号1—6，两个阶段各三项，每项均有“可观察证据”和“通过条件”，没有第七项。此前mission_state保存的首次简介及create_continuous_goal成功结果和本次get_continuous_goal证明目标仍active且turnsAccepted=1；panel_query_task返回空集合。未新建目标、未创建子Task，未进行禁止的外部操作。以本次实际六项消息为交付证据记录目标complete；随后发布同一说明的最终互动展示并履行panel_complete_mission(task_acceptances=[])，不以目标更新替代Mission完成。"
+        },
+        "author": "ses_-zUS3xSH1zzY6c8mw6y2"
+      }
+    }
+  ],
+  "continuations": [
+    {
+      "id": "pev_hfJmVpx8Hpv574TABJLl",
+      "kind": "event",
+      "type": "continuous_goal.continuation_requested",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": null,
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "continuous-goal",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 18,
+      "deadline_ms": null,
+      "emitted_at": 1791897417451,
+      "payload": {
+        "goal_id": "pev_g0VXw2lET00qY0JI8kGY",
+        "revision": "pev_g0VXw2lET00qY0JI8kGY",
+        "frontier": "msg_g0VXw2tw900tjJit6Us2",
+        "number": 1
+      }
+    }
+  ],
+  "usage": [
+    {
+      "id": "pvu_g0VXw2tty00qNQpBBv8u",
+      "occurred_at": 1791897405594,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 16734,
+      "output_tokens": 795,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 26496,
+      "cache_write_tokens": 0,
+      "total_tokens": 44025,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_hS1PnJuToUnKOfv75VUF"
+    },
+    {
+      "id": "pvu_g0VXw2wpq00mksj0CCNf",
+      "occurred_at": 1791897416870,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 17614,
+      "output_tokens": 117,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 26496,
+      "cache_write_tokens": 0,
+      "total_tokens": 44227,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_hMC03EOaEgTDknU0wx1O"
+    },
+    {
+      "id": "pvu_g0VXw37Qo006aoCdvD6p",
+      "occurred_at": 1791897457602,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 176,
+      "output_tokens": 65,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 44416,
+      "cache_write_tokens": 0,
+      "total_tokens": 44657,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_hLjaZfdRJeX30Ur1fSVa"
+    },
+    {
+      "id": "pvu_g0VXw39xg00FKA2XS29C",
+      "occurred_at": 1791897467328,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 18987,
+      "output_tokens": 15,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 26496,
+      "cache_write_tokens": 0,
+      "total_tokens": 45498,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_hiXbhBwswMpThiucUVCl"
+    },
+    {
+      "id": "pvu_g0VXw3CxI00QbTnRQ3sF",
+      "occurred_at": 1791897478836,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 19006,
+      "output_tokens": 17,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 26496,
+      "cache_write_tokens": 0,
+      "total_tokens": 45519,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_h33ndxemvcoLHoV4zIK1"
+    },
+    {
+      "id": "pvu_g0VXw3Fdt00E6ICf5Yox",
+      "occurred_at": 1791897489165,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 19409,
+      "output_tokens": 39,
+      "reasoning_tokens": 16,
+      "cache_read_tokens": 26496,
+      "cache_write_tokens": 0,
+      "total_tokens": 45960,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_horbcGhjTHW6viQ1SscW"
+    },
+    {
+      "id": "pvu_g0VXw3Ib500DaaKUJIWm",
+      "occurred_at": 1791897500523,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 20042,
+      "output_tokens": 38,
+      "reasoning_tokens": 27,
+      "cache_read_tokens": 26496,
+      "cache_write_tokens": 0,
+      "total_tokens": 46603,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_hBSzIHs43j1YoAaGMRAY"
+    },
+    {
+      "id": "pvu_g0VXw3cDM00OVxXcqW0t",
+      "occurred_at": 1791897575932,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 21215,
+      "output_tokens": 893,
+      "reasoning_tokens": 39,
+      "cache_read_tokens": 26496,
+      "cache_write_tokens": 0,
+      "total_tokens": 48643,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "agent_id": "mission",
+      "association_id": "pev_hWxKLqDQngTDtwgpk7DT"
+    }
+  ],
+  "ingresses": [],
+  "promptOwners": [
+    {
+      "session_id": "ses_-zUS3xSH1zzY6c8mw6y2",
+      "project_id": "prj_hIJIFA0njh8EPNHaL59g",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xbGzOq\\runner-85684-BXSceu\\project",
+      "generation": "cal_g0VXw34Vw007qcUT9BPl",
+      "owner_pid": 38668,
+      "owner_process_instance_id": "win32:639274942416394579",
+      "owner_occurrence_id": "83ecfdb0-28e2-436c-bb0a-666d8b8b1df8",
+      "time_acquired": 1791897446388
+    }
+  ],
+  "activations": []
+}

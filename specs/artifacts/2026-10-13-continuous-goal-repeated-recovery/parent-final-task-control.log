@@ -1,0 +1,28 @@
+[1/2] START test/task-control-terminal-owner.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a local post-turn pipeline owns domain settlement until its exact terminal-success delivery [4967.26ms]
+(pass) a live peer terminal owner schedules recheck and then delivers its exact success [2898.25ms]
+(pass) a live peer terminal owner schedules recheck and then recovers partial after physical exit [2357.85ms]
+
+ 3 pass
+ 0 fail
+ 18 expect() calls
+Ran 3 tests across 1 file. [14.70s]
+[1/2] DONE test/task-control-terminal-owner.test.ts exit=0 duration=15.48s
+[2/2] START test/task-control-abandoned-dispatch.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) abandoned dispatch recovery > settles a committed dispatch whose delivery owner vanished and wakes the Task [38320.79ms]
+(pass) abandoned dispatch recovery > restarts a partially admitted collection without false abandonment and emits one failure-aware wake [2290.96ms]
+(pass) abandoned dispatch recovery > keeps an epoch-one settlement out after terminalization and reopen [3521.34ms]
+(pass) abandoned dispatch recovery > preserves physical-owner rechecks across later descriptor pages [8657.43ms]
+(pass) abandoned dispatch recovery > one spent-budget disposition silences every member of the recovered collection [2778.18ms]
+
+ 5 pass
+ 0 fail
+ 112 expect() calls
+Ran 5 tests across 1 file. [57.80s]
+[2/2] DONE test/task-control-abandoned-dispatch.test.ts exit=0 duration=58.05s

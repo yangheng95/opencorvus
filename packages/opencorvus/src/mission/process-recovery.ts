@@ -22,7 +22,7 @@ import {
 } from "./process-recovery-facts"
 
 const RECOVERY_LEASE_MS = 30_000
-const RECOVERY_DEADLINE_MS = 120_000
+const RECOVERY_ADMISSION_DEADLINE_MS = 120_000
 const MAX_RECOVERY_FRONTIER_MESSAGES = 64
 
 function readTrailingIncompleteAssistantMessageIDs(sessionID: string): string[] {
@@ -134,12 +134,12 @@ export type MissionProcessRecoveryResult =
 /** Reconcile one Mission process interruption from immutable facts only. */
 export async function recoverMissionProcessSession(
   sessionID: string,
-  input: { signal?: AbortSignal; deadlineAt?: number } = {},
+  input: { signal?: AbortSignal; admissionDeadlineAt?: number } = {},
 ): Promise<MissionProcessRecoveryResult> {
   input.signal?.throwIfAborted()
-  const deadlineAt = input.deadlineAt ?? Date.now() + RECOVERY_DEADLINE_MS
+  const deadlineAt = input.admissionDeadlineAt ?? Date.now() + RECOVERY_ADMISSION_DEADLINE_MS
   if (!Number.isSafeInteger(deadlineAt) || deadlineAt <= Date.now()) {
-    throw new Error(`Mission Session ${sessionID} recovery requires a future absolute deadline`)
+    throw new Error(`Mission Session ${sessionID} recovery requires a future admission deadline`)
   }
   const mission = await requireMissionSession(sessionID)
   const ownerOccurrenceID = Identifier.ascending("call")
@@ -234,10 +234,7 @@ export async function recoverMissionProcessSession(
     const exactIncompleteFrontier = [
       ...new Set([
         ...(persistedWake
-          ? readIncompleteMissionAssistantMessageIDs(
-              sessionID,
-              persistedWake.reason.interruptedAssistantMessageIDs,
-            )
+          ? readIncompleteMissionAssistantMessageIDs(sessionID, persistedWake.reason.interruptedAssistantMessageIDs)
           : []),
         ...trailingIncomplete,
       ]),
@@ -384,6 +381,11 @@ export async function recoverMissionProcessSession(
       throw new Error(`Mission process recovery wake identity changed for ${sessionID}`)
     }
     await receipt.activation
+    // Recovery bounds the handoff to a physical Prompt owner. Once admitted,
+    // ordinary execution activity governs the reply's lifetime; caller and
+    // lease cancellation remain connected through this same signal.
+    deadline.signal.throwIfAborted()
+    deadline.clearTimeout()
     const completion = await receipt.completion
     deadline.signal.throwIfAborted()
     if (!completion.ok) {

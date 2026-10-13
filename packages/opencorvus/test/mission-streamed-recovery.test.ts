@@ -26,7 +26,14 @@ import { auditSchedulerSessionDeliverySettlement } from "@/protocol/delivery"
 import { WorkerTurnDescriptorTable } from "@/session/session.sql"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { databaseSnapshot } from "../script/benchmark/external-agent/runtime-evidence"
-import { auditMissionOutcome, auditMissionQuiescence } from "../script/benchmark/external-agent/contract"
+import {
+  advanceBenchmarkActivityWindow,
+  auditMissionOutcome,
+  auditMissionQuiescence,
+  benchmarkActivitySignature,
+  benchmarkObservationPollDelay,
+  benchmarkSessionActivity,
+} from "../script/benchmark/external-agent/contract"
 import { Server } from "@/server/server"
 
 const model = { providerID: "recovery-stream", modelID: "deterministic" }
@@ -50,26 +57,68 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
       // This checker exercises recovery of an explicitly delegated two-member
       // contract. Base's ordinary production now belongs to the Task root.
       await ExpertSquadConversationAuthoring.author({
-        projectDirectory: project.path, installationScope: "project", replace: false,
+        projectDirectory: project.path,
+        installationScope: "project",
+        replace: false,
         definition: buildExpertSquadAuthorDefinition({
-          schema_version: 2, namespace: "test", id: "recovery-contract", name: "Delegated Recovery Contract", label: "Delegated Recovery Contract",
+          schema_version: 2,
+          namespace: "test",
+          id: "recovery-contract",
+          name: "Delegated Recovery Contract",
+          label: "Delegated Recovery Contract",
           description: "Verify preservation and independent review across a delegated worker disconnect.",
-          version: "2026.09.30.1", product_pillars: ["work"], readme: "# Delegated recovery contract\n",
-          selector: { summary: "Exercise explicit delegated recovery.", selection_guidance: "Select for the local recovery checker.", instructions: "# Recovery contract\n" },
-          scheduler: { prompt: "Coordinate the declared producer and independent reviewer through the same Task.", capability_refs: [
-            "capability:capability_set:platform:tool-registry:orchestrator-base",
-            "capability:capability_set:platform:tool-registry:scheduler-transport",
-            "capability:tool:platform:tool-registry:dispatch_agent",
-            "capability:tool:platform:tool-registry:manage_task",
-          ] },
-          agents: {
-            "base-developer": { label: "Recovery Producer", description: "Own the assigned durable receipt.", base_role: "build", prompt: "# Base Developer\nProduce the assigned durable receipt and preserve committed effects on continuation.", capability_refs: ["capability:capability_set:platform:tool-registry:build-base"] },
-            "base-tester": { label: "Recovery Reviewer", description: "Independently review the repaired receipt.", base_role: "delegated-worker", prompt: "# Base Tester\nIndependently read and verify the assigned receipt.", capability_refs: ["capability:capability_set:platform:tool-registry:delegated-worker-base"] },
+          version: "2026.09.30.1",
+          product_pillars: ["work"],
+          readme: "# Delegated recovery contract\n",
+          selector: {
+            summary: "Exercise explicit delegated recovery.",
+            selection_guidance: "Select for the local recovery checker.",
+            instructions: "# Recovery contract\n",
           },
-          virtual_workflows: { "execution-verification": { label: "Delegated production and review", description: "Explicit producer dependency for this recovery contract.", nodes: {
-            "base-developer": { agent_id: "base-developer", description: "Produce durable receipt", depends_on: [] },
-            "base-tester": { agent_id: "base-tester", description: "Verify repaired receipt", depends_on: ["base-developer"] },
-          } } },
+          scheduler: {
+            prompt: "Coordinate the declared producer and independent reviewer through the same Task.",
+            capability_refs: [
+              "capability:capability_set:platform:tool-registry:orchestrator-base",
+              "capability:capability_set:platform:tool-registry:scheduler-transport",
+              "capability:tool:platform:tool-registry:dispatch_agent",
+              "capability:tool:platform:tool-registry:manage_task",
+            ],
+          },
+          agents: {
+            "base-developer": {
+              label: "Recovery Producer",
+              description: "Own the assigned durable receipt.",
+              base_role: "build",
+              prompt:
+                "# Base Developer\nProduce the assigned durable receipt and preserve committed effects on continuation.",
+              capability_refs: ["capability:capability_set:platform:tool-registry:build-base"],
+            },
+            "base-tester": {
+              label: "Recovery Reviewer",
+              description: "Independently review the repaired receipt.",
+              base_role: "delegated-worker",
+              prompt: "# Base Tester\nIndependently read and verify the assigned receipt.",
+              capability_refs: ["capability:capability_set:platform:tool-registry:delegated-worker-base"],
+            },
+          },
+          virtual_workflows: {
+            "execution-verification": {
+              label: "Delegated production and review",
+              description: "Explicit producer dependency for this recovery contract.",
+              nodes: {
+                "base-developer": {
+                  agent_id: "base-developer",
+                  description: "Produce durable receipt",
+                  depends_on: [],
+                },
+                "base-tester": {
+                  agent_id: "base-tester",
+                  description: "Verify repaired receipt",
+                  depends_on: ["base-developer"],
+                },
+              },
+            },
+          },
         }),
       })
       await Config.updateProjectPatch({
@@ -118,6 +167,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
       let staleSourceAttempted = false
       let sourceCorrected = false
       const calls: string[] = []
+      const rootDecisions: unknown[] = []
       const failures: string[] = []
       let selectedRef = ""
       const readRefs: string[] = []
@@ -165,7 +215,10 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             turn: previous
               ? {
                   kind: "continuation",
-                  authority: { kind: "prior_dispatch", continuation_dispatch_id: sourceOverride ?? previous.dispatch_id },
+                  authority: {
+                    kind: "prior_dispatch",
+                    continuation_dispatch_id: sourceOverride ?? previous.dispatch_id,
+                  },
                   guidance: "Preserve the committed operation, finish delivery, and verify the final result.",
                   evidence_locators: [],
                   ...obligation,
@@ -203,7 +256,10 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             rootStep++
             taskID ||= Database.use((db) => db.select().from(EngineTaskTable).get())!.id
             if (taskLifecycleProjection(taskID).status !== "active")
-              return call("no_action", { observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)), reason: "The terminal Task receipt is reconciled." })
+              return call("no_action", {
+                observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)),
+                reason: "The terminal Task receipt is reconciled.",
+              })
             const developer = lineage("base-developer")
             const tester = lineage("base-tester")
             const repair = readLatestTaskAcceptanceLedger(taskID)
@@ -224,6 +280,13 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
                 .filter((r) => r.kind === "dispatch_settlement")
                 .map((r) => r.payload as Record<string, any>)
                 .find((r) => r.dispatch_id === dispatchID)?.outcome
+            rootDecisions.push({
+              rootStep,
+              developer,
+              tester,
+              repair: repair?.revision,
+              settlements: rows.filter((row) => row.kind === "dispatch_settlement").map((row) => row.payload),
+            })
             if (!developer) return dispatch("base-developer", false)
             if (!repair && outcome(developer.dispatch_id))
               return call("manage_task", {
@@ -234,18 +297,26 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             if (repair && outcome(developer.dispatch_id)?.kind === "terminal_success" && !tester) {
               if (!staleSourceAttempted) {
                 staleSourceAttempted = true
-                const initial = rows.filter((row) => row.kind === "dispatch_lineage")
+                const initial = rows
+                  .filter((row) => row.kind === "dispatch_lineage")
                   .map((row) => row.payload as DispatchLineagePayload)
                   .find((row) => row.target_agent_id === "base-developer" && !row.continuation_of_dispatch_id)!
                 return dispatch("base-developer", true, initial.dispatch_id)
               }
               if (!sourceCorrected) {
-                const rootSession = (await Session.children(requireTask(taskID).session_id!)).find((row) => row.kind === "orchestrator")!
-                const errors = (await Session.messages({ sessionID: rootSession.id })).flatMap((message) => message.parts)
-                  .filter((part) => part.type === "tool" && part.tool === "dispatch_agent" && part.state.status === "error")
-                expect(errors.map((part) => part.type === "tool" && part.state.status === "error" ? part.state.failure.message : "")).toEqual([
-                  expect.stringContaining(`exact current dispatch is ${developer.dispatch_id}`),
-                ])
+                const rootSession = (await Session.children(requireTask(taskID).session_id!)).find(
+                  (row) => row.kind === "orchestrator",
+                )!
+                const errors = (await Session.messages({ sessionID: rootSession.id }))
+                  .flatMap((message) => message.parts)
+                  .filter(
+                    (part) => part.type === "tool" && part.tool === "dispatch_agent" && part.state.status === "error",
+                  )
+                expect(
+                  errors.map((part) =>
+                    part.type === "tool" && part.state.status === "error" ? part.state.failure.message : "",
+                  ),
+                ).toEqual([expect.stringContaining(`exact current dispatch is ${developer.dispatch_id}`)])
                 sourceCorrected = true
                 return dispatch("base-developer", true)
               }
@@ -260,7 +331,10 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
                 deliverable_artifact_locators: [],
                 accepted_delivery_slice_revision_ids: [],
               })
-            return call("no_action", { observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)), reason: "The exact lifecycle receipt has already been reconciled." })
+            return call("no_action", {
+              observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)),
+              reason: "The exact lifecycle receipt has already been reconciled.",
+            })
           }
           if (system.includes("# Base Developer")) {
             const step = developerStep++
@@ -361,11 +435,15 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
           if (step === 1 || step === 5) return call("panel_query_task", { taskIDs: [taskID] })
           if (step === 2 || step === 6)
             return call("panel_query_task_artifacts", {
-              queries: [{
-                taskID,
-                page_number: 1,
-                artifact_types: [step === 2 ? "recovery-contract/development-report" : "recovery-contract/test-report"],
-              }],
+              queries: [
+                {
+                  taskID,
+                  page_number: 1,
+                  artifact_types: [
+                    step === 2 ? "recovery-contract/development-report" : "recovery-contract/test-report",
+                  ],
+                },
+              ],
             })
           if (step === 3 || step === 7) {
             const batch = outputs("panel_query_task_artifacts").at(-1)
@@ -373,19 +451,23 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             const catalog = batch.results[0].value
             const entries = catalog.entries
             const entry = entries.find(
-              (e: any) => e.artifact_type === (step === 3 ? "recovery-contract/development-report" : "recovery-contract/test-report"),
+              (e: any) =>
+                e.artifact_type ===
+                (step === 3 ? "recovery-contract/development-report" : "recovery-contract/test-report"),
             )
             selectedRef = entry?.artifact_locator_ref
             if (!selectedRef) throw new Error(`Missing real catalog reference: ${JSON.stringify(catalog)}`)
             return call("panel_read_task_artifact", {
-              reads: [{
-                taskID,
-                artifact_transport_version: 2,
-                artifact_locator_ref: selectedRef,
-                byte_offset: 0,
-                max_bytes: 65536,
-                delivery: "inline",
-              }],
+              reads: [
+                {
+                  taskID,
+                  artifact_transport_version: 2,
+                  artifact_locator_ref: selectedRef,
+                  byte_offset: 0,
+                  max_bytes: 65536,
+                  delivery: "inline",
+                },
+              ],
             })
           }
           const readBatch = outputs("panel_read_task_artifact").at(-1)
@@ -467,16 +549,41 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
               ownerLifecycle: admission.ownerLifecycle,
             }),
         })
-        const deadline = Date.now() + 75_000
-        while (Date.now() < deadline) {
+        const inactivityMs = 75_000
+        let activity = { signature: "", deadline: Date.now() + inactivityMs }
+        let unchanged = 0
+        for (;;) {
           const messages = await Session.messages({ sessionID: mission.id })
+          const workerSessionIDs = taskID ? sessionIDsForTask(taskID) : []
+          const workerMessages = (
+            await Promise.all(workerSessionIDs.map((sessionID) => Session.messages({ sessionID })))
+          ).flat()
+          const artifacts = taskID
+            ? Database.use((db) =>
+                db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.task_id, taskID)).all(),
+              )
+            : []
+          const observed = benchmarkActivitySignature({
+            board: { task: taskID ? { id: taskID, ...taskLifecycleProjection(taskID) } : undefined, artifacts },
+            transcript: [...messages, ...workerMessages],
+            trace: [],
+            benchmarkEventCount: 0,
+            sessionActivity: benchmarkSessionActivity({
+              sessionIDs: [mission.id, ...workerSessionIDs],
+              readActivity: SessionStatus.getActivity,
+            }),
+          })
+          const advanced = advanceBenchmarkActivityWindow({
+            now: Date.now(),
+            currentDeadline: activity.deadline,
+            inactivityMs,
+            previousSignature: activity.signature,
+            observedSignature: observed,
+          })
+          activity = advanced
+          unchanged = advanced.changed ? 0 : unchanged + 1
           const errors = messages.flatMap((m) => m.parts).filter((p) => p.type === "tool" && p.state.status === "error")
           if (errors.length) {
-            const workerMessages = taskID
-              ? (
-                  await Promise.all(sessionIDsForTask(taskID).map((sessionID) => Session.messages({ sessionID })))
-                ).flat()
-              : []
             throw new Error(
               JSON.stringify({
                 missionErrors: errors.map((p) => (p as any).state),
@@ -501,7 +608,27 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             )
           )
             break
-          await Bun.sleep(25)
+          if (Date.now() >= activity.deadline)
+            throw new Error(
+              JSON.stringify({
+                error: "RecoveryInactivityTimeout",
+                inactivityMs,
+                lastActivityAt: activity.deadline - inactivityMs,
+                observedAt: Date.now(),
+                task: taskID ? taskLifecycleProjection(taskID) : null,
+                sessionActivity: benchmarkSessionActivity({
+                  sessionIDs: [mission.id, ...workerSessionIDs],
+                  readActivity: SessionStatus.getActivity,
+                }),
+              }),
+            )
+          await Bun.sleep(
+            benchmarkObservationPollDelay({
+              consecutiveUnchanged: unchanged,
+              now: Date.now(),
+              deadline: activity.deadline,
+            }),
+          )
         }
         await waitForIngressDeliveryHooksForTest()
         const occurrence = SessionStatus.executionOccurrence(mission.id)!
@@ -529,13 +656,27 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
           readProjection(`/task/${taskID}/transcript`),
         ])
         const missionRecord = missionRecords.find((item: any) => item.missionID === mission.missionID)
-        const creationMessage = missionTranscript.find((message: any) => message.parts.some((part: any) =>
-          part.type === "tool" && part.tool === "panel_create_task" && part.state.status === "completed"))
-        const postCreationReply = missionTranscript.find((message: any) => message.info.role === "assistant" &&
-          message.info.parentID === creationMessage?.info.parentID && message.info.finish === "stop" &&
-          message.parts.some((part: any) => part.type === "text" && part.text.startsWith("The Task is still running;")))
-        expect(postCreationReply?.info).toMatchObject({ role: "assistant", parentID: creationMessage.info.parentID,
-          time: { completed: expect.any(Number) }, finish: "stop" })
+        const creationMessage = missionTranscript.find((message: any) =>
+          message.parts.some(
+            (part: any) =>
+              part.type === "tool" && part.tool === "panel_create_task" && part.state.status === "completed",
+          ),
+        )
+        const postCreationReply = missionTranscript.find(
+          (message: any) =>
+            message.info.role === "assistant" &&
+            message.info.parentID === creationMessage?.info.parentID &&
+            message.info.finish === "stop" &&
+            message.parts.some(
+              (part: any) => part.type === "text" && part.text.startsWith("The Task is still running;"),
+            ),
+        )
+        expect(postCreationReply?.info).toMatchObject({
+          role: "assistant",
+          parentID: creationMessage.info.parentID,
+          time: { completed: expect.any(Number) },
+          finish: "stop",
+        })
         expect(
           auditMissionOutcome({
             missionRecord,
@@ -588,19 +729,54 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             .map((row: any) => row.state_status),
         ).toEqual(["completed", "completed", "completed"])
       } catch (error) {
-        const diagnostics = taskID ? await Promise.all(sessionIDsForTask(taskID).map(async (sessionID) => ({
-          sessionID,
-          messages: (await Session.messages({ sessionID })).map((message) => ({
-            id: message.info.id, role: message.info.role, agent: message.info.agent,
-            ...(message.info.role === "assistant" ? { finish: message.info.finish, error: message.info.error } : {}),
-            tools: message.parts.flatMap((part) => part.type === "tool" ? [{
-              tool: part.tool, status: part.state.status,
-              ...(part.state.status === "error" ? { failure: part.state.failure } : {}),
-            }] : []),
-          })),
-        }))) : []
-        console.error("RECOVERY_DIAGNOSTICS", JSON.stringify({ missionStep, rootStep, developerStep, testerStep, calls,
-          taskError: taskID ? requireTask(taskID).error : undefined, diagnostics }))
+        const diagnostics = taskID
+          ? await Promise.all(
+              sessionIDsForTask(taskID).map(async (sessionID) => ({
+                sessionID,
+                messages: (await Session.messages({ sessionID })).map((message) => ({
+                  id: message.info.id,
+                  role: message.info.role,
+                  agent: message.info.agent,
+                  ...(message.info.role === "assistant"
+                    ? { finish: message.info.finish, error: message.info.error }
+                    : {}),
+                  tools: message.parts.flatMap((part) =>
+                    part.type === "tool"
+                      ? [
+                          {
+                            tool: part.tool,
+                            status: part.state.status,
+                            ...(part.state.status === "error" ? { failure: part.state.failure } : {}),
+                          },
+                        ]
+                      : [],
+                  ),
+                })),
+              })),
+            )
+          : []
+        console.error(
+          "RECOVERY_DIAGNOSTICS",
+          JSON.stringify({
+            missionStep,
+            rootStep,
+            developerStep,
+            testerStep,
+            calls,
+            rootDecisions,
+            taskError: taskID ? requireTask(taskID).error : undefined,
+            diagnostics,
+          }),
+        )
+        if (taskID)
+          console.error(
+            "RECOVERY_ARTIFACT_FACTS",
+            JSON.stringify(
+              Database.use((db) =>
+                db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.task_id, taskID)).all(),
+              ),
+            ),
+          )
         console.error("RECOVERY_FAILURE", error)
         throw error
       } finally {
@@ -622,4 +798,4 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
       }
     },
   })
-}, 120_000)
+}, 180_000)

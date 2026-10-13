@@ -1,0 +1,13 @@
+[1/1] START test/task-control-terminal-owner.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a local post-turn pipeline owns domain settlement until its exact terminal-success delivery [3352.57ms]
+(pass) a live peer terminal owner schedules recheck and then delivers its exact success [2293.55ms]
+(pass) a live peer terminal owner schedules recheck and then recovers partial after physical exit [2129.09ms]
+
+ 3 pass
+ 0 fail
+ 18 expect() calls
+Ran 3 tests across 1 file. [11.47s]
+[1/1] DONE test/task-control-terminal-owner.test.ts exit=0 duration=12.15s

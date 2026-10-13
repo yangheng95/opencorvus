@@ -1,4 +1,5 @@
 import assert from "node:assert/strict"
+import { isDeepStrictEqual } from "node:util"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { execFileSync } from "node:child_process"
@@ -20,22 +21,27 @@ export function readGoalCrashSnapshot(databasePath: string, owner: Owner) {
   db.exec("BEGIN")
   try {
     const session = db.query<Row, [string]>("SELECT * FROM session WHERE id=?").get(owner.sessionID)!
+    const missionID = owner.kind === "mission" ? JSON.parse(session.metadata).mission.id : undefined
+    const tasks =
+      owner.kind === "mission"
+        ? db
+            .query<
+              Row,
+              [string, string, string]
+            >("SELECT t.*,c.creator_tool_part_id,c.contract creation_contract FROM engine_task t JOIN engine_task_creation_contract c ON c.task_id=t.id WHERE t.project_id=? AND t.source='mission' AND json_extract(t.metadata,'$.actor')='mission' AND json_extract(t.metadata,'$.mission.id')=? AND json_extract(t.metadata,'$.mission.session_id')=? ORDER BY t.time_created,t.id")
+            .all(session.project_id, missionID, owner.sessionID)
+        : db.query<Row, [string]>("SELECT * FROM engine_task WHERE id=?").all(owner.id)
     const roots = [owner.sessionID]
-    if (owner.kind === "mission")
-      roots.push(
-        ...db
-          .query<Row, [string]>(
-            "SELECT session_id FROM engine_task WHERE source='mission' AND json_extract(metadata,'$.mission.session_id')=?",
-          )
-          .all(owner.sessionID)
-          .map((row) => row.session_id),
-      )
-    const ids = db
-      .query<Row, string[]>(
-        `WITH RECURSIVE tree(id) AS (SELECT id FROM session WHERE id IN (${roots.map(() => "?").join(",")}) UNION SELECT s.id FROM session s JOIN tree p ON s.parent_id=p.id) SELECT id FROM tree`,
-      )
-      .all(...roots)
-      .map((row) => row.id as string)
+    if (owner.kind === "mission") roots.push(...tasks.map((row) => row.session_id))
+    const scope = (rootIDs: string[]) =>
+      db
+        .query<Row, string[]>(
+          `WITH RECURSIVE tree(id) AS (SELECT id FROM session WHERE project_id=? AND id IN (${rootIDs.map(() => "?").join(",")}) UNION SELECT s.id FROM session s JOIN tree p ON s.parent_id=p.id WHERE s.project_id=?) SELECT id FROM tree`,
+        )
+        .all(session.project_id, ...rootIDs, session.project_id)
+        .map((row) => row.id as string)
+    const taskScopes = tasks.map((task) => ({ taskID: task.id, sessionIDs: scope([task.session_id]) }))
+    const ids = scope(roots)
     const placeholders = ids.map(() => "?").join(",")
     const decoded = (rows: Row[]) =>
       rows.map((row) => ({
@@ -95,24 +101,36 @@ export function readGoalCrashSnapshot(databasePath: string, owner: Owner) {
           >("SELECT u.*, e.id association_id FROM provider_usage_event u JOIN protocol_event e ON e.type='continuous_goal.usage' AND json_extract(e.payload,'$.usage_id')=u.id WHERE json_extract(e.payload,'$.goal_id')=? ORDER BY u.occurred_at,u.id")
           .all(created.id)
       : []
-    const ingresses =
-      owner.kind === "task"
-        ? db
-            .query<Row, [string]>("SELECT * FROM engine_task_root_ingress WHERE task_id=? ORDER BY sequence")
-            .all(owner.id)
-        : []
+    const ingresses = tasks.flatMap((task) =>
+      db.query<Row, [string]>("SELECT * FROM engine_task_root_ingress WHERE task_id=? ORDER BY sequence").all(task.id),
+    )
+    const taskEvents = decoded(
+      tasks.flatMap((task) =>
+        db
+          .query<
+            Row,
+            [string]
+          >("SELECT * FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=? ORDER BY seq")
+          .all(task.id),
+      ),
+    )
+    const providerUsage = db
+      .query<
+        Row,
+        string[]
+      >(`SELECT * FROM provider_usage_event WHERE session_id IN (${placeholders}) ORDER BY occurred_at,id`)
+      .all(...ids)
     const promptOwners = db
       .query<Row, string[]>(`SELECT * FROM session_prompt_owner WHERE session_id IN (${placeholders})`)
       .all(...ids)
-    const activations =
-      owner.kind === "task"
-        ? db
-            .query<
-              Row,
-              [string]
-            >("SELECT a.* FROM engine_control_activation_lease a JOIN engine_task_root_ingress i ON i.id=a.target_id WHERE a.target='task_root_ingress' AND i.task_id=? ORDER BY a.time_activated,a.id")
-            .all(owner.id)
-        : []
+    const activations = tasks.flatMap((task) =>
+      db
+        .query<
+          Row,
+          [string]
+        >("SELECT a.* FROM engine_control_activation_lease a JOIN engine_task_root_ingress i ON i.id=a.target_id WHERE a.target='task_root_ingress' AND i.task_id=? ORDER BY a.time_activated,a.id")
+        .all(task.id),
+    )
     return {
       session,
       ids,
@@ -128,6 +146,10 @@ export function readGoalCrashSnapshot(databasePath: string, owner: Owner) {
       ingresses,
       promptOwners,
       activations,
+      tasks,
+      taskScopes,
+      taskEvents,
+      providerUsage,
     }
   } finally {
     db.exec("ROLLBACK")
@@ -135,7 +157,12 @@ export function readGoalCrashSnapshot(databasePath: string, owner: Owner) {
   }
 }
 
-export function crashCandidate(facts: Snapshot, audit: Row) {
+export function crashCandidate(
+  facts: Snapshot,
+  audit: Row,
+  recoveredInput?: { inputID: string; reason?: Row },
+  childScenario = false,
+) {
   if (facts.continuations.length !== 1 || facts.updates.at(-1)?.payload.input.status === "complete") return
   const continuation = facts.continuations[0]!
   const inputID = Identifier.deterministic("message", continuation.id)
@@ -156,16 +183,43 @@ export function crashCandidate(facts: Snapshot, audit: Row) {
       assistant.data.time.completed
     )
       continue
-    const ingress = facts.ingresses.find((row) => row.source_id === inputID)
     const acceptedInputs = assistant.data.acceptedInputMessageIDs ?? [assistant.data.parentID]
-    const acceptsCut = ingress
-      ? acceptedInputs.some(
-          (id: string) =>
-            facts.messages.find((message) => message.id === id)?.data.extra?.orchestrator_control_ingress
-              ?.ingress_id === ingress.id,
+    const childTask = childScenario
+      ? facts.tasks.find((task) =>
+          facts.taskScopes.some((scope) => scope.taskID === task.id && scope.sessionIDs.includes(assistant.session_id)),
         )
-      : acceptedInputs.includes(inputID)
-    if (!acceptsCut) continue
+      : undefined
+    const creationTool =
+      childTask &&
+      facts.tools.find((tool) => tool.id === childTask.creator_tool_part_id && tool.data.tool === "panel_create_task")
+    const creator = creationTool && facts.messages.find((message) => message.id === creationTool.message_id)
+    if (
+      childScenario &&
+      (!childTask || !creator || !(creator.data.acceptedInputMessageIDs ?? [creator.data.parentID]).includes(inputID))
+    )
+      continue
+    const ingress = childTask
+      ? facts.ingresses.find(
+          (row) =>
+            row.task_id === childTask.id &&
+            acceptedInputs.some(
+              (id: string) =>
+                facts.messages.find((message) => message.id === id)?.data.extra?.orchestrator_control_ingress
+                  ?.ingress_id === row.id,
+            ),
+        )
+      : facts.ingresses.find((row) => row.source_id === inputID)
+    if (childScenario && !ingress) continue
+    const physicalInput = facts.messages.find(
+      (message) =>
+        acceptedInputs.includes(message.id) &&
+        (ingress
+          ? message.data.extra?.orchestrator_control_ingress?.ingress_id === ingress.id
+          : message.id === inputID ||
+            (message.id === recoveredInput?.inputID &&
+              isDeepStrictEqual(message.data.extra?.wake_reason, recoveredInput.reason))),
+    )
+    if (!physicalInput) continue
     const progress = facts.parts
       .filter((part) => part.message_id === assistant.id && part.time_updated >= reader.firstByteReadAt)
       .map((part) => ({
@@ -182,6 +236,7 @@ export function crashCandidate(facts: Snapshot, audit: Row) {
     return {
       continuationID: continuation.id,
       inputID,
+      physicalInput,
       assistantID: assistant.id,
       requestIndex: index,
       reader,
@@ -189,10 +244,12 @@ export function crashCandidate(facts: Snapshot, audit: Row) {
       toolIDs,
       promptOwner,
       ingress,
-      opened: facts.events
+      ...(childTask ? { childTask, creationTool, creatorAssistantID: creator!.id } : {}),
+      ownerOpened: facts.events.filter((row) => row.type === "mission.execution.opened").at(-1),
+      opened: (childTask ? facts.taskEvents.filter((row) => row.aggregate_id === childTask.id) : facts.events)
         .filter(
           (row) =>
-            row.type === (facts.ingresses.length ? "task.execution.opened" : "mission.execution.opened") ||
+            row.type === (ingress ? "task.execution.opened" : "mission.execution.opened") ||
             row.type === "task.execution.reopened",
         )
         .at(-1),
@@ -210,7 +267,7 @@ export function recoveryCandidate(
   if (interrupted?.data.error?.name !== "ProcessExecutionInterruptedError" || !interrupted.data.time.completed) return
   for (const [requestIndex, request] of (audit.requests ?? []).entries()) {
     const context = request.response_reader.requestContext
-    if (!context || !facts.ids.includes(context.sessionID)) continue
+    if (!context || !facts.ids.includes(context.sessionID) || context.sessionID !== cut.promptOwner.session_id) continue
     const owner = facts.promptOwners.find((row) => row.session_id === context.sessionID)
     if (!owner || owner.owner_pid !== pid || owner.generation === cut.promptOwner.generation) continue
     const assistant = facts.messages.find((message) => message.id === context.activity?.assistantMessageID)
@@ -225,18 +282,25 @@ export function recoveryCandidate(
     )
     if (!input) continue
     const reason = input.data.extra?.wake_reason
+    const runtimeReplay =
+      reason?.source === "mission.process_recovery" &&
+      input.id === cut.physicalInput?.id &&
+      isDeepStrictEqual(reason, cut.physicalInput.data.extra?.wake_reason)
     if (
       reason?.source === "mission.process_recovery" &&
       (reason.openedEventID !== cut.opened?.id ||
-        reason.deadOwnerGeneration !== cut.promptOwner.generation ||
-        !reason.interruptedAssistantMessageIDs.includes(cut.assistantID))
+        (!runtimeReplay &&
+          (reason.deadOwnerGeneration !== cut.promptOwner.generation ||
+            !reason.interruptedAssistantMessageIDs.includes(cut.assistantID))))
     )
       continue
     return {
       kind: cut.ingress
         ? "task_ingress"
         : reason?.source === "mission.process_recovery"
-          ? "mission_process_recovery"
+          ? runtimeReplay
+            ? "mission_process_recovery_replay"
+            : "mission_process_recovery"
           : "accepted_goal_input",
       promptOwner: owner,
       inputID: input.id,
@@ -258,6 +322,7 @@ export function goalCrashActivity(facts: Snapshot, audit: Row) {
     tools: facts.tools.map((row) => ({ id: row.id, data: row.data })),
     outcomes: facts.outcomes.map((row) => ({ id: row.id, data: row.data })),
     protocol: facts.events.map((row) => ({ id: row.id, type: row.type, payload: row.payload })),
+    taskProtocol: (facts.taskEvents ?? []).map((row) => ({ id: row.id, type: row.type, payload: row.payload })),
     usageIDs: facts.usage.map((row) => row.id),
     requests: (audit.requests ?? []).map((request: Row) => ({
       model: request.model,
@@ -320,35 +385,50 @@ async function main() {
     execFileSync("git", args, { cwd: project, stdio: "ignore" })
   const authTarget = path.join(runtime.runtimeRoot, "data", "auth.json")
   const modelsTarget = path.join(runtime.runtimeRoot, "data", "models.json")
-  await fs.mkdir(path.dirname(authTarget), { recursive: true })
-  await fs.copyFile(path.resolve(authSource!), authTarget)
-  await fs.copyFile(path.join(path.dirname(path.resolve(authSource!)), "models.json"), modelsTarget)
   const redactor = new CredentialRedactor()
-  redactor.collect(JSON.parse(await fs.readFile(authTarget, "utf8")))
   const save = async (name: string, data: unknown) =>
     fs.writeFile(path.join(evidenceRoot, name), redactor.redact(JSON.stringify(data, null, 2)))
   const inactivityMs = 180_000
-  const maxRequests = 32
-  const tokenBudget = 800_000
+  const crashCount = Number(process.env.GOAL_CRASH_COUNT ?? "1")
+  assert([1, 2].includes(crashCount), "GOAL_CRASH_COUNT is one or two physical interruptions")
+  const scenario = process.env.GOAL_CRASH_SCENARIO ?? "owner"
+  assert(["owner", "mission_child"].includes(scenario), "Explicit supported crash scenario")
+  const childScenario = scenario === "mission_child"
+  if (childScenario) assert(kind === "mission" && crashCount === 1, "Child scenario has one Mission-owned interruption")
+  const maxRequests = Number(process.env.GOAL_CRASH_REQUEST_LIMIT ?? (childScenario ? 64 : crashCount === 2 ? 48 : 32))
+  assert(Number.isSafeInteger(maxRequests) && maxRequests > 0, "A positive, explicitly frozen request limit")
+  const tokenBudget = childScenario ? 1_600_000 : crashCount === 2 ? 1_200_000 : 800_000
   const turnBudget = 3
-  const request = [
-    `请执行有限持续目标验收。用户明确授权创建持续目标，tokenBudget=${tokenBudget}，turnBudget=${turnBudget}。目标是交付一份含六项具体核对标准的两阶段验收说明。`,
-    "首次输入这一轮：创建目标，简要说明阶段一需求核对、阶段二验收核对，然后结束当前输入，保持目标active。",
-    "第一个goal-controller自动轮次：实际输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；写完六项后核对实际消息，调用update_continuous_goal标记complete并引用证据，再完成当前模式的正常完成合同。",
-    "本验收可能在自动轮次中发生真实进程中断。若收到运行时恢复消息，请核对已有持久化输入和结果，从同一六项标准的安全边界继续，避免重复已完成工作；不创建新目标，不要求用户再说继续。",
-    "不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待。本有限说明由当前负责人直接交付，无需子agent或子Task。",
-    kind === "task"
-      ? "首轮用现有no_action结算当前输入；最后目标complete后按当前Task完成合同正常完成Task。"
-      : "这是无子Task的有限Mission协调；最后使用现有panel_complete_mission完成，task_acceptances=[]。",
-  ].join("\n")
+  const request = (
+    childScenario
+      ? [
+          `请执行真实Mission子Task持续目标验收。用户明确授权创建Mission持续目标，tokenBudget=${tokenBudget}，turnBudget=${turnBudget}。目标为交付两阶段各三项验收标准，每项包括可观察证据和通过条件，并实际验证一个独立子Task的交付。`,
+          "首次输入这一轮：仅创建持续目标并简要说明阶段一需求核对、阶段二验收核对，结束当前输入，保持目标active，暂不创建子Task。",
+          `第一个goal-controller自动轮次：用户明确要求创建且仅创建一个具有独立生命周期的子Task，使用已持有base专家团，模型精确为${sourceModel}。子Task自行实际交付上述两阶段六项标准，以当前正式可读取交付Artifact及Task完成合同结算；不创建自己的持续目标或额外Task。`,
+          "Mission等待子Task真实生产完成通知，读取该Task本次completed occurrence真实交付Artifact的全部字节，逐项核对六项标准并汇总。只有交付核对完成后才能标记原持续目标complete，再使用唯一子Task的真实evidence_read_refs完成Mission正常验收合同。",
+          "本验收可能在子Task模型执行中发生真实进程中断；从持久化事实继续同一目标与同一子Task，不新建替代任务，不要求用户再说继续。禁止访问网站、部署、读取凭据、改变权限或创建计划定时等待。",
+        ]
+      : [
+          `请执行有限持续目标验收。用户明确授权创建持续目标，tokenBudget=${tokenBudget}，turnBudget=${turnBudget}。目标是交付一份含六项具体核对标准的两阶段验收说明。`,
+          "首次输入这一轮：创建目标，简要说明阶段一需求核对、阶段二验收核对，然后结束当前输入，保持目标active。",
+          "第一个goal-controller自动轮次：实际输出两阶段各三项具体核对标准，每项包括可观察证据和通过条件；写完六项后核对实际消息，调用update_continuous_goal标记complete并引用证据，再完成当前模式的正常完成合同。",
+          "本验收可能在自动轮次及恢复过程中多次发生真实进程中断。请核对已有持久化输入和结果，从同一六项标准的安全边界继续，避免重复已完成工作；不创建新目标，不要求用户再说继续。",
+          "不访问网站、不部署、不读凭据、不改变权限、不创建计划定时等待。本有限说明由当前负责人直接交付，无需子agent或子Task。",
+          kind === "task"
+            ? "首轮用现有no_action结算当前输入；最后目标complete后按当前Task完成合同正常完成Task。"
+            : "这是无子Task的有限Mission协调；最后使用现有panel_complete_mission完成，task_acceptances=[]。",
+        ]
+  ).join("\n")
   const databasePath = path.join(runtime.runtimeRoot, "data", "opencorvus.db")
   const manifest = {
     kind,
+    scenario,
     sourceModel,
     project,
     runtimeRoot: runtime.runtimeRoot,
     databasePath,
     maxRequests,
+    crashCount,
     tokenBudget,
     turnBudget,
     inactivityMs,
@@ -365,7 +445,7 @@ async function main() {
   let before: Snapshot | undefined
   let cut: ReturnType<typeof crashCandidate>
   let recoveryEvidence: ReturnType<typeof recoveryCandidate>
-  const result: Row = { ...manifest, status: "running" }
+  const result: Row = { ...manifest, status: "running", crashes: [], recoveries: [] }
   function start(phase: string, used: number) {
     let startup = true
     const receipt = path.join(evidenceRoot, `${phase}-startup.json`)
@@ -477,6 +557,10 @@ async function main() {
     return response.json() as Promise<Row>
   }
   try {
+    await fs.mkdir(path.dirname(authTarget), { recursive: true })
+    redactor.collect(JSON.parse(await fs.readFile(path.resolve(authSource!), "utf8")))
+    await fs.copyFile(path.resolve(authSource!), authTarget)
+    await fs.copyFile(path.join(path.dirname(path.resolve(authSource!)), "models.json"), modelsTarget)
     const first = start("before", 0)
     children.push(first)
     await ready(first)
@@ -553,63 +637,102 @@ async function main() {
     }
     result.owner = owner
     await save("owner.json", owner)
-    cut = await waitFor("partial automatic goal response", first, async () => {
-      const facts = readGoalCrashSnapshot(databasePath, owner!)
-      const audit = await auditAt(first.auditRoot)
-      assert.equal(audit.exhausted, false, "Crash phase within total request ceiling")
-      if (facts.updates.at(-1)?.payload.input.status === "complete")
-        throw new Error("Goal completed before an observable automatic-turn crash cut")
-      const candidate = crashCandidate(facts, audit)
-      if (candidate) before = facts
-      return { activity: goalCrashActivity(facts, audit), value: candidate }
-    })
-    await save("crash-cut.json", { pid: first.child.pid, at: Date.now(), ...cut })
-    await save("before-facts.json", redactedSnapshot(before!))
-    first.child.kill("SIGKILL")
-    await first.child.exited
-    const crashed = readGoalCrashSnapshot(databasePath, owner!)
-    await save("crashed-facts.json", redactedSnapshot(crashed))
-    if (
-      crashed.messages.find((message) => message.id === cut!.assistantID)?.data.time.completed !== undefined ||
-      crashed.updates.at(-1)?.payload.input.status === "complete"
-    )
-      throw new Error("CRASH_CUT_ALREADY_SETTLED: the physical interruption missed the active assistant")
-    assert.equal(
-      crashed.promptOwners.find((row) => row.session_id === cut!.promptOwner?.session_id)?.generation,
-      cut!.promptOwner?.generation,
-      "Dead Prompt owner generation retained",
-    )
-    const firstAudit = await auditAt(first.auditRoot)
-    await save("before-provider.json", firstAudit)
-    const used = firstAudit.requests.length
-    result.crash = {
-      pid: first.child.pid,
-      exitCode: first.child.exitCode,
-      signalCode: first.child.signalCode,
-      requestCount: used,
-      cut,
+    let current = first
+    let previousCut: ReturnType<typeof crashCandidate>
+    let crashed: Snapshot | undefined
+    let used = 0
+    for (let generation = 1; generation <= crashCount; generation++) {
+      let cutFacts: Snapshot | undefined
+      recoveryEvidence = undefined
+      const currentCut = await waitFor(
+        `generation ${generation} partial automatic goal response`,
+        current,
+        async () => {
+          const facts = readGoalCrashSnapshot(databasePath, owner!)
+          const audit = await auditAt(current.auditRoot)
+          assert.equal(audit.exhausted, false, "Crash phase within total request ceiling")
+          if (facts.updates.at(-1)?.payload.input.status === "complete")
+            throw new Error("Goal completed before an observable automatic-turn crash cut")
+          if (previousCut && !recoveryEvidence) {
+            recoveryEvidence = recoveryCandidate(facts, audit, previousCut, current.child.pid)
+            if (recoveryEvidence) {
+              result.recoveries.push({ generation, startedAt: current.startedAt, ...recoveryEvidence })
+              await save(`generation-${generation}-recovery-admission.json`, result.recoveries.at(-1))
+            }
+          }
+          const candidate =
+            previousCut && !recoveryEvidence ? undefined : crashCandidate(facts, audit, recoveryEvidence, childScenario)
+          if (candidate) cutFacts = facts
+          return { activity: goalCrashActivity(facts, audit), value: candidate }
+        },
+      )
+      if (generation === 1) {
+        cut = currentCut
+        before = cutFacts
+      }
+      const killAt = Date.now()
+      await save(`generation-${generation}-crash-cut.json`, { pid: current.child.pid, at: killAt, ...currentCut })
+      await save(`generation-${generation}-before-facts.json`, redactedSnapshot(cutFacts!))
+      current.child.kill("SIGKILL")
+      await current.child.exited
+      crashed = readGoalCrashSnapshot(databasePath, owner!)
+      await save(`generation-${generation}-crashed-facts.json`, redactedSnapshot(crashed))
+      if (
+        crashed.messages.find((message) => message.id === currentCut.assistantID)?.data.time.completed !== undefined ||
+        crashed.updates.at(-1)?.payload.input.status === "complete"
+      )
+        throw new Error("CRASH_CUT_ALREADY_SETTLED: the physical interruption missed the active assistant")
+      assert.equal(
+        crashed.promptOwners.find((row) => row.session_id === currentCut.promptOwner.session_id)?.generation,
+        currentCut.promptOwner.generation,
+        "Dead Prompt owner generation retained",
+      )
+      const audit = await auditAt(current.auditRoot)
+      await save(`generation-${generation}-provider.json`, audit)
+      used += audit.requests.length
+      result.crashes.push({
+        generation,
+        pid: current.child.pid,
+        startedAt: current.startedAt,
+        killAt,
+        exitedAt: Date.now(),
+        exitCode: current.child.exitCode,
+        signalCode: current.child.signalCode,
+        requestCount: audit.requests.length,
+        cumulativeRequests: used,
+        cut: currentCut,
+        usageIDs: crashed.usage.map((row) => row.id),
+      })
+      await save("crashes.json", result.crashes)
+      assert(used < maxRequests, "Remaining recovery request capacity")
+      console.log(
+        JSON.stringify({
+          stage: "crashed",
+          kind,
+          generation,
+          pid: current.child.pid,
+          requests: used,
+          continuationID: currentCut.continuationID,
+          partial: currentCut.progress,
+        }),
+      )
+      previousCut = currentCut
+      current = start(`generation-${generation + 1}`, used)
+      children.push(current)
+      await ready(current)
     }
-    assert(used < maxRequests, "Remaining recovery request capacity")
-    console.log(
-      JSON.stringify({
-        stage: "crashed",
-        kind,
-        pid: first.child.pid,
-        requests: used,
-        continuationID: cut!.continuationID,
-        partial: cut!.progress,
-      }),
-    )
-    const second = start("after", used)
-    children.push(second)
-    await ready(second)
+    const second = current
+    recoveryEvidence = undefined
     const final = await waitFor("automatic formal startup recovery", second, async () => {
       const facts = readGoalCrashSnapshot(databasePath, owner!)
       const audit = await auditAt(second.auditRoot)
       assert.equal(audit.exhausted, false, "Recovery within total request ceiling")
       if (!recoveryEvidence) {
-        recoveryEvidence = recoveryCandidate(facts, audit, cut!, second.child.pid)
-        if (recoveryEvidence) await save("recovery-admission.json", recoveryEvidence)
+        recoveryEvidence = recoveryCandidate(facts, audit, previousCut!, second.child.pid)
+        if (recoveryEvidence) {
+          result.recoveries.push({ generation: crashCount + 1, startedAt: second.startedAt, ...recoveryEvidence })
+          await save(`generation-${crashCount + 1}-recovery-admission.json`, result.recoveries.at(-1))
+        }
       }
       const status = facts.updates.at(-1)?.payload.input.status
       if (["blocked", "paused"].includes(status)) throw new Error("Goal stopped after recovery: " + status)
@@ -646,12 +769,13 @@ async function main() {
     assert.equal(final.created!.id, before!.created!.id, "Goal identity retained")
     assert.deepEqual(
       final.continuations.map((row) => row.id),
-      [cut!.continuationID],
-      "Exactly the same accepted automatic continuation",
+      childScenario ? [...new Set(final.continuations.map((row) => row.id))] : [cut!.continuationID],
+      "Unique accepted automatic continuations",
     )
+    assert.equal(final.continuations[0]!.id, cut!.continuationID, "Original cut continuation retained")
     assert.deepEqual(
       final.messages.filter((row) => row.data.author === "goal-controller").map((row) => row.id),
-      [cut!.inputID],
+      final.continuations.map((row) => Identifier.deterministic("message", row.id)),
       "Exactly the same visible controller input",
     )
     if (kind === "task")
@@ -663,21 +787,33 @@ async function main() {
     else {
       assert.equal(
         final.events.filter((row) => row.type === "mission.execution.opened").at(-1)!.id,
-        cut!.opened!.id,
+        cut!.ownerOpened!.id,
         "Same Mission opened occurrence",
       )
     }
     assert(recoveryEvidence, "Exact new-process recovery input and Prompt generation observed")
     result.recoveryEvidence = recoveryEvidence
+    assert.equal(result.crashes.length, crashCount, "Every requested physical interruption was observed")
+    assert.equal(result.recoveries.length, crashCount, "Every formal restart acquired a new physical owner")
+    for (const crash of result.crashes) {
+      const interrupted = final.messages.find((message) => message.id === crash.cut.assistantID)!
+      assert.equal(
+        interrupted.data.error?.name,
+        "ProcessExecutionInterruptedError",
+        "Each old assistant settled by production recovery",
+      )
+      assert(interrupted.data.time.completed >= crash.killAt, "Interrupted settlement follows actual kill")
+    }
     const goal = await json(second, `/continuous-goal/${kind}/${owner!.id}`)
     assert.equal(goal.status, "complete")
-    assert.equal(goal.turnsAccepted, 1)
+    assert.equal(goal.turnsAccepted, final.continuations.length)
+    assert(goal.turnsAccepted <= turnBudget, "Accepted goal turns within explicit budget")
     assert.equal(
       goal.tokensUsed,
       final.usage.reduce((sum, row) => sum + row.total_tokens, 0),
       "Goal usage joins the original ledger",
     )
-    const priorUsage = new Set(crashed.usage.map((row) => row.id))
+    const priorUsage = new Set(crashed!.usage.map((row) => row.id))
     const recoveredUsage = final.usage.filter((row) => !priorUsage.has(row.id) && row.occurred_at >= second.startedAt)
     assert(recoveredUsage.length > 0, "New process settles new Provider usage")
     for (const row of recoveredUsage) {
@@ -738,7 +874,68 @@ async function main() {
       assert.equal(receipt.assistant_message_id, outcome.messageID)
       assert.equal(receipt.tool_call_id, outcome.toolCallID)
       assert.equal(receipt.tool_part_id, outcome.toolPartID)
-      assert.deepEqual(receipt.task_acceptances, [], "Finite coordination has its exact empty child acceptance set")
+      if (childScenario) {
+        assert.deepEqual(
+          final.tasks.map((task) => task.id),
+          [cut!.childTask!.id],
+          "Exact single production-created child",
+        )
+        assert.deepEqual(
+          receipt.task_acceptances.map((acceptance: Row) => acceptance.task_id),
+          [cut!.childTask!.id],
+        )
+        const acceptance = receipt.task_acceptances[0]
+        const terminal = final.taskEvents.find(
+          (event) => event.id === acceptance.terminal_lifecycle_reference.terminalEventID,
+        )
+        assert.equal(terminal?.type, "task.completed", "Acceptance binds actual child completion")
+        assert.equal(terminal?.aggregate_id, cut!.childTask!.id)
+        assert.equal(terminal?.payload.execution_epoch, cut!.ingress!.execution_epoch)
+        assert.deepEqual(
+          final.ingresses.find((row) => row.id === cut!.ingress!.id),
+          cut!.ingress,
+          "Child original ingress retained",
+        )
+        const task = await json(second, `/task/${cut!.childTask!.id}`)
+        assert.equal(task.status, "completed")
+        assert.equal(task.executionLifecycle.epoch, cut!.ingress!.execution_epoch)
+        const reads = transcripts
+          .filter((entry) => entry.sessionID === owner!.sessionID)
+          .flatMap((entry) => entry.messages)
+          .flatMap((message) => message.parts)
+          .filter(
+            (part: Row) =>
+              part.type === "tool" && part.tool === "panel_read_task_artifact" && part.state.status === "completed",
+          )
+          .flatMap((part: Row) => JSON.parse(part.state.output).results.map((row: Row) => row.value))
+        const refs = part.state.input.task_acceptances[0].evidence_read_refs as string[]
+        assert(refs.length > 0, "Mission supplied real artifact read references")
+        const acceptedReads = refs.map((ref) => reads.find((read: Row) => read.artifact_read_ref === ref))
+        assert(acceptedReads.every(Boolean), "Every accepted reference originates in a completed Mission read")
+        assert(acceptance.evidence_locators.length > 0, "Accepted Mission receipt contains actual artifact locators")
+        const scope = final.taskScopes.find((scope) => scope.taskID === cut!.childTask!.id)!
+        const ledger = final.providerUsage.filter((row) => scope.sessionIDs.includes(row.session_id))
+        assert(ledger.length > 0, "Real child Provider ledger exists")
+        const associated = final.usage.filter((row) => scope.sessionIDs.includes(row.session_id))
+        assert.deepEqual(
+          associated.map((row) => row.id),
+          ledger.map((row) => row.id),
+          "Entire settled child usage belongs to the active Mission goal",
+        )
+        assert(
+          associated.some((row) => recoveredUsage.some((recovered) => recovered.id === row.id)),
+          "New process settles child usage after the crash",
+        )
+        result.child = {
+          task,
+          acceptance,
+          acceptedReads,
+          usageIDs: associated.map((row) => row.id),
+          tokens: associated.reduce((sum, row) => sum + row.total_tokens, 0),
+          scope,
+        }
+      } else
+        assert.deepEqual(receipt.task_acceptances, [], "Finite coordination has its exact empty child acceptance set")
       result.completionReceipt = receipt
     }
     result.goal = goal

@@ -62,6 +62,10 @@ for (const kind of ["task", "mission"] as const) {
       updates: [],
       usage: [],
       activations: [],
+      tasks: [],
+      taskScopes: [],
+      taskEvents: [],
+      providerUsage: [],
       continuations: [{ id: continuationID }],
       ingresses: kind === "task" ? [{ id: ingressID, source_id: inputID, execution_epoch: 2 }] : [],
       promptOwners: [promptOwner],
@@ -131,7 +135,7 @@ test("Mission runtime recovery carries the exact opened event, dead generation a
     assistantID: "interrupted",
     inputID: "goal-input",
     opened: { id: "opened" },
-    promptOwner: { generation: "old-generation" },
+    promptOwner: { session_id: sessionID, generation: "old-generation" },
   } as Parameters<typeof recoveryCandidate>[2]
   const result = recoveryCandidate(
     facts,
@@ -147,6 +151,103 @@ test("Mission runtime recovery carries the exact opened event, dead generation a
     assistantID: "recovered",
     reason,
     interruptedAt: 300,
+  })
+})
+
+test("Mission repeated recovery replays the previously accepted runtime input and its immutable first-crash cause", () => {
+  const continuationID = Identifier.ascending("protocol_event")
+  const inputID = Identifier.deterministic("message", continuationID)
+  const reason = {
+    source: "mission.process_recovery",
+    openedEventID: "opened",
+    deadOwnerGeneration: "generation-one",
+    interruptedAssistantMessageIDs: ["assistant-one"],
+  }
+  const runtimeInput = { id: "runtime-input", data: { role: "user", extra: { wake_reason: reason } } }
+  const facts = {
+    ids: ["mission"],
+    continuations: [{ id: continuationID }],
+    updates: [],
+    ingresses: [],
+    events: [{ id: "opened", type: "mission.execution.opened" }],
+    messages: [
+      { id: inputID, time_created: 1, data: { role: "user", author: "goal-controller" } },
+      runtimeInput,
+      {
+        id: "assistant-two",
+        session_id: "mission",
+        time_created: 400,
+        data: { role: "assistant", time: {}, parentID: runtimeInput.id, acceptedInputMessageIDs: [runtimeInput.id] },
+      },
+    ],
+    parts: [
+      {
+        id: "partial",
+        message_id: "assistant-two",
+        time_updated: 500,
+        data: { type: "text", text: "Recovered output" },
+      },
+    ],
+    tools: [],
+    promptOwners: [{ session_id: "mission", owner_pid: 62, generation: "generation-two" }],
+  } as unknown as Parameters<typeof crashCandidate>[0]
+  const cut = crashCandidate(
+    facts,
+    {
+      pid: 62,
+      requests: [
+        {
+          response_reader: {
+            state: "reading",
+            byteCount: 32,
+            firstByteReadAt: 450,
+            requestContext: { sessionID: "mission", activity: { assistantMessageID: "assistant-two" } },
+          },
+        },
+      ],
+    },
+    { inputID: runtimeInput.id, reason },
+  )!
+  expect(cut).toMatchObject({
+    inputID,
+    physicalInput: runtimeInput,
+    assistantID: "assistant-two",
+    promptOwner: { generation: "generation-two" },
+  })
+  const interrupted = facts.messages.find((message) => message.id === cut.assistantID)!
+  interrupted.data.time.completed = 600
+  interrupted.data.error = { name: "ProcessExecutionInterruptedError" }
+  facts.promptOwners = [{ session_id: "mission", owner_pid: 63, generation: "generation-three" }]
+  facts.messages.push({
+    id: "assistant-three",
+    data: { role: "assistant", acceptedInputMessageIDs: [runtimeInput.id] },
+  })
+  expect(
+    recoveryCandidate(
+      facts,
+      {
+        requests: [
+          {
+            response_reader: {
+              requestContext: {
+                sessionID: "mission",
+                activity: { assistantMessageID: "assistant-three" },
+              },
+            },
+          },
+        ],
+      },
+      cut,
+      63,
+    ),
+  ).toMatchObject({
+    kind: "mission_process_recovery_replay",
+    inputID: runtimeInput.id,
+    assistantID: "assistant-three",
+    interruptedAssistantID: "assistant-two",
+    interruptedAt: 600,
+    promptOwner: { owner_pid: 63, generation: "generation-three" },
+    reason,
   })
 })
 
@@ -173,6 +274,7 @@ test("inactivity evidence consists of business frontiers and physical reader pro
     tools: [],
     outcomes: [],
     protocol: [{ id: "event", type: "continuous_goal.created", payload: { input: { objective: "one" } } }],
+    taskProtocol: [],
     usageIDs: ["usage"],
     requests: [
       {
@@ -185,5 +287,73 @@ test("inactivity evidence consists of business frontiers and physical reader pro
         terminal: undefined,
       },
     ],
+  })
+})
+
+test("Mission child cut binds its actual creation Tool and Task ingress to the original goal input", () => {
+  const continuationID = Identifier.ascending("protocol_event")
+  const inputID = Identifier.deterministic("message", continuationID)
+  const childTask = { id: "child", session_id: "child-root", creator_tool_part_id: "create-part" }
+  const physicalInput = {
+    id: "child-input",
+    data: { extra: { orchestrator_control_ingress: { ingress_id: "child-ingress" } } },
+  }
+  const ingress = { id: "child-ingress", task_id: "child", source_id: "creation-input", execution_epoch: 0 }
+  const facts = {
+    continuations: [{ id: continuationID }],
+    updates: [],
+    ids: ["mission", "child-root", "child-orchestrator"],
+    tasks: [childTask],
+    taskScopes: [{ taskID: "child", sessionIDs: ["child-root", "child-orchestrator"] }],
+    messages: [
+      { id: inputID, time_created: 1, data: { author: "goal-controller" } },
+      { id: "creator", data: { acceptedInputMessageIDs: [inputID] } },
+      physicalInput,
+      {
+        id: "child-assistant",
+        time_created: 3,
+        session_id: "child-orchestrator",
+        data: { role: "assistant", time: {}, acceptedInputMessageIDs: [physicalInput.id] },
+      },
+    ],
+    tools: [{ id: "create-part", message_id: "creator", data: { tool: "panel_create_task" } }],
+    parts: [
+      { id: "partial", message_id: "child-assistant", time_updated: 200, data: { type: "text", text: "Child output" } },
+    ],
+    promptOwners: [{ session_id: "child-orchestrator", owner_pid: 71, generation: "child-generation" }],
+    ingresses: [ingress],
+    events: [{ id: "mission-opened", type: "mission.execution.opened" }],
+    taskEvents: [
+      { id: "child-opened", aggregate_id: "child", type: "task.execution.opened", payload: { execution_epoch: 0 } },
+    ],
+  } as unknown as Parameters<typeof crashCandidate>[0]
+  expect(
+    crashCandidate(
+      facts,
+      {
+        pid: 71,
+        requests: [
+          {
+            response_reader: {
+              state: "reading",
+              byteCount: 64,
+              firstByteReadAt: 100,
+              requestContext: { sessionID: "child-orchestrator", activity: { assistantMessageID: "child-assistant" } },
+            },
+          },
+        ],
+      },
+      undefined,
+      true,
+    ),
+  ).toMatchObject({
+    inputID,
+    physicalInput,
+    childTask,
+    ingress,
+    creatorAssistantID: "creator",
+    opened: { id: "child-opened" },
+    ownerOpened: { id: "mission-opened" },
+    assistantID: "child-assistant",
   })
 })

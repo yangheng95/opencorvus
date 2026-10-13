@@ -1,0 +1,20 @@
+[1/1] START test/mission-process-recovery-driver.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a failed recovery worker exposes its exit and final diagnostics before verbose startup output [55.76ms]
+(pass) write-ahead takeover preserves one Message and a later owner death in the same opened occurrence gets a new identity [44996.12ms]
+(pass) the production close route takes over a dead recovery write-ahead owner before committing closed [14215.83ms]
+(pass) an absolute deadline fences a live hung recovery owner and a successor resumes its write-ahead Message [16067.95ms]
+(pass) caller abort fences a live hung recovery owner and a successor resumes its write-ahead Message [16455.97ms]
+(pass) an admitted Mission recovery completes beyond its admission deadline [15326.74ms]
+(pass) an admitted Mission recovery settles its caller-abort origin [12413.29ms]
+(pass) an admitted Mission recovery settles its typed-caller-abort origin [11818.54ms]
+(pass) the live Project driver preserves a peer owner and takes over after that owner dies without restart [14481.86ms]
+(pass) startup takes over an abort-closed delete intent after the route owner dies [7933.08ms]
+
+ 10 pass
+ 0 fail
+ 19 expect() calls
+Ran 10 tests across 1 file. [156.35s]
+[1/1] DONE test/mission-process-recovery-driver.test.ts exit=0 duration=156.98s

@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "kind": "task",
+  "goalID": "pev_g0VXvxRAi00dEScMmcnv",
+  "continuationID": "pev_hAlLrgvL0qmfiZUVegEh",
+  "generations": [
+    {
+      "generation": 1,
+      "pid": 54756,
+      "requests": 7,
+      "interruptedAssistantID": "msg_hsqUVRcyHCzGxXK7uCdH"
+    },
+    {
+      "generation": 2,
+      "pid": 85060,
+      "requests": 1,
+      "recoveryKind": "task_ingress",
+      "recoveryInputID": "msg_task-root-control_art_hTqUvDOMMlPrOWvMJLAa_msg_hsqUVRcyHCzGxXK7uCdH",
+      "interruptedAssistantID": "msg_h0vb0BkPYzmU0JUHnK5e"
+    },
+    {
+      "generation": 3,
+      "pid": 84164,
+      "requests": 4,
+      "recoveryKind": "task_ingress",
+      "recoveryInputID": "msg_task-root-control_art_hTqUvDOMMlPrOWvMJLAa_msg_h0vb0BkPYzmU0JUHnK5e"
+    }
+  ],
+  "totalRequests": 12,
+  "tokensUsed": 212967,
+  "recoveredUsageIDs": [
+    "pvu_g0VXvyXJh00ndfXPrIWS",
+    "pvu_g0VXvyesq00NGgGil5VI",
+    "pvu_g0VXvyhyO00PyUo4Tv0W"
+  ],
+  "visibleMessageIDs": [
+    "msg_hQUGJnb4F8fGF73hVIej",
+    "msg_hAlCwhX0U7ZTEo44tLPW"
+  ],
+  "interruptedUnreportedUsage": "unknown",
+  "reviewedAt": "2026-10-13T13:01:21.897Z"
+}

@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "kind": "mission",
+  "goalID": "pev_g0VXw2lET00qY0JI8kGY",
+  "continuationID": "pev_hfJmVpx8Hpv574TABJLl",
+  "generations": [
+    {
+      "generation": 1,
+      "pid": 78608,
+      "requests": 12,
+      "interruptedAssistantID": "msg_g0VXw2x0S00A77Y1Y2lX"
+    },
+    {
+      "generation": 2,
+      "pid": 85144,
+      "requests": 1,
+      "recoveryKind": "accepted_goal_input",
+      "recoveryInputID": "msg_hVhcT8doceBJzEkOnxR4",
+      "interruptedAssistantID": "msg_g0VXw30Rb00oSTSdF779"
+    },
+    {
+      "generation": 3,
+      "pid": 38668,
+      "requests": 11,
+      "recoveryKind": "mission_process_recovery",
+      "recoveryInputID": "msg_hjJARLdBUS16HyAnC5J0"
+    }
+  ],
+  "totalRequests": 24,
+  "tokensUsed": 365132,
+  "recoveredUsageIDs": [
+    "pvu_g0VXw37Qo006aoCdvD6p",
+    "pvu_g0VXw39xg00FKA2XS29C",
+    "pvu_g0VXw3CxI00QbTnRQ3sF",
+    "pvu_g0VXw3Fdt00E6ICf5Yox",
+    "pvu_g0VXw3Ib500DaaKUJIWm",
+    "pvu_g0VXw3cDM00OVxXcqW0t"
+  ],
+  "visibleMessageIDs": [
+    "msg_g0VXw2Xqp00FVDGHn0iZ",
+    "msg_g0VXw2tw900tjJit6Us2",
+    "msg_g0VXw2x0S00A77Y1Y2lX",
+    "msg_g0VXw30Rb00oSTSdF779",
+    "msg_g0VXw34Wi001jP6T3AGM",
+    "msg_g0VXw3IcD00JhyG4XhC5",
+    "msg_g0VXw3ulT008x1xger0X"
+  ],
+  "interruptedUnreportedUsage": "unknown",
+  "reviewedAt": "2026-10-13T13:22:18.505Z"
+}

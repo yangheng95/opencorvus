@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标重复崩溃与子 Task](2026-10-13-continuous-goal-repeated-recovery.md)：连续中断、恢复身份和真实子任务验收。
+
 - [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。
 
 - [文件链接条目与回执](2026-10-13-file-link-entry-contract.md)：entry与target边界、根因及验收。

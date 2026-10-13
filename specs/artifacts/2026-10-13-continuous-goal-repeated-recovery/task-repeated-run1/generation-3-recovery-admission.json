@@ -1,0 +1,35 @@
+{
+  "generation": 3,
+  "startedAt": 1791896244014,
+  "kind": "task_ingress",
+  "promptOwner": {
+    "session_id": "ses_-zUS42dK5zz9MtK1yS22",
+    "project_id": "prj_hHoRwTnf5kXAM2eK7niu",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-4tqjGo\\runner-81340-RKcU82\\project",
+    "generation": "cal_g0VXvyVF4004DKVNc1gm",
+    "owner_pid": 84164,
+    "owner_process_instance_id": "win32:639274930440083336",
+    "owner_occurrence_id": "d2934532-6706-4437-9d54-2e952fb96627",
+    "time_acquired": 1791896357490
+  },
+  "inputID": "msg_task-root-control_art_hTqUvDOMMlPrOWvMJLAa_msg_h0vb0BkPYzmU0JUHnK5e",
+  "assistantID": "msg_hAlCwhX0U7ZTEo44tLPW",
+  "interruptedAssistantID": "msg_h0vb0BkPYzmU0JUHnK5e",
+  "interruptedAt": 1791896357201,
+  "requestIndex": 0,
+  "requestContext": {
+    "sessionID": "ses_-zUS42dK5zz9MtK1yS22",
+    "streamRequest": {
+      "requestID": "msg_task-root-control_art_hTqUvDOMMlPrOWvMJLAa_msg_h0vb0BkPYzmU0JUHnK5e",
+      "agentID": "orchestrator",
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol",
+      "apiModelID": "gpt-6.1-sol"
+    },
+    "activity": {
+      "id": "act_g0VXvyVRq003t2q9D0pm",
+      "attempt": 0,
+      "assistantMessageID": "msg_hAlCwhX0U7ZTEo44tLPW"
+    }
+  }
+}

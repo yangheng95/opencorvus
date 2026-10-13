@@ -1,0 +1,54 @@
+[1/3] START test/runtime-execution-settlement.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime execution settlement authority > fences and cancels Task activation before Session prompt settlement, then admits rollback [410.12ms]
+(pass) runtime execution settlement authority > returns shutdown cancellation and admits a successor after owner release [0.77ms]
+(pass) runtime execution settlement authority > reports the exact active Instance authority and converges on the same settlement gate [2952.53ms]
+(pass) runtime execution settlement authority > publishes terminal protocol evidence while an owned execution is being terminated [3.12ms]
+(pass) runtime execution settlement authority > classifies a wake rejected by the production server settlement reason [2.90ms]
+(pass) runtime execution settlement authority > cancels an unfinished protocol subscriber after terminal facts are fenced [3.80ms]
+(pass) runtime execution settlement authority > bounds Project Git lock inactivity and admits settlement after the held lifecycle exits [85.81ms]
+(pass) runtime execution settlement authority > retains process occurrence across protocol inactivity and converges after late settlement [53.62ms]
+(pass) runtime execution settlement authority > cancels the physical owner and settles the gate after the owner exits [0.70ms]
+(pass) runtime execution settlement authority > returns the typed admission error while a settlement phase owns the kind [0.19ms]
+(pass) runtime execution settlement authority > reopens admission under the same gate token and starts the registered durable rescan [0.20ms]
+(pass) runtime execution settlement authority > restores every owned admission and reports an aggregate when one reopen listener fails [0.42ms]
+(pass) runtime execution settlement authority > drains existing database lifecycle effects then returns a typed error until admission reopens [1.53ms]
+(pass) runtime execution settlement authority > rejects a Protocol append before insertion while database settlement owns new access [3019.42ms]
+(pass) runtime execution settlement authority > blocks late Instance creation with a typed error and admits a fresh owner after handoff release [1746.67ms]
+(pass) runtime execution settlement authority > settles a durable Session wake loop before the runtime gate releases ownership [2596.55ms]
+(pass) runtime execution settlement authority > bounds a held Message bridge lifecycle and retains the process occurrence after late settlement [299.80ms]
+
+ 17 pass
+ 0 fail
+ 32 expect() calls
+Ran 17 tests across 1 file. [19.29s]
+[1/3] DONE test/runtime-execution-settlement.test.ts exit=0 duration=20.40s
+[2/3] START test/scheduler-wake-message-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) scheduler wake Message identity > settlement accepts the persisted wake Message its own delivery owns [1887.18ms]
+(pass) scheduler wake Message identity > a persisted Message decodes only with the identity its row keeps in SQL columns [2093.72ms]
+
+ 2 pass
+ 0 fail
+ 7 expect() calls
+Ran 2 tests across 1 file. [7.07s]
+[2/3] DONE test/scheduler-wake-message-identity.test.ts exit=0 duration=7.42s
+[3/3] START test/continuous-goal-runtime.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[goal-runtime-stage] accepted C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-Wsc4bm\test-81056-1seK0y\goal-stream-restart-Mi7a1D
+[goal-runtime-stage] owner exited
+[goal-runtime-stage] recovery stream requested
+[goal-runtime-stage] result {"outcome":"recovered","goal":{"id":"pev_g0VXw1pga00MmtMbpGpS","revision":"pev_g0VXw1pga00MmtMbpGpS","owner":{"kind":"chat","id":"ses_-zUS3yAJkzz8JWDfZXpw"},"objective":"Return one visible streamed response","status":"budget_limited","reason":"turn_budget","turnBudget":1,"tokensUsed":0,"turnsAccepted":1,"createdAt":1791897151059,"updatedAt":1791897151059,"sessionID":"ses_-zUS3yAJkzz8JWDfZXpw","projectID":"prj_h21ptgEByyDrheP75WAE","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Wsc4bm\\test-81056-1seK0y\\fixtures\\memory-qm71WD"},"request":{"id":"pev_hNmU15sloy3LT9VZjNcW","goalID":"pev_g0VXw1pga00MmtMbpGpS","revision":"pev_g0VXw1pga00MmtMbpGpS","frontier":"start","number":1},"controllerInputs":["msg_ho1MvjtS9ZQxmhyFBbBJ"],"replies":[{"id":"msg_g0VXw1rcp002mRGINqTq","parentID":"msg_ho1MvjtS9ZQxmhyFBbBJ","text":"provider reply 2"}]}
+(pass) a fresh process settles the same accepted goal input after its streamed owner exits [17473.78ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [18.94s]
+[3/3] DONE test/continuous-goal-runtime.test.ts exit=0 duration=19.15s

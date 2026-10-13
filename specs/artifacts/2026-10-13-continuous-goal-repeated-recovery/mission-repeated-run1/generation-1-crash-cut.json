@@ -1,0 +1,105 @@
+{
+  "pid": 67152,
+  "at": 1791896577022,
+  "continuationID": "pev_hPvqbLYDVDP4ExgyfFuY",
+  "inputID": "msg_hJiqC31cE5HRNHMp6ZBn",
+  "physicalInput": {
+    "id": "msg_hJiqC31cE5HRNHMp6ZBn",
+    "session_id": "ses_-zUS40sPGzz0IVlfyT3m",
+    "time_created": 1791896570824,
+    "time_updated": 1791896571186,
+    "data": {
+      "author": "goal-controller",
+      "role": "user",
+      "time": {
+        "created": 1791896570824
+      },
+      "agent": "mission",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "extra": {
+        "wake_reason": {
+          "source": "continuous_goal",
+          "goalID": "pev_g0VXvzM6k008SLBMLfAR",
+          "revision": "pev_g0VXvzM6k008SLBMLfAR",
+          "requestID": "pev_hPvqbLYDVDP4ExgyfFuY"
+        },
+        "surface": "panel"
+      },
+      "orderKey": "v1:0001791896570824:0000000000000030:0000000000000000:message:msg_hJiqC31cE5HRNHMp6ZBn"
+    }
+  },
+  "assistantID": "msg_g0VXvzOlq00iQGLVSjJe",
+  "requestIndex": 11,
+  "reader": {
+    "boundary": "provider-source-reader",
+    "state": "reading",
+    "receivedAt": 1791896574009,
+    "boundAt": 1791896574011,
+    "chunkCount": 31,
+    "byteCount": 476544,
+    "firstByteReadAt": 1791896574015,
+    "lastByteReadAt": 1791896576984,
+    "identityState": "observed",
+    "requestContext": {
+      "sessionID": "ses_-zUS40sPGzz0IVlfyT3m",
+      "streamRequest": {
+        "requestID": "msg_hJiqC31cE5HRNHMp6ZBn",
+        "agentID": "mission",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "activity": {
+        "id": "act_g0VXvzOso00gw4cJ23iG",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXvzOlq00iQGLVSjJe"
+      }
+    }
+  },
+  "progress": [
+    {
+      "id": "prt_g0VXvzQGj00tO3LvEKne",
+      "type": "text",
+      "characters": 6
+    }
+  ],
+  "toolIDs": [],
+  "promptOwner": {
+    "session_id": "ses_-zUS40sPGzz0IVlfyT3m",
+    "project_id": "prj_hcOur9sT6dNdtEV7wIlb",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pbOy71\\runner-82240-oXdkyR\\project",
+    "generation": "cal_g0VXvz7dz00Yqg7Zedre",
+    "owner_pid": 67152,
+    "owner_process_instance_id": "win32:639274932797290695",
+    "owner_occurrence_id": "e86c81a7-815f-40d3-adc1-01dc139cd19b",
+    "time_acquired": 1791896505107
+  },
+  "opened": {
+    "id": "pev_hZ6Y7sIwaQK52nmN2NrF",
+    "kind": "event",
+    "type": "mission.execution.opened",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUS40sPGzz0IVlfyT3m",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "mission.wake",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": "1470327a-3ff5-5edc-b387-e4a6746964f9",
+    "reply_to": null,
+    "seq": 1,
+    "deadline_ms": null,
+    "emitted_at": 1791896504964,
+    "payload": {
+      "missionID": "1b85b6d3e438d521",
+      "requestID": "19a20d1e-e6eb-444d-a082-b8f6c6300481",
+      "requestFingerprint": "d6e45ebddba0516ab5ddea45e67be2fe30976ca1d4bded2092211abfd9b5774e"
+    }
+  }
+}

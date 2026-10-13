@@ -1,0 +1,15 @@
+{
+  "kind": "mission",
+  "scenario": "mission_child",
+  "sourceModel": "openai/gpt-6.1-sol",
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NVeP19\\runner-79788-V29oeM\\project",
+  "runtimeRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NVeP19\\runner-79788-V29oeM\\runtime-root",
+  "databasePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NVeP19\\runner-79788-V29oeM\\runtime-root\\data\\opencorvus.db",
+  "maxRequests": 96,
+  "crashCount": 1,
+  "tokenBudget": 1600000,
+  "turnBudget": 3,
+  "inactivityMs": 180000,
+  "request": "请执行真实Mission子Task持续目标验收。用户明确授权创建Mission持续目标，tokenBudget=1600000，turnBudget=3。目标为交付两阶段各三项验收标准，每项包括可观察证据和通过条件，并实际验证一个独立子Task的交付。\n首次输入这一轮：仅创建持续目标并简要说明阶段一需求核对、阶段二验收核对，结束当前输入，保持目标active，暂不创建子Task。\n第一个goal-controller自动轮次：用户明确要求创建且仅创建一个具有独立生命周期的子Task，使用已持有base专家团，模型精确为openai/gpt-6.1-sol。子Task自行实际交付上述两阶段六项标准，以当前正式可读取交付Artifact及Task完成合同结算；不创建自己的持续目标或额外Task。\nMission等待子Task真实生产完成通知，读取该Task本次completed occurrence真实交付Artifact的全部字节，逐项核对六项标准并汇总。只有交付核对完成后才能标记原持续目标complete，再使用唯一子Task的真实evidence_read_refs完成Mission正常验收合同。\n本验收可能在子Task模型执行中发生真实进程中断；从持久化事实继续同一目标与同一子Task，不新建替代任务，不要求用户再说继续。禁止访问网站、部署、读取凭据、改变权限或创建计划定时等待。",
+  "startedAt": 1791899778530
+}

@@ -22,7 +22,11 @@ import {
 import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
-import { createExecutionCancellationOrigin, isExecutionCancellationError } from "./prompt/cancellation"
+import {
+  createExecutionCancellationOrigin,
+  ExecutionCancellationError,
+  isExecutionCancellationError,
+} from "./prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
 import type { Database } from "@/storage/db"
 import { MessageStore } from "./message-store"
@@ -352,21 +356,18 @@ export namespace SessionWake {
     reservation.onCancel((reason) => {
       if (!promptOwner) return
       try {
-        SessionPrompt.cancelOwned(
-          input.sessionID,
-          input.directory,
-          promptOwner,
-          {
-            origin: createExecutionCancellationOrigin({
-              actor: "runtime",
-              source: "process.shutdown",
-              surface: "session-wake-loop",
-              reason: reason instanceof Error ? reason.message : String(reason),
-              targetSessionID: input.sessionID,
-              messageID: input.messageID,
-            }),
-          },
-        )
+        SessionPrompt.cancelOwned(input.sessionID, input.directory, promptOwner, {
+          origin: isExecutionCancellationError(reason)
+            ? reason.origin
+            : createExecutionCancellationOrigin({
+                actor: "runtime",
+                source: "process.shutdown",
+                surface: "session-wake-loop",
+                reason: reason instanceof Error ? reason.message : String(reason),
+                targetSessionID: input.sessionID,
+                messageID: input.messageID,
+              }),
+        })
       } catch (error) {
         log.warn("wake loop cancellation callback failed", {
           sessionID: input.sessionID,
@@ -375,7 +376,27 @@ export namespace SessionWake {
         })
       }
     })
-    const cancelFromCaller = () => reservation.cancel(input.signal?.reason)
+    const cancelFromCaller = () => {
+      const reason = input.signal?.reason
+      reservation.cancel(
+        isExecutionCancellationError(reason)
+          ? reason
+          : new ExecutionCancellationError({
+              source: "session_prompt",
+              sessionID: input.sessionID,
+              message: reason instanceof Error ? reason.message : String(reason),
+              cause: reason,
+              origin: createExecutionCancellationOrigin({
+                actor: "runtime",
+                source: "runtime.prompt_owner",
+                surface: "session-wake-loop",
+                reason: reason instanceof Error ? reason.message : String(reason),
+                targetSessionID: input.sessionID,
+                messageID: input.messageID,
+              }),
+            }),
+      )
+    }
     if (input.signal?.aborted) cancelFromCaller()
     else input.signal?.addEventListener("abort", cancelFromCaller, { once: true })
     let resolveActivation!: (activation: WakeActivation) => void

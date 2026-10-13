@@ -9,6 +9,7 @@ import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { SessionPromptState } from "@/session/prompt/state"
+import { ExecutionCancellationError, createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { SessionWake } from "@/session/wake"
 import { Database } from "@/storage/db"
 import { MissionRoutes } from "@/server/routes/mission"
@@ -27,8 +28,8 @@ const [
   workerLabel = "first",
   deadlineMilliseconds,
   callerAbortMilliseconds,
-] =
-  process.argv.slice(2)
+  callerAbortKind,
+] = process.argv.slice(2)
 if (!mode || !projectDirectory || !barrierDirectory || !apiURL) {
   throw new Error("Mission recovery driver worker requires mode, project, barrier, and provider URL")
 }
@@ -160,10 +161,10 @@ async function run() {
             })
           },
         })
-        await publishJSONBarrier(
-          path.join(barrierDirectory, "owner-ready.json"),
-          { sessionID: mission.id, messageID: receipt.messageID },
-        )
+        await publishJSONBarrier(path.join(barrierDirectory, "owner-ready.json"), {
+          sessionID: mission.id,
+          messageID: receipt.messageID,
+        })
         await waitFor("owner-exit")
         return { mode, sessionID: mission.id, messageID: receipt.messageID }
       }
@@ -182,7 +183,7 @@ async function run() {
           const deadlineDelay = Number.parseInt(deadlineMilliseconds ?? "0", 10)
           const recovered = await recoverMissionProcessSession(mission.id, {
             signal: caller.signal,
-            ...(deadlineDelay > 0 ? { deadlineAt: Date.now() + deadlineDelay } : {}),
+            ...(deadlineDelay > 0 ? { admissionDeadlineAt: Date.now() + deadlineDelay } : {}),
           })
           return { mode, recovered }
         } finally {
@@ -190,7 +191,46 @@ async function run() {
         }
       }
       if (mode === "recovery-run") {
-        const recovered = await recoverMissionProcessSession(mission.id)
+        const deadlineDelay = Number.parseInt(deadlineMilliseconds ?? "0", 10)
+        const callerAbortDelay = Number.parseInt(callerAbortMilliseconds ?? "0", 10)
+        const caller = new AbortController()
+        let callerTimer: ReturnType<typeof setTimeout> | undefined
+        const callerTrigger =
+          callerAbortDelay > 0
+            ? waitFor("caller-abort").then(() => {
+                callerTimer = setTimeout(
+                  () =>
+                    caller.abort(
+                      callerAbortKind === "typed"
+                        ? new ExecutionCancellationError({
+                            source: "session_prompt",
+                            sessionID: mission.id,
+                            message: "Mission recovery fixture caller aborted",
+                            origin: createExecutionCancellationOrigin({
+                              actor: "user",
+                              source: "session.abort",
+                              surface: "api",
+                              requestID: "exact-caller-cancellation",
+                              reason: "Mission recovery fixture caller aborted",
+                              targetSessionID: mission.id,
+                            }),
+                          })
+                        : new Error("Mission recovery fixture caller aborted"),
+                    ),
+                  callerAbortDelay,
+                )
+              })
+            : undefined
+        let recovered
+        try {
+          recovered = await recoverMissionProcessSession(mission.id, {
+            signal: caller.signal,
+            ...(deadlineDelay > 0 ? { admissionDeadlineAt: Date.now() + deadlineDelay } : {}),
+          })
+        } finally {
+          if (callerTimer) clearTimeout(callerTimer)
+        }
+        await callerTrigger
         await publishJSONBarrier(path.join(barrierDirectory, "recovery-ready.json"), recovered)
         await waitFor("recovery-exit")
         await SessionPromptState.release(mission.id, mission.directory)
@@ -255,10 +295,7 @@ async function run() {
       }
       if (mode === "host-driver") {
         const result = await recoverStartedTaskExecutions({ scopeProjectWorktree: projectDirectory })
-        await publishJSONBarrier(
-          path.join(barrierDirectory, "driver-ready.json"),
-          { sessionID: mission.id, result },
-        )
+        await publishJSONBarrier(path.join(barrierDirectory, "driver-ready.json"), { sessionID: mission.id, result })
         await waitFor("driver-exit")
         await SessionPromptState.release(mission.id, mission.directory)
         return { mode, sessionID: mission.id, result }
