@@ -2784,6 +2784,14 @@ rows, discovery receipts, Composer groups and usage use the shared plural
 translation contract. Discovery stores the current successful count, translated
 at render time under the existing form occurrence and response ownership.
 
+Provider forms accept empty model declarations under the same global/project
+save transaction. Empty-to-empty edits retain the declaration shape and current
+peer additions; explicit removal deletes only the initial model overrides.
+Inherited models can reappear when an override is removed. The localized inline
+hint states that models can be added or discovered later and inheritance is
+preserved. Model references, captured scope and API validation keep their existing
+contracts. Saving configuration alone does not claim inference qualification.
+
 Channel edits require the currently selected project and show the existing
 workspace selection hint in the directory-free launcher. Shared Skill/MCP
 resource pages use the same loading lifecycle on first entry and manual reload;

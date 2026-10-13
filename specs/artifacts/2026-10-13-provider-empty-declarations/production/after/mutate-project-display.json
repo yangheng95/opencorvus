@@ -1,0 +1,23 @@
+{
+  "scope": "project",
+  "mode": "project-name",
+  "label": "project-display",
+  "method": "PATCH",
+  "path": "/project/current",
+  "status": 200,
+  "requestID": "e087c325-5f9e-4e13-a90f-b4b7f6b0b38c",
+  "input": {
+    "name": "Empty declaration qualification"
+  },
+  "body": {
+    "id": "prj_hRBkv3wPY5mtpqL0bwen",
+    "worktree": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-empty-declarations-01a133\\after\\project",
+    "name": "Empty declaration qualification",
+    "time": {
+      "created": 1791906722939,
+      "updated": 1791906952709
+    },
+    "sandboxes": []
+  },
+  "boundary": "Actual isolated production HTTP mutation; only own fictional data; known sample credential bytes masked"
+}

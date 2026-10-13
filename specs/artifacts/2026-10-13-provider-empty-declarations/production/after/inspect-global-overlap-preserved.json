@@ -1,0 +1,72 @@
+{
+  "label": "global-overlap-preserved",
+  "scope": "global",
+  "id": "owned-overlap",
+  "status": 200,
+  "requestID": "ed13213b-6bbc-41e7-926e-e916f90d6aa3",
+  "effective": {
+    "api": "http://127.0.0.1:18591/overlap/v1",
+    "name": "Global overlay base",
+    "models": {
+      "shared-one": {
+        "id": "shared-one",
+        "name": "Global shared metadata",
+        "release_date": "2026-10-13",
+        "attachment": false,
+        "reasoning": false,
+        "temperature": true,
+        "tool_call": true,
+        "cost": {
+          "input": 1,
+          "output": 2
+        },
+        "limit": {
+          "context": 10000,
+          "output": 1000
+        },
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "options": {}
+      }
+    }
+  },
+  "source": {
+    "name": "Global overlay base",
+    "api": "http://127.0.0.1:18591/overlap/v1",
+    "models": {
+      "shared-one": {
+        "id": "shared-one",
+        "name": "Global shared metadata",
+        "release_date": "2026-10-13",
+        "attachment": false,
+        "reasoning": false,
+        "temperature": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "cost": {
+          "input": 1,
+          "output": 2
+        },
+        "limit": {
+          "context": 10000,
+          "output": 1000
+        },
+        "options": {}
+      }
+    }
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

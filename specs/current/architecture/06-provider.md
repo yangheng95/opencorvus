@@ -373,6 +373,12 @@ Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 
 - 打开 Providers 配置页时只按当前 project/global scope 读取稳定的 Provider catalog、Auth method 和 config owner；不得隐式执行网络刷新。Provider 目录刷新和实时模型刷新只由两个显式按钮分别触发，各自完成后重读 Provider owner，各自拥有独立错误面。
 - 没有活动项目目录的桌面首次启动使用 `/global/providers`、`/global/providers/refresh`、`/global/providers/models/refresh`、`/global/providers/discover-models` 和 `/global/providers/:providerID/test`；这些路由把 `Config.getGlobal()` 显式传入与项目路由共用的 Provider 实现。`/auth/:providerID` 仍是唯一 API credential 写入面，项目目录不是新增 Provider、保存 API key、发现模型、测试连接或使用内置 Provider OAuth 的前置条件。`Plugin.listGlobalProviderHooks()` 是唯一 project-independent built-in hook catalog，同时投影 auth method、OAuth loader 和 Provider model projection；installed project plugins 仍只由真实 Project `Instance` 的 `Plugin.list()` 拥有。
 
+### Provider 声明与可运行模型
+
+`config.provider[id].models` 是可选配置覆盖，明确空对象也是合法声明。保存声明、名称、地址或环境变量不以 textarea 至少有一个 ID 为前提；模型可稍后添加或发现。Provider state 仍从 canonical catalog、配置和 Auth 派生，模型执行保持现有 loader、过滤与模型引用校验。零声明数量不能用作可运行模型数量。
+
+空到空的编辑保留 models 缺席或明确 `{}`，保存时重读当前配置并只应用用户字段意图。清空旧表单中的 ID 只删除原覆盖，保留保存前已新增的模型与其元数据；项目覆盖删除可以恢复全局同 ID，配置覆盖删除可以恢复 catalog 同 ID。此操作不表达屏蔽继承模型。清空仍被引用的唯一自定义模型继续返回 ProviderModelNotFoundError；Auth 存在事实保持独立。
+
 ### Provider Auth occurrence authority
 
 `ProviderAuth` 是 plugin 认证 method 执行的唯一 owner；`ProviderCredentialExchange` 是所有远端 Provider

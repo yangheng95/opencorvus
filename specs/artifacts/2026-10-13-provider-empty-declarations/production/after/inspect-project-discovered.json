@@ -1,0 +1,42 @@
+{
+  "label": "project-discovered",
+  "scope": "project",
+  "id": "owned-new-project",
+  "status": 200,
+  "requestID": "412e0da7-451e-4e77-a5d4-aa8d19a59f64",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project/v1",
+    "name": "New project bootstrap",
+    "env": [],
+    "models": {
+      "project-discovered-a": {
+        "name": "project-discovered-a",
+        "temperature": false,
+        "tool_call": true,
+        "options": {}
+      },
+      "project-discovered-b": {
+        "name": "project-discovered-b",
+        "temperature": false,
+        "tool_call": true,
+        "options": {}
+      }
+    }
+  },
+  "source": {
+    "name": "New project bootstrap",
+    "api": "http://127.0.0.1:18591/project/v1",
+    "env": [],
+    "models": {
+      "project-discovered-a": {
+        "name": "project-discovered-a",
+        "tool_call": true
+      },
+      "project-discovered-b": {
+        "name": "project-discovered-b",
+        "tool_call": true
+      }
+    }
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

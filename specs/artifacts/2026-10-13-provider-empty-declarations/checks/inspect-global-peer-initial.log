@@ -1,0 +1,28 @@
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    effective: {
+      api: 'http://127.0.0.1:18591/global-peer/v1',
+      env: [
+        'OWNED_PEER_KEY'
+...
+          name: 'Peer model metadata',
++         options: {},
++         temperature: false,
+          tool_call: false,
+          variants: {
+            quiet: {
+              reasoningEffort: 'minimal'
+            }
+
+    at D:\myhexin-local\opencorvus\.tmp-codex-provider-empty-declarations-01a133\inspect.cjs:13:28
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [Object],
+  expected: [Object],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}

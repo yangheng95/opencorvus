@@ -1,0 +1,118 @@
+{
+  "scope": "global",
+  "id": "owned-inherited",
+  "label": "global-inherited",
+  "status": 200,
+  "requestID": "abdef46d-816c-4679-b001-6a73dbc6844c",
+  "observed": {
+    "name": "Inherited declaration renamed",
+    "modelIDs": [
+      "catalog-one",
+      "catalog-two"
+    ],
+    "apiKeyConfigured": true,
+    "connected": true
+  },
+  "models": {
+    "catalog-one": {
+      "id": "catalog-one",
+      "providerID": "owned-inherited",
+      "name": "catalog-one",
+      "api": {
+        "id": "catalog-one",
+        "url": "http://127.0.0.1:18591/inherited/v1",
+        "npm": "@ai-sdk/openai-compatible"
+      },
+      "status": "active",
+      "headers": {},
+      "options": {},
+      "cost": {
+        "available": true,
+        "input": 1,
+        "output": 2,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "limit": {
+        "context": 10000,
+        "output": 1000
+      },
+      "capabilities": {
+        "temperature": true,
+        "reasoning": false,
+        "attachment": false,
+        "toolcall": true,
+        "input": {
+          "text": true,
+          "audio": false,
+          "image": false,
+          "video": false,
+          "pdf": false
+        },
+        "output": {
+          "text": true,
+          "audio": false,
+          "image": false,
+          "video": false,
+          "pdf": false
+        },
+        "interleaved": false
+      },
+      "release_date": "2026-10-13",
+      "variants": {}
+    },
+    "catalog-two": {
+      "id": "catalog-two",
+      "providerID": "owned-inherited",
+      "name": "catalog-two",
+      "api": {
+        "id": "catalog-two",
+        "url": "http://127.0.0.1:18591/inherited/v1",
+        "npm": "@ai-sdk/openai-compatible"
+      },
+      "status": "active",
+      "headers": {},
+      "options": {},
+      "cost": {
+        "available": true,
+        "input": 1,
+        "output": 2,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "limit": {
+        "context": 10000,
+        "output": 1000
+      },
+      "capabilities": {
+        "temperature": true,
+        "reasoning": false,
+        "attachment": false,
+        "toolcall": true,
+        "input": {
+          "text": true,
+          "audio": false,
+          "image": false,
+          "video": false,
+          "pdf": false
+        },
+        "output": {
+          "text": true,
+          "audio": false,
+          "image": false,
+          "video": false,
+          "pdf": false
+        },
+        "interleaved": false
+      },
+      "release_date": "2026-10-13",
+      "variants": {}
+    }
+  },
+  "issues": [],
+  "boundary": "Actual production public catalog; current configured fact and derived runnable identities, no credential contents"
+}

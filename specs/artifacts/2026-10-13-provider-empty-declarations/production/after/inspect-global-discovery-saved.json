@@ -1,0 +1,42 @@
+{
+  "label": "global-discovery-saved",
+  "scope": "global",
+  "id": "owned-new-global",
+  "status": 200,
+  "requestID": "89d5c576-9ff3-42d5-bc4e-90f30dfa2865",
+  "effective": {
+    "api": "http://127.0.0.1:18591/global-new/v1",
+    "name": "New global bootstrap",
+    "env": [],
+    "models": {
+      "global-discovered-a": {
+        "name": "global-discovered-a",
+        "temperature": false,
+        "tool_call": true,
+        "options": {}
+      },
+      "global-discovered-b": {
+        "name": "global-discovered-b",
+        "temperature": false,
+        "tool_call": true,
+        "options": {}
+      }
+    }
+  },
+  "source": {
+    "name": "New global bootstrap",
+    "api": "http://127.0.0.1:18591/global-new/v1",
+    "env": [],
+    "models": {
+      "global-discovered-a": {
+        "name": "global-discovered-a",
+        "tool_call": true
+      },
+      "global-discovered-b": {
+        "name": "global-discovered-b",
+        "tool_call": true
+      }
+    }
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

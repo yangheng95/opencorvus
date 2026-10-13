@@ -1,0 +1,28 @@
+{
+  "label": "project-absent-saved",
+  "scope": "project",
+  "id": "owned-project-absent",
+  "status": 200,
+  "requestID": "eee34063-4bc1-4b98-9fa9-81ae12b534a5",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project-absent/v1",
+    "name": "Project absent renamed",
+    "env": [
+      "OWNED_PROJECT_ABSENT_NEXT"
+    ],
+    "options": {
+      "timeout": 41000
+    }
+  },
+  "source": {
+    "name": "Project absent renamed",
+    "api": "http://127.0.0.1:18591/project-absent/v1",
+    "env": [
+      "OWNED_PROJECT_ABSENT_NEXT"
+    ],
+    "options": {
+      "timeout": 41000
+    }
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

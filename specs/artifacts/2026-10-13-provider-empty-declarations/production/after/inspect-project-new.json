@@ -1,0 +1,20 @@
+{
+  "label": "project-new",
+  "scope": "project",
+  "id": "owned-new-project",
+  "status": 200,
+  "requestID": "2f7ec6a8-1ed7-4611-b1f3-77f88b23e99b",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project/v1",
+    "name": "New project bootstrap",
+    "env": [],
+    "models": {}
+  },
+  "source": {
+    "name": "New project bootstrap",
+    "api": "http://127.0.0.1:18591/project/v1",
+    "env": [],
+    "models": {}
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

@@ -1,0 +1,128 @@
+[1/1] START test/provider-empty-declarations.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+157 |       const persisted = JSON.parse(await readFile(scope === "global" ? globalFile : projectFile, "utf8"))
+158 |       expect({
+159 |         status: saved.status,
+160 |         provider: saved.body.provider?.["empty-owned"],
+161 |         persisted: persisted.provider["empty-owned"],
+162 |       }).toEqual({
+               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "persisted": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "provider": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "status": 200,
+  }
+
+- Expected  - 2
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:162:10)
+(fail) Provider empty declaration contracts > global public save persists an explicit models-only empty object [565.87ms]
+173 |
+174 |     test(`${scope} public save accepts absent and empty model declarations`, async () => {
+175 |       for (const fields of [{}, { models: {} }]) {
+176 |         const definition = { name: "Bootstrap", api, env: [], options: { timeout: false }, ...fields }
+177 |         const saved = await configRequest(scope, { provider: { "empty-owned": definition } })
+178 |         expect({ status: saved.status, provider: saved.body.provider?.["empty-owned"] }).toEqual({
+                                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "provider": {
+      "api": "http://127.0.0.1:1/empty-declarations/v1",
+      "env": [],
+-     "models": {},
+      "name": "Bootstrap",
+      "options": {
+        "timeout": false,
+      },
+    },
+    "status": 200,
+  }
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:178:90)
+(fail) Provider empty declaration contracts > global public save accepts absent and empty model declarations [179.52ms]
+(pass) Provider empty declaration contracts > global catalog models remain runnable through an empty declaration and cleared override [260.80ms]
+(pass) Provider empty declaration contracts > global clearing the final unreferenced declaration retains the saved Auth fact [201.41ms]
+(pass) Provider empty declaration contracts > global clearing a model referenced model returns the canonical 400 [195.88ms]
+(pass) Provider empty declaration contracts > global clearing a agent referenced model returns the canonical 400 [209.03ms]
+157 |       const persisted = JSON.parse(await readFile(scope === "global" ? globalFile : projectFile, "utf8"))
+158 |       expect({
+159 |         status: saved.status,
+160 |         provider: saved.body.provider?.["empty-owned"],
+161 |         persisted: persisted.provider["empty-owned"],
+162 |       }).toEqual({
+               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "persisted": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "provider": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "status": 200,
+  }
+
+- Expected  - 2
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:162:10)
+(fail) Provider empty declaration contracts > project public save persists an explicit models-only empty object [2206.93ms]
+173 |
+174 |     test(`${scope} public save accepts absent and empty model declarations`, async () => {
+175 |       for (const fields of [{}, { models: {} }]) {
+176 |         const definition = { name: "Bootstrap", api, env: [], options: { timeout: false }, ...fields }
+177 |         const saved = await configRequest(scope, { provider: { "empty-owned": definition } })
+178 |         expect({ status: saved.status, provider: saved.body.provider?.["empty-owned"] }).toEqual({
+                                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "provider": {
+      "api": "http://127.0.0.1:1/empty-declarations/v1",
+      "env": [],
+-     "models": {},
+      "name": "Bootstrap",
+      "options": {
+        "timeout": false,
+      },
+    },
+    "status": 200,
+  }
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:178:90)
+(fail) Provider empty declaration contracts > project public save accepts absent and empty model declarations [1944.40ms]
+(pass) Provider empty declaration contracts > project catalog models remain runnable through an empty declaration and cleared override [1960.59ms]
+(pass) Provider empty declaration contracts > project clearing the final unreferenced declaration retains the saved Auth fact [1730.03ms]
+(pass) Provider empty declaration contracts > project clearing a model referenced model returns the canonical 400 [1704.73ms]
+(pass) Provider empty declaration contracts > project clearing a agent referenced model returns the canonical 400 [2036.57ms]
+(pass) Provider empty declaration contracts > clearing a project model override restores the global declaration [2299.78ms]
+
+ 9 pass
+ 4 fail
+ 53 expect() calls
+Ran 13 tests across 1 file. [24.18s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts
+[1/1] DONE test/provider-empty-declarations.test.ts exit=1 duration=25.12s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts

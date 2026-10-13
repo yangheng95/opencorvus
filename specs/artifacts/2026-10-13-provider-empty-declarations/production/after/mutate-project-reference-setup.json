@@ -1,0 +1,437 @@
+{
+  "scope": "project",
+  "mode": "config",
+  "label": "project-reference-setup",
+  "method": "PATCH",
+  "path": "/config",
+  "status": 200,
+  "requestID": "f21901fe-0fd8-4557-bb05-fc52a9f73ef2",
+  "input": {
+    "provider": {
+      "owned-project-referenced": {
+        "name": "Project reference guard",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {
+          "project-reference": {
+            "name": "Project referenced model",
+            "tool_call": true,
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            }
+          }
+        }
+      }
+    },
+    "model": "owned-project-referenced/project-reference"
+  },
+  "body": {
+    "$schema": "https://opencorvus.ai/config.json",
+    "command": {},
+    "plugin": [],
+    "model": "owned-project-referenced/project-reference",
+    "username": "unknown",
+    "agent": {},
+    "provider": {
+      "owned-bootstrap": {
+        "api": "http://127.0.0.1:18591/project-revised/v1",
+        "name": "Project empty renamed",
+        "env": [
+          "OWNED_PROJECT_NEXT"
+        ],
+        "models": {}
+      },
+      "owned-empty": {
+        "api": "http://127.0.0.1:18591/empty/v1",
+        "name": "No API key configured",
+        "models": {}
+      },
+      "owned-configzero": {
+        "api": "http://127.0.0.1:18591/config/v1",
+        "name": "Config key without models",
+        "models": {},
+        "options": {
+          "apiKey": "[OWNED SAMPLE CREDENTIAL]"
+        }
+      },
+      "owned-ready": {
+        "api": "http://127.0.0.1:18591/ready/v1",
+        "name": "Known model provider",
+        "models": {
+          "ready-known": {
+            "id": "ready-known",
+            "name": "ready-known",
+            "release_date": "2026-10-13",
+            "attachment": false,
+            "reasoning": false,
+            "temperature": true,
+            "tool_call": true,
+            "cost": {
+              "input": 1,
+              "output": 2
+            },
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            },
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "options": {}
+          }
+        }
+      },
+      "owned-env": {
+        "api": "http://127.0.0.1:18591/env/v1",
+        "name": "Single environment key",
+        "env": [
+          "OWNED_PROVIDER_API_KEY"
+        ],
+        "models": {}
+      },
+      "owned-absent": {
+        "api": "http://127.0.0.1:18591/absent/v1",
+        "name": "Global absent renamed",
+        "env": [
+          "OWNED_ABSENT_NEXT"
+        ],
+        "options": {
+          "timeout": 42000
+        }
+      },
+      "owned-models-only": {
+        "name": "Global models-only renamed",
+        "models": {}
+      },
+      "owned-inherited": {
+        "api": "http://127.0.0.1:18591/inherited/v1",
+        "name": "Inherited declaration renamed",
+        "models": {}
+      },
+      "owned-clear": {
+        "api": "http://127.0.0.1:18591/global-peer/v1",
+        "name": "Global peer edit renamed",
+        "env": [
+          "OWNED_PEER_KEY"
+        ],
+        "models": {
+          "peer-one": {
+            "name": "Peer model metadata",
+            "temperature": false,
+            "tool_call": false,
+            "cost": {
+              "input": 0.4,
+              "output": 0.8
+            },
+            "limit": {
+              "context": 12000,
+              "output": 900
+            },
+            "options": {},
+            "variants": {
+              "quiet": {
+                "reasoningEffort": "minimal"
+              }
+            }
+          }
+        },
+        "options": {
+          "timeout": 91000,
+          "metadata": {
+            "peer": "preserved"
+          }
+        }
+      },
+      "owned-referenced": {
+        "api": "http://127.0.0.1:18591/ref/v1",
+        "name": "Referenced declaration",
+        "models": {
+          "reference-one": {
+            "id": "reference-one",
+            "name": "reference-one",
+            "release_date": "2026-10-13",
+            "attachment": false,
+            "reasoning": false,
+            "temperature": true,
+            "tool_call": true,
+            "cost": {
+              "input": 1,
+              "output": 2
+            },
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            },
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "options": {}
+          }
+        }
+      },
+      "owned-overlap": {
+        "api": "http://127.0.0.1:18591/overlap/v1",
+        "name": "Global overlay base",
+        "models": {
+          "shared-one": {
+            "id": "shared-one",
+            "name": "Global shared metadata",
+            "release_date": "2026-10-13",
+            "attachment": false,
+            "reasoning": false,
+            "temperature": true,
+            "tool_call": true,
+            "cost": {
+              "input": 1,
+              "output": 2
+            },
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            },
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "options": {}
+          }
+        }
+      },
+      "owned-protocol-global": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {},
+            "nested": {}
+          }
+        }
+      },
+      "owned-new-global": {
+        "api": "http://127.0.0.1:18591/global-new/v1",
+        "name": "New global bootstrap",
+        "env": [],
+        "models": {
+          "global-discovered-a": {
+            "name": "global-discovered-a",
+            "temperature": false,
+            "tool_call": true,
+            "options": {}
+          },
+          "global-discovered-b": {
+            "name": "global-discovered-b",
+            "temperature": false,
+            "tool_call": true,
+            "options": {}
+          }
+        }
+      },
+      "owned-project-absent": {
+        "api": "http://127.0.0.1:18591/project-absent/v1",
+        "name": "Project absent renamed",
+        "env": [
+          "OWNED_PROJECT_ABSENT_NEXT"
+        ],
+        "options": {
+          "timeout": 41000
+        }
+      },
+      "owned-project-models-only": {
+        "name": "Project models-only renamed",
+        "models": {}
+      },
+      "owned-project-clear": {
+        "api": "http://127.0.0.1:18591/project-peer/v1",
+        "name": "Project peer edit renamed",
+        "env": [
+          "OWNED_PROJECT_PEER_KEY"
+        ],
+        "models": {
+          "project-peer-one": {
+            "name": "Project peer metadata",
+            "temperature": false,
+            "tool_call": false,
+            "cost": {
+              "input": 0.4,
+              "output": 0.8
+            },
+            "limit": {
+              "context": 12000,
+              "output": 900
+            },
+            "options": {},
+            "variants": {
+              "quiet": {
+                "reasoningEffort": "minimal"
+              }
+            }
+          }
+        },
+        "options": {
+          "timeout": 92000,
+          "metadata": {
+            "peer": "preserved"
+          }
+        }
+      },
+      "opencorvus": {
+        "api": "http://127.0.0.1:18591/product-project/v1",
+        "whitelist": [
+          "owned-filtered-model"
+        ]
+      },
+      "owned-protocol-project": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Protocol project",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {},
+            "nested": {}
+          }
+        }
+      },
+      "owned-new-project": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "New project bootstrap",
+        "env": [],
+        "models": {
+          "project-discovered-a": {
+            "name": "project-discovered-a",
+            "temperature": false,
+            "tool_call": true,
+            "options": {}
+          },
+          "project-discovered-b": {
+            "name": "project-discovered-b",
+            "temperature": false,
+            "tool_call": true,
+            "options": {}
+          }
+        }
+      },
+      "owned-project-referenced": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Project reference guard",
+        "models": {
+          "project-reference": {
+            "name": "Project referenced model",
+            "temperature": false,
+            "tool_call": true,
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            },
+            "options": {}
+          }
+        }
+      }
+    },
+    "prompt": {
+      "owned": "Project inherited",
+      "keep": "Project kept"
+    },
+    "prompt_profile": {
+      "active": "base"
+    },
+    "permission_mode": "full_access",
+    "terminal": {
+      "default_profile_id": "powershell",
+      "profiles": {
+        "powershell": {
+          "label": "Windows PowerShell",
+          "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "args": [
+            "-NoLogo"
+          ],
+          "env": {
+            "TERM": "xterm-256color",
+            "COLORTERM": "truecolor"
+          },
+          "icon": "powershell"
+        },
+        "pwsh": {
+          "label": "PowerShell",
+          "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+          "args": [
+            "-NoLogo"
+          ],
+          "env": {
+            "TERM": "xterm-256color",
+            "COLORTERM": "truecolor"
+          },
+          "icon": "powershell"
+        },
+        "cmd": {
+          "label": "Command Prompt",
+          "command": "C:\\WINDOWS\\system32\\cmd.exe",
+          "args": [],
+          "env": {
+            "TERM": "xterm-256color",
+            "COLORTERM": "truecolor"
+          },
+          "icon": "command-prompt"
+        },
+        "git-bash": {
+          "label": "Git Bash",
+          "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+          "args": [],
+          "env": {
+            "TERM": "xterm-256color",
+            "COLORTERM": "truecolor"
+          },
+          "icon": "bash"
+        }
+      }
+    },
+    "experimental": {
+      "auto_question": true,
+      "memory": {
+        "enabled": false,
+        "document_token_limit": 10000,
+        "organizer_input_token_budget": 32000,
+        "pending_availability_limit": 500
+      }
+    },
+    "mcp": {
+      "browser": {
+        "type": "local",
+        "command": [
+          "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+          "mcp",
+          "browser"
+        ],
+        "timeout": 30000
+      },
+      "computer": {
+        "type": "local",
+        "command": [
+          "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+          "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+        ],
+        "timeout": 30000
+      }
+    },
+    "assistant": {
+      "max_executor_groups": 5
+    }
+  },
+  "boundary": "Actual isolated production HTTP mutation; only own fictional data; known sample credential bytes masked"
+}

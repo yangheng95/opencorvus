@@ -1,0 +1,251 @@
+[1/1] START test/provider-empty-declarations.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+151 |
+152 | describe.serial("Provider empty declaration contracts", () => {
+153 |   test("merging an overlay into a missing prompt object applies its nested deletion", () => {
+154 |     const base = Config.Info.parse({ prompt_profile: { active: "base" } })
+155 |     const patch = Config.Overlay.parse({ prompt: { owned: null } })
+156 |     expect(Config.mergeOverlay(base, patch)).toEqual({ ...base, prompt: {} })
+                                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+    "permission_mode": "full_access",
+-   "prompt": {},
++   "prompt": {
++     "owned": null,
++   },
+    "prompt_profile": {
+      "active": "base",
+    },
+  }
+
+- Expected  - 1
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:156:46)
+(fail) Provider empty declaration contracts > merging an overlay into a missing prompt object applies its nested deletion [205.86ms]
+166 |       const result = Config.previewOverlayUpdate(
+167 |         base,
+168 |         Config.Overlay.parse(current),
+169 |         Config.Overlay.parse({ prompt: { owned: null } }),
+170 |       )
+171 |       expect(result).toEqual({ nextOverlay: { prompt: {} }, effective: { ...base, prompt } })
+                           ^
+error: expect(received).toEqual(expected)
+
+  {
+    "effective": {
+      "permission_mode": "full_access",
+      "prompt": {
+        "keep": "kept",
+-       "owned": "inherited",
+      },
+      "prompt_profile": {
+        "active": "base",
+      },
+    },
+    "nextOverlay": {
+-     "prompt": {},
++     "prompt": {
++       "owned": null,
++     },
+    },
+  }
+
+- Expected  - 2
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:171:22)
+(fail) Provider empty declaration contracts > previewing deletion from an empty overlay preserves inherited prompt values [37.16ms]
+(pass) Provider empty declaration contracts > previewing deletion from an explicit override overlay preserves inherited prompt values [34.73ms]
+180 |     test(`merging a nested object patch into ${label} metadata applies null and empty-object values`, () => {
+181 |       const base = Config.Info.parse({ prompt_profile: { active: "base" }, provider: { "merge-owned": { options } } })
+182 |       const merged = Config.mergePatch(base, {
+183 |         provider: { "merge-owned": { options: { metadata: { removed: null, empty: {} } } } },
+184 |       })
+185 |       expect(merged).toEqual({
+                           ^
+error: expect(received).toEqual(expected)
+
+  {
+    "permission_mode": "full_access",
+    "prompt_profile": {
+      "active": "base",
+    },
+    "provider": {
+      "merge-owned": {
+        "options": {
+          "metadata": {
+            "empty": {},
++           "removed": null,
+          },
+          "timeout": false,
+        },
+      },
+    },
+  }
+
+- Expected  - 0
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:185:22)
+(fail) Provider empty declaration contracts > merging a nested object patch into missing metadata applies null and empty-object values [35.46ms]
+180 |     test(`merging a nested object patch into ${label} metadata applies null and empty-object values`, () => {
+181 |       const base = Config.Info.parse({ prompt_profile: { active: "base" }, provider: { "merge-owned": { options } } })
+182 |       const merged = Config.mergePatch(base, {
+183 |         provider: { "merge-owned": { options: { metadata: { removed: null, empty: {} } } } },
+184 |       })
+185 |       expect(merged).toEqual({
+                           ^
+error: expect(received).toEqual(expected)
+
+  {
+    "permission_mode": "full_access",
+    "prompt_profile": {
+      "active": "base",
+    },
+    "provider": {
+      "merge-owned": {
+        "options": {
+          "metadata": {
+            "empty": {},
++           "removed": null,
+          },
+          "timeout": false,
+        },
+      },
+    },
+  }
+
+- Expected  - 0
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:185:22)
+(fail) Provider empty declaration contracts > merging a nested object patch into scalar metadata applies null and empty-object values [31.40ms]
+197 |       const persisted = JSON.parse(await readFile(scope === "global" ? globalFile : projectFile, "utf8"))
+198 |       expect({
+199 |         status: saved.status,
+200 |         provider: saved.body.provider?.["empty-owned"],
+201 |         persisted: persisted.provider["empty-owned"],
+202 |       }).toEqual({
+               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "persisted": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "provider": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "status": 200,
+  }
+
+- Expected  - 2
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:202:10)
+(fail) Provider empty declaration contracts > global public save persists an explicit models-only empty object [261.30ms]
+213 |
+214 |     test(`${scope} public save accepts absent and empty model declarations`, async () => {
+215 |       for (const fields of [{}, { models: {} }]) {
+216 |         const definition = { name: "Bootstrap", api, env: [], options: { timeout: false }, ...fields }
+217 |         const saved = await configRequest(scope, { provider: { "empty-owned": definition } })
+218 |         expect({ status: saved.status, provider: saved.body.provider?.["empty-owned"] }).toEqual({
+                                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "provider": {
+      "api": "http://127.0.0.1:1/empty-declarations/v1",
+      "env": [],
+-     "models": {},
+      "name": "Bootstrap",
+      "options": {
+        "timeout": false,
+      },
+    },
+    "status": 200,
+  }
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:218:90)
+(fail) Provider empty declaration contracts > global public save accepts absent and empty model declarations [118.05ms]
+(pass) Provider empty declaration contracts > global catalog models remain runnable through an empty declaration and cleared override [151.16ms]
+(pass) Provider empty declaration contracts > global clearing the final unreferenced declaration retains the saved Auth fact [144.88ms]
+(pass) Provider empty declaration contracts > global clearing a model referenced model returns the canonical 400 [149.72ms]
+(pass) Provider empty declaration contracts > global clearing a agent referenced model returns the canonical 400 [183.64ms]
+197 |       const persisted = JSON.parse(await readFile(scope === "global" ? globalFile : projectFile, "utf8"))
+198 |       expect({
+199 |         status: saved.status,
+200 |         provider: saved.body.provider?.["empty-owned"],
+201 |         persisted: persisted.provider["empty-owned"],
+202 |       }).toEqual({
+               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "persisted": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "provider": {
+-     "models": {},
+      "name": "Models-only",
+    },
+    "status": 200,
+  }
+
+- Expected  - 2
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:202:10)
+(fail) Provider empty declaration contracts > project public save persists an explicit models-only empty object [1677.76ms]
+213 |
+214 |     test(`${scope} public save accepts absent and empty model declarations`, async () => {
+215 |       for (const fields of [{}, { models: {} }]) {
+216 |         const definition = { name: "Bootstrap", api, env: [], options: { timeout: false }, ...fields }
+217 |         const saved = await configRequest(scope, { provider: { "empty-owned": definition } })
+218 |         expect({ status: saved.status, provider: saved.body.provider?.["empty-owned"] }).toEqual({
+                                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "provider": {
+      "api": "http://127.0.0.1:1/empty-declarations/v1",
+      "env": [],
+-     "models": {},
+      "name": "Bootstrap",
+      "options": {
+        "timeout": false,
+      },
+    },
+    "status": 200,
+  }
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts:218:90)
+(fail) Provider empty declaration contracts > project public save accepts absent and empty model declarations [1644.49ms]
+(pass) Provider empty declaration contracts > project catalog models remain runnable through an empty declaration and cleared override [1631.09ms]
+(pass) Provider empty declaration contracts > project clearing the final unreferenced declaration retains the saved Auth fact [1751.78ms]
+(pass) Provider empty declaration contracts > project clearing a model referenced model returns the canonical 400 [1391.20ms]
+(pass) Provider empty declaration contracts > project clearing a agent referenced model returns the canonical 400 [1577.12ms]
+(pass) Provider empty declaration contracts > clearing a project model override restores the global declaration [2126.44ms]
+
+ 10 pass
+ 8 fail
+ 59 expect() calls
+Ran 18 tests across 1 file. [19.42s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts
+[1/1] DONE test/provider-empty-declarations.test.ts exit=1 duration=20.04s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-empty-declarations.test.ts

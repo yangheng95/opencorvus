@@ -1,0 +1,18 @@
+{
+  "label": "global-clear-saved",
+  "scope": "global",
+  "id": "owned-clear",
+  "status": 200,
+  "requestID": "8fe51271-8d6b-46ae-864f-3671546e1ef6",
+  "effective": {
+    "api": "http://127.0.0.1:18591/clear/v1",
+    "name": "Clear custom declaration",
+    "models": {}
+  },
+  "source": {
+    "name": "Clear custom declaration",
+    "api": "http://127.0.0.1:18591/clear/v1",
+    "models": {}
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

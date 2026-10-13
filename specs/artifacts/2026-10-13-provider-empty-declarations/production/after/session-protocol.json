@@ -1,0 +1,91 @@
+{
+  "boundary": "Actual production TCP and durable Session metadata, no synthetic messages or model inference",
+  "sessionID": "ses_-zUS3JcwezzRlDGIAkrM",
+  "records": [
+    {
+      "operation": "set-owned-project-prompt",
+      "status": 200,
+      "requestID": "caf9e3cf-2159-4863-9d3c-bd49b9023f61",
+      "prompt": {
+        "owned": "Project inherited",
+        "keep": "Project kept"
+      }
+    },
+    {
+      "operation": "create-real-chat-session",
+      "status": 201,
+      "requestID": "30831c99-9c27-475c-9e61-27e6707e7016",
+      "sessionID": "ses_-zUS3JcwezzRlDGIAkrM",
+      "kind": "assistant",
+      "overlay": {
+        "model": "owned-ready/ready-known"
+      }
+    },
+    {
+      "operation": "delete-missing-override",
+      "status": 200,
+      "requestID": "9f373d03-edb6-491f-ac50-f4f51e39ea66",
+      "effective": {
+        "owned": "Project inherited",
+        "keep": "Project kept"
+      },
+      "origin": {
+        "owned": "project",
+        "keep": "project"
+      },
+      "durableStatus": 200,
+      "durableRequestID": "51f1d2ab-7612-4e3d-beae-d0d14d76e19c",
+      "stored": {
+        "model": "owned-ready/ready-known",
+        "prompt": {}
+      }
+    },
+    {
+      "operation": "set-override",
+      "status": 200,
+      "requestID": "87965ac8-e247-47cd-8dd3-cd3619307b42",
+      "effective": {
+        "owned": "Session override",
+        "keep": "Project kept"
+      },
+      "origin": {
+        "owned": "session",
+        "keep": "project"
+      },
+      "durableStatus": 200,
+      "durableRequestID": "173f8a66-5707-4685-aa11-5737e27c6985",
+      "stored": {
+        "model": "owned-ready/ready-known",
+        "prompt": {
+          "owned": "Session override"
+        }
+      }
+    },
+    {
+      "operation": "delete-existing-override",
+      "status": 200,
+      "requestID": "74c42071-69ed-4890-8eac-104bff0c573e",
+      "effective": {
+        "owned": "Project inherited",
+        "keep": "Project kept"
+      },
+      "origin": {
+        "owned": "project",
+        "keep": "project"
+      },
+      "durableStatus": 200,
+      "durableRequestID": "5278ff13-fa67-43a4-8c19-0740798f4c14",
+      "stored": {
+        "model": "owned-ready/ready-known",
+        "prompt": {}
+      }
+    },
+    {
+      "operation": "canonical-project-source",
+      "prompt": {
+        "owned": "Project inherited",
+        "keep": "Project kept"
+      }
+    }
+  ]
+}

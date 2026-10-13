@@ -16,7 +16,6 @@ import {
   applyProviderForm,
   ProviderFormApiError,
   providerFormValues,
-  providerModelIDs,
   validateProviderFormApi,
   type ProviderFormValues,
 } from "../../services/provider-form"
@@ -640,11 +639,6 @@ export default function ProvidersPanel() {
       return
     }
     const values = currentFormValues()
-    if (providerModelIDs(values.models).length === 0) {
-      setFormError(feedback("provider.form.error.models_required"))
-      return
-    }
-
     const apiKey = formApiKey().trim()
     const occurrence = formOccurrence
     const options = providerLoadOptions(directory)

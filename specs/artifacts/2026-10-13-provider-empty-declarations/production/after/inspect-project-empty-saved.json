@@ -1,0 +1,23 @@
+{
+  "label": "project-empty-saved",
+  "scope": "project",
+  "id": "owned-bootstrap",
+  "status": 200,
+  "requestID": "6d054dc9-7a42-4ed1-849a-61b28a48b150",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project-revised/v1",
+    "name": "Project empty renamed",
+    "env": [
+      "OWNED_PROJECT_NEXT"
+    ],
+    "models": {}
+  },
+  "source": {
+    "api": "http://127.0.0.1:18591/project-revised/v1",
+    "name": "Project empty renamed",
+    "env": [
+      "OWNED_PROJECT_NEXT"
+    ]
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

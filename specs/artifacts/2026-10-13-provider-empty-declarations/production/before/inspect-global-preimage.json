@@ -1,0 +1,16 @@
+{
+  "label": "global-preimage",
+  "scope": "global",
+  "id": "owned-bootstrap",
+  "status": 200,
+  "requestID": "1228961b-5255-4ecc-ab4f-1ec9a4a2540b",
+  "effective": {
+    "api": "http://127.0.0.1:18591/global/v1",
+    "name": "Saved key before models"
+  },
+  "source": {
+    "name": "Saved key before models",
+    "api": "http://127.0.0.1:18591/global/v1"
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

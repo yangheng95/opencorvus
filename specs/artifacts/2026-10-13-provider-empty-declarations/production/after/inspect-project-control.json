@@ -1,0 +1,43 @@
+{
+  "label": "project-control",
+  "scope": "project",
+  "id": "owned-ready",
+  "status": 200,
+  "requestID": "660babe2-e730-45e5-9f0c-7ca9ef329b56",
+  "effective": {
+    "api": "http://127.0.0.1:18591/ready/v1",
+    "name": "Project one-model control",
+    "models": {
+      "ready-known": {
+        "id": "ready-known",
+        "name": "ready-known",
+        "release_date": "2026-10-13",
+        "attachment": false,
+        "reasoning": false,
+        "temperature": true,
+        "tool_call": true,
+        "cost": {
+          "input": 1,
+          "output": 2
+        },
+        "limit": {
+          "context": 10000,
+          "output": 1000
+        },
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "options": {}
+      }
+    }
+  },
+  "source": {
+    "name": "Project one-model control"
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

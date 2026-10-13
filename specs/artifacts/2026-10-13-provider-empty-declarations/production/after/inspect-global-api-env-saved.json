@@ -1,0 +1,24 @@
+{
+  "label": "global-api-env-saved",
+  "scope": "global",
+  "id": "owned-bootstrap",
+  "status": 200,
+  "requestID": "f7267dd3-384f-4889-8fc9-16789da1fd43",
+  "effective": {
+    "api": "http://127.0.0.1:18591/global-revised/v1",
+    "name": "Global empty renamed",
+    "env": [
+      "OWNED_GLOBAL_NEXT"
+    ],
+    "models": {}
+  },
+  "source": {
+    "name": "Global empty renamed",
+    "api": "http://127.0.0.1:18591/global-revised/v1",
+    "models": {},
+    "env": [
+      "OWNED_GLOBAL_NEXT"
+    ]
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

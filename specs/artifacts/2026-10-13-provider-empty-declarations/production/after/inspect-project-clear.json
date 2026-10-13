@@ -1,0 +1,18 @@
+{
+  "label": "project-clear",
+  "scope": "project",
+  "id": "owned-project-clear",
+  "status": 200,
+  "requestID": "05709097-bb0a-46f2-8237-425eb0767964",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project/v1",
+    "name": "Project clear",
+    "models": {}
+  },
+  "source": {
+    "name": "Project clear",
+    "api": "http://127.0.0.1:18591/project/v1",
+    "models": {}
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

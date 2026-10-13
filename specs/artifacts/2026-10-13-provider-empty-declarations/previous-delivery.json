@@ -1,0 +1,50 @@
+{
+  "batch": 10,
+  "commit": "373d8682d0b6159a4a50edfae03e9e40bf89e5fa",
+  "parent": "5d0df5d1a8619bbdc4a496760f55c0345b1679bf",
+  "scopedPaths": 85,
+  "branch": "main",
+  "upstream": "origin/main",
+  "standardCommit": {
+    "originalExec": 70502,
+    "actualExit": 0,
+    "gitExit": 0
+  },
+  "freshFetchBeforePush": true,
+  "upstreamMerge": "Already up to date",
+  "pendingReviewedBeforePush": "373d8682d0b6159a4a50edfae03e9e40bf89e5fa fix(config): keep syntax diagnostics and provider feedback precise",
+  "push": {
+    "originalExec": 33594,
+    "actualExit": 0,
+    "capturedCommit": "373d8682d0b6159a4a50edfae03e9e40bf89e5fa",
+    "normalHooks": true,
+    "noBypass": true,
+    "remoteTipAtLaterObservation": "0370acd0fbde71e1fd49a832a2a8f3262574be35",
+    "ownedCommitRemoteAncestor": true,
+    "pendingAfterFreshFetch": "7e393fd28b2734f951353efc3636185a2aa76e7d fix(compaction): recover complete Message diagnostic evidence",
+    "boundary": "Concurrent 0370acd0fbde71e1fd49a832a2a8f3262574be35 created and independently pushed after own captured commit; not part of original push",
+    "laterParallelPending": "7e393fd28b2734f951353efc3636185a2aa76e7d fix(compaction): recover complete Message diagnostic evidence",
+    "pendingAfterBoundary": "Original push captured only 373d8682d; subsequent HEAD commits belong to separate owners and are listed at this later observation, not included in the completed own push"
+  },
+  "checks": {
+    "positiveTests": 45,
+    "assertions": 71,
+    "desktopScreenshots": 19,
+    "sol": {
+      "originalExec": 58042,
+      "actualExit": 0,
+      "requests": 4,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled/eof",
+      "pairedAuthModelsRemoved": true
+    },
+    "hook": "8 typecheck projects, routes, 348ops/26groups docs, 18 leases, 19 architecture docs, 10 packages, exact pushed tree release/module and tracked-source secret scan0"
+  },
+  "ownedPhysical": "before91894/after11627/final86849 exit0; Sol58042 exit0; own listeners0 and own tabs closed",
+  "remaining": "No own uncommitted paths; shared Source/Session/process/SDK/index changes remain with their owners; no release/tag/PR",
+  "evidence": "specs/artifacts/2026-10-13-config-jsonc-diagnostics/README.md",
+  "goalStatus": "active; batch10 delivered; batch11 parallel readonly root/impact intake ongoing",
+  "at": "2026-10-13T15:24:19.618Z"
+}

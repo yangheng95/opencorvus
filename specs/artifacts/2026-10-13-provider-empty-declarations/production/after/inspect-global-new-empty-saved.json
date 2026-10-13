@@ -1,0 +1,20 @@
+{
+  "label": "global-new-empty-saved",
+  "scope": "global",
+  "id": "owned-new-global",
+  "status": 200,
+  "requestID": "27703693-dfba-42b8-b359-d5f8a91a25b8",
+  "effective": {
+    "api": "http://127.0.0.1:18591/global-new/v1",
+    "name": "New global bootstrap",
+    "env": [],
+    "models": {}
+  },
+  "source": {
+    "name": "New global bootstrap",
+    "api": "http://127.0.0.1:18591/global-new/v1",
+    "env": [],
+    "models": {}
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

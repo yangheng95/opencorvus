@@ -1,0 +1,74 @@
+{
+  "label": "project-peer-final",
+  "scope": "project",
+  "id": "owned-project-clear",
+  "status": 200,
+  "requestID": "c4d4d445-1353-4ef2-a839-fdc186d3b173",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project-peer/v1",
+    "name": "Project peer edit renamed",
+    "env": [
+      "OWNED_PROJECT_PEER_KEY"
+    ],
+    "models": {
+      "project-peer-one": {
+        "name": "Project peer metadata",
+        "temperature": false,
+        "tool_call": false,
+        "cost": {
+          "input": 0.4,
+          "output": 0.8
+        },
+        "limit": {
+          "context": 12000,
+          "output": 900
+        },
+        "options": {},
+        "variants": {
+          "quiet": {
+            "reasoningEffort": "minimal"
+          }
+        }
+      }
+    },
+    "options": {
+      "timeout": 92000,
+      "metadata": {
+        "peer": "preserved"
+      }
+    }
+  },
+  "source": {
+    "name": "Project peer edit renamed",
+    "api": "http://127.0.0.1:18591/project-peer/v1",
+    "models": {
+      "project-peer-one": {
+        "name": "Project peer metadata",
+        "tool_call": false,
+        "limit": {
+          "context": 12000,
+          "output": 900
+        },
+        "cost": {
+          "input": 0.4,
+          "output": 0.8
+        },
+        "variants": {
+          "quiet": {
+            "reasoningEffort": "minimal"
+          }
+        }
+      }
+    },
+    "env": [
+      "OWNED_PROJECT_PEER_KEY"
+    ],
+    "options": {
+      "timeout": 92000,
+      "metadata": {
+        "peer": "preserved"
+      }
+    }
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

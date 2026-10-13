@@ -1,0 +1,68 @@
+{
+  "effective": {
+    "name": "Global peer edit renamed",
+    "api": "http://127.0.0.1:18591/global-peer/v1",
+    "env": [
+      "OWNED_PEER_KEY"
+    ],
+    "options": {
+      "timeout": 91000,
+      "metadata": {
+        "peer": "preserved"
+      }
+    },
+    "models": {
+      "peer-one": {
+        "name": "Peer model metadata",
+        "tool_call": false,
+        "limit": {
+          "context": 12000,
+          "output": 900
+        },
+        "cost": {
+          "input": 0.4,
+          "output": 0.8
+        },
+        "variants": {
+          "quiet": {
+            "reasoningEffort": "minimal"
+          }
+        },
+        "temperature": false,
+        "options": {}
+      }
+    }
+  },
+  "source": {
+    "name": "Global peer edit renamed",
+    "api": "http://127.0.0.1:18591/global-peer/v1",
+    "env": [
+      "OWNED_PEER_KEY"
+    ],
+    "options": {
+      "timeout": 91000,
+      "metadata": {
+        "peer": "preserved"
+      }
+    },
+    "models": {
+      "peer-one": {
+        "name": "Peer model metadata",
+        "tool_call": false,
+        "limit": {
+          "context": 12000,
+          "output": 900
+        },
+        "cost": {
+          "input": 0.4,
+          "output": 0.8
+        },
+        "variants": {
+          "quiet": {
+            "reasoningEffort": "minimal"
+          }
+        }
+      }
+    }
+  }
+}

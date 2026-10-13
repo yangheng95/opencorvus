@@ -1,0 +1,38 @@
+{
+  "label": "project-reference-retained",
+  "scope": "project",
+  "id": "owned-project-referenced",
+  "status": 200,
+  "requestID": "1f584664-7ccc-430f-9e60-2851b15ad265",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project/v1",
+    "name": "Project reference guard",
+    "models": {
+      "project-reference": {
+        "name": "Project referenced model",
+        "temperature": false,
+        "tool_call": true,
+        "limit": {
+          "context": 10000,
+          "output": 1000
+        },
+        "options": {}
+      }
+    }
+  },
+  "source": {
+    "name": "Project reference guard",
+    "api": "http://127.0.0.1:18591/project/v1",
+    "models": {
+      "project-reference": {
+        "name": "Project referenced model",
+        "tool_call": true,
+        "limit": {
+          "context": 10000,
+          "output": 1000
+        }
+      }
+    }
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

@@ -1,0 +1,209 @@
+{
+  "boundary": "Actual production TCP and exact owned source, no credential fields",
+  "records": [
+    {
+      "scope": "global",
+      "label": "create-array",
+      "status": 200,
+      "requestID": "8e4fb34b-c46b-468d-aa12-d242795446d2",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Additional global",
+        "models": {},
+        "options": {
+          "metadata": [
+            "known",
+            "array"
+          ]
+        }
+      },
+      "source": {
+        "name": "Additional global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": [
+            "known",
+            "array"
+          ]
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "label": "array-to-empty",
+      "status": 200,
+      "requestID": "a1dc7ef9-d380-409c-b4d6-9eda8ba03a94",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Additional global",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      },
+      "source": {
+        "name": "Additional global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "label": "create-existing-record",
+      "status": 200,
+      "requestID": "62bbe90b-98ef-4304-b7e9-e2c9c5b494d4",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Additional global",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      },
+      "source": {
+        "name": "Additional global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "label": "empty-patch-preserves-record",
+      "status": 200,
+      "requestID": "5fb763b3-4413-4ff8-91d4-d9ed9a29f298",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Additional global",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      },
+      "source": {
+        "name": "Additional global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "create-array",
+      "status": 200,
+      "requestID": "77e5adb3-bd73-4ae4-942d-6fe2209ffc41",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Additional project",
+        "models": {},
+        "options": {
+          "metadata": [
+            "known",
+            "array"
+          ]
+        }
+      },
+      "source": {
+        "name": "Additional project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": [
+            "known",
+            "array"
+          ]
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "array-to-empty",
+      "status": 200,
+      "requestID": "2e29da12-717d-4b98-b031-42eb32d116bf",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Additional project",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      },
+      "source": {
+        "name": "Additional project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "create-existing-record",
+      "status": 200,
+      "requestID": "2ebcc3d0-b3e4-42da-b8d9-90d9a9f8d73f",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Additional project",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      },
+      "source": {
+        "name": "Additional project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "empty-patch-preserves-record",
+      "status": 200,
+      "requestID": "e7adc727-c134-49bb-898d-711ecea12893",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Additional project",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      },
+      "source": {
+        "name": "Additional project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "record member"
+          }
+        }
+      }
+    }
+  ]
+}

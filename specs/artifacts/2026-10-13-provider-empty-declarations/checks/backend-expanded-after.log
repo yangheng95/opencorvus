@@ -1,0 +1,57 @@
+[1/3] START test/provider-empty-declarations.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider empty declaration contracts > merging an overlay into a missing prompt object applies its nested deletion [319.47ms]
+(pass) Provider empty declaration contracts > previewing deletion from an empty overlay preserves inherited prompt values [55.83ms]
+(pass) Provider empty declaration contracts > previewing deletion from an explicit override overlay preserves inherited prompt values [43.67ms]
+(pass) Provider empty declaration contracts > merging a nested object patch into missing metadata applies null and empty-object values [52.43ms]
+(pass) Provider empty declaration contracts > merging a nested object patch into scalar metadata applies null and empty-object values [54.73ms]
+(pass) Provider empty declaration contracts > global JSONC writer preserves the complete source for scalar to empty object [397.60ms]
+(pass) Provider empty declaration contracts > global JSONC writer preserves the complete source for missing object with nested deletion [85.87ms]
+(pass) Provider empty declaration contracts > global JSONC writer preserves the complete source for existing object with an empty patch [87.58ms]
+(pass) Provider empty declaration contracts > global public save persists an explicit models-only empty object [72.70ms]
+(pass) Provider empty declaration contracts > global public save accepts absent and empty model declarations [197.53ms]
+(pass) Provider empty declaration contracts > global catalog models remain runnable through an empty declaration and cleared override [211.07ms]
+(pass) Provider empty declaration contracts > global clearing the final unreferenced declaration retains the saved Auth fact [145.51ms]
+(pass) Provider empty declaration contracts > global clearing a model referenced model returns the canonical 400 [158.02ms]
+(pass) Provider empty declaration contracts > global clearing a agent referenced model returns the canonical 400 [162.41ms]
+(pass) Provider empty declaration contracts > project JSONC writer preserves the complete source for scalar to empty object [1674.01ms]
+(pass) Provider empty declaration contracts > project JSONC writer preserves the complete source for missing object with nested deletion [1664.97ms]
+(pass) Provider empty declaration contracts > project JSONC writer preserves the complete source for existing object with an empty patch [1589.34ms]
+(pass) Provider empty declaration contracts > project public save persists an explicit models-only empty object [1423.87ms]
+(pass) Provider empty declaration contracts > project public save accepts absent and empty model declarations [1725.28ms]
+(pass) Provider empty declaration contracts > project catalog models remain runnable through an empty declaration and cleared override [1872.26ms]
+(pass) Provider empty declaration contracts > project clearing the final unreferenced declaration retains the saved Auth fact [1516.06ms]
+(pass) Provider empty declaration contracts > project clearing a model referenced model returns the canonical 400 [1469.52ms]
+(pass) Provider empty declaration contracts > project clearing a agent referenced model returns the canonical 400 [1697.81ms]
+(pass) Provider empty declaration contracts > clearing a project model override restores the global declaration [1875.65ms]
+
+ 24 pass
+ 0 fail
+ 92 expect() calls
+Ran 24 tests across 1 file. [26.00s]
+[1/3] DONE test/provider-empty-declarations.test.ts exit=0 duration=27.14s
+[2/3] START test/server/conversation-initial-overlay.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) conversation creation commits its model overlay in the Session insert > a Chat created with an explicit model publishes the Session already carrying the overlay [2553.98ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [4.80s]
+[2/3] DONE test/server/conversation-initial-overlay.test.ts exit=0 duration=5.04s
+[3/3] START test/mission/session-initial-overlay.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Mission Session creation commits its model overlay > a Mission Session is published already carrying its title and model overlay [1862.24ms]
+(pass) Mission Session creation commits its model overlay > re-ensuring an existing Mission Session keeps its committed identity [1535.22ms]
+
+ 2 pass
+ 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [4.64s]
+[3/3] DONE test/mission/session-initial-overlay.test.ts exit=0 duration=4.79s

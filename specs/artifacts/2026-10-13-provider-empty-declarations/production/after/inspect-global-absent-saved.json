@@ -1,0 +1,28 @@
+{
+  "label": "global-absent-saved",
+  "scope": "global",
+  "id": "owned-absent",
+  "status": 200,
+  "requestID": "570b5b5d-4507-42bf-a793-5f2278204d09",
+  "effective": {
+    "api": "http://127.0.0.1:18591/absent/v1",
+    "name": "Global absent renamed",
+    "env": [
+      "OWNED_ABSENT_NEXT"
+    ],
+    "options": {
+      "timeout": 42000
+    }
+  },
+  "source": {
+    "name": "Global absent renamed",
+    "api": "http://127.0.0.1:18591/absent/v1",
+    "env": [
+      "OWNED_ABSENT_NEXT"
+    ],
+    "options": {
+      "timeout": 42000
+    }
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

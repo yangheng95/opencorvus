@@ -25,6 +25,105 @@ const original = {
 }
 
 describe("provider declaration edits", () => {
+  for (const [label, models] of [
+    ["empty", ""],
+    ["whitespace", " \t\r\n \n"],
+  ] as const) {
+    test(`creates an exact bootstrap declaration from ${label} model input`, () => {
+      expect(
+        applyProviderForm({
+          id: "bootstrap",
+          current: undefined,
+          initial: null,
+          values: { name: "Bootstrap", api: "http://localhost:17879/v1/", env: "", models },
+        }),
+      ).toEqual({ name: "Bootstrap", api: "http://localhost:17879/v1", env: [], models: {} })
+    })
+  }
+
+  for (const [label, definition] of [
+    ["absent models", { name: "Bootstrap", api: original.api, options: original.options }],
+    ["empty models", { name: "Bootstrap", api: original.api, options: original.options, models: {} }],
+    ["absent API", { name: "Bootstrap", options: original.options, models: {} }],
+  ] as const) {
+    test(`edits a ${label} declaration with exact field ownership`, () => {
+      const initial = providerFormValues(definition)
+      expect(
+        applyProviderForm({
+          id: "bootstrap",
+          current: definition,
+          initial,
+          values: { ...initial, name: "Renamed", env: "FIRST, SECOND" },
+        }),
+      ).toEqual({ ...definition, name: "Renamed", env: ["FIRST", "SECOND"] })
+    })
+  }
+
+  for (const [label, modelField] of [
+    ["absent", {}],
+    ["empty", { models: {} }],
+  ] as const) {
+    test(`preserves peer additions when the initial ${label} models stay empty`, () => {
+      const definition = { name: "Bootstrap", api: original.api, ...modelField }
+      const initial = providerFormValues(definition)
+      const current = {
+        ...definition,
+        api: "http://localhost:17879/peer/v1",
+        options: original.options,
+        models: original.models,
+      }
+      expect(
+        applyProviderForm({
+          id: "bootstrap",
+          current,
+          initial,
+          values: { ...initial, name: "Renamed", models: " \n" },
+        }),
+      ).toEqual({ ...current, name: "Renamed" })
+    })
+  }
+
+  for (const [label, peer] of [
+    ["an empty declaration", {}],
+    [
+      "the peer declaration",
+      { "peer:latest": { name: "Peer", tool_call: false, limit: { context: 9000, output: 512 } } },
+    ],
+  ] as const) {
+    test(`clearing the final original ID leaves ${label}`, () => {
+      const initial = providerFormValues(original)
+      const current = { ...original, models: { ...original.models, ...peer } }
+      expect(
+        applyProviderForm({
+          id: "local",
+          current,
+          initial,
+          values: { ...initial, models: " \r\n" },
+        }),
+      ).toEqual({ ...current, models: peer })
+      expect(current.models).toEqual({ ...original.models, ...peer })
+    })
+  }
+
+  test("empty model intent retains the existing explicit API and identity error contracts", () => {
+    const definition = { name: "Bootstrap", api: original.api, models: {} }
+    const initial = providerFormValues(definition)
+    for (const [current, baseline, api, name, code] of [
+      [undefined, null, "", "ProviderFormApiError", "PROVIDER_API_REQUIRED"],
+      [definition, initial, "ftp://localhost/v1", "ProviderFormApiError", "PROVIDER_API_INVALID"],
+      [definition, null, original.api, "ProviderFormConflictError", "PROVIDER_ALREADY_EXISTS"],
+      [undefined, initial, original.api, "ProviderFormConflictError", "PROVIDER_REMOVED"],
+    ] as const) {
+      let outcome: unknown
+      try {
+        outcome = applyProviderForm({ id: "bootstrap", current, initial: baseline, values: { ...initial, api } })
+      } catch (error) {
+        outcome = error
+      }
+      expect(outcome).toMatchObject({ name, code })
+    }
+  })
+
   test("validates explicit HTTP endpoints with standard host and port parsing", () => {
     for (const [raw, value] of [
       [" HTTPS://example.com/v1/// ", "HTTPS://example.com/v1"],

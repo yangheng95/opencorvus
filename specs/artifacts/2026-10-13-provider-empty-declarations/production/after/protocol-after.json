@@ -1,0 +1,290 @@
+{
+  "phase": "after",
+  "boundary": "Actual production TCP, exact owned canonical source, fictional public markers and no credential fields",
+  "records": [
+    {
+      "scope": "global",
+      "label": "create-empty",
+      "status": 200,
+      "requestID": "65d081f2-6e08-40b6-8006-162021d90d1a",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      },
+      "source": {
+        "name": "Protocol global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "label": "set-scalar",
+      "status": 200,
+      "requestID": "580bbfa0-f804-490b-a611-550eb39b9477",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {
+          "metadata": "previous"
+        }
+      },
+      "source": {
+        "name": "Protocol global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": "previous"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "label": "scalar-to-empty",
+      "status": 200,
+      "requestID": "4883c973-f320-40d9-a2c8-7e2dd845d112",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      },
+      "source": {
+        "name": "Protocol global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "label": "remove-metadata",
+      "status": 200,
+      "requestID": "1573c436-6e82-46c1-8c28-df7d54ce666c",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {}
+      },
+      "source": {
+        "name": "Protocol global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {}
+      }
+    },
+    {
+      "scope": "global",
+      "label": "create-record-empty-member",
+      "status": 200,
+      "requestID": "9c47cc6c-dbb2-4dc9-8cc1-167c5723ef91",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {}
+          }
+        }
+      },
+      "source": {
+        "name": "Protocol global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {}
+          }
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "label": "nested-delete",
+      "status": 200,
+      "requestID": "67681c5e-ae58-4b61-b3ae-d06e5bdecb48",
+      "effective": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {},
+            "nested": {}
+          }
+        }
+      },
+      "source": {
+        "name": "Protocol global",
+        "api": "http://127.0.0.1:18591/global/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {},
+            "nested": {}
+          }
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "create-empty",
+      "status": 200,
+      "requestID": "cae145fc-151f-4678-8047-214b3a573686",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Protocol project",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      },
+      "source": {
+        "name": "Protocol project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "set-scalar",
+      "status": 200,
+      "requestID": "24623916-6070-4036-9443-5cd3641c75a7",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Protocol project",
+        "models": {},
+        "options": {
+          "metadata": "previous"
+        }
+      },
+      "source": {
+        "name": "Protocol project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": "previous"
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "scalar-to-empty",
+      "status": 200,
+      "requestID": "82d6587e-dd56-46dc-aa5c-4a30297f11f8",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Protocol project",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      },
+      "source": {
+        "name": "Protocol project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "remove-metadata",
+      "status": 200,
+      "requestID": "59ff1ac5-d855-4b35-bcf0-bcde48166ec6",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Protocol project",
+        "models": {},
+        "options": {}
+      },
+      "source": {
+        "name": "Protocol project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {}
+      }
+    },
+    {
+      "scope": "project",
+      "label": "create-record-empty-member",
+      "status": 200,
+      "requestID": "6533febf-e5ea-4353-b868-4237ba0c5a33",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Protocol project",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {}
+          }
+        }
+      },
+      "source": {
+        "name": "Protocol project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {}
+          }
+        }
+      }
+    },
+    {
+      "scope": "project",
+      "label": "nested-delete",
+      "status": 200,
+      "requestID": "3f724843-ef1c-4fce-9b4d-b906f72f673c",
+      "effective": {
+        "api": "http://127.0.0.1:18591/project/v1",
+        "name": "Protocol project",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {},
+            "nested": {}
+          }
+        }
+      },
+      "source": {
+        "name": "Protocol project",
+        "api": "http://127.0.0.1:18591/project/v1",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {},
+            "nested": {}
+          }
+        }
+      }
+    }
+  ]
+}

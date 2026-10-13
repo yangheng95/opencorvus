@@ -1,0 +1,222 @@
+{
+  "scope": "global",
+  "mode": "config",
+  "label": "global-reference",
+  "method": "PATCH",
+  "path": "/global/config",
+  "status": 200,
+  "requestID": "8dc5868e-ea9c-44f9-a001-92872351ef61",
+  "input": {
+    "model": "owned-referenced/reference-one"
+  },
+  "body": {
+    "$schema": "https://opencorvus.ai/config.json",
+    "model": "owned-referenced/reference-one",
+    "provider": {
+      "owned-bootstrap": {
+        "api": "http://127.0.0.1:18591/global-revised/v1",
+        "name": "Global empty renamed",
+        "env": [
+          "OWNED_GLOBAL_NEXT"
+        ],
+        "models": {}
+      },
+      "owned-empty": {
+        "api": "http://127.0.0.1:18591/empty/v1",
+        "name": "No API key configured",
+        "models": {}
+      },
+      "owned-configzero": {
+        "api": "http://127.0.0.1:18591/config/v1",
+        "name": "Config key without models",
+        "models": {},
+        "options": {
+          "apiKey": "[OWNED SAMPLE CREDENTIAL]"
+        }
+      },
+      "owned-ready": {
+        "api": "http://127.0.0.1:18591/ready/v1",
+        "name": "Known model provider",
+        "models": {
+          "ready-known": {
+            "id": "ready-known",
+            "name": "ready-known",
+            "release_date": "2026-10-13",
+            "attachment": false,
+            "reasoning": false,
+            "temperature": true,
+            "tool_call": true,
+            "cost": {
+              "input": 1,
+              "output": 2
+            },
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            },
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "options": {}
+          }
+        }
+      },
+      "owned-env": {
+        "api": "http://127.0.0.1:18591/env/v1",
+        "name": "Single environment key",
+        "env": [
+          "OWNED_PROVIDER_API_KEY"
+        ],
+        "models": {}
+      },
+      "owned-absent": {
+        "api": "http://127.0.0.1:18591/absent/v1",
+        "name": "API-only declaration",
+        "env": [
+          "OWNED_ABSENT_KEY"
+        ],
+        "options": {
+          "timeout": 42000
+        }
+      },
+      "owned-models-only": {
+        "name": "Global models-only renamed",
+        "models": {}
+      },
+      "owned-inherited": {
+        "api": "http://127.0.0.1:18591/inherited/v1",
+        "name": "Inherited declaration renamed",
+        "models": {}
+      },
+      "owned-clear": {
+        "api": "http://127.0.0.1:18591/global-peer/v1",
+        "name": "Global peer edit renamed",
+        "env": [
+          "OWNED_PEER_KEY"
+        ],
+        "models": {
+          "peer-one": {
+            "name": "Peer model metadata",
+            "temperature": false,
+            "tool_call": false,
+            "cost": {
+              "input": 0.4,
+              "output": 0.8
+            },
+            "limit": {
+              "context": 12000,
+              "output": 900
+            },
+            "options": {},
+            "variants": {
+              "quiet": {
+                "reasoningEffort": "minimal"
+              }
+            }
+          }
+        },
+        "options": {
+          "timeout": 91000,
+          "metadata": {
+            "peer": "preserved"
+          }
+        }
+      },
+      "owned-referenced": {
+        "api": "http://127.0.0.1:18591/ref/v1",
+        "name": "Referenced declaration",
+        "models": {
+          "reference-one": {
+            "id": "reference-one",
+            "name": "reference-one",
+            "release_date": "2026-10-13",
+            "attachment": false,
+            "reasoning": false,
+            "temperature": true,
+            "tool_call": true,
+            "cost": {
+              "input": 1,
+              "output": 2
+            },
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            },
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "options": {}
+          }
+        }
+      },
+      "owned-overlap": {
+        "api": "http://127.0.0.1:18591/overlap/v1",
+        "name": "Global overlay base",
+        "models": {
+          "shared-one": {
+            "id": "shared-one",
+            "name": "Global shared metadata",
+            "release_date": "2026-10-13",
+            "attachment": false,
+            "reasoning": false,
+            "temperature": true,
+            "tool_call": true,
+            "cost": {
+              "input": 1,
+              "output": 2
+            },
+            "limit": {
+              "context": 10000,
+              "output": 1000
+            },
+            "modalities": {
+              "input": [
+                "text"
+              ],
+              "output": [
+                "text"
+              ]
+            },
+            "options": {}
+          }
+        }
+      },
+      "owned-protocol-global": {
+        "api": "http://127.0.0.1:18591/global/v1",
+        "name": "Protocol global",
+        "models": {},
+        "options": {
+          "metadata": {
+            "kept": "known",
+            "empty": {},
+            "nested": {}
+          }
+        }
+      }
+    },
+    "prompt_profile": {
+      "active": "base"
+    },
+    "permission_mode": "full_access",
+    "experimental": {
+      "auto_question": true,
+      "memory": {
+        "enabled": false,
+        "document_token_limit": 10000,
+        "organizer_input_token_budget": 32000,
+        "pending_availability_limit": 500
+      }
+    }
+  },
+  "boundary": "Actual isolated production HTTP mutation; only own fictional data; known sample credential bytes masked"
+}

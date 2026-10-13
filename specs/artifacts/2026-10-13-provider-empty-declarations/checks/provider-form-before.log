@@ -1,0 +1,29 @@
+bun test v1.4.0 (34cbb9a40)
+
+packages\overlay\test\provider-form.test.ts:
+(pass) provider declaration edits > creates an exact bootstrap declaration from empty model input [0.62ms]
+(pass) provider declaration edits > creates an exact bootstrap declaration from whitespace model input [0.06ms]
+(pass) provider declaration edits > edits a absent models declaration with exact field ownership [0.21ms]
+(pass) provider declaration edits > edits a empty models declaration with exact field ownership [0.05ms]
+(pass) provider declaration edits > edits a absent API declaration with exact field ownership [0.04ms]
+(pass) provider declaration edits > preserves peer additions when the initial absent models stay empty [0.11ms]
+(pass) provider declaration edits > preserves peer additions when the initial empty models stay empty [0.04ms]
+(pass) provider declaration edits > clearing the final original ID leaves an empty declaration [0.14ms]
+(pass) provider declaration edits > clearing the final original ID leaves the peer declaration [0.06ms]
+(pass) provider declaration edits > empty model intent retains the existing explicit API and identity error contracts [0.36ms]
+(pass) provider declaration edits > validates explicit HTTP endpoints with standard host and port parsing [0.33ms]
+(pass) provider declaration edits > maps malformed explicit endpoints to the form error contract [0.68ms]
+(pass) provider declaration edits > preserves current endpoint ownership when only another field was edited [0.31ms]
+(pass) provider declaration edits > applies a valid explicit endpoint correction to the latest definition [0.09ms]
+(pass) provider declaration edits > projects all environment names and exact model identities [0.05ms]
+(pass) provider declaration edits > changes the submitted name while preserving current runtime metadata [0.13ms]
+(pass) provider declaration edits > retains concurrent edits to untouched fields and model metadata [0.11ms]
+(pass) provider declaration edits > merges explicit model additions and removals with concurrent catalog changes [0.12ms]
+(pass) provider declaration edits > creates new models with exact identifiers and all submitted environment names [0.08ms]
+(pass) provider declaration edits > applies explicit endpoint and environment edits while retaining a peer model removal [0.14ms]
+(pass) provider declaration edits > maps stale provider identity to an explicit conflict contract [0.15ms]
+
+ 21 pass
+ 0 fail
+ 61 expect() calls
+Ran 21 tests across 1 file. [2.80s]

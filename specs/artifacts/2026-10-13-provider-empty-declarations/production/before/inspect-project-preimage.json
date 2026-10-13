@@ -1,0 +1,15 @@
+{
+  "label": "project-preimage",
+  "scope": "project",
+  "id": "owned-bootstrap",
+  "status": 200,
+  "requestID": "a6a1922a-a1f2-4476-a5ac-bdf8037da10b",
+  "effective": {
+    "api": "http://127.0.0.1:18591/project/v1",
+    "name": "Saved key before models"
+  },
+  "source": {
+    "api": "http://127.0.0.1:18591/project/v1"
+  },
+  "boundary": "Actual owned production TCP and exact canonical source; sample credential bytes masked"
+}

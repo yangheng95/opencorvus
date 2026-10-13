@@ -1,0 +1,28 @@
+[1/1] START test/provider-empty-declarations.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider empty declaration contracts > merging an overlay into a missing prompt object applies its nested deletion [249.88ms]
+(pass) Provider empty declaration contracts > previewing deletion from an empty overlay preserves inherited prompt values [43.15ms]
+(pass) Provider empty declaration contracts > previewing deletion from an explicit override overlay preserves inherited prompt values [58.09ms]
+(pass) Provider empty declaration contracts > merging a nested object patch into missing metadata applies null and empty-object values [58.82ms]
+(pass) Provider empty declaration contracts > merging a nested object patch into scalar metadata applies null and empty-object values [52.32ms]
+(pass) Provider empty declaration contracts > global public save persists an explicit models-only empty object [334.16ms]
+(pass) Provider empty declaration contracts > global public save accepts absent and empty model declarations [181.91ms]
+(pass) Provider empty declaration contracts > global catalog models remain runnable through an empty declaration and cleared override [202.61ms]
+(pass) Provider empty declaration contracts > global clearing the final unreferenced declaration retains the saved Auth fact [166.41ms]
+(pass) Provider empty declaration contracts > global clearing a model referenced model returns the canonical 400 [144.68ms]
+(pass) Provider empty declaration contracts > global clearing a agent referenced model returns the canonical 400 [158.22ms]
+(pass) Provider empty declaration contracts > project public save persists an explicit models-only empty object [1746.33ms]
+(pass) Provider empty declaration contracts > project public save accepts absent and empty model declarations [1857.86ms]
+(pass) Provider empty declaration contracts > project catalog models remain runnable through an empty declaration and cleared override [1826.14ms]
+(pass) Provider empty declaration contracts > project clearing the final unreferenced declaration retains the saved Auth fact [1665.32ms]
+(pass) Provider empty declaration contracts > project clearing a model referenced model returns the canonical 400 [1630.56ms]
+(pass) Provider empty declaration contracts > project clearing a agent referenced model returns the canonical 400 [1521.63ms]
+(pass) Provider empty declaration contracts > clearing a project model override restores the global declaration [1970.36ms]
+
+ 18 pass
+ 0 fail
+ 68 expect() calls
+Ran 18 tests across 1 file. [20.73s]
+[1/1] DONE test/provider-empty-declarations.test.ts exit=0 duration=21.49s

@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 服务商允许保存空模型声明，并可稍后添加或发现模型；名称、地址和环境变量编辑保留当前声明及并行新增模型。项目覆盖删除可恢复全局模型，仍被引用的自定义模型保持明确错误。配置合并正确持久化空对象并归一化嵌套删除标记。
+
 - 配置语法错误仅显示错误码与行列位置，避免将配置全文及展开的环境变量或文件内容带入诊断；保留配置路径、原解析顺序和读写语义。服务商操作使用简短的当前语言摘要与可展开详情，准确保留已保存及后续失败的事实，两个刷新入口各自恢复。
 
 - 零模型服务商正确显示已保存或已配置的 API Key；凭据、配置或目录读取失败时显示状态暂不可用，恢复后重新确认。行内与编辑输入使用同一事实，OAuth 登录不会被误当作 API Key，模型选择继续只显示真实可用模型。
@@ -77,6 +79,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Providers accept empty model declarations so models can be added or discovered later. Name, endpoint and environment edits preserve current declarations and concurrent additions. Removing a project override can restore global models; referenced custom models retain their explicit error contract. Configuration merges persist empty objects and normalize nested deletion markers.
 
 - Configuration syntax errors report codes and line/column positions without copying the full configuration or expanded environment/file values into diagnostics. Paths, parser order and read/write semantics are retained. Provider operations use short localized summaries with expandable details, preserve saved and follow-up failure facts, and recover each refresh independently.
 

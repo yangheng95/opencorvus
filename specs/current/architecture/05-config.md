@@ -154,6 +154,12 @@ opencorvus.jsonc ──→ 声明层 + 累积校验/合并 ──→ Config.get(
 同一安全 message 供具名序列化、实际日志、CLI 和 Provider `config.read` 局部失败使用。
 I/O 错误、schema 验证与成功读取配置保持各自原契约。
 
+## 空对象与 overlay 删除标记
+
+JSON Merge Patch（JavaScript Object Notation Merge Patch，JSON 合并补丁）的对象补丁先将缺席、scalar 或 array 目标初始化为对象，再递归应用成员；现有对象保留未触及的成员。明确 `{}` 因此可以建立空对象或替换非对象，但不表示清空已有对象。JSONC 文本 writer 与内存 merge primitive 使用同一 RFC 7396 合同，原注释、数组整体替换和候选校验继续保留。
+
+Session overlay 的 nested null 是删除当前覆盖的标记。preview 先将该标记应用到当前 overlay，再向 base 投影；缺席覆盖的删除仍形成合法空对象，删除已有覆盖恢复 base。持久 configOverlay 使用归一化后的 nextOverlay，原无 null 完整性校验保持。直接 mergeOverlay 对传入 base 的删除仍遵循同一 merge patch 语义。
+
 ## 跨进程 reader generation 与 runtime projection
 
 Project 和 global JSONC 文件是唯一配置事实；不存在 revision sidecar、影子配置、第二事件协议或
