@@ -3,13 +3,18 @@ import { Feedback } from "../ui/Feedback"
 import { For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js"
 
 import type { OfficialUsageSource, UsagePeriod, UsageStatistics } from "@opencorvus-ai/sdk"
+import type { KeyboardDelegate } from "@kobalte/core"
+import { createListState } from "@kobalte/core"
+import { useTooltipContext } from "@kobalte/core/tooltip"
 
 import { UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
 import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
+import { ListboxItem, ListboxItemDescription, ListboxRoot } from "../ui/Listbox"
 import { SegmentedControl } from "../ui/SegmentedControl"
+import { Tooltip } from "../ui/Tooltip"
 import { SettingsPanel } from "./layout"
 
 const PERIODS: UsagePeriod[] = ["day", "week", "month", "year"]
@@ -49,13 +54,93 @@ function bucketLabel(data: UsageStatistics, value: number): string {
   return new Intl.DateTimeFormat(localeTag(), { ...options, timeZone: data.timeZone }).format(value)
 }
 
-function UsageActivityGrid(props: { data: UsageStatistics }) {
-  const peak = createMemo(() => Math.max(0, ...props.data.buckets.map((bucket) => bucket.tokens.total)))
+function UsageBucketDetails(props: { tokens: number; interval: string }) {
+  const tooltip = useTooltipContext()
+  return (
+    <Tooltip.Portal>
+      <Tooltip.Content
+        as={ListboxItemDescription}
+        class="usage-activity__detail"
+        onEscapeKeyDown={(event) => {
+          event.preventDefault()
+          tooltip.hideTooltip(true)
+        }}
+      >
+        <strong>
+          {exactNumber(props.tokens)} {t("usage.table_tokens")}
+        </strong>
+        <small>{props.interval}</small>
+      </Tooltip.Content>
+    </Tooltip.Portal>
+  )
+}
+
+function UsageActivityGrid(props: { data?: UsageStatistics; period: UsagePeriod; loading: boolean }) {
+  const bucketElements = new Map<string, HTMLLIElement>()
+  const buckets = createMemo(() => props.data?.buckets ?? [])
+  const intervalFormatter = createMemo(() => {
+    const data = props.data
+    if (!data) return undefined
+    return new Intl.DateTimeFormat(localeTag(), {
+      timeZone: data.timeZone,
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "shortOffset",
+    })
+  })
+  const intervalLabel = (bucket: UsageStatistics["buckets"][number]) => {
+    const formatter = intervalFormatter()
+    return formatter ? `${formatter.format(bucket.start)} – ${formatter.format(bucket.end)}` : ""
+  }
+  const bucketText = (bucket: UsageStatistics["buckets"][number]) =>
+    `${intervalLabel(bucket)} · ${exactNumber(bucket.tokens.total)} ${t("usage.table_tokens")}`
+  const listState = createListState({
+    selectionMode: "single",
+    selectionBehavior: "replace",
+    disallowEmptySelection: () => buckets().length > 0,
+    dataSource: buckets,
+    getKey: () => (bucket: UsageStatistics["buckets"][number]) => bucket.start.toString(),
+    getTextValue: () => bucketText,
+  })
+  createEffect(() => {
+    if (!props.data) listState.selectionManager().clearSelection()
+  })
+  const keyInDirection = (key: string, axis: "horizontal" | "vertical", direction: -1 | 1) => {
+    const current = bucketElements.get(key)?.getBoundingClientRect()
+    if (!current) return undefined
+    let nearest: { key: string; distance: number } | undefined
+    for (const [candidateKey, element] of bucketElements) {
+      const candidate = element.getBoundingClientRect()
+      const aligned =
+        axis === "horizontal"
+          ? candidate.top < current.bottom && candidate.bottom > current.top
+          : candidate.left < current.right && candidate.right > current.left
+      const distance = (axis === "horizontal" ? candidate.left - current.left : candidate.top - current.top) * direction
+      if (aligned && distance > 0 && (!nearest || distance < nearest.distance)) {
+        nearest = { key: candidateKey, distance }
+      }
+    }
+    return nearest?.key
+  }
+  const keyboardDelegate: KeyboardDelegate = {
+    getKeyAbove: (key) => keyInDirection(key, "vertical", -1),
+    getKeyBelow: (key) => keyInDirection(key, "vertical", 1),
+    getKeyLeftOf: (key) => keyInDirection(key, "horizontal", -1),
+    getKeyRightOf: (key) => keyInDirection(key, "horizontal", 1),
+    getFirstKey: () => buckets()[0]?.start.toString(),
+    getLastKey: () => buckets().at(-1)?.start.toString(),
+  }
+  const peak = createMemo(() => Math.max(0, ...buckets().map((bucket) => bucket.tokens.total)))
   const labels = createMemo(() => {
-    const buckets = props.data.buckets
+    const data = props.data
+    if (!data) return []
+    const buckets = data.buckets
     if (buckets.length === 0) return []
-    if (props.data.period === "year") {
-      const month = new Intl.DateTimeFormat(localeTag(), { month: "short", timeZone: props.data.timeZone })
+    if (data.period === "year") {
+      const month = new Intl.DateTimeFormat(localeTag(), { month: "short", timeZone: data.timeZone })
       const seen = new Set<string>()
       return buckets.flatMap((bucket, index) => {
         const label = month.format(bucket.start)
@@ -67,7 +152,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
     const last = buckets.length - 1
     return [...new Set([0, Math.round(last / 3), Math.round((last * 2) / 3), last])].map((index) => ({
       index,
-      label: bucketLabel(props.data, buckets[index].start),
+      label: bucketLabel(data, buckets[index].start),
     }))
   })
   const level = (tokens: number) => {
@@ -75,43 +160,59 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
     return Math.max(1, Math.ceil((tokens / peak()) * 4))
   }
   const yearOffset = createMemo(() => {
-    if (props.data.period !== "year" || props.data.buckets.length === 0) return 0
+    const data = props.data
+    if (!data || data.period !== "year" || data.buckets.length === 0) return 0
     const day = new Intl.DateTimeFormat("en-US", {
-      timeZone: props.data.timeZone,
+      timeZone: data.timeZone,
       weekday: "short",
-    }).format(props.data.buckets[0].start)
+    }).format(data.buckets[0].start)
     return ({ Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 } as Record<string, number>)[day] ?? 0
   })
   const labelPosition = (index: number) =>
-    props.data.period === "year"
-      ? Math.floor((index + yearOffset()) / 7) /
-        Math.max(1, Math.ceil((props.data.buckets.length + yearOffset()) / 7) - 1)
-      : index / Math.max(1, props.data.buckets.length - 1)
+    props.period === "year"
+      ? Math.floor((index + yearOffset()) / 7) / Math.max(1, Math.ceil((buckets().length + yearOffset()) / 7) - 1)
+      : index / Math.max(1, buckets().length - 1)
 
   return (
     <div class="usage-activity" data-ui="usage-token-activity">
-      <div
-        class={`usage-activity__grid usage-activity__grid--${props.data.period}`}
-        role="img"
+      <ListboxRoot<UsageStatistics["buckets"][number]>
+        class={`usage-activity__grid usage-activity__grid--${props.period}`}
+        density="default"
         aria-label={t("usage.chart_aria")}
-      >
-        <For each={Array.from({ length: yearOffset() })}>
-          {() => <span class="usage-activity__cell usage-activity__cell--spacer" aria-hidden="true" />}
-        </For>
-        <For each={props.data.buckets}>
-          {(bucket) => (
-            <span class={`usage-activity__cell usage-activity__cell--${level(bucket.tokens.total)}`}>
-              <span class="sr-only">
-                {bucketLabel(props.data, bucket.start)} · {exactNumber(bucket.tokens.total)} {t("usage.table_tokens")}
-              </span>
-              <span class="usage-activity__tooltip" aria-hidden="true">
-                <strong>{exactNumber(bucket.tokens.total)}</strong>
-                <small>{bucketLabel(props.data, bucket.start)}</small>
-              </span>
-            </span>
-          )}
-        </For>
-      </div>
+        aria-busy={props.loading || undefined}
+        state={listState}
+        selectOnFocus
+        disallowEmptySelection={listState.selectionManager().disallowEmptySelection()}
+        disallowTypeAhead
+        autoFocus={false}
+        shouldFocusWrap={false}
+        keyboardDelegate={keyboardDelegate}
+        renderItem={(item) => {
+          onCleanup(() => bucketElements.delete(item.key))
+          const position = () => item.index + yearOffset()
+          return (
+            <Tooltip.Root openDelay={180} closeDelay={80} placement="top" gutter={8} fitViewport>
+              <Tooltip.Trigger
+                as={ListboxItem}
+                item={item}
+                ref={(element) => bucketElements.set(item.key, element)}
+                class={`usage-activity__cell usage-activity__cell--${level(item.rawValue.tokens.total)}`}
+                style={
+                  props.period === "year"
+                    ? {
+                        "grid-row": String((position() % 7) + 1),
+                        "grid-column": String(Math.floor(position() / 7) + 1),
+                      }
+                    : undefined
+                }
+              >
+                <span class="sr-only">{bucketText(item.rawValue)}</span>
+                <UsageBucketDetails tokens={item.rawValue.tokens.total} interval={intervalLabel(item.rawValue)} />
+              </Tooltip.Trigger>
+            </Tooltip.Root>
+          )
+        }}
+      />
       <div class="usage-activity__labels" aria-hidden="true">
         <For each={labels()}>
           {(item) => <span style={{ left: `${labelPosition(item.index) * 100}%` }}>{item.label}</span>}
@@ -438,15 +539,9 @@ export default function UsagePanel() {
             </Button>
           </div>
         </header>
-        <Show when={data()}>
-          {(resolved) => (
-            <>
-              <UsageActivityGrid data={resolved()} />
-              <Show when={resolved().current.summary.calls === 0}>
-                <p class="usage-coverage-note">{t("usage.empty_body")}</p>
-              </Show>
-            </>
-          )}
+        <UsageActivityGrid data={data()} period={period()} loading={loading()} />
+        <Show when={data()?.current.summary.calls === 0}>
+          <p class="usage-coverage-note">{t("usage.empty_body")}</p>
         </Show>
         <Show when={loading() && !data() && !error()}>
           <div class="usage-loading" role="status">

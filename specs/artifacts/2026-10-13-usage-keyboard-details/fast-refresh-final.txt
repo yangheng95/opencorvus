@@ -1,0 +1,69 @@
+Browser tab: 9, Title: "OpenCorvus", URL: "http://127.0.0.1:18573/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 63-77, 88-128, 134-139
++								88 container Usage summary
++									89 container 0
++										90 text 0
++										91 text Total Token
++									92 container
++										93 text 0 Peak interval
++									94 container $0
++										95 text $0
++										96 text Calculated cost
++									97 container
++										98 text 0 API calls
++									99 container
++										100 text — Pricing coverage
++								101 container API event time
++									102 text Oct 13, 2026 – Oct 13, 2026 Asia/Shanghai Even with previous period
++									103 list Description: Token activity heatmap, ID: listbox-cl-3668
++										104 (selected) Value: Oct 13, 2026, 12:00 AM GMT+8 – Oct 13, 2026, 01:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3670
++										105 Value: Oct 13, 2026, 01:00 AM GMT+8 – Oct 13, 2026, 02:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3672
++										106 Value: Oct 13, 2026, 02:00 AM GMT+8 – Oct 13, 2026, 03:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3674
++										107 Value: Oct 13, 2026, 03:00 AM GMT+8 – Oct 13, 2026, 04:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3676
++										108 Value: Oct 13, 2026, 04:00 AM GMT+8 – Oct 13, 2026, 05:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3678
++										109 Value: Oct 13, 2026, 05:00 AM GMT+8 – Oct 13, 2026, 06:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3680
++										110 Value: Oct 13, 2026, 06:00 AM GMT+8 – Oct 13, 2026, 07:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3682
++										111 Value: Oct 13, 2026, 07:00 AM GMT+8 – Oct 13, 2026, 08:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3684
++										112 Value: Oct 13, 2026, 08:00 AM GMT+8 – Oct 13, 2026, 09:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3686
++										113 Value: Oct 13, 2026, 09:00 AM GMT+8 – Oct 13, 2026, 10:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3688
++										114 Value: Oct 13, 2026, 10:00 AM GMT+8 – Oct 13, 2026, 11:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3690
++										115 Value: Oct 13, 2026, 11:00 AM GMT+8 – Oct 13, 2026, 12:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3692
++										116 Value: Oct 13, 2026, 12:00 PM GMT+8 – Oct 13, 2026, 01:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3694
++										117 Value: Oct 13, 2026, 01:00 PM GMT+8 – Oct 13, 2026, 02:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3696
++										118 Value: Oct 13, 2026, 02:00 PM GMT+8 – Oct 13, 2026, 03:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3698
++										119 Value: Oct 13, 2026, 03:00 PM GMT+8 – Oct 13, 2026, 04:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3700
++										120 Value: Oct 13, 2026, 04:00 PM GMT+8 – Oct 13, 2026, 05:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3702
++										121 Value: Oct 13, 2026, 05:00 PM GMT+8 – Oct 13, 2026, 06:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3704
++										122 Value: Oct 13, 2026, 06:00 PM GMT+8 – Oct 13, 2026, 07:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3706
++										123 Value: Oct 13, 2026, 07:00 PM GMT+8 – Oct 13, 2026, 08:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3708
++										124 Value: Oct 13, 2026, 08:00 PM GMT+8 – Oct 13, 2026, 09:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3710
++										125 Value: Oct 13, 2026, 09:00 PM GMT+8 – Oct 13, 2026, 10:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3712
++										126 Value: Oct 13, 2026, 10:00 PM GMT+8 – Oct 13, 2026, 11:00 PM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3714
++										127 Value: Oct 13, 2026, 11:00 PM GMT+8 – Oct 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-3668-item-cl-3716
++									128 text Completed streamed API calls will appear here at their actual event time.
+~									130 heading Activity insights, Value: 2
+~										131 text Activity insights
+~									132 text 0 Token per call
+~									133 text Input 0 Output 0 Reasoning 0 Cache 0
++									134 definition list
++										135 container Priced Token
++											136 text Priced Token
++										137 text 0
++										138 container Unpriced Token
++											139 text Unpriced Token
++										140 text 0
++										141 container Legacy unknown
++											142 text Legacy unknown
++										143 text 0
++								144 container
++									145 heading Providers, Value: 2
++										146 text Providers
++									147 text Measured Token share by Provider.
++									148 text 0 No Provider usage for this period.
++								149 text Cost is calculated from the model rate stored at call time. Unpriced and legacy-unknown Token are never presented as confirmed free usage.
++								150 button (collapsed) Secondary Actions: Expand, Official sources & reconciliation Provider-issued organization usage, financial ledgers, account credits, and cloud control-plane coverage. Compare, never sum
++									151 heading Official sources & reconciliation, Value: 2
++										152 text Official sources & reconciliation
++									153 text Provider-issued organization usage, financial ledgers, account credits, and cloud control-plane coverage.
++									154 text Compare, never sum

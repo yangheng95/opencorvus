@@ -1,0 +1,40 @@
+[1/1] START test/usage/usage-stats.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) natural-period Provider usage > aggregates current and previous calendar months with deterministic Provider and model rows [56.52ms]
+(pass) natural-period Provider usage > uses the real IANA day length across daylight-saving time [5.51ms]
+(pass) natural-period Provider usage > uses the 25-hour IANA day across the daylight-saving fallback [4.60ms]
+(pass) natural-period Provider usage > starts natural weeks on Monday [1.96ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for local [1.65ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for system [0.76ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for UTC+3 [0.80ms]
+(pass) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour forward transition [4.74ms]
+(pass) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour backward transition [3.85ms]
+(pass) natural-period Provider usage > assigns both Lord Howe 01:45 instants to their distinct real-hour intervals [2.93ms]
+(pass) natural-period Provider usage > resolves Santiago's missing midnight to exact adjacent natural days [3.74ms]
+(pass) natural-period Provider usage > fills Santiago's week with natural-day intervals through the midnight transition [3.55ms]
+(pass) natural-period Provider usage > fills Santiago's month with natural-day intervals through the midnight transition [45.32ms]
+(pass) natural-period Provider usage > fills Santiago's year with natural-day intervals through the midnight transition [59.58ms]
+(pass) natural-period Provider usage > assigns both ends of the 24-hour Asia/Shanghai day to the correct half-open window [4.18ms]
+(pass) natural-period Provider usage > assigns both ends of the 23-hour America/New_York day to the correct half-open window [1.98ms]
+(pass) natural-period Provider usage > assigns both ends of the 25-hour America/New_York day to the correct half-open window [2.64ms]
+(pass) natural-period Provider usage > includes the measured leap day and exact year endpoints in Shanghai's leap year [27.11ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the day observed at first 00:30 [3.00ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the day observed at second 00:30 [1.94ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the day observed at noon [2.51ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the month observed at first 00:30 [3.44ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the month observed at second 00:30 [3.05ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the month observed at noon [3.17ms]
+(pass) natural-period Provider usage > includes both Havana midnight hours in the previous day [1.92ms]
+(pass) natural-period Provider usage > includes both Havana midnight hours in the previous month [2.87ms]
+(pass) natural-period Provider usage > places both Havana midnight hours in one natural-day bucket within the week [2.00ms]
+(pass) natural-period Provider usage > places both Havana midnight hours in one natural-day bucket within the year [26.78ms]
+(pass) natural-period Provider usage > projects a natural year as daily activity buckets [25.28ms]
+(pass) natural-period Provider usage > serves canonical streamed-call ledger occurrences through the global usage API [2117.02ms]
+
+ 30 pass
+ 0 fail
+ 238 expect() calls
+Ran 30 tests across 1 file. [7.65s]
+[1/1] DONE test/usage/usage-stats.test.ts exit=0 duration=8.35s

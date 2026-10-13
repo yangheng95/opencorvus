@@ -726,6 +726,15 @@ activity section; a busy refresh remains focusable and suppresses repeat request
 Empty periods retain their actual zero-valued buckets. Official provider
 comparisons and model detail remain below the primary overview. No personal
 identity, subscription, streak or plugin usage is inferred from server credentials.
+Activity buckets use one Listbox inspection collection with a single Tab entry,
+visual-direction arrows and chronological Home/End. Zero-valued buckets remain
+inspectable; year positions express real weekdays without synthetic options.
+The collection carrier stays mounted with an empty current-data collection and
+aria-busy during loading, so a rapid Tab after refresh has a stable focus target.
+Kobalte owns collection selection and focus; retired data clears its selection.
+The shared Tooltip presents the same localized event interval, UTC offsets and
+Token count on hover or focus, with the item's registered description pointing
+to the actual popup. Escape closes that popup through its existing owner.
 Default light/dark palettes use neutral chrome; named palettes retain their
 own colors. Page typography follows the sole shared typography authority.
 

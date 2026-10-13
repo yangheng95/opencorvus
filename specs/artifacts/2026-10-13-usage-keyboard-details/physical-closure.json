@@ -1,0 +1,58 @@
+[
+  {
+    "scope": "before",
+    "pid": 76612,
+    "birthUtc": "2026-10-13T06:42:48.9287165Z",
+    "processPresent": false,
+    "listeners": 0,
+    "observedAt": "2026-10-13T08:41:20.7000521Z",
+    "terminal": {
+      "reason": "Own pages closed after manual usage-grid review",
+      "pid": 76612,
+      "elapsed": 213685,
+      "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+    }
+  },
+  {
+    "scope": "intermediate",
+    "pid": 82712,
+    "birthUtc": "2026-10-13T07:58:43.9826493Z",
+    "processPresent": false,
+    "listeners": 0,
+    "observedAt": "2026-10-13T08:41:21.5198581Z",
+    "terminal": {
+      "reason": "Own pages closed after manual usage-grid review",
+      "pid": 82712,
+      "elapsed": 458140,
+      "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+    }
+  },
+  {
+    "scope": "after",
+    "pid": 63148,
+    "birthUtc": "2026-10-13T08:12:16.3227187Z",
+    "processPresent": false,
+    "listeners": 0,
+    "observedAt": "2026-10-13T08:41:22.3027222Z",
+    "terminal": {
+      "reason": "Own pages closed after manual usage-grid review",
+      "pid": 63148,
+      "elapsed": 944410,
+      "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+    }
+  },
+  {
+    "scope": "complete",
+    "pid": 72212,
+    "birthUtc": "2026-10-13T08:34:08.7511373Z",
+    "processPresent": false,
+    "listeners": 0,
+    "observedAt": "2026-10-13T08:41:23.0862135Z",
+    "terminal": {
+      "reason": "Own pages closed after manual usage-grid review",
+      "pid": 72212,
+      "elapsed": 423707,
+      "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+    }
+  }
+]

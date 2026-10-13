@@ -20,6 +20,8 @@
 
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
 - [持续目标验收证据](../../artifacts/2026-10-13-continuous-goal-mode/README.md)：流式模型事实、Task 重开和桌面视觉复核。
+- [用量时间桶键盘详情](2026-10-13-usage-keyboard-details.md)：热力图的单Tab入口与真实桶详情。
+
 
 - [382 网页读取的语义空白保真](2026-10-13-webfetch-text-fidelity-382.md)：硬换行、代码缩进与原始文本输出边界。
 

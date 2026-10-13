@@ -381,13 +381,30 @@
   grid-template-rows: repeat(7, calc(18px * var(--ui-scale)));
 }
 
+.usage-activity__grid:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(2px * var(--ui-scale));
+}
+
 .usage-activity__cell {
+  --usage-cell-fill: var(--surface-inset);
+
   position: relative;
   display: block;
   min-width: calc(8px * var(--ui-scale));
   min-height: calc(18px * var(--ui-scale));
   border-radius: calc(3px * var(--ui-scale));
-  background: var(--surface-inset);
+  background: var(--usage-cell-fill);
+}
+
+.usage-activity__cell.oc-listbox-item {
+  min-height: calc(18px * var(--ui-scale));
+  padding: 0;
+  border-radius: calc(3px * var(--ui-scale));
+}
+
+.usage-activity__cell.oc-listbox-item:is(:hover, [data-selected], [data-highlighted], :focus-visible) {
+  background: var(--usage-cell-fill);
 }
 
 .usage-activity__cell > .sr-only {
@@ -403,56 +420,34 @@
 }
 
 .usage-activity__cell--1 {
-  background: color-mix(in srgb, var(--accent) 24%, var(--surface-inset));
+  --usage-cell-fill: color-mix(in srgb, var(--accent) 24%, var(--surface-inset));
 }
 
 .usage-activity__cell--2 {
-  background: color-mix(in srgb, var(--accent) 43%, var(--surface-inset));
+  --usage-cell-fill: color-mix(in srgb, var(--accent) 43%, var(--surface-inset));
 }
 
 .usage-activity__cell--3 {
-  background: color-mix(in srgb, var(--accent) 67%, var(--surface-inset));
+  --usage-cell-fill: color-mix(in srgb, var(--accent) 67%, var(--surface-inset));
 }
 
 .usage-activity__cell--4 {
-  background: color-mix(in srgb, var(--accent) 90%, white 10%);
+  --usage-cell-fill: color-mix(in srgb, var(--accent) 90%, white 10%);
 }
 
-.usage-activity__cell--spacer {
-  visibility: hidden;
-}
-
-.usage-activity__tooltip {
-  position: absolute;
-  z-index: 2;
-  bottom: calc(100% + 8px * var(--ui-scale));
-  left: 50%;
-  display: none;
+.usage-activity__detail {
   min-width: calc(116px * var(--ui-scale));
-  padding: var(--ui-gap-md) var(--ui-gap-md);
-  border: var(--oc-border-width) solid var(--border-strong);
-  border-radius: var(--oc-radius-large);
-  background: var(--surface-elevated);
-  box-shadow: var(--shadow-lg);
-  color: var(--text-strong);
   text-align: center;
-  transform: translateX(-50%);
-  pointer-events: none;
 }
 
-.usage-activity__tooltip strong,
-.usage-activity__tooltip small {
+.usage-activity__detail strong,
+.usage-activity__detail small {
   display: block;
-  white-space: nowrap;
 }
 
-.usage-activity__tooltip small {
+.usage-activity__detail small {
   margin-top: var(--ui-gap-3xs);
   color: var(--text-muted);
-}
-
-.usage-activity__cell:hover .usage-activity__tooltip {
-  display: block;
 }
 
 .usage-activity__labels {

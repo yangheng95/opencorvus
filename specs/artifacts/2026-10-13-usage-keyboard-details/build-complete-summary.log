@@ -1,0 +1,12 @@
+../../../.tmp-codex-usage-grid-01a133/ui-complete/assets/hu-DVk7Y_ka-CCTZJfqn.js                                 765.41 kB │ gzip:   172.84 kB
+../../../.tmp-codex-usage-grid-01a133/ui-complete/assets/vega-embed-policy-fSIymO6N.js                           786.03 kB │ gzip:   274.42 kB
+../../../.tmp-codex-usage-grid-01a133/ui-complete/assets/MapArtifact-Bc8p77mg.js                                 957.17 kB │ gzip:   251.72 kB
+../../../.tmp-codex-usage-grid-01a133/ui-complete/assets/Model3dArtifact-CBzsfos-.js                           1,072.74 kB │ gzip:   300.33 kB
+../../../.tmp-codex-usage-grid-01a133/ui-complete/assets/main-CKX6vyDI.js                                      1,702.93 kB │ gzip:   492.21 kB
+../../../.tmp-codex-usage-grid-01a133/ui-complete/assets/SpreadsheetArtifact-CPUAA0P7.js                       6,140.77 kB │ gzip: 1,703.73 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1m 13s

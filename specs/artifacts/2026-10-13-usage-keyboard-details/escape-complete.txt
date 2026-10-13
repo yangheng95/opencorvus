@@ -1,0 +1,143 @@
+Browser tab: 10, Title: "OpenCorvus", URL: "http://127.0.0.1:18573/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18573/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+			4 container 设置导航
+				5 button 返回 OpenCorvus
+			6 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				7 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-2591-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-2593-trigger, Secondary Actions: Expand
+				9 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-2595-trigger, Secondary Actions: Expand
+				10 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-2597-trigger, Secondary Actions: Expand
+		11 container panelBody
+			12 container Description: 对话快捷入口, ID: workspaceNavigation
+				13 container 对话快捷入口
+					14 button 对话
+					15 button Mission 看板
+					16 button 定时
+					17 button 专家团
+					18 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-120-trigger, Secondary Actions: Expand
+					19 button 设置
+				20 button 关于
+				21 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			22 container Description: 用量统计, ID: configDialog
+				23 container tabs-cl-191
+					24 container configSidebar
+						25 button 返回应用
+						26 search text field (settable) 搜索设置页面...
+						27 tab group
+							28 text 应用
+							29 tab (selectable, settable, boolean) 通用, Value: 0, ID: config-tab-general
+							30 tab (selectable, settable, boolean) 外观, Value: 0, ID: config-tab-appearance
+							31 tab (selectable, settable, boolean) 网络, Value: 0, ID: config-tab-network
+							32 tab (selected, settable, boolean) 用量统计, Value: 1, ID: config-tab-usage
+							33 text 产品
+							34 tab (selectable, settable, boolean) Chat, Value: 0, ID: config-tab-code
+							35 tab (selectable, settable, boolean) Work, Value: 0, ID: config-tab-work
+							36 text Mission 与自动化
+							37 tab (selectable, settable, boolean) Mission Card, Value: 0, ID: config-tab-mission-skill
+							38 tab (selectable, settable, boolean) 定时任务, Value: 0, ID: config-tab-scheduled
+							39 text 专家团
+							40 tab (selectable, settable, boolean) Squad 市场, Value: 0, ID: config-tab-expert-squad-install
+							41 tab (selectable, settable, boolean) 已安装专家团, Value: 0, ID: config-tab-expert-squad
+							42 text 共享资源
+							43 tab (selectable, settable, boolean) 模型服务商, Value: 0, ID: config-tab-providers
+							44 tab (selectable, settable, boolean) Skill 资源库, Value: 0, ID: config-tab-skill
+							45 tab (selectable, settable, boolean) MCP 连接, Value: 0, ID: config-tab-mcp
+							46 tab (selectable, settable, boolean) 通道, Value: 0, ID: config-tab-channel
+							47 text 上下文
+							48 tab (selectable, settable, boolean) 记忆与上下文, Value: 0, ID: config-tab-memory
+							49 text 数据
+							50 tab (selectable, settable, boolean) 归档, Value: 0, ID: config-tab-archive
+							51 tab (selectable, settable, boolean) 更新日志, Value: 0, ID: config-tab-changelog
+							52 tab (selectable, settable, boolean) 关于, Value: 0, ID: config-tab-about
+					53 splitter Description: 设置, Value: 230, ID: configResizer
+					54 container configContent
+						55 heading 用量统计, Value: 1
+							56 text 用量统计
+						57 container Description: 用量统计, ID: config-panel-usage
+							58 container usageBody
+								59 container
+									60 heading OpenCorvus, Value: 2
+										61 text OpenCorvus
+									62 text 当前服务的使用概览
+								63 container 用量摘要
+									64 container 0
+										65 text 0
+										66 text Token 总量
+									67 container
+										68 text 0 峰值区间
+									69 container $0
+										70 text $0
+										71 text 计算成本
+									72 container
+										73 text 0 API 调用
+									74 container
+										75 text — 价格覆盖率
+								76 container 按 API 发生时间统计
+									77 text 2026年10月13日 – 2026年10月13日 Asia/Shanghai 与上一周期持平
+								78 container
+									79 heading Token 活跃度, Value: 2
+										80 text Token 活跃度
+									81 text 本自然周期内已完成的流式模型调用。
+									82 container Description: 用量周期, ID: group-cl-2612
+										83 checkbox 今天, Value: 1, ID: group-cl-2612-item-cl-2613
+										84 checkbox 本周, Value: 0, ID: group-cl-2612-item-cl-2614
+										85 checkbox 本月, Value: 0, ID: group-cl-2612-item-cl-2615
+										86 checkbox 今年, Value: 0, ID: group-cl-2612-item-cl-2616
+									87 button 刷新用量
+									88 list Description: Token 活跃度热力图, ID: listbox-cl-2618
+										89 Value: 2026年10月13日 GMT+8 00:00 – 2026年10月13日 GMT+8 01:00 · 0 Token, ID: listbox-cl-2618-item-cl-3413
+										90 Value: 2026年10月13日 GMT+8 01:00 – 2026年10月13日 GMT+8 02:00 · 0 Token, ID: listbox-cl-2618-item-cl-3415
+										91 Value: 2026年10月13日 GMT+8 02:00 – 2026年10月13日 GMT+8 03:00 · 0 Token, ID: listbox-cl-2618-item-cl-3417
+										92 (selected) Value: 2026年10月13日 GMT+8 03:00 – 2026年10月13日 GMT+8 04:00 · 0 Token, ID: listbox-cl-2618-item-cl-3419
+										93 Value: 2026年10月13日 GMT+8 04:00 – 2026年10月13日 GMT+8 05:00 · 0 Token, ID: listbox-cl-2618-item-cl-3421
+										94 Value: 2026年10月13日 GMT+8 05:00 – 2026年10月13日 GMT+8 06:00 · 0 Token, ID: listbox-cl-2618-item-cl-3423
+										95 Value: 2026年10月13日 GMT+8 06:00 – 2026年10月13日 GMT+8 07:00 · 0 Token, ID: listbox-cl-2618-item-cl-3425
+										96 Value: 2026年10月13日 GMT+8 07:00 – 2026年10月13日 GMT+8 08:00 · 0 Token, ID: listbox-cl-2618-item-cl-3427
+										97 Value: 2026年10月13日 GMT+8 08:00 – 2026年10月13日 GMT+8 09:00 · 0 Token, ID: listbox-cl-2618-item-cl-3429
+										98 Value: 2026年10月13日 GMT+8 09:00 – 2026年10月13日 GMT+8 10:00 · 0 Token, ID: listbox-cl-2618-item-cl-3431
+										99 Value: 2026年10月13日 GMT+8 10:00 – 2026年10月13日 GMT+8 11:00 · 0 Token, ID: listbox-cl-2618-item-cl-3433
+										100 Value: 2026年10月13日 GMT+8 11:00 – 2026年10月13日 GMT+8 12:00 · 0 Token, ID: listbox-cl-2618-item-cl-3435
+										101 Value: 2026年10月13日 GMT+8 12:00 – 2026年10月13日 GMT+8 13:00 · 0 Token, ID: listbox-cl-2618-item-cl-3437
+										102 Value: 2026年10月13日 GMT+8 13:00 – 2026年10月13日 GMT+8 14:00 · 0 Token, ID: listbox-cl-2618-item-cl-3439
+										103 Value: 2026年10月13日 GMT+8 14:00 – 2026年10月13日 GMT+8 15:00 · 0 Token, ID: listbox-cl-2618-item-cl-3441
+										104 Value: 2026年10月13日 GMT+8 15:00 – 2026年10月13日 GMT+8 16:00 · 0 Token, ID: listbox-cl-2618-item-cl-3443
+										105 Value: 2026年10月13日 GMT+8 16:00 – 2026年10月13日 GMT+8 17:00 · 0 Token, ID: listbox-cl-2618-item-cl-3445
+										106 Value: 2026年10月13日 GMT+8 17:00 – 2026年10月13日 GMT+8 18:00 · 0 Token, ID: listbox-cl-2618-item-cl-3447
+										107 Value: 2026年10月13日 GMT+8 18:00 – 2026年10月13日 GMT+8 19:00 · 0 Token, ID: listbox-cl-2618-item-cl-3449
+										108 Value: 2026年10月13日 GMT+8 19:00 – 2026年10月13日 GMT+8 20:00 · 0 Token, ID: listbox-cl-2618-item-cl-3451
+										109 Value: 2026年10月13日 GMT+8 20:00 – 2026年10月13日 GMT+8 21:00 · 0 Token, ID: listbox-cl-2618-item-cl-3453
+										110 Value: 2026年10月13日 GMT+8 21:00 – 2026年10月13日 GMT+8 22:00 · 0 Token, ID: listbox-cl-2618-item-cl-3455
+										111 Value: 2026年10月13日 GMT+8 22:00 – 2026年10月13日 GMT+8 23:00 · 0 Token, ID: listbox-cl-2618-item-cl-3457
+										112 Value: 2026年10月13日 GMT+8 23:00 – 2026年10月14日 GMT+8 00:00 · 0 Token, ID: listbox-cl-2618-item-cl-3459
+									113 text 完成的流式 API 调用将按真实发生时间显示在这里。
+								114 container
+									115 heading 活跃洞察, Value: 2
+										116 text 活跃洞察
+									117 text 平均每次 0 Token
+									118 text 输入 0 输出 0 推理 0 缓存 0
+									119 definition list
+										120 container 已计价 Token
+											121 text 已计价 Token
+										122 text 0
+										123 container 未定价 Token
+											124 text 未定价 Token
+										125 text 0
+										126 container 历史未知
+											127 text 历史未知
+										128 text 0
+								129 container
+									130 heading Provider, Value: 2
+										131 text Provider
+									132 text 按 Provider 汇总实测 Token 占比。
+									133 text 0 本周期暂无 Provider 用量。
+								134 text 成本使用调用发生时保存的模型价格计算。未定价与历史未知 Token 不会被误报为确认免费。
+								135 button (collapsed) 官方数据源与对账 汇集 Provider 官方组织用量、财务账本、账户额度与云控制面覆盖状态。 只对账，不相加, Secondary Actions: Expand
+									136 heading 官方数据源与对账, Value: 2
+										137 text 官方数据源与对账
+									138 text 汇集 Provider 官方组织用量、财务账本、账户额度与云控制面覆盖状态。
+									139 text 只对账，不相加
+
+The focused UI element is 92 (selected) Value: 2026年10月13日 GMT+8 03:00 – 2026年10月13日 GMT+8 04:00 · 0 Token, ID: listbox-cl-2618-item-cl-3419

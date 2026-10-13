@@ -2,6 +2,8 @@
 
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence/README.md)：前后真实桌面、物理文件与根保护合同。
 
+- [用量时间桶键盘详情](2026-10-13-usage-keyboard-details/README.md)：真实双语桌面、快速刷新焦点、单一集合与提示层复核。
+
 - [383 工具结果与来源恢复](2026-10-05-connection-workspace-authority/source-result-commit-383/README.md)：48项后台合同、真实来源/文档和固定时限失败完整证据。
 
 - [持续目标独立复核](2026-10-13-continuous-goal-review/README.md)：归档/删除缺陷与受控流式跨进程恢复。

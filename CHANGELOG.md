@@ -13,6 +13,7 @@
 
 #### 修复
 
+- 用量热力图可用键盘逐桶查看完整时间区间、时区偏移和 Token 数值；加载时保留检查入口，修复快速刷新后按 Tab 丢失焦点的问题。
 - 能力搜索完成事务保留模型工具请求的原始元数据，修复 OpenAI 等带注释请求在成功搜索后被误判为不可变事实冲突的问题。
 - 投影包工具和 MCP 工具保留已验证的执行授权，超限结果可按原有合同保存到所属 Task/Session 的完整输出文件。
 - 产物复制与下载的忙碌状态保留键盘焦点，完成后可继续操作；类型徽标跟随界面语言，原始标题、文件名和内容保持不变。
@@ -38,6 +39,7 @@
 
 #### Fixed
 
+- Usage heatmap intervals are accessible by keyboard with complete event times, time-zone offsets and Token counts. The inspection entry stays available while loading, fixing focus loss when pressing Tab immediately after refresh.
 - Capability-search completion preserves the original tool-request metadata, fixing immutable-fact conflicts after successful searches for annotated requests such as OpenAI tool calls.
 - Projected package and MCP tools retain their validated execution authority so oversized results can be saved to the owning Task and Session output directory.
 - Artifact copy and download controls retain keyboard focus while busy for continued operation. Type badges follow the interface language while original titles, filenames and content retain their identity.

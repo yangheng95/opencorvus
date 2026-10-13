@@ -20,6 +20,8 @@
 
 - [Chat、Task、Mission 持续目标模式](records/2026-10/2026-10-13-continuous-goal-mode.md)：现状、授权与轮次、预算合同、实施和验收。
 - [持续目标验收证据](artifacts/2026-10-13-continuous-goal-mode/README.md)：真实多轮、终态重开、用量与桌面截图。
+- [用量时间桶键盘详情](records/2026-10/2026-10-13-usage-keyboard-details.md)：真实不可达基线、成熟集合与双语详情交互。
+
 
 - [382 网页读取的语义空白保真](records/2026-10/2026-10-13-webfetch-text-fidelity-382.md)：真实HTTP合同、Sol流式读取和桌面工具正文验证。
 

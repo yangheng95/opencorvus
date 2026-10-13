@@ -35,11 +35,7 @@ export function ListboxItem(props: ItemProps): JSX.Element {
     },
   }
   return (
-    <KobalteListbox.Item<"li">
-      {...rest}
-      {...selectionKeyDefaults}
-      class={classes("oc-listbox-item", local.class)}
-    />
+    <KobalteListbox.Item<"li"> {...rest} {...selectionKeyDefaults} class={classes("oc-listbox-item", local.class)} />
   )
 }
 
@@ -47,3 +43,5 @@ export function ListboxSection(props: SectionProps): JSX.Element {
   const [local, rest] = splitProps(props, ["class"])
   return <KobalteListbox.Section<"li"> {...rest} class={classes("oc-listbox-section", local.class)} />
 }
+
+export const ListboxItemDescription = KobalteListbox.ItemDescription

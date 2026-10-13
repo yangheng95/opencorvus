@@ -1,0 +1,489 @@
+Browser tab: 10, Title: "OpenCorvus", URL: "http://127.0.0.1:18573/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18573/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 container Settings navigation
+					6 button Back to OpenCorvus
+				7 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					8 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+					10 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-158-trigger, Secondary Actions: Expand
+					11 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-160-trigger, Secondary Actions: Expand
+			12 container panelBody
+				13 container Description: Chat shortcuts, ID: workspaceNavigation
+					14 container Chat shortcuts
+						15 button Chats
+						16 button Mission Board
+						17 button Scheduled
+						18 button Expert Squads
+						19 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-120-trigger, Secondary Actions: Expand
+						20 button Settings
+					21 button About
+					22 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				23 container Description: Usage, ID: configDialog
+					24 container tabs-cl-191
+						25 container configSidebar
+							26 button Back to app
+							27 search text field (settable) Search settings pages...
+							28 tab group
+								29 text Application
+								30 tab (selectable, settable, boolean) General, Value: 0, ID: config-tab-general
+								31 tab (selectable, settable, boolean) Appearance, Value: 0, ID: config-tab-appearance
+								32 tab (selectable, settable, boolean) Network, Value: 0, ID: config-tab-network
+								33 tab (selected, settable, boolean) Usage, Value: 1, ID: config-tab-usage
+								34 text Product
+								35 tab (selectable, settable, boolean) Chat, Value: 0, ID: config-tab-code
+								36 tab (selectable, settable, boolean) Work, Value: 0, ID: config-tab-work
+								37 text Missions & Automation
+								38 tab (selectable, settable, boolean) Mission Card, Value: 0, ID: config-tab-mission-skill
+								39 tab (selectable, settable, boolean) Scheduled tasks, Value: 0, ID: config-tab-scheduled
+								40 text Expert Squads
+								41 tab (selectable, settable, boolean) Squad Market, Value: 0, ID: config-tab-expert-squad-install
+								42 tab (selectable, settable, boolean) Installed Expert Squads, Value: 0, ID: config-tab-expert-squad
+								43 text Shared Resources
+								44 tab (selectable, settable, boolean) Providers, Value: 0, ID: config-tab-providers
+								45 tab (selectable, settable, boolean) Skill Library, Value: 0, ID: config-tab-skill
+								46 tab (selectable, settable, boolean) MCP Connections, Value: 0, ID: config-tab-mcp
+								47 tab (selectable, settable, boolean) Channel, Value: 0, ID: config-tab-channel
+								48 text Context
+								49 tab (selectable, settable, boolean) Memory & Context, Value: 0, ID: config-tab-memory
+								50 text Data
+								51 tab (selectable, settable, boolean) Archive, Value: 0, ID: config-tab-archive
+								52 tab (selectable, settable, boolean) Release notes, Value: 0, ID: config-tab-changelog
+								53 tab (selectable, settable, boolean) About, Value: 0, ID: config-tab-about
+						54 splitter Description: Settings, Value: 230, ID: configResizer
+						55 container configContent
+							56 heading Usage, Value: 1
+								57 text Usage
+							58 container Description: Usage, ID: config-panel-usage
+								59 container usageBody
+									60 container
+										61 heading OpenCorvus, Value: 2
+											62 text OpenCorvus
+										63 text Usage across this server
+									64 container Usage summary
+										65 container 0
+											66 text 0
+											67 text Total Token
+										68 container
+											69 text 0 Peak interval
+										70 container $0
+											71 text $0
+											72 text Calculated cost
+										73 container
+											74 text 0 API calls
+										75 container
+											76 text — Pricing coverage
+									77 container API event time
+										78 text Jan 1, 2026 – Dec 31, 2026 Asia/Shanghai Even with previous period
+									79 container
+										80 heading Token activity, Value: 2
+											81 text Token activity
+										82 text Completed streamed model calls in this natural period.
+										83 container Description: Usage period, ID: group-cl-228
+											84 checkbox Today, Value: 0, ID: group-cl-228-item-cl-229
+											85 checkbox This week, Value: 0, ID: group-cl-228-item-cl-230
+											86 checkbox This month, Value: 0, ID: group-cl-228-item-cl-231
+											87 checkbox This year, Value: 1, ID: group-cl-228-item-cl-232
+										88 button Refresh usage
+										89 list Description: Token activity heatmap, ID: listbox-cl-234
+											90 (selected) Value: Jan 1, 2026, 12:00 AM GMT+8 – Jan 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-976
+											91 Value: Jan 2, 2026, 12:00 AM GMT+8 – Jan 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-978
+											92 Value: Jan 3, 2026, 12:00 AM GMT+8 – Jan 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-980
+											93 Value: Jan 4, 2026, 12:00 AM GMT+8 – Jan 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-982
+											94 Value: Jan 5, 2026, 12:00 AM GMT+8 – Jan 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-984
+											95 Value: Jan 6, 2026, 12:00 AM GMT+8 – Jan 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-986
+											96 Value: Jan 7, 2026, 12:00 AM GMT+8 – Jan 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-988
+											97 Value: Jan 8, 2026, 12:00 AM GMT+8 – Jan 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-990
+											98 Value: Jan 9, 2026, 12:00 AM GMT+8 – Jan 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-992
+											99 Value: Jan 10, 2026, 12:00 AM GMT+8 – Jan 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-994
+											100 Value: Jan 11, 2026, 12:00 AM GMT+8 – Jan 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-996
+											101 Value: Jan 12, 2026, 12:00 AM GMT+8 – Jan 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-998
+											102 Value: Jan 13, 2026, 12:00 AM GMT+8 – Jan 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1000
+											103 Value: Jan 14, 2026, 12:00 AM GMT+8 – Jan 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1002
+											104 Value: Jan 15, 2026, 12:00 AM GMT+8 – Jan 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1004
+											105 Value: Jan 16, 2026, 12:00 AM GMT+8 – Jan 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1006
+											106 Value: Jan 17, 2026, 12:00 AM GMT+8 – Jan 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1008
+											107 Value: Jan 18, 2026, 12:00 AM GMT+8 – Jan 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1010
+											108 Value: Jan 19, 2026, 12:00 AM GMT+8 – Jan 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1012
+											109 Value: Jan 20, 2026, 12:00 AM GMT+8 – Jan 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1014
+											110 Value: Jan 21, 2026, 12:00 AM GMT+8 – Jan 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1016
+											111 Value: Jan 22, 2026, 12:00 AM GMT+8 – Jan 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1018
+											112 Value: Jan 23, 2026, 12:00 AM GMT+8 – Jan 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1020
+											113 Value: Jan 24, 2026, 12:00 AM GMT+8 – Jan 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1022
+											114 Value: Jan 25, 2026, 12:00 AM GMT+8 – Jan 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1024
+											115 Value: Jan 26, 2026, 12:00 AM GMT+8 – Jan 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1026
+											116 Value: Jan 27, 2026, 12:00 AM GMT+8 – Jan 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1028
+											117 Value: Jan 28, 2026, 12:00 AM GMT+8 – Jan 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1030
+											118 Value: Jan 29, 2026, 12:00 AM GMT+8 – Jan 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1032
+											119 Value: Jan 30, 2026, 12:00 AM GMT+8 – Jan 31, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1034
+											120 Value: Jan 31, 2026, 12:00 AM GMT+8 – Feb 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1036
+											121 Value: Feb 1, 2026, 12:00 AM GMT+8 – Feb 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1038
+											122 Value: Feb 2, 2026, 12:00 AM GMT+8 – Feb 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1040
+											123 Value: Feb 3, 2026, 12:00 AM GMT+8 – Feb 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1042
+											124 Value: Feb 4, 2026, 12:00 AM GMT+8 – Feb 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1044
+											125 Value: Feb 5, 2026, 12:00 AM GMT+8 – Feb 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1046
+											126 Value: Feb 6, 2026, 12:00 AM GMT+8 – Feb 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1048
+											127 Value: Feb 7, 2026, 12:00 AM GMT+8 – Feb 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1050
+											128 Value: Feb 8, 2026, 12:00 AM GMT+8 – Feb 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1052
+											129 Value: Feb 9, 2026, 12:00 AM GMT+8 – Feb 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1054
+											130 Value: Feb 10, 2026, 12:00 AM GMT+8 – Feb 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1056
+											131 Value: Feb 11, 2026, 12:00 AM GMT+8 – Feb 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1058
+											132 Value: Feb 12, 2026, 12:00 AM GMT+8 – Feb 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1060
+											133 Value: Feb 13, 2026, 12:00 AM GMT+8 – Feb 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1062
+											134 Value: Feb 14, 2026, 12:00 AM GMT+8 – Feb 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1064
+											135 Value: Feb 15, 2026, 12:00 AM GMT+8 – Feb 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1066
+											136 Value: Feb 16, 2026, 12:00 AM GMT+8 – Feb 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1068
+											137 Value: Feb 17, 2026, 12:00 AM GMT+8 – Feb 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1070
+											138 Value: Feb 18, 2026, 12:00 AM GMT+8 – Feb 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1072
+											139 Value: Feb 19, 2026, 12:00 AM GMT+8 – Feb 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1074
+											140 Value: Feb 20, 2026, 12:00 AM GMT+8 – Feb 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1076
+											141 Value: Feb 21, 2026, 12:00 AM GMT+8 – Feb 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1078
+											142 Value: Feb 22, 2026, 12:00 AM GMT+8 – Feb 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1080
+											143 Value: Feb 23, 2026, 12:00 AM GMT+8 – Feb 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1082
+											144 Value: Feb 24, 2026, 12:00 AM GMT+8 – Feb 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1084
+											145 Value: Feb 25, 2026, 12:00 AM GMT+8 – Feb 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1086
+											146 Value: Feb 26, 2026, 12:00 AM GMT+8 – Feb 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1088
+											147 Value: Feb 27, 2026, 12:00 AM GMT+8 – Feb 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1090
+											148 Value: Feb 28, 2026, 12:00 AM GMT+8 – Mar 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1092
+											149 Value: Mar 1, 2026, 12:00 AM GMT+8 – Mar 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1094
+											150 Value: Mar 2, 2026, 12:00 AM GMT+8 – Mar 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1096
+											151 Value: Mar 3, 2026, 12:00 AM GMT+8 – Mar 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1098
+											152 Value: Mar 4, 2026, 12:00 AM GMT+8 – Mar 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1100
+											153 Value: Mar 5, 2026, 12:00 AM GMT+8 – Mar 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1102
+											154 Value: Mar 6, 2026, 12:00 AM GMT+8 – Mar 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1104
+											155 Value: Mar 7, 2026, 12:00 AM GMT+8 – Mar 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1106
+											156 Value: Mar 8, 2026, 12:00 AM GMT+8 – Mar 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1108
+											157 Value: Mar 9, 2026, 12:00 AM GMT+8 – Mar 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1110
+											158 Value: Mar 10, 2026, 12:00 AM GMT+8 – Mar 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1112
+											159 Value: Mar 11, 2026, 12:00 AM GMT+8 – Mar 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1114
+											160 Value: Mar 12, 2026, 12:00 AM GMT+8 – Mar 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1116
+											161 Value: Mar 13, 2026, 12:00 AM GMT+8 – Mar 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1118
+											162 Value: Mar 14, 2026, 12:00 AM GMT+8 – Mar 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1120
+											163 Value: Mar 15, 2026, 12:00 AM GMT+8 – Mar 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1122
+											164 Value: Mar 16, 2026, 12:00 AM GMT+8 – Mar 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1124
+											165 Value: Mar 17, 2026, 12:00 AM GMT+8 – Mar 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1126
+											166 Value: Mar 18, 2026, 12:00 AM GMT+8 – Mar 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1128
+											167 Value: Mar 19, 2026, 12:00 AM GMT+8 – Mar 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1130
+											168 Value: Mar 20, 2026, 12:00 AM GMT+8 – Mar 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1132
+											169 Value: Mar 21, 2026, 12:00 AM GMT+8 – Mar 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1134
+											170 Value: Mar 22, 2026, 12:00 AM GMT+8 – Mar 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1136
+											171 Value: Mar 23, 2026, 12:00 AM GMT+8 – Mar 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1138
+											172 Value: Mar 24, 2026, 12:00 AM GMT+8 – Mar 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1140
+											173 Value: Mar 25, 2026, 12:00 AM GMT+8 – Mar 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1142
+											174 Value: Mar 26, 2026, 12:00 AM GMT+8 – Mar 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1144
+											175 Value: Mar 27, 2026, 12:00 AM GMT+8 – Mar 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1146
+											176 Value: Mar 28, 2026, 12:00 AM GMT+8 – Mar 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1148
+											177 Value: Mar 29, 2026, 12:00 AM GMT+8 – Mar 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1150
+											178 Value: Mar 30, 2026, 12:00 AM GMT+8 – Mar 31, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1152
+											179 Value: Mar 31, 2026, 12:00 AM GMT+8 – Apr 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1154
+											180 Value: Apr 1, 2026, 12:00 AM GMT+8 – Apr 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1156
+											181 Value: Apr 2, 2026, 12:00 AM GMT+8 – Apr 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1158
+											182 Value: Apr 3, 2026, 12:00 AM GMT+8 – Apr 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1160
+											183 Value: Apr 4, 2026, 12:00 AM GMT+8 – Apr 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1162
+											184 Value: Apr 5, 2026, 12:00 AM GMT+8 – Apr 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1164
+											185 Value: Apr 6, 2026, 12:00 AM GMT+8 – Apr 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1166
+											186 Value: Apr 7, 2026, 12:00 AM GMT+8 – Apr 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1168
+											187 Value: Apr 8, 2026, 12:00 AM GMT+8 – Apr 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1170
+											188 Value: Apr 9, 2026, 12:00 AM GMT+8 – Apr 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1172
+											189 Value: Apr 10, 2026, 12:00 AM GMT+8 – Apr 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1174
+											190 Value: Apr 11, 2026, 12:00 AM GMT+8 – Apr 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1176
+											191 Value: Apr 12, 2026, 12:00 AM GMT+8 – Apr 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1178
+											192 Value: Apr 13, 2026, 12:00 AM GMT+8 – Apr 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1180
+											193 Value: Apr 14, 2026, 12:00 AM GMT+8 – Apr 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1182
+											194 Value: Apr 15, 2026, 12:00 AM GMT+8 – Apr 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1184
+											195 Value: Apr 16, 2026, 12:00 AM GMT+8 – Apr 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1186
+											196 Value: Apr 17, 2026, 12:00 AM GMT+8 – Apr 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1188
+											197 Value: Apr 18, 2026, 12:00 AM GMT+8 – Apr 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1190
+											198 Value: Apr 19, 2026, 12:00 AM GMT+8 – Apr 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1192
+											199 Value: Apr 20, 2026, 12:00 AM GMT+8 – Apr 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1194
+											200 Value: Apr 21, 2026, 12:00 AM GMT+8 – Apr 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1196
+											201 Value: Apr 22, 2026, 12:00 AM GMT+8 – Apr 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1198
+											202 Value: Apr 23, 2026, 12:00 AM GMT+8 – Apr 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1200
+											203 Value: Apr 24, 2026, 12:00 AM GMT+8 – Apr 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1202
+											204 Value: Apr 25, 2026, 12:00 AM GMT+8 – Apr 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1204
+											205 Value: Apr 26, 2026, 12:00 AM GMT+8 – Apr 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1206
+											206 Value: Apr 27, 2026, 12:00 AM GMT+8 – Apr 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1208
+											207 Value: Apr 28, 2026, 12:00 AM GMT+8 – Apr 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1210
+											208 Value: Apr 29, 2026, 12:00 AM GMT+8 – Apr 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1212
+											209 Value: Apr 30, 2026, 12:00 AM GMT+8 – May 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1214
+											210 Value: May 1, 2026, 12:00 AM GMT+8 – May 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1216
+											211 Value: May 2, 2026, 12:00 AM GMT+8 – May 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1218
+											212 Value: May 3, 2026, 12:00 AM GMT+8 – May 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1220
+											213 Value: May 4, 2026, 12:00 AM GMT+8 – May 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1222
+											214 Value: May 5, 2026, 12:00 AM GMT+8 – May 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1224
+											215 Value: May 6, 2026, 12:00 AM GMT+8 – May 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1226
+											216 Value: May 7, 2026, 12:00 AM GMT+8 – May 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1228
+											217 Value: May 8, 2026, 12:00 AM GMT+8 – May 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1230
+											218 Value: May 9, 2026, 12:00 AM GMT+8 – May 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1232
+											219 Value: May 10, 2026, 12:00 AM GMT+8 – May 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1234
+											220 Value: May 11, 2026, 12:00 AM GMT+8 – May 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1236
+											221 Value: May 12, 2026, 12:00 AM GMT+8 – May 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1238
+											222 Value: May 13, 2026, 12:00 AM GMT+8 – May 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1240
+											223 Value: May 14, 2026, 12:00 AM GMT+8 – May 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1242
+											224 Value: May 15, 2026, 12:00 AM GMT+8 – May 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1244
+											225 Value: May 16, 2026, 12:00 AM GMT+8 – May 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1246
+											226 Value: May 17, 2026, 12:00 AM GMT+8 – May 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1248
+											227 Value: May 18, 2026, 12:00 AM GMT+8 – May 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1250
+											228 Value: May 19, 2026, 12:00 AM GMT+8 – May 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1252
+											229 Value: May 20, 2026, 12:00 AM GMT+8 – May 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1254
+											230 Value: May 21, 2026, 12:00 AM GMT+8 – May 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1256
+											231 Value: May 22, 2026, 12:00 AM GMT+8 – May 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1258
+											232 Value: May 23, 2026, 12:00 AM GMT+8 – May 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1260
+											233 Value: May 24, 2026, 12:00 AM GMT+8 – May 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1262
+											234 Value: May 25, 2026, 12:00 AM GMT+8 – May 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1264
+											235 Value: May 26, 2026, 12:00 AM GMT+8 – May 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1266
+											236 Value: May 27, 2026, 12:00 AM GMT+8 – May 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1268
+											237 Value: May 28, 2026, 12:00 AM GMT+8 – May 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1270
+											238 Value: May 29, 2026, 12:00 AM GMT+8 – May 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1272
+											239 Value: May 30, 2026, 12:00 AM GMT+8 – May 31, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1274
+											240 Value: May 31, 2026, 12:00 AM GMT+8 – Jun 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1276
+											241 Value: Jun 1, 2026, 12:00 AM GMT+8 – Jun 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1278
+											242 Value: Jun 2, 2026, 12:00 AM GMT+8 – Jun 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1280
+											243 Value: Jun 3, 2026, 12:00 AM GMT+8 – Jun 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1282
+											244 Value: Jun 4, 2026, 12:00 AM GMT+8 – Jun 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1284
+											245 Value: Jun 5, 2026, 12:00 AM GMT+8 – Jun 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1286
+											246 Value: Jun 6, 2026, 12:00 AM GMT+8 – Jun 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1288
+											247 Value: Jun 7, 2026, 12:00 AM GMT+8 – Jun 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1290
+											248 Value: Jun 8, 2026, 12:00 AM GMT+8 – Jun 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1292
+											249 Value: Jun 9, 2026, 12:00 AM GMT+8 – Jun 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1294
+											250 Value: Jun 10, 2026, 12:00 AM GMT+8 – Jun 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1296
+											251 Value: Jun 11, 2026, 12:00 AM GMT+8 – Jun 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1298
+											252 Value: Jun 12, 2026, 12:00 AM GMT+8 – Jun 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1300
+											253 Value: Jun 13, 2026, 12:00 AM GMT+8 – Jun 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1302
+											254 Value: Jun 14, 2026, 12:00 AM GMT+8 – Jun 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1304
+											255 Value: Jun 15, 2026, 12:00 AM GMT+8 – Jun 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1306
+											256 Value: Jun 16, 2026, 12:00 AM GMT+8 – Jun 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1308
+											257 Value: Jun 17, 2026, 12:00 AM GMT+8 – Jun 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1310
+											258 Value: Jun 18, 2026, 12:00 AM GMT+8 – Jun 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1312
+											259 Value: Jun 19, 2026, 12:00 AM GMT+8 – Jun 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1314
+											260 Value: Jun 20, 2026, 12:00 AM GMT+8 – Jun 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1316
+											261 Value: Jun 21, 2026, 12:00 AM GMT+8 – Jun 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1318
+											262 Value: Jun 22, 2026, 12:00 AM GMT+8 – Jun 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1320
+											263 Value: Jun 23, 2026, 12:00 AM GMT+8 – Jun 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1322
+											264 Value: Jun 24, 2026, 12:00 AM GMT+8 – Jun 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1324
+											265 Value: Jun 25, 2026, 12:00 AM GMT+8 – Jun 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1326
+											266 Value: Jun 26, 2026, 12:00 AM GMT+8 – Jun 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1328
+											267 Value: Jun 27, 2026, 12:00 AM GMT+8 – Jun 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1330
+											268 Value: Jun 28, 2026, 12:00 AM GMT+8 – Jun 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1332
+											269 Value: Jun 29, 2026, 12:00 AM GMT+8 – Jun 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1334
+											270 Value: Jun 30, 2026, 12:00 AM GMT+8 – Jul 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1336
+											271 Value: Jul 1, 2026, 12:00 AM GMT+8 – Jul 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1338
+											272 Value: Jul 2, 2026, 12:00 AM GMT+8 – Jul 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1340
+											273 Value: Jul 3, 2026, 12:00 AM GMT+8 – Jul 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1342
+											274 Value: Jul 4, 2026, 12:00 AM GMT+8 – Jul 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1344
+											275 Value: Jul 5, 2026, 12:00 AM GMT+8 – Jul 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1346
+											276 Value: Jul 6, 2026, 12:00 AM GMT+8 – Jul 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1348
+											277 Value: Jul 7, 2026, 12:00 AM GMT+8 – Jul 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1350
+											278 Value: Jul 8, 2026, 12:00 AM GMT+8 – Jul 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1352
+											279 Value: Jul 9, 2026, 12:00 AM GMT+8 – Jul 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1354
+											280 Value: Jul 10, 2026, 12:00 AM GMT+8 – Jul 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1356
+											281 Value: Jul 11, 2026, 12:00 AM GMT+8 – Jul 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1358
+											282 Value: Jul 12, 2026, 12:00 AM GMT+8 – Jul 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1360
+											283 Value: Jul 13, 2026, 12:00 AM GMT+8 – Jul 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1362
+											284 Value: Jul 14, 2026, 12:00 AM GMT+8 – Jul 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1364
+											285 Value: Jul 15, 2026, 12:00 AM GMT+8 – Jul 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1366
+											286 Value: Jul 16, 2026, 12:00 AM GMT+8 – Jul 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1368
+											287 Value: Jul 17, 2026, 12:00 AM GMT+8 – Jul 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1370
+											288 Value: Jul 18, 2026, 12:00 AM GMT+8 – Jul 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1372
+											289 Value: Jul 19, 2026, 12:00 AM GMT+8 – Jul 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1374
+											290 Value: Jul 20, 2026, 12:00 AM GMT+8 – Jul 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1376
+											291 Value: Jul 21, 2026, 12:00 AM GMT+8 – Jul 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1378
+											292 Value: Jul 22, 2026, 12:00 AM GMT+8 – Jul 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1380
+											293 Value: Jul 23, 2026, 12:00 AM GMT+8 – Jul 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1382
+											294 Value: Jul 24, 2026, 12:00 AM GMT+8 – Jul 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1384
+											295 Value: Jul 25, 2026, 12:00 AM GMT+8 – Jul 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1386
+											296 Value: Jul 26, 2026, 12:00 AM GMT+8 – Jul 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1388
+											297 Value: Jul 27, 2026, 12:00 AM GMT+8 – Jul 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1390
+											298 Value: Jul 28, 2026, 12:00 AM GMT+8 – Jul 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1392
+											299 Value: Jul 29, 2026, 12:00 AM GMT+8 – Jul 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1394
+											300 Value: Jul 30, 2026, 12:00 AM GMT+8 – Jul 31, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1396
+											301 Value: Jul 31, 2026, 12:00 AM GMT+8 – Aug 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1398
+											302 Value: Aug 1, 2026, 12:00 AM GMT+8 – Aug 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1400
+											303 Value: Aug 2, 2026, 12:00 AM GMT+8 – Aug 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1402
+											304 Value: Aug 3, 2026, 12:00 AM GMT+8 – Aug 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1404
+											305 Value: Aug 4, 2026, 12:00 AM GMT+8 – Aug 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1406
+											306 Value: Aug 5, 2026, 12:00 AM GMT+8 – Aug 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1408
+											307 Value: Aug 6, 2026, 12:00 AM GMT+8 – Aug 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1410
+											308 Value: Aug 7, 2026, 12:00 AM GMT+8 – Aug 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1412
+											309 Value: Aug 8, 2026, 12:00 AM GMT+8 – Aug 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1414
+											310 Value: Aug 9, 2026, 12:00 AM GMT+8 – Aug 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1416
+											311 Value: Aug 10, 2026, 12:00 AM GMT+8 – Aug 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1418
+											312 Value: Aug 11, 2026, 12:00 AM GMT+8 – Aug 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1420
+											313 Value: Aug 12, 2026, 12:00 AM GMT+8 – Aug 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1422
+											314 Value: Aug 13, 2026, 12:00 AM GMT+8 – Aug 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1424
+											315 Value: Aug 14, 2026, 12:00 AM GMT+8 – Aug 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1426
+											316 Value: Aug 15, 2026, 12:00 AM GMT+8 – Aug 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1428
+											317 Value: Aug 16, 2026, 12:00 AM GMT+8 – Aug 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1430
+											318 Value: Aug 17, 2026, 12:00 AM GMT+8 – Aug 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1432
+											319 Value: Aug 18, 2026, 12:00 AM GMT+8 – Aug 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1434
+											320 Value: Aug 19, 2026, 12:00 AM GMT+8 – Aug 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1436
+											321 Value: Aug 20, 2026, 12:00 AM GMT+8 – Aug 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1438
+											322 Value: Aug 21, 2026, 12:00 AM GMT+8 – Aug 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1440
+											323 Value: Aug 22, 2026, 12:00 AM GMT+8 – Aug 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1442
+											324 Value: Aug 23, 2026, 12:00 AM GMT+8 – Aug 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1444
+											325 Value: Aug 24, 2026, 12:00 AM GMT+8 – Aug 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1446
+											326 Value: Aug 25, 2026, 12:00 AM GMT+8 – Aug 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1448
+											327 Value: Aug 26, 2026, 12:00 AM GMT+8 – Aug 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1450
+											328 Value: Aug 27, 2026, 12:00 AM GMT+8 – Aug 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1452
+											329 Value: Aug 28, 2026, 12:00 AM GMT+8 – Aug 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1454
+											330 Value: Aug 29, 2026, 12:00 AM GMT+8 – Aug 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1456
+											331 Value: Aug 30, 2026, 12:00 AM GMT+8 – Aug 31, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1458
+											332 Value: Aug 31, 2026, 12:00 AM GMT+8 – Sep 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1460
+											333 Value: Sep 1, 2026, 12:00 AM GMT+8 – Sep 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1462
+											334 Value: Sep 2, 2026, 12:00 AM GMT+8 – Sep 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1464
+											335 Value: Sep 3, 2026, 12:00 AM GMT+8 – Sep 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1466
+											336 Value: Sep 4, 2026, 12:00 AM GMT+8 – Sep 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1468
+											337 Value: Sep 5, 2026, 12:00 AM GMT+8 – Sep 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1470
+											338 Value: Sep 6, 2026, 12:00 AM GMT+8 – Sep 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1472
+											339 Value: Sep 7, 2026, 12:00 AM GMT+8 – Sep 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1474
+											340 Value: Sep 8, 2026, 12:00 AM GMT+8 – Sep 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1476
+											341 Value: Sep 9, 2026, 12:00 AM GMT+8 – Sep 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1478
+											342 Value: Sep 10, 2026, 12:00 AM GMT+8 – Sep 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1480
+											343 Value: Sep 11, 2026, 12:00 AM GMT+8 – Sep 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1482
+											344 Value: Sep 12, 2026, 12:00 AM GMT+8 – Sep 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1484
+											345 Value: Sep 13, 2026, 12:00 AM GMT+8 – Sep 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1486
+											346 Value: Sep 14, 2026, 12:00 AM GMT+8 – Sep 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1488
+											347 Value: Sep 15, 2026, 12:00 AM GMT+8 – Sep 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1490
+											348 Value: Sep 16, 2026, 12:00 AM GMT+8 – Sep 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1492
+											349 Value: Sep 17, 2026, 12:00 AM GMT+8 – Sep 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1494
+											350 Value: Sep 18, 2026, 12:00 AM GMT+8 – Sep 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1496
+											351 Value: Sep 19, 2026, 12:00 AM GMT+8 – Sep 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1498
+											352 Value: Sep 20, 2026, 12:00 AM GMT+8 – Sep 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1500
+											353 Value: Sep 21, 2026, 12:00 AM GMT+8 – Sep 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1502
+											354 Value: Sep 22, 2026, 12:00 AM GMT+8 – Sep 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1504
+											355 Value: Sep 23, 2026, 12:00 AM GMT+8 – Sep 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1506
+											356 Value: Sep 24, 2026, 12:00 AM GMT+8 – Sep 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1508
+											357 Value: Sep 25, 2026, 12:00 AM GMT+8 – Sep 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1510
+											358 Value: Sep 26, 2026, 12:00 AM GMT+8 – Sep 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1512
+											359 Value: Sep 27, 2026, 12:00 AM GMT+8 – Sep 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1514
+											360 Value: Sep 28, 2026, 12:00 AM GMT+8 – Sep 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1516
+											361 Value: Sep 29, 2026, 12:00 AM GMT+8 – Sep 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1518
+											362 Value: Sep 30, 2026, 12:00 AM GMT+8 – Oct 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1520
+											363 Value: Oct 1, 2026, 12:00 AM GMT+8 – Oct 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1522
+											364 Value: Oct 2, 2026, 12:00 AM GMT+8 – Oct 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1524
+											365 Value: Oct 3, 2026, 12:00 AM GMT+8 – Oct 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1526
+											366 Value: Oct 4, 2026, 12:00 AM GMT+8 – Oct 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1528
+											367 Value: Oct 5, 2026, 12:00 AM GMT+8 – Oct 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1530
+											368 Value: Oct 6, 2026, 12:00 AM GMT+8 – Oct 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1532
+											369 Value: Oct 7, 2026, 12:00 AM GMT+8 – Oct 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1534
+											370 Value: Oct 8, 2026, 12:00 AM GMT+8 – Oct 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1536
+											371 Value: Oct 9, 2026, 12:00 AM GMT+8 – Oct 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1538
+											372 Value: Oct 10, 2026, 12:00 AM GMT+8 – Oct 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1540
+											373 Value: Oct 11, 2026, 12:00 AM GMT+8 – Oct 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1542
+											374 Value: Oct 12, 2026, 12:00 AM GMT+8 – Oct 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1544
+											375 Value: Oct 13, 2026, 12:00 AM GMT+8 – Oct 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1546
+											376 Value: Oct 14, 2026, 12:00 AM GMT+8 – Oct 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1548
+											377 Value: Oct 15, 2026, 12:00 AM GMT+8 – Oct 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1550
+											378 Value: Oct 16, 2026, 12:00 AM GMT+8 – Oct 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1552
+											379 Value: Oct 17, 2026, 12:00 AM GMT+8 – Oct 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1554
+											380 Value: Oct 18, 2026, 12:00 AM GMT+8 – Oct 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1556
+											381 Value: Oct 19, 2026, 12:00 AM GMT+8 – Oct 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1558
+											382 Value: Oct 20, 2026, 12:00 AM GMT+8 – Oct 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1560
+											383 Value: Oct 21, 2026, 12:00 AM GMT+8 – Oct 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1562
+											384 Value: Oct 22, 2026, 12:00 AM GMT+8 – Oct 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1564
+											385 Value: Oct 23, 2026, 12:00 AM GMT+8 – Oct 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1566
+											386 Value: Oct 24, 2026, 12:00 AM GMT+8 – Oct 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1568
+											387 Value: Oct 25, 2026, 12:00 AM GMT+8 – Oct 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1570
+											388 Value: Oct 26, 2026, 12:00 AM GMT+8 – Oct 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1572
+											389 Value: Oct 27, 2026, 12:00 AM GMT+8 – Oct 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1574
+											390 Value: Oct 28, 2026, 12:00 AM GMT+8 – Oct 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1576
+											391 Value: Oct 29, 2026, 12:00 AM GMT+8 – Oct 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1578
+											392 Value: Oct 30, 2026, 12:00 AM GMT+8 – Oct 31, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1580
+											393 Value: Oct 31, 2026, 12:00 AM GMT+8 – Nov 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1582
+											394 Value: Nov 1, 2026, 12:00 AM GMT+8 – Nov 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1584
+											395 Value: Nov 2, 2026, 12:00 AM GMT+8 – Nov 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1586
+											396 Value: Nov 3, 2026, 12:00 AM GMT+8 – Nov 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1588
+											397 Value: Nov 4, 2026, 12:00 AM GMT+8 – Nov 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1590
+											398 Value: Nov 5, 2026, 12:00 AM GMT+8 – Nov 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1592
+											399 Value: Nov 6, 2026, 12:00 AM GMT+8 – Nov 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1594
+											400 Value: Nov 7, 2026, 12:00 AM GMT+8 – Nov 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1596
+											401 Value: Nov 8, 2026, 12:00 AM GMT+8 – Nov 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1598
+											402 Value: Nov 9, 2026, 12:00 AM GMT+8 – Nov 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1600
+											403 Value: Nov 10, 2026, 12:00 AM GMT+8 – Nov 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1602
+											404 Value: Nov 11, 2026, 12:00 AM GMT+8 – Nov 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1604
+											405 Value: Nov 12, 2026, 12:00 AM GMT+8 – Nov 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1606
+											406 Value: Nov 13, 2026, 12:00 AM GMT+8 – Nov 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1608
+											407 Value: Nov 14, 2026, 12:00 AM GMT+8 – Nov 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1610
+											408 Value: Nov 15, 2026, 12:00 AM GMT+8 – Nov 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1612
+											409 Value: Nov 16, 2026, 12:00 AM GMT+8 – Nov 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1614
+											410 Value: Nov 17, 2026, 12:00 AM GMT+8 – Nov 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1616
+											411 Value: Nov 18, 2026, 12:00 AM GMT+8 – Nov 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1618
+											412 Value: Nov 19, 2026, 12:00 AM GMT+8 – Nov 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1620
+											413 Value: Nov 20, 2026, 12:00 AM GMT+8 – Nov 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1622
+											414 Value: Nov 21, 2026, 12:00 AM GMT+8 – Nov 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1624
+											415 Value: Nov 22, 2026, 12:00 AM GMT+8 – Nov 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1626
+											416 Value: Nov 23, 2026, 12:00 AM GMT+8 – Nov 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1628
+											417 Value: Nov 24, 2026, 12:00 AM GMT+8 – Nov 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1630
+											418 Value: Nov 25, 2026, 12:00 AM GMT+8 – Nov 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1632
+											419 Value: Nov 26, 2026, 12:00 AM GMT+8 – Nov 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1634
+											420 Value: Nov 27, 2026, 12:00 AM GMT+8 – Nov 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1636
+											421 Value: Nov 28, 2026, 12:00 AM GMT+8 – Nov 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1638
+											422 Value: Nov 29, 2026, 12:00 AM GMT+8 – Nov 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1640
+											423 Value: Nov 30, 2026, 12:00 AM GMT+8 – Dec 1, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1642
+											424 Value: Dec 1, 2026, 12:00 AM GMT+8 – Dec 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1644
+											425 Value: Dec 2, 2026, 12:00 AM GMT+8 – Dec 3, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1646
+											426 Value: Dec 3, 2026, 12:00 AM GMT+8 – Dec 4, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1648
+											427 Value: Dec 4, 2026, 12:00 AM GMT+8 – Dec 5, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1650
+											428 Value: Dec 5, 2026, 12:00 AM GMT+8 – Dec 6, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1652
+											429 Value: Dec 6, 2026, 12:00 AM GMT+8 – Dec 7, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1654
+											430 Value: Dec 7, 2026, 12:00 AM GMT+8 – Dec 8, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1656
+											431 Value: Dec 8, 2026, 12:00 AM GMT+8 – Dec 9, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1658
+											432 Value: Dec 9, 2026, 12:00 AM GMT+8 – Dec 10, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1660
+											433 Value: Dec 10, 2026, 12:00 AM GMT+8 – Dec 11, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1662
+											434 Value: Dec 11, 2026, 12:00 AM GMT+8 – Dec 12, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1664
+											435 Value: Dec 12, 2026, 12:00 AM GMT+8 – Dec 13, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1666
+											436 Value: Dec 13, 2026, 12:00 AM GMT+8 – Dec 14, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1668
+											437 Value: Dec 14, 2026, 12:00 AM GMT+8 – Dec 15, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1670
+											438 Value: Dec 15, 2026, 12:00 AM GMT+8 – Dec 16, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1672
+											439 Value: Dec 16, 2026, 12:00 AM GMT+8 – Dec 17, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1674
+											440 Value: Dec 17, 2026, 12:00 AM GMT+8 – Dec 18, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1676
+											441 Value: Dec 18, 2026, 12:00 AM GMT+8 – Dec 19, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1678
+											442 Value: Dec 19, 2026, 12:00 AM GMT+8 – Dec 20, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1680
+											443 Value: Dec 20, 2026, 12:00 AM GMT+8 – Dec 21, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1682
+											444 Value: Dec 21, 2026, 12:00 AM GMT+8 – Dec 22, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1684
+											445 Value: Dec 22, 2026, 12:00 AM GMT+8 – Dec 23, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1686
+											446 Value: Dec 23, 2026, 12:00 AM GMT+8 – Dec 24, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1688
+											447 Value: Dec 24, 2026, 12:00 AM GMT+8 – Dec 25, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1690
+											448 Value: Dec 25, 2026, 12:00 AM GMT+8 – Dec 26, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1692
+											449 Value: Dec 26, 2026, 12:00 AM GMT+8 – Dec 27, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1694
+											450 Value: Dec 27, 2026, 12:00 AM GMT+8 – Dec 28, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1696
+											451 Value: Dec 28, 2026, 12:00 AM GMT+8 – Dec 29, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1698
+											452 Value: Dec 29, 2026, 12:00 AM GMT+8 – Dec 30, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1700
+											453 Value: Dec 30, 2026, 12:00 AM GMT+8 – Dec 31, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1702
+											454 Value: Dec 31, 2026, 12:00 AM GMT+8 – Jan 1, 2027, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-1704
+										455 text Completed streamed API calls will appear here at their actual event time.
+									456 container
+										457 heading Activity insights, Value: 2
+											458 text Activity insights
+										459 text 0 Token per call
+										460 text Input 0 Output 0 Reasoning 0 Cache 0
+										461 definition list
+											462 container Priced Token
+												463 text Priced Token
+											464 text 0
+											465 container Unpriced Token
+												466 text Unpriced Token
+											467 text 0
+											468 container Legacy unknown
+												469 text Legacy unknown
+											470 text 0
+									471 container
+										472 heading Providers, Value: 2
+											473 text Providers
+										474 text Measured Token share by Provider.
+										475 text 0 No Provider usage for this period.
+									476 text Cost is calculated from the model rate stored at call time. Unpriced and legacy-unknown Token are never presented as confirmed free usage.
+									477 button (collapsed) Secondary Actions: Expand, Official sources & reconciliation Provider-issued organization usage, financial ledgers, account credits, and cloud control-plane coverage. Compare, never sum
+										478 heading Official sources & reconciliation, Value: 2
+											479 text Official sources & reconciliation
+										480 text Provider-issued organization usage, financial ledgers, account credits, and cloud control-plane coverage.
+										481 text Compare, never sum
+		482 container 0 Token Jan 1, 2026, 12:00 AM GMT+8 – Jan 2, 2026, 12:00 AM GMT+8, ID: tooltip-cl-975-content
+			483 container
+				484 text 0 Token
+			485 text Jan 1, 2026, 12:00 AM GMT+8 – Jan 2, 2026, 12:00 AM GMT+8
+
+The focused UI element is 90 (selected) Value: Jan 1, 2026, 12:00 AM GMT+8 – Jan 2, 2026, 12:00 AM GMT+8 · 0 Token, ID: listbox-cl-234-item-cl-976

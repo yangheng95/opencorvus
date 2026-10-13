@@ -1,0 +1,17 @@
+$ tsc --noEmit
+src/components/settings/UsagePanel.tsx(154,49): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
+src/components/settings/UsagePanel.tsx(155,34): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
+src/components/settings/UsagePanel.tsx(160,23): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
+src/components/settings/UsagePanel.tsx(161,54): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
+src/components/settings/UsagePanel.tsx(162,76): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
+src/components/settings/UsagePanel.tsx(172,51): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
+src/components/settings/UsagePanel.tsx(176,36): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
+src/components/settings/UsagePanel.tsx(178,43): error TS2349: This expression is not callable.
+  Type 'CollectionNode<UsageBucket>' has no call signatures.
