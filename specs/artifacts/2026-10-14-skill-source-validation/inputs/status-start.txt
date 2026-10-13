@@ -1,0 +1,28 @@
+ D packages/opencorvus/script/compaction-task-crash-check.ts
+ M packages/opencorvus/src/bus/index.ts
+ M packages/opencorvus/src/engine/host-recovery.ts
+ M packages/opencorvus/src/project/bootstrap.ts
+ M packages/opencorvus/src/session/compaction.ts
+ M packages/opencorvus/src/session/loop.ts
+ M packages/opencorvus/src/storage/db.ts
+ M packages/opencorvus/src/util/file-entry.ts
+ M packages/opencorvus/test/bus-durable-outbox.test.ts
+ M packages/opencorvus/test/mission-process-recovery.test.ts
+ M packages/opencorvus/test/storage/schema-contract.test.ts
+ M specs/README.md
+ M specs/artifacts/2026-10-13-compaction-stress/README.md
+ M specs/artifacts/README.md
+ M specs/current/architecture/02-data.md
+ M specs/current/architecture/project-memory.md
+ M specs/current/architecture/task-control-plane.md
+ M specs/records/2026-10/2026-10-13-compaction-stress.md
+ M specs/records/2026-10/2026-10-14-link-relocation-authority.md
+ M specs/records/2026-10/2026-10-14-task-question-recovery-405.md
+ M specs/records/2026-10/README.md
+?? .bun/
+?? packages/opencorvus/bun/
+?? packages/opencorvus/script/compaction-runtime-crash-check.ts
+?? packages/opencorvus/src/util/file-access.ts
+?? packages/opencorvus/test/compaction-recovery-boundary.test.ts
+?? packages/opencorvus/test/skill-local-source-validation.test.ts
+?? packages/opencorvus/test/storage/database-checkpoint.test.ts

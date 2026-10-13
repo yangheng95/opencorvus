@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 本地 Skill 来源的目录缺失、路径为文件或目录为空时返回明确的 400 错误，包含路径与原因；有效目录及目录链接继续按原配置与目录发现流程安装。
+
 - Skill 与 MCP 资源操作使用当前语言的简短摘要，原始诊断和可用的真实请求 ID 可展开查看；关闭反馈保留表单输入，目录警告沿同一反馈状态呈现。
 
 - 服务商行的模型数量、摘要和搜索使用同一公开目录，正确显示空声明或部分覆盖继承的模型；编辑继续保留原配置覆盖。目录读取失败时显示本地化未知状态，成功重读后恢复。
@@ -103,6 +105,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Local Skill sources report a typed 400 error with their path and reason for missing, non-directory or empty directories. Valid directories and directory links retain the existing installation and discovery flow.
 
 - Skill and MCP resource actions show localized summaries and expandable original diagnostics, including the actual request ID when available. Dismissing feedback retains form input, and directory warnings use the same feedback state.
 

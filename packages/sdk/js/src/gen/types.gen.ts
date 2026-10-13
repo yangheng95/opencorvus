@@ -5111,6 +5111,15 @@ export type SignalChannelConfig = {
   service?: string
 }
 
+export type SkillLocalSourceError = {
+  data: {
+    message: string
+    path: string
+    reason: "missing_directory" | "not_directory" | "empty_directory"
+  }
+  name: "SkillLocalSourceError"
+}
+
 export type SkillMarketUpstreamError = {
   data: {
     [key: string]: unknown
@@ -31188,6 +31197,15 @@ export type SkillInstallData = {
   }
   url: "/skill/install"
 }
+
+export type SkillInstallErrors = {
+  /**
+   * Invalid local Skill source
+   */
+  400: BadRequestError | SkillLocalSourceError
+}
+
+export type SkillInstallError = SkillInstallErrors[keyof SkillInstallErrors]
 
 export type SkillInstallResponses = {
   /**

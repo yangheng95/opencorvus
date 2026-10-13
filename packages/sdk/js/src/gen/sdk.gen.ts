@@ -525,6 +525,7 @@ import type {
   SkillDirectoriesResponses,
   SkillImportFileResponses,
   SkillInstalledResponses,
+  SkillInstallErrors,
   SkillInstallResponses,
   SkillIssuesResponses,
   SkillMarketDetailErrors,
@@ -13474,7 +13475,7 @@ export class Skill2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<SkillInstallResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<SkillInstallResponses, SkillInstallErrors, ThrowOnError>({
       url: "/skill/install",
       ...options,
       ...params,

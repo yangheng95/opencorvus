@@ -352,7 +352,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/skill` | List skills | `app.skills` |
 | GET | `/skill/directories` | Get skill directories | `skill.directories` |
 | POST | `/skill/import-file` | Import a dropped skill source Body: `archiveBase64`, `content`, `filename`, `files`, `policy`, `sourceName`. | `skill.importFile` |
-| POST | `/skill/install` | Install or import a skill source Body: `kind`, `policy`, `value`. | `skill.install` |
+| POST | `/skill/install` | Install or import a skill source Body: `kind`, `policy`, `value`; Errors: `BadRequestError`, `SkillLocalSourceError`. | `skill.install` |
 | GET | `/skill/installed` | List installed skills | `skill.installed` |
 | GET | `/skill/issues` | List Skill catalog issues | `skill.issues` |
 | GET | `/skill/market` | List skill markets | `skill.market` |

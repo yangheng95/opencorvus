@@ -352,7 +352,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/skill` | List skills | `app.skills` |
 | GET | `/skill/directories` | Get skill directories | `skill.directories` |
 | POST | `/skill/import-file` | Import a dropped skill source 请求体: `archiveBase64`, `content`, `filename`, `files`, `policy`, `sourceName`. | `skill.importFile` |
-| POST | `/skill/install` | Install or import a skill source 请求体: `kind`, `policy`, `value`. | `skill.install` |
+| POST | `/skill/install` | Install or import a skill source 请求体: `kind`, `policy`, `value`; 错误: `BadRequestError`, `SkillLocalSourceError`. | `skill.install` |
 | GET | `/skill/installed` | List installed skills | `skill.installed` |
 | GET | `/skill/issues` | List Skill catalog issues | `skill.issues` |
 | GET | `/skill/market` | List skill markets | `skill.market` |

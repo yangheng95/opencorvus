@@ -1,0 +1,13 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root='.tmp-codex-skill-source-validation-01a133/after',ids=['fdc3b965-030d-4e9a-95df-f5715c817881','13c4752e-02e0-4d05-ac82-3f5550847b9c','3d8d98a2-7c1a-49cb-80b6-c335993cc004','70f73268-e29e-4919-9150-63c7991cbddd']
+const rows=fs.readdirSync(root+'/runtime/log').filter(name=>name.endsWith('.log')).flatMap(name=>fs.readFileSync(path.join(root,'runtime/log',name),'utf8').split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line)))
+const matched=ids.map(id=>{
+ const complete=rows.find(row=>row.data?.requestID===id&&row.data?.status==='completed')
+ const failure=rows.find(row=>row.data?.requestID===id&&row.message==='request failed')
+ assert.equal(complete?.data?.statusCode,400);assert.equal(failure?.data?.error?.type,'SkillLocalSourceError')
+ return {requestID:id,status:complete.data.statusCode,duration:complete.data.duration,reason:failure.data.error.data.reason}
+})
+fs.writeFileSync(root+'/ui-http-correlations.json',JSON.stringify({observedAt:new Date().toISOString(),actualCompletedRequests:matched},null,2)+'\n')
+console.log(JSON.stringify(matched))

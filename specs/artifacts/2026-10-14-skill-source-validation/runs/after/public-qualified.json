@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-13T23:47:50.959Z",
+  "base": "http://127.0.0.1:18636",
+  "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\project",
+  "errors": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\missing-owned-skill",
+      "status": 400,
+      "requestID": "78d7a3e0-e9fe-429e-b649-a6775afaecfd",
+      "body": {
+        "name": "SkillLocalSourceError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\missing-owned-skill",
+          "reason": "missing_directory",
+          "message": "Skill directory not found: D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\missing-owned-skill"
+        }
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\file.txt",
+      "status": 400,
+      "requestID": "9248d413-74f4-4d54-b3fd-a25ee447ecf0",
+      "body": {
+        "name": "SkillLocalSourceError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\file.txt",
+          "reason": "not_directory",
+          "message": "Skill source is not a directory: D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\file.txt"
+        }
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\empty",
+      "status": 400,
+      "requestID": "99b5fd3c-6e9f-4f90-bcd1-e041bb132eb2",
+      "body": {
+        "name": "SkillLocalSourceError",
+        "data": {
+          "path": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\empty",
+          "reason": "empty_directory",
+          "message": "No SKILL.md files found in D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\empty"
+        }
+      }
+    }
+  ],
+  "uiInstalledSkill": {
+    "name": "owned-feedback",
+    "description": "Owned local resource for feedback qualification.",
+    "aliases": [],
+    "platforms": [],
+    "builtin": false,
+    "location": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\owned-feedback\\SKILL.md",
+    "content": "\n# Owned feedback\n\nA locally supplied note for resource management qualification.\n",
+    "priority": 0,
+    "required_tools": [],
+    "dir": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\owned-feedback",
+    "source_type": "config_path",
+    "source": "D:/myhexin-local/opencorvus/.tmp-codex-skill-source-validation-01a133/after/resource-fixtures/owned-feedback",
+    "trust": "local",
+    "risk": {
+      "level": "low",
+      "has_scripts": false,
+      "has_agents": false,
+      "has_references": false,
+      "has_templates": false
+    },
+    "recommended_policy": "deny",
+    "policy": "allow",
+    "managed": false,
+    "writable": true
+  },
+  "configuredSource": "D:/myhexin-local/opencorvus/.tmp-codex-skill-source-validation-01a133/after/resource-fixtures/owned-feedback",
+  "globalRestriction": {
+    "status": 400,
+    "requestID": "47d17f8a-c476-4aa6-90d4-f5ddeb35b570",
+    "body": {
+      "data": {
+        "message": "Request validation failed"
+      },
+      "error": [
+        {
+          "code": "invalid_value",
+          "path": [
+            "kind"
+          ],
+          "message": "Invalid option: expected one of \"url\"|\"git\""
+        }
+      ],
+      "success": false
+    }
+  }
+}

@@ -17645,6 +17645,43 @@
         },
         "type": "object"
       },
+      "SkillLocalSourceError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "missing_directory",
+                  "not_directory",
+                  "empty_directory"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "reason",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "SkillLocalSourceError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "SkillMarketUpstreamError": {
         "properties": {
           "data": {
@@ -108983,6 +109020,23 @@
               }
             },
             "description": "Installed skill source"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SkillLocalSourceError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Invalid local Skill source"
           }
         },
         "summary": "Install or import a skill source",

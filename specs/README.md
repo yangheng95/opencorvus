@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [本地Skill来源校验](records/2026-10/2026-10-14-skill-source-validation.md)：本地结构输入400合同、10项正向测试与6张真实原图。
+
 - [405 Question恢复与终态反馈](records/2026-10/2026-10-14-task-question-recovery-405.md)：普通Tool/A2A执行权威、真实入口红态及Side/超时展示调查。
 
 - [资源管理反馈](records/2026-10/2026-10-14-resource-feedback.md)：中英短摘要、原诊断/真实请求ID和14张原图；Skill目录500问题单列。

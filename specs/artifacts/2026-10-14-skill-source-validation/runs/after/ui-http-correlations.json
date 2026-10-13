@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-10-13T23:51:49.064Z",
+  "actualCompletedRequests": [
+    {
+      "requestID": "fdc3b965-030d-4e9a-95df-f5715c817881",
+      "status": 400,
+      "duration": 15,
+      "reason": "missing_directory"
+    },
+    {
+      "requestID": "13c4752e-02e0-4d05-ac82-3f5550847b9c",
+      "status": 400,
+      "duration": 5,
+      "reason": "not_directory"
+    },
+    {
+      "requestID": "3d8d98a2-7c1a-49cb-80b6-c335993cc004",
+      "status": 400,
+      "duration": 5,
+      "reason": "empty_directory"
+    },
+    {
+      "requestID": "70f73268-e29e-4919-9150-63c7991cbddd",
+      "status": 400,
+      "duration": 7,
+      "reason": "missing_directory"
+    }
+  ]
+}

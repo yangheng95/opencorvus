@@ -1,0 +1,34 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import assert from 'node:assert/strict'
+const root=path.resolve('.tmp-codex-skill-source-validation-01a133/after')
+const ready=JSON.parse(fs.readFileSync(root+'/ready.json','utf8')),base=`http://127.0.0.1:${ready.port}`
+const request=async(route,body)=>{
+ const response=await fetch(base+route,body===undefined?undefined:{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})
+ return {status:response.status,requestID:response.headers.get('x-opencorvus-request-id'),body:await response.json()}
+}
+const directory=path.join(root,'project'),query='?directory='+encodeURIComponent(directory),errors=[]
+for(const [entry,reason,message]of [['missing-owned-skill','missing_directory','Skill directory not found:'],['file.txt','not_directory','Skill source is not a directory:'],['empty','empty_directory','No SKILL.md files found in']]){
+ const source=path.join(root,'resource-fixtures',entry)
+ const result=await request('/skill/install'+query,{kind:'path',value:source,policy:'allow'})
+ assert.equal(result.status,400)
+ assert.deepEqual(result.body,{name:'SkillLocalSourceError',data:{path:source,reason,message:message+' '+source}})
+ assert.match(result.requestID,/^[0-9a-f-]{36}$/)
+ errors.push({source,...result})
+}
+const installed=await request('/skill/installed'+query)
+assert.equal(installed.status,200)
+const selected=installed.body.filter(skill=>skill.name==='owned-feedback')
+assert.equal(selected.length,1)
+assert.equal(selected[0].source_type,'config_path')
+assert.equal(path.resolve(selected[0].dir),path.resolve(ready.localSkillDirectory))
+const global=await request('/global/config');assert.equal(global.status,200)
+assert.equal(global.body.skills.paths.some(source=>path.resolve(source)===path.resolve(ready.localSkillDirectory)),true)
+const globalRestriction=await request('/global/skill/install',{kind:'path',value:ready.localSkillDirectory})
+assert.equal(globalRestriction.status,400)
+assert.equal(globalRestriction.body.success,false)
+assert.equal(globalRestriction.body.data.message,'Request validation failed')
+assert.deepEqual(globalRestriction.body.error[0].path,['kind'])
+const receipt={at:new Date().toISOString(),base,directory,errors,uiInstalledSkill:selected[0],configuredSource:global.body.skills.paths.find(source=>path.resolve(source)===path.resolve(ready.localSkillDirectory)),globalRestriction}
+fs.writeFileSync(root+'/public-qualified.json',JSON.stringify(receipt,null,2)+'\n')
+console.log(JSON.stringify({errors:errors.map(e=>({status:e.status,reason:e.body.data.reason,requestID:e.requestID})),uiInstalledSkill:selected[0].name,source_type:selected[0].source_type,globalRestriction:globalRestriction.status}))

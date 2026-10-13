@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [本地Skill来源校验](2026-10-14-skill-source-validation/README.md)：Root独立生产入口、真实目录输入与桌面原图记录。
+
 - [405 恢复权威与终态反馈](2026-10-14-task-question-recovery-405/README.md)：实施前只读源证据及404原图边界，尚未405验收。
 
 - [资源管理反馈](2026-10-14-resource-feedback/README.md)：14张原图、真实Skill接受与checker原失败、完整日志和第15批正常交付原件。

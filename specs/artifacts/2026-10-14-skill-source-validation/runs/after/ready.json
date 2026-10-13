@@ -1,0 +1,62 @@
+{
+  "pid": 61496,
+  "started": 1791935053513,
+  "port": 18636,
+  "participantPort": 18637,
+  "occurrence": {
+    "pid": 61496,
+    "processInstanceID": "win32:639275318534404253",
+    "occurrenceID": "751d518d-2bdb-4945-b6e0-018a33e9763f"
+  },
+  "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-resource-feedback-01a133\\ui-after",
+  "localSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\owned-feedback",
+  "missingSkillDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\resource-fixtures\\missing-owned-skill",
+  "projects": [
+    {
+      "label": "A",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\project-A"
+    },
+    {
+      "label": "B",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\project-B"
+    }
+  ],
+  "sessions": [
+    {
+      "label": "A",
+      "sessionID": "ses_-zUS1P5Mjzz6x6RV6ArM",
+      "projectID": "prj_hHTVlWGBK0DQGpxkfuZs",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\project-A"
+    },
+    {
+      "label": "B",
+      "sessionID": "ses_-zUS1P59xzzaiMht7hJx",
+      "projectID": "prj_hirkxFaa3X8e8Nr7NR6g",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-skill-source-validation-01a133\\after\\project-B"
+    }
+  ],
+  "catalogProviderCount": 91,
+  "scope": "Own generated fictional Auth only; complete public repository bootstrap catalog plus three owned entries; no real Provider credential copied",
+  "providers": [
+    {
+      "id": "owned-resource-a",
+      "models": [
+        "owned-resource-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-b",
+      "models": [
+        "owned-resource-b-model",
+        "owned-resource-b-inherited"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-resource-zero",
+      "models": [],
+      "apiKeyConfigured": true
+    }
+  ]
+}

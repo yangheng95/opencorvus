@@ -149,6 +149,11 @@ path、URL index 和 git source import 保持为独立高级入口。Market iden
 `skills-market/skills-sh/<owner>/<repository>/<skill>`，替换或删除前必须由目标 manifest 证明同一 identity；
 上游网络、HTTP 或响应校验故障统一发布 `SkillMarketUpstreamError` 与 HTTP 502，不能退化为匿名 500。
 
+本地path来源安装只在紧邻输入校验边界把缺失目录、非目录和空目录发布为
+`SkillLocalSourceError`（HTTP 400），包含原path、明确reason和message。共享目录校验
+跟随目录链接，并把其他IO故障原样传递；内置包、git/URL、发布替换和恢复故障不经此
+输入错误转换。公共错误Schema同时供OpenAPI和SDK生成使用，不另建错误DTO。
+
 运行时 `skill_market` Tool 提供搜索、检查和精确安装。搜索与检查是 network read；安装是经普通 Tool
 permission authority 单独授权的 local write。新安装 Skill 只在后续 turn 可被 mount；当前 turn 已冻结的
 Skill Tool surface 不热更新。`/global/skill/install` 与项目安装路由仍调用同一个通用

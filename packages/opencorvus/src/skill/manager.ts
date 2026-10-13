@@ -1,4 +1,5 @@
-import { lstat, mkdir, readFile, rename, rm } from "fs/promises"
+import { lstat, mkdir, readFile, rename, rm, stat } from "fs/promises"
+import { NamedError } from "@opencorvus-ai/util/error"
 import { createHash, randomUUID } from "node:crypto"
 import path from "path"
 import z from "zod"
@@ -40,6 +41,16 @@ let replacementCutHook: ((cut: SkillReplacementCut, targetIndex?: number) => voi
 
 async function replacementCut(cut: SkillReplacementCut, targetIndex?: number) {
   await replacementCutHook?.(cut, targetIndex)
+}
+
+class SkillDirectoryError extends Error {
+  constructor(
+    readonly path: string,
+    readonly reason: z.infer<typeof SkillManager.LocalSourceError.Schema>["data"]["reason"],
+    message: string,
+  ) {
+    super(message)
+  }
 }
 
 export namespace SkillManager {
@@ -145,6 +156,15 @@ export namespace SkillManager {
     value: z.string().min(1),
     policy: Policy.optional(),
   })
+
+  export const LocalSourceError = NamedError.create(
+    "SkillLocalSourceError",
+    z.object({
+      path: z.string(),
+      reason: z.enum(["missing_directory", "not_directory", "empty_directory"]),
+      message: z.string(),
+    }),
+  )
 
   export const ImportBundleFile = z
     .object({
@@ -479,7 +499,15 @@ export namespace SkillManager {
   async function installResolved(input: z.output<typeof InstallInput>) {
     if (input.kind === "path") {
       const resolved = resolveSource(input.value)
-      const definitions = await validateSkillDirectory(resolved)
+      const definitions = await validateSkillDirectory(resolved).catch((error) => {
+        if (error instanceof SkillDirectoryError) {
+          throw new LocalSourceError(
+            { path: error.path, reason: error.reason, message: error.message },
+            { cause: error },
+          )
+        }
+        throw error
+      })
       await patchGlobal((next) => {
         next.skills = next.skills || {}
         next.skills.paths = dedupe([...(next.skills.paths ?? []), resolved])
@@ -907,8 +935,19 @@ async function ensureManagedRepo(source: string, dest: string) {
 }
 
 async function validateSkillDirectory(dir: string): Promise<Skill.Definition[]> {
-  if (!(await Filesystem.isDir(dir))) {
-    throw new Error(`Skill directory not found: ${dir}`)
+  const info = await stat(dir).catch((error: unknown) => {
+    if (error && typeof error === "object" && "code" in error) {
+      if (error.code === "ENOENT") {
+        throw new SkillDirectoryError(dir, "missing_directory", `Skill directory not found: ${dir}`)
+      }
+      if (error.code === "ENOTDIR") {
+        throw new SkillDirectoryError(dir, "not_directory", `Skill source is not a directory: ${dir}`)
+      }
+    }
+    throw error
+  })
+  if (!info.isDirectory()) {
+    throw new SkillDirectoryError(dir, "not_directory", `Skill source is not a directory: ${dir}`)
   }
   const matches = await Glob.scan("**/SKILL.md", {
     cwd: dir,
@@ -918,7 +957,7 @@ async function validateSkillDirectory(dir: string): Promise<Skill.Definition[]> 
     symlink: true,
   })
   if (matches.length === 0) {
-    throw new Error(`No SKILL.md files found in ${dir}`)
+    throw new SkillDirectoryError(dir, "empty_directory", `No SKILL.md files found in ${dir}`)
   }
   const definitions: Skill.Definition[] = []
   for (const file of matches.sort()) {

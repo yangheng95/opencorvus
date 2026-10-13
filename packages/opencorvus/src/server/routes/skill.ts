@@ -6,7 +6,7 @@ import { Skill } from "@/skill/skill"
 import { SkillManager } from "@/skill/manager"
 import { SkillMount } from "@/skill/mounts"
 import { assertActiveProjectSession } from "../active-project-session"
-import { errors } from "../error"
+import { BAD_REQUEST_SCHEMA, errors } from "../error"
 
 async function assertInputSessionInActiveProject(input: object): Promise<void> {
   if ("sessionID" in input && typeof input.sessionID === "string") {
@@ -251,6 +251,14 @@ export function SkillRoutes() {
                     kind: SkillManager.InstallInput.shape.kind,
                   }),
                 ),
+              },
+            },
+          },
+          400: {
+            description: "Invalid local Skill source",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([BAD_REQUEST_SCHEMA, SkillManager.LocalSourceError.Schema])),
               },
             },
           },
