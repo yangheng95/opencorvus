@@ -1,0 +1,69 @@
+{
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2194,
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-structured-result-388\\live-attempt-01\\provider-run\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-structured-result-388\\live-attempt-01\\provider-run\\runtime\\data\\models.json"
+    }
+  ],
+  "listeners": null,
+  "observedAtUtc": "2026-10-13T09:56:49.2754830Z",
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 78344,
+        "processInstanceID": "win32:639274817330639305",
+        "occurrenceID": "30851adf-d304-44a9-be9b-43ed6c773e03"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 42824,
+        "processInstanceID": "win32:639274817321858588",
+        "occurrenceID": "54dad23e-e489-415f-a405-3702297d2447"
+      }
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "mcp-structured-result-388-live-01-e3b42b40-3b3b-45c6-a224-da6b4b24b7d9",
+    "outcome": "settled",
+    "host": {
+      "pid": 42824,
+      "processInstanceID": "win32:639274817321858588",
+      "occurrenceID": "54dad23e-e489-415f-a405-3702297d2447"
+    },
+    "target": {
+      "pid": 78344,
+      "processInstanceID": "win32:639274817330639305",
+      "occurrenceID": "30851adf-d304-44a9-be9b-43ed6c773e03"
+    },
+    "observedAtUtc": "2026-10-13T09:56:45.736Z",
+    "deadlineAt": 1791885532170,
+    "terminal": {
+      "occurrenceID": "mcp-structured-result-388-live-01-e3b42b40-3b3b-45c6-a224-da6b4b24b7d9",
+      "pid": 78344,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "occurrence": "mcp-structured-result-388-live-01-e3b42b40-3b3b-45c6-a224-da6b4b24b7d9"
+}

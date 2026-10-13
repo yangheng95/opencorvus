@@ -1,0 +1,7 @@
+{
+  "requestID": "aac11bb1-a9cc-468f-ad68-9ce35b38bcd2",
+  "requestSentAt": "2026-10-13T09:49:39.692Z",
+  "model": "openai/gpt-6.1-sol",
+  "promptProfile": "structured-reports-388",
+  "request": "请核对这组公开报告：1）日报摘要的 review_code 和 total；2）空资源检查报告的原文正文行与 note；3）完整存档开头的 archive_review_code 和 record_count。请从三个真实报告读取这些值，结果如果只显示部分正文，就依据实际返回的恢复信息读取所需位置。最后用中文简短列出核对结果，只读、不修改项目文件。\n"
+}

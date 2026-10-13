@@ -24,7 +24,7 @@ describe("MCP result provenance", () => {
       expect(builtin.metadata).toEqual({ computer: { computerId: "computer-1", displayId: "display-1" }, mcp_tool_result: { is_error: false } })
       for (const serverName of ["package-observer", undefined]) {
         const generic = await materializeMcpToolResult({ projectID: Instance.project.id, result, serverName })
-        expect({ text: generic.text, metadata: generic.metadata }).toEqual({ text: "done", metadata: { mcp_tool_result: { is_error: false } } })
+        expect({ text: generic.text, metadata: generic.metadata }).toEqual({ text: 'done\n\n{"computer_id":"computer-1","display_id":"display-1"}', metadata: { mcp_tool_result: { is_error: false } } })
       }
     } })
   })

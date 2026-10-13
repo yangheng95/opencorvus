@@ -18,6 +18,7 @@ import { Instance } from "../../src/project/instance"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
 import type { Provider } from "../../src/provider/provider"
 import { Session } from "../../src/session"
+import { MessageStore } from "../../src/session/message-store"
 import { SessionProcessor } from "../../src/session/processor"
 import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
 import { createRuntimeToolOwner } from "../../src/session/runtime-tool-owner"
@@ -49,8 +50,14 @@ const providerModel = {
   },
 } as Provider.Model
 
-for (const family of ["package-tool", "package-mcp", "default-mcp"] as const)
-  test(`${family} preserves oversized output in its exact Task and Session directory`, async () => {
+for (const [family, representation] of [
+  ["package-tool", "text"],
+  ["package-mcp", "text"],
+  ["default-mcp", "text"],
+  ["package-mcp", "structured"],
+  ["default-mcp", "structured"],
+] as const)
+  test(`${family} preserves oversized ${representation} output in its exact Task and Session directory`, async () => {
     await using project = await memoryProject()
     const calls: string[] = []
     const mcpServers = new Set<McpServer>()
@@ -62,10 +69,16 @@ for (const family of ["package-tool", "package-mcp", "default-mcp"] as const)
         mcpServers.add(server)
         server.registerTool(
           "emit",
-          { description: "Return the exact requested public test text.", inputSchema: { text: z.string() } },
+          {
+            description: "Return the exact requested public test text.",
+            inputSchema: { text: z.string() },
+            ...(representation === "structured" ? { outputSchema: { report: z.string() } } : {}),
+          },
           async ({ text }) => {
             calls.push(text)
-            return { content: [{ type: "text" as const, text }] }
+            return representation === "structured"
+              ? { content: [], structuredContent: { report: text } }
+              : { content: [{ type: "text" as const, text }] }
           },
         )
         const transport = new WebStandardStreamableHTTPServerTransport({
@@ -177,7 +190,7 @@ args: { text: tool.schema.string() }, async execute(args) { return args.text } }
           )
           const executedBodies: string[] = []
           const recovered: Array<{ sessionID: string; path: string }> = []
-          for (const boundary of ["bytes", "lines"] as const) {
+          for (const boundary of representation === "structured" ? (["bytes"] as const) : (["bytes", "lines"] as const)) {
             const session = await Session.create({
               kind: "orchestrator",
               parentID: requireTask(taskID).session_id!,
@@ -205,10 +218,12 @@ args: { text: tool.schema.string() }, async execute(args) { return args.text } }
             })
             try {
               for (const over of [false, true]) {
-                const body =
+                const text =
                   boundary === "bytes"
-                    ? "x".repeat(51200 + Number(over))
+                    ? "x".repeat(51200 + Number(over) - (representation === "structured" ? 13 : 0))
                     : Array.from({ length: 2000 + Number(over) }, (_, index) => `line ${index + 1}`).join("\n")
+                // The structured representation includes the 13 bytes in {"report":""}.
+                const body = representation === "structured" ? JSON.stringify({ report: text }) : text
                 const user = await Session.updateMessage({
                   id: Identifier.ascending("message"),
                   sessionID: session.id,
@@ -257,7 +272,7 @@ args: { text: tool.schema.string() }, async execute(args) { return args.text } }
                   messages: await Session.messages({ sessionID: session.id }),
                   activeLocalRefs: [providerName],
                 })
-                const args = { text: body }
+                const args = { text }
                 const call = Identifier.ascending("tool")
                 const result = (await resolved.tools[providerName]!.execute!(args, {
                   toolCallId: call,
@@ -267,7 +282,7 @@ args: { text: tool.schema.string() }, async execute(args) { return args.text } }
                   output: string
                   metadata: { truncated: boolean; outputPath?: string }
                 }
-                executedBodies.push(body)
+                executedBodies.push(text)
                 expect(result.metadata.truncated).toBe(over)
                 if (!over) expect(result.output).toBe(body)
                 else {
@@ -284,6 +299,14 @@ args: { text: tool.schema.string() }, async execute(args) { return args.text } }
                   recovered.push({ sessionID: session.id, path: outputPath })
                 }
                 await processor.completeRecoveredToolPart({ toolCallID: call, toolInput: args, output: result })
+                const completed = (await MessageStore.get({ sessionID: session.id, messageID: assistant.id })).parts.find(
+                  (part) => part.type === "tool" && part.callID === call,
+                )
+                expect(completed).toMatchObject({
+                  type: "tool",
+                  callID: call,
+                  state: { status: "completed", output: result.output, metadata: result.metadata },
+                })
               }
             } finally {
               await SessionRuntimeContractStore.dispose(session.id)
@@ -292,11 +315,12 @@ args: { text: tool.schema.string() }, async execute(args) { return args.text } }
           expect(recovered.map(({ sessionID, path: outputPath }) => path.dirname(outputPath))).toEqual(
             recovered.map(({ sessionID }) => ProjectRuntimePaths.toolOutputDir(project.path, taskID, sessionID)),
           )
-          expect(new Set(recovered.map((entry) => entry.sessionID)).size).toBe(2)
+          expect(new Set(recovered.map((entry) => entry.sessionID)).size).toBe(representation === "structured" ? 1 : 2)
           if (family !== "package-tool") expect(calls).toEqual(executedBodies)
           console.log(
             JSON.stringify({
               family,
+              representation,
               taskID,
               projectID: Instance.project.id,
               outputs: recovered,

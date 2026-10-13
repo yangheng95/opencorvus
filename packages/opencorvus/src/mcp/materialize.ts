@@ -87,7 +87,7 @@ export async function materializeMcpToolResult(input: {
     if (contentItem.type === "resource") {
       const { resource } = contentItem
       let materialized = false
-      if ("text" in resource && resource.text) {
+      if ("text" in resource && typeof resource.text === "string") {
         textParts.push(resource.text)
         materialized = true
       }
@@ -107,6 +107,18 @@ export async function materializeMcpToolResult(input: {
       continue
     }
     throw new Error(`Unsupported MCP content item type: ${(contentItem as { type?: string }).type ?? "(missing)"}`)
+  }
+
+  // Generic structured output is independent of content, including any text
+  // copy supplied by the server. Preserve both without guessing from text.
+  // Builtin results keep their provider-owned interpretation below; their
+  // structured payload can include screenshot bytes already stored above.
+  if (
+    input.result.structuredContent !== undefined &&
+    input.serverName !== ComputerMCPBuiltin.ServerName &&
+    input.serverName !== BrowserMCPBuiltin.ServerName
+  ) {
+    textParts.push(JSON.stringify(input.result.structuredContent))
   }
 
   const metadata =

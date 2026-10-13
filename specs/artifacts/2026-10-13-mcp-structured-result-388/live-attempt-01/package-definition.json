@@ -1,0 +1,56 @@
+{
+  "manifest": {
+    "schema_version": 2,
+    "namespace": "qa",
+    "id": "structured-reports-388",
+    "label": "公开结构化报告核对",
+    "description": "Read the three declared public reports using actual source results.",
+    "version": "2026.10.13.1",
+    "product_pillars": [
+      "work"
+    ],
+    "capability_sets": {},
+    "readme": "README.md",
+    "selector": {
+      "summary": "Read public report facts",
+      "selection_guidance": "Use for this public report review.",
+      "instructions": "selector.md"
+    },
+    "capability_projection": {
+      "scheduler": {
+        "base_role": "orchestrator",
+        "prompt": "agents/orchestrator/system.md",
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:orchestrator-base",
+          "capability:mcp_tool:package:structured-reports-388:structured-reports-388%2Fshared%2Freports%2Ftool%2Fempty-note",
+          "capability:mcp_tool:package:structured-reports-388:structured-reports-388%2Fshared%2Freports%2Ftool%2Freport-archive",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fpublicreports%2Ftool%2Fpublic-summary",
+          "capability:skill:package:structured-reports-388:structured-reports-388%2Fshared%2Fmethod",
+          "capability:tool:platform:tool-registry:manage_task",
+          "capability:tool:platform:tool-registry:read"
+        ]
+      },
+      "agents": {
+        "report-reader": {
+          "label": "Report reader",
+          "description": "Read public report facts",
+          "base_role": "explore",
+          "prompt": "agents/report-reader/system.md",
+          "capability_refs": [
+            "capability:skill:package:structured-reports-388:structured-reports-388%2Fshared%2Fmethod",
+            "capability:tool:platform:tool-registry:read"
+          ]
+        }
+      },
+      "virtual_workflows": {}
+    }
+  },
+  "files": {
+    "README.md": "# Public structured reports\nRead the user's requested public report fields using actual source results.\n",
+    "selector.md": "# Public reports\nUse for the bounded report review request.\n",
+    "agents/orchestrator/system.md": "# Public report owner\nOwn the requested read-only answer using your declared report and reading capabilities. Preserve actual returned evidence and report failures truthfully. Give the requested facts in a visible assistant message. When the request is satisfied, complete the Task with the current lifecycle interface and a truthful summary. No project file mutation or artifact publication is requested.\n",
+    "agents/report-reader/system.md": "Read the requested public report facts using actual evidence.\n",
+    "skills/method/SKILL.md": "---\nname: public-report-reading\ndescription: Read the declared public reports and answer the user's bounded question.\n---\n# Public report reading\nUse actual returned content. If a response is partial, follow its real recovery information for the sections needed to answer. Preserve missing facts as unknown.\n",
+    "mcp/reports.json": "{\"type\":\"remote\",\"transport\":\"streamable-http\",\"url\":\"http://127.0.0.1:18507/mcp\",\"oauth\":false,\"timeout\":15000,\"capabilities\":{\"tools\":[\"empty-note\",\"report-archive\"]}}"
+  }
+}

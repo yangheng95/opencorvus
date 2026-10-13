@@ -1,0 +1,44 @@
+{
+  "observedAt": "2026-10-13T10:00:58.105Z",
+  "pid": 38876,
+  "receipts": [
+    {
+      "idleTimeout": 10,
+      "port": 0,
+      "elapsedMs": 12502,
+      "admitted": [
+        "GET"
+      ],
+      "beforeClose": {
+        "kind": "error",
+        "error": "TypeError: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+      },
+      "afterClose": {
+        "kind": "error",
+        "error": "TypeError: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+      },
+      "sdkOwners": 1,
+      "ownerClose": "fulfilled",
+      "httpStop": "fulfilled"
+    },
+    {
+      "idleTimeout": 0,
+      "port": 0,
+      "elapsedMs": 12503,
+      "admitted": [
+        "GET"
+      ],
+      "beforeClose": {
+        "kind": "pending"
+      },
+      "afterClose": {
+        "kind": "eof",
+        "status": 200
+      },
+      "sdkOwners": 1,
+      "ownerClose": "fulfilled",
+      "httpStop": "fulfilled"
+    }
+  ],
+  "boundary": "Post-live auxiliary SDK GET stream probe; no model, credential, task or product changes"
+}

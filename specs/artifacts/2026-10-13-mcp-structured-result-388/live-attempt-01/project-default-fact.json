@@ -1,0 +1,14 @@
+{
+  "promptProfile": "base",
+  "model": "openai/gpt-6.1-sol",
+  "project": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-structured-result-388\\live-attempt-01\\provider-run\\project",
+  "mcp": {
+    "publicreports": {
+      "type": "remote",
+      "url": "http://127.0.0.1:18507/mcp",
+      "transport": "streamable-http",
+      "oauth": false,
+      "timeout": 15000
+    }
+  }
+}

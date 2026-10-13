@@ -1,0 +1,32 @@
+{
+  "observedAt": "2026-10-13T09:52:20.140Z",
+  "acceptance": "backend-passed",
+  "taskID": "tsk_g00VXvCmcH00E5YceOHj",
+  "rootSessionID": "ses_-zUS4nDEezzn6QUvUul0",
+  "sessions": [
+    {
+      "id": "ses_-zUS4nDEezzn6QUvUul0",
+      "parent_id": null,
+      "kind": "root",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-structured-result-388\\live-attempt-01\\provider-run\\project"
+    },
+    {
+      "id": "ses_-zUS4nCBizz8V6ef3AzS",
+      "parent_id": "ses_-zUS4nDEezzn6QUvUul0",
+      "kind": "orchestrator",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-structured-result-388\\live-attempt-01\\provider-run\\project"
+    }
+  ],
+  "smallPartID": "prt_g0VXvCtc300CQksYvU9M",
+  "emptyPartID": "prt_g0VXvCxSv00QmuYGOeqs",
+  "archivePartID": "prt_g0VXvCyii00b256JtfSw",
+  "readPartID": "prt_g0VXvD0Hf00SKnFxSr1a",
+  "outputPath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-structured-result-388\\live-attempt-01\\provider-run\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXvCmcH00E5YceOHj\\sessions\\ses_-zUS4nCBizz8V6ef3AzS\\tool-output\\tool_g0VXvCyrj00fiEuVG6z",
+  "archiveBytes": 178967,
+  "exactSavedBody": true,
+  "exactTaskSessionDirectory": true,
+  "providerRequests": 12,
+  "allRequestsExactModelStreamingHTTP200EOF": true,
+  "nativeDeadlineAt": 1791885532170,
+  "boundary": "Real Task default and package MCP result/read acceptance; desktop and physical shutdown remain separate"
+}
