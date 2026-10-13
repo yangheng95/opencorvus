@@ -1,0 +1,32 @@
+$ bun script/run-tests.ts test/continuous-goal.test.ts test/usage/stream-ledger.test.ts
+[1/2] START test/continuous-goal.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) durable continuous goal contracts > Chat creation, exact replay, pause, resume and completion persist real revisions [2881.01ms]
+(pass) durable continuous goal contracts > one exact continuation reserves one turn and reports the explicit budget terminal [2412.19ms]
+(pass) durable continuous goal contracts > usage references count descendant requests and their late completion exactly once [2287.99ms]
+(pass) durable continuous goal contracts > Task owner identity and cancellation project distinct goal facts [3374.63ms]
+(pass) durable continuous goal contracts > Mission includes its exact child Tasks and returns a typed overlapping-owner error [6145.88ms]
+(pass) durable continuous goal contracts > public route and native Tool share one exact durable goal [3389.85ms]
+(pass) durable continuous goal contracts > explicit blocking wins over quota and resuming preserves settled usage [2746.94ms]
+(pass) durable continuous goal contracts > different Projects retain exact independent owners and metering [5357.64ms]
+(pass) durable continuous goal contracts > a settled assistant batch advances the exact latest input frontier [2383.36ms]
+
+ 9 pass
+ 0 fail
+ 44 expect() calls
+Ran 9 tests across 1 file. [39.87s]
+[1/2] DONE test/continuous-goal.test.ts exit=0 duration=41.45s
+[2/2] START test/usage/stream-ledger.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) shared streamed-call usage ledger > returns the exact cancellation outcome from the canonical wrapper around a parked provider stream [3346.80ms]
+(pass) shared streamed-call usage ledger > records a non-Session helper stream exactly once at the common wrapper [3158.50ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [8.28s]
+[2/2] DONE test/usage/stream-ledger.test.ts exit=0 duration=8.56s

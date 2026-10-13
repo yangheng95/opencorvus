@@ -9,6 +9,7 @@
 - [Chat 最终页面](chat-completed.png)、[Mission 最终页面](mission-completed.png)：真实三轮消息、工具结果与完成产物的人工视觉复核。
 - [核心合同最终复跑](core-tests.log)、[同批多进程/用量/原入口检查](related-tests.log)：后者包含已修正的批处理测试数据失败，核心最终结果以单独复跑为准，未隐藏失败。
 - [复查服务关闭](review-settlement.json)：最终页面复查新进程的零 Provider 请求、服务结算和凭据对清理。
+- [合并后的功能复跑](merged-tests.log)、[全工作区类型检查](workspace-types.log)、[已提交代码拓扑](module-topology.log)：最终集成验证。
 
 实际 checker：`packages/opencorvus/script/continuous-goal-check.ts`，明确设置 GOAL_CHECK_ALLOW_REAL_PROVIDER、GOAL_CHECK_AUTH_SOURCE、GOAL_CHECK_MODEL、GOAL_CHECK_EVIDENCE、GOAL_CHECK_KIND。首次读取凭据与模型目录后执行真实流式 preflight；GOAL_CHECK_HOLD_UI 仅有限时保留 /ui 供人工检查。GOAL_CHECK_REVIEW_RUN 指向原私有 server.json 时只重开同一历史，模型请求上限为0。
 
