@@ -25,12 +25,12 @@ import {
   type SetSessionModeResponse,
   type ToolCallContent,
   type ToolKind,
-  type Usage,
 } from "@agentclientprotocol/sdk"
 
 import { Log } from "../util/log"
 import { pathToFileURL } from "bun"
 import { ACPSessionManager } from "./session"
+import { acpCompactionResponse, acpPromptResponse } from "./prompt-response"
 import type { ACPConfig, ACPSessionState } from "./types"
 import { Provider } from "../provider/provider"
 import { Identifier } from "../id/id"
@@ -1643,24 +1643,11 @@ export namespace ACP {
         return { name, args: rest.join(" ").trim() }
       })()
 
-      const buildUsage = (msg: AssistantMessage): Usage => ({
-        totalTokens:
-          msg.tokens.input +
-          msg.tokens.output +
-          msg.tokens.reasoning +
-          (msg.tokens.cache?.read ?? 0) +
-          (msg.tokens.cache?.write ?? 0),
-        inputTokens: msg.tokens.input,
-        outputTokens: msg.tokens.output,
-        thoughtTokens: msg.tokens.reasoning || undefined,
-        cachedReadTokens: msg.tokens.cache?.read || undefined,
-        cachedWriteTokens: msg.tokens.cache?.write || undefined,
-      })
-
       if (!cmd) {
+        const inputMessageID = Identifier.ascending("message")
         const response = await this.sdk.session.prompt({
           sessionID,
-          messageID: Identifier.ascending("message"),
+          messageID: inputMessageID,
           model: {
             providerID: model.providerID,
             modelID: model.modelID,
@@ -1670,61 +1657,39 @@ export namespace ACP {
           agent,
           directory,
         })
-        const msg = response.data?.info as AssistantMessage | undefined
-
         await sendUsageUpdate(this.connection, this.sdk, sessionID, directory)
-
-        return {
-          stopReason: "end_turn" as const,
-          usage: msg ? buildUsage(msg) : undefined,
-          _meta: {},
-        }
+        return acpPromptResponse({ sessionID, inputMessageID, response })
       }
 
       const command = await this.config.sdk.command
         .list({ directory }, { throwOnError: true })
         .then((x) => x.data!.find((c) => c.name === cmd.name))
       if (command) {
+        const inputMessageID = Identifier.ascending("message")
         const response = await this.sdk.session.command({
           sessionID,
-          messageID: Identifier.ascending("message"),
+          messageID: inputMessageID,
           command: command.name,
           arguments: cmd.args,
           model: model.providerID + "/" + model.modelID,
           agent,
           directory,
         })
-        const msg = response.data?.info as AssistantMessage | undefined
-
         await sendUsageUpdate(this.connection, this.sdk, sessionID, directory)
-
-        return {
-          stopReason: "end_turn" as const,
-          usage: msg ? buildUsage(msg) : undefined,
-          _meta: {},
-        }
+        return acpPromptResponse({ sessionID, inputMessageID, response })
       }
 
-      switch (cmd.name) {
-        case "compact":
-          await this.config.sdk.session.summarize(
-            {
-              sessionID,
-              directory,
-              providerID: model.providerID,
-              modelID: model.modelID,
-            },
-            { throwOnError: true },
-          )
-          break
+      if (cmd.name !== "compact") {
+        throw RequestError.invalidParams({ command: cmd.name }, `Unknown command: ${cmd.name}`)
       }
-
+      const response = await this.config.sdk.session.summarize({
+        sessionID,
+        directory,
+        providerID: model.providerID,
+        modelID: model.modelID,
+      })
       await sendUsageUpdate(this.connection, this.sdk, sessionID, directory)
-
-      return {
-        stopReason: "end_turn" as const,
-        _meta: {},
-      }
+      return acpCompactionResponse({ sessionID, response })
     }
 
     async cancel(params: CancelNotification) {

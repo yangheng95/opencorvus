@@ -42,7 +42,8 @@ import { Snapshot } from "@/snapshot"
 import { Log } from "../../util/log"
 import { AuthReadUnavailableResponse, badRequestBody, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
-import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
+import { completedReplyToUserMessage, isCompletedReplyToUserMessage } from "@/session/completed-reply"
 import { ProjectMemory } from "@/memory/project-memory"
 import { NotFoundError } from "../../storage/db"
 import { lazy } from "../../util/lazy"
@@ -371,9 +372,28 @@ async function executePublicSessionExecution(input: {
     await PublicSessionExecutionTestHooks.afterInitialOwnerRead?.({ sessionID, messageID })
     const existing = await readClaimedMessage()
     if (existing) return convergeExisting(existing)
+    let promptGenerationOwner: AbortSignal | undefined
+    const directory = Instance.directory
     try {
-      return await input.execute()
+      return await SessionPrompt.withPromptOwnerCapture(
+        sessionID,
+        (owner) => {
+          promptGenerationOwner = owner
+        },
+        input.execute,
+      )
     } catch (error) {
+      if (
+        isExecutionCancellationError(error) &&
+        error.sessionID === sessionID &&
+        promptGenerationOwner?.aborted &&
+        promptGenerationOwner.reason === error
+      ) {
+        await SessionPrompt.waitForOwnedFinish(sessionID, directory, promptGenerationOwner)
+        const reply = await completedReplyToUserMessage(sessionID, messageID, true)
+        if (reply) return reply
+        throw error
+      }
       if (error instanceof Session.BusyError) {
         await PublicSessionExecutionTestHooks.afterBusyBeforeConvergence?.({ sessionID, messageID })
         const claimedBeforeWait = await readClaimedMessage()
@@ -1648,7 +1668,7 @@ export const SessionRoutes = lazy(() =>
         const session = await assertActiveProjectSession(sessionID)
         assertPublicSessionOperationAuthority(session, "session.init")
         const fingerprint = publicSessionExecutionFingerprint(body)
-        await executePublicSessionExecution({
+        const reply = await executePublicSessionExecution({
           sessionID,
           messageID: body.messageID,
           fingerprint,
@@ -1660,7 +1680,7 @@ export const SessionRoutes = lazy(() =>
             }),
           converge: () => convergePromptTurn(sessionID, body.messageID),
         })
-        return c.json(true)
+        return c.json(isCompletedReplyToUserMessage(reply, body.messageID))
       },
     )
     .post(

@@ -1028,7 +1028,16 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 入站配置支持 stdio、声明的 HTTP/SSE 传输；SDK 新增的 MCP-over-ACP 类型返回
 `RequestError.invalidParams`。
 
-文件：`agent.ts` · `session.ts` · `types.ts`（README 存于目录内）。
+普通提示和注册命令共用 `acp/prompt-response.ts`，以本次请求的 input Message ID
+校验公共接口返回的规范 assistant reply，而非读取最新 Session 状态。
+正常回复、输出上限、内容拒绝和取消分别投影为 `end_turn`、`max_tokens`、
+`refusal`、`cancelled`；其他模型错误和请求错误返回带原诊断及准确身份的
+JSON-RPC（JavaScript Object Notation 远程过程调用）`RequestError`。
+usage 使用规范 `tokens.total`，不重算总量。未知命令返回 invalidParams；
+内置 compact 必须以 summarize 的实际 boolean 结果确认完成。
+流式消息和工具通知沿现有订阅传输，不为错误结果伪造消息。
+
+文件：`agent.ts` · `prompt-response.ts` · `session.ts` · `types.ts`（README 存于目录内）。
 
 ## Public Market runtime
 

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [393 ACP提示结果](2026-10-05-connection-workspace-authority/acp-prompt-terminal-393/README.md)：ACP连接、实际Message与流式协议验收。
+
 - [Provider 空模型声明保存](2026-10-13-provider-empty-declarations/README.md)：并行调查、正向数据和真实桌面保存。
 
 - [398 权限卡片深色悬停](2026-10-13-spreadsheet-permission-hover-398/README.md)：39原观察、19JPEG、真实前后色值与动作、两个正常关闭scope及有界补丁增量。

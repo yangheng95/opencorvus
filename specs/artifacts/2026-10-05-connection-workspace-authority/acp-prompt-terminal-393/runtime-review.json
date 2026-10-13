@@ -1,0 +1,121 @@
+{
+  "qualification": "Backend protocol integration using actual ACP, product HTTP, Session/Provider processing and a controlled local streaming participant. No external-model or visual qualification.",
+  "identities": [
+    {
+      "entry": "prompt",
+      "model": "normal",
+      "sessionID": "ses_-zUS37Js7zzw4x7kk4Bn",
+      "inputMessageID": "msg_g0VXwsg9B00b5D78RbUl",
+      "finalMessageID": "msg_g0VXwsgCi005xGGKpaQD",
+      "stopReason": "end_turn"
+    },
+    {
+      "entry": "prompt",
+      "model": "length",
+      "sessionID": "ses_-zUS37IhqzzYLl7wNqtF",
+      "inputMessageID": "msg_g0VXwshJR00TsqteLMyn",
+      "finalMessageID": "msg_g0VXwshM800fJrA05yfb",
+      "stopReason": "max_tokens"
+    },
+    {
+      "entry": "prompt",
+      "model": "content_filter",
+      "sessionID": "ses_-zUS37HuIzzVYH1P562L",
+      "inputMessageID": "msg_g0VXwsi6N0012da8ZOK7",
+      "finalMessageID": "msg_g0VXwsi9300pCkMvRkco",
+      "stopReason": "refusal"
+    },
+    {
+      "entry": "prompt",
+      "model": "error",
+      "sessionID": "ses_-zUS37HCzzzQVDXHHOkS",
+      "inputMessageID": "msg_g0VXwsing003K8OgIKa7",
+      "finalMessageID": "msg_g0VXwsiq900NjdNnBLq7",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "AI_StreamProviderError: Owned ACP stream failed after partial output"
+        }
+      },
+      "subsequentReply": "stop"
+    },
+    {
+      "entry": "prompt",
+      "model": "cancel",
+      "sessionID": "ses_-zUS37GNPzzbRyze0Hq0",
+      "inputMessageID": "msg_g0VXwsjdF00WyxSyKaUr",
+      "finalMessageID": "msg_g0VXwsjg300pRPXvatKi",
+      "stopReason": "cancelled"
+    },
+    {
+      "entry": "command",
+      "model": "normal",
+      "sessionID": "ses_-zUS37FXlzzfdAFD8KvK",
+      "inputMessageID": "msg_g0VXwskT5004QWz8L9WC",
+      "finalMessageID": "msg_g0VXwskVt00AGdNolXb4",
+      "stopReason": "end_turn"
+    },
+    {
+      "entry": "command",
+      "model": "length",
+      "sessionID": "ses_-zUS37EnbzzNedfS1fm8",
+      "inputMessageID": "msg_g0VXwslD300a7g3ML91Z",
+      "finalMessageID": "msg_g0VXwslFf000uFkH7Dz0",
+      "stopReason": "max_tokens"
+    },
+    {
+      "entry": "command",
+      "model": "content_filter",
+      "sessionID": "ses_-zUS37E2dzz5ZFzy8Muv",
+      "inputMessageID": "msg_g0VXwsly000KKhUtAUhh",
+      "finalMessageID": "msg_g0VXwsm0P00WlnYPJPrr",
+      "stopReason": "refusal"
+    },
+    {
+      "entry": "command",
+      "model": "error",
+      "sessionID": "ses_-zUS37DKvzzyyEN2gh3s",
+      "inputMessageID": "msg_g0VXwsmfg00FBucS4rAh",
+      "finalMessageID": "msg_g0VXwsmie00SV6GRepGS",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "AI_StreamProviderError: Owned ACP stream failed after partial output"
+        }
+      },
+      "subsequentReply": "stop"
+    },
+    {
+      "entry": "command",
+      "model": "cancel",
+      "sessionID": "ses_-zUS37CUPzzRui2yH5hW",
+      "inputMessageID": "msg_g0VXwsnWH00aGgXwzNeY",
+      "finalMessageID": "msg_g0VXwsnYo00OW4hSkD85",
+      "stopReason": "cancelled"
+    }
+  ],
+  "parallel": {
+    "sessions": [
+      "ses_-zUS37BRBzzY7wIDNmp3",
+      "ses_-zUS37BQYzzbyo5wH0wZ",
+      "ses_-zUS37B5czzKWgxU0m0J"
+    ],
+    "projectCount": 2
+  },
+  "compaction": {
+    "controlID": "sctl_g0VXwtJgY00xVkoXP6n",
+    "error": "SessionCompactionMaterialUnavailableError: Session ses_-zUS36gl9zzMOGEmusEh has no compactable material or reusable summary for source msg_g0VXwtJHD00OEJqv7OS5"
+  },
+  "checks": {
+    "protocol": 14,
+    "conversion": 12,
+    "publicIdentity": 13,
+    "uniqueTests": 39
+  },
+  "remaining": [
+    "Cancellation before a canonical assistant exists",
+    "Cross-process cancellation and full Task/Mission recovery",
+    "Complete stream-update/response race ordering",
+    "Original Research Studio long-history Sources"
+  ]
+}

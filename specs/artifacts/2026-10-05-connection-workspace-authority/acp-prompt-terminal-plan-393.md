@@ -1,0 +1,40 @@
+# 393 ACP提示结果与结束原因
+
+## Recall
+
+用户持续要求自主迭代UI/UX、Sources和功能缺陷；最新人工指令仅单agent开发，旧goal中的Astra/并行文字不执行。392为progress：bf862b1136f39f6a7a2d15ccd85fb49cf6b259b1已在远端main，正常push14935 exit0（并发发布后up-to-date），8工作区types、routes/docs/lease/package/secret通过，精确提交module1153/5907/4和release5项通过。392 Native和所有原句柄已闭合，无开发子agent。本轮继续392共享错误审计中尚未修复的ACP入口，不宣称原Research Studio长历史或全部Mission恢复矩阵已完成。
+
+已读392 Recall和共享审计；当前acp/agent、session、types、CLI acp启动、Session公共prompt/command routes、SDK client错误返回、Message错误、processor和loop结算、completed-reply、agent/run-error、CLI/Channel消费者、当前04-extensions/task-control-plane/07-panel-reactivity、既有dependabot-runtime-contract双端ACP测试、Provider-stream-error和取消occurrence合同、正式isolated测试运行器。全仓搜索stopReason、session.prompt/command、info.error、ACP/ClientSideConnection、取消与输出上限定义。权威[ACP Prompt Turn](https://agentclientprotocol.com/protocol/v1/prompt-turn)规定end_turn/max_tokens/refusal/cancelled不同含义，取消应在操作收尾后返回；官方SDK1.4有RequestError.internalError和相应StopReason。未委托。工作区包含其他Overlay/Univer/spec索引改动，仅本任务范围提交。
+
+## 修改前分析
+
+观察：392根因审计发现ACP两个模型入口在HTTP返回后固定end_turn；尚未对本轮缺陷做运行复现，因此代码证据与待复现资格分开。直接触发是SDK返回HTTP200的failed assistant Message，或者SDK默认throwOnError=false返回error而data为空。agent.ts只用可选data.info计算usage，然后返回成功。cancel已经调用正式Session.abort，processor也确实保存MessageAbortedError，但ACP丢掉其语义。finish=length/content-filter也同样丢失。普通prompt和注册command复制同一错误路径。HTTP完整返回仅代表传输成功，不能证明模型正常完成。
+
+影响：所有ACP编辑器的prompt和注册命令、取消、输出上限、拒绝、Provider错误、HTTP拒绝以及输入归属；必须按实际输入ID和Message归属转换，不用Session最新状态。共享机制仍遵循392横审：Task/Orchestrator已在terminal前转换硬错误；CLI/Channel检查info.error；公共Session返回失败Message保持真实事实；Mission有自身occurrence/owner/closure，不能由ACP返回值推导其成功。取消仍交给正式Session.abort，不增加平行取消flag/队列/终态writer。失败后新输入、两个Session及两个Project需按独立真实身份验证；重连/恢复取原Message，不改失败历史。本轮不修改调度、恢复、数据库schema、公共SDK schema或UI。
+
+相邻问题：ACP当前usage重新累加input/output/reasoning/cache，绕过规范tokens.total；使用实际返回Message的规范total可避免双计数，纳入同一结果投影。src/acp/README描述不存在的client.ts/server.ts和非流式实现、不存在的测试命令，已与当前代码冲突；替换为入口说明与当前根spec链接，删除过期平行架构，不扩大无关清理。
+
+## 实施方案及验收
+
+1. 使用正式backend checker新增聚焦正向合同，先复现旧入口错误。核心验收走官方AgentSideConnection/ClientSideConnection、实际产品HTTP路由、生产Provider/processor和本地可控流式参与者；保留完整持久Message和ACP响应。该资格是协议集成，不冒称真实外部模型或UI端到端。
+2. 两个入口共用一处ACP结果转换。要求规范assistant、确切Session和接受的input、已结算回复；原MessageAbortedError映射cancelled，规范输出上限映射max_tokens，content-filter映射refusal，其他硬错误使用现有唯一转换并返回结构化RequestError，携带原诊断与实际身份。SDK error和缺失/错误归属回复也须明确错误合同；正常回复end_turn，usage取规范tokens.total。删除两个无条件成功分支，不增加兼容/fallback路径。未注册命令须按明确invalidParams合同返回；既有compact维护路径单独保留其真实summarize接口语义，不能冒称普通模型reply。
+3. 验证普通/注册命令正常、部分输出错误、输出限制、取消和独立后续成功；同/异Project输入身份及公开持久Message一致。纯转换覆盖错误形态/身份和现有API无法自然返回的不完整回复。检查取消后所有资源闭合，并关注ACP更新与response时序；若发现共享收尾异常立即横审全部入口，不以测试夹具或超时掩盖。
+4. 类型、当前文档/架构检查，完整证据归档（含392最后push/module/release日志），范围提交、fresh fetch/merge/完整待推送集合复核/正常push。无UI改动和UI自动化；原Sources截图资格保持392，不将本轮backend检查说成新视觉验收。
+
+## 取消真实复现后的共享分析与方案调整
+
+首轮before夹具把title/summary辅助调用算作普通请求且漏了实际AI_StreamProviderError前缀；修正后before-canonical是2pass/8fail，普通/命令各自正常成功、length/refusal/Provider错误/cancelled四种语义失败。首版ACP转换后8pass/2fail：取消经过HTTP仍是UnknownError/Internal server error。cancel-diagnostic保存两入口真实请求与全部消息：实际同input的assistant已保存MessageAbortedError/cancellation actor=user/source=session.abort，但request抛ExecutionCancellationError，被serverErrorResponse按普通Error脱敏为500。禁止匹配错误字符串或在ACP设cancelled影子flag。
+
+横审扩展到公共executePublicSessionExecution的全部入口prompt/command/init/shell、Prompt attach/首owner/peer等待/重试、cancelMatch/cancellationReceipt/物理finish、所有awaitSessionPromptFinishedInScope和waitForOwnedFinish、错误handler。cancelMatch先拒绝绑定同owner的callbacks，再abort真实资源，保留busy直到finish；这一顺序服务Task/Mission/Session共用取消，不能为ACP改成提前释放。/abort正式路径已经等待同owner结算。通用HTTP执行writer只处理Busy与identity claim，遗漏“取消异常后读取同输入真实已结算回复”。shell自己在finally收尾并返回原assistant，不把shell重跑；init返回boolean，若通用writer开始返回failed Message，必须按现有completed-reply合同投影false，避免引入取消后true。全局脱敏错误handler保持。
+
+调整：在同一公共执行writer使用既有withPromptOwnerCapture记录该调用实际owner；仅对该owner的确切ExecutionCancellationError等待waitForOwnedFinish，然后以completedReplyToUserMessage(includeFailedReply=true)读取原input实际持久回复。无新取消队列、取消状态、模型重试或伪assistant；未知/无规范回复仍抛原错误，不能冒充成功。ACP继续只转换公共返回事实。模型运行前取消、跨进程取消/重启等尚未被本轮真实流覆盖，记录为未完成资格，不把本地已输出取消外推成全矩阵。增加普通/命令取消闭合及init false正向检查，既有精确输入/并行/replay合同复核。
+
+## 实施、验证及未完成资格
+
+公共writer已按上述确切owner收尾，init的既有boolean合同按规范completed-reply产生true/false。ACP普通/命令使用同一结果投影；边界用Message.WithParts schema验证SDK数据，避免generated user format的可选retryCount与运行时必需值类型错位。类型首轮报此不兼容，未用强制断言压过；改为规范schema后通过。compact同样保留HTTP错误体并验证true，未知命令invalidParams；没有公共schema改动或新错误协议。
+
+修后第一轮10项主协议合同及11项纯转换通过。追加同/异Project并行时，测试的using析构顺序先移除了peer项目再关闭监听器，触发ProjectDirectoryIntegrityError；是测试资源所有权错误，已改为监听器在两个项目都存在时关闭，原失败日志保留。compact追加测试最初把服务端拒绝预期为boolean false；实际原接口因保留窗口中没有可压缩材料而HTTP500。进一步直接读取SessionControl：failed/manual_summarize记录SessionCompactionMaterialUnavailableError，未发起该错误模型的压缩请求，不能宣称真实Provider压缩故障。现分别验收真实无材料失败和纯转换的boolean true/false合同，未删除失败事实或伪造摘要。
+
+最终contracts-complete：14项真实ACP/HTTP/流式参与者合同，67断言；12项转换合同，13断言；前一完整检查中未受后续ACP修改影响的13项公共输入幂等/排队/并行/replay/恢复合同，21断言。补充同一compact用例的持久failed control检查通过（不重复计入独立测试数）。共39项不同测试通过，所有已启动checker原句柄均实际exit，局部失败原日志保留。正式类型、docs348/26、architecture19通过。未运行UI自动化，未修改UI；本轮没有复制或使用外部Provider凭据。
+
+未完成：运行前尚无assistant的取消、跨进程取消和完整Task/Mission恢复未被本轮证明；ACP流式更新与最终响应在所有竞争时序下的先后关系仍需专项验收；原Research Studio长历史Sources与全部产品体验目标保持active。下一步提交本轮，再继续这些实际缺口。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [393 ACP提示结果](artifacts/2026-10-05-connection-workspace-authority/acp-prompt-terminal-plan-393.md)：普通提示、命令、模型错误与结束原因。
+
 - [Provider 空模型声明保存](records/2026-10/2026-10-13-provider-empty-declarations.md)：字段意图、目录继承与真实保存资格。
 
 - [403 Native关闭收敛](records/2026-10/2026-10-13-native-shutdown-pending-permission-403.md)：待授权下的实际关闭失败、全部入口与阶段根因调查。

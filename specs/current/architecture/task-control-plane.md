@@ -79,6 +79,15 @@ terminal remains immutable; a later handoff-validation exception cannot be used
 to repair an already-published success. Original failed Message/Part evidence is
 retained, and an independent retry has its own execution identity.
 
+Public Session executions capture their actual prompt generation owner. When
+that exact owner rejects a request with its cancellation reason, the HTTP writer
+waits for its physical finish before reading the canonical settled reply for the
+request's input Message. A persisted aborted reply remains the reply; cancellation
+does not become a generic transport error or trigger another model attempt.
+The initializer's boolean result uses the same completed-reply contract. Unknown
+errors and cancellation without a canonical settled reply retain their error
+path; no assistant Message is synthesized to fill a missing fact.
+
 The lifecycle event family is:
 
 ```text
