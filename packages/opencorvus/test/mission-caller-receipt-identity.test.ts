@@ -315,7 +315,7 @@ test("rejects replay when persisted Mission receipt provenance is not the strict
 })
 
 for (const legacyFamily of ["message", "part"] as const)
-  test(`requires a pre-release reset for an expanded Mission caller receipt ${legacyFamily} identity`, async () => {
+  test(`reports a typed data migration requirement for an expanded Mission caller receipt ${legacyFamily} identity`, async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -396,7 +396,7 @@ for (const legacyFamily of ["message", "part"] as const)
           observed = error
         }
         expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
+          code: "DATA_MIGRATION_REQUIRED",
           operation: "Database.Client.dataIntegrity.compactMissionCallerReceiptIdentity",
           message: expect.stringContaining(legacyFamily === "message" ? messageID : partID),
         })

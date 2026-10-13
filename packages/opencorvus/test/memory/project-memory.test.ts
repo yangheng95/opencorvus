@@ -390,7 +390,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     })
   })
 
-  for (const legacyKind of ["file", "chunk"] as const) test(`requires a pre-release reset for an expanded Project Memory ${legacyKind} identity`, async () => {
+  for (const legacyKind of ["file", "chunk"] as const) test(`reports a typed data migration requirement for an expanded Project Memory ${legacyKind} identity`, async () => {
       await using project = await memoryProject()
       await Instance.provide({
         directory: project.path,
@@ -436,7 +436,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             observed = error
           }
           expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-            code: "DATA_RESET_REQUIRED",
+            code: "DATA_MIGRATION_REQUIRED",
             operation: "Database.Client.dataIntegrity.compactProjectMemoryIdentity",
           })
           await Database.resetFiles(Database.Path())
@@ -445,7 +445,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
       })
   }, 60_000)
 
-  test("keeps general Memory outside the Project Memory reset epoch", async () => {
+  test("keeps general Memory outside the Project Memory identity epoch", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,

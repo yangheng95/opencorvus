@@ -3092,7 +3092,24 @@ describe("single Tool-result turn-control protocol", () => {
           part: expect.objectContaining({ status: "completed", control: { kind: "immediate_park" } }),
           ...committedEffect,
         }
-        expect(recovered).toEqual({ first: completedOccurrence, second: completedOccurrence })
+        expect(recovered).toMatchObject({ first: completedOccurrence, second: completedOccurrence })
+        expect(recovered.second).toEqual(recovered.first)
+        expect({
+          requestFacts: recovered.first.requestFacts,
+          resultFacts: recovered.first.resultFacts,
+          toolRequest: recovered.first.toolRequest,
+        }).toEqual({
+          requestFacts: [
+            ...cutSnapshot.requestFacts,
+            expect.objectContaining({
+              event_type: "stale",
+              request_id: cutSnapshot.requestFacts[0].request_id,
+              reason: "The continuation reached its persisted conclusion",
+            }),
+          ],
+          resultFacts: cutSnapshot.resultFacts,
+          toolRequest: cutSnapshot.toolRequest,
+        })
       } finally {
         for (const child of children) if (child.exitCode === null) child.kill()
         await Promise.all(children.map((child) => child.exited.catch(() => -1)))
@@ -3188,7 +3205,7 @@ describe("single Tool-result turn-control protocol", () => {
     })
   }, 120_000)
 
-  test("requires a reset for a legacy successful permission result whose ToolPart is still recoverable", async () => {
+  test("reports a typed migration requirement for a legacy successful permission result whose ToolPart is still recoverable", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -3251,7 +3268,7 @@ describe("single Tool-result turn-control protocol", () => {
           observed = error
         }
         expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
+          code: "DATA_MIGRATION_REQUIRED",
           operation: "Database.Client.dataIntegrity.toolResultControl",
         })
         await Database.resetFiles(Database.Path())

@@ -1,0 +1,17 @@
+$ bun script/run-tests.ts test/storage/database-transaction-contract.test.ts
+[1/1] START test/storage/database-transaction-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Database.transaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [305.69ms]
+(pass) Database.transaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [4.80ms]
+(pass) Database.transaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [3.51ms]
+(pass) Database.immediateTransaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [0.37ms]
+(pass) Database.immediateTransaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [2.48ms]
+(pass) Database.immediateTransaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [2.64ms]
+
+ 6 pass
+ 0 fail
+ 26 expect() calls
+Ran 6 tests across 1 file. [3.48s]
+[1/1] DONE test/storage/database-transaction-contract.test.ts exit=0 duration=4.14s

@@ -329,7 +329,7 @@ test("rejects a reversible Part occupied after preparation at the persistence tr
 })
 
 for (const legacyFamily of ["message", "part"] as const)
-  test(`requires a pre-release reset for an expanded Orchestrator control ${legacyFamily} identity`, async () => {
+  test(`reports a typed data migration requirement for an expanded Orchestrator control ${legacyFamily} identity`, async () => {
     await using project = await tmpdir({ git: true })
     await Instance.provide({
       directory: project.path,
@@ -387,7 +387,7 @@ for (const legacyFamily of ["message", "part"] as const)
           observed = error
         }
         expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
+          code: "DATA_MIGRATION_REQUIRED",
           operation: "Database.Client.dataIntegrity.compactOrchestratorControlIdentity",
           message: expect.stringContaining(legacyFamily === "message" ? messageID : partID),
         })

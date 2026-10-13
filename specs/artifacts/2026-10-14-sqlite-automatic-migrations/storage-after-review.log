@@ -1,0 +1,55 @@
+$ bun script/run-tests.ts test/storage/schema-migration.test.ts test/storage/schema-contract.test.ts
+[1/2] START test/storage/schema-migration.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the immutable migration target constructs the current application schema [4433.93ms]
+(pass) the production opener creates and reopens the current database version and identity [622.53ms]
+(pass) the production opener diagnoses a pre-baseline database and retains its physical identity [942.26ms]
+(pass) sequential revisions retain rowid, Unicode text and binary values while adding a required default [73.23ms]
+(pass) an explicit version migration renames the original field before reaching the new canonical table [81.63ms]
+(pass) the complete current baseline advances to a declared revision with its real objects and identity retained [853.25ms]
+(pass) table reconstruction preserves foreign-key relationships and composite identities [57.28ms]
+(pass) a new trigger enforces its declared current write contract after upgrading existing rows [49.80ms]
+(pass) an unsupported field removal returns a migration contract and retains the exact original schema and values [34.79ms]
+(pass) a failed new uniqueness constraint rolls back every pending revision and leaves a usable backup [42.61ms]
+(pass) a final data validation error rolls back structure, data and version together [42.58ms]
+(pass) a newer database returns an exact version error with its committed data retained [35.00ms]
+(pass) the pre-upgrade backup includes committed records still resident in the write-ahead log [58.45ms]
+(pass) independent database files keep their own history, identities and upgrade backups [96.87ms]
+(pass) two production processes reopen the same current baseline and the original database identity [2751.83ms]
+(pass) a killed migration writer recovers its original committed rows and upgrades on the next open [201.75ms]
+(pass) a backup filesystem failure retains the old database and a later retry completes the same upgrade [47.51ms]
+(pass) a migration with broken references returns an integrity failure and restores the original database [39.73ms]
+(pass) two first-start processes create one current database and converge on its physical identity [1154.07ms]
+(pass) two independent writer processes upgrade a versioned database once and preserve its rows [189.00ms]
+
+ 20 pass
+ 0 fail
+ 64 expect() calls
+Ran 20 tests across 1 file. [14.38s]
+[1/2] DONE test/storage/schema-migration.test.ts exit=0 duration=15.07s
+[2/2] START test/storage/schema-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) creates the complete current schema directly from the canonical DDL [46.87ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [49.66ms]
+(pass) uses one explicit application table registry for the canonical SQLite schema [44.91ms]
+(pass) reports invalid and duplicate application schema declarations [0.45ms]
+(pass) reports the required migration for a current-version database missing a canonical fact table [706.41ms]
+(pass) reports the required migration for a current-version database missing its Project fence [693.12ms]
+(pass) preserves an unknown application table with an explicit migration-required error [704.80ms]
+(pass) preserves the exact current-version database when its schema needs an undeclared migration [744.41ms]
+(pass) reports the migration-required contract for an undeclared WAL-backed table [674.78ms]
+(pass) reopens a freshly reset database with the exact current schema [810.16ms]
+(pass) reopens production Native and Capsule v2 bindings through the indexed current epoch [4982.23ms]
+(pass) reports a data-migration contract for a v1 Task process binding [3683.88ms]
+(pass) reports data-integrity errors for structurally invalid recognized v2 Native and Capsule bindings [6492.01ms]
+(pass) gracefully retires a settled connection with a retained completed prepared query [1444.66ms]
+
+ 14 pass
+ 0 fail
+ 50 expect() calls
+Ran 14 tests across 1 file. [21.95s]
+[2/2] DONE test/storage/schema-contract.test.ts exit=0 duration=22.09s

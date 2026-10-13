@@ -678,7 +678,7 @@ async function expectStartupResetRequired(artifactID: string) {
   }
   try {
     expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_INTEGRITY_ERROR",
       operation: "Database.Client.dataIntegrity.goalWorkloadCoverage",
       message: expect.stringContaining(artifactID),
     })

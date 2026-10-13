@@ -1,43 +1,36 @@
 import { queryAllFinalized } from "./sqlite-statement"
 import { Database as BunDatabase } from "bun:sqlite"
-import { createHash } from "node:crypto"
 import { SCHEMA_DDL } from "./ddl"
 
-type SchemaObjectShape = Map<string, string>
+export type SchemaObjectShape = Map<string, string>
+
+export type SchemaObject = {
+  type: "table" | "index" | "trigger" | "view"
+  name: string
+  table_name: string
+  sql: string | null
+}
+
+export function readSchemaObjects(sqlite: BunDatabase): SchemaObject[] {
+  return queryAllFinalized<SchemaObject>(
+    sqlite,
+    `
+    SELECT type, name, tbl_name AS table_name, sql
+    FROM sqlite_schema WHERE name NOT LIKE 'sqlite_%' ORDER BY type, name
+  `,
+  )
+}
 
 export function readSchemaObjectShape(sqlite: BunDatabase): SchemaObjectShape {
   return new Map(
-    queryAllFinalized<{ type: string; name: string; table_name: string; sql: string | null }>(
-      sqlite,
-      `SELECT type, name, tbl_name AS table_name, sql
-       FROM sqlite_schema
-       WHERE name NOT LIKE 'sqlite_%'
-       ORDER BY type, name`,
-    ).map((row) => [
+    readSchemaObjects(sqlite).map((row) => [
       `${row.type}:${row.name}`,
       `${row.table_name}:${row.sql === null ? "<implicit>" : row.sql.trim()}`,
     ]),
   )
 }
 
-export function schemaObjectFingerprint(sqlite: BunDatabase): string {
-  return createHash("sha256").update(JSON.stringify([...readSchemaObjectShape(sqlite)])).digest("hex")
-}
-
-function expectedSchemaObjectShape(): SchemaObjectShape {
-  const sqlite = new BunDatabase(":memory:")
-  try {
-    sqlite.exec(SCHEMA_DDL)
-    return readSchemaObjectShape(sqlite)
-  } finally {
-    sqlite.close(true)
-  }
-}
-
-function findShapeDrift(
-  expected: SchemaObjectShape,
-  actual: SchemaObjectShape,
-): string | undefined {
+export function findSchemaObjectDrift(expected: SchemaObjectShape, actual: SchemaObjectShape): string | undefined {
   for (const objectKey of actual.keys()) {
     if (!expected.has(objectKey)) return `unexpected schema object ${objectKey}`
   }
@@ -45,16 +38,6 @@ function findShapeDrift(
     const actualSql = actual.get(objectKey)
     if (actualSql === undefined) return `missing schema object ${objectKey}`
     if (actualSql !== expectedSql) return `schema object ${objectKey} differs from current DDL`
-  }
-}
-
-export function currentSchemaFingerprint(): string {
-  const sqlite = new BunDatabase(":memory:")
-  try {
-    sqlite.exec(SCHEMA_DDL)
-    return schemaObjectFingerprint(sqlite)
-  } finally {
-    sqlite.close(true)
   }
 }
 
@@ -76,12 +59,4 @@ export function canonicalSchemaObjectSQL(type: "table" | "index" | "trigger", na
   } finally {
     sqlite.close(true)
   }
-}
-
-export function findSchemaDrift(sqlite: BunDatabase): string | undefined {
-  return findShapeDrift(expectedSchemaObjectShape(), readSchemaObjectShape(sqlite))
-}
-
-export function hasApplicationSchema(sqlite: BunDatabase): boolean {
-  return readSchemaObjectShape(sqlite).size > 0
 }

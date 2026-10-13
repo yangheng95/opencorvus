@@ -581,7 +581,7 @@ test("returns the typed compact Artifact identity collision contract", async () 
   })
 }, 60_000)
 
-test("requires a pre-release reset for the legacy expanded idempotent Artifact epoch", async () => {
+test("reports a typed data migration requirement for the legacy expanded idempotent Artifact epoch", async () => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
@@ -621,7 +621,7 @@ test("requires a pre-release reset for the legacy expanded idempotent Artifact e
         observed = error
       }
       expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-        code: "DATA_RESET_REQUIRED",
+        code: "DATA_MIGRATION_REQUIRED",
         operation: "Database.Client.dataIntegrity.compactArtifactIdentity",
       })
       await Database.resetFiles(Database.Path())
@@ -630,7 +630,7 @@ test("requires a pre-release reset for the legacy expanded idempotent Artifact e
   })
 }, 60_000)
 
-test("requires a pre-release reset for the legacy expanded Project identity epoch", async () => {
+test("reports a typed data migration requirement for the legacy expanded Project identity epoch", async () => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
@@ -659,7 +659,7 @@ test("requires a pre-release reset for the legacy expanded Project identity epoc
         observed = error
       }
       expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-        code: "DATA_RESET_REQUIRED",
+        code: "DATA_MIGRATION_REQUIRED",
         operation: "Database.Client.dataIntegrity.compactProjectIdentity",
       })
       await Database.resetFiles(Database.Path())

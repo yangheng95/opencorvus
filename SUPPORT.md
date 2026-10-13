@@ -16,7 +16,7 @@ Support is provided on a best-effort basis. Opening an issue does not guarantee 
 
 ## After an upgrade: database startup is refused
 
-Pre-release versions can change the database contract. `SCHEMA_RESET_REQUIRED` means the stored schema does not match the current version. `DATA_RESET_REQUIRED` means stored data fails a current compatibility or integrity check. The error alone does not establish that your files are lost. Ordinary startup does not migrate these old records.
+New databases now begin at schema version 1. Later versions automatically apply declared upgrades before opening, with a database backup under `data/migration-backups` and a transaction that rolls back failed changes. `SCHEMA_BASELINE_REQUIRED` identifies an unversioned database from before this baseline; it requires explicitly chosen maintenance. `SCHEMA_VERSION_AHEAD` requires a newer application. `SCHEMA_MIGRATION_REQUIRED`, `SCHEMA_MIGRATION_FAILED`, `DATA_MIGRATION_REQUIRED` and `DATA_INTEGRITY_ERROR` identify an undeclared transition, failed upgrade or invalid stored facts. These errors preserve the data; do not reset a versioned database to resolve a routine upgrade.
 
 1. Record the previous and current versions, exact error code, operation and database path. From a terminal with the **same runtime environment** as the affected application, `opencorvus db path` prints the selected database path. A differently configured terminal may select another runtime; compare it with the error path before taking action. Remove private path components from a public report.
 2. Preserve the original state before attempting recovery. Stop every OpenCorvus process using that runtime through its normal shutdown flow before copying its files. Preserve the complete runtime root, including any SQLite write-ahead log (`-wal`) and shared-memory (`-shm`) files that remain, plus the affected project directories, their `.opencorvus` runtime files and any work or deliverables stored elsewhere. Keep the copies private: runtime configuration and data may contain credentials and conversations. A copy of only `opencorvus.db` is not a complete project backup.
@@ -28,7 +28,7 @@ For help, report the versions, error code/operation, installation method and whe
 
 ## 升级后数据库无法启动
 
-预发布版本可能改变数据库契约。`SCHEMA_RESET_REQUIRED` 表示已有数据库结构与当前版本不匹配；`DATA_RESET_REQUIRED` 表示已有数据未通过当前兼容性或完整性检查。仅凭错误不能认定文件已经丢失，普通启动也不会迁移这些旧记录。
+新数据库从 schema 版本1建立基线，后续版本在打开前自动执行已声明的迁移：先备份到 `data/migration-backups`，再在事务中升级，失败回滚。`SCHEMA_BASELINE_REQUIRED` 表示尚未登记版本的基线之前旧库，需要明确选择首次维护方式；`SCHEMA_VERSION_AHEAD` 表示需要更新的应用。`SCHEMA_MIGRATION_REQUIRED`、`SCHEMA_MIGRATION_FAILED`、`DATA_MIGRATION_REQUIRED` 和 `DATA_INTEGRITY_ERROR` 分别说明未声明转换、升级失败或已有事实不满足契约。错误会保留数据，不应通过清空版本化数据库解决正常升级。
 
 1. 记录升级前后的版本、准确错误码、操作名称及数据库路径。在与受影响应用使用**相同运行环境**的终端中，`opencorvus db path` 会打印所选数据库路径。终端配置不同可能指向另一个运行目录；采取操作前先与错误中的路径核对。公开报告中请隐去私人路径信息。
 2. 恢复前先保留原始状态。通过正常退出流程停止所有使用该运行目录的 OpenCorvus 进程，再复制文件。保留完整运行根目录，包括仍存在的 SQLite 预写日志（`-wal`）和共享内存文件（`-shm`）；同时保留相关项目目录、其中的 `.opencorvus` 运行文件，以及存放在其他位置的工作文件和交付物。备份应私密保存，配置和数据可能含有凭据与对话。只复制 `opencorvus.db` 不构成完整项目备份。

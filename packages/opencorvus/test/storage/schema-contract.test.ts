@@ -8,11 +8,8 @@ import {
   engineArtifactCatalogMetadataSHA256,
 } from "../../src/engine/artifact-catalog-metadata"
 import { engineArtifactCatalogLabelIndex } from "../../src/engine/artifact-catalog-constants"
-import {
-  currentSchemaFingerprint,
-  hasApplicationSchema,
-  schemaObjectFingerprint,
-} from "../../src/storage/schema-contract"
+import { readSchemaObjectShape } from "../../src/storage/schema-contract"
+import { DATABASE_MIGRATIONS } from "../../src/storage/migrations"
 import { createTestDatabase, editTestDatabase } from "../fixture/db"
 import { canonicalTaskCreationContract, taskCreationContractFingerprint } from "../../src/engine/task-creation-contract"
 import { Identifier } from "../../src/id/id"
@@ -30,13 +27,11 @@ import {
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { memoryProject } from "../fixture/memory"
 
-test("creates the complete pre-0.1.0 schema directly from the canonical DDL", () => {
+test("creates the complete current schema directly from the canonical DDL", () => {
   const sqlite = new BunDatabase(":memory:")
   try {
     sqlite.exec(SCHEMA_DDL)
     sqlite.run("PRAGMA foreign_keys=ON")
-    expect(hasApplicationSchema(sqlite)).toBe(true)
-    expect(schemaObjectFingerprint(sqlite)).toBe(currentSchemaFingerprint())
     const requiredObjects = [
       "bus_publication_delivery",
       "bus_publication_outbox",
@@ -261,7 +256,7 @@ test("reports invalid and duplicate application schema declarations", () => {
   )
 })
 
-test("requires an explicit reset when any canonical fact table is missing", async () => {
+test("reports the required migration for a current-version database missing a canonical fact table", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
     await createTestDatabase()
@@ -269,7 +264,7 @@ test("requires an explicit reset when any canonical fact table is missing", asyn
     expect(() => Database.Client()).toThrow(
       expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
         name: "DatabaseUnavailableError",
-        data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
+        data: expect.objectContaining({ code: "SCHEMA_MIGRATION_REQUIRED" }),
       }),
     )
   } finally {
@@ -277,7 +272,7 @@ test("requires an explicit reset when any canonical fact table is missing", asyn
   }
 })
 
-test("requires an explicit reset instead of adding a missing Project fence", async () => {
+test("reports the required migration for a current-version database missing its Project fence", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
     await createTestDatabase()
@@ -285,7 +280,7 @@ test("requires an explicit reset instead of adding a missing Project fence", asy
     expect(() => Database.Client()).toThrow(
       expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
         name: "DatabaseUnavailableError",
-        data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
+        data: expect.objectContaining({ code: "SCHEMA_MIGRATION_REQUIRED" }),
       }),
     )
   } finally {
@@ -293,7 +288,7 @@ test("requires an explicit reset instead of adding a missing Project fence", asy
   }
 })
 
-test("returns the reset-required contract for an unexpected legacy application table", async () => {
+test("preserves an unknown application table with an explicit migration-required error", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
     await createTestDatabase()
@@ -307,8 +302,8 @@ test("returns the reset-required contract for an unexpected legacy application t
     expect(DatabaseUnavailableError.isInstance(captured)).toBe(true)
     if (!DatabaseUnavailableError.isInstance(captured)) return
     expect(captured.data).toMatchObject({
-      operation: "Database.Client.schemaValidation",
-      code: "SCHEMA_RESET_REQUIRED",
+      operation: "Database.Client.schemaMigration",
+      code: "SCHEMA_MIGRATION_REQUIRED",
     })
     expect(captured.data.message).toContain("unexpected schema object table:a2a_task_queue")
   } finally {
@@ -316,7 +311,7 @@ test("returns the reset-required contract for an unexpected legacy application t
   }
 })
 
-test("rejects cross-owned creation and unrelated schema drift before any mutation", async () => {
+test("preserves the exact current-version database when its schema needs an undeclared migration", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
     await createTestDatabase()
@@ -348,11 +343,11 @@ test("rejects cross-owned creation and unrelated schema drift before any mutatio
     expect(DatabaseUnavailableError.isInstance(captured)).toBe(true)
     if (!DatabaseUnavailableError.isInstance(captured)) return
     expect(captured.data).toMatchObject({
-      operation: "Database.Client.schemaValidation",
-      code: "SCHEMA_RESET_REQUIRED",
+      operation: "Database.Client.schemaMigration",
+      code: "SCHEMA_MIGRATION_REQUIRED",
     })
     expect(captured.data.message).toContain("project_maintenance_fence")
-    expect(captured.data.message).toContain("reset it")
+    expect(captured.data.message).toContain("versioned migration is required")
     const after = new BunDatabase(Database.Path(), { readonly: true })
     try {
       expect({
@@ -377,7 +372,7 @@ test("rejects cross-owned creation and unrelated schema drift before any mutatio
   }
 })
 
-test("reports the canonical reset-required error for a stale WAL-backed schema", async () => {
+test("reports the migration-required contract for an undeclared WAL-backed table", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   let writer: BunDatabase | undefined
   try {
@@ -393,7 +388,7 @@ test("reports the canonical reset-required error for a stale WAL-backed schema",
     expect(() => Database.Client()).toThrow(
       expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
         name: "DatabaseUnavailableError",
-        data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
+        data: expect.objectContaining({ code: "SCHEMA_MIGRATION_REQUIRED" }),
       }),
     )
   } finally {
@@ -411,10 +406,12 @@ test("reopens a freshly reset database with the exact current schema", async () 
     Database.Client()
     Database.close()
     const sqlite = new BunDatabase(Database.Path(), { readonly: true })
+    const reference = new BunDatabase(":memory:")
     try {
-      expect(hasApplicationSchema(sqlite)).toBe(true)
-      expect(schemaObjectFingerprint(sqlite)).toBe(currentSchemaFingerprint())
+      reference.exec(DATABASE_MIGRATIONS.at(-1)!.ddl)
+      expect([...readSchemaObjectShape(sqlite)]).toEqual([...readSchemaObjectShape(reference)])
     } finally {
+      reference.close(true)
       sqlite.close(true)
     }
   } finally {
@@ -617,7 +614,7 @@ test("reopens production Native and Capsule v2 bindings through the indexed curr
   }
 })
 
-test("requires a reset for a v1 Task process binding", async () => {
+test("reports a data-migration contract for a v1 Task process binding", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
     await createTestDatabase()
@@ -644,7 +641,7 @@ test("requires a reset for a v1 Task process binding", async () => {
           observed = error
         }
         expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
+          code: "DATA_MIGRATION_REQUIRED",
           operation: "Database.Client.dataIntegrity.taskProcessBindingEpoch",
           message: expect.stringContaining("task-native-process-binding-v1"),
         })
@@ -656,7 +653,7 @@ test("requires a reset for a v1 Task process binding", async () => {
 })
 
 test(
-  "requires a stable reset for structurally invalid recognized v2 Native and Capsule bindings",
+  "reports data-integrity errors for structurally invalid recognized v2 Native and Capsule bindings",
   { timeout: 15_000 },
   async () => {
     const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
@@ -686,7 +683,7 @@ test(
               observed = error
             }
             expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-              code: "DATA_RESET_REQUIRED",
+              code: "DATA_INTEGRITY_ERROR",
               operation: "Database.Client.dataIntegrity.taskProcessBindingEpoch",
               message: expect.stringContaining(
                 mode === "native" ? "task-native-process-binding-v2" : TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,

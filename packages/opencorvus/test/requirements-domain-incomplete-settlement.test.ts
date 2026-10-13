@@ -821,7 +821,7 @@ describe("Requirements domain-incomplete settlement", () => {
     })
   }, 30_000)
 
-  test("pre-coverage RequirementSet data makes the pre-release database reset-required", async () => {
+  test("pre-coverage RequirementSet data reports the typed migration requirement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -848,7 +848,7 @@ describe("Requirements domain-incomplete settlement", () => {
           observed = error
         }
         expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
+          code: "DATA_MIGRATION_REQUIRED",
           operation: "Database.Client.dataIntegrity.requirementSetCoverage",
         })
         await Database.resetFiles(Database.Path())
@@ -857,7 +857,7 @@ describe("Requirements domain-incomplete settlement", () => {
     })
   }, 30_000)
 
-  test("malformed RequirementSet JSON has the same typed startup reset contract", async () => {
+  test("malformed RequirementSet JSON reports the typed startup data contract", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -906,7 +906,7 @@ describe("Requirements domain-incomplete settlement", () => {
           observed = error
         }
         expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
+          code: "DATA_MIGRATION_REQUIRED",
           operation: "Database.Client.dataIntegrity.requirementSetCoverage",
         })
         await Database.resetFiles(Database.Path())

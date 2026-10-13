@@ -131,7 +131,7 @@ afterAll(async () => {
 })
 
 describe("revising an installed expert squad from operator feedback", () => {
-  test("startup reports the explicit reset contract for a prior-format feedback candidate", async () => {
+  test("startup reports the typed migration contract for a prior-format feedback candidate", async () => {
     await using project = await memoryProject()
     const sourceDirectory = path.join(project.path, "feedback-source")
     await writeExpertSquadPackage({ directory: sourceDirectory, definition: packageDefinition("2026.08.13.1") })
@@ -179,7 +179,7 @@ describe("revising an installed expert squad from operator feedback", () => {
         }
         try {
           expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-            code: "DATA_RESET_REQUIRED",
+            code: "DATA_MIGRATION_REQUIRED",
             operation: "Database.Client.dataIntegrity.compactArtifactIdentity",
             message: expect.stringContaining(artifactID),
           })

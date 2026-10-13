@@ -1,0 +1,47 @@
+$ bun script/run-tests.ts test/tool-result-control-protocol.test.ts
+[1/1] START test/tool-result-control-protocol.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) single Tool-result turn-control protocol > rejects an exact projected StructuredOutput before a conditional response encoder can be overwritten [3629.62ms]
+(pass) single Tool-result turn-control protocol > projects the typed no_action receipt on the production scheduler Tool surface [4361.52ms]
+(pass) single Tool-result turn-control protocol > treats a completed immediate-park Tool outcome as the durable reply boundary [1.44ms]
+(pass) single Tool-result turn-control protocol > a live typed park completes its visible ToolPart and stops the current stream [2027.36ms]
+(pass) single Tool-result turn-control protocol > validates and persists the exact control before completing a ToolPart [1899.27ms]
+(pass) single Tool-result turn-control protocol > executes the normal Wait Tool producer and keeps an aborted occurrence ordinary [2754.86ms]
+(pass) single Tool-result turn-control protocol > executes the production projected orchestrator wait writer [2771.18ms]
+(pass) single Tool-result turn-control protocol > executes the real projected manage_task complete_task producer [8721.52ms]
+(pass) single Tool-result turn-control protocol > executes the real projected manage_task fail_task producer [8629.45ms]
+(pass) single Tool-result turn-control protocol > keeps a rejected projected completion occurrence ordinary [8049.39ms]
+(pass) single Tool-result turn-control protocol > creates one production worker coordination handoff and seals the committed turn [3223.06ms]
+(pass) single Tool-result turn-control protocol > persists one production coordination source in lineage and the Worker Turn descriptor [2802.38ms]
+(pass) single Tool-result turn-control protocol > fences a live production cancel_worker owner after Task terminal and reopen [4099.49ms]
+(pass) single Tool-result turn-control protocol > fences a live production ask_user owner after Task terminal and reopen [5718.23ms]
+(pass) single Tool-result turn-control protocol > fences a live production fail_task owner after Task terminal and reopen [3804.79ms]
+(pass) single Tool-result turn-control protocol > terminalizes a running old-epoch coordination Tool without replaying its effect [3298.44ms]
+(pass) single Tool-result turn-control protocol > replays a completed ask_user answered decision into its still-running ToolPart after owner loss [2972.00ms]
+(pass) single Tool-result turn-control protocol > replays a completed ask_user expired decision into its still-running ToolPart after owner loss [3875.83ms]
+(pass) single Tool-result turn-control protocol > replays a completed ask_user rejected decision into its still-running ToolPart after owner loss [2707.89ms]
+(pass) single Tool-result turn-control protocol > rejects an old-epoch pending redispatch before a successor lineage can commit [2510.96ms]
+(pass) single Tool-result turn-control protocol > rejects same-epoch terminal and deleted Tasks before persisting an active coordination action [3539.61ms]
+(pass) single Tool-result turn-control protocol > settles and replays the production A2A fail_task control writer [7989.59ms]
+(pass) single Tool-result turn-control protocol > serializes an exclusive Tool occurrence after prior ordinary work and seals later siblings [1.10ms]
+(pass) single Tool-result turn-control protocol > seals a misclassified occurrence after a malformed hook mutation exposes committed control [0.56ms]
+(pass) single Tool-result turn-control protocol > stops a queued exclusive effect when ordinary work seals with returned-control [0.58ms]
+(pass) single Tool-result turn-control protocol > stops a queued exclusive effect when ordinary work seals with mutated-control [0.54ms]
+(pass) single Tool-result turn-control protocol > preserves projected exclusive mode through provider preparation and the final Session Tool surface [1.01ms]
+(pass) single Tool-result turn-control protocol > coordinates a real projected scheduler wait with its ordinary sibling on the final Session Tool surface [2699.35ms]
+(pass) single Tool-result turn-control protocol > replays a permission-owned projected wait result across the result-to-ToolPart cut without a second effect [2818.40ms]
+(pass) single Tool-result turn-control protocol > completes the assistant exactly once after a permission-owned ToolPart-to-assistant cut [2740.13ms]
+(pass) single Tool-result turn-control protocol > recovers a projected permission wait exactly once across the result-boundary operating-system process cut [18985.43ms]
+(pass) single Tool-result turn-control protocol > recovers a projected permission wait exactly once across the part-boundary operating-system process cut [12879.50ms]
+(pass) single Tool-result turn-control protocol > replays a completed parked ToolPart into its assistant exactly once after the Part-to-message cut [1692.35ms]
+(pass) single Tool-result turn-control protocol > reports a typed migration requirement for a legacy successful permission result whose ToolPart is still recoverable [2761.56ms]
+(pass) single Tool-result turn-control protocol > accepts a completed historical ToolPart because it has no recoverable turn disposition [4059.08ms]
+(pass) single Tool-result turn-control protocol > rejects a real post-execution plugin that removes or changes host-owned turn control [5221.93ms]
+
+ 36 pass
+ 0 fail
+ 121 expect() calls
+Ran 36 tests across 1 file. [148.40s]
+[1/1] DONE test/tool-result-control-protocol.test.ts exit=0 duration=149.15s

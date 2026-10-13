@@ -26,7 +26,7 @@ Mission acceptance ledgers retain exact Task/epoch, evidence, criteria and histo
 
 Completion seals actual package-owned worker output locators in `worker_artifact_locators`; it does not identify delivery by terminal graph nodes. Intentionally delivered resources remain explicit `deliverable_artifact_locators`. Settled worker results remain claims to evaluate, and ordinary Host lifecycle/integrity checks remain unchanged.
 
-This change removes the old node-uniqueness index and adds the current completion-payload integrity trigger to canonical `SCHEMA_DDL`. Under the repository's existing pre-release persistence contract, an older database reports `SCHEMA_RESET_REQUIRED` before business reads and requires explicitly authorized rebuilding. No migration, silent reset, payload conversion or compatibility reader is supplied. Existing running application processes and Tasks have not been modified by this source change.
+The current version-1 database baseline includes the canonical completion-payload integrity trigger and Task-occurrence indexes. Future schema and payload changes follow the shared [versioned migration contract](02-data.md): back up and transactionally migrate before business reads, preserving exact Task completion authority. Existing running application processes and Tasks are not modified by a source change.
 
 ## SDK authoring examples
 

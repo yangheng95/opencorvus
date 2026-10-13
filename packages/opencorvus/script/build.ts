@@ -40,9 +40,11 @@ import { cleanBuildDist } from "./build-clean"
 import { writeOverlayPayloadStamp } from "./build-overlay-payload-stamp"
 import { generateOpencorvusGeneratedBuildArtifacts } from "./generate-build-artifacts"
 import { prepareEmbeddedOverlayUiPlugin } from "./embedded-overlay-ui-plugin"
+import { checkDatabaseMigrations } from "./check/database-migrations"
 
 const repoRoot = path.resolve(dir, "../..")
 
+checkDatabaseMigrations()
 Object.assign(process.env, await preparePackageBuildEnvironment(repoRoot, process.env))
 await generateOpencorvusGeneratedBuildArtifacts({ packageRoot: dir, repoRoot, log: console.log })
 

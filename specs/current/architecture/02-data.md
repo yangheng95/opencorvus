@@ -22,7 +22,7 @@
 `execution_succeeded` 配对读取；缺失配对或多成功结果给明确完整性错误。处理器错误收敛与
 共享 Session 中断恢复先用原 receipt 物化输出、附件、display 和 Source，经同一复合 writer
 提交；恢复不再次执行工具，也不伪造助手成功。Full access continuation 已退休仍可恢复。
-当前触发器属于严格 schema 准入，旧定义返回 `SCHEMA_RESET_REQUIRED`；无自动迁移或重置。
+当前触发器纳入版本1基线；后续变更经下述版本化迁移更新，完成校验后才进入业务恢复。
 
 权限恢复的 Message 收尾使用 `Session.completeRecoveredToolMessage`，在单一写事务中
 验证现有 Prompt generation，并重读全部 Tool/Provider 请求结果；未结束的 Tool 保持
@@ -31,6 +31,34 @@ Message 开放，终态重放保留原 completed 时间。各 Tool 的 park/hand
 以完成 Message 和规范 Tool outcome 为退休依据；成功 Tool 与 Message 完成之间的
 进程退出不会移除启动恢复入口。权限请求首写与身份检查同事务，读取按 request identity
 而非 requested 事件条数计数。Mission 的中断归属仍由正式 process-recovery 协议结算。
+
+## 数据库版本化迁移
+
+当前版本从新建的版本1基线开始支持自动迁移。唯一 registry 位于
+`src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
+payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
+`SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
+在 typecheck 和正式构建中实例化两份内存 SQLite，比较当前对象与最后迁移目标的实际结构。
+它不依赖可变源码摘要。
+
+所有 CLI、服务及子执行进程经 `Database.Client` 在业务访问/恢复前进入同一个迁移器。
+`BEGIN IMMEDIATE` 获得 writer 后重读版本；同库并发开库加入已提交的升级，独立数据库各自
+迁移。新库直接事务创建当前 schema 和版本。支持范围内的旧版本先在锁定快照序列化完整
+SQLite 到同目录 `migration-backups`，包含 WAL 中的已提交行；独占临时文件 fsync 后原子
+重命名，成功后才开始迁移。这个备份只覆盖数据库，不替代项目文件/附件和配置备份。
+
+每版可用同步函数转换明确的数据语义，再按目标 schema 更新表、索引、视图和触发器。
+表重建显式复制共同列和 rowid，新增列使用声明的默认值；字段移除、改名、类型或虚拟表
+变化需要显式语义转换，不能猜测丢弃。整条待升级链、最终 schema、外键与当前业务完整性
+校验处于同一事务，完成后提交版本。失败回滚并保留备份路径；进程中断由 SQLite 恢复
+最后已提交状态，再次开库重试。升级不会自动 reset、执行 Task 或合成历史消息。
+
+非空版本0返回 `SCHEMA_BASELINE_REQUIRED`，不属于本基线的升级范围；高于当前版本返回
+`SCHEMA_VERSION_AHEAD`。当前版本出现未声明结构漂移或有损转换返回
+`SCHEMA_MIGRATION_REQUIRED`；执行/备份/校验失败返回 `SCHEMA_MIGRATION_FAILED`。
+当前已登记版本中出现旧语义返回 `DATA_MIGRATION_REQUIRED`，真实当前数据完整性损坏返回
+`DATA_INTEGRITY_ERROR`。错误保留原数据供修复，不以抹库作为基线之后的升级方式。显式
+管理员 reset 仍是独立破坏性维护能力。未登记历史库的首次基线处置必须有用户明确授权。
 
 ## 运行时目录根
 
@@ -60,7 +88,8 @@ Git template、子进程和第三方临时写入均在该树内嵌套，结束�
 运行时不得扫描、读取或复制历史 XDG（Cross-Desktop Group，跨桌面规范组织）、AppData
 或旧 `~/.opencorvus` 分散目录，也不得把历史位置保留为 fallback。旧数据库及其 WAL
 （Write-Ahead Log，预写日志）/SHM（Shared Memory，共享内存）文件只能在进程完全退出后
-由用户明确授权的 maintenance 操作整体处置；普通启动和本路径重构不迁移或重建数据库。
+由用户明确授权的 maintenance 操作整体处置；普通启动不会搜索旧目录或重建数据库。
+规范路径内的版本化数据库按下述合同自动升级。
 
 SQLite 数据库与 data root 不拥有单后端启动锁；不同监听端口的多个后端可以同时打开同一
 数据库。物理执行由各领域的 durable lease 协调。破坏性 Project 删除、identity convergence
@@ -91,34 +120,34 @@ write transaction 重读并核对完整 snapshot、取得 promotion fence，首�
 列中，作为字节相等和防冲突事实；紧凑业务 ID 不是截断后冒充的密码学摘要。Project ID 由完整
 normalized repository identity material 经 `Identifier.deterministic("project", material)` 生成不超过
 24 字符的 `prj_*` 身份；包含旧 expanded Project primary key 的 pre-release Database 在 bootstrap
-返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。Task wait 由 exact Tool Part 确定性派生一个 native
+返回 `DATA_MIGRATION_REQUIRED`，不创建第二个 Project。Task wait 由 exact Tool Part 确定性派生一个 native
 Task-control registration identity；due ingress 与该 wait 的 `due_ingress_accepted` settlement 在同一事务提交，
 因此 restart 只重放一个 durable ingress。Automation `cal_*` fire identity 只属于 Session delay、recurring 与
 manual Automation occurrence，不再承担 Task wait 业务身份。其他手工或
 caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。Project Memory 的 pending
 user-input file/chunk 与 Project `MEMORY.MD` envelope file/chunk 分别使用 domain-separated 的 compact
 `memory` / `memchunk` identity；完整 Project、occurrence、content 和 provenance 仍在关系与 payload 中。
-包含 expanded Project Memory file 或 chunk primary key 的 pre-release Database 返回 `DATA_RESET_REQUIRED`，不
+包含 expanded Project Memory file 或 chunk primary key 的 pre-release Database 返回 `DATA_MIGRATION_REQUIRED`，不
 双读或原位改写其外键图。Permission request、execution attempt 和 ledger event 分别使用 domain-separated
 deterministic `per_*` identity 与 ordered `per_*` occurrence identity，均不超过 24 字符；policy revision、
 provider digest、scope fingerprint 和 execution-result SHA-256 继续保持完整。Permission ledger/result 中
-任一 prior-epoch expanded identity 或关系镜像会在 bootstrap 返回 `DATA_RESET_REQUIRED`，不会进入恢复重放。
+任一 prior-epoch expanded identity 或关系镜像会在 bootstrap 返回 `DATA_MIGRATION_REQUIRED`，不会进入恢复重放。
 Scheduler delivery 的 protocol event/inbox 与目标 Message/Part/Session-control 五个 occurrence identity 由同一
 invocation 分别 domain-separate 后确定性派生，全部不超过 24 字符。event/inbox 在 enqueue transaction 原子
 发行；目标 Message/Part/Session-control 在后续 materialization transaction 与 inbox settlement 原子提交。
-prior-epoch expanded scheduler occurrence graph 会在 bootstrap 返回 `DATA_RESET_REQUIRED`，不允许跨 epoch
+prior-epoch expanded scheduler occurrence graph 会在 bootstrap 返回 `DATA_MIGRATION_REQUIRED`，不允许跨 epoch
 拼接 replay。
 Orchestrator 的 terminal lifecycle/infrastructure wake 使用同一 wake identity 分别 domain-separate 派生 compact
 Message/Part identity；完整 wake/fact provenance 保留在 Message extra 与 Part metadata。旧 expanded control
-Message/Part graph 在 bootstrap 返回 `DATA_RESET_REQUIRED`，compact identity 被不同语义占用时返回 typed conflict。
+Message/Part graph 在 bootstrap 返回 `DATA_MIGRATION_REQUIRED`，compact identity 被不同语义占用时返回 typed conflict。
 Mission terminal caller receipt 使用 Mission Session identity 分别 domain-separate 派生 compact Message/Part；caller、
 Mission、terminal reason 与正式 receipt pointer 继续在同一事务持久化。旧 expanded receipt graph 在 bootstrap 返回
-`DATA_RESET_REQUIRED`，不同语义占用 compact Message/Part 时在通用 Session upsert 前返回 typed conflict。
+`DATA_MIGRATION_REQUIRED`，不同语义占用 compact Message/Part 时在通用 Session upsert 前返回 typed conflict。
 
 Build terminal observation 与 Evolution mutation receipt 使用同一 `Identifier.deterministic` Artifact
 生成器，业务 ID 最长 24 字符。Build 使用 Task/dispatch occurrence，Evolution 使用完整授权、目标修订与证据
 摘要作为 domain-separated 输入；完整 SHA-256 继续保存在事实和精确 locator 中。旧 expanded Build publication、
-尚未 publication 的 cleanup owner 或 Evolution receipt 在 bootstrap 返回 `DATA_RESET_REQUIRED`。
+尚未 publication 的 cleanup owner 或 Evolution receipt 在 bootstrap 返回 `DATA_MIGRATION_REQUIRED`。
 Evolution 重放按完整 receipt identity 验证后才执行 Manager reconcile；不同语义占用同一短 ID 返回
 `EvolutionMutationReceiptIdentityConflictError`，不增加 alias store 或双读。
 
@@ -126,7 +155,7 @@ Evolution 重放按完整 receipt identity 验证后才执行 Manager reconcile�
 保留；同 ID 的 Task、kind 或 envelope 冲突返回 `FeedbackRevisionIdentityConflictError`。
 旧 expanded candidate 由既有 compact Artifact bootstrap admission 拒绝。Goal Workload publication
 使用 Task/dispatch 派生 compact Artifact ID，publisher、store 与启动关系完整性校验复用同一生成器；
-旧 expanded Workload 由既有 `goalWorkloadCoverage` 启动校验返回 `DATA_RESET_REQUIRED`，不增设第二套检查。
+旧 expanded Workload 由既有 `goalWorkloadCoverage` 启动校验返回 `DATA_INTEGRITY_ERROR`，不增设第二套检查。
 
 所有表定义在 `src/engine/engine.sql.ts`，命名前缀 `engine_`（历史文档里的
 `orchestrator_*` 已全部重命名为 `engine_*`）。旧的多张过程表已合并为单一
@@ -207,7 +236,7 @@ idempotent expert output 的业务 ID 由 canonical publication material 经统�
 生成且总长不超过 24；完整 payload SHA-256 继续独立存储并进入 exact locator。若短 ID 已被不同
 canonical material 占用，writer 返回 typed identity-collision error，不得 alias。包含旧
 `art_idempotent_<64hex>` 身份的 pre-release Database 属于不兼容持久化 epoch，bootstrap 在业务读取前
-返回 `DATA_RESET_REQUIRED`；不得同时发行旧、新两套确定性身份或猜测重写 immutable provenance。
+返回 `DATA_MIGRATION_REQUIRED`；不得同时发行旧、新两套确定性身份或猜测重写 immutable provenance。
 Mission 创建下游 Task 时只提交一个
 discriminated `artifact_sources` 权威集合：completed source 只携带 source Task ID，由 Host 读取当前
 `TaskCompletionDecision` 并原子展开其完整 `deliverable_artifact_locators`；模型不再复制任何 completed
@@ -223,20 +252,16 @@ RequirementSet、ContractGraph 和 evidence artifact 引用同样由
 其他 `engine_*` 表的写入仍必须停留在已声明的 engine-owned writer/service 内，
 禁止跨域模块直接写。
 
-`engine_artifact.payload` 的严格领域 schema 也是持久化契约。任何让既有 row 无法被当前
-严格 reader 解释的 breaking payload 变更，必须在同一提交里修改 canonical
-`SCHEMA_DDL` 的对应数据完整性 trigger，形成新的唯一 current-schema 指纹。启动时只读
-比较完整 schema/object 指纹和 current 数据完整性；任何旧 schema、payload epoch、trigger
-差异或未知 drift 都在业务读取前以 `SCHEMA_RESET_REQUIRED` 失败关闭，并要求用户显式重建
-Database。当前产品不执行 historical migration、payload conversion、trigger repair、兼容
-reader 或双读写。禁止只升级 Zod reader 后让旧 payload 在任意 Board、Conversation 或
-continuation 读取点才抛出普通错误，也禁止用 optional 字段、默认值或 row patch 猜测新权威。
+`engine_artifact.payload` 的严格领域 schema 也是持久化契约。让既有行无法被当前
+reader 解释的变更必须同时更新对应完整性 trigger，并追加保留原始身份和权威的版本化
+数据迁移。迁移成功后只使用当前格式，不增加兼容 reader 或双读写。无法从真实事实重建的
+权威必须明确报错并保留原数据；禁止用 optional 字段、默认值或猜测 row patch 伪造。
 `dispatch_lineage` 的整个 payload 由
 `engine_dispatch_lineage_payload_insert` 约束为精确 JSON（JavaScript Object Notation，
 JavaScript 对象表示法）shape：顶层 key、Tool occurrence、projected worker identity、Task work
 scope、Delivery Slice revision、delivery owner、adapter input 与创建时间必须完整且无重复 key；
 projected target、runtime template、Session kind 与 dispatch adapter 必须属于同一执行身份。整个
-lineage row 不可更新；它的 breaking 变更必须同步改变该 trigger，形成显式 current-DDL 结构断点。
+lineage row 不可更新；它的 breaking 变更必须同步改变该 trigger，并登记对应版本迁移，保证基线之后的已存 lineage 可由当前 reader 正确解释。
 
 Dispatch recovery 每次最多接收 64 个去重的 exact
 `(task_id, child_session_id, dispatch_id)` descriptor。lineage 查询按完整 triple 命中；后续

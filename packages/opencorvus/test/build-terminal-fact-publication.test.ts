@@ -53,7 +53,7 @@ import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
 const modelRef = { providerID: "test", modelID: "build-terminal-publication" }
 
 for (const family of ["build", "partial", "cleanup", "evolution"] as const) {
-  test(`startup reports the explicit reset contract for legacy ${family} terminal identity`, async () => {
+  test(`startup reports the typed migration contract for legacy ${family} terminal identity`, async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -112,7 +112,7 @@ for (const family of ["build", "partial", "cleanup", "evolution"] as const) {
           observed = error
         }
         expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
-          code: "DATA_RESET_REQUIRED",
+          code: "DATA_MIGRATION_REQUIRED",
           operation: "Database.Client.dataIntegrity.compactTerminalArtifactIdentity",
           message: expect.stringContaining(id),
         })

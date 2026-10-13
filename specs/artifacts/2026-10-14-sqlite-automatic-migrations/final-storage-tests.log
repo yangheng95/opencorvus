@@ -1,0 +1,75 @@
+$ bun script/run-tests.ts test/storage/schema-migration.test.ts test/storage/schema-contract.test.ts test/storage/transaction.test.ts
+[1/3] START test/storage/schema-migration.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the immutable migration target constructs the current application schema [4771.93ms]
+(pass) the production opener creates and reopens the current database version and identity [985.95ms]
+(pass) the production opener diagnoses a pre-baseline database and retains its physical identity [1154.18ms]
+(pass) sequential revisions retain rowid, Unicode text and binary values while adding a required default [61.35ms]
+(pass) an explicit version migration renames the original field before reaching the new canonical table [70.57ms]
+(pass) the complete current baseline advances to a declared revision with its real objects and identity retained [1349.55ms]
+(pass) table reconstruction preserves foreign-key relationships and composite identities [84.69ms]
+(pass) a new trigger enforces its declared current write contract after upgrading existing rows [71.24ms]
+(pass) an unsupported field removal returns a migration contract and retains the exact original schema and values [50.41ms]
+(pass) a failed new uniqueness constraint rolls back every pending revision and leaves a usable backup [60.20ms]
+(pass) a final data validation error rolls back structure, data and version together [52.46ms]
+(pass) a newer database returns an exact version error with its committed data retained [46.19ms]
+(pass) the pre-upgrade backup includes committed records still resident in the write-ahead log [82.14ms]
+(pass) independent database files keep their own history, identities and upgrade backups [141.65ms]
+(pass) two production processes reopen the same current baseline and the original database identity [2930.73ms]
+(pass) a killed migration writer recovers its original committed rows and upgrades on the next open [308.02ms]
+(pass) a backup filesystem failure retains the old database and a later retry completes the same upgrade [54.28ms]
+(pass) a migration with broken references returns an integrity failure and restores the original database [45.00ms]
+(pass) two first-start processes create one current database and converge on its physical identity [1262.87ms]
+(pass) two independent writer processes upgrade a versioned database once and preserve its rows [236.78ms]
+
+ 20 pass
+ 0 fail
+ 64 expect() calls
+Ran 20 tests across 1 file. [16.81s]
+[1/3] DONE test/storage/schema-migration.test.ts exit=0 duration=17.65s
+[2/3] START test/storage/schema-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) creates the complete pre-0.1.0 schema directly from the canonical DDL [105.80ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [48.36ms]
+(pass) uses one explicit application table registry for the canonical SQLite schema [46.37ms]
+(pass) reports invalid and duplicate application schema declarations [0.30ms]
+(pass) reports the required migration for a current-version database missing a canonical fact table [912.65ms]
+(pass) reports the required migration for a current-version database missing its Project fence [820.92ms]
+(pass) preserves an unknown application table with an explicit migration-required error [1013.43ms]
+(pass) preserves the exact current-version database when its schema needs an undeclared migration [791.67ms]
+(pass) reports the migration-required contract for an undeclared WAL-backed table [851.68ms]
+(pass) reopens a freshly reset database with the exact current schema [1111.24ms]
+(pass) reopens production Native and Capsule v2 bindings through the indexed current epoch [4244.00ms]
+(pass) reports a data-migration contract for a v1 Task process binding [3739.94ms]
+(pass) reports data-integrity errors for structurally invalid recognized v2 Native and Capsule bindings [6151.27ms]
+(pass) gracefully retires a settled connection with a retained completed prepared query [865.69ms]
+
+ 14 pass
+ 0 fail
+ 53 expect() calls
+Ran 14 tests across 1 file. [21.68s]
+[2/3] DONE test/storage/schema-contract.test.ts exit=0 duration=21.85s
+[3/3] START test/storage/transaction.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+error: Cannot find module 'D:\myhexin-local\opencorvus\packages\opencorvus\test\storage\transaction.test.ts' from 'D:\myhexin-local\opencorvus\packages\opencorvus\test\isolated-test-entry.test.ts'
+-------------------------------
+
+
+ 0 pass
+ 1 fail
+ 1 error
+Ran 1 test across 1 file. [971.00ms]
+[3/3] DONE test/storage/transaction.test.ts exit=1 duration=1.12s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\storage\transaction.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\storage\transaction.test.ts
+error: script "test" exited with code 1

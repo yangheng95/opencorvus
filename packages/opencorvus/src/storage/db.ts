@@ -16,7 +16,8 @@ import * as fsPromises from "fs/promises"
 import { randomUUID } from "crypto"
 import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
-import { findSchemaDrift, schemaObjectFingerprint } from "./schema-contract"
+import { migrateSchema, SchemaMigrationError } from "./schema-migration"
+import { DATABASE_MIGRATIONS } from "./migrations"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -30,6 +31,8 @@ import { GoalWorkloadArtifactSchema } from "@/goal-workload-analyst/types"
 import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/relational-integrity"
 import {
   TASK_PROCESS_BINDING_INVALID_INDEX,
+  TASK_NATIVE_PROCESS_BINDING_PROTOCOL,
+  TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
   TASK_PROCESS_BINDING_INVALID_SQL,
 } from "@/engine/task-process-binding-contract"
 
@@ -249,10 +252,10 @@ function assertGoalWorkloadCoverageIntegrity(db: SQLiteBunDatabase<typeof Applic
       validateGoalWorkloadArtifactRelationalIntegrity({ db, row, payload })
     } catch (cause) {
       throw new DatabaseUnavailableError({
-        message: `OpenCorvus database contains an invalid Goal Workload coverage Artifact ${row.id} at ${dbPath}; reset this pre-release database. ${cause instanceof Error ? cause.message : String(cause)}`,
+        message: `OpenCorvus database contains an invalid Goal Workload coverage Artifact ${row.id} at ${dbPath}; a validated data migration or repair is required. ${cause instanceof Error ? cause.message : String(cause)}`,
         path: dbPath,
         operation: "Database.Client.dataIntegrity.goalWorkloadCoverage",
-        code: "DATA_RESET_REQUIRED",
+        code: "DATA_INTEGRITY_ERROR",
       })
     }
   }
@@ -280,10 +283,14 @@ function assertCurrentDataIntegrity(
       message:
         `OpenCorvus database contains Task process binding ${invalidTaskProcessBinding.id} ` +
         `with protocol ${invalidTaskProcessBinding.protocol ?? "<invalid>"} at ${dbPath}. ` +
-        "Its immutable process authority is invalid for the current database epoch; reset this pre-release database.",
+        "Its immutable process authority is invalid for the current database epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.taskProcessBindingEpoch",
-      code: "DATA_RESET_REQUIRED",
+      code:
+        invalidTaskProcessBinding.protocol === TASK_NATIVE_PROCESS_BINDING_PROTOCOL ||
+        invalidTaskProcessBinding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
+          ? "DATA_INTEGRITY_ERROR"
+          : "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -299,10 +306,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded Project ${legacyProject.id} at ${dbPath}. ` +
-        "Its relational identity belongs to the prior identity epoch; reset this pre-release database.",
+        "Its relational identity belongs to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactProjectIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -324,10 +331,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded idempotent Artifact ${legacyIdempotentArtifact.id} at ${dbPath}. ` +
-        "Its immutable locator provenance belongs to the prior identity epoch; reset this pre-release database.",
+        "Its immutable locator provenance belongs to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactArtifactIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -355,10 +362,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded terminal Artifact identity ${legacyTerminalArtifactIdentity.id} at ${dbPath}. ` +
-        "Its publication or cleanup occurrence belongs to the prior identity epoch; reset this pre-release database.",
+        "Its publication or cleanup occurrence belongs to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactTerminalArtifactIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -384,10 +391,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded Project Memory identity ${legacyProjectMemory.id} at ${dbPath}. ` +
-        "Its file and chunk references belong to the prior identity epoch; reset this pre-release database.",
+        "Its file and chunk references belong to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactProjectMemoryIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -412,10 +419,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains a pre-protocol recoverable Tool result ${legacyRecoverableToolControl.attempt_id} at ${dbPath}. ` +
-        "Its immutable turn-control result cannot be reconstructed; reset this pre-release database.",
+        "Its immutable turn-control result cannot be reconstructed; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.toolResultControl",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -447,10 +454,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded Permission identity ${legacyPermissionIdentity.id} at ${dbPath}. ` +
-        "Its authorization and execution references belong to the prior identity epoch; reset this pre-release database.",
+        "Its authorization and execution references belong to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactPermissionIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -527,10 +534,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded scheduler delivery identity ${legacySchedulerDeliveryIdentity.id} at ${dbPath}. ` +
-        "Its atomic protocol and conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+        "Its atomic protocol and conversation occurrence belongs to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactSchedulerDeliveryIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -557,10 +564,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded Orchestrator control identity ${legacyOrchestratorControlIdentity.id} at ${dbPath}. ` +
-        "Its terminal wake conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+        "Its terminal wake conversation occurrence belongs to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactOrchestratorControlIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -606,10 +613,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains legacy expanded Mission caller receipt identity ${legacyMissionCallerReceiptIdentity.id} at ${dbPath}. ` +
-        "Its terminal conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+        "Its terminal conversation occurrence belongs to the prior identity epoch; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.compactMissionCallerReceiptIdentity",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -630,10 +637,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains pre-coverage RequirementSet Artifact ${legacyRequirementSet.id} at ${dbPath}. ` +
-        "Its immutable producer and coverage receipt cannot be reconstructed; reset this pre-release database.",
+        "Its immutable producer and coverage receipt cannot be reconstructed; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.requirementSetCoverage",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -650,10 +657,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains malformed Goal Workload Artifact ${malformedGoalWorkload.id} at ${dbPath}. ` +
-        "Its immutable coverage receipt cannot be validated; reset this pre-release database.",
+        "Its immutable coverage receipt cannot be validated; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.goalWorkloadCoverage",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_INTEGRITY_ERROR",
     })
   }
 
@@ -677,10 +684,10 @@ function assertCurrentDataIntegrity(
     throw new DatabaseUnavailableError({
       message:
         `OpenCorvus database contains scheduler Message ${legacySchedulerMessage.id} from the prior Task occurrence epoch at ${dbPath}. ` +
-        "Its source and target execution occurrences cannot be reconstructed; reset this pre-release database.",
+        "Its source and target execution occurrences cannot be reconstructed; a validated data migration or repair is required.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.schedulerMessageOccurrenceEpoch",
-      code: "DATA_RESET_REQUIRED",
+      code: "DATA_MIGRATION_REQUIRED",
     })
   }
 
@@ -697,7 +704,7 @@ function assertCurrentDataIntegrity(
       message: `OpenCorvus database contains malformed root ingress fact ${malformedTaskIngress.id} at ${dbPath}.`,
       path: dbPath,
       operation: "Database.Client.dataIntegrity.taskIngressOccurrenceEpoch",
-      code: "DATA_INTEGRITY_RESET_REQUIRED",
+      code: "DATA_INTEGRITY_ERROR",
     })
   }
 
@@ -737,10 +744,10 @@ function assertCurrentDataIntegrity(
       throw new DatabaseUnavailableError({
         message:
           `OpenCorvus database contains a cancelled Task with incomplete causal protocol facts: ${taskID}. ` +
-          `Reset the database explicitly; OpenCorvus will not infer or fabricate cancellation provenance. ${reason}`,
+          `Existing data is retained; cancellation provenance requires explicit recovery. ${reason}`,
         path: dbPath,
         operation: "Database.Client.dataIntegrity",
-        code: "DATA_INTEGRITY_RESET_REQUIRED",
+        code: "DATA_INTEGRITY_ERROR",
       })
     }
   }
@@ -748,14 +755,13 @@ function assertCurrentDataIntegrity(
 
 function configureSqlite(sqlite: BunDatabase) {
   // auto_vacuum must be set before any table is created. An existing database
-  // with a different physical setting remains usable only when its schema
-  // exactly matches the current DDL; adopting a new physical format requires
-  // a separately authorized reset.
+  // retains that physical setting during schema migration; changing it needs
+  // an explicit VACUUM operation rather than deleting user history.
   sqlite.run("PRAGMA encoding = 'UTF-8'")
   const encoding = queryAllFinalized<{ encoding: string }>(sqlite, "PRAGMA encoding")[0]?.encoding
   if (encoding !== "UTF-8") {
     throw new Error(
-      `OpenCorvus database encoding is ${encoding ?? "unknown"}; reset the database because Artifact byte locators require UTF-8`,
+      `OpenCorvus database encoding is ${encoding ?? "unknown"}; an explicit encoding migration is required because Artifact byte locators require UTF-8`,
     )
   }
   sqlite.run("PRAGMA auto_vacuum = INCREMENTAL")
@@ -767,30 +773,6 @@ function configureSqlite(sqlite: BunDatabase) {
   // the next checkpoint instead of staying resident.
   sqlite.run("PRAGMA journal_size_limit = 67108864")
   sqlite.run("PRAGMA wal_checkpoint(PASSIVE)")
-}
-
-function createCurrentSchema(sqlite: BunDatabase, dbPath: string): BunDatabase {
-  let transactionActive = false
-  try {
-    sqlite.run("BEGIN IMMEDIATE")
-    transactionActive = true
-    sqlite.exec(SCHEMA_DDL)
-    const drift = findSchemaDrift(sqlite)
-    if (drift) {
-      throw new Error(`OpenCorvus database schema does not match current DDL at ${dbPath}: ${drift}`)
-    }
-    sqlite.run("COMMIT")
-    transactionActive = false
-  } catch (err) {
-    if (transactionActive) sqlite.run("ROLLBACK")
-    const reason = err instanceof Error ? err.message : String(err)
-    log.error("database schema apply failed", {
-      path: dbPath,
-      error: reason,
-    })
-    throw err
-  }
-  return sqlite
 }
 
 export namespace Database {
@@ -992,32 +974,6 @@ export namespace Database {
     return sqlite
   }
 
-  function probeExistingSchemaReadonly(dbPath: string): void {
-    const sqlite = new BunDatabase(dbPath, { readonly: true })
-    let drift: string | undefined
-    let fingerprint = ""
-    try {
-      sqlite.run("PRAGMA busy_timeout = 5000")
-      drift = findSchemaDrift(sqlite)
-      fingerprint = schemaObjectFingerprint(sqlite)
-    } finally {
-      sqlite.close(false)
-    }
-    if (drift) throw schemaResetRequired(dbPath, drift, fingerprint)
-  }
-
-  function schemaResetRequired(dbPath: string, reason: string, fingerprint: string) {
-    return new DatabaseUnavailableError({
-      message:
-        `OpenCorvus database schema does not match the pre-0.1.0 canonical DDL at ${dbPath}: ${reason}. ` +
-        `Received schema fingerprint ${fingerprint}. ` +
-        "The database was not modified; reset it because pre-release builds do not patch older schemas.",
-      path: dbPath,
-      operation: "Database.Client.schemaValidation",
-      code: "SCHEMA_RESET_REQUIRED",
-    })
-  }
-
   function recordUnavailable(error: unknown, operation: string) {
     for (const candidate of errorGraph(error)) {
       if (!DatabaseUnavailableError.isInstance(candidate)) continue
@@ -1098,24 +1054,37 @@ export namespace Database {
 
     try {
       const existed = fsSync.existsSync(dbPath)
-      if (existed) probeExistingSchemaReadonly(dbPath)
       const sqlite = openOwnedSqlite(dbPath, { configure: false })
-      if (existed) {
-        // The read-only probe is the epoch gate. Reassert the exact shape after
-        // obtaining the writable connection before any configuration PRAGMA.
-        const openingDrift = findSchemaDrift(sqlite)
-        if (openingDrift) throw schemaResetRequired(dbPath, openingDrift, schemaObjectFingerprint(sqlite))
-        configureSqlite(sqlite)
-        const integrityDB = drizzle({ client: sqlite, schema: ApplicationSchema })
-        provideDatabaseContext(
-          { effects: [], tx: integrityDB, closed: false, transactionDepth: 0 },
-          "Database.Client.dataIntegrity",
-          () => assertCurrentDataIntegrity(sqlite, integrityDB, dbPath),
+      if (!existed) configureSqlite(sqlite)
+      const integrityDB = drizzle({ client: sqlite, schema: ApplicationSchema })
+      let migration
+      try {
+        migration = migrateSchema({
+          sqlite,
+          databasePath: dbPath,
+          migrations: DATABASE_MIGRATIONS,
+          currentDDL: SCHEMA_DDL,
+          validate: () =>
+            provideDatabaseContext(
+              { effects: [], tx: integrityDB, closed: false, transactionDepth: 0 },
+              "Database.Client.dataIntegrity",
+              () => assertCurrentDataIntegrity(sqlite, integrityDB, dbPath),
+            ),
+        })
+      } catch (cause) {
+        if (!(cause instanceof SchemaMigrationError)) throw cause
+        throw new DatabaseUnavailableError(
+          {
+            message: cause.message + (cause.backupPath ? ` The pre-upgrade backup is at ${cause.backupPath}.` : ""),
+            path: dbPath,
+            operation: "Database.Client.schemaMigration",
+            code: cause.code,
+          },
+          { cause },
         )
-      } else {
-        configureSqlite(sqlite)
-        createCurrentSchema(sqlite, dbPath)
       }
+      if (existed) configureSqlite(sqlite)
+      if (migration.backupPath) log.info("database migration completed", migration)
       log.info("schema applied")
 
       const db = drizzle({ client: sqlite, schema: ApplicationSchema })
@@ -1132,9 +1101,8 @@ export namespace Database {
   }
 
   /** Process-local identity of the currently open physical SQLite handle.
-   * Rebuild/import closes and reopens that handle, invalidating every rowid
-   * cursor even when the durable database identity is restored from a
-   * snapshot. */
+   * Closing and reopening invalidates every process-local rowid cursor;
+   * schema migration preserves the durable database identity. */
   export function physicalConnectionEpoch(): number {
     if (!state.sqlite) Client()
     return state.connectionEpoch
@@ -1685,8 +1653,10 @@ export namespace Database {
       const effects: (() => void | Promise<void>)[] = []
       const result = Client().transaction((tx) => {
         return {
-          value: provideDatabaseContext({ tx, effects, closed: false, transactionDepth: 1 }, "Database.transaction", () =>
-            callback(tx),
+          value: provideDatabaseContext(
+            { tx, effects, closed: false, transactionDepth: 1 },
+            "Database.transaction",
+            () => callback(tx),
           ),
         }
       })

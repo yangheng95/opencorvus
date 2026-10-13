@@ -1,0 +1,1247 @@
+$ bun script/run-tests.ts test/build-terminal-fact-publication.test.ts test/expert-squad-feedback-revision.test.ts test/goal-workload-coverage-contract.test.ts test/memory/project-memory.test.ts test/mission-caller-receipt-identity.test.ts test/orchestrator-control-message.test.ts test/requirements-domain-incomplete-settlement.test.ts test/task-terminal-artifact-closure.test.ts test/tool-result-control-protocol.test.ts
+[1/9] START test/build-terminal-fact-publication.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) startup reports the explicit reset contract for legacy build terminal identity [3817.85ms]
+(pass) startup reports the explicit reset contract for legacy partial terminal identity [3259.43ms]
+(pass) startup reports the explicit reset contract for legacy cleanup terminal identity [3639.87ms]
+(pass) startup reports the explicit reset contract for legacy evolution terminal identity [3804.82ms]
+(pass) Build terminal-fact publication > physical Build receives every immutable Task-input attachment [8161.70ms]
+(pass) Build terminal-fact publication > fresh managed-worktree Build preserves the preallocated Session identity [8790.27ms]
+(pass) Build terminal-fact publication > the physical Build retries its exact publication before final settlement [6062.92ms]
+(pass) Build terminal-fact publication > an exhausted physical publication settles partial and removes both private refs [6934.49ms]
+(pass) Build terminal-fact publication > the canonical exact identity rejects payload drift after production publication [6469.35ms]
+(pass) Build terminal-fact publication > cleanup failure retains one durable owner and recovery deletes its exact refs before settlement retry [7789.58ms]
+(pass) Build terminal-fact publication > lease-renewal loss aborts the stale cleanup executor and lets one successor settle [5809.41ms]
+(pass) Build terminal-fact publication > production provenance failure publishes one typed partial only after private refs are cleaned [9626.39ms]
+(pass) Build terminal-fact publication > project bootstrap resumes the same pending cleanup owner after project close and reopen [12248.20ms]
+(pass) Build terminal-fact publication > Task deletion settles retained observation refs before appending its audit-preserving tombstone [7310.45ms]
+(pass) Build terminal-fact publication > Task deletion preserves its Task and owner when Git metadata is missing, then retries the same owner [6022.67ms]
+(pass) Build terminal-fact publication > Project deletion settles Build observation refs before deleting the aggregate [8843.85ms]
+
+ 16 pass
+ 0 fail
+ 37 expect() calls
+Ran 16 tests across 1 file. [113.69s]
+[1/9] DONE test/build-terminal-fact-publication.test.ts exit=0 duration=114.86s
+[2/9] START test/expert-squad-feedback-revision.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) revising an installed expert squad from operator feedback > startup reports the explicit reset contract for a prior-format feedback candidate [3154.05ms]
+(pass) revising an installed expert squad from operator feedback > derives the next daily revision so the author never restates the version [0.21ms]
+(pass) revising an installed expert squad from operator feedback > names the squad the way every other surface does [0.29ms]
+(pass) revising an installed expert squad from operator feedback > writes, installs and undoes one revision authored from what the operator said [2561.34ms]
+(pass) revising an installed expert squad from operator feedback > reaches a revision two hops back without undoing the hop in between [2731.84ms]
+(pass) revising an installed expert squad from operator feedback > rewrites the manifest but refuses capability the squad never held [2058.84ms]
+(pass) revising an installed expert squad from operator feedback > applies exact sequential edits and preserves the remaining parent text [2018.95ms]
+(pass) revising an installed expert squad from operator feedback > reports exact edit conflicts at the requested path and index [2256.15ms]
+(pass) revising an installed expert squad from operator feedback > reads long evidence in exact byte chunks and publishes its verified source provenance [2408.47ms]
+
+ 9 pass
+ 0 fail
+ 48 expect() calls
+Ran 9 tests across 1 file. [18.73s]
+[2/9] DONE test/expert-squad-feedback-revision.test.ts exit=0 duration=18.89s
+[3/9] START test/goal-workload-coverage-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Goal Workload coverage contract > independent processes publish one immutable per-dispatch Workload fact [9520.23ms]
+(pass) Goal Workload coverage contract > independent settlement callers return the same durable first winner in both controlled orders [10293.94ms]
+(pass) Goal Workload coverage contract > production dispatch and adapter chain projects the incomplete Workload settlement [2666.87ms]
+(pass) Goal Workload coverage contract > production dispatch and adapter chain projects the complete Workload settlement [2281.48ms]
+(pass) Goal Workload coverage contract > derives canonical incomplete, conflict, and complete receipts [0.31ms]
+(pass) Goal Workload coverage contract > retains unselected and repeated collector submissions as exact evidence [0.89ms]
+(pass) Goal Workload coverage contract > strict version 2 rejects a receipt that disagrees with raw coverage facts [1.04ms]
+(pass) Goal Workload coverage contract > publication identity is stable and domain-separated [0.19ms]
+(pass) Goal Workload coverage contract > publishes from a production-shaped nested Orchestrator and reuses its exact occurrence identity [1842.32ms]
+(pass) Goal Workload coverage contract > publishes complete, missing, extra, and duplicate receipts against the real GoalGraph tip [2454.54ms]
+(pass) Goal Workload coverage contract > records stale selected revisions while binding the newer successful GoalGraph tip [2212.85ms]
+(pass) Goal Workload coverage contract > ignores a later projection-null candidate and keeps the successful GoalGraph tip [2474.95ms]
+(pass) Goal Workload coverage contract > reopens a valid strict version-2 Workload database [2173.28ms]
+(pass) Goal Workload coverage contract > startup classifies a genuine prior-format Workload publication through its existing integrity authority [2440.03ms]
+(pass) Goal Workload coverage contract > startup rejects legacy-v1 Goal Workload coverage [2685.89ms]
+(pass) Goal Workload coverage contract > startup rejects malformed-json Goal Workload coverage [2789.24ms]
+(pass) Goal Workload coverage contract > startup rejects wrong-kind-locator Goal Workload coverage [2741.40ms]
+(pass) Goal Workload coverage contract > startup rejects revision-drift Goal Workload coverage [2956.63ms]
+(pass) Goal Workload coverage contract > startup rejects dispatch-lineage-drift Goal Workload coverage [2710.59ms]
+(pass) Goal Workload coverage contract > startup rejects workflow-occurrence-drift Goal Workload coverage [2865.62ms]
+(pass) Goal Workload coverage contract > startup rejects producer-session-drift Goal Workload coverage [2831.27ms]
+(pass) Goal Workload coverage contract > startup rejects producer-message-drift Goal Workload coverage [2520.15ms]
+(pass) Goal Workload coverage contract > startup rejects selected-subject-drift Goal Workload coverage [2769.13ms]
+(pass) Goal Workload coverage contract > startup rejects turn-provenance-drift Goal Workload coverage [2728.52ms]
+(pass) Goal Workload coverage contract > a recovered partial remains immutable while a new continuation dispatch succeeds [1816.08ms]
+(pass) Goal Workload coverage contract > startup lifecycle reconciliation freezes the crashed dispatch before a continuation succeeds [2106.25ms]
+(pass) Goal Workload coverage contract > settle-or-return-existing preserves the first committed dispatch outcome [1687.91ms]
+(pass) Goal Workload coverage contract > settle-or-return-existing also preserves a mapped outcome that commits before recovery [1730.92ms]
+(pass) production continuation workload selection > direct persists the successor selection and registers exact workload evidence [2310.78ms]
+(pass) production continuation workload selection > collection persists the successor selection and registers exact workload evidence [1960.49ms]
+(pass) production continuation workload selection > inherit persists the successor selection and registers exact workload evidence [1831.06ms]
+(pass) production continuation workload selection > coordination persists the successor selection and registers exact workload evidence [2050.72ms]
+(pass) production continuation workload selection > empty persists the successor selection and registers exact workload evidence [1817.70ms]
+
+ 33 pass
+ 0 fail
+ 95 expect() calls
+Ran 33 tests across 1 file. [85.38s]
+[3/9] DONE test/goal-workload-coverage-contract.test.ts exit=0 duration=85.59s
+[4/9] START test/memory/project-memory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project MEMORY.MD pending input and organizer document > captures trusted turns with two transcript contexts, redaction, replay, rename, and protected access [2455.32ms]
+(pass) Project MEMORY.MD pending input and organizer document > requires a pre-release reset for an expanded Project Memory file identity [2229.34ms]
+(pass) Project MEMORY.MD pending input and organizer document > requires a pre-release reset for an expanded Project Memory chunk identity [2031.47ms]
+(pass) Project MEMORY.MD pending input and organizer document > keeps general Memory outside the Project Memory reset epoch [1763.09ms]
+(pass) Project MEMORY.MD pending input and organizer document > rejects compact pending-input and document identity occupancy with typed invariants [1631.43ms]
+(pass) Project MEMORY.MD pending input and organizer document > fences competing Organizer runtimes until lease expiry and rejects the stale result [1574.04ms]
+(pass) Project MEMORY.MD pending input and organizer document > revokes an active Organizer lease when model availability changes [1643.66ms]
+(pass) Project MEMORY.MD pending input and organizer document > routes global project config invalidation to each Organizer registration identity [3300.51ms]
+(pass) Project MEMORY.MD pending input and organizer document > reinitializes one Organizer subscription set after its initial request transaction fails [1791.09ms]
+(pass) Project MEMORY.MD pending input and organizer document > reports a committed runtime projection failure and advances the Organizer barrier on retry [1929.82ms]
+(pass) Project MEMORY.MD pending input and organizer document > applies pending FIFO only when the same unavailable generation owns a persisted Organizer lease twice [1880.39ms]
+{"contract":"memory collector retry","calls":[{"activity":{"id":"act_g0VXxRv2A00OLIAoXPp8","attempt":0},"sessionID":"ses_-zUS2Y5HEzz1dlLovREY","userID":"msg_g0VXxRuqP00GSm04h0w6"},{"activity":{"id":"act_g0VXxRv2A00OLIAoXPp8","attempt":1},"sessionID":"ses_-zUS2Y5HEzz1dlLovREY","userID":"msg_g0VXxRuqP00GSm04h0w6"}],"result":{"status":"idle","revision":1},"document":{"revision":1,"pendingCount":0}}
+(pass) Project MEMORY.MD pending input and organizer document > manual organize route uses the pending FIFO owner's canonical Session model [5116.87ms]
+(pass) Project MEMORY.MD pending input and organizer document > uses the oldest pending Task as the canonical model owner across Tasks [2920.02ms]
+(pass) Project MEMORY.MD pending input and organizer document > advances unavailable FIFO proof one owner at a time before organizing the next configured Task [3077.49ms]
+(pass) Project MEMORY.MD pending input and organizer document > settles a pending Task without a bound root Session as durable unavailable [2070.16ms]
+(pass) Project MEMORY.MD pending input and organizer document > revokes an Organizer attempt whose single effective configuration snapshot becomes stale [2153.93ms]
+(pass) Project MEMORY.MD pending input and organizer document > consumes the abortable memory-agent text stream and commits its semantic replacement envelope [2077.40ms]
+(pass) Project MEMORY.MD pending input and organizer document > consumes the queued config-generation redrive after an in-flight Organizer lease is revoked [1701.40ms]
+(pass) Project MEMORY.MD pending input and organizer document > instance disposal cancels an in-flight Organizer run and releases its durable owner for the next attempt [1846.54ms]
+(pass) Project MEMORY.MD pending input and organizer document > injects a capacity notice that requires a visible user prompt without delegating organization to the main agent [1659.89ms]
+(pass) Project MEMORY.MD pending input and organizer document > captures attachment-only input and direct occurrences with stable canonical metadata [1656.39ms]
+(pass) Project MEMORY.MD pending input and organizer document > captures direct user Task creation and trusted HTTP interaction input while service calls stay internal [3231.63ms]
+(pass) Project MEMORY.MD pending input and organizer document > commits one authoritative permission reply when the HTTP decision is repeated with different text [2076.64ms]
+20 |
+21 | export namespace Question {
+22 |   let afterUserOutboxCommitForTest: (() => void) | undefined
+23 |
+24 |   export namespace TestHooks {
+25 |     export function failAfterNextUserOutboxCommit(error = new Error("injected post-commit interruption")): Disposable {
+                                                                   ^
+error: injected post-commit interruption
+      at failAfterNextUserOutboxCommit (D:\myhexin-local\opencorvus\packages\opencorvus\src\question\index.ts:25:63)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\project-memory.test.ts:1829:50)
+
+(pass) Project MEMORY.MD pending input and organizer document > recovers a committed question reply and its memory occurrence after interruption before durable delivery [2747.80ms]
+(pass) Project MEMORY.MD pending input and organizer document > records the literal channel answer through the real bound-task interaction path [3270.06ms]
+
+ 25 pass
+ 0 fail
+ 143 expect() calls
+Ran 25 tests across 1 file. [59.66s]
+[4/9] DONE test/memory/project-memory.test.ts exit=0 duration=59.89s
+[5/9] START test/mission-caller-receipt-identity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) persists and replays one compact Mission caller receipt with complete provenance [3083.50ms]
+(pass) rejects a compact Part occupied after preparation at the Mission receipt transaction fence [2544.52ms]
+(pass) rejects an occupied compact Mission receipt message before model preparation [2241.01ms]
+(pass) rejects an occupied compact Mission receipt part before model preparation [2476.83ms]
+(pass) rejects replay when persisted Mission receipt provenance is not the strict canonical metadata [2055.91ms]
+(pass) requires a pre-release reset for an expanded Mission caller receipt message identity [2671.26ms]
+(pass) requires a pre-release reset for an expanded Mission caller receipt part identity [3957.54ms]
+
+ 7 pass
+ 0 fail
+ 26 expect() calls
+Ran 7 tests across 1 file. [21.41s]
+[5/9] DONE test/mission-caller-receipt-identity.test.ts exit=0 duration=21.68s
+[6/9] START test/orchestrator-control-message.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) exact terminal ingress persists one visible Orchestrator control Message and reuses it [2070.29ms]
+(pass) rejects an occupied reversible control identity before overwriting another Message [1321.32ms]
+(pass) rejects an occupied reversible control Part identity before writing the control occurrence [1353.22ms]
+(pass) rejects a reversible Part occupied after preparation at the persistence transaction fence [2148.34ms]
+(pass) requires a pre-release reset for an expanded Orchestrator control message identity [2276.97ms]
+(pass) requires a pre-release reset for an expanded Orchestrator control part identity [2832.82ms]
+(pass) publishes the staged control runtime before the visible Message event [1697.34ms]
+
+ 7 pass
+ 0 fail
+ 21 expect() calls
+Ran 7 tests across 1 file. [18.04s]
+[6/9] DONE test/orchestrator-control-message.test.ts exit=0 duration=18.37s
+[7/9] START test/requirements-domain-incomplete-settlement.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Requirements domain-incomplete settlement > rolls back the RequirementSet when canonical task.updated publication is rejected [4395.87ms]
+(pass) Requirements domain-incomplete settlement > missing and decisions-only coverage remain exact incomplete evidence with exact incomplete settlement [4306.08ms]
+(pass) Requirements domain-incomplete settlement > a forged complete declaration is recomputed from durable request and remains incomplete [2776.13ms]
+(pass) Requirements domain-incomplete settlement > one exact finalized RequirementSet succeeds and records successful Requirements settlement [2678.59ms]
+(pass) Requirements domain-incomplete settlement > wire-valid collector facts are writer-valid at the production adapter boundary [3044.39ms]
+(pass) Requirements domain-incomplete settlement > defined future implementation and external verification obligations complete requirement coverage [3535.56ms]
+(pass) Requirements domain-incomplete settlement > durable read and selection facts are the only source and evidence authority [5358.76ms]
+(pass) Requirements domain-incomplete settlement > identity, unresolved, and declared-incomplete coverage remain fail-closed [3544.28ms]
+(pass) Requirements domain-incomplete settlement > a completed stale Turn in the same reused Session cannot publish for the current dispatch [2179.77ms]
+(pass) Requirements domain-incomplete settlement > pre-coverage RequirementSet data makes the pre-release database reset-required [2468.68ms]
+(pass) Requirements domain-incomplete settlement > malformed RequirementSet JSON has the same typed startup reset contract [2869.07ms]
+
+ 11 pass
+ 0 fail
+ 15 expect() calls
+Ran 11 tests across 1 file. [40.13s]
+[7/9] DONE test/requirements-domain-incomplete-settlement.test.ts exit=0 duration=40.37s
+[8/9] START test/task-terminal-artifact-closure.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) observes the completion call usage after the real Task terminal tool returns [11528.73ms]
+(pass) binds an exact Task-owned worker Message into the completion decision [9082.13ms]
+(pass) seals every terminal workflow worker Artifact into the completion decision without asking the model [9001.25ms]
+(pass) keeps the exact terminal expert Artifact immutable while preserving an idempotent replay [7546.42ms]
+(pass) returns the typed compact Artifact identity collision contract [2715.09ms]
+(pass) requires a pre-release reset for the legacy expanded idempotent Artifact epoch [2967.48ms]
+(pass) requires a pre-release reset for the legacy expanded Project identity epoch [2863.42ms]
+(pass) closes continuation admission before the real completion checkpoint and imports only declared deliverables [14535.71ms]
+(pass) projects exact referenced cross-Task resources through frozen Catalog membership [15102.67ms]
+(pass) admits a successor completion owner after the immutable activation lease expires [3097.56ms]
+(pass) keeps an empty completed-source delivery authority through target preparation [9905.17ms]
+(pass) imports an exact Artifact from a failed same-Mission Task under its terminal lifecycle authority [3201.39ms]
+
+ 12 pass
+ 0 fail
+ 64 expect() calls
+Ran 12 tests across 1 file. [93.41s]
+[8/9] DONE test/task-terminal-artifact-closure.test.ts exit=0 duration=93.61s
+[9/9] START test/tool-result-control-protocol.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) single Tool-result turn-control protocol > rejects an exact projected StructuredOutput before a conditional response encoder can be overwritten [3507.60ms]
+(pass) single Tool-result turn-control protocol > projects the typed no_action receipt on the production scheduler Tool surface [3267.06ms]
+(pass) single Tool-result turn-control protocol > treats a completed immediate-park Tool outcome as the durable reply boundary [1.18ms]
+(pass) single Tool-result turn-control protocol > a live typed park completes its visible ToolPart and stops the current stream [2022.38ms]
+(pass) single Tool-result turn-control protocol > validates and persists the exact control before completing a ToolPart [1954.71ms]
+(pass) single Tool-result turn-control protocol > executes the normal Wait Tool producer and keeps an aborted occurrence ordinary [3437.22ms]
+(pass) single Tool-result turn-control protocol > executes the production projected orchestrator wait writer [3239.78ms]
+(pass) single Tool-result turn-control protocol > executes the real projected manage_task complete_task producer [9051.83ms]
+(pass) single Tool-result turn-control protocol > executes the real projected manage_task fail_task producer [10557.40ms]
+(pass) single Tool-result turn-control protocol > keeps a rejected projected completion occurrence ordinary [10292.63ms]
+(pass) single Tool-result turn-control protocol > creates one production worker coordination handoff and seals the committed turn [3158.69ms]
+(pass) single Tool-result turn-control protocol > persists one production coordination source in lineage and the Worker Turn descriptor [3199.11ms]
+(pass) single Tool-result turn-control protocol > fences a live production cancel_worker owner after Task terminal and reopen [3156.91ms]
+(pass) single Tool-result turn-control protocol > fences a live production ask_user owner after Task terminal and reopen [4757.44ms]
+(pass) single Tool-result turn-control protocol > fences a live production fail_task owner after Task terminal and reopen [3088.90ms]
+(pass) single Tool-result turn-control protocol > terminalizes a running old-epoch coordination Tool without replaying its effect [2918.25ms]
+(pass) single Tool-result turn-control protocol > replays a completed ask_user answered decision into its still-running ToolPart after owner loss [3012.63ms]
+(pass) single Tool-result turn-control protocol > replays a completed ask_user expired decision into its still-running ToolPart after owner loss [4033.76ms]
+(pass) single Tool-result turn-control protocol > replays a completed ask_user rejected decision into its still-running ToolPart after owner loss [3234.30ms]
+(pass) single Tool-result turn-control protocol > rejects an old-epoch pending redispatch before a successor lineage can commit [3725.77ms]
+(pass) single Tool-result turn-control protocol > rejects same-epoch terminal and deleted Tasks before persisting an active coordination action [3575.89ms]
+(pass) single Tool-result turn-control protocol > settles and replays the production A2A fail_task control writer [7648.29ms]
+(pass) single Tool-result turn-control protocol > serializes an exclusive Tool occurrence after prior ordinary work and seals later siblings [1.58ms]
+(pass) single Tool-result turn-control protocol > seals a misclassified occurrence after a malformed hook mutation exposes committed control [0.62ms]
+(pass) single Tool-result turn-control protocol > stops a queued exclusive effect when ordinary work seals with returned-control [0.65ms]
+(pass) single Tool-result turn-control protocol > stops a queued exclusive effect when ordinary work seals with mutated-control [0.38ms]
+(pass) single Tool-result turn-control protocol > preserves projected exclusive mode through provider preparation and the final Session Tool surface [0.90ms]
+(pass) single Tool-result turn-control protocol > coordinates a real projected scheduler wait with its ordinary sibling on the final Session Tool surface [2797.37ms]
+(pass) single Tool-result turn-control protocol > replays a permission-owned projected wait result across the result-to-ToolPart cut without a second effect [2591.99ms]
+(pass) single Tool-result turn-control protocol > completes the assistant exactly once after a permission-owned ToolPart-to-assistant cut [2555.38ms]
+3090 |         const completedOccurrence = {
+3091 |           assistant: { finish: "tool-calls", completed: expect.any(Number) },
+3092 |           part: expect.objectContaining({ status: "completed", control: { kind: "immediate_park" } }),
+3093 |           ...committedEffect,
+3094 |         }
+3095 |         expect(recovered).toEqual({ first: completedOccurrence, second: completedOccurrence })
+                                 ^
+error: expect(received).toEqual(expected)
+
+  {
+    "first": {
+      "assistant": {
+-       "completed": Any<Number>,
++       "completed": 1791918471450,
+        "finish": "tool-calls",
+      },
+      "automationCount": 1,
+      "durableControl": {
+        "kind": "immediate_park",
+      },
+      "executionStarts": 1,
+      "executionSuccesses": 1,
+-     "part": ObjectContaining {
++     "part": {
+        "control": {
+          "kind": "immediate_park",
+        },
++       "id": "prt_g0VXxTGFk00kK14BSItB",
+        "status": "completed",
+      },
++     "requestFacts": [
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": "external_effect",
++         "event_type": "requested",
++         "fingerprint": "69275ccc328a3bb772eff718bbc3cef0a7279447e801249eaf7b50354222742d",
++         "id": "per_g0VXxTGG2001KK12b6gE",
++         "message_id": "msg_g0VXxTFtx00WwR5nM8PH",
++         "metadata": {
++           "choices": [
++             "allow_once",
++             "allow_task",
++             "deny",
++           ],
++           "projectGrantEligible": false,
++         },
++         "mode": "ask",
++         "outcome_slot": null,
++         "policy_revision": "51872296a449f744ffd4b62f36a5e8e37e51062d2c8f29f52e55134ef0311091",
++         "project_id": "prj_hsTGHVeRPoA5As55WcJr",
++         "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++         "provider_id": "wait",
++         "provider_kind": "projected",
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": {
++           "effect_class": "external_effect",
++           "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++           "provider_id": "wait",
++           "provider_kind": "projected",
++           "resource": {
++             "arguments": {
++               "duration_ms": 1000,
++               "reason": "verify cross-process Tool-result recovery",
++             },
++             "arguments_sha256": "c34a2d5a19fe6233ee7ffb41e1741ebd8b4c46601193c2603759098328d94189",
++             "operation": "wait",
++             "scope_type": "provider",
++           },
++           "tool_name": "wait",
++         },
++         "scope_version": "2",
++         "session_id": "ses_-zUS2Wk6ZzzOwWTmtZPs",
++         "source_event_id": null,
++         "summary": "wait (external_effect)",
++         "task_id": "tsk_g00VXxTFjX00x3xEre7b",
++         "time_created": 1791918464394,
++         "tool_call_id": "call_process_permission_wait",
++         "tool_name": "wait",
++       },
++       {
++         "actor_id": "process-result-cut",
++         "attempt_id": null,
++         "decision_scope": "invocation",
++         "decision_slot": "per_hj6v3dTOktFsmp9zIkle",
++         "effect_class": null,
++         "event_type": "allowed_once",
++         "fingerprint": null,
++         "id": "per_g0VXxTH8P00avIWTFADw",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918467765,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_hU7rFMmYWuX3hM6NpjhD",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_started",
++         "fingerprint": null,
++         "id": "per_g0VXxTHLJ009RPtTIu7N",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": "per_g0VXxTH8P00avIWTFADw",
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918468565,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_hU7rFMmYWuX3hM6NpjhD",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_succeeded",
++         "fingerprint": null,
++         "id": "per_g0VXxTHLO0022vRG0Gx7",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": "per_hU7rFMmYWuX3hM6NpjhD",
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918468570,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "stale",
++         "fingerprint": null,
++         "id": "per_g0VXxTI60004WRk0gyBB",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": "The continuation reached its persisted conclusion",
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918471460,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++     ],
+      "resultCount": 1,
++     "resultFacts": [
++       {
++         "attempt_id": "per_hU7rFMmYWuX3hM6NpjhD",
++         "result": {
++           "kind": "json",
++           "value": {
++             "metadata": {
++               "aborted": false,
++               "jobID": "atm_hLjQa8kUuzqix4s8DrdV",
++               "mode": "task",
++               "nextRun": 1791918469567,
++               "nonblocking": true,
++               "opencorvusToolResultControl": {
++                 "kind": "immediate_park",
++               },
++               "requestedMs": 1000,
++             },
++             "output": "Scheduled nonblocking task wait atm_hLjQa8kUuzqix4s8DrdV for 2026-10-13T19:07:49.567Z (requested 1000ms). Reason: verify cross-process Tool-result recovery. End this turn unless another real scheduler decision is immediately responsible; the scheduled wake will re-read current evidence. This is a scheduled park decision; do not poll with another wait.",
++             "title": "Wait Scheduled",
++           },
++         },
++         "time_created": 1791918468571,
++       },
++     ],
++     "toolRequest": {
++       "data": {
++         "callID": "call_process_permission_wait",
++         "input": {
++           "duration_ms": 1000,
++           "reason": "verify cross-process Tool-result recovery",
++         },
++         "time": {
++           "start": 1791918464376,
++         },
++         "tool": "wait",
++         "type": "tool-request",
++       },
++       "id": "prt_g0VXxTGFk00kK14BSItB",
++       "message_id": "msg_g0VXxTFtx00WwR5nM8PH",
++       "time_created": 1791918464377,
++     },
+    },
+    "second": {
+      "assistant": {
+-       "completed": Any<Number>,
++       "completed": 1791918471450,
+        "finish": "tool-calls",
+      },
+      "automationCount": 1,
+      "durableControl": {
+        "kind": "immediate_park",
+      },
+      "executionStarts": 1,
+      "executionSuccesses": 1,
+-     "part": ObjectContaining {
++     "part": {
+        "control": {
+          "kind": "immediate_park",
+        },
++       "id": "prt_g0VXxTGFk00kK14BSItB",
+        "status": "completed",
+      },
++     "requestFacts": [
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": "external_effect",
++         "event_type": "requested",
++         "fingerprint": "69275ccc328a3bb772eff718bbc3cef0a7279447e801249eaf7b50354222742d",
++         "id": "per_g0VXxTGG2001KK12b6gE",
++         "message_id": "msg_g0VXxTFtx00WwR5nM8PH",
++         "metadata": {
++           "choices": [
++             "allow_once",
++             "allow_task",
++             "deny",
++           ],
++           "projectGrantEligible": false,
++         },
++         "mode": "ask",
++         "outcome_slot": null,
++         "policy_revision": "51872296a449f744ffd4b62f36a5e8e37e51062d2c8f29f52e55134ef0311091",
++         "project_id": "prj_hsTGHVeRPoA5As55WcJr",
++         "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++         "provider_id": "wait",
++         "provider_kind": "projected",
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": {
++           "effect_class": "external_effect",
++           "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++           "provider_id": "wait",
++           "provider_kind": "projected",
++           "resource": {
++             "arguments": {
++               "duration_ms": 1000,
++               "reason": "verify cross-process Tool-result recovery",
++             },
++             "arguments_sha256": "c34a2d5a19fe6233ee7ffb41e1741ebd8b4c46601193c2603759098328d94189",
++             "operation": "wait",
++             "scope_type": "provider",
++           },
++           "tool_name": "wait",
++         },
++         "scope_version": "2",
++         "session_id": "ses_-zUS2Wk6ZzzOwWTmtZPs",
++         "source_event_id": null,
++         "summary": "wait (external_effect)",
++         "task_id": "tsk_g00VXxTFjX00x3xEre7b",
++         "time_created": 1791918464394,
++         "tool_call_id": "call_process_permission_wait",
++         "tool_name": "wait",
++       },
++       {
++         "actor_id": "process-result-cut",
++         "attempt_id": null,
++         "decision_scope": "invocation",
++         "decision_slot": "per_hj6v3dTOktFsmp9zIkle",
++         "effect_class": null,
++         "event_type": "allowed_once",
++         "fingerprint": null,
++         "id": "per_g0VXxTH8P00avIWTFADw",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918467765,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_hU7rFMmYWuX3hM6NpjhD",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_started",
++         "fingerprint": null,
++         "id": "per_g0VXxTHLJ009RPtTIu7N",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": "per_g0VXxTH8P00avIWTFADw",
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918468565,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_hU7rFMmYWuX3hM6NpjhD",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_succeeded",
++         "fingerprint": null,
++         "id": "per_g0VXxTHLO0022vRG0Gx7",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": "per_hU7rFMmYWuX3hM6NpjhD",
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918468570,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "stale",
++         "fingerprint": null,
++         "id": "per_g0VXxTI60004WRk0gyBB",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": "The continuation reached its persisted conclusion",
++         "request_id": "per_hj6v3dTOktFsmp9zIkle",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918471460,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++     ],
+      "resultCount": 1,
++     "resultFacts": [
++       {
++         "attempt_id": "per_hU7rFMmYWuX3hM6NpjhD",
++         "result": {
++           "kind": "json",
++           "value": {
++             "metadata": {
++               "aborted": false,
++               "jobID": "atm_hLjQa8kUuzqix4s8DrdV",
++               "mode": "task",
++               "nextRun": 1791918469567,
++               "nonblocking": true,
++               "opencorvusToolResultControl": {
++                 "kind": "immediate_park",
++               },
++               "requestedMs": 1000,
++             },
++             "output": "Scheduled nonblocking task wait atm_hLjQa8kUuzqix4s8DrdV for 2026-10-13T19:07:49.567Z (requested 1000ms). Reason: verify cross-process Tool-result recovery. End this turn unless another real scheduler decision is immediately responsible; the scheduled wake will re-read current evidence. This is a scheduled park decision; do not poll with another wait.",
++             "title": "Wait Scheduled",
++           },
++         },
++         "time_created": 1791918468571,
++       },
++     ],
++     "toolRequest": {
++       "data": {
++         "callID": "call_process_permission_wait",
++         "input": {
++           "duration_ms": 1000,
++           "reason": "verify cross-process Tool-result recovery",
++         },
++         "time": {
++           "start": 1791918464376,
++         },
++         "tool": "wait",
++         "type": "tool-request",
++       },
++       "id": "prt_g0VXxTGFk00kK14BSItB",
++       "message_id": "msg_g0VXxTFtx00WwR5nM8PH",
++       "time_created": 1791918464377,
++     },
+    },
+  }
+
+- Expected  - 4
++ Received  + 436
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\tool-result-control-protocol.test.ts:3095:27)
+(fail) single Tool-result turn-control protocol > recovers a projected permission wait exactly once across the result-boundary operating-system process cut [17134.04ms]
+3090 |         const completedOccurrence = {
+3091 |           assistant: { finish: "tool-calls", completed: expect.any(Number) },
+3092 |           part: expect.objectContaining({ status: "completed", control: { kind: "immediate_park" } }),
+3093 |           ...committedEffect,
+3094 |         }
+3095 |         expect(recovered).toEqual({ first: completedOccurrence, second: completedOccurrence })
+                                 ^
+error: expect(received).toEqual(expected)
+
+  {
+    "first": {
+      "assistant": {
+-       "completed": Any<Number>,
++       "completed": 1791918483003,
+        "finish": "tool-calls",
+      },
+      "automationCount": 1,
+      "durableControl": {
+        "kind": "immediate_park",
+      },
+      "executionStarts": 1,
+      "executionSuccesses": 1,
+-     "part": ObjectContaining {
++     "part": {
+        "control": {
+          "kind": "immediate_park",
+        },
++       "id": "prt_g0VXxTJRs0000FXL22KE",
+        "status": "completed",
+      },
++     "requestFacts": [
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": "external_effect",
++         "event_type": "requested",
++         "fingerprint": "69275ccc328a3bb772eff718bbc3cef0a7279447e801249eaf7b50354222742d",
++         "id": "per_g0VXxTJSI00bZTcGs7F9",
++         "message_id": "msg_g0VXxTJFg00yDaFsZsq7",
++         "metadata": {
++           "choices": [
++             "allow_once",
++             "allow_task",
++             "deny",
++           ],
++           "projectGrantEligible": false,
++         },
++         "mode": "ask",
++         "outcome_slot": null,
++         "policy_revision": "20c24b43d83b829ea71caa52c3e708a287d67d773747692c1879ed47ee02a32a",
++         "project_id": "prj_hFF2Rj1oDch7e8m9sjcb",
++         "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++         "provider_id": "wait",
++         "provider_kind": "projected",
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": {
++           "effect_class": "external_effect",
++           "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++           "provider_id": "wait",
++           "provider_kind": "projected",
++           "resource": {
++             "arguments": {
++               "duration_ms": 1000,
++               "reason": "verify cross-process Tool-result recovery",
++             },
++             "arguments_sha256": "c34a2d5a19fe6233ee7ffb41e1741ebd8b4c46601193c2603759098328d94189",
++             "operation": "wait",
++             "scope_type": "provider",
++           },
++           "tool_name": "wait",
++         },
++         "scope_version": "2",
++         "session_id": "ses_-zUS2WgkdzzXE6F0ykSl",
++         "source_event_id": null,
++         "summary": "wait (external_effect)",
++         "task_id": "tsk_g00VXxTJ5O00M71ix53p",
++         "time_created": 1791918476686,
++         "tool_call_id": "call_process_permission_wait",
++         "tool_name": "wait",
++       },
++       {
++         "actor_id": "process-part-cut",
++         "attempt_id": null,
++         "decision_scope": "invocation",
++         "decision_slot": "per_hwWOltRjVzkcijaSNUp9",
++         "effect_class": null,
++         "event_type": "allowed_once",
++         "fingerprint": null,
++         "id": "per_g0VXxTKDP00wwpkr6leP",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918479607,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_h6UZmxOrOPF91ZJNtK9v",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_started",
++         "fingerprint": null,
++         "id": "per_g0VXxTKMj00LJ18N6eSX",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": "per_g0VXxTKDP00wwpkr6leP",
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918480185,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_h6UZmxOrOPF91ZJNtK9v",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_succeeded",
++         "fingerprint": null,
++         "id": "per_g0VXxTKMq00p2JDu71Jw",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": "per_h6UZmxOrOPF91ZJNtK9v",
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918480192,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "stale",
++         "fingerprint": null,
++         "id": "per_g0VXxTL6N00cT9JfNVbD",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": "The continuation reached its persisted conclusion",
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918483015,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++     ],
+      "resultCount": 1,
++     "resultFacts": [
++       {
++         "attempt_id": "per_h6UZmxOrOPF91ZJNtK9v",
++         "result": {
++           "kind": "json",
++           "value": {
++             "metadata": {
++               "aborted": false,
++               "jobID": "atm_hAfN6u5hQkyTgVEnvqLS",
++               "mode": "task",
++               "nextRun": 1791918481188,
++               "nonblocking": true,
++               "opencorvusToolResultControl": {
++                 "kind": "immediate_park",
++               },
++               "requestedMs": 1000,
++             },
++             "output": "Scheduled nonblocking task wait atm_hAfN6u5hQkyTgVEnvqLS for 2026-10-13T19:08:01.188Z (requested 1000ms). Reason: verify cross-process Tool-result recovery. End this turn unless another real scheduler decision is immediately responsible; the scheduled wake will re-read current evidence. This is a scheduled park decision; do not poll with another wait.",
++             "title": "Wait Scheduled",
++           },
++         },
++         "time_created": 1791918480192,
++       },
++     ],
++     "toolRequest": {
++       "data": {
++         "callID": "call_process_permission_wait",
++         "input": {
++           "duration_ms": 1000,
++           "reason": "verify cross-process Tool-result recovery",
++         },
++         "time": {
++           "start": 1791918476660,
++         },
++         "tool": "wait",
++         "type": "tool-request",
++       },
++       "id": "prt_g0VXxTJRs0000FXL22KE",
++       "message_id": "msg_g0VXxTJFg00yDaFsZsq7",
++       "time_created": 1791918476661,
++     },
+    },
+    "second": {
+      "assistant": {
+-       "completed": Any<Number>,
++       "completed": 1791918483003,
+        "finish": "tool-calls",
+      },
+      "automationCount": 1,
+      "durableControl": {
+        "kind": "immediate_park",
+      },
+      "executionStarts": 1,
+      "executionSuccesses": 1,
+-     "part": ObjectContaining {
++     "part": {
+        "control": {
+          "kind": "immediate_park",
+        },
++       "id": "prt_g0VXxTJRs0000FXL22KE",
+        "status": "completed",
+      },
++     "requestFacts": [
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": "external_effect",
++         "event_type": "requested",
++         "fingerprint": "69275ccc328a3bb772eff718bbc3cef0a7279447e801249eaf7b50354222742d",
++         "id": "per_g0VXxTJSI00bZTcGs7F9",
++         "message_id": "msg_g0VXxTJFg00yDaFsZsq7",
++         "metadata": {
++           "choices": [
++             "allow_once",
++             "allow_task",
++             "deny",
++           ],
++           "projectGrantEligible": false,
++         },
++         "mode": "ask",
++         "outcome_slot": null,
++         "policy_revision": "20c24b43d83b829ea71caa52c3e708a287d67d773747692c1879ed47ee02a32a",
++         "project_id": "prj_hFF2Rj1oDch7e8m9sjcb",
++         "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++         "provider_id": "wait",
++         "provider_kind": "projected",
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": {
++           "effect_class": "external_effect",
++           "provider_digest": "e4181ad41fefea5ddadd48815fd8a88a9fa4744762006c296a3d7243ce8f5a67:7c457a9059e6adcd6686e226695fca0f80bdb7dd7945939b7d69c216e52f56be",
++           "provider_id": "wait",
++           "provider_kind": "projected",
++           "resource": {
++             "arguments": {
++               "duration_ms": 1000,
++               "reason": "verify cross-process Tool-result recovery",
++             },
++             "arguments_sha256": "c34a2d5a19fe6233ee7ffb41e1741ebd8b4c46601193c2603759098328d94189",
++             "operation": "wait",
++             "scope_type": "provider",
++           },
++           "tool_name": "wait",
++         },
++         "scope_version": "2",
++         "session_id": "ses_-zUS2WgkdzzXE6F0ykSl",
++         "source_event_id": null,
++         "summary": "wait (external_effect)",
++         "task_id": "tsk_g00VXxTJ5O00M71ix53p",
++         "time_created": 1791918476686,
++         "tool_call_id": "call_process_permission_wait",
++         "tool_name": "wait",
++       },
++       {
++         "actor_id": "process-part-cut",
++         "attempt_id": null,
++         "decision_scope": "invocation",
++         "decision_slot": "per_hwWOltRjVzkcijaSNUp9",
++         "effect_class": null,
++         "event_type": "allowed_once",
++         "fingerprint": null,
++         "id": "per_g0VXxTKDP00wwpkr6leP",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918479607,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_h6UZmxOrOPF91ZJNtK9v",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_started",
++         "fingerprint": null,
++         "id": "per_g0VXxTKMj00LJ18N6eSX",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": "per_g0VXxTKDP00wwpkr6leP",
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918480185,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": "per_h6UZmxOrOPF91ZJNtK9v",
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "execution_succeeded",
++         "fingerprint": null,
++         "id": "per_g0VXxTKMq00p2JDu71Jw",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": "per_h6UZmxOrOPF91ZJNtK9v",
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": null,
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918480192,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++       {
++         "actor_id": null,
++         "attempt_id": null,
++         "decision_scope": null,
++         "decision_slot": null,
++         "effect_class": null,
++         "event_type": "stale",
++         "fingerprint": null,
++         "id": "per_g0VXxTL6N00cT9JfNVbD",
++         "message_id": null,
++         "metadata": null,
++         "mode": null,
++         "outcome_slot": null,
++         "policy_revision": null,
++         "project_id": null,
++         "provider_digest": null,
++         "provider_id": null,
++         "provider_kind": null,
++         "reason": "The continuation reached its persisted conclusion",
++         "request_id": "per_hwWOltRjVzkcijaSNUp9",
++         "scope": null,
++         "scope_version": null,
++         "session_id": null,
++         "source_event_id": null,
++         "summary": null,
++         "task_id": null,
++         "time_created": 1791918483015,
++         "tool_call_id": null,
++         "tool_name": null,
++       },
++     ],
+      "resultCount": 1,
++     "resultFacts": [
++       {
++         "attempt_id": "per_h6UZmxOrOPF91ZJNtK9v",
++         "result": {
++           "kind": "json",
++           "value": {
++             "metadata": {
++               "aborted": false,
++               "jobID": "atm_hAfN6u5hQkyTgVEnvqLS",
++               "mode": "task",
++               "nextRun": 1791918481188,
++               "nonblocking": true,
++               "opencorvusToolResultControl": {
++                 "kind": "immediate_park",
++               },
++               "requestedMs": 1000,
++             },
++             "output": "Scheduled nonblocking task wait atm_hAfN6u5hQkyTgVEnvqLS for 2026-10-13T19:08:01.188Z (requested 1000ms). Reason: verify cross-process Tool-result recovery. End this turn unless another real scheduler decision is immediately responsible; the scheduled wake will re-read current evidence. This is a scheduled park decision; do not poll with another wait.",
++             "title": "Wait Scheduled",
++           },
++         },
++         "time_created": 1791918480192,
++       },
++     ],
++     "toolRequest": {
++       "data": {
++         "callID": "call_process_permission_wait",
++         "input": {
++           "duration_ms": 1000,
++           "reason": "verify cross-process Tool-result recovery",
++         },
++         "time": {
++           "start": 1791918476660,
++         },
++         "tool": "wait",
++         "type": "tool-request",
++       },
++       "id": "prt_g0VXxTJRs0000FXL22KE",
++       "message_id": "msg_g0VXxTJFg00yDaFsZsq7",
++       "time_created": 1791918476661,
++     },
+    },
+  }
+
+- Expected  - 4
++ Received  + 436
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\tool-result-control-protocol.test.ts:3095:27)
+(fail) single Tool-result turn-control protocol > recovers a projected permission wait exactly once across the part-boundary operating-system process cut [11556.74ms]
+(pass) single Tool-result turn-control protocol > replays a completed parked ToolPart into its assistant exactly once after the Part-to-message cut [1603.86ms]
+(pass) single Tool-result turn-control protocol > requires a reset for a legacy successful permission result whose ToolPart is still recoverable [1944.19ms]
+(pass) single Tool-result turn-control protocol > accepts a completed historical ToolPart because it has no recoverable turn disposition [1722.50ms]
+(pass) single Tool-result turn-control protocol > rejects a real post-execution plugin that removes or changes host-owned turn control [3226.71ms]
+
+2 tests failed:
+(fail) single Tool-result turn-control protocol > recovers a projected permission wait exactly once across the result-boundary operating-system process cut [17134.04ms]
+(fail) single Tool-result turn-control protocol > recovers a projected permission wait exactly once across the part-boundary operating-system process cut [11556.74ms]
+
+ 34 pass
+ 2 fail
+ 117 expect() calls
+Ran 36 tests across 1 file. [140.04s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\tool-result-control-protocol.test.ts
+[9/9] DONE test/tool-result-control-protocol.test.ts exit=1 duration=140.28s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\tool-result-control-protocol.test.ts
+error: script "test" exited with code 1
