@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [382 工具结果恢复断点](source-result-recovery-plan-382.md)：[真实持久状态与失败合同](source-result-recovery-382/README.md)。
+
 - [381 Sources 并发持久化](source-persistence-plan-381.md)：[功能与实页证据](source-persistence-381/README.md)。
 
 - [379 网页转换链接目标](source-link-base-plan-379.md)：[真实引用与点击证据](source-link-base-379/README.md)。

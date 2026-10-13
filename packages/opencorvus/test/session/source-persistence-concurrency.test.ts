@@ -75,6 +75,7 @@ describe("source commit identity", () => {
       await processor.ensureToolPart("source_b", "webfetch", { url: "https://example.com/shared" })
       await Promise.all(["source_a", "source_b"].map((call) => processor.completeRecoveredToolPart({
         toolCallID: call,
+        toolInput: { url: "https://example.com/shared" },
         output: { output: "actual local result", title: call, metadata: {}, sources: [source("shared")] },
       })))
       const reloaded = await MessageStore.get({ sessionID: scope.sessionID, messageID: scope.messageID })

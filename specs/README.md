@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [382 工具结果恢复断点](records/2026-10/2026-10-13-source-result-recovery-382.md)：两种授权模式的来源丢失与成功结果误判证据，生产修复待继续。
+
 - [381 Sources 并发持久化](records/2026-10/2026-10-13-source-persistence-381.md)：规范来源唯一性、消息归属与事务发布。
 
 - [模型列表键盘前缀导航](records/2026-10/2026-10-13-model-keyboard.md)：可见模型名称与键盘导航的一致性。
