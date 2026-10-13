@@ -16,6 +16,7 @@ import { decodeDataUrlBase64Bytes, decodeTextBytes, isDecodableText } from "./te
 import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { CompactionHandoff } from "./compaction-handoff"
 import { sideChatIdentity } from "@/chat/side-chat-identity"
+import { MessageCopyEvidence } from "./copy-evidence"
 import {
   FailureOccurrenceAnchor,
   ProcessorObservationFailure,
@@ -588,6 +589,7 @@ export namespace Message {
     sessionID: z.string(),
     orderKey: z.string().optional(),
     author: z.string().min(1),
+    copySources: MessageCopyEvidence.Schema.optional(),
   })
 
   export const User = Base.extend({

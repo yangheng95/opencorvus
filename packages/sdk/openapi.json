@@ -314,6 +314,9 @@
             ],
             "type": "object"
           },
+          "copySources": {
+            "$ref": "#/components/schemas/MessageCopyEvidence"
+          },
           "cost": {
             "type": "number"
           },
@@ -12408,6 +12411,55 @@
         ],
         "type": "object"
       },
+      "MessageCopyEvidence": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "partID": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sources": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "messageID": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "partID": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sessionID": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sessionID",
+                  "messageID",
+                  "partID",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "partID",
+            "sources"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
       "MessageOutputLengthError": {
         "properties": {
           "data": {
@@ -17716,6 +17768,9 @@
             "minLength": 1,
             "type": "string"
           },
+          "copySources": {
+            "$ref": "#/components/schemas/MessageCopyEvidence"
+          },
           "extra": {
             "additionalProperties": {},
             "propertyNames": {
@@ -19095,6 +19150,9 @@
                 "minLength": 1,
                 "type": "string"
               },
+              "copySources": {
+                "$ref": "#/components/schemas/MessageCopyEvidence"
+              },
               "extra": {
                 "additionalProperties": {},
                 "propertyNames": {
@@ -19276,6 +19334,9 @@
                   "write_errors"
                 ],
                 "type": "object"
+              },
+              "copySources": {
+                "$ref": "#/components/schemas/MessageCopyEvidence"
               },
               "cost": {
                 "type": "number"
@@ -98597,6 +98658,9 @@
                           ],
                           "type": "object"
                         },
+                        "copySources": {
+                          "$ref": "#/components/schemas/MessageCopyEvidence"
+                        },
                         "cost": {
                           "type": "number"
                         },
@@ -105166,6 +105230,9 @@
                             "write_errors"
                           ],
                           "type": "object"
+                        },
+                        "copySources": {
+                          "$ref": "#/components/schemas/MessageCopyEvidence"
                         },
                         "cost": {
                           "type": "number"

@@ -1,0 +1,44 @@
+$ bun script/run-tests.ts test/compaction-fork-lifecycle.test.ts test/compaction-evidence.test.ts
+[1/2] START test/compaction-fork-lifecycle.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) reconstructs the original anchor and retained tail after fork [2265.00ms]
+(pass) reconstructs the original anchor and retained tail after side-chat [2152.79ms]
+(pass) reports a typed integrity failure for a checkpoint pointing outside copied history [3166.71ms]
+(pass) recovers literal source citations after successive fork copies [3265.98ms]
+(pass) recovers literal source citations after successive side-chat copies [3948.34ms]
+(pass) reports a changed copied source while reading its current exact content [2882.10ms]
+{"scenario":"copy-evidence-depth","copies":32,"chars":136000,"elapsedMs":1555}
+(pass) preserves a deep copied evidence chain while fencing another Project [6627.59ms]
+(pass) keeps historical execution references read-only in an independent side context [2739.53ms]
+(pass) copies the completed reply's exact accepted steering batch [5477.24ms]
+(pass) retains independent side-chat source evidence when deleting its standalone source [4059.08ms]
+(pass) rolls back physical deletion when an independent copy commits before its fence [4024.74ms]
+(pass) physically deletes a standalone source when only another Project declares a reference [7006.25ms]
+
+ 12 pass
+ 0 fail
+ 48 expect() calls
+Ran 12 tests across 1 file. [52.35s]
+[1/2] DONE test/compaction-fork-lifecycle.test.ts exit=0 duration=53.23s
+[2/2] START test/compaction-evidence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction evidence fidelity > recovers a persisted megabyte file result across database reopen with isolated project sources [51648.39ms]
+(pass) compaction evidence fidelity > exposes exact text, input and trace locators in the bounded transcript [2.68ms]
+(pass) compaction evidence fidelity > recovers omitted middle text and tool input by exact Part and field [1.56ms]
+(pass) compaction evidence fidelity > returns exact output, typed failure and precise pagination endpoints [1.08ms]
+(pass) compaction evidence fidelity > pages Unicode evidence with exact code-unit cursors and original provenance [5.95ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_other_session/output/0 [3.86ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_text/output/0 [1.36ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_tool/failure/0 [0.72ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_tool/output/1000 [0.70ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_text/text/35028 [0.84ms]
+
+ 10 pass
+ 0 fail
+ 92 expect() calls
+Ran 10 tests across 1 file. [57.88s]
+[2/2] DONE test/compaction-evidence.test.ts exit=0 duration=60.19s

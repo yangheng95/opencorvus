@@ -88,6 +88,7 @@ export type AssistantMessage = {
       part_id: string
     }>
   }
+  copySources?: MessageCopyEvidence
   cost: number
   error?:
     | ProviderAuthError
@@ -3546,6 +3547,16 @@ export type MessageAbortedError = {
   name: "MessageAbortedError"
 }
 
+export type MessageCopyEvidence = Array<{
+  partID: string
+  sources: Array<{
+    messageID: string
+    partID: string
+    sessionID: string
+    sha256: string
+  }>
+}>
+
 export type MessageOutputLengthError = {
   data: {
     effectiveOutputLimit?: number
@@ -5169,6 +5180,7 @@ export type TaskMessageUserInfo = {
   agentID: string
   author: string
   channel: string
+  copySources?: MessageCopyEvidence
   extra?: {
     [key: string]: unknown
   }
@@ -5610,6 +5622,7 @@ export type VisibleMessage =
   | {
       agent: string
       author: string
+      copySources?: MessageCopyEvidence
       extra?: {
         [key: string]: unknown
       }
@@ -5655,6 +5668,7 @@ export type VisibleMessage =
           part_id: string
         }>
       }
+      copySources?: MessageCopyEvidence
       cost: number
       error?:
         | ProviderAuthError
@@ -28341,6 +28355,7 @@ export type SessionCommandResponses = {
           part_id: string
         }>
       }
+      copySources?: MessageCopyEvidence
       cost: number
       error?:
         | ProviderAuthError
@@ -29988,6 +30003,7 @@ export type SessionPromptResponses = {
           part_id: string
         }>
       }
+      copySources?: MessageCopyEvidence
       cost: number
       error?:
         | ProviderAuthError

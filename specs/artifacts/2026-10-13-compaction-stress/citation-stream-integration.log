@@ -1,0 +1,23 @@
+$ bun script/run-tests.ts test/memory/session-memory.test.ts
+[1/1] START test/memory/session-memory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session MEMORY.MD compaction checkpoint > persists automatic compaction control in canonical JSON form [1751.97ms]
+(pass) Session MEMORY.MD compaction checkpoint > parks a contended compaction control until its durable lease expires and recovers it once [1984.43ms]
+(pass) Session MEMORY.MD compaction checkpoint > reconstructs, advances, and projects the latest successful compaction exactly once [2282.60ms]
+(pass) Session MEMORY.MD compaction checkpoint > runs the real compaction integration and exposes its checkpoint to the next compaction only [1710.43ms]
+(pass) Session MEMORY.MD compaction checkpoint > continues original evidence through the provider tool loop into one checkpoint [1834.48ms]
+(pass) Session MEMORY.MD compaction checkpoint > continues copy evidence through the provider tool loop into one checkpoint [1805.90ms]
+(pass) Session MEMORY.MD compaction checkpoint > settles an empty compaction continuation as one typed failed control [1656.99ms]
+(pass) Session MEMORY.MD compaction checkpoint > preserves compaction failure diagnostics, settlement authority, and atomic publication [1499.61ms]
+(pass) Session MEMORY.MD compaction checkpoint > returns the canonical never-compacted document state through tool and HTTP surfaces [2491.74ms]
+(pass) Session MEMORY.MD compaction checkpoint > keeps the last completed checkpoint when a newer summary attempt is incomplete [1590.42ms]
+(pass) Session MEMORY.MD compaction checkpoint > reconstructs a forked checkpoint and enforces project ownership at the HTTP boundary [3812.34ms]
+(pass) Session MEMORY.MD compaction checkpoint > serves the bound checkpoint through the read-only tool and owned HTTP contract [2115.39ms]
+
+ 12 pass
+ 0 fail
+ 37 expect() calls
+Ran 12 tests across 1 file. [29.22s]
+[1/1] DONE test/memory/session-memory.test.ts exit=0 duration=29.83s

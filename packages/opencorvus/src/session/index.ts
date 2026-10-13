@@ -30,6 +30,7 @@ import { Project } from "../project/project"
 import { sessionDirectoryFilterCondition } from "./directory-filter"
 import { Log } from "../util/log"
 import { Message } from "./message"
+import { MessageCopyEvidence } from "./copy-evidence"
 import { MessageStore } from "./message-store"
 import { SessionEvents } from "./events"
 import { Instance } from "../project/instance"
@@ -462,6 +463,7 @@ export namespace Session {
 
       for (const msg of msgs) {
         const newID = idMap.get(msg.info.id)!
+        const partIDs = new Map(msg.parts.map((part) => [part.id, Identifier.ascending("part")]))
 
         const parentID =
           msg.info.role === "assistant" ? copiedMessageID(msg.info.parentID, `Message ${msg.info.id}`) : undefined
@@ -470,6 +472,7 @@ export namespace Session {
           ...messageInfo,
           sessionID: prepared.id,
           id: newID,
+          copySources: MessageCopyEvidence.copy(msg, partIDs),
           ...(parentID && { parentID }),
           ...(msg.info.role === "assistant" && msg.info.acceptedInputMessageIDs
             ? {
@@ -479,7 +482,6 @@ export namespace Session {
               }
             : {}),
         } as Message.Info
-        const partIDs = new Map(msg.parts.map((part) => [part.id, Identifier.ascending("part")]))
         const clonedParts = msg.parts.map((part) => {
           const { orderKey: _clonedPartOrderKey, ...partInfo } = part
           const originalToolPartID = "toolPartID" in part ? part.toolPartID : undefined

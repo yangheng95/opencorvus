@@ -15,7 +15,9 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(resetMemoryDatabase)
 
-async function seed(brokenBoundary = false, historicalDescriptor = false) {
+async function seed(
+  options: { brokenBoundary?: boolean; historicalDescriptor?: boolean; citeEvidence?: boolean } = {},
+) {
   const session = await Session.create({ kind: "assistant", title: "Forked compaction evidence" })
   async function user(text: string, extra?: Message.User["extra"]) {
     const info = await Session.updateMessage({
@@ -70,7 +72,7 @@ async function seed(brokenBoundary = false, historicalDescriptor = false) {
   }
   const initial = await user(
     "Original durable request",
-    historicalDescriptor
+    options.historicalDescriptor
       ? {
           workerTurnDescriptor: {
             id: Identifier.ascending("worker_turn_descriptor"),
@@ -87,8 +89,9 @@ async function seed(brokenBoundary = false, historicalDescriptor = false) {
   )
   await fs.mkdir(path.dirname(outputPath), { recursive: true })
   await fs.writeFile(outputPath, full)
+  const toolPartID = Identifier.ascending("part")
   await Session.updatePart({
-    id: Identifier.ascending("part"),
+    id: toolPartID,
     sessionID: session.id,
     messageID: earlier.id,
     type: "tool",
@@ -99,15 +102,44 @@ async function seed(brokenBoundary = false, historicalDescriptor = false) {
       input: { path: "original-source" },
       title: "Original evidence",
       output: "Short stored preview",
-      metadata: { truncated: true, outputPath },
+      metadata: { truncated: true, outputPath, traceID: "FORK-EVIDENCE-317" },
       time: { start: 1, end: 2 },
     },
   })
+  if (options.citeEvidence) {
+    await Session.updatePart({
+      id: Identifier.ascending("part"),
+      messageID: earlier.id,
+      sessionID: session.id,
+      type: "tool",
+      tool: "read",
+      callID: "call_failed_source",
+      state: {
+        status: "error",
+        input: { path: "missing-source" },
+        failure: {
+          message: "Original source unavailable",
+          name: "EvidenceFailure",
+          kind: "EvidenceFailure",
+          originSite: "read",
+          classification: "tool-execution",
+        },
+        metadata: { traceID: "FORK-FAILURE-618" },
+        time: { start: 3, end: 4 },
+      },
+    })
+  }
   await Session.updateMessage({ ...earlier, finish: "stop", time: { ...earlier.time, completed: Date.now() } })
   const correction = await user("Current correction overrides the earlier value")
   const tail = await assistant(correction.id, "Latest verified evidence")
   await Session.updateMessage({ ...tail, finish: "stop", time: { ...tail.time, completed: Date.now() } })
-  const summary = await assistant(correction.id, "Checkpoint retains current correction and exact evidence", true)
+  const summary = await assistant(
+    correction.id,
+    options.citeEvidence
+      ? `Checkpoint retains exact evidence: ${toolPartID}, call_original_evidence, trace=FORK-EVIDENCE-317`
+      : "Checkpoint retains current correction and exact evidence",
+    true,
+  )
   const completed = await Session.updateMessage({
     ...summary,
     finish: "stop",
@@ -121,7 +153,7 @@ async function seed(brokenBoundary = false, historicalDescriptor = false) {
       messageID: completed.id,
       type: "compaction",
       auto: true,
-      anchor_id: brokenBoundary ? Identifier.ascending("message") : initial.id,
+      anchor_id: options.brokenBoundary ? Identifier.ascending("message") : initial.id,
       tail_start_id: tail.id,
     },
   })
@@ -168,10 +200,210 @@ test("reports a typed integrity failure for a checkpoint pointing outside copied
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const { session } = await seed(true)
+      const { session } = await seed({ brokenBoundary: true })
       await expect(Session.fork({ sessionID: session.id })).rejects.toMatchObject({
         name: "HostProcessingFaultError",
         message: expect.stringContaining("outside the copied history"),
+      })
+    },
+  })
+})
+
+async function readEvidence(reader: ReturnType<typeof CompactionEvidenceReader.create>, partID: string, field: string) {
+  let offset = 0
+  let content = ""
+  let result: Record<string, any>
+  do {
+    const response = (await reader.execute!(
+      { part_id: partID, field, offset, limit: 30_000 },
+      { toolCallId: "call_copy_evidence", messages: [], abortSignal: new AbortController().signal },
+    )) as { output: string }
+    result = JSON.parse(response.output)
+    content += result.content
+    offset = result.nextOffset
+  } while (offset !== null)
+  return { ...result!, content }
+}
+
+test.each(["fork", "side-chat"] as const)(
+  "recovers literal source citations after successive %s copies",
+  async (purpose) => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { session, full } = await seed({ citeEvidence: true })
+        const original = await Session.messages({ sessionID: session.id })
+        const sourceTool = original.flatMap((m) => m.parts).find((p) => p.type === "tool")!
+        const sourceText = original[0]!.parts.find((p) => p.type === "text")!
+        const sourceSummary = texts(original).at(-1)
+        const first = await Session.fork({ sessionID: session.id, purpose })
+        const firstTool = (await Session.messages({ sessionID: first.id }))
+          .flatMap((m) => m.parts)
+          .find((p) => p.type === "tool")!
+        const second = await Session.fork({ sessionID: first.id })
+        Database.close()
+        const copied = await Session.messages({ sessionID: second.id })
+        expect(texts(copied).at(-1)).toBe(sourceSummary)
+        const target = copied.flatMap((m) => m.parts).find((p) => p.type === "tool")!
+        const reader = CompactionEvidenceReader.create(copied)
+        for (const source of [sourceTool, firstTool]) {
+          expect(await readEvidence(reader, source.id, "output")).toMatchObject({
+            partID: target.id,
+            messageID: target.messageID,
+            requestedSource: { sessionID: source.sessionID, messageID: source.messageID, partID: source.id },
+            originalRole: "assistant",
+            originalAuthor: "chat",
+            callID: "call_original_evidence",
+            content: full,
+          })
+        }
+        expect(JSON.parse((await readEvidence(reader, sourceTool.id, "input")).content)).toEqual({
+          path: "original-source",
+        })
+        expect(JSON.parse((await readEvidence(reader, sourceTool.id, "metadata")).content)).toMatchObject({
+          state: { traceID: "FORK-EVIDENCE-317" },
+        })
+        const failed = original.flatMap((m) => m.parts).find((p) => p.type === "tool" && p.state.status === "error")!
+        expect(JSON.parse((await readEvidence(reader, failed.id, "failure")).content)).toEqual({
+          message: "Original source unavailable",
+          name: "EvidenceFailure",
+          kind: "EvidenceFailure",
+          originSite: "read",
+          classification: "tool-execution",
+        })
+        expect(await readEvidence(reader, sourceText.id, "text")).toMatchObject({
+          originalRole: "user",
+          originalAuthor: "user",
+          content: "Original durable request",
+        })
+        const prefix = await Session.fork({ sessionID: session.id, messageID: sourceTool.messageID })
+        const prefixReader = CompactionEvidenceReader.create(await Session.messages({ sessionID: prefix.id }))
+        await expect(readEvidence(prefixReader, sourceTool.id, "output")).rejects.toMatchObject({
+          code: "COMPACTION_EVIDENCE_INVALID",
+        })
+        const laterInput = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          agent: "chat",
+          model: { providerID: "local", modelID: "copy-contract" },
+          time: { created: Date.now() },
+        })
+        const laterPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          messageID: laterInput.id,
+          sessionID: session.id,
+          type: "text",
+          text: "Later source history stays outside the copied snapshot",
+        })
+        await expect(readEvidence(reader, laterPart.id, "text")).rejects.toMatchObject({
+          code: "COMPACTION_EVIDENCE_INVALID",
+        })
+      },
+    })
+  },
+)
+
+test("reports a changed copied source while reading its current exact content", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Mutable copy evidence" })
+      const info = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: session.id,
+        role: "user",
+        author: "user",
+        agent: "chat",
+        model: { providerID: "local", modelID: "copy-contract" },
+        time: { created: Date.now() },
+      })
+      const part = await Session.updatePart({
+        id: Identifier.ascending("part"),
+        sessionID: session.id,
+        messageID: info.id,
+        type: "text",
+        text: "Original draft",
+      })
+      const copy = await Session.fork({ sessionID: session.id })
+      const copiedPart = (await Session.messages({ sessionID: copy.id }))[0]!.parts[0]!
+      await Session.updatePart({ ...copiedPart, type: "text", text: "Explicitly edited draft" })
+      Database.close()
+      const reader = CompactionEvidenceReader.create(await Session.messages({ sessionID: copy.id }))
+      expect(await readEvidence(reader, copiedPart.id, "text")).toMatchObject({ content: "Explicitly edited draft" })
+      await expect(readEvidence(reader, part.id, "text")).rejects.toMatchObject({ code: "COMPACTION_EVIDENCE_STALE" })
+      const next = await Session.fork({ sessionID: copy.id })
+      const nextReader = CompactionEvidenceReader.create(await Session.messages({ sessionID: next.id }))
+      expect(await readEvidence(nextReader, copiedPart.id, "text")).toMatchObject({
+        content: "Explicitly edited draft",
+      })
+      await expect(readEvidence(nextReader, part.id, "text")).rejects.toMatchObject({
+        code: "COMPACTION_EVIDENCE_STALE",
+      })
+      await Session.removePart({ sessionID: copy.id, messageID: copiedPart.messageID, partID: copiedPart.id })
+      const removedReader = CompactionEvidenceReader.create(await Session.messages({ sessionID: copy.id }))
+      await expect(readEvidence(removedReader, part.id, "text")).rejects.toMatchObject({
+        code: "COMPACTION_EVIDENCE_STALE",
+      })
+    },
+  })
+})
+
+test("preserves a deep copied evidence chain while fencing another Project", async () => {
+  await using project = await memoryProject("copy-depth")
+  await using other = await memoryProject("copy-other")
+  const content = "Exact preserved requirement 中文😀; ".repeat(4000)
+  let originalPartID = ""
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      let session = await Session.create({ kind: "assistant", title: "Evidence ancestry pressure" })
+      const info = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: session.id,
+        role: "user",
+        author: "user",
+        agent: "chat",
+        model: { providerID: "local", modelID: "copy-contract" },
+        time: { created: Date.now() },
+      })
+      const part = await Session.updatePart({
+        id: Identifier.ascending("part"),
+        sessionID: session.id,
+        messageID: info.id,
+        type: "text",
+        text: content,
+      })
+      originalPartID = part.id
+      const started = performance.now()
+      for (let i = 0; i < 32; i++) session = await Session.fork({ sessionID: session.id })
+      Database.close()
+      const messages = await Session.messages({ sessionID: session.id })
+      expect(messages[0]!.info.copySources?.[0]?.sources.length).toBe(32)
+      const restored = await readEvidence(CompactionEvidenceReader.create(messages), part.id, "text")
+      expect(restored.content).toBe(content)
+      expect(restored.requestedSource).toEqual({ sessionID: info.sessionID, messageID: info.id, partID: part.id })
+      console.log(
+        JSON.stringify({
+          scenario: "copy-evidence-depth",
+          copies: 32,
+          chars: content.length,
+          elapsedMs: Math.round(performance.now() - started),
+        }),
+      )
+    },
+  })
+  await Instance.provide({
+    directory: other.path,
+    fn: async () => {
+      const { session } = await seed()
+      const copy = await Session.fork({ sessionID: session.id })
+      const reader = CompactionEvidenceReader.create(await Session.messages({ sessionID: copy.id }))
+      await expect(readEvidence(reader, originalPartID, "text")).rejects.toMatchObject({
+        code: "COMPACTION_EVIDENCE_INVALID",
       })
     },
   })
@@ -182,7 +414,7 @@ test("keeps historical execution references read-only in an independent side con
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const { session } = await seed(false, true)
+      const { session } = await seed({ historicalDescriptor: true })
       // A descriptor claim on an ordinary execution anchor requires real owned
       // authority. The same opaque historical reference in a side copy grants none.
       await expect(Message.filterCompacted(MessageStore.stream(session.id))).rejects.toMatchObject({

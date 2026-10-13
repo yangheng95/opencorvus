@@ -86,6 +86,32 @@ cross-Project isolation. They also exercise Session memory integration and
 accepted-input immutability. These results add **zero** remote requests and do
 not establish semantic model quality or whole-process crash recovery.
 
-Copied model-authored citations may still name original Message/Part identities;
-exact retrieval through those citations and ordinary Task-bound fork authority
-remain separate unverified contracts. No source text is silently rewritten.
+## Exact citations across copies
+
+[Citation baseline](citation-before.log) reproduces three failures for old Part
+identities after copying. [Final citation contracts](citation-final.log) exercise
+literal unchanged summary text, all readable fields through successive copies,
+32 generations of a 136,000-character source, edited-copy staleness, excluded and
+later source material, and another Project. Checks compare actual recovered
+content and typed errors; digest strings are not the test oracle. The source
+identity digest is only an integrity check against a fixed copy-time payload.
+
+The current copier records exact ancestry on the canonical Message, and the
+reader resolves that ancestry only to Parts present in the bound snapshot. No
+old-ID lookup expands to another Session's live history. Copies predating the
+new provenance field still lack that proof and return the explicit scope error.
+The [SDK generation](citation-sdk-build.log) synchronizes the public message
+contract. This work adds zero real Provider requests. Ordinary Task-bound fork
+authority, real-model semantic continuation and crash recovery remain separate
+unverified requirements.
+
+[Streaming-loop integration](citation-stream-integration.log) uses a scripted
+streamed model to request the old Part ID through the production compaction
+tool dispatcher, processor, persisted Tool result and final checkpoint. The
+second model step receives the actual copied source bytes and current identity.
+This proves local integration of the alias contract, not remote model reasoning.
+
+[Compaction integrity regression](citation-integrity.log) verifies all 13 budget,
+projection, completed/incomplete/nonshrinking checkpoint and local HTTP streaming
+contracts with the updated Tool declaration. Together with the final reader/copy
+and memory runs, this continuation has 47 distinct passing focused tests.

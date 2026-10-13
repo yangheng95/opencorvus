@@ -527,12 +527,12 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
     })
   })
 
-  test("continues a compacted reader result through the real provider tool loop into one checkpoint", async () => {
+  test.each(["original", "copy"] as const)("continues %s evidence through the provider tool loop into one checkpoint", async (mode) => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "assistant", title: "Compaction reader tool loop" })
+        let session = await Session.create({ kind: "assistant", title: "Compaction reader tool loop" })
         const source = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
@@ -586,7 +586,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           time: { ...prior.time, completed: prior.time.created },
           finish: "stop",
         })
-        const compactSource = await Session.updateMessage({
+        let compactSource = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
           role: "user",
@@ -602,6 +602,16 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           type: "text",
           text: "Continue from the tool-backed checkpoint.",
         })
+        let targetToolPartID = sourceToolPartID
+        if (mode === "copy") {
+          session = await Session.fork({ sessionID: session.id })
+          Database.close()
+          const copied = await Session.messages({ sessionID: session.id })
+          const tail = copied.at(-1)!.info
+          if (tail.role !== "user") throw new Error("Expected copied compaction input")
+          compactSource = tail
+          targetToolPartID = copied.flatMap((message) => message.parts).find((part) => part.type === "tool")!.id
+        }
         const control = SessionControl.create({
           sessionID: session.id,
           kind: "manual_summarize",
@@ -769,7 +779,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           stepStarts: 2,
           stepFinishes: 2,
           reasoning: "Read the authoritative result.",
-          readerOutput: expect.stringContaining(`"partID":"${sourceToolPartID}"`),
+          readerOutput: expect.stringContaining(`"partID":"${targetToolPartID}"`),
           visibleTexts: ["I will read the authoritative result before writing the checkpoint.", checkpoint],
           checkpointParts: { source: 0, summary: 1 },
           memory: { filename: "MEMORY.MD", sourceMessageID: summary.info.id, content: checkpoint },
@@ -794,6 +804,13 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           compactedEvents: [session.id],
           controlStatus: { status: "consumed" },
         })
+        if (mode === "copy" && reader?.type === "tool" && reader.state.status === "completed") {
+          expect(JSON.parse(reader.state.output)).toMatchObject({
+            partID: targetToolPartID,
+            requestedSource: { sessionID: prior.sessionID, messageID: prior.id, partID: sourceToolPartID },
+            content: sourceToolOutput,
+          })
+        }
       },
     })
   })

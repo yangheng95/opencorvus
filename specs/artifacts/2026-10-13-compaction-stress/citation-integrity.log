@@ -1,0 +1,24 @@
+$ bun script/run-tests.ts test/compaction-integrity.test.ts
+[1/1] START test/compaction-integrity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction request and continuation contracts > intersects input capacity with the actual combined-window output reservation [21.54ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail before-source and repeated continuation compaction [21594.43ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail after-source and repeated continuation compaction [15748.83ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail at-source and repeated continuation compaction [17672.07ms]
+(pass) compaction request and continuation contracts > prices compaction system, tools and binary images in the same request envelope [21.60ms]
+(pass) compaction request and continuation contracts > retains a completed assistant tool step and reconstructs the same tail [15056.87ms]
+(pass) compaction request and continuation contracts > bounded summary input keeps an exact readable result and attachment locator [4.81ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after tool-result growth [21782.97ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after step-system growth [5657.81ms]
+(pass) real local streaming compaction transport > publishes the completed contract through HTTP stream, processor and durable control [5251.38ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [4076.55ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [3075.35ms]
+(pass) real local streaming compaction transport > publishes the not_smaller contract through HTTP stream, processor and durable control [3314.04ms]
+
+ 13 pass
+ 0 fail
+ 83 expect() calls
+Ran 13 tests across 1 file. [151.78s]
+[1/1] DONE test/compaction-integrity.test.ts exit=0 duration=158.33s

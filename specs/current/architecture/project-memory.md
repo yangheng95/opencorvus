@@ -58,6 +58,19 @@ Project memory has three explicitly scoped authorities:
    historical provenance; current Task or descriptor bindings still require the
    full execution-authority checks. Model-authored citation text is unchanged.
 
+   Copied Messages expose `copySources` as exact Part ancestry, including earlier
+   copy generations. The reader indexes those explicit historical identities
+   against the copied Parts in its bound snapshot; it never queries the source
+   Session or grants access to uncopied or later source material. A historical
+   read reports both its requested source identity and the current copied Part.
+   The existing canonical digest primitive binds each origin to its copy-time
+   JSON payload and role/author. An edited/deleted copy returns
+   `COMPACTION_EVIDENCE_STALE` for that origin, while its current ID reads current
+   content; conflicting identities return `COMPACTION_EVIDENCE_INVALID`.
+   The digest validates fixed evidence identity, not functional quality, and
+   binds full-output metadata rather than externally mutable file contents.
+   No second payload store or inferred mapping for older copies is maintained.
+
    Deleting a source tree with a same-Project independent side-history reference
    uses the existing tombstone contract, retaining the original source files.
    Physical deletion rechecks that ownership after acquiring its admission
