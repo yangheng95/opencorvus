@@ -1,0 +1,51 @@
+$ bun script/run-tests.ts test/compaction-task-authority.test.ts test/compaction-fork-lifecycle.test.ts test/session/fork-atomic-transcript.test.ts
+[1/3] START test/compaction-task-authority.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) retains the exact Task authority and source evidence across three worker checkpoints [3393.60ms]
+(pass) reconstructs descriptor-backed Task evidence as independent side history [2293.04ms]
+(pass) returns a Task ownership conflict when copying root execution identity [2256.43ms]
+(pass) returns a Task ownership conflict when copying worker execution identity [2289.33ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [15.27s]
+[1/3] DONE test/compaction-task-authority.test.ts exit=0 duration=16.05s
+[2/3] START test/compaction-fork-lifecycle.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) reconstructs the original anchor and retained tail after fork [2036.09ms]
+(pass) reconstructs the original anchor and retained tail after side-chat [1755.67ms]
+(pass) reports a typed integrity failure for a checkpoint pointing outside copied history [1531.03ms]
+(pass) recovers literal source citations after successive fork copies [1976.65ms]
+(pass) recovers literal source citations after successive side-chat copies [1997.91ms]
+(pass) reports a changed copied source while reading its current exact content [2015.39ms]
+{"scenario":"copy-evidence-depth","copies":32,"chars":136000,"elapsedMs":1186}
+(pass) preserves a deep copied evidence chain while fencing another Project [4883.11ms]
+(pass) keeps historical execution references read-only in an independent side context [1603.75ms]
+(pass) copies the completed reply's exact accepted steering batch [1692.80ms]
+(pass) retains independent side-chat source evidence when deleting its standalone source [1694.83ms]
+(pass) rolls back physical deletion when an independent copy commits before its fence [1756.76ms]
+(pass) physically deletes a standalone source when only another Project declares a reference [3718.84ms]
+
+ 12 pass
+ 0 fail
+ 48 expect() calls
+Ran 12 tests across 1 file. [28.13s]
+[2/3] DONE test/compaction-fork-lifecycle.test.ts exit=0 duration=28.31s
+[3/3] START test/session/fork-atomic-transcript.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [2054.24ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [1531.61ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [1603.78ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [6.00s]
+[3/3] DONE test/session/fork-atomic-transcript.test.ts exit=0 duration=6.14s

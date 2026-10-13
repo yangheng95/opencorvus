@@ -70,6 +70,14 @@ Project memory has three explicitly scoped authorities:
    historical provenance; current Task or descriptor bindings still require the
    full execution-authority checks. Model-authored citation text is unchanged.
 
+   Normal transcript forks are limited to standalone Session ancestry. A
+   Task-bound root or worker returns `TaskBoundSessionForkError` (HTTP 409)
+   before a target is published; ownership is checked again under the copy
+   transaction. Copying history cannot manufacture the new child's dispatch,
+   descriptor or Task occurrence. An explicit independent side-chat still uses
+   the same copier and retains source locators as historical evidence. Actual
+   Task execution continues through its canonical dispatch/runtime contracts.
+
    Copied Messages expose `copySources` as exact Part ancestry, including earlier
    copy generations. The reader indexes those explicit historical identities
    against the copied Parts in its bound snapshot; it never queries the source

@@ -34,7 +34,7 @@
 
 - [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage.md)：协议、取消根因与横向验收。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：研究、投影根因、154 次真实请求、三轮保真与物理中断恢复验收。
+- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：研究、154 次真实请求、三轮保真、Task 复制归属与物理中断恢复验收。
 
 - [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
 

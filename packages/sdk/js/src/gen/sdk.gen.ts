@@ -209,6 +209,7 @@ import type {
   FormatterStatusResponses,
   GatewayCapabilitiesResponses,
   GatewayChannelMessageResponses,
+  GatewayControlActionErrors,
   GatewayControlActionResponses,
   GatewayControlMessageResponses,
   GatewayStatsResponses,
@@ -5981,7 +5982,11 @@ export class Control extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<GatewayControlActionResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      GatewayControlActionResponses,
+      GatewayControlActionErrors,
+      ThrowOnError
+    >({
       url: "/gateway/control/action",
       ...options,
       ...params,

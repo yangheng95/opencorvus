@@ -66,9 +66,10 @@ Unicode output files across database reopen, fence other-project Parts, verify
 complete exact reconstruction, and check typed scope/field/offset errors. Those
 results do not establish remote semantic performance on the full-file cases.
 
-Still unverified: ordinary Task-bound worker-fork authority, operating-system
-restart mid-compaction, parallel full Task/Mission workloads, broader model
-distribution, and measured Codex parity.
+Still unverified: operating-system restart mid-compaction, parallel full
+Task/Mission workloads, broader model distribution, and measured Codex parity.
+The Task-bound copy contract below qualifies history-copy ownership; it does
+not implement a new Task execution branch or certify the complete Task driver.
 
 ## Retained evidence lifetime
 
@@ -110,9 +111,9 @@ reader resolves that ancestry only to Parts present in the bound snapshot. No
 old-ID lookup expands to another Session's live history. Copies predating the
 new provenance field still lack that proof and return the explicit scope error.
 The [SDK generation](citation-sdk-build.log) synchronizes the public message
-contract. This work adds zero real Provider requests. Ordinary Task-bound fork
-authority remains a separate unverified requirement. Later semantic and physical
-process runs below extend coverage without certifying that Task lifecycle.
+contract. This work adds zero real Provider requests. Full Task continuation
+remains a separate unverified requirement. Later semantic, process and copy
+ownership runs extend coverage without certifying that complete Task lifecycle.
 
 [Streaming-loop integration](citation-stream-integration.log) uses a scripted
 streamed model to request the old Part ID through the production compaction
@@ -173,3 +174,33 @@ supervisor owns and joins each child. Inactivity timeout is 180 seconds of no
 stdout/stderr activity; the existing test-command resource deadline is separate.
 The fixed local model output proves persistence and recovery mechanics, not
 semantic reasoning, full application startup or Task/Mission scheduling.
+
+## Task-bound checkpoint and copy ownership
+
+[Task authority baseline](task-authority-baseline.log.gz) proves exact original
+worker authority through three authored checkpoints and reproduces a normal
+worker fork whose copied anchor names a descriptor belonging to the source
+Session. Its new Session lacks a descriptor, so compaction projection returns
+the precise authority error. The same baseline contains one checker expectation
+mistake: metadata is the documented `{part,state}` envelope, not a bare object.
+[Fork admission baseline](task-fork-before.log) records the missing typed
+ownership conflict; its first fixture case also exposes separately sampled
+creation timestamps, now corrected to one Task creation instant.
+
+[Focused contracts](task-authority-final.log) exercise actual Task/dispatch/
+descriptor persistence, checkpoint reconstruction, exact source reads and
+database reopen, plus ordinary copy/atomicity/citation regression. The canonical
+writer now returns `TaskBoundSessionForkError` for normal Task-root or worker
+forks. Explicit side-chat retains the source as independent history using the
+same copier. Strict current-worker authority remains intact. The change prevents
+publishing an invalid execution container; it does not synthesize a dispatch or
+add an alternative execution identity.
+
+[Public route contracts](task-fork-routes.log) cover actual HTTP Session/Gateway
+requests and the panel Tool, plus existing Mission ownership. These are backend
+contracts, not UI automated tests or a full Task lifecycle run. The
+[final six-case matrix](task-fork-complete.log) covers Task-root/worker copies
+both before and after compaction, alongside original authority and side history.
+Combined with the copy/atomicity/Mission regressions, 24 distinct tests pass.
+The [SDK build](task-authority-sdk-build.log) synchronizes error responses. This
+continuation consumes **zero** remote model requests; total remains 154/160.

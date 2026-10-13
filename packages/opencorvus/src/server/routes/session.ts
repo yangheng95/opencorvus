@@ -1670,7 +1670,11 @@ export const SessionRoutes = lazy(() =>
         operationId: "session.fork",
         responses: {
           200: { description: "200", content: { "application/json": { schema: resolver(Session.Info) } } },
-          409: MissionSessionAuthorityConflict,
+          409: namedErrorResponse(
+            "The source execution identity is owned by its Task or Mission",
+            "MissionSessionAuthorityError",
+            "TaskBoundSessionForkError",
+          ),
         },
       }),
       validator(
