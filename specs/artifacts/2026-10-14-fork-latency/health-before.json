@@ -1,0 +1,89 @@
+{
+  "target": "http://127.0.0.1:18521/global/health",
+  "samples": [
+    {
+      "startedAt": "2026-10-13T21:27:17.245Z",
+      "completedAt": "2026-10-13T21:27:17.288Z",
+      "durationMs": 40.64620000000001,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:18.300Z",
+      "completedAt": "2026-10-13T21:27:18.302Z",
+      "durationMs": 2.1731999999999516,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:19.318Z",
+      "completedAt": "2026-10-13T21:27:19.321Z",
+      "durationMs": 2.6886999999996988,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:20.338Z",
+      "completedAt": "2026-10-13T21:27:20.341Z",
+      "durationMs": 2.6028000000001157,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:21.364Z",
+      "completedAt": "2026-10-13T21:27:21.367Z",
+      "durationMs": 2.4356000000007043,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:22.372Z",
+      "completedAt": "2026-10-13T21:27:22.374Z",
+      "durationMs": 2.1736000000000786,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:23.380Z",
+      "completedAt": "2026-10-13T21:27:23.383Z",
+      "durationMs": 2.298800000000483,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:24.390Z",
+      "completedAt": "2026-10-13T21:27:24.392Z",
+      "durationMs": 1.8899000000001251,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:25.394Z",
+      "completedAt": "2026-10-13T21:27:25.397Z",
+      "durationMs": 3.099899999999252,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:26.404Z",
+      "completedAt": "2026-10-13T21:27:26.408Z",
+      "durationMs": 3.914600000000064,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:27.411Z",
+      "completedAt": "2026-10-13T21:27:27.413Z",
+      "durationMs": 1.5088999999989028,
+      "status": 200,
+      "healthy": true
+    },
+    {
+      "startedAt": "2026-10-13T21:27:28.422Z",
+      "completedAt": "2026-10-13T21:27:28.424Z",
+      "durationMs": 1.786999999998443,
+      "status": 200,
+      "healthy": true
+    }
+  ]
+}

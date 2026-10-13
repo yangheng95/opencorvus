@@ -1,0 +1,67 @@
+{
+  "count": 351,
+  "total": {
+    "durationMs": 5892.720700000013,
+    "beginMs": 4.387900000012451,
+    "bodyMs": 1755.7644,
+    "commitMs": 4132.5684
+  },
+  "top": [
+    {
+      "count": 82,
+      "durationMs": 5579.931199999995,
+      "beginMs": 1.6208000000078755,
+      "bodyMs": 1449.9571999999898,
+      "commitMs": 4128.353199999998,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at flush (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\delivery-transaction.ts:25:30)"
+    },
+    {
+      "count": 1,
+      "durationMs": 253.17419999999765,
+      "beginMs": 0.023600000000442378,
+      "bodyMs": 251.08109999999942,
+      "commitMs": 2.069499999997788,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\session.ts:1880:37)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\validator\\validator.js:81:18)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+323019658f5ed7d9\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\hono-base.js:308:31)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:925:45)"
+    },
+    {
+      "count": 264,
+      "durationMs": 57.91450000002442,
+      "beginMs": 2.6833000000115135,
+      "bodyMs": 53.18940000000657,
+      "commitMs": 2.041800000006333,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at accept (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\scheduler\\event-service.ts:539:28)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\scheduler\\event-service.ts:251:15)\n    at dispatchDurableTargets (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\index.ts:779:22)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\index.ts:891:17)\n    at async executeDurableRow (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\bus\\index.ts:879:19)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "count": 1,
+      "durationMs": 0.6018999999978405,
+      "beginMs": 0.014100000000325963,
+      "bodyMs": 0.5462999999981548,
+      "commitMs": 0.041499999999359716,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at transaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1654:31)\n    at runUnlocked (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:189:28)\n    at withKeyedLock (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\lock.ts:46:19)\n    at run (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:170:12)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:366:21)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1173:15)\n    at run (node:async_hooks:99:29)\n    at run (node:async_hooks:99:29)"
+    },
+    {
+      "count": 1,
+      "durationMs": 0.4709000000002561,
+      "beginMs": 0.007299999997485429,
+      "bodyMs": 0.45670000000245636,
+      "commitMs": 0.006900000000314321,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at transaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1654:31)\n    at runUnlocked (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:183:36)\n    at withKeyedLock (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\lock.ts:46:19)\n    at run (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:170:12)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:366:21)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1173:15)\n    at run (node:async_hooks:99:29)\n    at run (node:async_hooks:99:29)"
+    },
+    {
+      "count": 1,
+      "durationMs": 0.402299999997922,
+      "beginMs": 0.016399999996792758,
+      "bodyMs": 0.33990000000267173,
+      "commitMs": 0.0459999999984575,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at acquire (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\runtime\\durable-execution-capacity.ts:120:13)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\provider.ts:960:57)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@ai-sdk+provider-utils@5.0.59+68a1e3a0c4588df3\\node_modules\\@ai-sdk\\provider-utils\\dist\\index.js:3543:26)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@ai-sdk+provider-utils@5.0.59+68a1e3a0c4588df3\\node_modules\\@ai-sdk\\provider-utils\\dist\\index.js:3514:133)\n    at async doStream (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@ai-sdk+openai@4.0.92+68a1e3a0c4588df3\\node_modules\\@ai-sdk\\openai\\dist\\index.js:6924:54)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\ai@7.0.138+68a1e3a0c4588df3\\node_modules\\ai\\dist\\index.js:15861:45)\n    at async wrapStream (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\provider\\llm.ts:81:36)\n    at async doStream (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\ai@7.0.138+68a1e3a0c4588df3\\node_modules\\ai\\dist\\index.js:15862:30)"
+    },
+    {
+      "count": 1,
+      "durationMs": 0.22569999999905122,
+      "beginMs": 0.02239999999801512,
+      "bodyMs": 0.19380000000091968,
+      "commitMs": 0.009500000000116415,
+      "stack": "    at transaction (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\drizzle-orm@1.0.0-beta.20+9151dc89920f49e2\\node_modules\\drizzle-orm\\bun-sqlite\\session.js:37:15)\n    at immediateTransaction (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts:1684:31)\n    at init (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\memory\\project-memory-organizer.ts:434:16)\n    at InstanceBootstrap (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\bootstrap.ts:101:26)\n    at processTicksAndRejections (native:7:39)"
+    }
+  ]
+}

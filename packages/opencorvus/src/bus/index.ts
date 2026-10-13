@@ -22,7 +22,8 @@ import {
 } from "./bus.sql"
 import { Instance, runAsInstanceActivity, runOutsideInstanceContext } from "../project/instance"
 import { Identifier } from "@/id/id"
-import { ControlLeaseFenceLostError, acquireControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { ControlLeaseFenceLostError, acquireControlLeaseInTransaction, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, renewControlLease } from "@/engine/control-lease"
+import { commitDeliveryTransaction } from "./delivery-transaction"
 
 export namespace Bus {
   const log = Log.create({ service: "bus" })
@@ -659,7 +660,7 @@ export namespace Bus {
   }
 
   function settlePhase(id: string, phase: DurablePhase) {
-    Database.use((db) => db.insert(BusPublicationPhaseReceiptTable).values({
+    return commitDeliveryTransaction((db) => db.insert(BusPublicationPhaseReceiptTable).values({
       id: Identifier.deterministic("call", `bus-phase\0${id}\0${phase}`),
       occurrence_id: id,
       phase,
@@ -684,7 +685,7 @@ export namespace Bus {
       if (outcomes.some((receipt) => receipt.outcome === "ignored")) return "ignored" as const
       return outcomes.at(-1)?.outcome
     })
-    Database.immediateTransaction((db) => {
+    await commitDeliveryTransaction((db) => {
       const stale = db
         .select()
         .from(BusPublicationDeliveryTable)
@@ -741,12 +742,14 @@ export namespace Bus {
       if (prior === "succeeded" || prior === "ignored") continue
       const deliveryID = `${payload.occurrenceID}\0${phase}\0${target.id}`
       const ownerID = `bus:${runtimeSubscriptionID}`
-      const now = Date.now()
       // Receipts now end their own lease, so a live lease for this exact
       // delivery is a real concurrent owner rather than this runtime's own
       // leftover. Reusing one would have been a way of tolerating a lease that
       // nothing handed back.
-      const lease = acquireControlLease({ target: "bus_delivery", targetID: deliveryID, ownerOccurrenceID: ownerID, now, leaseMilliseconds: 30_000 })
+      const lease = await commitDeliveryTransaction((db) => acquireControlLeaseInTransaction(db, {
+        target: "bus_delivery", targetID: deliveryID, ownerOccurrenceID: ownerID,
+        now: Date.now(), leaseMilliseconds: 30_000,
+      }))
       if (!lease.acquired) {
         failures.push(new Error(`Durable Bus delivery ${deliveryID} is leased by another runtime`))
         continue
@@ -760,8 +763,8 @@ export namespace Bus {
           // is pointless. Anything else — a busy database, shutdown-in-progress
           // — is transient, and ending renewal on it would let a long delivery
           // outlive its lease over a hiccup. Renewal cannot lose to this
-          // delivery's own receipt: the release and clearInterval have no
-          // await between them.
+          // delivery's own receipt: its committed write resolves before the
+          // next timer callback, and the Promise continuation clears renewal.
           const fenceLost = error instanceof ControlLeaseFenceLostError
           log.warn("durable Bus delivery lease renewal failed", {
             deliveryID,
@@ -774,7 +777,7 @@ export namespace Bus {
       renewal.unref()
       try {
         await target.deliver()
-        Database.immediateTransaction((db) => {
+        await commitDeliveryTransaction((db) => {
           const settledAt = Date.now()
           const current = currentControlLeaseInTransaction(db, "bus_delivery", deliveryID)
           if (!current || current.id !== lease.lease.id || current.owner_occurrence_id !== ownerID || current.expires_at <= settledAt) throw new Error(`Durable Bus delivery ${deliveryID} lost its lease before receipt`)
@@ -783,7 +786,7 @@ export namespace Bus {
         })
       } catch (error) {
         const outcome = target.settleFailure ? "ignored" as const : "failed" as const
-        const settled = Database.immediateTransaction((db) => {
+        const settled = await commitDeliveryTransaction((db) => {
           const terminal = db.select({ outcome: BusPublicationDeliveryReceiptTable.outcome })
             .from(BusPublicationDeliveryReceiptTable)
             .where(and(
@@ -861,7 +864,7 @@ export namespace Bus {
     }
     if (failures.length === 1) throw failures[0]
     if (failures.length > 1) throw new AggregateError(failures, `Durable Bus ${phase} phase failed`)
-    settlePhase(payload.occurrenceID, phase)
+    await settlePhase(payload.occurrenceID, phase)
   }
 
   async function executeDurableRow(row: DurableRow, signal: AbortSignal) {

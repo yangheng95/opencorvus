@@ -1,0 +1,211 @@
+{
+  "source": "ses_-zUS2EY0ezzjFidQwBy1",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\project",
+  "copied": {
+    "route": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Clong-source-reading-406-live%5Cproject",
+    "method": "POST",
+    "startedAt": "2026-10-13T21:35:26.221Z",
+    "completedAt": "2026-10-13T21:35:36.049Z",
+    "durationMs": 9825.9243,
+    "status": 200,
+    "body": {
+      "id": "ses_-zUS1vYAQzzJO3JPoVhP",
+      "slug": "shiny-harbor",
+      "version": "local",
+      "projectID": "prj_hgzD0UvE0KaucpYh7k6L",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\project",
+      "title": "Side chat · 请独立完成一次逐条阅读，不委派其他agent、不写文件、不使用脚本批量读取。README.md恰好包含R01到R36共36条资料，每条4行。请从第一条开始...",
+      "kind": "assistant",
+      "metadata": {
+        "configOverlay": {},
+        "sideChat": {
+          "sourceSessionID": "ses_-zUS2EY0ezzjFidQwBy1",
+          "inheritedMessageIDs": [
+            "msg_g0VXy4Rpu005OXcql2Wu",
+            "msg_g0VXy4Rpu01c3V64JAkI",
+            "msg_g0VXy4Rpu02zZdLAsL2s",
+            "msg_g0VXy4Rpu03qJblG1TcA",
+            "msg_g0VXy4Rpu04Dk4YCDXmT",
+            "msg_g0VXy4Rpu05GnIelU69e",
+            "msg_g0VXy4Rpu06o01vNgaq5",
+            "msg_g0VXy4Rpu07av1KAv042",
+            "msg_g0VXy4Rpu08S3PgBeu0y",
+            "msg_g0VXy4Rpu09FoQSNGC1h",
+            "msg_g0VXy4Rpu0APBvUYz7S1",
+            "msg_g0VXy4Rpu0B0Vu5see49",
+            "msg_g0VXy4Rpu0C7r19MtQOy",
+            "msg_g0VXy4Rpu0DQyIp8RUrx",
+            "msg_g0VXy4Rpu0Ez1Lpa0lAj",
+            "msg_g0VXy4Rpu0FKKT0LkjfR",
+            "msg_g0VXy4Rpu0GaNvMUt28W",
+            "msg_g0VXy4Rpu0HxuHiwvLSL",
+            "msg_g0VXy4Rpu0INOrip1ESd",
+            "msg_g0VXy4Rpu0JBMpMDT0Hj",
+            "msg_g0VXy4Rpu0KKzR042ncA",
+            "msg_g0VXy4Rpu0LIgEHyMNfe",
+            "msg_g0VXy4Rpu0M5t1vVnKSI",
+            "msg_g0VXy4Rpu0N0YREgEwTV",
+            "msg_g0VXy4Rpu0O83sUU5ONJ",
+            "msg_g0VXy4Rpu0PtAyWEBX2Z",
+            "msg_g0VXy4Rpu0QdXbtEJnIL",
+            "msg_g0VXy4Rpu0RoPDLvMj3P",
+            "msg_g0VXy4Rpu0SDpagPSylx",
+            "msg_g0VXy4Rpu0Thu48G5RLy",
+            "msg_g0VXy4Rpu0UfR1GfIhsm",
+            "msg_g0VXy4Rpu0VPlWjaby43",
+            "msg_g0VXy4Rpu0Wld9NmUGg6",
+            "msg_g0VXy4Rpu0Xo7MjTXicP",
+            "msg_g0VXy4Rpu0YRhmDXmNKB",
+            "msg_g0VXy4Rpu0ZPZoDfFC4P",
+            "msg_g0VXy4Rpu0afaomkorvb",
+            "msg_g0VXy4Rpu0bod1cGRDb3"
+          ]
+        }
+      },
+      "permission": [
+        {
+          "permission": "delegate_agent",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_expert_squad_inspect",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task_artifacts",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_create_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_mission",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_work",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_send_task_message",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_respond_interaction",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_cancel_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_checks",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_select_workspace",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_delete_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "question",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "bash",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "read",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "glob",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "search_code",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "edit",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "write",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "apply_patch",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "todo",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "schedule",
+          "pattern": "*",
+          "action": "allow"
+        }
+      ],
+      "time": {
+        "created": 1791927327017,
+        "updated": 1791927327017
+      }
+    }
+  },
+  "healthy": {
+    "route": "/global/health",
+    "method": "GET",
+    "startedAt": "2026-10-13T21:35:26.362Z",
+    "completedAt": "2026-10-13T21:35:26.371Z",
+    "durationMs": 8.719499999999982,
+    "status": 200,
+    "body": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-live\\runtime\\data",
+        "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/home"
+      }
+    }
+  },
+  "boundary": "One real public atomic copy and one overlapping health read, without UI automation or data fabrication."
+}

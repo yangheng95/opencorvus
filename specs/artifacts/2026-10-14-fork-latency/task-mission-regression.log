@@ -1,0 +1,22 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\task-event-projection-contract.test.ts:
+(pass) projects normalized Part ownership and Protocol envelope identity into conversation transport [1824.14ms]
+(pass) projects each reused Session lifecycle event from its exact occurrence descriptor [2231.03ms]
+
+test\task-control-terminal-owner.test.ts:
+(pass) a local post-turn pipeline owns domain settlement until its exact terminal-success delivery [2092.46ms]
+(pass) a live peer terminal owner schedules recheck and then delivers its exact success [2193.44ms]
+(pass) a live peer terminal owner schedules recheck and then recovers partial after physical exit [2299.26ms]
+
+test\mission-execution-cross-process-reconciliation.test.ts:
+(pass) two backend processes join one exact operator request and reject accepted-input drift [22234.42ms]
+(pass) a peer process takes over the exact close occurrence after the fenced owner dies [11757.38ms]
+(pass) a peer close settles the exact live streamed Mission Prompt before committing closed [13981.21ms]
+(pass) a peer close wins the wake-before-bundle cross-process ordering with one typed terminal outcome [11760.13ms]
+(pass) a peer close wins the wake-blocked cross-process ordering with one typed terminal outcome [10087.02ms]
+
+ 10 pass
+ 0 fail
+ 27 expect() calls
+Ran 10 tests across 3 files. [82.20s]

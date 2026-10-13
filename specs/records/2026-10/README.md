@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [长历史分叉耗时](2026-10-14-fork-latency.md)：实际卡顿、共享调用栈与完整数据合同。
+
 - [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle.md)：独立真实矩阵与全局Auth接受影响调查。
 
 - [404 Task Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404.md)：真实长目录与同 Request 断流，先补证再修复。

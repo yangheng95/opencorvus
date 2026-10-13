@@ -1,0 +1,22 @@
+bun test v1.4.0 (34cbb9a40)
+
+test\bus-writer-cross-process.test.ts:
+(pass) concurrent durable Bus publications deliver exact values and preserve replay receipts [21285.54ms]
+
+test\session\fork-atomic-transcript.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [3266.26ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [2348.03ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [2446.52ms]
+
+test\storage\database-transaction-contract.test.ts:
+(pass) Database.transaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [326.44ms]
+(pass) Database.transaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [2.28ms]
+(pass) Database.transaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [2.66ms]
+(pass) Database.immediateTransaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [0.39ms]
+(pass) Database.immediateTransaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [1.23ms]
+(pass) Database.immediateTransaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [1.16ms]
+
+ 10 pass
+ 0 fail
+ 63 expect() calls
+Ran 10 tests across 3 files. [32.14s]

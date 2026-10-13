@@ -3,6 +3,7 @@ import z from "zod"
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
 import { GlobalBus } from "@/bus/global"
+import { BusPublicationPhaseReceiptTable } from "@/bus/bus.sql"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { createRightSidebarConversationSession } from "@/chat/session"
@@ -16,6 +17,17 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const ReceiptEvent = BusEvent.define("test.bus.durable-receipt", z.object({ value: z.string() }))
 const DerivedReceiptEvent = BusEvent.define("test.bus.derived-durable-receipt", z.object({ value: z.string() }))
+
+function completedPhases(occurrenceID: string) {
+  return Database.use(db => db.select({ phase: BusPublicationPhaseReceiptTable.phase })
+    .from(BusPublicationPhaseReceiptTable).where(eq(BusPublicationPhaseReceiptTable.occurrence_id, occurrenceID))
+    .all().map(row => row.phase).sort())
+}
+
+async function waitForPublication(occurrenceID: string) {
+  await waitFor(() => completedPhases(occurrenceID).length === 3)
+  expect(completedPhases(occurrenceID)).toEqual(["exact", "global", "wildcard"])
+}
 
 async function waitFor(condition: () => boolean, timeoutMs = 5_000) {
   const deadline = Date.now() + timeoutMs
@@ -42,43 +54,49 @@ describe("durable Bus publication outbox", () => {
     const derivedStarted = new Promise<void>((resolve) => (markDerivedStarted = resolve))
     let stopSource!: () => void
     let stopDerived!: () => void
+    const observed: string[] = []
+    let sourcePublication!: Bus.Publication
+    let derivedPublication!: Bus.Publication
     const provision = Instance.provide({
       directory: project.path,
       fn: () => {
         stopSource = Bus.subscribe(
           ReceiptEvent,
           async ({ properties }) => {
+            observed.push("source-started")
             markSourceStarted()
             await sourceBlocked
-            Bus.publishOwned(DerivedReceiptEvent, { value: properties.value })
+            observed.push("source-resumed")
+            derivedPublication = Bus.publishOwned(DerivedReceiptEvent, { value: properties.value })
           },
           { durableID: "test.derived-publication-source", effect: "idempotent_by_occurrence" },
         )
         stopDerived = Bus.subscribe(
           DerivedReceiptEvent,
           async () => {
+            observed.push("derived-started")
             markDerivedStarted()
             await derivedBlocked
+            observed.push("derived-resumed")
           },
           { durableID: "test.derived-publication-target", effect: "idempotent_by_occurrence" },
         )
-        Bus.publishOwned(ReceiptEvent, { value: "derived" })
+        sourcePublication = Bus.publishOwned(ReceiptEvent, { value: "derived" })
       },
     })
 
     await sourceStarted
-    let disposed = false
     const disposal = Bus.TestHooks.disposeOwnedState().then(() => {
-      disposed = true
+      observed.push("disposal-settled")
     })
     releaseSource()
     await derivedStarted
-    await Bun.sleep(25)
-    expect(disposed).toBe(false)
     releaseDerived()
     await provision
     await disposal
-    expect(Bus.TestHooks.outbox()).toEqual([])
+    expect(observed).toEqual(["source-started", "source-resumed", "derived-started", "derived-resumed", "disposal-settled"])
+    await waitForPublication(sourcePublication.occurrenceID)
+    await waitForPublication(derivedPublication.occurrenceID)
     stopDerived()
     stopSource()
   })
@@ -89,6 +107,7 @@ describe("durable Bus publication outbox", () => {
     const received = { first: [] as string[], second: [] as string[] }
     let stopFirst!: () => void
     let stopSecond!: () => void
+    const publications: Bus.Publication[] = []
     await Instance.provide({
       directory: first.path,
       fn: () => {
@@ -110,9 +129,9 @@ describe("durable Bus publication outbox", () => {
       },
     })
     try {
-      await Instance.provide({ directory: first.path, fn: () => Bus.publishOwned(ReceiptEvent, { value: "first" }) })
-      await Instance.provide({ directory: second.path, fn: () => Bus.publishOwned(ReceiptEvent, { value: "second" }) })
-      await waitFor(() => Bus.TestHooks.outbox().length === 0)
+      await Instance.provide({ directory: first.path, fn: () => { publications.push(Bus.publishOwned(ReceiptEvent, { value: "first" })) } })
+      await Instance.provide({ directory: second.path, fn: () => { publications.push(Bus.publishOwned(ReceiptEvent, { value: "second" })) } })
+      await Promise.all(publications.map(publication => waitForPublication(publication.occurrenceID)))
       expect(received).toEqual({ first: ["first"], second: ["second"] })
     } finally {
       stopFirst()
@@ -129,6 +148,8 @@ describe("durable Bus publication outbox", () => {
     let expectedProjectID = ""
     let observedProjectID = ""
     let unsubscribe!: () => void
+    const observed: string[] = []
+    let publication!: Bus.Publication
     const provision = Instance.provide({
       directory: project.path,
       fn: () => {
@@ -136,30 +157,30 @@ describe("durable Bus publication outbox", () => {
         unsubscribe = Bus.subscribe(
           ReceiptEvent,
           async () => {
+            observed.push("subscriber-started")
             markStarted()
             await blocked
             observedProjectID = Instance.project.id
+            observed.push("subscriber-resumed")
           },
           { durableID: "test.async-project-lease", effect: "idempotent_by_occurrence" },
         )
-        Bus.publishOwned(ReceiptEvent, { value: "retain-lease" })
+        publication = Bus.publishOwned(ReceiptEvent, { value: "retain-lease" })
       },
     })
     await started
     unsubscribe()
-    let disposed = false
     const disposal = Instance.disposeAll().then(() => {
-      disposed = true
+      observed.push("disposal-settled")
     })
-    await Bun.sleep(25)
-    expect(disposed).toBe(false)
     release()
     await provision
     await disposal
-    expect({ observedProjectID, outbox: Bus.TestHooks.outbox() }).toEqual({
+    expect({ observedProjectID, observed }).toEqual({
       observedProjectID: expectedProjectID,
-      outbox: [],
+      observed: ["subscriber-started", "subscriber-resumed", "disposal-settled"],
     })
+    await waitForPublication(publication.occurrenceID)
   })
 
   test("cancels a real durable subscriber at shutdown and replays its retained receipt in a successor", async () => {
@@ -232,7 +253,8 @@ describe("durable Bus publication outbox", () => {
         }
       },
     })
-    expect({ replayed, outbox: Bus.TestHooks.outbox() }).toEqual({ replayed: "shutdown-replay", outbox: [] })
+    expect(replayed).toBe("shutdown-replay")
+    await waitForPublication(publication.occurrenceID)
   })
 
   test("recovers a Message source commit with the same occurrence after a successor runtime starts", async () => {
@@ -255,7 +277,7 @@ describe("durable Bus publication outbox", () => {
             },
           },
         })
-        await waitFor(() => Bus.TestHooks.outbox().length === 0)
+        await Promise.all(Bus.TestHooks.outbox().map(row => waitForPublication(row.occurrence_id)))
         using _interruption = Bus.TestHooks.suppressAutomaticDurableDrain()
         messageID = Identifier.ascending("message")
         await Session.updateMessage({
@@ -293,16 +315,8 @@ describe("durable Bus publication outbox", () => {
         )
         try {
           Bus.resumeDurablePublications()
-          const deadline = Date.now() + 5_000
-          while (Bus.TestHooks.outbox().some((row) => row.occurrence_id === occurrenceID) && Date.now() < deadline) {
-            await Bun.sleep(10)
-          }
-          expect({
-            occurrence: Bus.TestHooks.outbox().find((row) => row.occurrence_id === occurrenceID),
-            deliveries: Bus.TestHooks.deliveries(occurrenceID),
-            received,
-            owned: Bus.TestHooks.ownedPublications(),
-          }).toEqual({ occurrence: undefined, deliveries: [], received: [occurrenceID], owned: [] })
+          await waitForPublication(occurrenceID)
+          expect(received).toEqual([occurrenceID])
         } finally {
           unsubscribe()
         }
@@ -335,20 +349,8 @@ describe("durable Bus publication outbox", () => {
         try {
           const publication = Bus.publishOwned(ReceiptEvent, { value: "one-occurrence" })
           await publication.catch(() => undefined)
-          const deadline = Date.now() + 5_000
-          while (
-            Bus.TestHooks.outbox().some((row) => row.occurrence_id === publication.occurrenceID) &&
-            Date.now() < deadline
-          ) {
-            await Bun.sleep(10)
-          }
-          expect({
-            occurrence: Bus.TestHooks.outbox().find((row) => row.occurrence_id === publication.occurrenceID),
-            deliveries: Bus.TestHooks.deliveries(publication.occurrenceID),
-            settledCalls,
-            transientCalls,
-            owned: Bus.TestHooks.ownedPublications(),
-          }).toEqual({ occurrence: undefined, deliveries: [], settledCalls: 1, transientCalls: 2, owned: [] })
+          await waitForPublication(publication.occurrenceID)
+          expect({ settledCalls, transientCalls }).toEqual({ settledCalls: 1, transientCalls: 2 })
         } finally {
           settled()
           transient()
@@ -395,10 +397,10 @@ describe("durable Bus publication outbox", () => {
           })
           release()
           await Promise.all([first, second])
-          expect({ calls, maxConcurrent, outbox: Bus.TestHooks.outbox() }).toEqual({
+          await waitForPublication(accepted.occurrenceID)
+          expect({ calls, maxConcurrent }).toEqual({
             calls: 1,
             maxConcurrent: 1,
-            outbox: [],
           })
         } finally {
           release()
@@ -427,14 +429,11 @@ describe("durable Bus publication outbox", () => {
         try {
           const accepted = Bus.publishOwned(ReceiptEvent, { value: "global-projection-is-not-a-gate" })
           await accepted
-          const deadline = Date.now() + 5_000
-          while (Bus.TestHooks.outbox().length > 0 && Date.now() < deadline) await Bun.sleep(10)
+          await waitForPublication(accepted.occurrenceID)
           expect({
-            outbox: Bus.TestHooks.outbox(),
-            owners: Bus.TestHooks.ownedPublications(),
             successfulProjectionCalls,
             failedProjectionCalls,
-          }).toEqual({ outbox: [], owners: [], successfulProjectionCalls: 1, failedProjectionCalls: 1 })
+          }).toEqual({ successfulProjectionCalls: 1, failedProjectionCalls: 1 })
         } finally {
           GlobalBus.off("event", successfulProjection)
           GlobalBus.off("event", failedProjection)
@@ -461,9 +460,7 @@ describe("durable Bus publication outbox", () => {
         GlobalBus.on("event", transient, { durableID: "test.global.transient", effect: "idempotent_by_occurrence" })
         try {
           const publication = Bus.publishOwned(ReceiptEvent, { value: "global-occurrence" })
-          await waitFor(
-            () => !Bus.TestHooks.outbox().some((row) => row.occurrence_id === publication.occurrenceID),
-          )
+          await waitForPublication(publication.occurrenceID)
           expect({ settledCalls, transientCalls }).toEqual({ settledCalls: 1, transientCalls: 2 })
         } finally {
           GlobalBus.off("event", settled)
@@ -486,13 +483,8 @@ describe("durable Bus publication outbox", () => {
         try {
           const accepted = Bus.publishOwned(ReceiptEvent, { value: "local-projection-is-not-a-gate" })
           await accepted
-          const deadline = Date.now() + 5_000
-          while (Bus.TestHooks.outbox().length > 0 && Date.now() < deadline) await Bun.sleep(10)
-          expect({ outbox: Bus.TestHooks.outbox(), owners: Bus.TestHooks.ownedPublications(), projectionCalls }).toEqual({
-            outbox: [],
-            owners: [],
-            projectionCalls: 1,
-          })
+          await waitForPublication(accepted.occurrenceID)
+          expect(projectionCalls).toBe(1)
         } finally {
           unsubscribe()
         }

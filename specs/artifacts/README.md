@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [长历史分叉耗时](2026-10-14-fork-latency/README.md)：原始请求、CPU采样与真实复制/视觉证据。
+
 - [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle/README.md)：原始矩阵、截图及前批正常交付回执。
 
 - [长正文与来源阅读](2026-10-14-long-source-reading/README.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。

@@ -1,0 +1,228 @@
+{
+  "pragma": {
+    "journal_mode": {
+      "journal_mode": "wal"
+    },
+    "synchronous": {
+      "synchronous": 1
+    },
+    "wal_autocheckpoint": {
+      "wal_autocheckpoint": 1000
+    },
+    "cache_size": {
+      "cache_size": -64000
+    },
+    "auto_vacuum": {
+      "auto_vacuum": 2
+    }
+  },
+  "totals": {
+    "count": 291,
+    "bodyMs": 2187.635399999981,
+    "commitMs": 4557.892700000055,
+    "commitUserMs": 236,
+    "commitSystemMs": 3875
+  },
+  "commits": [
+    {
+      "beganAt": 1791929311374,
+      "durationMs": 361.70010000000184,
+      "beginMs": 0.14350000000194996,
+      "bodyMs": 96.57470000000103,
+      "commitMs": 264.98189999999886,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 16000,
+        "system": 219000
+      },
+      "walBefore": {
+        "bytes": 4177712,
+        "modifiedAt": 1791929311252.448
+      },
+      "walAfter": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929311476.3071
+      }
+    },
+    {
+      "beganAt": 1791929311915,
+      "durationMs": 418.6849000000002,
+      "beginMs": 0.13539999999920838,
+      "bodyMs": 74.33200000000215,
+      "commitMs": 344.21749999999884,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 0,
+        "system": 297000
+      },
+      "walBefore": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929311875.5864
+      },
+      "walAfter": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929311994.065
+      }
+    },
+    {
+      "beganAt": 1791929312679,
+      "durationMs": 481.8729999999996,
+      "beginMs": 0.18440000000191503,
+      "bodyMs": 103.47220000000016,
+      "commitMs": 378.2163999999975,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 0,
+        "system": 359000
+      },
+      "walBefore": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929312655.109
+      },
+      "walAfter": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929312786.3396
+      }
+    },
+    {
+      "beganAt": 1791929313384,
+      "durationMs": 507.9963000000025,
+      "beginMs": 0.13280000000304426,
+      "bodyMs": 73.2074999999968,
+      "commitMs": 434.6560000000027,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 32000,
+        "system": 265000
+      },
+      "walBefore": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929313328.8743
+      },
+      "walAfter": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929313464.025
+      }
+    },
+    {
+      "beganAt": 1791929314087,
+      "durationMs": 540.0729000000028,
+      "beginMs": 0.10160000000178115,
+      "bodyMs": 92.75340000000142,
+      "commitMs": 447.21789999999964,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 16000,
+        "system": 422000
+      },
+      "walBefore": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929314025.8906
+      },
+      "walAfter": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929314184.5852
+      }
+    },
+    {
+      "beganAt": 1791929314772,
+      "durationMs": 718.5247000000018,
+      "beginMs": 0.13500000000203727,
+      "bodyMs": 110.28629999999976,
+      "commitMs": 608.1034,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 15000,
+        "system": 531000
+      },
+      "walBefore": {
+        "bytes": 5932832,
+        "modifiedAt": 1791929314758.366
+      },
+      "walAfter": {
+        "bytes": 6802152,
+        "modifiedAt": 1791929314903.6162
+      }
+    },
+    {
+      "beganAt": 1791929315670,
+      "durationMs": 489.09739999999874,
+      "beginMs": 0.17380000000048312,
+      "bodyMs": 139.18089999999938,
+      "commitMs": 349.7426999999989,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 0,
+        "system": 328000
+      },
+      "walBefore": {
+        "bytes": 6802152,
+        "modifiedAt": 1791929315630.2046
+      },
+      "walAfter": {
+        "bytes": 6802152,
+        "modifiedAt": 1791929315815.987
+      }
+    },
+    {
+      "beganAt": 1791929316295,
+      "durationMs": 665.1239000000023,
+      "beginMs": 0.29130000000077416,
+      "bodyMs": 118.79839999999967,
+      "commitMs": 546.0342000000019,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 31000,
+        "system": 484000
+      },
+      "walBefore": {
+        "bytes": 6802152,
+        "modifiedAt": 1791929316282.0923
+      },
+      "walAfter": {
+        "bytes": 7189432,
+        "modifiedAt": 1791929316421.9058
+      }
+    },
+    {
+      "beganAt": 1791929317110,
+      "durationMs": 674.9635999999991,
+      "beginMs": 0.14240000000063446,
+      "bodyMs": 113.43049999999857,
+      "commitMs": 561.3906999999999,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 47000,
+        "system": 485000
+      },
+      "walBefore": {
+        "bytes": 7189432,
+        "modifiedAt": 1791929317082.054
+      },
+      "walAfter": {
+        "bytes": 7189432,
+        "modifiedAt": 1791929317231.8142
+      }
+    },
+    {
+      "beganAt": 1791929317925,
+      "durationMs": 644.1642000000029,
+      "beginMs": 0.14610000000175205,
+      "bodyMs": 114.66679999999906,
+      "commitMs": 529.3513000000021,
+      "outcome": "returned",
+      "commitCPU": {
+        "user": 15000,
+        "system": 485000
+      },
+      "walBefore": {
+        "bytes": 7189432,
+        "modifiedAt": 1791929317915.6042
+      },
+      "walAfter": {
+        "bytes": 7189432,
+        "modifiedAt": 1791929318046.6516
+      }
+    }
+  ]
+}

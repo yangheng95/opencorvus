@@ -1,0 +1,50 @@
+{
+  "samples": [
+    {
+      "beganAt": 1791927286602,
+      "durationMs": 0.23370000000000246,
+      "beginMs": 0.08389999999999986,
+      "bodyMs": 0.14179999999999993,
+      "commitMs": 0.008000000000002672,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-timing.ts:9:17"
+    },
+    {
+      "beganAt": 1791927286602,
+      "durationMs": 0.03760000000000119,
+      "beginMs": 0.008200000000002206,
+      "bodyMs": 0.026299999999999102,
+      "commitMs": 0.0030999999999998806,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-timing.ts:9:17"
+    },
+    {
+      "beganAt": 1791927286602,
+      "durationMs": 0.00980000000000203,
+      "beginMs": 0.002500000000001279,
+      "bodyMs": 0.005500000000001393,
+      "commitMs": 0.0017999999999993577,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-timing.ts:9:17"
+    },
+    {
+      "beganAt": 1791927286602,
+      "durationMs": 0.013799999999999812,
+      "beginMs": 0.0045999999999999375,
+      "bodyMs": 0.006800000000001916,
+      "commitMs": 0.0023999999999979593,
+      "outcome": "returned",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-timing.ts:9:17"
+    },
+    {
+      "beganAt": 1791927286603,
+      "durationMs": 0.1039999999999992,
+      "beginMs": 0.006199999999999761,
+      "bodyMs": 0.05790000000000006,
+      "commitMs": 0.03989999999999938,
+      "outcome": "threw",
+      "stack": "    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\fork-latency-407\\check-timing.ts:13:18"
+    }
+  ],
+  "boundary": "Actual synchronous transaction timing; no SQL parameters, result values, or business state are captured."
+}
