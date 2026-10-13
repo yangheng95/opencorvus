@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前基线 Sources 阅读](records/2026-10/2026-10-14-source-reading-current-baseline.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。
+
 - [Provider 保存与目录观察](records/2026-10/2026-10-14-provider-post-save-observation.md)：已保存事实、后续结果与诊断边界。
 
 - [SQLite 当前基线与自动迁移](records/2026-10/2026-10-14-sqlite-automatic-migrations.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。

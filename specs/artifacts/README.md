@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前基线 Sources 阅读](2026-10-14-source-reading-current-baseline/README.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。
+
 - [Provider 保存与目录观察](2026-10-14-provider-post-save-observation/README.md)：前态资格、并行调查和分阶段保存证据。
 
 - [SQLite 当前基线与自动迁移](2026-10-14-sqlite-automatic-migrations/README.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。
