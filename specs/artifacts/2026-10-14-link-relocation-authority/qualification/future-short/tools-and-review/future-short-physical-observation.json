@@ -1,0 +1,83 @@
+[
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275294955703839",
+    "phase": "prepare-node",
+    "role": "host",
+    "atUtc": "2026-10-13T23:08:57.3437568Z",
+    "pid": 87904
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275294955073426",
+    "phase": "prepare-node",
+    "role": "parent",
+    "atUtc": "2026-10-13T23:08:57.3589439Z",
+    "pid": 63976
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275294972084042",
+    "phase": "prepare-node",
+    "role": "target",
+    "atUtc": "2026-10-13T23:08:57.3602074Z",
+    "pid": 44888
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275295183263684",
+    "phase": "read-node",
+    "role": "host",
+    "atUtc": "2026-10-13T23:08:57.3618728Z",
+    "pid": 29108
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275295182393643",
+    "phase": "read-node",
+    "role": "parent",
+    "atUtc": "2026-10-13T23:08:57.3620583Z",
+    "pid": 62016
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275295202795024",
+    "phase": "read-node",
+    "role": "target",
+    "atUtc": "2026-10-13T23:08:57.3621920Z",
+    "pid": 90048
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275295183462815",
+    "phase": "read-bun",
+    "role": "host",
+    "atUtc": "2026-10-13T23:08:57.3634588Z",
+    "pid": 88052
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275295182483605",
+    "phase": "read-bun",
+    "role": "parent",
+    "atUtc": "2026-10-13T23:08:57.3635922Z",
+    "pid": 91000
+  },
+  {
+    "originalRetired": true,
+    "actualBirth": null,
+    "originalBirth": "win32:639275295203832461",
+    "phase": "read-bun",
+    "role": "target",
+    "atUtc": "2026-10-13T23:08:57.3637156Z",
+    "pid": 83264
+  }
+]
