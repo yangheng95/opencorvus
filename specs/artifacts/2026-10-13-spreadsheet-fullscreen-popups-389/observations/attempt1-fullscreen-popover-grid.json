@@ -1,0 +1,82 @@
+{
+  "frame": [
+    {
+      "children": [
+        {
+          "class": "msg-artifact__header",
+          "display": "flex",
+          "rect": {
+            "bottom": 64,
+            "height": 64,
+            "left": 0,
+            "right": 2560,
+            "top": 0,
+            "width": 2560,
+            "x": 0,
+            "y": 0
+          },
+          "tag": "HEADER"
+        },
+        {
+          "class": "msg-artifact__body",
+          "display": "block",
+          "rect": {
+            "bottom": 1440,
+            "height": 1376,
+            "left": 0,
+            "right": 2560,
+            "top": 64,
+            "width": 2560,
+            "x": 0,
+            "y": 64
+          },
+          "tag": "DIV"
+        },
+        {
+          "class": "",
+          "display": "contents",
+          "rect": {
+            "bottom": 0,
+            "height": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "tag": "DIV"
+        }
+      ],
+      "rect": {
+        "bottom": 1440,
+        "height": 1440,
+        "left": 0,
+        "right": 2560,
+        "top": 0,
+        "width": 2560,
+        "x": 0,
+        "y": 0
+      },
+      "style": "64px 1376px"
+    }
+  ],
+  "popovers": [
+    {
+      "fullscreen": true,
+      "rect": {
+        "bottom": 188.6666717529297,
+        "height": 93.33333587646484,
+        "left": 0,
+        "right": 301.3333435058594,
+        "top": 95.33333587646484,
+        "width": 301.3333435058594,
+        "x": 0,
+        "y": 95.33333587646484
+      },
+      "role": "dialog",
+      "slot": "popover-content",
+      "text": "Manager namedCreate a defined name by selecting cells or formulas, and entering the desired name into the text box."
+    }
+  ]
+}

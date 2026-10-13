@@ -1,0 +1,33 @@
+{
+  "scroll": [
+    {
+      "height": 635,
+      "top": 676
+    }
+  ],
+  "tooltip": [
+    {
+      "fullscreen": false,
+      "parent": "DIV",
+      "parentStyle": "display: contents;",
+      "position": "fixed",
+      "rect": {
+        "bottom": 311,
+        "height": 32,
+        "left": 755,
+        "right": 847,
+        "top": 279,
+        "width": 92,
+        "x": 755,
+        "y": 279
+      },
+      "text": "点击复制数值"
+    }
+  ],
+  "viewport": {
+    "height": 720,
+    "scrollX": 0,
+    "scrollY": 0,
+    "width": 1280
+  }
+}

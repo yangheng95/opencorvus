@@ -1,0 +1,58 @@
+{
+  "fullscreen": [
+    {
+      "class": "msg-artifact",
+      "rect": {
+        "bottom": 1440,
+        "height": 1440,
+        "left": 0,
+        "right": 2560,
+        "top": 0,
+        "width": 2560,
+        "x": 0,
+        "y": 0
+      },
+      "tag": "SECTION"
+    }
+  ],
+  "popups": [
+    {
+      "class": "univer-popup univer-popup-enter-done",
+      "insideFullscreen": false,
+      "parents": [
+        "DIV",
+        "BODY"
+      ],
+      "rect": {
+        "bottom": 1404.3333435058594,
+        "height": 373.3333435058594,
+        "left": 98.66667175292967,
+        "right": 334.5833435058594,
+        "top": 1031,
+        "width": 235.9166717529297,
+        "x": 98.66667175292967,
+        "y": 1031
+      },
+      "text": "DeleteCopyRenameChange colorHideUnhideProtect WorksheetUnprotect WorksheetChange Worksheet PermissionsView All Protection Ranges"
+    },
+    {
+      "class": "univer-popup",
+      "insideFullscreen": false,
+      "parents": [
+        "DIV",
+        "BODY"
+      ],
+      "rect": {
+        "bottom": -9997,
+        "height": 0,
+        "left": -9997,
+        "right": -9997,
+        "top": -9997,
+        "width": 0,
+        "x": -9997,
+        "y": -9997
+      },
+      "text": ""
+    }
+  ]
+}

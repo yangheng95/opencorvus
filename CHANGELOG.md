@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 修复电子表格全屏时工作表菜单、颜色对话框、缩放菜单和提示不可见的问题；子菜单重复打开保持可用，关闭父菜单后同步收起。全屏与语言切换保留当前工作簿及编辑导出。
+
 - 修复 MCP 合法空文件、音频内容和资源链接导致整个工具结果失败的问题。音频保存为附件并保留当前模型传输限制；资源链接保留原始引用信息。
 
 - Venice 流式请求使用正确的用量参数，并保留每次调用的显式选择；修复 Token 总量重复计入输出、缓存输入重复计费和推理分量丢失的问题。历史账本保留原记录，不重算。
@@ -51,6 +53,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Fixed spreadsheet sheet menus, color dialogs, zoom menus and tooltips being hidden in fullscreen. Repeated submenu activation stays usable, and closing its parent also closes the submenu. Fullscreen and language changes retain the current workbook and edited exports.
 
 - Fixed valid empty files, audio content and resource links failing whole MCP tool results. Audio is retained as an attachment with the current model transport limits, and resource links preserve their original reference fields.
 

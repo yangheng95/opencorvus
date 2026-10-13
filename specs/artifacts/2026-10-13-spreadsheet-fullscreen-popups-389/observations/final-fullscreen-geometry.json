@@ -1,0 +1,36 @@
+{
+  "frames": [
+    {
+      "gridRows": "64px 1376px",
+      "label": "Desk budget",
+      "rect": {
+        "bottom": 1440,
+        "height": 1440,
+        "left": 0,
+        "right": 2560,
+        "top": 0,
+        "width": 2560,
+        "x": 0,
+        "y": 0
+      }
+    }
+  ],
+  "tooltips": [
+    {
+      "owner": "Desk budget",
+      "parentStyle": "display: contents;",
+      "position": "fixed",
+      "rect": {
+        "bottom": 1397,
+        "height": 32,
+        "left": 2135,
+        "right": 2227,
+        "top": 1365,
+        "width": 92,
+        "x": 2135,
+        "y": 1365
+      },
+      "text": "点击复制数值"
+    }
+  ]
+}

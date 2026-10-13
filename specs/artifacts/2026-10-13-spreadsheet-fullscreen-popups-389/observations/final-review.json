@@ -1,0 +1,33 @@
+{
+  "reviewedBy": "root through actual isolated CUA tab 28; audit_ui archived selected evidence and manually reviewed key screenshots",
+  "canonicalChat": "ses_h0VKkCl7hbz3BKHVW2Xp",
+  "artifact": "art_g0VXv65e1004ErsrwSJs",
+  "build": "ui-after2",
+  "acceptance": "Verified scoped desktop fullscreen popup ownership, repeated submenu activation, descendant input and close lifecycle; remaining accessibility and remount UX explicitly excluded",
+  "observed": [
+    "First and repeated Enter retain visible color palette",
+    "More Colors input 336699 yields RGB 51,102,153; hue drag yields 8d3399 and internal wheel remains usable",
+    "Cancel closes only dialog; subsequent Escape closes parent and zoom opens cleanly",
+    "First Escape from a second dialog returns to menu; next Escape closes parent",
+    "Zoom 125% then 100% works",
+    "Apply #336699 changes sheet tab color; Ctrl+Z with canvas focus restores original style",
+    "B2=9 recalculates Total=14; actual browser CSV download is 61 bytes with exact quoted rows",
+    "Normal Chinese context menu, repeat Enter, 996633 dialog input/cancel and external zoom close work",
+    "Normal/fullscreen tooltips and Chinese Popover are visible",
+    "Locale en-US to zh-CN to en-US restored"
+  ],
+  "boundaries": [
+    "Ctrl+Z while tab focused did not undo; canvas focus then Ctrl+Z did",
+    "Switching to another Chat and back recreated workbook from published B2=7, Total=12, A1 selection; remounted menu works. No cross-Chat edit persistence claim, follow-up UX investigation required",
+    "Sheet tabs, Close sidebar, Notifications alt+T remain English AX names",
+    "More Colors remains an a without href; after cancel body focus observed, not claimed fixed or a new regression",
+    "Only selected actual consumers visually covered; no whole-library, mobile or concurrent-multi-instance acceptance"
+  ],
+  "pageClosedAt": "2026-10-13T11:10:24.388Z",
+  "ownerPID": 84148,
+  "occurrenceID": "c67b73cf-06e3-4ded-8a98-86955ef81782",
+  "launcher": 92626,
+  "launcherExitCode": 0,
+  "elapsedMilliseconds": 800601,
+  "shutdown": "Original owned stop-requested; normal runtime handoff; no kill or credentials/model calls in 389 review scopes"
+}

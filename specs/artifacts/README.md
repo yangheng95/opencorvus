@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389/README.md)：菜单、颜色对话框、缩放、提示、真实CSV和三轮独立服务收尾。
+
 - [390 MCP 文件与引用](2026-10-13-mcp-content-boundaries-390/README.md)：真实工具内容、0/60字节存储与下载、11次流式请求和原owner收尾。
 
 - [386 Sources多文件与刷新实页](2026-10-05-connection-workspace-authority/source-reopen-386/README.md)：独立当前页面、原始来源身份与真实模型证据。

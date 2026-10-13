@@ -1,0 +1,38 @@
+[
+  {
+    "insideFullscreen": false,
+    "parent": "BODY",
+    "rect": {
+      "bottom": 1406.0000915527344,
+      "height": 269.3333435058594,
+      "left": 2448,
+      "right": 2539.9375,
+      "top": 1136.666748046875,
+      "width": 91.9375,
+      "x": 2448,
+      "y": 1136.666748046875
+    },
+    "role": null,
+    "style": "position: fixed; left: 0px; top: 0px; transform: translate(2448px, 1136.67px); min-width: max-content; --radix-popper-transform-origin: 100% 269.333px; will-change: transform; z-index: 1080; --radix-popper-available-width: 2560px; --radix-popper-available-height: 1394px; --radix-popper-anchor-width: 44.0625px; --radix-popper-anchor-height: 24px;",
+    "tag": "DIV",
+    "text": "50%75%100%125%150%175%200%400%"
+  },
+  {
+    "insideFullscreen": false,
+    "parent": "DIV",
+    "rect": {
+      "bottom": 1406.0000915527344,
+      "height": 269.3333435058594,
+      "left": 2448,
+      "right": 2539.9375,
+      "top": 1136.666748046875,
+      "width": 91.9375,
+      "x": 2448,
+      "y": 1136.666748046875
+    },
+    "role": "menu",
+    "style": "outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height);",
+    "tag": "DIV",
+    "text": "50%75%100%125%150%175%200%400%"
+  }
+]

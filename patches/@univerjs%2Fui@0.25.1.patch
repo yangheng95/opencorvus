@@ -1,0 +1,550 @@
+diff --git a/lib/cjs/index.js b/lib/cjs/index.js
+index aa6473bee22fcae6bbdaaad2c8d5cb4893ed4b11..acf5901cc622412106f14d36fe01c575314381b5 100644
+--- a/lib/cjs/index.js
++++ b/lib/cjs/index.js
+@@ -4328,7 +4328,6 @@ function hasRenderableContextMenuSchema(menuSchema) {
+ 	return menuSchema.children.some((childSchema) => Boolean(childSchema.item));
+ }
+ function ContextMenuPanel(props) {
+-	var _layoutService$rootCo, _layoutService$rootCo2;
+ 	const { menuType, menuSessionVersion = 0, className, activeItemIds, hiddenItemIds, onOptionSelect } = props;
+ 	const menuManagerService = (0, _wendellhu_redi_react_bindings.useDependency)(IMenuManagerService);
+ 	const layoutService = (0, _wendellhu_redi_react_bindings.useDependency)(ILayoutService);
+@@ -4343,7 +4342,7 @@ function ContextMenuPanel(props) {
+ 		(0, _wendellhu_redi_react_bindings.useObservable)((0, react.useMemo)(() => menuManagerService.menuChanged$.pipe((0, rxjs.startWith)(void 0), (0, rxjs.scan)((version) => version + 1, 0)), [menuManagerService]), 0),
+ 		menuSessionVersion
+ 	]);
+-	const submenuPortalContainer = (_layoutService$rootCo = (_layoutService$rootCo2 = layoutService.rootContainerElement) === null || _layoutService$rootCo2 === void 0 || (_layoutService$rootCo2 = _layoutService$rootCo2.ownerDocument) === null || _layoutService$rootCo2 === void 0 ? void 0 : _layoutService$rootCo2.body) !== null && _layoutService$rootCo !== void 0 ? _layoutService$rootCo : typeof document !== "undefined" ? document.body : null;
++	const { mountContainer: submenuPortalContainer } = (0, react.useContext)(_univerjs_design.ConfigContext);
+ 	useScrollYOverContainer(menuElement, layoutService.rootContainerElement);
+ 	(0, react.useEffect)(() => {
+ 		var _layoutService$rootCo3, _layoutService$rootCo4;
+@@ -4595,7 +4594,6 @@ function ContextMenuMenuItem(props) {
+ 		onMouseEnter: () => {
+ 			clearSubmenuCloseTimer();
+ 			if (hasSubmenu && !disabled) {
+-				setSubmenuPositionReady(false);
+ 				setSubmenuVisible(true);
+ 			}
+ 		},
+@@ -4630,7 +4628,6 @@ function ContextMenuMenuItem(props) {
+ 						});
+ 						return;
+ 					}
+-					setSubmenuPositionReady(false);
+ 					setSubmenuVisible(true);
+ 					return;
+ 				}
+@@ -4767,17 +4764,18 @@ function useContextGroupHiddenStates$1(menuSchemas) {
+ //#region src/views/components/context-menu/AnchoredContextMenu.tsx
+ function AnchoredContextMenu(props) {
+ 	const { hostId, visible, anchorRect, menuType, anchorVertical = "bottom", menuOffset = 0, onRequestClose, onOptionSelect } = props;
+-	const contentRef = (0, react.useRef)(null);
++	const isOpen = visible && !!anchorRect;
++	const ownedNativeEvents = (0, react.useRef)(new WeakSet());
+ 	const contextMenuHostService = (0, _wendellhu_redi_react_bindings.useDependency)(IContextMenuHostService);
+ 	const onRequestCloseRef = (0, react.useRef)(onRequestClose);
+ 	const menuSessionVersionRef = (0, react.useRef)(0);
+-	const visibleRef = (0, react.useRef)(visible);
++	const visibleRef = (0, react.useRef)(isOpen);
+ 	const menuTypeRef = (0, react.useRef)(menuType);
+ 	(0, react.useEffect)(() => {
+ 		onRequestCloseRef.current = onRequestClose;
+ 	}, [onRequestClose]);
+-	if (visible && (!visibleRef.current || menuType !== menuTypeRef.current)) menuSessionVersionRef.current += 1;
+-	visibleRef.current = visible;
++	if (isOpen && (!visibleRef.current || menuType !== menuTypeRef.current)) menuSessionVersionRef.current += 1;
++	visibleRef.current = isOpen;
+ 	menuTypeRef.current = menuType;
+ 	(0, react.useEffect)(() => {
+ 		const disposable = contextMenuHostService.registerMenu(hostId, () => {
+@@ -4789,7 +4787,7 @@ function AnchoredContextMenu(props) {
+ 		};
+ 	}, [contextMenuHostService, hostId]);
+ 	(0, react.useLayoutEffect)(() => {
+-		if (visible) {
++		if (isOpen) {
+ 			contextMenuHostService.activateMenu(hostId);
+ 			return;
+ 		}
+@@ -4797,45 +4795,32 @@ function AnchoredContextMenu(props) {
+ 	}, [
+ 		contextMenuHostService,
+ 		hostId,
+-		visible
++		isOpen
+ 	]);
+ 	(0, react.useEffect)(() => {
+-		if (!visible) return;
+-		const isTargetInSubmenu = (target) => {
+-			return target instanceof Element && target.closest(`[${"data-u-context-menu-submenu"}]`);
+-		};
++		if (!isOpen) return;
+ 		const handlePointerDown = (event) => {
+-			if (isTargetInSubmenu(event.target)) return;
+-			if (contentRef.current && !contentRef.current.contains(event.target)) onRequestCloseRef.current();
++			if (!ownedNativeEvents.current.has(event)) onRequestCloseRef.current();
+ 		};
+ 		const handleEscape = (event) => {
+-			if (event.key === "Escape") onRequestCloseRef.current();
++			if (event.key === "Escape" && !event.defaultPrevented) onRequestCloseRef.current();
+ 		};
+ 		const handleWheel = (event) => {
+-			var _contentRef$current;
+-			if (isTargetInSubmenu(event.target)) {
+-				event.stopPropagation();
+-				return;
+-			}
+-			if ((_contentRef$current = contentRef.current) === null || _contentRef$current === void 0 ? void 0 : _contentRef$current.contains(event.target)) {
+-				event.stopPropagation();
+-				return;
+-			}
++			if (ownedNativeEvents.current.has(event)) return;
+ 			event.preventDefault();
+ 			event.stopPropagation();
+ 		};
+ 		document.addEventListener("pointerdown", handlePointerDown);
+ 		document.addEventListener("keydown", handleEscape);
+ 		document.addEventListener("wheel", handleWheel, {
+-			capture: true,
+ 			passive: false
+ 		});
+ 		return () => {
+ 			document.removeEventListener("pointerdown", handlePointerDown);
+ 			document.removeEventListener("keydown", handleEscape);
+-			document.removeEventListener("wheel", handleWheel, true);
++			document.removeEventListener("wheel", handleWheel);
+ 		};
+-	}, [visible]);
++	}, [isOpen]);
+ 	const offset = (0, react.useMemo)(() => {
+ 		if (!anchorRect) return [0, 0];
+ 		const anchorY = anchorVertical === "top" ? anchorRect.top : anchorRect.bottom;
+@@ -4847,13 +4832,14 @@ function AnchoredContextMenu(props) {
+ 		menuOffset
+ 	]);
+ 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_univerjs_design.Popup, {
+-		visible: visible && !!anchorRect,
++		visible: isOpen,
+ 		offset,
+ 		overflowVisible: true,
+ 		placementY: anchorVertical === "top" ? "above" : "below",
+ 		children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("section", {
+-			ref: contentRef,
+-			children: menuType && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(ContextMenuPanel, {
++			onPointerDownCapture: (event) => ownedNativeEvents.current.add(event.nativeEvent),
++			onWheelCapture: (event) => ownedNativeEvents.current.add(event.nativeEvent),
++			children: isOpen && menuType && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(ContextMenuPanel, {
+ 				menuType,
+ 				menuSessionVersion: menuSessionVersionRef.current,
+ 				onOptionSelect
+@@ -5195,9 +5181,20 @@ function DesktopWorkbenchContent(props) {
+ 	}, [onRendered]);
+ 	const [locale, setLocale] = (0, react.useState)(localeService.getLocales());
+ 	const [direction, setDirection] = (0, react.useState)(localeService.getDirection());
+-	const portalContainer = (0, react.useMemo)(() => document.createElement("div"), []);
++	const portalContainer = (0, react.useMemo)(() => {
++		const container = mountContainer.ownerDocument.createElement("div");
++		container.style.display = "contents";
++		return container;
++	}, [mountContainer]);
+ 	(0, react.useEffect)(() => {
+-		document.body.appendChild(portalContainer);
++		const ownerDocument = mountContainer.ownerDocument;
++		const syncPortalContainer = () => {
++			const fullscreenOwner = ownerDocument.fullscreenElement;
++			const parent = fullscreenOwner && fullscreenOwner.contains(mountContainer) ? fullscreenOwner : ownerDocument.body;
++			if (portalContainer.parentNode !== parent) parent.appendChild(portalContainer);
++		};
++		syncPortalContainer();
++		ownerDocument.addEventListener("fullscreenchange", syncPortalContainer);
+ 		const subscriptions = [localeService.localeChanged$.subscribe(() => {
+ 			setLocale(localeService.getLocales());
+ 		}), localeService.direction$.subscribe(() => {
+@@ -5205,7 +5202,8 @@ function DesktopWorkbenchContent(props) {
+ 		})];
+ 		return () => {
+ 			subscriptions.forEach((subscription) => subscription.unsubscribe());
+-			document.body.removeChild(portalContainer);
++			ownerDocument.removeEventListener("fullscreenchange", syncPortalContainer);
++			portalContainer.remove();
+ 		};
+ 	}, [
+ 		localeService,
+diff --git a/lib/es/index.js b/lib/es/index.js
+index 6c1e55d052f6448caccdce3cc1d3204f010e95bd..ef9ac67fb5eb7fc942b4d93e24aa2746db1d3f29 100644
+--- a/lib/es/index.js
++++ b/lib/es/index.js
+@@ -4298,7 +4298,6 @@ function hasRenderableContextMenuSchema(menuSchema) {
+ 	return menuSchema.children.some((childSchema) => Boolean(childSchema.item));
+ }
+ function ContextMenuPanel(props) {
+-	var _layoutService$rootCo, _layoutService$rootCo2;
+ 	const { menuType, menuSessionVersion = 0, className, activeItemIds, hiddenItemIds, onOptionSelect } = props;
+ 	const menuManagerService = useDependency(IMenuManagerService);
+ 	const layoutService = useDependency(ILayoutService);
+@@ -4313,7 +4312,7 @@ function ContextMenuPanel(props) {
+ 		useObservable(useMemo(() => menuManagerService.menuChanged$.pipe(startWith(void 0), scan((version) => version + 1, 0)), [menuManagerService]), 0),
+ 		menuSessionVersion
+ 	]);
+-	const submenuPortalContainer = (_layoutService$rootCo = (_layoutService$rootCo2 = layoutService.rootContainerElement) === null || _layoutService$rootCo2 === void 0 || (_layoutService$rootCo2 = _layoutService$rootCo2.ownerDocument) === null || _layoutService$rootCo2 === void 0 ? void 0 : _layoutService$rootCo2.body) !== null && _layoutService$rootCo !== void 0 ? _layoutService$rootCo : typeof document !== "undefined" ? document.body : null;
++	const { mountContainer: submenuPortalContainer } = useContext(ConfigContext);
+ 	useScrollYOverContainer(menuElement, layoutService.rootContainerElement);
+ 	useEffect(() => {
+ 		var _layoutService$rootCo3, _layoutService$rootCo4;
+@@ -4565,7 +4564,6 @@ function ContextMenuMenuItem(props) {
+ 		onMouseEnter: () => {
+ 			clearSubmenuCloseTimer();
+ 			if (hasSubmenu && !disabled) {
+-				setSubmenuPositionReady(false);
+ 				setSubmenuVisible(true);
+ 			}
+ 		},
+@@ -4600,7 +4598,6 @@ function ContextMenuMenuItem(props) {
+ 						});
+ 						return;
+ 					}
+-					setSubmenuPositionReady(false);
+ 					setSubmenuVisible(true);
+ 					return;
+ 				}
+@@ -4737,17 +4734,18 @@ function useContextGroupHiddenStates$1(menuSchemas) {
+ //#region src/views/components/context-menu/AnchoredContextMenu.tsx
+ function AnchoredContextMenu(props) {
+ 	const { hostId, visible, anchorRect, menuType, anchorVertical = "bottom", menuOffset = 0, onRequestClose, onOptionSelect } = props;
+-	const contentRef = useRef(null);
++	const isOpen = visible && !!anchorRect;
++	const ownedNativeEvents = useRef(new WeakSet());
+ 	const contextMenuHostService = useDependency(IContextMenuHostService);
+ 	const onRequestCloseRef = useRef(onRequestClose);
+ 	const menuSessionVersionRef = useRef(0);
+-	const visibleRef = useRef(visible);
++	const visibleRef = useRef(isOpen);
+ 	const menuTypeRef = useRef(menuType);
+ 	useEffect(() => {
+ 		onRequestCloseRef.current = onRequestClose;
+ 	}, [onRequestClose]);
+-	if (visible && (!visibleRef.current || menuType !== menuTypeRef.current)) menuSessionVersionRef.current += 1;
+-	visibleRef.current = visible;
++	if (isOpen && (!visibleRef.current || menuType !== menuTypeRef.current)) menuSessionVersionRef.current += 1;
++	visibleRef.current = isOpen;
+ 	menuTypeRef.current = menuType;
+ 	useEffect(() => {
+ 		const disposable = contextMenuHostService.registerMenu(hostId, () => {
+@@ -4759,7 +4757,7 @@ function AnchoredContextMenu(props) {
+ 		};
+ 	}, [contextMenuHostService, hostId]);
+ 	useLayoutEffect(() => {
+-		if (visible) {
++		if (isOpen) {
+ 			contextMenuHostService.activateMenu(hostId);
+ 			return;
+ 		}
+@@ -4767,45 +4765,32 @@ function AnchoredContextMenu(props) {
+ 	}, [
+ 		contextMenuHostService,
+ 		hostId,
+-		visible
++		isOpen
+ 	]);
+ 	useEffect(() => {
+-		if (!visible) return;
+-		const isTargetInSubmenu = (target) => {
+-			return target instanceof Element && target.closest(`[${"data-u-context-menu-submenu"}]`);
+-		};
++		if (!isOpen) return;
+ 		const handlePointerDown = (event) => {
+-			if (isTargetInSubmenu(event.target)) return;
+-			if (contentRef.current && !contentRef.current.contains(event.target)) onRequestCloseRef.current();
++			if (!ownedNativeEvents.current.has(event)) onRequestCloseRef.current();
+ 		};
+ 		const handleEscape = (event) => {
+-			if (event.key === "Escape") onRequestCloseRef.current();
++			if (event.key === "Escape" && !event.defaultPrevented) onRequestCloseRef.current();
+ 		};
+ 		const handleWheel = (event) => {
+-			var _contentRef$current;
+-			if (isTargetInSubmenu(event.target)) {
+-				event.stopPropagation();
+-				return;
+-			}
+-			if ((_contentRef$current = contentRef.current) === null || _contentRef$current === void 0 ? void 0 : _contentRef$current.contains(event.target)) {
+-				event.stopPropagation();
+-				return;
+-			}
++			if (ownedNativeEvents.current.has(event)) return;
+ 			event.preventDefault();
+ 			event.stopPropagation();
+ 		};
+ 		document.addEventListener("pointerdown", handlePointerDown);
+ 		document.addEventListener("keydown", handleEscape);
+ 		document.addEventListener("wheel", handleWheel, {
+-			capture: true,
+ 			passive: false
+ 		});
+ 		return () => {
+ 			document.removeEventListener("pointerdown", handlePointerDown);
+ 			document.removeEventListener("keydown", handleEscape);
+-			document.removeEventListener("wheel", handleWheel, true);
++			document.removeEventListener("wheel", handleWheel);
+ 		};
+-	}, [visible]);
++	}, [isOpen]);
+ 	const offset = useMemo(() => {
+ 		if (!anchorRect) return [0, 0];
+ 		const anchorY = anchorVertical === "top" ? anchorRect.top : anchorRect.bottom;
+@@ -4817,13 +4802,14 @@ function AnchoredContextMenu(props) {
+ 		menuOffset
+ 	]);
+ 	return /* @__PURE__ */ jsx(Popup, {
+-		visible: visible && !!anchorRect,
++		visible: isOpen,
+ 		offset,
+ 		overflowVisible: true,
+ 		placementY: anchorVertical === "top" ? "above" : "below",
+ 		children: /* @__PURE__ */ jsx("section", {
+-			ref: contentRef,
+-			children: menuType && /* @__PURE__ */ jsx(ContextMenuPanel, {
++			onPointerDownCapture: (event) => ownedNativeEvents.current.add(event.nativeEvent),
++			onWheelCapture: (event) => ownedNativeEvents.current.add(event.nativeEvent),
++			children: isOpen && menuType && /* @__PURE__ */ jsx(ContextMenuPanel, {
+ 				menuType,
+ 				menuSessionVersion: menuSessionVersionRef.current,
+ 				onOptionSelect
+@@ -5165,9 +5151,20 @@ function DesktopWorkbenchContent(props) {
+ 	}, [onRendered]);
+ 	const [locale, setLocale] = useState(localeService.getLocales());
+ 	const [direction, setDirection] = useState(localeService.getDirection());
+-	const portalContainer = useMemo(() => document.createElement("div"), []);
++	const portalContainer = useMemo(() => {
++		const container = mountContainer.ownerDocument.createElement("div");
++		container.style.display = "contents";
++		return container;
++	}, [mountContainer]);
+ 	useEffect(() => {
+-		document.body.appendChild(portalContainer);
++		const ownerDocument = mountContainer.ownerDocument;
++		const syncPortalContainer = () => {
++			const fullscreenOwner = ownerDocument.fullscreenElement;
++			const parent = fullscreenOwner && fullscreenOwner.contains(mountContainer) ? fullscreenOwner : ownerDocument.body;
++			if (portalContainer.parentNode !== parent) parent.appendChild(portalContainer);
++		};
++		syncPortalContainer();
++		ownerDocument.addEventListener("fullscreenchange", syncPortalContainer);
+ 		const subscriptions = [localeService.localeChanged$.subscribe(() => {
+ 			setLocale(localeService.getLocales());
+ 		}), localeService.direction$.subscribe(() => {
+@@ -5175,7 +5172,8 @@ function DesktopWorkbenchContent(props) {
+ 		})];
+ 		return () => {
+ 			subscriptions.forEach((subscription) => subscription.unsubscribe());
+-			document.body.removeChild(portalContainer);
++			ownerDocument.removeEventListener("fullscreenchange", syncPortalContainer);
++			portalContainer.remove();
+ 		};
+ 	}, [
+ 		localeService,
+diff --git a/lib/index.js b/lib/index.js
+index 6c1e55d052f6448caccdce3cc1d3204f010e95bd..ef9ac67fb5eb7fc942b4d93e24aa2746db1d3f29 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -4298,7 +4298,6 @@ function hasRenderableContextMenuSchema(menuSchema) {
+ 	return menuSchema.children.some((childSchema) => Boolean(childSchema.item));
+ }
+ function ContextMenuPanel(props) {
+-	var _layoutService$rootCo, _layoutService$rootCo2;
+ 	const { menuType, menuSessionVersion = 0, className, activeItemIds, hiddenItemIds, onOptionSelect } = props;
+ 	const menuManagerService = useDependency(IMenuManagerService);
+ 	const layoutService = useDependency(ILayoutService);
+@@ -4313,7 +4312,7 @@ function ContextMenuPanel(props) {
+ 		useObservable(useMemo(() => menuManagerService.menuChanged$.pipe(startWith(void 0), scan((version) => version + 1, 0)), [menuManagerService]), 0),
+ 		menuSessionVersion
+ 	]);
+-	const submenuPortalContainer = (_layoutService$rootCo = (_layoutService$rootCo2 = layoutService.rootContainerElement) === null || _layoutService$rootCo2 === void 0 || (_layoutService$rootCo2 = _layoutService$rootCo2.ownerDocument) === null || _layoutService$rootCo2 === void 0 ? void 0 : _layoutService$rootCo2.body) !== null && _layoutService$rootCo !== void 0 ? _layoutService$rootCo : typeof document !== "undefined" ? document.body : null;
++	const { mountContainer: submenuPortalContainer } = useContext(ConfigContext);
+ 	useScrollYOverContainer(menuElement, layoutService.rootContainerElement);
+ 	useEffect(() => {
+ 		var _layoutService$rootCo3, _layoutService$rootCo4;
+@@ -4565,7 +4564,6 @@ function ContextMenuMenuItem(props) {
+ 		onMouseEnter: () => {
+ 			clearSubmenuCloseTimer();
+ 			if (hasSubmenu && !disabled) {
+-				setSubmenuPositionReady(false);
+ 				setSubmenuVisible(true);
+ 			}
+ 		},
+@@ -4600,7 +4598,6 @@ function ContextMenuMenuItem(props) {
+ 						});
+ 						return;
+ 					}
+-					setSubmenuPositionReady(false);
+ 					setSubmenuVisible(true);
+ 					return;
+ 				}
+@@ -4737,17 +4734,18 @@ function useContextGroupHiddenStates$1(menuSchemas) {
+ //#region src/views/components/context-menu/AnchoredContextMenu.tsx
+ function AnchoredContextMenu(props) {
+ 	const { hostId, visible, anchorRect, menuType, anchorVertical = "bottom", menuOffset = 0, onRequestClose, onOptionSelect } = props;
+-	const contentRef = useRef(null);
++	const isOpen = visible && !!anchorRect;
++	const ownedNativeEvents = useRef(new WeakSet());
+ 	const contextMenuHostService = useDependency(IContextMenuHostService);
+ 	const onRequestCloseRef = useRef(onRequestClose);
+ 	const menuSessionVersionRef = useRef(0);
+-	const visibleRef = useRef(visible);
++	const visibleRef = useRef(isOpen);
+ 	const menuTypeRef = useRef(menuType);
+ 	useEffect(() => {
+ 		onRequestCloseRef.current = onRequestClose;
+ 	}, [onRequestClose]);
+-	if (visible && (!visibleRef.current || menuType !== menuTypeRef.current)) menuSessionVersionRef.current += 1;
+-	visibleRef.current = visible;
++	if (isOpen && (!visibleRef.current || menuType !== menuTypeRef.current)) menuSessionVersionRef.current += 1;
++	visibleRef.current = isOpen;
+ 	menuTypeRef.current = menuType;
+ 	useEffect(() => {
+ 		const disposable = contextMenuHostService.registerMenu(hostId, () => {
+@@ -4759,7 +4757,7 @@ function AnchoredContextMenu(props) {
+ 		};
+ 	}, [contextMenuHostService, hostId]);
+ 	useLayoutEffect(() => {
+-		if (visible) {
++		if (isOpen) {
+ 			contextMenuHostService.activateMenu(hostId);
+ 			return;
+ 		}
+@@ -4767,45 +4765,32 @@ function AnchoredContextMenu(props) {
+ 	}, [
+ 		contextMenuHostService,
+ 		hostId,
+-		visible
++		isOpen
+ 	]);
+ 	useEffect(() => {
+-		if (!visible) return;
+-		const isTargetInSubmenu = (target) => {
+-			return target instanceof Element && target.closest(`[${"data-u-context-menu-submenu"}]`);
+-		};
++		if (!isOpen) return;
+ 		const handlePointerDown = (event) => {
+-			if (isTargetInSubmenu(event.target)) return;
+-			if (contentRef.current && !contentRef.current.contains(event.target)) onRequestCloseRef.current();
++			if (!ownedNativeEvents.current.has(event)) onRequestCloseRef.current();
+ 		};
+ 		const handleEscape = (event) => {
+-			if (event.key === "Escape") onRequestCloseRef.current();
++			if (event.key === "Escape" && !event.defaultPrevented) onRequestCloseRef.current();
+ 		};
+ 		const handleWheel = (event) => {
+-			var _contentRef$current;
+-			if (isTargetInSubmenu(event.target)) {
+-				event.stopPropagation();
+-				return;
+-			}
+-			if ((_contentRef$current = contentRef.current) === null || _contentRef$current === void 0 ? void 0 : _contentRef$current.contains(event.target)) {
+-				event.stopPropagation();
+-				return;
+-			}
++			if (ownedNativeEvents.current.has(event)) return;
+ 			event.preventDefault();
+ 			event.stopPropagation();
+ 		};
+ 		document.addEventListener("pointerdown", handlePointerDown);
+ 		document.addEventListener("keydown", handleEscape);
+ 		document.addEventListener("wheel", handleWheel, {
+-			capture: true,
+ 			passive: false
+ 		});
+ 		return () => {
+ 			document.removeEventListener("pointerdown", handlePointerDown);
+ 			document.removeEventListener("keydown", handleEscape);
+-			document.removeEventListener("wheel", handleWheel, true);
++			document.removeEventListener("wheel", handleWheel);
+ 		};
+-	}, [visible]);
++	}, [isOpen]);
+ 	const offset = useMemo(() => {
+ 		if (!anchorRect) return [0, 0];
+ 		const anchorY = anchorVertical === "top" ? anchorRect.top : anchorRect.bottom;
+@@ -4817,13 +4802,14 @@ function AnchoredContextMenu(props) {
+ 		menuOffset
+ 	]);
+ 	return /* @__PURE__ */ jsx(Popup, {
+-		visible: visible && !!anchorRect,
++		visible: isOpen,
+ 		offset,
+ 		overflowVisible: true,
+ 		placementY: anchorVertical === "top" ? "above" : "below",
+ 		children: /* @__PURE__ */ jsx("section", {
+-			ref: contentRef,
+-			children: menuType && /* @__PURE__ */ jsx(ContextMenuPanel, {
++			onPointerDownCapture: (event) => ownedNativeEvents.current.add(event.nativeEvent),
++			onWheelCapture: (event) => ownedNativeEvents.current.add(event.nativeEvent),
++			children: isOpen && menuType && /* @__PURE__ */ jsx(ContextMenuPanel, {
+ 				menuType,
+ 				menuSessionVersion: menuSessionVersionRef.current,
+ 				onOptionSelect
+@@ -5165,9 +5151,20 @@ function DesktopWorkbenchContent(props) {
+ 	}, [onRendered]);
+ 	const [locale, setLocale] = useState(localeService.getLocales());
+ 	const [direction, setDirection] = useState(localeService.getDirection());
+-	const portalContainer = useMemo(() => document.createElement("div"), []);
++	const portalContainer = useMemo(() => {
++		const container = mountContainer.ownerDocument.createElement("div");
++		container.style.display = "contents";
++		return container;
++	}, [mountContainer]);
+ 	useEffect(() => {
+-		document.body.appendChild(portalContainer);
++		const ownerDocument = mountContainer.ownerDocument;
++		const syncPortalContainer = () => {
++			const fullscreenOwner = ownerDocument.fullscreenElement;
++			const parent = fullscreenOwner && fullscreenOwner.contains(mountContainer) ? fullscreenOwner : ownerDocument.body;
++			if (portalContainer.parentNode !== parent) parent.appendChild(portalContainer);
++		};
++		syncPortalContainer();
++		ownerDocument.addEventListener("fullscreenchange", syncPortalContainer);
+ 		const subscriptions = [localeService.localeChanged$.subscribe(() => {
+ 			setLocale(localeService.getLocales());
+ 		}), localeService.direction$.subscribe(() => {
+@@ -5175,7 +5172,8 @@ function DesktopWorkbenchContent(props) {
+ 		})];
+ 		return () => {
+ 			subscriptions.forEach((subscription) => subscription.unsubscribe());
+-			document.body.removeChild(portalContainer);
++			ownerDocument.removeEventListener("fullscreenchange", syncPortalContainer);
++			portalContainer.remove();
+ 		};
+ 	}, [
+ 		localeService,
+diff --git a/lib/umd/index.js b/lib/umd/index.js
+index 6d88068b2421b6b77a747f8d3d38b35b123a7f7b..4e27428067e983923858bb0eabfe9e0e71dbdf70 100644
+--- a/lib/umd/index.js
++++ b/lib/umd/index.js
+@@ -27,7 +27,7 @@ hover:univer-bg-gray-100 whitespace-nowrap univer-w-max
+                     `,Oo(u.id,p,r)&&`
+                   univer-bg-primary-50 univer-text-primary-700 univer-ring-1 univer-ring-primary-600
+                   dark:!univer-bg-primary-900 dark:!univer-text-primary-100
+-                `),disabled:d,onClick:()=>{var e;d||s==null||s({label:(e=u.id)==null?n.key:e,commandId:u.commandId,id:u.id,tooltip:u.tooltip&&l.t(u.tooltip)})},children:[m&&(0,a.jsx)(m,{className:`univer-text-base`,extend:{colorChannel1:`var(--univer-primary-600)`}}),(0,a.jsx)(`span`,{className:`univer-break-words univer-text-center univer-text-xs univer-leading-4`,children:u.title?l.t(u.title):n.key})]})}function Mo(e){let{item:o,activeItemIds:s,hiddenItemIds:c=Do,onOptionSelect:l}=e,[u,d]=(0,r.useState)([]),[f,p]=(0,r.useState)([]),m=(0,i.useDependency)(G),h=(0,i.useDependency)(t.LocaleService);(0,r.useEffect)(()=>{if(!o.children)return;let e=o.children.map(e=>{var r,i;return(0,t.convertObservableToBehaviorSubject)((r=(i=e.item)==null?void 0:i.activated$)==null?(0,n.of)(!1):r,!1)}),r=(0,n.combineLatest)(e).subscribe(e=>{let t=e.map((e,t)=>({actived:e,item:ko(o.children[t])})).filter(e=>e.actived);t.length===0?d([]):d(t.map(e=>e.item))});return()=>{r.unsubscribe(),e.forEach(e=>{e.complete()})}},[o]),(0,r.useEffect)(()=>{if(!o.children)return;let e=o.children.map(e=>{var r,i;return(0,t.convertObservableToBehaviorSubject)((r=(i=e.item)==null?void 0:i.hidden$)==null?(0,n.of)(!1):r,!1)}),r=(0,n.combineLatest)(e).subscribe(e=>{let t=e.map((e,t)=>({hidden:e,item:ko(o.children[t])})).filter(e=>e.hidden);t.length===0?p([]):p(t.map(e=>e.item))});return()=>{r.unsubscribe(),e.forEach(e=>{e.complete()})}},[o]);let g=(0,r.useMemo)(()=>{var e;return Ao((e=o.children)==null?[]:e,[...f,...c])},[c,f,o.children]);return o.children?(0,a.jsx)(Eo,{items:g.map(e=>{var t,n,r,i;return{key:e.key,onClick:()=>{var t,n,r,i,a,o;l==null||l({label:(t=(n=e.item)==null?void 0:n.id)==null?e.key:t,commandId:(r=e.item)==null?void 0:r.commandId,id:(i=e.item)==null?void 0:i.id,tooltip:((a=e.item)==null?void 0:a.tooltip)&&h.t((o=e.item)==null?void 0:o.tooltip)})},className:``,iconClassName:((t=e.item)==null?void 0:t.icon)===`TextTypeIcon`?`!univer-size-3.5`:void 0,Icon:m.get(e.item.icon),active:Oo((n=e.item)==null?void 0:n.id,u.includes((r=(i=e.item)==null?void 0:i.id)==null?``:r),s)}})}):null}function No(e){var t;let{item:n,activeItemIds:r,hiddenItemIds:i=Do,onOptionSelect:o}=e;return(t=n.children)!=null&&t.length?(0,a.jsx)(`div`,{className:`univer-item-center univer-grid univer-grid-cols-3 univer-gap-1.5 univer-py-1`,children:Ao(n.children,i).map(e=>(0,a.jsx)(jo,{menuSchema:e,activeItemIds:r,onOptionSelect:o},e.key))}):null}let Po=`univer-inline-flex univer-items-center univer-gap-2`;function Fo(e){return typeof e==`object`&&(e==null?void 0:e.selectable)===!1}function Io(e){return typeof e==`object`&&(e==null?void 0:e.hoverable)===!1}function Lo(e){var t;return e.item?!0:(t=e.children)!=null&&t.length?e.children.some(e=>!!e.item):!1}function Ro(e){var t,s;let{menuType:c,menuSessionVersion:l=0,className:u,activeItemIds:d,hiddenItemIds:f,onOptionSelect:p}=e,m=(0,i.useDependency)(X),h=(0,i.useDependency)(Y),[g,_]=(0,r.useState)(null),[v,y]=(0,r.useState)(()=>typeof window>`u`?240:Math.max(120,window.innerHeight-16)),b=(0,r.useMemo)(()=>c?m.getMenuByPositionKey(c):[],[m,c,(0,i.useObservable)((0,r.useMemo)(()=>m.menuChanged$.pipe((0,n.startWith)(void 0),(0,n.scan)(e=>e+1,0)),[m]),0),l]),x=(t=(s=h.rootContainerElement)==null||(s=s.ownerDocument)==null?void 0:s.body)==null?typeof document<`u`?document.body:null:t;return Oi(g,h.rootContainerElement),(0,r.useEffect)(()=>{var e,t;let n=(e=(t=h.rootContainerElement)==null||(t=t.ownerDocument)==null?void 0:t.defaultView)==null?typeof window<`u`?window:null:e;if(!n)return;let r=0,i=()=>{r&&n.cancelAnimationFrame(r),r=n.requestAnimationFrame(()=>{y(Math.max(120,n.innerHeight-16))})};return i(),n.addEventListener(`resize`,i),()=>{r&&n.cancelAnimationFrame(r),n.removeEventListener(`resize`,i)}},[h.rootContainerElement]),c?(0,a.jsx)(`div`,{ref:_,className:(0,o.clsx)(`univer-box-border univer-grid univer-min-w-52 univer-max-w-full univer-gap-1 univer-overflow-y-auto univer-overscroll-contain univer-rounded-md univer-bg-white univer-px-2 univer-py-1 univer-text-sm univer-text-gray-900 univer-shadow-md dark:!univer-bg-gray-700 dark:!univer-text-white`,o.borderClassName,o.scrollbarClassName,u),style:{maxHeight:v},onWheel:e=>e.stopPropagation(),children:(0,a.jsx)(zo,{menuSchemas:b,menuSessionVersion:l,submenuPortalContainer:x,activeItemIds:d,hiddenItemIds:f,onOptionSelect:p,maxMenuHeight:v})}):null}function zo(e){let{menuSchemas:n,menuSessionVersion:s,submenuPortalContainer:c,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d,maxMenuHeight:f}=e,p=(0,i.useDependency)(t.LocaleService),m=Vo(n),h=(0,r.useMemo)(()=>n.filter(e=>Lo(e)?e.children?!m[e.key]:!0:!1),[m,n]);return(0,a.jsx)(a.Fragment,{children:h.map((e,t)=>{var n;let r=t!==h.length-1;return e.item?(0,a.jsx)(Bo,{menuKey:e.key,menuItem:e.item,menuSessionVersion:s,submenuPortalContainer:c,onOptionSelect:d,maxMenuHeight:f,hiddenItemIds:u},e.key):(n=e.children)!=null&&n.length?e.quickLayout?(0,a.jsx)(`div`,{className:(0,o.clsx)(`univer-py-1`,r&&o.borderBottomClassName),children:e.quickLayout===`tile`?(0,a.jsx)(No,{item:e,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d}):(0,a.jsx)(Mo,{item:e,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d})},e.key):e.tiny?(0,a.jsx)(`div`,{className:(0,o.clsx)(`univer-flex univer-items-center univer-gap-1 univer-py-1`,r&&o.borderBottomClassName),children:e.children.map(e=>e.item&&(0,a.jsx)(Bo,{menuKey:e.key,menuItem:e.item,menuSessionVersion:s,submenuPortalContainer:c,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d,maxMenuHeight:f,compact:!0},e.key))},e.key):(0,a.jsxs)(`div`,{className:(0,o.clsx)(`univer-grid univer-gap-1 univer-py-1`,r&&o.borderBottomClassName),children:[e.title&&(0,a.jsx)(`strong`,{className:`univer-px-2 univer-text-xs univer-font-semibold univer-text-gray-600 dark:!univer-text-gray-300`,children:p.t(e.title)}),e.children.map(e=>e.item&&(0,a.jsx)(Bo,{menuKey:e.key,menuItem:e.item,menuSessionVersion:s,submenuPortalContainer:c,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d,maxMenuHeight:f},e.key))]},e.key):null})})}function Bo(e){let{menuKey:s,menuItem:c,menuSessionVersion:u,submenuPortalContainer:d,activeItemIds:f,hiddenItemIds:p=[],compact:m=!1,onOptionSelect:h,maxMenuHeight:g}=e,_=(0,i.useDependency)(t.LocaleService),v=(0,i.useObservable)(_.direction$),y=(0,i.useDependency)(X),b=(0,i.useObservable)(c.disabled$,!1),x=(0,i.useObservable)(c.activated$,!1),S=(0,i.useObservable)(c.hidden$,!1),C=(0,i.useObservable)(c.value$),w=c,T=(0,i.useObservable)((0,n.isObservable)(w.selections)?w.selections:void 0),[E,D]=(0,r.useState)(C),[O,k]=(0,r.useState)(!1),[A,j]=(0,r.useState)({left:0,top:0}),[M,N]=(0,r.useState)(!1),[P,F]=(0,r.useState)(`right`),I=(0,r.useRef)(null),ee=(0,r.useRef)(null),L=(0,r.useRef)(null),te=(0,r.useMemo)(()=>c.type!==1&&c.type!==2?[]:T||(Array.isArray(w.selections)?w.selections:[]),[c.type,T,w.selections]),ne=(0,r.useMemo)(()=>c.type!==3||!c.id?[]:y.getMenuByPositionKey(c.id),[c.id,c.type,y,u]),re=te.length>0,ie=ne.length>0,R=re||ie,ae=w.selectionsCommandId,z=(0,r.useCallback)(()=>{L.current!=null&&(clearTimeout(L.current),L.current=null)},[]),oe=(0,r.useCallback)(()=>{z(),L.current=setTimeout(()=>{L.current=null,k(!1)},500)},[z]);(0,r.useEffect)(()=>{D(C)},[C]),(0,r.useEffect)(()=>()=>z(),[z]),(0,r.useEffect)(()=>{if(!O){N(!1);return}let e=()=>{let e=I.current,t=ee.current;if(!e||!t)return;let n=e.getBoundingClientRect(),r=t.getBoundingClientRect(),i=n.right-2,a=n.left-r.width+2,o=i+r.width+8>window.innerWidth&&a>=8,s=o?a:i;F(o?`left`:`right`);let c=window.innerHeight-8-r.height;j({left:s,top:c<8?8:Math.min(Math.max(n.top,8),c)}),N(!0)},t=window.requestAnimationFrame(e);return window.addEventListener(`resize`,e),window.addEventListener(`scroll`,e,!0),()=>{window.cancelAnimationFrame(t),window.removeEventListener(`resize`,e),window.removeEventListener(`scroll`,e,!0)}},[O,re,ie]);let se=c.id!=null&&p.includes(c.id)||p.includes(s);if(S||se)return null;let ce=e=>{D((0,t.isRealNum)(e)&&typeof e==`string`?Number.parseInt(e):e)},B=e=>{h==null||h(e),z(),k(!1)},le=(0,o.clsx)(m?`
++                `),disabled:d,onClick:()=>{var e;d||s==null||s({label:(e=u.id)==null?n.key:e,commandId:u.commandId,id:u.id,tooltip:u.tooltip&&l.t(u.tooltip)})},children:[m&&(0,a.jsx)(m,{className:`univer-text-base`,extend:{colorChannel1:`var(--univer-primary-600)`}}),(0,a.jsx)(`span`,{className:`univer-break-words univer-text-center univer-text-xs univer-leading-4`,children:u.title?l.t(u.title):n.key})]})}function Mo(e){let{item:o,activeItemIds:s,hiddenItemIds:c=Do,onOptionSelect:l}=e,[u,d]=(0,r.useState)([]),[f,p]=(0,r.useState)([]),m=(0,i.useDependency)(G),h=(0,i.useDependency)(t.LocaleService);(0,r.useEffect)(()=>{if(!o.children)return;let e=o.children.map(e=>{var r,i;return(0,t.convertObservableToBehaviorSubject)((r=(i=e.item)==null?void 0:i.activated$)==null?(0,n.of)(!1):r,!1)}),r=(0,n.combineLatest)(e).subscribe(e=>{let t=e.map((e,t)=>({actived:e,item:ko(o.children[t])})).filter(e=>e.actived);t.length===0?d([]):d(t.map(e=>e.item))});return()=>{r.unsubscribe(),e.forEach(e=>{e.complete()})}},[o]),(0,r.useEffect)(()=>{if(!o.children)return;let e=o.children.map(e=>{var r,i;return(0,t.convertObservableToBehaviorSubject)((r=(i=e.item)==null?void 0:i.hidden$)==null?(0,n.of)(!1):r,!1)}),r=(0,n.combineLatest)(e).subscribe(e=>{let t=e.map((e,t)=>({hidden:e,item:ko(o.children[t])})).filter(e=>e.hidden);t.length===0?p([]):p(t.map(e=>e.item))});return()=>{r.unsubscribe(),e.forEach(e=>{e.complete()})}},[o]);let g=(0,r.useMemo)(()=>{var e;return Ao((e=o.children)==null?[]:e,[...f,...c])},[c,f,o.children]);return o.children?(0,a.jsx)(Eo,{items:g.map(e=>{var t,n,r,i;return{key:e.key,onClick:()=>{var t,n,r,i,a,o;l==null||l({label:(t=(n=e.item)==null?void 0:n.id)==null?e.key:t,commandId:(r=e.item)==null?void 0:r.commandId,id:(i=e.item)==null?void 0:i.id,tooltip:((a=e.item)==null?void 0:a.tooltip)&&h.t((o=e.item)==null?void 0:o.tooltip)})},className:``,iconClassName:((t=e.item)==null?void 0:t.icon)===`TextTypeIcon`?`!univer-size-3.5`:void 0,Icon:m.get(e.item.icon),active:Oo((n=e.item)==null?void 0:n.id,u.includes((r=(i=e.item)==null?void 0:i.id)==null?``:r),s)}})}):null}function No(e){var t;let{item:n,activeItemIds:r,hiddenItemIds:i=Do,onOptionSelect:o}=e;return(t=n.children)!=null&&t.length?(0,a.jsx)(`div`,{className:`univer-item-center univer-grid univer-grid-cols-3 univer-gap-1.5 univer-py-1`,children:Ao(n.children,i).map(e=>(0,a.jsx)(jo,{menuSchema:e,activeItemIds:r,onOptionSelect:o},e.key))}):null}let Po=`univer-inline-flex univer-items-center univer-gap-2`;function Fo(e){return typeof e==`object`&&(e==null?void 0:e.selectable)===!1}function Io(e){return typeof e==`object`&&(e==null?void 0:e.hoverable)===!1}function Lo(e){var t;return e.item?!0:(t=e.children)!=null&&t.length?e.children.some(e=>!!e.item):!1}function Ro(e){let{menuType:c,menuSessionVersion:l=0,className:u,activeItemIds:d,hiddenItemIds:f,onOptionSelect:p}=e,m=(0,i.useDependency)(X),h=(0,i.useDependency)(Y),[g,_]=(0,r.useState)(null),[v,y]=(0,r.useState)(()=>typeof window>`u`?240:Math.max(120,window.innerHeight-16)),b=(0,r.useMemo)(()=>c?m.getMenuByPositionKey(c):[],[m,c,(0,i.useObservable)((0,r.useMemo)(()=>m.menuChanged$.pipe((0,n.startWith)(void 0),(0,n.scan)(e=>e+1,0)),[m]),0),l]),x=(0,r.useContext)(o.ConfigContext).mountContainer;return Oi(g,h.rootContainerElement),(0,r.useEffect)(()=>{var e,t;let n=(e=(t=h.rootContainerElement)==null||(t=t.ownerDocument)==null?void 0:t.defaultView)==null?typeof window<`u`?window:null:e;if(!n)return;let r=0,i=()=>{r&&n.cancelAnimationFrame(r),r=n.requestAnimationFrame(()=>{y(Math.max(120,n.innerHeight-16))})};return i(),n.addEventListener(`resize`,i),()=>{r&&n.cancelAnimationFrame(r),n.removeEventListener(`resize`,i)}},[h.rootContainerElement]),c?(0,a.jsx)(`div`,{ref:_,className:(0,o.clsx)(`univer-box-border univer-grid univer-min-w-52 univer-max-w-full univer-gap-1 univer-overflow-y-auto univer-overscroll-contain univer-rounded-md univer-bg-white univer-px-2 univer-py-1 univer-text-sm univer-text-gray-900 univer-shadow-md dark:!univer-bg-gray-700 dark:!univer-text-white`,o.borderClassName,o.scrollbarClassName,u),style:{maxHeight:v},onWheel:e=>e.stopPropagation(),children:(0,a.jsx)(zo,{menuSchemas:b,menuSessionVersion:l,submenuPortalContainer:x,activeItemIds:d,hiddenItemIds:f,onOptionSelect:p,maxMenuHeight:v})}):null}function zo(e){let{menuSchemas:n,menuSessionVersion:s,submenuPortalContainer:c,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d,maxMenuHeight:f}=e,p=(0,i.useDependency)(t.LocaleService),m=Vo(n),h=(0,r.useMemo)(()=>n.filter(e=>Lo(e)?e.children?!m[e.key]:!0:!1),[m,n]);return(0,a.jsx)(a.Fragment,{children:h.map((e,t)=>{var n;let r=t!==h.length-1;return e.item?(0,a.jsx)(Bo,{menuKey:e.key,menuItem:e.item,menuSessionVersion:s,submenuPortalContainer:c,onOptionSelect:d,maxMenuHeight:f,hiddenItemIds:u},e.key):(n=e.children)!=null&&n.length?e.quickLayout?(0,a.jsx)(`div`,{className:(0,o.clsx)(`univer-py-1`,r&&o.borderBottomClassName),children:e.quickLayout===`tile`?(0,a.jsx)(No,{item:e,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d}):(0,a.jsx)(Mo,{item:e,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d})},e.key):e.tiny?(0,a.jsx)(`div`,{className:(0,o.clsx)(`univer-flex univer-items-center univer-gap-1 univer-py-1`,r&&o.borderBottomClassName),children:e.children.map(e=>e.item&&(0,a.jsx)(Bo,{menuKey:e.key,menuItem:e.item,menuSessionVersion:s,submenuPortalContainer:c,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d,maxMenuHeight:f,compact:!0},e.key))},e.key):(0,a.jsxs)(`div`,{className:(0,o.clsx)(`univer-grid univer-gap-1 univer-py-1`,r&&o.borderBottomClassName),children:[e.title&&(0,a.jsx)(`strong`,{className:`univer-px-2 univer-text-xs univer-font-semibold univer-text-gray-600 dark:!univer-text-gray-300`,children:p.t(e.title)}),e.children.map(e=>e.item&&(0,a.jsx)(Bo,{menuKey:e.key,menuItem:e.item,menuSessionVersion:s,submenuPortalContainer:c,activeItemIds:l,hiddenItemIds:u,onOptionSelect:d,maxMenuHeight:f},e.key))]},e.key):null})})}function Bo(e){let{menuKey:s,menuItem:c,menuSessionVersion:u,submenuPortalContainer:d,activeItemIds:f,hiddenItemIds:p=[],compact:m=!1,onOptionSelect:h,maxMenuHeight:g}=e,_=(0,i.useDependency)(t.LocaleService),v=(0,i.useObservable)(_.direction$),y=(0,i.useDependency)(X),b=(0,i.useObservable)(c.disabled$,!1),x=(0,i.useObservable)(c.activated$,!1),S=(0,i.useObservable)(c.hidden$,!1),C=(0,i.useObservable)(c.value$),w=c,T=(0,i.useObservable)((0,n.isObservable)(w.selections)?w.selections:void 0),[E,D]=(0,r.useState)(C),[O,k]=(0,r.useState)(!1),[A,j]=(0,r.useState)({left:0,top:0}),[M,N]=(0,r.useState)(!1),[P,F]=(0,r.useState)(`right`),I=(0,r.useRef)(null),ee=(0,r.useRef)(null),L=(0,r.useRef)(null),te=(0,r.useMemo)(()=>c.type!==1&&c.type!==2?[]:T||(Array.isArray(w.selections)?w.selections:[]),[c.type,T,w.selections]),ne=(0,r.useMemo)(()=>c.type!==3||!c.id?[]:y.getMenuByPositionKey(c.id),[c.id,c.type,y,u]),re=te.length>0,ie=ne.length>0,R=re||ie,ae=w.selectionsCommandId,z=(0,r.useCallback)(()=>{L.current!=null&&(clearTimeout(L.current),L.current=null)},[]),oe=(0,r.useCallback)(()=>{z(),L.current=setTimeout(()=>{L.current=null,k(!1)},500)},[z]);(0,r.useEffect)(()=>{D(C)},[C]),(0,r.useEffect)(()=>()=>z(),[z]),(0,r.useEffect)(()=>{if(!O){N(!1);return}let e=()=>{let e=I.current,t=ee.current;if(!e||!t)return;let n=e.getBoundingClientRect(),r=t.getBoundingClientRect(),i=n.right-2,a=n.left-r.width+2,o=i+r.width+8>window.innerWidth&&a>=8,s=o?a:i;F(o?`left`:`right`);let c=window.innerHeight-8-r.height;j({left:s,top:c<8?8:Math.min(Math.max(n.top,8),c)}),N(!0)},t=window.requestAnimationFrame(e);return window.addEventListener(`resize`,e),window.addEventListener(`scroll`,e,!0),()=>{window.cancelAnimationFrame(t),window.removeEventListener(`resize`,e),window.removeEventListener(`scroll`,e,!0)}},[O,re,ie]);let se=c.id!=null&&p.includes(c.id)||p.includes(s);if(S||se)return null;let ce=e=>{D((0,t.isRealNum)(e)&&typeof e==`string`?Number.parseInt(e):e)},B=e=>{h==null||h(e),z(),k(!1)},le=(0,o.clsx)(m?`
+               univer-relative univer-flex univer-size-8 univer-items-center univer-justify-center univer-rounded-md
+               univer-border-none univer-bg-transparent univer-p-0 univer-text-left univer-text-sm
+               dark:!univer-text-white
+@@ -46,7 +46,7 @@ hover:univer-bg-gray-100 whitespace-nowrap univer-w-max
+         `),ue=(0,a.jsxs)(`span`,{className:Po,children:[(0,a.jsx)(K,{value:E,title:m?void 0:c.title,label:c.label,icon:c.icon,onChange:ce}),c.shortcut&&` (${c.shortcut})`]}),V=c.type===0||c.type===2,de=Fo(c.label),H=(0,o.clsx)(le,Io(c.label)&&`
+       hover:univer-bg-transparent
+       dark:hover:!univer-bg-transparent
+-    `);return(0,a.jsxs)(`div`,{ref:I,className:`univer-relative`,onMouseEnter:()=>{z(),R&&!b&&(N(!1),k(!0))},onMouseLeave:e=>{if(R){var t;let n=e.relatedTarget;if(n&&(t=ee.current)!=null&&t.contains(n))return;oe()}},children:[de?(0,a.jsxs)(`div`,{className:H,"aria-disabled":b,children:[ue,R&&(0,a.jsx)(Vt,{className:`univer-size-3.5 univer-text-gray-400 dark:!univer-text-gray-200`})]}):(0,a.jsxs)(`button`,{type:`button`,className:H,disabled:b,title:m&&typeof c.tooltip==`string`?_.t(c.tooltip):void 0,onClick:()=>{if(z(),R){if(V){let e=c;h==null||h({commandId:e.commandId,params:e.params,value:E,id:e.id,label:s});return}N(!1),k(!0);return}if(!V)return;let e=c;h==null||h({commandId:e.commandId,params:e.params,value:E,id:e.id,label:s})},children:[ue,R&&!m&&(0,a.jsx)(Vt,{className:`univer-size-3.5 univer-text-gray-400 dark:!univer-text-gray-200`})]}),R&&O&&(d?(0,l.createPortal)((0,a.jsx)(`div`,{ref:ee,dir:v,"data-u-context-menu-submenu":`true`,className:`univer-z-[1080] univer-w-max univer-max-w-[calc(100vw-16px)]`,style:{position:`fixed`,left:A.left,top:A.top,paddingLeft:P===`right`?20:0,paddingRight:P===`left`?20:0,maxHeight:g,visibility:M?`visible`:`hidden`,pointerEvents:M?`auto`:`none`},onMouseEnter:z,onMouseLeave:e=>{var t;let n=e.relatedTarget;n&&(t=I.current)!=null&&t.contains(n)||oe()},onWheel:e=>e.stopPropagation(),children:(0,a.jsxs)(`div`,{className:(0,o.clsx)(`univer-overflow-y-auto univer-overscroll-contain univer-rounded-md univer-border univer-border-solid univer-border-gray-200 univer-bg-white univer-p-2 univer-shadow-md dark:!univer-border-gray-600 dark:!univer-bg-gray-700`,o.scrollbarClassName),style:{maxHeight:g},children:[re&&(0,a.jsx)(`div`,{className:`univer-grid univer-gap-1`,children:te.map((e,t)=>{var n;let r=`${c.id}-${(n=e.label)==null?e.id:n}-${t}`,i=E!==void 0&&String(E)===String(e.value),l=!Fo(e.label),u=!Io(e.label),d=(0,o.clsx)(`univer-relative univer-box-border univer-flex univer-min-h-8 univer-w-full univer-items-center univer-rounded-md univer-border-none univer-bg-transparent univer-px-2 univer-text-left univer-text-sm dark:!univer-text-white`,e.disabled?`univer-cursor-not-allowed univer-opacity-60`:u&&`
++    `);return(0,a.jsxs)(`div`,{ref:I,className:`univer-relative`,onMouseEnter:()=>{z(),R&&!b&&(k(!0))},onMouseLeave:e=>{if(R){var t;let n=e.relatedTarget;if(n&&(t=ee.current)!=null&&t.contains(n))return;oe()}},children:[de?(0,a.jsxs)(`div`,{className:H,"aria-disabled":b,children:[ue,R&&(0,a.jsx)(Vt,{className:`univer-size-3.5 univer-text-gray-400 dark:!univer-text-gray-200`})]}):(0,a.jsxs)(`button`,{type:`button`,className:H,disabled:b,title:m&&typeof c.tooltip==`string`?_.t(c.tooltip):void 0,onClick:()=>{if(z(),R){if(V){let e=c;h==null||h({commandId:e.commandId,params:e.params,value:E,id:e.id,label:s});return}k(!0);return}if(!V)return;let e=c;h==null||h({commandId:e.commandId,params:e.params,value:E,id:e.id,label:s})},children:[ue,R&&!m&&(0,a.jsx)(Vt,{className:`univer-size-3.5 univer-text-gray-400 dark:!univer-text-gray-200`})]}),R&&O&&(d?(0,l.createPortal)((0,a.jsx)(`div`,{ref:ee,dir:v,"data-u-context-menu-submenu":`true`,className:`univer-z-[1080] univer-w-max univer-max-w-[calc(100vw-16px)]`,style:{position:`fixed`,left:A.left,top:A.top,paddingLeft:P===`right`?20:0,paddingRight:P===`left`?20:0,maxHeight:g,visibility:M?`visible`:`hidden`,pointerEvents:M?`auto`:`none`},onMouseEnter:z,onMouseLeave:e=>{var t;let n=e.relatedTarget;n&&(t=I.current)!=null&&t.contains(n)||oe()},onWheel:e=>e.stopPropagation(),children:(0,a.jsxs)(`div`,{className:(0,o.clsx)(`univer-overflow-y-auto univer-overscroll-contain univer-rounded-md univer-border univer-border-solid univer-border-gray-200 univer-bg-white univer-p-2 univer-shadow-md dark:!univer-border-gray-600 dark:!univer-bg-gray-700`,o.scrollbarClassName),style:{maxHeight:g},children:[re&&(0,a.jsx)(`div`,{className:`univer-grid univer-gap-1`,children:te.map((e,t)=>{var n;let r=`${c.id}-${(n=e.label)==null?e.id:n}-${t}`,i=E!==void 0&&String(E)===String(e.value),l=!Fo(e.label),u=!Io(e.label),d=(0,o.clsx)(`univer-relative univer-box-border univer-flex univer-min-h-8 univer-w-full univer-items-center univer-rounded-md univer-border-none univer-bg-transparent univer-px-2 univer-text-left univer-text-sm dark:!univer-text-white`,e.disabled?`univer-cursor-not-allowed univer-opacity-60`:u&&`
+                                                       univer-cursor-pointer
+                                                       hover:univer-bg-gray-50
+                                                       dark:hover:!univer-bg-gray-600
+@@ -55,7 +55,7 @@ hover:univer-bg-gray-100 whitespace-nowrap univer-w-max
+                                                               univer-text-primary-600
+                                                             `}),(0,a.jsx)(`span`,{className:(0,o.clsx)(Po,l&&i&&`
+                                                           univer-pl-4
+-                                                        `),children:(0,a.jsx)(K,{value$:e.value$,value:e.value,label:e.label,icon:e.icon,onChange:t=>{var n;B==null||B({...e,value:t,id:c.id,label:s,commandId:(n=e.commandId)==null?ae:n})}})})]});return l?(0,a.jsx)(`button`,{type:`button`,className:d,disabled:e.disabled,onClick:()=>{var t;B==null||B({...e,id:c.id,label:s,commandId:(t=e.commandId)==null?ae:t})},children:f},r):(0,a.jsx)(`div`,{className:d,"aria-disabled":e.disabled,children:f},r)})}),ie&&(0,a.jsx)(zo,{menuSchemas:ne,menuSessionVersion:u,submenuPortalContainer:d,activeItemIds:f,hiddenItemIds:p,onOptionSelect:B,maxMenuHeight:g})]})}),d):null)]})}function Vo(e){let[t,i]=(0,r.useState)({});return(0,r.useEffect)(()=>{let t=e.map(e=>{var t;return(t=e.children)!=null&&t.length?(0,n.combineLatest)(e.children.map(e=>{var t,r;return(t=(r=e.item)==null?void 0:r.hidden$)==null?(0,n.of)(!1):t})).subscribe(t=>{let n=t.every(e=>e===!0);i(t=>({...t,[e.key]:n}))}):null});return()=>{t.forEach(e=>e==null?void 0:e.unsubscribe()),i({})}},[e]),t}function Ho(e){let{hostId:t,visible:n,anchorRect:s,menuType:c,anchorVertical:l=`bottom`,menuOffset:u=0,onRequestClose:d,onOptionSelect:f}=e,p=(0,r.useRef)(null),m=(0,i.useDependency)(wo),h=(0,r.useRef)(d),g=(0,r.useRef)(0),_=(0,r.useRef)(n),v=(0,r.useRef)(c);(0,r.useEffect)(()=>{h.current=d},[d]),n&&(!_.current||c!==v.current)&&(g.current+=1),_.current=n,v.current=c,(0,r.useEffect)(()=>{let e=m.registerMenu(t,()=>{h.current()});return()=>{e.dispose(),m.deactivateMenu(t)}},[m,t]),(0,r.useLayoutEffect)(()=>{if(n){m.activateMenu(t);return}m.deactivateMenu(t)},[m,t,n]),(0,r.useEffect)(()=>{if(!n)return;let e=e=>e instanceof Element&&e.closest(`[data-u-context-menu-submenu]`),t=t=>{e(t.target)||p.current&&!p.current.contains(t.target)&&h.current()},r=e=>{e.key===`Escape`&&h.current()},i=t=>{var n;if(e(t.target)){t.stopPropagation();return}if((n=p.current)!=null&&n.contains(t.target)){t.stopPropagation();return}t.preventDefault(),t.stopPropagation()};return document.addEventListener(`pointerdown`,t),document.addEventListener(`keydown`,r),document.addEventListener(`wheel`,i,{capture:!0,passive:!1}),()=>{document.removeEventListener(`pointerdown`,t),document.removeEventListener(`keydown`,r),document.removeEventListener(`wheel`,i,!0)}},[n]);let y=(0,r.useMemo)(()=>{if(!s)return[0,0];let e=l===`top`?s.top:s.bottom,t=l===`top`?e-u:e+u;return[s.left,t]},[s,l,u]);return(0,a.jsx)(o.Popup,{visible:n&&!!s,offset:y,overflowVisible:!0,placementY:l===`top`?`above`:`below`,children:(0,a.jsx)(`section`,{ref:p,children:c&&(0,a.jsx)(Ro,{menuType:c,menuSessionVersion:g.current,onOptionSelect:f})})})}function Uo(){let[e,n]=(0,r.useState)(!1),[o,s]=(0,r.useState)(``),[c,l]=(0,r.useState)(null),u=(0,r.useRef)(e),d=(0,i.useDependency)(So),f=(0,i.useDependency)(t.ICommandService),p=(0,i.useInjector)();u.current=e,(0,r.useEffect)(()=>{let e=d.registerContextMenuHandler({handleContextMenu:m,hideContextMenu(){h()},get visible(){return u.current}});return()=>{e.dispose()}},[d]);function m(e,t){n(!1),requestAnimationFrame(()=>{s(t),l({left:e.clientX,top:e.clientY,bottom:e.clientY}),n(!0)})}function h(){n(!1)}return(0,a.jsx)(Ho,{hostId:`desktop-context-menu`,visible:e,anchorRect:c,menuType:o,onRequestClose:h,onOptionSelect:e=>{let{label:t,commandId:n,value:r}=e,i=typeof e.params==`function`?e.params():e.params,a=i===void 0?{value:r}:i;f&&f.executeCommand(n==null?t:n,a),p.get(Y).focus(),h()}})}function Wo(){let e=(0,i.useDependency)(T),t=(0,i.useObservable)(e.sidebarOptions$),n=(0,r.useRef)(null),s=(0,r.useRef)(null),c=(0,r.useRef)(null),[l,u]=(0,r.useState)(!1),d=(0,r.useRef)(null),f=(0,r.useMemo)(()=>{if(!t)return null;let e={...t};for(let n of[`children`,`header`,`footer`]){let r=n;if(t[r]){let{key:n,...i}=t[r];i&&(e[r]=(0,a.jsx)(K,{...i},n))}}return e},[t]);(0,r.useEffect)(()=>{f!=null&&f.visible&&c.current&&c.current.focus()},[f==null?void 0:f.visible]),(0,r.useEffect)(()=>{let t=t=>{t.key===`Escape`&&e.visible&&(t.stopPropagation(),e.close())};return document.addEventListener(`keydown`,t),()=>document.removeEventListener(`keydown`,t)},[e]);let p=(0,r.useCallback)(e=>{e.preventDefault(),e.stopPropagation(),u(!0),document.body.style.cursor=`col-resize`,document.body.style.userSelect=`none`},[]);(0,r.useEffect)(()=>{if(!l){document.body.style.cursor=``,document.body.style.userSelect=``;return}let t=e=>{if(!s.current)return;let t=s.current.getBoundingClientRect().right-e.clientX,n=Math.max(280,Math.min(t,800));d.current=n,s.current.style.width=`${n}px`},n=()=>{u(!1),d.current!=null&&(e.setWidth(d.current),d.current=null)};return document.addEventListener(`mousemove`,t),document.addEventListener(`mouseup`,n),()=>{document.removeEventListener(`mousemove`,t),document.removeEventListener(`mouseup`,n)}},[l,e]),(0,r.useEffect)(()=>(n.current&&e.setContainer(n.current),()=>{e.setContainer(void 0)}),[e]),(0,r.useEffect)(()=>{let t=t=>{e.scrollEvent$.next(t)},r=n.current;return r&&r.addEventListener(`scroll`,t),()=>{r==null||r.removeEventListener(`scroll`,t)}},[e]);let m=(0,r.useMemo)(()=>{if(l&&d.current!=null)return`${d.current}px`;if(!(f!=null&&f.visible))return 0;let t=e.width;return t?`${t}px`:typeof f.width==`number`?`${f.width}px`:f.width},[l,f,e]);function h(){e.close(t==null?void 0:t.id)}return(0,a.jsxs)(`section`,{ref:s,"data-u-comp":`sidebar`,role:`complementary`,"aria-expanded":!!(f!=null&&f.visible),"aria-label":`Sidebar panel`,className:(0,o.clsx)(`univer-relative univer-h-full univer-flex-shrink-0 univer-bg-white univer-text-gray-900 dark:!univer-bg-gray-900 dark:!univer-text-white`,{"univer-w-96 univer-translate-x-0":f==null?void 0:f.visible,"univer-w-0 univer-translate-x-full":!(f!=null&&f.visible)}),style:{width:l?void 0:m},children:[(f==null?void 0:f.visible)&&(0,a.jsx)(`div`,{className:`hover:univer-bg-primary-500/30 active:univer-bg-primary-500/50 univer-absolute univer-left-0 univer-top-0 univer-z-20 univer-h-full univer-w-1 univer-cursor-col-resize univer-transition-colors`,onMouseDown:p,role:`separator`,"aria-orientation":`vertical`,"aria-label":`Resize sidebar`,tabIndex:0,onKeyDown:t=>{if(!s.current)return;let n=s.current.getBoundingClientRect().width,r=n;t.key===`ArrowLeft`?(t.preventDefault(),r=Math.max(280,n-20)):t.key===`ArrowRight`&&(t.preventDefault(),r=Math.min(800,n+20)),r!==n&&(s.current.style.width=`${r}px`,e.setWidth(r))}}),(0,a.jsxs)(`section`,{ref:n,className:(0,o.clsx)(`univer-box-border univer-grid univer-h-0 univer-min-h-full univer-grid-rows-[auto_1fr_auto] univer-overflow-y-auto`,o.borderLeftBottomClassName,o.scrollbarClassName),children:[(0,a.jsxs)(`header`,{className:`univer-sticky univer-top-0 univer-z-10 univer-box-border univer-flex univer-cursor-default univer-items-center univer-justify-between univer-bg-white univer-p-4 univer-pb-2 univer-text-base univer-font-medium univer-text-gray-800 dark:!univer-bg-gray-900 dark:!univer-text-white`,children:[f==null?void 0:f.header,(0,a.jsx)(`button`,{ref:c,type:`button`,className:`focus:univer-ring-primary-500/50 univer-cursor-pointer univer-appearance-none univer-rounded-sm univer-border-none univer-bg-transparent univer-p-0 univer-text-gray-500 focus:univer-outline-none focus:univer-ring-2 dark:!univer-text-gray-300`,onClick:h,"aria-label":`Close sidebar`,children:(0,a.jsx)(xe,{})})]}),(0,a.jsx)(`section`,{className:`univer-box-border univer-cursor-default univer-px-4`,style:f==null?void 0:f.bodyStyle,children:f==null?void 0:f.children}),(f==null?void 0:f.footer)&&(0,a.jsx)(`footer`,{className:`univer-sticky univer-bottom-0 univer-box-border univer-bg-white univer-p-4 dark:!univer-bg-gray-900`,children:f.footer})]})]})}let Go=(0,t.createIdentifier)(`univer.zen-zone-service`);function Ko(){let e=(0,i.useDependency)(Go),[t,n]=(0,r.useState)(!1),[s,c]=(0,r.useState)(),l=(0,i.useObservable)(e.temporaryHidden$),u=(0,i.useDependency)(G);(0,r.useEffect)(()=>{let t=[e.visible$.subscribe(e=>{n(e)}),e.componentKey$.subscribe(e=>{c(e)})];return()=>{t.forEach(e=>{e.unsubscribe()})}},[]);let d=(0,r.useMemo)(()=>{let e=u.get(s==null?``:s);if(e)return e},[s]);return(0,a.jsx)(`section`,{className:(0,o.clsx)(`univer-absolute univer-z-[-1] univer-flex`,{"univer-animate-in univer-fade-in univer-inset-0 univer-z-[100] univer-bg-gray-100":t,"univer-hidden":l}),children:(0,a.jsx)(`div`,{className:`univer-relative univer-flex-1`,children:d&&(0,a.jsx)(d,{})})})}function qo(e){let t=ki(Mi);return(0,a.jsx)(Jo,{...e,...t})}function Jo(e){var n;let{header:s=!0,toolbar:c=!0,footer:l=!0,headerMenu:u=!0,contextMenu:d=!0,ribbonType:f=`classic`,mountContainer:p,onRendered:m}=e,h=(0,i.useDependency)(t.LocaleService),g=(0,i.useDependency)(t.ThemeService),_=(0,i.useDependency)(xo),v=(0,r.useRef)(null),y=(0,i.useDependency)(t.IConfigService).getConfig(Mi),b=$(`custom-header`),x=$(`footer`),S=$(`header`),C=$(`header-menu`),w=$(`content`),T=$(`left-sidebar`),E=$(`global`),D=$(`toolbar`),O=(n=y==null?void 0:y.popupRootId)==null?`univer-popup-portal`:n;(0,r.useLayoutEffect)(()=>{let e=g.currentTheme$.subscribe(e=>{_.injectThemeToHead(e)});return()=>{e.unsubscribe()}},[]);let[k,A]=(0,r.useState)(!1);(0,r.useLayoutEffect)(()=>{let e=g.darkMode$.subscribe(e=>{A(e),e?document.documentElement.classList.add(`univer-dark`):document.documentElement.classList.remove(`univer-dark`)});return()=>{e.unsubscribe()}},[]),(0,r.useEffect)(()=>{v.current&&(m==null||m(v.current))},[m]);let[j,M]=(0,r.useState)(h.getLocales()),[N,P]=(0,r.useState)(h.getDirection()),F=(0,r.useMemo)(()=>document.createElement(`div`),[]);return(0,r.useEffect)(()=>{document.body.appendChild(F);let e=[h.localeChanged$.subscribe(()=>{M(h.getLocales())}),h.direction$.subscribe(()=>{P(h.getDirection())})];return()=>{e.forEach(e=>e.unsubscribe()),document.body.removeChild(F)}},[h,p,F]),(0,r.useEffect)(()=>{F.dir=N},[N,F]),(0,a.jsxs)(o.ConfigProvider,{locale:j==null?void 0:j.design,direction:N,mountContainer:F,children:[(0,a.jsxs)(`div`,{"data-u-comp":`workbench-layout`,className:(0,o.clsx)(`univer-flex univer-h-full univer-min-h-0 univer-flex-col univer-bg-white dark:!univer-bg-gray-800`,{"univer-dark":k}),tabIndex:-1,onBlur:e=>e.stopPropagation(),onContextMenu:e=>e.preventDefault(),dir:N,children:[(0,a.jsx)(`div`,{className:`univer-relative univer-flex univer-min-h-0 univer-flex-col univer-bg-white dark:!univer-bg-gray-800`,children:(0,a.jsx)(Q,{components:b},`custom-header`)}),s&&c&&(0,a.jsx)(`header`,{"data-u-comp":`headerbar`,className:`univer-relative univer-z-10 univer-w-full univer-overflow-hidden`,children:(0,a.jsx)(Q,{components:D,sharedProps:{ribbonType:f,headerMenuComponents:C,headerMenu:u}},`toolbar`)}),(0,a.jsxs)(`section`,{className:`univer-relative univer-flex univer-min-h-0 univer-flex-1 univer-flex-col`,children:[(0,a.jsxs)(`div`,{className:`univer-grid univer-h-full univer-grid-cols-[auto_1fr_auto] univer-grid-rows-[100%] univer-overflow-hidden`,children:[(0,a.jsx)(`aside`,{"data-u-comp":`left-sidebar`,className:`univer-h-full`,children:(0,a.jsx)(Q,{components:T},`left-sidebar`)}),(0,a.jsxs)(`section`,{className:(0,o.clsx)(`univer-relative univer-grid univer-flex-1 univer-grid-rows-[auto_1fr] univer-overflow-hidden univer-bg-white dark:!univer-bg-gray-800`,o.borderBottomClassName),children:[(0,a.jsx)(`header`,{children:s&&(0,a.jsx)(Q,{components:S},`header`)}),(0,a.jsx)(`section`,{className:`univer-relative univer-overflow-hidden dark:!univer-bg-gray-900`,ref:v,"data-range-selector":!0,onContextMenu:e=>e.preventDefault(),children:(0,a.jsx)(Q,{components:w},`content`)})]}),(0,a.jsx)(`aside`,{"data-u-comp":`right-sidebar`,className:`univer-z-[100] univer-h-full`,children:(0,a.jsx)(Wo,{})})]}),l&&(0,a.jsx)(`footer`,{children:(0,a.jsx)(Q,{components:x,sharedProps:{contextMenu:d}},`footer`)}),(0,a.jsx)(Ko,{})]})]}),(0,a.jsxs)(`div`,{dir:N,children:[(0,a.jsx)(Q,{components:E},`global`),d&&(0,a.jsx)(Uo,{}),(0,a.jsx)(Yo,{}),(0,a.jsx)(`div`,{id:O})]})]})}function Yo(){let{mountContainer:e}=(0,r.useContext)(o.ConfigContext);return(0,l.createPortal)((0,a.jsx)(Q,{components:$(`floating`)},`floating`),e)}var Xo=class extends t.Disposable{constructor(e,t,n,r,i){super(),this._injector=e,this._instanceService=t,this._layoutService=n,this._lifecycleService=r,this._renderManagerService=i,S(this,`_steadyTimeout`,void 0),S(this,`_renderTimeout`,void 0),S(this,`_currentRenderId`,null)}dispose(){super.dispose(),clearTimeout(this._steadyTimeout),clearTimeout(this._renderTimeout),delete this._instanceService,delete this._layoutService,delete this._lifecycleService,delete this._renderManagerService}_bootstrapWorkbench(){this.disposeWithMe(this.bootstrap(async(e,n)=>{this._layoutService&&(this.disposeWithMe(this._layoutService.registerRootContainerElement(n)),this.disposeWithMe(this._layoutService.registerContentElement(e)));try{await this._lifecycleService.onStage(t.LifecycleStages.Ready),this._renderTimeout=window.setTimeout(()=>{let n=this._renderManagerService.getRenderAll();for(let[t]of n)if(this._changeRenderUnit(t,e))break;this.disposeWithMe(this._instanceService.focused$.subscribe(t=>{t&&this._changeRenderUnit(t,e)})),this.disposeWithMe(this._renderManagerService.created$.subscribe(t=>{var n;t.unitId===((n=this._instanceService.getFocusedUnit())==null?void 0:n.getUnitId())&&this._changeRenderUnit(t.unitId,e)})),this.disposeWithMe(this._renderManagerService.disposed$.subscribe(e=>{this._currentRenderId===e&&(this._currentRenderId=null)})),this._lifecycleService.stage=t.LifecycleStages.Rendered,this._steadyTimeout=window.setTimeout(()=>{this._lifecycleService.stage=t.LifecycleStages.Steady},3e3)},300)}catch(e){if(clearTimeout(this._steadyTimeout),clearTimeout(this._renderTimeout),e instanceof t.LifecycleUnreachableError)return;throw e}}))}_changeRenderUnit(e,n){if(this._currentRenderId===e)return!1;let r=this._renderManagerService.getRenderById(e);if(!r||!r.unitId||(0,t.isInternalEditorID)(r.unitId))return!1;let i=this._currentRenderId?this._renderManagerService.getRenderById(this._currentRenderId):null;return i==null||i.deactivate(),i==null||i.engine.unmount(),r.engine.mount(n),r.activate(),this._currentRenderId=e,!0}};let Zo=class extends Xo{constructor(e,t,n,r,i,a,o,s,c){super(t,a,i,n,r),this._config=e,this._componentManager=c,o.mergeMenu(Ka),this._initBuiltinComponents(s),this._registerComponents(),this._bootstrapWorkbench()}_registerComponents(){[[wi,Ci],[Ei,Ti],[Hi,Li],[Ui,Vi],[qi,Wi],[ji,o.ColorPicker]].forEach(([e,t])=>{this.disposeWithMe(this._componentManager.register(e,t))})}dispose(){super.dispose(),this._componentManager.dispose()}bootstrap(e){return Qo(this._injector,this._config,e)}_initBuiltinComponents(e){this.disposeWithMe(e.registerComponent(`floating`,()=>(0,i.connectInjector)(io,this._injector))),this.disposeWithMe(e.registerComponent(`content`,()=>(0,i.connectInjector)(Za,this._injector))),this.disposeWithMe(e.registerComponent(`toolbar`,()=>(0,i.connectInjector)(bo,this._injector)))}};Zo=J([q(1,(0,t.Inject)(t.Injector)),q(2,(0,t.Inject)(t.LifecycleService)),q(3,s.IRenderManagerService),q(4,Y),q(5,t.IUniverInstanceService),q(6,X),q(7,Z),q(8,(0,t.Inject)(G))],Zo);function Qo(e,n,r){let s,c=n.container;s=typeof c==`string`?document.getElementById(c)||$o(c):c instanceof HTMLElement?c:$o(`univer`);let l=(0,i.connectInjector)(qo,e),u=e=>r(e,s);function d(){(0,o.render)((0,a.jsx)(l,{...n,mountContainer:s,onRendered:u}),s)}return d(),(0,t.toDisposable)(()=>{(0,o.unmount)(s)})}function $o(e){let t=document.createElement(`div`);return t.id=e,t}let es=(0,t.createIdentifier)(`univer.ui.ui-controller`);var ts=`@univerjs/ui`,ns=`0.25.1`;let rs=`
++                                                        `),children:(0,a.jsx)(K,{value$:e.value$,value:e.value,label:e.label,icon:e.icon,onChange:t=>{var n;B==null||B({...e,value:t,id:c.id,label:s,commandId:(n=e.commandId)==null?ae:n})}})})]});return l?(0,a.jsx)(`button`,{type:`button`,className:d,disabled:e.disabled,onClick:()=>{var t;B==null||B({...e,id:c.id,label:s,commandId:(t=e.commandId)==null?ae:t})},children:f},r):(0,a.jsx)(`div`,{className:d,"aria-disabled":e.disabled,children:f},r)})}),ie&&(0,a.jsx)(zo,{menuSchemas:ne,menuSessionVersion:u,submenuPortalContainer:d,activeItemIds:f,hiddenItemIds:p,onOptionSelect:B,maxMenuHeight:g})]})}),d):null)]})}function Vo(e){let[t,i]=(0,r.useState)({});return(0,r.useEffect)(()=>{let t=e.map(e=>{var t;return(t=e.children)!=null&&t.length?(0,n.combineLatest)(e.children.map(e=>{var t,r;return(t=(r=e.item)==null?void 0:r.hidden$)==null?(0,n.of)(!1):t})).subscribe(t=>{let n=t.every(e=>e===!0);i(t=>({...t,[e.key]:n}))}):null});return()=>{t.forEach(e=>e==null?void 0:e.unsubscribe()),i({})}},[e]),t}function Ho(e){let{hostId:t,visible:n,anchorRect:s,menuType:c,anchorVertical:l=`bottom`,menuOffset:u=0,onRequestClose:d,onOptionSelect:f}=e,isOpen=n&&!!s,ownedNativeEvents=(0,r.useRef)(new WeakSet()),m=(0,i.useDependency)(wo),h=(0,r.useRef)(d),g=(0,r.useRef)(0),_=(0,r.useRef)(isOpen),v=(0,r.useRef)(c);(0,r.useEffect)(()=>{h.current=d},[d]),isOpen&&(!_.current||c!==v.current)&&(g.current+=1),_.current=isOpen,v.current=c,(0,r.useEffect)(()=>{let e=m.registerMenu(t,()=>{h.current()});return()=>{e.dispose(),m.deactivateMenu(t)}},[m,t]),(0,r.useLayoutEffect)(()=>{if(isOpen){m.activateMenu(t);return}m.deactivateMenu(t)},[m,t,isOpen]),(0,r.useEffect)(()=>{if(!isOpen)return;const handlePointerDown=event=>{if(!ownedNativeEvents.current.has(event))h.current()},handleEscape=event=>{if(event.key===`Escape`&&!event.defaultPrevented)h.current()},handleWheel=event=>{if(ownedNativeEvents.current.has(event))return;event.preventDefault();event.stopPropagation()};document.addEventListener(`pointerdown`,handlePointerDown);document.addEventListener(`keydown`,handleEscape);document.addEventListener(`wheel`,handleWheel,{passive:!1});return()=>{document.removeEventListener(`pointerdown`,handlePointerDown);document.removeEventListener(`keydown`,handleEscape);document.removeEventListener(`wheel`,handleWheel)}},[isOpen]);let y=(0,r.useMemo)(()=>{if(!s)return[0,0];let e=l===`top`?s.top:s.bottom,t=l===`top`?e-u:e+u;return[s.left,t]},[s,l,u]);return(0,a.jsx)(o.Popup,{visible:isOpen,offset:y,overflowVisible:!0,placementY:l===`top`?`above`:`below`,children:(0,a.jsx)(`section`,{onPointerDownCapture:event=>ownedNativeEvents.current.add(event.nativeEvent),onWheelCapture:event=>ownedNativeEvents.current.add(event.nativeEvent),children:isOpen&&c&&(0,a.jsx)(Ro,{menuType:c,menuSessionVersion:g.current,onOptionSelect:f})})})}function Uo(){let[e,n]=(0,r.useState)(!1),[o,s]=(0,r.useState)(``),[c,l]=(0,r.useState)(null),u=(0,r.useRef)(e),d=(0,i.useDependency)(So),f=(0,i.useDependency)(t.ICommandService),p=(0,i.useInjector)();u.current=e,(0,r.useEffect)(()=>{let e=d.registerContextMenuHandler({handleContextMenu:m,hideContextMenu(){h()},get visible(){return u.current}});return()=>{e.dispose()}},[d]);function m(e,t){n(!1),requestAnimationFrame(()=>{s(t),l({left:e.clientX,top:e.clientY,bottom:e.clientY}),n(!0)})}function h(){n(!1)}return(0,a.jsx)(Ho,{hostId:`desktop-context-menu`,visible:e,anchorRect:c,menuType:o,onRequestClose:h,onOptionSelect:e=>{let{label:t,commandId:n,value:r}=e,i=typeof e.params==`function`?e.params():e.params,a=i===void 0?{value:r}:i;f&&f.executeCommand(n==null?t:n,a),p.get(Y).focus(),h()}})}function Wo(){let e=(0,i.useDependency)(T),t=(0,i.useObservable)(e.sidebarOptions$),n=(0,r.useRef)(null),s=(0,r.useRef)(null),c=(0,r.useRef)(null),[l,u]=(0,r.useState)(!1),d=(0,r.useRef)(null),f=(0,r.useMemo)(()=>{if(!t)return null;let e={...t};for(let n of[`children`,`header`,`footer`]){let r=n;if(t[r]){let{key:n,...i}=t[r];i&&(e[r]=(0,a.jsx)(K,{...i},n))}}return e},[t]);(0,r.useEffect)(()=>{f!=null&&f.visible&&c.current&&c.current.focus()},[f==null?void 0:f.visible]),(0,r.useEffect)(()=>{let t=t=>{t.key===`Escape`&&e.visible&&(t.stopPropagation(),e.close())};return document.addEventListener(`keydown`,t),()=>document.removeEventListener(`keydown`,t)},[e]);let p=(0,r.useCallback)(e=>{e.preventDefault(),e.stopPropagation(),u(!0),document.body.style.cursor=`col-resize`,document.body.style.userSelect=`none`},[]);(0,r.useEffect)(()=>{if(!l){document.body.style.cursor=``,document.body.style.userSelect=``;return}let t=e=>{if(!s.current)return;let t=s.current.getBoundingClientRect().right-e.clientX,n=Math.max(280,Math.min(t,800));d.current=n,s.current.style.width=`${n}px`},n=()=>{u(!1),d.current!=null&&(e.setWidth(d.current),d.current=null)};return document.addEventListener(`mousemove`,t),document.addEventListener(`mouseup`,n),()=>{document.removeEventListener(`mousemove`,t),document.removeEventListener(`mouseup`,n)}},[l,e]),(0,r.useEffect)(()=>(n.current&&e.setContainer(n.current),()=>{e.setContainer(void 0)}),[e]),(0,r.useEffect)(()=>{let t=t=>{e.scrollEvent$.next(t)},r=n.current;return r&&r.addEventListener(`scroll`,t),()=>{r==null||r.removeEventListener(`scroll`,t)}},[e]);let m=(0,r.useMemo)(()=>{if(l&&d.current!=null)return`${d.current}px`;if(!(f!=null&&f.visible))return 0;let t=e.width;return t?`${t}px`:typeof f.width==`number`?`${f.width}px`:f.width},[l,f,e]);function h(){e.close(t==null?void 0:t.id)}return(0,a.jsxs)(`section`,{ref:s,"data-u-comp":`sidebar`,role:`complementary`,"aria-expanded":!!(f!=null&&f.visible),"aria-label":`Sidebar panel`,className:(0,o.clsx)(`univer-relative univer-h-full univer-flex-shrink-0 univer-bg-white univer-text-gray-900 dark:!univer-bg-gray-900 dark:!univer-text-white`,{"univer-w-96 univer-translate-x-0":f==null?void 0:f.visible,"univer-w-0 univer-translate-x-full":!(f!=null&&f.visible)}),style:{width:l?void 0:m},children:[(f==null?void 0:f.visible)&&(0,a.jsx)(`div`,{className:`hover:univer-bg-primary-500/30 active:univer-bg-primary-500/50 univer-absolute univer-left-0 univer-top-0 univer-z-20 univer-h-full univer-w-1 univer-cursor-col-resize univer-transition-colors`,onMouseDown:p,role:`separator`,"aria-orientation":`vertical`,"aria-label":`Resize sidebar`,tabIndex:0,onKeyDown:t=>{if(!s.current)return;let n=s.current.getBoundingClientRect().width,r=n;t.key===`ArrowLeft`?(t.preventDefault(),r=Math.max(280,n-20)):t.key===`ArrowRight`&&(t.preventDefault(),r=Math.min(800,n+20)),r!==n&&(s.current.style.width=`${r}px`,e.setWidth(r))}}),(0,a.jsxs)(`section`,{ref:n,className:(0,o.clsx)(`univer-box-border univer-grid univer-h-0 univer-min-h-full univer-grid-rows-[auto_1fr_auto] univer-overflow-y-auto`,o.borderLeftBottomClassName,o.scrollbarClassName),children:[(0,a.jsxs)(`header`,{className:`univer-sticky univer-top-0 univer-z-10 univer-box-border univer-flex univer-cursor-default univer-items-center univer-justify-between univer-bg-white univer-p-4 univer-pb-2 univer-text-base univer-font-medium univer-text-gray-800 dark:!univer-bg-gray-900 dark:!univer-text-white`,children:[f==null?void 0:f.header,(0,a.jsx)(`button`,{ref:c,type:`button`,className:`focus:univer-ring-primary-500/50 univer-cursor-pointer univer-appearance-none univer-rounded-sm univer-border-none univer-bg-transparent univer-p-0 univer-text-gray-500 focus:univer-outline-none focus:univer-ring-2 dark:!univer-text-gray-300`,onClick:h,"aria-label":`Close sidebar`,children:(0,a.jsx)(xe,{})})]}),(0,a.jsx)(`section`,{className:`univer-box-border univer-cursor-default univer-px-4`,style:f==null?void 0:f.bodyStyle,children:f==null?void 0:f.children}),(f==null?void 0:f.footer)&&(0,a.jsx)(`footer`,{className:`univer-sticky univer-bottom-0 univer-box-border univer-bg-white univer-p-4 dark:!univer-bg-gray-900`,children:f.footer})]})]})}let Go=(0,t.createIdentifier)(`univer.zen-zone-service`);function Ko(){let e=(0,i.useDependency)(Go),[t,n]=(0,r.useState)(!1),[s,c]=(0,r.useState)(),l=(0,i.useObservable)(e.temporaryHidden$),u=(0,i.useDependency)(G);(0,r.useEffect)(()=>{let t=[e.visible$.subscribe(e=>{n(e)}),e.componentKey$.subscribe(e=>{c(e)})];return()=>{t.forEach(e=>{e.unsubscribe()})}},[]);let d=(0,r.useMemo)(()=>{let e=u.get(s==null?``:s);if(e)return e},[s]);return(0,a.jsx)(`section`,{className:(0,o.clsx)(`univer-absolute univer-z-[-1] univer-flex`,{"univer-animate-in univer-fade-in univer-inset-0 univer-z-[100] univer-bg-gray-100":t,"univer-hidden":l}),children:(0,a.jsx)(`div`,{className:`univer-relative univer-flex-1`,children:d&&(0,a.jsx)(d,{})})})}function qo(e){let t=ki(Mi);return(0,a.jsx)(Jo,{...e,...t})}function Jo(e){var n;let{header:s=!0,toolbar:c=!0,footer:l=!0,headerMenu:u=!0,contextMenu:d=!0,ribbonType:f=`classic`,mountContainer:p,onRendered:m}=e,h=(0,i.useDependency)(t.LocaleService),g=(0,i.useDependency)(t.ThemeService),_=(0,i.useDependency)(xo),v=(0,r.useRef)(null),y=(0,i.useDependency)(t.IConfigService).getConfig(Mi),b=$(`custom-header`),x=$(`footer`),S=$(`header`),C=$(`header-menu`),w=$(`content`),T=$(`left-sidebar`),E=$(`global`),D=$(`toolbar`),O=(n=y==null?void 0:y.popupRootId)==null?`univer-popup-portal`:n;(0,r.useLayoutEffect)(()=>{let e=g.currentTheme$.subscribe(e=>{_.injectThemeToHead(e)});return()=>{e.unsubscribe()}},[]);let[k,A]=(0,r.useState)(!1);(0,r.useLayoutEffect)(()=>{let e=g.darkMode$.subscribe(e=>{A(e),e?document.documentElement.classList.add(`univer-dark`):document.documentElement.classList.remove(`univer-dark`)});return()=>{e.unsubscribe()}},[]),(0,r.useEffect)(()=>{v.current&&(m==null||m(v.current))},[m]);let[j,M]=(0,r.useState)(h.getLocales()),[N,P]=(0,r.useState)(h.getDirection()),F=(0,r.useMemo)(()=>{const container=p.ownerDocument.createElement(`div`);container.style.display=`contents`;return container},[p]);return(0,r.useEffect)(()=>{const portalDocument=p.ownerDocument,syncPortalContainer=()=>{const fullscreenOwner=portalDocument.fullscreenElement,parent=fullscreenOwner&&fullscreenOwner.contains(p)?fullscreenOwner:portalDocument.body;if(F.parentNode!==parent)parent.appendChild(F)};syncPortalContainer();portalDocument.addEventListener(`fullscreenchange`,syncPortalContainer);let e=[h.localeChanged$.subscribe(()=>{M(h.getLocales())}),h.direction$.subscribe(()=>{P(h.getDirection())})];return()=>{e.forEach(e=>e.unsubscribe()),portalDocument.removeEventListener(`fullscreenchange`,syncPortalContainer),F.remove()}},[h,p,F]),(0,r.useEffect)(()=>{F.dir=N},[N,F]),(0,a.jsxs)(o.ConfigProvider,{locale:j==null?void 0:j.design,direction:N,mountContainer:F,children:[(0,a.jsxs)(`div`,{"data-u-comp":`workbench-layout`,className:(0,o.clsx)(`univer-flex univer-h-full univer-min-h-0 univer-flex-col univer-bg-white dark:!univer-bg-gray-800`,{"univer-dark":k}),tabIndex:-1,onBlur:e=>e.stopPropagation(),onContextMenu:e=>e.preventDefault(),dir:N,children:[(0,a.jsx)(`div`,{className:`univer-relative univer-flex univer-min-h-0 univer-flex-col univer-bg-white dark:!univer-bg-gray-800`,children:(0,a.jsx)(Q,{components:b},`custom-header`)}),s&&c&&(0,a.jsx)(`header`,{"data-u-comp":`headerbar`,className:`univer-relative univer-z-10 univer-w-full univer-overflow-hidden`,children:(0,a.jsx)(Q,{components:D,sharedProps:{ribbonType:f,headerMenuComponents:C,headerMenu:u}},`toolbar`)}),(0,a.jsxs)(`section`,{className:`univer-relative univer-flex univer-min-h-0 univer-flex-1 univer-flex-col`,children:[(0,a.jsxs)(`div`,{className:`univer-grid univer-h-full univer-grid-cols-[auto_1fr_auto] univer-grid-rows-[100%] univer-overflow-hidden`,children:[(0,a.jsx)(`aside`,{"data-u-comp":`left-sidebar`,className:`univer-h-full`,children:(0,a.jsx)(Q,{components:T},`left-sidebar`)}),(0,a.jsxs)(`section`,{className:(0,o.clsx)(`univer-relative univer-grid univer-flex-1 univer-grid-rows-[auto_1fr] univer-overflow-hidden univer-bg-white dark:!univer-bg-gray-800`,o.borderBottomClassName),children:[(0,a.jsx)(`header`,{children:s&&(0,a.jsx)(Q,{components:S},`header`)}),(0,a.jsx)(`section`,{className:`univer-relative univer-overflow-hidden dark:!univer-bg-gray-900`,ref:v,"data-range-selector":!0,onContextMenu:e=>e.preventDefault(),children:(0,a.jsx)(Q,{components:w},`content`)})]}),(0,a.jsx)(`aside`,{"data-u-comp":`right-sidebar`,className:`univer-z-[100] univer-h-full`,children:(0,a.jsx)(Wo,{})})]}),l&&(0,a.jsx)(`footer`,{children:(0,a.jsx)(Q,{components:x,sharedProps:{contextMenu:d}},`footer`)}),(0,a.jsx)(Ko,{})]})]}),(0,a.jsxs)(`div`,{dir:N,children:[(0,a.jsx)(Q,{components:E},`global`),d&&(0,a.jsx)(Uo,{}),(0,a.jsx)(Yo,{}),(0,a.jsx)(`div`,{id:O})]})]})}function Yo(){let{mountContainer:e}=(0,r.useContext)(o.ConfigContext);return(0,l.createPortal)((0,a.jsx)(Q,{components:$(`floating`)},`floating`),e)}var Xo=class extends t.Disposable{constructor(e,t,n,r,i){super(),this._injector=e,this._instanceService=t,this._layoutService=n,this._lifecycleService=r,this._renderManagerService=i,S(this,`_steadyTimeout`,void 0),S(this,`_renderTimeout`,void 0),S(this,`_currentRenderId`,null)}dispose(){super.dispose(),clearTimeout(this._steadyTimeout),clearTimeout(this._renderTimeout),delete this._instanceService,delete this._layoutService,delete this._lifecycleService,delete this._renderManagerService}_bootstrapWorkbench(){this.disposeWithMe(this.bootstrap(async(e,n)=>{this._layoutService&&(this.disposeWithMe(this._layoutService.registerRootContainerElement(n)),this.disposeWithMe(this._layoutService.registerContentElement(e)));try{await this._lifecycleService.onStage(t.LifecycleStages.Ready),this._renderTimeout=window.setTimeout(()=>{let n=this._renderManagerService.getRenderAll();for(let[t]of n)if(this._changeRenderUnit(t,e))break;this.disposeWithMe(this._instanceService.focused$.subscribe(t=>{t&&this._changeRenderUnit(t,e)})),this.disposeWithMe(this._renderManagerService.created$.subscribe(t=>{var n;t.unitId===((n=this._instanceService.getFocusedUnit())==null?void 0:n.getUnitId())&&this._changeRenderUnit(t.unitId,e)})),this.disposeWithMe(this._renderManagerService.disposed$.subscribe(e=>{this._currentRenderId===e&&(this._currentRenderId=null)})),this._lifecycleService.stage=t.LifecycleStages.Rendered,this._steadyTimeout=window.setTimeout(()=>{this._lifecycleService.stage=t.LifecycleStages.Steady},3e3)},300)}catch(e){if(clearTimeout(this._steadyTimeout),clearTimeout(this._renderTimeout),e instanceof t.LifecycleUnreachableError)return;throw e}}))}_changeRenderUnit(e,n){if(this._currentRenderId===e)return!1;let r=this._renderManagerService.getRenderById(e);if(!r||!r.unitId||(0,t.isInternalEditorID)(r.unitId))return!1;let i=this._currentRenderId?this._renderManagerService.getRenderById(this._currentRenderId):null;return i==null||i.deactivate(),i==null||i.engine.unmount(),r.engine.mount(n),r.activate(),this._currentRenderId=e,!0}};let Zo=class extends Xo{constructor(e,t,n,r,i,a,o,s,c){super(t,a,i,n,r),this._config=e,this._componentManager=c,o.mergeMenu(Ka),this._initBuiltinComponents(s),this._registerComponents(),this._bootstrapWorkbench()}_registerComponents(){[[wi,Ci],[Ei,Ti],[Hi,Li],[Ui,Vi],[qi,Wi],[ji,o.ColorPicker]].forEach(([e,t])=>{this.disposeWithMe(this._componentManager.register(e,t))})}dispose(){super.dispose(),this._componentManager.dispose()}bootstrap(e){return Qo(this._injector,this._config,e)}_initBuiltinComponents(e){this.disposeWithMe(e.registerComponent(`floating`,()=>(0,i.connectInjector)(io,this._injector))),this.disposeWithMe(e.registerComponent(`content`,()=>(0,i.connectInjector)(Za,this._injector))),this.disposeWithMe(e.registerComponent(`toolbar`,()=>(0,i.connectInjector)(bo,this._injector)))}};Zo=J([q(1,(0,t.Inject)(t.Injector)),q(2,(0,t.Inject)(t.LifecycleService)),q(3,s.IRenderManagerService),q(4,Y),q(5,t.IUniverInstanceService),q(6,X),q(7,Z),q(8,(0,t.Inject)(G))],Zo);function Qo(e,n,r){let s,c=n.container;s=typeof c==`string`?document.getElementById(c)||$o(c):c instanceof HTMLElement?c:$o(`univer`);let l=(0,i.connectInjector)(qo,e),u=e=>r(e,s);function d(){(0,o.render)((0,a.jsx)(l,{...n,mountContainer:s,onRendered:u}),s)}return d(),(0,t.toDisposable)(()=>{(0,o.unmount)(s)})}function $o(e){let t=document.createElement(`div`);return t.id=e,t}let es=(0,t.createIdentifier)(`univer.ui.ui-controller`);var ts=`@univerjs/ui`,ns=`0.25.1`;let rs=`
+ univer-m-0 univer-flex univer-appearance-none univer-items-center univer-justify-center
+ univer-border-0 univer-bg-transparent univer-p-0 univer-leading-none univer-outline-none
+ `;function is(e){var n;let{headerMenuComponents:s,headerMenu:c=!0}=e,l=(0,i.useDependency)(t.LocaleService),u=(0,i.useDependency)(ao),d=(0,i.useObservable)(u.ribbon$,[]),f=(0,i.useObservable)(u.activatedTab$,`ribbon.start`),p=(0,r.useMemo)(()=>{let e=d.findIndex(e=>e.key===f);return e===-1?0:e},[f,d]),m=d[p],h=(n=m==null?void 0:m.children)==null?[]:n,g=!!(c&&s&&s.size>0),_=(0,r.useRef)(null),[v,y]=(0,r.useState)(!1),[b,x]=(0,r.useState)(!1);if((0,r.useEffect)(()=>{!m&&d.length>0&&u.setActivatedTab(d[0].key)},[m,d,u]),(0,r.useEffect)(()=>{let e=_.current;if(!e)return;let t=()=>{let{scrollLeft:t,clientWidth:n,scrollWidth:r}=e;y(t>4),x(t+n<r-4)};t();let n=new ResizeObserver(t);return n.observe(e),e.addEventListener(`scroll`,t,{passive:!0}),()=>{n.disconnect(),e.removeEventListener(`scroll`,t)}},[m]),d.length===0&&!g)return null;function S(e){let t=d[e];t&&u.setActivatedTab(t.key)}function C(e){let t=_.current;t&&t.scrollBy({left:e===`left`?-168:168,behavior:`smooth`})}return(0,a.jsxs)(`div`,{"data-u-comp":`mobile-ribbon`,className:(0,o.clsx)(`univer-flex univer-flex-col univer-gap-1.5 univer-bg-gray-50 univer-px-3 univer-py-1.5 univer-text-sm dark:!univer-bg-gray-900`,o.borderBottomClassName),children:[(0,a.jsxs)(`div`,{className:`

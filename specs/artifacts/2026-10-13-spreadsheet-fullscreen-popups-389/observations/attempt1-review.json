@@ -1,0 +1,36 @@
+{
+  "reviewedBy": "root using actual CUA tab 26",
+  "canonicalChat": "ses_h0VKkCl7hbz3BKHVW2Xp",
+  "artifact": "art_g0VXv65e1004ErsrwSJs",
+  "build": "ui-after",
+  "locale": "en-US",
+  "acceptance": "incomplete; descendant submenu close ownership needs repair",
+  "observed": [
+    "Fullscreen sheet context menu and color submenu are visible in the fullscreen owner",
+    "First and repeated Enter retain the visible color palette",
+    "More Colors opens a visible fullscreen dialog and Cancel closes that dialog",
+    "Zoom changes from 100% to 125% and back to 100%",
+    "Defined-name Popover is visible inside fullscreen",
+    "Frame grid is 64px 1376px at 2560x1440 with display:contents portal owner",
+    "Selecting B2:B3 produces Sum 12, Count 2, Average 6",
+    "Click to Copy Tooltip is visible and fixed-positioned inside fullscreen"
+  ],
+  "remaining": [
+    "After closing the parent menu, the portaled color submenu remains visible",
+    "Descendant dialog input and wheel ownership must accompany the close-lifecycle repair",
+    "After Cancel the observed focused AX node is the page; no precise trigger-return claim",
+    "Normal-view tooltip screenshot did not show the target; do not count it as success",
+    "Final edited values, formula, CSV export, language roundtrip and cleanup still need final-build review"
+  ],
+  "interactionNotes": [
+    "More Colors was exposed as a link in AX, but getByRole(link) had no DOM match. getByText on the observed label opened it successfully. These two locator failures are not product failures.",
+    "Original B2=7/B3=5/B4=12 were retained during this attempt; selection changed to B2:B3. No workbook data edit or CSV export occurred."
+  ],
+  "pageClosedAt": "2026-10-13T10:43:46.661Z",
+  "ownerPID": 84648,
+  "occurrenceID": "0b8724c1-01a6-4299-9220-391fe776c017",
+  "launcher": 78924,
+  "launcherExitCode": 0,
+  "elapsedMilliseconds": 596202,
+  "shutdown": "Original owned stop-requested; no kill; no credentials/model calls in review service"
+}

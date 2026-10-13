@@ -14,7 +14,7 @@
 
 - [387 电子表格身份与运行时语言](records/2026-10/2026-10-13-spreadsheet-artifact-identity-387.md)：真实类型/菜单复现、同工作簿语言切换与编辑CSV验证。
 
-- [389 电子表格全屏弹层](records/2026-10/2026-10-13-spreadsheet-fullscreen-popups-389.md)：真实弹层父链、全屏显示与剩余无障碍语言调查。
+- [389 电子表格全屏弹层](records/2026-10/2026-10-13-spreadsheet-fullscreen-popups-389.md)：单实例弹层宿主、菜单关闭归属、真实桌面与编辑导出验收。
 
 - [Venice 用量与共享后台停机](records/2026-10/2026-10-13-venice-stream-usage.md)：唯一适配器计量、共享取消顺序与真实视觉/进程证据。
 

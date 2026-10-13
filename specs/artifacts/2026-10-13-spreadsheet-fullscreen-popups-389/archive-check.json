@@ -1,0 +1,80 @@
+{
+  "kind": "Archive integrity, bounded credential-pattern inspection and local-document link review; not UI automation or behavior validation",
+  "gzipRestoration": [
+    {
+      "path": "logs/before/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/before/stderr.log.gz",
+      "decodedBytes": 97237,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/attempt1/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/attempt1/stderr.log.gz",
+      "decodedBytes": 87148,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/final/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/final/stderr.log.gz",
+      "decodedBytes": 158220,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/build-attempt1.log.gz",
+      "decodedBytes": 71219,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/build-final.log.gz",
+      "decodedBytes": 71656,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "logs/typecheck.log.gz",
+      "decodedBytes": 16,
+      "matchesOriginalSourceBytes": true
+    },
+    {
+      "path": "downloads/final-edited-workbook.csv.gz",
+      "decodedBytes": 61,
+      "matchesOriginalSourceBytes": true
+    }
+  ],
+  "csv": {
+    "decodedBytes": 61,
+    "utf8Bom": "efbbbf",
+    "crlfSeparators": 3,
+    "exactRecordedDownloadContent": true
+  },
+  "safety": {
+    "scannedTextFiles": 35,
+    "patterns": [
+      "Bearer credential",
+      "quoted secret assignment",
+      "private key marker",
+      "provider key marker"
+    ],
+    "findings": [],
+    "scope": "Explicit source allowlist; no auth/models or runtime database copied. Pattern scan is bounded, not a universal absence guarantee."
+  },
+  "links": {
+    "documents": [
+      "specs/records/2026-10/2026-10-13-spreadsheet-fullscreen-popups-389.md",
+      "specs\\artifacts\\2026-10-13-spreadsheet-fullscreen-popups-389\\README.md"
+    ],
+    "checkedLocalLinks": 78,
+    "missing": []
+  }
+}

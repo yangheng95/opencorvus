@@ -2485,6 +2485,16 @@ JavaScript Object Notation (JSON) glTF models may contain only embedded
 `data:` resources, so model buffers, images, and extension data cannot create
 an indirect network path.
 Spreadsheet edits are renderer-local and do not mutate the durable workbook.
+Each Univer workbench owns one stable floating-content container. Its existing
+configuration supplies that container to context menus and their submenus,
+dialogs, dropdowns, popovers and tooltips. The owner attaches it to the containing
+fullscreen element while active and to its document body otherwise, preserving
+the workbook and disposing the container with that workbench. Tooltip geometry
+uses fixed viewport coordinates. Context-menu lifetime follows the actual open
+state and anchor; child portal pointer/wheel events belong to their React menu
+owner, and a dialog-consumed Escape is respected before closing the parent.
+Closing a parent retires its submenu, while repeated submenu activation retains
+its established positioning.
 Terminal artifacts replay an immutable American National Standards Institute
 (ANSI) transcript and never create a shell, pseudoterminal, socket, or process.
 

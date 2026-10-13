@@ -14,7 +14,7 @@
 
 - [387 电子表格身份与运行时语言](2026-10-13-spreadsheet-artifact-identity-387.md)：原工作簿语言更新和真实编辑导出。
 
-- [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389.md)：原生全屏之外的菜单宿主与后续分析。
+- [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389.md)：共享弹层与菜单生命周期修复、中英文实页和剩余边界。
 
 - [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage.md)：协议、取消根因与横向验收。
 
