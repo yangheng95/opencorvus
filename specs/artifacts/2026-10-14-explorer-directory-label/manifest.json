@@ -1,0 +1,2241 @@
+{
+  "createdAt": "2026-10-13T17:15:57.918Z",
+  "area": "2026-10-14-explorer-directory-label",
+  "files": 256,
+  "media": [
+    {
+      "artifact": "actual/root-label/ui/01-a-root-before.jpg",
+      "originalBytes": 33501,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/02-root-upload-one-en.jpg",
+      "originalBytes": 37144,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/03-root-upload-plural-en.jpg",
+      "originalBytes": 40869,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/04-create-root-en.jpg",
+      "originalBytes": 41446,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/05-root-upload-plural-zh.jpg",
+      "originalBytes": 40884,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/06-subdirectory-upload-zh.jpg",
+      "originalBytes": 48363,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/07-copy-two-root-zh.jpg",
+      "originalBytes": 52681,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/08-move-source-content.jpg",
+      "originalBytes": 33046,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/09-move-two-root-zh.jpg",
+      "originalBytes": 52742,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/10-current-query-root-zh.jpg",
+      "originalBytes": 51752,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/11-create-root-zh.jpg",
+      "originalBytes": 49928,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/12-refresh-root-error-zh.jpg",
+      "originalBytes": 58393,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/13-refresh-root-details-zh.jpg",
+      "originalBytes": 61924,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/14-project-b-isolated-zh.jpg",
+      "originalBytes": 31064,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/15-a-restored-current-query.jpg",
+      "originalBytes": 46501,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label/ui/16-refresh-restored-zh.jpg",
+      "originalBytes": 48227,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label-final/ui/01-a-root-before.jpg",
+      "originalBytes": 33501,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label-final/ui/02-root-upload-one-en.jpg",
+      "originalBytes": 37144,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label-final/ui/03-refresh-root-error-en.jpg",
+      "originalBytes": 38199,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label-final/ui/04-refresh-root-details-en.jpg",
+      "originalBytes": 46626,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label-final/ui/05-refresh-root-details-scroll-en.jpg",
+      "originalBytes": 42866,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label-final/ui/06-a-restored-query-en.jpg",
+      "originalBytes": 42975,
+      "format": "JPEG original"
+    },
+    {
+      "artifact": "actual/root-label-final/ui/07-project-b-isolated-en.jpg",
+      "originalBytes": 31326,
+      "format": "JPEG original"
+    }
+  ],
+  "qualification": "Complete original UI/tool/API/raw evidence, preserving first deadline-exceeded/parent1 and zero-request supplemental failure independently of the final run. All JPEG files remain original bytes. Root and the visual-review agent confirmed the final 01 disk JPEG shows the complete A-root baseline; the initial inline-preview doubt is not a disk-frame defect.",
+  "integrity": "Gzip/direct byte readback proves only archive-copy integrity; no source hash or mutable-code checksum is used as functional acceptance.",
+  "outcomeFacts": {
+    "first": {
+      "occurrence": "root-label-56aad08f-c05f-48aa-864b-957066ff94ef",
+      "launcherExitCode": 1,
+      "terminal": {
+        "occurrenceID": "root-label-56aad08f-c05f-48aa-864b-957066ff94ef",
+        "pid": 88504,
+        "reason": "deadline_exceeded",
+        "exitCode": 1,
+        "signal": null
+      },
+      "shutdownDispatch": false,
+      "supplementalReadbackExitCode": 1,
+      "supplementalRequests": 0
+    },
+    "final": {
+      "occurrence": "root-label-final-a44b2d9e-ac87-4e65-8fa1-5bb8519330f0",
+      "launcherExitCode": 0,
+      "terminal": {
+        "occurrenceID": "root-label-final-a44b2d9e-ac87-4e65-8fa1-5bb8519330f0",
+        "pid": 66112,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "shutdownDispatch": true,
+      "shutdownStatus": 200
+    },
+    "qualification": "Direct projections of complete original receipts. First and final occurrences remain independent; failures are not converted into successful completion."
+  },
+  "historicalAliases": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\prepared-fixture.json",
+      "historicalRelative": "history-first-occurrence/root-label/prepared-fixture.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\prepared-fixture.json",
+      "artifact": "actual/root-label/prepared-fixture.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\readback-final-a-a-1791909398186-c1c33520-64e4-407e-95dc-a67ccefff609.json",
+      "historicalRelative": "history-first-occurrence/root-label/readback-final-a-a-1791909398186-c1c33520-64e4-407e-95dc-a67ccefff609.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\readback-final-a-a-1791909398186-c1c33520-64e4-407e-95dc-a67ccefff609.json",
+      "artifact": "actual/root-label/readback-final-a-a-1791909398186-c1c33520-64e4-407e-95dc-a67ccefff609.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\readback-isolated-b-b-1791909630104-88c38e92-ea72-4ced-8617-85bec7206a15.json",
+      "historicalRelative": "history-first-occurrence/root-label/readback-isolated-b-b-1791909630104-88c38e92-ea72-4ced-8617-85bec7206a15.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\readback-isolated-b-b-1791909630104-88c38e92-ea72-4ced-8617-85bec7206a15.json",
+      "artifact": "actual/root-label/readback-isolated-b-b-1791909630104-88c38e92-ea72-4ced-8617-85bec7206a15.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\readback-restored-a-a-1791909799288-fc226d26-3627-4fc4-bf15-716850b2b768.json",
+      "historicalRelative": "history-first-occurrence/root-label/readback-restored-a-a-1791909799288-fc226d26-3627-4fc4-bf15-716850b2b768.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\readback-restored-a-a-1791909799288-fc226d26-3627-4fc4-bf15-716850b2b768.json",
+      "artifact": "actual/root-label/readback-restored-a-a-1791909799288-fc226d26-3627-4fc4-bf15-716850b2b768.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\registered-projects.json",
+      "historicalRelative": "history-first-occurrence/root-label/registered-projects.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registered-projects.json",
+      "artifact": "actual/root-label/registered-projects.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\registration-a-chat-response.json",
+      "historicalRelative": "history-first-occurrence/root-label/registration-a-chat-response.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-a-chat-response.json",
+      "artifact": "actual/root-label/registration-a-chat-response.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\registration-a-project-response.json",
+      "historicalRelative": "history-first-occurrence/root-label/registration-a-project-response.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-a-project-response.json",
+      "artifact": "actual/root-label/registration-a-project-response.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\registration-admission.json",
+      "historicalRelative": "history-first-occurrence/root-label/registration-admission.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-admission.json",
+      "artifact": "actual/root-label/registration-admission.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\registration-b-chat-response.json",
+      "historicalRelative": "history-first-occurrence/root-label/registration-b-chat-response.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-b-chat-response.json",
+      "artifact": "actual/root-label/registration-b-chat-response.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\registration-b-project-response.json",
+      "historicalRelative": "history-first-occurrence/root-label/registration-b-project-response.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-b-project-response.json",
+      "artifact": "actual/root-label/registration-b-project-response.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-ignore-fault-admission.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-ignore-fault-admission.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-admission.json",
+      "artifact": "actual/root-label/root-ignore-fault-admission.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-ignore-fault-created.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-ignore-fault-created.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-created.json",
+      "artifact": "actual/root-label/root-ignore-fault-created.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-ignore-fault-restore-admission.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-ignore-fault-restore-admission.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-restore-admission.json",
+      "artifact": "actual/root-label/root-ignore-fault-restore-admission.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-ignore-fault-restored.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-ignore-fault-restored.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-restored.json",
+      "artifact": "actual/root-label/root-ignore-fault-restored.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-label-inputs.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-label-inputs.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-inputs.json",
+      "artifact": "actual/root-label/root-label-inputs.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-label-launch-owner.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-label-launch-owner.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-launch-owner.json",
+      "artifact": "actual/root-label/root-label-launch-owner.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-label-launcher-joined.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-label-launcher-joined.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-launcher-joined.json",
+      "artifact": "actual/root-label/root-label-launcher-joined.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-label-physical-terminal-and-credential-free.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-label-physical-terminal-and-credential-free.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-physical-terminal-and-credential-free.json",
+      "artifact": "actual/root-label/root-label-physical-terminal-and-credential-free.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-label-settlement-owner.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-label-settlement-owner.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-settlement-owner.json",
+      "artifact": "actual/root-label/root-label-settlement-owner.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-label-shutdown-admission.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-label-shutdown-admission.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-shutdown-admission.json",
+      "artifact": "actual/root-label/root-label-shutdown-admission.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\root-label-ui-binding.json",
+      "historicalRelative": "history-first-occurrence/root-label/root-label-ui-binding.json",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-ui-binding.json",
+      "artifact": "actual/root-label/root-label-ui-binding.json.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\source-head.txt",
+      "historicalRelative": "history-first-occurrence/root-label/source-head.txt",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\source-head.txt",
+      "artifact": "actual/root-label/source-head.txt.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\source-status.txt",
+      "historicalRelative": "history-first-occurrence/root-label/source-status.txt",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\source-status.txt",
+      "artifact": "actual/root-label/source-status.txt.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\source-three-current.diff",
+      "historicalRelative": "history-first-occurrence/root-label/source-three-current.diff",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\source-three-current.diff",
+      "artifact": "actual/root-label/source-three-current.diff.gz",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\01-a-root-before.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/01-a-root-before.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\01-a-root-before.jpg",
+      "artifact": "actual/root-label/ui/01-a-root-before.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\02-root-upload-one-en.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/02-root-upload-one-en.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\02-root-upload-one-en.jpg",
+      "artifact": "actual/root-label/ui/02-root-upload-one-en.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\03-root-upload-plural-en.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/03-root-upload-plural-en.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\03-root-upload-plural-en.jpg",
+      "artifact": "actual/root-label/ui/03-root-upload-plural-en.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\04-create-root-en.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/04-create-root-en.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\04-create-root-en.jpg",
+      "artifact": "actual/root-label/ui/04-create-root-en.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\05-root-upload-plural-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/05-root-upload-plural-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\05-root-upload-plural-zh.jpg",
+      "artifact": "actual/root-label/ui/05-root-upload-plural-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\06-subdirectory-upload-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/06-subdirectory-upload-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\06-subdirectory-upload-zh.jpg",
+      "artifact": "actual/root-label/ui/06-subdirectory-upload-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\07-copy-two-root-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/07-copy-two-root-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\07-copy-two-root-zh.jpg",
+      "artifact": "actual/root-label/ui/07-copy-two-root-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\08-move-source-content.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/08-move-source-content.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\08-move-source-content.jpg",
+      "artifact": "actual/root-label/ui/08-move-source-content.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\09-move-two-root-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/09-move-two-root-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\09-move-two-root-zh.jpg",
+      "artifact": "actual/root-label/ui/09-move-two-root-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\10-current-query-root-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/10-current-query-root-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\10-current-query-root-zh.jpg",
+      "artifact": "actual/root-label/ui/10-current-query-root-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\11-create-root-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/11-create-root-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\11-create-root-zh.jpg",
+      "artifact": "actual/root-label/ui/11-create-root-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\12-refresh-root-error-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/12-refresh-root-error-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\12-refresh-root-error-zh.jpg",
+      "artifact": "actual/root-label/ui/12-refresh-root-error-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\13-refresh-root-details-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/13-refresh-root-details-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\13-refresh-root-details-zh.jpg",
+      "artifact": "actual/root-label/ui/13-refresh-root-details-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\14-project-b-isolated-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/14-project-b-isolated-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\14-project-b-isolated-zh.jpg",
+      "artifact": "actual/root-label/ui/14-project-b-isolated-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\15-a-restored-current-query.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/15-a-restored-current-query.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\15-a-restored-current-query.jpg",
+      "artifact": "actual/root-label/ui/15-a-restored-current-query.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label\\ui\\16-refresh-restored-zh.jpg",
+      "historicalRelative": "history-first-occurrence/root-label/ui/16-refresh-restored-zh.jpg",
+      "canonicalSource": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\16-refresh-restored-zh.jpg",
+      "artifact": "actual/root-label/ui/16-refresh-restored-zh.jpg",
+      "qualification": "The complete historical original bytes are identical to this canonical archived file; no image re-encoding or source digest gate"
+    }
+  ],
+  "exclusions": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\archive-run.log",
+      "reason": "Current archive invocation output is recorded by Root after completion"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-label",
+      "reason": "Historical duplicate mapped to canonical original evidence"
+    }
+  ],
+  "independentReportBoundary": "B-evidence-gap-and-plan is read-only B follow-up analysis; it is not UI or File.index repair acceptance.",
+  "items": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\after-three-files.diff",
+      "artifact": "analysis/after-three-files.diff.gz",
+      "originalBytes": 8154,
+      "archivedBytes": 2541,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\architecture-final.log",
+      "artifact": "analysis/architecture-final.log.gz",
+      "originalBytes": 141,
+      "archivedBytes": 129,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\architecture-plan.log",
+      "artifact": "analysis/architecture-plan.log.gz",
+      "originalBytes": 141,
+      "archivedBytes": 129,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\archive.mjs",
+      "artifact": "analysis/archive.mjs.gz",
+      "originalBytes": 12411,
+      "archivedBytes": 4232,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\audit.md",
+      "artifact": "analysis/audit.md.gz",
+      "originalBytes": 17636,
+      "archivedBytes": 9360,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\check-tool-syntax.ps1",
+      "artifact": "analysis/check-tool-syntax.ps1.gz",
+      "originalBytes": 2960,
+      "archivedBytes": 1158,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\deliver.mjs",
+      "artifact": "analysis/deliver.mjs.gz",
+      "originalBytes": 6909,
+      "archivedBytes": 2626,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\diff-check.log",
+      "artifact": "analysis/diff-check.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\diff-check.log.exit.json",
+      "artifact": "analysis/diff-check.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\diff-check.log.input.json",
+      "artifact": "analysis/diff-check.log.input.json.gz",
+      "originalBytes": 330,
+      "archivedBytes": 231,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\docs-final.log",
+      "artifact": "analysis/docs-final.log.gz",
+      "originalBytes": 106,
+      "archivedBytes": 115,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\docs-plan.log",
+      "artifact": "analysis/docs-plan.log.gz",
+      "originalBytes": 106,
+      "archivedBytes": 115,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\fault-create-original.log",
+      "artifact": "analysis/fault-create-original.log.gz",
+      "originalBytes": 1035,
+      "archivedBytes": 517,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\fault-final-create.log",
+      "artifact": "analysis/fault-final-create.log.gz",
+      "originalBytes": 1053,
+      "archivedBytes": 527,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\fault-final-restore.log",
+      "artifact": "analysis/fault-final-restore.log.gz",
+      "originalBytes": 1107,
+      "archivedBytes": 536,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\fault-restore-original.log",
+      "artifact": "analysis/fault-restore-original.log.gz",
+      "originalBytes": 1089,
+      "archivedBytes": 533,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\fixture-support.mjs",
+      "artifact": "analysis/fixture-support.mjs.gz",
+      "originalBytes": 7707,
+      "archivedBytes": 2675,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\implementation-final-status.txt",
+      "artifact": "analysis/implementation-final-status.txt.gz",
+      "originalBytes": 1088,
+      "archivedBytes": 360,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\implementation.md",
+      "artifact": "analysis/implementation.md.gz",
+      "originalBytes": 4929,
+      "archivedBytes": 3052,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\independent-review.md",
+      "artifact": "analysis/independent-review.md.gz",
+      "originalBytes": 9600,
+      "archivedBytes": 5484,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\launch-ui.ps1",
+      "artifact": "analysis/launch-ui.ps1.gz",
+      "originalBytes": 10872,
+      "archivedBytes": 3654,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\launch-ui.ps1.before-hidden-git-repair",
+      "artifact": "analysis/launch-ui.ps1.before-hidden-git-repair.gz",
+      "originalBytes": 10829,
+      "archivedBytes": 3643,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\launcher-final.log",
+      "artifact": "analysis/launcher-final.log.gz",
+      "originalBytes": 1747,
+      "archivedBytes": 629,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\launcher-first-prerequisite-error.log",
+      "artifact": "analysis/launcher-first-prerequisite-error.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\launcher-hidden-repair.log",
+      "artifact": "analysis/launcher-hidden-repair.log.gz",
+      "originalBytes": 1699,
+      "archivedBytes": 623,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\launcher-original.log",
+      "artifact": "analysis/launcher-original.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\locale-data-tests.log",
+      "artifact": "analysis/locale-data-tests.log.gz",
+      "originalBytes": 653,
+      "archivedBytes": 354,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\native-host.ts",
+      "artifact": "analysis/native-host.ts.gz",
+      "originalBytes": 5099,
+      "archivedBytes": 1971,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\owned-launch-functions.ps1",
+      "artifact": "analysis/owned-launch-functions.ps1.gz",
+      "originalBytes": 4170,
+      "archivedBytes": 1636,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\preexisting-status.txt",
+      "artifact": "analysis/preexisting-status.txt.gz",
+      "originalBytes": 1405,
+      "archivedBytes": 440,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\preexisting-three-files.diff",
+      "artifact": "analysis/preexisting-three-files.diff.gz",
+      "originalBytes": 3060,
+      "archivedBytes": 1209,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\prepare-final.log",
+      "artifact": "analysis/prepare-final.log.gz",
+      "originalBytes": 2280,
+      "archivedBytes": 467,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\prepare-original.log",
+      "artifact": "analysis/prepare-original.log.gz",
+      "originalBytes": 2238,
+      "archivedBytes": 461,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\prepare-ui.mjs",
+      "artifact": "analysis/prepare-ui.mjs.gz",
+      "originalBytes": 6846,
+      "archivedBytes": 2267,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\prepared-final-tools.md",
+      "artifact": "analysis/prepared-final-tools.md.gz",
+      "originalBytes": 8618,
+      "archivedBytes": 4565,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\prepared-tools.md",
+      "artifact": "analysis/prepared-tools.md.gz",
+      "originalBytes": 12835,
+      "archivedBytes": 6555,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\readback-final-a.log",
+      "artifact": "analysis/readback-final-a.log.gz",
+      "originalBytes": 328,
+      "archivedBytes": 223,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\readback-final-b.log",
+      "artifact": "analysis/readback-final-b.log.gz",
+      "originalBytes": 351,
+      "archivedBytes": 229,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\readback-final-restored-a.log",
+      "artifact": "analysis/readback-final-restored-a.log.gz",
+      "originalBytes": 353,
+      "archivedBytes": 230,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\readback-isolated-b.log",
+      "artifact": "analysis/readback-isolated-b.log.gz",
+      "originalBytes": 333,
+      "archivedBytes": 224,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\readback-restored-a.log",
+      "artifact": "analysis/readback-restored-a.log.gz",
+      "originalBytes": 324,
+      "archivedBytes": 218,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\register-final.log",
+      "artifact": "analysis/register-final.log.gz",
+      "originalBytes": 652,
+      "archivedBytes": 345,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\register-original.log",
+      "artifact": "analysis/register-original.log.gz",
+      "originalBytes": 640,
+      "archivedBytes": 338,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\register-projects.mjs",
+      "artifact": "analysis/register-projects.mjs.gz",
+      "originalBytes": 2765,
+      "archivedBytes": 1061,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-ignore-fault.mjs",
+      "artifact": "analysis/root-ignore-fault.mjs.gz",
+      "originalBytes": 3124,
+      "archivedBytes": 1147,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\shutdown-final.log",
+      "artifact": "analysis/shutdown-final.log.gz",
+      "originalBytes": 79,
+      "archivedBytes": 90,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\shutdown.ps1",
+      "artifact": "analysis/shutdown.ps1.gz",
+      "originalBytes": 8065,
+      "archivedBytes": 2713,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\typecheck.log",
+      "artifact": "analysis/typecheck.log.gz",
+      "originalBytes": 16,
+      "archivedBytes": 36,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\typecheck.log.exit.json",
+      "artifact": "analysis/typecheck.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\typecheck.log.input.json",
+      "artifact": "analysis/typecheck.log.input.json.gz",
+      "originalBytes": 350,
+      "archivedBytes": 263,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\ui-build-original.log",
+      "artifact": "analysis/ui-build-original.log.gz",
+      "originalBytes": 71656,
+      "archivedBytes": 11098,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\ui-readback.mjs",
+      "artifact": "analysis/ui-readback.mjs.gz",
+      "originalBytes": 4917,
+      "archivedBytes": 1719,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\visual-review-final-occurrence.md",
+      "artifact": "analysis/visual-review-final-occurrence.md.gz",
+      "originalBytes": 7160,
+      "archivedBytes": 4343,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\visual-review-first-occurrence.md",
+      "artifact": "analysis/visual-review-first-occurrence.md.gz",
+      "originalBytes": 8010,
+      "archivedBytes": 4532,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\prepared-fixture.json",
+      "artifact": "actual/root-label/prepared-fixture.json.gz",
+      "originalBytes": 20095,
+      "archivedBytes": 2119,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\readback-final-a-a-1791909398186-c1c33520-64e4-407e-95dc-a67ccefff609.json",
+      "artifact": "actual/root-label/readback-final-a-a-1791909398186-c1c33520-64e4-407e-95dc-a67ccefff609.json.gz",
+      "originalBytes": 53455,
+      "archivedBytes": 6695,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\readback-isolated-b-b-1791909630104-88c38e92-ea72-4ced-8617-85bec7206a15.json",
+      "artifact": "actual/root-label/readback-isolated-b-b-1791909630104-88c38e92-ea72-4ced-8617-85bec7206a15.json.gz",
+      "originalBytes": 13463,
+      "archivedBytes": 3031,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\readback-restored-a-a-1791909799288-fc226d26-3627-4fc4-bf15-716850b2b768.json",
+      "artifact": "actual/root-label/readback-restored-a-a-1791909799288-fc226d26-3627-4fc4-bf15-716850b2b768.json.gz",
+      "originalBytes": 1390,
+      "archivedBytes": 631,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registered-projects.json",
+      "artifact": "actual/root-label/registered-projects.json.gz",
+      "originalBytes": 13756,
+      "archivedBytes": 2839,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-a-chat-response.json",
+      "artifact": "actual/root-label/registration-a-chat-response.json.gz",
+      "originalBytes": 3175,
+      "archivedBytes": 1317,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-a-project-response.json",
+      "artifact": "actual/root-label/registration-a-project-response.json.gz",
+      "originalBytes": 2098,
+      "archivedBytes": 941,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-admission.json",
+      "artifact": "actual/root-label/registration-admission.json.gz",
+      "originalBytes": 302,
+      "archivedBytes": 245,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-b-chat-response.json",
+      "artifact": "actual/root-label/registration-b-chat-response.json.gz",
+      "originalBytes": 3189,
+      "archivedBytes": 1327,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\registration-b-project-response.json",
+      "artifact": "actual/root-label/registration-b-project-response.json.gz",
+      "originalBytes": 2112,
+      "archivedBytes": 950,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-admission.json",
+      "artifact": "actual/root-label/root-ignore-fault-admission.json.gz",
+      "originalBytes": 533,
+      "archivedBytes": 362,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-created.json",
+      "artifact": "actual/root-label/root-ignore-fault-created.json.gz",
+      "originalBytes": 1009,
+      "archivedBytes": 513,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-restore-admission.json",
+      "artifact": "actual/root-label/root-ignore-fault-restore-admission.json.gz",
+      "originalBytes": 877,
+      "archivedBytes": 465,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-ignore-fault-restored.json",
+      "artifact": "actual/root-label/root-ignore-fault-restored.json.gz",
+      "originalBytes": 1062,
+      "archivedBytes": 530,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-inputs.json",
+      "artifact": "actual/root-label/root-label-inputs.json.gz",
+      "originalBytes": 8273,
+      "archivedBytes": 1671,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-launch-owner.json",
+      "artifact": "actual/root-label/root-label-launch-owner.json.gz",
+      "originalBytes": 1697,
+      "archivedBytes": 621,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-launcher-joined.json",
+      "artifact": "actual/root-label/root-label-launcher-joined.json.gz",
+      "originalBytes": 1179,
+      "archivedBytes": 539,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-physical-terminal-and-credential-free.json",
+      "artifact": "actual/root-label/root-label-physical-terminal-and-credential-free.json.gz",
+      "originalBytes": 2168,
+      "archivedBytes": 855,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-settlement-owner.json",
+      "artifact": "actual/root-label/root-label-settlement-owner.json.gz",
+      "originalBytes": 459,
+      "archivedBytes": 309,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-shutdown-admission.json",
+      "artifact": "actual/root-label/root-label-shutdown-admission.json.gz",
+      "originalBytes": 507,
+      "archivedBytes": 359,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\root-label-ui-binding.json",
+      "artifact": "actual/root-label/root-label-ui-binding.json.gz",
+      "originalBytes": 268,
+      "archivedBytes": 226,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\source-head.txt",
+      "artifact": "actual/root-label/source-head.txt.gz",
+      "originalBytes": 41,
+      "archivedBytes": 58,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\source-status.txt",
+      "artifact": "actual/root-label/source-status.txt.gz",
+      "originalBytes": 657,
+      "archivedBytes": 310,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\source-three-current.diff",
+      "artifact": "actual/root-label/source-three-current.diff.gz",
+      "originalBytes": 8035,
+      "archivedBytes": 2525,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\01-a-root-before.jpg",
+      "artifact": "actual/root-label/ui/01-a-root-before.jpg",
+      "originalBytes": 33501,
+      "archivedBytes": 33501,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\02-root-upload-one-en.jpg",
+      "artifact": "actual/root-label/ui/02-root-upload-one-en.jpg",
+      "originalBytes": 37144,
+      "archivedBytes": 37144,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\03-root-upload-plural-en.jpg",
+      "artifact": "actual/root-label/ui/03-root-upload-plural-en.jpg",
+      "originalBytes": 40869,
+      "archivedBytes": 40869,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\04-create-root-en.jpg",
+      "artifact": "actual/root-label/ui/04-create-root-en.jpg",
+      "originalBytes": 41446,
+      "archivedBytes": 41446,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\05-root-upload-plural-zh.jpg",
+      "artifact": "actual/root-label/ui/05-root-upload-plural-zh.jpg",
+      "originalBytes": 40884,
+      "archivedBytes": 40884,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\06-subdirectory-upload-zh.jpg",
+      "artifact": "actual/root-label/ui/06-subdirectory-upload-zh.jpg",
+      "originalBytes": 48363,
+      "archivedBytes": 48363,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\07-copy-two-root-zh.jpg",
+      "artifact": "actual/root-label/ui/07-copy-two-root-zh.jpg",
+      "originalBytes": 52681,
+      "archivedBytes": 52681,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\08-move-source-content.jpg",
+      "artifact": "actual/root-label/ui/08-move-source-content.jpg",
+      "originalBytes": 33046,
+      "archivedBytes": 33046,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\09-move-two-root-zh.jpg",
+      "artifact": "actual/root-label/ui/09-move-two-root-zh.jpg",
+      "originalBytes": 52742,
+      "archivedBytes": 52742,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\10-current-query-root-zh.jpg",
+      "artifact": "actual/root-label/ui/10-current-query-root-zh.jpg",
+      "originalBytes": 51752,
+      "archivedBytes": 51752,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\11-create-root-zh.jpg",
+      "artifact": "actual/root-label/ui/11-create-root-zh.jpg",
+      "originalBytes": 49928,
+      "archivedBytes": 49928,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\12-refresh-root-error-zh.jpg",
+      "artifact": "actual/root-label/ui/12-refresh-root-error-zh.jpg",
+      "originalBytes": 58393,
+      "archivedBytes": 58393,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\13-refresh-root-details-zh.jpg",
+      "artifact": "actual/root-label/ui/13-refresh-root-details-zh.jpg",
+      "originalBytes": 61924,
+      "archivedBytes": 61924,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\14-project-b-isolated-zh.jpg",
+      "artifact": "actual/root-label/ui/14-project-b-isolated-zh.jpg",
+      "originalBytes": 31064,
+      "archivedBytes": 31064,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\15-a-restored-current-query.jpg",
+      "artifact": "actual/root-label/ui/15-a-restored-current-query.jpg",
+      "originalBytes": 46501,
+      "archivedBytes": 46501,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label\\ui\\16-refresh-restored-zh.jpg",
+      "artifact": "actual/root-label/ui/16-refresh-restored-zh.jpg",
+      "originalBytes": 48227,
+      "archivedBytes": 48227,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\prepared-fixture.json",
+      "artifact": "actual/root-label-final/prepared-fixture.json.gz",
+      "originalBytes": 20363,
+      "archivedBytes": 2095,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\readback-final-baseline-b-b-1791911305640-d8aba361-f8ac-4d94-988d-8cc0cb50f96d.json",
+      "artifact": "actual/root-label-final/readback-final-baseline-b-b-1791911305640-d8aba361-f8ac-4d94-988d-8cc0cb50f96d.json.gz",
+      "originalBytes": 13687,
+      "archivedBytes": 3055,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\readback-restored-single-a-a-1791911271917-79b4daf7-9a46-44dd-84ff-d94b6f5ea5e1.json",
+      "artifact": "actual/root-label-final/readback-restored-single-a-a-1791911271917-79b4daf7-9a46-44dd-84ff-d94b6f5ea5e1.json.gz",
+      "originalBytes": 35295,
+      "archivedBytes": 5119,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\registered-projects.json",
+      "artifact": "actual/root-label-final/registered-projects.json.gz",
+      "originalBytes": 13952,
+      "archivedBytes": 2837,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\registration-a-chat-response.json",
+      "artifact": "actual/root-label-final/registration-a-chat-response.json.gz",
+      "originalBytes": 3209,
+      "archivedBytes": 1327,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\registration-a-project-response.json",
+      "artifact": "actual/root-label-final/registration-a-project-response.json.gz",
+      "originalBytes": 2132,
+      "archivedBytes": 952,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\registration-admission.json",
+      "artifact": "actual/root-label-final/registration-admission.json.gz",
+      "originalBytes": 308,
+      "archivedBytes": 249,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\registration-b-chat-response.json",
+      "artifact": "actual/root-label-final/registration-b-chat-response.json.gz",
+      "originalBytes": 3223,
+      "archivedBytes": 1327,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\registration-b-project-response.json",
+      "artifact": "actual/root-label-final/registration-b-project-response.json.gz",
+      "originalBytes": 2146,
+      "archivedBytes": 954,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-ignore-fault-admission.json",
+      "artifact": "actual/root-label-final/root-ignore-fault-admission.json.gz",
+      "originalBytes": 545,
+      "archivedBytes": 372,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-ignore-fault-created.json",
+      "artifact": "actual/root-label-final/root-ignore-fault-created.json.gz",
+      "originalBytes": 1027,
+      "archivedBytes": 524,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-ignore-fault-restore-admission.json",
+      "artifact": "actual/root-label-final/root-ignore-fault-restore-admission.json.gz",
+      "originalBytes": 895,
+      "archivedBytes": 472,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-ignore-fault-restored.json",
+      "artifact": "actual/root-label-final/root-ignore-fault-restored.json.gz",
+      "originalBytes": 1080,
+      "archivedBytes": 533,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-label-final-inputs.json",
+      "artifact": "actual/root-label-final/root-label-final-inputs.json.gz",
+      "originalBytes": 8385,
+      "archivedBytes": 1641,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-label-final-launch-owner.json",
+      "artifact": "actual/root-label-final/root-label-final-launch-owner.json.gz",
+      "originalBytes": 1745,
+      "archivedBytes": 627,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-label-final-launcher-joined.json",
+      "artifact": "actual/root-label-final/root-label-final-launcher-joined.json.gz",
+      "originalBytes": 1186,
+      "archivedBytes": 536,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-label-final-physical-terminal-and-credential-free.json",
+      "artifact": "actual/root-label-final/root-label-final-physical-terminal-and-credential-free.json.gz",
+      "originalBytes": 2175,
+      "archivedBytes": 836,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-label-final-settlement-owner.json",
+      "artifact": "actual/root-label-final/root-label-final-settlement-owner.json.gz",
+      "originalBytes": 467,
+      "archivedBytes": 308,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-label-final-shutdown-admission.json",
+      "artifact": "actual/root-label-final/root-label-final-shutdown-admission.json.gz",
+      "originalBytes": 533,
+      "archivedBytes": 370,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\root-label-final-ui-binding.json",
+      "artifact": "actual/root-label-final/root-label-final-ui-binding.json.gz",
+      "originalBytes": 274,
+      "archivedBytes": 227,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\ui\\01-a-root-before.jpg",
+      "artifact": "actual/root-label-final/ui/01-a-root-before.jpg",
+      "originalBytes": 33501,
+      "archivedBytes": 33501,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\ui\\02-root-upload-one-en.jpg",
+      "artifact": "actual/root-label-final/ui/02-root-upload-one-en.jpg",
+      "originalBytes": 37144,
+      "archivedBytes": 37144,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\ui\\03-refresh-root-error-en.jpg",
+      "artifact": "actual/root-label-final/ui/03-refresh-root-error-en.jpg",
+      "originalBytes": 38199,
+      "archivedBytes": 38199,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\ui\\04-refresh-root-details-en.jpg",
+      "artifact": "actual/root-label-final/ui/04-refresh-root-details-en.jpg",
+      "originalBytes": 46626,
+      "archivedBytes": 46626,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\ui\\05-refresh-root-details-scroll-en.jpg",
+      "artifact": "actual/root-label-final/ui/05-refresh-root-details-scroll-en.jpg",
+      "originalBytes": 42866,
+      "archivedBytes": 42866,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\ui\\06-a-restored-query-en.jpg",
+      "artifact": "actual/root-label-final/ui/06-a-restored-query-en.jpg",
+      "originalBytes": 42975,
+      "archivedBytes": 42975,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\root-label-final\\ui\\07-project-b-isolated-en.jpg",
+      "artifact": "actual/root-label-final/ui/07-project-b-isolated-en.jpg",
+      "originalBytes": 31326,
+      "archivedBytes": 31326,
+      "format": "JPEG original"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\archive-syntax.exit.json",
+      "artifact": "actual/tool-validation/archive-syntax.exit.json.gz",
+      "originalBytes": 73,
+      "archivedBytes": 90,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\archive-syntax.input.json",
+      "artifact": "actual/tool-validation/archive-syntax.input.json.gz",
+      "originalBytes": 190,
+      "archivedBytes": 173,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\archive-syntax.log",
+      "artifact": "actual/tool-validation/archive-syntax.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\check-tool-syntax.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/check-tool-syntax.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\check-tool-syntax.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/check-tool-syntax.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\fixture-support.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/fixture-support.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\fixture-support.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/fixture-support.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\launch-ui.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/launch-ui.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\launch-ui.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/launch-ui.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\native-host.ts.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/native-host.ts.log.gz",
+      "originalBytes": 59,
+      "archivedBytes": 79,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\native-host.ts.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/native-host.ts.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\owned-launch-functions.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/owned-launch-functions.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\owned-launch-functions.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/owned-launch-functions.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\prepare-ui.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/prepare-ui.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\prepare-ui.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/prepare-ui.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\register-projects.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/register-projects.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\register-projects.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/register-projects.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\results.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/results.json.gz",
+      "originalBytes": 2921,
+      "archivedBytes": 505,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\root-ignore-fault.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/root-ignore-fault.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\root-ignore-fault.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/root-ignore-fault.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\shutdown.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/shutdown.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\shutdown.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/shutdown.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\ui-readback.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/ui-readback.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T161906366\\ui-readback.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T161906366/ui-readback.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\check-tool-syntax.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/check-tool-syntax.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\check-tool-syntax.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/check-tool-syntax.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\fixture-support.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/fixture-support.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\fixture-support.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/fixture-support.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\launch-ui.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/launch-ui.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\launch-ui.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/launch-ui.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\native-host.ts.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/native-host.ts.log.gz",
+      "originalBytes": 59,
+      "archivedBytes": 79,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\native-host.ts.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/native-host.ts.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\owned-launch-functions.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/owned-launch-functions.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\owned-launch-functions.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/owned-launch-functions.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\prepare-ui.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/prepare-ui.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\prepare-ui.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/prepare-ui.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\register-projects.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/register-projects.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\register-projects.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/register-projects.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\results.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/results.json.gz",
+      "originalBytes": 2921,
+      "archivedBytes": 504,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\root-ignore-fault.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/root-ignore-fault.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\root-ignore-fault.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/root-ignore-fault.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\shutdown.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/shutdown.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\shutdown.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/shutdown.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\ui-readback.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/ui-readback.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T162031662\\ui-readback.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T162031662/ui-readback.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\check-tool-syntax.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/check-tool-syntax.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\check-tool-syntax.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/check-tool-syntax.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\fixture-support.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/fixture-support.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\fixture-support.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/fixture-support.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\launch-ui.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/launch-ui.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\launch-ui.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/launch-ui.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\native-host.ts.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/native-host.ts.log.gz",
+      "originalBytes": 59,
+      "archivedBytes": 79,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\native-host.ts.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/native-host.ts.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\owned-launch-functions.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/owned-launch-functions.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\owned-launch-functions.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/owned-launch-functions.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\prepare-ui.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/prepare-ui.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\prepare-ui.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/prepare-ui.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\register-projects.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/register-projects.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\register-projects.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/register-projects.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\results.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/results.json.gz",
+      "originalBytes": 2921,
+      "archivedBytes": 501,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\root-ignore-fault.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/root-ignore-fault.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\root-ignore-fault.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/root-ignore-fault.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\shutdown.ps1.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/shutdown.ps1.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\shutdown.ps1.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/shutdown.ps1.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\ui-readback.mjs.log",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/ui-readback.mjs.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\tool-validation\\syntax-20261013T165446530\\ui-readback.mjs.log.exit.json",
+      "artifact": "actual/tool-validation/syntax-20261013T165446530/ui-readback.mjs.log.exit.json.gz",
+      "originalBytes": 72,
+      "archivedBytes": 89,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-original\\launch-ui.ps1",
+      "artifact": "actual/mature-original/launch-ui.ps1.gz",
+      "originalBytes": 10441,
+      "archivedBytes": 3557,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-original\\native-host.ts",
+      "artifact": "actual/mature-original/native-host.ts.gz",
+      "originalBytes": 5099,
+      "archivedBytes": 1971,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-original\\owned-launch-functions.ps1",
+      "artifact": "actual/mature-original/owned-launch-functions.ps1.gz",
+      "originalBytes": 4170,
+      "archivedBytes": 1636,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-original\\prepare-ui.mjs",
+      "artifact": "actual/mature-original/prepare-ui.mjs.gz",
+      "originalBytes": 4593,
+      "archivedBytes": 1853,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-original\\shutdown.ps1",
+      "artifact": "actual/mature-original/shutdown.ps1.gz",
+      "originalBytes": 9026,
+      "archivedBytes": 2889,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-original\\ui-readback.mjs",
+      "artifact": "actual/mature-original/ui-readback.mjs.gz",
+      "originalBytes": 6989,
+      "archivedBytes": 2424,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-diffs\\launch-ui.ps1.diff",
+      "artifact": "actual/mature-diffs/launch-ui.ps1.diff.gz",
+      "originalBytes": 8677,
+      "archivedBytes": 2352,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-diffs\\native-host.ts.diff",
+      "artifact": "actual/mature-diffs/native-host.ts.diff.gz",
+      "originalBytes": 352,
+      "archivedBytes": 178,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-diffs\\owned-launch-functions.ps1.diff",
+      "artifact": "actual/mature-diffs/owned-launch-functions.ps1.diff.gz",
+      "originalBytes": 376,
+      "archivedBytes": 185,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-diffs\\prepare-ui.mjs.diff",
+      "artifact": "actual/mature-diffs/prepare-ui.mjs.diff.gz",
+      "originalBytes": 11519,
+      "archivedBytes": 3578,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-diffs\\results.json",
+      "artifact": "actual/mature-diffs/results.json.gz",
+      "originalBytes": 2669,
+      "archivedBytes": 350,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-diffs\\shutdown.ps1.diff",
+      "artifact": "actual/mature-diffs/shutdown.ps1.diff.gz",
+      "originalBytes": 9412,
+      "archivedBytes": 2696,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\mature-diffs\\ui-readback.mjs.diff",
+      "artifact": "actual/mature-diffs/ui-readback.mjs.diff.gz",
+      "originalBytes": 12545,
+      "archivedBytes": 3755,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\check-tool-syntax.ps1.diff",
+      "artifact": "actual/final-tool-diffs/check-tool-syntax.ps1.diff.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\fixture-support.mjs.diff",
+      "artifact": "actual/final-tool-diffs/fixture-support.mjs.diff.gz",
+      "originalBytes": 1405,
+      "archivedBytes": 508,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\launch-ui.ps1.diff",
+      "artifact": "actual/final-tool-diffs/launch-ui.ps1.diff.gz",
+      "originalBytes": 3058,
+      "archivedBytes": 913,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\native-host.ts.diff",
+      "artifact": "actual/final-tool-diffs/native-host.ts.diff.gz",
+      "originalBytes": 361,
+      "archivedBytes": 184,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\owned-launch-functions.ps1.diff",
+      "artifact": "actual/final-tool-diffs/owned-launch-functions.ps1.diff.gz",
+      "originalBytes": 385,
+      "archivedBytes": 192,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\prepare-ui.mjs.diff",
+      "artifact": "actual/final-tool-diffs/prepare-ui.mjs.diff.gz",
+      "originalBytes": 1573,
+      "archivedBytes": 645,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\register-projects.mjs.diff",
+      "artifact": "actual/final-tool-diffs/register-projects.mjs.diff.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\results.json",
+      "artifact": "actual/final-tool-diffs/results.json.gz",
+      "originalBytes": 2529,
+      "archivedBytes": 383,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\root-ignore-fault.mjs.diff",
+      "artifact": "actual/final-tool-diffs/root-ignore-fault.mjs.diff.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\shutdown.ps1.diff",
+      "artifact": "actual/final-tool-diffs/shutdown.ps1.diff.gz",
+      "originalBytes": 3136,
+      "archivedBytes": 932,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\final-tool-diffs\\ui-readback.mjs.diff",
+      "artifact": "actual/final-tool-diffs/ui-readback.mjs.diff.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\check-tool-syntax.ps1",
+      "artifact": "actual/history-first-occurrence/check-tool-syntax.ps1.gz",
+      "originalBytes": 2960,
+      "archivedBytes": 1158,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\fault-create-original.log",
+      "artifact": "actual/history-first-occurrence/fault-create-original.log.gz",
+      "originalBytes": 1035,
+      "archivedBytes": 517,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\fault-restore-original.log",
+      "artifact": "actual/history-first-occurrence/fault-restore-original.log.gz",
+      "originalBytes": 1089,
+      "archivedBytes": 533,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\fixture-support.mjs",
+      "artifact": "actual/history-first-occurrence/fixture-support.mjs.gz",
+      "originalBytes": 7689,
+      "archivedBytes": 2670,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\history-manifest.json",
+      "artifact": "actual/history-first-occurrence/history-manifest.json.gz",
+      "originalBytes": 12263,
+      "archivedBytes": 1701,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\launch-ui.ps1",
+      "artifact": "actual/history-first-occurrence/launch-ui.ps1.gz",
+      "originalBytes": 10836,
+      "archivedBytes": 3648,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\launch-ui.ps1.before-hidden-git-repair",
+      "artifact": "actual/history-first-occurrence/launch-ui.ps1.before-hidden-git-repair.gz",
+      "originalBytes": 10829,
+      "archivedBytes": 3643,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\launcher-first-prerequisite-error.log",
+      "artifact": "actual/history-first-occurrence/launcher-first-prerequisite-error.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\launcher-hidden-repair.log",
+      "artifact": "actual/history-first-occurrence/launcher-hidden-repair.log.gz",
+      "originalBytes": 1699,
+      "archivedBytes": 623,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\launcher-original.log",
+      "artifact": "actual/history-first-occurrence/launcher-original.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\native-host.ts",
+      "artifact": "actual/history-first-occurrence/native-host.ts.gz",
+      "originalBytes": 5099,
+      "archivedBytes": 1971,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\original-run-receipts\\launch-owner.json",
+      "artifact": "actual/history-first-occurrence/original-run-receipts/launch-owner.json.gz",
+      "originalBytes": 1697,
+      "archivedBytes": 621,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\original-run-receipts\\native-host-ready.json",
+      "artifact": "actual/history-first-occurrence/original-run-receipts/native-host-ready.json.gz",
+      "originalBytes": 1440,
+      "archivedBytes": 692,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\original-run-receipts\\native-host-settled.json",
+      "artifact": "actual/history-first-occurrence/original-run-receipts/native-host-settled.json.gz",
+      "originalBytes": 908,
+      "archivedBytes": 484,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\original-run-receipts\\prepared-fixture.json",
+      "artifact": "actual/history-first-occurrence/original-run-receipts/prepared-fixture.json.gz",
+      "originalBytes": 20095,
+      "archivedBytes": 2119,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\original-run-receipts\\startup.json",
+      "artifact": "actual/history-first-occurrence/original-run-receipts/startup.json.gz",
+      "originalBytes": 149,
+      "archivedBytes": 144,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\owned-launch-functions.ps1",
+      "artifact": "actual/history-first-occurrence/owned-launch-functions.ps1.gz",
+      "originalBytes": 4170,
+      "archivedBytes": 1636,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\prepare-original.log",
+      "artifact": "actual/history-first-occurrence/prepare-original.log.gz",
+      "originalBytes": 2238,
+      "archivedBytes": 461,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\prepare-ui.mjs",
+      "artifact": "actual/history-first-occurrence/prepare-ui.mjs.gz",
+      "originalBytes": 6728,
+      "archivedBytes": 2215,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\prepared-tools.md",
+      "artifact": "actual/history-first-occurrence/prepared-tools.md.gz",
+      "originalBytes": 12835,
+      "archivedBytes": 6555,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\readback-final-a.log",
+      "artifact": "actual/history-first-occurrence/readback-final-a.log.gz",
+      "originalBytes": 328,
+      "archivedBytes": 223,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\readback-isolated-b.log",
+      "artifact": "actual/history-first-occurrence/readback-isolated-b.log.gz",
+      "originalBytes": 333,
+      "archivedBytes": 224,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\readback-restored-a.log",
+      "artifact": "actual/history-first-occurrence/readback-restored-a.log.gz",
+      "originalBytes": 324,
+      "archivedBytes": 218,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\register-original.log",
+      "artifact": "actual/history-first-occurrence/register-original.log.gz",
+      "originalBytes": 640,
+      "archivedBytes": 338,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\register-projects.mjs",
+      "artifact": "actual/history-first-occurrence/register-projects.mjs.gz",
+      "originalBytes": 2765,
+      "archivedBytes": 1061,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\root-ignore-fault.mjs",
+      "artifact": "actual/history-first-occurrence/root-ignore-fault.mjs.gz",
+      "originalBytes": 3124,
+      "archivedBytes": 1147,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\shutdown.ps1",
+      "artifact": "actual/history-first-occurrence/shutdown.ps1.gz",
+      "originalBytes": 8047,
+      "archivedBytes": 2710,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-feedback-01a133\\history-first-occurrence\\ui-readback.mjs",
+      "artifact": "actual/history-first-occurrence/ui-readback.mjs.gz",
+      "originalBytes": 4917,
+      "archivedBytes": 1719,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\prepared-fixture.json",
+      "artifact": "original-runs/explorer-directory-label-01a133/prepared-fixture.json.gz",
+      "originalBytes": 20095,
+      "archivedBytes": 2119,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\launch-owner.json",
+      "artifact": "original-runs/explorer-directory-label-01a133/launch-owner.json.gz",
+      "originalBytes": 1697,
+      "archivedBytes": 621,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\startup.json",
+      "artifact": "original-runs/explorer-directory-label-01a133/startup.json.gz",
+      "originalBytes": 149,
+      "archivedBytes": 144,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\stdout.log",
+      "artifact": "original-runs/explorer-directory-label-01a133/stdout.log.gz",
+      "originalBytes": 431,
+      "archivedBytes": 307,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\stderr.log",
+      "artifact": "original-runs/explorer-directory-label-01a133/stderr.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\evidence\\native-host-ready.json",
+      "artifact": "original-runs/explorer-directory-label-01a133/evidence/native-host-ready.json.gz",
+      "originalBytes": 1440,
+      "archivedBytes": 692,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\evidence\\native-host-settled.json",
+      "artifact": "original-runs/explorer-directory-label-01a133/evidence/native-host-settled.json.gz",
+      "originalBytes": 908,
+      "archivedBytes": 484,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-01a133\\runtime\\log\\dev.log",
+      "artifact": "original-runs/explorer-directory-label-01a133/runtime/log/dev.log.gz",
+      "originalBytes": 316186,
+      "archivedBytes": 21018,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\prepared-fixture.json",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/prepared-fixture.json.gz",
+      "originalBytes": 20363,
+      "archivedBytes": 2095,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\launch-owner.json",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/launch-owner.json.gz",
+      "originalBytes": 1745,
+      "archivedBytes": 627,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\startup.json",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/startup.json.gz",
+      "originalBytes": 155,
+      "archivedBytes": 148,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\stdout.log",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/stdout.log.gz",
+      "originalBytes": 556,
+      "archivedBytes": 370,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\stderr.log",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/stderr.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\evidence\\native-host-ready.json",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/evidence/native-host-ready.json.gz",
+      "originalBytes": 1464,
+      "archivedBytes": 693,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\evidence\\native-host-settled.json",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/evidence/native-host-settled.json.gz",
+      "originalBytes": 909,
+      "archivedBytes": 482,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\explorer-directory-label-final-01a133\\runtime\\log\\dev.log",
+      "artifact": "original-runs/explorer-directory-label-final-01a133/runtime/log/dev.log.gz",
+      "originalBytes": 129767,
+      "archivedBytes": 10416,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-publication-01a133\\evidence-gap-and-plan.md",
+      "artifact": "independent/B-evidence-gap-and-plan.md.gz",
+      "originalBytes": 22941,
+      "archivedBytes": 11955,
+      "format": "gzip of complete original bytes"
+    }
+  ]
+}

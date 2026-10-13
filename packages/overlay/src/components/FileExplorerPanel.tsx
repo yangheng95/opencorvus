@@ -197,14 +197,22 @@ function operationFailureMessage(operation: ExplorerFailureOperation): string {
   return t(keys[operation])
 }
 
+function explorerDirectoryDisplayPath(path: string | undefined): string | undefined {
+  return path === "" ? t("explorer.root_directory") : path
+}
+
 function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): string {
   if (error instanceof ApiError && error.body && typeof error.body === "object" && !Array.isArray(error.body)) {
     const body = error.body as { name?: unknown; data?: unknown }
     const data = body.data && typeof body.data === "object" && !Array.isArray(body.data)
       ? body.data as Record<string, unknown>
       : undefined
-    const summary = (key: string, field: string) =>
-      typeof data?.[field] === "string" ? t(key, { path: data[field] }) : operationFailureMessage(operation)
+    const summary = (key: string, field: string) => {
+      const value = data?.[field]
+      return typeof value === "string"
+        ? t(key, { path: field === "targetDir" ? explorerDirectoryDisplayPath(value) : value })
+        : operationFailureMessage(operation)
+    }
     switch (body.name) {
       case "FileConflictError":
       case "FileUploadConflictError":
@@ -262,7 +270,7 @@ function refreshReceiptMessage(read: FileRefreshReceipt): string {
     ? fileErrorSummary(read.state.error, read.target.kind === "directory" ? "load" : "search")
     : t("explorer.refresh_unconfirmed")
   return read.target.kind === "directory"
-    ? t("explorer.directory_refresh_result", { path: read.target.path || ".", message })
+    ? t("explorer.directory_refresh_result", { path: explorerDirectoryDisplayPath(read.target.path), message })
     : t("explorer.search_refresh_result", { query: read.target.query, message })
 }
 
@@ -283,10 +291,10 @@ function feedbackMessage(feedback: ExplorerFeedback): string {
         case "create-file":
         case "create-directory": return t("explorer.create_success", { path })
         case "rename": return t("explorer.rename_success", { path })
-        case "copy": return completed === 1 ? t("explorer.copy_success", { path }) : t("explorer.copy_many_success", { count: count(completed), target: feedback.target || "." })
-        case "move": return completed === 1 ? t("explorer.move_success", { path }) : t("explorer.move_many_success", { count: count(completed), target: feedback.target || "." })
+        case "copy": return completed === 1 ? t("explorer.copy_success", { path }) : t("explorer.copy_many_success", { count: count(completed), target: explorerDirectoryDisplayPath(feedback.target) })
+        case "move": return completed === 1 ? t("explorer.move_success", { path }) : t("explorer.move_many_success", { count: count(completed), target: explorerDirectoryDisplayPath(feedback.target) })
         case "delete": return completed === 1 ? t("explorer.delete_success", { path }) : t("explorer.delete_many_success", { count: count(completed) })
-        case "upload": return tc("explorer.upload_success", completed, { count: count(completed), target: feedback.target || "." })
+        case "upload": return tc("explorer.upload_success", completed, { count: count(completed), target: explorerDirectoryDisplayPath(feedback.target) })
       }
     }
     case "failure": return fileErrorSummary(feedback.error, feedback.operation)
@@ -1150,7 +1158,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const result = await showAppDialog({
       kind: `file-${type}-create`,
       title: type === "file" ? t("explorer.new_file") : t("explorer.new_folder"),
-      message: t("explorer.create_in", { target: targetDir || "." }),
+      message: t("explorer.create_in", { target: explorerDirectoryDisplayPath(targetDir) }),
       input: true,
       inputLabel: type === "file" ? t("explorer.file_name") : t("explorer.folder_name"),
       inputPlaceholder: type === "file" ? t("explorer.file_name_placeholder") : t("explorer.folder_name_placeholder"),

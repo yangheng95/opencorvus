@@ -72,6 +72,16 @@ v2原probe14:56:14.270Z→14:56:46.629Z/exit0：22个HTTP全部200、8原rg捕�
 
 ## 证据后才实施和交付
 
+2026-10-14原归档复核补充：三个originalRequestPresentAfterQ2ServerStarted=false是没有取得晚于server入口的正采样，绝非证明request已删除。三次原request实际可读采样分别比Q2 server/search入口早6/7/12ms；不能从false、HTTP pending或少一个rg日志推断fetching状态。原ready在ResumeThread前发布，首次POST在捕获ready后1–5ms dispatch，三Q1都纳入marker，因此触发点太早。
+
+[本批完整并行B报告](../../artifacts/2026-10-14-explorer-directory-label/independent/B-evidence-gap-and-plan.md.gz)保原三次/全部Native/实际时间读回与后续有限方案；其归档在同批资料区，仅为并行调查，不作Explorer展示或File.index修复资格。
+
+唯一原settled在attempt1的14:56:15.478捕获，原POST200已在15.383完成；到首次观察request目录删除15.537相差59ms，只是采样区间，不是fetching尚pending59ms。后两settled未捕获不代表阶段不存在；File.search入口/HTTP started也不公开files()读取的Promise身份。当前C4监督器后处理尾段已改，旧时间不能套新源码。完整三attempt/8原Native、原raw File.search日志和所有捕获已独立解包复核，无新runtime执行或File产品修改。
+
+后续有限计划只一个新自有occurrence/两真实Git Project、固定900000执行input、最多3attempt/总16000与128目录/总用户bytes≤1MiB，原Native settled合法captured且Q1仍pending才普通POST，200后立刻Q2、实体/content/list/原request晚采样并行，再Q3与另一Project对照。只移动观察触发点，不暂停/冻consumer/加hook、Source工厂或增负载；schema/birth/scope/I/O未知保首错。需要Q1旧成员、实际已发布完整bytes、Q2旧成员/Q3准确新成员才证明功能缺陷；exact同fetching归属仍区分推断。仍无自然窗口就停止该有限方案，保B unknown、不盲重复或删cache。具体新run/端口/脚本须另落输入审阅，当前尚未执行。
+
+若该有限方案仍不合格，另一已存在真实API证据的功能候选是健康目录link浏览：原junction/symlink实际target为目录且GET/file指定link path200含marker，而Node.type刻意保持entry=file、Explorer只directory展开。此为旧合同明确未扩的能力，非新回归；需另审权限/entrykind/allowed target/所有SDK/UI/根与规则/递归/Windows-POSIX、真正桌面展开与完整字节后才设计单一browsable事实，不翻转entrykind、canonical Git身份或吞unknown I/O。本批不实施该候选，不把只读代码报告称UI完成。
+
 若B实际复现，root先补实际根因与差异决策，再在唯一files/scan owner取得每新request自身采集，删旧复用路径而不造第二cache/epoch配置/队列；审查增加真实rg并发工作与同/异scope负载。若初次state preload/cache也成为替换影响，先全仓File.init和root/home特殊合同审计，未分析不删除。正向非UI聚焦tests需验证明确新成员/typederror/原bytes，不用“不发生/不存在”为核心断言；fixture只证明局部，真实同checker后态与桌面人工证据才算相应验收。
 
 原实例普通shutdown+Native原physical/output/request/owner/port+parentjoin后才允许切产品；不杀用户进程或观察超时换实例。后态新独立occurrence和相同原checker/数据资格，失败追根修工具后重跑，不缩scope为简单single-request。方案/原reports/artifacts根月索引、docs:check、当前架构如改变同步；仅本批files精确Gitcommit，fresh fetch/merge、完整upstream..HEAD资格、正常push后下一批。A、未发生error/retry、Native全平台/semantic恢复仍未完成，Goal保持active，不把单一B结果包装整体完成。

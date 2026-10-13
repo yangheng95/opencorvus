@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-10-13T17:15:57.925Z",
+  "area": "2026-10-14-capsule-preparation-authority",
+  "files": 1,
+  "media": [],
+  "qualification": "Complete read-only Capsule fact-source analysis. No Linux/model/product/restore acceptance is implied.",
+  "integrity": "Gzip/direct byte readback proves only archive-copy integrity; no source hash or mutable-code checksum is used as functional acceptance.",
+  "items": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-next-capsule-01a133\\fact-source-audit.md",
+      "artifact": "independent/fact-source-audit.md.gz",
+      "originalBytes": 24325,
+      "archivedBytes": 11620,
+      "format": "gzip of complete original bytes"
+    }
+  ]
+}

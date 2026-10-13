@@ -536,6 +536,12 @@ publication followed by reload failure retains its committed-upload meaning.
 Expanded directory failures derive from the current directory error Map;
 feedback and diagnostic scrolling stay within a bounded Explorer region.
 
+Empty normalized directory keys display the current-language root-folder label
+in Explorer destination, creation and directory-refresh feedback. Nonempty
+directory paths remain exact; a missing target is not a root fact. Only the
+typed upload-target directory field uses this display projection in errors.
+API paths, completed receipts and original Details retain their identities.
+
 One Explorer action outcome retains its actual completed receipts, the failed
 member or operation cause, and every started directory/search refresh receipt.
 Completed counts derive only from successful responses. Member failure and
