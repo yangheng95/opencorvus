@@ -1,0 +1,2829 @@
+{
+  "configuredContextTokens": 19000,
+  "configurationEvidence": "Pre-run request ledger and explicit launch command; raw report value was incorrectly redacted.",
+  "requests": 54,
+  "cleanup": {
+    "runtimePresent": true,
+    "dataPresent": true,
+    "authPresent": false,
+    "catalogPresent": false
+  },
+  "cases": [
+    {
+      "name": "text-middle",
+      "status": "passed",
+      "metrics": {
+        "region": {
+          "expected": "REGION-431f0e1eb193-text-middle",
+          "actual": "REGION-431f0e1eb193-text-middle",
+          "pass": true
+        },
+        "evidence": {
+          "expected": "EVIDENCE-431f0e1eb193-text-middle",
+          "actual": "EVIDENCE-431f0e1eb193-text-middle",
+          "pass": true
+        },
+        "permission": {
+          "expected": "denied",
+          "actual": "denied",
+          "pass": true
+        },
+        "validation": {
+          "expected": "pending",
+          "actual": "pending",
+          "pass": true
+        },
+        "rollback_owner": {
+          "expected": "unknown",
+          "actual": "unknown",
+          "pass": true
+        }
+      },
+      "steps": [
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4375,
+            "input": 4325,
+            "output": 50,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 5412,
+            "input": 5364,
+            "output": 48,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7543,
+            "input": 7494,
+            "output": 49,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7860,
+            "input": 296,
+            "output": 268,
+            "reasoning": 0,
+            "cache": {
+              "read": 7296,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 2938,
+            "input": 2887,
+            "output": 51,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8360,
+            "input": 6009,
+            "output": 303,
+            "reasoning": 0,
+            "cache": {
+              "read": 2048,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 2970,
+            "input": 487,
+            "output": 51,
+            "reasoning": 0,
+            "cache": {
+              "read": 2432,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8112,
+            "input": 8061,
+            "output": 51,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8640,
+            "input": 6285,
+            "output": 307,
+            "reasoning": 0,
+            "cache": {
+              "read": 2048,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 2974,
+            "input": 491,
+            "output": 51,
+            "reasoning": 0,
+            "cache": {
+              "read": 2432,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4205,
+            "input": 1468,
+            "output": 49,
+            "reasoning": 0,
+            "cache": {
+              "read": 2688,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4558,
+            "input": 499,
+            "output": 53,
+            "reasoning": 38,
+            "cache": {
+              "read": 3968,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 5468,
+            "input": 3121,
+            "output": 299,
+            "reasoning": 0,
+            "cache": {
+              "read": 2048,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ],
+      "calls": [
+        {
+          "partID": "prt_g0VXxvCkl00e6biAKSYy",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4f00kA68FE3dH",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4f00kA68FE3dH",
+            "messageID": "msg_g0VXxvC4a009QLKOXqB7",
+            "offset": 0,
+            "end": 15430,
+            "totalChars": 77031,
+            "nextOffset": 15430
+          }
+        },
+        {
+          "partID": "prt_g0VXxvDTC00bD2LQfYzn",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4S00Toe1xeor5",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4S00Toe1xeor5",
+            "messageID": "msg_g0VXxvC4I00br4WGdEyQ",
+            "offset": 0,
+            "end": 14811,
+            "totalChars": 15500,
+            "nextOffset": 14811
+          }
+        },
+        {
+          "partID": "prt_g0VXxvE9A00MnZ1xjGdt",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4S00Toe1xeor5",
+            "field": "text",
+            "offset": 14811,
+            "limit": 30000
+          }
+        },
+        {
+          "partID": "prt_g0VXxvEpw00jo8Bj41Tn",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 950
+          }
+        },
+        {
+          "partID": "prt_g0VXxvHuF003evq8Agcu",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4f00kA68FE3dH",
+            "field": "text",
+            "offset": 15430,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4f00kA68FE3dH",
+            "messageID": "msg_g0VXxvC4a009QLKOXqB7",
+            "offset": 15430,
+            "end": 43486,
+            "totalChars": 77031,
+            "nextOffset": 43486
+          }
+        },
+        {
+          "partID": "prt_g0VXxvJBX007ENqQTzVL",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1025
+          }
+        },
+        {
+          "partID": "prt_g0VXxvMWY00GtikSogtU",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4f00kA68FE3dH",
+            "field": "text",
+            "offset": 43486,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4f00kA68FE3dH",
+            "messageID": "msg_g0VXxvC4a009QLKOXqB7",
+            "offset": 43486,
+            "end": 71462,
+            "totalChars": 77031,
+            "nextOffset": 71462
+          }
+        },
+        {
+          "partID": "prt_g0VXxvNKX007WxHrexye",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4f00kA68FE3dH",
+            "field": "text",
+            "offset": 71462,
+            "limit": 10000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4f00kA68FE3dH",
+            "messageID": "msg_g0VXxvC4a009QLKOXqB7",
+            "offset": 71462,
+            "end": 71687,
+            "totalChars": 77031,
+            "nextOffset": 71687
+          }
+        },
+        {
+          "partID": "prt_g0VXxvOv500UniO57p1m",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1091
+          }
+        },
+        {
+          "partID": "prt_g0VXxvRkm001fXtCKt7K",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4f00kA68FE3dH",
+            "field": "text",
+            "offset": 71687,
+            "limit": 10000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4f00kA68FE3dH",
+            "messageID": "msg_g0VXxvC4a009QLKOXqB7",
+            "offset": 71687,
+            "end": 77031,
+            "totalChars": 77031,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxvUot00pPqVW63NP",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4S00Toe1xeor5",
+            "field": "text",
+            "offset": 14811,
+            "limit": 10000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4S00Toe1xeor5",
+            "messageID": "msg_g0VXxvC4I00br4WGdEyQ",
+            "offset": 14811,
+            "end": 15500,
+            "totalChars": 15500,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxvXLJ00TGgQVDlPy",
+          "messageID": "msg_g0VXxvC6000zNcUMDfJa",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvC4f00kA68FE3dH",
+            "field": "text",
+            "offset": 37000,
+            "limit": 4000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvC4f00kA68FE3dH",
+            "messageID": "msg_g0VXxvC4a009QLKOXqB7",
+            "offset": 37000,
+            "end": 41000,
+            "totalChars": 77031,
+            "nextOffset": 41000
+          }
+        }
+      ]
+    },
+    {
+      "name": "tool-file",
+      "status": "error",
+      "error": "CompactionContinuationMissingError: Compaction provider completed without a final visible continuation summary.",
+      "steps": [
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4140,
+            "input": 4102,
+            "output": 38,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7536,
+            "input": 7491,
+            "output": 45,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7829,
+            "input": 484,
+            "output": 49,
+            "reasoning": 0,
+            "cache": {
+              "read": 7296,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8921,
+            "input": 1044,
+            "output": 325,
+            "reasoning": 0,
+            "cache": {
+              "read": 7552,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4541,
+            "input": 503,
+            "output": 49,
+            "reasoning": 21,
+            "cache": {
+              "read": 3968,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7599,
+            "input": 4990,
+            "output": 49,
+            "reasoning": 0,
+            "cache": {
+              "read": 2560,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7886,
+            "input": 415,
+            "output": 47,
+            "reasoning": 0,
+            "cache": {
+              "read": 7424,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8930,
+            "input": 886,
+            "output": 364,
+            "reasoning": 0,
+            "cache": {
+              "read": 7680,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4559,
+            "input": 4511,
+            "output": 48,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7871,
+            "input": 4972,
+            "output": 339,
+            "reasoning": 0,
+            "cache": {
+              "read": 2560,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4554,
+            "input": 515,
+            "output": 49,
+            "reasoning": 22,
+            "cache": {
+              "read": 3968,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7605,
+            "input": 5000,
+            "output": 45,
+            "reasoning": 0,
+            "cache": {
+              "read": 2560,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7896,
+            "input": 425,
+            "output": 47,
+            "reasoning": 0,
+            "cache": {
+              "read": 7424,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8240,
+            "input": 511,
+            "output": 49,
+            "reasoning": 0,
+            "cache": {
+              "read": 7680,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8968,
+            "input": 489,
+            "output": 415,
+            "reasoning": 0,
+            "cache": {
+              "read": 8064,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4635,
+            "input": 593,
+            "output": 49,
+            "reasoning": 25,
+            "cache": {
+              "read": 3968,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7641,
+            "input": 5036,
+            "output": 45,
+            "reasoning": 0,
+            "cache": {
+              "read": 2560,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 7932,
+            "input": 461,
+            "output": 47,
+            "reasoning": 0,
+            "cache": {
+              "read": 7424,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8611,
+            "input": 547,
+            "output": 384,
+            "reasoning": 0,
+            "cache": {
+              "read": 7680,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4576,
+            "input": 560,
+            "output": 48,
+            "reasoning": 0,
+            "cache": {
+              "read": 3968,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ],
+      "calls": [
+        {
+          "partID": "prt_g0VXxvdGM00YqeAXNBRh",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "output",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "output",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 0,
+            "end": 23885,
+            "totalChars": 70492,
+            "nextOffset": 23885
+          }
+        },
+        {
+          "partID": "prt_g0VXxve2q00NOCsH2c5R",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfW00WafnV6oAY",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvcfW00WafnV6oAY",
+            "messageID": "msg_g0VXxvcfT00CFK9ei67I",
+            "offset": 0,
+            "end": 314,
+            "totalChars": 314,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxveg000EHUYQ2a2V",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfO00QSotG9f5H",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvcfO00QSotG9f5H",
+            "messageID": "msg_g0VXxvcfL00JWUtFTrN2",
+            "offset": 0,
+            "end": 4601,
+            "totalChars": 15500,
+            "nextOffset": 4601
+          }
+        },
+        {
+          "partID": "prt_g0VXxvfcE00ELIpdosmo",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1164
+          }
+        },
+        {
+          "partID": "prt_g0VXxviKJ00ZdUfXCwJa",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "output",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "output",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 0,
+            "end": 22113,
+            "totalChars": 70492,
+            "nextOffset": 22113
+          }
+        },
+        {
+          "partID": "prt_g0VXxvj1700xv0IOLma1",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfW00WafnV6oAY",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvcfW00WafnV6oAY",
+            "messageID": "msg_g0VXxvcfT00CFK9ei67I",
+            "offset": 0,
+            "end": 314,
+            "totalChars": 314,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxvjpd00vEZaMF9TI",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "input",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "input",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 0,
+            "end": 2567,
+            "totalChars": 6362,
+            "nextOffset": 2567
+          }
+        },
+        {
+          "partID": "prt_g0VXxvkVN00RfFkCvIej",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1402
+          }
+        },
+        {
+          "partID": "prt_g0VXxvmuj00BlU6XT2Hi",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "output",
+            "offset": 22113,
+            "limit": 30000
+          },
+          "page": {
+            "field": "output",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 22113,
+            "end": 43961,
+            "totalChars": 70492,
+            "nextOffset": 43961
+          }
+        },
+        {
+          "partID": "prt_g0VXxvnhB00UIPGWomzQ",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1176
+          }
+        },
+        {
+          "partID": "prt_g0VXxvqH1000QuD0HNDu",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "output",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "output",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 0,
+            "end": 22101,
+            "totalChars": 70492,
+            "nextOffset": 22101
+          }
+        },
+        {
+          "partID": "prt_g0VXxvqwV00rj0mN2sZJ",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfW00WafnV6oAY",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvcfW00WafnV6oAY",
+            "messageID": "msg_g0VXxvcfT00CFK9ei67I",
+            "offset": 0,
+            "end": 314,
+            "totalChars": 314,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxvrrB00PO68QuT0m",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "metadata",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "metadata",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 0,
+            "end": 282,
+            "totalChars": 282,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxvsbK00w9W3tQoIX",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfO00QSotG9f5H",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvcfO00QSotG9f5H",
+            "messageID": "msg_g0VXxvcfL00JWUtFTrN2",
+            "offset": 0,
+            "end": 1094,
+            "totalChars": 15500,
+            "nextOffset": 1094
+          }
+        },
+        {
+          "partID": "prt_g0VXxvtFH00cCmQgx9cn",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1404
+          }
+        },
+        {
+          "partID": "prt_g0VXxvvym00Fz1b6qZ4D",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "output",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "output",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 0,
+            "end": 21861,
+            "totalChars": 70492,
+            "nextOffset": 21861
+          }
+        },
+        {
+          "partID": "prt_g0VXxvwdm005DdDYf6xm",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfW00WafnV6oAY",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxvcfW00WafnV6oAY",
+            "messageID": "msg_g0VXxvcfT00CFK9ei67I",
+            "offset": 0,
+            "end": 314,
+            "totalChars": 314,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxvxJT00Bhi6vYG2f",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "metadata",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "metadata",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 0,
+            "end": 282,
+            "totalChars": 282,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxvy6000m2vWriszI",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1247
+          }
+        },
+        {
+          "partID": "prt_g0VXxw0V500OirwOXaen",
+          "messageID": "msg_g0VXxvcfw00pYCH58Seb",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxvcfe00pbLfRuu7X",
+            "field": "output",
+            "offset": 21861,
+            "limit": 30000
+          },
+          "page": {
+            "field": "output",
+            "partID": "prt_g0VXxvcfe00pbLfRuu7X",
+            "messageID": "msg_g0VXxvcfZ00gwCb00u6W",
+            "offset": 21861,
+            "end": 43853,
+            "totalChars": 70492,
+            "nextOffset": 43853
+          }
+        }
+      ]
+    },
+    {
+      "name": "message-diagnostics",
+      "status": "error",
+      "error": "CompactionContinuationMissingError: Compaction provider completed without a final visible continuation summary.",
+      "steps": [
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 4297,
+            "input": 4257,
+            "output": 40,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 6229,
+            "input": 6185,
+            "output": 44,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 6513,
+            "input": 448,
+            "output": 49,
+            "reasoning": 0,
+            "cache": {
+              "read": 6016,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 8672,
+            "input": 2063,
+            "output": 337,
+            "reasoning": 0,
+            "cache": {
+              "read": 6272,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 3325,
+            "input": 3275,
+            "output": 50,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9190,
+            "input": 6964,
+            "output": 50,
+            "reasoning": 0,
+            "cache": {
+              "read": 2176,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9820,
+            "input": 524,
+            "output": 336,
+            "reasoning": 0,
+            "cache": {
+              "read": 8960,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 3328,
+            "input": 590,
+            "output": 50,
+            "reasoning": 0,
+            "cache": {
+              "read": 2688,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9200,
+            "input": 6974,
+            "output": 50,
+            "reasoning": 0,
+            "cache": {
+              "read": 2176,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9918,
+            "input": 535,
+            "output": 423,
+            "reasoning": 0,
+            "cache": {
+              "read": 8960,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 3434,
+            "input": 675,
+            "output": 51,
+            "reasoning": 20,
+            "cache": {
+              "read": 2688,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9200,
+            "input": 6980,
+            "output": 44,
+            "reasoning": 0,
+            "cache": {
+              "read": 2176,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9505,
+            "input": 293,
+            "output": 252,
+            "reasoning": 0,
+            "cache": {
+              "read": 8960,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 3265,
+            "input": 505,
+            "output": 51,
+            "reasoning": 21,
+            "cache": {
+              "read": 2688,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9209,
+            "input": 6985,
+            "output": 48,
+            "reasoning": 0,
+            "cache": {
+              "read": 2176,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9488,
+            "input": 298,
+            "output": 230,
+            "reasoning": 0,
+            "cache": {
+              "read": 8960,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 3218,
+            "input": 480,
+            "output": 50,
+            "reasoning": 0,
+            "cache": {
+              "read": 2688,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9185,
+            "input": 6961,
+            "output": 48,
+            "reasoning": 0,
+            "cache": {
+              "read": 2176,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 9800,
+            "input": 455,
+            "output": 385,
+            "reasoning": 0,
+            "cache": {
+              "read": 8960,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        },
+        {
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 3375,
+            "input": 637,
+            "output": 50,
+            "reasoning": 0,
+            "cache": {
+              "read": 2688,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ],
+      "calls": [
+        {
+          "partID": "prt_g0VXxw19h00pWIhiLlau",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 0,
+            "end": 13827,
+            "totalChars": 78303,
+            "nextOffset": 13827
+          }
+        },
+        {
+          "partID": "prt_g0VXxw1nJ007eEmmK8WE",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxw0fx00xxOHL3wWI",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxw0fx00xxOHL3wWI",
+            "messageID": "msg_g0VXxw0fu00YNhFTQcRa",
+            "offset": 0,
+            "end": 321,
+            "totalChars": 321,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxw2iz00RpbcZqlf3",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxw0fp00FXt2w2Hz5",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxw0fp00FXt2w2Hz5",
+            "messageID": "msg_g0VXxw0fm00TVijOAkOC",
+            "offset": 0,
+            "end": 12791,
+            "totalChars": 15500,
+            "nextOffset": 12791
+          }
+        },
+        {
+          "partID": "prt_g0VXxw3LN00W7ksLRKWx",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1239
+          }
+        },
+        {
+          "partID": "prt_g0VXxw5aZ00kSH5YW5Ps",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 13827,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 13827,
+            "end": 37765,
+            "totalChars": 78303,
+            "nextOffset": 37765
+          }
+        },
+        {
+          "partID": "prt_g0VXxw6K600R8zcXyaZP",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 37765,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 37765,
+            "end": 38270,
+            "totalChars": 78303,
+            "nextOffset": 38270
+          }
+        },
+        {
+          "partID": "prt_g0VXxw7BY00od0IRdg1J",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1229
+          }
+        },
+        {
+          "partID": "prt_g0VXxw9ER00ijOUlEXc0",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 38270,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 38270,
+            "end": 62154,
+            "totalChars": 78303,
+            "nextOffset": 62154
+          }
+        },
+        {
+          "partID": "prt_g0VXxwA5900lXHu2giq4",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 62154,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 62154,
+            "end": 62659,
+            "totalChars": 78303,
+            "nextOffset": 62659
+          }
+        },
+        {
+          "partID": "prt_g0VXxwAov00cn9VZDylG",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1693
+          }
+        },
+        {
+          "partID": "prt_g0VXxwDvR00mnGmqv8y9",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 0,
+            "end": 23487,
+            "totalChars": 78303,
+            "nextOffset": 23487
+          }
+        },
+        {
+          "partID": "prt_g0VXxwEbC00pJ1bsh2Zg",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxw0fx00xxOHL3wWI",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          }
+        },
+        {
+          "partID": "prt_g0VXxwFD700R7nmH8Y61",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 894
+          }
+        },
+        {
+          "partID": "prt_g0VXxwHbV00ArB1xzhMC",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 0,
+            "end": 24163,
+            "totalChars": 78303,
+            "nextOffset": 24163
+          }
+        },
+        {
+          "partID": "prt_g0VXxwIDP00eZBV1ujMI",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxw0fx00xxOHL3wWI",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          }
+        },
+        {
+          "partID": "prt_g0VXxwJ5100221TFZBpS",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 782
+          }
+        },
+        {
+          "partID": "prt_g0VXxwKyQ004o4FGlSVP",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 24163,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 24163,
+            "end": 48425,
+            "totalChars": 78303,
+            "nextOffset": 48425
+          }
+        },
+        {
+          "partID": "prt_g0VXxwLn000hLZgHXYVl",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "part_id": "prt_g0VXxw0fx00xxOHL3wWI",
+            "field": "text",
+            "offset": 0,
+            "limit": 30000
+          },
+          "page": {
+            "field": "text",
+            "partID": "prt_g0VXxw0fx00xxOHL3wWI",
+            "messageID": "msg_g0VXxw0fu00YNhFTQcRa",
+            "offset": 0,
+            "end": 321,
+            "totalChars": 321,
+            "nextOffset": null
+          }
+        },
+        {
+          "partID": "prt_g0VXxwMZW00HdMRGjnhb",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "SaveCompactionNotes",
+          "input": {
+            "noteCharacters": 1483
+          }
+        },
+        {
+          "partID": "prt_g0VXxwP6A00ELgVlcA0W",
+          "messageID": "msg_g0VXxw0gW00uA74jSAOs",
+          "tool": "ReadCompactionEvidence",
+          "input": {
+            "message_id": "msg_g0VXxw0g000JgEm4Nwer",
+            "field": "diagnostics",
+            "offset": 48425,
+            "limit": 30000
+          },
+          "page": {
+            "field": "diagnostics",
+            "messageID": "msg_g0VXxw0g000JgEm4Nwer",
+            "offset": 48425,
+            "end": 72155,
+            "totalChars": 78303,
+            "nextOffset": 72155
+          }
+        }
+      ]
+    }
+  ],
+  "usageRecords": [
+    {
+      "id": "pvu_g0VXxvCx000MehnNzXph",
+      "occurred_at": 1791925124866,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4325,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4375,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvDde00KRY4jxfxN",
+      "occurred_at": 1791925127510,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 5364,
+      "output_tokens": 48,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 5412,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvEIQ00lc5d7OKn6",
+      "occurred_at": 1791925130038,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 7494,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 7543,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvGcL00rg5I1vqZ3",
+      "occurred_at": 1791925138961,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 296,
+      "output_tokens": 268,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7296,
+      "cache_write_tokens": 0,
+      "total_tokens": 7860,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvI48005LtlW8atc",
+      "occurred_at": 1791925144528,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 2887,
+      "output_tokens": 51,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 2938,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvKYA00SRCxVF3ZX",
+      "occurred_at": 1791925154078,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6009,
+      "output_tokens": 303,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2048,
+      "cache_write_tokens": 0,
+      "total_tokens": 8360,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvMgN00kE413fxzq",
+      "occurred_at": 1791925162275,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 487,
+      "output_tokens": 51,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2432,
+      "cache_write_tokens": 0,
+      "total_tokens": 2970,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvNXH008DVD4wgEE",
+      "occurred_at": 1791925165555,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 8061,
+      "output_tokens": 51,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 8112,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvQ3v00kEWTdPf71",
+      "occurred_at": 1791925175267,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6285,
+      "output_tokens": 307,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2048,
+      "cache_write_tokens": 0,
+      "total_tokens": 8640,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvRxl00IRHMmUVa2",
+      "occurred_at": 1791925182573,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 491,
+      "output_tokens": 51,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2432,
+      "cache_write_tokens": 0,
+      "total_tokens": 2974,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvVY2007A0U1T6ql",
+      "occurred_at": 1791925196354,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1468,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 4205,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvXVi00Pv7x9Ljws",
+      "occurred_at": 1791925203898,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 499,
+      "output_tokens": 53,
+      "reasoning_tokens": 38,
+      "cache_read_tokens": 3968,
+      "cache_write_tokens": 0,
+      "total_tokens": 4558,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvadI00Xyq9UrI0r",
+      "occurred_at": 1791925215900,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 3121,
+      "output_tokens": 299,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2048,
+      "cache_write_tokens": 0,
+      "total_tokens": 5468,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvces00at24N9oVn",
+      "occurred_at": 1791925223686,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6546,
+      "output_tokens": 69,
+      "reasoning_tokens": 46,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 6661,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24nwBzzd06E4wuOA",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VXxvdTJ00wXA6AY55j",
+      "occurred_at": 1791925226813,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4102,
+      "output_tokens": 38,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4140,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxve8b00AtrSaf67t",
+      "occurred_at": 1791925229373,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 7491,
+      "output_tokens": 45,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 7536,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvepg00PgrdNbR8X",
+      "occurred_at": 1791925232044,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 484,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7296,
+      "cache_write_tokens": 0,
+      "total_tokens": 7829,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvhdk00uEdzNXe0P",
+      "occurred_at": 1791925242836,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 1044,
+      "output_tokens": 325,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7552,
+      "cache_write_tokens": 0,
+      "total_tokens": 8921,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxviUi00pH9HAVnoJ",
+      "occurred_at": 1791925246120,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 503,
+      "output_tokens": 49,
+      "reasoning_tokens": 21,
+      "cache_read_tokens": 3968,
+      "cache_write_tokens": 0,
+      "total_tokens": 4541,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvjNV00Llf8yBFiM",
+      "occurred_at": 1791925249517,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4990,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2560,
+      "cache_write_tokens": 0,
+      "total_tokens": 7599,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvk3Z00mi0gknKFl",
+      "occurred_at": 1791925252125,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 415,
+      "output_tokens": 47,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7424,
+      "cache_write_tokens": 0,
+      "total_tokens": 7886,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvmQT00t903iXO2R",
+      "occurred_at": 1791925261233,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 886,
+      "output_tokens": 364,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7680,
+      "cache_write_tokens": 0,
+      "total_tokens": 8930,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvn8z00mHM2rYXs7",
+      "occurred_at": 1791925263993,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4511,
+      "output_tokens": 48,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4559,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvpad00z9TAZgFSR",
+      "occurred_at": 1791925273395,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4972,
+      "output_tokens": 339,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2560,
+      "cache_write_tokens": 0,
+      "total_tokens": 7871,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvqUe00UXHmyTFgv",
+      "occurred_at": 1791925276868,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 515,
+      "output_tokens": 49,
+      "reasoning_tokens": 22,
+      "cache_read_tokens": 3968,
+      "cache_write_tokens": 0,
+      "total_tokens": 4554,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvr6f00x7j5cN6dI",
+      "occurred_at": 1791925279225,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 5000,
+      "output_tokens": 45,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2560,
+      "cache_write_tokens": 0,
+      "total_tokens": 7605,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvs3h000rcC62f3Z",
+      "occurred_at": 1791925282885,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 425,
+      "output_tokens": 47,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7424,
+      "cache_write_tokens": 0,
+      "total_tokens": 7896,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvsk700Ev05y0r6A",
+      "occurred_at": 1791925285515,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 511,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7680,
+      "cache_write_tokens": 0,
+      "total_tokens": 8240,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvvGi00cjDja6ANb",
+      "occurred_at": 1791925295224,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 489,
+      "output_tokens": 415,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 8064,
+      "cache_write_tokens": 0,
+      "total_tokens": 8968,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvwAk000XaJZgYl3",
+      "occurred_at": 1791925298698,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 593,
+      "output_tokens": 49,
+      "reasoning_tokens": 25,
+      "cache_read_tokens": 3968,
+      "cache_write_tokens": 0,
+      "total_tokens": 4635,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvwu5002VDnsV4us",
+      "occurred_at": 1791925301509,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 5036,
+      "output_tokens": 45,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2560,
+      "cache_write_tokens": 0,
+      "total_tokens": 7641,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxvxVI00VuNn0bGAw",
+      "occurred_at": 1791925303816,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 461,
+      "output_tokens": 47,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7424,
+      "cache_write_tokens": 0,
+      "total_tokens": 7932,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw04700qeJ4C5tvc",
+      "occurred_at": 1791925313663,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 547,
+      "output_tokens": 384,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 7680,
+      "cache_write_tokens": 0,
+      "total_tokens": 8611,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw0ey00CjpDz8FMM",
+      "occurred_at": 1791925315948,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 560,
+      "output_tokens": 48,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 3968,
+      "cache_write_tokens": 0,
+      "total_tokens": 4576,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS24NKpzz5IPX8TJXk",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw1HM00GcYGSgIWA",
+      "occurred_at": 1791925318328,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 4257,
+      "output_tokens": 40,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 4297,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw23C00p1j3mbRxy",
+      "occurred_at": 1791925321294,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6185,
+      "output_tokens": 44,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 6229,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw2ti00o6p7g37n9",
+      "occurred_at": 1791925324550,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 448,
+      "output_tokens": 49,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 6016,
+      "cache_write_tokens": 0,
+      "total_tokens": 6513,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw58E00sH5sftDUt",
+      "occurred_at": 1791925333138,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 2063,
+      "output_tokens": 337,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 6272,
+      "cache_write_tokens": 0,
+      "total_tokens": 8672,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw5n900k23Fujgxj",
+      "occurred_at": 1791925335675,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 3275,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 3325,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw6Wt00e5XFZtQNs",
+      "occurred_at": 1791925338511,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6964,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2176,
+      "cache_write_tokens": 0,
+      "total_tokens": 9190,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw8ho00ohiTFQDNO",
+      "occurred_at": 1791925346876,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 524,
+      "output_tokens": 336,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 8960,
+      "cache_write_tokens": 0,
+      "total_tokens": 9820,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxw9TR00mWCEO6omZ",
+      "occurred_at": 1791925349830,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 590,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 3328,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwAIF007R4u1uX84",
+      "occurred_at": 1791925352980,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6974,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2176,
+      "cache_write_tokens": 0,
+      "total_tokens": 9200,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwDFs00aTY0pWkXX",
+      "occurred_at": 1791925364364,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 535,
+      "output_tokens": 423,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 8960,
+      "cache_write_tokens": 0,
+      "total_tokens": 9918,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwE5O00q8t3y2FJt",
+      "occurred_at": 1791925367558,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 675,
+      "output_tokens": 51,
+      "reasoning_tokens": 20,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 3434,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwEmb00LutFuCK6k",
+      "occurred_at": 1791925370237,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6980,
+      "output_tokens": 44,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2176,
+      "cache_write_tokens": 0,
+      "total_tokens": 9200,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwGhP00KTWvIw3kc",
+      "occurred_at": 1791925377603,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 293,
+      "output_tokens": 252,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 8960,
+      "cache_write_tokens": 0,
+      "total_tokens": 9505,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwHlc00YmxaWP3QA",
+      "occurred_at": 1791925381708,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 505,
+      "output_tokens": 51,
+      "reasoning_tokens": 21,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 3265,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwIMs00b9bxXQBQf",
+      "occurred_at": 1791925384018,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6985,
+      "output_tokens": 48,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2176,
+      "cache_write_tokens": 0,
+      "total_tokens": 9209,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwKOD00D4EnBq10X",
+      "occurred_at": 1791925391789,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 298,
+      "output_tokens": 230,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 8960,
+      "cache_write_tokens": 0,
+      "total_tokens": 9488,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwLD100GTrhKIWMY",
+      "occurred_at": 1791925394939,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 480,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 3218,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwLzL00AE0f40hoa",
+      "occurred_at": 1791925397935,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 6961,
+      "output_tokens": 48,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2176,
+      "cache_write_tokens": 0,
+      "total_tokens": 9185,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwOda00Irh6Kg9hu",
+      "occurred_at": 1791925408118,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 455,
+      "output_tokens": 385,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 8960,
+      "cache_write_tokens": 0,
+      "total_tokens": 9800,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    },
+    {
+      "id": "pvu_g0VXxwPKf00JQ5TFmjAD",
+      "occurred_at": 1791925410789,
+      "provider_id": "openai",
+      "model_id": "gpt-6.1-sol",
+      "purpose": "session",
+      "input_tokens": 637,
+      "output_tokens": 50,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 2688,
+      "cache_write_tokens": 0,
+      "total_tokens": 3375,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_-zUS23zKOzzXPi3V2SRy",
+      "agent_id": "compaction"
+    }
+  ]
+}

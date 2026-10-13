@@ -2,19 +2,26 @@
 
 - [持续目标 UI/UX 证据](2026-10-14-continuous-goal-ui-ux/README.md)：隔离实页、操作截图和真实目标投影。
 
+- [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle/README.md)：原始矩阵、截图及前批正常交付回执。
+
+- [长正文与来源阅读](2026-10-14-long-source-reading/README.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
+
+- [Provider Test 的结果事实](2026-10-14-provider-test-observation/README.md)：前态、正向合同与实际模型/页面资格。
+
 - [当前基线 Sources 阅读](2026-10-14-source-reading-current-baseline/README.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。
 
 - [Provider 保存与目录观察](2026-10-14-provider-post-save-observation/README.md)：前态资格、并行调查和分阶段保存证据。
 
 - [SQLite 当前基线与自动迁移](2026-10-14-sqlite-automatic-migrations/README.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。
 
-- [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation/README.md)：独立分析、真实predicate/文件准入、原活动与桌面资格。
+- [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation/README.md)：原Windows资格、Move修复正向checker、Root独立桌面截图与完整原实例收尾。
 
 - [删除 MySQL 转换能力](2026-10-14-remove-mysql-transfer/README.md)：公开接口、生成产物及剩余 SQLite/运行时合同验收。
 
 - [394 原Research Studio历史](2026-10-05-connection-workspace-authority/original-research-history-394/README.md)：原始数据库只读事实及后续视觉资格。
 
 - [403 Native关闭与重启收敛](2026-10-13-native-shutdown-pending-permission-403/README.md)：208个明确公开源、原红态与Native正常/失败终态，未复制运行数据或凭据。
+- [402 会话权限与拒绝收敛](2026-10-14-standalone-permission-projection-402/README.md)：明确红绿、原桌面JPEG、两次真实Sol公开事实及正常配对清理；未覆盖入口和Task边界独立保留。
 
 - [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401/README.md)：37个原观察、16个JPEG和中英同实例Dialog及正常物理收尾。
 
@@ -88,7 +95,7 @@
 
 - [388 MCP 结构化结果](2026-10-13-mcp-structured-result-388/README.md)：后台红绿、12次真实Sol流式请求、页面截图与正常收尾。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：271 次真实请求、原生/可见摘要/完整历史动作对照通过，修复原生状态 ID 丢失。
+- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：414 次真实请求；19k 窗口内完整文件与失败诊断 22 字段通过，保留原始证据、工作笔记和读取范围回执。
 
 - [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
 

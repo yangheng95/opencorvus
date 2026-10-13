@@ -1,0 +1,33 @@
+{
+  "occurrence": "directory-target-dot-entry-name-bun-cfab6e0f-7043-4374-9dd8-a207ed287dff",
+  "outcome": "ready",
+  "host": {
+    "pid": 63268,
+    "processInstanceID": "win32:639275190066009423",
+    "occurrenceID": "ebfea460-3d77-4832-9bc2-b6c628ec9d32"
+  },
+  "parent": {
+    "pid": 78640,
+    "processInstanceID": "win32:639275190065242645",
+    "occurrenceID": "4147d468-e477-4bfb-bf33-773e78cbfc74"
+  },
+  "target": {
+    "pid": 86340,
+    "processInstanceID": "win32:639275190088529384",
+    "occurrenceID": "3d742acb-bc49-48de-bd1a-b2b96d5f14c4"
+  },
+  "targetBirthAtMs": 1791922208852,
+  "deadlineAt": 1791922236594,
+  "inactivityTimeoutMs": 3000,
+  "printLogs": false,
+  "hostExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "hostBunVersion": "1.4.0",
+  "observedAtUtc": "2026-10-13T20:10:08.879Z",
+  "executable": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/ui-bundle/bin/bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\canonical-entry-name-qualifier.mjs",
+    "--host",
+    "bun"
+  ],
+  "authority": "Original production foreground run/onSpawned handle; run alone consumes child streams; no detached transfer"
+}

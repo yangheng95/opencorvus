@@ -1,0 +1,35 @@
+{
+  "schema": "canonical-entry-native-reader-text-diff/v1",
+  "currentSharedReaderUnchanged": true,
+  "fullBefore": "canonical-entry-native-reader.before.mjs",
+  "fullAfterProposal": "canonical-entry-native-reader.proposal.mjs",
+  "textExtractionMatches": true,
+  "qualification": "Exact source text difference only; not syntax/runtime/function acceptance",
+  "changes": [
+    {
+      "label": "proposal-header",
+      "before": "/** Scratch ABI reader proposal. Koffi is loaded only when explicitly called. */",
+      "after": "/** Canonical-entry review proposal; current shared reader remains unchanged. */"
+    },
+    {
+      "label": "two-explicit-W-function-declarations",
+      "before": "  const close = kernel.func(\"int __stdcall CloseHandle(DIRECTORY_TARGET_METADATA_HANDLE hObject)\")\n",
+      "after": "  const close = kernel.func(\"int __stdcall CloseHandle(DIRECTORY_TARGET_METADATA_HANDLE hObject)\")\n  const getFinalPath = kernel.func(\"uint32_t __stdcall GetFinalPathNameByHandleW(DIRECTORY_TARGET_METADATA_HANDLE hFile, _Out_ char16_t *lpszFilePath, uint32_t cchFilePath, uint32_t dwFlags)\")\n  const getShortPath = kernel.func(\"uint32_t __stdcall GetShortPathNameW(const char16_t *lpszLongPath, _Out_ char16_t *lpszShortPath, uint32_t cchBuffer)\")\n  assert.equal(koffi.sizeof(\"char16_t\"), 2)\n"
+    },
+    {
+      "label": "two-stage-UTF16-query-and-read-option",
+      "before": "  await publish({ type: \"abi-layout\", abi, nativeInput: input.nativeInput })\n\n  function read(operand) {\n",
+      "after": "  await publish({ type: \"abi-layout\", abi, nativeInput: input.nativeInput })\n  await publish({ type: \"entry-name-abi\", codeUnitBytes: 2, finalPathFlags: 0,\n    finalPathFlagsMeaning: \"FILE_NAME_NORMALIZED | VOLUME_NAME_DOS\", sizeThenReadCalls: 2,\n    maximumCodeUnits: 32768, outputBufferInitialByte: 165, nativeHandleSource: \"Same original NOFOLLOW CreateFileW handle as FileAttributeTagInfo\" })\n\n  function readWidePath(operation, subject, invoke) {\n    const result = { operation, subject, sizeCall: null, readCall: null, path: null, failures: [] }\n    try {\n      const required = invoke(null, 0)\n      const sizeError = lastError()\n      result.sizeCall = { suppliedCodeUnits: 0, returnValue: required, lastError: sizeError,\n        lastErrorMeaning: required ? \"observed-stale-on-size-result\" : \"failure-code\" }\n      if (!required) result.failures.push({ kind: \"win32\", operation, phase: \"size\", subject, win32Error: sizeError, rawReturn: required })\n      else if (!Number.isInteger(required) || required < 1 || required > 32768) result.failures.push({\n        kind: \"native-buffer-contract\", operation, phase: \"size\", subject, rawReturn: required, maximumCodeUnits: 32768 })\n      else {\n        const buffer = Buffer.alloc(required * 2, 0xa5)\n        const written = invoke(buffer, required)\n        const readError = lastError()\n        result.readCall = { suppliedCodeUnits: required, returnValue: written, lastError: readError,\n          lastErrorMeaning: written ? \"observed-stale-on-nonzero-result\" : \"failure-code\",\n          completeAllocatedBufferBase64: buffer.toString(\"base64\"), allocatedBytes: buffer.length }\n        if (!written) result.failures.push({ kind: \"win32\", operation, phase: \"read\", subject, win32Error: readError, rawReturn: written })\n        else if (!Number.isInteger(written) || written >= required) result.failures.push({\n          kind: \"native-buffer-contract\", operation, phase: \"read\", subject, rawReturn: written,\n          suppliedCodeUnits: required, reason: \"Returned length does not fit original sized buffer; no resize/retry\" })\n        else {\n          result.readCall.terminatorCodeUnit = buffer.readUInt16LE(written * 2)\n          result.readCall.returnedUtf16CodeUnits = Array.from({ length: written }, (_, index) => buffer.readUInt16LE(index * 2))\n          result.readCall.returnedUtf16LEBase64 = buffer.subarray(0, written * 2).toString(\"base64\")\n          result.path = buffer.toString(\"utf16le\", 0, written * 2)\n          if (result.readCall.terminatorCodeUnit !== 0 || result.path.includes(\"\\0\")) result.failures.push({\n            kind: \"native-buffer-contract\", operation, phase: \"termination\", subject,\n            terminatorCodeUnit: result.readCall.terminatorCodeUnit, embeddedNul: result.path.includes(\"\\0\") })\n        }\n      }\n    } catch (error) { result.failures.push({ kind: \"host-or-ffi\", operation, subject, error: originalError(error) }) }\n    result.firstCause = result.failures[0] ?? null\n    return result\n  }\n\n  function read(operand, includeEntryName = false) {\n"
+    },
+    {
+      "label": "same-original-handle-final-name-before-finally-close",
+      "before": "        if (!accepted) native.failures.push({ kind: \"win32\", operation: \"GetFileInformationByHandleEx\", win32Error: queryError, operand, rawReturn: accepted })\n      }\n",
+      "after": "        if (!accepted) native.failures.push({ kind: \"win32\", operation: \"GetFileInformationByHandleEx\", win32Error: queryError, operand, rawReturn: accepted })\n        else if (includeEntryName) {\n          native.finalPath = readWidePath(\"GetFinalPathNameByHandleW\", { operand, handle, flags: 0 }, (buffer, count) => getFinalPath(handle, buffer, count, 0))\n          native.failures.push(...native.finalPath.failures)\n        }\n      }\n"
+    },
+    {
+      "label": "entry-name-and-readonly-short-name-methods",
+      "before": "  return { library, abi, read }\n}\n",
+      "after": "  return { library, abi, read,\n    readEntryName: (operand) => read(operand, true),\n    readShortPath: (operand) => readWidePath(\"GetShortPathNameW\", { operand }, (buffer, count) => getShortPath(operand, buffer, count)),\n  }\n}\n"
+    }
+  ]
+}

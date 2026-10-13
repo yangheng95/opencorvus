@@ -294,5 +294,14 @@ test("uses the same exact failure occurrence and convergence evidence in normal 
     convergenceFailure: assistant.info.convergenceFailure,
   }
   expect(diagnostics(await Message.toModelMessages(history, model))).toEqual(expected)
-  expect(diagnostics(SessionCompaction.TestHooks.compactionTranscriptMessages(history))).toEqual(expected)
+  expect(
+    diagnostics(
+      SessionCompaction.TestHooks.compactionTranscriptMessages(history, {
+        system: [],
+        tools: {},
+        promptText: "Summarize the failure.",
+        maxTokens: 2_000,
+      }),
+    ),
+  ).toEqual(expected)
 })

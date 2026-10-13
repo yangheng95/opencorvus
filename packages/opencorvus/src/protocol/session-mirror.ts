@@ -3,13 +3,14 @@ import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
 import { Message, Session } from "@/session"
-import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
+import { isStandalonePermissionSession, sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import { originSourceFromMessageExtra, overlayMeta } from "@/orchestrator/protocol/message-bridge"
 import { Database, eq } from "@/storage/db"
 import { SessionTable } from "@/session/session.sql"
 import { timelineInteractionResponseOrderKey, timelineMessageOrderKey, timelineOrderKey } from "@/timeline/order"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { Instance } from "@/project/instance"
 import { currentProjectDirectory } from "@/project/instance-context"
 
 export type SessionBusEvent = {
@@ -21,6 +22,18 @@ export type SessionMirrorEvent = {
   type: string
   summary?: string
   payload?: Record<string, unknown>
+}
+
+export function permissionRequestOrderKey(request: Pick<PermissionAuthority.Request, "id" | "timeCreated">): string {
+  return timelineOrderKey({ domain: "interaction", time: request.timeCreated, id: request.id })
+}
+
+export function standalonePendingPermission(request: PermissionAuthority.Request, projectID: string) {
+  if (request.projectID !== projectID) return
+  const owner = taskIDForSession(request.sessionID)
+  if (owner !== request.taskID) throw new Error("Permission " + request.id + " Task ownership differs from durable Session lineage")
+  if (!isStandalonePermissionSession(request.sessionID, projectID)) return
+  return { ...request, orderKey: permissionRequestOrderKey(request) }
 }
 
 export function pendingPermissionSessionEvent(request: PermissionAuthority.Request): SessionMirrorEvent {
@@ -194,7 +207,8 @@ export function mapSessionBusEvent(
     }
   }
   if (event.type === PermissionAuthority.Event.Asked.type) {
-    const payload = stampSessionEventPayload(sessionID, props)
+    const request = PermissionAuthority.Request.parse(props)
+    const payload = stampSessionEventPayload(sessionID, props, permissionRequestOrderKey(request))
     return {
       type: "permission.asked",
       summary: `Permission requested: ${String(props.toolName ?? "")}`.trim(),
@@ -207,6 +221,13 @@ export function mapSessionBusEvent(
       type: "permission.replied",
       summary: `Permission decision: ${String(props.decision ?? "")}`.trim(),
       payload,
+    }
+  }
+  if (event.type === PermissionAuthority.Event.Terminated.type) {
+    return {
+      type: "permission.terminated",
+      summary: "Permission " + String(props.status),
+      payload: stampSessionEventPayload(sessionID, props),
     }
   }
   if (event.type === Question.Event.Asked.type) {
@@ -260,6 +281,12 @@ function shouldMirrorSessionScopedStream(sessionID: string): boolean {
 
 export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: string): Promise<void> {
   if (sessionBusEventSessionID(event) !== sessionID) return
+  if (event.type === PermissionAuthority.Event.Asked.type) {
+    if (!standalonePendingPermission(PermissionAuthority.Request.parse(event.properties), Instance.project.id)) return
+  } else if (event.type === PermissionAuthority.Event.Replied.type || event.type === PermissionAuthority.Event.Terminated.type) {
+    if (!isStandalonePermissionSession(sessionID, Instance.project.id)) return
+    if (event.type === PermissionAuthority.Event.Terminated.type && event.properties.projectID !== Instance.project.id) return
+  }
   const mapped = mapSessionBusEvent(event, { sessionID })
   if (!mapped) return
   const orderKey = mapped.payload?.orderKey
@@ -277,9 +304,9 @@ export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: s
       source: "session.bridge",
       orderKey,
       payload: {
+        summary: mapped.summary ?? mapped.type,
         ...(mapped.payload ?? {}),
         taskID,
-        summary: mapped.summary ?? mapped.type,
       },
     })
     return
@@ -292,8 +319,8 @@ export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: s
     source: "session.bridge",
     orderKey,
     payload: {
-      ...(mapped.payload ?? {}),
       summary: mapped.summary ?? mapped.type,
+      ...(mapped.payload ?? {}),
     },
   })
 }

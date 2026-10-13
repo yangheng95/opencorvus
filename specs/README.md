@@ -2,13 +2,21 @@
 
 - [持续目标 UI/UX](records/2026-10/2026-10-14-continuous-goal-ui-ux.md)：三模式统一入口、状态、预算控制和真实桌面验收。
 
+- [Provider Test 在途生命周期](records/2026-10/2026-10-14-provider-test-lifecycle.md)：独立补验并行、Key、删除重建与作用域接受边界。
+
+- [404 Task Git 与 Question 重连](records/2026-10/2026-10-14-task-git-question-reconnect-404.md)：冻结 Git 目录实证、同页草稿重连与合法 Work/Mission 后续验收。
+
+- [长正文与来源阅读](records/2026-10/2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
+
+- [Provider Test 的结果事实](records/2026-10/2026-10-14-provider-test-observation.md)：有效模型、当前语言与明确变更归属。
+
 - [当前基线 Sources 阅读](records/2026-10/2026-10-14-source-reading-current-baseline.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。
 
 - [Provider 保存与目录观察](records/2026-10/2026-10-14-provider-post-save-observation.md)：已保存事实、后续结果与诊断边界。
 
 - [SQLite 当前基线与自动迁移](records/2026-10/2026-10-14-sqlite-automatic-migrations.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。
 
-- [目录链接浏览与别名目的地](records/2026-10/2026-10-14-directory-target-navigation.md)：entry与目标事实、物理准入、有限真实调查和完整浏览方案。
+- [目录链接浏览与别名目的地](records/2026-10/2026-10-14-directory-target-navigation.md)：Move退休依赖修复、Root独立真实桌面验收与仍待实现的完整浏览/相对迁移合同。
 
 - [删除 MySQL 转换能力](records/2026-10/2026-10-14-remove-mysql-transfer.md)：删除转换实现、三个公开接口及专用测试，保留 SQLite 当前契约。
 
@@ -26,7 +34,7 @@
 
 - [403 Native关闭收敛](records/2026-10/2026-10-13-native-shutdown-pending-permission-403.md)：统一取消/监听器握手、真实Native正常关闭/重启与5s失败边界，58项正向后台检查。
 
-- [402 独立会话权限批准投影](records/2026-10/2026-10-13-standalone-permission-projection-402.md)：Main Chat的hydrate/live/reconnect、真实排序与完整控制入口横审。
+- [402 独立会话权限批准投影](records/2026-10/2026-10-13-standalone-permission-projection-402.md)：单源pending、canonical时间/正文、完整Board实体标签与拒绝后自然流式答复；真实Main/Side/child/Task审批及Sol允许/拒绝，未验收边界明确。
 
 - [398 表格权限卡片悬停](records/2026-10/2026-10-13-spreadsheet-permission-hover-398.md)：四分发主题修复、真实普通/全屏悬停、中英与浅色对照、明确资格边界。
 
@@ -96,7 +104,7 @@
 
 - [Venice 用量与共享后台停机](records/2026-10/2026-10-13-venice-stream-usage.md)：唯一适配器计量、共享取消顺序与真实视觉/进程证据。
 
-- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：271 次真实请求、原生/可见摘要/完整历史动作对照通过，修复原生状态 ID 丢失。
+- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：414 次真实请求；19k 窗口内完整文件与失败诊断 22 字段通过，保留原始证据、工作笔记和读取范围回执。
 
 - [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
 

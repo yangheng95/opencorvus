@@ -5,6 +5,7 @@ import { ProviderLLM } from "./llm"
 import { Provider } from "./provider"
 import { ProviderError } from "./error"
 import { ModelsDev } from "./models"
+import z from "zod"
 
 export type ProviderOperationScope = {
   config: () => Promise<Config.Info>
@@ -21,6 +22,20 @@ export type ProviderOperationResult<T> = {
   body: T
   status: 200 | 400
 }
+
+export const ProviderConnectionTestResult = z
+  .object({
+    ok: z.boolean(),
+    status: z.enum(["connected", "error"]),
+    code: z.enum(["connected", "provider_unavailable", "no_models", "request_failed"]),
+    providerID: z.string(),
+    modelID: z.string(),
+    message: z.string(),
+    output: z.string().meta({ description: "Actual generated text, including text received before a failed test." }),
+  })
+  .meta({ ref: "ProviderConnectionTestResult" })
+
+export type ProviderConnectionTestResult = z.infer<typeof ProviderConnectionTestResult>
 
 function normalizeApiBaseURL(raw: string): string | undefined {
   try {
@@ -49,10 +64,6 @@ function providerAllowsSavedKey(
     if (normalized) allowed.add(normalized)
   }
   return allowed.has(requestedApi)
-}
-
-async function scopedProvider(providerID: string, scope: ProviderOperationScope, config: Config.Info) {
-  return scope.global ? Provider.getProviderGlobal(providerID, config) : Provider.getProvider(providerID, { config })
 }
 
 async function scopedModel(providerID: string, modelID: string, scope: ProviderOperationScope, config: Config.Info) {
@@ -165,26 +176,20 @@ export async function testProviderConnection(
   providerID: string,
   modelID: string | undefined,
   scope: ProviderOperationScope,
-): Promise<
-  ProviderOperationResult<{
-    ok: boolean
-    status: "connected" | "error"
-    providerID: string
-    modelID: string
-    message: string
-  }>
-> {
+): Promise<ProviderOperationResult<ProviderConnectionTestResult>> {
   const config = await scope.config()
-  const provider = await scopedProvider(providerID, scope, config)
+  const provider = await Provider.getConfiguredProvider(providerID, { config, global: scope.global })
   if (!provider) {
     return {
       status: 400,
       body: {
         ok: false,
         status: "error",
+        code: "provider_unavailable",
         providerID,
         modelID: modelID ?? "",
-        message: "Provider is not configured. Set API key or auth first.",
+        message: "Provider is unavailable in the current configuration.",
+        output: "",
       },
     }
   }
@@ -195,13 +200,16 @@ export async function testProviderConnection(
       body: {
         ok: false,
         status: "error",
+        code: "no_models",
         providerID,
         modelID: "",
         message: "Provider has no available models.",
+        output: "",
       },
     }
   }
 
+  let output = ""
   try {
     const model = await scopedModel(providerID, selectedModelID, scope, config)
     const language = ProviderLLM.wrapModel(await scopedLanguage(model, scope, config), model, {})
@@ -220,6 +228,7 @@ export async function testProviderConnection(
     })
     const streamErrors: string[] = []
     for await (const part of stream.stream) {
+      if (part.type === "text-delta") output += part.text
       if (part.type === "error") {
         const error = part.error
         streamErrors.push(
@@ -230,22 +239,47 @@ export async function testProviderConnection(
     if (streamErrors.length > 0) {
       return {
         status: 200,
-        body: { ok: false, status: "error", providerID, modelID: selectedModelID, message: streamErrors.join("; ") },
+        body: {
+          ok: false,
+          status: "error",
+          code: "request_failed",
+          providerID,
+          modelID: selectedModelID,
+          message: streamErrors.join("; "),
+          output,
+        },
       }
     }
     return {
       status: 200,
-      body: { ok: true, status: "connected", providerID, modelID: selectedModelID, message: "Provider is reachable." },
+      body: {
+        ok: true,
+        status: "connected",
+        code: "connected",
+        providerID,
+        modelID: selectedModelID,
+        message: "Provider is reachable.",
+        output,
+      },
     }
   } catch (error) {
-    if (Auth.findReadError(error)) throw error
+    const authError = Auth.findReadError(error)
+    if (authError) throw authError
     const cause = error instanceof Error && error.cause instanceof Error ? error.cause : undefined
     const message = ProviderError.redactSensitiveProviderText(
       cause?.message || (error instanceof Error ? error.message : String(error)),
     )
     return {
       status: 200,
-      body: { ok: false, status: "error", providerID, modelID: selectedModelID, message },
+      body: {
+        ok: false,
+        status: "error",
+        code: "request_failed",
+        providerID,
+        modelID: selectedModelID,
+        message,
+        output,
+      },
     }
   }
 }

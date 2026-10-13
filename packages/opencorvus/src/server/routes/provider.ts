@@ -5,12 +5,12 @@ import z from "zod"
 import { Config } from "../../config/config"
 import { Auth } from "../../auth"
 import { Provider } from "../../provider/provider"
-import { discoverProviderModels, testProviderConnection } from "../../provider/operations"
+import { discoverProviderModels, ProviderConnectionTestResult, testProviderConnection } from "../../provider/operations"
 import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-lifecycle"
 import { ProviderAuth } from "../../provider/auth"
 import { ProviderOAuthFlowStore } from "../../provider/oauth-flow-store"
 import { ProviderRemovalReceipt, removeProvider } from "../../provider/removal"
-import { AuthReadUnavailableResponse, badRequestOrNamedErrorResponse, errors } from "../error"
+import { AuthReadUnavailableResponse, BAD_REQUEST_SCHEMA, badRequestOrNamedErrorResponse, errors } from "../error"
 import { lazy } from "../../util/lazy"
 import { settleCanonicalProviderCatalogInvalidation, settleProviderRefreshInvalidation } from "../provider-refresh"
 import { ProviderAccountUsage } from "../../provider/account-usage"
@@ -294,19 +294,18 @@ export const ProviderRoutes = lazy(() =>
             description: "Provider test result",
             content: {
               "application/json": {
-                schema: resolver(
-                  z.object({
-                    ok: z.boolean(),
-                    status: z.enum(["connected", "error"]),
-                    providerID: z.string(),
-                    modelID: z.string(),
-                    message: z.string(),
-                  }),
-                ),
+                schema: resolver(ProviderConnectionTestResult),
               },
             },
           },
-          ...errors(400),
+          400: {
+            description: "Invalid request or Provider test precondition",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([BAD_REQUEST_SCHEMA, ProviderConnectionTestResult])),
+              },
+            },
+          },
           503: AuthReadUnavailableResponse,
         },
       }),

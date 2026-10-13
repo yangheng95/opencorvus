@@ -58,7 +58,7 @@ Project memory has three explicitly scoped authorities:
    pairs; an error-only Message still contributes its actual diagnostics.
    These are metadata on the existing assistant, not a synthetic recovery
    Message. A failed summary remains ineligible as a MEMORY.MD checkpoint.
-   Oversized Message diagnostics carry a bounded preview plus an exact
+   Message diagnostics omitted from the request carry an optional preview plus an exact
    `message_id` / `field=diagnostics` reference in the same evidence reader.
    Pagination reconstructs the complete credential-redacted projection, with
    the same Unicode offset contract as Part fields. Message and Part locators
@@ -66,13 +66,51 @@ Project memory has three explicitly scoped authorities:
    returns `COMPACTION_EVIDENCE_INVALID`.
 
    The compaction transcript includes original authors and exact text/Tool Part
-   and call identities. Large text and Tool fields carry bounded previews plus
-   `ReadCompactionEvidence` references. The one reader resolves text, input,
+   and call identities. Text, Tool fields and redacted Message diagnostics use
+   one request-budget-aware projection: exact source references form the minimum;
+   complete fields are expanded in stable ascending additional estimated size,
+   then optional bounded previews consume remaining space. System instructions,
+   prepared Tool schemas and the final summarizer prompt share that same budget.
+   Original chronology and identities remain unchanged. Incremental script counts
+   include JSON escaping and use the shared Token estimator; final request checks
+   still apply, including on later evidence-read steps. Required context that
+   cannot fit produces a durable ContextOverflowError rather than a checkpoint.
+   Token estimates do not guarantee fit under every model's exact tokenizer.
+   Initial packing runs after the shared LLM entry has composed request language,
+   plugin transformations, parameters and actual Tool declarations. This final
+   envelope supplies the same input ceiling used by the ordinary request checks.
+   Discretionary compactor space reserves a model-response allowance and a read
+   exchange before expanding source fields. Each read is fitted to the remaining
+   shared window, including parallel results and JSON projection overhead. The
+   reader derives original contents and identities itself; fitting selects only
+   a valid Unicode endpoint. Exhausted windows return
+   `COMPACTION_EVIDENCE_WINDOW_FULL`; invalid endpoints return
+   `COMPACTION_EVIDENCE_INVALID_WINDOW`.
+
+   The helper may call `SaveCompactionNotes` with cumulative natural-language
+   working notes. These are ordinary visible, processor-owned Tool input/result
+   Parts. A successful note retains its complete call/result group and later
+   evidence in subsequent request views, while earlier reads remain canonical
+   and retrievable. Failed notes leave the prior working view intact. The note
+   result derives `source_reads` from actual read result frames and earlier note
+   receipts, merging ranges only for the same exact field/version/provenance.
+   It preserves original source identity, role/author, UTF-16 ranges, reader call
+   references and the first unread offset. This receipt proves delivery, not the
+   truth or authority of the content or the model's interpretation. The model
+   authors the notes; the host derives only factual read accounting. The note
+   exchange, including its receipt, must fit its reserved budget. There is no
+   additional durable memory store or host-selected Tool workflow. A restarted
+   compaction reads the prior attempt's actual notes and failure as source facts;
+   only a completed final summary can publish the Session checkpoint. Existing
+   helper step limits and capacity failures remain explicit resource boundaries.
+
+   Omitted fields keep `ReadCompactionEvidence` references. The one reader resolves text, input,
    output, structured failure and provenance metadata from the Session snapshot
    bound when compaction dispatches, including original Parts referenced by older
    checkpoints. A later message or another Session is outside that read scope.
    Tool output uses its canonical full-output file when the persisted result
-   declares truncation; the Task evidence reader uses the same output resolver.
+   declares truncation; a stored display preview is never treated as a complete
+   inline result. The Task evidence reader uses the same output resolver.
    Returned chunks preserve original role/author and exact UTF-16 code-unit
    offsets; a chunk endpoint may extend one unit to complete a Unicode character.
    A reader page cursor is distinct from a cursor inside the original result.

@@ -56,4 +56,22 @@ describe.serial("effective global configuration defaults", () => {
     expect((await Config.getGlobal()).username).toBe("first-write")
     expect((await Config.getGlobal()).prompt_profile).toEqual({ active: "dynamic" })
   })
+
+  test("experimental source publishes its current declared settings through canonical normalization", async () => {
+    await source(
+      JSON.stringify({
+        experimental: {
+          auto_question: false,
+          disable_paste_summary: true,
+          mcp_timeout: 1200,
+          continue_loop_on_deny: false,
+        },
+      }),
+    )
+    expect((await Config.getGlobal()).experimental).toEqual({
+      auto_question: false,
+      disable_paste_summary: true,
+      mcp_timeout: 1200,
+    })
+  })
 })

@@ -280,6 +280,7 @@ test("Session stream schema classifies connection snapshots and ordinary protoco
     payload: {
       sessionID: "session-1",
       conversationSnapshot: {
+        pendingPermissions: [],
         transcript: [],
         view: { topLevelSessionIDs: [], sessions: [], messages: [] },
         history: {

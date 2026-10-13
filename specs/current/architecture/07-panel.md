@@ -507,6 +507,17 @@ the content API determines its actual bytes, revision or original read error.
 This contract does not introduce directory-link navigation or physical alias
 tracking into the file workbench.
 
+Move verifies that the destination parent's actual access chain remains
+independent of the source entry being retired before native publication. A
+dependency returns HTTP 400/FileInvalidPathError with the original destination
+path; an existing destination entry, including a dangling link, takes precedence
+as HTTP 409/FileConflictError. Independently addressable aliases to the same
+target remain valid. Entry identity combines its exact address with BigInt
+filesystem identity; Windows observes the terminal reparse entry through one
+non-following handle and preserves junction versus symbolic access namespaces.
+This integrity check does not apply to Copy or claim atomic external-retarget
+protection. It does not add directory-link navigation or a second receipt.
+
 Move/copy validate each link's declared source and relocated destination targets
 through the current project path authority; an in-scope missing target remains
 a valid link entry. Native rename retains the link text. Copy retains it with
@@ -2645,6 +2656,17 @@ Every board response has a non-empty `snapshotVersion`. `lastSequence` is the
 latest protocol sequence included in that snapshot and lets the Overlay reject
 superseded deltas without maintaining a second board.
 
+The Board is materialized once as its complete JSON-visible response. Its
+opaque weak entity tag, `W/"task-board-v1:<digest>"`, identifies that projection
+using the canonical resource digest before adding `snapshotVersion`; the same
+object supplies the response body and ETag. Project names, Task titles, exact
+interaction identities and states, topology, execution, incidents and Brief
+therefore participate, rather than a count/max-time approximation. The installed
+Hono ETag middleware owns conditional GET/HEAD, tag lists, wildcard and weak
+comparison after the actual Task record lookup. A Board read does not advance
+Task execution, but may fill its existing derived Brief cache; this validator
+does not change that cache policy or claim large-Board performance.
+
 The current board contains:
 
 ```text
@@ -2777,6 +2799,18 @@ skills, Model Context Protocol providers, channels, permissions, and expert
 squads. `prompt_profile.active` remains the only active expert-squad selection
 source. Settings does not define agent-team order, a package workflow, or a
 second active profile.
+
+Provider connection Test delegates an omitted model ID to the backend's
+effective catalog. One per-provider observation map retains the generated
+result or the original HTTP error. Its short summary uses the current interface
+language and actual model identity; native disclosure exposes the original
+model output or complete technical diagnostic without translating the source.
+Accepted configuration, credential, cleanup and deletion mutations retire that
+provider's Test generation, result and busy state. Successful registry refresh
+retires all current observations; live model refresh uses its returned provider
+IDs. Scope, authority, selection and unmount fencing keep their existing owners.
+Opening, cancelling or failing an uncommitted edit is not an accepted mutation.
+Retiring a Test does not advance the shared owner used by Save, Auth or reads.
 
 Provider authoring uses one pure endpoint-edit validator for localized field
 feedback, save/discovery actions and the canonical form writer. New or explicit

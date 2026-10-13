@@ -1,0 +1,70 @@
+{
+  "sequence": 3,
+  "input": {
+    "label": "register-b-project",
+    "role": "b",
+    "method": "GET",
+    "route": "/project/current",
+    "query": {}
+  },
+  "occurrence": "directory-target-guard-after-c94af314-1bea-42a9-8e4c-5af4c59ddbce",
+  "host": {
+    "pid": 71960,
+    "processInstanceID": "win32:639275202435145245",
+    "occurrenceID": "252ff5fc-dbf5-4d39-96c9-35e68c06fecf"
+  },
+  "nativeTarget": {
+    "pid": 26924,
+    "processInstanceID": "win32:639275202443495227",
+    "occurrenceID": "f1f71372-91b2-4c29-a8ce-081ae27e015a"
+  },
+  "url": "http://127.0.0.1:18456/project/current?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cdirectory-target-guard-after-01a133%5Cproject-b",
+  "method": "GET",
+  "dispatchedAt": {
+    "utc": "2026-10-13T20:31:06.156Z",
+    "wallMs": 1791923466156,
+    "monotonicNs": "2741356796681500"
+  },
+  "chunks": [
+    {
+      "at": {
+        "utc": "2026-10-13T20:31:07.331Z",
+        "wallMs": 1791923467331,
+        "monotonicNs": "2741357972028100"
+      },
+      "bytes": 233,
+      "bytesBase64": "eyJpZCI6InByal9oSlpDN2luTXJ4V1dUa3FnbjRmUyIsIndvcmt0cmVlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxkaXJlY3RvcnktdGFyZ2V0LWd1YXJkLWFmdGVyLTAxYTEzM1xccHJvamVjdC1iIiwic2FuZGJveGVzIjpbXSwidGltZSI6eyJjcmVhdGVkIjoxNzkxOTIzNDY2ODY0LCJ1cGRhdGVkIjoxNzkxOTIzNDY2ODY0fX0="
+    }
+  ],
+  "status": 200,
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "233",
+    "content-type": "application/json",
+    "date": "Tue, 13 Oct 2026 20:31:07 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "4e916c5c-0f66-4c70-abba-06050f48935a"
+  },
+  "requestID": "4e916c5c-0f66-4c70-abba-06050f48935a",
+  "headersAt": {
+    "utc": "2026-10-13T20:31:07.331Z",
+    "wallMs": 1791923467331,
+    "monotonicNs": "2741357971913100"
+  },
+  "rawBodyBase64": "eyJpZCI6InByal9oSlpDN2luTXJ4V1dUa3FnbjRmUyIsIndvcmt0cmVlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxkaXJlY3RvcnktdGFyZ2V0LWd1YXJkLWFmdGVyLTAxYTEzM1xccHJvamVjdC1iIiwic2FuZGJveGVzIjpbXSwidGltZSI6eyJjcmVhdGVkIjoxNzkxOTIzNDY2ODY0LCJ1cGRhdGVkIjoxNzkxOTIzNDY2ODY0fX0=",
+  "rawBody": "{\"id\":\"prj_hJZC7inMrxWWTkqgn4fS\",\"worktree\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-14\\\\directory-target-guard-after-01a133\\\\project-b\",\"sandboxes\":[],\"time\":{\"created\":1791923466864,\"updated\":1791923466864}}",
+  "bodyCompleteAt": {
+    "utc": "2026-10-13T20:31:07.331Z",
+    "wallMs": 1791923467331,
+    "monotonicNs": "2741357972126600"
+  },
+  "body": {
+    "id": "prj_hJZC7inMrxWWTkqgn4fS",
+    "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project-b",
+    "sandboxes": [],
+    "time": {
+      "created": 1791923466864,
+      "updated": 1791923466864
+    }
+  }
+}

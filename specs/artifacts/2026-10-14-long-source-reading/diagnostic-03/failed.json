@@ -1,0 +1,10 @@
+{
+  "pid": 27772,
+  "occurrence": "long-source-reader-e0302d02-2260-467b-ac0e-2f829ff1ddcc",
+  "error": {
+    "name": "AssertionError",
+    "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   '$schema': 'https://opencorvus.ai/config.json',\n    model: 'openai/gpt-6.1-sol',\n    prompt_profile: {\n      active: 'base'\n    },\n    small_model: 'openai/gpt-6.1-sol'\n"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

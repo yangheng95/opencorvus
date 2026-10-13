@@ -7,6 +7,7 @@ import fs from "fs"
 import ignore from "ignore"
 import { Log } from "../util/log"
 import { Filesystem } from "../util/filesystem"
+import { readFileEntry, sameFileEntry } from "../util/file-entry"
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
 import { Project } from "../project/project"
@@ -800,10 +801,12 @@ export namespace File {
   export async function status() {
     if (!Project.isGitRepo(Instance.directory)) return []
 
-    const diffOutput = (await hostGit(
-      ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--numstat", "HEAD"],
-      { cwd: Instance.directory, timeoutProfile: "default" },
-    )).text()
+    const diffOutput = (
+      await hostGit(["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--numstat", "HEAD"], {
+        cwd: Instance.directory,
+        timeoutProfile: "default",
+      })
+    ).text()
 
     const changedFiles: Info[] = []
 
@@ -820,10 +823,12 @@ export namespace File {
       }
     }
 
-    const untrackedOutput = (await hostGit(
-      ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "ls-files", "--others", "--exclude-standard"],
-      { cwd: Instance.directory, timeoutProfile: "default" },
-    )).text()
+    const untrackedOutput = (
+      await hostGit(
+        ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "ls-files", "--others", "--exclude-standard"],
+        { cwd: Instance.directory, timeoutProfile: "default" },
+      )
+    ).text()
 
     if (untrackedOutput.trim()) {
       const untrackedFiles = untrackedOutput.trim().split("\n")
@@ -844,10 +849,12 @@ export namespace File {
     }
 
     // Get deleted files
-    const deletedOutput = (await hostGit(
-      ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--name-only", "--diff-filter=D", "HEAD"],
-      { cwd: Instance.directory, timeoutProfile: "default" },
-    )).text()
+    const deletedOutput = (
+      await hostGit(
+        ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--name-only", "--diff-filter=D", "HEAD"],
+        { cwd: Instance.directory, timeoutProfile: "default" },
+      )
+    ).text()
 
     if (deletedOutput.trim()) {
       const deletedFiles = deletedOutput.trim().split("\n")
@@ -882,9 +889,12 @@ export namespace File {
     await statReadableFile(file, full)
     await assertReadableFile(file, full)
 
-    const previewMimeType = path.extname(file).toLowerCase() === ".pdf"
-      ? "application/pdf"
-      : isImageByExtension(file) ? getImageMimeType(file) : undefined
+    const previewMimeType =
+      path.extname(file).toLowerCase() === ".pdf"
+        ? "application/pdf"
+        : isImageByExtension(file)
+          ? getImageMimeType(file)
+          : undefined
     if (previewMimeType) {
       const buffer = await readFileBytes(file, full)
       const content = buffer.toString("base64")
@@ -1152,7 +1162,7 @@ export namespace File {
     action: "copy" | "move" | "delete"
     source: { file: string; fullPath: string }
     target?: { file: string; fullPath: string }
-  }): Promise<fs.Stats> {
+  }): Promise<fs.BigIntStats> {
     const rootError = () =>
       fileInvalidPath({
         path: input.source.file,
@@ -1168,7 +1178,7 @@ export namespace File {
 
     const roots = [Instance.directory, Instance.worktree]
     if (roots.some((root) => path.relative(root, input.source.fullPath) === "")) throw rootError()
-    const entry = await fs.promises.lstat(input.source.fullPath).catch((error) => {
+    const entry = await fs.promises.lstat(input.source.fullPath, { bigint: true }).catch((error) => {
       if (isMissingPathError(error)) throw fileNotFound({ path: input.source.file })
       throw error
     })
@@ -1180,6 +1190,79 @@ export namespace File {
     ])
     if (physicalRoots.includes(source)) throw rootError()
     return entry
+  }
+
+  async function assertMoveDestinationIndependent(input: {
+    sourceFile: string
+    sourceFull: string
+    sourceEntry: fs.BigIntStats
+    targetFull: string
+    targetFile: string
+  }): Promise<void> {
+    const source = await readFileEntry(input.sourceFull, input.sourceEntry).catch((error) => {
+      if (isMissingPathError(error)) throw fileNotFound({ path: input.sourceFile })
+      throw error
+    })
+    const active = new Set<string>()
+    async function inspect(raw: string): Promise<string> {
+      const operand = process.platform === "win32" ? path.resolve(raw) : raw
+      if (active.has(operand)) {
+        throw Object.assign(new Error(`File move destination access has a recursive link state: ${operand}`), {
+          code: "ELOOP",
+          path: operand,
+        })
+      }
+      active.add(operand)
+      try {
+        const root = path.parse(operand).root
+        let namespace = root
+        const components = operand.slice(root.length).split(process.platform === "win32" ? /[\\/]/ : /\//)
+        for (const component of components) {
+          if (!component) continue
+          if (component === "." || component === "..") {
+            namespace = await fs.promises.realpath(`${namespace}${path.sep}${component}`)
+            continue
+          }
+          const candidate = path.join(namespace, component)
+          const entry = await readFileEntry(candidate)
+          if (sameFileEntry(source, entry)) {
+            throw fileInvalidPath({
+              path: input.targetFile,
+              message: `Destination parent depends on the source entry being moved: ${input.targetFile}`,
+            })
+          }
+          if (!entry.link) {
+            namespace = candidate
+            continue
+          }
+          const text = await fs.promises.readlink(candidate)
+          const expanded =
+            process.platform === "win32"
+              ? path.resolve(namespace, text)
+              : path.isAbsolute(text)
+                ? text
+                : `${namespace}${path.sep}${text}`
+          const resolved = await inspect(expanded)
+          // Windows junctions retain the outer access namespace for later
+          // relative links. True symbolic links replace it with their target.
+          namespace = entry.link === "junction" ? candidate : resolved
+        }
+        return namespace
+      } finally {
+        active.delete(operand)
+      }
+    }
+    try {
+      await inspect(path.dirname(input.targetFull))
+    } catch (error) {
+      if (isMissingPathError(error)) {
+        throw fileInvalidPath({
+          path: input.targetFile,
+          message: `Parent directory does not exist: ${parentRelativePath(input.targetFile) || "."}`,
+        })
+      }
+      throw error
+    }
   }
 
   function nodeForEntry(
@@ -1259,26 +1342,17 @@ export namespace File {
       throw new Error(`File.copy publication type mismatch: ${source} -> ${target}`)
     }
     if (sourceStat.isSymbolicLink()) {
-      const [sourceLink, targetLink] = await Promise.all([
-        fs.promises.readlink(source),
-        fs.promises.readlink(target),
-      ])
+      const [sourceLink, targetLink] = await Promise.all([fs.promises.readlink(source), fs.promises.readlink(target)])
       if (sourceLink !== targetLink) throw new Error(`File.copy symlink mismatch: ${source} -> ${target}`)
       return
     }
     if (sourceStat.isFile()) {
-      const [sourceBytes, targetBytes] = await Promise.all([
-        fs.promises.readFile(source),
-        fs.promises.readFile(target),
-      ])
+      const [sourceBytes, targetBytes] = await Promise.all([fs.promises.readFile(source), fs.promises.readFile(target)])
       if (!sourceBytes.equals(targetBytes)) throw new Error(`File.copy byte mismatch: ${source} -> ${target}`)
       return
     }
     if (!sourceStat.isDirectory()) return
-    const [sourceEntries, targetEntries] = await Promise.all([
-      fs.promises.readdir(source),
-      fs.promises.readdir(target),
-    ])
+    const [sourceEntries, targetEntries] = await Promise.all([fs.promises.readdir(source), fs.promises.readdir(target)])
     sourceEntries.sort()
     targetEntries.sort()
     if (
@@ -1379,15 +1453,26 @@ export namespace File {
     const target = input.newPath
     const sourceFull = path.join(Instance.directory, source)
     const targetFull = path.join(Instance.directory, target)
-    await assertFileMutationPaths({
+    const sourceEntry = await assertFileMutationPaths({
       action: "move",
       source: { file: source, fullPath: sourceFull },
       target: { file: target, fullPath: targetFull },
     })
 
-    if (await Filesystem.exists(targetFull)) {
+    const destination = await fs.promises.lstat(targetFull).catch((error) => {
+      if (isMissingPathError(error)) return undefined
+      throw error
+    })
+    if (destination) {
       throw fileConflict({ path: target })
     }
+    await assertMoveDestinationIndependent({
+      sourceFile: source,
+      sourceFull,
+      sourceEntry,
+      targetFull,
+      targetFile: target,
+    })
     await assertRelocatedSymlinkTargetsAllowed({
       file: source,
       sourceRoot: sourceFull,

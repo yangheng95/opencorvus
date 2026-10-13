@@ -1,0 +1,32 @@
+{
+  "occurrence": "directory-target-dot-guard-prepare-node-c20160ae-e284-426d-abd7-ffa43c5a58f5",
+  "outcome": "ready",
+  "host": {
+    "pid": 860,
+    "processInstanceID": "win32:639275201792642365",
+    "occurrenceID": "38048eb7-5580-4996-ae79-efa33f6f35c8"
+  },
+  "parent": {
+    "pid": 80920,
+    "processInstanceID": "win32:639275201792032712",
+    "occurrenceID": "641a0711-890a-49bc-bfb4-24195bad3da7"
+  },
+  "target": {
+    "pid": 58056,
+    "processInstanceID": "win32:639275201811960413",
+    "occurrenceID": "923b5ae7-159e-4e4a-8067-d74269a07ed0"
+  },
+  "targetBirthAtMs": 1791923381196,
+  "deadlineAt": 1791923439259,
+  "inactivityTimeoutMs": 20000,
+  "printLogs": false,
+  "hostExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "hostBunVersion": "1.4.0",
+  "observedAtUtc": "2026-10-13T20:29:41.224Z",
+  "executable": "C:/Program Files/nodejs/node.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\fixture-tool.mjs",
+    "prepare"
+  ],
+  "authority": "Original production foreground run/onSpawned handle; run alone consumes child streams; no detached transfer"
+}

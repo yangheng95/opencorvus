@@ -69,6 +69,13 @@ export function sessionLineageIdentity(sessionID: string): SessionLineageIdentit
   })
 }
 
+/** Permission cards in Session conversations exclude the existing Task owner.
+ * Question and transcript admission keep their own established contracts. */
+export function isStandalonePermissionSession(sessionID: string, projectID: string): boolean {
+  const lineage = sessionLineageIdentity(sessionID)
+  return Boolean(lineage && lineage.projectID === projectID && taskIDForSession(sessionID) === undefined)
+}
+
 function loadAndCache(sessionID: string) {
   const row = readSessionRow(sessionID)
   if (!row) return undefined

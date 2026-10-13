@@ -42,6 +42,14 @@ export namespace LLM {
   const log = Log.create({ service: "llm" })
   export const OUTPUT_TOKEN_MAX = ProviderTransform.OUTPUT_TOKEN_MAX
 
+  export type PreparedRequest = {
+    messages: ModelMessage[]
+    system: string[]
+    tools: Record<string, Tool>
+    capacityTokens: number
+    maxOutputTokens: number
+  }
+
   export type StreamInput = {
     /** Real transcript user message when this stream belongs to a conversation turn. */
     user?: Message.User
@@ -60,6 +68,8 @@ export namespace LLM {
     systemLabels?: string[]
     abort: AbortSignal
     messages: ModelMessage[]
+    /** Pack source-derived messages against the final system, Tools and output reservation. */
+    prepareMessages?: (request: PreparedRequest) => ModelMessage[] | Promise<ModelMessage[]>
     small?: boolean
     tools: Record<string, Tool>
     retries?: number
@@ -297,12 +307,20 @@ export namespace LLM {
       ...headers,
     }
     const systemText = system.join("\n")
-    const requestMessages = input.messages
     const capacity = ContextBudget.capacity({
       config,
       model: input.model,
       effectiveOutputTokens: params.maxOutputTokens,
     })
+    const requestMessages = input.prepareMessages
+      ? await input.prepareMessages({
+          messages: input.messages,
+          system,
+          tools,
+          capacityTokens: capacity.tokens,
+          maxOutputTokens: params.maxOutputTokens ?? maxOutputTokens,
+        })
+      : input.messages
     const checkCapacity = (messages: ModelMessage[], activeTools = tools, stepSystem = system) => {
       const estimate = RequestBudget.estimate({ system: stepSystem, messages, tools: activeTools })
       if (estimate.totalTokensEst > capacity.tokens) {
@@ -362,7 +380,9 @@ export namespace LLM {
             ? system
             : typeof prepared.instructions === "string"
               ? [prepared.instructions]
-              : (Array.isArray(prepared.instructions) ? prepared.instructions : [prepared.instructions]).map((message) => message.content)
+              : (Array.isArray(prepared.instructions) ? prepared.instructions : [prepared.instructions]).map(
+                  (message) => message.content,
+                )
         checkCapacity(prepared?.messages ?? step.messages, activeTools, stepSystem)
         return prepared
       },

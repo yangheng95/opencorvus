@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-entry-name-bun-cfab6e0f-7043-4374-9dd8-a207ed287dff",
+  "hostPID": 63268,
+  "parentPID": 78640,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 244721
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T20:10:09.169Z"
+}

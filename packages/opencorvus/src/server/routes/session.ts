@@ -52,7 +52,7 @@ import { appendConversationLiveEvent } from "@/protocol/conversation-live-buffer
 import {
   enrichStandaloneSessionTranscript,
   mapSessionBusEvent,
-  pendingPermissionSessionEvent,
+  standalonePendingPermission,
 } from "@/protocol/session-mirror"
 import { PermissionAuthority } from "@/permission/authority"
 import { listConversationAgentSessionsForSessionTree, taskExecutionProjectionForTask } from "@/orchestrator/task-event"
@@ -706,25 +706,11 @@ function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof
   })
 }
 
-function pendingPermissionProtocolSessionEvent(
-  request: PermissionAuthority.Request,
-): z.output<typeof SessionProtocolEvent> {
-  const orderKey = timelineOrderKey({
-    domain: "interaction",
-    time: request.timeCreated,
-    id: request.id,
-  })
-  const mapped = pendingPermissionSessionEvent(request)
-  return SessionProtocolEvent.parse({
-    event_id: `pending-permission-${request.id}`,
-    session_id: request.sessionID,
-    orderKey,
-    type: mapped.type,
-    emittedAt: request.timeCreated,
-    timestamp: request.timeCreated,
-    sequence: 0,
-    summary: mapped.summary!,
-    payload: { ...mapped.payload!, orderKey },
+async function pendingPermissionsForConversation(projectID: string, sessionIDs: ReadonlySet<string>) {
+  return (await PermissionAuthority.list()).flatMap((request) => {
+    if (!sessionIDs.has(request.sessionID)) return []
+    const projected = standalonePendingPermission(request, projectID)
+    return projected ? [projected] : []
   })
 }
 
@@ -1159,6 +1145,7 @@ export const SessionRoutes = lazy(() =>
         return c.json({
           board,
           pendingQuestions,
+          pendingPermissions: await pendingPermissionsForConversation(session.projectID, sessionIDSet),
           transcript: projectConversationTransportTranscript(transcript),
           events: executionEvents.map(protocolSessionEvent),
           view,
@@ -1330,6 +1317,7 @@ export const SessionRoutes = lazy(() =>
             transcript: projectConversationTransportTranscript(connectionConversation.transcript),
             view: connectionConversation.view,
             history: connectionConversation.history,
+            pendingPermissions: await pendingPermissionsForConversation(session.projectID, sessionTreeIDs),
           }
           // Subscribe before reading the canonical pending-question state. A
           // question created before the subscription is present in this
@@ -1339,9 +1327,6 @@ export const SessionRoutes = lazy(() =>
           const pendingQuestionEvents = readPendingQuestions()
             .filter((item) => sessionTreeIDs.has(item.sessionID))
             .map(pendingQuestionSessionEvent)
-          const pendingPermissionEvents = (await PermissionAuthority.list())
-            .filter((item) => sessionTreeIDs.has(item.sessionID))
-            .map(pendingPermissionProtocolSessionEvent)
           await Promise.all([stopSessionProtocol.drain(), stopTaskLifecycleProtocol.drain()])
           const connectedAt = Date.now()
           await writeData(
@@ -1372,7 +1357,6 @@ export const SessionRoutes = lazy(() =>
           ].sort((left, right) => left.time.emitted - right.time.emitted || left.id.localeCompare(right.id))
           for (const event of reconnectEvents) receiveProtocolEvent(event)
           for (const event of pendingQuestionEvents) await writeData(JSON.stringify(event))
-          for (const event of pendingPermissionEvents) await writeData(JSON.stringify(event))
           bufferingProtocolEvents = false
           const releaseWrites = bufferedProtocolEvents
             .splice(0)

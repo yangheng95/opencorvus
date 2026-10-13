@@ -204,6 +204,24 @@ admission authority, and global subscriptions cannot cross Project boundaries.
 `SessionStreamEvent` are the production Zod schemas and the generated
 OpenAPI/Software Development Kit contract for this handshake.
 
+Session HTTP hydration and the ordered connection snapshot also require
+`pendingPermissions`. This is the complete current pending permission set for
+the admitted conversation tree, distinct from the bounded additive transcript
+tail. The existing standalone interaction Map owns both Questions and
+Permissions. A shared strict adapter preserves Request identity, summary,
+directory, time and interaction order key for cold, connection and live input.
+Connection replacement changes only Permissions; existing Question objects
+retain their owner, while Question replay keeps its separate current behavior.
+Replied or ledger-backed Terminated events retire the matching pending card.
+Task cards continue to come from Board interactions. Side Chat uses the same
+adapter but admits only its exact independent Session.
+
+Interaction actions capture the request target, directory, endpoint, API
+authority and main selection epoch before awaiting transport. A default Task
+refresh runs only while that original source and authority remain current.
+Session cards reconcile through their normal events and snapshots; Side Chat
+retains its own explicit refresh callback.
+
 ## Canonical Identity
 
 Materialized conversation turns use:

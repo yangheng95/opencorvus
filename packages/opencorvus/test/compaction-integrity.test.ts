@@ -8,6 +8,7 @@ import { Provider } from "@/provider/provider"
 import { Session } from "@/session"
 import { SessionCompaction } from "@/session/compaction"
 import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
+import { CompactionWorkingContext } from "@/session/compaction-working-context"
 import { ContextBudget } from "@/session/context-budget"
 import { RequestBudget } from "@/session/request-budget"
 import { SessionControl } from "@/session/control"
@@ -30,29 +31,42 @@ afterEach(resetMemoryDatabase)
 describe("compaction request and continuation contracts", () => {
   test("intersects input capacity with the actual combined-window output reservation", () => {
     const model = limitModel({ context: 400_000, input: 272_000, output: 128_000 })
-    expect(ContextBudget.capacity({ config: {}, model })).toEqual({ status: "known", tokens: 256_000 })
+    expect(ContextBudget.capacity({ config: Config.Info.parse({}), model })).toEqual({
+      status: "known",
+      tokens: 256_000,
+    })
     expect(
       ContextBudget.capacity({
-        config: {},
+        config: Config.Info.parse({}),
         model: limitModel({ context: 200_000, input: 190_000, output: 40_000 }),
         effectiveOutputTokens: 30_000,
       }),
     ).toEqual({ status: "known", tokens: 170_000 })
     expect(
-      ContextBudget.capacity({ config: {}, model: limitModel({ context: 0, input: 80_000, output: 8_000 }) }),
+      ContextBudget.capacity({
+        config: Config.Info.parse({}),
+        model: limitModel({ context: 0, input: 80_000, output: 8_000 }),
+      }),
     ).toEqual({ status: "known", tokens: 80_000 })
-    expect(ContextBudget.capacity({ config: {}, model: limitModel({ context: 0, output: 8_000 }) })).toEqual({
+    expect(
+      ContextBudget.capacity({ config: Config.Info.parse({}), model: limitModel({ context: 0, output: 8_000 }) }),
+    ).toEqual({
       status: "known",
       tokens: 256_000,
     })
-    expect(ContextBudget.capacity({ config: {}, model: limitModel({ context: 8_000, output: 8_000 }) })).toEqual({
+    expect(
+      ContextBudget.capacity({ config: Config.Info.parse({}), model: limitModel({ context: 8_000, output: 8_000 }) }),
+    ).toEqual({
       status: "known",
       tokens: 0,
     })
-    expect(ContextBudget.preserveRecent({ config: {}, model })).toBe(64_000)
-    expect(ContextBudget.preserveRecent({ config: { compaction: { preserve_recent_tokens: 4_000 } }, model })).toBe(
-      4_000,
-    )
+    expect(ContextBudget.preserveRecent({ config: Config.Info.parse({}), model })).toBe(64_000)
+    expect(
+      ContextBudget.preserveRecent({
+        config: Config.Info.parse({ compaction: { preserve_recent_tokens: 4_000 } }),
+        model,
+      }),
+    ).toBe(4_000)
   })
 
   test.each(["before-source", "after-source", "at-source"] as const)(
@@ -133,19 +147,14 @@ describe("compaction request and continuation contracts", () => {
       tools: { reader: tool({ description: "Read the persisted result", inputSchema: z.object({ id: z.string() }) }) },
     }
     const estimate = RequestBudget.estimate(request)
-    const measured = SessionCompaction.requestBudget({
-      ...request,
-      config: {},
+    const capacity = ContextBudget.capacity({
+      config: Config.Info.parse({}),
       model: limitModel({ context: 2_000, output: 500 }),
     })
     expect(estimate.mediaCounts).toEqual({ image: 1, pdf: 0, audio: 0, video: 0 })
     expect(estimate.messagePayloadChars).toBeLessThan(500)
-    expect(measured).toMatchObject({
-      ...estimate,
-      estimatedTokens: estimate.totalTokensEst,
-      usableBudget: 1_500,
-      exceeds: true,
-    })
+    expect(capacity).toEqual({ status: "known", tokens: 1_500 })
+    expect(estimate.totalTokensEst).toBeGreaterThan(capacity.tokens)
     expect(estimate.totalTokensEst).toBe(
       estimate.systemTokensEst +
         estimate.toolSchemaTokensEst +
@@ -173,7 +182,7 @@ describe("compaction request and continuation contracts", () => {
         const model = modelDefinition()
         const selected = await SessionCompaction.TestHooks.selectCompactionInput({
           messages: history,
-          config: { compaction: { tail_turns: 1 } },
+          config: Config.Info.parse({ compaction: { tail_turns: 1 } }),
           model,
           overflow: false,
         })
@@ -253,14 +262,21 @@ describe("compaction request and continuation contracts", () => {
     const history = [
       { info: { id: "msg_result", role: "assistant", agent: "work", author: "work" }, parts: [part] },
     ] as Message.WithParts[]
-    const transcript = JSON.stringify(SessionCompaction.TestHooks.compactionTranscriptMessages(history))
+    const transcript = JSON.stringify(
+      SessionCompaction.TestHooks.compactionTranscriptMessages(history, {
+        system: [],
+        tools: {},
+        promptText: "Summarize the result.",
+        maxTokens: 2_000,
+      }),
+    )
     expect(transcript.length).toBeLessThan(5_000)
     expect(transcript).toContain("compaction_evidence_reference")
     expect(transcript).toContain("opencorvus-attachment://project/evidence.png")
     const reader = CompactionEvidenceReader.create(history)
     const output = (await reader.execute!(
       { part_id: part.id, field: "output", offset: 70_000, limit: 30 },
-      { toolCallId: "read_exact", messages: [], abortSignal: AbortSignal.timeout(1_000) },
+      { toolCallId: "read_exact", context: {}, messages: [], abortSignal: AbortSignal.timeout(1_000) },
     )) as { output: string }
     expect(JSON.parse(output.output)).toMatchObject({
       partID: part.id,
@@ -297,15 +313,17 @@ function modelDefinition(): Provider.Model {
 }
 
 async function user(sessionID: string, text: string) {
-  const info = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID,
-    role: "user",
-    author: "user",
-    time: { created: Date.now() },
-    agent: "chat",
-    model: target,
-  })
+  const info = Message.User.parse(
+    await Session.updateMessage({
+      id: Identifier.ascending("message"),
+      sessionID,
+      role: "user",
+      author: "user",
+      time: { created: Date.now() },
+      agent: "chat",
+      model: target,
+    }),
+  )
   await Session.updatePart({ id: Identifier.ascending("part"), sessionID, messageID: info.id, type: "text", text })
   return info
 }
@@ -318,22 +336,24 @@ async function assistant(
   summary = false,
   toolOutput = "Verified result",
 ) {
-  const info = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID,
-    role: "assistant",
-    summary,
-    author: summary ? "compaction" : "chat",
-    parentID,
-    agent: summary ? "compaction" : "chat",
-    time: { created: Date.now() },
-    finish: "stop",
-    path: { cwd: Instance.directory, root: Instance.worktree },
-    providerID: target.providerID,
-    modelID: target.modelID,
-    cost: 0,
-    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-  })
+  const info = Message.Assistant.parse(
+    await Session.updateMessage({
+      id: Identifier.ascending("message"),
+      sessionID,
+      role: "assistant",
+      summary,
+      author: summary ? "compaction" : "chat",
+      parentID,
+      agent: summary ? "compaction" : "chat",
+      time: { created: Date.now() },
+      finish: "stop",
+      path: { cwd: Instance.directory, root: Instance.worktree },
+      providerID: target.providerID,
+      modelID: target.modelID,
+      cost: 0,
+      tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+    }),
+  )
   if (step)
     await Session.updatePart({ id: Identifier.ascending("part"), sessionID, messageID: info.id, type: "step-start" })
   if (step)
@@ -354,7 +374,9 @@ async function assistant(
       },
     })
   await Session.updatePart({ id: Identifier.ascending("part"), sessionID, messageID: info.id, type: "text", text })
-  return Session.updateMessage({ ...info, time: { ...info.time, completed: Date.now() } })
+  return Message.Assistant.parse(
+    await Session.updateMessage({ ...info, time: { ...info.time, completed: Date.now() } }),
+  )
 }
 
 describe("real local streaming compaction transport", () => {
@@ -569,6 +591,9 @@ describe("real local streaming compaction transport", () => {
               tools: [
                 expect.objectContaining({
                   function: expect.objectContaining({ name: CompactionEvidenceReader.TOOL_NAME }),
+                }),
+                expect.objectContaining({
+                  function: expect.objectContaining({ name: CompactionWorkingContext.TOOL_NAME }),
                 }),
               ],
             })

@@ -12,6 +12,7 @@ export interface ProviderRefreshResult {
   fetchedAt?: number
   error?: string
   issues?: ProviderRefreshIssue[]
+  providers?: Array<{ providerID: string; count: number; ids: string[] }>
 }
 
 type ProviderRefreshResource = "catalog" | "models"

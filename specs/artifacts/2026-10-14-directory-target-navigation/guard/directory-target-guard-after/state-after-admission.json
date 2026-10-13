@@ -1,0 +1,45 @@
+{
+  "phase": "after",
+  "fixtureID": "fc1edaa2-91c8-45d9-9caa-142d25b87f36",
+  "owner": {
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133",
+    "targetBirthAtMs": 1791923444349,
+    "host": {
+      "pid": 71960,
+      "processInstanceID": "win32:639275202435145245",
+      "occurrenceID": "252ff5fc-dbf5-4d39-96c9-35e68c06fecf"
+    },
+    "ui": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\ui",
+    "projectB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project-b",
+    "printLogs": true,
+    "nativeDeadline": 1791924343460,
+    "ripgrepExecutable": "C:\\Users\\hengu\\.local\\bin\\rg.exe",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\runtime",
+    "port": 18456,
+    "sourceCLI": "D:/myhexin-local/opencorvus/packages/opencorvus/src/index.ts",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\evidence",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project",
+    "occurrence": "directory-target-guard-after-c94af314-1bea-42a9-8e4c-5af4c59ddbce",
+    "evidencePrefix": "directory-target-guard-after",
+    "fixtureID": "fc1edaa2-91c8-45d9-9caa-142d25b87f36",
+    "owner": {
+      "processInstanceID": "win32:639275202443495227",
+      "ProcessId": 26924
+    },
+    "inactivityTimeoutMs": 120000,
+    "nativeTarget": {
+      "pid": 26924,
+      "processInstanceID": "win32:639275202443495227",
+      "occurrenceID": "f1f71372-91b2-4c29-a8ce-081ae27e015a"
+    },
+    "qualification": "real-desktop-directory-target-guard",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after"
+  },
+  "at": {
+    "utc": "2026-10-13T20:43:49.173Z",
+    "wallMs": 1791924229173,
+    "monotonicNs": "2742119793002300"
+  },
+  "maximumHTTP": 10,
+  "qualification": "Read original owned state and real FileRoutes only; UI/mutations are performed separately by Root"
+}

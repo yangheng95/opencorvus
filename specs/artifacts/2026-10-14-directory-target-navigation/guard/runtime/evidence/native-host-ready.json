@@ -1,0 +1,45 @@
+{
+  "occurrence": "directory-target-guard-after-c94af314-1bea-42a9-8e4c-5af4c59ddbce",
+  "outcome": "ready",
+  "host": {
+    "pid": 71960,
+    "processInstanceID": "win32:639275202435145245",
+    "occurrenceID": "252ff5fc-dbf5-4d39-96c9-35e68c06fecf"
+  },
+  "parent": {
+    "pid": 51828,
+    "processInstanceID": "win32:639275202412667223",
+    "occurrenceID": "7cb3857a-e92b-45c7-9cd5-084d73bcad2a"
+  },
+  "target": {
+    "pid": 26924,
+    "processInstanceID": "win32:639275202443495227",
+    "occurrenceID": "f1f71372-91b2-4c29-a8ce-081ae27e015a"
+  },
+  "targetBirthAtMs": 1791923444349,
+  "deadlineAt": 1791924343460,
+  "inactivityTimeoutMs": 120000,
+  "printLogs": true,
+  "hostExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "hostBunVersion": "1.4.0",
+  "observedAtUtc": "2026-10-13T20:30:44.380Z",
+  "executable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18456",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\startup.json",
+    "--startup-occurrence",
+    "directory-target-guard-after-c94af314-1bea-42a9-8e4c-5af4c59ddbce",
+    "--log-level",
+    "INFO",
+    "--print-logs"
+  ],
+  "authority": "Original production foreground run/onSpawned handle; run alone consumes child streams; no detached transfer"
+}

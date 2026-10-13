@@ -62,6 +62,7 @@ function roleTitleKey(name: string): string {
   return `chat.role.${normalizeAgentRole(name)}`
 }
 import { interactionToCardSeeds, partitionInteractions } from "../utils/interaction"
+import { permissionInteraction, type PermissionInteraction } from "../utils/permission-interaction"
 import { isTreeWriterNoopEventType, isTreeWriterPassThroughEventType } from "./event-policy"
 
 // ── Internal indices ──
@@ -512,10 +513,10 @@ const terminalCardProjectionByReason = {
   error: { cardStatus: "error", terminalReason: "error" },
   aborted: { cardStatus: "completed", terminalReason: "aborted" },
 } satisfies Record<SessionTerminalReason, TerminalCardProjection>
-/** Raw Question.ask interactions for standalone session conversations such as
- *  Mission. Engine task questions are normalized by the backend into
- *  board.interactions and must not be duplicated here. */
-const standaloneQuestionInteractions = new Map<string, any>()
+/** Standalone Question facts and pending Permission requests share one projection.
+ *  Engine task interactions are normalized by the backend into board.interactions
+ *  and must not be duplicated here. */
+const standaloneInteractions = new Map<string, any>()
 interface BufferedPartDelta {
   event: any
 }
@@ -610,7 +611,7 @@ export function resetWriter(
   runningReviews.clear()
   terminalReviewOrderKeys.clear()
   pendingSessionStatus.clear()
-  standaloneQuestionInteractions.clear()
+  standaloneInteractions.clear()
   // Drop every key explicitly — plain assignment on a store merges instead of
   // replacing the existing keyed card collection.
   replaceCardTreeOrder([])
@@ -893,13 +894,15 @@ export function applyEvent(event: any): void {
     flushBufferedPartDeltas()
     return applyVisibleCardTreeEvent(() => handleStandaloneQuestion(event))
   }
+  if (type === "permission.asked" || type === "permission.replied" || type === "permission.terminated") {
+    flushBufferedPartDeltas()
+    return applyVisibleCardTreeEvent(() => handleStandalonePermission(event))
+  }
 
   if (
     type === "goal.created" ||
     type === "approval.request" ||
     type === "input.request" ||
-    type === "permission.asked" ||
-    type === "permission.replied" ||
     type === "diff.delta" ||
     isTreeWriterNoopEventType(type) ||
     isTreeWriterPassThroughEventType(type)
@@ -947,10 +950,6 @@ export function applyEvent(event: any): void {
   // try/catch. The runtime message stream emits these for permission
   // permission prompts and structured questions.
   if (type === "approval.request" || type === "input.request") return
-  // permission.* events fire alongside approval.request when an agent
-  // pauses on a tool call. Handled inline by
-  // InteractionCard — tree-writer just acknowledges.
-  if (type === "permission.asked" || type === "permission.replied") return
   // diff.delta is a streaming preview from the agent runtime — boardStore
   // already tracks the diff, the writer doesn't need to project it as a card.
   if (type === "diff.delta") return
@@ -1241,7 +1240,7 @@ function handleMessageUpdated(event: any, options: { metadataOnly?: boolean } = 
     rebuildTopLevelOrder()
   } else if (
     (Array.isArray(boardStore.board?.interactions) && boardStore.board.interactions.length > 0) ||
-    standaloneQuestionInteractions.size > 0
+    standaloneInteractions.size > 0
   ) {
     rebuildCardHierarchy()
   } else {
@@ -2150,8 +2149,48 @@ export function prepareStandaloneQuestionInteractions(requests: any[]): any[] {
 
 export function commitStandaloneQuestionInteractions(interactions: any[]): void {
   for (const interaction of interactions) {
-    standaloneQuestionInteractions.set(interaction.id, interaction)
+    standaloneInteractions.set(interaction.id, interaction)
   }
+}
+
+export function commitStandalonePermissionInteractions(interactions: PermissionInteraction[]): void {
+  for (const interaction of interactions) standaloneInteractions.set(interaction.id, interaction)
+}
+
+/** Reconnect replaces only pending permissions; Question facts and drafts keep their owners. */
+export function replaceStandalonePermissionInteractions(interactions: PermissionInteraction[]): void {
+  const questions = [...standaloneInteractions.values()].filter((interaction) => interaction.type !== "permission")
+  validateConversationBoardInteractions(boardStore.board, [...questions, ...interactions])
+  for (const [id, interaction] of standaloneInteractions) {
+    if (interaction.type === "permission") standaloneInteractions.delete(id)
+  }
+  commitStandalonePermissionInteractions(interactions)
+  regroupTimelineSegments({ deferHierarchy: true })
+  rebuildCardHierarchy()
+}
+
+function handleStandalonePermission(event: any): void {
+  const source = boardStore.selectedSource
+  if (source?.kind !== "session") return
+  const props = propsOf(event)
+  if (event.type === "permission.asked") {
+    const interaction = permissionInteraction({ ...props, orderKey: event.orderKey }, source.directory || "")
+    const existing = standaloneInteractions.get(interaction.id)
+    if (existing && existing.type !== "permission") {
+      throw new Error(`permission ${interaction.id} conflicts with an existing ${existing.type} interaction`)
+    }
+    standaloneInteractions.set(interaction.id, interaction)
+  } else {
+    const requestID = String(props.requestID || "")
+    const sessionID = String(props.sessionID || "")
+    if (!requestID || !sessionID) throw new Error(`${event.type} missing requestID/sessionID`)
+    const existing = standaloneInteractions.get(requestID)
+    if (!existing || existing.type !== "permission") return
+    if (existing.sessionID !== sessionID) throw new Error(`${event.type} ${requestID} session identity conflict`)
+    standaloneInteractions.delete(requestID)
+  }
+  regroupTimelineSegments({ deferHierarchy: true })
+  rebuildCardHierarchy()
 }
 
 export function hydrateStandaloneQuestionInteractions(requests: any[]): void {
@@ -2171,13 +2210,13 @@ function handleStandaloneQuestion(event: any): void {
   if (
     !isSelectedStandaloneSession(sessionID) &&
     !isKnownMissionSession &&
-    !standaloneQuestionInteractions.has(requestID)
+    standaloneInteractions.get(requestID)?.type !== "question"
   ) {
     return
   }
 
   if (type === "question.asked") {
-    standaloneQuestionInteractions.set(
+    standaloneInteractions.set(
       requestID,
       standaloneQuestionInteraction({ ...props, orderKey: event?.orderKey }),
     )
@@ -2186,8 +2225,8 @@ function handleStandaloneQuestion(event: any): void {
     return
   }
 
-  const existing = standaloneQuestionInteractions.get(requestID)
-  if (!existing) return
+  const existing = standaloneInteractions.get(requestID)
+  if (!existing || existing.type !== "question") return
   const responseOrderKey = requireTimelineOrderKeyDomain(
     event?.orderKey,
     `${type} ${requestID} response`,
@@ -2200,7 +2239,7 @@ function handleStandaloneQuestion(event: any): void {
       `${type} ${requestID} response orderKey time ${responseOrderTime} does not match timeResolved ${resolved}`,
     )
   }
-  standaloneQuestionInteractions.set(requestID, {
+  standaloneInteractions.set(requestID, {
     ...existing,
     status: type === "question.rejected" ? "rejected" : "answered",
     responseOrderKey,
@@ -3926,7 +3965,7 @@ function rebuildInteractionCards(board: any): {
 
 function conversationInteractions(board: any): any[] {
   const boardInteractions = Array.isArray(board?.interactions) ? board.interactions : []
-  return [...boardInteractions, ...standaloneQuestionInteractions.values()]
+  return [...boardInteractions, ...standaloneInteractions.values()]
 }
 
 export function validateConversationBoardInteractions(board: any, standaloneInteractions: any[] = []): void {

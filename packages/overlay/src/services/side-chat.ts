@@ -3,6 +3,7 @@ import { getHostTransport } from "./host-transport-runtime"
 import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
 import { prepareStandaloneQuestionInteractions } from "./tree-writer"
 import type { InteractionData } from "../components/InteractionCard"
+import { permissionInteraction, preparePermissionInteractions } from "../utils/permission-interaction"
 import {
   createSubagentConversationLiveProjection,
   observeSubagentConversationLiveEvent,
@@ -79,13 +80,18 @@ export function connectSideChat(
           try {
             const event = JSON.parse(data)
             if (event.type === "session.connected") {
-              base = parseSubagentConversation(
+              const snapshot = event.payload.conversationSnapshot
+              const preparedConversation = parseSubagentConversation(
                 { ...target, authority, source: { kind: "session", id: target.sessionID } },
-                event.payload.conversationSnapshot,
+                snapshot,
               )
+              const preparedPermissions = preparePermissionInteractions(snapshot.pendingPermissions, target.directory)
+                .filter((interaction) => interaction.sessionID === target.sessionID)
+              base = preparedConversation
               live = createSubagentConversationLiveProjection(target.sessionID)
               pending.clear()
-              handlers.interactions([])
+              for (const interaction of preparedPermissions) pending.set(interaction.id, interaction)
+              handlers.interactions([...pending.values()])
               handlers.connection(true)
               void refreshActivity()
             } else if (base) {
@@ -111,20 +117,20 @@ export function connectSideChat(
                 pending.set(id, { ...question, directory: target.directory })
                 handlers.interactions([...pending.values()])
               } else if (event.type === "permission.asked") {
-                pending.set(id, {
-                  id,
-                  type: "permission",
-                  title: payload.toolName,
-                  body: `${payload.summary}\n\n\`\`\`json\n${JSON.stringify(payload.scope, null, 2)}\n\`\`\``,
-                  status: "pending",
-                  payload: { choices: payload.choices },
-                  replyEndpoint: "permission",
-                  directory: target.directory,
-                })
+                const interaction = permissionInteraction({ ...payload, orderKey: event.orderKey }, target.directory)
+                if (interaction.sessionID !== target.sessionID) {
+                  throw new Error(`permission ${interaction.id} session identity conflict`)
+                }
+                pending.set(interaction.id, interaction)
                 handlers.interactions([...pending.values()])
-              } else if (["question.replied", "question.rejected", "permission.replied"].includes(event.type)) {
+              } else if (["question.replied", "question.rejected"].includes(event.type)) {
                 pending.delete(id)
                 handlers.interactions([...pending.values()])
+              } else if (event.type === "permission.replied" || event.type === "permission.terminated") {
+                if (pending.get(id)?.type === "permission") {
+                  pending.delete(id)
+                  handlers.interactions([...pending.values()])
+                }
               }
             }
           } catch (error) {

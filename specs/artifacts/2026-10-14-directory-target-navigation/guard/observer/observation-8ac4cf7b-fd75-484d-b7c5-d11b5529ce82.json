@@ -1,0 +1,21 @@
+{
+  "observerStartTimeUtcTicks": 639275210841326476,
+  "observedAtUtc": "2026-10-13T20:44:44.3011891Z",
+  "observerPID": 28060,
+  "qualification": "Original decoded ReadToEnd stdout/stderr after both tasks and natural WaitForExit; not a binary-stream or reg-child identity claim",
+  "arguments": [
+    "-e",
+    "import path from \"node:path\";\r\nconst root=process.argv[1];\r\nprocess.env.OPENCORVUS_HOME=path.join(root,\"runtime\");\r\nprocess.env.OPENCORVUS_TEST_HOME=path.join(root,\"home\");\r\nprocess.env.OPENCORVUS_TEST_PROCESS_ROOT=root;\r\nconst {installProcessShims}=await import(\"file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/runtime/shims.ts\");\r\ninstallProcessShims();\r\nconst {observeRuntimeProcessOccurrence}=await import(\"file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/runtime/process-occurrence.ts\");\r\nconsole.log(observeRuntimeProcessOccurrence(JSON.parse(process.argv[2])));",
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer",
+    "{\"pid\":26924,\"processInstanceID\":\"win32:639275202443495227\",\"occurrenceID\":\"f1f71372-91b2-4c29-a8ce-081ae27e015a\"}"
+  ],
+  "exitCode": 0,
+  "stderrDecoded": "",
+  "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+  "stdoutDecoded": "dead_or_reused",
+  "expected": {
+    "pid": 26924,
+    "processInstanceID": "win32:639275202443495227",
+    "occurrenceID": "f1f71372-91b2-4c29-a8ce-081ae27e015a"
+  }
+}

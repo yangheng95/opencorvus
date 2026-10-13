@@ -19,10 +19,8 @@ import { EffectiveConfig } from "@/config/effective"
 import { resolveAgentModel } from "@/agent/model"
 import { ContextBudget } from "./context-budget"
 import { RequestBudget } from "./request-budget"
-import { LLM } from "./llm"
 import { CompactionHandoff } from "./compaction-handoff"
 import { CompactionCoverage } from "./compaction-coverage"
-import { renderToolFailureCause } from "./tool-failure-cause"
 import { InstructionPrompt } from "./instruction"
 import { TaskPlan } from "@/memory/task-plan"
 import { SessionMemory } from "@/memory/session-memory"
@@ -33,6 +31,8 @@ import { SessionControl } from "./control"
 import { createHash } from "node:crypto"
 import { CompactionEvidenceReader } from "./compaction-evidence-reader"
 import { AssistantDiagnostics } from "./assistant-diagnostics"
+import { CompactionWorkingContext } from "./compaction-working-context"
+import { NamedError } from "@opencorvus-ai/util/error"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
 
 type CompactionProcessRuntime = {
@@ -89,13 +89,22 @@ export namespace SessionCompaction {
 
   function processFailureError(error: unknown): Error {
     if (error instanceof Error) return error
-    if (error && typeof error === "object") {
-      const value = error as { name?: unknown; data?: { message?: unknown } }
-      if (typeof value.name === "string" && typeof value.data?.message === "string") {
-        const result = new Error(value.data.message, { cause: error })
-        result.name = value.name
-        return result
-      }
+    const canonical = Message.Assistant.shape.error.unwrap().safeParse(error)
+    if (canonical.success) {
+      const value = canonical.data
+      return new (class extends NamedError {
+        override readonly name = value.name
+        readonly data = value.data
+        constructor() {
+          super("message" in value.data ? String(value.data.message) : JSON.stringify(value.data), { cause: error })
+        }
+        schema() {
+          return Message.Assistant.shape.error.unwrap()
+        }
+        toObject() {
+          return value
+        }
+      })()
     }
     return new Error(String(error), { cause: error })
   }
@@ -109,7 +118,6 @@ export namespace SessionCompaction {
     ),
   }
 
-  const TRANSCRIPT_FIELD_MAX_CHARS = 30_000
   const DISPATCH_ANCHOR_REFERENCE_MAX_CHARS = 4_000
   const TOOL_INPUT_STRING_MAX_CHARS = 1_000
   const TOOL_INPUT_STRING_HEAD_CHARS = 240
@@ -138,8 +146,6 @@ export namespace SessionCompaction {
     tail_start_id?: string
   }
 
-  type ToolStateForTranscript = z.infer<typeof Message.ToolState>
-
   type CompletedCompaction = {
     userIndex: number
     assistantIndex: number
@@ -162,7 +168,7 @@ export namespace SessionCompaction {
       .join("\n\n")
   }
 
-  function compactTranscriptField(text: string, maxChars = TRANSCRIPT_FIELD_MAX_CHARS) {
+  function compactTranscriptField(text: string, maxChars: number) {
     if (text.length <= maxChars) return text
     const head = Math.max(0, Math.floor(maxChars * 0.7))
     const tail = Math.max(0, maxChars - head)
@@ -192,15 +198,13 @@ export namespace SessionCompaction {
   }
 
   function transcriptText(text: string) {
-    return escapeTranscriptText(compactTranscriptField(text))
+    return escapeTranscriptText(text)
   }
 
   function jsonForTranscript(value: unknown) {
-    try {
-      return transcriptText(JSON.stringify(value))
-    } catch {
-      return transcriptText(String(value))
-    }
+    const serialized = JSON.stringify(value)
+    if (typeof serialized !== "string") throw new Error("Compaction field is not JSON serializable")
+    return transcriptText(serialized)
   }
 
   function sha256(text: string) {
@@ -316,49 +320,29 @@ export namespace SessionCompaction {
     return compactJsonProjection(Message.ToolInput.parse(value))
   }
 
-  function compactToolStateProjection(state: ToolStateForTranscript): unknown {
-    const projectedState = compactJsonProjection(state)
-    if (projectedState === null || typeof projectedState !== "object" || Array.isArray(projectedState))
-      return projectedState
-    if ("kind" in projectedState) return projectedState
-
-    return {
-      ...projectedState,
-      input: {
-        kind: "compaction_repeated_tool_input",
-        location: "sibling_input_element",
-      },
-    }
+  type TranscriptField = {
+    full?: string
+    fullCounts?: ReturnType<typeof Token.countScripts>
+    preview: string
+    previewCounts: ReturnType<typeof Token.countScripts>
+    value: string
+    counts: ReturnType<typeof Token.countScripts>
   }
+  type TranscriptSegment = string | TranscriptField
+  type TranscriptFieldRenderer = (full: string | undefined, reference: object, preview: unknown) => TranscriptSegment
 
-  function jsonForToolStateTranscript(state: ToolStateForTranscript) {
-    return jsonForTranscript(compactToolStateProjection(state))
-  }
-
-  function outputForToolTranscript(part: Message.ToolPart) {
-    if (part.state.status !== "completed") {
-      throw new Error(`Compaction output projection requires a completed tool part: ${part.id}`)
-    }
-    if (part.state.output.length <= TOOL_INPUT_STRING_MAX_CHARS && part.state.metadata.truncated !== true) {
-      return transcriptText(part.state.output)
-    }
-    return jsonForTranscript({
-      ...CompactionEvidenceReader.reference(part, "output"),
-      preview: largeTextProjection(part.state.output),
-    })
-  }
-
-  function renderTranscriptPart(part: Message.Part) {
+  function renderTranscriptPart(part: Message.Part, field: TranscriptFieldRenderer): TranscriptSegment[] | undefined {
     switch (part.type) {
       case "text":
-        return `<text part_id="${escapeTranscriptText(part.id)}">\n${
-          part.text.length <= TRANSCRIPT_FIELD_MAX_CHARS
-            ? transcriptText(part.text)
-            : jsonForTranscript({
-                ...CompactionEvidenceReader.reference(part, "text"),
-                preview: largeTextProjection(part.text),
-              })
-        }\n</text>`
+        return [
+          `<text part_id="${escapeTranscriptText(part.id)}">\n`,
+          field(
+            transcriptText(part.text),
+            CompactionEvidenceReader.reference(part, "text"),
+            largeTextProjection(part.text),
+          ),
+          "\n</text>",
+        ]
       case "file":
         return [
           `<file mime="${escapeTranscriptText(part.mime)}" filename="${escapeTranscriptText(part.filename ?? "")}">`,
@@ -367,35 +351,58 @@ export namespace SessionCompaction {
             url: part.url.startsWith("data:") ? undefined : part.url,
           }),
           "</file>",
-        ].join("")
+        ]
       case "source-url":
-        return `<source-url id="${escapeTranscriptText(part.sourceId)}" url="${escapeTranscriptText(part.url)}">${transcriptText(part.title ?? part.url)}</source-url>`
+        return [
+          `<source-url id="${escapeTranscriptText(part.sourceId)}" url="${escapeTranscriptText(part.url)}">${transcriptText(part.title ?? part.url)}</source-url>`,
+        ]
       case "source-document":
-        return `<source-document id="${escapeTranscriptText(part.sourceId)}" media-type="${escapeTranscriptText(part.mediaType)}">${transcriptText(part.title)}</source-document>`
+        return [
+          `<source-document id="${escapeTranscriptText(part.sourceId)}" media-type="${escapeTranscriptText(part.mediaType)}">${transcriptText(part.title)}</source-document>`,
+        ]
       case "source-file": {
         const range = part.range ? ` lines="${part.range.startLine}-${part.range.endLine}"` : ""
-        return `<source-file id="${escapeTranscriptText(part.sourceId)}" path="${escapeTranscriptText(part.path)}"${range}>${transcriptText(part.title)}</source-file>`
+        return [
+          `<source-file id="${escapeTranscriptText(part.sourceId)}" path="${escapeTranscriptText(part.path)}"${range}>${transcriptText(part.title)}</source-file>`,
+        ]
       }
       case "patch":
-        return `<patch>${transcriptText(Snapshot.formatPatchEvidence(part))}</patch>`
+        return [`<patch>${transcriptText(Snapshot.formatPatchEvidence(part))}</patch>`]
       case "tool": {
-        const lines = [
-          `<tool part_id="${escapeTranscriptText(part.id)}" call_id="${escapeTranscriptText(part.callID)}" name="${escapeTranscriptText(part.tool)}" status="${part.state.status}">`,
-          `<input>${jsonForTranscript({ ...CompactionEvidenceReader.reference(part, "input"), preview: compactToolInputProjection(part.state.input) })}</input>`,
+        const lines: TranscriptSegment[] = [
+          `<tool part_id="${escapeTranscriptText(part.id)}" call_id="${escapeTranscriptText(part.callID)}" name="${escapeTranscriptText(part.tool)}" status="${part.state.status}">\n<input>`,
+          field(
+            jsonForTranscript(Message.ToolInput.parse(part.state.input)),
+            CompactionEvidenceReader.reference(part, "input"),
+            compactToolInputProjection(part.state.input),
+          ),
+          "</input>\n",
         ]
         if (part.metadata || ("metadata" in part.state && part.state.metadata)) {
+          const metadata = {
+            part: part.metadata ?? {},
+            state: "metadata" in part.state ? (part.state.metadata ?? {}) : {},
+          }
           lines.push(
-            `<metadata>${jsonForTranscript({
-              ...CompactionEvidenceReader.reference(part, "metadata"),
-              preview: compactJsonProjection({
-                part: part.metadata ?? {},
-                state: "metadata" in part.state ? (part.state.metadata ?? {}) : {},
-              }),
-            })}</metadata>`,
+            "<metadata>",
+            field(
+              jsonForTranscript(metadata),
+              CompactionEvidenceReader.reference(part, "metadata"),
+              compactJsonProjection(metadata),
+            ),
+            "</metadata>\n",
           )
         }
         if (part.state.status === "completed") {
-          lines.push(`<output>${outputForToolTranscript(part)}</output>`)
+          lines.push(
+            "<output>",
+            field(
+              part.state.metadata.truncated === true ? undefined : transcriptText(part.state.output),
+              CompactionEvidenceReader.reference(part, "output"),
+              largeTextProjection(part.state.output),
+            ),
+            "</output>\n",
+          )
           if (part.state.attachments?.length) {
             const attachments = part.state.attachments
               .map((item) =>
@@ -407,28 +414,38 @@ export namespace SessionCompaction {
               )
               .map(escapeTranscriptText)
               .join(", ")
-            lines.push(`<attachments>${attachments}</attachments>`)
+            lines.push(`<attachments>${attachments}</attachments>\n`)
           }
         } else if (part.state.status === "error") {
           lines.push(
-            `<error>${jsonForTranscript({
-              ...CompactionEvidenceReader.reference(part, "failure"),
-              cause: compactJsonProjection(part.state.failure),
-              description: renderToolFailureCause(part.state.failure),
-            })}</error>`,
+            "<error>",
+            field(
+              jsonForTranscript(part.state.failure),
+              CompactionEvidenceReader.reference(part, "failure"),
+              compactJsonProjection(part.state.failure),
+            ),
+            "</error>\n",
           )
         } else {
-          lines.push(`<state>${jsonForToolStateTranscript(part.state)}</state>`)
+          lines.push(
+            `<state>${jsonForTranscript({
+              ...part.state,
+              input: { kind: "compaction_repeated_tool_input", location: "sibling_input_element" },
+              ...("metadata" in part.state
+                ? { metadata: { kind: "compaction_repeated_tool_metadata", location: "sibling_metadata_element" } }
+                : {}),
+            })}</state>\n`,
+          )
         }
         lines.push("</tool>")
-        return lines.join("\n")
+        return lines
       }
       case "compaction":
-        return "<compaction-checkpoint />"
+        return ["<compaction-checkpoint />"]
       case "snapshot":
-        return `<snapshot>${transcriptText(part.snapshot)}</snapshot>`
+        return [`<snapshot>${transcriptText(part.snapshot)}</snapshot>`]
       case "interactive-artifact":
-        return `<interactive-artifact id="${escapeTranscriptText(part.artifactID)}" />`
+        return [`<interactive-artifact id="${escapeTranscriptText(part.artifactID)}" />`]
       case "reasoning":
       case "step-start":
       case "step-finish":
@@ -437,35 +454,101 @@ export namespace SessionCompaction {
     }
   }
 
-  function compactionTranscriptMessages(messages: Message.WithParts[]): ModelMessage[] {
+  function compactionTranscriptMessages(
+    messages: Message.WithParts[],
+    input: {
+      system: string[]
+      tools: Record<string, AITool>
+      promptText: string
+      maxTokens: number
+    },
+  ): ModelMessage[] {
+    const fields: TranscriptField[] = []
+    const field: TranscriptFieldRenderer = (full, reference, preview) => {
+      // These strings will be embedded in ModelMessage JSON. Count the exact
+      // escaped substitution once; do not rescan the entire history per field.
+      const bounded = jsonForTranscript(reference)
+      const previewText = jsonForTranscript({ ...reference, preview })
+      const counts = Token.countScripts(JSON.stringify(bounded))
+      const fullCounts = full === undefined ? undefined : Token.countScripts(JSON.stringify(full))
+      if (full !== undefined && fullCounts && Token.weightCounts(fullCounts) <= Token.weightCounts(counts)) return full
+      const value = {
+        full,
+        fullCounts,
+        value: bounded,
+        counts,
+        preview: previewText,
+        previewCounts: Token.countScripts(JSON.stringify(previewText)),
+      }
+      fields.push(value)
+      return value
+    }
     const coveredDiagnostics = CompactionCoverage.coveredDiagnostics(messages)
-    return messages.flatMap((msg): ModelMessage[] => {
+    const transcript = messages.map((msg) => {
       const info = msg.info
-      const lines = [
-        `<message id="${escapeTranscriptText(info.id)}" role="${info.role}" agent="${escapeTranscriptText(info.agent)}" author="${escapeTranscriptText(info.author)}">`,
+      const lines: TranscriptSegment[] = [
+        `<message id="${escapeTranscriptText(info.id)}" role="${info.role}" agent="${escapeTranscriptText(info.agent)}" author="${escapeTranscriptText(info.author)}">\n`,
       ]
-      const diagnostics = info.role === "assistant" && !coveredDiagnostics.has(info.id)
-        ? AssistantDiagnostics.project(info) : undefined
+      const diagnostics =
+        info.role === "assistant" && !coveredDiagnostics.has(info.id) ? AssistantDiagnostics.project(info) : undefined
       if (diagnostics) {
         const serialized = JSON.stringify(diagnostics)
-        const value =
-          serialized.length > TRANSCRIPT_FIELD_MAX_CHARS
-            ? { ...CompactionEvidenceReader.diagnosticReference(info.id), preview: largeTextProjection(serialized) }
-            : diagnostics
-        lines.push(`<assistant-diagnostics>${jsonForTranscript(value)}</assistant-diagnostics>`)
+        lines.push(
+          "<assistant-diagnostics>",
+          field(
+            jsonForTranscript(diagnostics),
+            CompactionEvidenceReader.diagnosticReference(info.id),
+            largeTextProjection(serialized),
+          ),
+          "</assistant-diagnostics>\n",
+        )
       }
       const parts =
         info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(info)
           ? Message.compactionContinuationTextParts(msg.parts)
           : msg.parts
       for (const part of parts) {
-        const rendered = renderTranscriptPart(part)
-        if (rendered) lines.push(rendered)
+        const rendered = renderTranscriptPart(part, field)
+        if (rendered) lines.push(...rendered, "\n")
       }
       lines.push("</message>")
-      const content = [{ type: "text" as const, text: lines.join("\n") }]
-      return info.role === "user" ? [{ role: "user", content }] : [{ role: "assistant", content }]
+      return { role: info.role, lines }
     })
+    const render = (): ModelMessage[] => [
+      ...transcript.map(({ role, lines }) => ({
+        role,
+        content: [
+          { type: "text" as const, text: lines.map((part) => (typeof part === "string" ? part : part.value)).join("") },
+        ],
+      })),
+      { role: "user", content: [{ type: "text", text: input.promptText }] },
+    ]
+    const base = render()
+    const estimate = RequestBudget.estimate({ messages: base, system: input.system, tools: input.tools })
+    const overhead = estimate.systemTokensEst + estimate.toolSchemaTokensEst
+    let counts = Token.countScripts(JSON.stringify(base))
+    // Stable size ordering improves source coverage without changing transcript
+    // chronology, authority, or which evidence the model is allowed to request.
+    for (const detail of ["full", "preview"] as const) {
+      const candidates = fields
+        .flatMap((field) => {
+          if (field.value === field.full) return []
+          const next = detail === "full" ? field.fullCounts : field.previewCounts
+          const value = field[detail]
+          if (!next || value === undefined) return []
+          const delta = { dense: next.dense - field.counts.dense, latin: next.latin - field.counts.latin }
+          return [{ field, next, value, delta, weight: Token.weightCounts(delta) }]
+        })
+        .sort((a, b) => a.weight - b.weight)
+      for (const candidate of candidates) {
+        const expanded = { dense: counts.dense + candidate.delta.dense, latin: counts.latin + candidate.delta.latin }
+        if (Token.estimateCounts(expanded) + overhead > input.maxTokens) continue
+        candidate.field.value = candidate.value
+        candidate.field.counts = candidate.next
+        counts = expanded
+      }
+    }
+    return render()
   }
 
   function completedCompactions(messages: Message.WithParts[]) {
@@ -528,9 +611,9 @@ export namespace SessionCompaction {
       "Write a concise natural-language continuation summary as an ordinary assistant message.",
       "Preserve concrete requirements, stable identifiers and references, completed work, unresolved blockers, and useful next actions.",
       "Consolidate the current Session MEMORY.MD with the durable conversation evidence into one self-contained continuation summary. Exclude credentials, application programming interface (API) keys, tokens, passwords, private keys, and other secrets.",
-      "Read omitted user text through ReadCompactionEvidence(field=text) before summarizing its requirements. Retrieve relevant omitted Tool input, output, failure and metadata fields by their exact Part IDs. A preview or digest is not the complete source.",
+      "Inline text and JSON fields carry their complete source values. A compaction_evidence_reference identifies an omitted field; its optional preview or digest is not the complete source. Read omitted user text through ReadCompactionEvidence(field=text) before summarizing its requirements. Retrieve relevant omitted Tool input, output, failure and metadata fields by their exact Part IDs.",
       "Retrieve omitted assistant error, convergence and observation diagnostics with ReadCompactionEvidence(message_id=<exact Message ID>, field=diagnostics). Preserve the original failed occurrence and trace identities; a copied history is evidence of that original attempt, not a new execution. Message reads and Part reads use mutually exclusive locators.",
-      "For unfinished paginated tool work, retrieve the exact persisted output through ReadCompactionEvidence(field=output) and preserve the original result's nextOffset or next_offset verbatim with exact message/Part/call and Artifact locator references. The reader's own nextOffset pages this field; it is distinct from a cursor inside the original result. Never estimate a cursor, convert character and byte offsets, or restart an already completed prefix.",
+      "For unfinished paginated tool work, use the complete inline output or retrieve omitted output through ReadCompactionEvidence(field=output). Preserve the original result's nextOffset or next_offset verbatim with exact message/Part/call and Artifact locator references. The reader's own nextOffset pages this field; it is distinct from a cursor inside the original result. Never estimate a cursor, convert character and byte offsets, or restart an already completed prefix.",
       "Do not invent an active/current state object, domain handoff payload, terminal report, or JSON envelope.",
       "The original durable conversation and facts remain authoritative; this summary is only a bounded continuation projection.",
       "Preserve exact names and source references of relevant loaded Skills for reloading guidance. Preserve attachment locators and verified observations, not invented image details. Desktop/browser observations and focus are historical evidence; inspect current state before choosing new visual targets. A summary grants no tool access or action authorization.",
@@ -539,23 +622,6 @@ export namespace SessionCompaction {
     ]
       .filter((item): item is string => typeof item === "string" && item.length > 0)
       .join("\n\n")
-  }
-
-  export function requestBudget(input: {
-    messages: ModelMessage[]
-    system: string[]
-    tools: Record<string, AITool>
-    config: Config.Info
-    model: Provider.Model
-  }) {
-    const estimate = RequestBudget.estimate(input)
-    const capacity = ContextBudget.capacity(input)
-    return {
-      ...estimate,
-      estimatedTokens: estimate.totalTokensEst,
-      usableBudget: capacity.tokens,
-      exceeds: estimate.totalTokensEst > capacity.tokens,
-    }
   }
 
   function turns(messages: Message.WithParts[]) {
@@ -726,9 +792,9 @@ export namespace SessionCompaction {
   function prunableToolParts(messages: Message.WithParts[]): Message.ToolPart[] {
     const range = latestCompactionPruneRange(messages)
     if (!range) return []
-    const marker = messages.find((message) => message.info.id === range.markerID)?.parts.find(
-      (part): part is Message.CompactionPart => part.type === "compaction",
-    )
+    const marker = messages
+      .find((message) => message.info.id === range.markerID)
+      ?.parts.find((part): part is Message.CompactionPart => part.type === "compaction")
     const covered = new Map(marker?.covered_parts?.map((entry) => [entry.messageID, entry]))
     let total = 0
     let pruned = 0
@@ -987,43 +1053,23 @@ export namespace SessionCompaction {
       dispatchAnchor,
     })
     await CompactionEvidenceReader.assertSources(selected.head)
-    const providerMessages: ModelMessage[] = [
-      ...compactionTranscriptMessages(selected.head),
-      {
-        role: "user",
-        content: [
-          {
-            type: "text",
-            text: promptText,
-          },
-        ],
-      },
-    ]
+    const working = CompactionWorkingContext.create({
+      render: (request, maxTokens) =>
+        compactionTranscriptMessages(selected.head, { ...request, promptText, maxTokens }),
+    })
     const tools = {
       [CompactionEvidenceReader.TOOL_NAME]: processRuntime.prepareProviderTool({
         name: CompactionEvidenceReader.TOOL_NAME,
         source: "extra",
         model,
-        tool: CompactionEvidenceReader.create(await Session.messages({ sessionID: input.sessionID })),
+        tool: CompactionEvidenceReader.create(await Session.messages({ sessionID: input.sessionID }), working.fitPage),
       }),
-    }
-    const system = await LLM.composeSystem({
-      agentID: agent.name,
-      agent: sessionRuntimeFromNativeAgent(agent),
-      model,
-      system: [],
-      sessionID: input.sessionID,
-    })
-    const budget = requestBudget({ messages: providerMessages, system, tools, config, model })
-    if (budget.exceeds) {
-      const error = new Message.ContextOverflowError({
-        message: `Compaction request exceeds model context budget before provider call: estimated ${budget.estimatedTokens} tokens, usable budget ${budget.usableBudget}.`,
-      })
-      processor.message.error = error.toObject()
-      processor.message.finish = "error"
-      processor.message.time.completed = Date.now()
-      await Session.updateMessage(processor.message)
-      return { status: "failed", error } satisfies ProcessFailure
+      [CompactionWorkingContext.TOOL_NAME]: processRuntime.prepareProviderTool({
+        name: CompactionWorkingContext.TOOL_NAME,
+        source: "extra",
+        model,
+        tool: working.noteTool,
+      }),
     }
     const result = await processor.process({
       user: userMessage,
@@ -1033,7 +1079,9 @@ export namespace SessionCompaction {
       sessionID: input.sessionID,
       tools,
       system: [],
-      messages: providerMessages,
+      messages: compactionTranscriptMessages(selected.head, { system: [], tools: {}, promptText, maxTokens: 0 }),
+      prepareMessages: working.prepare,
+      prepareStep: (step) => ({ messages: working.project(step.messages) }),
       model,
       stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", isStepCount(agent.steps)],
     })

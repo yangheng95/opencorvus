@@ -1,3 +1,4 @@
+import { etag } from "hono/etag"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
@@ -1301,23 +1302,17 @@ export const EngineRoutes = lazy(() =>
               },
             },
           },
+          304: { description: "Current task board is unchanged; ETag identifies the complete JSON projection" },
           ...errors(404),
         },
       }),
       validator("param", z.object({ taskID: Task.shape.id })),
+      etag({ weak: true }),
       async (c) => {
         const taskID = c.req.valid("param").taskID
-        const etag = await EngineService.getBoardTag(taskID)
-        if (c.req.header("if-none-match") === etag) {
-          return new Response(null, {
-            status: 304,
-            headers: {
-              ETag: etag,
-            },
-          })
-        }
-        c.header("ETag", etag)
-        return c.json(await EngineService.getBoard(taskID))
+        const board = await EngineService.getBoard(taskID)
+        c.header("ETag", board.snapshotVersion)
+        return c.json(board)
       },
     )
     .get(

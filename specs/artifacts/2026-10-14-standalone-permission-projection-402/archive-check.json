@@ -1,0 +1,2654 @@
+{
+  "kind": "Preservation of exact captured artifacts and links; no source hash gate or UI/functionality acceptance",
+  "sourceFiles": 525,
+  "archiveFiles": 528,
+  "jpeg": 31,
+  "gzip": 494,
+  "bytes": 3015245,
+  "restored": [
+    {
+      "path": "check-live-402-deny.ts.gz",
+      "sourceBytes": 7818,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "check-live-402.ts.gz",
+      "sourceBytes": 7938,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "current-docs-ops.json.gz",
+      "sourceBytes": 7695,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/files.json.gz",
+      "sourceBytes": 242,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/green.command.txt.gz",
+      "sourceBytes": 127,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/green.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/green.log.gz",
+      "sourceBytes": 3095,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/green02.command.txt.gz",
+      "sourceBytes": 127,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/green02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/green02.log.gz",
+      "sourceBytes": 2005,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/handoff.json.gz",
+      "sourceBytes": 1343,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/implementation-status.md.gz",
+      "sourceBytes": 6300,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/red.command.txt.gz",
+      "sourceBytes": 127,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/red.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/red.log.gz",
+      "sourceBytes": 6067,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/related-results.json.gz",
+      "sourceBytes": 1055,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/related.command.txt.gz",
+      "sourceBytes": 381,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/related.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/related.log.gz",
+      "sourceBytes": 12605,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/root-sdk-window.json.gz",
+      "sourceBytes": 124,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/README.md.gz",
+      "sourceBytes": 3244,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/active-generators-after.json.gz",
+      "sourceBytes": 4,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/active-generators-final.json.gz",
+      "sourceBytes": 4,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/build.command.txt.gz",
+      "sourceBytes": 37,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/build.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/build.log.gz",
+      "sourceBytes": 1784,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/bun-version.txt.gz",
+      "sourceBytes": 7,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/handoff.json.gz",
+      "sourceBytes": 1110,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/head-before.txt.gz",
+      "sourceBytes": 42,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/observe-publication.mjs.gz",
+      "sourceBytes": 1930,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/openapi-delta-from-baseline.patch.gz",
+      "sourceBytes": 919,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/permission-denial-before-clonefix.test.ts.gz",
+      "sourceBytes": 13413,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/public-after-clonefix.command.txt.gz",
+      "sourceBytes": 91,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/public-after-clonefix.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/public-after-clonefix.log.gz",
+      "sourceBytes": 745,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/public-check.command.txt.gz",
+      "sourceBytes": 127,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/public-check.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/public-check.log.gz",
+      "sourceBytes": 2002,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/publication-observation.json.gz",
+      "sourceBytes": 1377,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/published-types-delta-from-baseline.patch.gz",
+      "sourceBytes": 988,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/sdk-total-from-head.patch.gz",
+      "sourceBytes": 17607,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/targets-before.json.gz",
+      "sourceBytes": 663,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/test-clonefix.patch.gz",
+      "sourceBytes": 1512,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-core.command.txt.gz",
+      "sourceBytes": 73,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-core.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-core.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-published-declarations.command.txt.gz",
+      "sourceBytes": 209,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-published-declarations.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-published-declarations.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-sdk.command.txt.gz",
+      "sourceBytes": 90,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-sdk.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/typecheck-sdk.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/sdk-final/types-delta-from-baseline.patch.gz",
+      "sourceBytes": 933,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/source-and-config-test.patch.gz",
+      "sourceBytes": 4740,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/typecheck.command.txt.gz",
+      "sourceBytes": 73,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/typecheck.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-continuation/typecheck.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "denied-tool-continuation-review.md.gz",
+      "sourceBytes": 17671,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "etag-identity-review.md.gz",
+      "sourceBytes": 8327,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/README.md.gz",
+      "sourceBytes": 2877,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/bun-version.txt.gz",
+      "sourceBytes": 7,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/head-before.txt.gz",
+      "sourceBytes": 42,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/input-files.json.gz",
+      "sourceBytes": 450,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/peer-type-failure-observed/compaction.ts.gz",
+      "sourceBytes": 46340,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/peer-type-failure-observed/llm.ts.gz",
+      "sourceBytes": 18055,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/peer-type-failure-observed/observed-at.txt.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/peer-type-failure-observed/source.patch.gz",
+      "sourceBytes": 8444,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/provider-module-before.patch.gz",
+      "sourceBytes": 9251,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/tests.command.txt.gz",
+      "sourceBytes": 218,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/tests.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/tests.log.gz",
+      "sourceBytes": 4281,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/typecheck-core.command.txt.gz",
+      "sourceBytes": 73,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/typecheck-core.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-root-recheck/typecheck-core.log.gz",
+      "sourceBytes": 318,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-shared-ops.json.gz",
+      "sourceBytes": 9426,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/README.md.gz",
+      "sourceBytes": 1792,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/build-command.json.gz",
+      "sourceBytes": 689,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/build.exit.gz",
+      "sourceBytes": 1,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/build.log.gz",
+      "sourceBytes": 74959,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/handoff.json.gz",
+      "sourceBytes": 4438,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/run-validation.ps1.gz",
+      "sourceBytes": 2074,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/typecheck-command.json.gz",
+      "sourceBytes": 558,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/typecheck.exit.gz",
+      "sourceBytes": 1,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "final-ui/typecheck.log.gz",
+      "sourceBytes": 16,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "freeze-public-evidence.mjs.gz",
+      "sourceBytes": 4631,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "frontend-preparation.md.gz",
+      "sourceBytes": 14368,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "full-board-validator-review.md.gz",
+      "sourceBytes": 19630,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/apply-backend.mjs.gz",
+      "sourceBytes": 14842,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/authority-canonical-trial.patch.gz",
+      "sourceBytes": 5631,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/authority-canonical-trial.ts.gz",
+      "sourceBytes": 67489,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/backend-before-sdk.patch.gz",
+      "sourceBytes": 32393,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/canonical-and-project-boundary.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/canonical-and-project-boundary.log.gz",
+      "sourceBytes": 3377,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/corrected-contracts.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/corrected-contracts.log.gz",
+      "sourceBytes": 3378,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-board.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-board.log.gz",
+      "sourceBytes": 1082,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-focused.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-focused.log.gz",
+      "sourceBytes": 6582,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-permission.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-permission.log.gz",
+      "sourceBytes": 1251,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-scope.patch.gz",
+      "sourceBytes": 48309,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/format-new-files.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/format-new-files.log.gz",
+      "sourceBytes": 194,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-board-expanded.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-board-expanded.log.gz",
+      "sourceBytes": 1967,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-expanded.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-expanded.log.gz",
+      "sourceBytes": 2794,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-initial.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-initial.log.gz",
+      "sourceBytes": 5450,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-permission-canonical.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-permission-canonical.log.gz",
+      "sourceBytes": 693,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/handoff.json.gz",
+      "sourceBytes": 3587,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/head-before.txt.gz",
+      "sourceBytes": 41,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/implementation-status.md.gz",
+      "sourceBytes": 10189,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/orchestrator-initial-before-catalog-expectation.test.ts.gz",
+      "sourceBytes": 18440,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/post-sdk-public.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/post-sdk-public.log.gz",
+      "sourceBytes": 2758,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/production-stop-callers.txt.gz",
+      "sourceBytes": 1049,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red-board-owner-fixed.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red-board-owner-fixed.log.gz",
+      "sourceBytes": 2674,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red.log.gz",
+      "sourceBytes": 10191,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/related-initial.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/related-initial.log.gz",
+      "sourceBytes": 17070,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/request-consumers.txt.gz",
+      "sourceBytes": 4673,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/request-full-search.txt.gz",
+      "sourceBytes": 3801,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/request-time-authority-review.md.gz",
+      "sourceBytes": 8085,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/sdk-build.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/sdk-build.log.gz",
+      "sourceBytes": 1787,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/sdk-generated.patch.gz",
+      "sourceBytes": 15916,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/sdk-publication-observation.json.gz",
+      "sourceBytes": 1022,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/session-event-after-mandatory-array.test.ts.gz",
+      "sourceBytes": 42006,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/session-permission-before-cutover-scope-fix.test.ts.gz",
+      "sourceBytes": 21015,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/task-board-before-brief-boundary.test.ts.gz",
+      "sourceBytes": 10540,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/task-board-before-owner-fix.test.ts.gz",
+      "sourceBytes": 4509,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/task-entry-callers.txt.gz",
+      "sourceBytes": 7281,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/task-project-read.preimage.ts.gz",
+      "sourceBytes": 860,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/task-read-authority-review.md.gz",
+      "sourceBytes": 7872,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/task-read-call-matrix.json.gz",
+      "sourceBytes": 7098,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/task-read-callers.txt.gz",
+      "sourceBytes": 4585,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-expanded.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-expanded.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-final.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-initial.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-initial.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-post-sdk-core.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-post-sdk-core.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-post-sdk-published.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-post-sdk-published.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "launch-sol.ps1.gz",
+      "sourceBytes": 33225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "live-402-deny.mjs.gz",
+      "sourceBytes": 5458,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "live-402.mjs.gz",
+      "sourceBytes": 5440,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01.stderr.log.gz",
+      "sourceBytes": 172065,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/closure-review.json.gz",
+      "sourceBytes": 226,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/global-chat-start.json.gz",
+      "sourceBytes": 4517,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/manual-driver-actual.ts.gz",
+      "sourceBytes": 2723,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/manual-review.md.gz",
+      "sourceBytes": 2452,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/manual-server-actual.ts.gz",
+      "sourceBytes": 5804,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/messages-after-allow.json.gz",
+      "sourceBytes": 10153,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/observations/main-allow-completed-en.ax.txt.gz",
+      "sourceBytes": 7245,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/page-closed.json.gz",
+      "sourceBytes": 114,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/pending-before-ui.json.gz",
+      "sourceBytes": 1650,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/public-global-config.json.gz",
+      "sourceBytes": 1266,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/ready.json.gz",
+      "sourceBytes": 4660,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/terminal.json.gz",
+      "sourceBytes": 748,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02.stderr.log.gz",
+      "sourceBytes": 137726,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/closure-review.json.gz",
+      "sourceBytes": 226,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/conversation-after-deny.json.gz",
+      "sourceBytes": 14597,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/global-chat-start.json.gz",
+      "sourceBytes": 4518,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/manual-driver-actual.ts.gz",
+      "sourceBytes": 2856,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/manual-review.md.gz",
+      "sourceBytes": 2569,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/manual-server-actual.ts.gz",
+      "sourceBytes": 6529,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/messages-after-deny.json.gz",
+      "sourceBytes": 6300,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/observations/main-connected-before-release.ax.txt.gz",
+      "sourceBytes": 6225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/observations/main-deny-terminal-error-en.ax.txt.gz",
+      "sourceBytes": 5864,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/page-closed.json.gz",
+      "sourceBytes": 83,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/permission-history-after-deny.json.gz",
+      "sourceBytes": 2884,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/public-global-config.json.gz",
+      "sourceBytes": 1266,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/ready.json.gz",
+      "sourceBytes": 4688,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/release-observation.json.gz",
+      "sourceBytes": 175,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/terminal.json.gz",
+      "sourceBytes": 627,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03.stderr.log.gz",
+      "sourceBytes": 167450,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/closure-review.json.gz",
+      "sourceBytes": 170,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/global-chat-start.json.gz",
+      "sourceBytes": 4398,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/manual-driver-actual.ts.gz",
+      "sourceBytes": 2856,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/manual-review.md.gz",
+      "sourceBytes": 2607,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/manual-server-actual.ts.gz",
+      "sourceBytes": 6556,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/messages-after-answer.json.gz",
+      "sourceBytes": 9440,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/observations/side-chat-message-completed-en.ax.txt.gz",
+      "sourceBytes": 7460,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/page-closed.json.gz",
+      "sourceBytes": 83,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/public-global-config.json.gz",
+      "sourceBytes": 1266,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/ready.json.gz",
+      "sourceBytes": 4667,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/release-observation.json.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/sessions-after-side-chat.json.gz",
+      "sourceBytes": 7837,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/side-chat-messages.json.gz",
+      "sourceBytes": 15217,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/terminal.json.gz",
+      "sourceBytes": 1111,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04.stderr.log.gz",
+      "sourceBytes": 163447,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/closure-review.json.gz",
+      "sourceBytes": 242,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/global-chat-start.json.gz",
+      "sourceBytes": 4426,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/manual-driver-actual.ts.gz",
+      "sourceBytes": 2868,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/manual-review.md.gz",
+      "sourceBytes": 3363,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/manual-server-actual.ts.gz",
+      "sourceBytes": 7478,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/observations/side-cold-restored-permission-en.ax.txt.gz",
+      "sourceBytes": 8648,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/observations/side-read-completed-en.ax.txt.gz",
+      "sourceBytes": 8752,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/page-closed.json.gz",
+      "sourceBytes": 83,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/permission-history-after-side-allow.json.gz",
+      "sourceBytes": 4544,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/public-global-config.json.gz",
+      "sourceBytes": 2032,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/ready.json.gz",
+      "sourceBytes": 4676,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/release-observation.json.gz",
+      "sourceBytes": 191,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/side-chat-created.json.gz",
+      "sourceBytes": 3444,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/side-conversation-after-allow.json.gz",
+      "sourceBytes": 30293,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/side-messages-after-allow.json.gz",
+      "sourceBytes": 15551,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/side-public-message-request.json.gz",
+      "sourceBytes": 416,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/side-public-message-response.json.gz",
+      "sourceBytes": 2840,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/terminal.json.gz",
+      "sourceBytes": 1267,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05.stderr.log.gz",
+      "sourceBytes": 146444,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/closure-review.json.gz",
+      "sourceBytes": 645,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/global-chat-start.json.gz",
+      "sourceBytes": 4518,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/manual-driver-actual.ts.gz",
+      "sourceBytes": 2868,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/manual-server-actual.ts.gz",
+      "sourceBytes": 8097,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/page-closed-late.json.gz",
+      "sourceBytes": 309,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/public-global-config.json.gz",
+      "sourceBytes": 1266,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/ready.json.gz",
+      "sourceBytes": 4694,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-05/terminal.json.gz",
+      "sourceBytes": 840,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06.stderr.log.gz",
+      "sourceBytes": 131204,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/closure-review.json.gz",
+      "sourceBytes": 676,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/global-chat-start.json.gz",
+      "sourceBytes": 4516,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/page-closed-fact.json.gz",
+      "sourceBytes": 204,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/public-global-config.json.gz",
+      "sourceBytes": 1266,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/ready.json.gz",
+      "sourceBytes": 4692,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/terminal.json.gz",
+      "sourceBytes": 679,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/work-ledger-error-en.ax.txt.gz",
+      "sourceBytes": 4455,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07.stderr.log.gz",
+      "sourceBytes": 141614,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/check-offline.command.txt.gz",
+      "sourceBytes": 284,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/check-offline.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/check-offline.log.gz",
+      "sourceBytes": 7007,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/check-offline02.command.txt.gz",
+      "sourceBytes": 284,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/check-offline02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/check-offline02.log.gz",
+      "sourceBytes": 1676,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/checker-final-input.mjs.gz",
+      "sourceBytes": 7967,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/checker-handoff.md.gz",
+      "sourceBytes": 3333,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/checker-initial-input.mjs.gz",
+      "sourceBytes": 1864,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/checker-offline01-input.mjs.gz",
+      "sourceBytes": 7346,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/checker-second-input.mjs.gz",
+      "sourceBytes": 2075,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/closure-review.json.gz",
+      "sourceBytes": 676,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/global-chat-start.json.gz",
+      "sourceBytes": 4514,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/main-deny-completed-en.ax.txt.gz",
+      "sourceBytes": 5714,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/main-warm-permission-en.ax.txt.gz",
+      "sourceBytes": 8764,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/manual-permission-driver-actual.ts.gz",
+      "sourceBytes": 2868,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/manual-permission-server-actual.ts.gz",
+      "sourceBytes": 8097,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/page-closed.json.gz",
+      "sourceBytes": 51,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/public-facts-1791922770980.json.gz",
+      "sourceBytes": 36751,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/public-facts-1791922789614.denial-check.json.gz",
+      "sourceBytes": 1482,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/public-facts-1791922789614.json.gz",
+      "sourceBytes": 36751,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/public-global-config.json.gz",
+      "sourceBytes": 1266,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/ready.json.gz",
+      "sourceBytes": 4690,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/terminal.json.gz",
+      "sourceBytes": 826,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08.stderr.log.gz",
+      "sourceBytes": 238828,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-one-create-request.json.gz",
+      "sourceBytes": 110,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-one-created.json.gz",
+      "sourceBytes": 671,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-one-message-request.json.gz",
+      "sourceBytes": 432,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-one-message-response.json.gz",
+      "sourceBytes": 3060,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-two-create-request.json.gz",
+      "sourceBytes": 110,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-two-created.json.gz",
+      "sourceBytes": 671,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-two-message-request.json.gz",
+      "sourceBytes": 432,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/child-two-message-response.json.gz",
+      "sourceBytes": 3060,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/closure-review.json.gz",
+      "sourceBytes": 676,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/entries-observation-1791923085819.json.gz",
+      "sourceBytes": 138498,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/global-chat-start.json.gz",
+      "sourceBytes": 4427,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/manual-permission-driver-actual.ts.gz",
+      "sourceBytes": 2868,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/manual-permission-server-actual.ts.gz",
+      "sourceBytes": 8097,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/page-closed.json.gz",
+      "sourceBytes": 52,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/parent-two-child-permissions-en.ax.txt.gz",
+      "sourceBytes": 8500,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/public-entry-failure-child-one-1791922868167.json.gz",
+      "sourceBytes": 246,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/public-entry-failure-child-two-1791922869726.json.gz",
+      "sourceBytes": 246,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/public-entry-initial-input.mjs.gz",
+      "sourceBytes": 4751,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/public-global-config.json.gz",
+      "sourceBytes": 4360,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/ready.json.gz",
+      "sourceBytes": 4683,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-message-request.json.gz",
+      "sourceBytes": 430,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-message-response.json.gz",
+      "sourceBytes": 3002,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-read-output-final-en.ax.txt.gz",
+      "sourceBytes": 10206,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-root-sessions.json.gz",
+      "sourceBytes": 9564,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-warm-permission-final-en.ax.txt.gz",
+      "sourceBytes": 10102,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/task-allowed-exact-root-error-en.ax.txt.gz",
+      "sourceBytes": 8338,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/task-create-request.json.gz",
+      "sourceBytes": 389,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/task-created.json.gz",
+      "sourceBytes": 429,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/task-permission-en.ax.txt.gz",
+      "sourceBytes": 9881,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/terminal.json.gz",
+      "sourceBytes": 3115,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05.launch.json.gz",
+      "sourceBytes": 262,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05.physical-terminal.json.gz",
+      "sourceBytes": 133,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05.runtime-owner.json.gz",
+      "sourceBytes": 471,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05.stderr.log.gz",
+      "sourceBytes": 136487,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05.stdout.log.gz",
+      "sourceBytes": 139,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/closure-review.json.gz",
+      "sourceBytes": 915,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/global-chat-start.json.gz",
+      "sourceBytes": 4515,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/manual-permission-driver.actual.ts.gz",
+      "sourceBytes": 2723,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/manual-permission-server.actual.ts.gz",
+      "sourceBytes": 5909,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/messages-before-close.json.gz",
+      "sourceBytes": 5095,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/observations/main-pending-expanded-before.ax.txt.gz",
+      "sourceBytes": 6374,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/pending-observation.json.gz",
+      "sourceBytes": 1649,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/public-external.csv.gz",
+      "sourceBytes": 35,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/public-global-config.json.gz",
+      "sourceBytes": 1266,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/public-model-catalog.json.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/ready.json.gz",
+      "sourceBytes": 4652,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/terminal.json.gz",
+      "sourceBytes": 627,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-evidence-index.json.gz",
+      "sourceBytes": 27193,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-facts-402.mjs.gz",
+      "sourceBytes": 7967,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-permission-driver.ts.gz",
+      "sourceBytes": 2868,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-permission-server.ts.gz",
+      "sourceBytes": 8097,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "manual-side-chat-question-guide.md.gz",
+      "sourceBytes": 9196,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "prepare-final-docs.mjs.gz",
+      "sourceBytes": 15234,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "profile-selection.json.gz",
+      "sourceBytes": 52,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "public-entry-402.mjs.gz",
+      "sourceBytes": 6071,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "settings-active-projection-review.md.gz",
+      "sourceBytes": 26384,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/business-start.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/business-start.log.gz",
+      "sourceBytes": 735,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/check-observation-1791919360455.json.gz",
+      "sourceBytes": 20626,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/checker-actual.ts.gz",
+      "sourceBytes": 7938,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/evidence/sol-402-a01-physical-terminal-and-pair-cleanup.json.gz",
+      "sourceBytes": 2422,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/evidence/sol-402-a01-qualified-surface-completion.json.gz",
+      "sourceBytes": 361,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/evidence/sol-402-a01-settlement-owner.json.gz",
+      "sourceBytes": 468,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/evidence/sol-402-a01-shutdown-admission.json.gz",
+      "sourceBytes": 526,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/global-chat-start-request.json.gz",
+      "sourceBytes": 452,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/global-chat-start-response.json.gz",
+      "sourceBytes": 4200,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/launch-actual.ps1.gz",
+      "sourceBytes": 33225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/launch.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/launch.log.gz",
+      "sourceBytes": 534,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/live-check.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/live-check.json.gz",
+      "sourceBytes": 1014,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/live-check.log.gz",
+      "sourceBytes": 1037,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/live-helper-actual.mjs.gz",
+      "sourceBytes": 5440,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/manual-review.md.gz",
+      "sourceBytes": 2685,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/observation-1791919298272.json.gz",
+      "sourceBytes": 24859,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/observation-1791919349987.json.gz",
+      "sourceBytes": 35372,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/observations/sol-main-answer-zh.ax.txt.gz",
+      "sourceBytes": 7817,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/page-closed.json.gz",
+      "sourceBytes": 142,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/provider-run/evidence/authority-ready.json.gz",
+      "sourceBytes": 15923,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/provider-run/evidence/managed-parent-ready.json.gz",
+      "sourceBytes": 498,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/provider-run/evidence/native-host-ready.json.gz",
+      "sourceBytes": 1861,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/provider-run/evidence/preflight-ready.json.gz",
+      "sourceBytes": 687,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/provider-run/evidence/provider-pair-staging.json.gz",
+      "sourceBytes": 1701,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/provider-run/launch-owner.json.gz",
+      "sourceBytes": 3401,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/public-external.csv.gz",
+      "sourceBytes": 53,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/public-global-config-facts.json.gz",
+      "sourceBytes": 142,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/ready.json.gz",
+      "sourceBytes": 722,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/shutdown.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/shutdown.log.gz",
+      "sourceBytes": 82,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/check-observation-1791923285446.json.gz",
+      "sourceBytes": 17970,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/checker-actual.ts.gz",
+      "sourceBytes": 7818,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/evidence/sol-402-a02-physical-terminal-and-pair-cleanup.json.gz",
+      "sourceBytes": 2425,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/evidence/sol-402-a02-qualified-surface-completion.json.gz",
+      "sourceBytes": 361,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/evidence/sol-402-a02-settlement-owner.json.gz",
+      "sourceBytes": 466,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/evidence/sol-402-a02-shutdown-admission.json.gz",
+      "sourceBytes": 528,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/global-chat-start-request.json.gz",
+      "sourceBytes": 470,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/global-chat-start-response.json.gz",
+      "sourceBytes": 4199,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/launch-actual.ps1.gz",
+      "sourceBytes": 33225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/launch.exit.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/launch.log.gz",
+      "sourceBytes": 535,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/live-check.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/live-check.json.gz",
+      "sourceBytes": 824,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/live-check.log.gz",
+      "sourceBytes": 845,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/live-helper-actual.mjs.gz",
+      "sourceBytes": 5458,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/manual-review.md.gz",
+      "sourceBytes": 1563,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/observation-1791923259493.json.gz",
+      "sourceBytes": 32344,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/page-closed.json.gz",
+      "sourceBytes": 52,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/provider-run/evidence/authority-ready.json.gz",
+      "sourceBytes": 15925,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/provider-run/evidence/managed-parent-ready.json.gz",
+      "sourceBytes": 500,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/provider-run/evidence/native-host-ready.json.gz",
+      "sourceBytes": 1862,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/provider-run/evidence/preflight-ready.json.gz",
+      "sourceBytes": 689,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/provider-run/evidence/provider-pair-staging.json.gz",
+      "sourceBytes": 1701,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/provider-run/launch-owner.json.gz",
+      "sourceBytes": 3404,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/public-external.csv.gz",
+      "sourceBytes": 53,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/public-global-config-facts.json.gz",
+      "sourceBytes": 142,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/ready.json.gz",
+      "sourceBytes": 722,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/root-exec-join.json.gz",
+      "sourceBytes": 437,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/shutdown.exit.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/shutdown.log.gz",
+      "sourceBytes": 82,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/sol-deny-completed-en.ax.txt.gz",
+      "sourceBytes": 6732,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/sol-permission-before-deny-en.ax.txt.gz",
+      "sourceBytes": 9554,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "task-child-public-entry-review.md.gz",
+      "sourceBytes": 4914,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "task-terminal-ui-review.md.gz",
+      "sourceBytes": 16644,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "ui-implementation-files.json.gz",
+      "sourceBytes": 1220,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "ui-implementation-review.md.gz",
+      "sourceBytes": 5362,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "ui-implementation.patch.gz",
+      "sourceBytes": 27145,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "ui-review.md.gz",
+      "sourceBytes": 15363,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/README.md.gz",
+      "sourceBytes": 3238,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/green-command.json.gz",
+      "sourceBytes": 538,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/green-session-mirror.ts.gz",
+      "sourceBytes": 12374,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/green-session-permission-projection.test.ts.gz",
+      "sourceBytes": 25336,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/green.exit.gz",
+      "sourceBytes": 1,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/green.log.gz",
+      "sourceBytes": 1700,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/handoff.json.gz",
+      "sourceBytes": 3408,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/red-command.json.gz",
+      "sourceBytes": 536,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/red-test-input.ts.gz",
+      "sourceBytes": 25336,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/red.exit.gz",
+      "sourceBytes": 1,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/red.log.gz",
+      "sourceBytes": 3166,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/run-check.ps1.gz",
+      "sourceBytes": 1904,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/save-fix-diff.mjs.gz",
+      "sourceBytes": 1401,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/scope-before.json.gz",
+      "sourceBytes": 395,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/scope-changes.json.gz",
+      "sourceBytes": 322,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/summary-fix.patch.gz",
+      "sourceBytes": 3584,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/typecheck-command.json.gz",
+      "sourceBytes": 437,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/typecheck.exit.gz",
+      "sourceBytes": 1,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "warm-summary/typecheck.log.gz",
+      "sourceBytes": 75,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/commit-final-initial.mjs.gz",
+      "sourceBytes": 4404,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/commit-final.mjs.gz",
+      "sourceBytes": 4629,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review.log.gz",
+      "sourceBytes": 11014,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review02.log.gz",
+      "sourceBytes": 39585,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/stage-final-review02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-commit.json.gz",
+      "sourceBytes": 57957,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/commit-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final.log.gz",
+      "sourceBytes": 2046,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/push-final01.log.gz",
+      "sourceBytes": 5069,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/push-final01.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/api-final02.log.gz",
+      "sourceBytes": 131,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/api-final02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final02.log.gz",
+      "sourceBytes": 106,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/docs-final02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/add-delivery-evidence.mjs.gz",
+      "sourceBytes": 3042,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/freeze-root-facts.mjs.gz",
+      "sourceBytes": 4812,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/actual-process-observation.json.gz",
+      "sourceBytes": 1006,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/bun-version.txt.gz",
+      "sourceBytes": 7,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/command.txt.gz",
+      "sourceBytes": 45,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/compiler-resolution.json.gz",
+      "sourceBytes": 1842,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/head-before.txt.gz",
+      "sourceBytes": 42,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/join-and-input-observation.json.gz",
+      "sourceBytes": 205,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/node-version.txt.gz",
+      "sourceBytes": 9,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/owner-completed.json.gz",
+      "sourceBytes": 91,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/owner-start.json.gz",
+      "sourceBytes": 446,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/peer-source-before.patch.gz",
+      "sourceBytes": 8444,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/README-before-correction.md.gz",
+      "sourceBytes": 2877,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/reconciliation.md.gz",
+      "sourceBytes": 5152,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/typecheck.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/typecheck.log.gz",
+      "sourceBytes": 75,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__package.json.gz",
+      "sourceBytes": 5758,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__compaction.ts.gz",
+      "sourceBytes": 46340,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__src__session__llm.ts.gz",
+      "sourceBytes": 18055,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__opencorvus__tsconfig.json.gz",
+      "sourceBytes": 635,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__util__package.json.gz",
+      "sourceBytes": 916,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/packages__util__src__error.ts.gz",
+      "sourceBytes": 2366,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/package-script-repeat/inputs/tsconfig-bun.json.gz",
+      "sourceBytes": 893,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "delivery-review/final-root-recheck/README.md.gz",
+      "sourceBytes": 3255,
+      "decodedMatchesOriginal": true
+    }
+  ],
+  "images": [
+    {
+      "path": "manual-after-01/observations/main-allow-completed-en.jpg",
+      "bytes": 58997,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/observations/main-cold-inline-en.jpg",
+      "bytes": 79380,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/observations/main-cold-restored-en.jpg",
+      "bytes": 77196,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/observations/main-pending-dialog-en.jpg",
+      "bytes": 76655,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-01/observations/main-pending-inline-en.jpg",
+      "bytes": 79458,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/observations/main-connected-before-release.jpg",
+      "bytes": 52807,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/observations/main-deny-terminal-error-en.jpg",
+      "bytes": 57626,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-02/observations/main-warm-permission-en.jpg",
+      "bytes": 76959,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/observations/question-answer-completed-en.jpg",
+      "bytes": 52331,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/observations/question-dialog-draft-en.jpg",
+      "bytes": 47498,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-03/observations/side-chat-message-completed-en.jpg",
+      "bytes": 63320,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/observations/side-cold-restored-permission-en.jpg",
+      "bytes": 68269,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/observations/side-read-completed-en.jpg",
+      "bytes": 61876,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-04/observations/side-warm-permission-before-summary-fix.jpg",
+      "bytes": 67883,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-06/work-ledger-error-en.jpg",
+      "bytes": 36527,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/main-deny-completed-en.jpg",
+      "bytes": 50145,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-07/main-warm-permission-en.jpg",
+      "bytes": 76706,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/parent-child-decisions-en.jpg",
+      "bytes": 54360,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/parent-two-child-permissions-en.jpg",
+      "bytes": 74584,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-read-output-final-en.jpg",
+      "bytes": 69603,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-read-output-visible-final-en.jpg",
+      "bytes": 67521,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-read-three-rows-final-en.jpg",
+      "bytes": 65567,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/side-warm-permission-final-en.jpg",
+      "bytes": 74545,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/task-allowed-exact-root-error-en.jpg",
+      "bytes": 90171,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-after-08/task-permission-en.jpg",
+      "bytes": 82300,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/observations/main-pending-before.jpg",
+      "bytes": 55791,
+      "matchesOriginal": true
+    },
+    {
+      "path": "manual-before-05/observations/main-pending-expanded-before.jpg",
+      "bytes": 54129,
+      "matchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/observations/sol-main-answer-zh.jpg",
+      "bytes": 65101,
+      "matchesOriginal": true
+    },
+    {
+      "path": "sol-after-01/observations/sol-main-permission-dialog-zh.jpg",
+      "bytes": 78505,
+      "matchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/sol-deny-completed-en.jpg",
+      "bytes": 69270,
+      "matchesOriginal": true
+    },
+    {
+      "path": "sol-after-02/sol-permission-before-deny-en.jpg",
+      "bytes": 79529,
+      "matchesOriginal": true
+    }
+  ],
+  "credentialScan": {
+    "inspected": 497,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "publicFixtureAssignments": 23,
+    "publicFixtureException": "Exact literal local-controlled-provider only; all other matching assignments fail",
+    "limitation": "Bounded patterns only; no credential/model authority file read"
+  },
+  "localLinks": {
+    "count": 4,
+    "broken": 0
+  }
+}

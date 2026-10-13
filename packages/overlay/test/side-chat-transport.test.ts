@@ -61,13 +61,27 @@ test("the side stream projects actionable questions and permission requests into
       JSON.stringify({
         type: "permission.asked",
         session_id: "ses_side",
+        orderKey: "v1:0000000000001:0:0:interaction:perm_side",
         payload: {
           id: "perm_side",
+          projectID: "project-side",
           sessionID: "ses_side",
+          messageID: "message-side",
+          toolCallID: "tool-side",
+          mode: "ask",
+          policyRevision: "policy-side",
+          providerKind: "builtin",
+          providerID: "read",
+          providerDigest: "builtin-read",
           toolName: "read",
+          effectClass: "read_local",
+          scopeVersion: "1",
           summary: "Read project context",
           scope: { path: "README.md" },
+          fingerprint: "read-project-context",
+          projectGrantEligible: false,
           choices: ["allow_once", "deny"],
+          timeCreated: 1,
         },
       }),
     )
@@ -100,7 +114,7 @@ test("the side stream projects actionable questions and permission requests into
       JSON.stringify({
         type: "permission.replied",
         session_id: "ses_side",
-        payload: { requestID: "perm_side", decision: "allow_once" },
+        payload: { requestID: "perm_side", sessionID: "ses_side", decision: "allow_once" },
       }),
     )
     expect(interactions.map((item) => item.id)).toEqual(["qst_side"])

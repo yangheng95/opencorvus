@@ -1,0 +1,1706 @@
+{
+  "capturedAtUtc": "2026-10-13T20:59:52.145Z",
+  "qualification": "Immutable original evidence preservation only, not a source hash or functional gate. Runtime home/auth/models/database directories intentionally outside this evidence selection.",
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\canonical-entry-name.inputs.json",
+      "target": "entry-name/tools/canonical-entry-name.inputs.json",
+      "originalBytes": 6075,
+      "storedBytes": 6075,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\canonical-entry-name-qualifier.mjs",
+      "target": "entry-name/tools/canonical-entry-name-qualifier.mjs.gz",
+      "originalBytes": 13161,
+      "storedBytes": 3824,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\canonical-entry-name-review.md",
+      "target": "entry-name/tools/canonical-entry-name-review.md.gz",
+      "originalBytes": 12785,
+      "storedBytes": 6522,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\canonical-entry-native-reader.before.mjs",
+      "target": "entry-name/tools/canonical-entry-native-reader.before.mjs",
+      "originalBytes": 5768,
+      "storedBytes": 5768,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\canonical-entry-native-reader.proposal.mjs",
+      "target": "entry-name/tools/canonical-entry-native-reader.proposal.mjs.gz",
+      "originalBytes": 9560,
+      "storedBytes": 3001,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\canonical-entry-native-reader.exact-changes.json",
+      "target": "entry-name/tools/canonical-entry-native-reader.exact-changes.json",
+      "originalBytes": 5848,
+      "storedBytes": 5848,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-name-runner.before.mjs",
+      "target": "entry-name/tools/entry-name-runner.before.mjs",
+      "originalBytes": 4125,
+      "storedBytes": 4125,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-name-reader.before.mjs",
+      "target": "entry-name/tools/entry-name-reader.before.mjs",
+      "originalBytes": 5768,
+      "storedBytes": 5768,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\native-metadata-reader.mjs",
+      "target": "entry-name/tools/native-metadata-reader.mjs.gz",
+      "originalBytes": 9566,
+      "storedBytes": 3007,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\run-dot-native.mjs",
+      "target": "entry-name/tools/run-dot-native.mjs",
+      "originalBytes": 5055,
+      "storedBytes": 5055,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\check-entry-syntax.mjs",
+      "target": "entry-name/tools/check-entry-syntax.mjs",
+      "originalBytes": 1224,
+      "storedBytes": 1224,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\read-entry-results.mjs",
+      "target": "entry-name/tools/read-entry-results.mjs",
+      "originalBytes": 1526,
+      "storedBytes": 1526,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-results-node.json",
+      "target": "entry-name/tools/entry-results-node.json.gz",
+      "originalBytes": 68053,
+      "storedBytes": 4960,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-results-bun.json",
+      "target": "entry-name/tools/entry-results-bun.json.gz",
+      "originalBytes": 71838,
+      "storedBytes": 5054,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-native-metadata-reader.mjs.stdout.bin",
+      "target": "entry-name/syntax/native-metadata-reader.mjs.stdout.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-native-metadata-reader.mjs.stderr.bin",
+      "target": "entry-name/syntax/native-metadata-reader.mjs.stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-native-metadata-reader.mjs.exit.json",
+      "target": "entry-name/syntax/native-metadata-reader.mjs.exit.json",
+      "originalBytes": 363,
+      "storedBytes": 363,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-canonical-entry-name-qualifier.mjs.stdout.bin",
+      "target": "entry-name/syntax/canonical-entry-name-qualifier.mjs.stdout.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-canonical-entry-name-qualifier.mjs.stderr.bin",
+      "target": "entry-name/syntax/canonical-entry-name-qualifier.mjs.stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-canonical-entry-name-qualifier.mjs.exit.json",
+      "target": "entry-name/syntax/canonical-entry-name-qualifier.mjs.exit.json",
+      "originalBytes": 371,
+      "storedBytes": 371,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-run-dot-native.mjs.stdout.bin",
+      "target": "entry-name/syntax/run-dot-native.mjs.stdout.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-run-dot-native.mjs.stderr.bin",
+      "target": "entry-name/syntax/run-dot-native.mjs.stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-syntax-run-dot-native.mjs.exit.json",
+      "target": "entry-name/syntax/run-dot-native.mjs.exit.json",
+      "originalBytes": 355,
+      "storedBytes": 355,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\original-input.json",
+      "target": "entry-name/runtime/node/original-input.json",
+      "originalBytes": 2045,
+      "storedBytes": 2045,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\parent-joined.json",
+      "target": "entry-name/runtime/node/parent-joined.json",
+      "originalBytes": 453,
+      "storedBytes": 453,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\stdout.bin",
+      "target": "entry-name/runtime/node/stdout.bin.gz",
+      "originalBytes": 239792,
+      "storedBytes": 12461,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\stderr.bin",
+      "target": "entry-name/runtime/node/stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\evidence\\native-host-ready.json",
+      "target": "entry-name/runtime/node/evidence/native-host-ready.json",
+      "originalBytes": 1201,
+      "storedBytes": 1201,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\evidence\\native-host-settled.json",
+      "target": "entry-name/runtime/node/evidence/native-host-settled.json",
+      "originalBytes": 2461,
+      "storedBytes": 2461,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\evidence\\native-host-stderr.bin",
+      "target": "entry-name/runtime/node/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-node\\evidence\\native-host-stdout.bin",
+      "target": "entry-name/runtime/node/evidence/native-host-stdout.bin.gz",
+      "originalBytes": 239792,
+      "storedBytes": 12461,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\original-input.json",
+      "target": "entry-name/runtime/bun/original-input.json",
+      "originalBytes": 2141,
+      "storedBytes": 2141,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\parent-joined.json",
+      "target": "entry-name/runtime/bun/parent-joined.json",
+      "originalBytes": 452,
+      "storedBytes": 452,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\stdout.bin",
+      "target": "entry-name/runtime/bun/stdout.bin.gz",
+      "originalBytes": 244721,
+      "storedBytes": 12900,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\stderr.bin",
+      "target": "entry-name/runtime/bun/stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\evidence\\native-host-ready.json",
+      "target": "entry-name/runtime/bun/evidence/native-host-ready.json",
+      "originalBytes": 1251,
+      "storedBytes": 1251,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\evidence\\native-host-settled.json",
+      "target": "entry-name/runtime/bun/evidence/native-host-settled.json",
+      "originalBytes": 2457,
+      "storedBytes": 2457,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\evidence\\native-host-stderr.bin",
+      "target": "entry-name/runtime/bun/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\entry-native-bun\\evidence\\native-host-stdout.bin",
+      "target": "entry-name/runtime/bun/evidence/native-host-stdout.bin.gz",
+      "originalBytes": 244721,
+      "storedBytes": 12900,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-implementation-plan.md",
+      "target": "guard/analysis/relocation-implementation-plan.md.gz",
+      "originalBytes": 23911,
+      "storedBytes": 12009,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-positive-contracts.md",
+      "target": "guard/analysis/relocation-positive-contracts.md.gz",
+      "originalBytes": 19255,
+      "storedBytes": 9704,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\move-guard-code-review.md",
+      "target": "guard/analysis/move-guard-code-review.md.gz",
+      "originalBytes": 10733,
+      "storedBytes": 6526,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-functional-review.md",
+      "target": "guard/analysis/guard-functional-review.md.gz",
+      "originalBytes": 10074,
+      "storedBytes": 5877,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-functional-review.json",
+      "target": "guard/analysis/guard-functional-review.json.gz",
+      "originalBytes": 220450,
+      "storedBytes": 18156,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\root-acceptance-review.json",
+      "target": "guard/analysis/root-acceptance-review.json.gz",
+      "originalBytes": 527347,
+      "storedBytes": 27118,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\summarize-root-acceptance.mjs",
+      "target": "guard/analysis/summarize-root-acceptance.mjs",
+      "originalBytes": 2828,
+      "storedBytes": 2828,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-functional-first.log",
+      "target": "guard/validation/guard-functional-first.log.gz",
+      "originalBytes": 180077,
+      "storedBytes": 11717,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-functional-first.exit.json",
+      "target": "guard/validation/guard-functional-first.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-functional-final.log",
+      "target": "guard/validation/guard-functional-final.log.gz",
+      "originalBytes": 145831,
+      "storedBytes": 9546,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-functional-final.exit.json",
+      "target": "guard/validation/guard-functional-final.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-typecheck-first.log",
+      "target": "guard/validation/guard-typecheck-first.log.gz",
+      "originalBytes": 75,
+      "storedBytes": 92,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-typecheck-first.exit.json",
+      "target": "guard/validation/guard-typecheck-first.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-typecheck-final.log",
+      "target": "guard/validation/guard-typecheck-final.log.gz",
+      "originalBytes": 75,
+      "storedBytes": 92,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-typecheck-final.exit.json",
+      "target": "guard/validation/guard-typecheck-final.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-format-source.log",
+      "target": "guard/validation/guard-format-source.log.gz",
+      "originalBytes": 94,
+      "storedBytes": 87,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-format-source.exit.json",
+      "target": "guard/validation/guard-format-source.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-format-final.log",
+      "target": "guard/validation/guard-format-final.log.gz",
+      "originalBytes": 110,
+      "storedBytes": 103,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-format-final.exit.json",
+      "target": "guard/validation/guard-format-final.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-format-review.log",
+      "target": "guard/validation/guard-format-review.log.gz",
+      "originalBytes": 50,
+      "storedBytes": 70,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\dot-docs-check.log",
+      "target": "guard/validation/dot-docs-check.log.gz",
+      "originalBytes": 106,
+      "storedBytes": 115,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\dot-docs-check.exit.json",
+      "target": "guard/validation/dot-docs-check.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\dot-architecture-check.log",
+      "target": "guard/validation/dot-architecture-check.log.gz",
+      "originalBytes": 141,
+      "storedBytes": 129,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\dot-architecture-check.exit.json",
+      "target": "guard/validation/dot-architecture-check.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\fixture-support.mjs",
+      "target": "guard/tools/fixture-support.mjs.gz",
+      "originalBytes": 12420,
+      "storedBytes": 3999,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\fixture-tool.mjs",
+      "target": "guard/tools/fixture-tool.mjs.gz",
+      "originalBytes": 12978,
+      "storedBytes": 4115,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\launch.ps1",
+      "target": "guard/tools/launch.ps1.gz",
+      "originalBytes": 11244,
+      "storedBytes": 3709,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-host.ts",
+      "target": "guard/tools/native-host.ts.gz",
+      "originalBytes": 11577,
+      "storedBytes": 3714,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\owned-launch-functions.ps1",
+      "target": "guard/tools/owned-launch-functions.ps1",
+      "originalBytes": 4864,
+      "storedBytes": 4864,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\shutdown.ps1",
+      "target": "guard/tools/shutdown.ps1",
+      "originalBytes": 8089,
+      "storedBytes": 8089,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\verify-state.mjs",
+      "target": "guard/tools/verify-state.mjs",
+      "originalBytes": 4855,
+      "storedBytes": 4855,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\check-syntax.ps1",
+      "target": "guard/tools/check-syntax.ps1",
+      "originalBytes": 2127,
+      "storedBytes": 2127,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\review.md",
+      "target": "guard/tools/review.md.gz",
+      "originalBytes": 10039,
+      "storedBytes": 5708,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\full-changes.json",
+      "target": "guard/tools/full-changes.json.gz",
+      "originalBytes": 141870,
+      "storedBytes": 23605,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\source-head-before-launch.txt",
+      "target": "guard/tools/source-head-before-launch.txt",
+      "originalBytes": 42,
+      "storedBytes": 42,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\source-diff-before-launch.patch",
+      "target": "guard/tools/source-diff-before-launch.patch.gz",
+      "originalBytes": 19322,
+      "storedBytes": 4563,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\file-entry-before-launch.ts",
+      "target": "guard/tools/file-entry-before-launch.ts",
+      "originalBytes": 6018,
+      "storedBytes": 6018,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\shutdown-root-exit.json",
+      "target": "guard/tools/shutdown-root-exit.json",
+      "originalBytes": 68,
+      "storedBytes": 68,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\history\\fixture-support.mjs",
+      "target": "guard/history/fixture-support.mjs.gz",
+      "originalBytes": 13082,
+      "storedBytes": 4178,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\history\\fixture-tool.mjs",
+      "target": "guard/history/fixture-tool.mjs.gz",
+      "originalBytes": 26399,
+      "storedBytes": 7201,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\history\\launch-ui.ps1",
+      "target": "guard/history/launch-ui.ps1.gz",
+      "originalBytes": 11229,
+      "storedBytes": 3699,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\history\\native-host.ts",
+      "target": "guard/history/native-host.ts.gz",
+      "originalBytes": 11568,
+      "storedBytes": 3711,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\history\\owned-launch-functions.ps1",
+      "target": "guard/history/owned-launch-functions.ps1",
+      "originalBytes": 4170,
+      "storedBytes": 4170,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\history\\shutdown.ps1",
+      "target": "guard/history/shutdown.ps1",
+      "originalBytes": 8079,
+      "storedBytes": 8079,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\check-syntax.ps1.json",
+      "target": "guard/syntax/check-syntax.ps1.json",
+      "originalBytes": 82,
+      "storedBytes": 82,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\fixture-support.mjs.log",
+      "target": "guard/syntax/fixture-support.mjs.log",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\fixture-support.mjs.log.exit.json",
+      "target": "guard/syntax/fixture-support.mjs.log.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\fixture-tool.mjs.log",
+      "target": "guard/syntax/fixture-tool.mjs.log",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\fixture-tool.mjs.log.exit.json",
+      "target": "guard/syntax/fixture-tool.mjs.log.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\launch.ps1.json",
+      "target": "guard/syntax/launch.ps1.json",
+      "originalBytes": 82,
+      "storedBytes": 82,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\native-host.ts.log",
+      "target": "guard/syntax/native-host.ts.log.gz",
+      "originalBytes": 48,
+      "storedBytes": 68,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\native-host.ts.log.exit.json",
+      "target": "guard/syntax/native-host.ts.log.exit.json",
+      "originalBytes": 65,
+      "storedBytes": 65,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\owned-launch-functions.ps1.json",
+      "target": "guard/syntax/owned-launch-functions.ps1.json",
+      "originalBytes": 82,
+      "storedBytes": 82,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\results.json",
+      "target": "guard/syntax/results.json",
+      "originalBytes": 747,
+      "storedBytes": 747,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\root-check-exits.json",
+      "target": "guard/syntax/root-check-exits.json",
+      "originalBytes": 88,
+      "storedBytes": 88,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\shutdown.ps1.json",
+      "target": "guard/syntax/shutdown.ps1.json",
+      "originalBytes": 82,
+      "storedBytes": 82,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\syntax\\state-check-exits.json",
+      "target": "guard/syntax/state-check-exits.json",
+      "originalBytes": 88,
+      "storedBytes": 88,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\01-initial.jpg",
+      "target": "guard/screenshots/01-initial.jpg",
+      "originalBytes": 32960,
+      "storedBytes": 32960,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/01-initial.jpg.gz",
+        "storedBytes": 23379,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\02-file-tree.jpg",
+      "target": "guard/screenshots/02-file-tree.jpg",
+      "originalBytes": 36592,
+      "storedBytes": 36592,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/02-file-tree.jpg.gz",
+        "storedBytes": 24758,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\03-dependent-error-details.jpg",
+      "target": "guard/screenshots/03-dependent-error-details.jpg",
+      "originalBytes": 55262,
+      "storedBytes": 55262,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/03-dependent-error-details.jpg.gz",
+        "storedBytes": 43331,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\04-dependent-response-body.jpg",
+      "target": "guard/screenshots/04-dependent-response-body.jpg",
+      "originalBytes": 50381,
+      "storedBytes": 50381,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/04-dependent-response-body.jpg.gz",
+        "storedBytes": 38585,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\05-dependent-body-bottom.jpg",
+      "target": "guard/screenshots/05-dependent-body-bottom.jpg",
+      "originalBytes": 50381,
+      "storedBytes": 50381,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/05-dependent-body-bottom.jpg.gz",
+        "storedBytes": 38585,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\06-indirect-error.jpg",
+      "target": "guard/screenshots/06-indirect-error.jpg",
+      "originalBytes": 43749,
+      "storedBytes": 43749,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/06-indirect-error.jpg.gz",
+        "storedBytes": 31688,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\07-junction-move-success.jpg",
+      "target": "guard/screenshots/07-junction-move-success.jpg",
+      "originalBytes": 37953,
+      "storedBytes": 37953,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/07-junction-move-success.jpg.gz",
+        "storedBytes": 26835,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\08-symbolic-error-zh.jpg",
+      "target": "guard/screenshots/08-symbolic-error-zh.jpg",
+      "originalBytes": 43228,
+      "storedBytes": 43228,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/08-symbolic-error-zh.jpg.gz",
+        "storedBytes": 31473,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\09-symbolic-move-success-zh.jpg",
+      "target": "guard/screenshots/09-symbolic-move-success-zh.jpg",
+      "originalBytes": 37320,
+      "storedBytes": 37320,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/09-symbolic-move-success-zh.jpg.gz",
+        "storedBytes": 26272,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\10-published-directory-zh.jpg",
+      "target": "guard/screenshots/10-published-directory-zh.jpg",
+      "originalBytes": 39744,
+      "storedBytes": 39744,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/10-published-directory-zh.jpg.gz",
+        "storedBytes": 27793,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\11-marker-editor-zh.ax.txt",
+      "target": "guard/screenshots/11-marker-editor-zh.ax.txt",
+      "originalBytes": 198,
+      "storedBytes": 198,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\11-marker-editor-zh.jpg",
+      "target": "guard/screenshots/11-marker-editor-zh.jpg",
+      "originalBytes": 33243,
+      "storedBytes": 33243,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/11-marker-editor-zh.jpg.gz",
+        "storedBytes": 22267,
+        "gzip": true
+      }
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\browser-warnings-errors.json",
+      "target": "guard/screenshots/browser-warnings-errors.json",
+      "originalBytes": 2,
+      "storedBytes": 2,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\directory-target-guard-after-inputs.json",
+      "target": "guard/directory-target-guard-after/directory-target-guard-after-inputs.json",
+      "originalBytes": 2989,
+      "storedBytes": 2989,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\directory-target-guard-after-launch-owner.json",
+      "target": "guard/directory-target-guard-after/directory-target-guard-after-launch-owner.json",
+      "originalBytes": 1850,
+      "storedBytes": 1850,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\directory-target-guard-after-launcher-joined.json",
+      "target": "guard/directory-target-guard-after/directory-target-guard-after-launcher-joined.json",
+      "originalBytes": 2922,
+      "storedBytes": 2922,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\directory-target-guard-after-physical-terminal-and-credential-free.json",
+      "target": "guard/directory-target-guard-after/directory-target-guard-after-physical-terminal-and-credential-free.json",
+      "originalBytes": 3911,
+      "storedBytes": 3911,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\directory-target-guard-after-settlement-owner.json",
+      "target": "guard/directory-target-guard-after/directory-target-guard-after-settlement-owner.json",
+      "originalBytes": 522,
+      "storedBytes": 522,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\directory-target-guard-after-shutdown-admission.json",
+      "target": "guard/directory-target-guard-after/directory-target-guard-after-shutdown-admission.json",
+      "originalBytes": 544,
+      "storedBytes": 544,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\directory-target-guard-after-ui-binding.json",
+      "target": "guard/directory-target-guard-after/directory-target-guard-after-ui-binding.json",
+      "originalBytes": 289,
+      "storedBytes": 289,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\http-01-register-root-project.json",
+      "target": "guard/directory-target-guard-after/http-01-register-root-project.json",
+      "originalBytes": 2971,
+      "storedBytes": 2971,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\http-02-register-root-chat.json",
+      "target": "guard/directory-target-guard-after/http-02-register-root-chat.json",
+      "originalBytes": 4073,
+      "storedBytes": 4073,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\http-03-register-b-project.json",
+      "target": "guard/directory-target-guard-after/http-03-register-b-project.json",
+      "originalBytes": 2979,
+      "storedBytes": 2979,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\http-04-register-b-chat.json",
+      "target": "guard/directory-target-guard-after/http-04-register-b-chat.json",
+      "originalBytes": 4069,
+      "storedBytes": 4069,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\prepare-1791923381558-72f94672-eba3-4d68-b597-3ed155b9a186.json",
+      "target": "guard/directory-target-guard-after/prepare-1791923381558-72f94672-eba3-4d68-b597-3ed155b9a186.json.gz",
+      "originalBytes": 60520,
+      "storedBytes": 4656,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\prepare-admission.json",
+      "target": "guard/directory-target-guard-after/prepare-admission.json",
+      "originalBytes": 4086,
+      "storedBytes": 4086,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\prepared-fixture.json",
+      "target": "guard/directory-target-guard-after/prepared-fixture.json.gz",
+      "originalBytes": 30761,
+      "storedBytes": 3109,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\register-1791923467384-eec5446d-697a-4da7-8a63-42869872bdd6.json",
+      "target": "guard/directory-target-guard-after/register-1791923467384-eec5446d-697a-4da7-8a63-42869872bdd6.json.gz",
+      "originalBytes": 65735,
+      "storedBytes": 6497,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\register-admission.json",
+      "target": "guard/directory-target-guard-after/register-admission.json",
+      "originalBytes": 3125,
+      "storedBytes": 3125,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\registered-projects.json",
+      "target": "guard/directory-target-guard-after/registered-projects.json.gz",
+      "originalBytes": 41635,
+      "storedBytes": 4726,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-admission.json",
+      "target": "guard/directory-target-guard-after/state-after-admission.json",
+      "originalBytes": 2235,
+      "storedBytes": 2235,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-01.json",
+      "target": "guard/directory-target-guard-after/state-after-http-01.json",
+      "originalBytes": 8058,
+      "storedBytes": 8058,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-02.json",
+      "target": "guard/directory-target-guard-after/state-after-http-02.json",
+      "originalBytes": 4254,
+      "storedBytes": 4254,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-03.json",
+      "target": "guard/directory-target-guard-after/state-after-http-03.json",
+      "originalBytes": 1521,
+      "storedBytes": 1521,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-04.json",
+      "target": "guard/directory-target-guard-after/state-after-http-04.json",
+      "originalBytes": 1523,
+      "storedBytes": 1523,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-05.json",
+      "target": "guard/directory-target-guard-after/state-after-http-05.json",
+      "originalBytes": 1533,
+      "storedBytes": 1533,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-06.json",
+      "target": "guard/directory-target-guard-after/state-after-http-06.json",
+      "originalBytes": 1520,
+      "storedBytes": 1520,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-07.json",
+      "target": "guard/directory-target-guard-after/state-after-http-07.json",
+      "originalBytes": 3475,
+      "storedBytes": 3475,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-08.json",
+      "target": "guard/directory-target-guard-after/state-after-http-08.json",
+      "originalBytes": 3475,
+      "storedBytes": 3475,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-09.json",
+      "target": "guard/directory-target-guard-after/state-after-http-09.json",
+      "originalBytes": 1547,
+      "storedBytes": 1547,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-http-10.json",
+      "target": "guard/directory-target-guard-after/state-after-http-10.json",
+      "originalBytes": 1547,
+      "storedBytes": 1547,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-after-result.json",
+      "target": "guard/directory-target-guard-after/state-after-result.json.gz",
+      "originalBytes": 68304,
+      "storedBytes": 6586,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-admission.json",
+      "target": "guard/directory-target-guard-after/state-before-admission.json",
+      "originalBytes": 2235,
+      "storedBytes": 2235,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-http-01.json",
+      "target": "guard/directory-target-guard-after/state-before-http-01.json.gz",
+      "originalBytes": 9586,
+      "storedBytes": 1795,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-http-02.json",
+      "target": "guard/directory-target-guard-after/state-before-http-02.json",
+      "originalBytes": 4254,
+      "storedBytes": 4254,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-http-03.json",
+      "target": "guard/directory-target-guard-after/state-before-http-03.json",
+      "originalBytes": 1521,
+      "storedBytes": 1521,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-http-04.json",
+      "target": "guard/directory-target-guard-after/state-before-http-04.json",
+      "originalBytes": 1523,
+      "storedBytes": 1523,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-http-05.json",
+      "target": "guard/directory-target-guard-after/state-before-http-05.json",
+      "originalBytes": 1533,
+      "storedBytes": 1533,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-http-06.json",
+      "target": "guard/directory-target-guard-after/state-before-http-06.json",
+      "originalBytes": 1520,
+      "storedBytes": 1520,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\directory-target-guard-after\\state-before-result.json",
+      "target": "guard/directory-target-guard-after/state-before-result.json.gz",
+      "originalBytes": 57369,
+      "storedBytes": 5727,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-1de529ec-b216-484c-81e7-80dc728e2b0c.json",
+      "target": "guard/observer/observation-1de529ec-b216-484c-81e7-80dc728e2b0c.json",
+      "originalBytes": 1554,
+      "storedBytes": 1554,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-73a62b15-624a-4a6e-bfb4-eb7b5d9770b0.json",
+      "target": "guard/observer/observation-73a62b15-624a-4a6e-bfb4-eb7b5d9770b0.json",
+      "originalBytes": 1550,
+      "storedBytes": 1550,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-8613017d-e930-4213-96dc-2ed715b46150.json",
+      "target": "guard/observer/observation-8613017d-e930-4213-96dc-2ed715b46150.json",
+      "originalBytes": 1550,
+      "storedBytes": 1550,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-8ac4cf7b-fd75-484d-b7c5-d11b5529ce82.json",
+      "target": "guard/observer/observation-8ac4cf7b-fd75-484d-b7c5-d11b5529ce82.json",
+      "originalBytes": 1554,
+      "storedBytes": 1554,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-8e9887fb-c486-4f9d-bd37-1d1443fcdb4a.json",
+      "target": "guard/observer/observation-8e9887fb-c486-4f9d-bd37-1d1443fcdb4a.json",
+      "originalBytes": 1554,
+      "storedBytes": 1554,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-8fbf749a-e4c9-48b3-8d1a-11a0823ab915.json",
+      "target": "guard/observer/observation-8fbf749a-e4c9-48b3-8d1a-11a0823ab915.json",
+      "originalBytes": 1550,
+      "storedBytes": 1550,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-9201b9d3-3db0-49d7-be47-6ebe6e726805.json",
+      "target": "guard/observer/observation-9201b9d3-3db0-49d7-be47-6ebe6e726805.json",
+      "originalBytes": 1550,
+      "storedBytes": 1550,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer\\observation-9faf6863-1f9b-48b9-9a8c-3a206dfb9833.json",
+      "target": "guard/observer/observation-9faf6863-1f9b-48b9-9a8c-3a206dfb9833.json",
+      "originalBytes": 1554,
+      "storedBytes": 1554,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\original-input.json",
+      "target": "guard/clients/prepare/original-input.json",
+      "originalBytes": 2135,
+      "storedBytes": 2135,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\parent-joined.json",
+      "target": "guard/clients/prepare/parent-joined.json",
+      "originalBytes": 452,
+      "storedBytes": 452,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\stdout.bin",
+      "target": "guard/clients/prepare/stdout.bin",
+      "originalBytes": 4631,
+      "storedBytes": 4631,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\stderr.bin",
+      "target": "guard/clients/prepare/stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\evidence\\native-host-ready.json",
+      "target": "guard/clients/prepare/evidence/native-host-ready.json",
+      "originalBytes": 1193,
+      "storedBytes": 1193,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\evidence\\native-host-settled.json",
+      "target": "guard/clients/prepare/evidence/native-host-settled.json",
+      "originalBytes": 2470,
+      "storedBytes": 2470,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\evidence\\native-host-stderr.bin",
+      "target": "guard/clients/prepare/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-prepare-node\\evidence\\native-host-stdout.bin",
+      "target": "guard/clients/prepare/evidence/native-host-stdout.bin",
+      "originalBytes": 4631,
+      "storedBytes": 4631,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\original-input.json",
+      "target": "guard/clients/register/original-input.json",
+      "originalBytes": 2144,
+      "storedBytes": 2144,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\parent-joined.json",
+      "target": "guard/clients/register/parent-joined.json",
+      "originalBytes": 456,
+      "storedBytes": 456,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\stdout.bin",
+      "target": "guard/clients/register/stdout.bin.gz",
+      "originalBytes": 15414,
+      "storedBytes": 3409,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\stderr.bin",
+      "target": "guard/clients/register/stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\evidence\\native-host-ready.json",
+      "target": "guard/clients/register/evidence/native-host-ready.json",
+      "originalBytes": 1197,
+      "storedBytes": 1197,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\evidence\\native-host-settled.json",
+      "target": "guard/clients/register/evidence/native-host-settled.json",
+      "originalBytes": 2477,
+      "storedBytes": 2477,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\evidence\\native-host-stderr.bin",
+      "target": "guard/clients/register/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-register-node\\evidence\\native-host-stdout.bin",
+      "target": "guard/clients/register/evidence/native-host-stdout.bin.gz",
+      "originalBytes": 15414,
+      "storedBytes": 3409,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\original-input.json",
+      "target": "guard/clients/state-before/original-input.json",
+      "originalBytes": 2164,
+      "storedBytes": 2164,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\parent-joined.json",
+      "target": "guard/clients/state-before/parent-joined.json",
+      "originalBytes": 460,
+      "storedBytes": 460,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\stdout.bin",
+      "target": "guard/clients/state-before/stdout.bin.gz",
+      "originalBytes": 18832,
+      "storedBytes": 3258,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\stderr.bin",
+      "target": "guard/clients/state-before/stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\evidence\\native-host-ready.json",
+      "target": "guard/clients/state-before/evidence/native-host-ready.json",
+      "originalBytes": 1199,
+      "storedBytes": 1199,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\evidence\\native-host-settled.json",
+      "target": "guard/clients/state-before/evidence/native-host-settled.json",
+      "originalBytes": 2493,
+      "storedBytes": 2493,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\evidence\\native-host-stderr.bin",
+      "target": "guard/clients/state-before/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-before-node\\evidence\\native-host-stdout.bin",
+      "target": "guard/clients/state-before/evidence/native-host-stdout.bin.gz",
+      "originalBytes": 18832,
+      "storedBytes": 3258,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\original-input.json",
+      "target": "guard/clients/state-after/original-input.json",
+      "originalBytes": 2156,
+      "storedBytes": 2156,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\parent-joined.json",
+      "target": "guard/clients/state-after/parent-joined.json",
+      "originalBytes": 459,
+      "storedBytes": 459,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\stdout.bin",
+      "target": "guard/clients/state-after/stdout.bin.gz",
+      "originalBytes": 26679,
+      "storedBytes": 3786,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\stderr.bin",
+      "target": "guard/clients/state-after/stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\evidence\\native-host-ready.json",
+      "target": "guard/clients/state-after/evidence/native-host-ready.json",
+      "originalBytes": 1197,
+      "storedBytes": 1197,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\evidence\\native-host-settled.json",
+      "target": "guard/clients/state-after/evidence/native-host-settled.json",
+      "originalBytes": 2489,
+      "storedBytes": 2489,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\evidence\\native-host-stderr.bin",
+      "target": "guard/clients/state-after/evidence/native-host-stderr.bin",
+      "originalBytes": 0,
+      "storedBytes": 0,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-native-state-after-node\\evidence\\native-host-stdout.bin",
+      "target": "guard/clients/state-after/evidence/native-host-stdout.bin.gz",
+      "originalBytes": 26679,
+      "storedBytes": 3786,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\prepared-fixture.json",
+      "target": "guard/runtime/prepared-fixture.json.gz",
+      "originalBytes": 30761,
+      "storedBytes": 3109,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\launch-owner.json",
+      "target": "guard/runtime/launch-owner.json",
+      "originalBytes": 1850,
+      "storedBytes": 1850,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\startup.json",
+      "target": "guard/runtime/startup.json",
+      "originalBytes": 167,
+      "storedBytes": 167,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\stdout.log",
+      "target": "guard/runtime/stdout.log.gz",
+      "originalBytes": 554,
+      "storedBytes": 369,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\stderr.log",
+      "target": "guard/runtime/stderr.log.gz",
+      "originalBytes": 209058,
+      "storedBytes": 16515,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\evidence\\native-host-ready.json",
+      "target": "guard/runtime/evidence/native-host-ready.json",
+      "originalBytes": 1703,
+      "storedBytes": 1703,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\evidence\\native-host-settled.json",
+      "target": "guard/runtime/evidence/native-host-settled.json",
+      "originalBytes": 2432,
+      "storedBytes": 2432,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\evidence\\native-host-stderr.bin",
+      "target": "guard/runtime/evidence/native-host-stderr.bin.gz",
+      "originalBytes": 209058,
+      "storedBytes": 16515,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\evidence\\native-host-stdout.bin",
+      "target": "guard/runtime/evidence/native-host-stdout.bin",
+      "originalBytes": 554,
+      "storedBytes": 554,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\metadata-push-original.log",
+      "target": "guard/prior-delivery/metadata-push-original.log.gz",
+      "originalBytes": 3653,
+      "storedBytes": 1323,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\metadata-push-original.exit.json",
+      "target": "guard/prior-delivery/metadata-push-original.exit.json",
+      "originalBytes": 64,
+      "storedBytes": 64,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\metadata-final-upstream-proof.json",
+      "target": "guard/prior-delivery/metadata-final-upstream-proof.json",
+      "originalBytes": 145,
+      "storedBytes": 145,
+      "gzip": false,
+      "originalBytesPreserved": true
+    }
+  ],
+  "screenshotPresentation": {
+    "atUtc": "2026-10-13T21:10:31.122Z",
+    "qualification": "Expose the same immutable original JPEG bytes for direct visual review; no image editing or regeneration",
+    "changes": [
+      {
+        "target": "guard/screenshots/01-initial.jpg",
+        "originalBytes": 32960,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/02-file-tree.jpg",
+        "originalBytes": 36592,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/03-dependent-error-details.jpg",
+        "originalBytes": 55262,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/04-dependent-response-body.jpg",
+        "originalBytes": 50381,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/05-dependent-body-bottom.jpg",
+        "originalBytes": 50381,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/06-indirect-error.jpg",
+        "originalBytes": 43749,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/07-junction-move-success.jpg",
+        "originalBytes": 37953,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/08-symbolic-error-zh.jpg",
+        "originalBytes": 43228,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/09-symbolic-move-success-zh.jpg",
+        "originalBytes": 37320,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/10-published-directory-zh.jpg",
+        "originalBytes": 39744,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/11-marker-editor-zh.jpg",
+        "originalBytes": 33243,
+        "exactOriginalBytes": true
+      }
+    ]
+  }
+}

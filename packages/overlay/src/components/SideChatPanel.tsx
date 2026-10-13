@@ -500,8 +500,8 @@ export function SideChatPanel(props: {
             <span class="side-chat-panel__empty-icon">
               <Icon name={preparing() ? "loading" : "side-chat"} size="medium" />
             </span>
-            <strong>{preparing() ? t("side_chat.creating") : t("side_chat.empty")}</strong>
-            <span>{t("side_chat.empty_hint")}</span>
+            <strong>{preparing() ? t("side_chat.creating") : t(session() && inherited().size === 0 ? "side_chat.no_reference_history" : "side_chat.empty")}</strong>
+            <span>{t(!preparing() && session() && inherited().size === 0 ? "side_chat.no_reference_history_hint" : "side_chat.empty_hint")}</span>
             <Show when={selected() && !creating()}>
               <div class="side-chat-suggestions">
                 <For each={["side_chat.suggest_explain", "side_chat.suggest_tradeoffs", "side_chat.suggest_verify"]}>

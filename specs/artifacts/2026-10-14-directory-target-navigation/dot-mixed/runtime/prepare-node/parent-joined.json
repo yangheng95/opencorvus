@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-prepare-node-dc2d31af-ae0b-4bc2-955e-e122bc0abd59",
+  "hostPID": 82320,
+  "parentPID": 88764,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 76484
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 72
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T19:42:37.141Z"
+}

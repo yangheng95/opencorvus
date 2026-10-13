@@ -4,6 +4,16 @@ import { Token } from "../src/util/token"
 import { SessionLoop } from "../src/session/loop"
 
 describe("token estimate", () => {
+  test("incremental script counts retain the exact escaped whole-payload estimate", () => {
+    const before = JSON.stringify({ content: "前缀😀" + "REFERENCE" + "suffix" })
+    const replacement = '中文<"&😀\\\n'.repeat(130)
+    const old = Token.countScripts("REFERENCE")
+    const next = Token.countScripts(JSON.stringify(replacement).slice(1, -1))
+    const base = Token.countScripts(before)
+    expect(
+      Token.estimateCounts({ dense: base.dense + next.dense - old.dense, latin: base.latin + next.latin - old.latin }),
+    ).toBe(Token.estimate(JSON.stringify({ content: "前缀😀" + replacement + "suffix" })))
+  })
   test("splits a string into dense-script and latin characters", () => {
     expect(Token.countScripts("abc")).toEqual({ dense: 0, latin: 3 })
     expect(Token.countScripts("财务报表")).toEqual({ dense: 4, latin: 0 })

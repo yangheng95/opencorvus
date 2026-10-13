@@ -1,0 +1,63 @@
+{
+  "schema": "directory-target-dot-mixed-input/v1",
+  "status": "proposal-only; Root must review and separately authorize execution",
+  "runRoot": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-dot-mixed-01a133",
+  "manifestName": "dot-mixed-fixture.json",
+  "maximumCases": 6,
+  "maximumFileBytes": 128,
+  "platform": "win32",
+  "architecture": "x64",
+  "packageAnchor": "D:/myhexin-local/opencorvus/packages/opencorvus/package.json",
+  "koffiVersion": "3.3.2",
+  "runtimes": {
+    "node": { "executable": "C:/Program Files/nodejs/node.exe", "nodeVersion": "25.7.0" },
+    "bun": { "executable": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/ui-bundle/bin/bun.exe", "bunVersion": "1.4.0" }
+  },
+  "nativeInput": { "library": "kernel32.dll", "desiredAccess": 0, "shareMode": 7, "securityAttributes": null, "creationDisposition": 3, "flagsAndAttributes": 35651584, "flagsHex": "0x02200000", "templateFile": null, "fileInformationClass": 9, "struct": { "FileAttributes": "uint32_t", "ReparseTag": "uint32_t" }, "bufferSize": 8 },
+  "modelCallsRequested": "none",
+  "cases": [
+    {
+      "id": "dot-ordinary", "description": "ordinary v; u stores raw v/../goal",
+      "directories": ["tree", "tree/v", "physical", "physical/data"],
+      "files": [{ "path": "tree/goal", "literal": "dot-ordinary:tree-goal\n" }, { "path": "physical/goal", "literal": "dot-ordinary:physical-goal\n" }],
+      "links": [{ "path": "tree/u", "type": "file", "rawRelativeText": "v/../goal" }],
+      "observations": [{ "id": "v", "path": "tree/v" }, { "id": "u", "path": "tree/u" }, { "id": "tree-goal", "path": "tree/goal" }, { "id": "physical-goal", "path": "physical/goal" }, { "id": "raw-access", "base": "tree", "rawSuffix": "v/../goal" }]
+    },
+    {
+      "id": "dot-absolute-symbolic", "description": "absolute directory symbolic v -> physical/data; u stores raw v/../goal",
+      "directories": ["tree", "physical", "physical/data"],
+      "files": [{ "path": "tree/goal", "literal": "dot-absolute-symbolic:tree-goal\n" }, { "path": "physical/goal", "literal": "dot-absolute-symbolic:physical-goal\n" }],
+      "links": [{ "path": "tree/v", "type": "dir", "absoluteTarget": "physical/data" }, { "path": "tree/u", "type": "file", "rawRelativeText": "v/../goal" }],
+      "observations": [{ "id": "v", "path": "tree/v" }, { "id": "u", "path": "tree/u" }, { "id": "tree-goal", "path": "tree/goal" }, { "id": "physical-goal", "path": "physical/goal" }, { "id": "raw-access", "base": "tree", "rawSuffix": "v/../goal" }]
+    },
+    {
+      "id": "dot-junction", "description": "junction v -> physical/data; u stores raw v/../goal",
+      "directories": ["tree", "physical", "physical/data"],
+      "files": [{ "path": "tree/goal", "literal": "dot-junction:tree-goal\n" }, { "path": "physical/goal", "literal": "dot-junction:physical-goal\n" }],
+      "links": [{ "path": "tree/v", "type": "junction", "absoluteTarget": "physical/data" }, { "path": "tree/u", "type": "file", "rawRelativeText": "v/../goal" }],
+      "observations": [{ "id": "v", "path": "tree/v" }, { "id": "u", "path": "tree/u" }, { "id": "tree-goal", "path": "tree/goal" }, { "id": "physical-goal", "path": "physical/goal" }, { "id": "raw-access", "base": "tree", "rawSuffix": "v/../goal" }]
+    },
+    {
+      "id": "dot-broken-symbolic", "description": "directory symbolic v -> declared missing physical/missing; no result for u is assumed",
+      "directories": ["tree", "physical", "physical/data"],
+      "files": [{ "path": "tree/goal", "literal": "dot-broken-symbolic:tree-goal\n" }, { "path": "physical/goal", "literal": "dot-broken-symbolic:physical-goal\n" }],
+      "links": [{ "path": "tree/v", "type": "dir", "absoluteTarget": "physical/missing" }, { "path": "tree/u", "type": "file", "rawRelativeText": "v/../goal" }],
+      "declaredMissing": [{ "path": "physical/missing", "operation": "lstat", "expectedCode": "ENOENT" }],
+      "observations": [{ "id": "v", "path": "tree/v" }, { "id": "u", "path": "tree/u" }, { "id": "tree-goal", "path": "tree/goal" }, { "id": "physical-goal", "path": "physical/goal" }, { "id": "raw-access", "base": "tree", "rawSuffix": "v/../goal" }]
+    },
+    {
+      "id": "mixed-junction", "description": "S absolute symbolic -> B/J; J junction -> D/data; r raw ../goal",
+      "directories": ["B", "D", "D/data"],
+      "files": [{ "path": "B/goal", "literal": "mixed-junction:B-goal\n" }, { "path": "D/goal", "literal": "mixed-junction:D-goal\n" }],
+      "links": [{ "path": "D/data/r", "type": "file", "rawRelativeText": "../goal" }, { "path": "B/J", "type": "junction", "absoluteTarget": "D/data" }, { "path": "S", "type": "dir", "absoluteTarget": "B/J" }],
+      "observations": [{ "id": "S", "path": "S" }, { "id": "inner-J", "path": "B/J" }, { "id": "r-direct", "path": "D/data/r" }, { "id": "r-through-S", "path": "S/r" }, { "id": "B-goal", "path": "B/goal" }, { "id": "D-goal", "path": "D/goal" }]
+    },
+    {
+      "id": "mixed-absolute-symbolic", "description": "S absolute symbolic -> B/T; T absolute directory symbolic -> D/data; r raw ../goal",
+      "directories": ["B", "D", "D/data"],
+      "files": [{ "path": "B/goal", "literal": "mixed-absolute-symbolic:B-goal\n" }, { "path": "D/goal", "literal": "mixed-absolute-symbolic:D-goal\n" }],
+      "links": [{ "path": "D/data/r", "type": "file", "rawRelativeText": "../goal" }, { "path": "B/T", "type": "dir", "absoluteTarget": "D/data" }, { "path": "S", "type": "dir", "absoluteTarget": "B/T" }],
+      "observations": [{ "id": "S", "path": "S" }, { "id": "inner-T", "path": "B/T" }, { "id": "r-direct", "path": "D/data/r" }, { "id": "r-through-S", "path": "S/r" }, { "id": "B-goal", "path": "B/goal" }, { "id": "D-goal", "path": "D/goal" }]
+    }
+  ]
+}

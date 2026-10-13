@@ -5,10 +5,12 @@ import {
   applyEvent as replayTaskEventToTree,
   applyConversationTurnArtifacts,
   commitPreparedConversationView,
+  commitStandalonePermissionInteractions,
   commitStandaloneQuestionInteractions,
   deferConversationTreeProjection,
   prepareConversationView,
   prepareStandaloneQuestionInteractions,
+  replaceStandalonePermissionInteractions,
   resetWriter,
   validateConversationBoardInteractions,
 } from "./tree-writer"
@@ -43,6 +45,7 @@ import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { conversationEventOwner } from "./event-policy"
 import { conversationHistoryPath } from "./conversation-history-path"
 import { captureMainReadingPosition } from "../store/conversation-ui"
+import { preparePermissionInteractions } from "../utils/permission-interaction"
 
 type EventReplay = {
   cursor: number
@@ -458,12 +461,17 @@ export function mergeSessionConnectionSnapshot(
   const view = requireObject(snapshot.view, "session.connected conversationSnapshot.view")
   const history = parseHistoryState(snapshot.history)
   const preparedConversation = prepareConversationView(view, transcript)
+  const preparedPermissions = preparePermissionInteractions(
+    requireArray(snapshot.pendingPermissions, "session.connected conversationSnapshot.pendingPermissions"),
+    conversationSourceDirectory(source),
+  )
   historyEpoch += 1
   historyAbort?.abort(new DOMException("Session connection snapshot superseded older history", "AbortError"))
   historyAbort = null
   historyLoading = false
   batch(() => {
     deferConversationTreeProjection(() => {
+      replaceStandalonePermissionInteractions(preparedPermissions)
       commitPreparedConversationView(preparedConversation)
     })
   })
@@ -685,6 +693,7 @@ export async function hydrateConversation(
     const responseDirectory = source.kind === "task" ? hydratedTaskDirectory(board, source.id) : requestDirectory
     const transcript = requireArray(data?.transcript, "transcript")
     const pendingQuestions = source.kind === "session" ? requireArray(data?.pendingQuestions, "pendingQuestions") : []
+    const pendingPermissions = source.kind === "session" ? requireArray(data?.pendingPermissions, "pendingPermissions") : []
     const events = requireArray(data?.events, "events")
     const view = requireObject(data?.view, "view")
     const agentView = requireObject(data?.agentView, "agentView") as unknown as ConversationAgentView
@@ -697,8 +706,9 @@ export async function hydrateConversation(
     const rewindCursor = parseRewindCursor((board as any).rewindCursor)
     const lastSequence = source.kind === "task" ? requireNonnegativeInteger(data?.lastSequence, "lastSequence") : 0
     const preparedQuestions = prepareStandaloneQuestionInteractions(pendingQuestions)
+    const preparedPermissions = preparePermissionInteractions(pendingPermissions, responseDirectory)
     const preparedConversation = prepareConversationView(view, transcript)
-    validateConversationBoardInteractions(board, preparedQuestions)
+    validateConversationBoardInteractions(board, [...preparedQuestions, ...preparedPermissions])
     if (source.kind === "task") validateBoardData(board)
     validateConversationAgentView(agentView, {
       rootSessionID,
@@ -715,6 +725,7 @@ export async function hydrateConversation(
             cause: hydrateCause,
           })
           commitStandaloneQuestionInteractions(preparedQuestions)
+          commitStandalonePermissionInteractions(preparedPermissions)
           if (source.kind === "task") {
             setBoardData(board, { notifyProjection: false })
             setTaskSequence(Number.isFinite(lastSequence) && lastSequence > 0 ? lastSequence : 0)

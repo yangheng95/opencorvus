@@ -27,6 +27,7 @@ import {
   providerAuthMethods,
   providerApiKeyConfigured,
   providerState,
+  readProviderTestResult,
   testProviderConnection,
   type AuthDialogCallbacks,
   type ProviderTestResult,
@@ -101,6 +102,32 @@ interface AuthMutationResult {
   issues: Array<{ phase?: string; providerID?: string; message: string }>
 }
 
+type ProviderTestObservation = { kind: "result"; result: ProviderTestResult } | { kind: "error"; error: unknown }
+
+function connectionResult(observation: ProviderTestObservation): ProviderTestResult | undefined {
+  return observation.kind === "result"
+    ? observation.result
+    : observation.error instanceof ApiError
+      ? readProviderTestResult(observation.error.body)
+      : undefined
+}
+
+function connectionSummary(observation: ProviderTestObservation): string {
+  const result = connectionResult(observation)
+  return result?.ok
+    ? "provider.test.success"
+    : result?.code === "no_models"
+      ? "provider.test.no_models"
+      : "provider.test.failed"
+}
+
+function connectionDetails(observation: ProviderTestObservation): string {
+  if (observation.kind === "error") return formatErrorDetails(observation.error)
+  const result = observation.result
+  const identity = [result.providerID, result.modelID].filter(Boolean).join("/")
+  return [identity, result.ok ? "" : result.message, result.output].filter(Boolean).join("\n")
+}
+
 const VISIBLE_MODEL_SUMMARY_LIMIT = 8
 
 export default function ProvidersPanel() {
@@ -110,10 +137,10 @@ export default function ProvidersPanel() {
   const [showAdd, setShowAdd] = createSignal(false)
   // Per-provider connectivity-test state. testing/results are keyed by
   // provider id so the operator can run several tests in parallel and
-  // see each result tagged to its row. Cleared when the provider is
-  // edited or removed (covered by row remount via the For key).
+  // see each result tagged to its row. Accepted provider mutations retire
+  // the affected observation; scope changes retire the whole panel.
   const [testing, setTesting] = createSignal<Set<string>>(new Set())
-  const [testResults, setTestResults] = createSignal<Map<string, ProviderTestResult>>(new Map())
+  const [testResults, setTestResults] = createSignal<Map<string, ProviderTestObservation>>(new Map())
   const [authing, setAuthing] = createSignal<Set<string>>(new Set())
   const [savingKey, setSavingKey] = createSignal<Set<string>>(new Set())
   const [deletingProviders, setDeletingProviders] = createSignal<Set<string>>(new Set())
@@ -159,13 +186,24 @@ export default function ProvidersPanel() {
   }
 
   async function updateActiveProviderConfig(
+    providerID: string,
     directory: string,
     mutator: (config: Record<string, any>) => void,
     options: ReturnType<typeof providerLoadOptions>,
   ): Promise<any> {
-    return directory.trim()
-      ? await updateConfig(mutator, options)
-      : await updateGlobalConfig(mutator, options.authority)
+    const retire = () => {
+      if (options.isCurrentDirectory(directory)) retireProviderTest(providerID)
+    }
+    try {
+      const result = directory.trim()
+        ? await updateConfig(mutator, options)
+        : await updateGlobalConfig(mutator, options.authority)
+      retire()
+      return result
+    } catch (error) {
+      if (committedConfigFromError(error)) retire()
+      throw error
+    }
   }
 
   function formatRelative(ms: number): string {
@@ -182,6 +220,24 @@ export default function ProvidersPanel() {
   let providerTestScopeGeneration = 0
   const providerTestGenerations = new Map<string, number>()
 
+  function retireProviderTest(providerID: string) {
+    providerTestGenerations.set(providerID, (providerTestGenerations.get(providerID) ?? 0) + 1)
+    setTesting((previous) => {
+      const next = new Set(previous)
+      next.delete(providerID)
+      return next
+    })
+    setTestResults((previous) => {
+      const next = new Map(previous)
+      next.delete(providerID)
+      return next
+    })
+  }
+
+  function retireAllProviderTests() {
+    for (const providerID of providerTestGenerations.keys()) retireProviderTest(providerID)
+  }
+
   async function refreshProviderCatalog(
     directory: string,
     options: ReturnType<typeof providerLoadOptions>,
@@ -196,6 +252,7 @@ export default function ProvidersPanel() {
         setProviderRefreshError(feedback("provider.catalog_refresh.failed", result.error))
         return
       }
+      retireAllProviderTests()
       setLastProvidersRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
         setProviderRefreshError(
@@ -227,6 +284,9 @@ export default function ProvidersPanel() {
       if (!result.ok) {
         setModelRefreshError(feedback("provider.model_refresh.failed", result.error))
         return
+      }
+      if (result.providers) {
+        for (const provider of result.providers) retireProviderTest(provider.providerID)
       }
       setLastModelsRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
@@ -268,7 +328,7 @@ export default function ProvidersPanel() {
         setFormError(null)
         setApiKeyInputs(new Map<string, string>())
         setTesting(new Set<string>())
-        setTestResults(new Map<string, ProviderTestResult>())
+        setTestResults(new Map<string, ProviderTestObservation>())
         setLastProvidersRefreshedAt(null)
         setLastModelsRefreshedAt(null)
         setProviderRefreshError(null)
@@ -294,40 +354,30 @@ export default function ProvidersPanel() {
     if (options.isCurrentDirectory(directory)) await reloadProviderInfo(directory, options)
   }
 
-  async function handleTest(providerId: string, models: Record<string, ProviderModel>) {
-    const modelID = Object.keys(models)[0]
-    if (!modelID) {
-      setTestResults((prev) => {
-        const next = new Map(prev)
-        next.set(providerId, { ok: false, message: t("provider.test.no_models") })
-        return next
-      })
-      return
-    }
+  async function handleTest(providerId: string) {
     const directory = activeDirectory().trim()
     const scopeGeneration = providerTestScopeGeneration
     const options = providerLoadOptions(directory)
-    const generation = (providerTestGenerations.get(providerId) ?? 0) + 1
-    providerTestGenerations.set(providerId, generation)
+    retireProviderTest(providerId)
+    const generation = providerTestGenerations.get(providerId)
     const ownsResult = () =>
       scopeGeneration === providerTestScopeGeneration &&
       generation === providerTestGenerations.get(providerId) &&
       options.isCurrentDirectory(directory)
     setTesting((prev) => new Set(prev).add(providerId))
     try {
-      const result = await testProviderConnection(providerId, modelID, options)
+      const result = await testProviderConnection(providerId, undefined, options)
       if (!ownsResult()) return
       setTestResults((prev) => {
         const next = new Map(prev)
-        next.set(providerId, result)
+        next.set(providerId, { kind: "result", result })
         return next
       })
     } catch (err) {
       if (!ownsResult()) return
-      const msg = err instanceof Error ? err.message : String(err)
       setTestResults((prev) => {
         const next = new Map(prev)
-        next.set(providerId, { ok: false, message: msg })
+        next.set(providerId, { kind: "error", error: err })
         return next
       })
     } finally {
@@ -378,6 +428,7 @@ export default function ProvidersPanel() {
     try {
       const ok = await authenticateSelectedProvider(providerId, authCallbacks(owns), options)
       if (ok && owns()) {
+        retireProviderTest(providerId)
         try {
           await refreshAuthState(options)
           if (!owns()) return
@@ -650,6 +701,7 @@ export default function ProvidersPanel() {
     try {
       try {
         await updateActiveProviderConfig(
+          id,
           directory,
           (cfg) => {
             removeDisabledProvider(cfg, id)
@@ -676,6 +728,7 @@ export default function ProvidersPanel() {
                 body: JSON.stringify({ type: "api", key: apiKey }),
               })) as AuthMutationResult
               credentialCommitted = true
+              if (options.isCurrentDirectory(directory)) retireProviderTest(id)
               return result.issues
             },
           },
@@ -683,7 +736,7 @@ export default function ProvidersPanel() {
             phase: "config.credential-cleanup",
             run: async () => {
               if (credentialCommitted) {
-                await updateActiveProviderConfig(directory, (cfg) => removeProjectApiKeyOverride(cfg, id), options)
+                await updateActiveProviderConfig(id, directory, (cfg) => removeProjectApiKeyOverride(cfg, id), options)
               }
             },
           },
@@ -788,7 +841,10 @@ export default function ProvidersPanel() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ type: "api", key: value }),
             })) as AuthMutationResult
-            if (owns()) clearApiKeyInput(providerId)
+            if (owns()) {
+              retireProviderTest(providerId)
+              clearApiKeyInput(providerId)
+            }
             return authResult.issues
           },
         },
@@ -797,6 +853,7 @@ export default function ProvidersPanel() {
           run: async () => {
             if (!authResult) return
             await updateActiveProviderConfig(
+              providerId,
               directory,
               (cfg) => {
                 removeProjectApiKeyOverride(cfg, providerId)
@@ -889,11 +946,7 @@ export default function ProvidersPanel() {
           : null
       if (residueNotice) setFormError(residueNotice)
       clearApiKeyInput(id)
-      setTestResults((prev) => {
-        const next = new Map(prev)
-        next.delete(id)
-        return next
-      })
+      retireProviderTest(id)
       try {
         await refreshAuthState(options)
       } catch (error) {
@@ -1218,7 +1271,7 @@ export default function ProvidersPanel() {
                           variant="outline"
                           size="md"
                           tone="neutral"
-                          onClick={() => void handleTest(row.id, row.provider.models || {})}
+                          onClick={() => void handleTest(row.id)}
                           disabled={testing().has(row.id)}
                           title={t("provider.test.button_title")}
                           data-testid={`provider-test-${row.id}`}
@@ -1254,10 +1307,16 @@ export default function ProvidersPanel() {
                       </div>
                       <Show when={testResults().get(row.id)}>
                         {(result) => (
-                          <Feedback class="provider-connection-feedback" tone={result().ok ? "success" : "error"}>
-                            {result().ok
-                              ? result().message || t("provider.test.success")
-                              : result().message || t("provider.test.failed")}
+                          <Feedback
+                            class="provider-connection-feedback"
+                            tone={connectionResult(result())?.ok ? "success" : "error"}
+                            details={connectionDetails(result())}
+                          >
+                            {t(connectionSummary(result()))}
+                            <Show when={connectionResult(result())?.modelID}>
+                              {" · "}
+                              {connectionResult(result())?.modelID}
+                            </Show>
                           </Feedback>
                         )}
                       </Show>

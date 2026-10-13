@@ -27,6 +27,19 @@ export namespace ContextBudget {
     return capacity(input).tokens
   }
 
+  /** Divide discretionary compactor space between source detail and one read exchange.
+   * Keep room for model-authored working notes even when the model output limit
+   * exceeds this caller's configured prompt ceiling. Mandatory context is priced first. */
+  export function compactionWorkspace(input: {
+    capacityTokens: number
+    minimumTokens: number
+    maxOutputTokens: number
+  }) {
+    const free = Math.max(0, input.capacityTokens - input.minimumTokens)
+    const responseTokens = Math.min(input.maxOutputTokens, Math.floor(free / 2))
+    return { responseTokens, readTokens: Math.floor((free - responseTokens) / 2) }
+  }
+
   export function preserveRecent(input: { config: Config.Info; model: Provider.Model }) {
     return Math.min(
       Math.floor(usable(input) * threshold(input)),

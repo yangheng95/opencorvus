@@ -416,6 +416,184 @@ test("copying an independent terminal root link publishes a link and retains the
   await textContent(http, "copied-root-link/root-marker.md")
 }, 60_000)
 
+function dependentDestination(result: { status: number; body: any }, target: string) {
+  expect(result).toEqual({
+    status: 400,
+    body: {
+      name: "FileInvalidPathError",
+      data: { path: target, message: `Destination parent depends on the source entry being moved: ${target}` },
+    },
+  })
+}
+
+test.each(["junction", "dir", "indirect", ...(process.platform === "win32" ? ["uppercase"] : [])] as const)(
+  "%s destination dependency returns 400 and the retained source can move through an independent alias",
+  async (mode) => {
+    await using fixture = await project(`link-move-dependency-${mode}`)
+    const data = path.join(fixture.path, "data")
+    await fs.mkdir(data)
+    await fs.mkdir(path.join(fixture.path, "context"))
+    await fs.writeFile(path.join(data, "marker.md"), marker)
+    const source = "Source-Link"
+    const kind = mode === "dir" ? "dir" : "junction"
+    await link(data, path.join(fixture.path, source), kind)
+    await link(data, path.join(fixture.path, "alias"), kind)
+    await link(`../${source}`, path.join(fixture.path, "context", "indirect"), "dir")
+    const original = await linkIdentity(path.join(fixture.path, source))
+    const independent = await linkIdentity(path.join(fixture.path, "alias"))
+    const target =
+      mode === "indirect" ? "context/indirect/moved" : `${mode === "uppercase" ? source.toUpperCase() : source}/moved`
+    await using http = await api(fixture.path)
+    dependentDestination(await http.mutate("move", source, target), target)
+    expect(await linkIdentity(path.join(fixture.path, source))).toEqual(original)
+    await textContent(http, `${source}/marker.md`)
+    await exactBytes(path.join(data, "marker.md"))
+    const admitted = "alias/moved"
+    published(
+      await http.mutate("move", source, admitted),
+      "move",
+      source,
+      admitted,
+      node(fixture.path, path.join(fixture.path, admitted)),
+    )
+    expect(await linkIdentity(path.join(fixture.path, admitted))).toEqual(original)
+    expect(await linkIdentity(path.join(fixture.path, "alias"))).toEqual(independent)
+    await textContent(http, "alias/moved/marker.md")
+    expect(await http.waitForEdits([source, admitted])).toEqual(
+      expect.arrayContaining(
+        [source, admitted].map((file) => ({ file, processAuthority: { kind: "host", cwd: fixture.path } })),
+      ),
+    )
+  },
+  60_000,
+)
+
+test.each(["junction", "dir"] as const)(
+  "mixed %s ancestors preserve the real relative namespace during Move admission",
+  async (kind) => {
+    await using fixture = await project(`link-move-mixed-${kind}`)
+    for (const name of ["context", "D/data", "output"])
+      await fs.mkdir(path.join(fixture.path, name), { recursive: true })
+    await fs.writeFile(path.join(fixture.path, "output", "marker.md"), marker)
+    await link(path.join(fixture.path, "output"), path.join(fixture.path, "context", "goal"), "dir")
+    await link(path.join(fixture.path, "output"), path.join(fixture.path, "D", "goal"), "dir")
+    await link(path.join(fixture.path, "D", "data"), path.join(fixture.path, "context", "inner"), kind)
+    await link(path.join(fixture.path, "context", "inner"), path.join(fixture.path, "S"), "dir")
+    await link("../goal", path.join(fixture.path, "D", "data", "r"), "dir")
+    const source = "context/goal",
+      target = "S/r/moved"
+    const original = await linkIdentity(path.join(fixture.path, source))
+    await using http = await api(fixture.path)
+    const result = await http.mutate("move", source, target)
+    if (process.platform === "win32" && kind === "junction") {
+      dependentDestination(result, target)
+      expect(await linkIdentity(path.join(fixture.path, source))).toEqual(original)
+    } else {
+      published(result, "move", source, target, node(fixture.path, path.join(fixture.path, target)))
+      expect(await linkIdentity(path.join(fixture.path, target))).toEqual(original)
+      await textContent(http, `${target}/marker.md`)
+    }
+    await exactBytes(path.join(fixture.path, "output", "marker.md"))
+  },
+  60_000,
+)
+
+test.skipIf(process.platform !== "win32")(
+  "Windows folds cancelled relative components before observing ordinary, symbolic, junction and broken entries",
+  async () => {
+    for (const kind of ["directory", "dir", "junction", "broken"] as const) {
+      await using fixture = await project(`link-move-folded-dot-${kind}`)
+      const tree = path.join(fixture.path, "tree"),
+        data = path.join(fixture.path, "data")
+      await fs.mkdir(tree)
+      await fs.mkdir(data)
+      await fs.writeFile(path.join(data, "marker.md"), marker)
+      if (kind === "directory") {
+        await fs.mkdir(path.join(tree, "v"))
+        await fs.writeFile(path.join(tree, "v", "note.md"), replacement)
+      } else
+        await link(
+          kind === "broken" ? path.join(fixture.path, "missing") : data,
+          path.join(tree, "v"),
+          kind === "junction" ? "junction" : "dir",
+        )
+      await link(data, path.join(tree, "goal"), "dir")
+      await link("v/../goal", path.join(tree, "u"), "dir")
+      const original = await identity(path.join(tree, "v"))
+      const originalText = kind === "directory" ? undefined : await fs.readlink(path.join(tree, "v"))
+      await using http = await api(fixture.path)
+      const source = "tree/v",
+        target = "tree/u/moved"
+      published(
+        await http.mutate("move", source, target),
+        "move",
+        source,
+        target,
+        node(fixture.path, path.join(fixture.path, target), false, kind === "directory" ? "directory" : "file"),
+      )
+      expect(await identity(path.join(fixture.path, target))).toEqual(original)
+      if (originalText !== undefined) expect(await fs.readlink(path.join(fixture.path, target))).toBe(originalText)
+      if (kind === "directory") await exactBytes(path.join(fixture.path, target, "note.md"), replacement)
+      else if (kind === "broken") missing(await http.content(`${target}/marker.md`), `${target}/marker.md`)
+      else await textContent(http, `${target}/marker.md`)
+      await exactBytes(path.join(data, "marker.md"))
+    }
+  },
+  90_000,
+)
+
+test("Move rejects an ordinary directory's retiring parent and admits finite independent root aliases", async () => {
+  await using fixture = await project("link-move-directory-dependency")
+  const source = "tree"
+  await fs.mkdir(path.join(fixture.path, source, "sub"), { recursive: true })
+  await fs.writeFile(path.join(fixture.path, source, "note.md"), marker)
+  const original = await identity(path.join(fixture.path, source))
+  await using http = await api(fixture.path)
+  const dependent = "tree/sub/moved"
+  dependentDestination(await http.mutate("move", source, dependent), dependent)
+  expect(await identity(path.join(fixture.path, source))).toEqual(original)
+  await exactBytes(path.join(fixture.path, source, "note.md"))
+  await link(fixture.path, path.join(fixture.path, "root-link"), "junction")
+  const target = "root-link/root-link/moved"
+  published(
+    await http.mutate("move", source, target),
+    "move",
+    source,
+    target,
+    node(fixture.path, path.join(fixture.path, target), false, "directory"),
+  )
+  expect(await identity(path.join(fixture.path, target))).toEqual(original)
+  await textContent(http, `${target}/note.md`)
+}, 60_000)
+
+test.each(["healthy", "dangling"] as const)(
+  "Move returns entry conflict for an existing %s destination through its source",
+  async (kind) => {
+    await using fixture = await project(`link-move-conflict-dependent-${kind}`)
+    const data = path.join(fixture.path, "data")
+    await fs.mkdir(data)
+    await link(data, path.join(fixture.path, "source"), "junction")
+    const target = "source/existing"
+    if (kind === "healthy") await fs.writeFile(path.join(data, "existing"), replacement)
+    else await link("missing", path.join(data, "existing"), "file")
+    const originalSource = await linkIdentity(path.join(fixture.path, "source"))
+    const originalTarget = await identity(path.join(data, "existing"))
+    await using http = await api(fixture.path)
+    expect(await http.mutate("move", "source", target)).toEqual({
+      status: 409,
+      body: {
+        name: "FileConflictError",
+        data: { path: target, message: `File destination already exists: ${target}` },
+      },
+    })
+    expect(await linkIdentity(path.join(fixture.path, "source"))).toEqual(originalSource)
+    expect(await identity(path.join(data, "existing"))).toEqual(originalTarget)
+    if (kind === "healthy") await exactBytes(path.join(data, "existing"), replacement)
+    else expect(await fs.readlink(path.join(data, "existing"))).toBe("missing")
+  },
+  60_000,
+)
+
 test("healthy external link targets retain the existing 400 source authority contract for every action", async () => {
   await using fixture = await project("link-external-source")
   await using external = await project("link-external-source-target")

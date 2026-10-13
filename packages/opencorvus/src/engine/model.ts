@@ -1,4 +1,5 @@
 import z from "zod"
+import { PermissionRequest } from "@/permission/types"
 import { TaskLifecycleProjectionSchema } from "./task-lifecycle-schema"
 import { InteractionUserInput } from "@/memory/interaction-user-input"
 import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
@@ -1028,6 +1029,8 @@ export const SessionBoardEnvelope = z.object({
   ),
 })
 
+export const SessionPendingPermission = PermissionRequest.extend({ orderKey: z.string().min(1) })
+
 export const SessionPendingQuestion = QuestionRequest.extend({
   orderKey: z.string().min(1),
 })
@@ -1050,6 +1053,7 @@ export const SessionEvent = SessionEventEnvelope.extend({
 
 export const SessionConversationConnectionSnapshot = z
   .object({
+    pendingPermissions: SessionPendingPermission.array(),
     transcript: z.array(
       z.object({
         info: z.intersection(
@@ -1091,6 +1095,7 @@ export const SessionProtocolEventType = z.enum([
   "message.part.removed",
   "permission.asked",
   "permission.replied",
+  "permission.terminated",
   "question.asked",
   "question.replied",
   "question.rejected",
@@ -1113,6 +1118,7 @@ export const SessionStreamEvent = z
 export const SessionConversationHydration = z.object({
   board: SessionBoardEnvelope,
   pendingQuestions: SessionPendingQuestion.array(),
+  pendingPermissions: SessionPendingPermission.array(),
   transcript: MessageVisibleWithPartsArray,
   events: SessionEvent.array(),
   history: TaskConversationHistoryState,

@@ -1,0 +1,21 @@
+{
+  "observedAtUtc": "2026-10-13T20:30:48.6327009Z",
+  "arguments": [
+    "-e",
+    "import path from \"node:path\";\r\nconst root=process.argv[1];\r\nprocess.env.OPENCORVUS_HOME=path.join(root,\"runtime\");\r\nprocess.env.OPENCORVUS_TEST_HOME=path.join(root,\"home\");\r\nprocess.env.OPENCORVUS_TEST_PROCESS_ROOT=root;\r\nconst {installProcessShims}=await import(\"file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/runtime/shims.ts\");\r\ninstallProcessShims();\r\nconst {observeRuntimeProcessOccurrence}=await import(\"file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/runtime/process-occurrence.ts\");\r\nconsole.log(observeRuntimeProcessOccurrence(JSON.parse(process.argv[2])));",
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\native-observer",
+    "{\"pid\":71960,\"processInstanceID\":\"win32:639275202435145245\",\"occurrenceID\":\"252ff5fc-dbf5-4d39-96c9-35e68c06fecf\"}"
+  ],
+  "exitCode": 0,
+  "observerStartTimeUtcTicks": 639275202484387215,
+  "qualification": "Original decoded ReadToEnd stdout/stderr after both tasks and natural WaitForExit; not a binary-stream or reg-child identity claim",
+  "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+  "observerPID": 88272,
+  "stdoutDecoded": "exact_live",
+  "expected": {
+    "pid": 71960,
+    "processInstanceID": "win32:639275202435145245",
+    "occurrenceID": "252ff5fc-dbf5-4d39-96c9-35e68c06fecf"
+  },
+  "stderrDecoded": ""
+}

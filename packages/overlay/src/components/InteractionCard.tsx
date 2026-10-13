@@ -15,9 +15,11 @@
 import { createEffect, createMemo, createSignal, createUniqueId, For, onCleanup, Show } from "solid-js"
 import { t } from "../utils/i18n"
 import { renderMarkdown } from "../utils/markdown"
-import { loadBoard } from "../store/board"
+import { boardStore, loadBoard } from "../store/board"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import {
   type InteractionReplyEndpoint,
+  type InteractionReplyTarget,
   type PermissionDecision,
   replyInteraction,
   rejectInteraction,
@@ -147,14 +149,31 @@ export function InteractionCard(props: InteractionCardProps) {
     })
   }
 
-  async function runAction(fn: () => Promise<void>) {
+  async function runAction(fn: (target: InteractionReplyTarget, endpoint: InteractionReplyEndpoint) => Promise<void>) {
     if (busy()) return
     setBusy(true)
     setError("")
     queueMicrotask(() => cardElement?.focus())
     try {
-      await fn()
-      await (props.afterReply ? props.afterReply() : loadBoard())
+      const target = replyTarget()
+      const endpoint = replyEndpoint()
+      const source = boardStore.selectedSource ? { ...boardStore.selectedSource } : null
+      const selectionEpoch = boardStore.selectEpoch
+      const authority = captureApiAuthority()
+      const afterReply = props.afterReply
+      await fn(target, endpoint)
+      if (afterReply) {
+        await afterReply()
+      } else if (
+        source?.kind === "task" &&
+        isApiAuthorityCurrent(authority) &&
+        selectionEpoch === boardStore.selectEpoch &&
+        boardStore.selectedSource?.kind === source.kind &&
+        boardStore.selectedSource.id === source.id &&
+        currentTraceDirectory() === target.directory
+      ) {
+        await loadBoard({ authority })
+      }
     } catch (err: any) {
       setError(err?.message || String(err))
       queueMicrotask(() => (errorElement ?? cardElement)?.focus())
@@ -164,23 +183,23 @@ export function InteractionCard(props: InteractionCardProps) {
   }
 
   const resolvePermission = (action: PermissionDecision) =>
-    runAction(() => replyInteraction(replyTarget(), action, false, {}, replyEndpoint()))
-  const reject = () => runAction(() => rejectInteraction(replyTarget(), false, replyEndpoint()))
+    runAction((target, endpoint) => replyInteraction(target, action, false, {}, endpoint))
+  const reject = () => runAction((target, endpoint) => rejectInteraction(target, false, endpoint))
   const submitAnswers = () =>
-    runAction(() => {
+    runAction((target, endpoint) => {
       const answers = questions().map((_, idx) => {
         const picked = getSelected(idx)
         const custom = (customText()[idx] ?? "").trim()
         return custom ? [...picked, custom] : picked
       })
       return replyInteraction(
-        replyTarget(),
+        target,
         "answer",
         false,
         {
           answers,
         },
-        replyEndpoint(),
+        endpoint,
       )
     })
 

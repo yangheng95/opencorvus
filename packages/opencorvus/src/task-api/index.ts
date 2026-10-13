@@ -94,7 +94,7 @@ import { awaitWithAbort } from "@/util/abort"
 import { bindMissionClosingChildTaskCanceller } from "@/mission/execution-close-effects"
 import { bindMissionRetentionSessionDeleter } from "@/mission/retention"
 import { MissionSessionAuthorityError } from "@/mission/public-session-authority"
-import { compileBoard, boardTag } from "@/workbench/board"
+import { compileBoard } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
   EngineArtifactTable,
@@ -2158,8 +2158,8 @@ export namespace EngineService {
   /**
    * The Board projection of a Task.
    *
-   * Read-only by contract: the poll loop advances state, and reading never
-   * does. This used to accept a `sync` option that every caller could pass
+   * Reading does not advance Task execution; it can fill the existing Brief
+   * projection cache. This used to accept a `sync` option that every caller could pass
    * and no implementation ever read — a public promise of freshness-on-demand
    * that did nothing. The parameter is gone rather than silently ignored.
    */
@@ -2216,12 +2216,6 @@ export namespace EngineService {
       authority: artifactCatalogAuthority(input.taskID),
       read: ArtifactReadInputSchema.parse(input.read),
     })
-  }
-
-  /** The Board projection's ETag. Read-only for the same reason getBoard is. */
-  export async function getBoardTag(taskID: string) {
-    requireTaskInCurrentProject(taskID)
-    return boardTag({ taskID })
   }
 
   export async function getProjectBoard(opts?: { limit?: number; query?: string; status?: string }) {

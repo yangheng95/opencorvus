@@ -12,10 +12,8 @@ import { Plugin } from "@/plugin"
 import type { Provider } from "@/provider/provider"
 import { LLM } from "./llm"
 import { recordProviderActivityEvent } from "./provider-activity-facts"
-import { EffectiveConfig } from "@/config/effective"
 import { EngineConfig } from "@/engine/config"
 import { CompactionOverflow } from "./compaction-overflow"
-import { PermissionAuthority } from "@/permission/authority"
 import {
   withLLMActivity,
   chunkHeartbeatKind,
@@ -528,7 +526,6 @@ export namespace SessionProcessor {
     }
 
     let snapshot: string | undefined
-    let blocked = false
     let needsCompaction = false
     let failureOccurrence: FailureOccurrenceAnchor | undefined
     let convergenceFailure: ToolPersistenceConvergenceFailure | undefined
@@ -618,9 +615,6 @@ export namespace SessionProcessor {
       async process(streamInput: LLM.StreamInput) {
         log.info("process")
         needsCompaction = false
-        const shouldBreak =
-          (await EffectiveConfig.effective({ sessionID: input.assistantMessage.sessionID })).experimental
-            ?.continue_loop_on_deny !== true
         const activity = (await EngineConfig.get()).activity
         const idleMs = activity.session_llm_idle_ms
         const canonicalActivityErrors = new Map<unknown, NonNullable<Message.Assistant["error"]>>()
@@ -1306,9 +1300,6 @@ export namespace SessionProcessor {
                               })
                             }
 
-                            if (value.error instanceof PermissionAuthority.RejectedError) {
-                              blocked = shouldBreak
-                            }
                             delete toolcalls[value.toolCallId]
                             toolErrorAccepted = true
                           }
@@ -1716,7 +1707,6 @@ export namespace SessionProcessor {
           const continuationIsSafe =
             !failureOccurrence &&
             !needsCompaction &&
-            !blocked &&
             !parkAfterToolResult &&
             !coordinationHandoff &&
             !input.assistantMessage.error
@@ -1753,13 +1743,11 @@ export namespace SessionProcessor {
           const stopping =
             completedOwnerBoundary ||
             needsCompaction ||
-            blocked ||
             parkAfterToolResult ||
             coordinationHandoff ||
             !!input.assistantMessage.error
           if (stopping) forgetRepeatedToolCalls(input.sessionID)
           if (needsCompaction) return "compact"
-          if (blocked) return "stop"
           if (parkAfterToolResult) return "stop"
           if (coordinationHandoff) return "stop"
           if (input.assistantMessage.error) return "stop"

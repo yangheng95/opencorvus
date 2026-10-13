@@ -1,0 +1,36 @@
+{
+  "plan": {
+    "role": "b",
+    "route": "/file/content",
+    "file": "root-marker.txt",
+    "literal": "GUARD ROOT B 01a133\r\n"
+  },
+  "url": "http://127.0.0.1:18456/file/content?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cdirectory-target-guard-after-01a133%5Cproject-b&path=root-marker.txt",
+  "dispatchedAt": {
+    "utc": "2026-10-13T20:43:49.709Z",
+    "wallMs": 1791924229709,
+    "monotonicNs": "2742120328734400"
+  },
+  "status": 200,
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "129",
+    "content-type": "application/json",
+    "date": "Tue, 13 Oct 2026 20:43:49 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "ff4caeef-5161-47ae-8723-03d31741f67d"
+  },
+  "requestID": "ff4caeef-5161-47ae-8723-03d31741f67d",
+  "rawBodyBase64": "eyJ0eXBlIjoidGV4dCIsImNvbnRlbnQiOiJHVUFSRCBST09UIEIgMDFhMTMzXHJcbiIsInJldmlzaW9uIjoiZjJmZDM3Nzc0ZWQwMTU0OWEyOWRkNTNiNmY2ZjZhNzZlNDhhNmFhZGZiODAyMDc3ZDQ0YTgyN2JmMGEzOWQ4OSJ9",
+  "rawBody": "{\"type\":\"text\",\"content\":\"GUARD ROOT B 01a133\\r\\n\",\"revision\":\"f2fd37774ed01549a29dd53b6f6f6a76e48a6aadfb802077d44a827bf0a39d89\"}",
+  "completedAt": {
+    "utc": "2026-10-13T20:43:49.848Z",
+    "wallMs": 1791924229848,
+    "monotonicNs": "2742120467987100"
+  },
+  "body": {
+    "type": "text",
+    "content": "GUARD ROOT B 01a133\r\n",
+    "revision": "f2fd37774ed01549a29dd53b6f6f6a76e48a6aadfb802077d44a827bf0a39d89"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "boundary": "Actual public HTTP preconditions after implementation; original frontend UI and genuine Sol qualification are separate",
+  "facts": [
+    {
+      "scope": "global",
+      "path": "/global/providers/owned-zero/test",
+      "status": 400,
+      "requestID": "db43f05b-1469-47c1-9eb0-21bab5f74a2d",
+      "body": {
+        "ok": false,
+        "status": "error",
+        "code": "no_models",
+        "providerID": "owned-zero",
+        "modelID": "",
+        "message": "Provider has no available models.",
+        "output": ""
+      }
+    },
+    {
+      "scope": "project",
+      "path": "/provider/owned-zero/test?directory=D%3A%5Cmyhexin-local%5Copencorvus%5C.tmp-codex-provider-test-observation-01a133%5Cafter%5Cproject",
+      "status": 400,
+      "requestID": "9525b311-42cb-4381-a758-bb8f1a07713b",
+      "body": {
+        "ok": false,
+        "status": "error",
+        "code": "no_models",
+        "providerID": "owned-zero",
+        "modelID": "",
+        "message": "Provider has no available models.",
+        "output": ""
+      }
+    },
+    {
+      "scope": "global-missing",
+      "path": "/global/providers/owned-missing/test",
+      "status": 400,
+      "requestID": "12764896-12da-4096-accc-31698447d8c3",
+      "body": {
+        "ok": false,
+        "status": "error",
+        "code": "provider_unavailable",
+        "providerID": "owned-missing",
+        "modelID": "",
+        "message": "Provider is unavailable in the current configuration.",
+        "output": ""
+      }
+    }
+  ],
+  "catalog": {
+    "status": 200,
+    "providers": [
+      {
+        "id": "openai",
+        "models": [
+          "gpt-6.1-sol"
+        ],
+        "apiKeyConfigured": false
+      },
+      {
+        "id": "opencorvus",
+        "models": [],
+        "apiKeyConfigured": true
+      },
+      {
+        "id": "owned-zero",
+        "models": [],
+        "apiKeyConfigured": true
+      }
+    ]
+  },
+  "audit": [
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "streaming": true,
+      "reader": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

@@ -3,6 +3,7 @@
  * (all prefixed COMPACTION_STRESS_) are required. CASES and ROUNDS are optional.
  * RESUME_REPORT reopens the exact unfinished policy round in a retained isolated runtime.
  * COMPARE_NATIVE=1 adds a one-checkpoint experimental native reference lane to policy cases.
+ * CONTEXT_TOKENS optionally lowers the configured prompt ceiling for read-window stress.
  * Auth and model catalog are copied together into an isolated disposable runtime.
  */
 import assert from "node:assert/strict"
@@ -28,6 +29,7 @@ const resultPath = env("RESULT")
 const maxRequests = Number(env("MAX_REQUESTS"))
 const rounds = Number(env("ROUNDS") ?? "1")
 const compareNative = env("COMPARE_NATIVE") === "1"
+const contextTokens = Number(env("CONTEXT_TOKENS") ?? "256000")
 const hostTemporaryRoot = os.tmpdir()
 const caseNames = [
   "text-start",
@@ -42,6 +44,7 @@ const caseNames = [
 assert(authSource && exactModel && resultPath, "AUTH_SOURCE, MODEL and RESULT are required")
 assert(Number.isSafeInteger(maxRequests) && maxRequests > 0 && maxRequests <= 100)
 assert(Number.isSafeInteger(rounds) && rounds > 0 && rounds <= 10)
+assert(Number.isSafeInteger(contextTokens) && contextTokens > 0)
 assert.equal(
   await fs.stat(resultPath).then(
     () => true,
@@ -55,11 +58,14 @@ const resume = await (async () => {
   if (!reportPath) return
   const previous = JSON.parse(await fs.readFile(reportPath, "utf8"))
   assert.equal(previous.model, exactModel, "Resume the same exact model")
+  assert.equal(previous.contextTokens, contextTokens, "Resume the same explicitly recorded context budget")
   assert.equal(previous.status, "failed", "Resume an unfinished run")
   const last = previous.cases.at(-1)
+  assert(last && last.status === "error", "Resume an unfinished policy round")
+  const probe = last.checkpoint !== undefined && last.lanes !== undefined
   assert(
-    last && last.status === "error" && last.lanes === undefined && last.checkpoint === undefined,
-    "Resume only a compaction interrupted before its paired probes",
+    probe || (last.lanes === undefined && last.checkpoint === undefined),
+    "Resume a complete checkpoint or interrupted compaction",
   )
   assert(CompactionPolicyCase.names.includes(last.name), "Resume a policy-action case")
   const descriptor = CompactionPolicyCase.Resume.parse({
@@ -97,7 +103,14 @@ const resume = await (async () => {
       "Previous credential/catalog copies must already be removed",
     )
   assert((await fs.stat(path.join(root, "runtime/data/opencorvus.db"))).isFile(), "Keep the original persisted history")
-  return { reportPath: path.resolve(reportPath), root, name: last.name as CompactionPolicyCase.Name, nonce, descriptor }
+  return {
+    reportPath: path.resolve(reportPath),
+    root,
+    name: last.name as CompactionPolicyCase.Name,
+    nonce,
+    descriptor,
+    probe: probe ? last : undefined,
+  }
 })()
 const selectedCases = (env("CASES") ?? resume?.name ?? "text-start,text-middle,text-end,tool-evidence").split(",")
 if (resume) assert.deepEqual(selectedCases, [resume.name], "Resume only the original unfinished case")
@@ -131,7 +144,7 @@ process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({
   model: exactModel,
   small_model: exactModel,
-  compaction: { tail_turns: 0 },
+  compaction: { tail_turns: 0, max_context_tokens: contextTokens },
   permission_mode: "full_access",
 })
 await fs.mkdir(project, { recursive: true })
@@ -190,7 +203,7 @@ using audit = new RealProviderAudit(
     activity = Date.now()
     // Durable accounting survives a crash between case reports. Contains only the
     // existing sanitized audit projection, never authorization headers or bodies.
-    writeFileSync(`${resultPath}.requests.json`, redactor.redact(JSON.stringify(audit.requests)))
+    writeFileSync(`${resultPath}.requests.json`, redactor.serialize(audit.requests))
   },
   authority,
   {
@@ -239,6 +252,7 @@ const report = {
   scope: "real-provider production-compactor integration; seeded history",
   rounds,
   compareNative,
+  contextTokens,
   ...(resume ? { resumedFrom: resume.reportPath, resume: resume.descriptor } : {}),
   credential: "available",
   modelProjection: "pending",
@@ -248,7 +262,7 @@ const report = {
 }
 async function save() {
   await fs.mkdir(path.dirname(path.resolve(resultPath!)), { recursive: true })
-  await fs.writeFile(resultPath!, redactor.redact(JSON.stringify(report, null, 2)))
+  await fs.writeFile(resultPath!, redactor.serialize(report, 2))
 }
 const { user, assistant } = await CompactionPolicyCase.history({ target, project })
 async function inactive<T>(run: (signal: AbortSignal) => Promise<T>) {
@@ -283,6 +297,7 @@ try {
             rounds,
             compareNative,
             resume: resume?.descriptor,
+            resumeProbe: resume?.probe,
             project,
             model,
             inactive,

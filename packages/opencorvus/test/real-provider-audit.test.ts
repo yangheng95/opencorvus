@@ -9,6 +9,29 @@ import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CopiedOAuth
 import { takeProviderResponseObserver, type ProviderRequestContext } from "../src/util/provider-response-observation"
 import { settlementTrackedReadableStream } from "../src/util/stream-activity"
 
+test("credential collection preserves token budgets and JSON serialization preserves numeric measurements", () => {
+  const redactor = new CredentialRedactor()
+  redactor.collect({
+    COMPACTION_STRESS_CONTEXT_TOKENS: "19000",
+    MONKEY: "ordinary-label",
+    OPENAI_API_KEY: "54321",
+    provider: { access: 'credential"line\nvalue', refresh: "refresh-fixture" },
+  })
+  const report = {
+    contextTokens: 19000,
+    capacityLabel: "19000 ordinary-label",
+    credentialEcho: "54321",
+    nested: { text: 'credential"line\nvalue', refreshed: "refresh-fixture" },
+  }
+  expect(JSON.parse(redactor.serialize(report, 2))).toEqual({
+    contextTokens: 19000,
+    capacityLabel: "19000 ordinary-label",
+    credentialEcho: "[REDACTED]",
+    nested: { text: "[REDACTED]", refreshed: "[REDACTED]" },
+  })
+  expect(redactor.redact("19000 ordinary-label 54321")).toBe("19000 ordinary-label [REDACTED]")
+})
+
 function requestMetadata(entry: RealProviderAudit["requests"][number]) {
   const { response_reader, ...metadata } = entry
   return metadata.tool_declarations ? { ...metadata, tool_declarations: declarationMetadata(metadata.tool_declarations) } : metadata

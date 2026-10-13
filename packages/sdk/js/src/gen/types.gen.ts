@@ -513,10 +513,6 @@ export type Config = {
      * Expire unanswered question interactions at the five-minute automatic deadline without attributing an operator decision. Independent fine-grained switch. When false, questions wait indefinitely for an operator reply.
      */
     auto_question?: boolean
-    /**
-     * Continue the agent loop when a tool call is denied
-     */
-    continue_loop_on_deny?: boolean
     disable_paste_summary?: boolean
     /**
      * Timeout in milliseconds for model context protocol (MCP) requests. Defaults to 30000 (30 seconds).
@@ -871,6 +867,7 @@ export type Event =
   | EventMissionHandoff
   | EventPermissionAsked
   | EventPermissionReplied
+  | EventPermissionTerminated
   | EventProjectMemoryNoticeChanged
   | EventProjectMemoryOrganizeRequested
   | EventProjectUpdated
@@ -1361,6 +1358,17 @@ export type EventPermissionReplied = {
     }
   }
   type: "permission.replied"
+}
+
+export type EventPermissionTerminated = {
+  properties: {
+    ledgerEventID: PermissionIdentity
+    projectID: string
+    requestID: PermissionIdentity
+    sessionID: string
+    status: "cancelled" | "stale"
+  }
+  type: "permission.terminated"
 }
 
 export type EventProjectMemoryNoticeChanged = {
@@ -4333,6 +4341,19 @@ export type ProviderConfig = {
   whitelist?: Array<string>
 }
 
+export type ProviderConnectionTestResult = {
+  code: "connected" | "provider_unavailable" | "no_models" | "request_failed"
+  message: string
+  modelID: string
+  ok: boolean
+  /**
+   * Actual generated text, including text received before a failed test.
+   */
+  output: string
+  providerID: string
+  status: "connected" | "error"
+}
+
 export type ProviderMonetaryBalanceUsage = {
   currency: "USD"
   exceeded: boolean
@@ -4747,6 +4768,41 @@ export type SessionConversationConnectionSnapshot = {
     oldestOrderKey: string | null
     oldestTimestamp: number | null
   }
+  pendingPermissions: Array<{
+    choices: Array<PermissionDecision>
+    effectClass: string
+    fingerprint: string
+    id: PermissionIdentity
+    messageID: string
+    mode: PermissionMode
+    orderKey: string
+    policyRevision: string
+    projectGrantEligible: boolean
+    projectID: string
+    providerDigest: string
+    providerID: string
+    providerKind:
+      | "builtin"
+      | "plugin"
+      | "skill"
+      | "mcp"
+      | "mcp_app"
+      | "browser"
+      | "computer"
+      | "projected"
+      | "schedule"
+      | "external"
+    scope: {
+      [key: string]: unknown
+    }
+    scopeVersion: string
+    sessionID: string
+    summary: string
+    taskID?: string
+    timeCreated: number
+    toolCallID: string
+    toolName: string
+  }>
   transcript: Array<{
     info: VisibleMessage & {
       agentID: string
@@ -4975,6 +5031,7 @@ export type SessionProtocolEvent = {
     | "message.part.removed"
     | "permission.asked"
     | "permission.replied"
+    | "permission.terminated"
     | "question.asked"
     | "question.replied"
     | "question.rejected"
@@ -21874,9 +21931,9 @@ export type GlobalProvidersTestData = {
 
 export type GlobalProvidersTestErrors = {
   /**
-   * Bad request
+   * Invalid request or Provider test precondition
    */
-  400: BadRequestError
+  400: BadRequestError | ProviderConnectionTestResult
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -21889,13 +21946,7 @@ export type GlobalProvidersTestResponses = {
   /**
    * Provider connection result
    */
-  200: {
-    message: string
-    modelID: string
-    ok: boolean
-    providerID: string
-    status: "connected" | "error"
-  }
+  200: ProviderConnectionTestResult
 }
 
 export type GlobalProvidersTestResponse = GlobalProvidersTestResponses[keyof GlobalProvidersTestResponses]
@@ -27175,9 +27226,9 @@ export type ProviderTestData = {
 
 export type ProviderTestErrors = {
   /**
-   * Bad request
+   * Invalid request or Provider test precondition
    */
-  400: BadRequestError
+  400: BadRequestError | ProviderConnectionTestResult
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -27190,13 +27241,7 @@ export type ProviderTestResponses = {
   /**
    * Provider test result
    */
-  200: {
-    message: string
-    modelID: string
-    ok: boolean
-    providerID: string
-    status: "connected" | "error"
-  }
+  200: ProviderConnectionTestResult
 }
 
 export type ProviderTestResponse = ProviderTestResponses[keyof ProviderTestResponses]
@@ -28835,6 +28880,41 @@ export type SessionConversationResponses = {
       oldestOrderKey: string | null
       oldestTimestamp: number | null
     }
+    pendingPermissions: Array<{
+      choices: Array<PermissionDecision>
+      effectClass: string
+      fingerprint: string
+      id: PermissionIdentity
+      messageID: string
+      mode: PermissionMode
+      orderKey: string
+      policyRevision: string
+      projectGrantEligible: boolean
+      projectID: string
+      providerDigest: string
+      providerID: string
+      providerKind:
+        | "builtin"
+        | "plugin"
+        | "skill"
+        | "mcp"
+        | "mcp_app"
+        | "browser"
+        | "computer"
+        | "projected"
+        | "schedule"
+        | "external"
+      scope: {
+        [key: string]: unknown
+      }
+      scopeVersion: string
+      sessionID: string
+      summary: string
+      taskID?: string
+      timeCreated: number
+      toolCallID: string
+      toolName: string
+    }>
     pendingQuestions: Array<{
       /**
        * Explicit automatic answer contract for this question request

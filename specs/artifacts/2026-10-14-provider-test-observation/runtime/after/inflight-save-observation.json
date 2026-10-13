@@ -1,0 +1,62 @@
+{
+  "observedAt": 1791925072026,
+  "configStatus": 200,
+  "providerName": "Owned Sol in-flight accepted save",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "state": "settled",
+      "receivedAt": 1791924872248,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791924874768
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "state": "settled",
+      "receivedAt": 1791924874831,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791924876805
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "state": "settled",
+      "receivedAt": 1791924917563,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791924919010
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "state": "settled",
+      "receivedAt": 1791924979408,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791924980749
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": 200,
+      "state": "settled",
+      "receivedAt": 1791925065287,
+      "terminal": {
+        "kind": "eof",
+        "at": 1791925066376
+      }
+    }
+  ],
+  "committedConfigFile": {
+    "path": "runtime/config/opencorvus.jsonc",
+    "mtimeMs": 1791925065620.5562
+  },
+  "boundary": "Current saved name observed via actual 200 GET; filesystem last-write time compared to original Sol EOF; UI earlier showed both operations busy"
+}

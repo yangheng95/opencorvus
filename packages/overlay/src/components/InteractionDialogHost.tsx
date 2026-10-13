@@ -11,9 +11,9 @@
 //     picks the oldest pending interaction not already dismissed for this
 //     overlay session.
 //   • Reuses <InteractionCard> for the body — there is exactly one place that
-//     renders an interaction (rule 8 / rule 9). The card already closes the
-//     loop with loadBoard() after a successful reply, which collapses the
-//     dialog automatically once status moves off "pending".
+//     renders an interaction (rule 8 / rule 9). Replies update the shared
+//     current interaction projection, which closes the dialog once its
+//     interaction leaves "pending".
 //   • Esc / backdrop click marks the current interaction id as dismissed for
 //     the lifetime of the host (until status changes or a fresh id arrives),
 //     letting the user fall back to the inline card without the popup
