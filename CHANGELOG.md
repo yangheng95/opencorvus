@@ -13,6 +13,7 @@
 
 #### 修复
 
+- PDF 阅读器支持网页引用与文档内部链接，键盘可聚焦和打开；跳转遵循文档目的地并显示本地化失败提示，缩放、旋转和文字选择共用原页面几何。
 - 用量统计正确覆盖半小时夏令时和午夜切换的自然周期，修复部分调用漏入时间桶、错分到上一周期或周期终点越界的问题。
 - 用量周期选择和刷新保留键盘焦点，可连续切换周期并继续操作；加载时显示当前请求状态。
 - 网络代理设置保留用户名和密码的首尾空格及字面百分号，修复保存或发起请求时认证信息被改写的问题。此前已被裁剪并保存的内容需要重新输入。
@@ -33,6 +34,7 @@
 
 #### Fixed
 
+- PDF previews support web references and internal document links with keyboard focus and activation. Navigation follows the document destination, reports failures in the interface language, and shares page geometry with zoom, rotation and text selection.
 - Usage covers natural periods across half-hour daylight-saving and midnight transitions, fixing calls missing from time buckets, assigned to the previous period, or counted beyond the period end.
 - Usage period controls and refresh retain keyboard focus for consecutive actions. Loading shows the current request state.
 - Network proxy settings preserve leading and trailing spaces and literal percent signs in usernames and passwords, fixing credentials being changed when saved or used. Values already trimmed and saved must be entered again.

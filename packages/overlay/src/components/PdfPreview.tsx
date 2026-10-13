@@ -1,10 +1,13 @@
 import * as pdfjs from "pdfjs-dist"
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url"
-import { Show, createEffect, createResource, createSignal, onCleanup } from "solid-js"
+import { EventBus, PDFLinkService } from "pdfjs-dist/web/pdf_viewer.mjs"
+import { Show, batch, createEffect, createResource, createSignal, onCleanup } from "solid-js"
 import { captureApiAuthority, fetchResourceAsObjectUrl } from "../services/api"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { createAnimationFrameScheduler, hasRunningLayoutAnimation } from "../utils/animation-frame"
+import { externalUrl } from "../utils/external-url"
+import { PDF_MIN_ZOOM, PDF_MAX_ZOOM, PdfDestinationError, pdfDestinationView } from "../utils/pdf-destination"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 
@@ -21,8 +24,20 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
   const [zoom, setZoom] = createSignal(1)
   const [viewportWidth, setViewportWidth] = createSignal(0)
   const [error, setError] = createSignal<unknown>()
+  const [navigationError, setNavigationError] = createSignal<unknown>()
   const [currentDocument, setCurrentDocument] = createSignal<pdfjs.PDFDocumentProxy>()
+  const [navigationRender, setNavigationRender] = createSignal(0)
   let sourceGeneration = 0
+  let navigationSequence = 0
+  let pendingNavigation: {
+    document: pdfjs.PDFDocumentProxy
+    sequence: number
+    pageNumber: number
+    destination: readonly unknown[]
+    currentZoom: number
+    currentPoint?: [number, number]
+    events: EventBus
+  } | undefined
   let readingPosition = { top: 0, left: 0 }
   let restorePending = false
   let renderedPage = 0
@@ -54,6 +69,90 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
   )
 
+  function changePage(value: number) {
+    navigationSequence += 1
+    pendingNavigation = undefined
+    setNavigationError(undefined)
+    batch(() => {
+      setPage(value)
+      setNavigationRender(navigationSequence)
+    })
+  }
+
+  function changeZoom(value: number) {
+    navigationSequence += 1
+    pendingNavigation = undefined
+    setNavigationError(undefined)
+    batch(() => {
+      setZoom(value)
+      setNavigationRender(navigationSequence)
+    })
+  }
+
+  function pageOffset() {
+    const frame = pageHost!.getBoundingClientRect()
+    const viewport = viewportHost!.getBoundingClientRect()
+    return {
+      left: viewportHost!.scrollLeft + frame.left - viewport.left - viewportHost!.clientLeft,
+      top: viewportHost!.scrollTop + frame.top - viewport.top - viewportHost!.clientTop,
+    }
+  }
+
+  function linkServiceFor(loaded: pdfjs.PDFDocumentProxy) {
+    const service = new PDFLinkService({ eventBus: new EventBus() })
+    service.setDocument(loaded)
+    service.goToDestination = async (destination) => {
+      const sequence = ++navigationSequence
+      pendingNavigation = undefined
+      setNavigationError(undefined)
+      setNavigationRender(sequence)
+      const generation = sourceGeneration
+      const ownsNavigation = () => sequence === navigationSequence && generation === sourceGeneration && currentDocument() === loaded
+      const events = new EventBus()
+      const navigation = new PDFLinkService({ eventBus: events })
+      let resolved = false
+      // A resolver belongs to one click and one document, including its awaits.
+      navigation.setDocument(loaded)
+      navigation.setViewer({
+        scrollPageIntoView({ pageNumber, destArray }: { pageNumber: number; destArray: readonly unknown[] }) {
+          resolved = true
+          void loaded.getPage(pageNumber).then((targetPage) => {
+            if (!ownsNavigation() || !viewportHost || !pageHost) return
+            const natural = targetPage.getViewport({ scale: 1 })
+            const fitScale = Math.max(160, viewportWidth() - 24) / natural.width
+            const offset = pageOffset()
+            const currentPoint = pageNumber === page()
+              ? targetPage.getViewport({ scale: fitScale * zoom() }).convertToPdfPoint(
+                Math.max(0, viewportHost.scrollLeft - offset.left),
+                Math.max(0, viewportHost.scrollTop - offset.top),
+              ) as [number, number]
+              : undefined
+            // Validate before changing the visible page; the paint recomputes
+            // geometry if the pane width changes while navigation is pending.
+            pdfDestinationView({ destination: destArray, viewport: natural,
+              availableWidth: Math.max(160, viewportWidth() - 24), availableHeight: Math.max(1, viewportHost.clientHeight - 24),
+              fitScale, currentZoom: zoom(), currentPoint })
+            pendingNavigation = { document: loaded, sequence, pageNumber, destination: destArray, currentZoom: zoom(), currentPoint, events }
+            setNavigationError(undefined)
+            batch(() => {
+              setPage(pageNumber)
+              setNavigationRender(sequence)
+            })
+          }).catch((reason) => { if (ownsNavigation()) setNavigationError(() => reason) })
+        },
+      })
+      try {
+        await navigation.goToDestination(destination)
+        if (ownsNavigation() && !resolved) {
+          setNavigationError(new PdfDestinationError("PDF destination could not be resolved"))
+        }
+      } catch (reason) {
+        if (ownsNavigation()) setNavigationError(() => reason)
+      }
+    }
+    return service
+  }
+
   function bindViewport(element: HTMLDivElement) {
     resizeObserver?.disconnect()
     viewportHost = element
@@ -70,6 +169,7 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
   }
 
   onCleanup(() => {
+    navigationSequence += 1
     resizeObserver?.disconnect()
     restoreReading.cancel()
   })
@@ -77,6 +177,9 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
   createEffect(() => {
     const url = source.loading || source.error ? undefined : source()
     const generation = ++sourceGeneration
+    navigationSequence += 1
+    pendingNavigation = undefined
+    setNavigationError(undefined)
     readingPosition = { top: 0, left: 0 }
     restorePending = false
     renderedPage = 0
@@ -123,6 +226,10 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
     const pageNumber = page()
     const availableWidth = viewportWidth()
     const zoomFactor = zoom()
+    navigationRender()
+    const linkLabel = t("artifact.file.open_document_link")
+    const navigation = pendingNavigation?.document === loaded && pendingNavigation.pageNumber === pageNumber
+      ? pendingNavigation : undefined
     if (!loaded || !target || !frame || !textTarget || pageCount() === 0 || availableWidth <= 0) return
     paintedWidth = 0
     textTarget.replaceChildren()
@@ -133,13 +240,25 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
     }
     let renderTask: pdfjs.RenderTask | undefined
     let textLayer: pdfjs.TextLayer | undefined
+    const annotationTarget = document.createElement("div")
+    annotationTarget.className = "msg-artifact-pdf__annotations"
     let disposed = false
+    const ownsRender = () => !disposed && currentDocument() === loaded && page() === pageNumber
     void loaded
       .getPage(pageNumber)
       .then(async (pdfPage) => {
-        if (disposed || currentDocument() !== loaded || page() !== pageNumber) return
+        if (!ownsRender()) return
         const natural = pdfPage.getViewport({ scale: 1 })
         const contentWidth = Math.max(160, availableWidth - 24)
+        const destinationView = navigation && pdfDestinationView({
+          destination: navigation.destination, viewport: natural, availableWidth: contentWidth,
+          availableHeight: Math.max(1, viewportHost!.clientHeight - 24), fitScale: contentWidth / natural.width,
+          currentZoom: navigation.currentZoom, currentPoint: navigation.currentPoint,
+        })
+        if (destinationView && Math.abs(destinationView.zoom - zoomFactor) > 0.000001) {
+          setZoom(destinationView.zoom)
+          return
+        }
         const displayScale = (contentWidth / natural.width) * zoomFactor
         const displayViewport = pdfPage.getViewport({ scale: displayScale })
         const outputScale = Math.min(window.devicePixelRatio || 1, 2)
@@ -157,10 +276,48 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
           viewport: displayViewport,
         })
         renderTask = pdfPage.render({ canvas: target, canvasContext: context, viewport })
-        await Promise.all([renderTask.promise, textLayer.render()])
-        if (disposed || currentDocument() !== loaded || page() !== pageNumber) return
+        const renderLinks = async () => {
+          const annotations = await pdfPage.getAnnotations({ intent: "display" })
+          if (!ownsRender()) return
+          const links = annotations.flatMap((annotation) => {
+            if (annotation.annotationType !== pdfjs.AnnotationType.LINK) return []
+            if (annotation.url) {
+              try { return [{ ...annotation, url: externalUrl(annotation.url).href }] }
+              catch { return [] }
+            }
+            return typeof annotation.dest === "string" || Array.isArray(annotation.dest) ? [annotation] : []
+          })
+          const linkService = linkServiceFor(loaded)
+          const annotationViewport = displayViewport.clone({ dontFlip: true })
+          annotationTarget.style.setProperty("--total-scale-factor", String(displayScale * pdfPage.userUnit))
+          const layer = new pdfjs.AnnotationLayer({
+            div: annotationTarget, page: pdfPage, viewport: annotationViewport, linkService,
+            accessibilityManager: null, annotationCanvasMap: null, annotationEditorUIManager: null,
+            structTreeLayer: null, commentManager: null, annotationStorage: null,
+          })
+          await layer.render({ annotations: links, viewport: annotationViewport, div: annotationTarget,
+            page: pdfPage, linkService, renderForms: false, enableScripting: false })
+          for (const anchor of annotationTarget.querySelectorAll<HTMLAnchorElement>("[data-internal-link] > a")) {
+            anchor.setAttribute("aria-label", anchor.title || linkLabel)
+          }
+        }
+        await Promise.all([renderTask.promise, textLayer.render(), renderLinks()])
+        if (!ownsRender()) return
+        frame.append(annotationTarget)
         target.dataset.ready = "true"
         paintedWidth = availableWidth
+        if (navigation && navigation === pendingNavigation && navigation.sequence === navigationSequence) {
+          navigation.events.dispatch("textlayerrendered", { pageNumber, source: { textLayer: { div: textTarget } } })
+          const rect = destinationView!.rect
+          const offset = pageOffset()
+          const coordinates = rect && displayViewport.convertToViewportRectangle(rect)
+          readingPosition = coordinates ? {
+            left: Math.max(0, offset.left + Math.min(coordinates[0], coordinates[2])),
+            top: Math.max(0, offset.top + Math.min(coordinates[1], coordinates[3])),
+          } : { top: 0, left: 0 }
+          restorePending = true
+          pendingNavigation = undefined
+        }
         restoreReading.schedule()
       })
       .catch((reason: unknown) => {
@@ -173,6 +330,7 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
       disposed = true
       renderTask?.cancel()
       textLayer?.cancel()
+      annotationTarget.remove()
       textTarget.replaceChildren()
     })
   })
@@ -188,54 +346,61 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
       }
     >
       <div class={["msg-artifact-file__pdf-preview", props.class].filter(Boolean).join(" ")}>
-        <div class="msg-artifact-file__toolbar">
-          <div class="msg-artifact-file__page-controls">
-            <Button
-              variant="ghost"
-              size="sm"
-              tone="neutral"
-              disabled={page() <= 1}
-              onClick={() => setPage((value) => Math.max(1, value - 1))}
-            >
-              {t("artifact.file.previous")}
-            </Button>
-            <span>
-              {page()} / {pageCount() || "…"}
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              tone="neutral"
-              disabled={!pageCount() || page() >= pageCount()}
-              onClick={() => setPage((value) => Math.min(pageCount(), value + 1))}
-            >
-              {t("artifact.file.next")}
-            </Button>
+        <div>
+          <div class="msg-artifact-file__toolbar">
+            <div class="msg-artifact-file__page-controls">
+              <Button
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                disabled={page() <= 1}
+                onClick={() => changePage(Math.max(1, page() - 1))}
+              >
+                {t("artifact.file.previous")}
+              </Button>
+              <span>
+                {page()} / {pageCount() || "…"}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                disabled={!pageCount() || page() >= pageCount()}
+                onClick={() => changePage(Math.min(pageCount(), page() + 1))}
+              >
+                {t("artifact.file.next")}
+              </Button>
+            </div>
+            <div class="msg-artifact-file__zoom-controls">
+              <Button
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                disabled={zoom() <= PDF_MIN_ZOOM}
+                onClick={() => changeZoom(Math.max(PDF_MIN_ZOOM, zoom() - 0.25))}
+              >
+                {t("artifact.file.zoom_out")}
+              </Button>
+              <Button variant="ghost" size="sm" tone="neutral" onClick={() => changeZoom(1)}>
+                {t("artifact.file.fit_width")}
+              </Button>
+              <span>{Math.round(zoom() * 100)}%</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                disabled={zoom() >= PDF_MAX_ZOOM}
+                onClick={() => changeZoom(Math.min(PDF_MAX_ZOOM, zoom() + 0.25))}
+              >
+                {t("artifact.file.zoom_in")}
+              </Button>
+            </div>
           </div>
-          <div class="msg-artifact-file__zoom-controls">
-            <Button
-              variant="ghost"
-              size="sm"
-              tone="neutral"
-              disabled={zoom() <= 0.5}
-              onClick={() => setZoom((value) => Math.max(0.5, value - 0.25))}
-            >
-              {t("artifact.file.zoom_out")}
-            </Button>
-            <Button variant="ghost" size="sm" tone="neutral" onClick={() => setZoom(1)}>
-              {t("artifact.file.fit_width")}
-            </Button>
-            <span>{Math.round(zoom() * 100)}%</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              tone="neutral"
-              disabled={zoom() >= 2.5}
-              onClick={() => setZoom((value) => Math.min(2.5, value + 0.25))}
-            >
-              {t("artifact.file.zoom_in")}
-            </Button>
-          </div>
+          <Show when={navigationError()}>
+            <Feedback tone="error" details={formatErrorDetails(navigationError())}>
+              {t("artifact.file.link_failed")}
+            </Feedback>
+          </Show>
         </div>
         <div
           class="msg-artifact-pdf"
@@ -259,6 +424,8 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
             />
             <div
               class="msg-artifact-pdf__text-layer"
+              tabIndex={-1}
+              aria-label={props.label}
               ref={(element) => {
                 textHost = element
               }}

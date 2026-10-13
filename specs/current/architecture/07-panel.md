@@ -145,6 +145,21 @@ page, zoom, width or source cancels both render tasks and removes the old text
 nodes; read-position restoration waits for both current layers. There is no
 second PDF parser, server text copy or optical character recognition path.
 
+The same render owns PDF.js AnnotationLayer for HTTP(S) and internal Link
+annotations. External URLs pass existing externalUrl admission and the main
+document anchor opener. PDFLinkService resolves internal names, references and
+page indexes within one immutable document per click; the local destination
+mapper translates XYZ/Fit variants through the target page viewport and shared
+zoom bounds. Navigation intent, document generation and render disposal protect
+source/page changes and explicit same-value zoom commands. The final canvas,
+text and annotation paint restores the target reading point after moving focus.
+Each detached annotation container is removed on cleanup and may only be
+attached by its current render. Annotation dimensions and rotation share page
+geometry; keyboard links retain original labels or a localized accessible name.
+Unresolved destinations show localized Feedback within the toolbar header,
+leaving the document readable. Script, form and non-link actions are outside
+this reader contract; there is no separate PDF history or external opener.
+
 Text file-preview Artifacts use the existing resource's ready state to admit
 CodeEditor. Successfully loaded zero-byte text is valid content and displays the
 same read-only editor as nonempty text. Loading and resource failure remain
