@@ -1,0 +1,53 @@
+{
+  "plan": {
+    "role": "root",
+    "route": "/file",
+    "file": "alias-j"
+  },
+  "url": "http://127.0.0.1:18456/file?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cdirectory-target-guard-after-01a133%5Cproject&path=alias-j",
+  "dispatchedAt": {
+    "utc": "2026-10-13T20:43:49.850Z",
+    "wallMs": 1791924229850,
+    "monotonicNs": "2742120469546500"
+  },
+  "status": 200,
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "667",
+    "content-type": "application/json",
+    "date": "Tue, 13 Oct 2026 20:43:49 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "86849a47-01b9-4e2a-b249-a79b8db551f6"
+  },
+  "requestID": "86849a47-01b9-4e2a-b249-a79b8db551f6",
+  "rawBodyBase64": "W3sibmFtZSI6Im1hcmtlci50eHQiLCJwYXRoIjoiYWxpYXMtalxcbWFya2VyLnR4dCIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxkaXJlY3RvcnktdGFyZ2V0LWd1YXJkLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcYWxpYXMtalxcbWFya2VyLnR4dCIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6Im1vdmVkLWoiLCJwYXRoIjoiYWxpYXMtalxcbW92ZWQtaiIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxkaXJlY3RvcnktdGFyZ2V0LWd1YXJkLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcYWxpYXMtalxcbW92ZWQtaiIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6Im1vdmVkLXMiLCJwYXRoIjoiYWxpYXMtalxcbW92ZWQtcyIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxkaXJlY3RvcnktdGFyZ2V0LWd1YXJkLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcYWxpYXMtalxcbW92ZWQtcyIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9XQ==",
+  "rawBody": "[{\"name\":\"marker.txt\",\"path\":\"alias-j\\\\marker.txt\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-14\\\\directory-target-guard-after-01a133\\\\project\\\\alias-j\\\\marker.txt\",\"type\":\"file\",\"ignored\":false},{\"name\":\"moved-j\",\"path\":\"alias-j\\\\moved-j\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-14\\\\directory-target-guard-after-01a133\\\\project\\\\alias-j\\\\moved-j\",\"type\":\"file\",\"ignored\":false},{\"name\":\"moved-s\",\"path\":\"alias-j\\\\moved-s\",\"absolute\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-14\\\\directory-target-guard-after-01a133\\\\project\\\\alias-j\\\\moved-s\",\"type\":\"file\",\"ignored\":false}]",
+  "completedAt": {
+    "utc": "2026-10-13T20:43:49.852Z",
+    "wallMs": 1791924229852,
+    "monotonicNs": "2742120472395300"
+  },
+  "body": [
+    {
+      "name": "marker.txt",
+      "path": "alias-j\\marker.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project\\alias-j\\marker.txt",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "moved-j",
+      "path": "alias-j\\moved-j",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project\\alias-j\\moved-j",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "moved-s",
+      "path": "alias-j\\moved-s",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project\\alias-j\\moved-s",
+      "type": "file",
+      "ignored": false
+    }
+  ]
+}

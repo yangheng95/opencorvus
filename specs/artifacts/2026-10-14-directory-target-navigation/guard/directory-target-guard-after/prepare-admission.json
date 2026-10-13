@@ -1,0 +1,141 @@
+{
+  "schema": "directory-target-navigation.fixture/v1",
+  "qualification": "real-desktop-directory-target-guard",
+  "fixtureID": "fc1edaa2-91c8-45d9-9caa-142d25b87f36",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133",
+  "prefix": "directory-target-guard-after",
+  "port": 18456,
+  "originalInputs": {
+    "files": [
+      {
+        "role": "root",
+        "path": "root-marker.txt",
+        "size": 21,
+        "bytesBase64": "R1VBUkQgUk9PVCBBIDAxYTEzMw0K",
+        "literal": "GUARD ROOT A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "data/marker.txt",
+        "size": 21,
+        "bytesBase64": "R1VBUkQgREFUQSBBIDAxYTEzMw0K",
+        "literal": "GUARD DATA A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "source-tree/note.txt",
+        "size": 21,
+        "bytesBase64": "R1VBUkQgVFJFRSBBIDAxYTEzMw0K",
+        "literal": "GUARD TREE A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": ".gitignore",
+        "size": 11,
+        "bytesBase64": "L3NvdXJjZS1qLwo=",
+        "literal": "/source-j/\n"
+      },
+      {
+        "role": "b",
+        "path": "root-marker.txt",
+        "size": 21,
+        "bytesBase64": "R1VBUkQgUk9PVCBCIDAxYTEzMw0K",
+        "literal": "GUARD ROOT B 01a133\r\n"
+      },
+      {
+        "role": "b",
+        "path": ".gitignore",
+        "size": 0,
+        "bytesBase64": "",
+        "literal": ""
+      }
+    ],
+    "directories": {
+      "root": [
+        "data",
+        "context",
+        "source-tree"
+      ],
+      "b": []
+    },
+    "links": [
+      {
+        "role": "root",
+        "path": "source-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project\\data",
+        "kind": "junction"
+      },
+      {
+        "role": "root",
+        "path": "source-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project\\data",
+        "kind": "dir"
+      },
+      {
+        "role": "root",
+        "path": "alias-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project\\data",
+        "kind": "junction"
+      },
+      {
+        "role": "root",
+        "path": "alias-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project\\data",
+        "kind": "dir"
+      },
+      {
+        "role": "root",
+        "path": "context/indirect-relative",
+        "text": "../source-j",
+        "kind": "dir"
+      }
+    ],
+    "registrationPlan": {
+      "firstSequence": 1,
+      "steps": [
+        {
+          "label": "register-root-project",
+          "role": "root",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-root-chat",
+          "role": "root",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        },
+        {
+          "label": "register-b-project",
+          "role": "b",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-b-chat",
+          "role": "b",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        }
+      ]
+    },
+    "maximumHTTP": 4,
+    "maximumLiteralBytes": 512,
+    "actualLiteralBytes": 95,
+    "modelCallsRequested": "none",
+    "credentialCatalogStaging": "none",
+    "boundary": "Prepare only creates these inputs; Register only performs four ordinary public Project/empty-Chat requests. Root separately owns all UI and mutation/readback actions."
+  },
+  "at": {
+    "utc": "2026-10-13T20:29:41.289Z",
+    "wallMs": 1791923381289,
+    "monotonicNs": "2741271932719700"
+  },
+  "boundary": "Exclusive new namespace; first failure retained, no deletion/reuse/retry"
+}

@@ -1,0 +1,46 @@
+{
+  "capturedAtUtc": "2026-10-13T21:07:51.676Z",
+  "qualification": "Original validation/tool evidence preservation, not a functional source digest gate",
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-docs-final.log",
+      "target": "validation/guard-docs-final.log.gz",
+      "originalBytes": 106,
+      "storedBytes": 115,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-docs-final.exit.json",
+      "target": "validation/guard-docs-final.exit.json",
+      "originalBytes": 103,
+      "storedBytes": 103,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-architecture-final.log",
+      "target": "validation/guard-architecture-final.log.gz",
+      "originalBytes": 141,
+      "storedBytes": 129,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-architecture-final.exit.json",
+      "target": "validation/guard-architecture-final.exit.json",
+      "originalBytes": 117,
+      "storedBytes": 117,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\checkpoint-delivery.mjs",
+      "target": "tools/checkpoint-delivery.mjs.gz",
+      "originalBytes": 8270,
+      "storedBytes": 2964,
+      "gzip": true,
+      "originalBytesPreserved": true
+    }
+  ]
+}

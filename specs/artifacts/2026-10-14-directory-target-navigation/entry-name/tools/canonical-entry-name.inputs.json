@@ -1,0 +1,50 @@
+{
+  "schema": "directory-target-canonical-entry-name-input/v1",
+  "status": "prepare-only; no syntax or native execution authorized to preparer",
+  "platform": "win32",
+  "architecture": "x64",
+  "maximumSlots": 16,
+  "packageAnchor": "D:/myhexin-local/opencorvus/packages/opencorvus/package.json",
+  "koffiVersion": "3.3.2",
+  "runtimes": {
+    "node": { "executable": "C:/Program Files/nodejs/node.exe", "nodeVersion": "25.7.0" },
+    "bun": { "executable": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/ui-bundle/bin/bun.exe", "bunVersion": "1.4.0" }
+  },
+  "nativeInput": { "library": "kernel32.dll", "desiredAccess": 0, "shareMode": 7, "securityAttributes": null, "creationDisposition": 3, "flagsAndAttributes": 35651584, "flagsHex": "0x02200000", "templateFile": null, "fileInformationClass": 9, "struct": { "FileAttributes": "uint32_t", "ReparseTag": "uint32_t" }, "bufferSize": 8 },
+  "entryNameInput": { "function": "GetFinalPathNameByHandleW", "flags": 0, "flagsMeaning": "FILE_NAME_NORMALIZED | VOLUME_NAME_DOS", "firstBuffer": null, "firstCodeUnits": 0, "secondCodeUnits": "actual first return", "utf16CodeUnitBytes": 2, "maximumCodeUnits": 32768, "resizeRetries": 0 },
+  "shortNameInput": { "function": "GetShortPathNameW", "source": "exact original long operand from named earlier slot", "firstBuffer": null, "firstCodeUnits": 0, "secondCodeUnits": "actual first return", "unchangedPathMeaning": "short-name access not covered; do not create/guess an alias" },
+  "fixtures": {
+    "before": {
+      "schema": "directory-target-navigation.fixture/v1",
+      "fixtureID": "c2a68b0b-9f1b-4fe3-af16-f289f0715e93",
+      "manifest": "D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/directory-target-before/prepared-fixture.json",
+      "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-before-01a133/project"
+    },
+    "mixed": {
+      "schema": "directory-target-dot-mixed-fixture/v1",
+      "fixtureID": "df2ea0df-f134-4503-aea1-a2597ff25c9e",
+      "manifest": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-dot-mixed-01a133/dot-mixed-fixture.json",
+      "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/directory-target-dot-mixed-01a133"
+    }
+  },
+  "slots": [
+    { "id": "ordinary-file", "fixture": "before", "path": "regular-file.txt", "reference": { "collection": "files", "memberPath": "regular-file.txt", "field": "entry", "path": "regular-file.txt" } },
+    { "id": "ordinary-file-uppercase", "fixture": "before", "path": "REGULAR-FILE.TXT", "reference": { "collection": "files", "memberPath": "regular-file.txt", "field": "entry", "path": "regular-file.txt" } },
+    { "id": "unicode-file", "fixture": "before", "path": "target-dir/资料 Note.txt", "reference": { "collection": "files", "memberPath": "target-dir/资料 Note.txt", "field": "entry", "path": "target-dir/资料 Note.txt" } },
+    { "id": "ordinary-directory", "fixture": "before", "path": "target-dir", "reference": { "collection": "links", "memberPath": "junction-dir", "field": "target", "path": "target-dir" } },
+    { "id": "terminal-file-symbolic", "fixture": "before", "path": "file-link", "reference": { "collection": "links", "memberPath": "file-link", "field": "entry", "path": "file-link" } },
+    { "id": "terminal-directory-symbolic", "fixture": "before", "path": "absolute-dir-link", "reference": { "collection": "links", "memberPath": "absolute-dir-link", "field": "entry", "path": "absolute-dir-link" } },
+    { "id": "terminal-junction", "fixture": "before", "path": "junction-dir", "reference": { "collection": "links", "memberPath": "junction-dir", "field": "entry", "path": "junction-dir" } },
+    { "id": "terminal-broken-symbolic", "fixture": "before", "path": "broken-dir-link", "reference": { "collection": "links", "memberPath": "broken-dir-link", "field": "entry", "path": "broken-dir-link" } },
+    { "id": "terminal-broken-junction", "fixture": "before", "path": "broken-junction", "reference": { "collection": "links", "memberPath": "broken-junction", "field": "entry", "path": "broken-junction" } },
+    { "id": "ancestor-junction-file", "fixture": "before", "path": "aliases/root-back/regular-file.txt", "reference": { "collection": "files", "memberPath": "regular-file.txt", "field": "entry", "path": "regular-file.txt" } },
+    { "id": "ancestor-symbolic-unicode-file", "fixture": "before", "path": "absolute-dir-link/资料 Note.txt", "reference": { "collection": "files", "memberPath": "target-dir/资料 Note.txt", "field": "entry", "path": "target-dir/资料 Note.txt" } },
+    { "id": "mixed-junction-terminal-r", "fixture": "mixed", "path": "mixed-junction/S/r", "reference": { "caseID": "mixed-junction", "memberPath": "D/data/r", "path": "mixed-junction/D/data/r" } },
+    { "id": "mixed-symbolic-terminal-r", "fixture": "mixed", "path": "mixed-absolute-symbolic/S/r", "reference": { "caseID": "mixed-absolute-symbolic", "memberPath": "D/data/r", "path": "mixed-absolute-symbolic/D/data/r" } },
+    { "id": "terminal-directory-symbolic-uppercase", "fixture": "before", "path": "ABSOLUTE-DIR-LINK", "reference": { "collection": "links", "memberPath": "absolute-dir-link", "field": "entry", "path": "absolute-dir-link" } },
+    { "id": "actual-short-ordinary-file", "fixture": "before", "shortOf": "ordinary-file", "reference": { "collection": "files", "memberPath": "regular-file.txt", "field": "entry", "path": "regular-file.txt" } },
+    { "id": "actual-short-unicode-file", "fixture": "before", "shortOf": "unicode-file", "reference": { "collection": "files", "memberPath": "target-dir/资料 Note.txt", "field": "entry", "path": "target-dir/资料 Note.txt" } }
+  ],
+  "modelCallsRequested": "none",
+  "qualification": "Fixed read-only same-NOFOLLOW-handle entry-name observation only. Case and short access are observed; no hardlink pair, production loader, retirement validator, File API, futuretree or UI acceptance. Stop first native/FFI/buffer/close failure, preserve the complete original record and error."
+}

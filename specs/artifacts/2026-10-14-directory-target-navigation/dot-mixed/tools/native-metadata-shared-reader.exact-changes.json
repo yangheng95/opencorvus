@@ -1,0 +1,38 @@
+{
+  "qualification": "Prepare-only text extraction; original executed tool unchanged; no execution or syntax check has occurred",
+  "original": "native-metadata-qualifier.mjs",
+  "proposal": "native-metadata-qualifier.shared-proposal.mjs",
+  "helper": "native-metadata-reader.mjs",
+  "changes": [
+    {
+      "label": "shared-reader-import",
+      "before": "import { createRequire } from \"node:module\"",
+      "after": "import { createNativeMetadataReader, originalError as errorFact } from \"./native-metadata-reader.mjs\""
+    },
+    {
+      "label": "single-library-and-abi-extraction",
+      "before": "  stage = \"single-koffi-load\"\n  const packageRequire = createRequire(input.packageAnchor)\n  const entryPath = packageRequire.resolve(\"koffi\")\n  const packagePath = path.join(path.dirname(entryPath), \"package.json\")\n  const packageInfo = JSON.parse(await fs.readFile(packagePath, \"utf8\"))\n  assert.equal(packageInfo.version, input.koffiVersion)\n  const koffi = packageRequire(\"koffi\")\n  assert.equal(koffi.version, input.koffiVersion)\n  const nativeModules = Object.values(packageRequire.cache).filter((item) => item?.filename?.endsWith(\".node\"))\n  const addons = []\n  for (const item of nativeModules) addons.push({ cacheFilename: item.filename, physicalPath: await fs.realpath(item.filename), loaded: item.loaded, exportedVersion: item.exports?.version })\n  output.library = { packageAnchor: input.packageAnchor, entryPath, physicalEntry: await fs.realpath(entryPath), packagePath, packageVersion: packageInfo.version, nativeVersion: koffi.version, addons }\n  await emit({ type: \"actual-library\", library: output.library })\n  assert.equal(addons.length, 1, \"Exactly one observed loaded native addon is required; do not infer an unobserved path\")\n  assert.equal(addons[0].exportedVersion, input.koffiVersion)\n  assert.ok(addons[0].physicalPath.toLowerCase().includes(`${path.sep}@koromix${path.sep}koffi-win32-x64${path.sep}`), \"Observed addon must be the declared installed Windows x64 package\")\n\n  stage = \"fixed-win32-abi\"\n  const kernel = koffi.load(\"kernel32.dll\")\n  const HANDLE = koffi.pointer(\"DIRECTORY_TARGET_METADATA_HANDLE\", koffi.opaque())\n  const TAG_INFO = koffi.struct(\"DIRECTORY_TARGET_FILE_ATTRIBUTE_TAG_INFO\", { FileAttributes: \"uint32_t\", ReparseTag: \"uint32_t\" })\n  const abi = { handleBytes: koffi.sizeof(HANDLE), bufferSize: koffi.sizeof(TAG_INFO), fields: { FileAttributes: koffi.offsetof(TAG_INFO, \"FileAttributes\"), ReparseTag: koffi.offsetof(TAG_INFO, \"ReparseTag\") } }\n  assert.deepEqual(abi, { handleBytes: 8, bufferSize: 8, fields: { FileAttributes: 0, ReparseTag: 4 } })\n  const create = kernel.func(\"DIRECTORY_TARGET_METADATA_HANDLE __stdcall CreateFileW(const char16_t *lpFileName, uint32_t dwDesiredAccess, uint32_t dwShareMode, void *lpSecurityAttributes, uint32_t dwCreationDisposition, uint32_t dwFlagsAndAttributes, void *hTemplateFile)\")\n  const query = kernel.func(\"int __stdcall GetFileInformationByHandleEx(DIRECTORY_TARGET_METADATA_HANDLE hFile, int FileInformationClass, _Out_ DIRECTORY_TARGET_FILE_ATTRIBUTE_TAG_INFO *lpFileInformation, uint32_t dwBufferSize)\")\n  const lastError = kernel.func(\"uint32_t __stdcall GetLastError()\")\n  const close = kernel.func(\"int __stdcall CloseHandle(DIRECTORY_TARGET_METADATA_HANDLE hObject)\")\n  const INVALID = (1n << 64n) - 1n\n  const invalid = (handle) => handle === null || handle === undefined || (typeof handle === \"bigint\" && BigInt.asUintN(64, handle) === INVALID)\n  output.abi = abi\n  await emit({ type: \"abi-layout\", abi, nativeInput: input.nativeInput })\n\n",
+      "after": "  const reader = await createNativeMetadataReader(input, async (fact) => {\n    if (fact.type === \"reader-stage\") stage = fact.stage\n    if (fact.type === \"actual-library\") output.library = fact.library\n    if (fact.type === \"abi-layout\") output.abi = fact.abi\n    await emit(fact)\n  })\n\n"
+    },
+    {
+      "label": "fixed-native-read-extraction",
+      "before": "    let handle\n    try {\n      handle = create(item.operand, 0, 7, null, 3, 0x00200000 | 0x02000000, null)\n      const openError = lastError() // Immediate, synchronous same-thread capture; no await/other native call intervenes.\n      native.open = { returnValue: handle, lastError: openError, lastErrorMeaning: invalid(handle) ? \"failure-code\" : \"observed-stale-on-success\" }\n      if (invalid(handle)) native.failures.push({ kind: \"win32\", operation: \"CreateFileW\", win32Error: openError, operand: item.operand, rawReturn: handle })\n      else {\n        const info = {}\n        const accepted = query(handle, 9, info, 8)\n        const queryError = lastError()\n        native.query = { returnValue: accepted, lastError: queryError, lastErrorMeaning: accepted ? \"observed-stale-on-success\" : \"failure-code\", output: { ...info } }\n        if (!accepted) native.failures.push({ kind: \"win32\", operation: \"GetFileInformationByHandleEx\", win32Error: queryError, operand: item.operand, rawReturn: accepted })\n      }\n    } catch (error) { native.failures.push({ kind: \"host-or-ffi\", error: errorFact(error) }) }\n    finally {\n      if (!invalid(handle)) {\n        try {\n          const accepted = close(handle)\n          const closeError = lastError()\n          native.close = { status: accepted ? \"closed\" : \"failed\", returnValue: accepted, lastError: closeError, lastErrorMeaning: accepted ? \"observed-stale-on-success\" : \"failure-code\" }\n          if (!accepted) native.failures.push({ kind: \"win32\", operation: \"CloseHandle\", win32Error: closeError, operand: item.operand, rawReturn: accepted })\n        } catch (error) { native.close = { status: \"failed\", error: errorFact(error) }; native.failures.push({ kind: \"close-host-or-ffi\", error: errorFact(error) }) }\n      }\n    }\n",
+      "after": "    Object.assign(native, reader.read(item.operand))\n"
+    },
+    {
+      "label": "same-original-return-pointer-contract",
+      "before": "typeof handle === \"bigint\"",
+      "after": "typeof native.open?.returnValue === \"bigint\""
+    },
+    {
+      "label": "same-original-error-serializer-extraction",
+      "before": "const errorFact = (error, seen = new Map()) => {\n  if (typeof error === \"bigint\") return { type: \"bigint\", value: String(error) }\n  if (error === undefined) return { type: \"undefined\" }\n  if (error === null || typeof error !== \"object\") return { type: typeof error, value: String(error) }\n  if (seen.has(error)) return { reference: seen.get(error) }\n  const identity = seen.size + 1\n  seen.set(error, identity)\n  const properties = {}\n  for (const name of Object.getOwnPropertyNames(error)) properties[name] = errorFact(error[name], seen)\n  return { identity, type: error instanceof Error ? error.name : \"Object\", properties }\n}\n",
+      "after": ""
+    },
+    {
+      "label": "proposal-only-header",
+      "before": "/** PREPARED ONLY. Root separately authorizes Node and Bun; the qualifier writes only stdout. */",
+      "after": "/** REVIEW PROPOSAL ONLY. Do not run the prior 20 operands again. Root may replace the original with this shared-reader consumer after review. */"
+    }
+  ]
+}

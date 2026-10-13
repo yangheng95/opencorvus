@@ -6,7 +6,7 @@
 
 - [SQLite 当前基线与自动迁移](2026-10-14-sqlite-automatic-migrations.md)：旧数据维护、新建版本1、后续事务迁移与备份恢复验收。
 
-- [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation.md)：独立列表target合同、别名移动与相对链接范围前检。
+- [目录链接浏览与别名目的地](2026-10-14-directory-target-navigation.md)：Move退休依赖修复、Root独立真实桌面验收与仍待实现的完整浏览/相对迁移合同。
 
 - [删除 MySQL 转换能力](2026-10-14-remove-mysql-transfer.md)：删除转换实现、三个公开接口及专用测试，保留 SQLite 当前契约。
 

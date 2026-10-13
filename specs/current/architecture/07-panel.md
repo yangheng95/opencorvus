@@ -507,6 +507,17 @@ the content API determines its actual bytes, revision or original read error.
 This contract does not introduce directory-link navigation or physical alias
 tracking into the file workbench.
 
+Move verifies that the destination parent's actual access chain remains
+independent of the source entry being retired before native publication. A
+dependency returns HTTP 400/FileInvalidPathError with the original destination
+path; an existing destination entry, including a dangling link, takes precedence
+as HTTP 409/FileConflictError. Independently addressable aliases to the same
+target remain valid. Entry identity combines its exact address with BigInt
+filesystem identity; Windows observes the terminal reparse entry through one
+non-following handle and preserves junction versus symbolic access namespaces.
+This integrity check does not apply to Copy or claim atomic external-retarget
+protection. It does not add directory-link navigation or a second receipt.
+
 Move/copy validate each link's declared source and relocated destination targets
 through the current project path authority; an in-scope missing target remains
 a valid link entry. Native rename retains the link text. Copy retains it with

@@ -8,9 +8,23 @@
 
 用户明确授权批次并行；本轮一层限定file_alias_audit只读UI影响、file_alias_contracts只读后端别名/relocation、functional_audit只读实际predicate/SDK/原工具预算，均禁止再委托、产品/测试/正式spec/Git修改或运行。已完整读上一候选next-batch-candidate.md；新报告待Root全文核验。file_alias_contracts的新源码推导包括source-through-self发布后可寻址与relative link经alias搬迁的物理目标范围，均尚未实测。不得凭名称/最后错误断定根因或把推导写成复现。
 
+用户随后明确要求“停止所有子agent，你自己验收”。Root立即停止全部子agent，重新读取状态确认仅Root运行；此后不再委托。原并行报告只保留历史资格，最终代码、原日志、真实页面、截图和收尾由Root独立核验。该指令停止委托，没有停止持续迭代目标。
+
 本轮继续使用benchmark-debug-template（基准调试模板）的Recall、原输入/原输出/真实活动期限及二次复核流程；已重读其SKILL。当前成熟PS launcher只有900000ms absolute execution（绝对执行预算）、startup观察45秒、shutdown观察45秒/其他owner join75秒，**没有**外部120000ms inactivity driver。无活动超时是独立待资格的既有ProcessFacade.run能力，不把absolute执行cap冒充无活动计时。工具观察expiry只继续原handle，绝不重开/重置执行input。所有准备、纯syntax和预算资格先完成，再启动真正页面，实际交互/读回后立即收束，后续分析和Git不耗服务预算。
 
 ## 已知现象、直接触发和历史边界
+
+### 本批当前实现与Root独立验收
+
+当前已实施下文冻结的Move源entry退休依赖检查及目的entry冲突优先级；共享相对声明/future tree（未来树）、完整目录链接浏览、两条旧meta等待与Host代理探测超时仍未修复。下文“尚无产品修改”等记录描述各历史检查点，不能代替本段当前事实。本批只交付已取得真实证据的Move合同，不更新版本或发布。
+
+Root独立全文解析首轮和最终原日志，报告与逐请求清单见[guard/README.md](../../artifacts/2026-10-14-directory-target-navigation/guard/README.md)。首轮link30/root18共48 pass、628 expect、188个真实TCP请求，200×98/400×61/404×25/409×4；最终诊断修正后直接受影响link checker重新运行，30 pass、334 expect、130个真实请求，200×91/400×13/404×22/409×4，原退出均0。两轮分别94条原entry身份/readlink及42条完整正文记录；未打印的身份/通知断言不补造日志。小Hono（HTTP路由库）checker成功响应的requestID为null，是原输入事实；新完整服务的脚本请求保有真实requestID。最终source类型检查原0，第一轮root准入语义没有再变更，不借其0覆盖后续link修正。
+
+新隔离fixture=fc1edaa2-91c8-45d9-9caa-142d25b87f36、真实开发服务localhost:18456/ui。Root亲自进行5次Move：junction/self、indirect relative、symbolic/self均HTTP400并保原source；经独立alias的junction与symbolic各200并以原dev/ino/birth/readlink发布到A/data。4个注册、6个before只读与10个after只读请求均200/201，A/B根、六份注册后文件完整bytes与新entry逐项读回。11张1280×720原JPEG均由Root实际查看；英语与中文错误/成功摘要、根列表、data展开和marker Editor有对应原图。04/05只显示滚动后的Details片段，底部闭括号未完整入图；11图完整显示真实marker，不能把片段图说成完整body视觉证据。页面没有产品源码改动或UI自动化测试。
+
+同原服务occurrence=directory-target-guard-after-c94af314-1bea-42a9-8e4c-5af4c59ddbce，输入900000ms绝对执行cap、120000ms真实Target输出无活动预算；Host/Target/Parent birth、原输入、stdout554B/stderr209058B与全部joins/writes保留。原stderr全文只有3条对应上述拒绝的FileInvalidPathError400诊断，浏览器原warn/error记录0；不能由此排除旧meta/proxy共享根因。Root关闭自己的隔离tab后，普通shutdown于2026-10-13T20:44:44.014Z实际200，同原Native和launcher自然退出0，原birth退休/port释放事实20:44:46.828Z收齐。shutdown-root-exit.json原exitCode为null（PowerShell脚本返回不赋$LASTEXITCODE），保原值；不能将其伪写为0。实际tool退出0、原HTTP200、Native/parent0与物理回执分别证明各对象，外层tool结构化返回仅在chat，没有补造binary日志。
+
+新增dot46件与entry-name/guard198件原件已完整归档；大文本/log采用完整gzip，逐件解压与原件直接字节比较相同，凭据、模型目录、runtime home与数据库未进入归档。GetFinalPathNameByHandleW的Node/Bun各16槽只资格当前Windows ABI（Application Binary Interface，应用二进制接口）与原entry名；hardlink pair、Darwin别名、case-sensitive Windows、UNC（Universal Naming Convention，通用命名约定）、未知tag/close失败、retarget原子竞态仍未覆盖。生产入口通过真实FileRoutes与新source CLI运行，但不冒称安装包运行器已资格。本批不需要LLM调用，没有新凭据读取、复制或模型验收。最终文档检查、范围提交、最新upstream同步与正常push另保原结果；此处尚不宣称已推送。
 
 已有真实Windows junction/dir symlink的terminal lstat为link、followed target为目录，直接GET/file具体alias path200返回marker，后续真实TCP（Transmission Control Protocol，传输控制协议）合同也证alias子内容完整CRLF（Carriage Return/Line Feed，回车换行）字节。当前File.Node.type有意统一为entry目录或其它entry；terminal link= file，ignored目录hint来自同一entry。因此不是type回归。Explorer仅type=directory显示chevron/展开/目录菜单，其它行openFile，尚无独立target目录事实；新的真实修前点击图仍未取得。
 
@@ -19,6 +33,26 @@
 新增目录目的地需要先确认两个相关实际边界。源码表明File.move先验证路径/parent/relocation，renameNoReplace之后nodeForPath读取原targetFull：source terminal link若移进通过其自身到达的target，旧source路径退休后targetFull可能不可寻址。另一alias到同target可能完全合法，不能用canonical target ancestor粗略阻断所有alias。relative readlink用path.resolve(logical parent,text)校验；alias改变实体parent深度时，实际新链接目标可能与逻辑声明目标不同。这是permission/publication共同影响，不能先加猜测gate或通过目录图标掩盖。当前仅推导，须小型真实checker（检查器）证实。
 
 ## 公共事实和最终能力范围
+
+### 本次 current Move 修复的冻结合同与影响
+
+Root完成当前实现/归档/三个共享索引owned条目及07-panel精确合同更新后，当前package.json文档checker真实0（345 operations、26 groups），architecture-index真实0（19 current documents）；原完整log/exit另保guard/validation。共享README/07-panel其余owner差异先保存并审阅，提交只用最新HEAD加本任务条目/段落，不能把Provider或权限并行改动混入。
+
+独立code review全文核未发现P0/P1/P2功能阻断，指出两诊断边界。Root采最小修正：post/addressed两原lstat以成熟allSettled收齐首错/第二错；native只有CreateFileW的已资格Win322/3映射ENOENT，Tag/name/Close同码保原WIN32_x不猜missing，避免unknown观察错误变400/404。没有注入未知I/O/native/close失败实验，真实失败分支仍未验。首聚焦实际link30/root18共48pass0fail且runner原0/typecheck0已保，修正后重跑直接受影响linkchecker与类型；root准入语义不变，不借首0覆盖修后版本。
+
+实施前准确原名资格已完成并Root全文核两宿主32槽全部原path/返回readlink/原BigInt身份、size/read/NUL/Close与原library/ABI/settled：Node16/239792B、Bun16/244721B均原0，Target与Parent stderr均0B，原三joins/四writes及三个结算事实fulfilled、父自然close0。全部GetFinalPathNameByHandleW原名exactDeclared=true；terminalfile/dirSYM/junction/broken返回ownentry而非followed目标；uppercase返回stored大小写；两个实际GetShortPathNameW产生祖先与终端8.3operand，均回原完整名字，Unicode完整UTF16保真。每个原Close1、identityStable=true；short无猜名/创建，hardlink pair/case-sensitive Windows policy/Darwin等仍unknown。这只资格当前裸库原语，不冒production loader/File或retarget原子性。Root全文核relocation-implementation-plan与relocation-positive-contracts，采用上节冻结guard/Move strict-lstat/新400先后；额外futuretree设计只作下批输入，不提前实现未用泛型view。
+
+可观察原故障是三次正常原生发布后原目的路径ENOENT/HTTP404，直接触发为destination parent的实际访问链包含将退休source entry。旧assertAllowedFilePath只验证followed实体scope、旧sharedrelocation只校验link声明，均不证明发布后逻辑目的地继续可寻址；nodeForPath则在rename之后读取失效原路径。根因属于发布准入的数据完整性，不是Node类型或UI摘要，不通过回执改实体地址、失败后重找文件或补重试解决。
+
+本提交范围先为File.move新增一次发布前访问依赖审查；源/目的/root/parent原准入先完成，已存在目的entry返回FileConflictError409，再走新依赖与现唯一sharedrelocation，最后原renameNoReplace→notify→nodeForPath。新依赖错误固定HTTP400/FileInvalidPathError，data.path=原newPath，message=`Destination parent depends on the source entry being moved: ${newPath}`。独立alias即便followed target相同也保持200；普通目录向自身实体后代移动属于同一退休依赖合同。Copy不退休source，因此不调用这一guard；它的共享相对声明问题仍待后续明确修复。
+
+定义/调用已全仓搜索：assertFileMutationPaths仅move/copy/delete，sharedrelocation仅move/copy；新Win32GetFinal/TagInfo没有同语义生产实现。FileRoutes为唯一API mutation producer，CLI Debug只list；公开Node五字段/错误类型/route/SDK均无需新增协议。Filesystem.exists当前是access且follow终端dangling/任何错误false；Move的目的precheck以成熟lstat替换，现存dangling也直接409，已知ENOENT/ENOTDIR才继续，原未知I/O直接throws，不修改global exists/Copy/create。这样新400不会抢占已存在entry的409；原source scope/root与Copy self-directory precedence保持。
+
+访问状态是当前access namespace与remaining suffix，原用户operation path已由现path.join折叠。每个实际entry由BigInt lstat与准确NOFOLLOW entry address识别；不以ultimate target或inode-only合并独立目录entry。Windows真实tag区分SYMLINK与MOUNT_POINT：相对SYM在当前namespace按已资格path.resolve折叠，absolute/relative SYM递归target并用返回namespace继续suffix；junction递归其绝对target仅查依赖，外层仍保自身访问namespace。普通entry继续同访问namespace；POSIX符号text原components保留，解析link后再处理..，不将Windows折叠外推。active按准确访问namespace避免真实重复解析cycle，完成后的同namespace可重用；有限root-back重复不因inode相同判cycle。原错误/未知tag保持错误，不猜tag、不吞scope I/O、不复制目标或创建影子树。依赖检查不是原子权限快照；外部retarget/rename竞态沿原系统操作错误，未声称全部race消除。
+
+Windows entry地址候选必须先完成同NOFOLLOW handle GetFinalPathNameByHandleW实际名称资格（含大小写、真实API返回8.3、broken与mixed terminal own entry），之后才写产品。同原handle读取tag/name并一次Close，首native失败与close失败都保留；使用现requireRuntimePackage/Koffi3.3.2部署原语，宿主中立，不新增bun:ffi或第二fallback。其他平台只用成熟fs parent realpath+terminal名称及BigInt事实，POSIX标准字节路径与Darwin特殊case/Unicode volume别名区分；后者尚无实机证据，不宣称验证。长路径/UNC、未知reparse/close错误及retarget race没有本批有限Windows实体覆盖，明确保留。
+
+正向验收复用现file-link-entry-contract真实Hono/FileRoutes TCP与managed memoryProject：self junction/SYM、indirectrelative目的地的精确400和原source dev/ino/readlink/target全文保持；两独立same-target alias与mixedSYM合法200、新node/原inode/原text/全文content及notify；ordinary self-directory400、有限root-back合法200、dangling/healthy目的409；现root与link整树正向合同聚焦重跑。新真正service/localhost:18456/ui以最小无loop A/B owned fixture、固定900s/120s原Native实例，真实Move反馈/Details与独立alias成功收敛截图人工查看，正常shutdown及所有原joins收齐后才提交。没有UI自动测试或GPT调用需求。当前07-panel已有foreign变更，只精确加入本guard契约hunk；所有新spec/artifact同步各README并跑docs:check，source typecheck/相关checker/normal hooks，精确task提交、freshupstream合并/完整待推送集合核查/正常push。完整目录target浏览、sharedrelocation未来树、meta/Hostproxy底层问题仍未满足，不将本guard交付包装为全部完成。
 
 本批目标是健康、当前权限允许的目录link在真实Files中可展开/收起、打开alias子文件，并在现New/Upload/copy/move目录目的地中使用其原逻辑path；scope（项目范围）、错误Details、语言、已展开路径和编辑owner继续自然收敛。完整能力不得仅画folder图标而仍把上传发到parent，也不得为了更容易通过旧测试缩成只有普通目录。
 
@@ -55,6 +89,26 @@ primitive先记录Bun1.4/Windows真实Dirent.isDirectory/isFile/isSymbolicLink�
 同步07-panel当前单一契约、root/month/artifact索引和完整reports/原输入/原raw/图片；docs:check、architecture-index、相关类型/build/范围diff及正常hooks。每批任何产品或spec修改均精确commit，保存审查差异，用最新HEAD私有index隔离shared条目，CAS（Compare-And-Swap，比较交换）失败只更新base不覆盖并行工作。每次push前fresh fetch→upstream merge→完整upstream..HEAD集合资格→正常push；non-fast-forward重新同流程，无tag/Release/发布。未取得项、工具首错与原预算失败明确交付，Goal保持active并下一批。
 
 ## 当前状态
+
+用户最新明确“停止所有子agent，你自己验收”；Root对当前全部三子agent逐一interrupt并核live列表仅Root running，后续不再委托。原持续目标未停止。实际18456同service已自然完成两次Root手动Move400（selfJ与indirect），真实Details显示400/type/newPath/固定原因、requestID513a7325-fa9e-4465-b532-ad7c1581576e；图04/05只显示Details scroll片段，不把未呈全的closing body称全图完整。Root独立限定新增readonly verify-state before6/after10请求：原五links的dev/ino/birth/text、六registered literals、A/B root list与四正文；after固定data/moved-{j,s}同原entry/别名list/真实marker读回，仅Root真实页面执行move，无checker mutation/模型。每phase新guard-state namespace120s/30s真实输出，首错保全不重放；先parser后Root另授。这是补真实磁盘/HTTP证据，不是UI自动化测试。
+
+guard阶段复用唯一run-dot-native的固定Node两个分支：Prepare60s execution/20s真实输出无活动，Register120s/30s，各新guard-native-{prepare|register}-node独占namespace；不沿用仅ABI3s窗口去截断Git15s或HTTP20s的合法单步骤。Target自然发布原input、每次实际Git结果与每次HTTP完整原record；这些是真实输入/完成结果，不是ping或伪活动。服务仍单独原900s/120s；所有小phase由同生产Native run唯一流consumer/full joins与parent自然close记录，源参数不重用旧namespace。
+
+Root全文核guard-after review与六current脚本及完整原历史，冻结新owned18456/guard-after namespace：仅95B四正文/ignore、五健康link、普通source-tree、独立A/B Git；Prepare/Register四真实请求，不偷加root-loop或旧8consumed操作，现immutable bin/ui与当前sourceCLI，900000cap/120000真实输出、45s启动/关闭观察。小型本地工具诊断修复先实施：成熟passive Get-OwnedNativeState目前只在exit非0显示stderr，exit0 warning丢失；新本scope helper在同一次原ReadToEnd双tasks/WaitForExit后持久decoded stdout/stderr/原PID/.NET StartTimeTicks/argv/exit至observer namespace，不创建第二consumer、改状态判定/计时/kill/shims。该decodedText不冒未取得的binary原流；主Native/parent原binary流仍由原Host/launcher收全。Prepare前全部Node/parser/Transpiler纯syntax另存原结果，再Root另授Prepare/Launch/Register/实际交互。没有模型或凭据catalog。
+
+Root已全文审bootstrap-proxy-timeout-audit并归档analysis：全部生产入口、Task/Mission/Session occurrence正常/终态/恢复、串并行/多Project/工具环境核后，证实是Host显式同步shims→SystemProxy.install→execFileSync reg固定2000ms→message-only warning，在Target run之前；installed先true且同process失败不重试。6382ms只为admission至ready整体，不全归reg；原error PID/status/signal/output丢失，reg实际birth/底层超时/整个树未知。官方Bun1.4源码和同步返回契约不能补本次exact receipt；8月ARC-024已有平台adapter例外，不能凭未进Facade宣布新旁路。Files无网络/模型依赖，继续精确文件资格，不改代理timeout/disable/suppress或重开原例；诊断保留与底层原因另待有正式输入/隐私边界的批次。代理72B原件仍未改写，不能称console clean。
+
+本续轮后fresh HEAD/upstream已前进至2494f5da532487059d4e4c1215840716c19814fe（并行数据库baseline与Provider交付）；本任务原020提交仍祖先，foreign改动与real index保留。新dot三phase全部原0：同fixture-ID、Read Node32/269998B和Bun32/272927B，两个原stderr0B；各原terminal/settled/outputSettled/物理/输出/request及四writesfulfilled，parent自然close0。六例四dot的u.raw=v/../goal与原未fold raw-access实际均tree/goal，broken v自身followed ENOENT保留；mixed S→B/J(junction→D/data)的S/r实际B/goal，而directr为D/goal；S→B/T(absolute SYMLINK→D/data)的S/r实际D/goal。这支持Windows每个相对替换stage fold、绝对SYM递归传回namespace、junction保外层context；不能外推POSIX或只用ultimate实路径。本轮46份原件1,457,244B已逐字节无损归档dot-mixed，四syntax0和Host准备72B warning均保全。没有File产品、未来树或UI后态验收。
+
+下一实现收敛为生产准入同一访问事实：Move退休source entry与目的parent访问链依赖；move/copy sharedrelocation同时审source和未来实体parent中的link声明。当前physical-parent+输入basename可能遗漏Windows大小写/8.3实际别名，而inode-only又错误合并独立hardlink，尚未宣称排除。授权functional_audit只准备≤16槽同NOFOLLOW原handle的GetFinalPathNameByHandleW只读资格，成熟normalized DOS0/官方size与UTF16合同、GetShortPathNameW仅读实际返回、不改policy；现sharedreader不改，提案/history完整。Root另授运行前须全文审阅。file_alias_audit只读最小统一walker/futuretree设计，不再meta probe；均禁止再委托、source/tests/正式spec/Git与执行。新事实完整落盘后才实施，不按旧统一Windows-anchor方案修补。
+
+2026-10-14持续续轮已先重读完整Recall并核当前HEAD=origin/main=020f7b0004da883695392f5cc8b24550acf9c638；上一turn实际push0/fresh ancestor0、357归档原件与Git逐字节相同，属于进展。当前本任务tracked范围clean，real index空；其他owner的数据库/权限/Provider/compaction/架构和shared索引变化保留，不扩分支。新增持久格式迁移全局规则已读，本Files范围不改数据库或消息。
+
+Root全文审dot-mixed review/inputs/qualifier、共享reader、旧consumer替换提案/每个完整diff：六例、32 observations/host、338 literal bytes、新独占root directory-target-dot-mixed-01a133；四dot（ordinary/absolute symbolic/junction/broken symbolic）u.raw=v/../goal及原未fold访问对照，两mixed absolute S→B/J或B/T→D/data/r(raw ../goal)，B/goal与D/goal不同正文。Prepare Node一次生成原UUID和实体manifest，Read Node/Bun各首次一次、same原fixture-ID/成员lstat/readlink/bytes，观察输出不预断哪marker正确。没有API/mutation/模型/UI。旧20原脚本已独占保历史并完整逐字节核，批准当前consumer替换为shared reader、旧inline删除，旧20不重放；newhelper的动态资格由新Read原结果决定，不拿历史20绿色替代。
+
+新增Root run-dot-native只组装固定输入/独占phase目录/隔离非凭据环境并收Native Host完整parent原byte与close；实际stdout唯一consumer仍是已资格production ProcessFacade.run，原onSpawned handle/terminal/settled/outputSettled/full writes与原birth保存。各phase原30000ms执行cap+3000ms真实stdout/stderr无活动，scope下原不同occurrence，外围不套buffered Host的120s假无活动。原syntax Node --check不加载模块/Native，随后Root顺序Prepare、原UUID Node Read、同UUID Bun Read；首故障保原退出/全cause和partial，命名空间不重试，不凭observations0称File通过。源码编辑仍须这份真实规则结果后完整补方案，源退休Move、sharedrelocation/futuretree和完整目录浏览整体目标未改。
+
+新四份syntax各原0。一次Native Prepare实际原0/六例创建成功，fixtureID=df2ea0df-f134-4503-aea1-a2597ff25c9e；Host82320/birth639275173505049918、Target88796/birth639275173568449257、Parent88764，原Target stdout76484B/stderr0，3joins/4writes/physical/output/request均fulfilled、自然exited0。Parent Host自身stderr另72B是`[opencorvus bootstrap] detect system proxy: spawnSync reg.exe ETIMEDOUT`，发生在ready前约6秒；不能把Target stderr0当Host无错误/排除Host reg child生命周期，原reg PID/birth/cause/stdout仍未知。已立即授权file_alias_contracts只读全生产bootstrap/Task-Mission-Session/native/service/tool与终态/恢复/并发环境横审，禁止访问registry/凭据或按最后message归因。原fixture准备完整，随后同UUID的两32项只读规则收录仍独立推进；不屏蔽warning/调大等待，也不把该原0冒全部共享机制已合格。
 
 本次交付是调查证据检查点：修前48个真实脚本HTTP、8个独立mutation、8张人工查看的桌面JPEG、原实例正常结算已完成；当前产品没有修改，两个准入根因尚未实施，目录link浏览、后态/中文与meta等待根因尚未达成。完整原失败与未知保留，持续Goal仍active，检查点正常提交/最新上游合并与push之后继续资格与实施，不把它称完整修复批次。
 

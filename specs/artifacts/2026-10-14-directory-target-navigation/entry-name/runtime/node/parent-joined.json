@@ -1,0 +1,23 @@
+{
+  "occurrence": "directory-target-dot-entry-name-node-a5c87208-2ccb-44d4-893e-e3d80cef21fb",
+  "hostPID": 41152,
+  "parentPID": 71472,
+  "terminal": {
+    "code": 0,
+    "signal": null,
+    "errors": []
+  },
+  "outputJoins": [
+    {
+      "stream": "stdout",
+      "status": "fulfilled",
+      "bytes": 239792
+    },
+    {
+      "stream": "stderr",
+      "status": "fulfilled",
+      "bytes": 0
+    }
+  ],
+  "joinedAtUtc": "2026-10-13T20:10:02.274Z"
+}

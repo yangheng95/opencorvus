@@ -1,0 +1,85 @@
+{
+  "sequence": 4,
+  "input": {
+    "label": "register-b-chat",
+    "role": "b",
+    "method": "POST",
+    "route": "/coding/chat/session",
+    "query": {},
+    "body": {}
+  },
+  "occurrence": "directory-target-guard-after-c94af314-1bea-42a9-8e4c-5af4c59ddbce",
+  "host": {
+    "pid": 71960,
+    "processInstanceID": "win32:639275202435145245",
+    "occurrenceID": "252ff5fc-dbf5-4d39-96c9-35e68c06fecf"
+  },
+  "nativeTarget": {
+    "pid": 26924,
+    "processInstanceID": "win32:639275202443495227",
+    "occurrenceID": "f1f71372-91b2-4c29-a8ce-081ae27e015a"
+  },
+  "url": "http://127.0.0.1:18456/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Cdirectory-target-guard-after-01a133%5Cproject-b",
+  "method": "POST",
+  "requestBody": "{}",
+  "requestBodyBase64": "e30=",
+  "dispatchedAt": {
+    "utc": "2026-10-13T20:31:07.333Z",
+    "wallMs": 1791923467333,
+    "monotonicNs": "2741357973639700"
+  },
+  "chunks": [
+    {
+      "at": {
+        "utc": "2026-10-13T20:31:07.362Z",
+        "wallMs": 1791923467362,
+        "monotonicNs": "2741358002617700"
+      },
+      "bytes": 418,
+      "bytesBase64": "eyJzZXNzaW9uIjp7ImlkIjoic2VzXy16VVMyQmtGTXp6MnRHRk9FTW5UIiwic2x1ZyI6ImNhbG0tZWFnbGUiLCJ2ZXJzaW9uIjoibG9jYWwiLCJwcm9qZWN0SUQiOiJwcmpfaEpaQzdpbk1yeFdXVGtxZ240ZlMiLCJkaXJlY3RvcnkiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGRpcmVjdG9yeS10YXJnZXQtZ3VhcmQtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0LWIiLCJ0aXRsZSI6IkNoYXQiLCJraW5kIjoiYXNzaXN0YW50IiwibWV0YWRhdGEiOnsiY29udmVyc2F0aW9uIjp7ImV4cGVyaWVuY2UiOiJjaGF0Iiwic3VyZmFjZSI6InJpZ2h0LXNpZGViYXIifX0sInRpbWUiOnsiY3JlYXRlZCI6MTc5MTkyMzQ2NzMzNSwidXBkYXRlZCI6MTc5MTkyMzQ2NzMzNX19fQ=="
+    }
+  ],
+  "status": 201,
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "418",
+    "content-type": "application/json",
+    "date": "Tue, 13 Oct 2026 20:31:07 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "82cc58ac-b5dc-4536-80bb-943aac7d7f41"
+  },
+  "requestID": "82cc58ac-b5dc-4536-80bb-943aac7d7f41",
+  "headersAt": {
+    "utc": "2026-10-13T20:31:07.361Z",
+    "wallMs": 1791923467361,
+    "monotonicNs": "2741358002407700"
+  },
+  "rawBodyBase64": "eyJzZXNzaW9uIjp7ImlkIjoic2VzXy16VVMyQmtGTXp6MnRHRk9FTW5UIiwic2x1ZyI6ImNhbG0tZWFnbGUiLCJ2ZXJzaW9uIjoibG9jYWwiLCJwcm9qZWN0SUQiOiJwcmpfaEpaQzdpbk1yeFdXVGtxZ240ZlMiLCJkaXJlY3RvcnkiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGRpcmVjdG9yeS10YXJnZXQtZ3VhcmQtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0LWIiLCJ0aXRsZSI6IkNoYXQiLCJraW5kIjoiYXNzaXN0YW50IiwibWV0YWRhdGEiOnsiY29udmVyc2F0aW9uIjp7ImV4cGVyaWVuY2UiOiJjaGF0Iiwic3VyZmFjZSI6InJpZ2h0LXNpZGViYXIifX0sInRpbWUiOnsiY3JlYXRlZCI6MTc5MTkyMzQ2NzMzNSwidXBkYXRlZCI6MTc5MTkyMzQ2NzMzNX19fQ==",
+  "rawBody": "{\"session\":{\"id\":\"ses_-zUS2BkFMzz2tGFOEMnT\",\"slug\":\"calm-eagle\",\"version\":\"local\",\"projectID\":\"prj_hJZC7inMrxWWTkqgn4fS\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-14\\\\directory-target-guard-after-01a133\\\\project-b\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791923467335,\"updated\":1791923467335}}}",
+  "bodyCompleteAt": {
+    "utc": "2026-10-13T20:31:07.362Z",
+    "wallMs": 1791923467362,
+    "monotonicNs": "2741358002734200"
+  },
+  "body": {
+    "session": {
+      "id": "ses_-zUS2BkFMzz2tGFOEMnT",
+      "slug": "calm-eagle",
+      "version": "local",
+      "projectID": "prj_hJZC7inMrxWWTkqgn4fS",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\directory-target-guard-after-01a133\\project-b",
+      "title": "Chat",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        }
+      },
+      "time": {
+        "created": 1791923467335,
+        "updated": 1791923467335
+      }
+    }
+  }
+}
