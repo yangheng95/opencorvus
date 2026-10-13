@@ -17,6 +17,11 @@ pre-catalog error reporting does not query unavailable translations.
 
 ## Composer availability
 
+Composer model groups retain each connected catalog option's canonical label
+beside its fully-qualified ID. The visible list and literal search consume that
+same option; search covers model label, model ID, provider ID and provider label.
+Selection and persistence continue to use the fully-qualified model ID.
+
 Project file listing, content/source-content, file status and text/file search
 GET readers use the existing Project identity admission independently of
 executable model bootstrap. They retain the selected Project directory,

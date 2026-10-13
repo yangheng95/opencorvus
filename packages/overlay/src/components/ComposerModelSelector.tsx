@@ -37,8 +37,8 @@ interface ProviderGroup {
   providerName: string
   /** True when the server reports the provider as connected/auth'd. */
   available: boolean
-  /** Fully-qualified model IDs ("<provider>/<model>"). */
-  models: string[]
+  /** Canonical labels paired with fully-qualified model IDs ("<provider>/<model>"). */
+  models: ModelOption[]
 }
 
 interface ModelOption {
@@ -118,7 +118,7 @@ function mirrorProviderGroups(): ProviderGroup[] {
       available: true,
       models: [],
     }
-    group.models.push(option.value)
+    group.models.push({ id: option.value, label: option.modelLabel })
     groups.set(option.providerID, group)
   }
   return [...groups.values()].sort((left, right) => left.providerName.localeCompare(right.providerName))
@@ -327,8 +327,8 @@ export function ComposerModelSelector() {
     return groups()
       .map((group) => ({
         ...group,
-        models: group.models.filter((modelID) =>
-          matchesSearchParts(search, [modelID, group.providerID, group.providerName]),
+        models: group.models.filter((option) =>
+          matchesSearchParts(search, [option.id, option.label, group.providerID, group.providerName]),
         ),
       }))
       .filter((group) => group.models.length > 0)
@@ -500,13 +500,7 @@ interface ProviderModelGroupProps {
 }
 
 function ProviderModelGroup(props: ProviderModelGroupProps) {
-  const options = createMemo<ModelOption[]>(() => {
-    const labels = new Map(connectedModelOptions().map((option) => [option.value, option.modelLabel]))
-    return props.group.models.map((modelID) => ({
-      id: modelID,
-      label: labels.get(modelID) ?? splitModelID(modelID).name,
-    }))
-  })
+  const options = createMemo(() => props.group.models)
   const selectedOption = createMemo(() => options().find((option) => option.id === props.currentModel) ?? null)
   const selectedKeys = createMemo(() => {
     const option = selectedOption()

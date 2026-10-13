@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Composer 可见模型名称搜索](records/2026-10/2026-10-13-composer-model-search.md)：真实名称搜索失败与单一选项投影修复。
+
 - [379 网页转换链接目标](records/2026-10/2026-10-13-source-link-base-379.md)：保留原网页基址，修复网页引用误开本地文件。
 
 - [378 网页来源字符编码](records/2026-10/2026-10-13-source-charset-378.md)：修复真实中文网页的来源标题和正文乱码。
