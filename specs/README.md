@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [文件发布后的搜索采集](records/2026-10/2026-10-13-file-search-publication-order.md)：真实并发采集边界、原身份与正向验收。
+
+- [进程结算错误屏障](records/2026-10/2026-10-13-process-settlement-barrier.md)：原完整Handle合同、真实原错误与Capsule共享缺口。
+
 - [397 表格按钮键盘焦点](records/2026-10/2026-10-13-spreadsheet-button-focus-397.md)：原生按钮激活前被夺焦的共性机制与完整消费者审查。
 
 - [391 历史活动与交接输入](artifacts/2026-10-05-connection-workspace-authority/activity-input-projection-plan-391.md)：真实消息角色、进展与交接上下文的读取合同。

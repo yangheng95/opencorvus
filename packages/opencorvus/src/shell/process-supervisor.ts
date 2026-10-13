@@ -184,12 +184,12 @@ export namespace ProcessSupervisor {
     /** Physical process exit. Output collectors must separately await outputSettled. */
     exited: Promise<number>
     /** Original host exit fact when the adapter can distinguish exit code and signal. */
-    terminalFact?: Promise<{ exitCode: number | null; signal: NodeJS.Signals | null }>
+    terminalFact: Promise<{ exitCode: number | null; signal: NodeJS.Signals | null }>
     /** Completion of stdout/stderr delivery after physical exit. */
-    outputSettled?: Promise<void>
+    outputSettled: Promise<void>
     /** One authoritative settlement: physical exit, output closure, and
      * supervisor-owned request cleanup. */
-    settled?: Promise<void>
+    settled: Promise<void>
     terminate(): Promise<void>
     dispose(): Promise<void>
     unref(): void
@@ -212,7 +212,7 @@ export namespace ProcessSupervisor {
   async function joinPhysicalAndOutputSettlement(handle: Pick<Handle, "exited" | "outputSettled">): Promise<void> {
     const [physical, output] = await Promise.allSettled([
       handle.exited.then(() => undefined),
-      handle.outputSettled ?? Promise.resolve(),
+      handle.outputSettled,
     ])
     const failures = [
       ...(physical.status === "rejected" ? [physical.reason] : []),
@@ -223,7 +223,7 @@ export namespace ProcessSupervisor {
 
   async function waitForOwnedPhysicalSettlement(handle: Handle): Promise<void> {
     await handle.exited
-    await Promise.allSettled([handle.settled ?? joinPhysicalAndOutputSettlement(handle)])
+    await Promise.allSettled([handle.settled])
   }
 
   type Factory = (opts: SpawnOptions) => Promise<Handle>
@@ -1179,7 +1179,7 @@ process.stdin.resume()
       unregistered = true
       liveHandles.delete(id)
     }
-    const settled = handle.settled ?? joinPhysicalAndOutputSettlement(handle)
+    const settled = handle.settled
     void settled.catch(() => undefined)
     const tracked: Handle = {
       pid: handle.pid,
@@ -1289,12 +1289,12 @@ process.stdin.resume()
         `${label} process did not exit within ${exitTimeoutMs}ms after disposal was requested`,
       ),
       awaitWithTimeout(
-        handle.outputSettled ?? handle.exited.then(() => undefined),
+        handle.outputSettled,
         exitTimeoutMs,
         `${label} output did not settle within ${exitTimeoutMs}ms after disposal was requested`,
       ),
       awaitWithTimeout(
-        handle.settled ?? joinPhysicalAndOutputSettlement(handle),
+        handle.settled,
         cleanupTimeoutMs,
         `${label} supervisor settlement did not finish within ${cleanupTimeoutMs}ms after disposal was requested`,
       ),
@@ -1854,7 +1854,7 @@ process.stdin.resume()
       }
       return outcome.code
     })
-    const outputSettled = (helperHandle.outputSettled ?? helperHandle.exited.then(() => undefined)).then(() => {
+    const outputSettled = helperHandle.outputSettled.then(() => {
       if (outputFailures.length === 1) throw outputFailures[0]
       if (outputFailures.length > 1) {
         throw new AggregateError(outputFailures, "Windows process supervisor output streams failed")

@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [文件发布与搜索顺序](2026-10-13-file-search-publication-order.md)：旧scan复用候选与有限真实验证。
+
+- [进程结算与Handle合同](2026-10-13-process-settlement-barrier.md)：完整root/影响、原cause与分阶段验收。
+
 - [397 表格按钮键盘焦点](2026-10-13-spreadsheet-button-focus-397.md)：原生按钮焦点、键盘快捷键与动作后编辑回焦。
 
 - [391 历史活动与交接输入](2026-10-13-activity-input-projection-391.md)：两历史读取、真实刷新/Sources及原委派错误事实。

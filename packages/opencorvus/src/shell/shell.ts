@@ -147,7 +147,7 @@ export namespace Shell {
         await supervisor.outputSettled
       } else {
         await ProcessSupervisor.awaitWithTimeout(
-          supervisor.outputSettled ?? supervisor.exited.then(() => undefined),
+          supervisor.outputSettled,
           Math.max(1, cleanupDeadlineAt - Date.now()),
           "Shell.run output did not settle before the absolute cleanup deadline",
         )

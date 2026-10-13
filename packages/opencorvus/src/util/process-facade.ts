@@ -13,9 +13,9 @@ import type { ProcessSupervisor as ProcessSupervisorContract } from "@/shell/pro
 function terminalReceipt(
   occurrenceID: string,
   pid: number,
-  handle: Pick<ProcessSupervisorContract.Handle, "exited" | "terminalFact">,
+  handle: Pick<ProcessSupervisorContract.Handle, "terminalFact">,
 ): Promise<ProcessTerminalReceipt> {
-  const fact = handle.terminalFact ?? handle.exited.then((exitCode) => ({ exitCode, signal: null }))
+  const fact = handle.terminalFact
   return fact.then(({ exitCode, signal }) => ({
     occurrenceID,
     pid,
@@ -69,9 +69,14 @@ function supervisedProcessFacade(input: {
       ? await ProcessSupervisor.spawnTaskCommand(input.task, command)
       : await ProcessSupervisor.spawnHostCommand({ ...command, cwd: request.cwd })
     const terminal = terminalReceipt(request.occurrenceID, handle.pid, handle)
-    const outputSettled = handle.outputSettled ?? handle.exited.then(() => undefined)
-    const supervisorSettled = handle.settled ?? Promise.all([handle.exited, outputSettled]).then(() => undefined)
-    const settled = Promise.all([terminal, outputSettled, supervisorSettled]).then(([receipt]) => receipt)
+    const outputSettled = handle.outputSettled
+    const settled = Promise.allSettled([terminal, outputSettled, handle.settled]).then((outcomes) => {
+      const failures = outcomes.flatMap((outcome) => outcome.status === "rejected" ? [outcome.reason] : [])
+      if (failures.length) throw ProcessSupervisor.combineFailures("Process facade settlement failed", failures)
+      const receipt = outcomes[0]
+      if (receipt.status !== "fulfilled") throw receipt.reason
+      return receipt.value
+    })
     void settled.catch(() => undefined)
     const projectOutput = (
       stream: NodeJS.ReadableStream | null,

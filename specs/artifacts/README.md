@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [文件发布与搜索顺序证据](2026-10-13-file-search-publication-order/README.md)：原HTTP/Native采集时序、实体与桌面。
+
+- [进程結算错误屏障证据](2026-10-13-process-settlement-barrier/README.md)：原Promise身份、具名结算与平台资格。
+
 - [397 表格按钮键盘焦点](2026-10-13-spreadsheet-button-focus-397/README.md)：真实Tab/Enter/Space、范围/规则、菜单回焦、CSV与正常owner收尾。
 
 - [391 历史活动与交接输入](2026-10-05-connection-workspace-authority/activity-input-projection-391/README.md)：数据库、公开投影和实际刷新截图。

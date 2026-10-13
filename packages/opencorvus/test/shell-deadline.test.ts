@@ -81,7 +81,9 @@ describe("Shell absolute deadline authority", () => {
       stdout: null,
       stderr: null,
       exited,
+      terminalFact: exited.then((exitCode) => ({ exitCode, signal: null })),
       outputSettled,
+      settled: Promise.all([exited, outputSettled]).then(() => undefined),
       async terminate() {
         resolveExit(143)
         resolveOutput()

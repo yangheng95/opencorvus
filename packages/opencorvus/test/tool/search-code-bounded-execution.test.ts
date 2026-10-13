@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { PassThrough } from "node:stream"
+import { finished } from "node:stream/promises"
 import { ProcessOutputLimitError } from "@opencorvus-ai/util/process"
 import { resolveSessionExecutionAuthority } from "../../src/engine/task-session-lineage"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
@@ -106,11 +107,18 @@ function completedHandle(input: {
   const stdout = new PassThrough()
   const stderr = new PassThrough()
   let resolveExit!: (code: number) => void
-  let resolveOutput!: () => void
-  let resolveSettlement!: () => void
   const exited = new Promise<number>((resolve) => (resolveExit = resolve))
-  const outputSettled = new Promise<void>((resolve) => (resolveOutput = resolve))
-  const settled = new Promise<void>((resolve) => (resolveSettlement = resolve))
+  const outputSettled = Promise.allSettled([finished(stdout, { cleanup: true }), finished(stderr, { cleanup: true })]).then((outcomes) => {
+    const failures = outcomes.flatMap((outcome) => outcome.status === "rejected" ? [outcome.reason] : [])
+    if (failures.length) throw ProcessSupervisor.combineFailures("Fixture output delivery failed", failures)
+  })
+  const settled = Promise.allSettled([exited, outputSettled]).then((outcomes) => {
+    input.onSettled?.()
+    const failures = outcomes.flatMap((outcome) => outcome.status === "rejected" ? [outcome.reason] : [])
+    if (failures.length) throw ProcessSupervisor.combineFailures("Fixture process settlement failed", failures)
+  })
+  void outputSettled.catch(() => undefined)
+  void settled.catch(() => undefined)
   let closed = false
   const close = () => {
     if (closed) return
@@ -118,9 +126,6 @@ function completedHandle(input: {
     stdout.end(input.stdoutText)
     stderr.end(input.stderrText)
     resolveExit(input.code)
-    resolveOutput()
-    resolveSettlement()
-    input.onSettled?.()
   }
   setTimeout(close, 0)
   return {
@@ -129,6 +134,7 @@ function completedHandle(input: {
     stdout,
     stderr,
     exited,
+    terminalFact: exited.then((exitCode) => ({ exitCode, signal: null })),
     outputSettled,
     settled,
     async terminate() {
@@ -150,7 +156,7 @@ function matchOutput(filename: string, text: string): string {
 
 function expectedSearchSource(filename: string, line: number, snippet: string, startColumn?: number) {
   return {
-    type: "source-file", sourceId: expect.any(String), path: filename, title: path.basename(filename),
+    type: "source-file" as const, sourceId: expect.any(String), path: filename, title: path.basename(filename),
     range: { startLine: line, endLine: line, ...(startColumn === undefined ? {} : { startColumn }) }, provider: "opencorvus-search-code", snippet,
   }
 }

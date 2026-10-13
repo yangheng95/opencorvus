@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { PassThrough } from "node:stream"
+import { finished } from "node:stream/promises"
 import { TextReader, Uint8ArrayWriter, ZipWriter } from "@zip.js/zip.js"
 import { runHostBrowserNodeSidecar, runTaskBrowserNodeSidecar } from "../src/browser/runtime/node-executor"
 import { isBrowserPreviewTargetVisible, waitForBrowserPreviewUrlReachable } from "../src/browser-preview/liveness"
@@ -49,7 +50,7 @@ async function minimalPresentationBytes() {
   await zip.add("ppt/presentation.xml", new TextReader('<p:presentation xmlns:p="urn:p"/>'))
   await zip.add("ppt/slides/slide1.xml", new TextReader('<p:sld xmlns:p="urn:p"/>'))
   await zip.close()
-  return Buffer.from(output.getData())
+  return Buffer.from(await output.getData())
 }
 
 async function writeMcpFixture(file: string) {
@@ -398,6 +399,7 @@ describe("explicit conversation and Task execution authority", () => {
           defaultOfficeSpawns.push({ cwd: options.cwd, executable: options.executable, args: options.args })
           const stdout = new PassThrough()
           const stderr = new PassThrough()
+          const outputSettled = Promise.all([finished(stdout, { cleanup: true }), finished(stderr, { cleanup: true })]).then(() => undefined)
           stdout.end('{"success":true,"data":{"authority":"task"}}')
           stderr.end()
           return {
@@ -406,6 +408,9 @@ describe("explicit conversation and Task execution authority", () => {
             stdout,
             stderr,
             exited: Promise.resolve(0),
+            terminalFact: Promise.resolve({ exitCode: 0, signal: null }),
+            outputSettled,
+            settled: outputSettled,
             async terminate() {},
             async dispose() {},
             unref() {},
@@ -443,20 +448,34 @@ describe("explicit conversation and Task execution authority", () => {
         const restoreCheckpointFactory = ProcessSupervisor.setCommandFactoryForTest(async () => {
           let finish!: (code: number) => void
           const exited = new Promise<number>((resolve) => (finish = resolve))
+          const stdout = new PassThrough()
+          const stderr = new PassThrough()
+          const outputSettled = Promise.all([finished(stdout, { cleanup: true }), finished(stderr, { cleanup: true })]).then(() => undefined)
+          const settled = Promise.all([exited, outputSettled]).then(() => undefined)
           let disposed = false
+          const close = () => {
+            if (disposed) return
+            disposed = true
+            stdout.end()
+            stderr.end()
+            stdout.resume()
+            stderr.resume()
+            finish(0)
+          }
           return {
             pid: nextPID++,
             stdin: null,
-            stdout: new PassThrough(),
-            stderr: new PassThrough(),
+            stdout,
+            stderr,
             exited,
+            terminalFact: exited.then((exitCode) => ({ exitCode, signal: null })),
+            outputSettled,
+            settled,
             async terminate() {
-              if (!disposed) finish(0)
-              disposed = true
+              close()
             },
             async dispose() {
-              if (!disposed) finish(0)
-              disposed = true
+              close()
             },
             unref() {},
           }

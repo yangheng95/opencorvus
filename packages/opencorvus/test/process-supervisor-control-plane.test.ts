@@ -7,13 +7,23 @@ import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promis
 import os from "node:os"
 import path from "node:path"
 import { PassThrough } from "node:stream"
+import { finished } from "node:stream/promises"
 import { spawn } from "node:child_process"
 import { randomUUID } from "node:crypto"
 import net from "node:net"
 import { pathToFileURL } from "node:url"
-import { currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
+import { currentRuntimeProcessOccurrence, observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { Global } from "@/global"
 import { Shell } from "@/shell/shell"
+
+function joinedSettlement(promises: Promise<unknown>[]) {
+  const result = Promise.allSettled(promises).then((outcomes) => {
+    const failures = outcomes.flatMap((outcome) => outcome.status === "rejected" ? [outcome.reason] : [])
+    if (failures.length) throw ProcessSupervisor.combineFailures("Fixture settlement failed", failures)
+  })
+  void result.catch(() => undefined)
+  return result
+}
 
 describe("ProcessSupervisor control-plane authority", () => {
   test("foreground shell reclaims its child tree and returns the root command exit", async () => {
@@ -26,16 +36,70 @@ describe("ProcessSupervisor control-plane authority", () => {
     } finally { await ProcessSupervisor.disposeAndWaitForExit(handle, "foreground root exit contract") }
   }, 60_000)
 
-  test("background shell retains its owned child tree until explicit disposal", async () => {
+  test("background root exit preserves its original code while its owned job is disposed", async () => {
     if (process.platform !== "win32") return
     const owner = "background-root-exit-contract"
-    const handle = await ProcessSupervisor.spawnHostShell({ command: "sleep 30 & exit 7", shell: Shell.acceptable(),
-      terminateChildrenOnRootExit: false, owner })
+    const observedRequest: { value?: Readonly<Record<string, unknown>>; callbackCount: number; captures: unknown[] } = { callbackCount: 0, captures: [] }
+    const restore = ProcessSupervisor.setWindowsRequestObserverForTest((value) => {
+      observedRequest.callbackCount++
+      observedRequest.captures.push({ request: { ...value }, readyFileType: typeof value.ready_file })
+      if (value.kind === "shell" && value.command === "sleep 30 & exit 7" && value.owner_pid === process.pid) observedRequest.value = value
+    })
+    let handle: ProcessSupervisor.Handle | undefined
     try {
-      await Bun.sleep(250)
-      expect(ProcessSupervisor.metricsSnapshot().owners[owner]?.count).toBe(1)
-      expect(await ProcessSupervisor.disposeAndWaitForExit(handle, "background root exit contract")).toBe(7)
-    } finally { await ProcessSupervisor.disposeAndWaitForExit(handle, "background root exit contract cleanup") }
+      handle = await ProcessSupervisor.spawnHostShell({ command: "sleep 30 & exit 7", shell: Shell.acceptable(),
+        terminateChildrenOnRootExit: false, owner })
+      const request = observedRequest.value
+      console.info("background-request-capture", JSON.stringify({ callbackCount: observedRequest.callbackCount,
+        captures: observedRequest.captures, handlePID: handle.pid, capturedReadyFileType: typeof request?.ready_file }))
+      if (!request || typeof request.ready_file !== "string" || typeof request.request_id !== "string"
+        || typeof request.runtime_occurrence_id !== "string") throw new Error("Background root request evidence is unavailable")
+      const runtimeOwner = currentRuntimeProcessOccurrence()
+      // Matchers receive assertion projections, while the original request and
+      // native markers remain unchanged as the physical observation sources.
+      expect({ ...request }).toMatchObject({ kind: "shell", request_id: expect.any(String), ready_file: expect.any(String),
+        owner_pid: runtimeOwner.pid, owner_process_instance_id: runtimeOwner.processInstanceID,
+        runtime_occurrence_id: runtimeOwner.occurrenceID })
+      console.info("background-request-after-validation", JSON.stringify({ request, readyFileType: typeof request.ready_file }))
+      const ready = JSON.parse(await readFile(request.ready_file, "utf8")) as {
+        protocol: number; detached: boolean; request_id: string; helper_pid: number; target_pid: number
+        target_process_instance_id: string; runtime_occurrence_id: string
+      }
+      expect({ ...ready }).toEqual({ protocol: 3, detached: false, request_id: request.request_id,
+        helper_pid: expect.any(Number), target_pid: handle.pid, target_process_instance_id: expect.stringMatching(/^win32:\d+$/),
+        runtime_occurrence_id: request.runtime_occurrence_id })
+      const helper = JSON.parse(await readFile(path.join(path.dirname(request.ready_file), "helper.json"), "utf8")) as {
+        protocol: number; request_id: string; helper_pid: number; helper_process_instance_id: string; runtime_occurrence_id: string
+      }
+      expect({ ...helper }).toEqual({ protocol: 1, request_id: request.request_id, helper_pid: ready.helper_pid,
+        helper_process_instance_id: expect.stringMatching(/^win32:\d+$/), runtime_occurrence_id: request.runtime_occurrence_id })
+      // These occurrence IDs identify the original request owner, as in orphan recovery;
+      // they are not an occurrence UUID published by either observed child process.
+      const target = { pid: ready.target_pid, processInstanceID: ready.target_process_instance_id,
+        occurrenceID: runtimeOwner.occurrenceID }
+      const deadline = Date.now() + 5_000
+      let rootObservation = observeRuntimeProcessOccurrence(target)
+      while (rootObservation === "exact_live" && Date.now() < deadline) {
+        await Bun.sleep(20)
+        rootObservation = observeRuntimeProcessOccurrence(target)
+      }
+      const helperObservation = observeRuntimeProcessOccurrence({ pid: helper.helper_pid,
+        processInstanceID: helper.helper_process_instance_id, occurrenceID: runtimeOwner.occurrenceID })
+      const registeredOwner = ProcessSupervisor.metricsSnapshot().owners[owner]
+      const evidence = { requestID: request.request_id, readyPath: request.ready_file, ready, helper,
+        occurrenceIDSource: "request-owner", rootObservation, helperObservation, registeredOwner }
+      console.info("background-root-exit-evidence", JSON.stringify(evidence))
+      if (rootObservation !== "dead_or_reused") throw new Error(`Background root exit qualification is insufficient: ${JSON.stringify(evidence)}`)
+      expect({ rootObservation, helperObservation, registeredOwner }).toEqual({ rootObservation: "dead_or_reused",
+        helperObservation: "exact_live", registeredOwner: { count: 1, pids: [handle.pid] } })
+      const code = await ProcessSupervisor.disposeAndWaitForExit(handle, "background root exit contract")
+      const settlements = await Promise.allSettled([handle.outputSettled, handle.settled])
+      expect({ code, terminal: await handle.terminalFact, settlements }).toEqual({ code: 7,
+        terminal: { exitCode: 7, signal: null }, settlements: [{ status: "fulfilled", value: undefined }, { status: "fulfilled", value: undefined }] })
+    } finally {
+      restore()
+      if (handle) await ProcessSupervisor.disposeAndWaitForExit(handle, "background root exit contract cleanup")
+    }
   }, 60_000)
 
   test("Shell.run returns the foreground root exit after child cleanup", async () => {
@@ -167,7 +231,9 @@ describe("ProcessSupervisor control-plane authority", () => {
       stdout: null,
       stderr: null,
       exited: Promise.resolve(0),
+      terminalFact: Promise.resolve({ exitCode: 0, signal: null }),
       outputSettled,
+      settled: outputSettled,
       async terminate() {},
       async dispose() {},
       unref() {},
@@ -190,7 +256,9 @@ describe("ProcessSupervisor control-plane authority", () => {
       stdout: null,
       stderr: null,
       exited,
+      terminalFact: exited.then((exitCode) => ({ exitCode, signal: null })),
       outputSettled,
+      settled: joinedSettlement([exited, outputSettled]),
       async terminate() {},
       async dispose() {},
       unref() {},
@@ -222,7 +290,9 @@ describe("ProcessSupervisor control-plane authority", () => {
       stdout: null,
       stderr: null,
       exited,
+      terminalFact: exited.then((exitCode) => ({ exitCode, signal: null })),
       outputSettled,
+      settled: joinedSettlement([exited, outputSettled]),
       async terminate() {},
       async dispose() {},
       unref() {},
@@ -245,13 +315,17 @@ describe("ProcessSupervisor control-plane authority", () => {
     const owner = "process-supervisor-unknown-physical-settlement-contract"
     const exited = Promise.reject<number>(new Error("missing exact physical settlement marker"))
     void exited.catch(() => undefined)
+    const terminalFact = exited.then((exitCode) => ({ exitCode, signal: null }))
+    void terminalFact.catch(() => undefined)
     const restore = ProcessSupervisor.setCommandFactoryForTest(async () => ({
       pid: 41_004,
       stdin: null,
       stdout: null,
       stderr: null,
       exited,
+      terminalFact,
       outputSettled: Promise.resolve(),
+      settled: joinedSettlement([exited]),
       async terminate() {},
       async dispose() {},
       unref() {},
@@ -368,6 +442,9 @@ describe("ProcessSupervisor control-plane authority", () => {
       stdout: null,
       stderr: null,
       exited: Promise.resolve(0),
+      terminalFact: Promise.resolve({ exitCode: 0, signal: null }),
+      outputSettled: Promise.resolve(),
+      settled: disposal,
       async terminate() {},
       async dispose() {
         await disposal
@@ -386,6 +463,7 @@ describe("ProcessSupervisor control-plane authority", () => {
       ).toBe(0)
     } finally {
       releaseDisposal()
+      await handle.settled
     }
   })
 
@@ -514,6 +592,7 @@ describe("ProcessSupervisor control-plane authority", () => {
     const stderr = new PassThrough()
     let resolveExit!: (code: number) => void
     const exited = new Promise<number>((resolve) => (resolveExit = resolve))
+    const outputSettled = joinedSettlement([finished(stdout, { cleanup: true }), finished(stderr, { cleanup: true })])
     let terminated = false
     const restore = ProcessSupervisor.setCommandFactoryForTest(async () => {
       setTimeout(() => {
@@ -526,7 +605,9 @@ describe("ProcessSupervisor control-plane authority", () => {
         stdout,
         stderr,
         exited,
-        outputSettled: Promise.resolve(),
+        terminalFact: exited.then((exitCode) => ({ exitCode, signal: null })),
+        outputSettled,
+        settled: joinedSettlement([exited, outputSettled]),
         async terminate() {
           if (terminated) return
           terminated = true
@@ -576,7 +657,7 @@ describe("ProcessSupervisor control-plane authority", () => {
       ProcessSupervisor.setWindowsOutputObserverForTest(undefined)
       if (handle) {
         await ProcessSupervisor.terminateAndWaitForExit(handle, "deterministic output failure test").catch(() => undefined)
-        await handle.outputSettled?.catch(() => undefined)
+        await handle.outputSettled.catch(() => undefined)
         await handle.dispose().catch(() => undefined)
       }
     }

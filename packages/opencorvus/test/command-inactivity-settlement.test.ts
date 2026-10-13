@@ -1,22 +1,30 @@
 import { expect, test } from "bun:test"
 import { PassThrough } from "node:stream"
+import { finished } from "node:stream/promises"
 import { runHostCommandWithInactivity } from "../src/shell/command-inactivity"
 import { ProcessSupervisor } from "../src/shell/process-supervisor"
 
+function deliveredOutput(streams: PassThrough[]) {
+  const result = Promise.allSettled(streams.map((stream) => finished(stream, { cleanup: true }))).then((outcomes) => {
+    const errors = outcomes.flatMap((outcome) => outcome.status === "rejected" ? [outcome.reason] : [])
+    if (errors.length) throw ProcessSupervisor.combineFailures("Fixture output delivery failed", errors)
+  })
+  void result.catch(() => undefined)
+  return result
+}
+
 test("waits for supervisor settlement and returns output delivered after physical exit", async () => {
   const stdout = new PassThrough()
-  let settle!: () => void
-  const settled = new Promise<void>((resolve) => (settle = resolve))
+  const stderr = new PassThrough()
+  const settled = deliveredOutput([stdout, stderr])
+  stderr.end()
   const restore = ProcessSupervisor.setCommandFactoryForTest(async () => ({
     pid: 991001,
     stdin: null,
     stdout,
-    stderr: (() => {
-      const stream = new PassThrough()
-      stream.end()
-      return stream
-    })(),
+    stderr,
     exited: Promise.resolve(0),
+    terminalFact: Promise.resolve({ exitCode: 0, signal: null }),
     outputSettled: settled,
     settled,
     async terminate() {},
@@ -26,7 +34,6 @@ test("waits for supervisor settlement and returns output delivered after physica
   try {
     setTimeout(() => {
       stdout.end("tail-after-exit")
-      settle()
     }, 20)
     const result = await runHostCommandWithInactivity({
       executable: process.execPath,
@@ -46,14 +53,20 @@ test("returns a typed exit failure when supervisor settlement fails", async () =
     stream.end()
     return stream
   }
+  const stdout = emptyOutput()
+  const stderr = emptyOutput()
+  const outputSettled = deliveredOutput([stdout, stderr])
+  const settled = outputSettled.then(() => { throw new Error("settlement proof unavailable") })
+  void settled.catch(() => undefined)
   const restore = ProcessSupervisor.setCommandFactoryForTest(async () => ({
     pid: 991002,
     stdin: null,
-    stdout: emptyOutput(),
-    stderr: emptyOutput(),
+    stdout,
+    stderr,
     exited: Promise.resolve(0),
-    outputSettled: Promise.resolve(),
-    settled: Promise.reject(new Error("settlement proof unavailable")),
+    terminalFact: Promise.resolve({ exitCode: 0, signal: null }),
+    outputSettled,
+    settled,
     async terminate() {},
     async dispose() {},
     unref() {},
@@ -115,6 +128,7 @@ test("a failed byte observer returns actual retained bytes after native settleme
 test("a failed byte source keeps its output stage, original error and actual bytes", async () => {
   const stdout = new PassThrough()
   const stderr = new PassThrough()
+  const outputSettled = deliveredOutput([stdout, stderr])
   stderr.end()
   const failure = new Error("controlled byte source failure")
   const restore = ProcessSupervisor.setCommandFactoryForTest(async () => ({
@@ -123,8 +137,9 @@ test("a failed byte source keeps its output stage, original error and actual byt
     stdout,
     stderr,
     exited: Promise.resolve(0),
-    outputSettled: Promise.resolve(),
-    settled: Promise.resolve(),
+    terminalFact: Promise.resolve({ exitCode: 0, signal: null }),
+    outputSettled,
+    settled: outputSettled,
     async terminate() {},
     async dispose() {},
     unref() {},

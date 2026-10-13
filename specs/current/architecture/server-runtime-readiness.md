@@ -30,6 +30,20 @@ between preparation phases and before launching the next physical process.
 Complete settlement alone authorizes isolated test-runtime removal; uncertainty
 retains that owned runtime and reports the actual failure.
 
+Every ProcessSupervisor Handle supplies its original `terminalFact`,
+`outputSettled` and `settled` promises. Physical exit alone cannot substitute
+for output closure or supervisor-owned request cleanup. The supervised Host/Task
+facade joins all three original branches before publishing its settlement
+receipt or error. An earlier output failure therefore cannot retire the public
+barrier while the original supervisor settlement is still pending.
+
+The public barrier uses the existing supervisor failure collector: a sole
+failure retains its original reference, and distinct terminal, output and
+cleanup causes are retained together. The successful receipt comes from the
+original terminal fact, including the observed exit code or signal. Caller
+destination drainage and Task Capsule preparation resources have their own
+ownership boundaries; this projection does not manufacture their completion.
+
 The supervised Host facade requires an explicit root-exit policy. Foreground
 owners pass `terminateChildrenOnRootExit=true` to reclaim their owned descendants
 when the root command exits; other existing Host callers explicitly retain

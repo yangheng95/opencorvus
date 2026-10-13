@@ -241,7 +241,7 @@ export namespace Ripgrep {
 
       buffer += decoder.decode()
       if (buffer) throw new Error("ripgrep file list ended without a NUL terminator")
-      const [code, stderrBuffer] = await Promise.all([proc.exited, stderr, proc.outputSettled ?? Promise.resolve()])
+      const [code, stderrBuffer] = await Promise.all([proc.exited, stderr, proc.outputSettled])
       if (code === 1 && !sawFile && !stderrBuffer.toString().trim()) {
         completed = true
         return
@@ -258,7 +258,7 @@ export namespace Ripgrep {
         await ProcessSupervisor.terminateAndWaitForExit(proc, "ripgrep files")
         await Promise.all([
           stderr.catch(() => undefined),
-          proc.outputSettled?.catch(() => undefined) ?? Promise.resolve(),
+          proc.outputSettled.catch(() => undefined),
         ])
       } else {
         await proc.dispose()

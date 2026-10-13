@@ -1,0 +1,960 @@
+{
+  "createdAt": "2026-10-13T15:47:46.954Z",
+  "files": 136,
+  "png": 0,
+  "qualification": "Original complete evidence copy with direct byte readback; no source digest used as functional acceptance",
+  "items": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\README.md",
+      "artifact": "analysis/README.md.gz",
+      "originalBytes": 1690,
+      "archivedBytes": 961,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\barrier-and-handle-contract.md",
+      "artifact": "analysis/barrier-and-handle-contract.md.gz",
+      "originalBytes": 20732,
+      "archivedBytes": 8600,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\focused-validation-plan.md",
+      "artifact": "analysis/focused-validation-plan.md.gz",
+      "originalBytes": 14033,
+      "archivedBytes": 5873,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\capsule-boundary-audit.md",
+      "artifact": "analysis/capsule-boundary-audit.md.gz",
+      "originalBytes": 15010,
+      "archivedBytes": 6145,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\docker-endpoint.exit",
+      "artifact": "analysis/environment/docker-endpoint.exit.gz",
+      "originalBytes": 1,
+      "archivedBytes": 21,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\docker-endpoint.log",
+      "artifact": "analysis/environment/docker-endpoint.log.gz",
+      "originalBytes": 43,
+      "archivedBytes": 60,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\docker-server-version.exit",
+      "artifact": "analysis/environment/docker-server-version.exit.gz",
+      "originalBytes": 1,
+      "archivedBytes": 21,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\docker-server-version.log",
+      "artifact": "analysis/environment/docker-server-version.log.gz",
+      "originalBytes": 20,
+      "archivedBytes": 40,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\ubuntu-tool-paths.exit",
+      "artifact": "analysis/environment/ubuntu-tool-paths.exit.gz",
+      "originalBytes": 2,
+      "archivedBytes": 22,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\ubuntu-tool-paths.log",
+      "artifact": "analysis/environment/ubuntu-tool-paths.log.gz",
+      "originalBytes": 338,
+      "archivedBytes": 202,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\wsl-list.exit",
+      "artifact": "analysis/environment/wsl-list.exit.gz",
+      "originalBytes": 1,
+      "archivedBytes": 21,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\environment\\wsl-list.log",
+      "artifact": "analysis/environment/wsl-list.log.gz",
+      "originalBytes": 254,
+      "archivedBytes": 132,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\adapter-before.log",
+      "artifact": "analysis/implementation/adapter-before.log.gz",
+      "originalBytes": 3777,
+      "archivedBytes": 1115,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\adapter-before.log.exit.json",
+      "artifact": "analysis/implementation/adapter-before.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\adapter-before.log.input.json",
+      "artifact": "analysis/implementation/adapter-before.log.input.json.gz",
+      "originalBytes": 363,
+      "archivedBytes": 264,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\authority-after-zip-await.log",
+      "artifact": "analysis/implementation/authority-after-zip-await.log.gz",
+      "originalBytes": 432,
+      "archivedBytes": 309,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\authority-after-zip-await.log.exit.json",
+      "artifact": "analysis/implementation/authority-after-zip-await.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\authority-after-zip-await.log.input.json",
+      "artifact": "analysis/implementation/authority-after-zip-await.log.input.json.gz",
+      "originalBytes": 403,
+      "archivedBytes": 292,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\background-root-cancel-boundary.md",
+      "artifact": "analysis/implementation/background-root-cancel-boundary.md.gz",
+      "originalBytes": 9664,
+      "archivedBytes": 4241,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\before-background-checker.diff",
+      "artifact": "analysis/implementation/before-background-checker.diff.gz",
+      "originalBytes": 5402,
+      "archivedBytes": 1435,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-final.log",
+      "artifact": "analysis/implementation/control-plane-final.log.gz",
+      "originalBytes": 3650,
+      "archivedBytes": 1296,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-final.log.exit.json",
+      "artifact": "analysis/implementation/control-plane-final.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-final.log.input.json",
+      "artifact": "analysis/implementation/control-plane-final.log.input.json.gz",
+      "originalBytes": 391,
+      "archivedBytes": 282,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-capture.log",
+      "artifact": "analysis/implementation/control-plane-os-root-capture.log.gz",
+      "originalBytes": 5659,
+      "archivedBytes": 1794,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-capture.log.exit.json",
+      "artifact": "analysis/implementation/control-plane-os-root-capture.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-capture.log.input.json",
+      "artifact": "analysis/implementation/control-plane-os-root-capture.log.input.json.gz",
+      "originalBytes": 426,
+      "archivedBytes": 301,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-final.log",
+      "artifact": "analysis/implementation/control-plane-os-root-final.log.gz",
+      "originalBytes": 5543,
+      "archivedBytes": 1564,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-final.log.exit.json",
+      "artifact": "analysis/implementation/control-plane-os-root-final.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-final.log.input.json",
+      "artifact": "analysis/implementation/control-plane-os-root-final.log.input.json.gz",
+      "originalBytes": 457,
+      "archivedBytes": 321,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-holder.log",
+      "artifact": "analysis/implementation/control-plane-os-root-holder.log.gz",
+      "originalBytes": 3809,
+      "archivedBytes": 1404,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-holder.log.exit.json",
+      "artifact": "analysis/implementation/control-plane-os-root-holder.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root-holder.log.input.json",
+      "artifact": "analysis/implementation/control-plane-os-root-holder.log.input.json.gz",
+      "originalBytes": 428,
+      "archivedBytes": 305,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root.log",
+      "artifact": "analysis/implementation/control-plane-os-root.log.gz",
+      "originalBytes": 3740,
+      "archivedBytes": 1323,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root.log.exit.json",
+      "artifact": "analysis/implementation/control-plane-os-root.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\control-plane-os-root.log.input.json",
+      "artifact": "analysis/implementation/control-plane-os-root.log.input.json.gz",
+      "originalBytes": 429,
+      "archivedBytes": 306,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\final-scoped.diff",
+      "artifact": "analysis/implementation/final-scoped.diff.gz",
+      "originalBytes": 34441,
+      "archivedBytes": 7732,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\final-status.txt",
+      "artifact": "analysis/implementation/final-status.txt.gz",
+      "originalBytes": 1607,
+      "archivedBytes": 486,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\focused-after.log",
+      "artifact": "analysis/implementation/focused-after.log.gz",
+      "originalBytes": 13262,
+      "archivedBytes": 3609,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\focused-after.log.exit.json",
+      "artifact": "analysis/implementation/focused-after.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\focused-after.log.input.json",
+      "artifact": "analysis/implementation/focused-after.log.input.json.gz",
+      "originalBytes": 739,
+      "archivedBytes": 378,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-baseline-driver.log",
+      "artifact": "analysis/implementation/native-v3-baseline-driver.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-baseline-driver.log.exit.json",
+      "artifact": "analysis/implementation/native-v3-baseline-driver.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-baseline-driver.log.input.json",
+      "artifact": "analysis/implementation/native-v3-baseline-driver.log.input.json.gz",
+      "originalBytes": 899,
+      "archivedBytes": 429,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-baseline-observer.log",
+      "artifact": "analysis/implementation/native-v3-baseline-observer.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-baseline-observer.log.exit.json",
+      "artifact": "analysis/implementation/native-v3-baseline-observer.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-baseline-observer.log.input.json",
+      "artifact": "analysis/implementation/native-v3-baseline-observer.log.input.json.gz",
+      "originalBytes": 549,
+      "archivedBytes": 333,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-controller.mjs.syntax.log",
+      "artifact": "analysis/implementation/native-v3-controller.mjs.syntax.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-evidence.mjs.syntax.log",
+      "artifact": "analysis/implementation/native-v3-evidence.mjs.syntax.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-native-host.mjs.syntax.log",
+      "artifact": "analysis/implementation/native-v3-native-host.mjs.syntax.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-observe-physical.mjs.syntax.log",
+      "artifact": "analysis/implementation/native-v3-observe-physical.mjs.syntax.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-observed-results.json",
+      "artifact": "analysis/implementation/native-v3-observed-results.json.gz",
+      "originalBytes": 36245,
+      "archivedBytes": 3983,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-producer.mjs.syntax.log",
+      "artifact": "analysis/implementation/native-v3-producer.mjs.syntax.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-reader-causes.json",
+      "artifact": "analysis/implementation/native-v3-reader-causes.json.gz",
+      "originalBytes": 16202,
+      "archivedBytes": 1734,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-reader-driver.log",
+      "artifact": "analysis/implementation/native-v3-reader-driver.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-reader-driver.log.exit.json",
+      "artifact": "analysis/implementation/native-v3-reader-driver.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-reader-driver.log.input.json",
+      "artifact": "analysis/implementation/native-v3-reader-driver.log.input.json.gz",
+      "originalBytes": 919,
+      "archivedBytes": 435,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-reader-observer.log",
+      "artifact": "analysis/implementation/native-v3-reader-observer.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-reader-observer.log.exit.json",
+      "artifact": "analysis/implementation/native-v3-reader-observer.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-reader-observer.log.input.json",
+      "artifact": "analysis/implementation/native-v3-reader-observer.log.input.json.gz",
+      "originalBytes": 545,
+      "archivedBytes": 330,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\native-v3-results.md",
+      "artifact": "analysis/implementation/native-v3-results.md.gz",
+      "originalBytes": 6890,
+      "archivedBytes": 3006,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\preexisting-status.txt",
+      "artifact": "analysis/implementation/preexisting-status.txt.gz",
+      "originalBytes": 1937,
+      "archivedBytes": 569,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\preexisting.diff",
+      "artifact": "analysis/implementation/preexisting.diff.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\root-typecheck-tool-receipt.json",
+      "artifact": "analysis/implementation/root-typecheck-tool-receipt.json.gz",
+      "originalBytes": 594,
+      "archivedBytes": 384,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\scoped-diff-check.log",
+      "artifact": "analysis/implementation/scoped-diff-check.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\scoped-diff-check.log.exit.json",
+      "artifact": "analysis/implementation/scoped-diff-check.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\scoped-diff-check.log.input.json",
+      "artifact": "analysis/implementation/scoped-diff-check.log.input.json.gz",
+      "originalBytes": 1012,
+      "archivedBytes": 368,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-typecheck-repairs.md",
+      "artifact": "analysis/implementation/test-typecheck-repairs.md.gz",
+      "originalBytes": 3708,
+      "archivedBytes": 1708,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-complete-config.log",
+      "artifact": "analysis/implementation/test-types-complete-config.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-complete-config.log.exit.json",
+      "artifact": "analysis/implementation/test-types-complete-config.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-complete-config.log.input.json",
+      "artifact": "analysis/implementation/test-types-complete-config.log.input.json.gz",
+      "originalBytes": 395,
+      "archivedBytes": 287,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-final.log",
+      "artifact": "analysis/implementation/test-types-final.log.gz",
+      "originalBytes": 168,
+      "archivedBytes": 147,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-final.log.exit.json",
+      "artifact": "analysis/implementation/test-types-final.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-final.log.input.json",
+      "artifact": "analysis/implementation/test-types-final.log.input.json.gz",
+      "originalBytes": 395,
+      "archivedBytes": 287,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-node-resolved.log",
+      "artifact": "analysis/implementation/test-types-node-resolved.log.gz",
+      "originalBytes": 68911,
+      "archivedBytes": 2693,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-node-resolved.log.exit.json",
+      "artifact": "analysis/implementation/test-types-node-resolved.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-node-resolved.log.input.json",
+      "artifact": "analysis/implementation/test-types-node-resolved.log.input.json.gz",
+      "originalBytes": 395,
+      "archivedBytes": 287,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root-final.log",
+      "artifact": "analysis/implementation/test-types-os-root-final.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root-final.log.exit.json",
+      "artifact": "analysis/implementation/test-types-os-root-final.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root-final.log.input.json",
+      "artifact": "analysis/implementation/test-types-os-root-final.log.input.json.gz",
+      "originalBytes": 478,
+      "archivedBytes": 330,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root-holder.log",
+      "artifact": "analysis/implementation/test-types-os-root-holder.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root-holder.log.exit.json",
+      "artifact": "analysis/implementation/test-types-os-root-holder.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root-holder.log.input.json",
+      "artifact": "analysis/implementation/test-types-os-root-holder.log.input.json.gz",
+      "originalBytes": 483,
+      "archivedBytes": 341,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root.log",
+      "artifact": "analysis/implementation/test-types-os-root.log.gz",
+      "originalBytes": 1322,
+      "archivedBytes": 306,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root.log.exit.json",
+      "artifact": "analysis/implementation/test-types-os-root.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\test-types-os-root.log.input.json",
+      "artifact": "analysis/implementation/test-types-os-root.log.input.json.gz",
+      "originalBytes": 466,
+      "archivedBytes": 324,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\tsconfig-tests-before-ambient-declarations.json",
+      "artifact": "analysis/implementation/tsconfig-tests-before-ambient-declarations.json.gz",
+      "originalBytes": 1342,
+      "archivedBytes": 385,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\tsconfig-tests-before-node-resolution.json",
+      "artifact": "analysis/implementation/tsconfig-tests-before-node-resolution.json.gz",
+      "originalBytes": 1246,
+      "archivedBytes": 363,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\tsconfig-tests.json",
+      "artifact": "analysis/implementation/tsconfig-tests.json.gz",
+      "originalBytes": 1415,
+      "archivedBytes": 394,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\typecheck-after.log",
+      "artifact": "analysis/implementation/typecheck-after.log.gz",
+      "originalBytes": 75,
+      "archivedBytes": 92,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\typecheck-after.log.exit.json",
+      "artifact": "analysis/implementation/typecheck-after.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\typecheck-after.log.input.json",
+      "artifact": "analysis/implementation/typecheck-after.log.input.json.gz",
+      "originalBytes": 288,
+      "archivedBytes": 224,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\typecheck-final.log",
+      "artifact": "analysis/implementation/typecheck-final.log.gz",
+      "originalBytes": 75,
+      "archivedBytes": 92,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\typecheck-final.log.exit.json",
+      "artifact": "analysis/implementation/typecheck-final.log.exit.json.gz",
+      "originalBytes": 69,
+      "archivedBytes": 85,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\typecheck-final.log.input.json",
+      "artifact": "analysis/implementation/typecheck-final.log.input.json.gz",
+      "originalBytes": 288,
+      "archivedBytes": 224,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\implementation\\verification.md",
+      "artifact": "analysis/implementation/verification.md.gz",
+      "originalBytes": 7843,
+      "archivedBytes": 3530,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\README.md",
+      "artifact": "analysis/native-v3/README.md.gz",
+      "originalBytes": 3782,
+      "archivedBytes": 1849,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\baseline.input.json",
+      "artifact": "analysis/native-v3/baseline.input.json.gz",
+      "originalBytes": 1458,
+      "archivedBytes": 546,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\close-stdout-reader.input.json",
+      "artifact": "analysis/native-v3/close-stdout-reader.input.json.gz",
+      "originalBytes": 1476,
+      "archivedBytes": 550,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\controller.mjs",
+      "artifact": "analysis/native-v3/controller.mjs.gz",
+      "originalBytes": 16266,
+      "archivedBytes": 4970,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\evidence.mjs",
+      "artifact": "analysis/native-v3/evidence.mjs.gz",
+      "originalBytes": 6792,
+      "archivedBytes": 2620,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\native-host.mjs",
+      "artifact": "analysis/native-v3/native-host.mjs.gz",
+      "originalBytes": 12754,
+      "archivedBytes": 3958,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\observe-physical.mjs",
+      "artifact": "analysis/native-v3/observe-physical.mjs.gz",
+      "originalBytes": 2035,
+      "archivedBytes": 888,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\producer.mjs",
+      "artifact": "analysis/native-v3/producer.mjs.gz",
+      "originalBytes": 3573,
+      "archivedBytes": 1390,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\native-v3\\syntax-results.json",
+      "artifact": "analysis/native-v3/syntax-results.json.gz",
+      "originalBytes": 2264,
+      "archivedBytes": 303,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-occurrence-matrix-01a133\\audit-report.txt",
+      "artifact": "independent/audit-report.txt.gz",
+      "originalBytes": 26434,
+      "archivedBytes": 10311,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-occurrence-matrix-01a133\\capsule-review.txt",
+      "artifact": "independent/capsule-review.txt.gz",
+      "originalBytes": 17284,
+      "archivedBytes": 6876,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-occurrence-matrix-01a133\\capsule-phase-b-design.txt",
+      "artifact": "independent/capsule-phase-b-design.txt.gz",
+      "originalBytes": 22746,
+      "archivedBytes": 8860,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\prepared-run.json",
+      "artifact": "actual/native-sink-baseline-01a133-v3/prepared-run.json.gz",
+      "originalBytes": 925,
+      "archivedBytes": 474,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\expected-tail-stdout.bin",
+      "artifact": "actual/native-sink-baseline-01a133-v3/expected-tail-stdout.bin.gz",
+      "originalBytes": 65536,
+      "archivedBytes": 210,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\stdout.log",
+      "artifact": "actual/native-sink-baseline-01a133-v3/stdout.log.gz",
+      "originalBytes": 65536,
+      "archivedBytes": 210,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\stderr.log",
+      "artifact": "actual/native-sink-baseline-01a133-v3/stderr.log.gz",
+      "originalBytes": 61,
+      "archivedBytes": 81,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\controller-events.jsonl",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/controller-events.jsonl.gz",
+      "originalBytes": 10201,
+      "archivedBytes": 2050,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\controller-final.json",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/controller-final.json.gz",
+      "originalBytes": 11676,
+      "archivedBytes": 2331,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\host-events.jsonl",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/host-events.jsonl.gz",
+      "originalBytes": 26098,
+      "archivedBytes": 2695,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\host-final.json",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/host-final.json.gz",
+      "originalBytes": 4966,
+      "archivedBytes": 1303,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\host-ready.json",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/host-ready.json.gz",
+      "originalBytes": 4242,
+      "archivedBytes": 921,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\physical-observer.json",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/physical-observer.json.gz",
+      "originalBytes": 1037,
+      "archivedBytes": 560,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\producer-events.jsonl",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/producer-events.jsonl.gz",
+      "originalBytes": 1727,
+      "archivedBytes": 509,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\producer-exit-intent.json",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/producer-exit-intent.json.gz",
+      "originalBytes": 389,
+      "archivedBytes": 292,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-baseline-01a133-v3\\evidence\\producer-ready.json",
+      "artifact": "actual/native-sink-baseline-01a133-v3/evidence/producer-ready.json.gz",
+      "originalBytes": 520,
+      "archivedBytes": 329,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\prepared-run.json",
+      "artifact": "actual/native-sink-reader-01a133-v3/prepared-run.json.gz",
+      "originalBytes": 932,
+      "archivedBytes": 480,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\expected-tail-stdout.bin",
+      "artifact": "actual/native-sink-reader-01a133-v3/expected-tail-stdout.bin.gz",
+      "originalBytes": 65536,
+      "archivedBytes": 210,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\stdout.log",
+      "artifact": "actual/native-sink-reader-01a133-v3/stdout.log.gz",
+      "originalBytes": 0,
+      "archivedBytes": 20,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\stderr.log",
+      "artifact": "actual/native-sink-reader-01a133-v3/stderr.log.gz",
+      "originalBytes": 61,
+      "archivedBytes": 81,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\controller-events.jsonl",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/controller-events.jsonl.gz",
+      "originalBytes": 11483,
+      "archivedBytes": 2350,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\controller-final.json",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/controller-final.json.gz",
+      "originalBytes": 21271,
+      "archivedBytes": 3195,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\host-events.jsonl",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/host-events.jsonl.gz",
+      "originalBytes": 40550,
+      "archivedBytes": 3461,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\host-final.json",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/host-final.json.gz",
+      "originalBytes": 12432,
+      "archivedBytes": 1961,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\host-ready.json",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/host-ready.json.gz",
+      "originalBytes": 4220,
+      "archivedBytes": 918,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\physical-observer.json",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/physical-observer.json.gz",
+      "originalBytes": 1035,
+      "archivedBytes": 560,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\producer-events.jsonl",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/producer-events.jsonl.gz",
+      "originalBytes": 1697,
+      "archivedBytes": 502,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\producer-exit-intent.json",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/producer-exit-intent.json.gz",
+      "originalBytes": 389,
+      "archivedBytes": 296,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\native-sink-reader-01a133-v3\\evidence\\producer-ready.json",
+      "artifact": "actual/native-sink-reader-01a133-v3/evidence/producer-ready.json.gz",
+      "originalBytes": 520,
+      "archivedBytes": 331,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\docs-final.log",
+      "artifact": "root-review/docs-final.log.gz",
+      "originalBytes": 106,
+      "archivedBytes": 115,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\architecture-final.log",
+      "artifact": "root-review/architecture-final.log.gz",
+      "originalBytes": 141,
+      "archivedBytes": 129,
+      "format": "gzip of complete original bytes"
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-native-barrier-01a133\\root-final-checks.json",
+      "artifact": "root-review/root-final-checks.json.gz",
+      "originalBytes": 839,
+      "archivedBytes": 499,
+      "format": "gzip of complete original bytes"
+    }
+  ]
+}

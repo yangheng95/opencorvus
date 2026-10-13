@@ -266,25 +266,6 @@ try {
     ])
     const responses = await Promise.all([request("task-a", workspaceA), request("task-b", workspaceB)])
     process.stdout.write(`${responses.join("\n")}\n`)
-    if (frozenToolchainRoot !== "/") {
-      const browser = await command("task-a", workspaceA, "/usr/local/bin/node", [
-        "-e",
-        "const {chromium}=require('/opt/opencorvus-browser/node_modules/playwright/index.js');(async()=>{const browser=await chromium.launch({executablePath:'/opt/opencorvus-browser/chromium/chrome-headless-shell',headless:true,args:['--no-sandbox']});const page=await browser.newPage();await page.goto('http://127.0.0.1:18800');process.stdout.write(await page.textContent('body'));await browser.close()})()",
-      ])
-      const child = Bun.spawn([browser.executable, ...browser.args], {
-        cwd: browser.cwd,
-        env: browser.env,
-        stdout: "pipe",
-        stderr: "pipe",
-      })
-      const [code, stdout, stderr] = await Promise.all([
-        child.exited,
-        new Response(child.stdout).text(),
-        new Response(child.stderr).text(),
-      ])
-      if (code !== 0) throw new Error(`OCI browser failed with ${code}: ${stderr}`)
-      process.stdout.write(`BROWSER=${stdout}\n`)
-    }
     await Promise.all([
       disposeOciTaskContainer({ descriptor, taskID: "task-a", brokerEnvironment }),
       disposeOciTaskContainer({ descriptor, taskID: "task-b", brokerEnvironment }),

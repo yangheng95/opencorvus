@@ -596,7 +596,7 @@ async function runCapsule(input: {
     args: await encode(input.args),
   })
   const exited = handle.exited.then(async (exitCode) => {
-    await (handle.outputSettled ?? Promise.resolve())
+    await handle.outputSettled
     if (!settled) {
       rejectResult(
         new ExecutionCapsuleRuntimeUnavailableError(

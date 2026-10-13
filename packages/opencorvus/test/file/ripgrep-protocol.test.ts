@@ -71,7 +71,8 @@ test("the streaming file-list reader retains a Unicode filename split inside a U
       stderr.end()
       return {
         pid: 992318, stdin: new PassThrough(), stdout, stderr,
-        exited: Promise.resolve(0), outputSettled: drained, settled: drained,
+        exited: Promise.resolve(0), terminalFact: Promise.resolve({ exitCode: 0, signal: null }),
+        outputSettled: drained, settled: drained,
         async terminate() { stdout.resume(); stderr.resume() },
         async dispose() {}, unref() {},
       }
