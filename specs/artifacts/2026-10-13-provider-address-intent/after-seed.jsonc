@@ -1,0 +1,25 @@
+{
+  "provider": {
+    "audit-inherited-endpoint": {
+      "name": "Inherited endpoint",
+      "npm": "@ai-sdk/openai-compatible",
+      "models": {
+        "audit:latest": {
+          "name": "Inherited audit model",
+          "tool_call": true
+        }
+      }
+    },
+    "audit-template-endpoint": {
+      "name": "Template endpoint",
+      "api": "https://${AUDIT_PROVIDER_HOST}/v1",
+      "npm": "@ai-sdk/openai-compatible",
+      "models": {
+        "audit:latest": {
+          "name": "Template audit model",
+          "tool_call": true
+        }
+      }
+    }
+  }
+}

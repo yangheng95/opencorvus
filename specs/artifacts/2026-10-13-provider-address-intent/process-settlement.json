@@ -1,0 +1,27 @@
+{
+  "serviceExit": {
+    "before": {
+      "exit": 0,
+      "session": 37467
+    },
+    "after": {
+      "exit": 0,
+      "session": 35038
+    }
+  },
+  "listenerCount": 0,
+  "physical": [
+    {
+      "pid": 81148,
+      "stage": "before",
+      "present": false,
+      "birthUtc": "2026-10-13T09:02:19.9281517Z"
+    },
+    {
+      "pid": 78072,
+      "stage": "after",
+      "present": false,
+      "birthUtc": "2026-10-13T09:12:42.8581188Z"
+    }
+  ]
+}

@@ -13,6 +13,8 @@
 
 #### 修复
 
+- Provider 表单的地址错误、保存和发现入口使用同一校验，修复已标为无效的地址仍可添加的问题；仅编辑其他字段时保留当前声明的地址与模型配置。
+
 - 修复全屏产物中按 Enter、空格或向下键打开下载菜单时页面卡死的问题；关闭菜单后可继续键盘操作，保留文件阅读位置。
 
 - 用量热力图可用键盘逐桶查看完整时间区间、时区偏移和 Token 数值；加载时保留检查入口，修复快速刷新后按 Tab 丢失焦点的问题。
@@ -40,6 +42,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Provider address feedback, saving and discovery use the same validation, fixing invalid addresses being added despite a visible error. Editing other fields preserves the current endpoint and model definition.
 
 - Fixed page freezes when opening fullscreen artifact download menus with Enter, Space or Arrow Down. Keyboard interaction continues after closing the menu, and file reading position is preserved.
 

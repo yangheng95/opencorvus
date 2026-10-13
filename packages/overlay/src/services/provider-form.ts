@@ -7,6 +7,41 @@ export interface ProviderFormValues {
 
 type ProviderDefinition = Record<string, unknown>
 
+type ProviderFormApiCode = "PROVIDER_API_REQUIRED" | "PROVIDER_API_INVALID"
+
+export class ProviderFormApiError extends Error {
+  constructor(readonly code: ProviderFormApiCode) {
+    super(code === "PROVIDER_API_REQUIRED" ? "API URL is required." : "API URL must be a valid absolute HTTP(S) URL.")
+    this.name = "ProviderFormApiError"
+  }
+}
+
+/** Validate an explicit endpoint edit; untouched fields remain owned by the current definition. */
+export function validateProviderFormApi(
+  raw: string,
+  initial?: string,
+): { ok: true; changed: boolean; value: string } | { ok: false; changed: true; code: ProviderFormApiCode } {
+  const normalize = (value: string) => value.trim().replace(/\/+$/, "")
+  const value = normalize(raw)
+  if (initial !== undefined && value === normalize(initial)) return { ok: true, changed: false, value }
+  if (!value) return { ok: false, changed: true, code: "PROVIDER_API_REQUIRED" }
+  try {
+    const url = new URL(value)
+    if (
+      !/^https?:\/\//i.test(value) ||
+      !["http:", "https:"].includes(url.protocol) ||
+      !url.hostname ||
+      url.username ||
+      url.password
+    ) {
+      return { ok: false, changed: true, code: "PROVIDER_API_INVALID" }
+    }
+    return { ok: true, changed: true, value }
+  } catch {
+    return { ok: false, changed: true, code: "PROVIDER_API_INVALID" }
+  }
+}
+
 function record(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value)
 }
@@ -66,9 +101,10 @@ export function applyProviderForm(input: {
   if (initial && !current) throw new ProviderFormConflictError("PROVIDER_REMOVED")
   const next: ProviderDefinition = structuredClone(current ?? {})
   const name = (value: string) => value.trim() || id
-  const api = (value: string) => value.trim().replace(/\/+$/, "")
   if (!initial || name(values.name) !== name(initial.name)) next.name = name(values.name)
-  if (!initial || api(values.api) !== api(initial.api)) next.api = api(values.api)
+  const api = validateProviderFormApi(values.api, initial?.api)
+  if (api.ok === false) throw new ProviderFormApiError(api.code)
+  if (api.changed) next.api = api.value
   const env = environmentNames(values.env)
   if (!initial || JSON.stringify(env) !== JSON.stringify(environmentNames(initial.env))) next.env = env
 

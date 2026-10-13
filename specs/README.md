@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
+
 - [384 权限续行消息恢复调查](records/2026-10/2026-10-13-permission-message-recovery-384.md)：同消息过早完成与真实活跃peer消息被改写的两个失败合同。
 
 - [Explorer批量文件操作](records/2026-10/2026-10-13-explorer-copy-convergence.md)：成功回执、根目标准入与真实API根保护。

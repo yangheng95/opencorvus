@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Provider 地址编辑](2026-10-13-provider-address-intent/README.md)：真实表单、实际配置和运行收尾。
+
 - [384 权限续行恢复断点](2026-10-05-connection-workspace-authority/permission-message-recovery-384/README.md)：真实工具、双进程owner、规范状态与完整失败日志。
 
 - [386 全屏菜单键盘循环](2026-10-13-artifact-fullscreen-menu-386/README.md)：真实祖先样式、双语菜单、下载字节及服务退出证据。

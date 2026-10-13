@@ -2631,6 +2631,15 @@ skills, Model Context Protocol providers, channels, permissions, and expert
 squads. `prompt_profile.active` remains the only active expert-squad selection
 source. Settings does not define agent-team order, a package workflow, or a
 second active profile.
+
+Provider authoring uses one pure endpoint-edit validator for localized field
+feedback, save/discovery actions and the canonical form writer. New or explicit
+API edits require a parseable absolute HTTP(S) address without URL userinfo;
+untouched addresses remain owned by the latest provider definition, including
+model-only declarations and runtime templates. Discovery validates its current
+input without the edit exemption. This does not prove connectivity or alter
+the backend provider schema or its single template-expansion owner.
+
 Channel edits require the currently selected project and show the existing
 workspace selection hint in the directory-free launcher. Shared Skill/MCP
 resource pages use the same loading lifecycle on first entry and manual reload;

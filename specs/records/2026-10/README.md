@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
+
 - [384 权限续行消息恢复调查](2026-10-13-permission-message-recovery-384.md)：过早收尾、跨进程所有权与尚未修复范围。
 
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence.md)：部分成功收敛与真实桌面/API根保护。
