@@ -112,7 +112,7 @@ try {
     { projectToolPartInTransaction },
     { taskLifecycleProjection },
     { MessageStore },
-    { CompactionToolResultReader },
+    { CompactionEvidenceReader },
     { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
     { recoverStartedTaskExecutions, assertStartedTaskProjectRecoverySucceeded },
     { listOwnedPromptSessionsForTask },
@@ -128,7 +128,7 @@ try {
     import("@/session/tool-part-facts"),
     import("@/engine/task-lifecycle"),
     import("@/session/message-store"),
-    import("@/session/compaction-tool-result-reader"),
+    import("@/session/compaction-evidence-reader"),
     import("@/cli/server-runtime"),
     import("@/engine/host-recovery"),
     import("@/engine/runtime"),
@@ -304,7 +304,7 @@ try {
     const raw =
       read.field === "input"
         ? JSON.stringify(part.state.input)
-        : (await CompactionToolResultReader.authoritativeOutput(part)).output
+        : (await CompactionEvidenceReader.authoritativeOutput(part)).output
     const returned = output.evidence_reads.filter(
       (item: any) => item.message_id === read.message_id && item.part_id === read.part_id && item.field === read.field,
     )

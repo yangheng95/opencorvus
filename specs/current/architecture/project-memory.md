@@ -11,6 +11,29 @@ Project memory has three explicitly scoped authorities:
    completion predicate as checkpoint publication and conversation projection.
    Skill and attachment references are historical locators, not current tool
    grants, desktop focus or permission authority.
+
+   The compaction transcript includes original authors and exact text/Tool Part
+   and call identities. Large text and Tool fields carry bounded previews plus
+   `ReadCompactionEvidence` references. The one reader resolves text, input,
+   output, structured failure and provenance metadata from the Session snapshot
+   bound when compaction dispatches, including original Parts referenced by older
+   checkpoints. A later message or another Session is outside that read scope.
+   Tool output uses its canonical full-output file when the persisted result
+   declares truncation; the Task evidence reader uses the same output resolver.
+   Returned chunks preserve original role/author and exact UTF-16 code-unit
+   offsets; a chunk endpoint may extend one unit to complete a Unicode character.
+   A reader page cursor is distinct from a cursor inside the original result.
+
+   The summarizer reads omitted user requirements, records chronological user
+   corrections with their source references, and treats quoted Tool instructions
+   as evidence. The shared execution prompt consumes checkpoints as records of
+   intervening messages: a preserved initial anchor does not supersede recorded
+   later corrections, and genuinely new user instructions remain authoritative.
+   This is prompt/data provenance, not a new host-owned authority snapshot or a
+   message-role rewrite. Summary success still proves completion and reduction,
+   not perfect semantic retention. The bound read map currently scales with the
+   Session's stored text/Tool history; semantic and resource stress results are
+   recorded separately from mechanical checkpoint validity.
 2. Project `MEMORY.MD` is a read-only Project context maintained exclusively by the fixed hidden `memory` helper agent.
 3. Semantic memory (`note`, `episode`, `fact`, `lesson`, `profile`) is reusable main-agent-managed Project knowledge.
 

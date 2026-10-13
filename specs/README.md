@@ -4,6 +4,8 @@
 
 - [389 电子表格全屏弹层](records/2026-10/2026-10-13-spreadsheet-fullscreen-popups-389.md)：真实弹层父链、全屏显示与剩余无障碍语言调查。
 
+- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：研究、信息与指令保真、证据和执行追踪的真实验收。
+
 - [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
 
 - [384 权限续行消息恢复调查](records/2026-10/2026-10-13-permission-message-recovery-384.md)：同消息过早完成与真实活跃peer消息被改写的两个失败合同。

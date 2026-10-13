@@ -7,7 +7,7 @@ import { Instance } from "@/project/instance"
 import { Provider } from "@/provider/provider"
 import { Session } from "@/session"
 import { SessionCompaction } from "@/session/compaction"
-import { CompactionToolResultReader } from "@/session/compaction-tool-result-reader"
+import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
 import { ContextBudget } from "@/session/context-budget"
 import { RequestBudget } from "@/session/request-budget"
 import { SessionControl } from "@/session/control"
@@ -251,15 +251,15 @@ describe("compaction request and continuation contracts", () => {
       },
     } as Message.ToolPart
     const history = [
-      { info: { id: "msg_result", role: "assistant", agent: "work" }, parts: [part] },
+      { info: { id: "msg_result", role: "assistant", agent: "work", author: "work" }, parts: [part] },
     ] as Message.WithParts[]
     const transcript = JSON.stringify(SessionCompaction.TestHooks.compactionTranscriptMessages(history))
     expect(transcript.length).toBeLessThan(5_000)
-    expect(transcript).toContain("compaction_tool_result_reference")
+    expect(transcript).toContain("compaction_evidence_reference")
     expect(transcript).toContain("opencorvus-attachment://project/evidence.png")
-    const reader = CompactionToolResultReader.create(history)
+    const reader = CompactionEvidenceReader.create(history)
     const output = (await reader.execute!(
-      { part_id: part.id, offset: 70_000, limit: 30 },
+      { part_id: part.id, field: "output", offset: 70_000, limit: 30 },
       { toolCallId: "read_exact", messages: [], abortSignal: AbortSignal.timeout(1_000) },
     )) as { output: string }
     expect(JSON.parse(output.output)).toMatchObject({
@@ -568,7 +568,7 @@ describe("real local streaming compaction transport", () => {
               model: target.modelID,
               tools: [
                 expect.objectContaining({
-                  function: expect.objectContaining({ name: CompactionToolResultReader.TOOL_NAME }),
+                  function: expect.objectContaining({ name: CompactionEvidenceReader.TOOL_NAME }),
                 }),
               ],
             })

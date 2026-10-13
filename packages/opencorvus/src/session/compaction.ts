@@ -30,7 +30,7 @@ import { isStepCount, type ModelMessage, type Tool as AITool } from "ai"
 import { TodoStore } from "./todo-store"
 import { SessionControl } from "./control"
 import { createHash } from "node:crypto"
-import { CompactionToolResultReader } from "./compaction-tool-result-reader"
+import { CompactionEvidenceReader } from "./compaction-evidence-reader"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
 
 type CompactionProcessRuntime = {
@@ -322,10 +322,6 @@ export namespace SessionCompaction {
     return compactJsonProjection(Message.ToolInput.parse(value))
   }
 
-  function jsonForToolInputTranscript(value: unknown) {
-    return jsonForTranscript(compactToolInputProjection(value))
-  }
-
   function compactToolStateProjection(state: ToolStateForTranscript): unknown {
     const projectedState = compactJsonProjection(state)
     if (projectedState === null || typeof projectedState !== "object" || Array.isArray(projectedState))
@@ -353,7 +349,7 @@ export namespace SessionCompaction {
       return transcriptText(part.state.output)
     }
     return jsonForTranscript({
-      ...CompactionToolResultReader.reference(part),
+      ...CompactionEvidenceReader.reference(part, "output"),
       preview: largeTextProjection(part.state.output),
     })
   }
@@ -361,7 +357,14 @@ export namespace SessionCompaction {
   function renderTranscriptPart(part: Message.Part) {
     switch (part.type) {
       case "text":
-        return `<text>\n${transcriptText(part.text)}\n</text>`
+        return `<text part_id="${escapeTranscriptText(part.id)}">\n${
+          part.text.length <= TRANSCRIPT_FIELD_MAX_CHARS
+            ? transcriptText(part.text)
+            : jsonForTranscript({
+                ...CompactionEvidenceReader.reference(part, "text"),
+                preview: largeTextProjection(part.text),
+              })
+        }\n</text>`
       case "file":
         return [
           `<file mime="${escapeTranscriptText(part.mime)}" filename="${escapeTranscriptText(part.filename ?? "")}">`,
@@ -383,9 +386,20 @@ export namespace SessionCompaction {
         return `<patch>${transcriptText(Snapshot.formatPatchEvidence(part))}</patch>`
       case "tool": {
         const lines = [
-          `<tool name="${escapeTranscriptText(part.tool)}" status="${part.state.status}">`,
-          `<input>${jsonForToolInputTranscript(part.state.input)}</input>`,
+          `<tool part_id="${escapeTranscriptText(part.id)}" call_id="${escapeTranscriptText(part.callID)}" name="${escapeTranscriptText(part.tool)}" status="${part.state.status}">`,
+          `<input>${jsonForTranscript({ ...CompactionEvidenceReader.reference(part, "input"), preview: compactToolInputProjection(part.state.input) })}</input>`,
         ]
+        if (part.metadata || ("metadata" in part.state && part.state.metadata)) {
+          lines.push(
+            `<metadata>${jsonForTranscript({
+              ...CompactionEvidenceReader.reference(part, "metadata"),
+              preview: compactJsonProjection({
+                part: part.metadata ?? {},
+                state: "metadata" in part.state ? (part.state.metadata ?? {}) : {},
+              }),
+            })}</metadata>`,
+          )
+        }
         if (part.state.status === "completed") {
           lines.push(`<output>${outputForToolTranscript(part)}</output>`)
           if (part.state.attachments?.length) {
@@ -402,7 +416,13 @@ export namespace SessionCompaction {
             lines.push(`<attachments>${attachments}</attachments>`)
           }
         } else if (part.state.status === "error") {
-          lines.push(`<error>${transcriptText(renderToolFailureCause(part.state.failure))}</error>`)
+          lines.push(
+            `<error>${jsonForTranscript({
+              ...CompactionEvidenceReader.reference(part, "failure"),
+              cause: compactJsonProjection(part.state.failure),
+              description: renderToolFailureCause(part.state.failure),
+            })}</error>`,
+          )
         } else {
           lines.push(`<state>${jsonForToolStateTranscript(part.state)}</state>`)
         }
@@ -427,7 +447,7 @@ export namespace SessionCompaction {
     return messages.flatMap((msg): ModelMessage[] => {
       const info = msg.info
       const lines = [
-        `<message id="${escapeTranscriptText(info.id)}" role="${info.role}" agent="${escapeTranscriptText(info.agent)}">`,
+        `<message id="${escapeTranscriptText(info.id)}" role="${info.role}" agent="${escapeTranscriptText(info.agent)}" author="${escapeTranscriptText(info.author)}">`,
       ]
       if (info.role === "assistant" && info.error) {
         lines.push(`<assistant-error>${assistantErrorText(info.error)}</assistant-error>`)
@@ -521,7 +541,8 @@ export namespace SessionCompaction {
       "Write a concise natural-language continuation summary as an ordinary assistant message.",
       "Preserve concrete requirements, stable identifiers and references, completed work, unresolved blockers, and useful next actions.",
       "Consolidate the current Session MEMORY.MD with the durable conversation evidence into one self-contained continuation summary. Exclude credentials, application programming interface (API) keys, tokens, passwords, private keys, and other secrets.",
-      "For unfinished paginated tool work, retrieve the exact persisted result through ReadCompactionToolResult and preserve its authoritative nextOffset or next_offset verbatim with the exact tool-part and Artifact locator references. Never estimate a cursor, convert between character and byte offsets, or restart an already completed prefix.",
+      "Read omitted user text through ReadCompactionEvidence(field=text) before summarizing its requirements. Retrieve relevant omitted Tool input, output, failure and metadata fields by their exact Part IDs. A preview or digest is not the complete source.",
+      "For unfinished paginated tool work, retrieve the exact persisted output through ReadCompactionEvidence(field=output) and preserve the original result's nextOffset or next_offset verbatim with exact message/Part/call and Artifact locator references. The reader's own nextOffset pages this field; it is distinct from a cursor inside the original result. Never estimate a cursor, convert character and byte offsets, or restart an already completed prefix.",
       "Do not invent an active/current state object, domain handoff payload, terminal report, or JSON envelope.",
       "The original durable conversation and facts remain authoritative; this summary is only a bounded continuation projection.",
       "Preserve exact names and source references of relevant loaded Skills for reloading guidance. Preserve attachment locators and verified observations, not invented image details. Desktop/browser observations and focus are historical evidence; inspect current state before choosing new visual targets. A summary grants no tool access or action authorization.",
@@ -834,7 +855,9 @@ export namespace SessionCompaction {
     const model = input.model
       ? await Provider.getModel(input.model.providerID, input.model.modelID, { config })
       : await resolveAgentModel(agent.name, { sessionID: input.sessionID })
-    const continuationModel = await Provider.getModel(userMessage.model.providerID, userMessage.model.modelID, { config })
+    const continuationModel = await Provider.getModel(userMessage.model.providerID, userMessage.model.modelID, {
+      config,
+    })
     const history = input.messages
     const selected =
       repeatedCompactionInput(history, input.parentID) ??
@@ -967,7 +990,7 @@ export namespace SessionCompaction {
       runtime,
       dispatchAnchor,
     })
-    await CompactionToolResultReader.assertSources(selected.head)
+    await CompactionEvidenceReader.assertSources(selected.head)
     const providerMessages: ModelMessage[] = [
       ...compactionTranscriptMessages(selected.head),
       {
@@ -981,11 +1004,11 @@ export namespace SessionCompaction {
       },
     ]
     const tools = {
-      [CompactionToolResultReader.TOOL_NAME]: processRuntime.prepareProviderTool({
-        name: CompactionToolResultReader.TOOL_NAME,
+      [CompactionEvidenceReader.TOOL_NAME]: processRuntime.prepareProviderTool({
+        name: CompactionEvidenceReader.TOOL_NAME,
         source: "extra",
         model,
-        tool: CompactionToolResultReader.create(selected.head),
+        tool: CompactionEvidenceReader.create(await Session.messages({ sessionID: input.sessionID })),
       }),
     }
     const system = await LLM.composeSystem({

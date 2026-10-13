@@ -8,7 +8,7 @@ import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
 import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { ProviderError } from "@/provider/error"
 import { Session } from "@/session"
-import { CompactionToolResultReader } from "@/session/compaction-tool-result-reader"
+import { CompactionEvidenceReader } from "@/session/compaction-evidence-reader"
 import type { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
 import type { JSONSchema7 } from "@ai-sdk/provider"
@@ -534,8 +534,8 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
         source = "message-part-input"
         output = JSON.stringify(part.state.input) ?? "null"
       } else if (read.field === "output" && part.state.status === "completed") {
-        const resolved = await CompactionToolResultReader.authoritativeOutput(
-          part as CompactionToolResultReader.CompletedToolPart,
+        const resolved = await CompactionEvidenceReader.authoritativeOutput(
+          part as CompactionEvidenceReader.CompletedToolPart,
         )
         source = resolved.source
         output = resolved.output

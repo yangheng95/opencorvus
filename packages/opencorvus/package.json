@@ -18,6 +18,7 @@
     "check:evolution-e2e": "bun run script/expert-squad-evolution-e2e.ts",
     "check:dynamic-e2e": "bun run script/dynamic-expert-squad-e2e.ts",
     "check:control-state-redundancy": "bun run script/control-state-redundancy-check.ts",
+    "check:compaction-stress": "bun run script/compaction-stress.ts",
     "dev": "bun ./src/index.ts",
     "check:control-lease-owners": "bun run script/check/control-lease-owners.ts"
   },

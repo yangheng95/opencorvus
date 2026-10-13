@@ -17,7 +17,7 @@ import type { Provider as ProviderType } from "../../src/provider/provider"
 import { Server } from "../../src/server/server"
 import { Session } from "../../src/session"
 import { SessionCompaction } from "../../src/session/compaction"
-import { CompactionToolResultReader } from "../../src/session/compaction-tool-result-reader"
+import { CompactionEvidenceReader } from "../../src/session/compaction-evidence-reader"
 import { SessionControl } from "../../src/session/control"
 import { LLM } from "../../src/session/llm"
 import { SessionLoop } from "../../src/session/loop"
@@ -444,7 +444,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
           return {
             message: assistant,
             async process(processInput: any) {
-              expect(Object.keys(processInput.tools)).toEqual([CompactionToolResultReader.TOOL_NAME])
+              expect(Object.keys(processInput.tools)).toEqual([CompactionEvidenceReader.TOOL_NAME])
               expect(processInput.stopWhen).toHaveLength(2)
               await Session.updatePart({
                 id: Identifier.ascending("part"),
@@ -638,8 +638,8 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
                     {
                       type: "tool-call",
                       toolCallId: toolCallID,
-                      toolName: CompactionToolResultReader.TOOL_NAME,
-                      input: JSON.stringify({ part_id: sourceToolPartID, offset: 0, limit: 30_000 }),
+                      toolName: CompactionEvidenceReader.TOOL_NAME,
+                      input: JSON.stringify({ part_id: sourceToolPartID, field: "output", offset: 0, limit: 30_000 }),
                     },
                     {
                       type: "finish",
@@ -781,8 +781,8 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
                 {
                   type: "text",
                   text: [
-                    `<message id="${summary.info.id}" role="assistant" agent="compaction">`,
-                    "<text>",
+                    `<message id="${summary.info.id}" role="assistant" agent="compaction" author="compaction">`,
+                    `<text part_id="${Message.compactionContinuationTextParts(summary.parts)[0]!.id}">`,
                     checkpoint,
                     "</text>",
                     "</message>",
