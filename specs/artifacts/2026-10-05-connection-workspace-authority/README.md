@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [388 参考历史重连身份](history-render-identity-plan-388.md)：[真实侧聊与正文生命周期](history-render-identity-388/README.md)。
+
 - [387 尺寸通知与布局调查](resize-delivery-plan-387.md)：[真实页面与诊断证据](resize-delivery-387/README.md)。
 
 - [386 Sources多文件刷新](source-reopen-plan-386.md)：[真实模型与实页证据](source-reopen-386/README.md)。

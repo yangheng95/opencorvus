@@ -1,4 +1,5 @@
 import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, untrack } from "solid-js"
+import { Key } from "@solid-primitives/keyed"
 import { apiJson, captureApiAuthority, getServerUrl, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { boardStore } from "../store/board"
 import {
@@ -439,7 +440,7 @@ export function SideChatPanel(props: {
                 {t("side_chat.history", { count: String(history().length) })}
               </Disclosure.Trigger>
               <Disclosure.Content>
-                <For each={history()}>{(message) => <SideMessage message={message} />}</For>
+                <Key each={history()} by="messageID">{(message) => <SideMessage message={message()} />}</Key>
               </Disclosure.Content>
             </Disclosure.Root>
           </Show>

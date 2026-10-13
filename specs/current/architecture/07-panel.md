@@ -665,6 +665,11 @@ existing conversation disclosure store, scoped to API authority, source and Side
 Session. Its layout choice survives Dock remounts and primary-conversation
 returns alongside the reading position;
 opening it pauses the nearest transcript's follow controller for reading.
+Reference-history rows retain their component identity by canonical Message ID,
+independently of wrapper objects received in a replacement connection snapshot.
+The keyed accessor supplies current message data; removing a Message or changing
+the actual target retains the existing retirement behavior. Reconnection does
+not discard rendered history solely because its snapshot objects are new.
 Pending questions and permissions render through the existing InteractionCard.
 Side Chat cards project their body parts through the shared conversation display
 contract, as child transcript cards do. Full protocol parts remain in the
