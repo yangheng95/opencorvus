@@ -11,5 +11,9 @@
 | [恢复测试初次清理超时](runtime-checker-timeout.log) | 已激活恢复请求，测试等待进程退出超时；不是模型行为结论 |
 | [恢复与清理修后](runtime-after.log) | 实际两进程、流式 HTTP、原 Message/receipt、一次续跑预算、回复输出全部通过 |
 | [类型检查](typecheck.log) | 根 typecheck，8/8 workspace 检查通过 |
+| [合并后恢复](runtime-merged.log) | 合并 origin/main 最新3个已发布提交后，原实际恢复验收再次通过 |
+| [正常推送检查](pre-push.log) | 类型、路由、文档、lease owners、架构/包/模块拓扑与 secret scan 通过，4535ddf67 推送成功 |
 
 运行测试的 Provider 端为受控协议 fixture，只证明真实 Prompt/SessionWake/数据库/进程恢复合同。本轮没有真实模型端到端或 UI 验收；没有修改 UI。Task/Mission 的物理崩溃矩阵未扩展，前一轮三模式真实模型与截图仍见[原验收](../2026-10-13-continuous-goal-mode/README.md)。
+
+独立 agent 对新增恢复用例的只读复核未发现确定问题。该用例覆盖请求发出、响应前退出后直接调用 reconciler；不覆盖部分输出中断、全局 Scheduler 的启动发现链或恢复后的真实模型计量。
