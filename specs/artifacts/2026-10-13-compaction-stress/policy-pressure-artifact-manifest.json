@@ -1,0 +1,50 @@
+{
+  "scope": "Repeated authorization under a constrained compactor budget, with exact recovery after a real network interruption",
+  "archives": [
+    "policy-pressure-budget-baseline.log.gz",
+    "policy-pressure-budget-repair.log.gz",
+    "policy-pressure-docs-delivery.log.gz",
+    "policy-pressure-grant-real.log.gz",
+    "policy-pressure-recovery-local.log.gz",
+    "policy-pressure-recovery-typecheck.log.gz",
+    "policy-pressure-revoke-real.log.gz",
+    "policy-pressure-revoke-resume.log.gz",
+    "policy-pressure-typecheck.log.gz"
+  ],
+  "reports": [
+    "policy-pressure-failure-retention.json",
+    "policy-pressure-grant-real-summary.json",
+    "policy-pressure-grant-real.json",
+    "policy-pressure-grant-real.json.requests.json",
+    "policy-pressure-matrix-summary.json",
+    "policy-pressure-network-failure.json",
+    "policy-pressure-revoke-real-summary.json",
+    "policy-pressure-revoke-real.json",
+    "policy-pressure-revoke-real.json.requests.json",
+    "policy-pressure-revoke-resume-summary.json",
+    "policy-pressure-revoke-resume.json",
+    "policy-pressure-revoke-resume.json.requests.json"
+  ],
+  "local": {
+    "distinctPassingTests": 31,
+    "tests": "policy-pressure-recovery-local.log.gz",
+    "typecheck": "policy-pressure-recovery-typecheck.log.gz",
+    "docs": "policy-pressure-docs-delivery.log.gz"
+  },
+  "paid": {
+    "matrix": "policy-pressure-matrix-summary.json",
+    "requests": 116,
+    "cumulativeRequests": 530,
+    "completedUsageReceipts": 115,
+    "unknownUsageRequests": 1,
+    "completedRounds": 10,
+    "passedActions": 20,
+    "passedFields": 100
+  },
+  "notes": [
+    "Original failed revoke report and baseline calibration logs are retained.",
+    "The source-reader disconnect is observed ECONNRESET after successful HTTP headers; the original failure and Tool facts remain exact after recovery.",
+    "Read-range receipts and file-writing actions are checked against canonical database records.",
+    "Full-history controls use a declared larger ceiling; these results do not assert equal-budget efficiency or universal model quality."
+  ]
+}

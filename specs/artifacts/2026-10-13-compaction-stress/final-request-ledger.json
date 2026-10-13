@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 414,
-  "authorizedTotal": 430,
+  "total": 530,
+  "authorizedTotal": 660,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -328,6 +328,54 @@
         "catalogPresent": false
       },
       "summary": "read-pressure-diagnostics-receipts-summary.json"
+    },
+    {
+      "name": "policy-pressure-revoke-real",
+      "status": "failed",
+      "requests": 38,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedRounds": 2,
+      "passedActions": 4,
+      "passedFields": 20,
+      "summary": "policy-pressure-revoke-real-summary.json"
+    },
+    {
+      "name": "policy-pressure-revoke-resume",
+      "status": "passed",
+      "requests": 20,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedRounds": 3,
+      "passedActions": 6,
+      "passedFields": 30,
+      "summary": "policy-pressure-revoke-resume-summary.json"
+    },
+    {
+      "name": "policy-pressure-grant-real",
+      "status": "passed",
+      "requests": 58,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedRounds": 5,
+      "passedActions": 10,
+      "passedFields": 50,
+      "summary": "policy-pressure-grant-real-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
@@ -339,5 +387,14 @@
     "passedFields": 100,
     "requests": 51,
     "summary": "transcript-budget-policy-real-summary.json"
+  },
+  "latestPressurePolicyMatrix": {
+    "status": "passed",
+    "completedRounds": 10,
+    "plannedRounds": 10,
+    "passedActions": 20,
+    "passedFields": 100,
+    "requests": 116,
+    "summary": "policy-pressure-matrix-summary.json"
   }
 }
