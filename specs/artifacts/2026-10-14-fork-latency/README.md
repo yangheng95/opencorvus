@@ -42,3 +42,13 @@
 - [事实检查脚本](check-facts.ts)以实际数据库和原始审计记录检查：当前版本1、12个侧聊中11个完整引用副本的工具/消息绑定及源payload、全部18条真实流与服务清理。第一份早期空引用副本记录其创建边界。
 
 下一批继续确认日志回写页数与提交成本，并在完整生命周期/恢复合同下修复；不放宽5秒目标，不将本批响应改善描述为长历史复制性能完成。
+
+## 追加：已确认同步日志回写成本
+
+`b3fb10aad`提交后正常推送的[原hook日志](push.log.gz)显示整仓类型/迁移检查通过，但另一组尚未完成SDK生成的Question接口工作使路由检查失败。保留工作区来源，不覆盖其生成事务，不跳过hook。
+
+随后只读观测的[真实WAL-index与提交记录](transaction-wal-analysis.json)证明：10次慢提交合计4700.682ms，每次在相同WAL salt下，nBackfill由0变为mxFrame，实际回写1079—1763页；两份头一致。不是单纯从文件大小猜测checkpoint。实际[公共复制及全回执](copy-settlement-wal.json)9678/9775ms、health最大908ms，5秒目标仍未达成；[原服务请求](wal-request-timeline.json)已在dev.log覆盖前保留。
+
+新增[机制探针](wal-index-preflight.json)只验证被动字段读取，不能替代产品事实；[采样器](wal-index.ts)按SQLite公开格式读取前100字节，不写内存/文件、不获取SQLite锁、不执行checkpoint。完整[本轮原记录](wal/run-record.json)、[压缩原始事务记录](wal/transaction-timings.json.gz)、[追加只读检查结果](checked-facts-wal.json)与[检查器](check-wal-facts.ts)单独保留，前述旧记录保持原观察时点。
+
+累计六次成功服务21条Sol真实流全部200/EOF，另一个诊断启动失败保留；当前13个侧聊中的12个完整引用副本身份与Source payload通过，第一份仍为首个回复完成前的空引用。原Target61484/Host整体与配对清理已结算，原服务72943/API取证9985均join exit0。没有新增UI视觉资格或生产修改。下一批先审共享Database生命周期并设计唯一回写策略；本批仍使用原同步/自动checkpoint配置。

@@ -1,0 +1,30 @@
+[
+  {
+    "level": "info",
+    "time": "2026-10-13T22:20:06.702Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "44f33ed3-4226-495b-8b9a-a30f82fb2c19",
+      "method": "POST",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "info",
+    "time": "2026-10-13T22:20:16.373Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "44f33ed3-4226-495b-8b9a-a30f82fb2c19",
+      "method": "POST",
+      "path": "/session/ses_-zUS2EY0ezzjFidQwBy1/side-chat",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 9671
+    },
+    "message": "request"
+  }
+]

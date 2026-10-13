@@ -69,3 +69,15 @@ timing原案因Proxy读取Bun不可改写的transaction.immediate属性触发Typ
 本批保留每批256的唯一实现，交付范围是将持久事件投递写入合并、有界让出事件循环并保持完整原始事实。所有实际目标回执及38消息/36工具引用检查通过，18条Sol流式请求均200/EOF，六个诊断occurrence（含一个工具启动失败）均物理终态并回收配对；最后服务70463已join exit0。9张真实截图已人工检查。后台共33个不同用例覆盖Bus、SQLite源原子性、Task终态/occurrence、Mission跨进程及共享恢复；当前256批次再次通过14项78断言。具体原记录与局限见[证据索引](../../artifacts/2026-10-14-fork-latency/README.md)。
 
 这是一批已验证的响应改善，**原先5秒复制总耗时目标未达成**；整体goal保持active，继续下一轮日志回写调查。成员Rendering及其他UI范围不能据此宣称完成。独立提交/上游合并与正常push后继续，不将未满足要求写成完成。
+
+## 提交后追加：回写的被动实证
+
+`b3fb10aad`独立提交已建立，fresh fetch/merge后待推送只有该提交。正常pre-push完成整仓typecheck及迁移一致性检查，随后因共享工作区另一组Question connected.pendingQuestions新增与生成SDK尚未同步而退出1；本批未修改这些接口/生成文件，不覆盖仍在实施的源和独占SDK生成事务。保留原失败日志，修复正常生成差异后必须重新fetch/merge、检查完整待推送集合并重跑原hook，不跳过检查。
+
+等待共享生成事务收敛期间继续本批已有回写调查：依据[SQLite WAL-index公开字段](https://www.sqlite.org/walformat.html#the_wal_index_header)，只读目标`-shm`前100字节中的两份48字节头、mxFrame（偏移16）、nPage（20）、nBackfill（96）及真实WAL salt。读头不取文件锁、不修改参数、不执行checkpoint；头副本不一致时仅作为撕裂观察而不能判定回写事实。格式表中的nBackfill偏移96与后文文字128存在表述不一致，因此以表及实际SQLite输出验证：全新自有机制探针默认1000页，先观察27帧/0回写，再真实写入后1380帧/1380回写，完整1220行读取通过。它只验证采样器，不能替代产品验收。
+
+新独立`fork-latency-407-wal` occurrence仍使用原38消息和8请求/600秒租约。在原被动计时中增加提交前后WAL-index计数，公共API采样覆盖全部回执，结束复制原服务的相关请求日志再启动其他服务，防止dev.log覆盖证据。新的事实将决定下轮改动，不先更改生产SQLite生命周期或checkpoint策略。
+
+追加正式运行完成：POST9678ms、全部263/789回执9775ms，25次health最大908ms；10次慢COMMIT合计4700.682ms。每一次均观察到相同salt、两份头一致、nBackfill从0增至mxFrame，回写1079—1763页，准确发生在跨越默认1000页的提交；其余281次外层事务提交均不超过50ms。这将同步自动checkpoint确认为剩余复制路径的直接耗时，而不只是文件尺寸相关性。源复制及事件正文仍需单独计入总耗时，不能把4.7秒简单当作移走checkpoint后的保证值。
+
+本轮额外3条Sol流全部200/EOF，总数21；原Target61484、原Host、输出/请求与配对清理完整，72943和API取证9985已join exit0。新增Side13完整38消息/36工具来源及所有旧副本通过只读核验；没有UI源码/新人工页面。原日志已及时保存。下一批须先横审Database初始化、所有写入、close/reset/resetForTests、checkpointTruncate/vacuum、进程重启及多Project/多进程的生命周期，形成一份唯一回写策略，再实施与验收；本轮仍未关闭自动checkpoint、降低同步级别或引入后台进程。
