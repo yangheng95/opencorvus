@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 修复 MCP 合法空文件、音频内容和资源链接导致整个工具结果失败的问题。音频保存为附件并保留当前模型传输限制；资源链接保留原始引用信息。
+
 - Venice 流式请求使用正确的用量参数，并保留每次调用的显式选择；修复 Token 总量重复计入输出、缓存输入重复计费和推理分量丢失的问题。历史账本保留原记录，不重算。
 - 关闭或重启服务时先取消所有项目的后台工作，再等待其物理清理完成，修复 Memory 整理等后台任务反向等待停机取消而卡住的问题。
 
@@ -49,6 +51,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Fixed valid empty files, audio content and resource links failing whole MCP tool results. Audio is retained as an attachment with the current model transport limits, and resource links preserve their original reference fields.
 
 - Venice streaming requests use the correct usage parameter and preserve explicit per-call choices. Fixed output counted twice in Token totals, cache input charged twice, and missing reasoning components. Historical ledger records are retained without recalculation.
 - Service shutdown and restart cancel background work across all Projects before joining its physical cleanup, fixing background work such as Memory organization waiting for cancellation from a later shutdown stage.

@@ -1,0 +1,143 @@
+{
+  "observedAt": "2026-10-13T10:16:34.744Z",
+  "pid": 76480,
+  "port": 55934,
+  "calls": [
+    "empty-blob",
+    "mixed-empty-blob",
+    "audio-block",
+    "audio-resource-control",
+    "resource-link",
+    "empty-text-control",
+    "text-link-control"
+  ],
+  "observations": [
+    {
+      "variant": "empty-blob",
+      "sdkAccepted": true,
+      "failure": {
+        "name": "Error",
+        "message": "MCP tool resource file:///public/empty.bin did not return usable text or blob content"
+      }
+    },
+    {
+      "variant": "mixed-empty-blob",
+      "sdkAccepted": true,
+      "failure": {
+        "name": "Error",
+        "message": "MCP tool resource file:///public/empty.csv did not return usable text or blob content"
+      }
+    },
+    {
+      "variant": "audio-block",
+      "sdkAccepted": true,
+      "failure": {
+        "name": "Error",
+        "message": "Unsupported MCP content item type: audio"
+      }
+    },
+    {
+      "variant": "audio-resource-control",
+      "sdkAccepted": true,
+      "materialized": {
+        "text": "Public audio generated.",
+        "attachments": [
+          {
+            "sha": "86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac",
+            "url": "/attachment/prj_hlrE51EmwXCqAAwqslt5/86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac.wav",
+            "mime": "audio/wav",
+            "size": 60,
+            "filename": "file:///public/audio.wav"
+          }
+        ],
+        "metadata": {
+          "mcp_tool_result": {
+            "is_error": false
+          }
+        }
+      },
+      "projected": {
+        "type": "text",
+        "value": "Public audio generated.\n\nAttachments remain tool-owned evidence because this provider transport cannot send them as typed tool results:\n- audio/wav; ref=/attachment/prj_hlrE51EmwXCqAAwqslt5/86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac.wav; sha256=86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac; bytes=60; reason=provider openai adapter @ai-sdk/openai has no verified file-data transport for MIME audio/wav"
+      }
+    },
+    {
+      "variant": "resource-link",
+      "sdkAccepted": true,
+      "failure": {
+        "name": "Error",
+        "message": "Unsupported MCP content item type: resource_link"
+      }
+    },
+    {
+      "variant": "empty-text-control",
+      "sdkAccepted": true,
+      "materialized": {
+        "text": "",
+        "attachments": [],
+        "metadata": {
+          "mcp_tool_result": {
+            "is_error": false
+          }
+        }
+      },
+      "projected": {
+        "type": "json",
+        "value": {
+          "output": "",
+          "attachments": []
+        }
+      }
+    },
+    {
+      "variant": "text-link-control",
+      "sdkAccepted": true,
+      "materialized": {
+        "text": "Public report: https://example.com/public/report.csv",
+        "attachments": [],
+        "metadata": {
+          "mcp_tool_result": {
+            "is_error": false
+          }
+        }
+      },
+      "projected": {
+        "type": "text",
+        "value": "Public report: https://example.com/public/report.csv"
+      }
+    }
+  ],
+  "downstream": {
+    "emptyStoredReference": {
+      "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "url": "/attachment/prj_hlrE51EmwXCqAAwqslt5/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "mime": "text/csv",
+      "size": 0,
+      "filename": "empty.csv"
+    },
+    "emptyModelOutput": {
+      "type": "text",
+      "value": "Public export succeeded; zero records.\n\n[Tool-result text attachment: empty.csv; mime=text/csv; ref=/attachment/prj_hlrE51EmwXCqAAwqslt5/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv; sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855; bytes=0]\n"
+    },
+    "rawDecode": {
+      "name": "Error",
+      "message": "MCP zero-byte probe: expected non-empty base64 payload"
+    },
+    "canonicalEmptyDecodeBytes": 0
+  },
+  "serverOwners": 11,
+  "closed": [
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled"
+  ],
+  "boundary": "Actual loopback SDK, production materializer/store/model-output conversion; no Provider/model call or UI"
+}

@@ -672,6 +672,14 @@ full-file recovery and canonical result persistence; `isError`, original content
 and attachments retain their contracts. Builtin Browser and Computer results
 keep their provider-identity interpretation, including screenshot attachments.
 
+MCP embedded blob resources preserve valid zero-byte files within the resource
+contract; other binary media retain the strict nonempty decoder. Audio content
+uses the same project-owned attachment store and the existing Provider transport
+capability check. Resource links contribute an ordered JSON reference containing
+only their actual public identity and description fields, including size zero;
+this does not fetch the URI or grant resource-read authority. Original MCP content
+and existing error metadata remain canonical across these representations.
+
 Projected default MCP result materialization uses the parsed server identity,
 separately from the provider-visible Tool name. A Browser screenshot result
 exposes its canonical invocation `sourceToolPartID`, page URL and attachment

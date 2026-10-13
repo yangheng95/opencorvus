@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [390 MCP 文件与引用](2026-10-13-mcp-content-boundaries-390/README.md)：真实工具内容、0/60字节存储与下载、11次流式请求和原owner收尾。
+
 - [386 Sources多文件与刷新实页](2026-10-05-connection-workspace-authority/source-reopen-386/README.md)：独立当前页面、原始来源身份与真实模型证据。
 
 - [385 权限续行消息结算](2026-10-05-connection-workspace-authority/permission-message-settlement-385/README.md)：受控流式新工具、实际进程恢复与完整失败/成功证据。

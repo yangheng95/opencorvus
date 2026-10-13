@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [390 MCP 文件与资源引用](records/2026-10/2026-10-13-mcp-content-boundaries-390.md)：合法空文件、音频附件与资源链接的真实结果和下载验收。
+
 - [386 Sources多文件与刷新实页](artifacts/2026-10-05-connection-workspace-authority/source-reopen-plan-386.md)：当前Sources显示、点击与刷新重开的独立真实模型旅程。
 
 - [385 权限续行消息结算](records/2026-10/2026-10-13-permission-message-settlement-385.md)：物理所有权、完整消息收尾与72项后台合同。

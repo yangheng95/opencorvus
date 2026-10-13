@@ -160,4 +160,54 @@ describe("tool-result attachment provider projection", () => {
       adapter: "openai-responses",
     })
   })
+
+  test("projects a real zero-byte CSV attachment with its exact byte count and original result", async () => {
+    await using tmp = await tmpdir({ git: true })
+    await Instance.provide({
+      directory: tmp.path,
+      fn: async () => {
+        const reference = await AttachmentStore.write(Instance.project.id, Buffer.alloc(0), "text/csv", "empty.csv")
+        const output = await Message.toolResultToModelOutput(
+          { text: "Zero-row export completed.", attachments: [reference] },
+          openAIModel,
+        )
+        expect(output).toEqual({
+          type: "text",
+          value: `Zero-row export completed.\n\n[Tool-result text attachment: empty.csv; mime=text/csv; ref=${reference.url}; sha256=${reference.sha}; bytes=0]\n`,
+        })
+      },
+    })
+  })
+
+  test("projects a stored audio reference and the explicit Provider transport limitation", async () => {
+    await using tmp = await tmpdir({ git: true })
+    await Instance.provide({
+      directory: tmp.path,
+      fn: async () => {
+        const bytes = Buffer.from(
+          "UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YRAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "base64",
+        )
+        const reference = await AttachmentStore.write(Instance.project.id, bytes, "audio/wav", "public.wav")
+        const audioModel = {
+          ...openAIModel,
+          capabilities: { ...openAIModel.capabilities, input: { ...openAIModel.capabilities.input, audio: true } },
+        }
+        const reason = "provider openai adapter @ai-sdk/openai has no verified file-data transport for MIME audio/wav"
+        expect(ProviderTransform.toolResultAttachmentTransport(audioModel, "audio/wav")).toEqual({
+          contentType: "unsupported",
+          reason,
+        })
+        expect(
+          await Message.toolResultToModelOutput(
+            { text: "Public audio generated.", attachments: [reference] },
+            audioModel,
+          ),
+        ).toEqual({
+          type: "text",
+          value: `Public audio generated.\n\nAttachments remain tool-owned evidence because this provider transport cannot send them as typed tool results:\n- audio/wav; ref=${reference.url}; sha256=${reference.sha}; bytes=60; reason=${reason}`,
+        })
+      },
+    })
+  })
 })

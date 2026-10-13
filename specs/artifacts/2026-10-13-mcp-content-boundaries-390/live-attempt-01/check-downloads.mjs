@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+const root='.tmp-mcp-content-boundaries-390/live-attempt-01';
+const results=JSON.parse(fs.readFileSync(root+'/public-results.json','utf8'));
+const audio=Object.values(results).flatMap(r=>r.content).find(c=>c.type==='audio');
+if(!audio)throw Error('Missing actual public audio sample');
+const csv=fs.readFileSync(root+'/downloaded-empty.csv');
+const wav=fs.readFileSync(root+'/downloaded-audio.wav');
+if(csv.length!==0||!wav.equals(Buffer.from(audio.data,'base64')))throw Error('Downloaded bytes differ from public tool content');
+const receipt={checkedAt:new Date().toISOString(),source:'Actual CUA Download links on tab27',csvBytes:csv.length,audioBytes:wav.length,audioMime:audio.mimeType,audioExactlyMatchesReturnedContent:true,files:['downloaded-empty.csv','downloaded-audio.wav']};
+fs.writeFileSync(root+'/download-check.json',JSON.stringify(receipt,null,2));
+console.log(JSON.stringify(receipt,null,2));

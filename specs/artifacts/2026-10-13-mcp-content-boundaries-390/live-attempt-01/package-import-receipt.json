@@ -1,0 +1,20 @@
+{
+  "input": {
+    "sourceDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-content-boundaries-390\\live-attempt-01\\package-source\\qa\\content-boundaries-390",
+    "installationScope": "project"
+  },
+  "status": 200,
+  "result": {
+    "operation": "installed",
+    "before": null,
+    "after": {
+      "installationScope": "project",
+      "projectDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-content-boundaries-390\\live-attempt-01\\provider-run\\project",
+      "namespace": "qa",
+      "id": "content-boundaries-390",
+      "version": "2026.10.13.1",
+      "packageDigest": "597289b85dcbd1447849c2755d54300b40bdedffeacae3be58d1d598bb38b792",
+      "targetRoot": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-content-boundaries-390\\live-attempt-01\\provider-run\\project\\.opencorvus\\expert-squads\\qa\\content-boundaries-390"
+    }
+  }
+}

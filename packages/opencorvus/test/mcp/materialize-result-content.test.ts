@@ -22,6 +22,7 @@ async function withRemoteResult<T>(result: CallToolResult, run: (received: CallT
   const http = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
+    idleTimeout: 0,
     async fetch(request) {
       const server = new McpServer({ name: "public-report-result", version: "1.0.0" })
       servers.add(server)
@@ -119,6 +120,38 @@ const cases: Array<{ name: string; result: CallToolResult; text: string; isError
     text: '{"error":{"code":"REPORT_SCOPE_REQUIRED","message":"Use an approved report scope."}}',
     isError: true,
   },
+  {
+    name: "minimal resource link with its original non-HTTP URI",
+    result: {
+      content: [{ type: "resource_link", uri: "reports://quarter/2026?team=%2Fa#summary", name: "quarter.json" }],
+    },
+    text: '{"type":"resource_link","uri":"reports://quarter/2026?team=%2Fa#summary","name":"quarter.json"}',
+    isError: false,
+  },
+  {
+    name: "ordered public resource link fields beside original text and structured error data",
+    result: {
+      content: [
+        { type: "text", text: "Report reference follows.\r\n" },
+        {
+          type: "resource_link",
+          uri: "file:///remote/public/report.csv",
+          name: "report.csv",
+          title: "",
+          description: "Public zero-row report",
+          mimeType: "text/csv",
+          size: 0,
+          _meta: { diagnostic: "opaque-client-value" },
+          annotations: { audience: ["user"], priority: 0.7 },
+        },
+        { type: "text", text: "Original source description." },
+      ],
+      structuredContent: { error: "Export is incomplete; inspect the available report reference." },
+      isError: true,
+    },
+    text: 'Report reference follows.\r\n\n\n{"type":"resource_link","uri":"file:///remote/public/report.csv","name":"report.csv","title":"","description":"Public zero-row report","mimeType":"text/csv","size":0}\n\nOriginal source description.\n\n{"error":"Export is incomplete; inspect the available report reference."}',
+    isError: true,
+  },
 ]
 
 for (const example of cases)
@@ -193,4 +226,91 @@ test("materializes mixed MCP text, image, resource and structured data with comp
       })
     },
   })
+})
+
+for (const mime of ["application/octet-stream", "text/csv"])
+  test(`materializes an actual zero-byte MCP ${mime} resource with its mixed result`, async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const result: CallToolResult = {
+          content: [
+            { type: "text", text: "Public export succeeded; zero records." },
+            { type: "resource", resource: { uri: "file:///public/empty.csv", mimeType: mime, blob: "" } },
+          ],
+          structuredContent: { records: 0 },
+        }
+        await withRemoteResult(result, async (received) => {
+          const materialized = await materializeMcpToolResult({
+            projectID: Instance.project.id,
+            serverName: "public-reports",
+            result: received,
+          })
+          expect(materialized.text).toBe('Public export succeeded; zero records.\n\n{"records":0}')
+          expect(materialized.metadata).toEqual({ mcp_tool_result: { is_error: false } })
+          expect(materialized.attachments).toHaveLength(1)
+          const reference = materialized.attachments[0]!
+          expect(reference).toMatchObject({ mime, size: 0, filename: "file:///public/empty.csv" })
+          const located = attachmentNameFromUrl(reference.url)!
+          expect(located.projectID).toBe(Instance.project.id)
+          expect(await AttachmentStore.read(located.projectID, located.name)).toEqual(Buffer.alloc(0))
+          expect(received).toEqual(result)
+        })
+      },
+    })
+  })
+
+test("materializes actual MCP audio and the same resource bytes as canonical audio attachments", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      // A valid mono 8000 Hz 16-bit PCM WAV with eight silent samples.
+      const data = "UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YRAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      const audio = Buffer.from(data, "base64")
+      for (const content of [
+        { type: "resource" as const, resource: { uri: "file:///public/audio.wav", mimeType: "audio/wav", blob: data } },
+        { type: "audio" as const, mimeType: "audio/wav", data },
+      ]) {
+        const result: CallToolResult = { content: [{ type: "text", text: "Public audio generated." }, content] }
+        await withRemoteResult(result, async (received) => {
+          const materialized = await materializeMcpToolResult({
+            projectID: Instance.project.id,
+            serverName: "public-reports",
+            result: received,
+            imageFilename: "screenshot.png",
+          })
+          expect(materialized.text).toBe("Public audio generated.")
+          expect(materialized.metadata).toEqual({ mcp_tool_result: { is_error: false } })
+          expect(materialized.attachments).toHaveLength(1)
+          const reference = materialized.attachments[0]!
+          expect(reference).toMatchObject({ mime: "audio/wav", size: 60 })
+          const located = attachmentNameFromUrl(reference.url)!
+          expect(located.projectID).toBe(Instance.project.id)
+          expect(located.name.slice(-4)).toBe(".wav")
+          expect(await AttachmentStore.read(located.projectID, located.name)).toEqual(audio)
+          expect(received).toEqual(result)
+        })
+      }
+    },
+  })
+})
+
+test.each([
+  [
+    { type: "resource", resource: { uri: "file:///public/invalid.bin", blob: "!!!!" } },
+    "MCP tool resource blob file:///public/invalid.bin: invalid base64 payload",
+  ],
+  [{ type: "image", mimeType: "image/png", data: "" }, "MCP tool image content: expected non-empty base64 payload"],
+  [{ type: "audio", mimeType: "audio/wav", data: "" }, "MCP tool audio content: expected non-empty base64 payload"],
+])("reports the exact binary decoder contract for %j", async (content, message) => {
+  // Malformed Base64 is rejected by the SDK; empty image/audio strings pass
+  // that schema but still fail the production decoder's nonempty media contract.
+  await expect(
+    materializeMcpToolResult({
+      projectID: "prj_binary_decoder_contract",
+      result: { content: [content] } as CallToolResult,
+    }),
+  ).rejects.toThrow(message)
 })

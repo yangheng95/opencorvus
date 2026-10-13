@@ -1,0 +1,23 @@
+我会各调用一次这三个报告，核对返回正文和附件信息；不读取链接内容、不听取音频，也不修改项目文件。
+三个只读报告已各调用一次，返回信息如下：
+
+- **空 CSV 导出**
+  - 原文：`Public export succeeded; zero records.`
+  - `records`：`0`
+  - CSV 附件实际字节数：**0 字节**
+
+- **静音音频**
+  - 原文：`Public silent audio generated.`
+  - MIME：`audio/wav`
+  - 附件实际字节数：**60 字节**
+  - 传输限制：返回结果明确说明，当前 OpenAI 适配器没有经过验证的 `audio/wav` 文件数据传输能力，不能将该附件作为类型化工具结果传给模型；附件仍保留为工具侧证据。这里仅依据返回正文及附件信息报告，没有接收或听取音频内容。
+
+- **报告资源引用**
+  - 原始 URI：`https://example.com/reports/empty.csv`
+  - `name`：`empty.csv`
+  - `title`：`Public empty report`
+  - `description`：`Zero-row public report`
+  - `mimeType`：`text/csv`
+  - `size`：`0`
+
+未读取链接内容，未修改项目文件。

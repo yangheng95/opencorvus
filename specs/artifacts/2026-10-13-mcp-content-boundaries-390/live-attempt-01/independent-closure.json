@@ -1,0 +1,26 @@
+{
+  "boundary": "Independent exact copied paths, owned process identity and ports after all original owner handles joined",
+  "listeners": [],
+  "occurrence": "mcp-content-boundaries-390-live-01-ce6b34bf-2656-48b0-a06a-70e9eaea3990",
+  "mcpOriginalProcess": "exited",
+  "mcpIdentity": {
+    "execHandle": 22251,
+    "occurrence": "1ea30bae-4fa0-4da0-bfaa-62cf44e5671f",
+    "startTimeUtc": "2026-10-13T10:50:05.9715228Z",
+    "executable": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\sse-compression-305\\bun140\\bun-windows-x64\\bun.exe",
+    "parentPID": 5264,
+    "pid": 20420,
+    "fixedDeadlineAt": 1791889206173
+  },
+  "observedAt": "2026-10-13T10:57:43.9212997Z",
+  "copiedPair": [
+    {
+      "state": "removed",
+      "member": "auth.json"
+    },
+    {
+      "state": "removed",
+      "member": "models.json"
+    }
+  ]
+}

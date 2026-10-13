@@ -1,0 +1,16 @@
+{
+  "shutdown": {
+    "exitCode": 0,
+    "execChunk": "20367f"
+  },
+  "note": "Native/shutdown PowerShell scripts return normally without setting LASTEXITCODE; these exit0 values are the actual exec/wait tool completion results",
+  "observedAt": "2026-10-13T10:57:43.9669179Z",
+  "nativeLauncher": {
+    "exitCode": 0,
+    "execSession": 88420
+  },
+  "mcp": {
+    "exitCode": 0,
+    "execSession": 22251
+  }
+}

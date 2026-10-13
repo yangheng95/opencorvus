@@ -72,14 +72,19 @@ export async function materializeMcpToolResult(input: {
       textParts.push(contentItem.text)
       continue
     }
-    if (contentItem.type === "image") {
-      if (!contentItem.mimeType) throw new Error("MCP image content missing mimeType")
+    if (contentItem.type === "resource_link") {
+      const { uri, name, title, description, mimeType, size } = contentItem
+      textParts.push(JSON.stringify({ type: "resource_link", uri, name, title, description, mimeType, size }))
+      continue
+    }
+    if (contentItem.type === "image" || contentItem.type === "audio") {
+      if (!contentItem.mimeType) throw new Error(`MCP ${contentItem.type} content missing mimeType`)
       attachments.push(
         await AttachmentStore.write(
           input.projectID,
-          decodeRawBase64Payload(contentItem.data, "MCP tool image content"),
+          decodeRawBase64Payload(contentItem.data, `MCP tool ${contentItem.type} content`),
           contentItem.mimeType,
-          input.imageFilename,
+          contentItem.type === "image" ? input.imageFilename : undefined,
         ),
       )
       continue
@@ -91,12 +96,16 @@ export async function materializeMcpToolResult(input: {
         textParts.push(resource.text)
         materialized = true
       }
-      if ("blob" in resource && resource.blob) {
+      if ("blob" in resource && typeof resource.blob === "string") {
         const mime = resource.mimeType ?? "application/octet-stream"
+        const bytes =
+          resource.blob === ""
+            ? Buffer.alloc(0)
+            : decodeRawBase64Payload(resource.blob, `MCP tool resource blob ${resource.uri}`)
         attachments.push(
           await AttachmentStore.write(
             input.projectID,
-            decodeRawBase64Payload(resource.blob, `MCP tool resource blob ${resource.uri}`),
+            bytes,
             mime,
             resource.uri,
           ),

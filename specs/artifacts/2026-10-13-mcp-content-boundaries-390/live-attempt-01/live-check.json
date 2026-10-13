@@ -1,0 +1,61 @@
+{
+  "observedAt": "2026-10-13T10:54:09.953Z",
+  "acceptance": "backend-passed",
+  "taskID": "tsk_g00VXvSRD400ocgErO7w",
+  "rootSessionID": "ses_-zUS4XYfizzTsgqUuZu6",
+  "sessions": [
+    {
+      "id": "ses_-zUS4XYfizzTsgqUuZu6",
+      "parent_id": null,
+      "kind": "root",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-content-boundaries-390\\live-attempt-01\\provider-run\\project"
+    },
+    {
+      "id": "ses_-zUS4XXq0zzrQF2DPDnp",
+      "parent_id": "ses_-zUS4XYfizzTsgqUuZu6",
+      "kind": "orchestrator",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-content-boundaries-390\\live-attempt-01\\provider-run\\project"
+    }
+  ],
+  "toolPartIDs": [
+    "prt_g0VXvSixf003RAK4C251",
+    "prt_g0VXvSdFY0041eeujBEU",
+    "prt_g0VXvShdp00XI1gYmiAf"
+  ],
+  "exactOriginalDurableContent": true,
+  "exactCanonicalOutput": true,
+  "actualMcpCalls": 3,
+  "attachmentFacts": [
+    {
+      "toolPartID": "prt_g0VXvSdFY0041eeujBEU",
+      "url": "/attachment/prj_h4Io1mTN9eWK4wixcEIn/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-content-boundaries-390\\live-attempt-01\\provider-run\\project\\.opencorvus\\.r\\project\\attachments\\d5a3dc47c656cfe7cfb39d39e474e47124e8446778207091824865cad8160c48\\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+      "bytes": 0,
+      "exactPublicSample": true,
+      "metadata": {
+        "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "url": "/attachment/prj_h4Io1mTN9eWK4wixcEIn/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.csv",
+        "mime": "text/csv",
+        "size": 0,
+        "filename": "file:///public/empty.csv"
+      }
+    },
+    {
+      "toolPartID": "prt_g0VXvShdp00XI1gYmiAf",
+      "url": "/attachment/prj_h4Io1mTN9eWK4wixcEIn/86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac.wav",
+      "absolutePath": "D:\\myhexin-local\\opencorvus\\.tmp-mcp-content-boundaries-390\\live-attempt-01\\provider-run\\project\\.opencorvus\\.r\\project\\attachments\\d5a3dc47c656cfe7cfb39d39e474e47124e8446778207091824865cad8160c48\\86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac.wav",
+      "bytes": 60,
+      "exactPublicSample": true,
+      "metadata": {
+        "sha": "86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac",
+        "url": "/attachment/prj_h4Io1mTN9eWK4wixcEIn/86b5f5a4a69b226cef532cb4019df8ff0c08a804fa919af5d116e6e257cd9eac.wav",
+        "mime": "audio/wav",
+        "size": 60
+      }
+    }
+  ],
+  "providerRequests": 11,
+  "allRequestsExactModelStreamingHTTP200EOF": true,
+  "nativeDeadlineAt": 1791889235929,
+  "boundary": "Actual Task default/package MCP content and attachments; manual page and physical shutdown are separate; no audio typed transport or linked resource fetching claim"
+}

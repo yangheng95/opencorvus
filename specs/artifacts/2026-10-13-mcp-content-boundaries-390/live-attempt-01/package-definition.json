@@ -1,0 +1,56 @@
+{
+  "manifest": {
+    "schema_version": 2,
+    "namespace": "qa",
+    "id": "content-boundaries-390",
+    "label": "公开MCP文件与引用核对",
+    "description": "Read the three declared public file and reference results using actual source evidence.",
+    "version": "2026.10.13.1",
+    "product_pillars": [
+      "work"
+    ],
+    "capability_sets": {},
+    "readme": "README.md",
+    "selector": {
+      "summary": "Read public file and reference facts",
+      "selection_guidance": "Use for this public result review.",
+      "instructions": "selector.md"
+    },
+    "capability_projection": {
+      "scheduler": {
+        "base_role": "orchestrator",
+        "prompt": "agents/orchestrator/system.md",
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:orchestrator-base",
+          "capability:mcp_tool:package:content-boundaries-390:content-boundaries-390%2Fshared%2Freports%2Ftool%2Faudio-clip",
+          "capability:mcp_tool:package:content-boundaries-390:content-boundaries-390%2Fshared%2Freports%2Ftool%2Fempty-export",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fpublicreports%2Ftool%2Freport-reference",
+          "capability:skill:package:content-boundaries-390:content-boundaries-390%2Fshared%2Fmethod",
+          "capability:tool:platform:tool-registry:manage_task",
+          "capability:tool:platform:tool-registry:read"
+        ]
+      },
+      "agents": {
+        "report-reader": {
+          "label": "Report reader",
+          "description": "Read public result facts",
+          "base_role": "explore",
+          "prompt": "agents/report-reader/system.md",
+          "capability_refs": [
+            "capability:skill:package:content-boundaries-390:content-boundaries-390%2Fshared%2Fmethod",
+            "capability:tool:platform:tool-registry:read"
+          ]
+        }
+      },
+      "virtual_workflows": {}
+    }
+  },
+  "files": {
+    "README.md": "# Public result reports\nRead the user's requested public result fields using actual source results.\n",
+    "selector.md": "# Public results\nUse for the bounded report review request.\n",
+    "agents/orchestrator/system.md": "# Public result owner\nOwn the requested read-only answer using your declared report capabilities. Preserve actual returned evidence and report failures truthfully. Give the requested facts in a visible assistant message. When the request is satisfied, complete the Task with the current lifecycle interface and a truthful summary. No project file mutation or artifact publication is requested.\n",
+    "agents/report-reader/system.md": "Read the requested public result facts using actual evidence.\n",
+    "skills/method/SKILL.md": "---\nname: public-result-reading\ndescription: Read the declared public results and answer the user's bounded question.\n---\n# Public result reading\nUse actual returned content and attachment metadata. Preserve missing facts as unknown and state media transport limitations faithfully.\n",
+    "mcp/reports.json": "{\"type\":\"remote\",\"transport\":\"streamable-http\",\"url\":\"http://127.0.0.1:18507/mcp\",\"oauth\":false,\"timeout\":15000,\"capabilities\":{\"tools\":[\"empty-export\",\"audio-clip\"]}}"
+  }
+}

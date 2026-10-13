@@ -1,0 +1,47 @@
+{
+  "report-reference": {
+    "content": [
+      {
+        "type": "resource_link",
+        "uri": "https://example.com/reports/empty.csv",
+        "name": "empty.csv",
+        "title": "Public empty report",
+        "description": "Zero-row public report",
+        "mimeType": "text/csv",
+        "size": 0
+      }
+    ]
+  },
+  "empty-export": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Public export succeeded; zero records."
+      },
+      {
+        "type": "resource",
+        "resource": {
+          "uri": "file:///public/empty.csv",
+          "mimeType": "text/csv",
+          "blob": ""
+        }
+      }
+    ],
+    "structuredContent": {
+      "records": 0
+    }
+  },
+  "audio-clip": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Public silent audio generated."
+      },
+      {
+        "type": "audio",
+        "mimeType": "audio/wav",
+        "data": "UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YRAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      }
+    ]
+  }
+}

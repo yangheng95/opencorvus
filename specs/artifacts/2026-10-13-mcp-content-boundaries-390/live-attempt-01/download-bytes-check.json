@@ -1,0 +1,18 @@
+{
+  "facts": [
+    {
+      "bytes": 0,
+      "publicSample": "empty.csv",
+      "download": "downloaded-empty.csv",
+      "exactBytes": true
+    },
+    {
+      "bytes": 60,
+      "publicSample": "silent.wav",
+      "download": "downloaded-audio.wav",
+      "exactBytes": true
+    }
+  ],
+  "boundary": "Actual root-operated browser downloads compared byte-for-byte with independent public samples; screenshot/manual review remains root-owned",
+  "observedAt": "2026-10-13T10:56:20.8682210Z"
+}
