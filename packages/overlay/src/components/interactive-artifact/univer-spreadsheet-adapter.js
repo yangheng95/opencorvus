@@ -82,8 +82,12 @@ function workbookSnapshot(payload, locale) {
   }
 }
 
+function spreadsheetLocale(language) {
+  return language === "zh-CN" ? LocaleType.ZH_CN : LocaleType.EN_US
+}
+
 export function mountUniverSpreadsheet(host, payload, language, darkMode) {
-  const locale = language === "zh-CN" ? LocaleType.ZH_CN : LocaleType.EN_US
+  const locale = spreadsheetLocale(language)
   const { univer, univerAPI } = createUniver({
     locale,
     darkMode,
@@ -114,6 +118,7 @@ export function mountUniverSpreadsheet(host, payload, language, darkMode) {
   return {
     dispose: () => univer.dispose(),
     setDarkMode: (enabled) => themeService.setDarkMode(enabled),
+    setLocale: (language) => univerAPI.setLocale(spreadsheetLocale(language)),
     exportFiles: () => {
       const snapshot = workbook.save()
       return snapshot.sheetOrder.map((id) => {

@@ -102,3 +102,9 @@ $env:GOAL_CRASH_EVIDENCE='<absolute new run directory>'
 ```
 
 原具体命令执行输出为工作树 `.tmp-goal-crash-task-run1.log`、`.tmp-goal-crash-mission-run1.log`、`.tmp-goal-crash-mission-run2.log`；完整证据在 `specs/artifacts/2026-10-13-continuous-goal-crash-recovery/`。独立agent不提交推送，主agent负责最终证据复核、索引、提交与main收敛。
+
+## 主 agent 交付复核
+
+- 原29项目标合同与新增4项checker合同在当前工作树独立复跑通过，共33项；真实Task和Mission成功场景均由独立证据脚本和人工正文复核再次确认。根8个工作区类型检查、文档/架构检查和格式检查通过。66个证据文件（含gzip解压内容）的已知凭据扫描为0命中。
+- 本轮验收提交为 `13a045642`。合并已发布上游后的 `9a7a5aa9e` 正常推送成功，原pre-push的类型、路由、文档、lease owners、架构/包/committed-tree模块拓扑及secret scan全部通过，未绕过hook。只出现三个文档索引冲突，保留双方条目；上游后端生产路径未改动，无须重复真实Provider收费运行。
+- 同步主工作区时发现并行提交 `099aaf2b3`。已核对其387规格Recall、真实模型与桌面/编辑导出、typecheck/build及收尾证据，确认属于另一个已授权且验证通过的交付；在隔离工作树合并它，避免覆盖或丢弃主工作区历史。主工作区尚有其他未提交改动，仅对本任务与其重叠的文档索引逐文件备份、验证并保留，其他文件不纳入本轮提交。

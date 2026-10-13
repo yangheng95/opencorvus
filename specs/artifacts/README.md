@@ -2,6 +2,8 @@
 
 - [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
 
+- [387 电子表格语言与编辑](2026-10-13-spreadsheet-artifact-identity-387/README.md)：真实Sol发布、双语菜单、编辑后CSV和物理收尾。
+
 - [Provider 地址编辑](2026-10-13-provider-address-intent/README.md)：真实表单、实际配置和运行收尾。
 
 - [384 权限续行恢复断点](2026-10-05-connection-workspace-authority/permission-message-recovery-384/README.md)：真实工具、双进程owner、规范状态与完整失败日志。

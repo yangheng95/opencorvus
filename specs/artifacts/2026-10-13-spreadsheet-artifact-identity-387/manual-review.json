@@ -1,0 +1,58 @@
+{
+  "observedAt": "2026-10-13T09:43:22.801Z",
+  "chat": "ses_h0VKkCl7hbz3BKHVW2Xp",
+  "artifact": "art_g0VXv65e1004ErsrwSJs",
+  "actualModel": "gpt-6.1-sol",
+  "providerRequests": 6,
+  "allStreamsHTTP200EOF": true,
+  "editedCell": {
+    "address": "B2",
+    "before": 7,
+    "after": 9
+  },
+  "computedCell": {
+    "address": "B4",
+    "formula": "=SUM(B2:B3)",
+    "before": 12,
+    "after": 14
+  },
+  "languageRoundtrip": "Chinese -> English -> Chinese -> English; same mounted workbook retained edits and selection",
+  "download": {
+    "actualBrowserPath": "C:/Users/hengu/Downloads/Desk budget - 清单.csv",
+    "bytes": 61,
+    "exactExpectedUTF8BomCsv": true
+  },
+  "pages": {
+    "before": {
+      "tab": 22,
+      "closed": true,
+      "process": 74768,
+      "handle": 83522,
+      "join": "fa0c44",
+      "exit": 0
+    },
+    "after": {
+      "tab": 23,
+      "closed": true,
+      "process": 48796,
+      "handle": 41932,
+      "join": "4f65ca",
+      "exit": 0
+    },
+    "priorTab18": "Absent from current inventory; prior close acknowledgement remains unconfirmed"
+  },
+  "modelOwner": {
+    "host": 43836,
+    "target": 10692,
+    "handle": 33320,
+    "join": "a7e4cc",
+    "exit": 0,
+    "pairedCleanup": "Complete in original receipt"
+  },
+  "remaining": [
+    "Fullscreen internal sheet popup is outside native fullscreen owner; separate389",
+    "Univer hardcoded accessible names remain English: Sheet tabs, Close sidebar, Notifications alt+T",
+    "Readonly and multi-sheet workbooks not separately exercised"
+  ],
+  "boundary": "Actual root CUA interactions, viewed screenshots and actual downloaded bytes; no UI automation test"
+}

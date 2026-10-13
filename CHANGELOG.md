@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 电子表格产物的类型名称与工作表菜单跟随界面语言；切换语言保留当前编辑值、公式结果和选区，导出继续使用当前工作簿。
+
 - Provider 表单的地址错误、保存和发现入口使用同一校验，修复已标为无效的地址仍可添加的问题；仅编辑其他字段时保留当前声明的地址与模型配置。
 
 - 修复全屏产物中按 Enter、空格或向下键打开下载菜单时页面卡死的问题；关闭菜单后可继续键盘操作，保留文件阅读位置。
@@ -42,6 +44,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Spreadsheet artifact type labels and sheet menus follow the interface language. Language changes retain edited cells, formula results and selection, and exports continue to use the current workbook.
 
 - Provider address feedback, saving and discovery use the same validation, fixing invalid addresses being added despite a visible error. Editing other fields preserves the current endpoint and model definition.
 

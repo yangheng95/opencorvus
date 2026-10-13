@@ -1,0 +1,332 @@
+{
+  "observedAt": "2026-10-13T09:43:22.911Z",
+  "files": [
+    {
+      "source": "chat-input.json",
+      "archive": "chat-input.json",
+      "bytes": 495,
+      "redacted": false
+    },
+    {
+      "source": "chat-accepted.json",
+      "archive": "chat-accepted.json",
+      "bytes": 3867,
+      "redacted": false
+    },
+    {
+      "source": "canonical.json",
+      "archive": "canonical.json",
+      "bytes": 14213,
+      "redacted": false
+    },
+    {
+      "source": "canonical-check.json",
+      "archive": "canonical-check.json",
+      "bytes": 359,
+      "redacted": false
+    },
+    {
+      "source": "check-canonical.py",
+      "archive": "check-canonical.py",
+      "bytes": 3063,
+      "redacted": false
+    },
+    {
+      "source": "start-chat.mjs",
+      "archive": "start-chat.mjs",
+      "bytes": 1584,
+      "redacted": false
+    },
+    {
+      "source": "launcher.log",
+      "archive": "launcher.log.gz",
+      "bytes": 379,
+      "redacted": false
+    },
+    {
+      "source": "shutdown.log",
+      "archive": "shutdown.log.gz",
+      "bytes": 91,
+      "redacted": false
+    },
+    {
+      "source": "typecheck.log",
+      "archive": "typecheck.log.gz",
+      "bytes": 36,
+      "redacted": false
+    },
+    {
+      "source": "build.log",
+      "archive": "build.log.gz",
+      "bytes": 11055,
+      "redacted": false
+    },
+    {
+      "source": "review-server.ts",
+      "archive": "review-server.ts",
+      "bytes": 2108,
+      "redacted": false
+    },
+    {
+      "source": "launch-review.ps1",
+      "archive": "launch-review.ps1",
+      "bytes": 3530,
+      "redacted": false
+    },
+    {
+      "source": "manual-review.json",
+      "archive": "manual-review.json",
+      "bytes": 1656,
+      "redacted": false
+    },
+    {
+      "source": "edited-workbook.csv",
+      "archive": "edited-workbook.csv.gz",
+      "bytes": 77,
+      "redacted": false,
+      "boundary": "Lossless gzip preserves actual UTF-8 BOM and CRLF downloaded bytes through Git text normalization."
+    },
+    {
+      "source": "before-fullscreen-en.txt",
+      "archive": "before-fullscreen-en.txt",
+      "bytes": 1456,
+      "redacted": false
+    },
+    {
+      "source": "before-chinese.txt",
+      "archive": "before-chinese.txt",
+      "bytes": 11893,
+      "redacted": false
+    },
+    {
+      "source": "before-sheet-menu-zh.txt",
+      "archive": "before-sheet-menu-zh.txt",
+      "bytes": 204,
+      "redacted": false
+    },
+    {
+      "source": "after-menu-zh.txt",
+      "archive": "after-menu-zh.txt",
+      "bytes": 5592,
+      "redacted": false
+    },
+    {
+      "source": "after-edits-language-roundtrip.txt",
+      "archive": "after-edits-language-roundtrip.txt",
+      "bytes": 1448,
+      "redacted": false
+    },
+    {
+      "source": "after-download.txt",
+      "archive": "after-download.txt",
+      "bytes": 1515,
+      "redacted": false
+    },
+    {
+      "source": "fullscreen-popup-observation.json",
+      "archive": "fullscreen-popup-observation.json",
+      "bytes": 1644,
+      "redacted": false
+    },
+    {
+      "source": "fullscreen-owner-observation.json",
+      "archive": "fullscreen-owner-observation.json",
+      "bytes": 106,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/authority-ready.json",
+      "archive": "provider-before/evidence/authority-ready.json",
+      "bytes": 15911,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/managed-parent-ready.json",
+      "archive": "provider-before/evidence/managed-parent-ready.json",
+      "bytes": 529,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/native-host-ready.json",
+      "archive": "provider-before/evidence/native-host-ready.json",
+      "bytes": 1845,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/native-host-settled.json",
+      "archive": "provider-before/evidence/native-host-settled.json",
+      "bytes": 957,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/preflight-ready.json",
+      "archive": "provider-before/evidence/preflight-ready.json",
+      "bytes": 718,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/profile-selection-admitted.json",
+      "archive": "provider-before/evidence/profile-selection-admitted.json",
+      "bytes": 254,
+      "redacted": false
+    },
+    {
+      "source": "provider-before/evidence/provider-pair-staging.json",
+      "archive": "provider-before/evidence/provider-pair-staging.json",
+      "bytes": 1673,
+      "redacted": false
+    },
+    {
+      "source": "ui-before/owner.json",
+      "archive": "ui-before/owner.json",
+      "bytes": 154,
+      "redacted": false
+    },
+    {
+      "source": "ui-before/ready.json",
+      "archive": "ui-before/ready.json",
+      "bytes": 343,
+      "redacted": false
+    },
+    {
+      "source": "ui-before/terminal.json",
+      "archive": "ui-before/terminal.json",
+      "bytes": 210,
+      "redacted": false
+    },
+    {
+      "source": "ui-before/stop-requested",
+      "archive": "ui-before/stop-requested",
+      "bytes": 134,
+      "redacted": false
+    },
+    {
+      "source": "ui-after-review/owner.json",
+      "archive": "ui-after-review/owner.json",
+      "bytes": 154,
+      "redacted": false
+    },
+    {
+      "source": "ui-after-review/ready.json",
+      "archive": "ui-after-review/ready.json",
+      "bytes": 343,
+      "redacted": false
+    },
+    {
+      "source": "ui-after-review/terminal.json",
+      "archive": "ui-after-review/terminal.json",
+      "bytes": 210,
+      "redacted": false
+    },
+    {
+      "source": "ui-after-review/stop-requested",
+      "archive": "ui-after-review/stop-requested",
+      "bytes": 110,
+      "redacted": false
+    },
+    {
+      "source": "provider-live/spreadsheet-artifact-identity-387-before-final-provider-audit.json",
+      "archive": "provider-live/spreadsheet-artifact-identity-387-before-final-provider-audit.json.gz",
+      "bytes": 3065,
+      "redacted": false
+    },
+    {
+      "source": "provider-live/spreadsheet-artifact-identity-387-before-physical-terminal-and-pair-cleanup.json",
+      "archive": "provider-live/spreadsheet-artifact-identity-387-before-physical-terminal-and-pair-cleanup.json",
+      "bytes": 2484,
+      "redacted": false
+    },
+    {
+      "source": "provider-live/spreadsheet-artifact-identity-387-before-qualified-surface-completion.json",
+      "archive": "provider-live/spreadsheet-artifact-identity-387-before-qualified-surface-completion.json",
+      "bytes": 361,
+      "redacted": false
+    },
+    {
+      "source": "provider-live/spreadsheet-artifact-identity-387-before-settlement-owner.json",
+      "archive": "provider-live/spreadsheet-artifact-identity-387-before-settlement-owner.json",
+      "bytes": 536,
+      "redacted": false
+    },
+    {
+      "source": "provider-live/spreadsheet-artifact-identity-387-before-shutdown-admission.json",
+      "archive": "provider-live/spreadsheet-artifact-identity-387-before-shutdown-admission.json",
+      "bytes": 556,
+      "redacted": false
+    },
+    {
+      "source": "screenshots/after-edited-en.png",
+      "archive": "screenshots/after-edited-en.png",
+      "bytes": 53900,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/after-edited-zh.png",
+      "archive": "screenshots/after-edited-zh.png",
+      "bytes": 55035,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/after-edits-language-roundtrip.png",
+      "archive": "screenshots/after-edits-language-roundtrip.png",
+      "bytes": 55035,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/after-fullscreen-popup-hidden.png",
+      "archive": "screenshots/after-fullscreen-popup-hidden.png",
+      "bytes": 55035,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/after-initial-zh.png",
+      "archive": "screenshots/after-initial-zh.png",
+      "bytes": 53140,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/after-menu-en.png",
+      "archive": "screenshots/after-menu-en.png",
+      "bytes": 74661,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/after-menu-zh.png",
+      "archive": "screenshots/after-menu-zh.png",
+      "bytes": 70893,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/before-chinese.png",
+      "archive": "screenshots/before-chinese.png",
+      "bytes": 78487,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/before-fullscreen-en.png",
+      "archive": "screenshots/before-fullscreen-en.png",
+      "bytes": 53272,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/before-fullscreen-zh.png",
+      "archive": "screenshots/before-fullscreen-zh.png",
+      "bytes": 53412,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/before-inline-menu-zh.png",
+      "archive": "screenshots/before-inline-menu-zh.png",
+      "bytes": 71546,
+      "kind": "Root actual screenshot manually viewed"
+    },
+    {
+      "source": "screenshots/before-sheet-menu-zh.png",
+      "archive": "screenshots/before-sheet-menu-zh.png",
+      "bytes": 55065,
+      "kind": "Root actual screenshot manually viewed"
+    }
+  ],
+  "knownCredentialScan": "Passed in memory after redaction; no credential values emitted",
+  "boundary": "Exact allowlist; no auth/models/database/runtime directory; original screenshots and lossless gzip"
+}

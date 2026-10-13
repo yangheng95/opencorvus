@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { getLocale, t } from "../../utils/i18n"
@@ -22,6 +22,7 @@ export function SpreadsheetArtifact(props: { payload: SpreadsheetPayload }) {
       dispose = runtime.dispose
       exportFiles = runtime.exportFiles
       stopThemeObserver = observeAppliedTheme(() => runtime.setDarkMode(appliedColorScheme() === "dark"))
+      createEffect(() => runtime.setLocale(getLocale()))
     } catch {
       setError(true)
     }
@@ -34,6 +35,7 @@ export function SpreadsheetArtifact(props: { payload: SpreadsheetPayload }) {
 
   return (
     <ArtifactFrame
+      payload={props.payload}
       exportFiles={() => {
         if (!exportFiles) throw new Error(t("artifact.spreadsheet.load_failed"))
         return exportFiles()
