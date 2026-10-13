@@ -1,5 +1,9 @@
 # 383 投影工具大结果的执行授权传递
 
+## 当前验收状态
+
+Attempt04已完成本轮真实GPT-6.1 Sol Task scheduler→package工具大结果→read首尾→自然Task completed，规范正文/目录/流式请求checker、实际桌面截图人工复核与原owner正常物理收尾均通过。此前三次失败按各自事实保留；package/default MCP的模型端到端及worker/Mission不外推，本轮未改生产源码。成功证据见[Attempt04档案](../../artifacts/2026-10-13-projected-output-authority-383/live-attempt-04/README.md)。
+
 ## Recall
 
 用户持续要求分批并行体验和调查 OpenCorvus，完成根因与影响分析、落盘方案、真实修复、聚焦正向验证、必要真实页面/模型验收及范围提交推送。主 agent 将383独立委托本子任务，禁止再次委托。拥有范围为 `src/expert-squad/prompt-profile-resolver.ts`、新建聚焦后台测试、本记录及 `.tmp-projected-output-authority-383`。不得改Truncate授权规则、共享README/架构/CHANGELOG、其他线程正在修改的permission/session/file代码，不使用真实Provider/凭据，不运行UI（User Interface，用户界面）自动化，不提交；主 agent 最终复核、页面、统一文档和提交推送。
@@ -116,3 +120,31 @@ Attempt02在本地preflight的15秒HTTP请求期限内未完成，尚未导入�
 主agent实际查看attempt03失败页、保存`actual-task-provider-overloaded.png`并关闭tab17，子任务也人工查看该图。该截图仅证明真实失败状态，不能计作383大结果/read成功验收。按主agent指示停止当前连续scope重试，待后续批次再验收。原截止16:08:56.207之前，Host76344/Target82164在16:04:14.182正常exited0，16:04:18.334 outputDrain/requestCleanup及配对清理完成；shutdown与launcher14588均实际exit0。七个Provider请求HTTP200/EOF只证明流传输闭合，不掩盖其中真实overloaded业务错误。
 
 最终[383档案](../../artifacts/2026-10-13-projected-output-authority-383/README.md)分别包含backend-contract红绿/类型检查9项，attempt01失败/真实规范结果/owner/checker27项，attempt02本地预检失败14项，attempt03Provider失败/规范原文/真实截图/owner24项，各scope有独立清单且已知凭据扫描0。未归档runtime、数据库、binary或auth/models。后台383三包装器3项44断言通过；成功模型投影大结果→read接续→Task完成和对应成功页面仍未达成，不能包装为整体端到端完成。
+
+## 新goal轮次：Attempt04计划
+
+2026-10-13 16:27再次收到主agent明确委托：距Provider overloaded约25分钟后继续成功模型验收。已重读本记录和385 Recall，核对HEAD `3d4adff49`已包含383/385的独立修复提交；两个目标生产文件无未提交差异。当前permission/session/file/UI及共享文档的并行改动保留，本子任务不修改它们、共享runner或索引，不提交、不再次委托。
+
+启动前再次读取前三scope原始owner/native physical receipt/实际句柄join，确认三者native exited0、outputDrainComplete/requestCleanupComplete/pairedCleanupComplete均true，所有复制auth/models已删除，18502/18503没有listener。Attempt02的launcher exit1仍作为预检资格失败保存，正常native退出不改写该失败。原始失败与截图档案保持不变。
+
+Fresh scope `projected-output-authority-383-live-04`，RunRoot `.tmp-projected-output-authority-383/live-attempt-04/provider-run`，回执同scope的provider-live，端口18502。复用原生产CLI NativeService owner/377私有完整UI包，固定600000ms原生边界、累计16真实请求（含预检）及180000ms有意义流活动后的无活动限制，截止不延长。配对stageDiagnosticProvider与完整models目录、credential/catalog/实际gpt-6.1-sol streaming预检不变；源码和现有checker验收条件不降低。
+
+任务专用install/create/observe/check脚本仅增加明确attempt04目录参数，已向主agent说明，保持所有原条件。安装同一SDK产物 `package-source-02/qa/projected-report-383`，公开原文仍96717字节/2104行；项目默认Base不变，CLI显式选包并指定openai/gpt-6.1-sol。请求使用已校正的load-public-report名称，正常可见用户消息要求实际首部审核代号与末尾行数。真实模型自然搜索/激活、读取大结果及恢复read，独立checker验证原文、精确Task/Session目录、规范metadata/outcome、真实答复和Task completed。
+
+Ready URL和原截止尽早通知主agent，真实Task接受后立即发送Task/Session，至少在原截止前约2分钟预留截图与shutdown时间。若本地15秒preflight准备超时再次发生，先分析现有checker实际请求时序并协调修复范围，不盲重试、不偷偷改共享runner；若Provider再次overloaded，保留真实失败并正常收尾。任何共享调度/恢复/终态异常继续横审。成功或失败后均由原owner正常shutdown/join，核对端口与配对副本清理，证据只归入attempt04；页面操作由主agent负责。
+
+### Attempt04真实后台结果
+
+本轮scope `projected-output-authority-383-live-04-a634545e-e131-4fc6-a019-57b5ae7b67d8`，Host73192/Target4108，launcher33430；原截止16:39:15.173。16:30前后正式preflight返回credential usable、catalog projected、actualModel gpt-6.1-sol、streaming true。原生产SDK包导入同一不可变package身份，config回读默认Base；CLI真实接受Task `tsk_g00VXusvo400gWdUSw6w`、project `prj_h2bdjyZwpQJJNyteMWz1`，root `ses_-zUS5744HzzgGn1HIL72`及orchestrator `ses_-zUS572yJzzmVONilPr4`。Ready、Task与原截止均提前通知主agent。
+
+真实Sol自然完成skill→两次capability_search（搜索和精确激活）→包工具→两次read→可见答复→manage_task complete_task。两次搜索带实际OpenAI itemId且规范completed，直接覆盖385先前真实失败边界；包工具结果truncated=true、保存文件96717字节与公开输入逐字节相等，outputPath精确属于该project/Task/orchestrator Session，直接覆盖383显式authority保存边界。随后真实read参数分别offset1/limit8与offset2100/limit4，实际正文给出ORCHID-383-ALPHA和TOTAL DATA ROWS:2100；用户可见中文答复包含两个正确值。报告字符串split后2104项包含末尾空项，实际Read按文本行合同返回totalLines2103，本轮未把末尾换行产生的空分隔项当额外内容行。
+
+独立 `check-live.ts live-attempt-04` 在16:32:56.363完成exit0：只读规范SQL事务/生产completedToolOutcomeOutput、真实文件和正式Task status联合验证，lifecycleStatus completed、active执行数0、所有实际assistant完成时间存在；11个实际请求均gpt-6.1-sol、streaming、HTTP200、源reader settled/EOF，未耗尽16预算。`live-check.json`为backend-passed，`live-canonical.json`及`live-provider-audit.json`经CredentialRedactor落盘。该结果是新的成功事实，不覆盖前三轮失败，也不外推未由模型运行的package/default MCP路径。主agent桌面截图与原owner物理收尾仍分别进行。
+
+### Attempt04页面、收尾和归档完成
+
+主agent实际打开独立tab19，查看Completed自然答案、包工具截断恢复提示/完整保存路径、read首部和末尾，并逐张截图人工复核后明确关闭页面。本子任务再次人工查看同四张关键图。`projected-output-recovery.png`仅为大输出中段滚动样本，未误标为恢复提示头部，也未作为关键图归档。
+
+收到PageClosed后立即调用原 `live-sol-shutdown.ps1 -PageClosed`：Target于16:37:27.512正常exited0，原Host/Target exact occurrence及outputDrain/requestCleanup均完整，16:37:31.771完成auth/models副本配对清理。shutdown实际工具exit0（chunk a4f9af），原launcher33430实际join exit0（chunk e3492f）；早于原16:39:15.173截止约108秒，未延长预算或操作用户进程。独立复查18502 listener为空且两复制文件均不存在。
+
+[Attempt04档案](../../artifacts/2026-10-13-projected-output-authority-383/live-attempt-04/README.md)包含精确allowlist30项文本/压缩证据、原实际保存全文和公开预期原文、完整checker、规范Task/工具/模型事实、owner收尾，以及4张人工查看截图；另有清单和README。CredentialRedactor已知凭据匹配0，未归档runtime/数据库/binary/auth/models。383/385档案README当前状态已更新为本轮明确package工具链成功，同时保留历史失败的原始记录与当时结论。共享索引、文档检查及本次证据提交由主agent执行。

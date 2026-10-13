@@ -1,0 +1,27 @@
+{
+  "observedAt": "2026-10-13T08:32:56.363Z",
+  "acceptance": "backend-passed",
+  "taskID": "tsk_g00VXusvo400gWdUSw6w",
+  "lifecycleStatus": "completed",
+  "reportToolPartID": "prt_g0VXut61K00PepFfcLGp",
+  "reportSessionID": "ses_-zUS572yJzzmVONilPr4",
+  "outputPath": "D:\\myhexin-local\\opencorvus\\.tmp-projected-output-authority-383\\live-attempt-04\\provider-run\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXusvo400gWdUSw6w\\sessions\\ses_-zUS572yJzzmVONilPr4\\tool-output\\tool_g0VXut6CH00SjpQkjAj",
+  "fullOutputBytes": 96717,
+  "exactSavedBody": true,
+  "exactTaskSessionDirectory": true,
+  "readToolPartIDs": [
+    "prt_g0VXut88a00aWEUk6TCS",
+    "prt_g0VXutAtJ00Tq70kKIST"
+  ],
+  "firstPageReadPartID": "prt_g0VXut88a00aWEUk6TCS",
+  "completedMetadataSearchParts": [
+    "prt_g0VXut0UF006JgEIEil0",
+    "prt_g0VXut2CY00sRP9ds26i"
+  ],
+  "completionPartID": "prt_g0VXutD3o00NNvv5KEZT",
+  "packageDigest": "f8309f5d56cb68a6fc29fadb0205cc9a02ae5a1d2d2f926a50c6928d68cde5cf",
+  "providerRequests": 11,
+  "allRequestsExactModelStreamingHTTP200EOF": true,
+  "nativeDeadlineAt": 1791880755173,
+  "boundary": "Real Task and package Tool/read CAS acceptance; desktop review and exact native shutdown remain separate"
+}
