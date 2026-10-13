@@ -81,3 +81,5 @@ timing原案因Proxy读取Bun不可改写的transaction.immediate属性触发Typ
 追加正式运行完成：POST9678ms、全部263/789回执9775ms，25次health最大908ms；10次慢COMMIT合计4700.682ms。每一次均观察到相同salt、两份头一致、nBackfill从0增至mxFrame，回写1079—1763页，准确发生在跨越默认1000页的提交；其余281次外层事务提交均不超过50ms。这将同步自动checkpoint确认为剩余复制路径的直接耗时，而不只是文件尺寸相关性。源复制及事件正文仍需单独计入总耗时，不能把4.7秒简单当作移走checkpoint后的保证值。
 
 本轮额外3条Sol流全部200/EOF，总数21；原Target61484、原Host、输出/请求与配对清理完整，72943和API取证9985已join exit0。新增Side13完整38消息/36工具来源及所有旧副本通过只读核验；没有UI源码/新人工页面。原日志已及时保存。下一批须先横审Database初始化、所有写入、close/reset/resetForTests、checkpointTruncate/vacuum、进程重启及多Project/多进程的生命周期，形成一份唯一回写策略，再实施与验收；本轮仍未关闭自动checkpoint、降低同步级别或引入后台进程。
+
+第二次正常push时SDK生成文件已更新；随后共享ProvidersPanel编辑把原有provider-save导入替换成新provider-mutation导入，但73/718/735/764/852/892处仍使用原3个导出，导致六个TS2304。全仓检索确认唯一真实定义仍是已提交的services/provider-save.ts，函数/类型公共合同不变；HEAD原页面也已有完整旧导入。这是清楚可判定的接线遗漏，修复只在新导入旁恢复原HEAD导入，保留其余未提交Provider修改，不建立另一实现、不纳入其功能交付。恢复行相对HEAD不产生本批页面差异，正常hook重新验证；它不提供Provider视觉或功能资格。修改前原完整差异保存在自有scratch，不覆盖他人代码。
