@@ -1,0 +1,240 @@
+{
+  "kind": "Selected evidence byte recovery, bounded patch increment preservation and local links; not UI automation or functional acceptance",
+  "selection": {
+    "allowlistedSourceFiles": 68,
+    "originalObservationFiles": 39,
+    "fullRuntimeOrVendorOrCredentialDirectoriesCopied": false
+  },
+  "gzipRestoration": [
+    {
+      "path": "implementation/patch-increment.json.gz",
+      "decodedBytes": 16050,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/apply-vendor.log.gz",
+      "decodedBytes": 89,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/typecheck.log.gz",
+      "decodedBytes": 16,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/build.log.gz",
+      "decodedBytes": 70781,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/patch-prepare.log.gz",
+      "decodedBytes": 377,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/patch-commit.log.gz",
+      "decodedBytes": 137,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/install-final.log.gz",
+      "decodedBytes": 139,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/owner.json.gz",
+      "decodedBytes": 154,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/ready.json.gz",
+      "decodedBytes": 343,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/terminal.json.gz",
+      "decodedBytes": 210,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/stop-requested.gz",
+      "decodedBytes": 78,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/before/stderr.log.gz",
+      "decodedBytes": 71657,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/after/owner.json.gz",
+      "decodedBytes": 154,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/after/ready.json.gz",
+      "decodedBytes": 343,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/after/terminal.json.gz",
+      "decodedBytes": 210,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/after/stop-requested.gz",
+      "decodedBytes": 69,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/after/stdout.log.gz",
+      "decodedBytes": 51,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "logs/after/stderr.log.gz",
+      "decodedBytes": 78297,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "implementation/launch-review.ps1.gz",
+      "decodedBytes": 3530,
+      "matchesSourceBytes": true
+    },
+    {
+      "path": "implementation/review-server.ts.gz",
+      "decodedBytes": 2108,
+      "matchesSourceBytes": true
+    }
+  ],
+  "images": [
+    {
+      "path": "observations/after-cleanup-zh.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-dark-card.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-dark-delete.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-dark-edit.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-dark-full.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-dark-zh.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-edit-detail.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-full-delete.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-full-edit.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-full-pointer-leave.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-full-zh.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-light-card.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/after-pointer-leave.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/before-cleanup.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/before-dark-card.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/before-dark-delete.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/before-dark-edit.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/before-dark-full.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    },
+    {
+      "path": "observations/before-light-card.jpg",
+      "matchesSourceBytes": true,
+      "format": "JPEG"
+    }
+  ],
+  "increment": {
+    "baseCommit": "3c5adc5bfb871c2264b3b0cb3ddbfdfb2dbee602",
+    "patchPath": "patches/@univerjs%2Fsheets-ui@0.25.1.patch",
+    "replacementCount": 56,
+    "largestReplacementBytes": 2689,
+    "inMemoryReconstructionMatchesCurrentBytes": true,
+    "qualification": "Stable Git identity and exact artifact bytes only; no mutable-source hash gate"
+  },
+  "historicalReview": {
+    "reviewedAt": "2026-10-13T16:33:36.486Z",
+    "scriptRerun": false,
+    "originalBytesPreserved": true
+  },
+  "credentialScan": {
+    "textFilesInspected": 52,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "qualification": "Bounded patterns only; no auth/models contents read or copied"
+  },
+  "localLinks": {
+    "count": 92,
+    "broken": 0
+  }
+}

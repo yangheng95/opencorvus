@@ -4,7 +4,7 @@
 
 - [402 独立会话权限批准投影](2026-10-13-standalone-permission-projection-402.md)：Main Chat的hydrate/live/reconnect、真实排序与完整控制入口横审。
 
-- [398 表格权限卡片悬停](2026-10-13-spreadsheet-permission-hover-398.md)：同一权限列表的深色背景/说明文字与普通、全屏验收范围。
+- [398 表格权限卡片悬停](2026-10-13-spreadsheet-permission-hover-398.md)：真实深色卡片/操作悬停、同实例语言/主题与19张人工复核截图。
 
 - [392 委派失败与终态](2026-10-14-delegate-terminal-392.md)：原错误保留、准确执行轮次、Sources与真实终态验收。
 

@@ -1,0 +1,146 @@
+{
+  "iteration": 398,
+  "kind": "Read-only implementation investigation, not UI automation or new page acceptance",
+  "actualPreset": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+preset-sheets-core@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/preset-sheets-core/package.json",
+  "actualSheetsUI": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+sheets-ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/sheets-ui",
+  "distributions": [
+    {
+      "file": "lib/index.js",
+      "candidates": [
+        {
+          "function": "SheetPermissionPanelList",
+          "classes": [
+            {
+              "text": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+              "line": 26708
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 26742
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 26749
+            },
+            {
+              "text": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+              "line": 26792
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "lib/es/index.js",
+      "candidates": [
+        {
+          "function": "SheetPermissionPanelList",
+          "classes": [
+            {
+              "text": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+              "line": 26708
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 26742
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 26749
+            },
+            {
+              "text": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+              "line": 26792
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "lib/cjs/index.js",
+      "candidates": [
+        {
+          "function": "SheetPermissionPanelList",
+          "classes": [
+            {
+              "text": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+              "line": 26737
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 26771
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 26778
+            },
+            {
+              "text": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+              "line": 26821
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "lib/umd/index.js",
+      "candidates": [
+        {
+          "function": "Yd",
+          "classes": [
+            {
+              "text": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+              "line": 15
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 15
+            },
+            {
+              "text": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+              "line": 15
+            },
+            {
+              "text": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+              "line": 15
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "css": {
+    "actualPresetFile": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+preset-sheets-core@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/preset-sheets-core/lib/index.css",
+    "rules": [
+      ".hover\\:univer-bg-gray-50:hover{background-color:var(--univer-gray-50)}",
+      ".hover\\:univer-bg-gray-200:hover{background-color:var(--univer-gray-200)}",
+      ".dark\\:\\!univer-text-gray-300:where(.univer-dark,.univer-dark *){color:var(--univer-gray-300)!important}",
+      ".dark\\:\\!univer-text-white:where(.univer-dark,.univer-dark *){color:var(--univer-white)!important}",
+      ".dark\\:hover\\:\\!univer-bg-gray-600:hover:where(.univer-dark,.univer-dark *){background-color:var(--univer-gray-600)!important}",
+      ".dark\\:hover\\:\\!univer-bg-gray-700:hover:where(.univer-dark,.univer-dark *){background-color:var(--univer-gray-700)!important}"
+    ]
+  },
+  "theme": {
+    "source": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+themes@0.25.1/node_modules/@univerjs/themes/lib/cjs/index.js",
+    "white": "#FFFFFF",
+    "gray": {
+      "50": "#F9FAFB",
+      "100": "#EEEFF1",
+      "200": "#E3E5EA",
+      "300": "#A8B0BD",
+      "400": "#7D8698",
+      "500": "#4E5565",
+      "600": "#31363F",
+      "700": "#272A2F",
+      "800": "#1F2124",
+      "900": "#1B1C1F"
+    }
+  },
+  "publishedSourceMaps": [],
+  "scope": "Existing four runtime panel-list function only; dark description class remains proposed pending root actual computed-style review. No production changed.",
+  "distinctCandidates": {
+    "399": "More Colors native trigger and Dialog return-focus",
+    "400": "Post-Dialog menu Escape ownership/expected layering investigation",
+    "401": "Shared Design Dialog Close locale"
+  }
+}

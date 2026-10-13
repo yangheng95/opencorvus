@@ -1,0 +1,225 @@
+{
+  "reviewedAt": "2026-10-13T16:33:36.486Z",
+  "reviewer": "Root, actual CUA actions and manual screenshot inspection",
+  "qualification": "Real desktop UI acceptance of scoped permission-card colours; no UI automation tests",
+  "sessionID": "ses_h0VKkCl7hbz3BKHVW2Xp",
+  "artifactID": "art_g0VXv65e1004ErsrwSJs",
+  "implementation": "Four runtime class changes only; 14 patch headers with ten original non-runtime segments retained; installed preset and built spreadsheet chunk independently reviewed",
+  "dark": {
+    "before": {
+      "cardBackground": [
+        249,
+        250,
+        251
+      ],
+      "text": [
+        255,
+        255,
+        255
+      ],
+      "operationBackground": [
+        227,
+        229,
+        234
+      ],
+      "description": [
+        125,
+        134,
+        152
+      ]
+    },
+    "after": {
+      "cardBackground": [
+        39,
+        42,
+        47
+      ],
+      "text": [
+        255,
+        255,
+        255
+      ],
+      "operationBackground": [
+        49,
+        54,
+        63
+      ],
+      "description": [
+        168,
+        176,
+        189
+      ]
+    },
+    "surfaces": "Actual normal and fullscreen card/Edit/Delete pointer hover observed; direct right clicks position pointer over operations without left activation"
+  },
+  "light": {
+    "beforeAndAfter": {
+      "cardBackground": [
+        249,
+        250,
+        251
+      ],
+      "text": [
+        27,
+        28,
+        31
+      ],
+      "description": [
+        125,
+        134,
+        152
+      ]
+    },
+    "qualification": "Actual theme change in same workbook, rule retained; no claim of improved light description contrast"
+  },
+  "language": {
+    "path": "English → Chinese (Simplified) → English",
+    "observed": "Same A1 rule, original HOVER-398 temporary description, translated title/body/Add/empty state in normal and fullscreen"
+  },
+  "actions": {
+    "add": "Actual Tab/Enter from sidebar Close opens Detail; actual Confirm creates A1 rule",
+    "edit": "Actual Edit opens original A1/HOVER-398 temporary detail; Cancel closes sidebar content, original rule remains and reopens through real sheet menu",
+    "pointerLeave": "Actual pointer move by heading click makes card :hover false and background transparent; original screenshots retain range drawing",
+    "delete": "Actual Delete only this own temporary rule; Chinese fullscreen empty state observed",
+    "settings": "System/English restored; 100% unchanged"
+  },
+  "data": {
+    "visibleValues": "7/5/12",
+    "cellEdits": 0,
+    "modelRequests": 0,
+    "qualification": "Original real artifact retained; formula recalculation and new model publication were not repeated for this CSS change"
+  },
+  "limitations": [
+    "A1 was selected as well as protected; independent range-highlight visual effect was not separated from selection/protection drawing. Screenshots and unchanged event code remain evidence, not full highlight qualification.",
+    "Explicit context-command editor return was not repeated in 398; 397 prior qualification is a separate record.",
+    "No all-theme, all-user, multi-workbook, mobile, light-description contrast or WCAG-wide compliance claim."
+  ],
+  "scopes": {
+    "before": {
+      "ready": {
+        "pid": 81704,
+        "port": 18505,
+        "started": 1791907936829,
+        "occurrence": {
+          "pid": 81704,
+          "processInstanceID": "win32:639275047300487186",
+          "occurrenceID": "cda2fe9e-c86c-408e-a8db-ca91ebc099be"
+        },
+        "source": "Production listener preparation/recovery and private built UI; fresh credentialless runtime; no model execution"
+      },
+      "terminal": {
+        "reason": "Own pages closed after manual spreadsheet artifact review",
+        "pid": 81704,
+        "elapsed": 305157,
+        "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+      },
+      "pageClosed": {
+        "at": "2026-10-13T16:17:11.604Z",
+        "tab": "40",
+        "themeRestored": "System",
+        "language": "English",
+        "ruleCleanup": "Only own HOVER-398 temporary rule via actual Delete, localized empty state observed"
+      },
+      "originalDeadline": "2026-10-13T16:32:16.829Z",
+      "closeBy": "2026-10-13T16:31:16.829Z",
+      "pageCloseReserveMs": 905225,
+      "launcherJoinedExitCode": 0,
+      "ownership": "Root owned credentialless production listener/recovery, no model or user credential"
+    },
+    "after": {
+      "ready": {
+        "pid": 72932,
+        "port": 18505,
+        "started": 1791908623030,
+        "occurrence": {
+          "pid": 72932,
+          "processInstanceID": "win32:639275054163798276",
+          "occurrenceID": "c8503fc0-aaa4-4843-a775-feb8cc4b0d59"
+        },
+        "source": "Production listener preparation/recovery and private built UI; fresh credentialless runtime; no model execution"
+      },
+      "terminal": {
+        "reason": "Own pages closed after manual spreadsheet artifact review",
+        "pid": 72932,
+        "elapsed": 397242,
+        "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+      },
+      "pageClosed": {
+        "at": "2026-10-13T16:30:12.564Z",
+        "tab": "41",
+        "themeRestored": "System",
+        "languageRestored": "English",
+        "scale": "100%",
+        "originalValues": "7/5/12, original formula retained in current view",
+        "ruleCleanup": "Only own temporary rule deleted; Chinese empty state seen",
+        "modelRequests": 0
+      },
+      "originalDeadline": "2026-10-13T16:43:43.030Z",
+      "closeBy": "2026-10-13T16:42:43.030Z",
+      "pageCloseReserveMs": 810466,
+      "launcherJoinedExitCode": 0,
+      "ownership": "Root owned credentialless production listener/recovery, no model or user credential"
+    }
+  },
+  "processFailures": [
+    {
+      "stage": "Before capture",
+      "kind": "CUA strict locator",
+      "message": "getByText('HOVER-398 temporary', {exact:true}) resolved to card description and tooltip",
+      "resolution": "Used actual Sidebar panel scope; subsequent real hover/style/screenshot captured"
+    },
+    {
+      "stage": "Vendor edit preparation",
+      "kind": "AST guarded edit failed before any writes",
+      "message": "Class count univer-text-gray-400 node_modules/@univerjs/sheets-ui/lib/index.js",
+      "resolution": "Two literals include empty state. Scoped exact description literal; empty state unchanged. Successful final edit/install recorded separately"
+    },
+    {
+      "stage": "Chinese capture",
+      "kind": "CUA no_matches",
+      "message": "Guessed 侧栏面板 did not match actual 侧边栏面板",
+      "resolution": "Read actual AX and used correct current label; this is locator error, not a product language defect"
+    }
+  ],
+  "observations": [
+    "after-cleanup-zh.jpg",
+    "after-dark-card.jpg",
+    "after-dark-card.json",
+    "after-dark-delete.jpg",
+    "after-dark-delete.json",
+    "after-dark-edit.jpg",
+    "after-dark-edit.json",
+    "after-dark-full.jpg",
+    "after-dark-full.json",
+    "after-dark-zh.jpg",
+    "after-dark-zh.json",
+    "after-edit-detail.jpg",
+    "after-full-delete.jpg",
+    "after-full-delete.json",
+    "after-full-edit.jpg",
+    "after-full-edit.json",
+    "after-full-pointer-leave.jpg",
+    "after-full-zh-ax.txt",
+    "after-full-zh.jpg",
+    "after-light-card.jpg",
+    "after-light-card.json",
+    "after-page-closed.json",
+    "after-pointer-leave.jpg",
+    "after-pointer-leave.json",
+    "after-settings-restored-ax.txt",
+    "before-cleanup-ax.txt",
+    "before-cleanup.jpg",
+    "before-dark-card.jpg",
+    "before-dark-card.json",
+    "before-dark-delete.jpg",
+    "before-dark-delete.json",
+    "before-dark-edit.jpg",
+    "before-dark-edit.json",
+    "before-dark-full.jpg",
+    "before-dark-full.json",
+    "before-light-card.jpg",
+    "before-light-card.json",
+    "before-page-closed.json"
+  ],
+  "axQualification": "Saved getAXState outputs are partial diffs unless explicitly named full; no complete AX coverage claim"
+}

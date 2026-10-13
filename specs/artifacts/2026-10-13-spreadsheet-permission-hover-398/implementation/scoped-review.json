@@ -1,0 +1,314 @@
+{
+  "iteration": 398,
+  "reviewer": "audit_ui",
+  "qualification": "Independent static scope/distribution/installation review; no UI automation or real-page acceptance",
+  "actualPreset": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+preset-sheets-core@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/preset-sheets-core/package.json",
+  "actualEntry": "D:/myhexin-local/opencorvus/node_modules/.bun/@univerjs+sheets-ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/sheets-ui/lib/cjs/index.js",
+  "runtime": [
+    {
+      "file": "lib/index.js",
+      "function": "SheetPermissionPanelList",
+      "beforeCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "afterCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "functionCount": 1,
+      "parseDiagnostics": 0,
+      "fullSourceOutsideFourClassLiteralsIdentical": true,
+      "installedMatchesPatchWorkcopy": true
+    },
+    {
+      "file": "lib/es/index.js",
+      "function": "SheetPermissionPanelList",
+      "beforeCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "afterCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "functionCount": 1,
+      "parseDiagnostics": 0,
+      "fullSourceOutsideFourClassLiteralsIdentical": true,
+      "installedMatchesPatchWorkcopy": true
+    },
+    {
+      "file": "lib/cjs/index.js",
+      "function": "SheetPermissionPanelList",
+      "beforeCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "afterCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "functionCount": 1,
+      "parseDiagnostics": 0,
+      "fullSourceOutsideFourClassLiteralsIdentical": true,
+      "installedMatchesPatchWorkcopy": true
+    },
+    {
+      "file": "lib/umd/index.js",
+      "function": "Yd",
+      "beforeCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "afterCounts": [
+        {
+          "target": 1,
+          "matches": 1,
+          "expected": 1
+        },
+        {
+          "target": 2,
+          "matches": 2,
+          "expected": 2
+        },
+        {
+          "target": 3,
+          "matches": 1,
+          "expected": 1
+        }
+      ],
+      "functionCount": 1,
+      "parseDiagnostics": 0,
+      "fullSourceOutsideFourClassLiteralsIdentical": true,
+      "installedMatchesPatchWorkcopy": true
+    }
+  ],
+  "patch": {
+    "file": "patches/@univerjs%2Fsheets-ui@0.25.1.patch",
+    "headers": [
+      "lib/cjs/index.js",
+      "lib/cjs/locale/en-US.js",
+      "lib/cjs/locale/zh-CN.js",
+      "lib/es/index.js",
+      "lib/es/locale/en-US.js",
+      "lib/es/locale/zh-CN.js",
+      "lib/index.js",
+      "lib/locale/en-US.js",
+      "lib/locale/zh-CN.js",
+      "lib/types/locale/en-US.d.ts",
+      "lib/types/views/permission/panel-detail/PermissionDetailMainPart.d.ts",
+      "lib/umd/index.js",
+      "lib/umd/locale/en-US.js",
+      "lib/umd/locale/zh-CN.js"
+    ],
+    "count": 14,
+    "cacheSegments": 0,
+    "otherSegments": [
+      {
+        "file": "lib/cjs/locale/en-US.js",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/cjs/locale/zh-CN.js",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/es/locale/en-US.js",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/es/locale/zh-CN.js",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/locale/en-US.js",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/locale/zh-CN.js",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/types/locale/en-US.d.ts",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/types/views/permission/panel-detail/PermissionDetailMainPart.d.ts",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/umd/locale/en-US.js",
+        "patchSegmentIdentical": true
+      },
+      {
+        "file": "lib/umd/locale/zh-CN.js",
+        "patchSegmentIdentical": true
+      }
+    ]
+  },
+  "existingPresetCSS": [
+    ".dark\\:\\!univer-text-gray-300:where(.univer-dark,.univer-dark *){color:var(--univer-gray-300)!important}",
+    ".dark\\:hover\\:\\!univer-bg-gray-600:hover:where(.univer-dark,.univer-dark *){background-color:var(--univer-gray-600)!important}",
+    ".dark\\:hover\\:\\!univer-bg-gray-700:hover:where(.univer-dark,.univer-dark *){background-color:var(--univer-gray-700)!important}"
+  ],
+  "installation": {
+    "log": ".tmp-spreadsheet-permission-hover-398/install-final.log",
+    "exit": "0"
+  },
+  "scope": [
+    "One card hover class, two Edit/Delete hover classes and one full description literal in each real panel-list function",
+    "Empty-state gray400 remains outside selected description class; no global replacement",
+    "UMD Yd function and all bindings/statements outside the four literals unchanged",
+    "Inherited 392/394 runtime changes preserved by full outside-literal source identity; ten non-runtime patch segments unchanged",
+    "No schema, locale, type, theme tokens, CSS or public API additions"
+  ],
+  "previousAttempt": "Root reports first broad gray400 selector safely aborted before any product write; inspected current script collects and verifies all four files before the writing loop, final description selector uses exact full literal.",
+  "build": {
+    "status": "completed",
+    "exit": "0",
+    "log": ".tmp-spreadsheet-permission-hover-398/build.log",
+    "reportedDuration": "1m 4s",
+    "bundle": ".tmp-spreadsheet-permission-hover-398/ui-after/assets/SpreadsheetArtifact-DNLy2Js_.js",
+    "parseDiagnostics": 0,
+    "targetClassLiterals": [
+      {
+        "class": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50 dark:hover:!univer-bg-gray-700",
+        "function": "vIt"
+      },
+      {
+        "class": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600",
+        "function": "vIt"
+      },
+      {
+        "class": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600",
+        "function": "vIt"
+      },
+      {
+        "class": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400 dark:!univer-text-gray-300",
+        "function": "vIt"
+      }
+    ],
+    "counts": [
+      {
+        "class": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50 dark:hover:!univer-bg-gray-700",
+        "matches": 1
+      },
+      {
+        "class": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600",
+        "matches": 2
+      },
+      {
+        "class": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400 dark:!univer-text-gray-300",
+        "matches": 1
+      }
+    ],
+    "css": ".tmp-spreadsheet-permission-hover-398/ui-after/assets/SpreadsheetArtifact-rLuRc8xi.css",
+    "cssRules": [
+      ".dark\\:\\!univer-text-gray-300:where(.univer-dark,.univer-dark *){color:var(--univer-gray-300)!important}",
+      ".dark\\:hover\\:\\!univer-bg-gray-600:hover:where(.univer-dark,.univer-dark *){background-color:var(--univer-gray-600)!important}",
+      ".dark\\:hover\\:\\!univer-bg-gray-700:hover:where(.univer-dark,.univer-dark *){background-color:var(--univer-gray-700)!important}"
+    ],
+    "qualification": "Actual built bundle contains all four scoped class values and shipped CSS; not screenshot or page acceptance"
+  },
+  "notPerformed": [
+    "Product/patch/shared/spec changes",
+    "Browser/service/model/credential use",
+    "UI automation, commits or delegation"
+  ],
+  "typecheck": {
+    "exit": "0",
+    "log": ".tmp-spreadsheet-permission-hover-398/typecheck.log"
+  },
+  "result": "No concrete implementation defect found within approved four-class scope"
+}

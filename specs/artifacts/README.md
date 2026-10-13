@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [398 权限卡片深色悬停](2026-10-13-spreadsheet-permission-hover-398/README.md)：39原观察、19JPEG、真实前后色值与动作、两个正常关闭scope及有界补丁增量。
+
 - [392 委派失败与终态](2026-10-05-connection-workspace-authority/delegate-terminal-392/README.md)：原始Provider故障、正向合同和真实模型验收。
 
 - [395 稀疏配置层继承](2026-10-13-sparse-config-layer-defaults-395/README.md)：公开探针、58项后台合同、真实Base/Ask与未完成批准、迟关闭/exit1原证据。

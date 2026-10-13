@@ -1,0 +1,115 @@
+{
+  "at": "2026-10-13T16:14:49.247Z",
+  "card": {
+    "background": "rgb(249, 250, 251)",
+    "classes": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50 univer-border-gray-200 dark:!univer-border-gray-600 univer-border-solid univer-border",
+    "color": "rgb(255, 255, 255)",
+    "hover": true,
+    "rect": {
+      "height": 146.40000915527344,
+      "width": 297.20001220703125,
+      "x": 867.2000122070312,
+      "y": 151.5500030517578
+    },
+    "tag": "DIV",
+    "text": "清单(A1)CreatedI can editView PermissionsI can viewHOVER-398 temporary"
+  },
+  "children": [
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "classes": "univer-flex univer-h-5 univer-justify-between univer-leading-5",
+      "color": "rgb(255, 255, 255)",
+      "hover": false,
+      "rect": {
+        "height": 20,
+        "width": 271.6000061035156,
+        "x": 880,
+        "y": 164.35000610351562
+      },
+      "tag": "DIV",
+      "text": "清单(A1)"
+    },
+    {
+      "background": "rgb(227, 229, 234)",
+      "classes": "univer-my-2 univer-h-px univer-bg-gray-200",
+      "color": "rgb(255, 255, 255)",
+      "hover": false,
+      "rect": {
+        "height": 1,
+        "width": 271.6000061035156,
+        "x": 880,
+        "y": 192.3500061035156
+      },
+      "tag": "DIV",
+      "text": ""
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "classes": "",
+      "color": "rgb(255, 255, 255)",
+      "hover": true,
+      "rect": {
+        "height": 83.80000305175781,
+        "width": 271.6000061035156,
+        "x": 880,
+        "y": 201.3500061035156
+      },
+      "tag": "DIV",
+      "text": "CreatedI can editView PermissionsI can viewHOVER-398 temporary"
+    }
+  ],
+  "dark": true,
+  "description": {
+    "background": "rgba(0, 0, 0, 0)",
+    "classes": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+    "color": "rgb(125, 134, 152)",
+    "hover": true,
+    "rect": {
+      "height": 20,
+      "width": 147.08750915527344,
+      "x": 880,
+      "y": 258.4375
+    },
+    "tag": "DIV",
+    "text": "HOVER-398 temporary"
+  },
+  "operations": [
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "classes": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+      "color": "rgb(255, 255, 255)",
+      "hover": false,
+      "rect": {
+        "height": 24,
+        "width": 22,
+        "x": 1107.5999755859375,
+        "y": 162.35000610351562
+      },
+      "tag": "DIV",
+      "text": ""
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "classes": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+      "color": "rgb(255, 255, 255)",
+      "hover": false,
+      "rect": {
+        "height": 24,
+        "width": 22,
+        "x": 1129.5999755859375,
+        "y": 162.35000610351562
+      },
+      "tag": "DIV",
+      "text": ""
+    }
+  ],
+  "tokens": {
+    "gray-200": "#E3E5EA",
+    "gray-300": "#A8B0BD",
+    "gray-400": "#7D8698",
+    "gray-50": "#F9FAFB",
+    "gray-600": "#31363F",
+    "gray-700": "#272A2F",
+    "gray-900": "#1B1C1F"
+  }
+}

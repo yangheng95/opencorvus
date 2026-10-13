@@ -1,0 +1,126 @@
+[
+  {
+    "file": "lib/index.js",
+    "path": "node_modules/@univerjs/sheets-ui/lib/index.js",
+    "name": "SheetPermissionPanelList",
+    "replacements": [
+      {
+        "start": 1394656,
+        "end": 1394720,
+        "before": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+        "after": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50 dark:hover:!univer-bg-gray-700"
+      },
+      {
+        "start": 1396246,
+        "end": 1396328,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 1396647,
+        "end": 1396729,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 1399068,
+        "end": 1399161,
+        "before": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+        "after": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400 dark:!univer-text-gray-300"
+      }
+    ]
+  },
+  {
+    "file": "lib/es/index.js",
+    "path": "node_modules/@univerjs/sheets-ui/lib/es/index.js",
+    "name": "SheetPermissionPanelList",
+    "replacements": [
+      {
+        "start": 1394656,
+        "end": 1394720,
+        "before": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+        "after": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50 dark:hover:!univer-bg-gray-700"
+      },
+      {
+        "start": 1396246,
+        "end": 1396328,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 1396647,
+        "end": 1396729,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 1399068,
+        "end": 1399161,
+        "before": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+        "after": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400 dark:!univer-text-gray-300"
+      }
+    ]
+  },
+  {
+    "file": "lib/cjs/index.js",
+    "path": "node_modules/@univerjs/sheets-ui/lib/cjs/index.js",
+    "name": "SheetPermissionPanelList",
+    "replacements": [
+      {
+        "start": 1467082,
+        "end": 1467146,
+        "before": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+        "after": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50 dark:hover:!univer-bg-gray-700"
+      },
+      {
+        "start": 1468895,
+        "end": 1468977,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 1469398,
+        "end": 1469480,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 1472208,
+        "end": 1472301,
+        "before": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+        "after": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400 dark:!univer-text-gray-300"
+      }
+    ]
+  },
+  {
+    "file": "lib/umd/index.js",
+    "path": "node_modules/@univerjs/sheets-ui/lib/umd/index.js",
+    "name": "Yd",
+    "replacements": [
+      {
+        "start": 692052,
+        "end": 692116,
+        "before": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50",
+        "after": "univer-mt-3 univer-rounded-lg univer-p-3 hover:univer-bg-gray-50 dark:hover:!univer-bg-gray-700"
+      },
+      {
+        "start": 692920,
+        "end": 693002,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 693159,
+        "end": 693241,
+        "before": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200",
+        "after": "univer-box-border univer-h-6 univer-rounded-sm univer-p-1 hover:univer-bg-gray-200 dark:hover:!univer-bg-gray-600"
+      },
+      {
+        "start": 694639,
+        "end": 694732,
+        "before": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400",
+        "after": "univer-text-3 univer-mt-2 univer-max-w-64 univer-truncate univer-text-sm univer-text-gray-400 dark:!univer-text-gray-300"
+      }
+    ]
+  }
+]

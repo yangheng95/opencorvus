@@ -2480,6 +2480,12 @@ Confirm title producers. Its range error is derived from the current ranges by
 the existing checker at render time, and that same result governs display and
 Confirm. Description, choices, workbook and original validation order remain
 owned by their existing state and services.
+Protection rule cards use the existing Univer dark hover surface, and their
+Edit/Delete regions use its existing dark operation surface. Rule descriptions
+use the same theme’s dark foreground variant. The mounted list and ThemeService
+supply these variants in ordinary and fullscreen views while retaining the
+existing rule identity, actions, locale and range drawing. No Host colour
+override or separate theme state supplies the protection card.
 
 Shared artifact action controls preserve native focus while an operation owns
 their busy state. Native disabled is reserved for genuinely unavailable actions;

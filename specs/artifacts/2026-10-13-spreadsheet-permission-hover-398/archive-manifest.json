@@ -1,0 +1,574 @@
+{
+  "iteration": 398,
+  "selection": "Explicit 39 original observations plus scoped implementation, bounded patch-text increment, named logs and two own scopes. No runtime, DB, auth/models, UI build, full vendor/UMD or unrelated evidence.",
+  "historicalReview": "record-manual-review.mjs copied only; original final-review.json and observedAt retained.",
+  "generatedDocuments": [
+    "README.md",
+    "archive-check.json"
+  ],
+  "files": [
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-cleanup-zh.jpg",
+      "path": "observations/after-cleanup-zh.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 51386,
+      "archivedBytes": 51386,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-card.jpg",
+      "path": "observations/after-dark-card.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 70115,
+      "archivedBytes": 70115,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-card.json",
+      "path": "observations/after-dark-card.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 961,
+      "archivedBytes": 961
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-delete.jpg",
+      "path": "observations/after-dark-delete.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 68777,
+      "archivedBytes": 68777,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-delete.json",
+      "path": "observations/after-dark-delete.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 401,
+      "archivedBytes": 401
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-edit.jpg",
+      "path": "observations/after-dark-edit.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 68769,
+      "archivedBytes": 68769,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-edit.json",
+      "path": "observations/after-dark-edit.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 401,
+      "archivedBytes": 401
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-full.jpg",
+      "path": "observations/after-dark-full.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 56785,
+      "archivedBytes": 56785,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-full.json",
+      "path": "observations/after-dark-full.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 617,
+      "archivedBytes": 617
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-zh.jpg",
+      "path": "observations/after-dark-zh.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 67342,
+      "archivedBytes": 67342,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-dark-zh.json",
+      "path": "observations/after-dark-zh.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 282,
+      "archivedBytes": 282
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-edit-detail.jpg",
+      "path": "observations/after-edit-detail.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 80093,
+      "archivedBytes": 80093,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-full-delete.jpg",
+      "path": "observations/after-full-delete.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 55833,
+      "archivedBytes": 55833,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-full-delete.json",
+      "path": "observations/after-full-delete.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 280,
+      "archivedBytes": 280
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-full-edit.jpg",
+      "path": "observations/after-full-edit.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 55740,
+      "archivedBytes": 55740,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-full-edit.json",
+      "path": "observations/after-full-edit.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 280,
+      "archivedBytes": 280
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-full-pointer-leave.jpg",
+      "path": "observations/after-full-pointer-leave.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 52729,
+      "archivedBytes": 52729,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-full-zh-ax.txt",
+      "path": "observations/after-full-zh-ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff; not complete AX qualification",
+      "sourceBytes": 163,
+      "archivedBytes": 163
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-full-zh.jpg",
+      "path": "observations/after-full-zh.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 53961,
+      "archivedBytes": 53961,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-light-card.jpg",
+      "path": "observations/after-light-card.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 70107,
+      "archivedBytes": 70107,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-light-card.json",
+      "path": "observations/after-light-card.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 184,
+      "archivedBytes": 184
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-page-closed.json",
+      "path": "observations/after-page-closed.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 307,
+      "archivedBytes": 307
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-pointer-leave.jpg",
+      "path": "observations/after-pointer-leave.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 76008,
+      "archivedBytes": 76008,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-pointer-leave.json",
+      "path": "observations/after-pointer-leave.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 136,
+      "archivedBytes": 136
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/after-settings-restored-ax.txt",
+      "path": "observations/after-settings-restored-ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff; not complete AX qualification",
+      "sourceBytes": 250,
+      "archivedBytes": 250
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-cleanup-ax.txt",
+      "path": "observations/before-cleanup-ax.txt",
+      "compression": "none",
+      "qualification": "Original accessibility output may be partial diff; not complete AX qualification",
+      "sourceBytes": 164,
+      "archivedBytes": 164
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-cleanup.jpg",
+      "path": "observations/before-cleanup.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 75308,
+      "archivedBytes": 75308,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-card.jpg",
+      "path": "observations/before-dark-card.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 67666,
+      "archivedBytes": 67666,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-card.json",
+      "path": "observations/before-dark-card.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 3098,
+      "archivedBytes": 3098
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-delete.jpg",
+      "path": "observations/before-dark-delete.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 66921,
+      "archivedBytes": 66921,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-delete.json",
+      "path": "observations/before-dark-delete.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 377,
+      "archivedBytes": 377
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-edit.jpg",
+      "path": "observations/before-dark-edit.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 66676,
+      "archivedBytes": 66676,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-edit.json",
+      "path": "observations/before-dark-edit.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 555,
+      "archivedBytes": 555
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-full.jpg",
+      "path": "observations/before-dark-full.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 54136,
+      "archivedBytes": 54136,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-dark-full.json",
+      "path": "observations/before-dark-full.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 174,
+      "archivedBytes": 174
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-light-card.jpg",
+      "path": "observations/before-light-card.jpg",
+      "compression": "none",
+      "qualification": "Original JPEG, Root manually reviewed; no image editing",
+      "sourceBytes": 70107,
+      "archivedBytes": 70107,
+      "mediaType": "image/jpeg"
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-light-card.json",
+      "path": "observations/before-light-card.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 184,
+      "archivedBytes": 184
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/before-page-closed.json",
+      "path": "observations/before-page-closed.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 211,
+      "archivedBytes": 211
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/observations/final-review.json",
+      "path": "observations/final-review.json",
+      "compression": "none",
+      "qualification": "Original computed style or manual observation",
+      "sourceBytes": 8041,
+      "archivedBytes": 8041
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/source-review.json",
+      "path": "implementation/source-review.json",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 5502,
+      "archivedBytes": 5502
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/scoped-review.json",
+      "path": "implementation/scoped-review.json",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 9464,
+      "archivedBytes": 9464
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/vendor-files.json",
+      "path": "implementation/vendor-files.json",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 5446,
+      "archivedBytes": 5446
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/apply-vendor.mjs",
+      "path": "implementation/apply-vendor.mjs",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 2685,
+      "archivedBytes": 2685
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/record-manual-review.mjs",
+      "path": "implementation/record-manual-review.mjs",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 4586,
+      "archivedBytes": 4586
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/patch-increment.json",
+      "path": "implementation/patch-increment.json.gz",
+      "compression": "gzip",
+      "qualification": "Exact bounded patch-text increment relative to recorded HEAD; excludes full UMD line and whole patch",
+      "sourceBytes": 16050,
+      "archivedBytes": 1830
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/apply-vendor.log",
+      "path": "logs/apply-vendor.log.gz",
+      "compression": "gzip",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 89,
+      "archivedBytes": 95
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/typecheck.log",
+      "path": "logs/typecheck.log.gz",
+      "compression": "gzip",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 16,
+      "archivedBytes": 36
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/build.log",
+      "path": "logs/build.log.gz",
+      "compression": "gzip",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 70781,
+      "archivedBytes": 10848
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/patch-prepare.log",
+      "path": "logs/patch-prepare.log.gz",
+      "compression": "gzip",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 377,
+      "archivedBytes": 264
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/patch-commit.log",
+      "path": "logs/patch-commit.log.gz",
+      "compression": "gzip",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 137,
+      "archivedBytes": 138
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/install-final.log",
+      "path": "logs/install-final.log.gz",
+      "compression": "gzip",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 139,
+      "archivedBytes": 136
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/typecheck.exit",
+      "path": "logs/typecheck.exit",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/build.exit",
+      "path": "logs/build.exit",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-spreadsheet-permission-hover-398/install-final.exit",
+      "path": "logs/install-final.exit",
+      "compression": "none",
+      "qualification": "Original selected evidence",
+      "sourceBytes": 3,
+      "archivedBytes": 3
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-before/owner.json",
+      "path": "logs/before/owner.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 154,
+      "archivedBytes": 149
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-before/ready.json",
+      "path": "logs/before/ready.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 343,
+      "archivedBytes": 253
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-before/terminal.json",
+      "path": "logs/before/terminal.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 210,
+      "archivedBytes": 170
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-before/stop-requested",
+      "path": "logs/before/stop-requested.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 78,
+      "archivedBytes": 92
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-before/stdout.log",
+      "path": "logs/before/stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 51,
+      "archivedBytes": 69
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-before/stderr.log",
+      "path": "logs/before/stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 71657,
+      "archivedBytes": 6816
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-after/owner.json",
+      "path": "logs/after/owner.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 154,
+      "archivedBytes": 149
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-after/ready.json",
+      "path": "logs/after/ready.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 343,
+      "archivedBytes": 255
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-after/terminal.json",
+      "path": "logs/after/terminal.json.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 210,
+      "archivedBytes": 169
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-after/stop-requested",
+      "path": "logs/after/stop-requested.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 69,
+      "archivedBytes": 87
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-after/stdout.log",
+      "path": "logs/after/stdout.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 51,
+      "archivedBytes": 69
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/398-after/stderr.log",
+      "path": "logs/after/stderr.log.gz",
+      "compression": "gzip",
+      "qualification": "Own credentialless process scope; canonical workbook runtime reused, not a fresh DB",
+      "sourceBytes": 78297,
+      "archivedBytes": 7445
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/launch-review.ps1",
+      "path": "implementation/launch-review.ps1.gz",
+      "compression": "gzip",
+      "qualification": "Existing reviewed launcher/server, preserved without running; uses original canonical runtime after credential cleanup",
+      "sourceBytes": 3530,
+      "archivedBytes": 1343
+    },
+    {
+      "source": ".tmp-spreadsheet-artifact-identity-387/review-server.ts",
+      "path": "implementation/review-server.ts.gz",
+      "compression": "gzip",
+      "qualification": "Existing reviewed launcher/server, preserved without running; uses original canonical runtime after credential cleanup",
+      "sourceBytes": 2108,
+      "archivedBytes": 909
+    }
+  ]
+}

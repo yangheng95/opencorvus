@@ -1,5 +1,9 @@
 # 398 电子表格权限列表深色悬停可读性
 
+## 当前结果
+
+Root已按真实前态批准并实施四runtime的精确1+2+1 class，独立复核、安装/typecheck/private build及真实桌面后态完成。普通/全屏深色卡片、Edit/Delete实际hover、中英同实例、Light对照和Edit/Cancel/自建规则Delete均有原始证据；两次自有页面及进程正常关闭，System/English/100%恢复，0模型请求。[398证据目录](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/README.md)保留精确范围与失败记录。下文实施前时态按历史保留；不宣称独立range-highlight、context-command回焦、浅色说明对比度、全部主题或WCAG整库合规。共享文档、最终docs及提交/推送由Root继续负责。
+
 ## 状态与 Recall
 
 当前为实施前根因和范围方案。Root已完成397真实桌面验收与自有scope收尾，正收敛提交；本批优先处理已观察的权限规则卡片浅底浅字。audit_ui只获准写本spec及自有scratch，不改生产、依赖、其它spec或共享文件，不启动服务/浏览器/模型，不接触凭据、不运行UI自动化、不提交、不再次委托。Root负责新spec索引、文档检查、真实前态、方案批准、实施、后态截图人工复核和最终范围交付。
@@ -129,3 +133,25 @@ Root已读Recall及完整根因/影响方案，批准使用既有credentialless 
 自有398-before PID81704原1200000ms，实际305157ms正常stop/join0；tab40已关闭，只有HOVER-398 temporary规则由真实Delete清理。原主题System/应用深色、English、100%及7/5/12均保持。真实Tab/Enter Add创建A1规则。普通及全屏实际正文click悬停：card背景rgb(249,250,251)、正文白色、description rgb(125,134,152)；Edit/Delete真实右键仅使指针落在图标（未左激活），各自:hover=true、背景rgb(227,229,234)、白色图标。实际主题变量与方案defaultToken一致。切Light后同规则保留、背景同249/250/251、正文27/28/31，description仍125/134/152；恢复System后正常清理。截图和选定computed styles在自有observations，Root全部人工查看。首次不限定Sidebar的description locator因tooltip同名产生strict错误，随后按实际Sidebar正确采集；不删除失败事实。
 
 Root据此批准四runtime中精确1+2+1 class追加，保持其它完整源码/旧392394patch段；不改CSS、theme来源、宿主、焦点、语言或公开type。description灰400在拟深色gray700上理论3.93:1，因此一并使用既有gray300，真实后态再验证，不扩大浅色/整库对比度承诺。
+
+## 最终实施、真实后态与交付资格
+
+Root完成真实前态后批准四处分发class，先AST限定SheetPermissionPanelList/UMD Yd，再正常Bun patch/install。初稿按gray400 token匹配时同时命中description/empty state，计数保护在写生产前中止；最终改成完整description literal，只改1张卡片、2个操作区域、1个说明。生成的空Bun缓存段已精确剔除。独立[scoped-review](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/implementation/scoped-review.json)确认四literal之外全源码一致、其它10个旧patch段完整、实际preset安装与构建bundle/CSS消费一致。typecheck、private build（1m4s）及frozen install均exit0，不以它们替代页面验收。
+
+后态真实深色卡片:hover背景为rgb(39,42,47)，白色标题/权限正文保持，description为rgb(168,176,189)；原前态分别为浅背景249/250/251、白正文、说明125/134/152。Edit/Delete分别通过真实右键保留指针、不左激活，实际:hover局部背景从227/229/234变为49/54/63，白图标可读。普通/全屏截图与选定计算样式详见[398证据目录](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/README.md)；audit_ui另人工对看正文前后原图，未操作浏览器。
+
+同一A1/HOVER-398 temporary规则在English→Chinese→English及普通/全屏之间保持，界面标题、权限正文、Add/空态按当前语言展示。Light真实对照仍为浅背景249/250/251、正文27/28/31、说明125/134/152，没有宣称改善浅色说明对比度。真实Tab/Enter Add及正常Confirm创建规则，Edit打开原规则；Cancel关闭侧栏内容，原规则保留并由工作表菜单重开。最后只Delete自建规则并确认中文空态。原单元格7/5/12保持，0单元格编辑、0模型请求，未重新验公式重算或模型发布。
+
+指针通过标题实际点击移开时卡片:hover=false、背景transparent；但A1同时被选中和保护，独立range-highlight未从这两种绘制中分离，不认证完整高亮显隐。398未重跑context-command编辑回焦，397既有结果不重复算本轮成功。不宣称全主题、全用户、多工作簿、移动端、浅色说明对比度或WCAG全库合规。More Colors、菜单Escape层级、Dialog Close语言仍分开候选，不扩大本批。
+
+原[final-review](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/observations/final-review.json)还保留Tooltip同名strict locator、错误猜测中文“侧栏面板”而实际为“侧边栏面板”的no_matches，以及上述AST安全中止；都不冒充产品语言缺陷或省略失败步骤。所存AX多数为diff片段，不称完整AX覆盖。record-manual-review脚本只归档未重跑，原reviewedAt=2026-10-13T16:33:36.486Z未更改。
+
+## 物理关闭、复用数据与证据冻结
+
+before owner81704/occurrence cda2fe9e-c86c-408e-a8db-ca91ebc099be，tab40于2026-10-13T16:17:11.604Z关闭，elapsed305157ms、join exit0；after owner72932/occurrence c8503fc0-aaa4-4843-a775-feb8cc4b0d59，tab41于16:30:12.564Z关闭，elapsed397242ms、join exit0。两次均在原20分钟和deadline-60s预留内正常stop。System/English/100%恢复，自建规则已清理；原[before关闭](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/observations/before-page-closed.json)与[after关闭](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/observations/after-page-closed.json)保持。
+
+成熟review launcher实际把OPENCORVUS_HOME绑定已清理凭据的既有387 canonical runtime，是新的无凭据进程scope复用原工作簿数据，**不是fresh DB**。原ready.source中的fresh说明未篡改，但资格以真实launcher路径为准。归档仅保存本轮自有owner/ready/terminal/stop/stdout/stderr和两个成熟helper的原字节，不复制runtime、auth/models、387/393/395原模型证据或构建资产。
+
+[manifest](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/archive-manifest.json)明确68源文件加3归档文档共71文件，39原observations中19 JPEG，21个gzip。精确patch新增内容按Root批准保存为[有界UTF-8字节替换增量](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/implementation/patch-increment.json.gz)：基线为稳定Git commit 3c5adc5bfb871c2264b3b0cb3ddbfdfb2dbee602，56个局部替换、最大2689字节，内存重建逐字节等于当时当前patch；不含完整UMD长行/whole patch，不用可变源码hash门，也不作UI功能验收。
+
+[archive-check](../../artifacts/2026-10-13-spreadsheet-permission-hover-398/archive-check.json)记录gzip/JPEG逐字节恢复、有限凭据模式和局部链接检查，不替代视觉资格或普遍秘密检测。索引建议仅写自有scratch archive-index-ops.json，未应用；Root继续负责共享架构/changelog、最终docs、范围提交、上游同步及push。audit_ui未修改共享、生产或提交，402报告保持冻结。
