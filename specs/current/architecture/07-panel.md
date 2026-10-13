@@ -20,7 +20,8 @@ pre-catalog error reporting does not query unavailable translations.
 Composer model groups retain each connected catalog option's canonical label
 beside its fully-qualified ID. The visible list and literal search consume that
 same option; search covers model label, model ID, provider ID and provider label.
-Selection and persistence continue to use the fully-qualified model ID.
+Listbox typeahead uses that visible model label for prefix navigation. Selection
+and persistence continue to use the fully-qualified model ID.
 
 Project file listing, content/source-content, file status and text/file search
 GET readers use the existing Project identity admission independently of
@@ -68,6 +69,17 @@ text files retain CodeEditor, citation ranges and save admission. Other binary
 content keeps the existing non-editable description. The file-image container
 owns its bounded layout and scrolling; there is no additional fetch, image
 cache, file mutation or parallel preview implementation.
+
+File readers admit existing text candidates only when their complete original
+bytes are valid UTF-8 and contain no NUL. Invalid candidates use the existing
+binary response before text decoding, diff generation or editable revision
+publication. The same byte predicate guards text saves after the existing path,
+read-only and revision checks. Submitted strings must also round-trip through
+UTF-8 exactly; NUL and isolated UTF-16 surrogates produce FileInvalidPathError.
+Successful atomic writes and revision receipts share the same validated bytes.
+Valid replacement characters, BOM, empty content and line separators retain
+their original text. Dedicated image/PDF previews and existing extension/MIME
+classifications keep their contracts; no alternate encoding is guessed.
 
 Read sources resolved from canonical attachments carry origin=attachment and
 the exact original filename from AttachmentStore metadata, including Unicode and
@@ -132,6 +144,21 @@ a selection through unrelated PDF content-order nodes. Replacing a
 page, zoom, width or source cancels both render tasks and removes the old text
 nodes; read-position restoration waits for both current layers. There is no
 second PDF parser, server text copy or optical character recognition path.
+
+The same render owns PDF.js AnnotationLayer for HTTP(S) and internal Link
+annotations. External URLs pass existing externalUrl admission and the main
+document anchor opener. PDFLinkService resolves internal names, references and
+page indexes within one immutable document per click; the local destination
+mapper translates XYZ/Fit variants through the target page viewport and shared
+zoom bounds. Navigation intent, document generation and render disposal protect
+source/page changes and explicit same-value zoom commands. The final canvas,
+text and annotation paint restores the target reading point after moving focus.
+Each detached annotation container is removed on cleanup and may only be
+attached by its current render. Annotation dimensions and rotation share page
+geometry; keyboard links retain original labels or a localized accessible name.
+Unresolved destinations show localized Feedback within the toolbar header,
+leaving the document readable. Script, form and non-link actions are outside
+this reader contract; there is no separate PDF history or external opener.
 
 Text file-preview Artifacts use the existing resource's ready state to admit
 CodeEditor. Successfully loaded zero-byte text is valid content and displays the
@@ -625,6 +652,13 @@ to wrap within the measured sidebar. Settings owns compact row density and
 selection colors; the shared primitive owns vertical layout and tab semantics.
 Rail rows retain their intrinsic content height as the navigation scrolls.
 The search field keeps a concise visible hint and a complete accessible name.
+Shared SearchField uses explicit `clearable` for its clear affordance; optional
+`onClear` owns only a domain action after the single empty-value publication.
+Clear restores the same connected, enabled input synchronously and shares the
+input's disabled state. External input refs remain available to navigation
+owners. Memory retains its clear-triggered list reload; Mailbox retains its
+existing search dismissal without a clear button. There is no delayed focus
+recovery or consumer-specific duplicate focus implementation.
 Its resize separator projects the mounted sidebar's actual width and applied
 CSS scale through one local frame-scheduled geometry owner. Size and root-style
 observation retire with that open node; CSS default measurements do not become
@@ -655,7 +689,11 @@ workspace, apply the default chat intent and reset the primary center surface.
 Usage presents the current server's real aggregate with an OpenCorvus identity,
 five equal metrics, activity grid, and side-by-side token/provider breakdowns.
 Period selection controls the existing usage contract; year is the initial
-view. Empty periods retain their actual zero-valued buckets. Official provider
+view. The activity header, period controls and refresh button stay mounted
+while current-period data loads, preserving keyboard focus across consecutive
+selections and refreshes. Loading clears the prior data and appears within the
+activity section; a busy refresh remains focusable and suppresses repeat requests.
+Empty periods retain their actual zero-valued buckets. Official provider
 comparisons and model detail remain below the primary overview. No personal
 identity, subscription, streak or plugin usage is inferred from server credentials.
 Default light/dark palettes use neutral chrome; named palettes retain their
@@ -2222,9 +2260,9 @@ same surface and preserves canonical tab order and selected identity.
 The Composer's Code/Work control, active conversation context badges, and model
 trigger share `--oc-density-chip-height`; the send/stop action alone uses the
 larger `--oc-density-icon-button`. The model Listbox groups the canonical
-connected-provider catalog but renders each fully-qualified
-`<provider>/<model>` value once on one line. It does not derive and repeat a
-second short display identity.
+connected-provider catalog and renders each model's canonical label once on
+one line. Its fully-qualified `<provider>/<model>` ID remains the selection
+value and tooltip; the visible label also supplies keyboard prefix navigation.
 
 Right Dock width has one persisted source, `rightDockWidth`. Its runtime
 renderer, pointer and keyboard resizers, and Cascading Style Sheets (CSS)

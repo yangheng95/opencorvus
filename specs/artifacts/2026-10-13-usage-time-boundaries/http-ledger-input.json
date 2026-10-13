@@ -1,0 +1,20 @@
+{
+  "purpose": "Artificial statistical acceptance inputs through production writer; no actual Provider usage",
+  "acceptanceEvents": [
+    {
+      "occurredAt": 1788624000000,
+      "tokens": 100,
+      "costUSD": 0.001
+    },
+    {
+      "occurredAt": 1788706800000,
+      "tokens": 200,
+      "costUSD": 0.002
+    },
+    {
+      "occurredAt": 1788751800000,
+      "tokens": 300,
+      "costUSD": 0.003
+    }
+  ]
+}

@@ -2,6 +2,25 @@
 
 - [持续目标模式验收](2026-10-13-continuous-goal-mode/README.md)：三种真实模型执行、Task 跨轮次重开、计量与最终桌面截图。
 
+- [PDF 文档链接](2026-10-13-pdf-links-381/README.md)：真实输入、目的地正向合同、双语桌面交互和截图复核。
+
+- [用量时间边界与键盘操作](2026-10-13-usage-time-boundaries/README.md)：真实双语桌面截图、32项正向测试与生产HTTP统计。
+
+- [382 工具结果恢复调查](2026-10-05-connection-workspace-authority/source-result-recovery-382/README.md)：完整状态阶段、四个失败合同和源探针。
+
+- [381 Sources 并发持久化](2026-10-05-connection-workspace-authority/source-persistence-381/README.md)：聚焦功能合同、真实来源与运行证据。
+
+- [模型列表键盘前缀导航](2026-10-13-model-keyboard/README.md)：真实焦点与选择前后截图。
+
+- [清除操作验收](2026-10-13-clear-intent/README.md)：搜索焦点、代理空值保存、双语桌面截图和实际配置。
+
+- [长行读取的完整字符边界](2026-10-13-text-unicode-380/README.md)：正向工具合同、真实Sol读取、桌面截图和正常运行收尾。
+
+- [文件完整字节准入](2026-10-13-file-text-admission/README.md)：真实有损保存前态、只读后态、文本保存与聚焦功能合同。
+- [Composer模型名称搜索](2026-10-13-iteration-batch-380/README.md)：可见名称搜索前后桌面截图。
+
+- [代理认证原值验收](2026-10-13-proxy-credentials/README.md)：修复前后功能测试、真实页面保存、双语截图与本地认证请求。
+
 - [Dependabot升级验收](2026-10-13-dependabot-upgrades/README.md)：实际Provider/ACP流式测试、逐文件回归结果、编辑保存与时间线截图。
 
 - [Issue 40：Parallel Search MCP](2026-10-12-parallel-search-issue-40/README.md)：真实匿名搜索、公开双语指南、0.1.25发布、完整公开日志修订及Issue回复回执。

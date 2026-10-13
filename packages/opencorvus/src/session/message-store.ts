@@ -529,6 +529,29 @@ export namespace MessageStore {
     return partsByMessageIDs([messageID]).get(messageID) ?? []
   })
 
+  /** Read canonical Sources without hydrating unrelated Tool result bodies. */
+  export function sourcePartsInTransaction(
+    db: Database.TxOrDb,
+    input: { sessionID: string; messageID: string },
+  ): Message.SourcePart[] {
+    Database.requireActiveTransaction("MessageStore.sourcePartsInTransaction")
+    const parent = db.select({ id: MessageTable.id }).from(MessageTable).where(and(
+      eq(MessageTable.id, input.messageID),
+      eq(MessageTable.session_id, input.sessionID),
+    )).get()
+    if (!parent) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+    return db.select().from(PartTable).where(and(
+      eq(PartTable.message_id, input.messageID),
+      inArray(sql<string>`json_extract(${PartTable.data}, '$.type')`, [
+        VISIBLE_PART_TYPE.sourceUrl, VISIBLE_PART_TYPE.sourceDocument, VISIBLE_PART_TYPE.sourceFile,
+      ]),
+    )).orderBy(PartTable.time_created, PartTable.id).all().flatMap((row) => {
+      const part = persistedPart(db, row, input.sessionID)
+      return part.type === "source-url" || part.type === "source-document" || part.type === "source-file"
+        ? [part] : []
+    })
+  }
+
   export const part = fn(
     z.object({
       sessionID: Identifier.schema("session"),

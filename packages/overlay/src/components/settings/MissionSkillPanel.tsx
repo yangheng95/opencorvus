@@ -277,13 +277,13 @@ export default function MissionSkillPanel() {
           <Show when={!detailOpen()}>
             <SettingsToolbar>
               <SearchField
+                clearable
                 class="mission-skill-search"
                 dataUI="mission-skill-search"
                 clearDataUI="mission-skill-search-clear"
                 value={query()}
                 placeholder={t("mission_skill.search_placeholder")}
                 onValueChange={setQuery}
-                onClear={() => setQuery("")}
               />
               <div class="mission-skill-filters" role="toolbar" aria-label={t("mission_skill.filter_label")}>
                 <For each={["all", "built_in", "project", "global"] as MissionSkillFilter[]}>

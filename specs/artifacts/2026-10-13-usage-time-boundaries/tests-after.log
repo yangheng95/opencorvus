@@ -1,0 +1,52 @@
+[1/2] START test/usage/usage-stats.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) natural-period Provider usage > aggregates current and previous calendar months with deterministic Provider and model rows [68.06ms]
+(pass) natural-period Provider usage > uses the real IANA day length across daylight-saving time [7.49ms]
+(pass) natural-period Provider usage > uses the 25-hour IANA day across the daylight-saving fallback [4.94ms]
+(pass) natural-period Provider usage > starts natural weeks on Monday [4.38ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for local [4.66ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for system [4.69ms]
+(pass) natural-period Provider usage > returns the canonical time-zone validation error for UTC+3 [1.77ms]
+(pass) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour forward transition [8.91ms]
+(pass) natural-period Provider usage > assigns measured calls across Lord Howe's half-hour backward transition [4.28ms]
+(pass) natural-period Provider usage > assigns both Lord Howe 01:45 instants to their distinct real-hour intervals [3.84ms]
+(pass) natural-period Provider usage > resolves Santiago's missing midnight to exact adjacent natural days [4.76ms]
+(pass) natural-period Provider usage > fills Santiago's week with natural-day intervals through the midnight transition [4.15ms]
+(pass) natural-period Provider usage > fills Santiago's month with natural-day intervals through the midnight transition [6.38ms]
+(pass) natural-period Provider usage > fills Santiago's year with natural-day intervals through the midnight transition [65.11ms]
+(pass) natural-period Provider usage > assigns both ends of the 24-hour Asia/Shanghai day to the correct half-open window [4.87ms]
+(pass) natural-period Provider usage > assigns both ends of the 23-hour America/New_York day to the correct half-open window [3.92ms]
+(pass) natural-period Provider usage > assigns both ends of the 25-hour America/New_York day to the correct half-open window [2.99ms]
+(pass) natural-period Provider usage > includes the measured leap day and exact year endpoints in Shanghai's leap year [26.00ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the day observed at first 00:30 [3.88ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the day observed at second 00:30 [2.75ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the day observed at noon [2.32ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the month observed at first 00:30 [4.77ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the month observed at second 00:30 [3.92ms]
+(pass) natural-period Provider usage > uses Havana's first real midnight for the month observed at noon [3.60ms]
+(pass) natural-period Provider usage > includes both Havana midnight hours in the previous day [2.72ms]
+(pass) natural-period Provider usage > includes both Havana midnight hours in the previous month [5.19ms]
+(pass) natural-period Provider usage > places both Havana midnight hours in one natural-day bucket within the week [3.43ms]
+(pass) natural-period Provider usage > places both Havana midnight hours in one natural-day bucket within the year [26.85ms]
+(pass) natural-period Provider usage > projects a natural year as daily activity buckets [32.65ms]
+(pass) natural-period Provider usage > serves canonical streamed-call ledger occurrences through the global usage API [2586.90ms]
+
+ 30 pass
+ 0 fail
+ 238 expect() calls
+Ran 30 tests across 1 file. [9.46s]
+[1/2] DONE test/usage/usage-stats.test.ts exit=0 duration=10.26s
+[2/2] START test/usage/stream-ledger.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) shared streamed-call usage ledger > returns the exact cancellation outcome from the canonical wrapper around a parked provider stream [2956.09ms]
+(pass) shared streamed-call usage ledger > records a non-Session helper stream exactly once at the common wrapper [2574.34ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [7.09s]
+[2/2] DONE test/usage/stream-ledger.test.ts exit=0 duration=7.33s

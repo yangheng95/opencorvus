@@ -799,12 +799,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
           >
           <aside ref={listElement} class="automations-list" aria-label={t("automations.list")}>
             <SearchField
+              clearable
               class="automations-search"
               size="md"
               value={search()}
               placeholder={t("automations.search_placeholder")}
               onValueChange={setSearch}
-              onClear={() => setSearch("")}
               disabled={Boolean(busyAction())}
             />
             <SegmentedControl

@@ -441,9 +441,9 @@ export function ComposerModelSelector() {
         <Popover.Content class="model-selector-popover composer-model-selector-popover">
           <div class="model-selector-search">
             <SearchField
+              clearable
               value={query()}
               onValueChange={setQuery}
-              onClear={() => searchInputRef?.focus()}
               placeholder={t("model_selector.search_placeholder")}
               size="sm"
               inputRef={(element) => {
@@ -530,7 +530,7 @@ function ProviderModelGroup(props: ProviderModelGroupProps) {
         options={options()}
         value={selectedKeys()}
         optionValue={(option) => option.id}
-        optionTextValue={(option) => option.id}
+        optionTextValue={(option) => option.label}
         optionDisabled={() => !!props.disabled}
         disallowEmptySelection={options().length > 0}
         allowDuplicateSelectionEvents

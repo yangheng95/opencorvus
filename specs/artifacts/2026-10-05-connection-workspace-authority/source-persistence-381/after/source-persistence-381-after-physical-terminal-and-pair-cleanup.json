@@ -1,0 +1,69 @@
+{
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "chain": [
+    {
+      "expected": {
+        "pid": 80588,
+        "processInstanceID": "win32:639274677632127399",
+        "occurrenceID": "74d8b6aa-d906-404b-af93-1e484b73f3a0"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 73400,
+        "processInstanceID": "win32:639274677622037052",
+        "occurrenceID": "41f3f687-7a35-42a5-984e-d29886f147ef"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-13T06:01:17.1480707Z",
+  "occurrence": "source-persistence-381-after-9cd6992c-8780-4e80-b1e8-1b3c7ede91aa",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "copiedLength": 2194,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-persistence-381-after\\runtime\\data\\auth.json",
+      "outcome": "removed"
+    },
+    {
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-persistence-381-after\\runtime\\data\\models.json",
+      "outcome": "removed"
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "source-persistence-381-after-9cd6992c-8780-4e80-b1e8-1b3c7ede91aa",
+    "outcome": "settled",
+    "host": {
+      "pid": 73400,
+      "processInstanceID": "win32:639274677622037052",
+      "occurrenceID": "41f3f687-7a35-42a5-984e-d29886f147ef"
+    },
+    "target": {
+      "pid": 80588,
+      "processInstanceID": "win32:639274677632127399",
+      "occurrenceID": "74d8b6aa-d906-404b-af93-1e484b73f3a0"
+    },
+    "observedAtUtc": "2026-10-13T06:01:13.465Z",
+    "deadlineAt": 1791871562183,
+    "terminal": {
+      "occurrenceID": "source-persistence-381-after-9cd6992c-8780-4e80-b1e8-1b3c7ede91aa",
+      "pid": 80588,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

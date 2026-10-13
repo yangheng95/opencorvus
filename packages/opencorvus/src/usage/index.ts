@@ -215,10 +215,10 @@ export namespace UsageStats {
   }
 
   function periodStart(now: DateTime, period: Period): DateTime {
-    if (period === "day") return now.startOf("day")
-    if (period === "week") return now.startOf("week")
-    if (period === "month") return now.startOf("month")
-    return now.startOf("year")
+    const start = now.startOf(period)
+    return start
+      .getPossibleOffsets()
+      .reduce((earliest, candidate) => (candidate.toMillis() < earliest.toMillis() ? candidate : earliest), start)
   }
 
   function plusPeriod(value: DateTime, period: Period, amount: number): DateTime {
@@ -232,8 +232,8 @@ export namespace UsageStats {
     const now = DateTime.fromMillis(input.now ?? Date.now(), { zone: input.timeZone })
     if (!now.isValid) throw new Error(`Invalid time zone ${input.timeZone}`)
     const start = periodStart(now, input.period)
-    const end = plusPeriod(start, input.period, 1)
-    const previousStart = plusPeriod(start, input.period, -1)
+    const end = periodStart(plusPeriod(start, input.period, 1), input.period)
+    const previousStart = periodStart(plusPeriod(start, input.period, -1), input.period)
     return {
       period: input.period,
       timeZone: input.timeZone,
@@ -245,8 +245,8 @@ export namespace UsageStats {
 
   function nextBucket(value: DateTime, grain: Window["grain"]): DateTime {
     if (grain === "hour") return value.plus({ hours: 1 })
-    if (grain === "day") return value.plus({ days: 1 })
-    return value.plus({ months: 1 })
+    if (grain === "day") return periodStart(value.plus({ days: 1 }), "day")
+    return periodStart(value.plus({ months: 1 }), "month")
   }
 
   function changePercent(current: number, previous: number): number | null {
@@ -325,32 +325,22 @@ export namespace UsageStats {
         return summary
       }, emptySummary()),
     )
-    const bucketRecords = new Map<number, Record[]>()
-    for (const record of currentRecords) {
-      const value = DateTime.fromMillis(record.occurredAt, { zone: window.timeZone })
-      const bucketStart =
-        window.grain === "hour"
-          ? value.startOf("hour")
-          : window.grain === "day"
-            ? value.startOf("day")
-            : value.startOf("month")
-      const start = bucketStart.toMillis()
-      bucketRecords.set(start, [...(bucketRecords.get(start) ?? []), record])
-    }
+    const orderedRecords = [...currentRecords].sort((left, right) => left.occurredAt - right.occurredAt)
+    let recordIndex = 0
     const buckets: z.infer<typeof Bucket>[] = []
     let cursor = DateTime.fromMillis(window.current.start, { zone: window.timeZone })
     const end = DateTime.fromMillis(window.current.end, { zone: window.timeZone })
     while (cursor < end) {
       const next = nextBucket(cursor, window.grain)
-      const summary = finishSummary(
-        (bucketRecords.get(cursor.toMillis()) ?? []).reduce((value, record) => {
-          addRecord(value, record)
-          return value
-        }, emptySummary()),
-      )
+      const bucketEnd = Math.min(next.toMillis(), window.current.end)
+      const summary = emptySummary()
+      while (recordIndex < orderedRecords.length && orderedRecords[recordIndex].occurredAt < bucketEnd) {
+        addRecord(summary, orderedRecords[recordIndex])
+        recordIndex += 1
+      }
       buckets.push({
         start: cursor.toMillis(),
-        end: next.toMillis(),
+        end: bucketEnd,
         tokens: summary.tokens,
         costUSD: summary.costUSD,
         calls: summary.calls,

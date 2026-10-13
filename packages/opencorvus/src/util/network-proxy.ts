@@ -62,11 +62,10 @@ export function proxiedFetchInit<T extends ProxyFetchInit>(
 
 export function authenticatedProxyUrl(rawUrl: string, username?: string, password?: string): string {
   const parsed = new URL(rawUrl)
-  const user = username?.trim()
-  const pass = password?.trim()
-
-  if (user) parsed.username = user
-  if (pass) parsed.password = pass
+  // URL setters preserve percent escapes; these fields are raw identities,
+  // so encode them once before transports decode URL userinfo.
+  if (username) parsed.username = encodeURIComponent(username)
+  if (password) parsed.password = encodeURIComponent(password)
 
   return parsed.toString()
 }

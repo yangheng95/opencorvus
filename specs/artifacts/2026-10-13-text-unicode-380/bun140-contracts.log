@@ -1,0 +1,41 @@
+$ bun script/run-tests.ts test/text-file-page.test.ts test/read-tool-cited-range.test.ts
+[1/2] START test/text-file-page.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) byte-capped file pages retain the full total and continue from the next contiguous line [4649.97ms]
+(pass) file and content readers expose the same empty lines [1952.52ms]
+(pass) file and content readers expose the same blank lines [1091.05ms]
+(pass) file and content readers expose the same lf lines [1455.77ms]
+(pass) file and content readers expose the same crlf lines [1229.64ms]
+(pass) file and content readers expose the same cr lines [966.52ms]
+(pass) file and content readers expose the same mixed lines [920.91ms]
+(pass) UTF-8 byte bounds and line-length clipping share one page contract [1093.50ms]
+(pass) out-of-range errors report the actual complete file length [1028.50ms]
+(pass) split-pair file pages retain complete characters at the line budget [1389.93ms]
+(pass) complete-pair file pages retain complete characters at the line budget [1108.56ms]
+(pass) later-pair file pages retain complete characters at the line budget [1270.27ms]
+(pass) exact-limit file pages retain complete characters at the line budget [1943.27ms]
+(pass) supplementary-cjk file pages retain complete characters at the line budget [1905.61ms]
+(pass) supplementary characters preserve the contiguous byte-capped page [907.90ms]
+(pass) Read publishes the exact complete-character prefix in its output and preview [2954.55ms]
+(pass) production Skill tool publishes actual file totals and tail content [1812.80ms]
+(pass) mission Skill tool publishes actual file totals and tail content [1988.21ms]
+
+ 18 pass
+ 0 fail
+ 70 expect() calls
+Ran 18 tests across 1 file. [39.78s]
+[1/2] DONE test/text-file-page.test.ts exit=0 duration=43.59s
+[2/2] START test/read-tool-cited-range.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) read citations name a location, not a receipt > a windowed read cites the window it read [1.08ms]
+(pass) read citations name a location, not a receipt > a truncated first page still cites where it stopped [0.59ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [1.52s]
+[2/2] DONE test/read-tool-cited-range.test.ts exit=0 duration=1.88s

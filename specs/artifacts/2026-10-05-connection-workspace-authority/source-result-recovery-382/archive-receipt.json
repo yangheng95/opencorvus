@@ -1,0 +1,61 @@
+{
+  "files": [
+    {
+      "name": "full_access-canonical-stages.json.gz",
+      "originalBytes": 53992,
+      "archivedBytes": 2864
+    },
+    {
+      "name": "full_access-receipt-cut-stages.json.gz",
+      "originalBytes": 32593,
+      "archivedBytes": 2632
+    },
+    {
+      "name": "ask-canonical-stages.json.gz",
+      "originalBytes": 49557,
+      "archivedBytes": 2825
+    },
+    {
+      "name": "ask-receipt-cut-stages.json.gz",
+      "originalBytes": 30371,
+      "archivedBytes": 2642
+    },
+    {
+      "name": "checks/source-commit-probe.test.ts.gz",
+      "originalBytes": 8474,
+      "archivedBytes": 2903
+    },
+    {
+      "name": "checks/receipt-cut-probe.test.ts.gz",
+      "originalBytes": 7490,
+      "archivedBytes": 2651
+    },
+    {
+      "name": "checks/probe-tooling.log.gz",
+      "originalBytes": 1000,
+      "archivedBytes": 414
+    },
+    {
+      "name": "checks/probe-before.log.gz",
+      "originalBytes": 4189,
+      "archivedBytes": 1237
+    },
+    {
+      "name": "checks/receipt-cut-before.log.gz",
+      "originalBytes": 6694,
+      "archivedBytes": 1691
+    },
+    {
+      "name": "checks/source-contracts.log.gz",
+      "originalBytes": 1166,
+      "archivedBytes": 538
+    },
+    {
+      "name": "checks/archive.mjs.gz",
+      "originalBytes": 3163,
+      "archivedBytes": 1296
+    }
+  ],
+  "integrity": "Each full decompressed archive equals the exact original bytes; originals preserved privately.",
+  "credentials": "Probe inputs contain only the owned temporary text file; no Provider credentials were read or used."
+}

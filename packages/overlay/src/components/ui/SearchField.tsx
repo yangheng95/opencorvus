@@ -16,6 +16,7 @@ export interface SearchFieldProps {
   inputDataTestID?: string
   inputRef?: (element: HTMLInputElement) => void
   disabled?: boolean
+  clearable?: boolean
   clearLabel?: string
   clearDataUI?: string
   clearDataTestID?: string
@@ -32,11 +33,13 @@ function classes(...values: Array<string | undefined>): string {
 }
 
 export function SearchField(props: SearchFieldProps): JSX.Element {
+  let input: HTMLInputElement | undefined
   const clearLabel = () => props.clearLabel || t("common.clear")
   const submitLabel = () => props.submitLabel || t("common.search")
   const clear = () => {
     props.onValueChange("")
     props.onClear?.()
+    if (input?.isConnected && !props.disabled) input.focus()
   }
   const submit = () => props.onSubmit?.()
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (event) => {
@@ -58,7 +61,10 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
     >
       <Icon name="search" class="search-field-icon" />
       <TextField.Input
-        ref={props.inputRef}
+        ref={(element) => {
+          input = element
+          props.inputRef?.(element)
+        }}
         id={props.inputID}
         type="search"
         value={props.value}
@@ -70,7 +76,7 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
         onInput={(event) => props.onValueChange(event.currentTarget.value)}
         onKeyDown={handleKeyDown}
       />
-      <Show when={props.value && props.onClear}>
+      <Show when={props.value && props.clearable}>
         <Button
           type="button"
           variant="ghost"
@@ -80,6 +86,7 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
           data-ui={props.clearDataUI}
           data-testid={props.clearDataTestID}
           onClick={clear}
+          disabled={props.disabled}
           title={clearLabel()}
           aria-label={clearLabel()}
         >

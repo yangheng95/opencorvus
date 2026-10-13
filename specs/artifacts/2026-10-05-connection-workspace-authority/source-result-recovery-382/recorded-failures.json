@@ -1,0 +1,54 @@
+{
+  "cases": [
+    {
+      "mode": "full_access",
+      "cut": "canonical",
+      "executeCount": 1,
+      "durableSourceCount": 1,
+      "finalToolStatus": "completed",
+      "finalSourceCount": 0,
+      "toolContractSatisfied": true,
+      "sourceContractSatisfied": false,
+      "recovery": 0,
+      "original": "full_access-canonical-stages.json.gz"
+    },
+    {
+      "mode": "full_access",
+      "cut": "receipt-cut",
+      "executeCount": 1,
+      "durableSourceCount": 1,
+      "finalToolStatus": "error",
+      "finalSourceCount": 0,
+      "toolContractSatisfied": false,
+      "sourceContractSatisfied": false,
+      "recovery": 0,
+      "original": "full_access-receipt-cut-stages.json.gz"
+    },
+    {
+      "mode": "ask",
+      "cut": "canonical",
+      "executeCount": 1,
+      "durableSourceCount": 1,
+      "finalToolStatus": "completed",
+      "finalSourceCount": 0,
+      "toolContractSatisfied": true,
+      "sourceContractSatisfied": false,
+      "recovery": 1,
+      "original": "ask-canonical-stages.json.gz"
+    },
+    {
+      "mode": "ask",
+      "cut": "receipt-cut",
+      "executeCount": 1,
+      "durableSourceCount": 1,
+      "finalToolStatus": "error",
+      "finalSourceCount": 0,
+      "toolContractSatisfied": false,
+      "sourceContractSatisfied": false,
+      "recovery": 0,
+      "original": "ask-receipt-cut-stages.json.gz"
+    }
+  ],
+  "productionFixed": false,
+  "scope": "Actual ReadTool, permission APIs, database and recovery functions; explicit source-write fault or durable-result cut, not an operating-system crash or Provider/UI acceptance."
+}

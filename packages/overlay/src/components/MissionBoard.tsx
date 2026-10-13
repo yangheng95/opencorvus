@@ -340,6 +340,7 @@ export function MissionBoard(props: MissionBoardProps) {
       </header>
       <div class="mission-board__controls">
         <SearchField
+          clearable
           class="mission-board__search"
           inputRef={(element) => {
             searchInput = element
@@ -347,7 +348,6 @@ export function MissionBoard(props: MissionBoardProps) {
           value={search()}
           placeholder={t("mission_board.search_placeholder")}
           onValueChange={setSearch}
-          onClear={() => searchInput?.focus()}
         />
         <SelectControl<ProjectOption>
           class="mission-board__project-filter"

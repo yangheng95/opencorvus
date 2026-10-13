@@ -86,11 +86,11 @@ export function TreeArtifact(props: { payload: TreePayload; exportFiles?: () => 
     <ArtifactFrame payload={props.payload} exportFiles={props.exportFiles} title={props.payload.title} kind="Tree">
       <div class="msg-artifact-tree__toolbar">
         <SearchField
+          clearable
           value={filter()}
           placeholder={t("artifact.tree.search")}
           size="sm"
           onValueChange={setFilter}
-          onClear={() => setFilter("")}
         />
         <span>{t("artifact.tree.nodes", { count: visible().size })}</span>
       </div>

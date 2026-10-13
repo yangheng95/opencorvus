@@ -121,6 +121,15 @@ EngineInteraction 持久化；进程恢复复用同一 Request 创建时间与�
 
 ## 当前数据流
 
+`network.proxy.username/password` 保存原始非空字符串，包括外围空格和字面百分号。
+Network 保存/测试草稿和 Config schema 不裁剪认证字段；仅代理地址保留外围空白正规化。
+唯一 `authenticatedProxyUrl` 把原始身份分别编码一次后交给 URL userinfo，Bun fetch、
+Node Undici 与 BrowserRuntime 按同一 URL 合同解码。配置文件不存储预编码的身份。
+先前已裁剪并保存的字符无法恢复，需由用户重新输入。
+Network保存将清空的认证字段显式投影为merge patch的null，移除当前配置文件的旧值；
+独立连通测试仍使用省略空字段的完整草稿。删除项目覆盖保留既有全局继承语义，
+不等于关闭上层配置的认证。代理URL为空仍走原整项删除合同。
+
 ```
 opencorvus.jsonc ──→ Config.get() ──→ Zod 验证 + 层级合并 ──→ 带 source revision 的缓存
                       │

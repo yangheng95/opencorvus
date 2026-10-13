@@ -4,6 +4,15 @@
 > `src/bus/` · `src/decision-log/` · `src/storage/` · `src/workspace/workspace.sql.ts` ·
 > `src/control/control.sql.ts`
 
+## Source 事实的批次提交
+
+`persistMessageSources` 在同一 SQLite immediate transaction 内验证真实 Session/Message
+归属、读取该消息的规范 Source Parts，并按 `(type, sourceId)` 去重写入整批来源。
+`MessageStore.sourcePartsInTransaction` 复用规范 Part 校验，仅读取 Source 行；
+`Session.writePartInTransaction` 继续负责身份、顺序、终态准入与提交后事件。
+重复来源重放保留原事实，新增来源仍遵循已完成 Message 的不可变合同。
+Tool outcome、权限执行 receipt 与助手完成的既有生命周期不由这个 helper 改写。
+
 ## 运行时目录根
 
 Continuous goal（持续目标）与既有 Delivery Slice Goal（交付切片）是不同合同。
@@ -856,6 +865,17 @@ fact，可以复用；不得额外复制成 input manifest。
 后续长期文件 owner 是通用 `artifact_file_ref`，不是 attachment-only
 `attachment_ref`。在该表实施前，GC 仍可对 `/attachment/...` 嵌入引用做
 harvest。
+
+## Text file page boundaries
+
+The ordinary Read tool and both Skill supporting-file readers use one text-page
+collector for line limits, contiguous byte-bounded pages and complete file totals.
+Its long-line prefix stays within the existing 2000 UTF-16 code-unit budget and
+ends between complete code points: a boundary inside a valid surrogate pair moves
+back one code unit. The existing truncation notice and 50 KB page budget apply to
+that same prefix. Tool output and preview share it; file bytes, source identity and
+line ranges remain the original read facts. This does not promise grapheme-cluster
+boundaries or repair malformed source text.
 
 ## 相关文档
 

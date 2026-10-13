@@ -3,7 +3,25 @@
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。
 - [持续目标验收证据](../../artifacts/2026-10-13-continuous-goal-mode/README.md)：流式模型事实、Task 重开和桌面视觉复核。
 
+- [382 工具结果恢复断点](2026-10-13-source-result-recovery-382.md)：真实读取、持久化中断边界及共享恢复入口审计。
+
+- [用量自然周期、时间桶与控件生命周期](2026-10-13-usage-time-boundaries.md)：共享边界根因、正向统计合同和真实桌面验收。
+
+- [381 PDF 文档链接](2026-10-13-pdf-links-381.md)：注解投影、桌面点击和阅读位置调查。
+
+- [381 Sources 并发持久化](2026-10-13-source-persistence-381.md)：真实数据库重复复现、共享 writer 修复与实页复核。
+
+- [模型列表键盘前缀导航](2026-10-13-model-keyboard.md)：真实Tab/键入/Enter路径与身份保真。
+
+- [清除操作的焦点与保存语义](2026-10-13-clear-intent.md)：并行调查、全调用迁移和真实保存合同。
+
+- [文件完整字节的文本准入](2026-10-13-file-text-admission.md)：读取、保存错误合同与真实桌面复核。
+
 - [Composer 可见模型名称搜索](2026-10-13-composer-model-search.md)：根因、桌面交互与范围验证。
+
+- [持续迭代首批：代理认证原值](2026-10-13-iteration-proxy-credentials.md)：并行调查、设置草稿和代理认证的完整数据链。
+
+- [380 长行读取的 Unicode 边界](2026-10-13-text-unicode-boundary-380.md)：普通文件及技能附属文件的完整字符输出。
 
 - [379 网页转换链接目标](2026-10-13-source-link-base-379.md)：真实相对链接故障与最终网页地址解析。
 

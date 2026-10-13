@@ -1048,6 +1048,7 @@ export default function ProvidersPanel() {
             </Show>
           </div>
           <SearchField
+            clearable
             class="provider-search-field"
             inputDataUI="provider-search-input"
             inputDataTestID="provider-search-input"
@@ -1056,7 +1057,6 @@ export default function ProvidersPanel() {
             placeholder={t("provider.search.placeholder")}
             ariaLabel={t("provider.search.label")}
             onValueChange={setProviderSearch}
-            onClear={() => setProviderSearch("")}
             clearDataUI="provider-search-clear"
             clearDataTestID="provider-search-clear"
           />

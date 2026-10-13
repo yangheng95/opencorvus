@@ -15,6 +15,7 @@ import fuzzysort from "fuzzysort"
 import { Global } from "../global"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHash, randomUUID } from "node:crypto"
+import { isUtf8 } from "node:buffer"
 import { withKeyedLock } from "../util/lock"
 import { CROSS_PROCESS_LOCK_RETRY, SHARED_JSON_FACT_QUEUE_TIMEOUT_MS, withProcessLock } from "../util/process-lock"
 import { hostGit } from "../util/git"
@@ -873,6 +874,10 @@ export namespace File {
     return createHash("sha256").update(identity).update("\0").update(bytes).digest("hex")
   }
 
+  function isUtf8Text(bytes: Uint8Array): boolean {
+    return isUtf8(bytes) && !bytes.includes(0)
+  }
+
   async function readResolvedContent(file: string, full: string, identity?: string): Promise<Content> {
     await statReadableFile(file, full)
     await assertReadableFile(file, full)
@@ -906,6 +911,7 @@ export namespace File {
     }
 
     const bytes = await readFileBytes(file, full)
+    if (!isUtf8Text(bytes)) return { type: "binary", content: "" }
     const editable = identity !== undefined && !AttachmentStore.nameFromAbsolutePath(Instance.project.id, full)
     return {
       type: "text",
@@ -1003,10 +1009,17 @@ export namespace File {
             throw fileInvalidPath({ path: file, message: `Cannot edit read-only file: ${file}` })
           }
           if (current.revision !== expectedRevision) throw conflict()
-          await Filesystem.writeAtomic(currentPhysical, content, existing.mode & 0o777)
+          const bytes = Buffer.from(content, "utf8")
+          if (!isUtf8Text(bytes) || bytes.toString("utf8") !== content) {
+            throw fileInvalidPath({
+              path: file,
+              message: `Cannot save content as lossless UTF-8 text without null bytes: ${file}`,
+            })
+          }
+          await Filesystem.writeAtomic(currentPhysical, bytes, existing.mode & 0o777)
           await notifyEdited([file])
           // Describe this commit even when an external writer changes the file during notification.
-          return { type: "text" as const, content, revision: contentRevision(identity, Buffer.from(content, "utf8")) }
+          return { type: "text" as const, content, revision: contentRevision(identity, bytes) }
         }),
       SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
     )

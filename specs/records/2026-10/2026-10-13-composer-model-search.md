@@ -34,4 +34,4 @@ ProviderGroup.models 使用既有 ModelOption[]；唯一 connectedModelOptions �
 - 六张真实桌面截图在证据目录，已人工查看核心前后态、标识、Provider与选择结果。范围是 Windows 浏览器1280×720英文深色桌面；未声称验证原生 Tauri 或其他平台。
 - Overlay typecheck session15738 exit0；私有 build34210 exit0；renderer-surface、docs:check（345 operations/25 groups）、architecture-index（18 documents）、diff --check 均通过。构建保留现有 use-client/大chunk提示，不是视觉验收替代。
 - ui_audit 独立只读复核确认所有值/提交/check状态继续使用id，原排序与响应生命周期保持；未提出阻塞问题。
-- 当前未完成：范围提交与推送。其它任务后续增加代理配置及Unicode截断修改，仍排除在本批暂存范围外。
+- 交付完成：范围提交b3f5c6ad3，fresh fetch/merge origin/main后待推集合仅该提交。首次push因全局Bun1.3.14未满足1.4.0被hook拒绝；使用既有隔离Bun1.4.0重跑正常push，typecheck、routes/docs/control lease/architecture/package/release/module topology及secret scan全部通过，远端main确认b3f5c6ad38b18a125cc3ca8b3cad1e0b98be8554。没有改全局Bun或绕过hook。自己的两个页面关闭，18430/18431按/shutdown正常exit0；其余并行任务变更保留。

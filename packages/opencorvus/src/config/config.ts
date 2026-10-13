@@ -1379,8 +1379,8 @@ export namespace Config {
         .optional()
         .describe("Route websearch and webfetch HTTP requests through the configured HTTP(S) proxy"),
       url: z.string().trim().min(1).optional().describe("HTTP(S) proxy URL, e.g. http://127.0.0.1:7890"),
-      username: z.string().trim().min(1).optional().describe("Proxy authentication username"),
-      password: z.string().trim().min(1).optional().describe("Proxy authentication password"),
+      username: z.string().min(1).optional().describe("Proxy authentication username"),
+      password: z.string().min(1).optional().describe("Proxy authentication password"),
     })
     .strict()
     .superRefine((proxy, ctx) => {

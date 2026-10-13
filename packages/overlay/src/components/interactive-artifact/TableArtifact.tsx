@@ -69,11 +69,11 @@ export function TableArtifact(props: { payload: TablePayload }) {
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Table">
       <div class="msg-artifact-table__toolbar">
         <SearchField
+          clearable
           value={filter()}
           placeholder={t("artifact.table.search")}
           size="sm"
           onValueChange={setFilter}
-          onClear={() => setFilter("")}
         />
         <span>
           {t("artifact.table.rows", {

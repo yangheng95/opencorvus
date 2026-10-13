@@ -1,0 +1,44 @@
+[
+  {
+    "scope": "before",
+    "pid": 72116,
+    "birthUtc": "2026-10-13T06:04:13.8262147Z",
+    "processPresent": false,
+    "listeners": 0,
+    "observedAt": "2026-10-13T06:26:18.6165217Z",
+    "terminal": {
+      "reason": "Own pages closed after manual usage-review review",
+      "pid": 72116,
+      "elapsed": 221090,
+      "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+    }
+  },
+  {
+    "scope": "after",
+    "pid": 82940,
+    "birthUtc": "2026-10-13T06:22:41.2846769Z",
+    "processPresent": false,
+    "listeners": 0,
+    "observedAt": "2026-10-13T06:26:19.5076398Z",
+    "terminal": {
+      "reason": "Own pages closed after manual usage-review review",
+      "pid": 82940,
+      "elapsed": 132613,
+      "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+    }
+  },
+  {
+    "scope": "http-after",
+    "pid": 56904,
+    "birthUtc": "2026-10-13T06:25:02.3046745Z",
+    "processPresent": false,
+    "listeners": 0,
+    "observedAt": "2026-10-13T06:26:20.4159668Z",
+    "terminal": {
+      "reason": "Own pages closed after manual usage-review review",
+      "pid": 56904,
+      "elapsed": 68737,
+      "terminal": "Production process execution settled, listener stopped, runtime handoff released"
+    }
+  }
+]

@@ -3,7 +3,25 @@
 - [Chat、Task、Mission 持续目标模式](records/2026-10/2026-10-13-continuous-goal-mode.md)：现状、授权与轮次、预算合同、实施和验收。
 - [持续目标验收证据](artifacts/2026-10-13-continuous-goal-mode/README.md)：真实多轮、终态重开、用量与桌面截图。
 
+- [382 工具结果恢复断点](records/2026-10/2026-10-13-source-result-recovery-382.md)：两种授权模式的来源丢失与成功结果误判证据，生产修复待继续。
+
+- [用量自然周期、时间桶与控件生命周期](records/2026-10/2026-10-13-usage-time-boundaries.md)：半小时/午夜夏令时统计与连续键盘操作。
+
+- [381 PDF 文档链接](records/2026-10/2026-10-13-pdf-links-381.md)：共享阅读器的真实网页引用与内部目的地体验。
+
+- [381 Sources 并发持久化](records/2026-10/2026-10-13-source-persistence-381.md)：规范来源唯一性、消息归属与事务发布。
+
+- [模型列表键盘前缀导航](records/2026-10/2026-10-13-model-keyboard.md)：可见模型名称与键盘导航的一致性。
+
+- [清除操作的焦点与保存语义](records/2026-10/2026-10-13-clear-intent.md)：共享搜索控件和代理认证清空的真实前后复核。
+
+- [文件完整字节的文本准入](records/2026-10/2026-10-13-file-text-admission.md)：非法UTF-8与二进制可编辑风险的完整字节验证。
+
 - [Composer 可见模型名称搜索](records/2026-10/2026-10-13-composer-model-search.md)：真实名称搜索失败与单一选项投影修复。
+
+- [持续迭代首批：代理认证原值](records/2026-10/2026-10-13-iteration-proxy-credentials.md)：并行根因调查、原值保真与本地真实传输验收。
+
+- [380 长行读取的 Unicode 边界](records/2026-10/2026-10-13-text-unicode-boundary-380.md)：并行调查、完整字符输出与真实读取验证。
 
 - [379 网页转换链接目标](records/2026-10/2026-10-13-source-link-base-379.md)：保留原网页基址，修复网页引用误开本地文件。
 

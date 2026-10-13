@@ -1,4 +1,5 @@
 import { Identifier } from "@/id/id"
+import { Database } from "@/storage/db"
 import { Session } from "."
 import { Message } from "./message"
 import { MessageStore } from "./message-store"
@@ -10,25 +11,25 @@ export async function persistMessageSources(input: {
   sources: readonly unknown[]
 }): Promise<Message.SourcePart[]> {
   const payloads = input.sources.map((source) => Message.SourcePayload.parse(source))
-  const existingSources = new Set(
-    (await MessageStore.parts(input.messageID)).flatMap((part) =>
-      part.type === "source-url" || part.type === "source-document" || part.type === "source-file"
-        ? [`${part.type}\0${part.sourceId}`]
-        : [],
-    ),
-  )
-  const created: Message.SourcePart[] = []
-  for (const source of payloads) {
-    const key = `${source.type}\0${source.sourceId}`
-    if (existingSources.has(key)) continue
-    const persisted = await Session.updatePart({
-      ...source,
-      id: Identifier.ascending("part"),
-      sessionID: input.sessionID,
-      messageID: input.messageID,
-    })
-    created.push(persisted as Message.SourcePart)
-    existingSources.add(key)
-  }
-  return created
+  // Reserve the SQLite writer before reading identities, including across
+  // separate permission continuations. Publication follows the same commit.
+  return Database.immediateTransaction((db) => {
+    const existingSources = new Set(
+      MessageStore.sourcePartsInTransaction(db, input).map((part) => `${part.type}\0${part.sourceId}`),
+    )
+    const created: Message.SourcePart[] = []
+    for (const source of payloads) {
+      const key = `${source.type}\0${source.sourceId}`
+      if (existingSources.has(key)) continue
+      const { outputPart } = Session.writePartInTransaction(db, {
+        ...source,
+        id: Identifier.ascending("part"),
+        sessionID: input.sessionID,
+        messageID: input.messageID,
+      })
+      created.push(outputPart as Message.SourcePart)
+      existingSources.add(key)
+    }
+    return created
+  })
 }

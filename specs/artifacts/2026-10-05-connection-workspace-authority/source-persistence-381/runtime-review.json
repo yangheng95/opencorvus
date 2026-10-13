@@ -1,0 +1,58 @@
+{
+  "completedSourceFacts": [
+    {
+      "messageID": "msg_g0VXuGBrQ008b3rBwNOA",
+      "toolRequestID": "prt_g0VXuGHZw00oEFDFmO82",
+      "sourceID": "prt_g0VXuGHx600AAOEzD0c7",
+      "sourceIdentity": "b0b4d28a002d2455c35eb2a9b5b78600939a8f5af21f6392b8bd50eda2111431",
+      "title": "Example Domain",
+      "url": "https://example.com/"
+    },
+    {
+      "messageID": "msg_g0VXuGI1a00hVwmOpHni",
+      "toolRequestID": "prt_g0VXuGMVK00KhOmDE9Qp",
+      "sourceID": "prt_g0VXuGMiv00oFvA7eQV5",
+      "sourceIdentity": "b0b4d28a002d2455c35eb2a9b5b78600939a8f5af21f6392b8bd50eda2111431",
+      "title": "Example Domain",
+      "url": "https://example.com/"
+    },
+    {
+      "messageID": "msg_g0VXuGgrd00TQrmHSQkI",
+      "toolRequestID": "prt_g0VXuGjOe00VYCHkacrq",
+      "sourceID": "prt_g0VXuGjkP00k60LwfIWk",
+      "sourceIdentity": "b0b4d28a002d2455c35eb2a9b5b78600939a8f5af21f6392b8bd50eda2111431",
+      "title": "Example Domain",
+      "url": "https://example.com/"
+    }
+  ],
+  "requestedWebfetchCalls": 4,
+  "actualCompletedWebfetchCalls": 3,
+  "fullQualification": false,
+  "actualLauncherExit": 1,
+  "qualificationError": "OWNED_PROVIDER_COMPLETION_INVALID",
+  "providerBudget": 12,
+  "providerRequests": 12,
+  "providerExhausted": true,
+  "requestAgents": {
+    "memory": 4,
+    "chat": 1,
+    "work": 7
+  },
+  "actualAssistantErrors": [
+    {
+      "id": "msg_g0VXuGjwX00wR4wjX9uJ",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Error: E2E_REQUEST_BUDGET_EXHAUSTED"
+        }
+      }
+    }
+  ],
+  "nativeMilliseconds": 310253,
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "pairedCleanupComplete": true,
+  "boundary": "Backend canonical data and actual runtime checker only; screenshots and navigation were reviewed manually. Same-step two-call end-to-end remains unmet after the fixed cumulative request budget was reached."
+}

@@ -1801,6 +1801,8 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact-pdf__page {
+  --scale-round-x: 1px;
+  --scale-round-y: 1px;
   position: relative;
   width: max-content;
   margin-inline: auto;
@@ -1812,10 +1814,50 @@ button.msg-source-chip .msg-source-chip__filename {
   box-shadow: var(--shadow-md);
 }
 
-/* PDF.js TextLayer positions transparent text over its page canvas. */
+/* PDF.js places link annotations over the same page canvas and text. */
+.msg-artifact-pdf__annotations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transform-origin: 0 0;
+  z-index: 2;
+}
+
+.msg-artifact-pdf__annotations section {
+  position: absolute;
+  text-align: initial;
+  pointer-events: auto;
+  box-sizing: border-box;
+  transform-origin: 0 0;
+  user-select: none;
+}
+
+.msg-artifact-pdf__annotations .linkAnnotation > a {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+.msg-artifact-pdf__annotations .linkAnnotation > a:is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.msg-artifact-pdf__annotations[data-main-rotation="90"] .norotate {
+  transform: rotate(270deg) translateX(-100%);
+}
+
+.msg-artifact-pdf__annotations[data-main-rotation="180"] .norotate {
+  transform: rotate(180deg) translate(-100%, -100%);
+}
+
+.msg-artifact-pdf__annotations[data-main-rotation="270"] .norotate {
+  transform: rotate(90deg) translateY(-100%);
+}
+
 .msg-artifact-pdf__text-layer {
-  --scale-round-x: 1px;
-  --scale-round-y: 1px;
   position: absolute;
   inset: 0;
   overflow: clip;
@@ -1859,15 +1901,18 @@ button.msg-source-chip .msg-source-chip__filename {
   background: transparent;
 }
 
-.msg-artifact-pdf__text-layer[data-main-rotation="90"] {
+.msg-artifact-pdf__text-layer[data-main-rotation="90"],
+.msg-artifact-pdf__annotations[data-main-rotation="90"] {
   transform: rotate(90deg) translateY(-100%);
 }
 
-.msg-artifact-pdf__text-layer[data-main-rotation="180"] {
+.msg-artifact-pdf__text-layer[data-main-rotation="180"],
+.msg-artifact-pdf__annotations[data-main-rotation="180"] {
   transform: rotate(180deg) translate(-100%, -100%);
 }
 
-.msg-artifact-pdf__text-layer[data-main-rotation="270"] {
+.msg-artifact-pdf__text-layer[data-main-rotation="270"],
+.msg-artifact-pdf__annotations[data-main-rotation="270"] {
   transform: rotate(270deg) translateX(-100%);
 }
 

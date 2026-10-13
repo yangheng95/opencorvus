@@ -369,11 +369,11 @@ function SnapshotArtifactView(props: {
         </div>
         <div class="conversation-artifact-inspector__toolbar">
           <SearchField
+            clearable
             value={query()}
             size="sm"
             placeholder={t("chat.artifacts.search_resources")}
             onValueChange={setQuery}
-            onClear={() => setQuery("")}
           />
           <span>{t("chat.artifacts.resource_total", { count: filteredResources().length })}</span>
         </div>

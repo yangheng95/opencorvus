@@ -1,0 +1,48 @@
+Browser tab: 6, Title: "OpenCorvus", URL: "http://127.0.0.1:18573/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 63-77, 88-104, 110-115
++								88 container Usage summary
++									89 container 0
++										90 text 0
++										91 text Total Token
++									92 container
++										93 text 0 Peak interval
++									94 container $0
++										95 text $0
++										96 text Calculated cost
++									97 container
++										98 text 0 API calls
++									99 container
++										100 text — Pricing coverage
++								101 container API event time
++									102 text Oct 1, 2026 – Oct 31, 2026 Asia/Shanghai Even with previous period
+~										85 checkbox This month, Value: 1, ID: group-cl-228-item-cl-231
+~										86 checkbox This year, Value: 0, ID: group-cl-228-item-cl-232
++									103 container Token activity heatmap
++									104 text Completed streamed API calls will appear here at their actual event time.
+~									106 heading Activity insights, Value: 2
+~										107 text Activity insights
+~									108 text 0 Token per call
+~									109 text Input 0 Output 0 Reasoning 0 Cache 0
++									110 definition list
++										111 container Priced Token
++											112 text Priced Token
++										113 text 0
++										114 container Unpriced Token
++											115 text Unpriced Token
++										116 text 0
++										117 container Legacy unknown
++											118 text Legacy unknown
++										119 text 0
++								120 container
++									121 heading Providers, Value: 2
++										122 text Providers
++									123 text Measured Token share by Provider.
++									124 text 0 No Provider usage for this period.
++								125 text Cost is calculated from the model rate stored at call time. Unpriced and legacy-unknown Token are never presented as confirmed free usage.
++								126 button (collapsed) Secondary Actions: Expand, Official sources & reconciliation Provider-issued organization usage, financial ledgers, account credits, and cloud control-plane coverage. Compare, never sum
++									127 heading Official sources & reconciliation, Value: 2
++										128 text Official sources & reconciliation
++									129 text Provider-issued organization usage, financial ledgers, account credits, and cloud control-plane coverage.
++									130 text Compare, never sum
+The focused UI element is 85 checkbox This month, Value: 1, ID: group-cl-228-item-cl-231

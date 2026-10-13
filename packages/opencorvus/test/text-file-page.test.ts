@@ -5,6 +5,9 @@ import { Instance } from "../src/project/instance"
 import { Skill } from "../src/skill/skill"
 import { SkillTool, MissionSkillTool } from "../src/tool/skill"
 import { Tool } from "../src/tool/tool"
+import { ReadTool } from "../src/tool/read"
+import { Session } from "../src/session"
+import { resolveSessionExecutionAuthority } from "../src/engine/task-session-lineage"
 import { readTextFilePage, readTextFilePageContent, renderTextFilePage } from "../src/tool/text-file"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -90,6 +93,59 @@ test("out-of-range errors report the actual complete file length", async () => {
   )
 }, 30_000)
 
+test.each([
+  ["split-pair", "a".repeat(1999) + "🙂tail", "a".repeat(1999)],
+  ["complete-pair", "a".repeat(1998) + "🙂tail", "a".repeat(1998) + "🙂"],
+  ["later-pair", "a".repeat(2000) + "🙂tail", "a".repeat(2000)],
+  ["exact-limit", "a".repeat(1998) + "🙂", "a".repeat(1998) + "🙂"],
+  ["supplementary-cjk", "中".repeat(1999) + "𠮷野", "中".repeat(1999)],
+] as const)("%s file pages retain complete characters at the line budget", async (name, content, prefix) => {
+  await using project = await memoryProject()
+  const file = path.join(project.path, name + ".txt")
+  await fs.writeFile(file, content)
+  const expected = prefix + (content.length > 2000 ? "... (line truncated to 2000 chars)" : "")
+  for (const page of [await readTextFilePage(file, {}), readTextFilePageContent(content, {})]) {
+    expect(page.raw).toEqual([expected])
+    expect(Buffer.from(page.raw[0], "utf8").toString("utf8")).toBe(expected)
+    expect(renderTextFilePage(page)).toBe(`1: ${expected}\n\n(End of file - total 1 lines)`)
+  }
+}, 30_000)
+
+test("supplementary characters preserve the contiguous byte-capped page", async () => {
+  await using project = await memoryProject()
+  const file = path.join(project.path, "supplementary.txt")
+  const line = "🙂".repeat(999) + "a🙂tail"
+  const content = Array(20).fill(line).join("\n")
+  const expected = "🙂".repeat(999) + "a... (line truncated to 2000 chars)"
+  await fs.writeFile(file, content)
+  for (const page of [await readTextFilePage(file, {}), readTextFilePageContent(content, {})]) {
+    expect(page).toMatchObject({ raw: Array(12).fill(expected), lines: 12, totalLines: 20, nextOffset: 13, truncatedByBytes: true })
+  }
+  expect((await readTextFilePage(file, { offset: 13 })).raw).toEqual(Array(8).fill(expected))
+}, 30_000)
+
+test("Read publishes the exact complete-character prefix in its output and preview", async () => {
+  await using project = await memoryProject()
+  const file = path.join(project.path, "read-unicode.txt")
+  await fs.writeFile(file, "a".repeat(1999) + "🙂tail")
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const session = await Session.create({ kind: "assistant", title: "Unicode read contract" })
+    const context: Tool.Context = {
+      sessionID: session.id, messageID: "message_unicode_read", agent: "coding",
+      abort: new AbortController().signal, messages: [],
+      executionAuthority: await resolveSessionExecutionAuthority({
+        sessionID: session.id, projectID: Instance.project.id, expected: { kind: "conversation" },
+      }),
+      executionSurface: Tool.executionSurface(["read"], []), metadata() {},
+    }
+    const result = await (await ReadTool.init()).execute({ filePath: file }, context)
+    const expected = "a".repeat(1999) + "... (line truncated to 2000 chars)"
+    expect(result.metadata).toMatchObject({ preview: expected, lines: 1, totalLines: 1, readType: "text" })
+    expect(result.output).toBe(`<path>${file}</path>\n<type>file</type>\n<content>1: ${expected}\n\n(End of file - total 1 lines)\n</content>`)
+    expect(result.sources![0]).toMatchObject({ type: "source-file", path: file, provider: "opencorvus-read" })
+  } })
+}, 30_000)
+
 test.each(["production", "mission"] as const)(
   "%s Skill tool publishes actual file totals and tail content",
   async (family) => {
@@ -102,6 +158,7 @@ test.each(["production", "mission"] as const)(
     const location = path.join(directory, "SKILL.md")
     await fs.writeFile(location, "---\nname: page-contract\ndescription: Text page contract\n---\nRead support.txt.\n")
     await fs.writeFile(path.join(directory, "support.txt"), lines.join("\n"))
+    await fs.writeFile(path.join(directory, "unicode.txt"), "a".repeat(1999) + "🙂tail")
     await Instance.provide({
       directory: project.path,
       fn: async () => {
@@ -137,6 +194,10 @@ test.each(["production", "mission"] as const)(
         const tail = await tool.execute({ name: skill.name, file: "support.txt", offset: 301 }, context)
         expect(tail.metadata).toMatchObject({ lines: 1, totalLines: 301, truncated: false })
         expect(tail.output).toContain("301: END-OF-SUPPORT\n\n(End of file - total 301 lines)")
+        const unicode = await tool.execute({ name: skill.name, file: "unicode.txt" }, context)
+        const expected = "a".repeat(1999) + "... (line truncated to 2000 chars)"
+        expect(unicode.metadata).toMatchObject({ preview: expected, lines: 1, totalLines: 1 })
+        expect(unicode.output).toBe(`<skill_file name="page-contract" path="unicode.txt">\n1: ${expected}\n\n(End of file - total 1 lines)\n</skill_file>`)
       },
     })
   },

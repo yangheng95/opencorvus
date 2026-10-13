@@ -48,10 +48,10 @@ export default function ReleaseNotesPanel() {
           <>
             <div class="release-notes-toolbar">
               <SearchField
+                clearable
                 value={query()}
                 placeholder={t("releases.search")}
                 onValueChange={setQuery}
-                onClear={() => setQuery("")}
                 size="md"
               />
               <Button variant="outline" size="sm" tone="neutral" onClick={() => select(installed)}>
