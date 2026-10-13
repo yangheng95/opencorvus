@@ -1,0 +1,28 @@
+[
+  {
+    "url": "https://unpkg.com/venice-ai-sdk-provider@2.1.1/dist/index.mjs",
+    "version": "2.1.1",
+    "configExcerpts": [
+      "includeUsage:!0}:void 0},{responseHeaders:n,value:a}=await Qd({url:this.config.url({path",
+      "includeUsage:t.includeUsage,supportsStructuredOutputs:t.supportsStructuredOutputs,metada",
+      "includeUsage:t.includeUsage}),c.imageModel=u=>new dg(u,e(\"image\")),c.embeddingModel=u=>n"
+    ],
+    "requestExcerpts": [
+      "stream_options:e.streamOptions,stop:r.stopSequences,stop_token_ids:e.stopTokenIds,seed:r.seed,temperature:r.temperature,max_temp:e.maxTemp,min_temp:e.minTemp,top_p:r.topP,min_p:e.minP,top_k:r.topK,fre",
+      "stream_options:this.config.includeUsage?{includeUsage:!0}:void 0},{responseHeaders:n,value:a}=await Qd({url:this.config.url({path:\"/chat/completions\",modelId:this.modelId}),headers:Hd(this.config.head"
+    ]
+  },
+  {
+    "url": "https://unpkg.com/venice-ai-sdk-provider@2.2.0/dist/index.mjs",
+    "version": "2.2.0",
+    "configExcerpts": [
+      "includeUsage:h.boolean()}).optional(),user:h.string().optional(),structuredOutputs:h.boo",
+      "includeUsage:e.includeUsage,supportsStructuredOutputs:e.supportsStructuredOutputs,metada",
+      "includeUsage:e.includeUsage}),u.imageModel=c=>new n_(c,t(\"image\")),u.embeddingModel=c=>n"
+    ],
+    "requestExcerpts": [
+      "stream_options:t.streamOptions==null?void 0:{include_usage:t.streamOptions.includeUsage},stop:n.stopSequences,stop_token_ids:t.stopTokenIds,seed:n.seed,temperature:n.temperature,max_temp:t.maxTemp,min",
+      "stream_options:i.stream_options??(this.config.includeUsage?{include_usage:!0}:void 0)},{responseHeaders:r,value:a}=await Wp({url:this.config.url({path:\"/chat/completions\",modelId:this.modelId}),header"
+    ]
+  }
+]

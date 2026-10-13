@@ -373,6 +373,7 @@
     "@codemirror/merge@6.12.2": "patches/@codemirror%2Fmerge@6.12.2.patch",
     "@kobalte/core@0.13.11": "patches/@kobalte%2Fcore@0.13.11.patch",
     "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
+    "venice-ai-sdk-provider@2.0.2": "patches/venice-ai-sdk-provider@2.0.2.patch",
   },
   "overrides": {
     "@ai-sdk/cerebras": "3.0.68",

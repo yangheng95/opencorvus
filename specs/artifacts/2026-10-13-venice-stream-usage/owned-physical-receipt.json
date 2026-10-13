@@ -1,0 +1,53 @@
+{
+  "processes": [
+    {
+      "liveCount": 0,
+      "pid": 71720
+    },
+    {
+      "liveCount": 0,
+      "pid": 65328
+    },
+    {
+      "liveCount": 0,
+      "pid": 80028
+    },
+    {
+      "liveCount": 0,
+      "pid": 83936
+    },
+    {
+      "liveCount": 0,
+      "pid": 69424
+    },
+    {
+      "liveCount": 0,
+      "pid": 81624
+    }
+  ],
+  "ownedPorts": [
+    {
+      "listenCount": 0,
+      "port": 18573
+    },
+    {
+      "listenCount": 0,
+      "port": 59491
+    },
+    {
+      "listenCount": 0,
+      "port": 56989
+    }
+  ],
+  "observedUtc": "2026-10-13T10:34:27.8360408Z",
+  "nativeProbeExit": {
+    "before2": 0,
+    "after2": 0,
+    "before1": 0,
+    "after1": 0
+  },
+  "originalPageExecExit": {
+    "after": 0,
+    "before": 0
+  }
+}

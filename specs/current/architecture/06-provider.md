@@ -234,6 +234,15 @@ Provider 在首次异步边界前冻结复制该上下文；携带上下文的�
 ProviderLLM 中间件使用 V4。SDK 官方原生接收 V3 模型，因此现有 Copilot/Venice
 适配器仍通过这一入口，不新增 host 兼容实现或第二套依赖图。
 
+Venice 的当前 bundled 2.0.2 适配器通过根 `patchedDependencies` 的单一可读补丁交付，
+ESM（ECMAScript Modules，模块导入）与 CJS（CommonJS，模块导入）入口保持相同合同。
+聊天流默认发送 `stream_options.include_usage:true`，显式 constructor false 保留，
+per-call `streamOptions.includeUsage` 优先于 constructor，并映射到协议 snake 字段。
+适配器把 prompt 作为输入总量，cache-read/cache-creation 从 no-cache 输入中扣除；
+reasoning 从 completion 文本中拆出，并由响应 schema 保留。SDK 只相加一次输入/输出总量。
+修复位于唯一适配器，不在 Session、Provider factory 或统计层按厂商改数；历史账本缺少
+原始详细 usage，继续保留已记录事实，不推测重算。
+
 `outputTokens` 是包含 reasoning 的输出总量。持久化的 `tokens.output` 只保存 text
 output，`tokens.reasoning` 单独保存 reasoning，因此成本与总量都只能各计一次。
 输入总量同理以 Provider total 为权威；当特定 Provider family 不返回 total 时才由

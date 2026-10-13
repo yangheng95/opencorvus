@@ -1,0 +1,14 @@
+[1/1] START test/instance-background-shutdown.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a process gate cancels background work and retains the foreground owner until retry settlement [1879.92ms]
+(pass) listener shutdown cancels 1 serial Project owners and joins physical cleanup [2836.99ms]
+(pass) listener shutdown cancels 2 serial Project owners and joins physical cleanup [3186.48ms]
+(pass) listener shutdown cancels 2 parallel Project owners and joins physical cleanup [3154.75ms]
+
+ 4 pass
+ 0 fail
+ 23 expect() calls
+Ran 4 tests across 1 file. [16.07s]
+[1/1] DONE test/instance-background-shutdown.test.ts exit=0 duration=16.72s

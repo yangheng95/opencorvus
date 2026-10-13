@@ -1,0 +1,64 @@
+[1/3] START test/usage/venice-stream-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(fail) registry-esm: default reporting preserves the official total [63355.24ms]
+  ^ this test timed out after 30000ms.
+
+# Unhandled error between tests
+-------------------------------
+1240 |                   `activities=${lease.activities.size}:closing=${String(lease.closing)}`,
+1241 |                 settled: lease.closedSignal,
+1242 |               })),
+1243 |             ),
+1244 |           inactivityTimeoutMilliseconds,
+1245 |           inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+                                              ^
+InstanceSettlementInactivityError: Instance settlement made no progress for 60000ms; active authorities: instance:c:\users\hengu\appdata\local\temp\opencorvus-test-run-pptkak\test-80516-vhop0q\fixtures\memory-p6clag:serving:activities=0:closing=false
+     labels: [ "instance:c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-pptkak\\test-80516-vhop0q\\fixtures\\memory-p6clag:serving:activities=0:closing=false" ],
+ inactivityTimeoutMilliseconds: 60000,
+
+      at inactivityError (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1245:40)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\runtime\execution-settlement.ts:50:32)
+-------------------------------
+
+(fail) registry-esm: input cache and output reasoning are exclusive components [61625.79ms]
+  ^ this test timed out after 30000ms.
+
+# Unhandled error between tests
+-------------------------------
+1240 |                   `activities=${lease.activities.size}:closing=${String(lease.closing)}`,
+1241 |                 settled: lease.closedSignal,
+1242 |               })),
+1243 |             ),
+1244 |           inactivityTimeoutMilliseconds,
+1245 |           inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+                                              ^
+InstanceSettlementInactivityError: Instance settlement made no progress for 60000ms; active authorities: instance:c:\users\hengu\appdata\local\temp\opencorvus-test-run-pptkak\test-80516-vhop0q\fixtures\memory-qeqt5j:serving:activities=0:closing=false
+     labels: [ "instance:c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-pptkak\\test-80516-vhop0q\\fixtures\\memory-qeqt5j:serving:activities=0:closing=false" ],
+ inactivityTimeoutMilliseconds: 60000,
+
+      at inactivityError (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1245:40)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\runtime\execution-settlement.ts:50:32)
+-------------------------------
+
+(fail) registry-esm: per-call reporting overrides the provider setting [61488.87ms]
+  ^ this test timed out after 30000ms.
+
+# Unhandled error between tests
+-------------------------------
+1240 |                   `activities=${lease.activities.size}:closing=${String(lease.closing)}`,
+1241 |                 settled: lease.closedSignal,
+1242 |               })),
+1243 |             ),
+1244 |           inactivityTimeoutMilliseconds,
+1245 |           inactivityError: (labels) => new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+                                              ^
+InstanceSettlementInactivityError: Instance settlement made no progress for 60000ms; active authorities: instance:c:\users\hengu\appdata\local\temp\opencorvus-test-run-pptkak\test-80516-vhop0q\fixtures\memory-gz2h1k:serving:activities=0:closing=false
+     labels: [ "instance:c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-pptkak\\test-80516-vhop0q\\fixtures\\memory-gz2h1k:serving:activities=0:closing=false" ],
+ inactivityTimeoutMilliseconds: 60000,
+
+      at inactivityError (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1245:40)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\runtime\execution-settlement.ts:50:32)
+-------------------------------
+

@@ -1,0 +1,255 @@
+[1/1] START test/usage/venice-stream-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
+    "stream": true,
+-   "stream_options": {
+-     "include_usage": true,
+-   },
+  }
+
+- Expected  - 3
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) registry-esm: default reporting preserves the official total [3495.48ms]
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
+    "stream": true,
+    "stream_options": {
+-     "include_usage": true,
++     "includeUsage": true,
+    },
+  }
+
+- Expected  - 1
++ Received  + 7
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) registry-esm: input cache and output reasoning are exclusive components [3255.34ms]
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
++   "n": 1,
+    "stream": true,
+-   "stream_options": {
+-     "include_usage": true,
++   "venice_parameters": {
++     "include_venice_system_prompt": false,
+    },
+  }
+
+- Expected  - 2
++ Received  + 9
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) registry-esm: per-call reporting overrides the provider setting [3720.94ms]
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
++   "n": 1,
+    "stream": true,
+    "stream_options": {
+-     "include_usage": false,
++     "includeUsage": true,
++   },
++   "venice_parameters": {
++     "include_venice_system_prompt": false,
+    },
+  }
+
+- Expected  - 1
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) registry-esm: an explicit per-call false is sent as the protocol value [3038.47ms]
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
+    "stream": true,
+-   "stream_options": {
+-     "include_usage": true,
+-   },
+  }
+
+- Expected  - 3
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) published-commonjs: default reporting preserves the official total [2408.42ms]
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
+    "stream": true,
+    "stream_options": {
+-     "include_usage": true,
++     "includeUsage": true,
+    },
+  }
+
+- Expected  - 1
++ Received  + 7
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) published-commonjs: input cache and output reasoning are exclusive components [2225.04ms]
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
++   "n": 1,
+    "stream": true,
+-   "stream_options": {
+-     "include_usage": true,
++   "venice_parameters": {
++     "include_venice_system_prompt": false,
+    },
+  }
+
+- Expected  - 2
++ Received  + 9
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) published-commonjs: per-call reporting overrides the provider setting [2142.89ms]
+124 |                 ? { providerOptions: { [model.providerID]: { streamOptions: { includeUsage: scenario.callUsage } } } }
+125 |                 : {}),
+126 |             })
+127 |             expect(await result.text).toBe("Owned protocol result")
+128 |             expect(packets).toHaveLength(1)
+129 |             expect(packets[0]).toMatchObject({
+                                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "messages": [
++     {
++       "content": "Measure the declared local protocol input",
++       "role": "user",
++     },
++   ],
+    "model": "exact-protocol-model",
++   "n": 1,
+    "stream": true,
+    "stream_options": {
+-     "include_usage": false,
++     "includeUsage": true,
++   },
++   "venice_parameters": {
++     "include_venice_system_prompt": false,
+    },
+  }
+
+- Expected  - 1
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts:129:32)
+(fail) published-commonjs: an explicit per-call false is sent as the protocol value [2224.87ms]
+
+ 0 pass
+ 8 fail
+ 24 expect() calls
+Ran 8 tests across 1 file. [29.24s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts
+[1/1] DONE test/usage/venice-stream-contract.test.ts exit=1 duration=30.28s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\usage\venice-stream-contract.test.ts

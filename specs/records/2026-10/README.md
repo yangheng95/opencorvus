@@ -10,6 +10,8 @@
 
 - [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389.md)：原生全屏之外的菜单宿主与后续分析。
 
+- [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage.md)：协议、取消根因与横向验收。
+
 - [上下文压缩压力测试](2026-10-13-compaction-stress.md)：研究、投影根因、真实模型与原始证据保留验收。
 
 - [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。

@@ -1,0 +1,80 @@
+[1/4] START test/instance-background-shutdown.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) listener shutdown cancels 1 serial Project owners and joins physical cleanup [3350.59ms]
+(pass) listener shutdown cancels 2 serial Project owners and joins physical cleanup [3006.75ms]
+(pass) listener shutdown cancels 2 parallel Project owners and joins physical cleanup [2738.92ms]
+
+ 3 pass
+ 0 fail
+ 15 expect() calls
+Ran 3 tests across 1 file. [14.35s]
+[1/4] DONE test/instance-background-shutdown.test.ts exit=0 duration=15.03s
+[2/4] START test/instance-background-work.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance background work > retains the source fault diagnostic after owner cancellation and joins physical cleanup [1651.16ms]
+(pass) instance background work > retains the same text fault diagnostic after owner cancellation and joins physical cleanup [1896.06ms]
+(pass) instance background work > retains the instance admission fault diagnostic after owner cancellation and joins physical cleanup [1506.84ms]
+(pass) instance background work > retains the database admission fault diagnostic after owner cancellation and joins physical cleanup [1243.37ms]
+(pass) instance background work > retains the mixed fault diagnostic after owner cancellation and joins physical cleanup [1289.92ms]
+(pass) instance background work > retains the cleanup fault diagnostic after owner cancellation and joins physical cleanup [1313.09ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1276.91ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1278.20ms]
+(pass) instance background work > settles exact external owner reason external primitive after complete unwind [1716.53ms]
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [3389.85ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [1728.95ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [1878.57ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [1623.04ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [1600.66ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1622.65ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [1672.60ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1503.88ms]
+
+ 17 pass
+ 0 fail
+ 41 expect() calls
+Ran 17 tests across 1 file. [29.01s]
+[2/4] DONE test/instance-background-work.test.ts exit=0 duration=29.15s
+[3/4] START test/runtime-execution-settlement.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime execution settlement authority > fences and cancels Task activation before Session prompt settlement, then admits rollback [220.58ms]
+(pass) runtime execution settlement authority > returns shutdown cancellation and admits a successor after owner release [0.81ms]
+(pass) runtime execution settlement authority > reports the exact active Instance authority and converges on the same settlement gate [2138.01ms]
+(pass) runtime execution settlement authority > publishes terminal protocol evidence while an owned execution is being terminated [1.81ms]
+(pass) runtime execution settlement authority > classifies a wake rejected by the production server settlement reason [1.23ms]
+(pass) runtime execution settlement authority > cancels an unfinished protocol subscriber after terminal facts are fenced [1.13ms]
+(pass) runtime execution settlement authority > bounds Project Git lock inactivity and admits settlement after the held lifecycle exits [63.64ms]
+(pass) runtime execution settlement authority > retains process occurrence across protocol inactivity and converges after late settlement [51.61ms]
+(pass) runtime execution settlement authority > cancels the physical owner and settles the gate after the owner exits [0.43ms]
+(pass) runtime execution settlement authority > returns the typed admission error while a settlement phase owns the kind [0.15ms]
+(pass) runtime execution settlement authority > reopens admission under the same gate token and starts the registered durable rescan [0.23ms]
+(pass) runtime execution settlement authority > restores every owned admission and reports an aggregate when one reopen listener fails [0.46ms]
+(pass) runtime execution settlement authority > drains existing database lifecycle effects then returns a typed error until admission reopens [1.18ms]
+(pass) runtime execution settlement authority > rejects a Protocol append before insertion while database settlement owns new access [1494.70ms]
+(pass) runtime execution settlement authority > blocks late Instance creation with a typed error and admits a fresh owner after handoff release [1050.58ms]
+(pass) runtime execution settlement authority > settles a durable Session wake loop before the runtime gate releases ownership [1563.91ms]
+(pass) runtime execution settlement authority > bounds a held Message bridge lifecycle and retains the process occurrence after late settlement [175.52ms]
+
+ 17 pass
+ 0 fail
+ 32 expect() calls
+Ran 17 tests across 1 file. [8.66s]
+[3/4] DONE test/runtime-execution-settlement.test.ts exit=0 duration=8.92s
+[4/4] START test/process-shutdown-task-lifecycle.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) hands off active occurrences in a mixed lifecycle batch across two Projects [3802.74ms]
+(pass) real listener shutdown settles a terminal Task Prompt tail and retains its completed occurrence [1798.97ms]
+(pass) real listener shutdown publishes pending Question abandonments across two Projects before protocol admission closes [3080.53ms]
+
+ 3 pass
+ 0 fail
+ 8 expect() calls
+Ran 3 tests across 1 file. [10.63s]
+[4/4] DONE test/process-shutdown-task-lifecycle.test.ts exit=0 duration=10.88s

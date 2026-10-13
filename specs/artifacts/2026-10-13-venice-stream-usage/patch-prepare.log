@@ -1,0 +1,13 @@
+bun patch v1.4.0 (34cbb9a40)
+Resolving dependencies
+Resolved, downloaded and extracted [8]
+
+Checked 1668 installs across 1914 packages (no changes) [531.00ms]
+
+To patch venice-ai-sdk-provider, edit the following folder:
+
+  node_modules/venice-ai-sdk-provider
+
+Once you're done with your changes, run:
+
+  bun patch --commit 'node_modules/venice-ai-sdk-provider'

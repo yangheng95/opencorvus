@@ -1,0 +1,125 @@
+import fs from "node:fs/promises"
+import path from "node:path"
+
+const root = path.resolve(process.argv[2]!)
+const projectCount = Number(process.argv[3])
+if (![1, 2].includes(projectCount)) throw new Error("The probe requires one or two owned projects")
+const { declareNativeTaskProcessDeployment } = await import("../packages/opencorvus/src/runtime/task-process-deployment")
+declareNativeTaskProcessDeployment()
+const { Instance, runInstanceBackgroundWork } = await import("../packages/opencorvus/src/project/instance")
+const { Server } = await import("../packages/opencorvus/src/server/server")
+const { Database } = await import("../packages/opencorvus/src/storage/db")
+const { Log } = await import("../packages/opencorvus/src/util/log")
+const { RuntimeExecutionSettlement } = await import("../packages/opencorvus/src/runtime/execution-settlement")
+const { SessionPromptState } = await import("../packages/opencorvus/src/session/prompt/state")
+await Log.init({ print: false })
+const events: unknown[] = []
+const write = async (event: Record<string, unknown>) => {
+  const row = structuredClone({ time: new Date().toISOString(), ...event })
+  events.push(row)
+  await fs.writeFile(path.join(root, "observations.json"), JSON.stringify(events, null, 2))
+  console.log(JSON.stringify(row))
+}
+const controls = Array.from({ length: projectCount }, () => new AbortController())
+const signals: AbortSignal[] = []
+const completions: Promise<void>[] = []
+const identities: string[] = []
+const directories: string[] = []
+const settled: boolean[] = []
+const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+let stopState = "not-requested"
+let stopping: Promise<void> | undefined
+const startStop = () => {
+  if (stopping) return stopping
+  stopState = "pending"
+  stopping = server.stop(true).then(() => { stopState = "settled" }, (error: unknown) => {
+    stopState = "failed"
+    throw error
+  })
+  void stopping.catch(() => undefined)
+  return stopping
+}
+const watchdog = setTimeout(() => {
+  for (const control of controls) control.abort(new Error("Owned probe bounded cleanup"))
+}, 15_000)
+try {
+  for (let index = 0; index < projectCount; index++) {
+    const directory = path.join(root, `project-${index}`)
+    directories.push(directory)
+    await fs.mkdir(directory, { recursive: true })
+    const git = (args: string[]) => {
+      const result = Bun.spawnSync(["git", "-C", directory, ...args], { stdout: "pipe", stderr: "pipe" })
+      if (result.exitCode !== 0) throw new Error(`Owned Git setup exited ${result.exitCode}`)
+    }
+    git(["init"])
+    git(["config", "user.name", "Owned Probe"])
+    git(["config", "user.email", "owned-probe@example.invalid"])
+    await fs.writeFile(path.join(directory, "owned-project.txt"), `${projectCount}:${index}\n`)
+    git(["add", "owned-project.txt"])
+    git(["commit", "-m", "Owned isolated probe project"])
+    const started = Promise.withResolvers<void>()
+    await Instance.provide({ directory, fn: async () => {
+      identities[index] = Instance.project.id
+      settled[index] = false
+      const completion = runInstanceBackgroundWork(`owned-stop-probe:${index}`, async (signal) => {
+        signals[index] = signal
+        const handle = await fs.open(path.join(directory, "physical-work.txt"), "w")
+        try {
+          await handle.write(`started:${Instance.project.id}\n`)
+          await handle.sync()
+          started.resolve()
+          await new Promise<void>((resolve) => {
+            if (signal.aborted) resolve()
+            else signal.addEventListener("abort", () => resolve(), { once: true })
+          })
+          await handle.write(`cancelled:${Instance.project.id}\n`)
+          await handle.sync()
+        } finally {
+          await handle.close()
+          settled[index] = true
+        }
+      }, controls[index]!.signal)
+      completions.push(completion)
+      await started.promise
+    } })
+  }
+  await write({ phase: "outer-instance-callbacks-exited", projectCount, identities, ownedPromptControllers: SessionPromptState.ownedPromptSessionIDs().length, runtimeOwners: RuntimeExecutionSettlement.snapshot(), backgroundSignals: signals.map((signal) => signal.aborted), physicalWorkSettled: settled })
+  void startStop()
+  const gateDeadline = Date.now() + 5_000
+  let admission: unknown
+  while (Date.now() < gateDeadline) {
+    try {
+      await Instance.tryProvideActive({ directory: directories[0]!, fn: () => undefined })
+    } catch (error) {
+      if (error instanceof Error && error.name === "InstanceProcessAdmissionClosedError") {
+        admission = { name: error.name, message: error.message }
+        break
+      }
+      throw error
+    }
+    if (stopState !== "pending") break
+    await Bun.sleep(25)
+  }
+  await Bun.sleep(500)
+  await write({ phase: "normal-stop-at-instance-gate", stopState, admission: admission ?? "not-observed", backgroundSignals: signals.map((signal) => signal.aborted), physicalWorkSettled: settled })
+  controls[0]!.abort(new Error("Owned probe releases project 0 after observation"))
+  await completions[0]
+  if (projectCount === 2) {
+    await Bun.sleep(200)
+    await write({ phase: "first-owned-project-released", stopState, backgroundSignals: signals.map((signal) => signal.aborted), physicalWorkSettled: settled })
+    controls[1]!.abort(new Error("Owned probe releases project 1 after observation"))
+  }
+  await Promise.all(completions)
+  await startStop()
+  await write({ phase: "normal-stop-settled-after-owned-abort", stopState, backgroundSignals: signals.map((signal) => signal.aborted), physicalWorkSettled: settled, physicalWork: await Promise.all(directories.map((directory) => fs.readFile(path.join(directory, "physical-work.txt"), "utf8"))) })
+} finally {
+  for (const control of controls) control.abort(new Error("Owned probe final cleanup"))
+  await Promise.allSettled(completions)
+  await startStop()
+  clearTimeout(watchdog)
+  await Database.awaitEffectIdle(5_000)
+  Database.close()
+  await Log.close()
+}
+await fs.writeFile(path.join(root, "terminal.json"), JSON.stringify({ pid: process.pid, stopState, allOwnedWorkSettled: settled.every(Boolean), projectCount, completedAt: new Date().toISOString() }, null, 2))
+console.log(JSON.stringify({ terminal: "completed", stopState, projectCount }))

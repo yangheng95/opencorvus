@@ -1,0 +1,65 @@
+[1/4] START test/instance-background-shutdown.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a process gate cancels background work and retains the foreground owner until retry settlement [2885.28ms]
+(pass) listener shutdown cancels 1 serial Project owners and joins physical cleanup [4455.44ms]
+(pass) listener shutdown cancels 2 serial Project owners and joins physical cleanup [4778.30ms]
+(pass) listener shutdown cancels 2 parallel Project owners and joins physical cleanup [5562.32ms]
+
+ 4 pass
+ 0 fail
+ 20 expect() calls
+Ran 4 tests across 1 file. [23.72s]
+[1/4] DONE test/instance-background-shutdown.test.ts exit=0 duration=25.72s
+[2/4] START test/usage/venice-stream-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) registry-esm: default reporting preserves the official total [3196.16ms]
+(pass) registry-esm: input cache and output reasoning are exclusive components [2345.20ms]
+(pass) registry-esm: per-call reporting overrides the provider setting [2456.99ms]
+(pass) registry-esm: an explicit provider false remains the protocol value [2732.08ms]
+(pass) registry-esm: an explicit per-call false is sent as the protocol value [2109.24ms]
+(pass) published-commonjs: default reporting preserves the official total [2585.13ms]
+(pass) published-commonjs: input cache and output reasoning are exclusive components [2324.38ms]
+(pass) published-commonjs: per-call reporting overrides the provider setting [2004.32ms]
+(pass) published-commonjs: an explicit provider false remains the protocol value [2159.89ms]
+(pass) published-commonjs: an explicit per-call false is sent as the protocol value [3025.56ms]
+
+ 10 pass
+ 0 fail
+ 98 expect() calls
+Ran 10 tests across 1 file. [28.80s]
+[2/4] DONE test/usage/venice-stream-contract.test.ts exit=0 duration=29.13s
+[3/4] START test/dependabot-runtime-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) @ai-sdk/togetherai streams the configured model and its declared input contract [2265.01ms]
+(pass) @ai-sdk/github-copilot streams the configured model and its declared input contract [2095.15ms]
+(pass) venice-ai-sdk-provider streams the configured model and its declared input contract [2320.07ms]
+(pass) gitlab-ai-provider streams the configured model and its declared input contract [3015.88ms]
+(pass) ai-gateway-provider/providers/fireworks streams the configured model and its declared input contract [1989.42ms]
+(pass) ACP 1.4 routes session configuration, listing, fork and resume in a declared MCP-free project [3507.43ms]
+
+ 6 pass
+ 0 fail
+ 30 expect() calls
+Ran 6 tests across 1 file. [18.29s]
+[3/4] DONE test/dependabot-runtime-contract.test.ts exit=0 duration=18.51s
+[4/4] START test/session/provider-usage-normalization.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider-neutral usage normalization > projects AI SDK 7 token details and charges every output token exactly once [2.17ms]
+(pass) Provider-neutral usage normalization > keeps measured usage while exposing an unpriced Provider model [0.26ms]
+(pass) Provider-neutral usage normalization > uses normalized component totals when an Anthropic-family adapter omits a provider total [0.25ms]
+(pass) Provider-neutral usage normalization > uses the request-time over-200K rate without double-charging reasoning output [0.25ms]
+(pass) Provider-neutral usage normalization > includes cache-write input when selecting the over-200K price tier [0.23ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [1067.00ms]
+[4/4] DONE test/session/provider-usage-normalization.test.ts exit=0 duration=1.23s

@@ -1,0 +1,73 @@
+[1/4] START test/runtime-startup-recovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime startup recovery > projects application environment into a fresh restart process occurrence [1.15ms]
+(pass) runtime startup recovery > binds the ACP listener after preparing the current process occurrence [535.44ms]
+(pass) runtime startup recovery > serves health while the owned application recovery is still running [21.06ms]
+(pass) runtime startup recovery > recovers a ready sibling project while another project remains held [0.56ms]
+(pass) runtime startup recovery > keeps each Project recovery queue independent when one Project exhausts its slots [1.62ms]
+(pass) runtime startup recovery > settles failed foundational preparation and prepares the next attempt [9.28ms]
+(pass) runtime startup recovery > keeps an application recovery failure observable after listener readiness [19.18ms]
+(pass) runtime startup recovery > stops a published listener before propagating required recovery failure [11.47ms]
+(pass) runtime startup recovery > stops a published listener when post-bind poller initialization fails [18.27ms]
+(pass) runtime startup recovery > cancels held application recovery before joining it during settlement [3.90ms]
+(pass) runtime startup recovery > completes one graceful listener stop through a transient settlement cleanup failure [38.03ms]
+(pass) runtime startup recovery > continues the exact graceful-stop receipt after the commit decision [34.42ms]
+
+ 12 pass
+ 0 fail
+ 23 expect() calls
+Ran 12 tests across 1 file. [6.46s]
+[1/4] DONE test/runtime-startup-recovery.test.ts exit=0 duration=7.35s
+[2/4] START test/scheduler-task-root-message-schema.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) scheduler Task-root Message protocol > fresh Mission delivery propagates Project cancellation through its actual wake reservation and settles the receipt [3857.38ms]
+(pass) scheduler Task-root Message protocol > settles Project discovery queued after teardown starts while its initialized owner is still admitted [2600.97ms]
+(pass) scheduler Task-root Message protocol > global discovery admits a later Project and settles admitted work during Project teardown [7401.11ms]
+(pass) scheduler Task-root Message protocol > discovers a large scheduler Project backlog through fixed database cursor pages [2570.07ms]
+(pass) scheduler Task-root Message protocol > settles a Mission delivery against the occurrence open at enqueue after close and reopen [4181.60ms]
+(pass) scheduler Task-root Message protocol > materializes one delivery reference into the persisted Message and Orchestrator wake [3542.81ms]
+(pass) scheduler Task-root Message protocol > pages only due unresolved recipient heads and refills the shared production capacity [17344.65ms]
+(pass) scheduler Task-root Message protocol > resumes an errored scheduler wake only inside its enqueue-time Mission occurrence [3848.27ms]
+
+ 8 pass
+ 0 fail
+ 105 expect() calls
+Ran 8 tests across 1 file. [48.96s]
+[2/4] DONE test/scheduler-task-root-message-schema.test.ts exit=0 duration=49.22s
+[3/4] START test/scheduler-event-durable-fire.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Event Job durable fact authority > settles an old Mission fire against its first opened occurrence after close and reopen [3016.85ms]
+(pass) Event Job durable fact authority > a closed Mission fire survives acceptance crash and terminalizes in FIFO recovery after reopen [2304.72ms]
+(pass) Event Job durable fact authority > a closed-Mission causal-cycle successor settles by its frozen Mission reservation at the FIFO head [2065.43ms]
+(pass) Event Job durable fact authority > round-trips complete Event retry, terminal frontier and Mission reservation facts through strict transfer [4347.68ms]
+(pass) Event Job durable fact authority > the configured production wake owner persists and activates the exact Event fire Message [2321.82ms]
+(pass) Event Job durable fact authority > persists a transient Bus input once and binds one successful fire to the exact definition revision [1796.71ms]
+(pass) Event Job durable fact authority > runs distinct Event Job heads across Projects through one physical capacity frontier [3496.20ms]
+(pass) Event Job durable fact authority > keeps an accepted Event fire pending when its owner is cancelled after permit grant [1601.93ms]
+(pass) Event Job durable fact authority > definition removal appends a tombstone without erasing an already accepted fire [1630.53ms]
+(pass) Event Job durable fact authority > a retry keeps the same fire identity and appends ordered receipts [2588.08ms]
+(pass) Event Job durable fact authority > duplicate acceptance is idempotent and preserves one fire [1445.92ms]
+(pass) Event Job durable fact authority > same occurrence identity rejects a different immutable input [1561.11ms]
+
+ 12 pass
+ 0 fail
+ 31 expect() calls
+Ran 12 tests across 1 file. [30.05s]
+[3/4] DONE test/scheduler-event-durable-fire.test.ts exit=0 duration=30.27s
+[4/4] START test/mission-streamed-recovery.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a Mission recovers a committed side effect, corrects a stale continuation and starts its independent verifier [47141.86ms]
+
+ 1 pass
+ 0 fail
+ 34 expect() calls
+Ran 1 test across 1 file. [49.24s]
+[4/4] DONE test/mission-streamed-recovery.test.ts exit=0 duration=49.48s

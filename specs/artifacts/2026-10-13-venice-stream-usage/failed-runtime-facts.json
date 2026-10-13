@@ -1,0 +1,35 @@
+{
+  "source": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-pptkak/test-80516-vHop0Q/runtime-root/data/opencorvus.db",
+  "counts": {
+    "provider_usage_event": {
+      "count": 1
+    },
+    "session": {
+      "count": 0
+    },
+    "engine_task": {
+      "count": 0
+    },
+    "provider_activity_request": {
+      "count": 0
+    },
+    "provider_activity_outcome": {
+      "count": 0
+    }
+  },
+  "usage": [
+    {
+      "provider_id": "venice-contract",
+      "model_id": "exact-protocol-model",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0,
+      "billing_status": "priced"
+    }
+  ],
+  "scope": "Owned failing checker only; shared process gate waits its calling serving lease. No raw credentials/messages read."
+}

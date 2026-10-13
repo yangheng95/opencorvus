@@ -1,0 +1,123 @@
+import assert from "node:assert/strict"
+import fs from "node:fs/promises"
+import path from "node:path"
+const root = path.resolve(process.argv[2]!)
+const authSource = process.argv[3]!
+const { installProcessShims } = await import("../packages/opencorvus/src/runtime/shims")
+installProcessShims()
+const { declareNativeTaskProcessDeployment } = await import("../packages/opencorvus/src/runtime/task-process-deployment")
+declareNativeTaskProcessDeployment()
+const { CredentialRedactor, RealProviderAudit, installProcessProviderAudit } = await import("../packages/opencorvus/script/real-provider-audit")
+const redactor = new CredentialRedactor()
+const publish = async (name: string, data: unknown) => fs.writeFile(path.join(root, name), redactor.redact(JSON.stringify(data, null, 2)))
+const { stageDiagnosticProvider } = await import("../packages/opencorvus/script/evolution-diagnostic-provider")
+await fs.mkdir(path.join(root, "runtime", "data"), { recursive: true })
+const authority = await stageDiagnosticProvider({ authSource, dataDirectory: path.join(root, "runtime", "data"), modelID: "gpt-6.1-sol", redactor })
+const state = installProcessProviderAudit(() => {
+  let audit!: InstanceType<typeof RealProviderAudit>
+  const persist = () => { void publish("provider-audit.json", { pid: process.pid, model: "gpt-6.1-sol", requests: audit.requests }) }
+  audit = new RealProviderAudit("gpt-6.1-sol", 6, persist, { copiedOAuthExpiresAt: authority.copiedOAuthExpiresAt }, undefined, { redactor })
+  return { audit, persist }
+})
+const { Log } = await import("../packages/opencorvus/src/util/log")
+await Log.init({ print: false })
+const { Config } = await import("../packages/opencorvus/src/config/config")
+const { Instance } = await import("../packages/opencorvus/src/project/instance")
+const { Auth } = await import("../packages/opencorvus/src/auth")
+const { Provider } = await import("../packages/opencorvus/src/provider/provider")
+const { SessionStatus } = await import("../packages/opencorvus/src/session/status")
+const { Session } = await import("../packages/opencorvus/src/session")
+const { ProjectMemory } = await import("../packages/opencorvus/src/memory/project-memory")
+const { Database } = await import("../packages/opencorvus/src/storage/db")
+const { listenWithRecoveredServerRuntime } = await import("../packages/opencorvus/src/cli/server-runtime")
+const { freezeOverlayUiDirectory } = await import("../packages/opencorvus/src/server/overlay-ui")
+const { recoverStartedTaskExecutions, assertStartedTaskProjectRecoverySucceeded } = await import("../packages/opencorvus/src/engine/host-recovery")
+const physical = await import("../packages/opencorvus/src/runtime/process-occurrence")
+const directory = path.join(root, "project")
+await fs.mkdir(directory, { recursive: true })
+const git = (args: string[]) => {
+  const result = Bun.spawnSync(["git", "-C", directory, ...args], { stdout: "pipe", stderr: "pipe" })
+  assert.equal(result.exitCode, 0, `Owned Git ${args[0]} failed`)
+}
+git(["init"])
+git(["config", "user.name", "Owned Shutdown Qualification"])
+git(["config", "user.email", "owned-shutdown@example.invalid"])
+await fs.writeFile(path.join(directory, "README.md"), "# Owned background shutdown qualification\n")
+git(["add", "README.md"])
+git(["commit", "-m", "Owned isolated model qualification"])
+await Config.updateGlobalPatch({ model: "openai/gpt-6.1-sol", small_model: "openai/gpt-6.1-sol", prompt_profile: { active: "base" }, experimental: { memory: { enabled: true } } })
+await Instance.provide({ directory, fn: async () => {
+  const credential = await Auth.get("openai")
+  assert.equal(credential?.type, "oauth")
+  const model = await Provider.getModel("openai", "gpt-6.1-sol")
+  assert.equal(model.api.id, "gpt-6.1-sol")
+  await publish("authority-ready.json", { pid: process.pid, owner: physical.currentRuntimeProcessOccurrence(), credential: "available", target: "openai/gpt-6.1-sol", apiModel: model.api.id, pairedModels: true, catalog: "projected", executionStarted: false })
+} })
+let runtime: Awaited<ReturnType<typeof listenWithRecoveredServerRuntime>> | undefined
+let prompt: Promise<unknown> | undefined
+let stopping: Promise<void> | undefined
+const stop = () => stopping ??= runtime ? runtime.server.stop(true) : Instance.disposeAll()
+const lifetime = setTimeout(() => { void stop() }, 480_000)
+let success = false
+try {
+  runtime = await listenWithRecoveredServerRuntime({ disposeInstances: () => Instance.disposeAll(), options: { hostname: "127.0.0.1", port: 18574, overlayUiSource: freezeOverlayUiDirectory({ directory: path.resolve("../../.tmp-codex-provider-url-01a133/ui-after") }) }, recover: async () => {
+    const result = await recoverStartedTaskExecutions({ scopeProjectWorktree: directory })
+    assertStartedTaskProjectRecoverySucceeded(result)
+  } })
+  await runtime.recovery
+  const origin = new URL("http://127.0.0.1:18574")
+  state.audit.localOrigins.add(origin.origin)
+  const preflight = await state.audit.preflight({ serverURL: origin, model: "openai/gpt-6.1-sol", inactivityMs: 180_000, activity: SessionStatus.getActivity })
+  await publish("preflight-ready.json", { preflight, requestsBeforeProject: state.audit.requests.length })
+  // Credential readiness is complete before admitting this separate public
+  // input. Observe its naturally triggered Organizer while its stream is live.
+  const response = await state.audit.nativeFetch(new URL("/global/chat/start", origin), {
+    method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ requestID: crypto.randomUUID(), model: "openai/gpt-6.1-sol", text: "独立后台停机验收。项目工作规范是：持续迭代 opencorvus，按批次调查 UI/UX、功能与缺陷，先落盘根因/影响，再修复和验证，范围提交、上游同步及正常推送。请保留这条项目规范。当前对话仅回复 OK，无需调用工具。" }),
+  })
+  assert.equal(response.status, 202, "Exact public Global Chat start acceptance response")
+  const chat = await response.json() as any
+  const session = await Session.get(chat.session.id)
+  prompt = Promise.resolve({ status: "public-start-accepted", sessionID: session.id, messageID: chat.messageID })
+  const deadline = Date.now() + 180_000
+  let selected: (typeof state.audit.requests)[number] | undefined
+  while (Date.now() < deadline) {
+    selected = state.audit.requests.find((entry) => entry.response_reader.requestContext?.sessionID === session.id && entry.response_reader.requestContext.streamRequest.agentID === "memory" && entry.response_reader.state === "reading" && !!entry.response_reader.firstByteReadAt)
+    if (selected) break
+    const completedMemory = state.audit.requests.find((entry) => entry.response_reader.requestContext?.sessionID === session.id && entry.response_reader.requestContext.streamRequest.agentID === "memory" && entry.response_reader.state === "settled")
+    if (completedMemory) throw new Error("The selected Memory attempt completed before its cancellation boundary was observed")
+    if (state.audit.exhausted) throw new Error("Qualification request budget exhausted")
+    await Bun.sleep(10)
+  }
+  assert(selected, "Actual Memory helper source reader must be reading streamed GPT-6.1 Sol bytes before stop")
+  const before = ProjectMemory.read(session.projectID)
+  assert.equal(before.status, "organizing")
+  assert.equal(selected.model, "gpt-6.1-sol")
+  assert.equal(selected.status, 200)
+  const identity = structuredClone(selected.response_reader)
+  await publish("memory-reading-before-stop.json", { sessionID: session.id, projectID: session.projectID, before, selectedReader: identity, boundary: "Real public authored prompt; production Organizer background owner; existing Response reader observes actual bytes" })
+  const requestedAt = Date.now()
+  await stop()
+  const after = ProjectMemory.read(session.projectID)
+  const promptReceipt = await prompt
+  assert.equal(selected.response_reader.state, "settled")
+  assert.equal(selected.response_reader.terminal?.kind, "aborted")
+  assert.equal(after.status, "retry_wait")
+  assert.equal(after.pendingCount, 1)
+  await publish("sol-memory-stop-qualified.json", { pid: process.pid, requestedAt, completedAt: Date.now(), sessionID: session.id, projectID: session.projectID, before, after, selectedReader: selected.response_reader, promptReceipt, requests: state.audit.requests, boundary: "Cancellation retains the durable pending input for the next legal trigger; no claim of automatic re-execution or online Venice accounting" })
+  success = true
+} catch (error) {
+  const fact = (error: unknown): unknown => ({ message: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined, ...(error instanceof AggregateError ? { errors: error.errors.map(fact) } : {}) })
+  await publish("failure.json", { error: fact(error), requests: state.audit.requests })
+} finally {
+  clearTimeout(lifetime)
+  await stop()
+  await prompt
+  state.persist()
+  await Database.awaitEffectIdle(5_000)
+  Database.close()
+  await Log.close()
+  state.audit[Symbol.dispose]()
+  await publish("terminal.json", { pid: process.pid, success, completedAt: new Date().toISOString(), listenerStop: "settled", copiedPairCleanup: "parent after actual exit" })
+}
+process.exit(success ? 0 : 1)

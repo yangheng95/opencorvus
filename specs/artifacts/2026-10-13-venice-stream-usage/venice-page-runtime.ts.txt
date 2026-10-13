@@ -1,0 +1,65 @@
+import fs from "node:fs"
+import path from "node:path"
+const root=process.argv[2]!
+const {installProcessShims}=await import('../packages/opencorvus/src/runtime/shims')
+installProcessShims()
+const {freezeOverlayUiDirectory}=await import('../packages/opencorvus/src/server/overlay-ui')
+const {Instance}=await import('../packages/opencorvus/src/project/instance')
+const {listenWithRecoveredServerRuntime}=await import('../packages/opencorvus/src/cli/server-runtime')
+const {recoverStartedTaskExecutions,assertStartedTaskProjectRecoverySucceeded}=await import('../packages/opencorvus/src/engine/host-recovery')
+const {Config}=await import('../packages/opencorvus/src/config/config')
+const {Provider}=await import('../packages/opencorvus/src/provider/provider')
+const {ProviderLLM}=await import('../packages/opencorvus/src/provider/llm')
+const {streamText}=await import('../packages/opencorvus/src/llm/api')
+const {Session}=await import('../packages/opencorvus/src/session')
+const started=Date.now()
+const requests:any[]=[]
+const cases={
+ 'official-example': {prompt_tokens:612,completion_tokens:146,total_tokens:758},
+ 'cached-reasoning': {prompt_tokens:1000,completion_tokens:300,total_tokens:1300,prompt_tokens_details:{cached_tokens:200,cache_creation_input_tokens:20},completion_tokens_details:{reasoning_tokens:80}},
+}
+const participant=Bun.serve({hostname:'127.0.0.1',port:0,async fetch(request){
+ const body=await request.json() as any
+ const strict=new URL(request.url).pathname.startsWith('/strict/')
+ requests.push({path:new URL(request.url).pathname,model:body.model,stream:body.stream,stream_options:body.stream_options,mode:strict?'protocol':'converter-input'})
+ const raw=cases[body.model as keyof typeof cases]
+ if(!raw)return Response.json({error:{message:'Unknown declared local model',type:'invalid_request_error'}},{status:400})
+ const base={id:'owned-venice-protocol',object:'chat.completion.chunk',created:1,model:body.model}
+ const delta={...base,choices:[{index:0,delta:{content:'Owned local protocol result'},finish_reason:null}]}
+ const stop={...base,choices:[{index:0,delta:{},finish_reason:'stop'}],...(!strict||body.stream_options?.include_usage===true?{usage:raw}:{})}
+ return new Response(`data: ${JSON.stringify(delta)}\n\ndata: ${JSON.stringify(stop)}\n\ndata: [DONE]\n\n`,{headers:{'Content-Type':'text/event-stream'}})
+}})
+const provider={name:'Venice local protocol',npm:'venice-ai-sdk-provider',api:new URL(path.basename(root)==='before'?'converter/v1':'strict/v1',participant.url).href,options:{apiKey:'owned-local-participant',includeUsage:true,timeout:false},models:Object.fromEntries(Object.keys(cases).map(id=>[id,{name:id,reasoning:true,limit:{context:10000,output:1000},cost:{input:1,output:2,cache_read:0.1,cache_write:1.25}}]))}
+const directory=path.join(root,'project')
+fs.mkdirSync(path.join(directory,'.opencorvus'),{recursive:true})
+fs.writeFileSync(path.join(directory,'.opencorvus/opencorvus.jsonc'),JSON.stringify({provider:{'venice-local-contract':provider}},null,2))
+const runtime=await listenWithRecoveredServerRuntime({
+ options:{hostname:'127.0.0.1',port:18573,overlayUiSource:freezeOverlayUiDirectory({directory:process.argv[3]!})},
+ recover:async()=>{const result=await recoverStartedTaskExecutions({scopeProjectWorktree:directory});assertStartedTaskProjectRecoverySucceeded(result)},
+ disposeInstances:()=>Instance.disposeAll(),
+})
+await runtime.recovery
+const observations:any[]=[]
+await Instance.provide({directory,fn:async()=>{
+ const config=await Config.get()
+ for(const id of Object.keys(cases)){
+  const model=await Provider.getModel('venice-local-contract',id,{config})
+  const language=await Provider.getLanguage(model,{config})
+  const result=streamText({model:ProviderLLM.wrapModel(language,model,{}),timeoutMs:false,prompt:'Inspect the explicitly declared local protocol input',usagePurpose:'other'})
+  observations.push({id,text:await result.text,usage:await result.usage,normalized:Session.getUsage({model,usage:await result.usage})})
+ }
+ const configStrict=Config.Info.parse({provider:{'venice-strict-contract':{...provider,api:new URL('strict/v1',participant.url).href}}})
+ const model=await Provider.getModel('venice-strict-contract','official-example',{config:configStrict})
+ const language=await Provider.getLanguage(model,{config:configStrict})
+ const result=streamText({model:language,timeoutMs:false,prompt:'Inspect the declared request protocol only'})
+ observations.push({mode:'untracked-wire-probe',text:await result.text,usage:await result.usage})
+}})
+const response=await fetch('http://127.0.0.1:18573/global/usage?period=day&timeZone=Asia%2FShanghai')
+const stats=await response.json()
+fs.writeFileSync(path.join(root,'protocol-ledger.json'),JSON.stringify({identity:'Declared local protocol data; not Venice inference or financial evidence',cases,requests,observations,http:{status:response.status,stats}},null,2))
+fs.writeFileSync(path.join(root,'ready.json'),JSON.stringify({pid:process.pid,port:runtime.server.port,participantPort:participant.port,started,occurrence:runtime.occurrence,source:'Production listener/recovery, shared streamed-call ledger and actual HTTP, private built UI; no external provider or credential'},null,2))
+let stopping=false
+const stop=async(reason:string)=>{if(stopping)return;stopping=true;clearInterval(poll);clearTimeout(deadline);try{await participant.stop(true);await runtime.server.stop(true);await runtime.recovery;fs.writeFileSync(path.join(root,'terminal.json'),JSON.stringify({reason,pid:process.pid,elapsed:Date.now()-started,terminal:'Production stop and owned participant closed'},null,2));process.exit(0)}catch(error){console.error(error);process.exit(1)}}
+const poll=setInterval(()=>{if(fs.existsSync(path.join(root,'stop-requested')))void stop('Own manual Venice usage page closed')},500)
+const deadline=setTimeout(()=>void stop('Own isolated 30min lease'),1800000)
+console.log('Own Venice usage service ready on 18573')

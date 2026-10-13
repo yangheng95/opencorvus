@@ -1,0 +1,68 @@
+[
+  {
+    "time": "2026-10-13T10:05:28.451Z",
+    "phase": "outer-instance-callbacks-exited",
+    "projectCount": 2,
+    "identities": [
+      "prj_h74H93XffFllDxRLyaPt",
+      "prj_hfmqIBZ4hzo3yeXTiLgb"
+    ],
+    "ownedPromptControllers": 0,
+    "runtimeOwners": [],
+    "backgroundSignals": [
+      false,
+      false
+    ],
+    "physicalWorkSettled": [
+      false,
+      false
+    ]
+  },
+  {
+    "time": "2026-10-13T10:05:28.982Z",
+    "phase": "normal-stop-at-instance-gate",
+    "stopState": "pending",
+    "admission": {
+      "name": "InstanceProcessAdmissionClosedError",
+      "message": "Instance process admission is closed during runtime settlement"
+    },
+    "backgroundSignals": [
+      false,
+      false
+    ],
+    "physicalWorkSettled": [
+      false,
+      false
+    ]
+  },
+  {
+    "time": "2026-10-13T10:05:29.187Z",
+    "phase": "first-owned-project-released",
+    "stopState": "pending",
+    "backgroundSignals": [
+      true,
+      false
+    ],
+    "physicalWorkSettled": [
+      true,
+      false
+    ]
+  },
+  {
+    "time": "2026-10-13T10:05:29.199Z",
+    "phase": "normal-stop-settled-after-owned-abort",
+    "stopState": "settled",
+    "backgroundSignals": [
+      true,
+      true
+    ],
+    "physicalWorkSettled": [
+      true,
+      true
+    ],
+    "physicalWork": [
+      "started:prj_h74H93XffFllDxRLyaPt\ncancelled:prj_h74H93XffFllDxRLyaPt\n",
+      "started:prj_hfmqIBZ4hzo3yeXTiLgb\ncancelled:prj_hfmqIBZ4hzo3yeXTiLgb\n"
+    ]
+  }
+]

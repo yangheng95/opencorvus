@@ -13,6 +13,9 @@
 
 #### 修复
 
+- Venice 流式请求使用正确的用量参数，并保留每次调用的显式选择；修复 Token 总量重复计入输出、缓存输入重复计费和推理分量丢失的问题。历史账本保留原记录，不重算。
+- 关闭或重启服务时先取消所有项目的后台工作，再等待其物理清理完成，修复 Memory 整理等后台任务反向等待停机取消而卡住的问题。
+
 - 通用 MCP 工具保留结构化结果正文，超限时可保存完整文件并继续读取；合法空文本资源不会再使整个结果失败。
 
 - 电子表格产物的类型名称与工作表菜单跟随界面语言；切换语言保留当前编辑值、公式结果和选区，导出继续使用当前工作簿。
@@ -46,6 +49,9 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Venice streaming requests use the correct usage parameter and preserve explicit per-call choices. Fixed output counted twice in Token totals, cache input charged twice, and missing reasoning components. Historical ledger records are retained without recalculation.
+- Service shutdown and restart cancel background work across all Projects before joining its physical cleanup, fixing background work such as Memory organization waiting for cancellation from a later shutdown stage.
 
 - Generic MCP tools preserve structured result content, including full-file recovery for oversized output. Valid empty text resources no longer fail the whole result.
 

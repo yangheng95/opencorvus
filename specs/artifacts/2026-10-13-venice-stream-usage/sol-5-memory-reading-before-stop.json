@@ -1,0 +1,42 @@
+{
+  "sessionID": "ses_hySLmIjyMkh0iIFbL51m",
+  "projectID": "prj_hmopVoAHOmJHRLo2DKWN",
+  "before": {
+    "filename": "MEMORY.MD",
+    "scope": "project",
+    "content": "",
+    "revision": 0,
+    "tokenCount": 0,
+    "status": "organizing",
+    "pendingCount": 1,
+    "droppedPendingCount": 0,
+    "timeCreated": 1791888046557,
+    "timeUpdated": 1791888046614
+  },
+  "selectedReader": {
+    "boundary": "provider-source-reader",
+    "state": "reading",
+    "receivedAt": 1791888047558,
+    "boundAt": 1791888047558,
+    "chunkCount": 2,
+    "byteCount": 5410,
+    "firstByteReadAt": 1791888047560,
+    "lastByteReadAt": 1791888047562,
+    "identityState": "observed",
+    "requestContext": {
+      "sessionID": "ses_hySLmIjyMkh0iIFbL51m",
+      "streamRequest": {
+        "requestID": "msg_hMvNqTLv6R33px6dg21W",
+        "agentID": "memory",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "activity": {
+        "id": "act_g0VXvPdEk00wGEZxzqaW",
+        "attempt": 0
+      }
+    }
+  },
+  "boundary": "Real public authored prompt; production Organizer background owner; existing Response reader observes actual bytes"
+}

@@ -1,0 +1,31 @@
+{
+  "installed": "2.0.2",
+  "declared": "2.0.2",
+  "latest": "2.2.0",
+  "published": [
+    {
+      "version": "2.1.1",
+      "released": "2026-06-25T17:40:18.438Z",
+      "engines": {
+        "node": ">=18"
+      },
+      "peerDependencies": {
+        "ai": "^6.0.90"
+      },
+      "source": "https://unpkg.com/venice-ai-sdk-provider@2.1.1/dist/index.mjs",
+      "converterExcerpt": ".max(2).optional(),minTemp:m.number().min(0).max(2).optional(),n:m.int().min(1).default(1)});function Vu(t){if(t==null)return{inputTokens:{total:void 0,noCache:void 0,cacheRead:void 0,cacheWrite:void 0},outputTokens:{total:void 0,text:void 0,reasoning:void 0},raw:void 0};let r=t.prompt_tokens??0,i=t.completion_tokens??0,o=t.prompt_tokens_details?.cached_tokens??0,e=t.completion_tokens_details?.reasoning_tokens??0;return{inputTokens:{total:r,noCache:r-o,cacheRead:o,cacheWrite:t.prompt_tokens_details?.cache_creation_input_tokens??void 0},outputTokens:{total:i,text:i-e,reasoning:e},raw:t}}var eg=m.object({error:m.object({message:m.string(),type:m.string().nullish(),param:m.any().nullish(),code:m.union([m.string(),m.number()]).nullish()})}),Kd={errorSchema:eg,errorToMessage:t=>t.error.message};function tg(t){return t.replace(/[A-Z]/g,r=>`_${r.toLowerCase()}`)}function Wd({veniceParameters:t}){let r={},i=t??Ru.parse({});for(let[o,e]of Object"
+    },
+    {
+      "version": "2.2.0",
+      "released": "2026-10-01T17:09:49.042Z",
+      "engines": {
+        "node": ">=24"
+      },
+      "peerDependencies": {
+        "ai": "^6.0.90"
+      },
+      "source": "https://unpkg.com/venice-ai-sdk-provider@2.2.0/dist/index.mjs",
+      "converterExcerpt": ".max(2).optional(),minTemp:h.number().min(0).max(2).optional(),n:h.int().min(1).optional()});function Dl(e){if(e==null)return{inputTokens:{total:void 0,noCache:void 0,cacheRead:void 0,cacheWrite:void 0},outputTokens:{total:void 0,text:void 0,reasoning:void 0},raw:void 0};let n=e.prompt_tokens??0,i=e.completion_tokens??0,o=e.prompt_tokens_details?.cached_tokens??0,t=e.completion_tokens_details?.reasoning_tokens??0;return{inputTokens:{total:n,noCache:n-o,cacheRead:o,cacheWrite:e.prompt_tokens_details?.cache_creation_input_tokens??void 0},outputTokens:{total:i,text:i-t,reasoning:t},raw:e}}var By=h.object({error:h.object({message:h.string(),type:h.string().nullish(),param:h.any().nullish(),code:h.union([h.string(),h.number()]).nullish()})}),Ky=h.looseObject({error:h.string(),issues:h.array(h.looseObject({message:h.string(),path:h.array(h.union([h.string(),h.number()])).optional()})).optional()}),Wy=h.union([By,Ky]);function Nl(e){if(typeof "
+    }
+  ]
+}

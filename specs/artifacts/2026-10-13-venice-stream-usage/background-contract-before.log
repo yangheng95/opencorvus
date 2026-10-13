@@ -1,0 +1,42 @@
+[1/1] START test/instance-background-shutdown.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+59 | 
+60 |     stopping = listener.stop(true)
+61 |     await Promise.race([
+62 |       Promise.all(cancelled.map((entry) => entry.promise)),
+63 |       new Promise<never>((_, reject) => {
+64 |         deadline = setTimeout(() => reject(new Error("Listener shutdown did not broadcast background cancellation")), 5_000)
+                                                    ^
+error: Listener shutdown did not broadcast background cancellation
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-shutdown.test.ts:64:48)
+(fail) listener shutdown cancels 1 serial Project owners and joins physical cleanup [7111.56ms]
+59 | 
+60 |     stopping = listener.stop(true)
+61 |     await Promise.race([
+62 |       Promise.all(cancelled.map((entry) => entry.promise)),
+63 |       new Promise<never>((_, reject) => {
+64 |         deadline = setTimeout(() => reject(new Error("Listener shutdown did not broadcast background cancellation")), 5_000)
+                                                    ^
+error: Listener shutdown did not broadcast background cancellation
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-shutdown.test.ts:64:48)
+(fail) listener shutdown cancels 2 serial Project owners and joins physical cleanup [7566.95ms]
+59 | 
+60 |     stopping = listener.stop(true)
+61 |     await Promise.race([
+62 |       Promise.all(cancelled.map((entry) => entry.promise)),
+63 |       new Promise<never>((_, reject) => {
+64 |         deadline = setTimeout(() => reject(new Error("Listener shutdown did not broadcast background cancellation")), 5_000)
+                                                    ^
+error: Listener shutdown did not broadcast background cancellation
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-shutdown.test.ts:64:48)
+(fail) listener shutdown cancels 2 parallel Project owners and joins physical cleanup [7274.89ms]
+
+ 0 pass
+ 3 fail
+Ran 3 tests across 1 file. [27.37s]
+[1/1] DONE test/instance-background-shutdown.test.ts exit=1 duration=28.06s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-shutdown.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-shutdown.test.ts

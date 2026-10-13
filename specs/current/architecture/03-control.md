@@ -262,6 +262,13 @@ channel 等 project-scoped State 的唯一缓存与释放 owner。Server 在 pro
 后排空，避免全局清理反向等待自己的取消步骤。Server 的进程终态协议仍负责更广的
 Session/Task 终态事实与数据库交接，此顺序不替代该协议。
 
+Server 在 Instance disposal 之前取得的 process settlement gate 也遵守这一顺序：
+`waitForIdle` 校验仍持有同一准入 token 后，使用现有后台 controller 向全部缓存 Project
+广播取消，再等待真实 lease 的 closed signal。取得 gate 本身只关闭新准入，返回的 handle
+先由 Server 持有，因此取消或排空失败可通过原 rollback 释放准入并重试。普通前台 lease
+仍需完整退出；已经取消的后台信号不在 rollback 中复活，原持久化状态与下一次合法触发
+负责恢复。此步骤不改变 Task/Mission occurrence、Session 消息或其终态事实。
+
 ## control —— 外部控制账号与真实 Session 消息
 
 **代码**：`src/control/`

@@ -149,7 +149,11 @@ test.each([
               },
             ],
           })
-          expect(Session.getUsage({ model, usage: await result.usage }).tokens).toMatchObject({ input: 10, output: 2 })
+          expect(Session.getUsage({ model, usage: await result.usage }).tokens).toMatchObject({
+            total: 12,
+            input: 10,
+            output: 2,
+          })
         },
       })
     } finally {

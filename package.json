@@ -187,6 +187,7 @@
     "rrule@2.8.1": "patches/rrule@2.8.1.patch",
     "solid-js@1.9.14": "patches/solid-js@1.9.14.patch",
     "@astrojs/starlight@0.41.7": "patches/@astrojs%2Fstarlight@0.41.7.patch",
-    "@kobalte/utils@0.9.2": "patches/@kobalte%2Futils@0.9.2.patch"
+    "@kobalte/utils@0.9.2": "patches/@kobalte%2Futils@0.9.2.patch",
+    "venice-ai-sdk-provider@2.0.2": "patches/venice-ai-sdk-provider@2.0.2.patch"
   }
 }

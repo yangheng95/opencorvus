@@ -1,0 +1,142 @@
+diff --git a/dist/index.js b/dist/index.js
+index c19ecff7e39b68f9b88cf9fdda60c18f15e31f39..71f27a4c36253754f693fb283c6b100331f42cb9 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -104,17 +104,22 @@ function convertVeniceChatUsage(usage) {
+       raw: void 0
+     };
+   }
++  const input = usage.prompt_tokens ?? 0;
++  const output = usage.completion_tokens ?? 0;
++  const cacheRead = usage.prompt_tokens_details?.cached_tokens ?? 0;
++  const cacheWrite = usage.prompt_tokens_details?.cache_creation_input_tokens ?? 0;
++  const reasoning = usage.completion_tokens_details?.reasoning_tokens ?? 0;
+   return {
+     inputTokens: {
+-      total: usage.total_tokens ?? void 0,
+-      noCache: usage.prompt_tokens ?? void 0,
+-      cacheRead: usage.prompt_tokens_details?.cached_tokens ?? void 0,
+-      cacheWrite: usage.prompt_tokens_details?.cache_creation_input_tokens ?? void 0
++      total: input,
++      noCache: input - cacheRead - cacheWrite,
++      cacheRead,
++      cacheWrite
+     },
+     outputTokens: {
+-      total: usage.completion_tokens ?? void 0,
+-      text: void 0,
+-      reasoning: void 0
++      total: output,
++      text: output - reasoning,
++      reasoning
+     },
+     raw: usage
+   };
+@@ -14969,6 +14974,9 @@ var veniceTokenUsageSchema = external_exports.object({
+   prompt_tokens: external_exports.number().nullish(),
+   completion_tokens: external_exports.number().nullish(),
+   total_tokens: external_exports.number().nullish(),
++  completion_tokens_details: external_exports.object({
++    reasoning_tokens: external_exports.number().nullish()
++  }).nullish(),
+   prompt_tokens_details: external_exports.object({
+     cached_tokens: external_exports.number().nullish(),
+     cache_creation_input_tokens: external_exports.number().nullish()
+@@ -15210,7 +15218,7 @@ var VeniceChatLanguageModel = class {
+         user: compatibleOptions.user,
+         max_completion_tokens: compatibleOptions.maxCompletionTokens ?? options.maxOutputTokens,
+         stream: compatibleOptions.stream,
+-        stream_options: compatibleOptions.streamOptions,
++        stream_options: compatibleOptions.streamOptions == null ? void 0 : { include_usage: compatibleOptions.streamOptions.includeUsage },
+         stop: options.stopSequences,
+         stop_token_ids: compatibleOptions.stopTokenIds,
+         seed: options.seed,
+@@ -15313,7 +15321,7 @@ var VeniceChatLanguageModel = class {
+     const body = {
+       ...args,
+       stream: true,
+-      stream_options: this.config.includeUsage ? { includeUsage: true } : void 0
++      stream_options: args.stream_options ?? { include_usage: this.config.includeUsage }
+     };
+     const { responseHeaders, value: response } = await (0, import_provider_utils2.postJsonToApi)({
+       url: this.config.url({ path: "/chat/completions", modelId: this.modelId }),
+@@ -15582,7 +15590,7 @@ function createVenice(options = {}) {
+   });
+   const createChatModel = (modelId) => new VeniceChatLanguageModel(modelId, {
+     ...getModelConfig("chat"),
+-    includeUsage: options.includeUsage,
++    includeUsage: options.includeUsage ?? true,
+     supportsStructuredOutputs: options.supportsStructuredOutputs
+   });
+   const createLanguageModel = (modelId) => createChatModel(modelId);
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 6553fa285b7479f6955efc90c670b1cff0e7fbb9..91dfebcc08603d5d2902a1aa2cb4dbaaf3843500 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -82,17 +82,22 @@ function convertVeniceChatUsage(usage) {
+       raw: void 0
+     };
+   }
++  const input = usage.prompt_tokens ?? 0;
++  const output = usage.completion_tokens ?? 0;
++  const cacheRead = usage.prompt_tokens_details?.cached_tokens ?? 0;
++  const cacheWrite = usage.prompt_tokens_details?.cache_creation_input_tokens ?? 0;
++  const reasoning = usage.completion_tokens_details?.reasoning_tokens ?? 0;
+   return {
+     inputTokens: {
+-      total: usage.total_tokens ?? void 0,
+-      noCache: usage.prompt_tokens ?? void 0,
+-      cacheRead: usage.prompt_tokens_details?.cached_tokens ?? void 0,
+-      cacheWrite: usage.prompt_tokens_details?.cache_creation_input_tokens ?? void 0
++      total: input,
++      noCache: input - cacheRead - cacheWrite,
++      cacheRead,
++      cacheWrite
+     },
+     outputTokens: {
+-      total: usage.completion_tokens ?? void 0,
+-      text: void 0,
+-      reasoning: void 0
++      total: output,
++      text: output - reasoning,
++      reasoning
+     },
+     raw: usage
+   };
+@@ -14947,6 +14952,9 @@ var veniceTokenUsageSchema = external_exports.object({
+   prompt_tokens: external_exports.number().nullish(),
+   completion_tokens: external_exports.number().nullish(),
+   total_tokens: external_exports.number().nullish(),
++  completion_tokens_details: external_exports.object({
++    reasoning_tokens: external_exports.number().nullish()
++  }).nullish(),
+   prompt_tokens_details: external_exports.object({
+     cached_tokens: external_exports.number().nullish(),
+     cache_creation_input_tokens: external_exports.number().nullish()
+@@ -15188,7 +15196,7 @@ var VeniceChatLanguageModel = class {
+         user: compatibleOptions.user,
+         max_completion_tokens: compatibleOptions.maxCompletionTokens ?? options.maxOutputTokens,
+         stream: compatibleOptions.stream,
+-        stream_options: compatibleOptions.streamOptions,
++        stream_options: compatibleOptions.streamOptions == null ? void 0 : { include_usage: compatibleOptions.streamOptions.includeUsage },
+         stop: options.stopSequences,
+         stop_token_ids: compatibleOptions.stopTokenIds,
+         seed: options.seed,
+@@ -15291,7 +15299,7 @@ var VeniceChatLanguageModel = class {
+     const body = {
+       ...args,
+       stream: true,
+-      stream_options: this.config.includeUsage ? { includeUsage: true } : void 0
++      stream_options: args.stream_options ?? { include_usage: this.config.includeUsage }
+     };
+     const { responseHeaders, value: response } = await postJsonToApi({
+       url: this.config.url({ path: "/chat/completions", modelId: this.modelId }),
+@@ -15560,7 +15568,7 @@ function createVenice(options = {}) {
+   });
+   const createChatModel = (modelId) => new VeniceChatLanguageModel(modelId, {
+     ...getModelConfig("chat"),
+-    includeUsage: options.includeUsage,
++    includeUsage: options.includeUsage ?? true,
+     supportsStructuredOutputs: options.supportsStructuredOutputs
+   });
+   const createLanguageModel = (modelId) => createChatModel(modelId);

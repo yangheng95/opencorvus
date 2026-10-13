@@ -1,0 +1,51 @@
+[1/3] START test/usage/venice-stream-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) registry-esm: default reporting preserves the official total [2226.31ms]
+(pass) registry-esm: input cache and output reasoning are exclusive components [1522.11ms]
+(pass) registry-esm: per-call reporting overrides the provider setting [1631.78ms]
+(pass) registry-esm: an explicit provider false remains the protocol value [1504.06ms]
+(pass) registry-esm: an explicit per-call false is sent as the protocol value [1570.85ms]
+(pass) published-commonjs: default reporting preserves the official total [1668.06ms]
+(pass) published-commonjs: input cache and output reasoning are exclusive components [1816.87ms]
+(pass) published-commonjs: per-call reporting overrides the provider setting [1425.82ms]
+(pass) published-commonjs: an explicit provider false remains the protocol value [1573.53ms]
+(pass) published-commonjs: an explicit per-call false is sent as the protocol value [2055.75ms]
+
+ 10 pass
+ 0 fail
+ 98 expect() calls
+Ran 10 tests across 1 file. [23.12s]
+[1/3] DONE test/usage/venice-stream-contract.test.ts exit=0 duration=23.93s
+[2/3] START test/dependabot-runtime-contract.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) @ai-sdk/togetherai streams the configured model and its declared input contract [2190.45ms]
+(pass) @ai-sdk/github-copilot streams the configured model and its declared input contract [1841.94ms]
+(pass) venice-ai-sdk-provider streams the configured model and its declared input contract [1783.85ms]
+(pass) gitlab-ai-provider streams the configured model and its declared input contract [1806.43ms]
+(pass) ai-gateway-provider/providers/fireworks streams the configured model and its declared input contract [1584.84ms]
+(pass) ACP 1.4 routes session configuration, listing, fork and resume in a declared MCP-free project [3117.18ms]
+
+ 6 pass
+ 0 fail
+ 30 expect() calls
+Ran 6 tests across 1 file. [14.74s]
+[2/3] DONE test/dependabot-runtime-contract.test.ts exit=0 duration=15.04s
+[3/3] START test/session/provider-usage-normalization.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Provider-neutral usage normalization > projects AI SDK 7 token details and charges every output token exactly once [1.77ms]
+(pass) Provider-neutral usage normalization > keeps measured usage while exposing an unpriced Provider model [0.23ms]
+(pass) Provider-neutral usage normalization > uses normalized component totals when an Anthropic-family adapter omits a provider total [0.19ms]
+(pass) Provider-neutral usage normalization > uses the request-time over-200K rate without double-charging reasoning output [0.37ms]
+(pass) Provider-neutral usage normalization > includes cache-write input when selecting the over-200K price tier [0.29ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [954.00ms]
+[3/3] DONE test/session/provider-usage-normalization.test.ts exit=0 duration=1.11s

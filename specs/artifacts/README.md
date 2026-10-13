@@ -10,6 +10,8 @@
 
 - [387 电子表格语言与编辑](2026-10-13-spreadsheet-artifact-identity-387/README.md)：真实Sol发布、双语菜单、编辑后CSV和物理收尾。
 
+- [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage/README.md)：协议账本、双语桌面与原生进程收尾。
+
 - [Provider 地址编辑](2026-10-13-provider-address-intent/README.md)：真实表单、实际配置和运行收尾。
 
 - [384 权限续行恢复断点](2026-10-05-connection-workspace-authority/permission-message-recovery-384/README.md)：真实工具、双进程owner、规范状态与完整失败日志。

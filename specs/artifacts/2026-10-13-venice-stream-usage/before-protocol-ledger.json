@@ -1,0 +1,742 @@
+{
+  "identity": "Declared local protocol data; not Venice inference or financial evidence",
+  "cases": {
+    "official-example": {
+      "prompt_tokens": 612,
+      "completion_tokens": 146,
+      "total_tokens": 758
+    },
+    "cached-reasoning": {
+      "prompt_tokens": 1000,
+      "completion_tokens": 300,
+      "total_tokens": 1300,
+      "prompt_tokens_details": {
+        "cached_tokens": 200,
+        "cache_creation_input_tokens": 20
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 80
+      }
+    }
+  },
+  "requests": [
+    {
+      "path": "/converter/v1/chat/completions",
+      "model": "official-example",
+      "stream": true,
+      "stream_options": {
+        "includeUsage": true
+      },
+      "mode": "converter-input"
+    },
+    {
+      "path": "/converter/v1/chat/completions",
+      "model": "cached-reasoning",
+      "stream": true,
+      "stream_options": {
+        "includeUsage": true
+      },
+      "mode": "converter-input"
+    },
+    {
+      "path": "/strict/v1/chat/completions",
+      "model": "official-example",
+      "stream": true,
+      "stream_options": {
+        "includeUsage": true
+      },
+      "mode": "protocol"
+    }
+  ],
+  "observations": [
+    {
+      "id": "official-example",
+      "text": "Owned local protocol result",
+      "usage": {
+        "inputTokens": 758,
+        "inputTokenDetails": {
+          "noCacheTokens": 612
+        },
+        "outputTokens": 146,
+        "outputTokenDetails": {},
+        "totalTokens": 904,
+        "raw": {
+          "prompt_tokens": 612,
+          "completion_tokens": 146,
+          "total_tokens": 758
+        }
+      },
+      "normalized": {
+        "billing": {
+          "status": "priced"
+        },
+        "cost": 0.000904,
+        "tokens": {
+          "total": 904,
+          "input": 612,
+          "output": 146,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "cached-reasoning",
+      "text": "Owned local protocol result",
+      "usage": {
+        "inputTokens": 1300,
+        "inputTokenDetails": {
+          "noCacheTokens": 1000,
+          "cacheReadTokens": 200,
+          "cacheWriteTokens": 20
+        },
+        "outputTokens": 300,
+        "outputTokenDetails": {},
+        "totalTokens": 1600,
+        "raw": {
+          "prompt_tokens": 1000,
+          "completion_tokens": 300,
+          "total_tokens": 1300,
+          "prompt_tokens_details": {
+            "cached_tokens": 200,
+            "cache_creation_input_tokens": 20
+          }
+        }
+      },
+      "normalized": {
+        "billing": {
+          "status": "priced"
+        },
+        "cost": 0.001645,
+        "tokens": {
+          "total": 1600,
+          "input": 1000,
+          "output": 300,
+          "reasoning": 0,
+          "cache": {
+            "write": 20,
+            "read": 200
+          }
+        }
+      }
+    },
+    {
+      "mode": "untracked-wire-probe",
+      "text": "Owned local protocol result",
+      "usage": {
+        "inputTokenDetails": {},
+        "outputTokenDetails": {}
+      }
+    }
+  ],
+  "http": {
+    "status": 200,
+    "stats": {
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "grain": "hour",
+      "current": {
+        "start": 1791820800000,
+        "end": 1791907200000,
+        "summary": {
+          "tokens": {
+            "input": 1612,
+            "output": 446,
+            "reasoning": 0,
+            "cacheRead": 200,
+            "cacheWrite": 20,
+            "total": 2504
+          },
+          "costUSD": 0.002549,
+          "calls": 2,
+          "averageTokensPerCall": 1252,
+          "billing": {
+            "pricedTokens": 2504,
+            "unpricedTokens": 0,
+            "unknownTokens": 0,
+            "percent": 100
+          }
+        }
+      },
+      "previous": {
+        "start": 1791734400000,
+        "end": 1791820800000,
+        "summary": {
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0,
+          "averageTokensPerCall": 0,
+          "billing": {
+            "pricedTokens": 0,
+            "unpricedTokens": 0,
+            "unknownTokens": 0,
+            "percent": null
+          }
+        }
+      },
+      "comparison": {
+        "tokensPercent": null,
+        "costPercent": null,
+        "callsPercent": null
+      },
+      "buckets": [
+        {
+          "start": 1791820800000,
+          "end": 1791824400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791824400000,
+          "end": 1791828000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791828000000,
+          "end": 1791831600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791831600000,
+          "end": 1791835200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791835200000,
+          "end": 1791838800000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791838800000,
+          "end": 1791842400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791842400000,
+          "end": 1791846000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791846000000,
+          "end": 1791849600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791849600000,
+          "end": 1791853200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791853200000,
+          "end": 1791856800000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791856800000,
+          "end": 1791860400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791860400000,
+          "end": 1791864000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791864000000,
+          "end": 1791867600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791867600000,
+          "end": 1791871200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791871200000,
+          "end": 1791874800000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791874800000,
+          "end": 1791878400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791878400000,
+          "end": 1791882000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791882000000,
+          "end": 1791885600000,
+          "tokens": {
+            "input": 1612,
+            "output": 446,
+            "reasoning": 0,
+            "cacheRead": 200,
+            "cacheWrite": 20,
+            "total": 2504
+          },
+          "costUSD": 0.002549,
+          "calls": 2
+        },
+        {
+          "start": 1791885600000,
+          "end": 1791889200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791889200000,
+          "end": 1791892800000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791892800000,
+          "end": 1791896400000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791896400000,
+          "end": 1791900000000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791900000000,
+          "end": 1791903600000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        },
+        {
+          "start": 1791903600000,
+          "end": 1791907200000,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0
+        }
+      ],
+      "providers": [
+        {
+          "providerID": "venice-local-contract",
+          "modelCount": 2,
+          "share": 1,
+          "summary": {
+            "tokens": {
+              "input": 1612,
+              "output": 446,
+              "reasoning": 0,
+              "cacheRead": 200,
+              "cacheWrite": 20,
+              "total": 2504
+            },
+            "costUSD": 0.002549,
+            "calls": 2,
+            "averageTokensPerCall": 1252,
+            "billing": {
+              "pricedTokens": 2504,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        }
+      ],
+      "models": [
+        {
+          "providerID": "venice-local-contract",
+          "modelID": "cached-reasoning",
+          "share": 0.6389776357827476,
+          "summary": {
+            "tokens": {
+              "input": 1000,
+              "output": 300,
+              "reasoning": 0,
+              "cacheRead": 200,
+              "cacheWrite": 20,
+              "total": 1600
+            },
+            "costUSD": 0.001645,
+            "calls": 1,
+            "averageTokensPerCall": 1600,
+            "billing": {
+              "pricedTokens": 1600,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        },
+        {
+          "providerID": "venice-local-contract",
+          "modelID": "official-example",
+          "share": 0.3610223642172524,
+          "summary": {
+            "tokens": {
+              "input": 612,
+              "output": 146,
+              "reasoning": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 904
+            },
+            "costUSD": 0.000904,
+            "calls": 1,
+            "averageTokensPerCall": 904,
+            "billing": {
+              "pricedTokens": 904,
+              "unpricedTokens": 0,
+              "unknownTokens": 0,
+              "percent": 100
+            }
+          }
+        }
+      ],
+      "official": {
+        "fetchedAt": 1791884347181,
+        "sources": [
+          {
+            "id": "openai-organization",
+            "providerID": "openai",
+            "label": "OpenAI organization",
+            "status": "unconfigured",
+            "authorities": [
+              "organization_usage",
+              "financial_ledger"
+            ],
+            "scope": "Entire OpenAI organization; may include traffic outside OpenCorvus.",
+            "freshness": "Provider aggregation lag applies; Costs is the financial authority.",
+            "credentialEnv": "OPENAI_ADMIN_KEY",
+            "documentationURL": "https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "anthropic-organization",
+            "providerID": "anthropic",
+            "label": "Anthropic organization",
+            "status": "unconfigured",
+            "authorities": [
+              "organization_usage",
+              "financial_ledger"
+            ],
+            "scope": "Entire Anthropic organization; may include traffic outside OpenCorvus.",
+            "freshness": "Provider aggregation lag applies; Cost Report is the financial authority.",
+            "credentialEnv": "ANTHROPIC_ADMIN_KEY",
+            "documentationURL": "https://platform.claude.com/docs/en/api/admin/usage_report/retrieve_messages",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "openrouter-account",
+            "providerID": "openrouter",
+            "label": "OpenRouter account credits",
+            "status": "unconfigured",
+            "authorities": [
+              "account_credit"
+            ],
+            "scope": "Lifetime purchased and used credits for the authenticated OpenRouter account; the key ledger includes disabled keys in its default workspace.",
+            "freshness": "Live account credit balance and default-workspace key facts; not a natural-period Token ledger.",
+            "credentialEnv": "OPENROUTER_MANAGEMENT_KEY",
+            "documentationURL": "https://openrouter.ai/docs/api/api-reference/credits/get-credits",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "aws-bedrock-control-plane",
+            "providerID": "amazon-bedrock",
+            "label": "AWS Bedrock control plane",
+            "status": "requires_configuration",
+            "authorities": [
+              "cloud_control_plane"
+            ],
+            "scope": "AWS account and Region through CloudWatch plus Cost Explorer or CUR.",
+            "freshness": "CloudWatch and billing export grains differ.",
+            "credentialEnv": null,
+            "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "azure-openai-control-plane",
+            "providerID": "azure",
+            "label": "Azure OpenAI control plane",
+            "status": "requires_configuration",
+            "authorities": [
+              "cloud_control_plane"
+            ],
+            "scope": "Azure subscription and resource through Azure Monitor plus Cost Management.",
+            "freshness": "Metric and invoice settlement grains differ.",
+            "credentialEnv": null,
+            "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          },
+          {
+            "id": "vertex-ai-control-plane",
+            "providerID": "google-vertex",
+            "label": "Google Vertex AI control plane",
+            "status": "requires_configuration",
+            "authorities": [
+              "cloud_control_plane"
+            ],
+            "scope": "Google Cloud project through Cloud Monitoring plus Cloud Billing export.",
+            "freshness": "Metric and billing export grains differ.",
+            "credentialEnv": null,
+            "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+            "message": null,
+            "period": null,
+            "periodAlignment": null,
+            "tokens": null,
+            "costUSD": null,
+            "credits": null,
+            "keyUsage": null,
+            "reconciliation": null
+          }
+        ],
+        "rule": "compare_never_sum"
+      }
+    }
+  }
+}

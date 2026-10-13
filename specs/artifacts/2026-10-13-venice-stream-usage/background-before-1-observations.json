@@ -1,0 +1,47 @@
+[
+  {
+    "time": "2026-10-13T10:05:26.841Z",
+    "phase": "outer-instance-callbacks-exited",
+    "projectCount": 1,
+    "identities": [
+      "prj_hVgjv6Xpwf1ninOfHtxO"
+    ],
+    "ownedPromptControllers": 0,
+    "runtimeOwners": [],
+    "backgroundSignals": [
+      false
+    ],
+    "physicalWorkSettled": [
+      false
+    ]
+  },
+  {
+    "time": "2026-10-13T10:05:27.371Z",
+    "phase": "normal-stop-at-instance-gate",
+    "stopState": "pending",
+    "admission": {
+      "name": "InstanceProcessAdmissionClosedError",
+      "message": "Instance process admission is closed during runtime settlement"
+    },
+    "backgroundSignals": [
+      false
+    ],
+    "physicalWorkSettled": [
+      false
+    ]
+  },
+  {
+    "time": "2026-10-13T10:05:27.399Z",
+    "phase": "normal-stop-settled-after-owned-abort",
+    "stopState": "settled",
+    "backgroundSignals": [
+      true
+    ],
+    "physicalWorkSettled": [
+      true
+    ],
+    "physicalWork": [
+      "started:prj_hVgjv6Xpwf1ninOfHtxO\ncancelled:prj_hVgjv6Xpwf1ninOfHtxO\n"
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "time": "2026-10-13T10:22:52.111Z",
+    "phase": "outer-instance-callbacks-exited",
+    "projectCount": 2,
+    "identities": [
+      "prj_hm3XQUfVS360GgsdrLSF",
+      "prj_hWIc0WSudaD97uZLKmPy"
+    ],
+    "ownedPromptControllers": 0,
+    "runtimeOwners": [],
+    "backgroundSignals": [
+      false,
+      false
+    ],
+    "physicalWorkSettled": [
+      false,
+      false
+    ]
+  },
+  {
+    "time": "2026-10-13T10:22:52.155Z",
+    "phase": "normal-stop-settled-by-instance-owner",
+    "stopState": "settled",
+    "backgroundSignals": [
+      true,
+      true
+    ],
+    "physicalWorkSettled": [
+      true,
+      true
+    ],
+    "reasons": [
+      "Instance background work cancelled: process settlement",
+      "Instance background work cancelled: process settlement"
+    ],
+    "physicalWork": [
+      "started:prj_hm3XQUfVS360GgsdrLSF\ncancelled:prj_hm3XQUfVS360GgsdrLSF\n",
+      "started:prj_hWIc0WSudaD97uZLKmPy\ncancelled:prj_hWIc0WSudaD97uZLKmPy\n"
+    ]
+  }
+]

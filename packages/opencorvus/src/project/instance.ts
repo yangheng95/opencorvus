@@ -1231,6 +1231,10 @@ export const Instance: InstanceApi = {
     return {
       async waitForIdle(inactivityTimeoutMilliseconds) {
         if (processSettlementGate !== token) throw new Error("Instance process settlement gate is no longer active")
+        // Background work owns serving leases and needs this cancellation to
+        // unwind. Broadcast to every Project before joining any lease; disposal
+        // runs only after this process-wide drain has completed.
+        for (const entry of cache.values()) cancelInstanceBackgroundWork(entry, "process settlement")
         await waitForRuntimeSettlementIdle({
           snapshot: () =>
             [...cache.entries()].flatMap(([key, entry]) =>
