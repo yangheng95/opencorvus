@@ -59,7 +59,7 @@ SideChat通过真实UI创建、发送准备输入并设置自己的Chat目标，
 
 最终本地化复核发现保存反馈与本地校验signal缓存了调用时翻译后的文本。同一owner保持选中、切换语言时，正文控件订阅locale，但这些signal不会重新翻译。改为保存语义文案键、渲染时通过当前t翻译；API原错误和用户/模型原原因仍保留原文。没有目标事实或协议变化。真实语言切换在同一目标的新保存反馈仍可见时复核。
 
-## 最终验收结果
+## 首轮最终验收结果
 
 由主agent独立完成；未继续使用子agent。正式隔离开发`/ui`桌面1280×900已真实呈现并人工查看。6个目标、10个自动轮次全部由真实Provider执行，并通过UI填写依据完成。Provider总计24请求（含runtime1原检查器失败的2请求），runtime2的22请求均实际流式EOF，模型全部精确为`gpt-6.1-sol`，HTTP全部200，固定96请求额度未补充。7个正式服务generation全部退出，端口已关闭，auth/models配对副本已删除，浏览器临时页关闭、视口恢复。
 
@@ -89,3 +89,29 @@ SideChat通过真实UI创建、发送准备输入并设置自己的Chat目标，
 主工作区另有已授权并独立提交的`b3fb10aad`事件投递批次改善，其记录明确保留未达到5秒复制指标的边界，不能算作本轮Goal功能或视觉结果。为保留主交付来源，以普通merge生成`405e9f74b`，只在三份索引冲突中保留双方条目。在隔离worktree补跑该提交涉及的Bus投递和Session fork原子性合同，16测试/51断言通过；再次运行原根目录typecheck，8个package通过。未纳入主工作区其他未提交的Question、Provider、compaction或Sources改动。
 
 [集成原始日志](../../artifacts/2026-10-14-continuous-goal-ui-ux/integration/)与页面/真实Provider证据具有不同用途：前者证明合入代码后的合同、类型和构建，后者证明已实际呈现并人工查看的目标操作。没有把静态检查替代视觉验收，也没有运行UI自动化。收敛主工作区只允许对精确三份重叠索引保存/复核原差异后合并，再完整恢复其他任务原文；其余dirty文件保留，正常pre-push检查不可绕过。
+
+## 当前提交补验方案与Recall
+
+持续Goal继续要求验收至找不出新问题；执行方式遵循用户最新明确的“不要使用子agent”，主agent独立完成，不恢复旧的Sol子agent委托。上一轮为progress：真实页面发现的问题已修复，`548660a8b`已推送main且收敛主工作区，原35个dirty tracked文件与96个untracked文件保留核验通过。新一轮开始worktree clean，主工作区HEAD相同但其他任务仍在修改，继续隔离实施。
+
+已重读本Recall、当前continuous-goal架构、共享控制组件、公共HTTP采集/检查器、私有运行器以及benchmark-debug-template技能。全仓聚焦检索确认当前6组Goal后台合同覆盖原子状态/预算/Project隔离、模型工具、迟到计量、多进程与流式重启恢复；这些局部或受控Provider合同不能代替真实模型或页面。原完整视觉验收在`c641a01b9`加本轮UI源码；其后合入共享Bus投递批次修复。当前已推送代码的真实闭环是本轮需要补强的证据，尚不能仅凭上轮截图证明。
+
+验收输入输出与边界：在`548660a8b`复用已审阅的正式serve私有运行器，新增runtime-3，沿用原已授权auth/models配对、精确`openai/gpt-6.1-sol`以及跨runtime固定96请求总上限。此前24请求，剩余72；绝不重置额度。启动前分别核对模型投影、凭据可用及实际流请求模型。只控制新建私有页面和所持服务，不操作用户进程。
+
+运行计划：通过真实桌面`/ui`分别创建Chat、Task、Mission目标，有限两轮预算，实际确认自动轮次、可见原始controller与累计计量；Task在已接收轮次后暂停、正常结算、显式恢复；读取每个确切公共owner验证预算终态，填写真实完成依据。再正常冷重启同一私有DB，复读三种owner的完整目标身份、revision、用量及已接收轮次，并人工重新查看页面。已有上一轮409、blocked原因保持、SideChat作用域与双语/主题/分栏截图仍作为那些具体场景的证据，不虚构本轮再次覆盖。发生新问题则记录触发、控制/数据流根因、影响面、修复与原验收复跑；发现调度/恢复异常立即横审全部生产入口和occurrence。
+
+同时使用仓库隔离test runner执行6组Goal后台聚焦合同；不运行全量test或UI自动化。运行器以真实活动变化更新180秒无活动超时，HTTP/启动/清理操作30秒，长等待只轮询本轮活句柄且每次不超过60秒。成功标准为三种owner实际两轮结算、完成依据与计量由实时公开HTTP证明、冷重启投影一致、匹配模型的真实流式EOF、截图实际呈现并人工查看、全部后台合同通过、私有进程/端口/配对凭据退休且没有未解释异常。最后归档更新已有证据索引、正常提交/push并保留其他任务改动。
+
+## 当前提交补验结果
+
+runtime-3实际基线为`548660a8b882b4e481014a7e8daee7faab5bc181`，主agent独立完成，无新委托。三种Goal均通过真实UI创建、每种实际2轮、填写真实依据完成：Chat 62,978令牌；Task 204,414令牌；Mission 83,481令牌。Task第1轮在显式暂停之后完成，保留101,491令牌，之后通过UI恢复并完成第2轮。公共检查器对Task以实际完成的`read_task_message`输入`message_id`精确关联各controller，再验证回复完成和`no_action`已结算；Chat/Mission通过真实parentID关联。不是仅凭模型自述或目标标题判断执行。
+
+首次本轮采集脚本误把Task创建正确的202 Accepted响应当作200失败。产品实际已经接受`tsk_g00VXyL1hX00nCG95WjT`，通过该确切ID读取公开详情和conversation保存owner，而未重复创建Task。检查器按生产route合同修正Task创建预期为202，Mission为200；当前helper保留显式取证命令。原观察见[检查器误判记录](../../artifacts/2026-10-14-continuous-goal-ui-ux/runtime-3/seed-checker-failure.json)，不是产品失败或凭据问题。
+
+[重启前](../../artifacts/2026-10-14-continuous-goal-ui-ux/runtime-3/before-restart.json)与[冷重启后](../../artifacts/2026-10-14-continuous-goal-ui-ux/runtime-3/after-restart.json)均为passed。generation1/2保持同一个私有DB，重新公开读取三个完整Goal对象，identity、revision、status、reason、budget、tokensUsed和turnsAccepted均精确一致；三种正式conversation仍保留2个真实controller及明确独立stage，每个实际回复已结算。重开页面后逐一人工查看Chat、Task、Mission截图，完成依据和原计量保留。加载过渡截图单独命名，不能冒充最终图。
+
+通过仓库隔离test runner，持续目标的5组后台合同合计36测试/196断言通过：store/HTTP/Tool 13/60，独立作用域与计量15/119，多进程1/4，真实生产路径受控流式重启1/4，crash checker选择与活动合同6/9。原计划第6组`goal-workload-coverage-contract`对应既有Delivery Goal Workload而非持续目标，实际也通过33/95，但不计入持续目标指标或真实Provider资格。没有UI自动化。
+
+runtime-3新增14条真实`gpt-6.1-sol`请求，均streaming、HTTP200、实际EOF；连同runtime1/2累计38/96，额度没有补充。冷重启后的generation2真实请求为0，累计数维持38。88852、89776两个自有正式服务均SIGTERM结算，7878端口关闭，auth/models配对副本移除，cleanupErrors为空；临时tab关闭、桌面viewport恢复。全部原始audit和日志归档并再次凭据扫描。没有发现新的产品故障、调度/恢复异常或未解释终态，因此本轮不修改已验收生产代码。
+
+证据打包工具同步扩展为按原始runtime序列核对累计账本及额度。首版误要求初始runtime1也提供后续才加入的`previousRunRequests`字段，实际原初始结果没有该字段；改为明确验证首轮编号1、所有轮次连续、后续轮次carry值等于前轮总数，不回写或伪造原初始记录。真实账本38请求、36条成功验收EOF，10个完整audit档/668原始文件，文本及解压档凭据扫描通过。此为证据工具校准，与产品行为无关。

@@ -1,0 +1,844 @@
+{
+  "observedAt": 1791931713665,
+  "owner": {
+    "kind": "mission",
+    "id": "ses_-zUS1ey3HzzaffylBqh4",
+    "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project",
+    "input": {
+      "requestID": "49b8b5e6-a37c-4d5c-a55b-0fee2a147347",
+      "productPillar": "work",
+      "model": "openai/gpt-6.1-sol",
+      "text": "当前合并版本持续目标验收准备。只回复‘准备好了’，正常结束这次输入，稍后用户通过界面设置目标。禁止委派 Agent、创建子 Task、定时等待、外站、文件修改、部署、凭据或权限操作。 保持 Mission opened，不调用完成 Mission。",
+      "expertSquadIDs": [
+        "base"
+      ]
+    },
+    "result": {
+      "missionID": "031bed85566d9a0d",
+      "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "goal": {
+    "id": "pev_g0VXyLx9h00L1IT8bYO8",
+    "revision": "pev_g0VXyMduF00UIdi98ikV",
+    "owner": {
+      "kind": "mission",
+      "id": "ses_-zUS1ey3HzzaffylBqh4"
+    },
+    "objective": "当前合并版本持续目标 Mission 验收。每个自动轮次只回复‘Mission 当前基线验收持续中’，正常结束本轮，保持 Mission opened 和 goal active，直到我从界面填写依据完成。禁止委派 Agent、创建 Task、定时等待、修改文件、外站、部署、凭据或权限操作。",
+    "status": "complete",
+    "reason": "当前548660a8b基线，真实Mission两轮均回复‘Mission 当前基线验收持续中’，持续目标控制器作者独立可见；公开HTTP核对83,481令牌、2/2轮及预算终态，真实截图人工复核。现在完成本隔离目标。",
+    "turnBudget": 2,
+    "tokensUsed": 83481,
+    "turnsAccepted": 2,
+    "createdAt": 1791931499004,
+    "updatedAt": 1791931663338,
+    "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+    "projectID": "prj_hzeAdvEzMNR6nEIERXfZ",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project"
+  },
+  "conversation": {
+    "board": {
+      "kind": "session",
+      "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+      "status": "idle",
+      "composerReferences": {
+        "skillNames": [],
+        "missionSkillNames": [],
+        "expertSquadIDs": []
+      },
+      "title": "当前合并版本持续目标验收准备。只回复‘准备好了’，正常结束这次输入，稍后用户通过界面设置目标。禁止委派 Agent、创建子 Task、定时等待、外站、文件...",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project",
+      "changes": []
+    },
+    "pendingQuestions": [],
+    "pendingPermissions": [],
+    "transcript": [
+      {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1791931279128
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "mission.operator",
+              "missionID": "031bed85566d9a0d",
+              "requestID": "49b8b5e6-a37c-4d5c-a55b-0fee2a147347",
+              "requestFingerprint": "436f1d35e6a185eb65e69c98d4a8a96a362e7f3b804bb8df00d372e30d364724",
+              "openedEventID": "pev_hz7dsDy08jWsLkOdTc5d"
+            },
+            "surface": "panel",
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "mission.operator",
+              "literalText": "当前合并版本持续目标验收准备。只回复‘准备好了’，正常结束这次输入，稍后用户通过界面设置目标。禁止委派 Agent、创建子 Task、定时等待、外站、文件修改、部署、凭据或权限操作。 保持 Mission opened，不调用完成 Mission。"
+            }
+          },
+          "orderKey": "v1:0001791931279128:0000000000000030:0000000000000000:message:msg_hrcST4ruUP91WIfJVyPn",
+          "id": "msg_hrcST4ruUP91WIfJVyPn",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "resolvedRole": "user",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": "mission.operator"
+        },
+        "parts": [
+          {
+            "id": "prt_hlngE7WJxWBbQ2J37Rkg",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_hrcST4ruUP91WIfJVyPn",
+            "orderKey": "v1:0001791931279133:0000000000000031:0000000000000000:part:prt_hlngE7WJxWBbQ2J37Rkg",
+            "type": "text",
+            "text": "当前合并版本持续目标验收准备。只回复‘准备好了’，正常结束这次输入，稍后用户通过界面设置目标。禁止委派 Agent、创建子 Task、定时等待、外站、文件修改、部署、凭据或权限操作。 保持 Mission opened，不调用完成 Mission。",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hzeAdvEzMNR6nEIERXfZ/faca0e9050e6324c30c33b212217617cf939fc9c529b8ab74f8089aa5e45951b.json",
+              "catalog_snapshot_hash": "faca0e9050e6324c30c33b212217617cf939fc9c529b8ab74f8089aa5e45951b"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "mission",
+          "role": "assistant",
+          "time": {
+            "created": 1791931279205,
+            "completed": 1791931284560
+          },
+          "parentID": "msg_hrcST4ruUP91WIfJVyPn",
+          "acceptedInputMessageIDs": [
+            "msg_hrcST4ruUP91WIfJVyPn"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "mission",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 40796,
+            "input": 40790,
+            "output": 6,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001791931279205:0000000000000030:0000000000000000:message:msg_g0VXyL1yX00arePrfEHP",
+          "id": "msg_g0VXyL1yX00arePrfEHP",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "resolvedRole": "mission",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXyL2bG00PM24hOIRd",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyL1yX00arePrfEHP",
+            "orderKey": "v1:0001791931281606:0000000000000031:0000000000000000:part:prt_g0VXyL2bG00PM24hOIRd",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXyL3Gd00Wr1L56mp8",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyL1yX00arePrfEHP",
+            "orderKey": "v1:0001791931284171:0000000000000031:0000000000000000:part:prt_g0VXyL3Gd00Wr1L56mp8",
+            "type": "text",
+            "text": "准备好了",
+            "time": {
+              "start": 1791931284171,
+              "end": 1791931284318
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_06652168aedd22fb016aceb39412e08191a7587ed377d34164",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXyL3MQ00w4O8Z2MbC",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyL1yX00arePrfEHP",
+            "orderKey": "v1:0001791931284534:0000000000000031:0000000000000000:part:prt_g0VXyL3MQ00w4O8Z2MbC",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 40796,
+              "input": 40790,
+              "output": 6,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "goal-controller",
+          "role": "user",
+          "time": {
+            "created": 1791931499405
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "continuous_goal",
+              "goalID": "pev_g0VXyLx9h00L1IT8bYO8",
+              "revision": "pev_g0VXyLx9h00L1IT8bYO8",
+              "requestID": "pev_hKLNF8FdwC2jhOrIkxYZ"
+            },
+            "surface": "panel"
+          },
+          "orderKey": "v1:0001791931499405:0000000000000030:0000000000000000:message:msg_hUjJX5QidtjCNJNUlxLQ",
+          "id": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "resolvedRole": "goal-controller",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": "continuous_goal"
+        },
+        "parts": [
+          {
+            "id": "prt_hdAiFFz22t7ij451slyr",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+            "orderKey": "v1:0001791931499411:0000000000000031:0000000000000000:part:prt_hdAiFFz22t7ij451slyr",
+            "type": "text",
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 当前合并版本持续目标 Mission 验收。每个自动轮次只回复‘Mission 当前基线验收持续中’，正常结束本轮，保持 Mission opened 和 goal active，直到我从界面填写依据完成。禁止委派 Agent、创建 Task、定时等待、修改文件、外站、部署、凭据或权限操作。\nGoal: pev_g0VXyLx9h00L1IT8bYO8; prior settled frontier: msg_g0VXyL1yX00arePrfEHP.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hzeAdvEzMNR6nEIERXfZ/faca0e9050e6324c30c33b212217617cf939fc9c529b8ab74f8089aa5e45951b.json",
+              "catalog_snapshot_hash": "faca0e9050e6324c30c33b212217617cf939fc9c529b8ab74f8089aa5e45951b"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "mission",
+          "role": "assistant",
+          "time": {
+            "created": 1791931499451,
+            "completed": 1791931502482
+          },
+          "parentID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "acceptedInputMessageIDs": [
+            "msg_hUjJX5QidtjCNJNUlxLQ"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "mission",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 41622,
+            "input": 15114,
+            "output": 12,
+            "reasoning": 0,
+            "cache": {
+              "read": 26496,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001791931499451:0000000000000030:0000000000000000:message:msg_g0VXyLxGt00naRLNRJX2",
+          "id": "msg_g0VXyLxGt00naRLNRJX2",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "resolvedRole": "mission",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXyLxRZ00gsgy5YmRW",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyLxGt00naRLNRJX2",
+            "orderKey": "v1:0001791931500113:0000000000000031:0000000000000000:part:prt_g0VXyLxRZ00gsgy5YmRW",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXyLxxc00HdBFYvLuk",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyLxGt00naRLNRJX2",
+            "orderKey": "v1:0001791931502100:0000000000000031:0000000000000000:part:prt_g0VXyLxxc00HdBFYvLuk",
+            "type": "text",
+            "text": "Mission 当前基线验收持续中",
+            "time": {
+              "start": 1791931502100,
+              "end": 1791931502298
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_0a4e1e9024fd72f4016aceb46e00b8819184684a3c5ec2b15f",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXyLy3R00CYrLEcx5c",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyLxGt00naRLNRJX2",
+            "orderKey": "v1:0001791931502463:0000000000000031:0000000000000000:part:prt_g0VXyLy3R00CYrLEcx5c",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 41622,
+              "input": 15114,
+              "output": 12,
+              "reasoning": 0,
+              "cache": {
+                "read": 26496,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "goal-controller",
+          "role": "user",
+          "time": {
+            "created": 1791931503417
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "continuous_goal",
+              "goalID": "pev_g0VXyLx9h00L1IT8bYO8",
+              "revision": "pev_g0VXyLx9h00L1IT8bYO8",
+              "requestID": "pev_hNAJG3HNbGH6odSvLGKt"
+            },
+            "surface": "panel"
+          },
+          "orderKey": "v1:0001791931503417:0000000000000030:0000000000000000:message:msg_hFYFXZuO0SVPnTCeB05A",
+          "id": "msg_hFYFXZuO0SVPnTCeB05A",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "resolvedRole": "goal-controller",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": "continuous_goal"
+        },
+        "parts": [
+          {
+            "id": "prt_hhozW9a6qBMjYbC4It0G",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_hFYFXZuO0SVPnTCeB05A",
+            "orderKey": "v1:0001791931503423:0000000000000031:0000000000000000:part:prt_hhozW9a6qBMjYbC4It0G",
+            "type": "text",
+            "text": "Continuous goal controller — automatic continuation 2.\nThe user authorized this ongoing objective: 当前合并版本持续目标 Mission 验收。每个自动轮次只回复‘Mission 当前基线验收持续中’，正常结束本轮，保持 Mission opened 和 goal active，直到我从界面填写依据完成。禁止委派 Agent、创建 Task、定时等待、修改文件、外站、部署、凭据或权限操作。\nGoal: pev_g0VXyLx9h00L1IT8bYO8; prior settled frontier: msg_g0VXyLxGt00naRLNRJX2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 41622; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hzeAdvEzMNR6nEIERXfZ/faca0e9050e6324c30c33b212217617cf939fc9c529b8ab74f8089aa5e45951b.json",
+              "catalog_snapshot_hash": "faca0e9050e6324c30c33b212217617cf939fc9c529b8ab74f8089aa5e45951b"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "mission",
+          "role": "assistant",
+          "time": {
+            "created": 1791931503455,
+            "completed": 1791931507388
+          },
+          "parentID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "acceptedInputMessageIDs": [
+            "msg_hFYFXZuO0SVPnTCeB05A"
+          ],
+          "modelID": "gpt-6.1-sol",
+          "providerID": "openai",
+          "agent": "mission",
+          "path": {
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 41859,
+            "input": 15351,
+            "output": 12,
+            "reasoning": 0,
+            "cache": {
+              "read": 26496,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001791931503455:0000000000000030:0000000000000000:message:msg_g0VXyLyJT000YBhs7w4u",
+          "id": "msg_g0VXyLyJT000YBhs7w4u",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "resolvedRole": "mission",
+          "agentID": "mission",
+          "sessionAgentID": "mission",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VXyLyTu00Ph2Oa62hS",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyLyJT000YBhs7w4u",
+            "orderKey": "v1:0001791931504102:0000000000000031:0000000000000000:part:prt_g0VXyLyTu00Ph2Oa62hS",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VXyLzDs00LrGNOZdaa",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyLyJT000YBhs7w4u",
+            "orderKey": "v1:0001791931506952:0000000000000031:0000000000000000:part:prt_g0VXyLzDs00LrGNOZdaa",
+            "type": "text",
+            "text": "Mission 当前基线验收持续中",
+            "time": {
+              "start": 1791931506952,
+              "end": 1791931507195
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_0fdb47625e75fa42016aceb472de1c81918e7a75a69d4a0836",
+                "phase": "final_answer"
+              }
+            }
+          },
+          {
+            "id": "prt_g0VXyLzKY00eEbJSm9P4",
+            "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+            "messageID": "msg_g0VXyLyJT000YBhs7w4u",
+            "orderKey": "v1:0001791931507367:0000000000000031:0000000000000000:part:prt_g0VXyLzKY00eEbJSm9P4",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 41859,
+              "input": 15351,
+              "output": 12,
+              "reasoning": 0,
+              "cache": {
+                "read": 26496,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "priced"
+            }
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "event_id": "pev_g0VXyL3N600epqQDN78h",
+        "session_id": "ses_-zUS1ey3HzzaffylBqh4",
+        "orderKey": "v1:0001791931279128:0000000000000050:0000000000000000:session:msg_hrcST4ruUP91WIfJVyPn",
+        "emittedAt": 1791931284572,
+        "timestamp": 1791931284572,
+        "sequence": 4,
+        "summary": "agent.execution.lifecycle",
+        "type": "agent.execution.lifecycle",
+        "payload": {
+          "inputMessageID": "msg_hrcST4ruUP91WIfJVyPn",
+          "status": {
+            "type": "idle"
+          },
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "agentID": "mission",
+          "orderKey": "v1:0001791931279128:0000000000000050:0000000000000000:session:msg_hrcST4ruUP91WIfJVyPn",
+          "resolvedRole": "mission"
+        }
+      },
+      {
+        "event_id": "pev_g0VXyLy3w00xlxKB7zah",
+        "session_id": "ses_-zUS1ey3HzzaffylBqh4",
+        "orderKey": "v1:0001791931499405:0000000000000050:0000000000000000:session:msg_hUjJX5QidtjCNJNUlxLQ",
+        "emittedAt": 1791931502492,
+        "timestamp": 1791931502492,
+        "sequence": 9,
+        "summary": "agent.execution.lifecycle",
+        "type": "agent.execution.lifecycle",
+        "payload": {
+          "inputMessageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "status": {
+            "type": "idle"
+          },
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "agentID": "mission",
+          "orderKey": "v1:0001791931499405:0000000000000050:0000000000000000:session:msg_hUjJX5QidtjCNJNUlxLQ",
+          "resolvedRole": "mission"
+        }
+      },
+      {
+        "event_id": "pev_g0VXyLzLR00uM53kdZo5",
+        "session_id": "ses_-zUS1ey3HzzaffylBqh4",
+        "orderKey": "v1:0001791931503417:0000000000000050:0000000000000000:session:msg_hFYFXZuO0SVPnTCeB05A",
+        "emittedAt": 1791931507420,
+        "timestamp": 1791931507420,
+        "sequence": 13,
+        "summary": "agent.execution.lifecycle",
+        "type": "agent.execution.lifecycle",
+        "payload": {
+          "inputMessageID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "status": {
+            "type": "idle"
+          },
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "channel": "mission",
+          "agentID": "mission",
+          "orderKey": "v1:0001791931503417:0000000000000050:0000000000000000:session:msg_hFYFXZuO0SVPnTCeB05A",
+          "resolvedRole": "mission"
+        }
+      }
+    ],
+    "view": {
+      "topLevelSessionIDs": [
+        "ses_-zUS1ey3HzzaffylBqh4"
+      ],
+      "sessions": [
+        {
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "agentID": "mission",
+          "orderKey": "v1:0001791931279128:0000000000000050:0000000000000000:session:ses_-zUS1ey3HzzaffylBqh4",
+          "stage": "mission",
+          "messageIDs": [
+            "msg_hrcST4ruUP91WIfJVyPn",
+            "msg_g0VXyL1yX00arePrfEHP",
+            "msg_hUjJX5QidtjCNJNUlxLQ",
+            "msg_g0VXyLxGt00naRLNRJX2",
+            "msg_hFYFXZuO0SVPnTCeB05A",
+            "msg_g0VXyLyJT000YBhs7w4u"
+          ],
+          "lastDisplayMessageID": "msg_g0VXyLyJT000YBhs7w4u",
+          "firstMessageTime": 1791931279128,
+          "lastMessageTime": 1791931503455,
+          "firstObservedAt": 1791931279128,
+          "lastObservedAt": 1791931279128,
+          "activity": [],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "inputPreview": {
+            "text": "Continuous goal controller — automatic continuation 2.\nThe user authorized this ongoing objective: 当前合并版本持续目标 Mission 验收。每个自动轮次只回复‘Mission 当前基线验收持续中’，正常结束本轮，保持 Mission opened 和 goal active，直到我从界面填写依据完成。禁止委派 Agent、创建 Task、定时等待、修改文件、外站、部署、凭据或权限操作。\nGoal: pev_g0VXyLx9h00L1IT8bYO8; prior settled frontier: msg_g0VXyLxGt00naRLNRJX2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 41622; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction.",
+            "messageID": "msg_hFYFXZuO0SVPnTCeB05A",
+            "observedAt": 1791931503417,
+            "source": "user_message"
+          },
+          "placement": "top_level"
+        }
+      ],
+      "messages": [
+        {
+          "messageID": "msg_hrcST4ruUP91WIfJVyPn",
+          "inputMessageID": "msg_hrcST4ruUP91WIfJVyPn",
+          "orderKey": "v1:0001791931279128:0000000000000030:0000000000000000:message:msg_hrcST4ruUP91WIfJVyPn",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791931279128,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXyL1yX00arePrfEHP",
+          "inputMessageID": "msg_hrcST4ruUP91WIfJVyPn",
+          "orderKey": "v1:0001791931279205:0000000000000030:0000000000000000:message:msg_g0VXyL1yX00arePrfEHP",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "mission",
+          "time": 1791931279205,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "inputMessageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "orderKey": "v1:0001791931499405:0000000000000030:0000000000000000:message:msg_hUjJX5QidtjCNJNUlxLQ",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791931499405,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXyLxGt00naRLNRJX2",
+          "inputMessageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "orderKey": "v1:0001791931499451:0000000000000030:0000000000000000:message:msg_g0VXyLxGt00naRLNRJX2",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "mission",
+          "time": 1791931499451,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "inputMessageID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "orderKey": "v1:0001791931503417:0000000000000030:0000000000000000:message:msg_hFYFXZuO0SVPnTCeB05A",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791931503417,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXyLyJT000YBhs7w4u",
+          "inputMessageID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "orderKey": "v1:0001791931503455:0000000000000030:0000000000000000:message:msg_g0VXyLyJT000YBhs7w4u",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "mission",
+          "time": 1791931503455,
+          "placement": "top_level"
+        }
+      ]
+    },
+    "turnArtifacts": [],
+    "agentView": {
+      "topLevelExecutionIDs": [
+        "msg_hrcST4ruUP91WIfJVyPn",
+        "msg_hUjJX5QidtjCNJNUlxLQ",
+        "msg_hFYFXZuO0SVPnTCeB05A"
+      ],
+      "sessions": [
+        {
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "agentID": "mission",
+          "orderKey": "v1:0001791931279128:0000000000000030:0000000000000000:message:msg_hrcST4ruUP91WIfJVyPn",
+          "stage": "mission",
+          "messageIDs": [
+            "msg_hrcST4ruUP91WIfJVyPn",
+            "msg_g0VXyL1yX00arePrfEHP"
+          ],
+          "firstMessageTime": 1791931279128,
+          "lastMessageTime": 1791931279128,
+          "firstObservedAt": 1791931279128,
+          "lastObservedAt": 1791931284572,
+          "status": "idle",
+          "activity": [
+            {
+              "id": "prt_g0VXyL3Gd00Wr1L56mp8",
+              "messageID": "msg_g0VXyL1yX00arePrfEHP",
+              "orderKey": "v1:0001791931284171:0000000000000031:0000000000000000:part:prt_g0VXyL3Gd00Wr1L56mp8",
+              "type": "text",
+              "text": "准备好了"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXyL1yX00arePrfEHP",
+          "inputPreview": {
+            "text": "当前合并版本持续目标验收准备。只回复‘准备好了’，正常结束这次输入，稍后用户通过界面设置目标。禁止委派 Agent、创建子 Task、定时等待、外站、文件修改、部署、凭据或权限操作。 保持 Mission opened，不调用完成 Mission。",
+            "messageID": "msg_hrcST4ruUP91WIfJVyPn",
+            "observedAt": 1791931279128,
+            "source": "user_message"
+          },
+          "executionID": "msg_hrcST4ruUP91WIfJVyPn",
+          "inputMessageID": "msg_hrcST4ruUP91WIfJVyPn"
+        },
+        {
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "agentID": "mission",
+          "orderKey": "v1:0001791931499405:0000000000000030:0000000000000000:message:msg_hUjJX5QidtjCNJNUlxLQ",
+          "stage": "mission",
+          "messageIDs": [
+            "msg_hUjJX5QidtjCNJNUlxLQ",
+            "msg_g0VXyLxGt00naRLNRJX2"
+          ],
+          "firstMessageTime": 1791931499405,
+          "lastMessageTime": 1791931499405,
+          "firstObservedAt": 1791931499405,
+          "lastObservedAt": 1791931502492,
+          "status": "idle",
+          "activity": [
+            {
+              "id": "prt_g0VXyLxxc00HdBFYvLuk",
+              "messageID": "msg_g0VXyLxGt00naRLNRJX2",
+              "orderKey": "v1:0001791931502100:0000000000000031:0000000000000000:part:prt_g0VXyLxxc00HdBFYvLuk",
+              "type": "text",
+              "text": "Mission 当前基线验收持续中"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXyLxGt00naRLNRJX2",
+          "inputPreview": {
+            "text": "Continuous goal controller — automatic continuation 1.\nThe user authorized this ongoing objective: 当前合并版本持续目标 Mission 验收。每个自动轮次只回复‘Mission 当前基线验收持续中’，正常结束本轮，保持 Mission opened 和 goal active，直到我从界面填写依据完成。禁止委派 Agent、创建 Task、定时等待、修改文件、外站、部署、凭据或权限操作。\nGoal: pev_g0VXyLx9h00L1IT8bYO8; prior settled frontier: msg_g0VXyL1yX00arePrfEHP.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 0; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction.",
+            "messageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+            "observedAt": 1791931499405,
+            "source": "user_message"
+          },
+          "executionID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "inputMessageID": "msg_hUjJX5QidtjCNJNUlxLQ"
+        },
+        {
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "agentID": "mission",
+          "orderKey": "v1:0001791931503417:0000000000000030:0000000000000000:message:msg_hFYFXZuO0SVPnTCeB05A",
+          "stage": "mission",
+          "messageIDs": [
+            "msg_hFYFXZuO0SVPnTCeB05A",
+            "msg_g0VXyLyJT000YBhs7w4u"
+          ],
+          "firstMessageTime": 1791931503417,
+          "lastMessageTime": 1791931503417,
+          "firstObservedAt": 1791931503417,
+          "lastObservedAt": 1791931507420,
+          "status": "idle",
+          "activity": [
+            {
+              "id": "prt_g0VXyLzDs00LrGNOZdaa",
+              "messageID": "msg_g0VXyLyJT000YBhs7w4u",
+              "orderKey": "v1:0001791931506952:0000000000000031:0000000000000000:part:prt_g0VXyLzDs00LrGNOZdaa",
+              "type": "text",
+              "text": "Mission 当前基线验收持续中"
+            }
+          ],
+          "todos": [],
+          "todoUpdatedAt": 0,
+          "placement": "top_level",
+          "lastDisplayMessageID": "msg_g0VXyLyJT000YBhs7w4u",
+          "inputPreview": {
+            "text": "Continuous goal controller — automatic continuation 2.\nThe user authorized this ongoing objective: 当前合并版本持续目标 Mission 验收。每个自动轮次只回复‘Mission 当前基线验收持续中’，正常结束本轮，保持 Mission opened 和 goal active，直到我从界面填写依据完成。禁止委派 Agent、创建 Task、定时等待、修改文件、外站、部署、凭据或权限操作。\nGoal: pev_g0VXyLx9h00L1IT8bYO8; prior settled frontier: msg_g0VXyLxGt00naRLNRJX2.\nContinue from the actual accumulated evidence. Preserve the original permissions and constraints.\nIf the objective is achieved, record complete with evidence through update_continuous_goal and settle the normal owner contract.\nIf an external blocker prevents further progress, record blocked with the exact unmet work.\nRecorded tokens: 41622; token budget: unspecified.\nThis message is authored by the goal controller, not a new user instruction.",
+            "messageID": "msg_hFYFXZuO0SVPnTCeB05A",
+            "observedAt": 1791931503417,
+            "source": "user_message"
+          },
+          "executionID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "inputMessageID": "msg_hFYFXZuO0SVPnTCeB05A"
+        }
+      ],
+      "messages": [
+        {
+          "messageID": "msg_hrcST4ruUP91WIfJVyPn",
+          "inputMessageID": "msg_hrcST4ruUP91WIfJVyPn",
+          "orderKey": "v1:0001791931279128:0000000000000030:0000000000000000:message:msg_hrcST4ruUP91WIfJVyPn",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791931279128,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXyL1yX00arePrfEHP",
+          "inputMessageID": "msg_hrcST4ruUP91WIfJVyPn",
+          "orderKey": "v1:0001791931279205:0000000000000030:0000000000000000:message:msg_g0VXyL1yX00arePrfEHP",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "mission",
+          "time": 1791931279205,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "inputMessageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "orderKey": "v1:0001791931499405:0000000000000030:0000000000000000:message:msg_hUjJX5QidtjCNJNUlxLQ",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791931499405,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXyLxGt00naRLNRJX2",
+          "inputMessageID": "msg_hUjJX5QidtjCNJNUlxLQ",
+          "orderKey": "v1:0001791931499451:0000000000000030:0000000000000000:message:msg_g0VXyLxGt00naRLNRJX2",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "mission",
+          "time": 1791931499451,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "inputMessageID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "orderKey": "v1:0001791931503417:0000000000000030:0000000000000000:message:msg_hFYFXZuO0SVPnTCeB05A",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "user",
+          "time": 1791931503417,
+          "placement": "top_level"
+        },
+        {
+          "messageID": "msg_g0VXyLyJT000YBhs7w4u",
+          "inputMessageID": "msg_hFYFXZuO0SVPnTCeB05A",
+          "orderKey": "v1:0001791931503455:0000000000000030:0000000000000000:message:msg_g0VXyLyJT000YBhs7w4u",
+          "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+          "sessionAgentID": "mission",
+          "agentID": "mission",
+          "stage": "mission",
+          "time": 1791931503455,
+          "placement": "top_level"
+        }
+      ]
+    },
+    "history": {
+      "oldestTimestamp": 1791931279128,
+      "oldestOrderKey": "v1:0001791931279128:0000000000000030:0000000000000000:message:msg_hrcST4ruUP91WIfJVyPn",
+      "oldestMessageID": "msg_hrcST4ruUP91WIfJVyPn",
+      "hasMore": false,
+      "limit": 80
+    }
+  }
+}

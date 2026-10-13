@@ -1,0 +1,14 @@
+{
+  "stage": "Task public owner setup",
+  "checkerExpectedStatus": 200,
+  "actualStatus": 202,
+  "actualBody": {
+    "task_id": "tsk_g00VXyL1hX00nCG95WjT",
+    "project_id": "prj_hzeAdvEzMNR6nEIERXfZ",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project"
+  },
+  "recordSource": "Original terminal tool output, transcribed after the accepted response failed the checker",
+  "cause": "Checker expected HTTP200 for Task creation; the production contract returns HTTP202 Accepted",
+  "resolution": "Read the exact already accepted Task ID, preserve its real conversation and use explicit HTTP202 expectation for Task creation",
+  "duplicateTaskCreated": false
+}

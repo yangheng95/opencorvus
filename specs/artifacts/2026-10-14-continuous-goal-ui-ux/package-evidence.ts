@@ -71,21 +71,41 @@ const provider = await Promise.all(
   })),
 )
 const requests = provider.flatMap((entry) => entry.data.requests)
-assert.equal(requests.length, 24, "Cumulative real requests include the initial failed checker run")
+const runs = await Promise.all(
+  before.filter((file) => /runtime-\d+[\\/]result\.json$/.test(file)).map(async (file) => ({
+    number: Number(path.basename(path.dirname(file)).slice("runtime-".length)),
+    data: JSON.parse(await fs.readFile(file, "utf8")),
+  })),
+)
+runs.sort((a, b) => a.number - b.number)
+assert(runs.length > 0)
+assert.equal(runs[0]!.number, 1, "Evidence begins with the original first occurrence")
+let cumulative = 0
+for (const [index, run] of runs.entries()) {
+  assert.equal(run.number, index + 1, "Every cumulative occurrence is retained")
+  if (index > 0)
+    assert.equal(run.data.previousRunRequests, cumulative, "A following occurrence retains the original cumulative quota")
+  assert.equal(run.data.maxRequests, 96)
+  cumulative = run.data.totalRequests
+  assert(Number.isSafeInteger(cumulative) && cumulative <= run.data.maxRequests)
+}
+assert.equal(requests.length, cumulative, "The real per-generation ledger matches all settled occurrences")
 for (const request of requests) {
   assert.equal(request.model, "gpt-6.1-sol")
   assert.equal(request.streaming, true)
   assert.equal(request.status, 200)
 }
 const successfulRequests = provider
-  .filter((entry) => entry.file.startsWith("runtime-2/"))
+  .filter((entry) => runs.some((run) => run.data.status === "closed" && entry.file.startsWith(`runtime-${run.number}/`)))
   .flatMap((entry) => entry.data.requests)
 for (const request of successfulRequests)
   assert.equal(request.response_reader.terminal.kind, "eof", "Successful acceptance streams reached real EOF")
-const settlement = JSON.parse(await fs.readFile(path.join(root, "runtime-2/settlement.json"), "utf8"))
-assert.equal(settlement.credentialPairRemoved, true)
-assert(settlement.processes.every((entry: any) => entry.exited))
-assert.equal(settlement.totalRequests, 24)
+for (const run of runs) {
+  const settlement = JSON.parse(await fs.readFile(path.join(root, `runtime-${run.number}/settlement.json`), "utf8"))
+  assert.equal(settlement.credentialPairRemoved, true)
+  assert(settlement.processes.every((entry: any) => entry.exited))
+  assert.equal(settlement.totalRequests, run.data.totalRequests)
+}
 const publishable = (await files(root)).filter(
   (file) =>
     !path

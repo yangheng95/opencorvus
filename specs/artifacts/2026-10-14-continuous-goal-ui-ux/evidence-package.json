@@ -1,7 +1,7 @@
 {
   "status": "passed",
-  "realRequests": 24,
-  "successfulStreams": 22,
+  "realRequests": 38,
+  "successfulStreams": 36,
   "model": "gpt-6.1-sol",
   "streaming": true,
   "archives": [
@@ -44,9 +44,19 @@
       "path": "runtime-2/generation-7-audit.json.gz",
       "files": 10,
       "bytes": 779
+    },
+    {
+      "path": "runtime-3/generation-1-audit.json.gz",
+      "files": 222,
+      "bytes": 30457
+    },
+    {
+      "path": "runtime-3/generation-2-audit.json.gz",
+      "files": 1,
+      "bytes": 196
     }
   ],
-  "scannedFiles": 164,
+  "scannedFiles": 214,
   "credentialScan": "passed",
   "credentialPairRemoved": true,
   "processes": "exited",

@@ -1,0 +1,21 @@
+{
+  "kind": "mission",
+  "id": "ses_-zUS1ey3HzzaffylBqh4",
+  "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nJdWO3\\runner-42884-dP12VI\\project",
+  "input": {
+    "requestID": "49b8b5e6-a37c-4d5c-a55b-0fee2a147347",
+    "productPillar": "work",
+    "model": "openai/gpt-6.1-sol",
+    "text": "当前合并版本持续目标验收准备。只回复‘准备好了’，正常结束这次输入，稍后用户通过界面设置目标。禁止委派 Agent、创建子 Task、定时等待、外站、文件修改、部署、凭据或权限操作。 保持 Mission opened，不调用完成 Mission。",
+    "expertSquadIDs": [
+      "base"
+    ]
+  },
+  "result": {
+    "missionID": "031bed85566d9a0d",
+    "sessionID": "ses_-zUS1ey3HzzaffylBqh4",
+    "created": true,
+    "productPillar": "work"
+  }
+}
