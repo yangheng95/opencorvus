@@ -7,7 +7,7 @@
 - 已读AGENTS.md、continuous-goal当前架构、07-panel与当前数据/会话定义、前轮Recall、UI基础组件和computer-use指导。已全仓搜索continuous-goal SDK/HTTP/事件、Composer/主会话/SideChat入口、owner身份、预算合并与错误合同。当前overlay只把三个goal事件消费为noop，没有实际创建/控制/状态UI；现有GoalGroup/GoalDialogHost属于交付切片，不能复用其语义。
 - 已读App共用会话区域、board/work-ledger/conversation-session/API authority/选中生命周期、Dialog/TextField/Button/Checkbox/i18n与样式tokens。Task使用Task ID，Chat/Mission使用canonical Session ID；Mission logical ID不可替代。Mission draft必须先启动。预算只约束新自动轮次，已接收执行可继续结算；设置后预算可提高/调整，当前API不提供清除已设置预算。
 - 先前独立审计反馈与代码复核一致：共享主会话区域覆盖三模式，SideChat需独立会话身份；不要依赖usage事件必然到达owner SSE。UI只持有当前HTTP投影与表单草稿，不建立第二份目标状态。
-- 本轮真实请求硬上限事先固定为96，包含preflight和后续手工验收，跨服务重启累计。runtime1的2请求因检查器在Chat完成时要求辅助Memory也已EOF而误失败，原失败保留、进程/端口/配对副本已清理；runtime2按剩余94开始，精确Chat reader+所有辅助结算后成功提供正式`/ui`，当前累计4请求。不是产品或凭据失败。详见同轮artifact runtime-plan/manifest/preflight/settlement。
+- 本轮真实请求硬上限事先固定为96，包含preflight和后续手工验收，跨服务重启累计。runtime1的2请求因检查器在Chat完成时要求辅助Memory也已EOF而误失败，原失败保留、进程/端口/配对副本已清理；runtime2按剩余94开始，精确Chat reader+所有辅助结算后成功提供正式`/ui`，启动时累计4请求，最终累计24请求。不是产品或凭据失败。详见同轮artifact runtime-plan/manifest/preflight/settlement。
 
 ## 问题深度与影响
 
@@ -33,7 +33,7 @@
 
 ## 当前状态
 
-方案、实施与本轮真实UI/UX验收已完成。当前工作为证据归档、Git提交与主交付来源收敛；结果见文末。
+方案、实施、证据归档与本轮真实UI/UX验收已完成，代码和证据已独立提交。真实页面的冻结基线与后续Git集成验证分别记录；结果见文末，最终推送及工作区收敛状态由交付说明报告。
 
 ## 首轮真实页面发现与修订
 
@@ -79,3 +79,13 @@ SideChat通过真实UI创建、发送准备输入并设置自己的Chat目标，
 非UI聚焦检查：Goal HTTP适配8测试/15断言；共享作者投影8测试/28断言。overlay和根目录8个package类型检查、最终build、2语言2284键、CSS tokens、docs:check通过。初次服务合同测试的query/path误期望、i18n脚本错误cwd及最初preflight辅助Reader检查误判已修复检查工具/用法并复跑，原失败证据保留。CLI build现有大chunk/use-client提示不影响构建成功，不以这些检查替代视觉证据。
 
 完整audit共有445原始文件，按8个目录保留内容一致的gzip归档；原文件保留本地且不入提交。日志gzip保留原始字节，归档仅用于证据完整性，不以源码或图片摘要代替功能验收。对文本与解压归档执行已知凭据扫描，通过。未变更持久化schema、产品版本或发布渠道；本轮交付为代码、文档及真实运行证据。
+
+## Git集成验证
+
+实现与完整视觉/真实Provider验收使用冻结基线`c641a01b9410d91d41aa2b0e48b0dac0767cd087`及本轮UI改动，功能提交为`740db2638`。随后以普通merge合入远端`461d9856a`，生成`c09dd8d7b`；三份spec索引冲突保留双方条目。远端带入Provider连接生命周期、compaction工作上下文及会话阅读锚点等交付。16个Goal HTTP/作者合同测试仍通过，i18n为2语言2286键，docs:check与architecture-index通过，overlay正式build通过。
+
+首次集成typecheck报告overlay的`ProviderConnectionTestResult`无法从SDK导入。全仓定义与package exports复核确认当前生成源码已有类型，但本地SDK的types出口指向旧`dist/index.d.ts`。在检查清理目标限定于SDK package后执行其现有build，生成产物没有造成tracked源码差异；重跑原根目录typecheck，8个package全部通过。此为本地构建产物更新，不新增源码兼容层；初次错误由工具输出记录，最终构建及复跑原始日志归档。
+
+主工作区另有已授权并独立提交的`b3fb10aad`事件投递批次改善，其记录明确保留未达到5秒复制指标的边界，不能算作本轮Goal功能或视觉结果。为保留主交付来源，以普通merge生成`405e9f74b`，只在三份索引冲突中保留双方条目。在隔离worktree补跑该提交涉及的Bus投递和Session fork原子性合同，16测试/51断言通过；再次运行原根目录typecheck，8个package通过。未纳入主工作区其他未提交的Question、Provider、compaction或Sources改动。
+
+[集成原始日志](../../artifacts/2026-10-14-continuous-goal-ui-ux/integration/)与页面/真实Provider证据具有不同用途：前者证明合入代码后的合同、类型和构建，后者证明已实际呈现并人工查看的目标操作。没有把静态检查替代视觉验收，也没有运行UI自动化。收敛主工作区只允许对精确三份重叠索引保存/复核原差异后合并，再完整恢复其他任务原文；其余dirty文件保留，正常pre-push检查不可绕过。
