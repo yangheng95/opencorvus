@@ -1,0 +1,22 @@
+$ bun script/run-tests.ts test/compaction-message-diagnostics.test.ts
+[1/1] START test/compaction-message-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) long error-only diagnostics publish an exact Message evidence locator [17.84ms]
+(pass) Message evidence paging reconstructs Unicode diagnostics, exact trace and redacted credentials [38.44ms]
+(pass) a failed Message remains a valid attributed record after atomic history copying [2635.30ms]
+(pass) reopened copy generations recover exact original Message diagnostics and fence stale or foreign evidence [2269.74ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_foreign/$part_id [1.27ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_input/$part_id [0.95ms]
+(pass) invalid Message locators return the exact evidence error contract: $message_idprt_invalid [0.84ms]
+{"scenario":"diagnostics-stream","round":1,"sessionID":"ses_-zUS3UGYNzzFqEpzr2HS","originalMessageID":"msg_g0VXwVjRs00rfndDvXn0","summaryID":"msg_g0VXwVjVL00UvLgyOLI7","cumulativeRequests":4,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"messageID":"msg_g0VXwVjRs00rfndDvXn0"},{"offset":30000,"end":60000,"nextOffset":60000,"messageID":"msg_g0VXwVjRs00rfndDvXn0"},{"offset":60000,"end":73037,"nextOffset":null,"messageID":"msg_g0VXwVjRs00rfndDvXn0"}],"trace":"TRACE-MIDDLE-731"}
+{"scenario":"diagnostics-stream","round":2,"sessionID":"ses_-zUS3UGYNzzFqEpzr2HS","originalMessageID":"msg_g0VXwVjRs00rfndDvXn0","summaryID":"msg_g0VXwVjdP00JPWRZeCnA","cumulativeRequests":8,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"messageID":"msg_g0VXwVjRs00rfndDvXn0"},{"offset":30000,"end":60000,"nextOffset":60000,"messageID":"msg_g0VXwVjRs00rfndDvXn0"},{"offset":60000,"end":73037,"nextOffset":null,"messageID":"msg_g0VXwVjRs00rfndDvXn0"}],"trace":"TRACE-MIDDLE-731"}
+{"scenario":"diagnostics-stream","round":3,"sessionID":"ses_-zUS3UGJRzzz51gHg2LM","originalMessageID":"msg_g0VXwVjRs00rfndDvXn0","summaryID":"msg_g0VXwVjlz005cDggrkFm","cumulativeRequests":12,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"requestedSource":{"sessionID":"ses_-zUS3UGYNzzFqEpzr2HS","messageID":"msg_g0VXwVjRs00rfndDvXn0"},"messageID":"msg_g0VXwVjgc0104u3is3BJ"},{"offset":30000,"end":60000,"nextOffset":60000,"requestedSource":{"sessionID":"ses_-zUS3UGYNzzFqEpzr2HS","messageID":"msg_g0VXwVjRs00rfndDvXn0"},"messageID":"msg_g0VXwVjgc0104u3is3BJ"},{"offset":60000,"end":73037,"nextOffset":null,"requestedSource":{"sessionID":"ses_-zUS3UGYNzzFqEpzr2HS","messageID":"msg_g0VXwVjRs00rfndDvXn0"},"messageID":"msg_g0VXwVjgc0104u3is3BJ"}],"trace":"TRACE-MIDDLE-731"}
+(pass) streamed compaction retrieves full Message diagnostics across repeated checkpoints and a copied history [3441.47ms]
+
+ 8 pass
+ 0 fail
+ 126 expect() calls
+Ran 8 tests across 1 file. [13.66s]
+[1/1] DONE test/compaction-message-diagnostics.test.ts exit=0 duration=14.32s

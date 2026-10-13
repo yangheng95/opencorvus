@@ -33,9 +33,12 @@ Project memory has three explicitly scoped authorities:
    pairs; an error-only Message still contributes its actual diagnostics.
    These are metadata on the existing assistant, not a synthetic recovery
    Message. A failed summary remains ineligible as a MEMORY.MD checkpoint.
-   Oversized Message-level diagnostics still follow the transcript preview
-   ceiling; exact paginated recovery of those fields is not yet provided by
-   the Part-scoped evidence reader.
+   Oversized Message diagnostics carry a bounded preview plus an exact
+   `message_id` / `field=diagnostics` reference in the same evidence reader.
+   Pagination reconstructs the complete credential-redacted projection, with
+   the same Unicode offset contract as Part fields. Message and Part locators
+   are mutually exclusive; a missing, mismatched or out-of-scope locator
+   returns `COMPACTION_EVIDENCE_INVALID`.
 
    The compaction transcript includes original authors and exact text/Tool Part
    and call identities. Large text and Tool fields carry bounded previews plus
@@ -91,9 +94,18 @@ Project memory has three explicitly scoped authorities:
    the same copier and retains source locators as historical evidence. Actual
    Task execution continues through its canonical dispatch/runtime contracts.
 
-   Copied Messages expose `copySources` as exact Part ancestry, including earlier
-   copy generations. The reader indexes those explicit historical identities
-   against the copied Parts in its bound snapshot; it never queries the source
+   Copied Messages expose `copySources` as exact Part ancestry and Message
+   diagnostics ancestry, including earlier copy generations. The latter stores
+   original Message/Session/parent/accepted-input identities and a fixed binding
+   to the canonical diagnostic fields, without copying their payload. Local
+   Message and failure-occurrence owner references are rebound together, so a
+   copied failed Message still satisfies its public schema. Diagnostic body,
+   Tool trace and convergence Part references retain their historical meaning.
+   The current diagnostic projection identifies `copiedFrom`; original-ID reads
+   restore the exact source owner/parent/input identities and return the current
+   copy identity separately. A copy is evidence, not a newly executed failure.
+   The reader indexes those explicit historical identities
+   against the copied Messages and Parts in its bound snapshot; it never queries the source
    Session or grants access to uncopied or later source material. A historical
    read reports both its requested source identity and the current copied Part.
    The existing canonical digest primitive binds each origin to its copy-time
@@ -103,6 +115,8 @@ Project memory has three explicitly scoped authorities:
    The digest validates fixed evidence identity, not functional quality, and
    binds full-output metadata rather than externally mutable file contents.
    No second payload store or inferred mapping for older copies is maintained.
+   Copies created before diagnostics ancestry was recorded can read their
+   current Message IDs; unsupported historical aliases remain explicit errors.
 
    Deleting a source tree with a same-Project independent side-history reference
    uses the existing tombstone contract, retaining the original source files.

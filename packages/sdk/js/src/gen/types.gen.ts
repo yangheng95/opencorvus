@@ -3547,15 +3547,27 @@ export type MessageAbortedError = {
   name: "MessageAbortedError"
 }
 
-export type MessageCopyEvidence = Array<{
-  partID: string
-  sources: Array<{
-    messageID: string
-    partID: string
-    sessionID: string
-    sha256: string
-  }>
-}>
+export type MessageCopyEvidence = Array<
+  | {
+      partID: string
+      sources: Array<{
+        messageID: string
+        partID: string
+        sessionID: string
+        sha256: string
+      }>
+    }
+  | {
+      field: "diagnostics"
+      sources: Array<{
+        acceptedInputMessageIDs?: Array<string>
+        messageID: string
+        parentID: string
+        sessionID: string
+        sha256: string
+      }>
+    }
+>
 
 export type MessageOutputLengthError = {
   data: {

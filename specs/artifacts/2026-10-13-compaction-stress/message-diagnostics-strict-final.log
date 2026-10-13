@@ -1,0 +1,24 @@
+$ bun script/run-tests.ts test/compaction-message-diagnostics.test.ts
+[1/1] START test/compaction-message-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) long error-only diagnostics publish an exact Message evidence locator [23.41ms]
+(pass) Message evidence paging reconstructs Unicode diagnostics, exact trace and redacted credentials [36.27ms]
+(pass) Message diagnostics preserve Unicode endpoints and validate their exclusive locator [10.22ms]
+(pass) OpenAI strict Tool arguments materialize Message and Part locators through the production adapter [14.22ms]
+(pass) a failed Message remains a valid attributed record after atomic history copying [2366.83ms]
+(pass) reopened copy generations recover exact original Message diagnostics and fence stale or foreign evidence [2892.71ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_foreign/$part_id [1.63ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_input/$part_id [1.28ms]
+(pass) invalid Message locators return the exact evidence error contract: $message_idprt_invalid [1.14ms]
+{"scenario":"diagnostics-stream","round":1,"sessionID":"ses_-zUS3S4l4zzGe7FIEMRI","originalMessageID":"msg_g0VXwXvFI00Es4qq1PYR","summaryID":"msg_g0VXwXvJc00IkEMiJicL","cumulativeRequests":4,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"messageID":"msg_g0VXwXvFI00Es4qq1PYR"},{"offset":30000,"end":60000,"nextOffset":60000,"messageID":"msg_g0VXwXvFI00Es4qq1PYR"},{"offset":60000,"end":73144,"nextOffset":null,"messageID":"msg_g0VXwXvFI00Es4qq1PYR"}],"trace":"TRACE-MIDDLE-731"}
+{"scenario":"diagnostics-stream","round":2,"sessionID":"ses_-zUS3S4l4zzGe7FIEMRI","originalMessageID":"msg_g0VXwXvFI00Es4qq1PYR","summaryID":"msg_g0VXwXvTY006C3ENlvVu","cumulativeRequests":8,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"messageID":"msg_g0VXwXvFI00Es4qq1PYR"},{"offset":30000,"end":60000,"nextOffset":60000,"messageID":"msg_g0VXwXvFI00Es4qq1PYR"},{"offset":60000,"end":73144,"nextOffset":null,"messageID":"msg_g0VXwXvFI00Es4qq1PYR"}],"trace":"TRACE-MIDDLE-731"}
+{"scenario":"diagnostics-stream","round":3,"sessionID":"ses_-zUS3S4RtzzWW74LVxqC","originalMessageID":"msg_g0VXwXvFI00Es4qq1PYR","summaryID":"msg_g0VXwXveP00nU9Y0j9H1","cumulativeRequests":12,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"requestedSource":{"sessionID":"ses_-zUS3S4l4zzGe7FIEMRI","messageID":"msg_g0VXwXvFI00Es4qq1PYR"},"messageID":"msg_g0VXwXvYC01alUYUVJjx"},{"offset":30000,"end":60000,"nextOffset":60000,"requestedSource":{"sessionID":"ses_-zUS3S4l4zzGe7FIEMRI","messageID":"msg_g0VXwXvFI00Es4qq1PYR"},"messageID":"msg_g0VXwXvYC01alUYUVJjx"},{"offset":60000,"end":73144,"nextOffset":null,"requestedSource":{"sessionID":"ses_-zUS3S4l4zzGe7FIEMRI","messageID":"msg_g0VXwXvFI00Es4qq1PYR"},"messageID":"msg_g0VXwXvYC01alUYUVJjx"}],"trace":"TRACE-MIDDLE-731"}
+(pass) streamed compaction retrieves full Message diagnostics across repeated checkpoints and a copied history [4173.09ms]
+
+ 10 pass
+ 0 fail
+ 135 expect() calls
+Ran 10 tests across 1 file. [14.69s]
+[1/1] DONE test/compaction-message-diagnostics.test.ts exit=0 duration=15.56s

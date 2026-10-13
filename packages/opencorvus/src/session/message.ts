@@ -17,6 +17,7 @@ import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { CompactionHandoff } from "./compaction-handoff"
 import { sideChatIdentity } from "@/chat/side-chat-identity"
 import { MessageCopyEvidence } from "./copy-evidence"
+import { AssistantDiagnostics } from "./assistant-diagnostics"
 import {
   FailureOccurrenceAnchor,
   ProcessorObservationFailure,
@@ -908,35 +909,6 @@ export namespace Message {
     ].join("\n")
   }
 
-  /** Read-only diagnostic facts belonging to this real assistant occurrence.
-   * Both ordinary replay and compaction retain the same attributed evidence;
-   * an attempt failure does not erase its already committed Tool results. */
-  export function assistantDiagnostics(info: Assistant) {
-    if (
-      !info.error &&
-      !info.failureOccurrence &&
-      !info.convergenceFailure &&
-      !info.observationFailures?.length &&
-      info.finish !== "error"
-    ) {
-      return
-    }
-    return ProviderError.redactSensitiveProviderValue({
-      sessionID: info.sessionID,
-      messageID: info.id,
-      author: info.author,
-      parentID: info.parentID,
-      acceptedInputMessageIDs: info.acceptedInputMessageIDs,
-      time: info.time,
-      finish: info.finish,
-      summary: info.summary,
-      error: info.error,
-      failureOccurrence: info.failureOccurrence,
-      convergenceFailure: info.convergenceFailure,
-      observationFailures: info.observationFailures,
-    })
-  }
-
   type ToolResultAttachment = {
     mime: string
     url: string
@@ -1242,7 +1214,7 @@ export namespace Message {
     const toModelOutput = (args: unknown) => toolResultToModelOutput(args, model)
 
     for (const msg of input) {
-      const diagnostics = msg.info.role === "assistant" ? assistantDiagnostics(msg.info) : undefined
+      const diagnostics = msg.info.role === "assistant" ? AssistantDiagnostics.project(msg.info) : undefined
       if (msg.parts.length === 0 && !diagnostics) continue
 
       if (msg.info.role === "user") {

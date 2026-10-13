@@ -1,0 +1,14 @@
+$ bun script/run-tests.ts test/session/fork-atomic-transcript.test.ts
+[1/1] START test/session/fork-atomic-transcript.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [2122.77ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [1591.10ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [1654.40ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [7.75s]
+[1/1] DONE test/session/fork-atomic-transcript.test.ts exit=0 duration=8.48s

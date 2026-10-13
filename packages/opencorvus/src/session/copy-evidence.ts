@@ -1,6 +1,7 @@
 import z from "zod"
 import { canonicalDigestSource } from "@/util/canonical-digest"
 import type { Message } from "./message"
+import { AssistantDiagnostics } from "./assistant-diagnostics"
 
 /** Exact ancestry of copied evidence, never execution or cross-Session access authority. */
 export namespace MessageCopyEvidence {
@@ -14,14 +15,25 @@ export namespace MessageCopyEvidence {
     .strict()
   export type Source = z.infer<typeof Source>
 
+  const DiagnosticSource = Source.omit({ partID: true })
+    .extend({
+      parentID: z.string().min(1),
+      acceptedInputMessageIDs: z.array(z.string().min(1)).min(1).optional(),
+    })
+    .strict()
+  export type DiagnosticSource = z.infer<typeof DiagnosticSource>
+
   export const Schema = z
     .array(
-      z
-        .object({
-          partID: z.string().min(1),
-          sources: z.array(Source).min(1),
-        })
-        .strict(),
+      z.union([
+        z
+          .object({
+            partID: z.string().min(1),
+            sources: z.array(Source).min(1),
+          })
+          .strict(),
+        z.object({ field: z.literal("diagnostics"), sources: z.array(DiagnosticSource).min(1) }).strict(),
+      ]),
     )
     .meta({ ref: "MessageCopyEvidence" })
   export type Info = z.infer<typeof Schema>
@@ -44,8 +56,10 @@ export namespace MessageCopyEvidence {
   }
 
   export function copy(message: Message.WithParts, partIDs: ReadonlyMap<string, string>): Info {
-    const inherited = new Map(message.info.copySources?.map((item) => [item.partID, item.sources]))
-    return message.parts.flatMap((part) => {
+    const inherited = new Map(
+      message.info.copySources?.flatMap((item) => ("partID" in item ? [[item.partID, item.sources] as const] : [])),
+    )
+    const result: Info = message.parts.flatMap((part) => {
       if (part.type !== "text" && part.type !== "tool") return []
       const partID = partIDs.get(part.id)
       if (!partID) throw new Error(`Copied evidence Part ${part.id} has no target identity`)
@@ -64,5 +78,23 @@ export namespace MessageCopyEvidence {
         },
       ]
     })
+    if (message.info.role === "assistant") {
+      const sha256 = diagnosticDigest(message.info)
+      if (sha256)
+        result.push({
+          field: "diagnostics",
+          sources: [
+            ...(message.info.copySources?.flatMap((entry) => ("field" in entry ? entry.sources : [])) ?? []),
+            { ...AssistantDiagnostics.identity(message.info), sha256 },
+          ],
+        })
+    }
+    return result
+  }
+
+  export function diagnosticDigest(info: Message.Assistant): string | undefined {
+    const facts = AssistantDiagnostics.facts(info)
+    if (!facts) return
+    return canonicalDigestSource("message-copy-diagnostics-v1", JSON.parse(JSON.stringify(facts))).sha256
   }
 }

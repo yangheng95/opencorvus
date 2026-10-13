@@ -244,8 +244,56 @@ the existing Provider redactor handles credential fields. Terminal callbacks
 close admission on their exact owner before releasing callers, unless other
 accepted work remains. This uses the existing reusable receipt and in-memory
 termination state. It does not add a retry queue or Task execution authority.
-Oversized Message-level errors still need exact paginated recovery; full
+The Message-level pagination gap left by this stage is addressed below; full
 Task/Mission orchestration and native-compaction comparisons remain open.
 The [focused typecheck receipt](failed-history-typecheck.log) covers the two
 changed tests and their production dependencies. Documentation and architecture
 index checks also pass.
+
+## Complete Message diagnostics and copy identity
+
+[Baseline](message-diagnostics-before.log.gz) contains four positive failures:
+truncated diagnostic JSON, a missing Message reader, and two real atomic-copy
+paths rejected for mismatched failure-occurrence ownership. The source rows
+remain intact. Three existing typed scope-error assertions pass on that baseline.
+
+The same evidence reader now pages Message diagnostics by `message_id` and
+`field=diagnostics`, alongside its Part fields. The canonical copy ancestry adds
+diagnostic identities and fixed payload bindings; it stores no duplicate error
+body. Local copied owners satisfy the Message schema, and historical reads
+restore original Session/Message/parent/input/failure identities. Current copied
+diagnostics identify their recorded sources. Credentials use the existing
+redactor; original diagnostic content and historical Tool/Part trace IDs remain
+source data.
+
+[Final eight-file regression](message-diagnostics-final.log) passes 74 tests;
+[atomic-copy regression](message-diagnostics-atomic.log) adds three. The
+[final ten-case suite](message-diagnostics-strict-final.log) adds the OpenAI
+strict Tool input contract, for **78 distinct passing tests**. Its real
+production adapter materializes nullable Message/Part locators and default
+offsets into correct executable inputs; this is local ABI coverage, not a
+remote model call. [Final trace cases](message-diagnostics-trace-final.log)
+repeat the nine new tests with explicit unpersisted Part/write-error references.
+The [narrow typecheck](message-diagnostics-typecheck-final.log) and
+[SDK generation](message-diagnostics-sdk.log) pass. The initial narrow check
+required only explicit test Tool context and page-array annotations; its
+[diagnostics](message-diagnostics-typecheck.log) are retained.
+
+The new real HTTP streaming chain completes three compactions, reading all
+approximately 73,000 characters in three pages each. The third checkpoint runs
+in a copied independent history and resolves the original Message citation from
+the previous summary. Every received full error body preserves the exact middle
+trace and source cursor; current copy IDs and requested source IDs are recorded
+separately. Twelve local streaming requests per successful chain prove actual
+processor/Tool transport and publication. They are scripted, not real-model
+semantic scoring, and consume zero remote allowance. Earlier local
+[contract](message-diagnostics-contracts.log) and
+[repaired wire](message-diagnostics-wire-repaired.log) runs are repeats, not
+additional distinct coverage. The
+[first wire run](message-diagnostics-wire.log.gz) preserves a checker-only error:
+the model-facing Tool result is already page JSON, not the internal wrapper the
+first checker expected. Raw compressed failures preserve their original bytes.
+
+Total remote use remains **154/160**. Full Task/Mission orchestration, native
+compaction comparison, multi-model distribution and OS power-loss behavior
+remain unverified; no perfect-compression or Codex-equivalence claim is made.

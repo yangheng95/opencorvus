@@ -31,6 +31,7 @@ import { sessionDirectoryFilterCondition } from "./directory-filter"
 import { Log } from "../util/log"
 import { Message } from "./message"
 import { MessageCopyEvidence } from "./copy-evidence"
+import { AssistantDiagnostics } from "./assistant-diagnostics"
 import { MessageStore } from "./message-store"
 import { SessionEvents } from "./events"
 import { Instance } from "../project/instance"
@@ -486,7 +487,7 @@ export namespace Session {
         const parentID =
           msg.info.role === "assistant" ? copiedMessageID(msg.info.parentID, `Message ${msg.info.id}`) : undefined
         const { orderKey: _clonedMessageOrderKey, ...messageInfo } = msg.info
-        const clonedInfo = {
+        let clonedInfo = {
           ...messageInfo,
           sessionID: prepared.id,
           id: newID,
@@ -500,6 +501,9 @@ export namespace Session {
               }
             : {}),
         } as Message.Info
+        if (clonedInfo.role === "assistant") {
+          clonedInfo = AssistantDiagnostics.rebind(clonedInfo, AssistantDiagnostics.identity(clonedInfo))
+        }
         const clonedParts = msg.parts.map((part) => {
           const { orderKey: _clonedPartOrderKey, ...partInfo } = part
           const originalToolPartID = "toolPartID" in part ? part.toolPartID : undefined

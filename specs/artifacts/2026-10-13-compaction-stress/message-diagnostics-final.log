@@ -1,0 +1,167 @@
+$ bun script/run-tests.ts test/compaction-message-diagnostics.test.ts test/compaction-evidence.test.ts test/compaction-fork-lifecycle.test.ts test/compaction-task-authority.test.ts test/compaction-integrity.test.ts test/memory/session-memory.test.ts test/read-context-history-retention.test.ts test/session/failed-history-replay.test.ts
+[1/8] START test/compaction-message-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) long error-only diagnostics publish an exact Message evidence locator [17.82ms]
+(pass) Message evidence paging reconstructs Unicode diagnostics, exact trace and redacted credentials [11.31ms]
+(pass) Message diagnostics preserve Unicode endpoints and validate their exclusive locator [9.83ms]
+(pass) a failed Message remains a valid attributed record after atomic history copying [2599.15ms]
+(pass) reopened copy generations recover exact original Message diagnostics and fence stale or foreign evidence [2492.74ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_foreign/$part_id [1.83ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_input/$part_id [0.95ms]
+(pass) invalid Message locators return the exact evidence error contract: $message_idprt_invalid [1.01ms]
+{"scenario":"diagnostics-stream","round":1,"sessionID":"ses_-zUS3Tehxzz4jtP6xsUH","originalMessageID":"msg_g0VXwWLIL00ke0yNduZw","summaryID":"msg_g0VXwWLLp001f3A9BA0M","cumulativeRequests":4,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"messageID":"msg_g0VXwWLIL00ke0yNduZw"},{"offset":30000,"end":60000,"nextOffset":60000,"messageID":"msg_g0VXwWLIL00ke0yNduZw"},{"offset":60000,"end":73037,"nextOffset":null,"messageID":"msg_g0VXwWLIL00ke0yNduZw"}],"trace":"TRACE-MIDDLE-731"}
+{"scenario":"diagnostics-stream","round":2,"sessionID":"ses_-zUS3Tehxzz4jtP6xsUH","originalMessageID":"msg_g0VXwWLIL00ke0yNduZw","summaryID":"msg_g0VXwWLUV00WGRtk8ebU","cumulativeRequests":8,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"messageID":"msg_g0VXwWLIL00ke0yNduZw"},{"offset":30000,"end":60000,"nextOffset":60000,"messageID":"msg_g0VXwWLIL00ke0yNduZw"},{"offset":60000,"end":73037,"nextOffset":null,"messageID":"msg_g0VXwWLIL00ke0yNduZw"}],"trace":"TRACE-MIDDLE-731"}
+{"scenario":"diagnostics-stream","round":3,"sessionID":"ses_-zUS3TeSSzzCZeVtQiJD","originalMessageID":"msg_g0VXwWLIL00ke0yNduZw","summaryID":"msg_g0VXwWLdQ00y4mogHBaZ","cumulativeRequests":12,"pages":[{"offset":0,"end":30000,"nextOffset":30000,"requestedSource":{"sessionID":"ses_-zUS3Tehxzz4jtP6xsUH","messageID":"msg_g0VXwWLIL00ke0yNduZw"},"messageID":"msg_g0VXwWLXb01h4ai11AwR"},{"offset":30000,"end":60000,"nextOffset":60000,"requestedSource":{"sessionID":"ses_-zUS3Tehxzz4jtP6xsUH","messageID":"msg_g0VXwWLIL00ke0yNduZw"},"messageID":"msg_g0VXwWLXb01h4ai11AwR"},{"offset":60000,"end":73037,"nextOffset":null,"requestedSource":{"sessionID":"ses_-zUS3Tehxzz4jtP6xsUH","messageID":"msg_g0VXwWLIL00ke0yNduZw"},"messageID":"msg_g0VXwWLXb01h4ai11AwR"}],"trace":"TRACE-MIDDLE-731"}
+(pass) streamed compaction retrieves full Message diagnostics across repeated checkpoints and a copied history [3749.69ms]
+
+ 9 pass
+ 0 fail
+ 132 expect() calls
+Ran 9 tests across 1 file. [14.14s]
+[1/8] DONE test/compaction-message-diagnostics.test.ts exit=0 duration=15.23s
+[2/8] START test/compaction-evidence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction evidence fidelity > recovers a persisted megabyte file result across database reopen with isolated project sources [4394.20ms]
+(pass) compaction evidence fidelity > exposes exact text, input and trace locators in the bounded transcript [1.84ms]
+(pass) compaction evidence fidelity > recovers omitted middle text and tool input by exact Part and field [0.96ms]
+(pass) compaction evidence fidelity > returns exact output, typed failure and precise pagination endpoints [0.50ms]
+(pass) compaction evidence fidelity > pages Unicode evidence with exact code-unit cursors and original provenance [0.52ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_other_session/output/0 [0.43ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_text/output/0 [0.35ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_tool/failure/0 [0.32ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_tool/output/1000 [0.37ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_text/text/35028 [0.70ms]
+
+ 10 pass
+ 0 fail
+ 92 expect() calls
+Ran 10 tests across 1 file. [5.64s]
+[2/8] DONE test/compaction-evidence.test.ts exit=0 duration=5.85s
+[3/8] START test/compaction-fork-lifecycle.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) reconstructs the original anchor and retained tail after fork [1898.82ms]
+(pass) reconstructs the original anchor and retained tail after side-chat [1723.51ms]
+(pass) reports a typed integrity failure for a checkpoint pointing outside copied history [1560.03ms]
+(pass) recovers literal source citations after successive fork copies [1903.43ms]
+(pass) recovers literal source citations after successive side-chat copies [2797.87ms]
+(pass) reports a changed copied source while reading its current exact content [2253.05ms]
+{"scenario":"copy-evidence-depth","copies":32,"chars":136000,"elapsedMs":1324}
+(pass) preserves a deep copied evidence chain while fencing another Project [5347.27ms]
+(pass) keeps historical execution references read-only in an independent side context [1856.83ms]
+(pass) copies the completed reply's exact accepted steering batch [1921.70ms]
+(pass) retains independent side-chat source evidence when deleting its standalone source [2176.64ms]
+(pass) rolls back physical deletion when an independent copy commits before its fence [2025.08ms]
+(pass) physically deletes a standalone source when only another Project declares a reference [3858.33ms]
+
+ 12 pass
+ 0 fail
+ 48 expect() calls
+Ran 12 tests across 1 file. [30.74s]
+[3/8] DONE test/compaction-fork-lifecycle.test.ts exit=0 duration=30.91s
+[4/8] START test/compaction-task-authority.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) retains the exact Task authority and source evidence across three worker checkpoints [3498.47ms]
+(pass) reconstructs descriptor-backed Task evidence as independent side history [2593.75ms]
+(pass) returns a Task ownership conflict when copying root execution identity (checkpoint: false) [2672.59ms]
+(pass) returns a Task ownership conflict when copying root execution identity (checkpoint: true) [2174.71ms]
+(pass) returns a Task ownership conflict when copying worker execution identity (checkpoint: false) [2564.25ms]
+(pass) returns a Task ownership conflict when copying worker execution identity (checkpoint: true) [2224.00ms]
+
+ 6 pass
+ 0 fail
+ 46 expect() calls
+Ran 6 tests across 1 file. [17.84s]
+[4/8] DONE test/compaction-task-authority.test.ts exit=0 duration=18.03s
+[5/8] START test/compaction-integrity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction request and continuation contracts > intersects input capacity with the actual combined-window output reservation [10.30ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail before-source and repeated continuation compaction [1871.98ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail after-source and repeated continuation compaction [1793.00ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail at-source and repeated continuation compaction [1876.74ms]
+(pass) compaction request and continuation contracts > prices compaction system, tools and binary images in the same request envelope [3.08ms]
+(pass) compaction request and continuation contracts > retains a completed assistant tool step and reconstructs the same tail [1749.14ms]
+(pass) compaction request and continuation contracts > bounded summary input keeps an exact readable result and attachment locator [3.82ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after tool-result growth [2164.95ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after step-system growth [1906.58ms]
+(pass) real local streaming compaction transport > publishes the completed contract through HTTP stream, processor and durable control [2641.65ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [2070.60ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [2087.14ms]
+(pass) real local streaming compaction transport > publishes the not_smaller contract through HTTP stream, processor and durable control [2216.37ms]
+
+ 13 pass
+ 0 fail
+ 83 expect() calls
+Ran 13 tests across 1 file. [21.94s]
+[5/8] DONE test/compaction-integrity.test.ts exit=0 duration=22.12s
+[6/8] START test/memory/session-memory.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session MEMORY.MD compaction checkpoint > persists automatic compaction control in canonical JSON form [1880.58ms]
+(pass) Session MEMORY.MD compaction checkpoint > parks a contended compaction control until its durable lease expires and recovers it once [2114.76ms]
+(pass) Session MEMORY.MD compaction checkpoint > reconstructs, advances, and projects the latest successful compaction exactly once [1765.60ms]
+(pass) Session MEMORY.MD compaction checkpoint > runs the real compaction integration and exposes its checkpoint to the next compaction only [1583.01ms]
+(pass) Session MEMORY.MD compaction checkpoint > continues original evidence through the provider tool loop into one checkpoint [1739.88ms]
+(pass) Session MEMORY.MD compaction checkpoint > continues copy evidence through the provider tool loop into one checkpoint [2013.20ms]
+(pass) Session MEMORY.MD compaction checkpoint > settles an empty compaction continuation as one typed failed control [1855.99ms]
+(pass) Session MEMORY.MD compaction checkpoint > preserves compaction failure diagnostics, settlement authority, and atomic publication [1463.00ms]
+(pass) Session MEMORY.MD compaction checkpoint > returns the canonical never-compacted document state through tool and HTTP surfaces [2664.94ms]
+(pass) Session MEMORY.MD compaction checkpoint > keeps the last completed checkpoint when a newer summary attempt is incomplete [1683.36ms]
+(pass) Session MEMORY.MD compaction checkpoint > reconstructs a forked checkpoint and enforces project ownership at the HTTP boundary [4345.50ms]
+(pass) Session MEMORY.MD compaction checkpoint > serves the bound checkpoint through the read-only tool and owned HTTP contract [2359.64ms]
+
+ 12 pass
+ 0 fail
+ 37 expect() calls
+Ran 12 tests across 1 file. [27.33s]
+[6/8] DONE test/memory/session-memory.test.ts exit=0 duration=27.53s
+[7/8] START test/read-context-history-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Decision Log reads retain every previously visible page in model context [4.52ms]
+(pass) file evidence projects its original line and column into model context [0.41ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProcessExecutionInterruptedError [3.56ms]
+(pass) preserves committed Tool evidence and exact diagnostics after APIError [0.64ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageOutputLengthError [0.37ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageAbortedError [0.49ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProviderAuthError [0.49ms]
+(pass) projects an error-only assistant as its original attributed diagnostic record [0.53ms]
+(pass) retains secondary observation evidence alongside a completed assistant [0.41ms]
+(pass) redacts credential diagnostics while preserving request trace and literal quoted content [1.05ms]
+(pass) uses the same exact failure occurrence and convergence evidence in normal and compaction views [3.01ms]
+
+ 11 pass
+ 0 fail
+ 35 expect() calls
+Ran 11 tests across 1 file. [1193.00ms]
+[7/8] DONE test/read-context-history-retention.test.ts exit=0 duration=1.34s
+[8/8] START test/session/failed-history-replay.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"scenario":"failed-history-wire","key":"project-one","request":1,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":2,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-one","request":3,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-one","sessionID":"ses_-zUS3TBtOzz4cCmA47Eh","failedMessageID":"msg_g0VXwWo7200xgZeATTL3","summaryMessageID":"msg_g0VXwWoUA00UQFy8e6pC","requestCount":3,"trace":"TRACE-FAILED-project-one","overlap":false,"observedDiagnostics":{"sessionID":"ses_-zUS3TBtOzz4cCmA47Eh","messageID":"msg_g0VXwWo7200xgZeATTL3","parentID":"msg_g0VXwWo6l00Ck5MC1D28","acceptedInputMessageIDs":["msg_g0VXwWo6l00Ck5MC1D28"],"author":"chat","time":{"created":1791904533180,"completed":1791904533200},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3TBtOzz4cCmA47Eh","assistant_message_id":"msg_g0VXwWo7200xgZeATTL3","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3TBtOzz4cCmA47Eh","messageID":"msg_g0VXwWo7200xgZeATTL3","parentID":"msg_g0VXwWo6l00Ck5MC1D28","acceptedInputMessageIDs":["msg_g0VXwWo6l00Ck5MC1D28"],"author":"chat","time":{"created":1791904533180,"completed":1791904533200},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3TBtOzz4cCmA47Eh","assistant_message_id":"msg_g0VXwWo7200xgZeATTL3","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-one","content":"{\"trace\":\"TRACE-FAILED-project-one\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-one; failed assistant msg_g0VXwWo7200xgZeATTL3 has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+{"scenario":"failed-history-wire","key":"project-two","request":4,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":5,"model":"replay"}
+{"scenario":"failed-history-wire","key":"project-two","request":6,"model":"replay"}
+{"scenario":"failed-history-replayed","key":"project-two","sessionID":"ses_-zUS3TArbzzZSENmtqWr","failedMessageID":"msg_g0VXwWp8d00KyC1r3irG","summaryMessageID":"msg_g0VXwWpJl00WH07lIF6e","requestCount":3,"trace":"TRACE-FAILED-project-two","overlap":true,"observedDiagnostics":{"sessionID":"ses_-zUS3TArbzzZSENmtqWr","messageID":"msg_g0VXwWp8d00KyC1r3irG","parentID":"msg_g0VXwWp8T00lCZh8SuT1","acceptedInputMessageIDs":["msg_g0VXwWp8T00lCZh8SuT1"],"author":"chat","time":{"created":1791904537123,"completed":1791904537134},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3TArbzzZSENmtqWr","assistant_message_id":"msg_g0VXwWp8d00KyC1r3irG","error_name":"ProcessExecutionInterruptedError"}},"compactorDiagnostics":{"sessionID":"ses_-zUS3TArbzzZSENmtqWr","messageID":"msg_g0VXwWp8d00KyC1r3irG","parentID":"msg_g0VXwWp8T00lCZh8SuT1","acceptedInputMessageIDs":["msg_g0VXwWp8T00lCZh8SuT1"],"author":"chat","time":{"created":1791904537123,"completed":1791904537134},"finish":"error","error":{"name":"ProcessExecutionInterruptedError","data":{"message":"Original process interrupted after the committed read"}},"failureOccurrence":{"session_id":"ses_-zUS3TArbzzZSENmtqWr","assistant_message_id":"msg_g0VXwWp8d00KyC1r3irG","error_name":"ProcessExecutionInterruptedError"}},"observedToolResult":{"role":"tool","tool_call_id":"call_failed_history_project-two","content":"{\"trace\":\"TRACE-FAILED-project-two\",\"next_offset\":17031,\"evidence\":\"committed-read\"}"},"summary":"Retained TRACE-FAILED-project-two; failed assistant msg_g0VXwWp8d00KyC1r3irG has ProcessExecutionInterruptedError. Its read result is committed; validation remains pending and deployment is denied."}
+(pass) real streamed Session replay and compaction retain a failed attempt's evidence in independent projects [6914.06ms]
+
+ 1 pass
+ 0 fail
+ 30 expect() calls
+Ran 1 test across 1 file. [8.57s]
+[8/8] DONE test/session/failed-history-replay.test.ts exit=0 duration=8.79s

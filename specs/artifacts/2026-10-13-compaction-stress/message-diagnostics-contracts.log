@@ -1,0 +1,59 @@
+$ bun script/run-tests.ts test/compaction-message-diagnostics.test.ts test/compaction-evidence.test.ts test/read-context-history-retention.test.ts
+[1/3] START test/compaction-message-diagnostics.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) long error-only diagnostics publish an exact Message evidence locator [14.11ms]
+(pass) Message evidence paging reconstructs Unicode diagnostics, exact trace and redacted credentials [16.22ms]
+(pass) a failed Message remains a valid attributed record after atomic history copying [2347.51ms]
+(pass) reopened copy generations recover exact original Message diagnostics and fence stale or foreign evidence [2361.69ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_foreign/$part_id [1.79ms]
+(pass) invalid Message locators return the exact evidence error contract: msg_input/$part_id [0.85ms]
+(pass) invalid Message locators return the exact evidence error contract: $message_idprt_invalid [0.89ms]
+
+ 7 pass
+ 0 fail
+ 43 expect() calls
+Ran 7 tests across 1 file. [8.80s]
+[1/3] DONE test/compaction-message-diagnostics.test.ts exit=0 duration=9.54s
+[2/3] START test/compaction-evidence.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction evidence fidelity > recovers a persisted megabyte file result across database reopen with isolated project sources [4384.84ms]
+(pass) compaction evidence fidelity > exposes exact text, input and trace locators in the bounded transcript [2.05ms]
+(pass) compaction evidence fidelity > recovers omitted middle text and tool input by exact Part and field [0.97ms]
+(pass) compaction evidence fidelity > returns exact output, typed failure and precise pagination endpoints [0.74ms]
+(pass) compaction evidence fidelity > pages Unicode evidence with exact code-unit cursors and original provenance [0.74ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_other_session/output/0 [0.57ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_text/output/0 [0.51ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_tool/failure/0 [0.47ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_tool/output/1000 [0.55ms]
+(pass) compaction evidence fidelity > returns the explicit evidence error contract for prt_text/text/35028 [0.63ms]
+
+ 10 pass
+ 0 fail
+ 92 expect() calls
+Ran 10 tests across 1 file. [5.71s]
+[2/3] DONE test/compaction-evidence.test.ts exit=0 duration=5.89s
+[3/3] START test/read-context-history-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Decision Log reads retain every previously visible page in model context [2.64ms]
+(pass) file evidence projects its original line and column into model context [0.28ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProcessExecutionInterruptedError [1.93ms]
+(pass) preserves committed Tool evidence and exact diagnostics after APIError [0.41ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageOutputLengthError [0.21ms]
+(pass) preserves committed Tool evidence and exact diagnostics after MessageAbortedError [0.41ms]
+(pass) preserves committed Tool evidence and exact diagnostics after ProviderAuthError [0.34ms]
+(pass) projects an error-only assistant as its original attributed diagnostic record [0.28ms]
+(pass) retains secondary observation evidence alongside a completed assistant [0.26ms]
+(pass) redacts credential diagnostics while preserving request trace and literal quoted content [0.68ms]
+(pass) uses the same exact failure occurrence and convergence evidence in normal and compaction views [1.45ms]
+
+ 11 pass
+ 0 fail
+ 35 expect() calls
+Ran 11 tests across 1 file. [1389.00ms]
+[3/3] DONE test/read-context-history-retention.test.ts exit=0 duration=1.59s

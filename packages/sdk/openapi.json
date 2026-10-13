@@ -12413,50 +12413,108 @@
       },
       "MessageCopyEvidence": {
         "items": {
-          "additionalProperties": false,
-          "properties": {
-            "partID": {
-              "minLength": 1,
-              "type": "string"
-            },
-            "sources": {
-              "items": {
-                "additionalProperties": false,
-                "properties": {
-                  "messageID": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
-                  "partID": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
-                  "sessionID": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
-                  "sha256": {
-                    "pattern": "^[a-f0-9]{64}$",
-                    "type": "string"
-                  }
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "partID": {
+                  "minLength": 1,
+                  "type": "string"
                 },
-                "required": [
-                  "sessionID",
-                  "messageID",
-                  "partID",
-                  "sha256"
-                ],
-                "type": "object"
+                "sources": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "messageID": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "partID": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "sessionID": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "sha256": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "sessionID",
+                      "messageID",
+                      "partID",
+                      "sha256"
+                    ],
+                    "type": "object"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
               },
-              "minItems": 1,
-              "type": "array"
+              "required": [
+                "partID",
+                "sources"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "field": {
+                  "const": "diagnostics",
+                  "type": "string"
+                },
+                "sources": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "acceptedInputMessageIDs": {
+                        "items": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "messageID": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "parentID": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "sessionID": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "sha256": {
+                        "pattern": "^[a-f0-9]{64}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "sessionID",
+                      "messageID",
+                      "sha256",
+                      "parentID"
+                    ],
+                    "type": "object"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "field",
+                "sources"
+              ],
+              "type": "object"
             }
-          },
-          "required": [
-            "partID",
-            "sources"
-          ],
-          "type": "object"
+          ]
         },
         "type": "array"
       },

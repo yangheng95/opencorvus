@@ -31,6 +31,7 @@ import { TodoStore } from "./todo-store"
 import { SessionControl } from "./control"
 import { createHash } from "node:crypto"
 import { CompactionEvidenceReader } from "./compaction-evidence-reader"
+import { AssistantDiagnostics } from "./assistant-diagnostics"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
 
 type CompactionProcessRuntime = {
@@ -441,9 +442,14 @@ export namespace SessionCompaction {
       const lines = [
         `<message id="${escapeTranscriptText(info.id)}" role="${info.role}" agent="${escapeTranscriptText(info.agent)}" author="${escapeTranscriptText(info.author)}">`,
       ]
-      const diagnostics = info.role === "assistant" ? Message.assistantDiagnostics(info) : undefined
+      const diagnostics = info.role === "assistant" ? AssistantDiagnostics.project(info) : undefined
       if (diagnostics) {
-        lines.push(`<assistant-diagnostics>${jsonForTranscript(diagnostics)}</assistant-diagnostics>`)
+        const serialized = JSON.stringify(diagnostics)
+        const value =
+          serialized.length > TRANSCRIPT_FIELD_MAX_CHARS
+            ? { ...CompactionEvidenceReader.diagnosticReference(info.id), preview: largeTextProjection(serialized) }
+            : diagnostics
+        lines.push(`<assistant-diagnostics>${jsonForTranscript(value)}</assistant-diagnostics>`)
       }
       const parts =
         info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(info)
@@ -520,6 +526,7 @@ export namespace SessionCompaction {
       "Preserve concrete requirements, stable identifiers and references, completed work, unresolved blockers, and useful next actions.",
       "Consolidate the current Session MEMORY.MD with the durable conversation evidence into one self-contained continuation summary. Exclude credentials, application programming interface (API) keys, tokens, passwords, private keys, and other secrets.",
       "Read omitted user text through ReadCompactionEvidence(field=text) before summarizing its requirements. Retrieve relevant omitted Tool input, output, failure and metadata fields by their exact Part IDs. A preview or digest is not the complete source.",
+      "Retrieve omitted assistant error, convergence and observation diagnostics with ReadCompactionEvidence(message_id=<exact Message ID>, field=diagnostics). Preserve the original failed occurrence and trace identities; a copied history is evidence of that original attempt, not a new execution. Message reads and Part reads use mutually exclusive locators.",
       "For unfinished paginated tool work, retrieve the exact persisted output through ReadCompactionEvidence(field=output) and preserve the original result's nextOffset or next_offset verbatim with exact message/Part/call and Artifact locator references. The reader's own nextOffset pages this field; it is distinct from a cursor inside the original result. Never estimate a cursor, convert character and byte offsets, or restart an already completed prefix.",
       "Do not invent an active/current state object, domain handoff payload, terminal report, or JSON envelope.",
       "The original durable conversation and facts remain authoritative; this summary is only a bounded continuation projection.",
