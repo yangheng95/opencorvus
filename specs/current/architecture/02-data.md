@@ -4,6 +4,15 @@
 > `src/bus/` · `src/decision-log/` · `src/storage/` · `src/workspace/workspace.sql.ts` ·
 > `src/control/control.sql.ts`
 
+## Source 事实的批次提交
+
+`persistMessageSources` 在同一 SQLite immediate transaction 内验证真实 Session/Message
+归属、读取该消息的规范 Source Parts，并按 `(type, sourceId)` 去重写入整批来源。
+`MessageStore.sourcePartsInTransaction` 复用规范 Part 校验，仅读取 Source 行；
+`Session.writePartInTransaction` 继续负责身份、顺序、终态准入与提交后事件。
+重复来源重放保留原事实，新增来源仍遵循已完成 Message 的不可变合同。
+Tool outcome、权限执行 receipt 与助手完成的既有生命周期不由这个 helper 改写。
+
 ## 运行时目录根
 
 OpenCorvus 拥有的用户级运行时文件统一位于一个 canonical root。显式配置只接受绝对路径

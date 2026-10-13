@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [381 Sources 并发持久化](2026-10-05-connection-workspace-authority/source-persistence-381/README.md)：聚焦功能合同、真实来源与运行证据。
+
 - [模型列表键盘前缀导航](2026-10-13-model-keyboard/README.md)：真实焦点与选择前后截图。
 
 - [清除操作验收](2026-10-13-clear-intent/README.md)：搜索焦点、代理空值保存、双语桌面截图和实际配置。

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [381 Sources 并发持久化](source-persistence-plan-381.md)：[功能与实页证据](source-persistence-381/README.md)。
+
 - [379 网页转换链接目标](source-link-base-plan-379.md)：[真实引用与点击证据](source-link-base-379/README.md)。
 
 - [378 网页来源字符编码](source-charset-plan-378.md)：[真实官网来源与完整运行证据](source-charset-378/README.md)。

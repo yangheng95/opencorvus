@@ -1,0 +1,355 @@
+{
+  "observedAtUtc": "2026-10-13T06:01:26.686Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hqkeD5MZtymKOPRH2Ryk",
+      "project_id": "prj_hdVNeaMTec4p1h8PG8wt",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-persistence-381-after\\runtime\\data\\projects\\2026\\10\\13\\7270c978-100f-4a8d-bd98-a8218c92ccaa",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"37e25f74-f603-4ca2-a55c-0c36a07f148f\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hL0UA691tpNos7OAPCkb\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUS5jofgzzsJVXX0fLP",
+      "project_id": "prj_hj3NMPCu9xrxtRnWao4l",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-persistence-381-after\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请实际调用两次 webfetch 读取 https://example.com，两次都使用 format=markdown；读取完成后用一句中文概括页面用...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hL0UA691tpNos7OAPCkb",
+      "sessionID": "ses_hqkeD5MZtymKOPRH2Ryk",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791870975587
+      }
+    },
+    {
+      "id": "msg_g0VXuG0OB00ms6AwNKyE",
+      "sessionID": "ses_hqkeD5MZtymKOPRH2Ryk",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791870976123,
+        "completed": 1791870987064
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_b63549fa-c22f-4fe5-aad5-991a44765b6e",
+      "sessionID": "ses_-zUS5jofgzzsJVXX0fLP",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791871019799
+      }
+    },
+    {
+      "id": "msg_g0VXuGBrQ008b3rBwNOA",
+      "sessionID": "ses_-zUS5jofgzzsJVXX0fLP",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791871020220,
+        "completed": 1791871043848
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXuGI1a00hVwmOpHni",
+      "sessionID": "ses_-zUS5jofgzzsJVXX0fLP",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791871043914,
+        "completed": 1791871062150
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXuGMma00OMsgIK8x1",
+      "sessionID": "ses_-zUS5jofgzzsJVXX0fLP",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791871062204,
+        "completed": 1791871072581
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_9626377e-ce37-43ef-954b-3626009527ed",
+      "sessionID": "ses_-zUS5jofgzzsJVXX0fLP",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791871139118
+      }
+    },
+    {
+      "id": "msg_g0VXuGgrd00TQrmHSQkI",
+      "sessionID": "ses_-zUS5jofgzzsJVXX0fLP",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791871139397,
+        "completed": 1791871150911
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXuGjwX00wR4wjX9uJ",
+      "sessionID": "ses_-zUS5jofgzzsJVXX0fLP",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791871151234,
+        "completed": 1791871152141
+      },
+      "finish": "error",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Error: E2E_REQUEST_BUDGET_EXHAUSTED"
+        }
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hhcF95TO6lJuEhRN0qGV",
+      "messageID": "msg_hL0UA691tpNos7OAPCkb",
+      "type": "text",
+      "text": "Reply with OK.",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXuG0fK00FQX47TeEe",
+      "messageID": "msg_g0VXuG0OB00ms6AwNKyE",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuG2tR00KyQ3EiZF0",
+      "messageID": "msg_g0VXuG0OB00ms6AwNKyE",
+      "type": "text",
+      "text": "OK",
+      "textChars": 2,
+      "time": {
+        "start": 1791870985749,
+        "end": 1791870986012
+      }
+    },
+    {
+      "id": "prt_g0VXuG3DL00p5sFEXDHq",
+      "messageID": "msg_g0VXuG0OB00ms6AwNKyE",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXuGBke00KZV79JA4L",
+      "messageID": "msg_b63549fa-c22f-4fe5-aad5-991a44765b6e",
+      "type": "text",
+      "text": "请实际调用两次 webfetch 读取 https://example.com，两次都使用 format=markdown；读取完成后用一句中文概括页面用途，并保留真实来源。不要修改文件、创建任务或调用成员。",
+      "textChars": 104
+    },
+    {
+      "id": "prt_g0VXuGEz9007R7aoykH1",
+      "messageID": "msg_g0VXuGBrQ008b3rBwNOA",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuGHx600AAOEzD0c7",
+      "messageID": "msg_g0VXuGBrQ008b3rBwNOA",
+      "type": "source-url",
+      "sourceId": "b0b4d28a002d2455c35eb2a9b5b78600939a8f5af21f6392b8bd50eda2111431",
+      "url": "https://example.com/",
+      "title": "Example Domain",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXuGHyP00H7ayZ91Rk",
+      "messageID": "msg_g0VXuGBrQ008b3rBwNOA",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXuGJxt00V0k1js0Wu",
+      "messageID": "msg_g0VXuGI1a00hVwmOpHni",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuGMiv00oFvA7eQV5",
+      "messageID": "msg_g0VXuGI1a00hVwmOpHni",
+      "type": "source-url",
+      "sourceId": "b0b4d28a002d2455c35eb2a9b5b78600939a8f5af21f6392b8bd50eda2111431",
+      "url": "https://example.com/",
+      "title": "Example Domain",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXuGMjM00ls72P4cY2",
+      "messageID": "msg_g0VXuGI1a00hVwmOpHni",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXuGMu7004C1kTo4pl",
+      "messageID": "msg_g0VXuGMma00OMsgIK8x1",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuGP2a005iia2hHKc",
+      "messageID": "msg_g0VXuGMma00OMsgIK8x1",
+      "type": "text",
+      "text": "已使用 Markdown 格式实际读取两次：[Example Domain](https://example.com) 用于提供无需许可即可引用的文档示例域名，不应作为测试或监控服务使用。",
+      "textChars": 94,
+      "time": {
+        "start": 1791871070884,
+        "end": 1791871072149
+      }
+    },
+    {
+      "id": "prt_g0VXuGPRk00QA419bdBl",
+      "messageID": "msg_g0VXuGMma00OMsgIK8x1",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXuGgn800sVTNLpaxE",
+      "messageID": "msg_9626377e-ce37-43ef-954b-3626009527ed",
+      "type": "text",
+      "text": "再验证同一步的工具结果：请在同一次响应中并行发出两个完全相同的 webfetch 调用，网址 https://example.com，format=markdown。两次都完成后只回复“读取完成”。不要创建任务或调用成员。",
+      "textChars": 111
+    },
+    {
+      "id": "prt_g0VXuGh9200yoC2p5Lrg",
+      "messageID": "msg_g0VXuGgrd00TQrmHSQkI",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXuGjkP00k60LwfIWk",
+      "messageID": "msg_g0VXuGgrd00TQrmHSQkI",
+      "type": "source-url",
+      "sourceId": "b0b4d28a002d2455c35eb2a9b5b78600939a8f5af21f6392b8bd50eda2111431",
+      "url": "https://example.com/",
+      "title": "Example Domain",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXuGjm000ucqmrzrDv",
+      "messageID": "msg_g0VXuGgrd00TQrmHSQkI",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXuGk9d00qY0toZuEH",
+      "messageID": "msg_g0VXuGjwX00wR4wjX9uJ",
+      "type": "step-start"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXuGHZw00oEFDFmO82",
+      "message_id": "msg_g0VXuGBrQ008b3rBwNOA",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_Ow0vj3OKHLWhK8HdkjMtFnFb\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://example.com\",\"format\":\"markdown\"},\"metadata\":{\"openai\":{\"itemId\":\"fc_042005f68822b125016acdc8420f5487d09d7079bc9f69140a\"}},\"time\":{\"start\":1791871042200}}"
+    },
+    {
+      "id": "prt_g0VXuGMVK00KhOmDE9Qp",
+      "message_id": "msg_g0VXuGI1a00hVwmOpHni",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_c03ab96ed0034d22a550764f4a42c974\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://example.com\",\"format\":\"markdown\"},\"metadata\":{\"openai\":{\"itemId\":\"fc_09595d9cc345c244016acdc855106881918ae210f914be9f30\"}},\"time\":{\"start\":1791871061134}}"
+    },
+    {
+      "id": "prt_g0VXuGjOe00VYCHkacrq",
+      "message_id": "msg_g0VXuGgrd00TQrmHSQkI",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_VPw8rD8PNwtnvzp1YOHZRneB\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://example.com\",\"format\":\"markdown\"},\"metadata\":{\"openai\":{\"itemId\":\"fc_0ac39092461f7c0e016acdc8ad149087d0a081fcc5f6659c7e\"}},\"time\":{\"start\":1791871149132}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXuGHZw00oEFDFmO82",
+      "outcome": "completed",
+      "resultAttemptID": "per_h0PTnQKKwZmqWRhBq5rS",
+      "outputChars": 172,
+      "output": "Example Domain\n\nThis domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.",
+      "metadata": {
+        "originalBytes": 172,
+        "shownBytes": 172,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791871043617
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXuGMVK00KhOmDE9Qp",
+      "outcome": "completed",
+      "resultAttemptID": "per_haEyLroAbmSxw4cNmRZZ",
+      "outputChars": 172,
+      "output": "Example Domain\n\nThis domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.",
+      "metadata": {
+        "originalBytes": 172,
+        "shownBytes": 172,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791871061968
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXuGjOe00VYCHkacrq",
+      "outcome": "completed",
+      "resultAttemptID": "per_ho68QHDru4ZD9r5ofQsS",
+      "outputChars": 172,
+      "output": "Example Domain\n\nThis domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.",
+      "metadata": {
+        "originalBytes": 172,
+        "shownBytes": 172,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791871150459
+      }
+    }
+  ]
+}

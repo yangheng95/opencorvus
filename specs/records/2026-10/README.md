@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [381 Sources 并发持久化](2026-10-13-source-persistence-381.md)：真实数据库重复复现、共享 writer 修复与实页复核。
+
 - [模型列表键盘前缀导航](2026-10-13-model-keyboard.md)：真实Tab/键入/Enter路径与身份保真。
 
 - [清除操作的焦点与保存语义](2026-10-13-clear-intent.md)：并行调查、全调用迁移和真实保存合同。

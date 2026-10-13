@@ -1,0 +1,15 @@
+{
+  "pid": 80588,
+  "occurrence": "source-persistence-381-after-9cd6992c-8780-4e80-b1e8-1b3c7ede91aa",
+  "owner": {
+    "pid": 80588,
+    "processInstanceID": "win32:639274677632127399",
+    "occurrenceID": "a2690cd9-5716-4555-afc8-61e01c8e799e"
+  },
+  "parent": {
+    "pid": 68648,
+    "processInstanceID": "win32:639274677631683819",
+    "occurrenceID": "fa64d564-6562-4931-bf61-63aeafd3e9e5"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

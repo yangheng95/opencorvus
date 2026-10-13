@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [381 Sources 并发持久化](records/2026-10/2026-10-13-source-persistence-381.md)：规范来源唯一性、消息归属与事务发布。
+
 - [模型列表键盘前缀导航](records/2026-10/2026-10-13-model-keyboard.md)：可见模型名称与键盘导航的一致性。
 
 - [清除操作的焦点与保存语义](records/2026-10/2026-10-13-clear-intent.md)：共享搜索控件和代理认证清空的真实前后复核。
