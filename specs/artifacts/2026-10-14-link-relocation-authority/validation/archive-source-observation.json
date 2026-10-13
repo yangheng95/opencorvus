@@ -1,0 +1,11 @@
+{
+  "qualification": "Root's tool-result review; not an original binary stderr capture",
+  "firstArchiveExitCode": 1,
+  "firstFailure": {
+    "code": "ENOENT",
+    "source": ".tmp-codex-directory-target-01a133/copy-kind-source-before.patch"
+  },
+  "cause": "The earlier git diff before product edits was empty. Its PowerShell pipeline supplied no objects to Set-Content, so no empty file was created. The archiver had incorrectly selected that expected file.",
+  "evidenceBoundary": "Original before-edit git status/diff tool results remain in chat. No replacement before patch or artificial empty capture is manufactured. The actual before-launch source snapshots and full final diff are separately retained.",
+  "repair": "Remove the absent item from the exact selection. Retain all already-written original archive files, resume only after direct original byte equality, and reject any differing existing item. Product behavior is unchanged."
+}

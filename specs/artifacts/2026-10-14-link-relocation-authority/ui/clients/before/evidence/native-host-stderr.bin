@@ -1,0 +1,10 @@
+file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/copy-kind-after-tools/fixture-support.mjs:105
+  await fs.writeFile(full, JSON.stringify(data, null, 2), { flag: "wx" })
+                                ^
+
+TypeError: Do not know how to serialize a BigInt
+    at JSON.stringify (<anonymous>)
+    at save (file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/copy-kind-after-tools/fixture-support.mjs:105:33)
+    at async file:///D:/myhexin-local/opencorvus/.tmp-codex-directory-target-01a133/copy-kind-after-tools/verify-state.mjs:31:1
+
+Node.js v25.7.0

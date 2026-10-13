@@ -1,10 +1,14 @@
 # 2026-10 Records
 
+- [Provider 模型摘要](2026-10-14-provider-model-summary.md)：空/部分覆盖继承、10模型完整搜索与中英未知状态的真实修后资格。
+
+- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
+
 - [持续目标 UI/UX](2026-10-14-continuous-goal-ui-ux.md)：目标控制、状态反馈、双语与真实页面复核。
 
 - [长历史分叉耗时](2026-10-14-fork-latency.md)：实际卡顿、共享调用栈与完整数据合同。
 
-- [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle.md)：独立真实矩阵与全局Auth接受影响调查。
+- [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle.md)：真实12秒窗口前后对照、全局Auth接受传播修复及未资格范围。
 
 - [404 Task Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404.md)：真实长目录与同 Request 断流，先补证再修复。
 
@@ -104,7 +108,7 @@
 
 - [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage.md)：协议、取消根因与横向验收。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：414 次真实请求；19k 窗口内完整文件与失败诊断 22 字段通过，保留原始证据、工作笔记和读取范围回执。
+- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：530 次真实请求；19k 预算下两类授权各五轮、20 个动作与 100 字段通过，含真实断线后的原历史续验。
 
 - [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
 

@@ -1,0 +1,998 @@
+{
+  "before": [
+    {
+      "time": "2026-10-13T22:46:05.700Z",
+      "message": "request",
+      "data": {
+        "requestID": "8f7b4e7a-dfff-461f-bfb4-e90e238e7bd5",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:46:05.845Z",
+      "message": "request",
+      "data": {
+        "requestID": "8f7b4e7a-dfff-461f-bfb4-e90e238e7bd5",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 145
+      }
+    },
+    {
+      "time": "2026-10-13T22:46:54.643Z",
+      "message": "request",
+      "data": {
+        "requestID": "8c3948aa-2e9a-40ae-9124-be81ae323610",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:46:54.644Z",
+      "message": "request",
+      "data": {
+        "requestID": "8c3948aa-2e9a-40ae-9124-be81ae323610",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:04.749Z",
+      "message": "request",
+      "data": {
+        "requestID": "18fd68b3-b302-48b8-882d-4d048c81f34f",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:04.750Z",
+      "message": "request",
+      "data": {
+        "requestID": "5c26e5b9-f99b-4579-8008-9c768be7654a",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:04.752Z",
+      "message": "request",
+      "data": {
+        "requestID": "18fd68b3-b302-48b8-882d-4d048c81f34f",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:04.752Z",
+      "message": "request",
+      "data": {
+        "requestID": "5c26e5b9-f99b-4579-8008-9c768be7654a",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.606Z",
+      "message": "request",
+      "data": {
+        "requestID": "b4952c0d-5fb0-49ab-8981-7bcc5a509996",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.607Z",
+      "message": "request",
+      "data": {
+        "requestID": "b4952c0d-5fb0-49ab-8981-7bcc5a509996",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.618Z",
+      "message": "request",
+      "data": {
+        "requestID": "b08a5764-26bb-4547-a1d6-53af7346c72b",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.620Z",
+      "message": "request",
+      "data": {
+        "requestID": "b08a5764-26bb-4547-a1d6-53af7346c72b",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.622Z",
+      "message": "request",
+      "data": {
+        "requestID": "d8b3fc0d-d7cc-4ad1-8c20-d3a0dc4091b1",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.624Z",
+      "message": "request",
+      "data": {
+        "requestID": "d8b3fc0d-d7cc-4ad1-8c20-d3a0dc4091b1",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.626Z",
+      "message": "request",
+      "data": {
+        "requestID": "85f239bb-0970-43db-80c3-e0f4f5e148f2",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.659Z",
+      "message": "request",
+      "data": {
+        "requestID": "85f239bb-0970-43db-80c3-e0f4f5e148f2",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 33
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.662Z",
+      "message": "request",
+      "data": {
+        "requestID": "4bb962a3-4076-4a5e-80a3-b791cf178120",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.663Z",
+      "message": "request",
+      "data": {
+        "requestID": "4bb962a3-4076-4a5e-80a3-b791cf178120",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.665Z",
+      "message": "request",
+      "data": {
+        "requestID": "60332801-cbcc-476e-8c5e-d0dc7251178e",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:47:18.726Z",
+      "message": "request",
+      "data": {
+        "requestID": "60332801-cbcc-476e-8c5e-d0dc7251178e",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 61
+      }
+    }
+  ],
+  "after": [
+    {
+      "time": "2026-10-13T22:49:39.531Z",
+      "message": "request",
+      "data": {
+        "requestID": "e46341f8-d7a5-4b90-8538-d20fe0ae31b0",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:49:39.661Z",
+      "message": "request",
+      "data": {
+        "requestID": "e46341f8-d7a5-4b90-8538-d20fe0ae31b0",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 130
+      }
+    },
+    {
+      "time": "2026-10-13T22:49:49.352Z",
+      "message": "request",
+      "data": {
+        "requestID": "980a61db-e794-494e-9237-931f0aa46df4",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:49:49.355Z",
+      "message": "request",
+      "data": {
+        "requestID": "980a61db-e794-494e-9237-931f0aa46df4",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      }
+    },
+    {
+      "time": "2026-10-13T22:49:59.340Z",
+      "message": "request",
+      "data": {
+        "requestID": "343346c5-875b-47d6-8738-9ee33da243d5",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:49:59.342Z",
+      "message": "request",
+      "data": {
+        "requestID": "343346c5-875b-47d6-8738-9ee33da243d5",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    },
+    {
+      "time": "2026-10-13T22:49:59.345Z",
+      "message": "request",
+      "data": {
+        "requestID": "1b8f6dbf-4438-4d52-a40f-f00e3452743e",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:49:59.346Z",
+      "message": "request",
+      "data": {
+        "requestID": "1b8f6dbf-4438-4d52-a40f-f00e3452743e",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:50:38.157Z",
+      "message": "request",
+      "data": {
+        "requestID": "155def33-985e-4f51-906b-2be118ad6123",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:50:38.158Z",
+      "message": "request",
+      "data": {
+        "requestID": "ffcb1cfc-7f47-4230-af7f-ba702eba5552",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:50:38.159Z",
+      "message": "request",
+      "data": {
+        "requestID": "155def33-985e-4f51-906b-2be118ad6123",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    },
+    {
+      "time": "2026-10-13T22:50:38.159Z",
+      "message": "request",
+      "data": {
+        "requestID": "ffcb1cfc-7f47-4230-af7f-ba702eba5552",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:00.871Z",
+      "message": "request",
+      "data": {
+        "requestID": "27a3ebc5-21bc-4589-96d3-fb80fd071093",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:00.873Z",
+      "message": "request",
+      "data": {
+        "requestID": "27a3ebc5-21bc-4589-96d3-fb80fd071093",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:01.355Z",
+      "message": "request",
+      "data": {
+        "requestID": "5997804e-02d1-4d61-b774-9453a8efa2ff",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:01.357Z",
+      "message": "request",
+      "data": {
+        "requestID": "96ea07af-56e5-4993-85b4-b574442c6fcb",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:01.358Z",
+      "message": "request",
+      "data": {
+        "requestID": "96ea07af-56e5-4993-85b4-b574442c6fcb",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:01.394Z",
+      "message": "request",
+      "data": {
+        "requestID": "5997804e-02d1-4d61-b774-9453a8efa2ff",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 39
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:28.439Z",
+      "message": "request",
+      "data": {
+        "requestID": "25f808b1-0a4b-4fd9-8f9b-be80acb50807",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:28.452Z",
+      "message": "request",
+      "data": {
+        "requestID": "25f808b1-0a4b-4fd9-8f9b-be80acb50807",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 13
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:28.454Z",
+      "message": "request",
+      "data": {
+        "requestID": "c49d5005-fa33-4198-963c-26b1c6a34ace",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:51:28.455Z",
+      "message": "request",
+      "data": {
+        "requestID": "c49d5005-fa33-4198-963c-26b1c6a34ace",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:03.682Z",
+      "message": "request",
+      "data": {
+        "requestID": "b1ee8641-7cb7-4790-a82b-60193d20e819",
+        "method": "POST",
+        "path": "/provider/refresh",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:03.898Z",
+      "message": "request",
+      "data": {
+        "requestID": "b1ee8641-7cb7-4790-a82b-60193d20e819",
+        "method": "POST",
+        "path": "/provider/refresh",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 216
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:03.918Z",
+      "message": "request",
+      "data": {
+        "requestID": "78a21ec8-b6e0-4d4c-804a-e3b21e949386",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:03.919Z",
+      "message": "request",
+      "data": {
+        "requestID": "d461cb2e-cbf3-43dd-a049-82716a49bb87",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:03.920Z",
+      "message": "request",
+      "data": {
+        "requestID": "d461cb2e-cbf3-43dd-a049-82716a49bb87",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:04.057Z",
+      "message": "request",
+      "data": {
+        "requestID": "78a21ec8-b6e0-4d4c-804a-e3b21e949386",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 139
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:48.213Z",
+      "message": "request",
+      "data": {
+        "requestID": "1676f7d0-9647-49d8-882a-15ce031f5286",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:48.214Z",
+      "message": "request",
+      "data": {
+        "requestID": "61d6be98-4136-4de5-94b5-b052dc8d412e",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:48.215Z",
+      "message": "request",
+      "data": {
+        "requestID": "61d6be98-4136-4de5-94b5-b052dc8d412e",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:48.218Z",
+      "message": "request",
+      "data": {
+        "requestID": "1676f7d0-9647-49d8-882a-15ce031f5286",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:52.809Z",
+      "message": "request",
+      "data": {
+        "requestID": "1969655a-01dd-46d7-b1e5-6e9fef98ff93",
+        "method": "POST",
+        "path": "/provider/refresh",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:52.987Z",
+      "message": "request",
+      "data": {
+        "requestID": "1969655a-01dd-46d7-b1e5-6e9fef98ff93",
+        "method": "POST",
+        "path": "/provider/refresh",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 178
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:53.007Z",
+      "message": "request",
+      "data": {
+        "requestID": "fb7a817c-3b42-4984-a97f-aee878c5b48f",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:53.008Z",
+      "message": "request",
+      "data": {
+        "requestID": "23ee1103-cd8a-40b4-90af-f1933a76b63b",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:53.008Z",
+      "message": "request",
+      "data": {
+        "requestID": "23ee1103-cd8a-40b4-90af-f1933a76b63b",
+        "method": "GET",
+        "path": "/provider/auth",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      }
+    },
+    {
+      "time": "2026-10-13T22:52:53.165Z",
+      "message": "request",
+      "data": {
+        "requestID": "fb7a817c-3b42-4984-a97f-aee878c5b48f",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 157
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.854Z",
+      "message": "request",
+      "data": {
+        "requestID": "4a21f544-7087-4e5d-9b90-2c9f74fda1b3",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.854Z",
+      "message": "request",
+      "data": {
+        "requestID": "4a21f544-7087-4e5d-9b90-2c9f74fda1b3",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.862Z",
+      "message": "request",
+      "data": {
+        "requestID": "8642a453-da12-469e-a5a8-4b55d516e3cd",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.876Z",
+      "message": "request",
+      "data": {
+        "requestID": "8642a453-da12-469e-a5a8-4b55d516e3cd",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 14
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.877Z",
+      "message": "request",
+      "data": {
+        "requestID": "548682ab-5437-4d89-acb9-e77e442aaf51",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.878Z",
+      "message": "request",
+      "data": {
+        "requestID": "548682ab-5437-4d89-acb9-e77e442aaf51",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.880Z",
+      "message": "request",
+      "data": {
+        "requestID": "00145319-b698-4f8a-83b0-28256555d2db",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.881Z",
+      "message": "request",
+      "data": {
+        "requestID": "00145319-b698-4f8a-83b0-28256555d2db",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.883Z",
+      "message": "request",
+      "data": {
+        "requestID": "aeb29760-c0d9-4eea-b00d-cae56b5b8676",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.885Z",
+      "message": "request",
+      "data": {
+        "requestID": "aeb29760-c0d9-4eea-b00d-cae56b5b8676",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.887Z",
+      "message": "request",
+      "data": {
+        "requestID": "68923dcd-6c47-441d-833a-6066320908c2",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:53:00.902Z",
+      "message": "request",
+      "data": {
+        "requestID": "68923dcd-6c47-441d-833a-6066320908c2",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 15
+      }
+    }
+  ],
+  "overflow": [
+    {
+      "time": "2026-10-13T22:57:18.710Z",
+      "message": "request",
+      "data": {
+        "requestID": "909cb301-7544-434b-9d21-2899ae61c467",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:18.860Z",
+      "message": "request",
+      "data": {
+        "requestID": "909cb301-7544-434b-9d21-2899ae61c467",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 150
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:37.746Z",
+      "message": "request",
+      "data": {
+        "requestID": "e016c5f7-d269-486d-b861-56b3c2dc7941",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:37.747Z",
+      "message": "request",
+      "data": {
+        "requestID": "e016c5f7-d269-486d-b861-56b3c2dc7941",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:43.256Z",
+      "message": "request",
+      "data": {
+        "requestID": "3c8cfbb8-0c07-4447-bb50-36e4d0d3f223",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:43.258Z",
+      "message": "request",
+      "data": {
+        "requestID": "2f5f5f42-b06b-440e-ba71-42bd2c9eb8bf",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:43.259Z",
+      "message": "request",
+      "data": {
+        "requestID": "3c8cfbb8-0c07-4447-bb50-36e4d0d3f223",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:43.259Z",
+      "message": "request",
+      "data": {
+        "requestID": "2f5f5f42-b06b-440e-ba71-42bd2c9eb8bf",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.760Z",
+      "message": "request",
+      "data": {
+        "requestID": "90930471-0e07-4669-a2cf-11ee4034f351",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.761Z",
+      "message": "request",
+      "data": {
+        "requestID": "90930471-0e07-4669-a2cf-11ee4034f351",
+        "method": "GET",
+        "path": "/global/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.772Z",
+      "message": "request",
+      "data": {
+        "requestID": "c39648ff-c3e8-4a4c-a876-e83ee97afb91",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.773Z",
+      "message": "request",
+      "data": {
+        "requestID": "c39648ff-c3e8-4a4c-a876-e83ee97afb91",
+        "method": "GET",
+        "path": "/global/providers",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.775Z",
+      "message": "request",
+      "data": {
+        "requestID": "a3e0658b-4f5d-4c71-b2bd-9bd03c9bcae5",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.776Z",
+      "message": "request",
+      "data": {
+        "requestID": "a3e0658b-4f5d-4c71-b2bd-9bd03c9bcae5",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.778Z",
+      "message": "request",
+      "data": {
+        "requestID": "f1aa10d5-98ec-4709-99c4-66b596dfb5dd",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.803Z",
+      "message": "request",
+      "data": {
+        "requestID": "f1aa10d5-98ec-4709-99c4-66b596dfb5dd",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 25
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.805Z",
+      "message": "request",
+      "data": {
+        "requestID": "4be20fa9-40ef-4684-b879-43f06ab49a52",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.806Z",
+      "message": "request",
+      "data": {
+        "requestID": "4be20fa9-40ef-4684-b879-43f06ab49a52",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.807Z",
+      "message": "request",
+      "data": {
+        "requestID": "7b19e212-2d66-4cd6-8822-3c641dc255ce",
+        "method": "GET",
+        "path": "/provider",
+        "status": "started"
+      }
+    },
+    {
+      "time": "2026-10-13T22:57:56.823Z",
+      "message": "request",
+      "data": {
+        "requestID": "7b19e212-2d66-4cd6-8822-3c641dc255ce",
+        "method": "GET",
+        "path": "/provider",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 16
+      }
+    }
+  ]
+}

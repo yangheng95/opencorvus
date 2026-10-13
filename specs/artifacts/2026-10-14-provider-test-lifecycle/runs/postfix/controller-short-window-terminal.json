@@ -1,0 +1,17 @@
+{
+  "started": 1791930725606,
+  "at": 1791930753182,
+  "baseline": 1,
+  "matched": {
+    "id": 2,
+    "method": "POST",
+    "path": "/owned-lifecycle-a/v1/chat/completions",
+    "receivedAt": 1791930743169,
+    "model": "owned-lifecycle-a-model",
+    "streaming": true,
+    "initialCredentialMatched": false,
+    "respondedAt": 1791930753172,
+    "status": 400
+  },
+  "expired": false
+}

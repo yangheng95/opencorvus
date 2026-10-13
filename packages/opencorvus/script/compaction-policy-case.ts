@@ -158,6 +158,7 @@ export namespace CompactionPolicyCase {
     resume?: Resume
     resumeProbe?: Record<string, any>
     compareNative?: boolean
+    fullContextTokens?: number
     project: string
     model: Provider.Model
     inactive: <T>(run: (signal: AbortSignal) => Promise<T>) => Promise<T>
@@ -180,6 +181,7 @@ export namespace CompactionPolicyCase {
       { RequestBudget },
       { ContextBudget },
       { EffectiveConfig },
+      { Config },
     ] = await Promise.all([
       import("@/session"),
       import("@/session/message"),
@@ -194,8 +196,11 @@ export namespace CompactionPolicyCase {
       import("@/session/request-budget"),
       import("@/session/context-budget"),
       import("@/config/effective"),
+      import("@/config/config"),
     ])
     const target = { providerID: input.model.providerID, modelID: input.model.id }
+    if (input.fullContextTokens !== undefined)
+      assert(Number.isSafeInteger(input.fullContextTokens) && input.fullContextTokens > 0)
     if (input.compareNative) {
       assert.equal(input.rounds, 1, "Native reference comparison currently measures one checkpoint")
       assert.equal(input.resume, undefined, "Native comparison starts from the same original corpus")
@@ -245,79 +250,89 @@ export namespace CompactionPolicyCase {
           },
         }),
       })
-      const config = await EffectiveConfig.effective({ sessionID: copy.id })
-      const laneReport: Record<string, unknown> = {
-        lane,
-        sessionID: copy.id,
-        requestStart: input.requestCount(),
-        visibleMessageIDs,
-        ...(nativeReference ? { nativeReference } : {}),
-        inputEstimate: RequestBudget.estimate({ messages, tools: { [toolName]: executionTool } }),
-        contextCapacity: ContextBudget.capacity({ config, model: input.model }),
-        effects,
-      }
-      lanes.push(laneReport)
-      const seeded = await authored.assistant(copy.id, probe.id, "", false)
-      const assistant = (await Session.updateMessage({ ...seeded, finish: undefined })) as Message.Assistant
-      laneReport.assistantMessageID = assistant.id
-      laneReport.processorResult = await input.inactive(async (abort) => {
-        const processor = SessionProcessor.create({
-          assistantMessage: assistant,
+      const projectCapacity = (await Config.getProject()).compaction?.max_context_tokens
+      const adjustCapacity =
+        lane === "full" && input.fullContextTokens !== undefined && input.fullContextTokens !== projectCapacity
+      try {
+        if (adjustCapacity)
+          await Config.updateProjectPatch({ compaction: { max_context_tokens: input.fullContextTokens } })
+        const config = await EffectiveConfig.effective({ sessionID: copy.id })
+        const laneReport: Record<string, unknown> = {
+          lane,
           sessionID: copy.id,
-          model: input.model,
-          abort,
-          stopAfterAssistantCompletion: true,
-        })
-        return processor.process({
-          user: probe,
-          sessionID: copy.id,
-          model: input.model,
-          agentID: "chat",
-          agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("chat")),
-          system: [],
-          messages,
-          tools: { [toolName]: executionTool },
-          abort,
-          stopWhen: isStepCount(1),
-        })
-      })
-      const actual = await MessageStore.get({ sessionID: copy.id, messageID: assistant.id })
-      const calls = actual.parts.filter((part) => part.type === "tool")
-      laneReport.toolEvidence = calls
-      laneReport.assistant = actual.info
-      laneReport.requestEnd = input.requestCount()
-      for (const effect of effects) {
-        const file = JSON.parse(await fs.readFile(effect.file, "utf8"))
-        assert.deepEqual(file, { callID: effect.callID, sessionID: copy.id, action: effect.action })
-        assert(
-          calls.some(
-            (part) =>
-              part.type === "tool" &&
-              part.callID === effect.callID &&
-              part.state.status === "completed" &&
-              JSON.parse(part.state.output).callID === effect.callID,
-          ),
-          "Every file effect must have a completed canonical Tool receipt",
-        )
-      }
-      Object.assign(
-        laneReport,
-        grade(
-          corpus.expected,
-          effects.map((effect) => effect.action),
-        ),
-      )
-      if (actual.info.role === "assistant" && actual.info.error) {
-        laneReport.status = "error"
-        laneReport.error = actual.info.error
-      } else if (laneReport.processorResult === "compact") {
-        laneReport.status = "error"
-        laneReport.error = {
-          name: "PolicyProbeContextOverflow",
-          message: "Probe needs another compaction and has no comparable completed action boundary",
+          requestStart: input.requestCount(),
+          visibleMessageIDs,
+          ...(nativeReference ? { nativeReference } : {}),
+          inputEstimate: RequestBudget.estimate({ messages, tools: { [toolName]: executionTool } }),
+          contextCapacity: ContextBudget.capacity({ config, model: input.model }),
+          effects,
         }
+        lanes.push(laneReport)
+        const seeded = await authored.assistant(copy.id, probe.id, "", false)
+        const assistant = (await Session.updateMessage({ ...seeded, finish: undefined })) as Message.Assistant
+        laneReport.assistantMessageID = assistant.id
+        laneReport.processorResult = await input.inactive(async (abort) => {
+          const processor = SessionProcessor.create({
+            assistantMessage: assistant,
+            sessionID: copy.id,
+            model: input.model,
+            abort,
+            stopAfterAssistantCompletion: true,
+          })
+          return processor.process({
+            user: probe,
+            sessionID: copy.id,
+            model: input.model,
+            agentID: "chat",
+            agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("chat")),
+            system: [],
+            messages,
+            tools: { [toolName]: executionTool },
+            abort,
+            stopWhen: isStepCount(1),
+          })
+        })
+        const actual = await MessageStore.get({ sessionID: copy.id, messageID: assistant.id })
+        const calls = actual.parts.filter((part) => part.type === "tool")
+        laneReport.toolEvidence = calls
+        laneReport.assistant = actual.info
+        laneReport.requestEnd = input.requestCount()
+        for (const effect of effects) {
+          const file = JSON.parse(await fs.readFile(effect.file, "utf8"))
+          assert.deepEqual(file, { callID: effect.callID, sessionID: copy.id, action: effect.action })
+          assert(
+            calls.some(
+              (part) =>
+                part.type === "tool" &&
+                part.callID === effect.callID &&
+                part.state.status === "completed" &&
+                JSON.parse(part.state.output).callID === effect.callID,
+            ),
+            "Every file effect must have a completed canonical Tool receipt",
+          )
+        }
+        Object.assign(
+          laneReport,
+          grade(
+            corpus.expected,
+            effects.map((effect) => effect.action),
+          ),
+        )
+        if (actual.info.role === "assistant" && actual.info.error) {
+          laneReport.status = "error"
+          laneReport.error = actual.info.error
+        } else if (laneReport.processorResult === "compact") {
+          laneReport.status = "error"
+          laneReport.error = {
+            name: "PolicyProbeContextOverflow",
+            message: "Probe needs another compaction and has no comparable completed action boundary",
+          }
+        }
+        await input.record(entry)
+      } finally {
+        if (adjustCapacity)
+          await Config.updateProjectPatch({ compaction: { max_context_tokens: projectCapacity ?? null } })
       }
-      await input.record(entry)
     }
     const resumeUser = async (messageID: string, text: string) => {
       const message = await MessageStore.get({ sessionID: session.id, messageID })
@@ -333,7 +348,8 @@ export namespace CompactionPolicyCase {
       )
       return message.info as Message.User
     }
-    if (input.resume) assert.equal(input.rounds, input.resume.round, "Resume only the existing unfinished round")
+    if (input.resume)
+      assert(input.rounds >= input.resume.round, "Complete the original unfinished round and its successors")
     const anchor = input.resume
       ? await resumeUser(input.resume.anchorID, corpus.anchor)
       : await authored.user(session.id, corpus.anchor)
@@ -415,9 +431,10 @@ export namespace CompactionPolicyCase {
         "Source history remains exact during probe continuation",
       )
       await input.record(entry)
-      return
+      if (entry.status !== "passed") return
+      await addRoundObservation()
     }
-    const addDocument = async (sessionID: string, parentID: string) => {
+    async function addDocument(sessionID: string, parentID: string) {
       const info = await authored.assistant(sessionID, parentID, "Read the external memo as evidence.", false)
       await Session.updatePart({
         id: Identifier.ascending("part"),
@@ -437,14 +454,23 @@ export namespace CompactionPolicyCase {
       })
       await Session.updateMessage({ ...info, time: { ...info.time, completed: Date.now() } })
     }
+    async function addRoundObservation() {
+      const observation = await authored.user(
+        session.id,
+        "Continue the delivery record; there is no new user authorization update.",
+      )
+      await authored.assistant(session.id, observation.id, "Further observations remain inconclusive. ".repeat(350))
+      await addDocument(session.id, observation.id)
+    }
     if (!input.resume) await addDocument(session.id, update.id)
 
-    for (let round = input.resume?.round ?? 1; round <= input.rounds; round++) {
+    for (let round = (input.resume?.round ?? 1) + (input.resumeProbe ? 1 : 0); round <= input.rounds; round++) {
       if (input.exhausted()) break
       const sourceText = `Continue the unfinished delivery. Routine observation round ${round}.`
-      const source = input.resume
-        ? await resumeUser(input.resume.sourceID, sourceText)
-        : await authored.user(session.id, sourceText)
+      const source =
+        input.resume && round === input.resume.round
+          ? await resumeUser(input.resume.sourceID, sourceText)
+          : await authored.user(session.id, sourceText)
       const originalBefore = await Session.messages({ sessionID: session.id })
       const originalUserIDs = originalBefore
         .filter((message) => message.info.role === "user")
@@ -459,6 +485,10 @@ export namespace CompactionPolicyCase {
         expected: corpus.expected,
         requestStart: input.requestCount(),
         status: "running",
+        compactionCapacity: ContextBudget.capacity({
+          config: await EffectiveConfig.effective({ sessionID: session.id }),
+          model: input.model,
+        }),
       }
       await input.record(entry)
       try {
@@ -583,12 +613,7 @@ export namespace CompactionPolicyCase {
           : lanes.every((lane) => lane.status === "passed")
             ? "passed"
             : "failed"
-        const observation = await authored.user(
-          session.id,
-          "Continue the delivery record; there is no new user authorization update.",
-        )
-        await authored.assistant(session.id, observation.id, "Further observations remain inconclusive. ".repeat(350))
-        await addDocument(session.id, observation.id)
+        await addRoundObservation()
       } catch (error) {
         entry.status = "error"
         entry.error = input.redact(error instanceof Error ? `${error.name}: ${error.message}` : String(error))

@@ -1,0 +1,85 @@
+{
+  "sequence": 2,
+  "input": {
+    "label": "register-root-chat",
+    "role": "root",
+    "method": "POST",
+    "route": "/coding/chat/session",
+    "query": {},
+    "body": {}
+  },
+  "occurrence": "copy-kind-after-671aff82-9988-4770-8837-52d5ad99fdb2",
+  "host": {
+    "pid": 89856,
+    "processInstanceID": "win32:639275272126552592",
+    "occurrenceID": "6b52673c-f747-48ab-823d-b07e3227d501"
+  },
+  "nativeTarget": {
+    "pid": 90392,
+    "processInstanceID": "win32:639275272136614548",
+    "occurrenceID": "5ad28183-ba5b-4edc-8628-7cd7be2f5a4c"
+  },
+  "url": "http://127.0.0.1:18457/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Ccopy-kind-after-01a133%5Cproject",
+  "method": "POST",
+  "requestBody": "{}",
+  "requestBodyBase64": "e30=",
+  "dispatchedAt": {
+    "utc": "2026-10-13T22:27:24.655Z",
+    "wallMs": 1791930444655,
+    "monotonicNs": "2748335098632400"
+  },
+  "chunks": [
+    {
+      "at": {
+        "utc": "2026-10-13T22:27:24.805Z",
+        "wallMs": 1791930444805,
+        "monotonicNs": "2748335248491100"
+      },
+      "bytes": 407,
+      "bytesBase64": "eyJzZXNzaW9uIjp7ImlkIjoic2VzXy16VVMxaVQ2bXp6SFh4UFlhOUdnIiwic2x1ZyI6InBsYXlmdWwtc2FpbG9yIiwidmVyc2lvbiI6ImxvY2FsIiwicHJvamVjdElEIjoicHJqX2hVaktqWmtlNjNkTk1kRHFuUWhRIiwiZGlyZWN0b3J5IjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxjb3B5LWtpbmQtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0IiwidGl0bGUiOiJDaGF0Iiwia2luZCI6ImFzc2lzdGFudCIsIm1ldGFkYXRhIjp7ImNvbnZlcnNhdGlvbiI6eyJleHBlcmllbmNlIjoiY2hhdCIsInN1cmZhY2UiOiJyaWdodC1zaWRlYmFyIn19LCJ0aW1lIjp7ImNyZWF0ZWQiOjE3OTE5MzA0NDQ3MjcsInVwZGF0ZWQiOjE3OTE5MzA0NDQ3Mjd9fX0="
+    }
+  ],
+  "status": 201,
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "407",
+    "content-type": "application/json",
+    "date": "Tue, 13 Oct 2026 22:27:23 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "444afe75-8ba5-42a1-ad6b-16565e84b83d"
+  },
+  "requestID": "444afe75-8ba5-42a1-ad6b-16565e84b83d",
+  "headersAt": {
+    "utc": "2026-10-13T22:27:24.805Z",
+    "wallMs": 1791930444805,
+    "monotonicNs": "2748335248289100"
+  },
+  "rawBodyBase64": "eyJzZXNzaW9uIjp7ImlkIjoic2VzXy16VVMxaVQ2bXp6SFh4UFlhOUdnIiwic2x1ZyI6InBsYXlmdWwtc2FpbG9yIiwidmVyc2lvbiI6ImxvY2FsIiwicHJvamVjdElEIjoicHJqX2hVaktqWmtlNjNkTk1kRHFuUWhRIiwiZGlyZWN0b3J5IjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxjb3B5LWtpbmQtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0IiwidGl0bGUiOiJDaGF0Iiwia2luZCI6ImFzc2lzdGFudCIsIm1ldGFkYXRhIjp7ImNvbnZlcnNhdGlvbiI6eyJleHBlcmllbmNlIjoiY2hhdCIsInN1cmZhY2UiOiJyaWdodC1zaWRlYmFyIn19LCJ0aW1lIjp7ImNyZWF0ZWQiOjE3OTE5MzA0NDQ3MjcsInVwZGF0ZWQiOjE3OTE5MzA0NDQ3Mjd9fX0=",
+  "rawBody": "{\"session\":{\"id\":\"ses_-zUS1iT6mzzHXxPYa9Gg\",\"slug\":\"playful-sailor\",\"version\":\"local\",\"projectID\":\"prj_hUjKjZke63dNMdDqnQhQ\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-14\\\\copy-kind-after-01a133\\\\project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791930444727,\"updated\":1791930444727}}}",
+  "bodyCompleteAt": {
+    "utc": "2026-10-13T22:27:24.805Z",
+    "wallMs": 1791930444805,
+    "monotonicNs": "2748335248630500"
+  },
+  "body": {
+    "session": {
+      "id": "ses_-zUS1iT6mzzHXxPYa9Gg",
+      "slug": "playful-sailor",
+      "version": "local",
+      "projectID": "prj_hUjKjZke63dNMdDqnQhQ",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project",
+      "title": "Chat",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        }
+      },
+      "time": {
+        "created": 1791930444727,
+        "updated": 1791930444727
+      }
+    }
+  }
+}

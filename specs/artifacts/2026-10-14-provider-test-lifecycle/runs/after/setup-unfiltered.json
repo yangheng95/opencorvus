@@ -1,0 +1,23 @@
+{
+  "at": 1791927640003,
+  "configStatus": 409,
+  "catalogStatus": 200,
+  "providerCount": 2,
+  "owned": [
+    {
+      "id": "owned-lifecycle-a",
+      "models": [
+        "owned-lifecycle-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-lifecycle-b",
+      "models": [
+        "owned-lifecycle-b-model"
+      ],
+      "apiKeyConfigured": true
+    }
+  ],
+  "purpose": "Fixture preparation: remove own initial whitelist so delete/recreate remains visible through original catalog; real public write, no UI acceptance claim"
+}

@@ -1,0 +1,23 @@
+{
+  "at": 1791928059821,
+  "configStatus": 200,
+  "catalogStatus": 200,
+  "providerCount": 90,
+  "owned": [
+    {
+      "id": "owned-lifecycle-a",
+      "models": [
+        "owned-lifecycle-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-lifecycle-b",
+      "models": [
+        "owned-lifecycle-b-model"
+      ],
+      "apiKeyConfigured": true
+    }
+  ],
+  "boundary": "Real public preparation after default own Git initialization; current catalog and errors only, config snapshot excluded"
+}

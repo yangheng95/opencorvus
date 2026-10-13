@@ -1,0 +1,114 @@
+{
+  "role": "root",
+  "method": "GET",
+  "url": "http://127.0.0.1:18457/file?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-14%5Ccopy-kind-after-01a133%5Cproject&path=",
+  "status": 200,
+  "requestID": "85e40dea-e53f-408e-af44-a2bbddef5371",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "content-length": "2546",
+    "content-type": "application/json",
+    "date": "Tue, 13 Oct 2026 22:32:00 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "85e40dea-e53f-408e-af44-a2bbddef5371"
+  },
+  "rawBodyBase64": "W3sibmFtZSI6Ii5vcGVuY29ydnVzIiwicGF0aCI6Ii5vcGVuY29ydnVzIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGNvcHkta2luZC1hZnRlci0wMWExMzNcXHByb2plY3RcXC5vcGVuY29ydnVzIiwidHlwZSI6ImRpcmVjdG9yeSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiJjb250ZXh0IiwicGF0aCI6ImNvbnRleHQiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcY29weS1raW5kLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcY29udGV4dCIsInR5cGUiOiJkaXJlY3RvcnkiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoiZGF0YSIsInBhdGgiOiJkYXRhIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGNvcHkta2luZC1hZnRlci0wMWExMzNcXHByb2plY3RcXGRhdGEiLCJ0eXBlIjoiZGlyZWN0b3J5IiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6InNvdXJjZS10cmVlIiwicGF0aCI6InNvdXJjZS10cmVlIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGNvcHkta2luZC1hZnRlci0wMWExMzNcXHByb2plY3RcXHNvdXJjZS10cmVlIiwidHlwZSI6ImRpcmVjdG9yeSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiIuZ2l0YXR0cmlidXRlcyIsInBhdGgiOiIuZ2l0YXR0cmlidXRlcyIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxjb3B5LWtpbmQtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFwuZ2l0YXR0cmlidXRlcyIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6Ii5naXRpZ25vcmUiLCJwYXRoIjoiLmdpdGlnbm9yZSIsImFic29sdXRlIjoiQzpcXFVzZXJzXFxoZW5ndVxcLmNvZGV4XFxvcGVuY29ydnVzLXByb2R1Y3QtaXRlcmF0aW9uXFwyMDI2LTEwLTE0XFxjb3B5LWtpbmQtYWZ0ZXItMDFhMTMzXFxwcm9qZWN0XFwuZ2l0aWdub3JlIiwidHlwZSI6ImZpbGUiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoiYWxpYXMtaiIsInBhdGgiOiJhbGlhcy1qIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGNvcHkta2luZC1hZnRlci0wMWExMzNcXHByb2plY3RcXGFsaWFzLWoiLCJ0eXBlIjoiZmlsZSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiJhbGlhcy1zIiwicGF0aCI6ImFsaWFzLXMiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcY29weS1raW5kLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcYWxpYXMtcyIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6ImNvcGllZC1qIiwicGF0aCI6ImNvcGllZC1qIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGNvcHkta2luZC1hZnRlci0wMWExMzNcXHByb2plY3RcXGNvcGllZC1qIiwidHlwZSI6ImZpbGUiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoiY29waWVkLXMiLCJwYXRoIjoiY29waWVkLXMiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcY29weS1raW5kLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcY29waWVkLXMiLCJ0eXBlIjoiZmlsZSIsImlnbm9yZWQiOmZhbHNlfSx7Im5hbWUiOiJyb290LW1hcmtlci50eHQiLCJwYXRoIjoicm9vdC1tYXJrZXIudHh0IiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGNvcHkta2luZC1hZnRlci0wMWExMzNcXHByb2plY3RcXHJvb3QtbWFya2VyLnR4dCIsInR5cGUiOiJmaWxlIiwiaWdub3JlZCI6ZmFsc2V9LHsibmFtZSI6InNvdXJjZS1qIiwicGF0aCI6InNvdXJjZS1qIiwiYWJzb2x1dGUiOiJDOlxcVXNlcnNcXGhlbmd1XFwuY29kZXhcXG9wZW5jb3J2dXMtcHJvZHVjdC1pdGVyYXRpb25cXDIwMjYtMTAtMTRcXGNvcHkta2luZC1hZnRlci0wMWExMzNcXHByb2plY3RcXHNvdXJjZS1qIiwidHlwZSI6ImZpbGUiLCJpZ25vcmVkIjpmYWxzZX0seyJuYW1lIjoic291cmNlLXMiLCJwYXRoIjoic291cmNlLXMiLCJhYnNvbHV0ZSI6IkM6XFxVc2Vyc1xcaGVuZ3VcXC5jb2RleFxcb3BlbmNvcnZ1cy1wcm9kdWN0LWl0ZXJhdGlvblxcMjAyNi0xMC0xNFxcY29weS1raW5kLWFmdGVyLTAxYTEzM1xccHJvamVjdFxcc291cmNlLXMiLCJ0eXBlIjoiZmlsZSIsImlnbm9yZWQiOmZhbHNlfV0=",
+  "body": [
+    {
+      "name": ".opencorvus",
+      "path": ".opencorvus",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\.opencorvus",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "context",
+      "path": "context",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\context",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "data",
+      "path": "data",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\data",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": "source-tree",
+      "path": "source-tree",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\source-tree",
+      "type": "directory",
+      "ignored": false
+    },
+    {
+      "name": ".gitattributes",
+      "path": ".gitattributes",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\.gitattributes",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": ".gitignore",
+      "path": ".gitignore",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\.gitignore",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "alias-j",
+      "path": "alias-j",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\alias-j",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "alias-s",
+      "path": "alias-s",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\alias-s",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "copied-j",
+      "path": "copied-j",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\copied-j",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "copied-s",
+      "path": "copied-s",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\copied-s",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "root-marker.txt",
+      "path": "root-marker.txt",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\root-marker.txt",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "source-j",
+      "path": "source-j",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\source-j",
+      "type": "file",
+      "ignored": false
+    },
+    {
+      "name": "source-s",
+      "path": "source-s",
+      "absolute": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\source-s",
+      "type": "file",
+      "ignored": false
+    }
+  ],
+  "at": {
+    "utc": "2026-10-13T22:32:00.409Z",
+    "wallMs": 1791930720409,
+    "monotonicNs": "2748610844972100"
+  }
+}

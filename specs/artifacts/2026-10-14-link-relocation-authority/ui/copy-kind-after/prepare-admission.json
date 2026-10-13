@@ -1,0 +1,141 @@
+{
+  "schema": "copy-link-kind.fixture/v1",
+  "qualification": "real-desktop-copy-link-kind",
+  "fixtureID": "ad19ccf5-247d-428f-8d7a-af8d4faf7135",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133",
+  "prefix": "copy-kind-after",
+  "port": 18457,
+  "originalInputs": {
+    "files": [
+      {
+        "role": "root",
+        "path": "root-marker.txt",
+        "size": 20,
+        "bytesBase64": "Q09QWSBST09UIEEgMDFhMTMzDQo=",
+        "literal": "COPY ROOT A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "data/marker.txt",
+        "size": 20,
+        "bytesBase64": "Q09QWSBEQVRBIEEgMDFhMTMzDQo=",
+        "literal": "COPY DATA A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": "source-tree/note.txt",
+        "size": 20,
+        "bytesBase64": "Q09QWSBUUkVFIEEgMDFhMTMzDQo=",
+        "literal": "COPY TREE A 01a133\r\n"
+      },
+      {
+        "role": "root",
+        "path": ".gitignore",
+        "size": 11,
+        "bytesBase64": "L3NvdXJjZS1qLwo=",
+        "literal": "/source-j/\n"
+      },
+      {
+        "role": "b",
+        "path": "root-marker.txt",
+        "size": 20,
+        "bytesBase64": "Q09QWSBST09UIEIgMDFhMTMzDQo=",
+        "literal": "COPY ROOT B 01a133\r\n"
+      },
+      {
+        "role": "b",
+        "path": ".gitignore",
+        "size": 0,
+        "bytesBase64": "",
+        "literal": ""
+      }
+    ],
+    "directories": {
+      "root": [
+        "data",
+        "context",
+        "source-tree"
+      ],
+      "b": []
+    },
+    "links": [
+      {
+        "role": "root",
+        "path": "source-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\data",
+        "kind": "junction"
+      },
+      {
+        "role": "root",
+        "path": "source-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\data",
+        "kind": "dir"
+      },
+      {
+        "role": "root",
+        "path": "alias-j",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\data",
+        "kind": "junction"
+      },
+      {
+        "role": "root",
+        "path": "alias-s",
+        "text": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project\\data",
+        "kind": "dir"
+      },
+      {
+        "role": "root",
+        "path": "context/indirect-relative",
+        "text": "../source-j",
+        "kind": "dir"
+      }
+    ],
+    "registrationPlan": {
+      "firstSequence": 1,
+      "steps": [
+        {
+          "label": "register-root-project",
+          "role": "root",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-root-chat",
+          "role": "root",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        },
+        {
+          "label": "register-b-project",
+          "role": "b",
+          "method": "GET",
+          "route": "/project/current",
+          "query": {}
+        },
+        {
+          "label": "register-b-chat",
+          "role": "b",
+          "method": "POST",
+          "route": "/coding/chat/session",
+          "query": {},
+          "body": {}
+        }
+      ]
+    },
+    "maximumHTTP": 4,
+    "maximumLiteralBytes": 512,
+    "actualLiteralBytes": 91,
+    "modelCallsRequested": "none",
+    "credentialCatalogStaging": "none",
+    "boundary": "Prepare only creates these inputs; Register only performs four ordinary public Project/empty-Chat requests. Root separately owns all UI and mutation/readback actions."
+  },
+  "at": {
+    "utc": "2026-10-13T22:26:47.253Z",
+    "wallMs": 1791930407253,
+    "monotonicNs": "2748297697525700"
+  },
+  "boundary": "Exclusive new namespace; first failure retained, no deletion/reuse/retry"
+}

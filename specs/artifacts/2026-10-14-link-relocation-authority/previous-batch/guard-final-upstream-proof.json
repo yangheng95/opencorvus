@@ -1,0 +1,43 @@
+{
+  "atUtc": "2026-10-13T21:26:02.4266950Z",
+  "originalImagesAncestorExit": 0,
+  "ownedScopeStatus": [],
+  "pending": [],
+  "fullStatus": [
+    " M packages/opencorvus/script/compaction-stress.ts",
+    " M packages/opencorvus/script/real-provider-audit.ts",
+    " M packages/opencorvus/src/agent/prompt/compaction.txt",
+    " M packages/opencorvus/src/provider/error.ts",
+    " M packages/opencorvus/src/session/compaction-evidence-reader.ts",
+    " M packages/opencorvus/src/session/compaction.ts",
+    " M packages/opencorvus/src/session/context-budget.ts",
+    " M packages/opencorvus/src/session/llm.ts",
+    " M packages/opencorvus/src/session/message.ts",
+    " M packages/opencorvus/test/compaction-integrity.test.ts",
+    " M packages/opencorvus/test/compaction-transcript-budget.test.ts",
+    " M packages/opencorvus/test/memory/session-memory.test.ts",
+    " M packages/opencorvus/test/real-provider-audit.test.ts",
+    " M specs/README.md",
+    " M specs/artifacts/2026-10-13-compaction-stress/final-request-ledger.json",
+    " M specs/artifacts/README.md",
+    " M specs/records/2026-10/2026-10-13-compaction-stress.md",
+    " M specs/records/2026-10/README.md",
+    "?? .bun/",
+    "?? packages/opencorvus/bun/",
+    "?? packages/opencorvus/src/session/compaction-working-context.ts",
+    "?? packages/opencorvus/test/compaction-read-pressure.test.ts",
+    "?? packages/opencorvus/test/compaction-working-context.test.ts"
+  ],
+  "push": {
+    "atUtc": "2026-10-13T21:25:23.924797Z",
+    "reviewedPending": [],
+    "exitCode": 0,
+    "reviewedHead": "74ff844f64c73a76a30df8baca7647a2c3817fa3",
+    "command": "git push"
+  },
+  "staged": [],
+  "freshFetchExit": 0,
+  "head": "74ff844f64c73a76a30df8baca7647a2c3817fa3",
+  "fixAncestorExit": 0,
+  "upstream": "74ff844f64c73a76a30df8baca7647a2c3817fa3"
+}

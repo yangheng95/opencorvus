@@ -1,0 +1,34 @@
+{
+  "occurrence": "directory-target-dot-relocation-read-node-2198faea-846a-4647-b6b7-7058d6fa5c00",
+  "outcome": "ready",
+  "host": {
+    "pid": 82732,
+    "processInstanceID": "win32:639275249619148179",
+    "occurrenceID": "c6d9c92a-98cd-4709-9607-6c4f104d8044"
+  },
+  "parent": {
+    "pid": 84584,
+    "processInstanceID": "win32:639275249618549317",
+    "occurrenceID": "5abd2752-6aff-4430-9cbe-63f5de37945f"
+  },
+  "target": {
+    "pid": 87220,
+    "processInstanceID": "win32:639275249634794788",
+    "occurrenceID": "812cbf3e-6e58-4223-974f-a8b1c603eaf4"
+  },
+  "targetBirthAtMs": 1791928163479,
+  "deadlineAt": 1791928221909,
+  "inactivityTimeoutMs": 15000,
+  "printLogs": false,
+  "hostExecutable": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\bun.exe",
+  "hostBunVersion": "1.4.0",
+  "observedAtUtc": "2026-10-13T21:49:23.515Z",
+  "executable": "C:/Program Files/nodejs/node.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\relocation-kind-qualifier.mjs",
+    "read",
+    "node",
+    "e30c3c94-6c2b-4aa2-bb79-2bdc6e33c741"
+  ],
+  "authority": "Original production foreground run/onSpawned handle; run alone consumes child streams; no detached transfer"
+}

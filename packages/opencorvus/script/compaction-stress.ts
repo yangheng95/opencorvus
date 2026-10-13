@@ -4,6 +4,7 @@
  * RESUME_REPORT reopens the exact unfinished policy round in a retained isolated runtime.
  * COMPARE_NATIVE=1 adds a one-checkpoint experimental native reference lane to policy cases.
  * CONTEXT_TOKENS optionally lowers the configured prompt ceiling for read-window stress.
+ * FULL_CONTEXT_TOKENS sets the separate full-history policy control ceiling (default at least 256000).
  * Auth and model catalog are copied together into an isolated disposable runtime.
  */
 import assert from "node:assert/strict"
@@ -30,6 +31,7 @@ const maxRequests = Number(env("MAX_REQUESTS"))
 const rounds = Number(env("ROUNDS") ?? "1")
 const compareNative = env("COMPARE_NATIVE") === "1"
 const contextTokens = Number(env("CONTEXT_TOKENS") ?? "256000")
+const fullContextTokens = Number(env("FULL_CONTEXT_TOKENS") ?? Math.max(256000, contextTokens))
 const hostTemporaryRoot = os.tmpdir()
 const caseNames = [
   "text-start",
@@ -45,6 +47,7 @@ assert(authSource && exactModel && resultPath, "AUTH_SOURCE, MODEL and RESULT ar
 assert(Number.isSafeInteger(maxRequests) && maxRequests > 0 && maxRequests <= 100)
 assert(Number.isSafeInteger(rounds) && rounds > 0 && rounds <= 10)
 assert(Number.isSafeInteger(contextTokens) && contextTokens > 0)
+assert(Number.isSafeInteger(fullContextTokens) && fullContextTokens >= contextTokens)
 assert.equal(
   await fs.stat(resultPath).then(
     () => true,
@@ -59,6 +62,7 @@ const resume = await (async () => {
   const previous = JSON.parse(await fs.readFile(reportPath, "utf8"))
   assert.equal(previous.model, exactModel, "Resume the same exact model")
   assert.equal(previous.contextTokens, contextTokens, "Resume the same explicitly recorded context budget")
+  assert.equal(previous.fullContextTokens, fullContextTokens, "Resume the same full-history control budget")
   assert.equal(previous.status, "failed", "Resume an unfinished run")
   const last = previous.cases.at(-1)
   assert(last && last.status === "error", "Resume an unfinished policy round")
@@ -75,7 +79,8 @@ const resume = await (async () => {
     sourceID: last.sourceID,
     round: last.round,
   })
-  assert.equal(descriptor.round, rounds, "Retain the original last-round number")
+  assert.equal(previous.rounds, rounds, "Retain the original planned round count")
+  assert(descriptor.round <= rounds, "Resume within the original planned rounds")
   const expected = CompactionPolicyCase.Action.parse(last.expected)
   const nonce = expected.policy_revision.slice("POLICY-".length)
   assert.deepEqual(
@@ -144,7 +149,7 @@ process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({
   model: exactModel,
   small_model: exactModel,
-  compaction: { tail_turns: 0, max_context_tokens: contextTokens },
+  compaction: { tail_turns: 0 },
   permission_mode: "full_access",
 })
 await fs.mkdir(project, { recursive: true })
@@ -228,6 +233,7 @@ const [
   { sessionRuntimeFromNativeAgent },
   { Database },
   { Log },
+  { Config },
 ] = await Promise.all([
   import("@/project/instance"),
   import("@/session"),
@@ -242,6 +248,7 @@ const [
   import("@/agent/session-agent-runtime"),
   import("@/storage/db"),
   import("@/util/log"),
+  import("@/config/config"),
 ])
 await Log.init({ print: false, level: "ERROR" })
 const target = { providerID, modelID }
@@ -253,6 +260,7 @@ const report = {
   rounds,
   compareNative,
   contextTokens,
+  fullContextTokens,
   ...(resume ? { resumedFrom: resume.reportPath, resume: resume.descriptor } : {}),
   credential: "available",
   modelProjection: "pending",
@@ -283,6 +291,7 @@ try {
   await Instance.provide({
     directory: project,
     fn: async () => {
+      await Config.updateProjectPatch({ compaction: { max_context_tokens: contextTokens } })
       const model = await Provider.getModel(providerID, modelID)
       assert.equal(model.id, modelID, "Requested model must be projected by copied catalog")
       report.modelProjection = "verified"
@@ -295,6 +304,7 @@ try {
             name: name as CompactionPolicyCase.Name,
             nonce,
             rounds,
+            fullContextTokens,
             compareNative,
             resume: resume?.descriptor,
             resumeProbe: resume?.probe,
@@ -651,7 +661,8 @@ try {
     },
   })
   report.status =
-    reports.length === (resume ? 1 : selectedCases.length * rounds) && reports.every((r) => r.status === "passed")
+    reports.length === (resume ? rounds - resume.descriptor.round + 1 : selectedCases.length * rounds) &&
+    reports.every((r) => r.status === "passed")
       ? "passed"
       : "failed"
 } catch (error) {

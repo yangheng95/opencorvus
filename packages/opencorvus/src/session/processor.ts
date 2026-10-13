@@ -10,6 +10,7 @@ import { Bus } from "@/bus"
 import { SessionStatus, sessionLifecycleOrderKey } from "./status"
 import { Plugin } from "@/plugin"
 import type { Provider } from "@/provider/provider"
+import { ProviderError } from "@/provider/error"
 import { LLM } from "./llm"
 import { recordProviderActivityEvent } from "./provider-activity-facts"
 import { EngineConfig } from "@/engine/config"
@@ -148,7 +149,24 @@ export namespace SessionProcessor {
       public readonly partIDs: string[],
       public override readonly cause: unknown,
     ) {
-      const retryCause = cause instanceof Error ? `${cause.name}: ${cause.message}` : String(cause)
+      const causes: string[] = []
+      const seen = new Set<Error>()
+      let current = cause
+      while (current !== undefined) {
+        if (!(current instanceof Error)) {
+          causes.push(String(current))
+          break
+        }
+        if (seen.has(current)) {
+          causes.push("[circular error cause]")
+          break
+        }
+        seen.add(current)
+        const code = Object.getOwnPropertyDescriptor(current, "code")?.value
+        causes.push(`${current.name}: ${current.message}${typeof code === "string" ? ` (code=${code})` : ""}`)
+        current = current.cause
+      }
+      const retryCause = ProviderError.redactSensitiveProviderText(causes.join(" <- "))
       super(
         `SessionProcessor cannot retry activity attempt ${attempt} inside the same assistant message after tool execution started. Created parts: ${partIDs.join(", ") || "(none)"}. Retry cause: ${retryCause}`,
       )

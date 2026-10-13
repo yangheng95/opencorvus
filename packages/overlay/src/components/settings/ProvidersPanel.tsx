@@ -1,4 +1,5 @@
 import { Feedback } from "../ui/Feedback"
+import type { ProviderRemovalReceipt } from "@opencorvus-ai/sdk"
 // ── ProvidersPanel ──
 // Solid.js component for managing custom LLM providers.
 // Allows adding, editing, and removing OpenAI-compatible providers
@@ -13,6 +14,7 @@ import { boardStore } from "../../store/board"
 import { loadProviderInfo } from "../../services/config-load"
 import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
 import { settleProviderSaveFollowups, type ProviderSaveFollowup, type ProviderSaveIssue } from "../../services/provider-save"
+import { onProviderMutation, providerMutationScope, publishProviderMutation } from "../../services/provider-mutation"
 import {
   applyProviderForm,
   ProviderFormApiError,
@@ -24,6 +26,7 @@ import { matchesSearchParts } from "../../services/text-search"
 import { activeDirectory } from "../../services/workspace"
 import {
   authenticateSelectedProvider,
+  modelsForProvider,
   providerAuthMethods,
   providerApiKeyConfigured,
   providerState,
@@ -191,17 +194,21 @@ export default function ProvidersPanel() {
     mutator: (config: Record<string, any>) => void,
     options: ReturnType<typeof providerLoadOptions>,
   ): Promise<any> {
-    const retire = () => {
-      if (options.isCurrentDirectory(directory)) retireProviderTest(providerID)
+    const observeCommit = () => {
+      publishProviderMutation({
+        authority: options.authority,
+        scope: providerMutationScope(directory),
+        providerIDs: [providerID],
+      })
     }
     try {
       const result = directory.trim()
         ? await updateConfig(mutator, options)
         : await updateGlobalConfig(mutator, options.authority)
-      retire()
+      observeCommit()
       return result
     } catch (error) {
-      if (committedConfigFromError(error)) retire()
+      if (committedConfigFromError(error)) observeCommit()
       throw error
     }
   }
@@ -238,6 +245,15 @@ export default function ProvidersPanel() {
     for (const providerID of providerTestGenerations.keys()) retireProviderTest(providerID)
   }
 
+  onCleanup(
+    onProviderMutation((mutation) => {
+      if (!isApiAuthorityCurrent(mutation.authority)) return
+      if (mutation.scope.kind === "project" && mutation.scope.directory !== activeDirectory().trim()) return
+      if (mutation.providerIDs === "all") retireAllProviderTests()
+      else for (const providerID of mutation.providerIDs) retireProviderTest(providerID)
+    }),
+  )
+
   async function refreshProviderCatalog(
     directory: string,
     options: ReturnType<typeof providerLoadOptions>,
@@ -247,12 +263,13 @@ export default function ProvidersPanel() {
     setRefreshingProviders(true)
     try {
       const result = await requestProviderCatalogRefresh(directory, options.authority)
+      if (result.ok)
+        publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: "all" })
       if (sequence !== providerRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
         setProviderRefreshError(feedback("provider.catalog_refresh.failed", result.error))
         return
       }
-      retireAllProviderTests()
       setLastProvidersRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
         setProviderRefreshError(
@@ -280,13 +297,16 @@ export default function ProvidersPanel() {
     setRefreshingModels(true)
     try {
       const result = await requestProviderModelsRefresh(directory, options.authority)
+      if (result.ok && result.providers)
+        publishProviderMutation({
+          authority: options.authority,
+          scope: { kind: "global" },
+          providerIDs: result.providers.map((provider) => provider.providerID),
+        })
       if (sequence !== modelRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
         setModelRefreshError(feedback("provider.model_refresh.failed", result.error))
         return
-      }
-      if (result.providers) {
-        for (const provider of result.providers) retireProviderTest(provider.providerID)
       }
       setLastModelsRefreshedAt(result.fetchedAt ?? Date.now())
       if (result.issues?.length) {
@@ -427,8 +447,8 @@ export default function ProvidersPanel() {
     setAuthing((prev) => new Set(prev).add(providerId))
     try {
       const ok = await authenticateSelectedProvider(providerId, authCallbacks(owns), options)
+      if (ok) publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: "all" })
       if (ok && owns()) {
-        retireProviderTest(providerId)
         try {
           await refreshAuthState(options)
           if (!owns()) return
@@ -533,11 +553,6 @@ export default function ProvidersPanel() {
   function catalogProviders(): any[] {
     const cat = appStore.providerCatalog as any
     return Array.isArray(cat?.all) ? cat.all : []
-  }
-
-  function providerModelIds(models: Record<string, unknown> | undefined): string[] {
-    if (!models || typeof models !== "object" || Array.isArray(models)) return []
-    return Object.keys(models)
   }
 
   function providerMatchesSearch(parts: Array<unknown>): boolean {
@@ -728,7 +743,7 @@ export default function ProvidersPanel() {
                 body: JSON.stringify({ type: "api", key: apiKey }),
               })) as AuthMutationResult
               credentialCommitted = true
-              if (options.isCurrentDirectory(directory)) retireProviderTest(id)
+              publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: [id] })
               return result.issues
             },
           },
@@ -841,8 +856,12 @@ export default function ProvidersPanel() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ type: "api", key: value }),
             })) as AuthMutationResult
+            publishProviderMutation({
+              authority: options.authority,
+              scope: { kind: "global" },
+              providerIDs: [providerId],
+            })
             if (owns()) {
-              retireProviderTest(providerId)
               clearApiKeyInput(providerId)
             }
             return authResult.issues
@@ -931,10 +950,18 @@ export default function ProvidersPanel() {
       const path = directory
         ? providerScopedPath(`provider/${encodeURIComponent(id)}`, directory)
         : `global/providers/${encodeURIComponent(id)}`
-      const receipt = (await apiJson(path, { method: "DELETE", authority: options.authority })) as {
-        status: "committed" | "committed_with_residue"
-        residue: Array<{ owner: string; message: string }>
-      }
+      const receipt = (await apiJson(path, {
+        method: "DELETE",
+        authority: options.authority,
+      })) as ProviderRemovalReceipt
+      publishProviderMutation({
+        authority: options.authority,
+        scope:
+          receipt.scope === "global" || receipt.credential === "removed" || receipt.credential === "absent"
+            ? { kind: "global" }
+            : providerMutationScope(directory),
+        providerIDs: [receipt.providerID],
+      })
       if (!owns()) return
       const residueNotice =
         receipt.status === "committed_with_residue"
@@ -946,7 +973,6 @@ export default function ProvidersPanel() {
           : null
       if (residueNotice) setFormError(residueNotice)
       clearApiKeyInput(id)
-      retireProviderTest(id)
       try {
         await refreshAuthState(options)
       } catch (error) {
@@ -974,9 +1000,22 @@ export default function ProvidersPanel() {
     setEditing(null)
   }
 
+  function modelListIssue(providerID: string): boolean {
+    return appStore.providerLoadIssues.some(
+      (issue) =>
+        issue.resource === "catalog" ||
+        (issue.resource === "provider" && (!issue.providerID || issue.providerID === providerID)),
+    )
+  }
+
+  function modelListKnown(providerID: string): boolean {
+    return Boolean(appStore.providerCatalog) && !modelListIssue(providerID)
+  }
+
   const unfilteredProviderEntries = createMemo(() =>
     Object.entries(configProviders()).map(([id, provider]) => {
-      const modelIds = providerModelIds(provider.models)
+      const modelsKnown = modelListKnown(id)
+      const modelIds = modelsKnown ? modelsForProvider(id) : []
       const canAuthenticate = providerAuthMethods(id).length > 0
       const status = canAuthenticate ? providerState(id) : null
       const statusText = status
@@ -993,8 +1032,10 @@ export default function ProvidersPanel() {
         name: provider.name || id,
         envText: provider.env?.join(", ") || "",
         modelIds,
-        modelCountText: tc("provider.models.count", modelIds.length),
-        modelSummaryText: modelSummary(modelIds),
+        modelCountText: modelsKnown ? tc("provider.models.count", modelIds.length) : "—",
+        modelSummaryText: modelsKnown
+          ? modelSummary(modelIds)
+          : t(modelListIssue(id) ? "provider.models.unavailable" : "common.loading"),
         modelOverflowText,
         canAuthenticate,
         status,
@@ -1011,6 +1052,7 @@ export default function ProvidersPanel() {
         row.envText,
         row.modelCountText,
         row.modelSummaryText,
+        ...row.modelIds,
         row.modelOverflowText,
         row.statusText,
       ]),
@@ -1021,13 +1063,14 @@ export default function ProvidersPanel() {
     return catalogProviders()
       .filter((p: any) => p && typeof p.id === "string" && !custom.has(p.id))
       .map((p: any) => {
-        const modelCount = providerModelIds(p.models).length
+        const modelsKnown = modelListKnown(p.id)
+        const modelCount = modelsKnown ? modelsForProvider(p.id).length : 0
         const providerStatus = providerState(p.id)
         const status = providerStatus.tone === "active" ? providerStatus : null
         return {
           id: p.id,
           name: p.name || p.id,
-          modelCountText: tc("provider.models.count", modelCount),
+          modelCountText: modelsKnown ? tc("provider.models.count", modelCount) : "—",
           authMethods: providerAuthMethods(p.id).length,
           status,
           statusText: status

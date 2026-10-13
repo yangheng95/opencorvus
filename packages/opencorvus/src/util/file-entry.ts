@@ -6,7 +6,8 @@ import { requireRuntimePackage } from "@/runtime/package-require"
 export type FileEntry = {
   address: string
   stat: BigIntStats
-  link: "symbolic" | "junction" | undefined
+  // The creation type preserves the entry; it does not describe its target.
+  link: "file" | "dir" | "junction" | undefined
 }
 
 function sameIdentity(left: BigIntStats, right: BigIntStats) {
@@ -37,7 +38,7 @@ export async function readFileEntry(full: string, expected?: BigIntStats): Promi
     if (Boolean(link) !== stat.isSymbolicLink()) throw changedEntry(full)
   } else {
     address = path.join(await fs.realpath(path.dirname(full)), path.basename(full))
-    link = stat.isSymbolicLink() ? "symbolic" : undefined
+    link = stat.isSymbolicLink() ? "file" : undefined
   }
   const observations = await Promise.allSettled([fs.lstat(full, { bigint: true }), fs.lstat(address, { bigint: true })])
   const failures = observations.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
@@ -107,7 +108,7 @@ function readWindowsEntry(full: string): Pick<FileEntry, "address" | "link"> {
     const info = {} as { FileAttributes: number; ReparseTag: number }
     if (!api.tag(handle, 9, info, api.tagSize)) throw failure("GetFileInformationByHandleEx")
     let link: FileEntry["link"]
-    if (info.ReparseTag === 0xa000000c) link = "symbolic"
+    if (info.ReparseTag === 0xa000000c) link = (info.FileAttributes & 0x10) !== 0 ? "dir" : "file"
     else if (info.ReparseTag === 0xa0000003) link = "junction"
     else if (info.ReparseTag !== 0 || (info.FileAttributes & 0x400) !== 0) {
       throw Object.assign(new Error(`Unsupported reparse tag for file entry: ${full} (${info.ReparseTag})`), {

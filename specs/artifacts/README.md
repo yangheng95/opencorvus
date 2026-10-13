@@ -1,10 +1,14 @@
 # Artifact entry points
 
+- [Provider 模型摘要](2026-10-14-provider-model-summary/README.md)：17张原图、三个正常退出服务、完整原日志与第14批正常交付回执。
+
+- [相对链接迁移范围与未来树](2026-10-14-link-relocation-authority/README.md)：原交付回执、有限宿主资格与Root独立功能/桌面证据。
+
 - [持续目标 UI/UX 证据](2026-10-14-continuous-goal-ui-ux/README.md)：隔离实页、操作截图和真实目标投影。
 
 - [长历史分叉耗时](2026-10-14-fork-latency/README.md)：原始请求、CPU采样与真实复制/视觉证据。
 
-- [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle/README.md)：原始矩阵、截图及前批正常交付回执。
+- [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle/README.md)：22张原图、15次实际流式故障输入、物理退出与完整日志；前批回执独立承接。
 
 - [长正文与来源阅读](2026-10-14-long-source-reading/README.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
 
@@ -97,7 +101,7 @@
 
 - [388 MCP 结构化结果](2026-10-13-mcp-structured-result-388/README.md)：后台红绿、12次真实Sol流式请求、页面截图与正常收尾。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：414 次真实请求；19k 窗口内完整文件与失败诊断 22 字段通过，保留原始证据、工作笔记和读取范围回执。
+- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：530 次真实请求；19k 预算下两类授权各五轮、20 个动作与 100 字段通过，含真实断线后的原历史续验。
 
 - [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
 

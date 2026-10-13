@@ -1,0 +1,82 @@
+{
+  "fixtureID": "ad19ccf5-247d-428f-8d7a-af8d4faf7135",
+  "occurrence": "copy-kind-after-671aff82-9988-4770-8837-52d5ad99fdb2",
+  "owner": {
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\runtime",
+    "ui": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\ui-bundle\\bin\\ui",
+    "printLogs": true,
+    "nativeDeadline": 1791931312586,
+    "occurrence": "copy-kind-after-671aff82-9988-4770-8837-52d5ad99fdb2",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\evidence",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project",
+    "sourceCLI": "D:/myhexin-local/opencorvus/packages/opencorvus/src/index.ts",
+    "qualification": "real-desktop-copy-link-kind",
+    "nativeTarget": {
+      "pid": 90392,
+      "processInstanceID": "win32:639275272136614548",
+      "occurrenceID": "5ad28183-ba5b-4edc-8628-7cd7be2f5a4c"
+    },
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133",
+    "fixtureID": "ad19ccf5-247d-428f-8d7a-af8d4faf7135",
+    "inactivityTimeoutMs": 120000,
+    "port": 18457,
+    "owner": {
+      "processInstanceID": "win32:639275272136614548",
+      "ProcessId": 90392
+    },
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-kind-after-tools\\copy-kind-after",
+    "ripgrepExecutable": "C:\\Users\\hengu\\.local\\bin\\rg.exe",
+    "projectB": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\copy-kind-after-01a133\\project-b",
+    "evidencePrefix": "copy-kind-after",
+    "host": {
+      "pid": 89856,
+      "processInstanceID": "win32:639275272126552592",
+      "occurrenceID": "6b52673c-f747-48ab-823d-b07e3227d501"
+    },
+    "targetBirthAtMs": 1791930413661
+  },
+  "at": {
+    "utc": "2026-10-13T22:27:22.840Z",
+    "wallMs": 1791930442840,
+    "monotonicNs": "2748333283617300"
+  },
+  "originalPlan": {
+    "firstSequence": 1,
+    "steps": [
+      {
+        "label": "register-root-project",
+        "role": "root",
+        "method": "GET",
+        "route": "/project/current",
+        "query": {}
+      },
+      {
+        "label": "register-root-chat",
+        "role": "root",
+        "method": "POST",
+        "route": "/coding/chat/session",
+        "query": {},
+        "body": {}
+      },
+      {
+        "label": "register-b-project",
+        "role": "b",
+        "method": "GET",
+        "route": "/project/current",
+        "query": {}
+      },
+      {
+        "label": "register-b-chat",
+        "role": "b",
+        "method": "POST",
+        "route": "/coding/chat/session",
+        "query": {},
+        "body": {}
+      }
+    ]
+  },
+  "maximumHTTP": 4,
+  "mutationRequests": 0,
+  "declaredRuntimeRuleBase64": "Lm9wZW5jb3J2dXMvLnIvCg==",
+  "boundary": "Normal four requests only; no retry, mutation, source readback, UI or model request"
+}

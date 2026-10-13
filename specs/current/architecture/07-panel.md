@@ -15,6 +15,15 @@ environment preparation failures keep their existing native retry command.
 One startup lifecycle hands readiness and listener disposal to the renderer;
 pre-catalog error reporting does not query unavailable translations.
 
+Provider rows display model counts, summaries, complete ID tooltips and model-ID
+search from the same public catalog used by model selection, through the existing
+modelsForProvider reader. Configuration remains the source for model editing and
+field intent; inherited catalog models are not copied into configuration. Missing
+catalog data, catalog read errors and applicable Provider projection issues render
+an unknown count and localized model-list status. A successful explicit reload
+restores the catalog presentation. A catalog count does not prove authentication
+or runnable model availability.
+
 ## Composer availability
 
 Composer model groups retain each connected catalog option's canonical label
@@ -522,6 +531,13 @@ Move/copy validate each link's declared source and relocated destination targets
 through the current project path authority; an in-scope missing target remains
 a valid link entry. Native rename retains the link text. Copy retains it with
 verbatim symlink copying and the existing strict staged tree validation.
+The private entry observation supplies the symlink creation type from that same
+entry metadata. Copy records each link's original text and creation type while
+the mature copier handles ordinary entries, then creates the staged links with
+that explicit type. Windows junctions and broken directory symbolic links retain
+their original reparse semantics. Strict staging and publication checks compare
+creation types as well as link text and file bytes. This does not publish a
+followed-directory navigation fact or a complete unpublished-tree resolver.
 Recursion and self-directory protection apply to actual directory entries.
 Delete retains the existing source authority and unlinks admitted terminal
 entries without requiring their targets to exist. Unknown filesystem errors

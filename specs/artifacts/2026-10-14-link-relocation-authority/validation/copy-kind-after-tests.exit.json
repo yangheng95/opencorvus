@@ -1,0 +1,5 @@
+{
+  "atUtc": "2026-10-13T22:10:28.9757136Z",
+  "exitCode": 0,
+  "command": "bun run --cwd packages/opencorvus test test/file-link-entry-contract.test.ts test/file-mutation-root-contract.test.ts test/file-ignore-coordinate-contract.test.ts"
+}

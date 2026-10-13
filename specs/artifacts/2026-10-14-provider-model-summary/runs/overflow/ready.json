@@ -1,0 +1,68 @@
+{
+  "pid": 86044,
+  "started": 1791932224533,
+  "port": 18628,
+  "participantPort": 18629,
+  "occurrence": {
+    "pid": 86044,
+    "processInstanceID": "win32:639275290244671208",
+    "occurrenceID": "f4161226-58ef-4f9b-99b5-59c9e3a2c3bc"
+  },
+  "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\ui-final",
+  "projects": [
+    {
+      "label": "A",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\overflow\\project-A"
+    },
+    {
+      "label": "B",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\overflow\\project-B"
+    }
+  ],
+  "sessions": [
+    {
+      "label": "A",
+      "sessionID": "ses_-zUS1awfAzzepENTRrRG",
+      "projectID": "prj_h16OB1L3Ll7bZOJKAgPj",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\overflow\\project-A"
+    },
+    {
+      "label": "B",
+      "sessionID": "ses_-zUS1awQfzzNmF5ziOtn",
+      "projectID": "prj_hLP3ElEJNemVaodp0jSq",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-model-summary-01a133\\overflow\\project-B"
+    }
+  ],
+  "catalogProviderCount": 91,
+  "scope": "Own generated fictional Auth only; complete public repository bootstrap catalog plus three owned entries; no real Provider credential copied",
+  "providers": [
+    {
+      "id": "owned-summary-a",
+      "models": [
+        "owned-summary-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-summary-b",
+      "models": [
+        "owned-summary-b-model",
+        "owned-summary-b-inherited",
+        "owned-summary-b-catalog-01",
+        "owned-summary-b-catalog-02",
+        "owned-summary-b-catalog-03",
+        "owned-summary-b-catalog-04",
+        "owned-summary-b-catalog-05",
+        "owned-summary-b-catalog-06",
+        "owned-summary-b-catalog-07",
+        "owned-summary-b-catalog-08"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-summary-zero",
+      "models": [],
+      "apiKeyConfigured": true
+    }
+  ]
+}

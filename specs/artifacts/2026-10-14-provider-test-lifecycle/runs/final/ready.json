@@ -1,0 +1,54 @@
+{
+  "pid": 87288,
+  "started": 1791927994731,
+  "port": 18618,
+  "participantPort": 18619,
+  "occurrence": {
+    "pid": 87288,
+    "processInstanceID": "win32:639275247946649547",
+    "occurrenceID": "9f480ad4-bddd-4f08-9c41-f73c09237fa2"
+  },
+  "uiDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-observation-01a133\\ui-final",
+  "projects": [
+    {
+      "label": "A",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\final\\project-A"
+    },
+    {
+      "label": "B",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\final\\project-B"
+    }
+  ],
+  "sessions": [
+    {
+      "label": "A",
+      "sessionID": "ses_-zUS1sgA5zz5P1T72WSL",
+      "projectID": "prj_hV4jaDlPD1twUxDJHZWI",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\final\\project-A"
+    },
+    {
+      "label": "B",
+      "sessionID": "ses_-zUS1sfpLzzQx5QzYkbc",
+      "projectID": "prj_h4cpk49FKlORMobwDRei",
+      "directory": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\final\\project-B"
+    }
+  ],
+  "catalogProviderCount": 90,
+  "scope": "Own generated fictional Auth only; complete public repository bootstrap catalog plus two owned entries; no real Provider credential copied",
+  "providers": [
+    {
+      "id": "owned-lifecycle-a",
+      "models": [
+        "owned-lifecycle-a-model"
+      ],
+      "apiKeyConfigured": true
+    },
+    {
+      "id": "owned-lifecycle-b",
+      "models": [
+        "owned-lifecycle-b-model"
+      ],
+      "apiKeyConfigured": true
+    }
+  ]
+}

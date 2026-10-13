@@ -1,0 +1,11 @@
+{
+  "pid": 70636,
+  "target": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\postfix\\runtime\\data\\auth.json",
+  "label": "cross-scope-auth-after",
+  "started": 1791930382103,
+  "credentialGenerations": {
+    "owned-lifecycle-a": "cb3ac929-0c6b-44a5-aa1c-cc8c53415060",
+    "owned-lifecycle-b": "93cb3c37-2d6f-406d-925b-d7f97798d255"
+  },
+  "boundary": "Actual production lock on own canonical fake Auth; no credential values"
+}

@@ -1,0 +1,93 @@
+{
+  "observedAt": 1791929142499,
+  "authMtimeMs": 1791929142035.3677,
+  "providers": [
+    {
+      "id": "owned-lifecycle-a",
+      "generation": "31e200fe-c4fc-479a-bdec-8ddb7e64b533"
+    },
+    {
+      "id": "owned-lifecycle-b",
+      "generation": "4d817050-8afe-4778-a1d4-5a739ff57cb5"
+    }
+  ],
+  "lease": {
+    "pid": 89952,
+    "target": "D:\\myhexin-local\\opencorvus\\.tmp-codex-provider-test-lifecycle-01a133\\final\\runtime\\data\\auth.json",
+    "label": "cross-scope-auth",
+    "started": 1791928880169,
+    "credentialGenerations": {
+      "owned-lifecycle-a": "a42afea2-6279-4559-a31a-9fd8d8971b62",
+      "owned-lifecycle-b": "4d817050-8afe-4778-a1d4-5a739ff57cb5"
+    },
+    "boundary": "Actual production lock on own canonical fake Auth; no credential values"
+  },
+  "requests": [
+    {
+      "id": 1,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928158433,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": true,
+      "respondedAt": 1791928168435,
+      "status": 400
+    },
+    {
+      "id": 2,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928341788,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791928351789,
+      "status": 400
+    },
+    {
+      "id": 3,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928366579,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791928376580,
+      "status": 400
+    },
+    {
+      "id": 4,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928522364,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791928532365,
+      "status": 400
+    },
+    {
+      "id": 5,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791928525775,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791928535776,
+      "status": 400
+    },
+    {
+      "id": 6,
+      "method": "POST",
+      "path": "/owned-lifecycle-a/v1/chat/completions",
+      "receivedAt": 1791929128050,
+      "model": "owned-lifecycle-a-model",
+      "streaming": true,
+      "initialCredentialMatched": false,
+      "respondedAt": 1791929138052,
+      "status": 400
+    }
+  ]
+}

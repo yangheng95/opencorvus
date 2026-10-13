@@ -1,0 +1,856 @@
+{
+  "status": "passed",
+  "scope": "Two authored authorization changes, five consecutive checkpoints per change, actual full/compacted actions under declared separate capacities; includes exact third-round recovery after a real source-reader disconnect.",
+  "model": "openai/gpt-6.1-sol",
+  "compactorAndCompactedCapacity": 19000,
+  "fullHistoryControlCapacity": 256000,
+  "helperStepLimit": 20,
+  "requests": 116,
+  "cumulativeRequests": 530,
+  "completedRounds": 10,
+  "passedActions": 20,
+  "passedFields": 100,
+  "runs": [
+    {
+      "name": "policy-pressure-revoke-real",
+      "status": "failed",
+      "requests": 38,
+      "completedRounds": 2
+    },
+    {
+      "name": "policy-pressure-revoke-resume",
+      "status": "passed",
+      "requests": 20,
+      "completedRounds": 3
+    },
+    {
+      "name": "policy-pressure-grant-real",
+      "status": "passed",
+      "requests": 58,
+      "completedRounds": 5
+    }
+  ],
+  "cases": [
+    {
+      "name": "policy-revoke",
+      "round": 1,
+      "status": "passed",
+      "sessionID": "ses_-zUS1oLmwzzeH8HQSjkh",
+      "sourceID": "msg_g0VXyBeDn00qL73xI8p3",
+      "summaryID": "msg_g0VXyBeFx00qvvN09rcV",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 11,
+      "requests": 13,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1oLlgzzkvQ27l6gX",
+          "assistantMessageID": "msg_g0VXyBu1V00uIGq2yKFl",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1oLlgzzkvQ27l6gX\\prt_g0VXyBusU00ZNQEMb6Pz.json",
+              "partID": "prt_g0VXyBua800imz34x2an",
+              "callID": "call_04637b46c0c24f5c86ca0688fd8e1b34",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 13985,
+            "cachedInput": 6144,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1o62szzLnVOK20Wc",
+          "assistantMessageID": "msg_g0VXyBuwc00ZX0Yfqm3z",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1o62szzLnVOK20Wc\\prt_g0VXyBveF00oxkzDuKWZ.json",
+              "partID": "prt_g0VXyBvPF00AJwE4Vj7m",
+              "callID": "call_a873b7ca80e349d29b581f5481b23364",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 6951,
+            "cachedInput": 0,
+            "output": 81
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-revoke",
+      "round": 2,
+      "status": "passed",
+      "sessionID": "ses_-zUS1oLmwzzeH8HQSjkh",
+      "sourceID": "msg_g0VXyBvfV006NpQtfJzz",
+      "summaryID": "msg_g0VXyBvi8002QrwgIhyz",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 10,
+      "requests": 12,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1o4K1zzi90iUh6Xl",
+          "assistantMessageID": "msg_g0VXyCCbY00b3r3LL2IK",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1o4K1zzi90iUh6Xl\\prt_g0VXyCDVx0021tfqwjE1.json",
+              "partID": "prt_g0VXyCDBQ006mOYwawA0",
+              "callID": "call_9ab588b11881449babb97fcdeeb2bced",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 22387,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1nnTgzzNy55yKoUD",
+          "assistantMessageID": "msg_g0VXyCDZW00D0d826KNS",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1nnTgzzNy55yKoUD\\prt_g0VXyCEND00ekb4qahlU.json",
+              "partID": "prt_g0VXyCE5o00gXJs6hUKO",
+              "callID": "call_845e65178a284a7183b066c2542e7efa",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 7060,
+            "cachedInput": 0,
+            "output": 81
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-revoke",
+      "round": 3,
+      "status": "passed",
+      "sessionID": "ses_-zUS1oLmwzzeH8HQSjkh",
+      "sourceID": "msg_g0VXyCEOy00mOOOu60lV",
+      "summaryID": "msg_g0VXyFYD600DXYo9LOtG",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 4,
+      "requests": 6,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1kS26zzXH2m1WHvE",
+          "assistantMessageID": "msg_g0VXyFfl100FLYQw6LBf",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1kS26zzXH2m1WHvE\\prt_g0VXyFgaB00db90b6WBV.json",
+              "partID": "prt_g0VXyFgIQ00JQB7AHdiM",
+              "callID": "call_af5c0fa1fedf4da9ab0ef4f2ee83e909",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 24645,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1kKZzzz5fkYO0erM",
+          "assistantMessageID": "msg_g0VXyFgdw00K5y0M0cns",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1kKZzzz5fkYO0erM\\prt_g0VXyFhVt002h9Qy7DgF.json",
+              "partID": "prt_g0VXyFhEz00PAFnDzDxL",
+              "callID": "call_da5b47b3f8b44cf6800ca5077e8415d4",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 7323,
+            "cachedInput": 0,
+            "output": 81
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-revoke",
+      "round": 4,
+      "status": "passed",
+      "sessionID": "ses_-zUS1oLmwzzeH8HQSjkh",
+      "sourceID": "msg_g0VXyFhYF00vS5qJSOwn",
+      "summaryID": "msg_g0VXyFhhT00yVHlX1gPq",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 4,
+      "requests": 6,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1kIQozzsAomdrcmt",
+          "assistantMessageID": "msg_g0VXyFpbX00KnI4g6k9X",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1kIQozzsAomdrcmt\\prt_g0VXyFqWe00GVqTzuIeR.json",
+              "partID": "prt_g0VXyFqDp00V7VncFS6g",
+              "callID": "call_5f440b5ee2f441998b964bf5e66a6977",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 26903,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1kAajzz9r7CoiyMO",
+          "assistantMessageID": "msg_g0VXyFqba00iKZGt9fFp",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1kAajzz9r7CoiyMO\\prt_g0VXyFrUu00UBNbcjJoD.json",
+              "partID": "prt_g0VXyFrCT00B8PwK8gpz",
+              "callID": "call_cec46433d6f0443ea52b09883be0c244",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 7501,
+            "cachedInput": 0,
+            "output": 81
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-revoke",
+      "round": 5,
+      "status": "passed",
+      "sessionID": "ses_-zUS1oLmwzzeH8HQSjkh",
+      "sourceID": "msg_g0VXyFrWu00sIoaHiCLE",
+      "summaryID": "msg_g0VXyFreO00FMgRKZQi2",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 6,
+      "requests": 8,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1k8SQzzaLrdRdAcj",
+          "assistantMessageID": "msg_g0VXyG2M900aQY0lu23O",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1k8SQzzaLrdRdAcj\\prt_g0VXyG3Ly00G6F37h8pB.json",
+              "partID": "prt_g0VXyG30f00OcCQWjo50",
+              "callID": "call_fa3348598ccf414589e323da14c2d8e1",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 29161,
+            "cachedInput": 0,
+            "output": 81
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1jxxlzz7GP50ypBN",
+          "assistantMessageID": "msg_g0VXyG3RA00n8PMsqp2o",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YxFClA\\runner-73760-aGcxXw\\runtime-root\\tmp\\opencorvus-compaction-stress-UTgYO4\\project\\policy-actions\\ses_-zUS1jxxlzz7GP50ypBN\\prt_g0VXyG48z00UZ3MjAazD.json",
+              "partID": "prt_g0VXyG3s200KS9bSRK2E",
+              "callID": "call_5205914c4b834032828c4d485b6eccbd",
+              "action": {
+                "kind": "draft",
+                "channel": "CHANNEL-d8d7094ce131-policy-revoke",
+                "region": "REGION-d8d7094ce131-policy-revoke",
+                "artifact_id": "ARTIFACT-d8d7094ce131-policy-revoke",
+                "policy_revision": "POLICY-d8d7094ce131-policy-revoke"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 7571,
+            "cachedInput": 0,
+            "output": 81
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 1,
+      "status": "passed",
+      "sessionID": "ses_-zUS1jSxSzzlNbqmP9Hn",
+      "sourceID": "msg_g0VXyGX3F00u4peYYn4u",
+      "summaryID": "msg_g0VXyGX5a00YM54D1C1y",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 14,
+      "requests": 16,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1jSw8zzn1yKLgoK9",
+          "assistantMessageID": "msg_g0VXyGqYk00d1bSwTy7f",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1jSw8zzn1yKLgoK9\\prt_g0VXyGrWm00eeuJ8TwzD.json",
+              "partID": "prt_g0VXyGrDx00KYGVMMPh7",
+              "callID": "call_2a255119df2a43d98ec7da5c6c180cf1",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 20142,
+            "cachedInput": 0,
+            "output": 85
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1j9YWzz9oF6VReli",
+          "assistantMessageID": "msg_g0VXyGraU005TeqkTe1j",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1j9YWzz9oF6VReli\\prt_g0VXyGsND00Ffi5EXell.json",
+              "partID": "prt_g0VXyGs2x00DuP2UOZ8P",
+              "callID": "call_672d7d06a6aa48f8a6a2eb352745a21d",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 6939,
+            "cachedInput": 0,
+            "output": 85
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 2,
+      "status": "passed",
+      "sessionID": "ses_-zUS1jSxSzzlNbqmP9Hn",
+      "sourceID": "msg_g0VXyGsOu00sbKiNJN5Y",
+      "summaryID": "msg_g0VXyGsSU00dbaQZWoas",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 1,
+      "requests": 3,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1j7aWzzf5fy3rh7I",
+          "assistantMessageID": "msg_g0VXyGvhq00BqHMSE7My",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1j7aWzzf5fy3rh7I\\prt_g0VXyGwZn001shcOqzh4.json",
+              "partID": "prt_g0VXyGwGb002uUqqfHqg",
+              "callID": "call_6af4c681da57499c9109b67cf9857f5d",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 22402,
+            "cachedInput": 0,
+            "output": 85
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1j4OAzzJN9N0pS1M",
+          "assistantMessageID": "msg_g0VXyGwda00P9phkl69e",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1j4OAzzJN9N0pS1M\\prt_g0VXyGxSw00bdgeX73qi.json",
+              "partID": "prt_g0VXyGx7u0037q7A1vHp",
+              "callID": "call_21f9354643d8423991f154f181505004",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 996,
+            "cachedInput": 6144,
+            "output": 85
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 3,
+      "status": "passed",
+      "sessionID": "ses_-zUS1jSxSzzlNbqmP9Hn",
+      "sourceID": "msg_g0VXyGxVj008yQFyhnnq",
+      "summaryID": "msg_g0VXyGxbS00XqiQ8zfve",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 10,
+      "requests": 12,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1j2TSzzTRWIJGxTo",
+          "assistantMessageID": "msg_g0VXyHEtM00fiMBaQ9K7",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1j2TSzzTRWIJGxTo\\prt_g0VXyHFm400QRd4Q22c8.json",
+              "partID": "prt_g0VXyHFRG00eNjrW7CAc",
+              "callID": "call_889186a57f894964b43755d0446324da",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 24662,
+            "cachedInput": 0,
+            "output": 85
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1ilFqzzY2uQ7GEB3",
+          "assistantMessageID": "msg_g0VXyHFpS00D0mEkEWZn",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1ilFqzzY2uQ7GEB3\\prt_g0VXyHGo900iOKadttxC.json",
+              "partID": "prt_g0VXyHGPT00bxXCGyyYp",
+              "callID": "call_045e3ecb738c4031848111ff83c4c534",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 7207,
+            "cachedInput": 0,
+            "output": 85
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 4,
+      "status": "passed",
+      "sessionID": "ses_-zUS1jSxSzzlNbqmP9Hn",
+      "sourceID": "msg_g0VXyHGtM00xNRPOmmY9",
+      "summaryID": "msg_g0VXyHH2o00zyzdD6qKE",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 11,
+      "requests": 13,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1ij4ezzSMR1Z0UHJ",
+          "assistantMessageID": "msg_g0VXyHbRb001hdQtzTVK",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1ij4ezzSMR1Z0UHJ\\prt_g0VXyHcOG00Jxaa5IMgW.json",
+              "partID": "prt_g0VXyHc3V00l5wnxhu4q",
+              "callID": "call_cddb123bbf3b48cb916c922953f6aa91",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 26922,
+            "cachedInput": 0,
+            "output": 85
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1iOgQzzqGjRRHATD",
+          "assistantMessageID": "msg_g0VXyHcRU002sXkLmErG",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1iOgQzzqGjRRHATD\\prt_g0VXyHdcz00B6ZLWRIbQ.json",
+              "partID": "prt_g0VXyHdHK00d6Yq4tc3N",
+              "callID": "call_c61b9a5002654fd8a6f07f363954904b",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 7231,
+            "cachedInput": 0,
+            "output": 87
+          }
+        }
+      ]
+    },
+    {
+      "name": "policy-grant",
+      "round": 5,
+      "status": "passed",
+      "sessionID": "ses_-zUS1jSxSzzlNbqmP9Hn",
+      "sourceID": "msg_g0VXyHdfW00L3nLIxqoy",
+      "summaryID": "msg_g0VXyHdoh00fiqqnIzMt",
+      "compactionCapacity": {
+        "status": "known",
+        "tokens": 19000
+      },
+      "compactionRequests": 12,
+      "requests": 14,
+      "lanes": [
+        {
+          "lane": "full",
+          "status": "passed",
+          "sessionID": "ses_-zUS1iMJYzzcNi9j9tcT",
+          "assistantMessageID": "msg_g0VXyHzIr00RpWs7kTGV",
+          "capacity": {
+            "status": "known",
+            "tokens": 256000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1iMJYzzcNi9j9tcT\\prt_g0VXyI0Ff00m7jB228tz.json",
+              "partID": "prt_g0VXyHzuu00kJ2JJBnqg",
+              "callID": "call_6d18ecf395f44930852b0a1e0e6c44c1",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 23038,
+            "cachedInput": 6144,
+            "output": 85
+          }
+        },
+        {
+          "lane": "compacted",
+          "status": "passed",
+          "sessionID": "ses_-zUS1i0sgzzziCDx86pm",
+          "assistantMessageID": "msg_g0VXyI0J300x20gbV4TQ",
+          "capacity": {
+            "status": "known",
+            "tokens": 19000
+          },
+          "effects": [
+            {
+              "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Q3X4et\\runner-85148-3pb5Tp\\runtime-root\\tmp\\opencorvus-compaction-stress-nhdIxH\\project\\policy-actions\\ses_-zUS1i0sgzzziCDx86pm\\prt_g0VXyI14r00Nfah9HLkS.json",
+              "partID": "prt_g0VXyI0qM00cDvdNXWoq",
+              "callID": "call_04cdda00d2b24ab685611d494573ad44",
+              "action": {
+                "kind": "release",
+                "channel": "CHANNEL-a5087f4b9ead-policy-grant",
+                "region": "REGION-a5087f4b9ead-policy-grant",
+                "artifact_id": "ARTIFACT-a5087f4b9ead-policy-grant",
+                "policy_revision": "POLICY-a5087f4b9ead-policy-grant"
+              }
+            }
+          ],
+          "passedFields": 5,
+          "usage": {
+            "requests": 1,
+            "uncachedInput": 7151,
+            "cachedInput": 0,
+            "output": 85
+          }
+        }
+      ]
+    }
+  ],
+  "interruption": {
+    "report": "policy-pressure-revoke-real.json",
+    "failureEvidence": "policy-pressure-network-failure.json",
+    "requestNumber": 38,
+    "sourceReader": {
+      "status": 200,
+      "terminal": "error",
+      "origin": "read",
+      "type": "TypeError",
+      "code": "ECONNRESET"
+    },
+    "priorCheckpointRemainedAuthoritative": true,
+    "originalFailureRetained": true,
+    "requestsWithoutUsageReceipt": 1
+  },
+  "usageRecords": 115,
+  "credentialCleanup": [
+    {
+      "runtimePresent": true,
+      "dataPresent": true,
+      "authPresent": false,
+      "catalogPresent": false
+    },
+    {
+      "runtimePresent": true,
+      "dataPresent": true,
+      "authPresent": false,
+      "catalogPresent": false
+    },
+    {
+      "runtimePresent": true,
+      "dataPresent": true,
+      "authPresent": false,
+      "catalogPresent": false
+    }
+  ],
+  "limitations": [
+    "One configured model and authored histories; full-history controls deliberately receive a larger declared input ceiling.",
+    "The original disconnected request has no completed usage receipt; it remains counted and its billing is unknown.",
+    "These results do not prove perfect semantic retention, native product state integration, Mission recovery or all-model parity."
+  ]
+}

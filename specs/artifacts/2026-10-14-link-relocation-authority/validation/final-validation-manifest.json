@@ -1,0 +1,70 @@
+{
+  "capturedAtUtc": "2026-10-13T22:44:51.793Z",
+  "qualification": "Original validation/tool evidence, no source digest or functional gate",
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-kind-docs-final.log",
+      "target": "copy-kind-docs-final.log.gz",
+      "originalBytes": 106,
+      "storedBytes": 115,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-kind-docs-final.exit.json",
+      "target": "copy-kind-docs-final.exit.json",
+      "originalBytes": 103,
+      "storedBytes": 103,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-kind-architecture-final.log",
+      "target": "copy-kind-architecture-final.log.gz",
+      "originalBytes": 141,
+      "storedBytes": 129,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-kind-architecture-final.exit.json",
+      "target": "copy-kind-architecture-final.exit.json",
+      "originalBytes": 117,
+      "storedBytes": 117,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-delivery-root-review.json",
+      "target": "copy-delivery-root-review.json.gz",
+      "originalBytes": 697763,
+      "storedBytes": 31498,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-delivery-root-review-original.log",
+      "target": "copy-delivery-root-review-original.log.gz",
+      "originalBytes": 2758,
+      "storedBytes": 901,
+      "gzip": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\review-copy-delivery.mjs",
+      "target": "review-copy-delivery.mjs",
+      "originalBytes": 2353,
+      "storedBytes": 2353,
+      "gzip": false,
+      "originalBytesPreserved": true
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\copy-kind-delivery.mjs",
+      "target": "copy-kind-delivery.mjs",
+      "originalBytes": 6075,
+      "storedBytes": 6075,
+      "gzip": false,
+      "originalBytesPreserved": true
+    }
+  ]
+}

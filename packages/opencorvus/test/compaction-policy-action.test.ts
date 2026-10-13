@@ -44,12 +44,25 @@ test("a budget-interrupted compacted action resumes its saved checkpoint and una
   await exercise("policy-grant", 1, false, false, true)
 }, 60_000)
 
+test("tight compaction and a complete full-history control execute under their declared separate budgets", async () => {
+  await exercise("policy-revoke", 1, false, false, false, true)
+}, 60_000)
+
+test("an interrupted middle checkpoint resumes its original input and finishes later planned rounds", async () => {
+  await exercise("policy-grant", 3, false, true)
+}, 90_000)
+
+test("an interrupted middle probe resumes its original action and finishes later planned rounds", async () => {
+  await exercise("policy-grant", 3, false, false, true)
+}, 90_000)
+
 async function exercise(
   name: CompactionPolicyCase.Name,
   rounds: number,
   wrong: boolean,
   interrupted = false,
   probeInterrupted = false,
+  pressure = false,
 ) {
   const corpus = CompactionPolicyCase.definition(name, `local-${name}`)
   const requests: any[] = []
@@ -81,7 +94,7 @@ async function exercise(
       let response: string
       if (names.includes("ReadCompactionEvidence")) {
         compactorRequests++
-        if (compactorRequests === 1) {
+        if (compactorRequests === 1 && !pressure) {
           const userContent = body.messages
             .filter((message: any) => message.role === "user")
             .map((message: any) => message.content)
@@ -129,7 +142,7 @@ async function exercise(
           model: `${target.providerID}/${target.modelID}`,
           small_model: `${target.providerID}/${target.modelID}`,
           enabled_providers: [target.providerID],
-          compaction: { tail_turns: 0, max_context_tokens: 256_000 },
+          compaction: { tail_turns: 0, max_context_tokens: pressure ? 19_000 : 256_000 },
           provider: {
             [target.providerID]: {
               name: "Isolated policy transport",
@@ -151,6 +164,7 @@ async function exercise(
           name,
           nonce: `local-${name}`,
           rounds,
+          fullContextTokens: pressure ? 256_000 : undefined,
           project: project.path,
           model: await Provider.getModel(target.providerID, target.modelID),
           requestCount: () => requests.length,
@@ -215,7 +229,7 @@ async function exercise(
               if (!resumed.includes(entry)) resumed.push(entry)
             },
           })
-          expect(resumed).toHaveLength(1)
+          expect(resumed).toHaveLength(rounds - cut.round + 1)
           expect(resumed[0]).toMatchObject({
             sessionID: cut.sessionID,
             sourceID: cut.sourceID,
@@ -232,20 +246,31 @@ async function exercise(
             name,
             wrong,
             interrupted,
+            pressure,
             requests: requests.length,
             entries,
             resumed,
           }),
         )
-        expect(entries).toHaveLength(rounds)
-        const graded = probeInterrupted ? resumed : interrupted ? [entries[0], resumed[0]] : entries
+        expect(entries).toHaveLength(probeInterrupted ? 1 : interrupted ? 2 : rounds)
+        const graded = probeInterrupted ? resumed : interrupted ? [entries[0], ...resumed] : entries
         expect(graded.map((entry) => entry.status)).toEqual(Array(rounds).fill(wrong ? "failed" : "passed"))
         expect(requests).toHaveLength(rounds * 3 + (probeInterrupted ? 1 : 0))
+        if (pressure) {
+          expect(
+            requests[1].messages
+              .filter((message: any) => message.role === "user")
+              .map((message: any) => message.content)
+              .join("\n"),
+          ).toContain(corpus.longUpdate)
+        }
         for (const entry of graded) {
+          expect(entry.compactionCapacity).toEqual({ status: "known", tokens: pressure ? 19_000 : 256_000 })
           expect(entry.checkpoint).toMatchObject({ status: "valid_checkpoint", processExitCode: 0 })
           expect(entry.reopen).toBe("exact projection identities")
           expect(entry.lanes.map((lane: any) => lane.lane)).toEqual(["full", "compacted"])
-          expect(entry.lanes[0].contextCapacity).toEqual(entry.lanes[1].contextCapacity)
+          expect(entry.lanes[0].contextCapacity).toEqual({ status: "known", tokens: 256_000 })
+          expect(entry.lanes[1].contextCapacity).toEqual({ status: "known", tokens: pressure ? 19_000 : 256_000 })
           expect(entry.lanes[0].inputEstimate.totalTokensEst).toBeGreaterThan(
             entry.lanes[1].inputEstimate.totalTokensEst,
           )
@@ -266,6 +291,7 @@ async function exercise(
             })
           }
         }
+        expect((await Config.get()).compaction?.max_context_tokens).toBe(pressure ? 19_000 : 256_000)
       },
     })
   } finally {

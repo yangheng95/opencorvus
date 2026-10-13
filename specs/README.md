@@ -1,10 +1,14 @@
 # Specs Storage Index
 
+- [Provider 模型摘要](records/2026-10/2026-10-14-provider-model-summary.md)：统一目录数量、摘要和完整模型ID搜索；17张原图及真实读取失败恢复。
+
+- [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
+
 - [持续目标 UI/UX](records/2026-10/2026-10-14-continuous-goal-ui-ux.md)：三模式统一入口、状态、预算控制和真实桌面验收。
 
 - [长历史分叉耗时](records/2026-10/2026-10-14-fork-latency.md)：真实长引用、运行时采样与原子消息/事件共享机制。
 
-- [Provider Test 在途生命周期](records/2026-10/2026-10-14-provider-test-lifecycle.md)：独立补验并行、Key、删除重建与作用域接受边界。
+- [Provider Test 在途生命周期](records/2026-10/2026-10-14-provider-test-lifecycle.md)：有效响应跨项目退休修复、并行逐项收敛与22张原图；保留超时窗口局限。
 
 - [404 Task Git 与 Question 重连](records/2026-10/2026-10-14-task-git-question-reconnect-404.md)：冻结 Git 目录实证、同页草稿重连与合法 Work/Mission 后续验收。
 
@@ -106,7 +110,7 @@
 
 - [Venice 用量与共享后台停机](records/2026-10/2026-10-13-venice-stream-usage.md)：唯一适配器计量、共享取消顺序与真实视觉/进程证据。
 
-- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：414 次真实请求；19k 窗口内完整文件与失败诊断 22 字段通过，保留原始证据、工作笔记和读取范围回执。
+- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：530 次真实请求；19k 预算下两类授权各五轮、20 个动作与 100 字段通过，含真实断线后的原历史续验。
 
 - [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
 

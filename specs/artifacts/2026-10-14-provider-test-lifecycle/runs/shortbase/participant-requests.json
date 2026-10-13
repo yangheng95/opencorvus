@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "method": "POST",
+    "path": "/owned-lifecycle-a/v1/chat/completions",
+    "receivedAt": 1791930917691,
+    "model": "owned-lifecycle-a-model",
+    "streaming": true,
+    "initialCredentialMatched": true,
+    "respondedAt": 1791930927697,
+    "status": 400
+  }
+]
