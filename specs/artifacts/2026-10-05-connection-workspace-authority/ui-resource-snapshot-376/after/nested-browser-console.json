@@ -1,0 +1,14 @@
+[
+  {
+    "level": "error",
+    "message": "MissingI18nKeyError: Missing i18n string for locale en-US: common.error\n    at SI (http://localhost:18383/ui/assets/main-CAo85tzZ.js:2:12857)\n    at xM (http://localhost:18383/ui/assets/main-CAo85tzZ.js:2:12920)\n    at f (http://localhost:18383/ui/assets/main-CAo85tzZ.js:2:13133)\n    at Fh (http://localhost:18383/ui/assets/main-CAo85tzZ.js:231:160)\n    at http://localhost:18383/ui/assets/main-CAo85tzZ.js:231:882",
+    "timestamp": "2026-10-13T03:14:27.972Z",
+    "url": "http://localhost:18383/ui/assets/main-CAo85tzZ.js"
+  },
+  {
+    "level": "error",
+    "message": "Uncaught SyntaxError: Unexpected token '<', \"<!doctype \"... is not valid JSON",
+    "timestamp": "2026-10-13T03:14:27.974Z",
+    "url": "http://localhost:18383/ui/inspect/resource/"
+  }
+]

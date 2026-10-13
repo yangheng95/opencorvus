@@ -1,5 +1,11 @@
 # 07 — Overlay Panels And Task Evidence
 
+The `/ui` document and its static resources share the server process's
+[immutable resource ownership](server-runtime-readiness.md#static-frontend-resource-ownership).
+Rebuilding an input directory does not switch a running page's module version;
+new server processes capture the new publication. Project and conversation data
+continue through their existing dynamic readers and subscriptions.
+
 ## Composer availability
 
 Project file listing, content/source-content, file status and text/file search

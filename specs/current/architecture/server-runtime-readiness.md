@@ -49,6 +49,34 @@ current runner commands do not supply such an observer.
 
 ## Public HTTP response boundary
 
+### Static frontend resource ownership
+
+Each server process binds one complete frontend resource snapshot before serving
+`/ui`. Directory capture validates the physical publication boundary and retains
+every regular resource, including workers, dynamic chunks, locale files, fonts
+and licenses. Optional manifests and required directories validate that same
+captured input. Embedded resources enter the same immutable Blob representation
+and response path. The source exposes a read-only lookup over private resources;
+each request obtains its own stream, and no request reopens the publication
+directory. Source identity and diagnostics describe these exact captured bytes.
+
+Replacing or deleting the original build cannot change an existing server's
+resources. A newly started process captures the new publication. The snapshot
+is held for the process lifetime; its retained payload size is the full published
+UI size, with transient capture allocations in addition. This ownership does not
+freeze project files, messages or other dynamic API data. There is no build
+watcher, second asset cache, automatic page refresh or runtime source rebinding.
+
+Resource URLs decode once and enter the captured namespace after rejecting null
+bytes, backslashes, invalid escaping and parent traversal. HTTP HTML responses
+rewrite absolute and relative asset links against the existing public prefix and
+document depth. A client that independently constructs resource URLs must still
+use the correct application base; HTML rewriting does not repair relative locale
+requests authored by the client. Backend byte/status contracts and actual page
+inspection are separate verification surfaces.
+
+### Error responses
+
 Thrown HTTP (Hypertext Transfer Protocol) failures enter the shared server error
 handler. Named errors and message-authored HTTP exceptions retain the current
 JSON (JavaScript Object Notation) envelopes, including400/404 mapping and the

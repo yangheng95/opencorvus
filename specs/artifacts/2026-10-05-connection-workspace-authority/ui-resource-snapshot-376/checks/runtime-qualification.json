@@ -1,0 +1,147 @@
+{
+  "result": {
+    "source": {
+      "id": "prt_g0VXtZtFL008ocrJOsE6",
+      "messageID": "msg_g0VXtZsCJ009ZqhoxmIi",
+      "type": "source-file",
+      "sourceId": "f5d8518b69672d3e27c2917890d9349ff5540b88cb87e33f0fb2944534f32a05",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\ui-resource-snapshot-376-after\\project\\资源记录.txt",
+      "title": "资源记录.txt",
+      "provider": "opencorvus-read"
+    },
+    "completed": [
+      {
+        "id": "msg_g0VXtZfgh00veOfAeKLP",
+        "sessionID": "ses_hufL37ctpeegVoRO1qDB",
+        "role": "assistant",
+        "author": "chat",
+        "agent": "chat",
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "time": {
+          "created": 1791860886771,
+          "completed": 1791860891735
+        },
+        "finish": "stop"
+      },
+      {
+        "id": "msg_g0VXtZtHQ00DnnN8i5QQ",
+        "sessionID": "ses_-zUS6Q863zzi3tpahnCO",
+        "role": "assistant",
+        "author": "work",
+        "agent": "work",
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "time": {
+          "created": 1791860939020,
+          "completed": 1791860947663
+        },
+        "finish": "stop"
+      }
+    ],
+    "requests": 5,
+    "elapsedMs": 578003,
+    "savedBytes": 65,
+    "settled": {
+      "occurrence": "ui-resource-snapshot-376-after-180efbad-7925-4074-a006-abb4364526cb",
+      "outcome": "settled",
+      "host": {
+        "pid": 71556,
+        "processInstanceID": "win32:639274576764295289",
+        "occurrenceID": "c66475fc-fd74-4c49-aa51-203db86ea98f"
+      },
+      "target": {
+        "pid": 72924,
+        "processInstanceID": "win32:639274576772216014",
+        "occurrenceID": "87ff57b6-c11d-4dae-97ca-1a5443a88cb2"
+      },
+      "observedAtUtc": "2026-10-13T03:17:35.224Z",
+      "deadlineAt": 1791861476410,
+      "terminal": {
+        "occurrenceID": "ui-resource-snapshot-376-after-180efbad-7925-4074-a006-abb4364526cb",
+        "pid": 72924,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "qualified": {
+      "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+      "providerUserCancelledRequests": 0,
+      "physicalCompletion": true,
+      "providerEOFRequests": 5,
+      "qualification": "NativeService",
+      "cancellation": null
+    },
+    "oldWorker": {
+      "level": "info",
+      "time": "2026-10-13T03:12:54.519Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "807970f0-8c71-4ee1-8dbb-0a8ce01b7b96",
+        "method": "GET",
+        "path": "/ui/assets/markdown-render.worker-CF9y63Km.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    "editor": {
+      "level": "info",
+      "time": "2026-10-13T03:13:44.985Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f80d6477-c48e-41e1-b6bc-27b32e97be61",
+        "method": "GET",
+        "path": "/ui/assets/CodeEditor-KqnXIBNR.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    "publishedAtUtc": "2026-10-13T03:11:17.117Z",
+    "originalIdentity": "directory:d72d34729fa039ddef84e4ec77569bd5835f2f477bf66500aa20baae15d83ee7",
+    "freshIdentity": "directory:2fccf42d1365da1bb2b124cb72de0f8c282cc27204a9d1122e10b297b8c9e4eb",
+    "localeRequests": [
+      {
+        "level": "info",
+        "time": "2026-10-13T03:14:27.953Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "3aeecae0-c708-44e9-9bb5-8487a549ff23",
+          "method": "GET",
+          "path": "/ui/inspect/resource/i18n/zh-CN.json",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 0
+        },
+        "message": "request"
+      },
+      {
+        "level": "info",
+        "time": "2026-10-13T03:14:27.963Z",
+        "service": "server",
+        "logDomain": "non-session",
+        "data": {
+          "requestID": "6d2b4804-ab1a-4617-a896-378b60e910b0",
+          "method": "GET",
+          "path": "/ui/inspect/resource/i18n/en-US.json",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 0
+        },
+        "message": "request"
+      }
+    ]
+  },
+  "boundary": "Actual resource bytes, publication/request times, model/Source/ToolOutcome, saved file bytes and Native closure. Five screenshots manually reviewed: root UI and lazy editor succeeded after replacement; nested document initialization failed on relative locale requests and remains a separate follow-up. No UI assertions."
+}

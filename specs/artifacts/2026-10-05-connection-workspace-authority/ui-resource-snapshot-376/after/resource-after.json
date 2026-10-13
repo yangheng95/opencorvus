@@ -1,0 +1,60 @@
+{
+  "stage": "after",
+  "identity": "directory:d72d34729fa039ddef84e4ec77569bd5835f2f477bf66500aa20baae15d83ee7",
+  "receipts": [
+    {
+      "target": "assets/CommandMenuSurface-9Ez69chO.css",
+      "status": 200,
+      "bytes": 144067,
+      "contentType": "text/css; charset=utf-8",
+      "completeBytes": "equal to original formal build"
+    },
+    {
+      "target": "assets/CommandMenuSurface-CtjT7lnd.js",
+      "status": 200,
+      "bytes": 95594,
+      "contentType": "application/javascript; charset=utf-8",
+      "completeBytes": "equal to original formal build"
+    },
+    {
+      "target": "assets/main-BlyfF09t.css",
+      "status": 200,
+      "bytes": 540853,
+      "contentType": "text/css; charset=utf-8",
+      "completeBytes": "equal to original formal build"
+    },
+    {
+      "target": "assets/main-CAo85tzZ.js",
+      "status": 200,
+      "bytes": 1701475,
+      "contentType": "application/javascript; charset=utf-8",
+      "completeBytes": "equal to original formal build"
+    },
+    {
+      "target": "assets/markdown-render.worker-CF9y63Km.js",
+      "status": 200,
+      "bytes": 153916,
+      "contentType": "application/javascript; charset=utf-8",
+      "completeBytes": "equal to original formal build"
+    },
+    {
+      "target": "i18n/en-US.json",
+      "status": 200,
+      "bytes": 135785,
+      "contentType": "application/json;charset=utf-8",
+      "completeBytes": "equal to original formal build"
+    },
+    {
+      "target": "assets/scope-resource-376.bin",
+      "status": 200,
+      "bytes": 32,
+      "contentType": "application/octet-stream",
+      "completeBytes": "equal to original formal build"
+    },
+    {
+      "publishedWorker": "markdown-render.worker-DqbgtJ0U.js",
+      "originalWorker": "assets/markdown-render.worker-CF9y63Km.js",
+      "publication": "Different real build; source version comparison is recorded, response bytes qualified above"
+    }
+  ]
+}

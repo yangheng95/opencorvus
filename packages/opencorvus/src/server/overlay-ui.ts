@@ -2,8 +2,7 @@ import { Hono, type Context } from "hono"
 import { createHash } from "node:crypto"
 import path from "path"
 import fs from "fs"
-import fsp from "fs/promises"
-import { EMBEDDED_OVERLAY_UI, type EmbeddedOverlayUiFile } from "./overlay-ui-embedded.generated"
+import { EMBEDDED_OVERLAY_UI } from "./overlay-ui-embedded.generated"
 
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -41,6 +40,7 @@ export type FrozenOverlayUiSource = Readonly<
       manifestSHA256?: string
       assetClosureSHA256: string
       assetCount: number
+      readResource: (path: string) => Blob | undefined
     }
   | {
       kind: "embedded"
@@ -50,6 +50,7 @@ export type FrozenOverlayUiSource = Readonly<
       indexSHA256: string
       assetClosureSHA256: string
       assetCount: number
+      readResource: (path: string) => Blob | undefined
     }
   | {
       kind: "missing"
@@ -86,10 +87,6 @@ function resolveDefaultOverlayDir(): string | undefined {
 
   return undefined
 }
-
-const EMBEDDED_OVERLAY_UI_BY_PATH = new Map<string, EmbeddedOverlayUiFile>(
-  EMBEDDED_OVERLAY_UI.map((file) => [file.path, file]),
-)
 
 function isInsideDirectory(root: string, candidate: string): boolean {
   const rootWithSeparator = root.endsWith(path.sep) ? root : root + path.sep
@@ -151,6 +148,28 @@ type ViteManifestEntry = {
   dynamicImports?: unknown
 }
 
+/** Capture bytes once; only immutable Blobs escape the capture boundary. */
+function freezeResourceBytes(files: ReadonlyMap<string, Buffer>) {
+  const index = files.get("index.html")
+  if (!index) throw new Error("Overlay UI source is missing index.html")
+  const indexHtml = index.toString("utf8")
+  const resources = new Map<string, Blob>()
+  const closure: string[] = []
+  for (const [relativePath, bytes] of [...files].sort(([left], [right]) => left.localeCompare(right))) {
+    const type = MIME[path.extname(relativePath).toLowerCase()] || "application/octet-stream"
+    resources.set(`/${relativePath}`, new Blob([bytes], { type }))
+    closure.push(`${relativePath}\0${bytes.byteLength}\0${sha256(bytes)}`)
+  }
+  return {
+    indexHtml,
+    indexSHA256: sha256(index),
+    assetRefs: Object.freeze(overlayUiAssetRefs(indexHtml)),
+    assetClosureSHA256: sha256(closure.join("\n")),
+    assetCount: resources.size,
+    readResource: (resourcePath: string) => resources.get(resourcePath),
+  }
+}
+
 export function freezeOverlayUiDirectory(input: {
   directory: string
   manifestPath?: string
@@ -162,10 +181,21 @@ export function freezeOverlayUiDirectory(input: {
   const files = new Map<string, string>()
   const index = regularFileWithin(directory, "index.html")
   files.set(index.relativePath, index.absolutePath)
-  const indexHtml = fs.readFileSync(index.absolutePath, "utf8")
-  for (const resource of localDocumentResourceRefs(indexHtml)) {
-    const file = regularFileWithin(directory, resource)
-    files.set(file.relativePath, file.absolutePath)
+  // Workers, dynamic imports, fonts and other late requests need the same
+  // ownership as the entry point, including when no build manifest is supplied.
+  collectDirectoryFiles(directory, directory, files)
+  const bytes = new Map([...files].map(([relative, absolute]) => [relative, fs.readFileSync(absolute)]))
+  const requireResource = (relativePath: string): Buffer => {
+    const normalized = relativePath.replace(/\\/g, "/").replace(/^\/+/, "")
+    if (!normalized || normalized.split("/").includes("..")) {
+      throw new Error(`Overlay UI resource path is invalid: ${relativePath}`)
+    }
+    const content = bytes.get(normalized)
+    if (!content) throw new Error(`Overlay UI resource is missing from its captured directory: ${relativePath}`)
+    return content
+  }
+  for (const resource of localDocumentResourceRefs(requireResource("index.html").toString("utf8"))) {
+    requireResource(decodeURIComponent(resource))
   }
 
   let manifestSHA256: string | undefined
@@ -176,9 +206,7 @@ export function freezeOverlayUiDirectory(input: {
     if (!isInsideDirectory(directory, manifestCandidate)) {
       throw new Error(`Overlay UI manifest escapes its frozen directory: ${input.manifestPath}`)
     }
-    const manifestFile = regularFileWithin(directory, path.relative(directory, manifestCandidate))
-    files.set(manifestFile.relativePath, manifestFile.absolutePath)
-    const manifestBytes = fs.readFileSync(manifestFile.absolutePath)
+    const manifestBytes = requireResource(path.relative(directory, manifestCandidate))
     manifestSHA256 = sha256(manifestBytes)
     const manifest = JSON.parse(manifestBytes.toString("utf8")) as Record<string, ViteManifestEntry>
     const manifestKeys = new Set(Object.keys(manifest))
@@ -193,8 +221,7 @@ export function freezeOverlayUiDirectory(input: {
         if (typeof resource !== "string" || !resource.trim()) {
           throw new Error(`Overlay UI manifest entry ${key} has an invalid resource`)
         }
-        const file = regularFileWithin(directory, resource)
-        files.set(file.relativePath, file.absolutePath)
+        requireResource(resource)
       }
     }
   }
@@ -208,28 +235,15 @@ export function freezeOverlayUiDirectory(input: {
     if (!isInsideDirectory(directory, staticDirectory) || !fs.statSync(staticDirectory).isDirectory()) {
       throw new Error(`Overlay UI static directory is invalid: ${requiredDirectory}`)
     }
-    collectDirectoryFiles(directory, staticDirectory, files)
   }
 
-  const closure = Array.from(files.entries())
-    .sort(([left], [right]) => left.localeCompare(right))
-    .map(
-      ([relativePath, absolutePath]) =>
-        `${relativePath}\0${fs.statSync(absolutePath).size}\0${sha256(fs.readFileSync(absolutePath))}`,
-    )
-    .join("\n")
-  const indexSHA256 = sha256(indexHtml)
-  const assetClosureSHA256 = sha256(closure)
+  const captured = freezeResourceBytes(bytes)
   return Object.freeze({
     kind: "directory" as const,
     directory,
-    indexHtml,
-    assetRefs: Object.freeze(overlayUiAssetRefs(indexHtml)),
-    identity: `directory:${assetClosureSHA256}`,
-    indexSHA256,
+    ...captured,
+    identity: `directory:${captured.assetClosureSHA256}`,
     ...(manifestSHA256 ? { manifestSHA256 } : {}),
-    assetClosureSHA256,
-    assetCount: files.size,
   })
 }
 
@@ -244,29 +258,24 @@ function arrayStrings(value: unknown): string[] {
 export function freezeDefaultOverlayUiSource(): FrozenOverlayUiSource {
   const directory = resolveDefaultOverlayDir()
   if (directory) return freezeOverlayUiDirectory({ directory })
-  const index = EMBEDDED_OVERLAY_UI_BY_PATH.get("/index.html")
-  if (!index) return Object.freeze({ kind: "missing" as const, identity: "missing" as const })
-  const indexHtml = fs.readFileSync(index.file, "utf8")
-  const assetRefs = Object.freeze(overlayUiAssetRefs(indexHtml))
-  const indexSHA256 = sha256(indexHtml)
-  const assetClosureSHA256 = sha256(
-    EMBEDDED_OVERLAY_UI.map((entry) => `${entry.path}\0${sha256(fs.readFileSync(entry.file))}`)
-      .sort()
-      .join("\n"),
-  )
+  if (!EMBEDDED_OVERLAY_UI.some((entry) => entry.path === "/index.html")) {
+    return Object.freeze({ kind: "missing" as const, identity: "missing" as const })
+  }
+  const captured = freezeResourceBytes(new Map(EMBEDDED_OVERLAY_UI.map((entry) => [entry.path.replace(/^\//, ""), fs.readFileSync(entry.file)])))
   return Object.freeze({
     kind: "embedded" as const,
-    indexHtml,
-    assetRefs,
-    identity: `embedded:${assetClosureSHA256}`,
-    indexSHA256,
-    assetClosureSHA256,
-    assetCount: EMBEDDED_OVERLAY_UI.length,
+    ...captured,
+    identity: `embedded:${captured.assetClosureSHA256}`,
   })
 }
 
 function normalizeOverlayReqPath(reqPath: string): string | null {
-  if (reqPath.includes("\0")) return null
+  try {
+    reqPath = decodeURIComponent(reqPath)
+  } catch {
+    return null
+  }
+  if (reqPath.includes("\0") || reqPath.includes("\\")) return null
   const normalized = reqPath === "/" ? "/index.html" : reqPath
   if (normalized.split("/").includes("..")) return null
   return normalized
@@ -301,103 +310,23 @@ function overlayPublicBase(c: Context): string {
 
 export namespace OverlayUI {
   /**
-   * Validate that a `/ui/...` request path stays inside the overlay
-   * dir. Returns the absolute filesystem path on success, or null
-   * when the request must be rejected with 403.
-   *
-   * Defends against:
-   *  - audit-2026-04-29 opencorvus F7 — `..` traversal (literal or
-   *    URL-encoded `%2e%2e/`). path.resolve normalises both, then a
-   *    `${dir}${sep}` prefix compare blocks sibling-dir leakage
-   *    (e.g. `/foo/ui-private/secret` no longer satisfies a naive
-   *    `startsWith("/foo/ui")`).
-   *  - audit-2026-04-29 opencorvus V6.a — NUL byte poisoning.
-   *    Bun.file / Node fs treat the NUL terminator inconsistently;
-   *    `path.resolve(dir, "./index.html\0/etc/passwd")` may serve
-   *    either depending on libc. Reject up-front rather than picking
-   *    a side.
-   *  - audit-2026-04-29 opencorvus V6.b — symlink escape. Once the
-   *    resolved path is inside dir, a malicious symlink at that path
-   *    pointing outside (e.g. planted by a tampered VSIX or a
-   *    misconfigured dev tree) would still leak the target's bytes
-   *    via Bun.file's transparent follow. realpath comparison closes
-   *    the gap; for non-existent paths we let the handler fall
-   *    through to its SPA index.html fallback (no escape there
-   *    because we re-validate inside the resolved dir).
-   *
-   * Note: input `reqPath` is already URL-decoded by Hono's parser
-   * (so `%2e%2e/` arrives as `../`, `%00` arrives as `\0`).
-   */
-  export async function validatePath(dir: string, reqPath: string): Promise<string | null> {
-    if (reqPath.includes("\0")) return null
-    const resolved = path.resolve(dir, "." + reqPath)
-    const dirWithSep = dir.endsWith(path.sep) ? dir : dir + path.sep
-    if (resolved !== dir && !resolved.startsWith(dirWithSep)) return null
-    // realpath throws ENOENT on non-existent paths; the SPA fallback
-    // handler handles that case downstream by serving index.html.
-    // For any OTHER error (EACCES on a hostile symlink target,
-    // ELOOP on a cycle), fail closed — refuse the request.
-    try {
-      const realFile = await fsp.realpath(resolved)
-      const realDir = await fsp.realpath(dir)
-      const realDirWithSep = realDir.endsWith(path.sep) ? realDir : realDir + path.sep
-      if (realFile !== realDir && !realFile.startsWith(realDirWithSep)) return null
-    } catch (err) {
-      const code = (err as NodeJS.ErrnoException).code
-      if (code !== "ENOENT" && code !== "ENOTDIR") return null
-    }
-    return resolved
-  }
-
-  /**
    * The caller freezes the complete source before route registration. A
-   * running server therefore never re-resolves a mutable shared build path.
+   * running server reads only immutable resources owned by that source.
    */
   export function routes(source: FrozenOverlayUiSource) {
     const app = new Hono()
 
-    // Vite builds HTML with absolute asset paths (e.g. `/assets/...`).
+    // Vite builds can use absolute or relative asset paths.
     // Prefer proxy-prefix absolute paths when the proxy reports one;
     // otherwise emit paths relative to the current `/ui/...` document
     // so `/opencorvus/ui/` works even when the proxy strips the prefix
     // without sending `X-Forwarded-Prefix`.
     const rewriteHtmlAssets = (c: Context, html: string): string =>
-      html.replace(/(src|href)="\/(assets|i18n)\//g, `$1="${overlayPublicBase(c)}/$2/`)
-
-    const serveEmbedded = async (c: Context) => {
-      const requested = normalizeOverlayReqPath(c.req.path.replace(/^\/ui/, "") || "/")
-      if (requested === null) return c.text("Forbidden", 403)
-
-      const entry =
-        EMBEDDED_OVERLAY_UI_BY_PATH.get(requested) ??
-        (isOverlayStaticRequest(requested) ? undefined : EMBEDDED_OVERLAY_UI_BY_PATH.get("/index.html"))
-      if (!entry) return c.text("Not Found", 404)
-
-      const ext = path.extname(entry.path)
-      const contentType = MIME[ext] || "application/octet-stream"
-      const file = Bun.file(entry.file)
-      if (ext === ".html") {
-        const html = await file.text()
-        return c.body(rewriteHtmlAssets(c, html), 200, {
-          "Content-Type": contentType,
-          "Cache-Control": "no-cache",
-          ...overlayUiFingerprintHeaders(source as Extract<FrozenOverlayUiSource, { kind: "embedded" }>),
-        })
-      }
-      return c.body(await file.arrayBuffer(), 200, {
-        "Content-Type": contentType,
-        "Cache-Control": "no-cache",
-        ...overlayUiFingerprintHeaders(source as Extract<FrozenOverlayUiSource, { kind: "embedded" }>),
-      })
-    }
+      html.replace(/(src|href)=(["'])(?:\.?\/)?(assets|i18n)\//g, `$1=$2${overlayPublicBase(c)}/$3/`)
 
     const handle = async (c: Context) => {
       if (c.req.path.endsWith("/ui")) {
         return c.redirect("ui/", 308)
-      }
-
-      if (source.kind === "embedded") {
-        return serveEmbedded(c)
       }
 
       if (source.kind === "missing") {
@@ -407,46 +336,19 @@ export namespace OverlayUI {
         )
       }
 
-      const dir = source.directory
-      let reqPath = c.req.path.replace(/^\/ui/, "") || "/"
-      if (reqPath === "/") reqPath = "/index.html"
-
-      const filePath = await validatePath(dir, reqPath)
-      if (filePath === null) {
-        return c.text("Forbidden", 403)
-      }
-
-      try {
-        const file = Bun.file(filePath)
-        if (!(await file.exists())) {
-          if (isOverlayStaticRequest(reqPath)) {
-            return c.text("Not Found", 404)
-          }
-          // SPA fallback — always serves the (rewritten) index.html
-          const indexHtml = source.indexHtml
-          return c.body(rewriteHtmlAssets(c, indexHtml), 200, {
-            "Content-Type": "text/html; charset=utf-8",
-            ...overlayUiFingerprintHeaders(source),
-          })
-        }
-        const ext = path.extname(filePath)
-        const contentType = MIME[ext] || "application/octet-stream"
-        if (ext === ".html") {
-          const html = await file.text()
-          return c.body(rewriteHtmlAssets(c, html), 200, {
-            "Content-Type": contentType,
-            "Cache-Control": "no-cache",
-            ...overlayUiFingerprintHeaders(source),
-          })
-        }
-        return c.body(await file.arrayBuffer(), 200, {
-          "Content-Type": contentType,
-          "Cache-Control": "no-cache",
-          ...overlayUiFingerprintHeaders(source),
-        })
-      } catch {
-        return c.text("Not Found", 404)
-      }
+      const requested = normalizeOverlayReqPath(c.req.path.replace(/^\/ui/, "") || "/")
+      if (requested === null) return c.text("Forbidden", 403)
+      const resource = source.readResource(requested) ??
+        (isOverlayStaticRequest(requested) ? undefined : source.readResource("/index.html"))
+      if (!resource) return c.text("Not Found", 404)
+      const body = resource.type.startsWith("text/html")
+        ? rewriteHtmlAssets(c, await resource.text())
+        : resource.stream()
+      return c.body(body, 200, {
+        "Content-Type": resource.type,
+        "Cache-Control": "no-cache",
+        ...overlayUiFingerprintHeaders(source),
+      })
     }
 
     app.get("/", handle)

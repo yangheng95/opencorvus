@@ -1,0 +1,52 @@
+{
+  "identity": "directory:2fccf42d1365da1bb2b124cb72de0f8c282cc27204a9d1122e10b297b8c9e4eb",
+  "assetCount": 440,
+  "captureMilliseconds": 345.1839,
+  "memoryBefore": {
+    "rss": 35192832,
+    "heapTotal": 2307072,
+    "heapUsed": 2307072,
+    "external": 0,
+    "arrayBuffers": 0
+  },
+  "memoryAfter": {
+    "rss": 149950464,
+    "heapTotal": 4767744,
+    "heapUsed": 83117612,
+    "external": 81807540,
+    "arrayBuffers": 36900590
+  },
+  "results": [
+    {
+      "relative": "assets/CommandMenuSurface-B2Lq9ltB.css",
+      "status": 200,
+      "bytes": 172467,
+      "completeBytes": "equal to the new real private build"
+    },
+    {
+      "relative": "assets/CommandMenuSurface-CfXGfZyb.js",
+      "status": 200,
+      "bytes": 260663,
+      "completeBytes": "equal to the new real private build"
+    },
+    {
+      "relative": "assets/main-BAVW6uTR.css",
+      "status": 200,
+      "bytes": 685761,
+      "completeBytes": "equal to the new real private build"
+    },
+    {
+      "relative": "assets/main-tGz5a9EI.js",
+      "status": 200,
+      "bytes": 3743311,
+      "completeBytes": "equal to the new real private build"
+    },
+    {
+      "relative": "assets/markdown-render.worker-DqbgtJ0U.js",
+      "status": 200,
+      "bytes": 352269,
+      "completeBytes": "equal to the new real private build"
+    }
+  ],
+  "scope": "Separate real HTTP resource listener; no browser/LLM claims. Snapshot byte total is the resource memory floor, process memory delta includes other allocations."
+}
