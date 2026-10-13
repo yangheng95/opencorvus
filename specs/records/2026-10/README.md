@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [无模型时的 Provider 发现入口](2026-10-13-provider-discovery-bootstrap.md)：共享根因与真实作用域验证。
+
 - [388 参考历史重连身份](2026-10-13-history-render-identity-388.md)：真实重连的消息组件身份、来源焦点与文件定位。
 
 - [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。

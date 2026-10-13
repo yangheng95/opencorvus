@@ -614,11 +614,6 @@ export namespace Provider {
         }
       }
 
-      if (Object.keys(provider.models).length === 0) {
-        delete providers[providerID]
-        continue
-      }
-
       log.info("found", { providerID })
     }
 
@@ -741,21 +736,20 @@ export namespace Provider {
     try {
       await Auth.all()
       const snapshot = Config.Info.parse(config ?? (await Config.get()))
-      const provider = config
-        ? await getProviderGlobal("opencorvus", snapshot)
-        : await getProvider("opencorvus", { config: snapshot })
-      if (!provider?.key) throw new Error("OpenCorvus Provider credentials are not configured")
+      const provider = await getConfiguredProvider("opencorvus", { config: snapshot, global: config !== undefined })
+      const apiKey = provider ? selectedAPIKey(provider.options, provider.key) : undefined
+      if (!apiKey) throw new Error("OpenCorvus Provider credentials are not configured")
       const catalog = await ModelsDev.get()
       const declaration = catalog.opencorvus
       if (!declaration) throw new Error("Model catalog is missing provider opencorvus")
-      const endpoint = (snapshot.provider?.opencorvus?.api ?? declaration.api)?.trim().replace(/\/+$/, "")
+      const endpoint = discoveryEndpoint("opencorvus", snapshot, declaration)
       if (!endpoint) throw new Error("OpenCorvus Provider is missing its live models endpoint")
       const request = async (pathname: "/models" | "/model/info") => {
         const response = await fetch(
           `${endpoint}${pathname}`,
           providerFetchInit(
             {
-              headers: { Authorization: `Bearer ${provider.key}` },
+              headers: { Authorization: `Bearer ${apiKey}` },
               signal: AbortSignal.timeout(15_000),
             },
             resolveFetchProxy(snapshot),
@@ -797,18 +791,46 @@ export namespace Provider {
     }
   }
 
+  function hasRunnableModels(provider: Info | undefined): provider is Info {
+    return provider !== undefined && Object.keys(provider.models).length > 0
+  }
+
+  function runnableProvider(state: ProviderState, providerID: string): Info | undefined {
+    const provider = state.providers[providerID]
+    return hasRunnableModels(provider) ? provider : undefined
+  }
+
+  function runnableProviders(state: ProviderState): Record<string, Info> {
+    return Object.fromEntries(Object.entries(state.providers).filter(([, provider]) => hasRunnableModels(provider)))
+  }
+
+  function selectedAPIKey(options: Record<string, any>, key: string | undefined): string | undefined {
+    return typeof options["apiKey"] === "string" ? options["apiKey"] : typeof key === "string" ? key : undefined
+  }
+
+  /** Explicit discovery reads the same configured facts before model availability is established. */
+  export async function getConfiguredProvider(providerID: string, scope: { config: Config.Info; global: boolean }) {
+    const state = await (scope.global ? globalStateFor(scope.config) : stateFor(scope.config))
+    return state.providers[providerID] as Info | undefined
+  }
+
+  /** The current declaration owns discovery, independently of individual inference endpoints. */
+  export function discoveryEndpoint(providerID: string, config: Config.Info, declaration?: ModelsDev.Provider) {
+    return (config.provider?.[providerID]?.api ?? declaration?.api)?.trim().replace(/\/+$/, "")
+  }
+
   export async function list(opts?: { config?: Config.Info }) {
-    return stateFor(opts?.config).then((state) => state.providers)
+    return stateFor(opts?.config).then(runnableProviders)
   }
 
   export async function listGlobal(config: Config.Info) {
-    return globalStateFor(config).then((state) => state.providers)
+    return globalStateFor(config).then(runnableProviders)
   }
 
   export async function catalog(opts?: { config?: Config.Info }) {
     return stateFor(opts?.config).then((state) => ({
       database: state.database,
-      providers: state.providers,
+      providers: runnableProviders(state),
       issues: state.issues,
     }))
   }
@@ -816,7 +838,7 @@ export namespace Provider {
   export async function catalogGlobal(config: Config.Info) {
     return globalStateFor(config).then((state) => ({
       database: state.database,
-      providers: state.providers,
+      providers: runnableProviders(state),
       issues: state.issues,
     }))
   }
@@ -847,7 +869,7 @@ export namespace Provider {
       })
       const s = await (opts?.state ?? stateFor(opts?.config))
       const config = s.config
-      const provider = s.providers[model.providerID]
+      const provider = runnableProvider(s, model.providerID)!
       const options = { ...provider.options }
       if (options["apiKey"] === undefined && provider.key) options["apiKey"] = provider.key
       applyProviderPolicy(model.providerID, options)
@@ -868,18 +890,13 @@ export namespace Provider {
           ...model.headers,
         }
 
-      const selectedAPIKey =
-        typeof options["apiKey"] === "string"
-          ? options["apiKey"]
-          : typeof provider.key === "string"
-            ? provider.key
-            : undefined
-      const credentialObservation = selectedAPIKey === undefined ? await Auth.inspect(model.providerID) : undefined
+      const apiKey = selectedAPIKey(options, provider.key)
+      const credentialObservation = apiKey === undefined ? await Auth.inspect(model.providerID) : undefined
       const credentialGeneration =
-        selectedAPIKey !== undefined
+        apiKey !== undefined
           ? canonicalDigestSource("opencorvus.provider.selected-credential.v1", {
               providerID: model.providerID,
-              key: selectedAPIKey,
+              key: apiKey,
             }).sha256
           : (credentialObservation?.generation ??
             canonicalDigestSource("opencorvus.provider.credential-fallback.v1", {
@@ -1126,17 +1143,17 @@ export namespace Provider {
   }
 
   export async function getProvider(providerID: string, opts?: { config?: Config.Info }) {
-    return stateFor(opts?.config).then((s) => s.providers[providerID])
+    return stateFor(opts?.config).then((s) => runnableProvider(s, providerID)!)
   }
 
   export async function getProviderGlobal(providerID: string, config: Config.Info) {
-    return globalStateFor(config).then((s) => s.providers[providerID])
+    return globalStateFor(config).then((s) => runnableProvider(s, providerID)!)
   }
 
   function modelFromState(s: ProviderState, providerID: string, modelID: string): Model {
-    const provider = s.providers[providerID]
+    const provider = runnableProvider(s, providerID)
     if (!provider) {
-      const availableProviders = Object.keys(s.providers)
+      const availableProviders = Object.keys(runnableProviders(s))
       const matches = fuzzysort.go(providerID, availableProviders, { limit: 3, threshold: -10000 })
       const suggestions = matches.map((m) => m.target)
       throw new ModelNotFoundError({ providerID, modelID, suggestions })
@@ -1174,10 +1191,10 @@ export namespace Provider {
         })
       : undefined
     const s = await (opts?.state ?? stateFor(opts?.config))
-    const provider = s.providers[model.providerID]
+    const provider = runnableProvider(s, model.providerID)
     const canonical = provider?.models[model.id]
     if (!provider || !canonical) {
-      const availableModels = provider ? Object.keys(provider.models) : Object.keys(s.providers)
+      const availableModels = provider ? Object.keys(provider.models) : Object.keys(runnableProviders(s))
       const matches = fuzzysort.go(provider ? model.id : model.providerID, availableModels, {
         limit: 3,
         threshold: -10000,
@@ -1217,7 +1234,7 @@ export namespace Provider {
 
   export async function closest(providerID: string, query: string[], opts?: { config?: Config.Info }) {
     const s = await stateFor(opts?.config)
-    const provider = s.providers[providerID]
+    const provider = runnableProvider(s, providerID)
     if (!provider) return undefined
     for (const item of query) {
       for (const modelID of Object.keys(provider.models)) {
@@ -1238,7 +1255,7 @@ export namespace Provider {
       return getModel(parsed.providerID, parsed.modelID, { config: cfg })
     }
 
-    const provider = await stateFor(opts?.config).then((state) => state.providers[providerID])
+    const provider = await stateFor(opts?.config).then((state) => runnableProvider(state, providerID))
     if (provider) {
       const priority = smallModelPriority(providerID)
       for (const item of priority) {

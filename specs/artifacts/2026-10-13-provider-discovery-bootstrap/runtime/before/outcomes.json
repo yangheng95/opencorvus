@@ -1,0 +1,58 @@
+{
+  "boundary": "Actual production HTTP using isolated generated sample credential and loopback participant; no private credential, online provider or model inference",
+  "outcomes": {
+    "globalSavedZero": {
+      "status": 400,
+      "body": {
+        "ok": false,
+        "models": [],
+        "count": 0,
+        "error": "Saved provider credentials can only be used with that provider's configured API URL."
+      }
+    },
+    "projectSavedZero": {
+      "status": 400,
+      "body": {
+        "ok": false,
+        "models": [],
+        "count": 0,
+        "error": "Saved provider credentials can only be used with that provider's configured API URL."
+      }
+    },
+    "globalExplicitZero": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "global-discovered-a",
+          "global-discovered-b"
+        ],
+        "count": 2
+      }
+    },
+    "globalSavedKnown": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "models": [
+          "ready-known"
+        ],
+        "count": 1
+      }
+    },
+    "globalLiveRefresh": {
+      "status": 200,
+      "body": {
+        "ok": false,
+        "error": "OpenCorvus Provider credentials are not configured"
+      }
+    },
+    "projectLiveRefresh": {
+      "status": 200,
+      "body": {
+        "ok": false,
+        "error": "OpenCorvus Provider credentials are not configured"
+      }
+    }
+  }
+}

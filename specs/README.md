@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [无模型时的 Provider 发现入口](records/2026-10/2026-10-13-provider-discovery-bootstrap.md)：凭据事实、可推理投影与发现恢复。
+
 - [388 参考历史重连身份](artifacts/2026-10-05-connection-workspace-authority/history-render-identity-plan-388.md)：真实完整快照、正文生命周期与侧聊历史稳定性。
 
 - [392 表格无障碍语言](records/2026-10/2026-10-13-spreadsheet-accessibility-locale-392.md)：工作表、侧栏和通知名称的同实例语言订阅与桌面验收。

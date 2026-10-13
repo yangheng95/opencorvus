@@ -13,6 +13,8 @@
 
 #### 修复
 
+- 已保存密钥的服务商可在尚未配置模型时发现模型；OpenCorvus 实时目录刷新可恢复空模型目录或已被模型筛选清空的目录。全局与项目地址按各自配置解析，模型选择仍只显示真实可用模型。
+
 - 表格的工作表标签、侧栏和通知名称随界面语言切换；已打开的保护范围列表同步更新标题与正文，并保留工作表编辑、侧栏选项和宽度。
 
 - 可编辑表格明确提示编辑仅保留在当前视图，离开或折叠前可下载修改后的工作表；说明 CSV 仅保留单元格值。提示随语言切换，全屏仍保留完整工作表操作区域。
@@ -59,6 +61,8 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Providers with saved keys can discover models before any model has been configured. OpenCorvus live refresh can restore empty catalogs or catalogs fully filtered by model settings. Global and project discovery use their own configured endpoints, while model selection continues to show runnable models.
 
 - Spreadsheet sheet-tab, Sidebar and notification names follow the interface language. Open protection-range lists refresh their title and content while retaining workbook edits, selected panel options and width.
 

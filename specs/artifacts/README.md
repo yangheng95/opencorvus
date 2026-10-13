@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [无模型时的 Provider 发现入口](2026-10-13-provider-discovery-bootstrap/README.md)：实际HTTP、已存地址绑定与桌面证据。
+
 - [388 参考历史重连身份](2026-10-05-connection-workspace-authority/history-render-identity-388/README.md)：真实侧聊、限定连接中断与正文身份记录。
 
 - [392 表格无障碍语言](2026-10-13-spreadsheet-accessibility-locale-392/README.md)：五个名称、侧栏正文双向语言、状态/宽度保留与真实CSV下载。
