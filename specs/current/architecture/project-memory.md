@@ -12,6 +12,18 @@ Project memory has three explicitly scoped authorities:
    Skill and attachment references are historical locators, not current tool
    grants, desktop focus or permission authority.
 
+   Summary completion, checkpoint publication and compaction-control consumption
+   are separate durable boundaries. A process interrupted before marker commit
+   leaves the previous checkpoint authoritative; the recovered Session loop
+   retries under the existing control lease. A committed, completed checkpoint
+   can be reused while consuming the pending control. Automatic compaction then
+   continues the normal user turn. Interrupted assistants retain their persisted
+   text and typed failure evidence. Live text deltas are transport events; the
+   processor checkpoints accumulated Parts on its existing 200 ms cadence, so
+   fragments not yet persisted can be lost on abrupt process exit. The physical
+   crash checker covers owned child-process exits and fresh Session reopening,
+   not operating-system power loss or every Task/Mission recovery layer.
+
    The compaction transcript includes original authors and exact text/Tool Part
    and call identities. Large text and Tool fields carry bounded previews plus
    `ReadCompactionEvidence` references. The one reader resolves text, input,

@@ -1,0 +1,735 @@
+{
+  "scope": "Scripted local streaming transport; physical owned-child exits and fresh-process reads",
+  "remoteModelRequests": 0,
+  "runs": [
+    {
+      "name": "crash-calibration",
+      "status": "passed",
+      "remoteModelRequests": 0,
+      "cases": [
+        {
+          "cut": "checkpoint_saved",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 1,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "crash-automatic-calibration",
+      "status": "failed",
+      "reportedStatus": "failed",
+      "remoteModelRequests": 0,
+      "cases": [
+        {
+          "cut": "checkpoint_saved",
+          "kind": "automatic",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:05:59.715Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-bUY37M\\\\runner-73360-q6w42S\\\\checkpoint_saved-automatic-BT0Fvu\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:05:59.717Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-bUY37M\\\\runner-73360-q6w42S\\\\checkpoint_saved-automatic-BT0Fvu\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:05:59.719Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\op"
+          }
+        }
+      ]
+    },
+    {
+      "name": "crash-runner-role-calibration",
+      "status": "failed",
+      "reportedStatus": "failed",
+      "remoteModelRequests": 0,
+      "cases": [
+        {
+          "cut": "streaming",
+          "kind": "manual",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.935Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\streaming-manual-yXh06T\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.937Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\streaming-manual-yXh06T\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.941Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8K"
+          }
+        },
+        {
+          "cut": "summary_saved",
+          "kind": "manual",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.961Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\summary_saved-manual-jeOm6O\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.964Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\summary_saved-manual-jeOm6O\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.967Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-tes"
+          }
+        },
+        {
+          "cut": "summary_saved",
+          "kind": "automatic",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.940Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\summary_saved-automatic-gRVoNc\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.942Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\summary_saved-automatic-gRVoNc\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.961Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorv"
+          }
+        },
+        {
+          "cut": "streaming",
+          "kind": "automatic",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.984Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\streaming-automatic-xrByhc\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.986Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\streaming-automatic-xrByhc\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:10:55.989Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-"
+          }
+        },
+        {
+          "cut": "checkpoint_transaction",
+          "kind": "manual",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.759Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_transaction-manual-I1BzJb\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.761Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_transaction-manual-I1BzJb\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.765Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Te"
+          }
+        },
+        {
+          "cut": "checkpoint_saved",
+          "kind": "manual",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.773Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_saved-manual-SvoO0Y\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.775Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_saved-manual-SvoO0Y\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.778Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorv"
+          }
+        },
+        {
+          "cut": "checkpoint_transaction",
+          "kind": "automatic",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.797Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_transaction-automatic-EChkpC\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.799Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_transaction-automatic-EChkpC\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.803Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Loc"
+          }
+        },
+        {
+          "cut": "checkpoint_saved",
+          "kind": "automatic",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 0,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.795Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_saved-automatic-855iS3\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.797Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-8Kkzfx\\\\runner-74780-IS0cTV\\\\checkpoint_saved-automatic-855iS3\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:11:04.801Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\op"
+          }
+        }
+      ]
+    },
+    {
+      "name": "crash-volatile-window",
+      "status": "failed",
+      "reportedStatus": "failed",
+      "remoteModelRequests": 0,
+      "cases": [
+        {
+          "cut": "streaming",
+          "kind": "manual",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 81,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:13:59.126Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-uOWGSV\\\\runner-83096-OCOb1b\\\\streaming-manual-NoIiSa\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:13:59.130Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-uOWGSV\\\\runner-83096-OCOb1b\\\\streaming-manual-NoIiSa\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:13:59.133Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-uO"
+          }
+        },
+        {
+          "cut": "summary_saved",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 82,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "streaming",
+          "kind": "automatic",
+          "status": "failed",
+          "settlementConfirmed": true,
+          "requests": 3,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 81,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 1,
+              "settlementConfirmed": true
+            }
+          ],
+          "error": {
+            "name": "AssertionError",
+            "message": "{\"level\":\"info\",\"time\":\"2026-10-13T12:13:59.095Z\",\"service\":\"default\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-uOWGSV\\\\runner-83096-OCOb1b\\\\streaming-automatic-kV6l8e\\\\project\"},\"message\":\"creating instance\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:13:59.101Z\",\"service\":\"project.open\",\"logDomain\":\"non-session\",\"data\":{\"stage\":\"project.from-directory\",\"platform\":\"win32\",\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-uOWGSV\\\\runner-83096-OCOb1b\\\\streaming-automatic-kV6l8e\\\\project\",\"status\":\"started\"},\"message\":\"project.open.stage\"}\n{\"level\":\"info\",\"time\":\"2026-10-13T12:13:59.105Z\",\"service\":\"project\",\"logDomain\":\"non-session\",\"data\":{\"directory\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-"
+          }
+        },
+        {
+          "cut": "summary_saved",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 3,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 82,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_transaction",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 83,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_transaction",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 3,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 83,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_saved",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 1,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_saved",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "crash-final",
+      "status": "passed",
+      "reportedStatus": "passed",
+      "remoteModelRequests": 0,
+      "cases": [
+        {
+          "cut": "streaming",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 3,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 81,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "summary_saved",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 3,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 82,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "streaming",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 81,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "summary_saved",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 82,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_saved",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 1,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_transaction",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 83,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_saved",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_transaction",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 3,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 83,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "crash-final-smoke",
+      "status": "passed",
+      "reportedStatus": "passed",
+      "remoteModelRequests": 0,
+      "cases": [
+        {
+          "cut": "checkpoint_saved",
+          "kind": "automatic",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_saved",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 1,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 84,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "crash-typed-hooks",
+      "status": "passed",
+      "reportedStatus": "passed",
+      "remoteModelRequests": 0,
+      "cases": [
+        {
+          "cut": "summary_saved",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 82,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        },
+        {
+          "cut": "checkpoint_transaction",
+          "kind": "manual",
+          "status": "passed",
+          "settlementConfirmed": true,
+          "requests": 2,
+          "phases": [
+            {
+              "mode": "cut",
+              "exitCode": 83,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "recover",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            },
+            {
+              "mode": "inspect",
+              "exitCode": 0,
+              "settlementConfirmed": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
