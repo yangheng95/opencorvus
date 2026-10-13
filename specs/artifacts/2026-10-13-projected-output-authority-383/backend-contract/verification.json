@@ -1,0 +1,55 @@
+{
+  "before": {
+    "exitCode": 1,
+    "passed": 0,
+    "failed": 3,
+    "assertions": 6,
+    "actualWrapperErrors": 3
+  },
+  "after": {
+    "exitCode": 0,
+    "passed": 3,
+    "failed": 0,
+    "assertions": 44,
+    "producerCalls": 12,
+    "completeFilesVerified": 6
+  },
+  "typecheckExitCode": 0,
+  "diffCheckExitCode": 0,
+  "evidence": [
+    {
+      "source": "before.log",
+      "archive": "before.log.gz"
+    },
+    {
+      "source": "before-confirmed.log",
+      "archive": "before-confirmed.log.gz"
+    },
+    {
+      "source": "before-confirmed.exit.txt",
+      "archive": "before-confirmed.exit.txt"
+    },
+    {
+      "source": "after.log",
+      "archive": "after.log.gz"
+    },
+    {
+      "source": "after.exit.txt",
+      "archive": "after.exit.txt"
+    },
+    {
+      "source": "typecheck.log",
+      "archive": "typecheck.log.gz"
+    },
+    {
+      "source": "typecheck.exit.txt",
+      "archive": "typecheck.exit.txt"
+    },
+    {
+      "source": "final-review.log",
+      "archive": "final-review.log.gz"
+    }
+  ],
+  "knownCredentialMatches": 0,
+  "scope": "Backend CAS/Permission/materializer/real native capsule and HTTP MCP wrappers; independent first model Task acceptance failed as documented in live-attempt-01"
+}

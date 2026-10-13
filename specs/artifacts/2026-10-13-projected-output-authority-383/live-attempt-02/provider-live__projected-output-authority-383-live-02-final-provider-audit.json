@@ -1,0 +1,48 @@
+{
+  "pid": 64196,
+  "executable": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\locale-bootstrap-377-bundle\\after\\bin\\bun.exe",
+  "model": "gpt-6.1-sol",
+  "maxRequests": 16,
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791878148113,
+        "boundAt": 1791878148148,
+        "chunkCount": 15,
+        "byteCount": 37968,
+        "firstByteReadAt": 1791878148153,
+        "lastByteReadAt": 1791878155943,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_hCRtX3CRBBdvPKSqGXAJ",
+          "streamRequest": {
+            "requestID": "msg_hY84duv8koIcCpm4ZdnD",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXuk5rW008H1ryxFLL",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791878156079
+        }
+      },
+      "tool_declarations": {
+        "state": "absent",
+        "entries": []
+      },
+      "status": 200
+    }
+  ],
+  "exhausted": false,
+  "observedAt": "2026-10-13T07:55:56.079Z"
+}

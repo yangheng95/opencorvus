@@ -148,6 +148,13 @@ list the current Project, while native Mission queries retain Mission ownership.
 Explicit taskIDs requires at least one ID; an empty array is a schema error.
 Future projected Panel grant changes must review their schema and mode identity.
 
+Projected package tools, package MCP tools and default MCP tools pass the
+execution authority derived from their validated TaskToolExecutionScope to the
+shared output truncator. Oversized successful output retains the existing
+bounded preview and full file under the primary Project, Task and exact
+Session. This adapter step neither infers authority from a bare Session ID nor
+changes the original producer execution directory or its possible effects.
+
 ## Search and reveal contract
 
 One search accepts one to four queries, exact kind/owner filters, at most five

@@ -35,6 +35,7 @@ import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 import {
   bindPackageToolRuntime,
   bindProjectedTaskToolRuntime,
+  executionAuthorityFromTaskToolScope,
   resolvePackageTaskToolExecutionScope,
   resolveProjectedTaskToolExecutionScope,
   type PackageToolRuntimeBinding,
@@ -1907,7 +1908,11 @@ export namespace PromptProfileResolver {
             },
           })
         })
-        const truncated = await Truncate.output(result.output, { sessionID: scope.sessionID }, scope.executionSurface)
+        const truncated = await Truncate.output(
+          result.output,
+          { sessionID: scope.sessionID, executionAuthority: executionAuthorityFromTaskToolScope(scope) },
+          scope.executionSurface,
+        )
         const resultMetadata: Record<string, unknown> = {
           ...(Object.keys(result.metadata).length > 0 ? { package_metadata: result.metadata } : {}),
           package_tool_ref: input.ref,
@@ -2050,7 +2055,7 @@ export namespace PromptProfileResolver {
         })
         const truncated = await Truncate.output(
           materialized.text,
-          { sessionID: scope.sessionID },
+          { sessionID: scope.sessionID, executionAuthority: executionAuthorityFromTaskToolScope(scope) },
           scope.executionSurface,
         )
         return MCP.bindAppToolResult(
@@ -2128,7 +2133,7 @@ export namespace PromptProfileResolver {
         })
         const truncated = await Truncate.output(
           materialized.text,
-          { sessionID: scope.sessionID },
+          { sessionID: scope.sessionID, executionAuthority: executionAuthorityFromTaskToolScope(scope) },
           scope.executionSurface,
         )
         return MCP.bindAppToolResult(

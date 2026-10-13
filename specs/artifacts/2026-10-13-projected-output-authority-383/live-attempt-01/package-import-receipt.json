@@ -1,0 +1,13 @@
+{
+  "input": {
+    "sourceDirectory": "D:\\myhexin-local\\opencorvus\\.tmp-projected-output-authority-383\\package-source\\qa\\projected-report-383",
+    "installationScope": "project"
+  },
+  "status": 400,
+  "result": {
+    "name": "ExpertSquadPackageError",
+    "data": {
+      "message": "Package tool ref \"projected-report-383/shared/load_public_report\" must equal projected-report-383/shared/<tool-id>"
+    }
+  }
+}
