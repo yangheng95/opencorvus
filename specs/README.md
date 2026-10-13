@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [401 Dialog关闭名称语言](records/2026-10/2026-10-14-design-dialog-close-locale-401.md)：共享ConfigProvider默认语言、完整资源与真实桌面关闭名称。
+
 - [393 ACP提示结果](artifacts/2026-10-05-connection-workspace-authority/acp-prompt-terminal-plan-393.md)：普通提示、命令、模型错误与结束原因。
 
 - [Provider 空模型声明保存](records/2026-10/2026-10-13-provider-empty-declarations.md)：字段意图、目录继承与真实保存资格。

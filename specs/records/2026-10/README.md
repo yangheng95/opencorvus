@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401.md)：公共可选locale合同、完整19语言分发与桌面验收方案。
+
 - [393 ACP提示结果](2026-10-14-acp-prompt-terminal-393.md)：真实错误、取消收尾、结束原因和协议集成验收。
 
 - [Provider 空模型声明保存](2026-10-13-provider-empty-declarations.md)：旧数量限制、空集合合同及前后态验收。
