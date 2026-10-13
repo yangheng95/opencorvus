@@ -70,3 +70,22 @@ older than seven days; the fixed code retains canonical references and reclaims
 aged orphans. A 193-file case publishes a reference after cleanup has started,
 then verifies 192 reclaimed orphans and the exact retained source bytes. This is
 local storage/cleanup evidence and adds **zero** remote model requests.
+
+## Copy and deletion lifecycle
+
+[Original reproduction](fork-before.log) records loss of the checkpoint anchor
+and tail after both native fork and side-chat, and missing full-output bytes
+after source deletion. [Causal-order reproduction](fork-causal-before.log)
+records a later-created accepted input being frozen before its copied Parts can
+be written. Both use the real Session/Engine APIs, database and filesystem.
+
+[Final local contracts](fork-final.log) cover copied checkpoint reconstruction
+after database reopen, exact accepted-input and timeline identity, inherited
+execution-reference scope, source deletion, copy/deletion concurrency and
+cross-Project isolation. They also exercise Session memory integration and
+accepted-input immutability. These results add **zero** remote requests and do
+not establish semantic model quality or whole-process crash recovery.
+
+Copied model-authored citations may still name original Message/Part identities;
+exact retrieval through those citations and ordinary Task-bound fork authority
+remain separate unverified contracts. No source text is silently rewritten.

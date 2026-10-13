@@ -12,7 +12,7 @@
 
 - [388 MCP 结构化结果](2026-10-13-mcp-structured-result-388/README.md)：后台红绿、12次真实Sol流式请求、页面截图与正常收尾。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：真实请求、失败基线、语义指标、原始证据保留及验收边界。
+- [上下文压缩压力测试](2026-10-13-compaction-stress/README.md)：真实请求、失败基线、语义指标、原始证据保留、复制生命周期及验收边界。
 
 - [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
 

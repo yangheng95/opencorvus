@@ -46,6 +46,24 @@ Project memory has three explicitly scoped authorities:
    contract; no separate retention registry or reference counter is stored.
    External deletion or preexisting missing bytes still produce an explicit
    source-read failure; retention does not synthesize lost evidence.
+
+   Session copies remap checkpoint anchors, retained-tail boundaries, assistant
+   parents and accepted-input batches through one complete Message identity map.
+   Missing copied dependencies produce an explicit integrity error. Independent
+   side history includes inputs accepted by a completed reply even when those
+   inputs were created after its assistant Message. The atomic copier writes
+   complete user bundles before assistant bundles, preserving source creation
+   times and canonical timeline order through the same persistence primitives.
+   In an unbound independent side Session, an inherited worker descriptor is
+   historical provenance; current Task or descriptor bindings still require the
+   full execution-authority checks. Model-authored citation text is unchanged.
+
+   Deleting a source tree with a same-Project independent side-history reference
+   uses the existing tombstone contract, retaining the original source files.
+   Physical deletion rechecks that ownership after acquiring its admission
+   fence and before moving files. A copy committed before the fence produces
+   the existing typed unsettled/rollback result; a retry selects retention.
+   There is no separate copy-evidence registry or replacement file path.
 2. Project `MEMORY.MD` is a read-only Project context maintained exclusively by the fixed hidden `memory` helper agent.
 3. Semantic memory (`note`, `episode`, `fact`, `lesson`, `profile`) is reusable main-agent-managed Project knowledge.
 

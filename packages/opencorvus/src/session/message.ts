@@ -15,6 +15,7 @@ import type { Provider } from "@/provider/provider"
 import { decodeDataUrlBase64Bytes, decodeTextBytes, isDecodableText } from "./text-mime"
 import { attachmentNameFromUrl } from "@/storage/attachment-reference"
 import { CompactionHandoff } from "./compaction-handoff"
+import { sideChatIdentity } from "@/chat/side-chat-identity"
 import {
   FailureOccurrenceAnchor,
   ProcessorObservationFailure,
@@ -1651,6 +1652,18 @@ export namespace Message {
         const dispatchLineage = taskID
           ? findDispatchLineageBySession({ taskID, sessionID: anchor.info.sessionID })
           : undefined
+        let inheritedReference = false
+        if (descriptorRef && !taskID && !latestDescriptor && !dispatchLineage) {
+          const { Session } = await import(".")
+          const owner = await Session.get(anchor.info.sessionID)
+          const side = sideChatIdentity(owner.metadata)
+          // Independent side history carries source descriptors as provenance,
+          // while its own Task/descriptor bindings still require full authority.
+          inheritedReference =
+            owner.kind === "assistant" &&
+            owner.parentID === undefined &&
+            side?.inheritedMessageIDs.includes(anchor.info.id) === true
+        }
         const failAuthority = (message: string): never => {
           throw new Message.CompactionTaskAuthorityError({
             message,
@@ -1658,7 +1671,7 @@ export namespace Message {
             anchorMessageID: anchor.info.id,
           })
         }
-        if (descriptorRef || latestDescriptor || dispatchLineage) {
+        if (!inheritedReference && (descriptorRef || latestDescriptor || dispatchLineage)) {
           const currentDescriptor =
             latestDescriptor ?? failAuthority("projected worker compaction Session has no current descriptor")
           const exactDescriptorRef =

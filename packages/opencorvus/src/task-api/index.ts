@@ -3278,6 +3278,25 @@ export namespace EngineService {
     | { surface: "public_session" | "panel" }
     | { surface: "right_sidebar"; experience: "chat" | "work" }
 
+  function hasIndependentSideHistoryReference(
+    db: Database.TxOrDb,
+    projectID: string,
+    deletingSessionIDs: readonly string[],
+  ): boolean {
+    const deleting = JSON.stringify(deletingSessionIDs)
+    return (
+      db.select({ id: SessionTable.id })
+        .from(SessionTable)
+        .where(and(
+          eq(SessionTable.project_id, projectID),
+          sql`json_extract(${SessionTable.metadata}, '$.sideChat.sourceSessionID') IN (SELECT value FROM json_each(${deleting}))`,
+          sql`${SessionTable.id} NOT IN (SELECT value FROM json_each(${deleting}))`,
+        ))
+        .limit(1)
+        .get() !== undefined
+    )
+  }
+
   function sessionDeletionRootIdentity(session: Pick<Session.Info, "kind" | "metadata">): {
     kind: string
     conversationExperience: "chat" | "work" | null
@@ -3492,7 +3511,8 @@ export namespace EngineService {
       boundTasks.length > 0 ||
       root.kind === "mission" ||
       rootMetadata?.panelCreation !== undefined ||
-      rootMetadata?.globalChatStart !== undefined
+      rootMetadata?.globalChatStart !== undefined ||
+      Database.use((db) => hasIndependentSideHistoryReference(db, root.projectID, ids))
     ) {
       const tasksForDelete: TaskRow[] = []
       if (input?.deleteTasks) {
@@ -3616,6 +3636,17 @@ export namespace EngineService {
         rootSessionID: sessionID,
         rootIdentity: sessionDeletionRootIdentity(root),
         sessions: deletionSessions,
+      })
+      // A side conversation may have committed after the initial retention
+      // decision but before this physical deletion acquired its admission fence.
+      // Check before moving source bytes; the normal rollback preserves them.
+      Database.use((db) => {
+        assertSessionDeletionAuthorityInTransaction(db, claim.authority)
+        if (hasIndependentSideHistoryReference(db, root.projectID, ids)) {
+          throw new SessionDeletionRuntimeNotSettledError(
+            `Session tree ${sessionID} gained an independent history reference before physical deletion`,
+          )
+        }
       })
       await settleRuntime()
       await stageSessionDeletionCleanup(cleanupPlan)

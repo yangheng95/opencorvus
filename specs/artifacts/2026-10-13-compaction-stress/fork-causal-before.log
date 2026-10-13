@@ -1,0 +1,65 @@
+$ bun script/run-tests.ts test/compaction-fork-lifecycle.test.ts test/compaction-integrity.test.ts
+[1/2] START test/compaction-fork-lifecycle.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) reconstructs the original anchor and retained tail after fork [2376.54ms]
+(pass) reconstructs the original anchor and retained tail after side-chat [2253.77ms]
+(pass) reports a typed integrity failure for a checkpoint pointing outside copied history [2404.98ms]
+(pass) keeps historical execution references read-only in an independent side context [2197.41ms]
+2794 |       `).get())
+2795 |   }
+2796 |
+2797 |   function assertTaskRootMessageMutable(db: Database.TxOrDb, messageID: string): void {
+2798 |     if (taskRootMessageIsImmutable(db, messageID)) {
+2799 |       throw new Error(`Task-root causal Message ${messageID} is immutable`)
+                       ^
+error: Task-root causal Message msg_g0VXvZJmZ0284lHroyjL is immutable
+      at assertTaskRootMessageMutable (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2799:17)
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2387:39)
+      at run (node:async_hooks:99:29)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at runSavepoint (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1759:9)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2430:19)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:1786:25)
+      at run (node:async_hooks:99:29)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at runSavepoint (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1759:9)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\compaction-fork-lifecycle.test.ts:269:34)
+(fail) copies the completed reply's exact accepted steering batch [1775.36ms]
+(pass) retains independent side-chat source evidence when deleting its standalone source [2153.35ms]
+(pass) rolls back physical deletion when an independent copy commits before its fence [2180.00ms]
+(pass) physically deletes a standalone source when only another Project declares a reference [4031.11ms]
+
+ 7 pass
+ 1 fail
+ 17 expect() calls
+Ran 8 tests across 1 file. [23.70s]
+[1/2] DONE test/compaction-fork-lifecycle.test.ts exit=1 duration=24.35s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\compaction-fork-lifecycle.test.ts
+[2/2] START test/compaction-integrity.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) compaction request and continuation contracts > intersects input capacity with the actual combined-window output reservation [11.84ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail before-source and repeated continuation compaction [3101.20ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail after-source and repeated continuation compaction [2976.66ms]
+(pass) compaction request and continuation contracts > preserves the initial anchor with a retained tail at-source and repeated continuation compaction [2668.87ms]
+(pass) compaction request and continuation contracts > prices compaction system, tools and binary images in the same request envelope [6.31ms]
+(pass) compaction request and continuation contracts > retains a completed assistant tool step and reconstructs the same tail [1781.22ms]
+(pass) compaction request and continuation contracts > bounded summary input keeps an exact readable result and attachment locator [2.59ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after tool-result growth [2342.17ms]
+(pass) real local streaming compaction transport > checks the final continuation envelope after step-system growth [2365.32ms]
+(pass) real local streaming compaction transport > publishes the completed contract through HTTP stream, processor and durable control [3130.97ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [2357.77ms]
+(pass) real local streaming compaction transport > publishes the incomplete contract through HTTP stream, processor and durable control [2219.87ms]
+(pass) real local streaming compaction transport > publishes the not_smaller contract through HTTP stream, processor and durable control [2280.41ms]
+
+ 13 pass
+ 0 fail
+ 83 expect() calls
+Ran 13 tests across 1 file. [27.68s]
+[2/2] DONE test/compaction-integrity.test.ts exit=0 duration=27.88s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\compaction-fork-lifecycle.test.ts
+error: script "test" exited with code 1

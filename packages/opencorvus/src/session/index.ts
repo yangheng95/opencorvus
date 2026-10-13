@@ -436,17 +436,35 @@ export namespace Session {
             message.info.finish !== "tool-calls" &&
             message.info.finish !== "unknown",
         )
-        msgs = msgs.slice(0, lastComplete + 1)
+        const acceptedInputs = new Set(
+          msgs.slice(0, lastComplete + 1).flatMap((msg) =>
+            msg.info.role === "assistant" ? Message.acceptedInputMessageIDs(msg.info) : [],
+          ),
+        )
+        // A steering input can be created after the assistant Message starts
+        // and still belong to its completed reply. Preserve that exact accepted
+        // batch, rather than cutting it off at the assistant's creation order.
+        msgs = msgs.filter(
+          (msg, index) => index <= lastComplete || (msg.info.role === "user" && acceptedInputs.has(msg.info.id)),
+        )
       }
-      const idMap = new Map<string, string>()
+      const cutoff = input.messageID ? msgs.findIndex((msg) => msg.info.id >= input.messageID!) : -1
+      if (cutoff >= 0) msgs = msgs.slice(0, cutoff)
+      const idMap = new Map(msgs.map((msg) => [msg.info.id, Identifier.ascending("message")]))
+      const copiedMessageID = (messageID: string, owner: string) => {
+        const copied = idMap.get(messageID)
+        if (!copied) {
+          throw new HostProcessingFaultError(`${owner} references Message ${messageID} outside the copied history`)
+        }
+        return copied
+      }
       const clones: { info: Message.Info; parts: Message.Part[] }[] = []
 
       for (const msg of msgs) {
-        if (input.messageID && msg.info.id >= input.messageID) break
-        const newID = Identifier.ascending("message")
-        idMap.set(msg.info.id, newID)
+        const newID = idMap.get(msg.info.id)!
 
-        const parentID = msg.info.role === "assistant" && msg.info.parentID ? idMap.get(msg.info.parentID) : undefined
+        const parentID =
+          msg.info.role === "assistant" ? copiedMessageID(msg.info.parentID, `Message ${msg.info.id}`) : undefined
         const { orderKey: _clonedMessageOrderKey, ...messageInfo } = msg.info
         const clonedInfo = {
           ...messageInfo,
@@ -455,7 +473,9 @@ export namespace Session {
           ...(parentID && { parentID }),
           ...(msg.info.role === "assistant" && msg.info.acceptedInputMessageIDs
             ? {
-                acceptedInputMessageIDs: msg.info.acceptedInputMessageIDs.map((id) => idMap.get(id) ?? id),
+                acceptedInputMessageIDs: msg.info.acceptedInputMessageIDs.map((id) =>
+                  copiedMessageID(id, `Message ${msg.info.id}`),
+                ),
               }
             : {}),
         } as Message.Info
@@ -467,12 +487,19 @@ export namespace Session {
           if (originalToolPartID !== undefined && toolPartID === undefined) {
             throw new HostProcessingFaultError(`Part ${part.id} references a Tool outside its Message`)
           }
+          const copiedBoundary = (messageID: string | undefined) => {
+            if (messageID === undefined) return undefined
+            return copiedMessageID(messageID, `Compaction Part ${part.id}`)
+          }
           return {
             ...partInfo,
             id: partIDs.get(part.id)!,
             messageID: clonedInfo.id,
             sessionID: prepared.id,
             ...(toolPartID ? { toolPartID } : {}),
+            ...(part.type === "compaction"
+              ? { anchor_id: copiedBoundary(part.anchor_id), tail_start_id: copiedBoundary(part.tail_start_id) }
+              : {}),
           } as Message.Part
         })
         clones.push({ info: clonedInfo, parts: clonedParts })
@@ -486,8 +513,14 @@ export namespace Session {
             sideChat: { sourceSessionID: original.id, inheritedMessageIDs: clones.map((clone) => clone.info.id) },
           }
         const session = persistPreparedNextInTransaction(db, prepared)
-        for (const clone of clones) {
-          persistMessageWithCommitInTransaction(clone, () => undefined)
+        // Finish copied inputs before any assistant reference freezes them.
+        // Source chronology remains authoritative even when causal dependency
+        // order differs from Message creation order. All rows commit together.
+        for (const role of ["user", "assistant"] as const) {
+          for (const clone of clones) {
+            if (clone.info.role !== role) continue
+            persistMessageBundleRows(clone, undefined, undefined, undefined, { preserveCreated: true })
+          }
         }
         return session
       })
@@ -1381,6 +1414,7 @@ export namespace Session {
     options: {
       publishCreated: boolean
       publishUpdated: boolean
+      preserveCreated?: true
     },
     commit?: (db: Database.TxOrDb) => void,
   ): Message.VisibleInfo {
@@ -1392,7 +1426,7 @@ export namespace Session {
         .from(MessageTable)
         .where(eq(MessageTable.id, msg.id))
         .get()
-      const latestSessionMessage = existing
+      const latestSessionMessage = existing || options.preserveCreated
         ? undefined
         : db
             .select({ timeCreated: MessageTable.time_created })
@@ -1731,6 +1765,7 @@ export namespace Session {
     commit?: () => void,
     beforeVisibilityEffects?: () => void,
     preflightBundle?: () => void,
+    options?: { preserveCreated: true },
   ) {
     for (const control of input.controls ?? []) {
       if (control.sessionID !== input.info.sessionID) {
@@ -1748,7 +1783,11 @@ export namespace Session {
         .where(eq(MessageTable.id, input.info.id))
         .get()
       const initialInfo = existing ? input.info : initialMessageForPartWrite(input.info)
-      const initialPersisted = upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
+      const initialPersisted = upsertMessageRow(initialInfo, {
+        publishCreated: false,
+        publishUpdated: false,
+        ...options,
+      })
       beforeVisibilityEffects?.()
       if (!existing) {
         const createdInfo = messageWithPersistedCreated(input.info, initialPersisted.time.created)
