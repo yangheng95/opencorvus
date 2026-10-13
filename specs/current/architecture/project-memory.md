@@ -34,6 +34,18 @@ Project memory has three explicitly scoped authorities:
    not perfect semantic retention. The bound read map currently scales with the
    Session's stored text/Tool history; semantic and resource stress results are
    recorded separately from mechanical checkpoint validity.
+
+   Full Tool-output bytes remain available while canonical Tool request,
+   progress, outcome or Permission execution-result metadata references their
+   path, even after seven days and across Session forks. The existing hourly
+   cleanup reclaims only aged orphan files in its managed runtime layouts.
+   A global reference snapshot may conservatively retain files, while every
+   deletion batch rereads current references and unlinks under the same
+   synchronous database writer reservation. Batches yield between groups of
+   at most 64 entries. Path identity uses the shared filesystem comparison
+   contract; no separate retention registry or reference counter is stored.
+   External deletion or preexisting missing bytes still produce an explicit
+   source-read failure; retention does not synthesize lost evidence.
 2. Project `MEMORY.MD` is a read-only Project context maintained exclusively by the fixed hidden `memory` helper agent.
 3. Semantic memory (`note`, `episode`, `fact`, `lesson`, `profile`) is reusable main-agent-managed Project knowledge.
 

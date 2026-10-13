@@ -1,4 +1,5 @@
-import fs from "fs/promises"
+import { statSync, unlinkSync } from "node:fs"
+import { setImmediate } from "node:timers/promises"
 import path from "path"
 import { Identifier } from "../id/id"
 import { CapabilityRules } from "../capability/rules"
@@ -11,12 +12,16 @@ import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import type { ToolExecutionSurface } from "./execution-surface"
+import { Database, sql } from "@/storage/db"
+import { ToolPartOutcomeTable, ToolPartProgressTable, ToolPartRequestTable } from "@/session/session.sql"
+import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 
 export namespace Truncate {
   export const MAX_LINES = 2000
   export const MAX_BYTES = 50 * 1024
   const RETENTION_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
   const HOUR_MS = 60 * 60 * 1000
+  const CLEANUP_BATCH_SIZE = 64
 
   export type Result = { content: string; truncated: false } | { content: string; truncated: true; outputPath: string }
 
@@ -43,18 +48,18 @@ export namespace Truncate {
     return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT"
   }
 
-  async function statExistingFile(filepath: string) {
+  function statExistingFile(filepath: string) {
     try {
-      return await fs.stat(filepath)
+      return statSync(filepath)
     } catch (error) {
       if (isMissingFile(error)) return undefined
       throw error
     }
   }
 
-  async function unlinkExistingFile(filepath: string) {
+  function unlinkExistingFile(filepath: string) {
     try {
-      await fs.unlink(filepath)
+      unlinkSync(filepath)
     } catch (error) {
       if (isMissingFile(error)) return
       throw error
@@ -65,11 +70,42 @@ export namespace Truncate {
     return [...new Set(Project.list().map((project) => ProjectRuntimePaths.projectRuntimeRoot(project.worktree)))]
   }
 
+  function referencedOutputPaths(db: Database.TxOrDb) {
+    const requests = db
+      .select({ path: sql<string>`json_extract(${ToolPartRequestTable.data}, '$.metadata.outputPath')` })
+      .from(ToolPartRequestTable)
+      .where(sql`json_type(${ToolPartRequestTable.data}, '$.metadata.outputPath') = 'text'`)
+      .all()
+    const outcomes = db
+      .select({ path: sql<string>`json_extract(${ToolPartOutcomeTable.data}, '$.metadata.outputPath')` })
+      .from(ToolPartOutcomeTable)
+      .where(sql`json_type(${ToolPartOutcomeTable.data}, '$.metadata.outputPath') = 'text'`)
+      .all()
+    const progress = db
+      .select({ path: sql<string>`json_extract(${ToolPartProgressTable.metadata}, '$.outputPath')` })
+      .from(ToolPartProgressTable)
+      .where(sql`json_type(${ToolPartProgressTable.metadata}, '$.outputPath') = 'text'`)
+      .all()
+    const results = db
+      .select({
+        path: sql<string>`json_extract(${PermissionExecutionResultTable.result}, '$.value.metadata.outputPath')`,
+      })
+      .from(PermissionExecutionResultTable)
+      .where(sql`json_type(${PermissionExecutionResultTable.result}, '$.value.metadata.outputPath') = 'text'`)
+      .all()
+    return new Set(
+      [...requests, ...outcomes, ...progress, ...results]
+        .filter((row) => row.path.length > 0)
+        .map((row) => Filesystem.normalizeForCompare(row.path)),
+    )
+  }
+
   async function cleanupRoot(
     root: string,
     cutoff: number,
+    initiallyReferenced: ReadonlySet<string>,
     signal?: AbortSignal,
-  ): Promise<{ scanned: number; removed: string[] }> {
+  ): Promise<{ scanned: number; removed: string[]; retained: string[] }> {
     signal?.throwIfAborted()
     const entries = (
       await Promise.all(
@@ -79,26 +115,55 @@ export namespace Truncate {
       )
     ).flat()
     const removed: string[] = []
-    for (const entry of entries) {
+    const retained: string[] = []
+    for (let start = 0; start < entries.length; start += CLEANUP_BATCH_SIZE) {
       signal?.throwIfAborted()
-      const filepath = path.join(root, entry)
-      const stat = await statExistingFile(filepath)
-      if (!stat || stat.mtimeMs >= cutoff) continue
-      await unlinkExistingFile(filepath)
-      signal?.throwIfAborted()
-      removed.push(filepath)
+      const candidates: string[] = []
+      for (const entry of entries.slice(start, start + CLEANUP_BATCH_SIZE)) {
+        const filepath = path.join(root, entry)
+        if (!Filesystem.contains(root, filepath))
+          throw new Error(`Tool output cleanup escaped its runtime root: ${filepath}`)
+        const stat = statExistingFile(filepath)
+        if (!stat || stat.mtimeMs >= cutoff) continue
+        if (initiallyReferenced.has(Filesystem.normalizeForCompare(filepath))) retained.push(filepath)
+        else candidates.push(filepath)
+      }
+      // Keep the reference read and physical reclamation under the same writer
+      // reservation. Bounded synchronous batches let other processes publish
+      // references between batches, which each read fresh canonical facts.
+      if (candidates.length)
+        Database.immediateTransaction((db) => {
+          const referenced = referencedOutputPaths(db)
+          for (const filepath of candidates) {
+            signal?.throwIfAborted()
+            const stat = statExistingFile(filepath)
+            if (!stat || stat.mtimeMs >= cutoff) continue
+            if (referenced.has(Filesystem.normalizeForCompare(filepath))) {
+              retained.push(filepath)
+              continue
+            }
+            unlinkExistingFile(filepath)
+            removed.push(filepath)
+          }
+        })
+      await setImmediate()
     }
-    return { scanned: entries.length, removed }
+    return { scanned: entries.length, removed, retained }
   }
 
   export async function cleanup(signal?: AbortSignal) {
+    signal?.throwIfAborted()
     const cutoff = Date.now() - RETENTION_MS
-    const receipt = { scanned: 0, removed: [] as string[] }
+    const receipt = { scanned: 0, removed: [] as string[], retained: [] as string[] }
+    // This snapshot can only retain extra files. Every deletion candidate is
+    // rechecked against current references under the writer reservation.
+    const initiallyReferenced = Database.use(referencedOutputPaths)
     for (const root of registeredRuntimeRoots()) {
       signal?.throwIfAborted()
-      const rootReceipt = await cleanupRoot(root, cutoff, signal)
+      const rootReceipt = await cleanupRoot(root, cutoff, initiallyReferenced, signal)
       receipt.scanned += rootReceipt.scanned
       receipt.removed.push(...rootReceipt.removed)
+      receipt.retained.push(...rootReceipt.retained)
     }
     return receipt
   }

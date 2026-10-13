@@ -60,3 +60,13 @@ results do not establish remote semantic performance on the full-file cases.
 Still unverified: three successful consecutive rounds after the second repair,
 remote full-file/failure cases, operating-system restart mid-compaction, parallel
 full Task/Mission workloads, broader model distribution, and measured Codex parity.
+
+## Retained evidence lifetime
+
+[Retention contracts](retention-contracts.log) exercise the actual age cleanup,
+database reopening, canonical Session forks, exact full-output reads, pending
+recovery receipts and live Tool metadata. Baseline code deleted referenced files
+older than seven days; the fixed code retains canonical references and reclaims
+aged orphans. A 193-file case publishes a reference after cleanup has started,
+then verifies 192 reclaimed orphans and the exact retained source bytes. This is
+local storage/cleanup evidence and adds **zero** remote model requests.

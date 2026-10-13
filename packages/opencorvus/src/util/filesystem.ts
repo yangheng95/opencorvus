@@ -453,7 +453,7 @@ export namespace Filesystem {
     return value
   }
 
-  function normalizeForCompare(p: string) {
+  export function normalizeForCompare(p: string) {
     let value = trimTrailingSeparators(normalize(pathResolve(normalizeWindowsPath(p))))
     if (process.platform === "win32") value = value.toLowerCase()
     return value

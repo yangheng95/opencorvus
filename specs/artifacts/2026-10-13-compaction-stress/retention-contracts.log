@@ -1,0 +1,17 @@
+$ bun script/run-tests.ts test/tool-output-retention.test.ts
+[1/1] START test/tool-output-retention.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) retention settles expired outputs in both current runtime ownership roots [2319.06ms]
+(pass) retains referenced conversation evidence across age cleanup and reopen [1829.23ms]
+(pass) retains referenced task evidence across age cleanup and reopen [1710.14ms]
+(pass) retains recovery-receipt and live-progress evidence before a terminal Tool outcome [2185.04ms]
+{"contract":"retention-fresh-reference","scanned":193,"removed":192,"retained":1,"elapsedMs":95}
+(pass) observes references committed after cleanup starts while reclaiming aged orphan batches [2563.69ms]
+
+ 5 pass
+ 0 fail
+ 19 expect() calls
+Ran 5 tests across 1 file. [13.20s]
+[1/1] DONE test/tool-output-retention.test.ts exit=0 duration=13.96s
