@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [391 历史活动与交接输入](2026-10-13-activity-input-projection-391.md)：两历史读取、真实刷新/Sources及原委派错误事实。
+
 - [Config JSONC 诊断与 Provider 反馈](2026-10-13-config-jsonc-diagnostics.md)：两解析入口、原输入边界和实页资格。
 
 - [396 表格焦点与读位](2026-10-13-spreadsheet-focus-scroll-396.md)：共享隐藏输入focus与内部导航的分工。

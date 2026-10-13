@@ -629,6 +629,9 @@ export function projectConversationAgentView(
   }
   const transcriptActivityByMessageID = new Map<string, ConversationAgentActivityItem[]>()
   for (const message of Array.isArray(transcript) ? transcript : []) {
+    // Input is already represented by inputPreview and the complete transcript.
+    // Activity has the same assistant-output ownership as live Part updates.
+    if (message?.info?.role !== "assistant") continue
     const sessionID = String(message?.info?.sessionID || "")
     if (!sessionID) continue
     const activity = (Array.isArray(message?.parts) ? message.parts : [])

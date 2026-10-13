@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [391 历史活动与交接输入](2026-10-05-connection-workspace-authority/activity-input-projection-391/README.md)：数据库、公开投影和实际刷新截图。
+
 - [Config JSONC 诊断与 Provider 反馈](2026-10-13-config-jsonc-diagnostics/README.md)：真实HTTP、正向诊断与桌面故障/恢复。
 
 - [396 表格焦点与读位](2026-10-13-spreadsheet-focus-scroll-396/README.md)：真实点击、同实例语言、规则清理、编辑导航、CSV与原owner关闭。

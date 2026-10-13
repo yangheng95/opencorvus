@@ -226,6 +226,15 @@ Chat replies. Control-only transcript rows retain their required owner and
 Session/Part checks even when they have no visible message metadata. HTTP reads
 and ordered Session connection snapshots use this one admission parser.
 
+Agent activity projects the real output Parts of assistant-role Messages. User
+input belongs to the original transcript and the occurrence's input context,
+which the progress card exposes through its handoff disclosure. Both bounded
+Task history queries and Session transcript projections classify by the
+persisted Message role before ordering and limiting activity, matching live
+Part updates. A reconnect therefore preserves the same output activity while
+keeping the complete input available; input text and attachments do not become
+extra agent progress or consume its bounded activity slots.
+
 Other stable identities are:
 
 - `integrity:session:<sessionID>` for a live integrity review stream;

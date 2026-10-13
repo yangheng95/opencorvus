@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [391 历史活动与交接输入](artifacts/2026-10-05-connection-workspace-authority/activity-input-projection-plan-391.md)：真实消息角色、进展与交接上下文的读取合同。
+
 - [Config JSONC 诊断与 Provider 反馈](records/2026-10/2026-10-13-config-jsonc-diagnostics.md)：安全producer、真实错误与当前语言反馈。
 
 - [396 表格焦点与读位](records/2026-10/2026-10-13-spreadsheet-focus-scroll-396.md)：隐藏输入焦点的外层滚动根因、完整调用面与真实桌面复核。

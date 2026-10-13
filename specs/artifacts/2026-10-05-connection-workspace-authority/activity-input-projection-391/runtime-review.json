@@ -1,0 +1,42 @@
+{
+  "childSessionID": "ses_-zUS3Vepszzhhmpbd5rA",
+  "parentSessionID": "ses_-zUS3Vh7jzzkASlRfZ0r",
+  "inputMessageID": "msg_g0VXwULBG000W3YyCBME",
+  "finalMessageID": "msg_g0VXwUMc500KPdUtkFdC",
+  "actor": "work",
+  "source": {
+    "id": "prt_g0VXwUMZj00sbeNaIe74",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\activity-input-projection-391-after\\project\\来源材料\\方案甲.txt",
+    "range": {
+      "startLine": 2,
+      "endLine": 3
+    },
+    "toolPartID": "prt_g0VXwUMMo004uyaltjLY"
+  },
+  "requests": 7,
+  "preflight": {
+    "sessionID": "ses_hZwmiTdhM1M4rlNH95e2",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "native": {
+    "terminal": {
+      "occurrenceID": "activity391-after-24257118-2733-472c-9efd-dd89ef9c9521",
+      "pid": 69688,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "durationMilliseconds": 353887,
+    "physicalCompletion": true,
+    "pairedCleanupComplete": true
+  },
+  "replayEventID": "pev_g0VXwUP2w004qf8GZsbR",
+  "boundary": "Canonical DB, public HTTP/SSE, actual streaming Provider, and Native resource checks. UI accepted separately by actual page interaction and manual screenshot review.",
+  "remaining": [
+    "The independent live scope remains a Provider business failure with an incorrectly completed delegated terminal; original failure facts and the shared investigation are retained separately.",
+    "Original Research Studio long-history dataset is not covered by this bounded real session-local run."
+  ]
+}

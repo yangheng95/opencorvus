@@ -158,10 +158,8 @@ function conversationActivityMessageScopes(
         m.id AS messageID
       FROM requested_scope scope
       JOIN message m ON m.session_id = scope.session_id
-      WHERE
-        scope.input_message_id IS NULL OR
-        m.id = scope.input_message_id OR
-        json_extract(m.data, '$.parentID') = scope.input_message_id
+      WHERE json_extract(m.data, '$.role') = 'assistant'
+        AND (scope.input_message_id IS NULL OR json_extract(m.data, '$.parentID') = scope.input_message_id)
       ORDER BY scope.execution_id, m.time_created, m.id
     `)
   }))
@@ -430,9 +428,9 @@ export namespace MessageStore {
 
   /** Load a compact latest-part projection for every requested execution
    * occurrence. A physical Session may serve multiple turns, so the persisted
-   * query is bound to the authoritative input Message (and assistant Messages
-   * parented to it) before applying the activity limit. Sessions that have not
-   * emitted an execution lifecycle yet use their explicit precommit scope. */
+   * query selects assistant Messages parented to the authoritative input before
+   * applying the activity limit. The input remains in the transcript/context.
+   * Sessions without an execution lifecycle use their explicit precommit scope. */
   export async function latestConversationAgentActivityByExecution(input: {
     executions: Array<{ sessionID: string; inputMessageID?: string }>
     beforeOrAt?: number | null

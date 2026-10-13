@@ -8,6 +8,6 @@
 
 真实开发服务/UI使用gpt-6.1-sol，7次流式请求包含预检和helper。未刷新页面中父进展和dock都显示最终正文；Source“方案甲.txt L2–3”打开文件并选中2—3行。规范数据库、HTTP conversation和SSE回放核对相同work身份及同一input。Native资源在306843ms完成，端口释放、复制auth/models成对清理，页面关闭。Provider传输完成与Message stop、Tool completed分别检查。
 
-验证状态：首次typecheck因同期配置类型改动失败，原日志保留；重跑、文档检查和提交推送结果在最终证据中记录。
+验证状态：前三次typecheck因同期配置类型改动失败，原日志保留；最终正常push的8工作区types、routes/docs、lease、architecture/package/release/module和secret检查全部通过，4341de9807675b2c6170c53beef1b3eb27ffdd6c已推送。完整push原日志随[391证据](../../artifacts/2026-10-05-connection-workspace-authority/activity-input-projection-391/README.md)归档，未绕过hook。
 
 剩余：刷新后父进展额外显示一行英文交接输入，已保存03/05真实对照，下一轮追查实时/恢复投影差异。原Research Studio长历史未重放，本轮不能代表全部功能体验完成。误建空目录删除曾被自动审批以blocked by policy拒绝，保留原处，未绕过。

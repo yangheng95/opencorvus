@@ -5,6 +5,9 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
+import { projectConversationAgentView } from "@/conversation/view"
+import { projectPersistedSessionMessage } from "@/orchestrator/protocol/message-bridge"
+import { listConversationAgentSessionsForSessionTree } from "@/orchestrator/task-event"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import type { ConversationAgentActivityItem } from "@opencorvus-ai/transport-protocol"
 
@@ -25,6 +28,13 @@ async function createOccurrence(input: {
     agent: "researcher",
     model: { providerID: "test", modelID: "activity" },
     time: { created: Date.now() },
+  })
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: input.sessionID,
+    messageID: user.id,
+    type: "text",
+    text: `Read and report this occurrence: ${user.id}`,
   })
   const assistant = await Session.updateMessage({
     id: Identifier.ascending("message"),
@@ -52,6 +62,42 @@ async function createOccurrence(input: {
   }
   return { inputMessageID: user.id, assistantMessageID: assistant.id }
 }
+
+test("projects the original handoff as input context and assistant output as occurrence activity", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Input and output ownership" })
+      const occurrence = await createOccurrence({ sessionID: session.id, texts: ["Confirmed price and delivery."] })
+      const input = await MessageStore.get({ sessionID: session.id, messageID: occurrence.inputMessageID })
+      const reply = await MessageStore.get({ sessionID: session.id, messageID: occurrence.assistantMessageID })
+      const transcript = [input, reply].map(projectPersistedSessionMessage)
+      const ledger = listConversationAgentSessionsForSessionTree({
+        sessionID: session.id,
+        projectID: Instance.project.id,
+      })
+      const view = projectConversationAgentView(transcript, [], ledger)
+      expect(transcript[0]?.parts).toMatchObject([
+        { type: "text", text: `Read and report this occurrence: ${input.info.id}` },
+      ])
+      expect(view.sessions).toMatchObject([{
+        inputMessageID: input.info.id,
+        inputPreview: {
+          text: `Read and report this occurrence: ${input.info.id}`,
+          messageID: input.info.id,
+          source: "user_message",
+        },
+        activity: [{ id: reply.parts[0]!.id, messageID: reply.info.id, type: "text", text: "Confirmed price and delivery." }],
+      }])
+      expect(view.messages.map(({ messageID }) => messageID)).toEqual([input.info.id, reply.info.id])
+      const compact = await MessageStore.latestConversationAgentActivityByExecution({
+        executions: [{ sessionID: session.id, inputMessageID: input.info.id }],
+      })
+      expect(compact.get(input.info.id)).toEqual(view.sessions[0]!.activity)
+    },
+  })
+})
 
 test("hydrates bounded activity for parallel Sessions and repeated execution occurrences", async () => {
   await using project = await memoryProject()
