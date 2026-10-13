@@ -38,9 +38,12 @@
 - 新测试前三次超时，不作为产品失败直接下结论。实际恢复已经得到回复，测试未释放待机 Prompt owner，等待进程退出挂住；对照仓库 Mission recovery driver 使用 SessionPromptState.release 清理私有 owner 后原验收通过（37.59 秒）。添加 result/error 屏障明确区分结果产生与进程清理。Provider fixture 用专用 small_model 身份识别 Memory Organizer（记忆整理器）的请求，避免动态目标上下文使系统提示全文识别不适用。
 - 另检查 process.shutdown 被当作用户取消的候选：SessionWake 使用 typed cancellation（带类型取消原因）直接 cancelOwned；Session loop 的 publishTerminal 对该类型提前返回，没有走通用 aborted 发布分支。未在无真实证据下修改公共状态合同；优雅关闭全部矩阵仍未执行。
 - 横向覆盖包括：三 owner 的正常/终态与归档/删除；并发两进程预占；Chat 真实 Prompt 退出/重启；跨项目隔离。Task/Mission 的物理崩溃和多项目并行真实模型执行没有在本轮扩展。
+- 独立 agent 对新恢复测试及 fixture 进行了第二次只读复核，未发现确定问题，核对了真实调用链、结果断言及仅终止私有进程的清理范围。该用例中断点是请求已发出但尚未返回响应；不覆盖部分输出中断。第二进程直接调用 reconciler，不覆盖全局 Scheduler 启动发现链。Provider 未给 usage，因此不声称恢复后的模型计量已由该运行用例证明。
 
 ## 验证与交付状态
 
 - 主 agent 命令：`bun run --cwd packages/opencorvus test -- test/continuous-goal.test.ts test/continuous-goal-independent.test.ts test/continuous-goal-process.test.ts`，29 pass；另 `test/continuous-goal-runtime.test.ts`，1 pass。总计 **30 pass**，使用隔离 Bun 1.4.0 与真实数据库/生产调用链。
 - 新增运行用例的模型端为本机受控流式 Provider，仅证明传输/调度/持久化/恢复合同，不是本轮真实模型端到端验收。没有使用真实凭据、额外模型额度，也未运行 UI 自动化。本轮未修改 UI，不重复前一轮视觉验收。
-- 类型/文档/拓扑与正常 pre-push 检查、最终提交和集成结果在完成后补充。
+- 根 typecheck 通过（8/8）；docs:check 通过（348 ops/26 groups）；architecture-index 通过（19 current documents）。正常 pre-push 的 routes、control lease owners、package topology、committed-tree release mutation/module topology 和 secret scan 均通过，未绕过 hook。
+- 修复提交 `a347f98c3`；拉取并合并远端 `3d4adff49`，合并提交 `4535ddf67` 仅三个文档索引冲突，保留双方条目。合并后重复实际进程恢复测试通过（19.12 秒）。完整待推送集合为该修复与合并提交，已正常推送至 origin/main。
+- main 从 `3d4adff49` 快进至 `4535ddf67`。预先审查并备份三个有并行修改的索引，只插入本任务新条目；去除插入内容后原用户文件逐字相同，其他脏文件保持原样。本任务源码与测试已收敛主交付来源；本次收尾文档随后单独提交并正常推送。
