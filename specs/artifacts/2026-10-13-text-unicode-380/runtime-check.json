@@ -1,0 +1,29 @@
+{
+  "summaries": [
+    {
+      "scope": "after",
+      "canonicalOutput": "Exact full output and preview matched",
+      "sourceFile": "Exact complete original text matched",
+      "tools": 1,
+      "sources": 1,
+      "assistantCompleted": 2,
+      "originalSettlement": "UNVERIFIED: interrupted owner/output drain"
+    },
+    {
+      "scope": "final",
+      "canonicalOutput": "Exact full output and preview matched",
+      "sourceFile": "Exact complete original text matched",
+      "tools": 1,
+      "sources": 1,
+      "assistantCompleted": 2,
+      "originalSettlement": "Checked below"
+    }
+  ],
+  "final": {
+    "requests": 5,
+    "stream": "HTTP 200 / EOF",
+    "elapsedMs": 243281,
+    "physical": "Normal native, output and request settlement; paired cleanup complete"
+  },
+  "boundary": "Canonical persisted tool data and real process/provider receipts. UI screenshots were reviewed manually; no DOM, UI text or pixel assertions."
+}

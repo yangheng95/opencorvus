@@ -34,7 +34,12 @@ function textFilePageCollector(input: { offset?: number; limit?: number }) {
       lines += 1
       // Count the whole input while keeping one contiguous, bounded page.
       if (lines <= start || raw.length >= limit || truncatedByBytes) return
-      const line = text.length > MAX_LINE_LENGTH ? text.substring(0, MAX_LINE_LENGTH) + MAX_LINE_SUFFIX : text
+      let end = Math.min(text.length, MAX_LINE_LENGTH)
+      // The code-unit budget must end between complete Unicode code points.
+      const last = text.charCodeAt(end - 1)
+      const next = text.charCodeAt(end)
+      if (last >= 0xd800 && last <= 0xdbff && next >= 0xdc00 && next <= 0xdfff) end--
+      const line = text.length > end ? text.slice(0, end) + MAX_LINE_SUFFIX : text
       const size = Buffer.byteLength(line, "utf8") + (raw.length > 0 ? 1 : 0)
       if (bytes + size > MAX_BYTES) {
         truncatedByBytes = true

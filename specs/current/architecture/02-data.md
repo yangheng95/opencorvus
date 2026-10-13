@@ -853,6 +853,17 @@ fact，可以复用；不得额外复制成 input manifest。
 `attachment_ref`。在该表实施前，GC 仍可对 `/attachment/...` 嵌入引用做
 harvest。
 
+## Text file page boundaries
+
+The ordinary Read tool and both Skill supporting-file readers use one text-page
+collector for line limits, contiguous byte-bounded pages and complete file totals.
+Its long-line prefix stays within the existing 2000 UTF-16 code-unit budget and
+ends between complete code points: a boundary inside a valid surrogate pair moves
+back one code unit. The existing truncation notice and 50 KB page budget apply to
+that same prefix. Tool output and preview share it; file bytes, source identity and
+line ranges remain the original read facts. This does not promise grapheme-cluster
+boundaries or repair malformed source text.
+
 ## 相关文档
 
 完成的助手消息在原子整批写入及正式会话导入时，共用同一初始行构造器：先在事务内保留可写入 Parts 的开放行，临时移除 completed、finish、error 以及依附 error 的 failureOccurrence、convergenceFailure、observationFailures；Parts 写入后再统一持久化完整原终态。临时行不作为对外消息发布，最终错误及诊断归属必须满足原 Message schema，已完成消息仍不可变。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [长行读取的完整字符边界](2026-10-13-text-unicode-380/README.md)：正向工具合同、真实Sol读取、桌面截图和正常运行收尾。
+
 - [文件完整字节准入](2026-10-13-file-text-admission/README.md)：真实有损保存前态、只读后态、文本保存与聚焦功能合同。
 - [Composer模型名称搜索](2026-10-13-iteration-batch-380/README.md)：可见名称搜索前后桌面截图。
 
