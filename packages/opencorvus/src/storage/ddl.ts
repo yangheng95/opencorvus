@@ -4102,13 +4102,61 @@ WHEN EXISTS (
     AND json_extract(data,'$.role')='assistant'
     AND json_type(data,'$.time.completed') IN ('integer','real')
     AND NOT (
-      json_extract(NEW.data,'$.type')='compaction'
-      AND json_extract(data,'$.summary')=1
-      AND json_extract(data,'$.author')='compaction'
+      (
+        json_extract(NEW.data,'$.type')='compaction'
+        AND json_extract(data,'$.summary')=1
+        AND json_extract(data,'$.author')='compaction'
+      )
+      OR (
+        json_extract(NEW.data,'$.type') IN ('source-url','source-document','source-file','interactive-artifact')
+        AND EXISTS (
+          SELECT 1 FROM tool_part_request request
+          JOIN tool_part_outcome outcome ON outcome.request_part_id=request.id
+          WHERE request.id=json_extract(NEW.data,'$.toolPartID')
+            AND request.message_id=NEW.message_id
+            AND json_extract(outcome.data,'$.outcome')='completed'
+        )
+      )
     )
 )
 BEGIN
   SELECT RAISE(ABORT, 'part: completed assistant content is immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS part_tool_result_binding_insert
+BEFORE INSERT ON part
+FOR EACH ROW
+WHEN json_type(NEW.data,'$.toolPartID') IS NOT NULL
+  AND NOT (
+    json_extract(NEW.data,'$.type') IN ('source-url','source-document','source-file','interactive-artifact')
+    AND json_type(NEW.data,'$.toolPartID')='text'
+    AND EXISTS (
+      SELECT 1 FROM tool_part_request request
+      JOIN tool_part_outcome outcome ON outcome.request_part_id=request.id
+      WHERE request.id=json_extract(NEW.data,'$.toolPartID') AND request.message_id=NEW.message_id
+        AND json_extract(outcome.data,'$.outcome')='completed'
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'part: Tool result binding requires its completed invocation');
+END;
+
+CREATE TRIGGER IF NOT EXISTS part_tool_result_binding_update
+BEFORE UPDATE ON part
+FOR EACH ROW
+WHEN json_type(NEW.data,'$.toolPartID') IS NOT NULL
+  AND NOT (
+    json_extract(NEW.data,'$.type') IN ('source-url','source-document','source-file','interactive-artifact')
+    AND json_type(NEW.data,'$.toolPartID')='text'
+    AND EXISTS (
+      SELECT 1 FROM tool_part_request request
+      JOIN tool_part_outcome outcome ON outcome.request_part_id=request.id
+      WHERE request.id=json_extract(NEW.data,'$.toolPartID') AND request.message_id=NEW.message_id
+        AND json_extract(outcome.data,'$.outcome')='completed'
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'part: Tool result binding requires its completed invocation');
 END;
 
 CREATE TRIGGER IF NOT EXISTS completed_assistant_part_no_update

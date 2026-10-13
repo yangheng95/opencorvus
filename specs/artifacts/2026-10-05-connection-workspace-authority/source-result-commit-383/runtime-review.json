@@ -1,0 +1,49 @@
+{
+  "canonicalToolResults": true,
+  "sourceBinding": {
+    "partID": "prt_g0VXupDnB002la4LtZFy",
+    "toolPartID": "prt_g0VXupDT400xZT0R4v7E",
+    "messageID": "msg_g0VXupBKH00ltVxHqt6O",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\project\\结果来源.txt",
+    "range": {
+      "startLine": 1,
+      "endLine": 2
+    }
+  },
+  "documentBinding": {
+    "partID": "prt_g0VXupFxL00kCAB1GSZ7",
+    "toolPartID": "prt_g0VXupFdC00twEdmyU43",
+    "messageID": "msg_g0VXupDtt00J6w3eALCV",
+    "artifactID": "art_g0VXupFxK00GkhfhLytL",
+    "renderer": "document@1"
+  },
+  "requestedToolBehavior": "Read actual first two lines and publish their document; all three actual calls completed",
+  "providerRequests": 7,
+  "providerBudget": 20,
+  "providerExhausted": false,
+  "requestAgents": {
+    "memory": 2,
+    "chat": 1,
+    "work": 4
+  },
+  "actualAssistantErrors": [],
+  "nativeMilliseconds": 594777,
+  "nativeTerminal": {
+    "occurrenceID": "source-result-commit-383-live-72f04b34-2094-4401-89cc-e0c26af79c65",
+    "pid": 81592,
+    "reason": "deadline_exceeded",
+    "exitCode": 1,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "pairedCleanupComplete": true,
+  "actualLauncherExit": 1,
+  "qualificationError": "OWNED_NATIVE_COMPLETION_INVALID",
+  "fullQualification": false,
+  "unmet": [
+    "Reload/reopen visual verification was not completed before the fixed native deadline."
+  ],
+  "boundary": "Read-only backend canonical/runtime assertions; actual UI screenshots were reviewed manually. Native deadline failure remains a failure. This healthy Provider run does not prove Provider crash recovery."
+}

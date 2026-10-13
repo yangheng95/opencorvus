@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [383 完整工具结果与来源恢复](2026-10-13-source-result-commit-383.md)：完整事务、共享恢复入口与实际页面边界。
+
 - [持续目标独立测试与修复](2026-10-13-continuous-goal-review.md)：独立审计反馈、运行验证与修复。
 - [持续目标独立存储审计](2026-10-13-continuous-goal-independent-audit.md)：归档重叠与保留历史删除的两个真实缺陷。
 - [持续目标独立复核证据](../../artifacts/2026-10-13-continuous-goal-review/README.md)：修前、修后与实际 Prompt 重启恢复日志。

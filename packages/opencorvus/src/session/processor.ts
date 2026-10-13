@@ -49,6 +49,7 @@ import {
 import { Instance } from "@/project/instance"
 import { persistMessageSources } from "./source-persistence"
 import { normalizeToolResult } from "./tool-result-normalization"
+import { recoverCompletedToolResult } from "./tool-result-recovery"
 import { canonicalJSONValue } from "@/util/canonical-digest"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { taskIDForSession } from "@/engine/task-session-lineage"
@@ -341,6 +342,10 @@ export namespace SessionProcessor {
     })
 
     const failToolPart = async (part: Message.ToolPart, failure: ToolFailureCause): Promise<void> => {
+      if (await recoverCompletedToolResult(part)) {
+        delete toolcalls[part.callID]
+        return
+      }
       const start = toolStartTime(part)
       await Session.updatePart({
         ...part,
@@ -404,7 +409,9 @@ export namespace SessionProcessor {
       const byID = new Map(persisted.map((part) => [part.id, part]))
       const unconverged = parts.filter((part) => {
         const stored = byID.get(part.id)
-        if (stored?.type !== "tool" || stored.state.status !== "error") return true
+        if (stored?.type !== "tool") return true
+        if (stored.state.status === "completed") return false
+        if (stored.state.status !== "error") return true
         const storedOccurrence = stored.state.failure.data?.failure_occurrence as FailureOccurrenceAnchor | undefined
         return !storedOccurrence || !sameFailureOccurrence(storedOccurrence, occurrence)
       })
@@ -498,9 +505,8 @@ export namespace SessionProcessor {
           throw new Error(`Open ToolPart not found for Tool call ${value.toolCallId}`)
         }
         const resolvedInput = value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
-        await Session.updatePart({
-          ...match,
-          state: {
+        const completed = await Session.persistCompletedToolResult({
+          tool: { ...match, state: {
             status: "completed",
             input: resolvedInput,
             output: value.output.output,
@@ -508,33 +514,12 @@ export namespace SessionProcessor {
             title: value.output.title,
             time: completedToolTime(toolStartTime(match)),
             attachments: value.output.attachments,
-          },
+          } },
+          display: displayParts,
+          sources: sourcePayloads,
         })
         delete toolcalls[value.toolCallId]
-        if (displayParts.length > 0) {
-          const existingPartIDs = new Set((await MessageStore.parts(input.assistantMessage.id)).map((part) => part.id))
-          for (const candidate of displayParts) {
-            const displayPart = Message.InteractiveArtifactPart.parse(candidate)
-            if (displayPart.sessionID !== input.assistantMessage.sessionID) {
-              throw new Error(`tool result display part ${displayPart.id} belongs to a different session`)
-            }
-            if (displayPart.messageID !== input.assistantMessage.id) {
-              throw new Error(`tool result display part ${displayPart.id} belongs to a different message`)
-            }
-            if (existingPartIDs.has(displayPart.id)) continue
-            await Session.updatePart(displayPart)
-            existingPartIDs.add(displayPart.id)
-            onPartCreated(displayPart.id)
-          }
-        }
-        if (sourcePayloads.length > 0) {
-          const persisted = await persistMessageSources({
-            sessionID: input.assistantMessage.sessionID,
-            messageID: input.assistantMessage.id,
-            sources: sourcePayloads,
-          })
-          for (const part of persisted) onPartCreated(part.id)
-        }
+        for (const part of completed.parts) onPartCreated(part.id)
         return false
       })
       mcpAppCalls.delete(value.toolCallId)
@@ -1309,15 +1294,17 @@ export namespace SessionProcessor {
                                 toolName: value.toolName,
                               },
                             })
-                            await Session.updatePartWithSignal(run.signal, {
-                              ...match,
-                              state: {
-                                status: "error",
-                                input: resolvedInput,
-                                failure,
-                                time: completedToolTime(toolStartTime(match)),
-                              },
-                            })
+                            if (!(await recoverCompletedToolResult(match))) {
+                              await Session.updatePartWithSignal(run.signal, {
+                                ...match,
+                                state: {
+                                  status: "error",
+                                  input: resolvedInput,
+                                  failure,
+                                  time: completedToolTime(toolStartTime(match)),
+                                },
+                              })
+                            }
 
                             if (value.error instanceof PermissionAuthority.RejectedError) {
                               blocked = shouldBreak

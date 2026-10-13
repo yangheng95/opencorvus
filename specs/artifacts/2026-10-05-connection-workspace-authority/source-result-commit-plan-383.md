@@ -1,0 +1,52 @@
+# 383 完整工具结果提交与恢复
+
+## Recall
+
+持续自主改进，最新仅单 agent。上一轮382是progress：真实Read/permission/数据库/恢复函数确认Full access和Ask me均有两种断点，证据已推送76e4364c7。Tool完成后Source失败不可重试，receipt完成但Tool未完成时被通用恢复误记error。原四个失败合同须转为正确行为，不能重定义验收；381真实并行双调用因请求上限未完成仍保留。开始时保留file/webfetch/usage/PDF/路径等其他任务改动，不委托。
+
+已读382 Recall、全部terminalizeRecoveredIncompleteAssistant生产入口、processor普通和恢复完成/错误收敛、Source helper、MessageStore、Session canonical writer、Permission ledger/result、Tool outcome reader、完整结果归一化/附件物化、Task-root activation fence和02-data/security-permission/07-panel。当前来源公开helper还被5个工具/Session测试文件使用，其中webfetch测试有其他任务改动；保留该模块API，通过唯一Session实现处理来源，不改他人测试。
+
+## 根因与共同影响
+
+结果成功、Source/display和助手完成分步写入；已完成Tool被当作完整结果，通用错误/重启恢复又忽略原permission成功receipt。原381只解决Sources批次自身原子性。Full access会先退役continuation，故补Ask me扫描不能覆盖默认模式。Task-root过期activation、dispatch worker、Mission进程恢复、普通Session和prompt生命周期均共享同一恢复函数。所有新Part仍受终态和activation限制，而已接受Tool outcome可晚到结算，必须给其真实伴随结果提供同一受约束写入语义。
+
+## 实施
+
+1. Session canonical writer增加完整completed Tool result事务，包含Tool outcome、严格绑定同Session/Message的display及Message局部去重Source、同事务事件outbox。Source身份算法移入同一Session writer；现有source-persistence模块只委托该实现，不保留第二算法。先验证所有payload和归属，再提交；本地toolcall及尝试回滚跟踪只在完整提交后更新。
+2. 伴随结果的晚到写入只可由这个复合writer内部基于同Message已接受Tool request和completed outcome使用，类型限定Source或interactive-artifact。原普通Part写入、独立Provider Source和助手完成保持既有围栏，不放开任意终态Part或新执行。其事实结算不要求已过期activation重新变成活跃。
+3. 共用精确session/message/call/tool/project的permission成功receipt读取，校验实际execution_succeeded与唯一attempt/result；损坏或歧义返回明确完整性错误，不能选任意.get行或重跑外部效果。普通完成引用和恢复使用同一结果解释。
+4. 处理器错误收敛与Session中断恢复先恢复已有成功receipt，通过同一完整结果writer保存真实输出/附件/display/Source，再保留真实助手中断事实；没有成功receipt的操作继续按既有typed interruption处理。正常/权限恢复不新增LLM调用、调度分支、队列、影子状态或Source重建猜测。
+
+## 验收
+
+先用真实SQLite Source插入失败证明完整事务回滚与同调用重试；原382结果须保持真实读取次数1，Source完整；receipt断点须恢复completed Tool与原输出/来源。覆盖Full access/Ask me、串并行、不同Message/项目、普通终态错误与已接受Tool晚到结算、display归属/immutable冲突、事件回调完整事实。加入真实子进程退出/重启边界与Task-root/Mission入口验证；不以fixture断言冒充这些范围。
+
+既有Source正向合同和与变更直接相关的Tool/permission恢复合同、typecheck、文档/架构及正常push hooks均执行。无UI源码改动时后台验收仍须进入真实运行入口；如进入页面或改UI，则只允许真实/dev /ui、截图与人工复核，不添加或运行UI自动化。需要Provider时另行预声明新的独立输入/预算，auth/models成对验证，绝不重开381额度。
+
+实现/验证过程中如发现receipt和输出物化边界、Task/Mission终态差异等新事实，先更新该方案再修改，不缩为某一种会话补丁。完成后更新当前架构、索引、记录、范围提交、fresh fetch/merge和普通push；未达成项如实保留，持续goal保持active。
+
+## SQLite 终态围栏的补充分析
+
+首轮57057中两个原382问题均已通过新实际SQLite故障/receipt恢复合同，终态伴随来源仍被 storage/ddl.ts 的 completed_assistant_part_no_insert 拒绝。应用内临时许可不足以描述持久事实，不能绕过或暂停数据库触发器。
+
+因此Source Parts和interactive-artifact Part增加可选toolPartID，表示同一Message中真实已接受Tool request；仅完整结果writer赋予此绑定。应用和SQLite同时验证该request属于同Message且具有completed outcome，才允许追加其伴随结果。独立Provider Source继续无此绑定，普通终态内容不可变规则保持。更新Source公开Part schema及必要生成类型，不添加SourcePayload字段或第二来源存储。
+
+该触发器属于当前DDL（Data Definition Language，数据定义语言）合同，仓库严格schema准入会拒绝旧触发器定义。保留现有SCHEMA_RESET_REQUIRED机制，不添加自动迁移、旧触发器兼容或绕过；本轮只使用新隔离数据库，绝不重置用户现有数据或重启正在使用的服务。将此交付/后续升级限制明确列入记录，未经相应授权不能宣称现有用户实例已升级。
+
+## 当前验证与实页声明
+
+新恢复合同11项44断言、既有权限恢复8项25断言及capability-search completion合同1项6断言通过。处理器tool-error和consumer-error分支连同原生产边界12项45断言通过。真实操作系统子进程在receipt已提交、Tool事务未提交、Mission持有真实Prompt owner后退出三个边界恢复成功，3项25断言；Mission后续wake的模型执行仅在测试消费者边界截住，不冒充真实Provider。Task-root实际webfetch结果在释放activation后恢复，1项5断言。fork与规范Tool存储相关合同亦通过，详细最终统计在记录中去重。
+
+工具链修正：Bun SQLite不提供所尝试的自定义function API，保留原失败日志后改在既有Bus.publishOwnedInTransaction的实际completed Tool事件处确认活动事务并退出子进程；真实SQLite事务由OS退出回滚。Mission原单进程探针缺真实死亡owner，改用确实死亡的子进程和正式Mission恢复入口。Task内读取项目外文件按真实进程边界被拒，测试改用实际许可的owned HTTP网页，未绕过文件边界。缺失Identifier导入导致的首次runner故障已修正并复测，后续引用schema改为复用Part自身ID schema。
+
+实页预声明一个新的source-result-commit-383-live NativeService，端口18392，RunRoot为C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-result-commit-383-live，固定600000ms/20累计Provider请求。此轮代码及schema已改变，独立于已失败并关闭的381，不修改其结果或续额。auth/models成对验证usable/projected/实际gpt-6.1-sol流式；仅使用新建项目、文件和浏览器页。用当前源码正式Vite构建到私有Bun旁ui目录，经生产CLI的/ui提供，启动后创建四行中文样本，要求真实读取前两行并发布简短行内文档，人工检查Source、文档、点击和重载。没有Vite服务器或UI自动化。
+
+## 本轮收敛与未满足项
+
+48项去重相关后台合同、189个断言通过；包含真实SQLite失败、原调用重试、双恢复并发、已完成助手晚到Source、fork绑定、项目隔离、处理器错误分支、Task释放activation与三个真实OS退出边界。typecheck、生成SDK及私有当前UI构建通过。原失败工具链日志完整保留。
+
+实际Sol运行完成glob、read(offset=1,limit=2)、publish_interactive_artifact；Source绑定精确read Part和Message，document@1正文与实际读取前两行一致，display绑定精确publisher。真实页面已截图人工检查来源名称/行号、点击文件高亮、打开文档工作区。最后刷新后重选会话的验证未完成：固定Native deadline已到，原生终态deadline_exceeded/exit1，launcher23132为OWNED_NATIVE_COMPLETION_INVALID/exit1。7次gpt-6.1-sol流式请求均200/EOF，20请求预算未耗尽。594777ms目标存活后物理进程、输出、请求、端口及auth/models副本均收敛；关闭了本轮唯一tab3。不能宣称完整实页验收通过，不重启/续额。04图为到期Offline事实。
+
+仍未覆盖：真实Provider在OS崩溃后的恢复；刷新重开；同一Message多个不同permission continuation的并行终态收敛；历史旧schema数据与已写error/不完整completed结果修复。已确认共同恢复入口和本轮正向范围，后续继续调查未验证边界；不将其笼统称为全部恢复问题已解决。
+
+自动审批拒绝删除初次Identifier工具链失败留下的空目录C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-wd8Jg5/runner-65772-O8iIva，仅返回blocked by policy。只读检查为空、原进程已结束；未通过其他机制重试删除，目录保留。该事实与产品Native/auth清理完成分别记录。

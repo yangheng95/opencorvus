@@ -2308,9 +2308,10 @@ the closed separator keeps pointer events disabled.
 Conversation message cards can render durable interactive content without
 using the Right Dock Browser Preview. A real tool publishes one strict
 message-owned `interactive_artifact` row and returns an
-`interactive-artifact` display part. The Session processor persists that part
-as a sibling of the real tool result. The message part contains only the
-artifact ID; its own Session identity and the active project directory provide
+`interactive-artifact` display part. The Session processor commits that part
+with the real tool outcome and Sources in one transaction. The message part
+contains the artifact ID and a `toolPartID` binding to the completed invocation;
+its own Session identity and the active project directory provide
 route scope. The session artifact route remains the only payload source across
 live display and replay, so standalone Chat, task conversations, Mission,
 delegated workers, and active expert-squad agents share the same protocol.

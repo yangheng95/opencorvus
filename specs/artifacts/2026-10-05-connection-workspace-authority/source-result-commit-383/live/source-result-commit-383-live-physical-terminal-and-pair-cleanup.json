@@ -1,0 +1,69 @@
+{
+  "copiedPair": [
+    {
+      "copiedLength": 2194,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "presentAfter": false
+    },
+    {
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "source-result-commit-383-live-72f04b34-2094-4401-89cc-e0c26af79c65",
+    "outcome": "settled",
+    "host": {
+      "pid": 51976,
+      "processInstanceID": "win32:639274760149720599",
+      "occurrenceID": "bf849a2d-cda4-4a70-94c9-62f5beda868f"
+    },
+    "target": {
+      "pid": 81592,
+      "processInstanceID": "win32:639274760205571518",
+      "occurrenceID": "e6ae08a9-2255-4cca-8862-15fc282c67a7"
+    },
+    "observedAtUtc": "2026-10-13T08:23:35.334Z",
+    "deadlineAt": 1791879814909,
+    "terminal": {
+      "occurrenceID": "source-result-commit-383-live-72f04b34-2094-4401-89cc-e0c26af79c65",
+      "pid": 81592,
+      "reason": "deadline_exceeded",
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "chain": [
+    {
+      "expected": {
+        "pid": 81592,
+        "processInstanceID": "win32:639274760205571518",
+        "occurrenceID": "e6ae08a9-2255-4cca-8862-15fc282c67a7"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 51976,
+        "processInstanceID": "win32:639274760149720599",
+        "occurrenceID": "bf849a2d-cda4-4a70-94c9-62f5beda868f"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "occurrence": "source-result-commit-383-live-72f04b34-2094-4401-89cc-e0c26af79c65",
+  "observedAtUtc": "2026-10-13T08:23:44.3586429Z"
+}

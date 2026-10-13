@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [383 完整工具结果与来源恢复](source-result-commit-plan-383.md)：[后台合同、真实页面及未完成边界](source-result-commit-383/README.md)。
+
 - [382 工具结果恢复断点](source-result-recovery-plan-382.md)：[真实持久状态与失败合同](source-result-recovery-382/README.md)。
 
 - [381 Sources 并发持久化](source-persistence-plan-381.md)：[功能与实页证据](source-persistence-381/README.md)。

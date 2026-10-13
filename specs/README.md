@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [383 完整工具结果与来源恢复](records/2026-10/2026-10-13-source-result-commit-383.md)：原子结果提交、成功回执恢复、真实OS断点与实页未完成边界。
+
 - [持续目标独立测试与修复](records/2026-10/2026-10-13-continuous-goal-review.md)：独立 agent 审计、恢复路径与正向回归。
 - [持续目标独立存储审计](records/2026-10/2026-10-13-continuous-goal-independent-audit.md)：归档范围冲突与保留历史删除的修前复现和修后合同。
 - [持续目标独立复核证据](artifacts/2026-10-13-continuous-goal-review/README.md)：独立及主 agent 日志、受控流式跨进程恢复。

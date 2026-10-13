@@ -22,6 +22,7 @@ import {
   ToolInvocationProviderKind,
 } from "./invocation"
 import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "./permission.sql"
+import { durableExecutionResult, resultFromDurable } from "./execution-result"
 import {
   acquireControlLease,
   assertControlLeaseInTransaction,
@@ -408,30 +409,6 @@ export namespace PermissionAuthority {
         })
     })
     return row as LedgerRow
-  }
-
-  type DurableExecutionResult = { kind: "json"; value: unknown } | { kind: "undefined" }
-
-  function durableExecutionResult(result: unknown): {
-    payload: DurableExecutionResult
-  } {
-    const payload: DurableExecutionResult =
-      result === undefined ? { kind: "undefined" } : { kind: "json", value: result }
-    const serialized = JSON.stringify(payload)
-    if (serialized === undefined) {
-      throw new Error("Tool result cannot be durably represented")
-    }
-    return { payload: JSON.parse(serialized) as DurableExecutionResult }
-  }
-
-  function resultFromDurable<T>(stored: unknown): T {
-    if (!stored || typeof stored !== "object" || Array.isArray(stored)) {
-      throw new Error("Durable Tool result has an invalid envelope")
-    }
-    const payload = stored as Partial<DurableExecutionResult>
-    if (payload.kind === "undefined") return undefined as T
-    if (payload.kind === "json" && "value" in payload) return payload.value as T
-    throw new Error("Durable Tool result has an unknown envelope")
   }
 
   function completeExecution<T>(input: {

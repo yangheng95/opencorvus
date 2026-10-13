@@ -2425,6 +2425,7 @@ export type InteractiveArtifactPart = {
   messageID: string
   orderKey?: string
   sessionID: string
+  toolPartID?: string
   type: "interactive-artifact"
 }
 
@@ -5049,6 +5050,7 @@ export type SourceDocumentPart = {
   sessionID: string
   sourceId: string
   title: string
+  toolPartID?: string
   type: "source-document"
 }
 
@@ -5068,6 +5070,7 @@ export type SourceFilePart = {
   sourceId: string
   symbol?: string
   title: string
+  toolPartID?: string
   type: "source-file"
 }
 
@@ -5094,6 +5097,7 @@ export type SourceUrlPart = {
   snippet?: string
   sourceId: string
   title?: string
+  toolPartID?: string
   type: "source-url"
   url: string
 }
@@ -5765,6 +5769,7 @@ export type VisibleMessagePart =
       snippet?: string
       sourceId: string
       title?: string
+      toolPartID?: string
       type: "source-url"
       url: string
     }
@@ -5781,6 +5786,7 @@ export type VisibleMessagePart =
       sessionID: string
       sourceId: string
       title: string
+      toolPartID?: string
       type: "source-document"
     }
   | {
@@ -5799,6 +5805,7 @@ export type VisibleMessagePart =
       sourceId: string
       symbol?: string
       title: string
+      toolPartID?: string
       type: "source-file"
     }
   | {
@@ -5819,6 +5826,7 @@ export type VisibleMessagePart =
       messageID: string
       orderKey: string
       sessionID: string
+      toolPartID?: string
       type: "interactive-artifact"
     }
   | {

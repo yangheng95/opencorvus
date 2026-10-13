@@ -32,6 +32,14 @@ The ledger stores redacted scope plus hashes; it must not store tokens, cookies,
 
 Pending requests survive process release and project restart. A later client can settle the same durable request. A started attempt without a terminal result becomes `outcome_unknown`; the same attempt is not blindly replayed. Engine interaction rows are presentation projections that reference the ledger request rather than a second approval authority.
 
+A paired `execution_succeeded` and durable execution result remain authoritative after the
+continuation is retired, including Full access. Tool completion and interruption recovery use
+one reader for the exact accepted Project/Session/Message/call/Tool identity and deterministic
+attempt. Missing success/result pairs or multiple successful attempts are integrity faults.
+Recovery materializes the original result and atomically commits its Tool outcome, display
+and Sources through the Session writer; it never executes the effect again. The assistant's
+interrupted state remains truthful. See [Tool result persistence](02-data.md).
+
 ## Transport contract
 
 The Overlay, Application Client Protocol (ACP), command-line interface, channel runtime, protocol mirror, server routes, and generated Software Development Kit share the same request identity and decisions. Presentation adapters may translate labels, but they cannot invent approval scopes or settle outside the canonical reply/revoke APIs.

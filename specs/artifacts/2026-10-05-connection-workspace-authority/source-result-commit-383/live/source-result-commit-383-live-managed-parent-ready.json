@@ -1,0 +1,15 @@
+{
+  "pid": 81592,
+  "occurrence": "source-result-commit-383-live-72f04b34-2094-4401-89cc-e0c26af79c65",
+  "owner": {
+    "pid": 81592,
+    "processInstanceID": "win32:639274760205571518",
+    "occurrenceID": "062f3d89-5dd2-436f-b4ec-b884c7d52c7b"
+  },
+  "parent": {
+    "pid": 76620,
+    "processInstanceID": "win32:639274760204795935",
+    "occurrenceID": "bde5bd99-2e64-466a-858c-4cf532dc316c"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

@@ -4,14 +4,25 @@
 > `src/bus/` · `src/decision-log/` · `src/storage/` · `src/workspace/workspace.sql.ts` ·
 > `src/control/control.sql.ts`
 
-## Source 事实的批次提交
+## Tool 完整结果与 Source 提交
 
 `persistMessageSources` 在同一 SQLite immediate transaction 内验证真实 Session/Message
 归属、读取该消息的规范 Source Parts，并按 `(type, sourceId)` 去重写入整批来源。
 `MessageStore.sourcePartsInTransaction` 复用规范 Part 校验，仅读取 Source 行；
-`Session.writePartInTransaction` 继续负责身份、顺序、终态准入与提交后事件。
-重复来源重放保留原事实，新增来源仍遵循已完成 Message 的不可变合同。
-Tool outcome、权限执行 receipt 与助手完成的既有生命周期不由这个 helper 改写。
+来源身份算法只有 Session canonical writer 一份；`source-persistence` 公开 helper 委托它。
+`Session.persistCompletedToolResult` 在同一事务提交 Tool outcome、行内产物 display、
+去重 Source 与事件 outbox，完整提交后处理器才退休本地调用。事件消费者可读取完整结果。
+
+工具伴随的 Source/interactive-artifact Part 记录 `toolPartID`，应用与 SQLite 同时验证
+它引用同 Message 的真实 Tool request 和 completed outcome。只有该复合 writer 可晚到结算
+已接受调用的伴随结果，包括已完成助手或 Task activation 已释放的恢复；普通新 Part、
+独立 Provider Source 和历史内容仍遵循原不可变/activation 合同。fork 将绑定重映射到新 Tool。
+
+成功 Permission receipt 通过精确 Project/Session/Message/call/Tool 身份与唯一 attempt 的
+`execution_succeeded` 配对读取；缺失配对或多成功结果给明确完整性错误。处理器错误收敛与
+共享 Session 中断恢复先用原 receipt 物化输出、附件、display 和 Source，经同一复合 writer
+提交；恢复不再次执行工具，也不伪造助手成功。Full access continuation 已退休仍可恢复。
+当前触发器属于严格 schema 准入，旧定义返回 `SCHEMA_RESET_REQUIRED`；无自动迁移或重置。
 
 ## 运行时目录根
 

@@ -1,0 +1,38 @@
+{
+  "occurrence": "source-result-commit-383-live-72f04b34-2094-4401-89cc-e0c26af79c65",
+  "outcome": "ready",
+  "host": {
+    "pid": 51976,
+    "processInstanceID": "win32:639274760149720599",
+    "occurrenceID": "bf849a2d-cda4-4a70-94c9-62f5beda868f"
+  },
+  "parent": {
+    "pid": 82116,
+    "processInstanceID": "win32:639274760067039253",
+    "occurrenceID": "44808574-8f15-46b3-9c04-236e9f500d76"
+  },
+  "target": {
+    "pid": 81592,
+    "processInstanceID": "win32:639274760205571518",
+    "occurrenceID": "e6ae08a9-2255-4cca-8862-15fc282c67a7"
+  },
+  "targetBirthAtMs": 1791879220557,
+  "deadlineAt": 1791879814909,
+  "observedAtUtc": "2026-10-13T08:13:40.774Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/source-result-commit-383-bundle/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-results-383.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\runtime",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\project",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\evidence",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\startup.json",
+    "18392",
+    "source-result-commit-383-live-72f04b34-2094-4401-89cc-e0c26af79c65",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-result-commit-383-live\\task-selection.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-result-commit-383\\builtin.json",
+    "20",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

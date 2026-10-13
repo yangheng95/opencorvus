@@ -28,6 +28,8 @@ import { ProtocolStore } from "@/protocol/store"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { AgentTrace } from "@/trace"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
+import { completedReadResult } from "../fixture/completed-read-result"
+import { HostProcessingFaultError } from "@/llm/host-fault"
 
 // These producer-boundary spies intentionally expose only stream. The unknown
 // intermediate marks that partial fixture boundary, not a complete SDK result.
@@ -35,6 +37,36 @@ afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
+
+for (const boundary of ["tool-error", "consumer-error"] as const) {
+  test(`${boundary} preserves the actual successful permission result`, async () => {
+    await processorFixture(async ({ directory, sessionID, processor, process }) => {
+      const filePath = path.join(path.dirname(directory), `${Identifier.ascending("part")}.txt`)
+      await fs.writeFile(filePath, "completed effect evidence\n")
+      try {
+        const value = await completedReadResult({
+          mode: "full_access", filePath, session: await Session.get(sessionID), message: processor.message,
+        })
+        using stream = spyOn(LLM, "stream").mockImplementation(async () => ({
+          stream: (async function* () {
+            yield { type: "start" }
+            const error = new HostProcessingFaultError("Completed effect transport failed")
+            if (boundary === "tool-error") {
+              yield { type: "tool-error", toolCallId: value.callID, toolName: "read", input: value.args, error }
+            } else yield { type: "error", error }
+          })(),
+        }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+        await process({})
+        const parts = await MessageStore.parts(processor.message.id)
+        expect(parts.find((part) => part.id === value.part.id)).toMatchObject({
+          state: { status: "completed", output: value.result.output },
+        })
+        expect(parts.filter((part) => part.type === "source-file")).toMatchObject(value.result.sources!)
+        expect(value.executeCount()).toBe(1)
+      } finally { await fs.unlink(filePath) }
+    })
+  }, 30_000)
+}
 
 test("real idle retry scopes pending JSON observations to each actual attempt before external cancellation", async () => {
   await processorFixture(async ({ controller, processor, process, taskID, sessionID }) => {

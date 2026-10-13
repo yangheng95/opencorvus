@@ -4,6 +4,7 @@ import type { AnySchema, ErrorObject } from "ajv"
 import { Identifier } from "../id/id"
 import { Message } from "./message"
 import { normalizeToolResult } from "./tool-result-normalization"
+import { recoverCompletedToolResult } from "./tool-result-recovery"
 import { MessageStore } from "./message-store"
 import { settleAbandonedProviderActivity } from "./provider-activity-facts"
 import { NotFoundError } from "@/storage/db"
@@ -2780,6 +2781,7 @@ export namespace SessionLoop {
           })
           continue
         }
+        if (await recoverCompletedToolResult(part)) continue
         const recoveredPanelCreation = await requireControlPlaneToolLoaders().recoverPanelCreation({
           sessionID,
           messageID: candidate.info.id,

@@ -329,13 +329,15 @@ export namespace Message {
     .meta({ ref: "SourcePayload" })
   export type SourcePayload = z.infer<typeof SourcePayload>
 
-  export const SourceUrlPart = PartBase.extend(SourceUrlPayload.shape).meta({ ref: "SourceUrlPart" })
+  const ToolResultPartBinding = { toolPartID: PartBase.shape.id.optional() }
+
+  export const SourceUrlPart = PartBase.extend({ ...SourceUrlPayload.shape, ...ToolResultPartBinding }).meta({ ref: "SourceUrlPart" })
   export type SourceUrlPart = z.infer<typeof SourceUrlPart>
 
-  export const SourceDocumentPart = PartBase.extend(SourceDocumentPayload.shape).meta({ ref: "SourceDocumentPart" })
+  export const SourceDocumentPart = PartBase.extend({ ...SourceDocumentPayload.shape, ...ToolResultPartBinding }).meta({ ref: "SourceDocumentPart" })
   export type SourceDocumentPart = z.infer<typeof SourceDocumentPart>
 
-  export const SourceFilePart = PartBase.extend(SourceFilePayload.shape).meta({ ref: "SourceFilePart" })
+  export const SourceFilePart = PartBase.extend({ ...SourceFilePayload.shape, ...ToolResultPartBinding }).meta({ ref: "SourceFilePart" })
   export type SourceFilePart = z.infer<typeof SourceFilePart>
 
   export const SourcePart = z
@@ -400,6 +402,7 @@ export namespace Message {
   export const InteractiveArtifactPart = PartBase.extend({
     type: z.literal(VISIBLE_PART_TYPE.interactiveArtifact),
     artifactID: z.string().trim().min(1),
+    ...ToolResultPartBinding,
   })
     .strict()
     .meta({

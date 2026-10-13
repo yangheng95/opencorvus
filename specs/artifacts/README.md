@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [383 工具结果与来源恢复](2026-10-05-connection-workspace-authority/source-result-commit-383/README.md)：48项后台合同、真实来源/文档和固定时限失败完整证据。
+
 - [持续目标独立复核](2026-10-13-continuous-goal-review/README.md)：归档/删除缺陷与受控流式跨进程恢复。
 
 - [385 能力搜索请求元数据](2026-10-13-capability-request-metadata-385/README.md)：后台正向合同与真实模型未达成事实分开保存。

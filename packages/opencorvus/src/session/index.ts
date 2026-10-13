@@ -50,7 +50,6 @@ import { SessionControl } from "./control"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
-import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
 import {
   TaskPromptProfileImmutableError,
   requireTaskPackageRevisionBinding,
@@ -78,6 +77,7 @@ import {
 import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { normalizeToolResult } from "./tool-result-normalization"
+import { completedToolExecutionResult } from "./tool-outcome-facts"
 import { assertSessionDeletionAdmissionInTransaction } from "./deletion-cleanup"
 import { sideChatIdentity, SideChatSourceError } from "@/chat/side-chat-identity"
 import { EffectiveConfig } from "@/config/effective"
@@ -455,13 +455,20 @@ export namespace Session {
               }
             : {}),
         } as Message.Info
+        const partIDs = new Map(msg.parts.map((part) => [part.id, Identifier.ascending("part")]))
         const clonedParts = msg.parts.map((part) => {
           const { orderKey: _clonedPartOrderKey, ...partInfo } = part
+          const originalToolPartID = "toolPartID" in part ? part.toolPartID : undefined
+          const toolPartID = originalToolPartID === undefined ? undefined : partIDs.get(originalToolPartID)
+          if (originalToolPartID !== undefined && toolPartID === undefined) {
+            throw new HostProcessingFaultError(`Part ${part.id} references a Tool outside its Message`)
+          }
           return {
             ...partInfo,
-            id: Identifier.ascending("part"),
+            id: partIDs.get(part.id)!,
             messageID: clonedInfo.id,
             sessionID: prepared.id,
+            ...(toolPartID ? { toolPartID } : {}),
           } as Message.Part
         })
         clones.push({ info: clonedInfo, parts: clonedParts })
@@ -2115,7 +2122,7 @@ export namespace Session {
 
   function updatePartRow(
     part: Message.Part,
-    options: { publish: boolean; completedCompactionCheckpoint?: boolean },
+    options: { publish: boolean; completedCompactionCheckpoint?: boolean; settledToolPartID?: string },
     transaction?: Database.TxOrDb,
   ): { outputPart: Message.Part; wrotePart: boolean } {
     assertPartHasNoInlineBase64(part)
@@ -2144,6 +2151,21 @@ export namespace Session {
         .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
         .get()
       if (!message) throw new NotFoundError({ message: `Message not found: ${messageID}` })
+      let acceptedToolResult = false
+      const boundToolPartID = "toolPartID" in part ? part.toolPartID : undefined
+      if (boundToolPartID !== undefined || options.settledToolPartID !== undefined) {
+        const request = db.select({ messageID: ToolPartRequestTable.message_id }).from(ToolPartRequestTable)
+          .where(eq(ToolPartRequestTable.id, boundToolPartID ?? "")).get()
+        const outcome = db.select({ data: ToolPartOutcomeTable.data }).from(ToolPartOutcomeTable)
+          .where(eq(ToolPartOutcomeTable.request_part_id, boundToolPartID ?? "")).get()
+        const validBinding = request?.messageID === messageID && outcome?.data.outcome === "completed" &&
+          (part.type === "source-url" || part.type === "source-document" || part.type === "source-file" ||
+            part.type === "interactive-artifact")
+        if (!validBinding || (options.settledToolPartID !== undefined && boundToolPartID !== options.settledToolPartID)) {
+          throw new HostProcessingFaultError(`Part ${id} has no matching completed Tool result`)
+        }
+        acceptedToolResult = options.settledToolPartID !== undefined
+      }
       const time = Math.max(requestedTime, message.timeCreated)
       messageOrderKey = timelineMessageOrderKey({
         info: {
@@ -2208,21 +2230,7 @@ export namespace Session {
         }
         let outcome = toolOutcomeData(part)
         if (outcome?.outcome === "completed" && part.state.status === "completed") {
-          const permissionRequest = db.select({ requestID: PermissionLedgerTable.request_id })
-            .from(PermissionLedgerTable)
-            .where(and(
-              eq(PermissionLedgerTable.event_type, "requested"),
-              eq(PermissionLedgerTable.session_id, sessionID),
-              eq(PermissionLedgerTable.message_id, messageID),
-              eq(PermissionLedgerTable.tool_call_id, part.callID),
-            )).get()
-          const resultAttemptID = permissionRequest
-            ? Identifier.deterministic("permission", `attempt\0${permissionRequest.requestID}`)
-            : undefined
-          const resultReceipt = resultAttemptID
-            ? db.select().from(PermissionExecutionResultTable)
-              .where(eq(PermissionExecutionResultTable.attempt_id, resultAttemptID)).get()
-            : undefined
+          const resultReceipt = completedToolExecutionResult(db, part)
           if (resultReceipt) {
             // The receipt is the sole authority for a permission-bearing Tool
             // output: the outcome fact below stores no `output`, and reads
@@ -2232,11 +2240,9 @@ export namespace Session {
             // differ. Recording the divergence keeps it diagnosable; raising it
             // would destroy an external effect that already succeeded, for a
             // value this write discards anyway.
-            const stored = resultReceipt.result as { kind?: string; value?: unknown }
             const projected = (() => {
               try {
-                if (stored?.kind === "undefined") return ""
-                if (stored?.kind === "json") return normalizeToolResult(stored.value).output
+                return normalizeToolResult(resultReceipt.value).output
               } catch {
                 // A receipt this write cannot project is still the authority;
                 // reads surface the real projection failure at their own site.
@@ -2246,7 +2252,7 @@ export namespace Session {
             if (projected !== part.state.output) {
               log.warn("tool outcome diverges from its Permission result", {
                 partID: id,
-                attemptID: resultReceipt.attempt_id,
+                attemptID: resultReceipt.attemptID,
                 tool: part.tool,
                 projectedLength: projected?.length,
                 persistedLength: part.state.output.length,
@@ -2254,7 +2260,7 @@ export namespace Session {
             }
             outcome = {
               outcome: "completed",
-              resultAttemptID: resultReceipt.attempt_id,
+              resultAttemptID: resultReceipt.attemptID,
               title: outcome.title,
               metadata: outcome.metadata,
               time: outcome.time,
@@ -2306,7 +2312,9 @@ export namespace Session {
           options.completedCompactionCheckpoint === true &&
           part.type === "compaction" &&
           existingPart === undefined
-        if (!isCheckpointAppend) throw new HostProcessingFaultError(`Part ${id} is immutable after assistant completion`)
+        if (!isCheckpointAppend && !acceptedToolResult) {
+          throw new HostProcessingFaultError(`Part ${id} is immutable after assistant completion`)
+        }
       }
       if (existingPart) {
         const current = existingPart.data as { type?: string }
@@ -2314,10 +2322,12 @@ export namespace Session {
           throw new HostProcessingFaultError(`Non-streaming Part ${id} is immutable`)
         }
       }
-      assertTaskRootAssistantActivationFenceInTransaction(db, {
-        assistantMessageID: messageID,
-        now: time,
-      })
+      if (!acceptedToolResult) {
+        assertTaskRootAssistantActivationFenceInTransaction(db, {
+          assistantMessageID: messageID,
+          now: time,
+        })
+      }
       db.insert(PartTable)
         .values({
           id,
@@ -2348,6 +2358,80 @@ export namespace Session {
   ): { outputPart: Message.Part; wrotePart: boolean } {
     Database.requireActiveTransaction("Session.writePartInTransaction")
     return updatePartRow(part, options, db)
+  }
+
+  function writeMessageSourcesInTransaction(
+    db: Database.TxOrDb,
+    input: { sessionID: string; messageID: string; sources: readonly Message.SourcePayload[] },
+    settledToolPartID?: string,
+  ): Message.SourcePart[] {
+    const existing = new Set(MessageStore.sourcePartsInTransaction(db, input)
+      .map((part) => `${part.type}\0${part.sourceId}`))
+    const created: Message.SourcePart[] = []
+    for (const source of input.sources) {
+      const key = `${source.type}\0${source.sourceId}`
+      if (existing.has(key)) continue
+      const { outputPart } = updatePartRow({
+        ...source, id: Identifier.ascending("part"), sessionID: input.sessionID, messageID: input.messageID,
+        ...(settledToolPartID !== undefined ? { toolPartID: settledToolPartID } : {}),
+      }, { publish: true, settledToolPartID }, db)
+      created.push(outputPart as Message.SourcePart)
+      existing.add(key)
+    }
+    return created
+  }
+
+  /** Provider citations share the same source identity writer as Tool results. */
+  export async function persistMessageSources(input: {
+    sessionID: string; messageID: string; sources: readonly unknown[]
+  }): Promise<Message.SourcePart[]> {
+    const sources = input.sources.map((source) => Message.SourcePayload.parse(source))
+    return Database.immediateTransaction((db) => writeMessageSourcesInTransaction(db, { ...input, sources }))
+  }
+
+  /** Settle the complete result of one accepted Tool invocation in one commit. */
+  export async function persistCompletedToolResult(input: {
+    tool: Message.ToolPart
+    display?: readonly unknown[]
+    sources?: readonly unknown[]
+    expectedResultAttemptID?: string
+  }): Promise<{ tool: Message.ToolPart; parts: Message.Part[] }> {
+    const tool = Message.ToolPart.parse(input.tool)
+    if (tool.state.status !== "completed") throw new HostProcessingFaultError("Completed Tool result required")
+    const display = (input.display ?? []).map((candidate) => Message.InteractiveArtifactPart.parse(candidate))
+    const sources = (input.sources ?? []).map((source) => Message.SourcePayload.parse(source))
+    for (const part of display) {
+      if (part.sessionID !== tool.sessionID || part.messageID !== tool.messageID) {
+        throw new HostProcessingFaultError(`Tool result display Part ${part.id} belongs to a different Message or Session`)
+      }
+      if (part.toolPartID !== undefined && part.toolPartID !== tool.id) {
+        throw new HostProcessingFaultError(`Tool result display Part ${part.id} belongs to a different Tool invocation`)
+      }
+    }
+    return Database.immediateTransaction((db) => {
+      if (input.expectedResultAttemptID !== undefined) {
+        const receipt = completedToolExecutionResult(db, tool)
+        if (receipt?.attemptID !== input.expectedResultAttemptID) {
+          throw new HostProcessingFaultError(`Tool ${tool.id} recovered result identity changed before commit`)
+        }
+        const outcome = db.select({ data: ToolPartOutcomeTable.data }).from(ToolPartOutcomeTable)
+          .where(eq(ToolPartOutcomeTable.request_part_id, tool.id)).get()
+        if (outcome?.data.outcome === "completed" && outcome.data.resultAttemptID === receipt.attemptID) {
+          const request = db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, tool.id)).get()!
+          return { tool: projectToolPartInTransaction(db, request)!, parts: [] }
+        }
+      }
+      const completed = updatePartRow(tool, { publish: true }, db).outputPart as Message.ToolPart
+      const parts: Message.Part[] = []
+      for (const part of display) {
+        const written = updatePartRow({ ...part, toolPartID: tool.id }, { publish: true, settledToolPartID: tool.id }, db)
+        if (written.wrotePart) parts.push(written.outputPart)
+      }
+      parts.push(...writeMessageSourcesInTransaction(db, {
+        sessionID: tool.sessionID, messageID: tool.messageID, sources,
+      }, tool.id))
+      return { tool: completed, parts }
+    })
   }
 
   /** Atomically publish one Part update and its parent Message update while a
