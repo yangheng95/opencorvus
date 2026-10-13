@@ -2,6 +2,10 @@
 
 ## Recall
 
+当前远端诊断为[三平台selected run38443967530](https://github.com/yangheng95/opencorvus/actions/runs/38443967530)，workflow_dispatch，分支codex/dependabot-upgrades，实际head=f7b1625b0d378e14862b7e3c88e3af7d254cd436，test_files明确为上述七个文件。本轮实现提交0a9bfb448，已普通合入当时origin/main的04fcd0115为f7b1625b0；04fcd是已独立实页/构建验收的共享Dialog本地化补丁，不改变后端测试源码。fresh fetch/merge后审查完整推送集合：仅0a9bfb448和merge不属于已发布origin/main祖先；冻结安装与全部正式push hooks通过，已推送同名upstream。main本轮仍未由本任务修改，后续并行提交及未提交内容须重新核对。
+
+依赖审计边界：20261014-audit.log的Bun审计1735包零漏洞。推送的4条GitHub警报已通过真实alert API核对：#5/#6为现用Overlay Cargo.lock的glib0.18.5/rand0.7.3，#13/#14为2026-10-05历史Cargo.lock快照中的同两个依赖；不是4个新升级PR，也不能由Bun审计排除Rust问题。它们属于2026-10-05-dependency-remediation已记载的GTK/PHF父依赖及Linux原生验收未完成项。本轮没有忽略、关闭安全告警或篡改历史锁图，没有宣称全Rust依赖安全修复完成。自动跟进恢复后应先处理selected真实日志并解决POSIX文件问题，再为最终代码启动空test_files的独立完整三平台CI；未获完整成功不得合main。
+
 2026-10-14续查本地验收：5个重复PR32/28/25/24/20已逐个关闭，读回open PR列表为空。20261014-fix-check.log原runner七文件67测试全部通过（1+5+6+8+36+3+8），包含真实Task两次进程切断、Mission中断且兄弟Tool待审批、重复恢复、错误退休及多Project隔离；typecheck八任务、docs:check、architecture-index通过。原失败日志20261014-reproduce.log保留。Linux字面反斜杠/尾部换行文件名仍待远端复现，已在原File Git测试增加物理路径、实际字节与直接File.read正向检查来区分运行库、文件入口及HTTP阶段。本轮先提交并推送同一工作分支运行七文件三平台聚焦诊断；selected成功也不具备main合入资格，定位/修复该文件问题后最终版本必须另跑空test_files完整三平台CI。本轮尚未更动main。
 
 2026-10-14修改前根因核对：Windows原runner复现4文件/6断言失败，File Git 8测试通过但排除了POSIX字面反斜杠文件名。两份工具表未随continuous-goal公开架构及tool-pool-data的角色投影更新，修正独立预期，Task worker工具集保持当前合同。跨进程两例实际均已完成assistant和ToolPart、保存immediate_park、且副作用/成功receipt均恰好一次；失败是共享worker新增requestFacts/resultFacts/toolRequest诊断字段后旧精确整对象断言未同步。全仓搜索确认session/permission-message-process-recovery也消费这些字段，不能删worker字段；改为正向验证完成合同，并精确比较首次与再次恢复的全部事实不变。artifact-read用例手工插入requested与result，缺少execution_succeeded/outcome_slot，违反当前02-data和completedToolExecutionResult的成对事实契约；改用真实PermissionAuthority.authorizeAndExecute写入projected调用成功及结果，保留实际延迟读取/索引/来源归属验收，不能放松生产writer检查。
