@@ -1,0 +1,12 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+const root=path.resolve('.tmp-spreadsheet-artifact-identity-387');
+const preflight=JSON.parse(await fs.readFile(root+'/provider-before/evidence/preflight-ready.json','utf8')).preflight;
+assert.equal(preflight.credential,'usable');assert.equal(preflight.catalog,'projected');assert.equal(preflight.actualModel,'gpt-6.1-sol');assert.equal(preflight.streaming,true);
+const input={requestID:randomUUID(),model:'openai/gpt-6.1-sol',text:'请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为Item，B1为Quantity，A2为Notebook，B2为7，A3为Pen，B3为5，A4为Total，B4公式为=SUM(B2:B3)，计算值为12。请用真实产物发布工具完成，保留这些原始标题和数据，成功后简短说明即可。'};
+await fs.writeFile(root+'/chat-input.json',JSON.stringify(input,null,2)+'\n',{flag:'wx'});
+const response=await fetch('http://127.0.0.1:18504/global/chat/start',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(input),signal:AbortSignal.timeout(15000)});
+const data=await response.json();await fs.writeFile(root+'/chat-accepted.json',JSON.stringify({status:response.status,...data},null,2)+'\n',{flag:'wx'});
+assert.equal(response.status,202);console.log(JSON.stringify({status:response.status,sessionID:data.session.id,messageID:data.messageID,directory:data.session.directory}));

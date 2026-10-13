@@ -2363,6 +2363,12 @@ current source against the published payload. It does not write a durable draft
 or mutate the original publication. Copy/download continue to export the current
 mounted source; recreating the renderer restores the published content.
 
+Spreadsheet passes its canonical payload identity to the shared Frame while its
+custom export accessor continues to read the currently mounted workbook. Product
+language changes update that same Univer instance through its public locale
+service and the already registered language packages; they do not recreate the
+workbook or replace edited cells with the published payload.
+
 Shared artifact action controls preserve native focus while an operation owns
 their busy state. Native disabled is reserved for genuinely unavailable actions;
 ARIA disabled/busy and the existing operation owner describe transient work.

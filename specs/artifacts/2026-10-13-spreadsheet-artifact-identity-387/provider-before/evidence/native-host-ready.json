@@ -1,0 +1,38 @@
+{
+  "occurrence": "spreadsheet-artifact-identity-387-before-ef3f84eb-0287-4c2b-9805-1964e35a763f",
+  "outcome": "ready",
+  "host": {
+    "pid": 43836,
+    "processInstanceID": "win32:639274800926959894",
+    "occurrenceID": "1d15ad7e-8ddd-4b57-b943-2fe04d25cb00"
+  },
+  "parent": {
+    "pid": 77996,
+    "processInstanceID": "win32:639274800787786694",
+    "occurrenceID": "e4898544-1e32-4409-82df-4d839767d3c1"
+  },
+  "target": {
+    "pid": 10692,
+    "processInstanceID": "win32:639274800939409734",
+    "occurrenceID": "226a8a39-38d8-4c77-929b-135fbe42eb75"
+  },
+  "targetBirthAtMs": 1791883293940,
+  "deadlineAt": 1791883892660,
+  "observedAtUtc": "2026-10-13T09:21:33.969Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-13/locale-bootstrap-377-bundle/after/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\runtime",
+    "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\project",
+    "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\evidence",
+    "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\startup.json",
+    "18504",
+    "spreadsheet-artifact-identity-387-before-ef3f84eb-0287-4c2b-9805-1964e35a763f",
+    "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\task-selection.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\builtin.json",
+    "12",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

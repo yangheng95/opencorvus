@@ -1,0 +1,15 @@
+{
+  "pid": 10692,
+  "occurrence": "spreadsheet-artifact-identity-387-before-ef3f84eb-0287-4c2b-9805-1964e35a763f",
+  "owner": {
+    "pid": 10692,
+    "processInstanceID": "win32:639274800939409734",
+    "occurrenceID": "f2f304a8-1771-4e8d-b8cf-dd6cbd7414dd"
+  },
+  "parent": {
+    "pid": 79188,
+    "processInstanceID": "win32:639274800938949979",
+    "occurrenceID": "dcf825fb-b7d8-4efb-9286-bf1eeadae478"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

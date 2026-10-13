@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [387 电子表格身份与运行时语言](2026-10-13-spreadsheet-artifact-identity-387.md)：原工作簿语言更新和真实编辑导出。
+
+- [389 电子表格全屏弹层](2026-10-13-spreadsheet-fullscreen-popups-389.md)：原生全屏之外的菜单宿主与后续分析。
+
 - [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
 
 - [384 权限续行消息恢复调查](2026-10-13-permission-message-recovery-384.md)：过早收尾、跨进程所有权与尚未修复范围。

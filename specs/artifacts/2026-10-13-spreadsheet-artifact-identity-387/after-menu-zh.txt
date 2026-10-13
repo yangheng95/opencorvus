@@ -1,0 +1,80 @@
+Browser tab: 23, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 327-384, 405-407
++									405 container
++										406 text chat
++										407 text 33 秒
++										408 button (collapsed) Secondary Actions: Expand, Description: publish_interactive_artifact · AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
++											409 text publish_interactive_artifact
++											410 text AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
++											411 text 1 个失败
++										412 container
++											413 button (collapsed) Description: publish_interactive_artifact · Desk budget, Secondary Actions: Expand
++												414 text publish_interactive_artifact
++												415 text Desk budget
++												416 image
++											417 container Desk budget
++												418 container
++													419 text 电子表格
++													420 heading Desk budget, Value: 3
++														421 text Desk budget
++													422 button 复制文本
++													423 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-275-trigger, Secondary Actions: Expand
++													424 button 在作品视图中打开 Desk budget
++												425 container Desk budget
++													426 container
++														427 container
++															428 container
++																429 container
++																	430 text field (settable) B3
++																	431 link (collapsed) Secondary Actions: Expand
++																		432 image
++																433 image univer-doc-main-canvas
++																434 image
++																435 button
++																	436 image
++															437 container
++																438 image univer-doc-main-canvas
++																439 image univer-sheet-main-canvas_interactive-artifact-Desk budget
++															440 container Sidebar panel
++																441 container
++																	442 button Close sidebar
++																		443 image
++														444 container
++															445 button
++																446 image
++															447 button
++																448 image
++															449 tab group Sheet tabs
++																450 tab (selected, settable, boolean) 清单, Value: 1
++															451 button
++																452 image
++															453 button
++																454 image
++															455 container
++																456 button
++															457 button
++																458 image
++															459 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
++													460 container Notifications alt+T
++													461 container Notifications alt+T
++										462 container
++											463 text 已发布可编辑的  Desk budget ：仅含“清单”工作表，20行6列，首行冻结；原始数据及 B4 公式均已保留，计算值为12。可直接在表格中编辑。
++										464 button 复制消息
++										465 button (collapsed) Description: 添加局部指令, Secondary Actions: Expand
++										466 pop up button (collapsed) Description: 查看本轮模型用量：94K Token, Secondary Actions: Expand
++										467 text 10月13日 17:22
++		468 container
++			469 button (disabled) 删除
++			470 button 复制
++			471 button 重命名
++			472 button 更改颜色
++				473 text 更改颜色
++				474 image
++			475 button (disabled) 隐藏
++			476 button (disabled) 取消隐藏
++			477 button 保护工作表
++			478 button (disabled) 取消保护工作表
++			479 button (disabled) 更改工作表权限
++			480 button 查看所有保护范围
+The focused UI element is 450 tab (selected, settable, boolean) 清单, Value: 1

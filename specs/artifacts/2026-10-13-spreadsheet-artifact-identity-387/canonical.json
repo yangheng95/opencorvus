@@ -1,0 +1,409 @@
+{
+  "sessionID": "ses_h0VKkCl7hbz3BKHVW2Xp",
+  "artifacts": [
+    {
+      "id": "art_g0VXv65e1004ErsrwSJs",
+      "message_id": "msg_g0VXv62TS00z0f1aikG8",
+      "payload": {
+        "schemaVersion": "1",
+        "title": "Desk budget",
+        "renderer": "spreadsheet@1",
+        "editable": true,
+        "sheets": [
+          {
+            "id": "list",
+            "name": "清单",
+            "rowCount": 20,
+            "columnCount": 6,
+            "frozenRows": 1,
+            "frozenColumns": 0,
+            "cells": [
+              {
+                "address": "A1",
+                "value": "Item"
+              },
+              {
+                "address": "B1",
+                "value": "Quantity"
+              },
+              {
+                "address": "A2",
+                "value": "Notebook"
+              },
+              {
+                "address": "B2",
+                "value": 7
+              },
+              {
+                "address": "A3",
+                "value": "Pen"
+              },
+              {
+                "address": "B3",
+                "value": 5
+              },
+              {
+                "address": "A4",
+                "value": "Total"
+              },
+              {
+                "address": "B4",
+                "formula": "=SUM(B2:B3)",
+                "computed": 12
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hhqq6G0agG7CRtUAFBgQ",
+      "data": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791883365449
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "api.chat",
+            "requestID": "7c03333e-8c70-47be-9d76-9dc25a3f679c",
+            "requestFingerprint": "f22e2db478fd5308b95d5ca2ea2d80d652643ab51e49f397c9e2362b6472be78"
+          },
+          "surface": "right-sidebar",
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "api.chat",
+            "literalText": "请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为Item，B1为Quantity，A2为Notebook，B2为7，A3为Pen，B3为5，A4为Total，B4公式为=SUM(B2:B3)，计算值为12。请用真实产物发布工具完成，保留这些原始标题和数据，成功后简短说明即可。"
+          },
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001791883365449:0000000000000030:0000000000000000:message:msg_hhqq6G0agG7CRtUAFBgQ"
+      }
+    },
+    {
+      "id": "msg_g0VXv5zTL00YcYzw4LYK",
+      "data": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791883365655,
+          "completed": 1791883377163
+        },
+        "parentID": "msg_hhqq6G0agG7CRtUAFBgQ",
+        "acceptedInputMessageIDs": [
+          "msg_hhqq6G0agG7CRtUAFBgQ"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\runtime\\data\\projects\\2026\\10\\13\\0c7958ba-6e5f-4348-ab42-a47ffcc846f4",
+          "root": "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\runtime\\data\\projects\\2026\\10\\13\\0c7958ba-6e5f-4348-ab42-a47ffcc846f4"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 30767,
+          "input": 30603,
+          "output": 164,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791883365655:0000000000000030:0000000000000000:message:msg_g0VXv5zTL00YcYzw4LYK"
+      }
+    },
+    {
+      "id": "msg_g0VXv62TS00z0f1aikG8",
+      "data": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791883377194,
+          "completed": 1791883389497
+        },
+        "parentID": "msg_hhqq6G0agG7CRtUAFBgQ",
+        "acceptedInputMessageIDs": [
+          "msg_hhqq6G0agG7CRtUAFBgQ"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\runtime\\data\\projects\\2026\\10\\13\\0c7958ba-6e5f-4348-ab42-a47ffcc846f4",
+          "root": "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\runtime\\data\\projects\\2026\\10\\13\\0c7958ba-6e5f-4348-ab42-a47ffcc846f4"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 31369,
+          "input": 730,
+          "output": 162,
+          "reasoning": 13,
+          "cache": {
+            "read": 30464,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791883377194:0000000000000030:0000000000000000:message:msg_g0VXv62TS00z0f1aikG8"
+      }
+    },
+    {
+      "id": "msg_g0VXv65hB005eHIcem2j",
+      "data": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791883389578,
+          "completed": 1791883398978
+        },
+        "parentID": "msg_hhqq6G0agG7CRtUAFBgQ",
+        "acceptedInputMessageIDs": [
+          "msg_hhqq6G0agG7CRtUAFBgQ"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\runtime\\data\\projects\\2026\\10\\13\\0c7958ba-6e5f-4348-ab42-a47ffcc846f4",
+          "root": "D:\\myhexin-local\\opencorvus\\.tmp-spreadsheet-artifact-identity-387\\provider-before\\runtime\\data\\projects\\2026\\10\\13\\0c7958ba-6e5f-4348-ab42-a47ffcc846f4"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 31726,
+          "input": 9140,
+          "output": 58,
+          "reasoning": 0,
+          "cache": {
+            "read": 22528,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791883389578:0000000000000030:0000000000000000:message:msg_g0VXv65hB005eHIcem2j"
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXv61ad00WRv42BTII",
+      "message_id": "msg_g0VXv5zTL00YcYzw4LYK",
+      "request": {
+        "type": "tool-request",
+        "callID": "call_6f0505d3ae25404da004e3e4e6559d41",
+        "tool": "publish_interactive_artifact",
+        "input": {
+          "artifact": {
+            "schemaVersion": "1",
+            "title": "Desk budget",
+            "content": {
+              "renderer": "spreadsheet@1",
+              "editable": true,
+              "sheets": [
+                {
+                  "id": "list",
+                  "name": "清单",
+                  "rowCount": 20,
+                  "columnCount": 6,
+                  "frozenRows": 1,
+                  "cells": [
+                    {
+                      "address": "A1",
+                      "value": "Item"
+                    },
+                    {
+                      "address": "B1",
+                      "value": "Quantity"
+                    },
+                    {
+                      "address": "A2",
+                      "value": "Notebook"
+                    },
+                    {
+                      "address": "B2",
+                      "value": 7
+                    },
+                    {
+                      "address": "A3",
+                      "value": "Pen"
+                    },
+                    {
+                      "address": "B3",
+                      "value": 5
+                    },
+                    {
+                      "address": "A4",
+                      "value": "Total"
+                    },
+                    {
+                      "address": "B4",
+                      "value": null,
+                      "formula": "=SUM(B2:B3)",
+                      "computed": 12
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_03c7811a5c05b3fb016acdf86db6c88191b1639d5646af477a"
+          }
+        },
+        "time": {
+          "start": 1791883373795
+        }
+      },
+      "outcome": {
+        "outcome": "failed",
+        "failure": {
+          "kind": "tool-input-invalid",
+          "name": "tool-input-invalid",
+          "message": "AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {\"artifact\":{\"schemaVersion\":\"1\",\"title\":\"Desk budget\",\"content\":{\"renderer\":\"spreadsheet@1\",\"editable\":true,\"sheets\":[{\"id\":\"list\",\"name\":\"清单\",\"rowCount\":20,\"columnCount\":6,\"frozenRows\":1,\"cells\":[{\"address\":\"A1\",\"value\":\"Item\"},{\"address\":\"B1\",\"value\":\"Quantity\"},{\"address\":\"A2\",\"value\":\"Notebook\"},{\"address\":\"B2\",\"value\":7},{\"address\":\"A3\",\"value\":\"Pen\"},{\"address\":\"B3\",\"value\":5},{\"address\":\"A4\",\"value\":\"Total\"},{\"address\":\"B4\",\"value\":null,\"formula\":\"=SUM(B2:B3)\",\"computed\":12}]}]}}}.\nError message: [\n  {\n    \"code\": \"custom\",\n    \"path\": [\n      \"artifact\",\n      \"content\",\n      \"sheets\",\n      0,\n      \"cells\",\n      7,\n      \"value\"\n    ],\n    \"message\": \"spreadsheet cell must contain exactly one value or formula\"\n  },\n  {\n    \"code\": \"custom\",\n    \"message\": \"spreadsheet cell must contain exactly one value or formula\",\n    \"path\": [\n      \"artifact\",\n      \"content\",\n      \"sheets\",\n      0,\n      \"cells\",\n      7,\n      \"value\"\n    ]\n  }\n]",
+          "originSite": "session.processor.tool-error",
+          "classification": "tool-input-invalid",
+          "data": {
+            "toolCallId": "call_6f0505d3ae25404da004e3e4e6559d41",
+            "toolName": "publish_interactive_artifact"
+          }
+        },
+        "time": {
+          "end": 1791883376717
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXv64lW00iROM3EOmg",
+      "message_id": "msg_g0VXv62TS00z0f1aikG8",
+      "request": {
+        "type": "tool-request",
+        "callID": "call_7c5a81e188f04ddca451ee3602aa85dd",
+        "tool": "publish_interactive_artifact",
+        "input": {
+          "artifact": {
+            "schemaVersion": "1",
+            "title": "Desk budget",
+            "content": {
+              "renderer": "spreadsheet@1",
+              "editable": true,
+              "sheets": [
+                {
+                  "id": "list",
+                  "name": "清单",
+                  "rowCount": 20,
+                  "columnCount": 6,
+                  "frozenRows": 1,
+                  "frozenColumns": 0,
+                  "cells": [
+                    {
+                      "address": "A1",
+                      "value": "Item"
+                    },
+                    {
+                      "address": "B1",
+                      "value": "Quantity"
+                    },
+                    {
+                      "address": "A2",
+                      "value": "Notebook"
+                    },
+                    {
+                      "address": "B2",
+                      "value": 7
+                    },
+                    {
+                      "address": "A3",
+                      "value": "Pen"
+                    },
+                    {
+                      "address": "B3",
+                      "value": 5
+                    },
+                    {
+                      "address": "A4",
+                      "value": "Total"
+                    },
+                    {
+                      "address": "B4",
+                      "formula": "=SUM(B2:B3)",
+                      "computed": 12
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "fc_0768291d97d2c565016acdf879f6988191b536a9c0b74f69e4"
+          }
+        },
+        "time": {
+          "start": 1791883386002
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hE2AGg3OGgBS569zOpAT",
+        "title": "Desk budget",
+        "metadata": {
+          "artifactID": "art_g0VXv65e1004ErsrwSJs",
+          "renderer": "spreadsheet@1",
+          "truncated": false
+        },
+        "time": {
+          "end": 1791883389390
+        }
+      }
+    }
+  ]
+}

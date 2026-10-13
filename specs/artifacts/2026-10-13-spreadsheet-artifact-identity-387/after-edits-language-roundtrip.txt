@@ -1,0 +1,49 @@
+Browser tab: 23, Title: "OpenCorvus", URL: "http://localhost:18505/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18505/ui/
+	1 container Desk budget
+		2 container
+			3 text 电子表格
+			4 heading Desk budget, Value: 3
+				5 text Desk budget
+			6 button 复制文本
+			7 pop up button (collapsed) Description: 下载, ID: dropdownmenu-cl-275-trigger, Secondary Actions: Expand
+			8 button 关闭 Desk budget 作品视图
+		9 container Desk budget
+			10 container
+				11 container
+					12 container
+						13 container
+							14 text field (settable) B3
+							15 link (collapsed) Secondary Actions: Expand
+								16 image
+						17 image univer-doc-main-canvas
+						18 image
+						19 button
+							20 image
+					21 container
+						22 image univer-doc-main-canvas
+						23 image univer-sheet-main-canvas_interactive-artifact-Desk budget
+					24 container Sidebar panel
+						25 container
+							26 button Close sidebar
+								27 image
+				28 container
+					29 button
+						30 image
+					31 button
+						32 image
+					33 tab group Sheet tabs
+						34 tab (selected, settable, boolean) 清单, Value: 1
+					35 button
+						36 image
+					37 button
+						38 image
+					39 container
+						40 button
+					41 button
+						42 image
+					43 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
+			44 container Notifications alt+T
+			45 container Notifications alt+T
+
+The focused UI element is 8 button 关闭 Desk budget 作品视图
