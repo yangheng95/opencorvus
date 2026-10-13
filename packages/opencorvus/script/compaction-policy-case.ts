@@ -21,6 +21,16 @@ export namespace CompactionPolicyCase {
     })
     .strict()
   export type Action = z.infer<typeof Action>
+  export const Resume = z
+    .object({
+      sessionID: z.string().min(1),
+      anchorID: z.string().min(1),
+      updateID: z.string().min(1),
+      sourceID: z.string().min(1),
+      round: z.number().int().min(1).max(10),
+    })
+    .strict()
+  export type Resume = z.infer<typeof Resume>
 
   export function definition(name: Name, nonce: string) {
     const kind = name === "policy-revoke" ? "draft" : "release"
@@ -144,6 +154,7 @@ export namespace CompactionPolicyCase {
     name: Name
     nonce: string
     rounds: number
+    resume?: Resume
     project: string
     model: Provider.Model
     inactive: <T>(run: (signal: AbortSignal) => Promise<T>) => Promise<T>
@@ -184,10 +195,32 @@ export namespace CompactionPolicyCase {
     const target = { providerID: input.model.providerID, modelID: input.model.id }
     const authored = await history({ target, project: input.project })
     const corpus = definition(input.name, input.nonce)
-    const session = await Session.create({ kind: "assistant", title: input.name })
-    const anchor = await authored.user(session.id, corpus.anchor)
-    await authored.assistant(session.id, anchor.id, "Initial delivery investigation. ".repeat(300))
-    const update = await authored.user(session.id, corpus.longUpdate)
+    const session = input.resume
+      ? await Session.get(input.resume.sessionID)
+      : await Session.create({ kind: "assistant", title: input.name })
+    assert.equal(path.resolve(session.directory), path.resolve(input.project), "Original benchmark project ownership")
+    const resumeUser = async (messageID: string, text: string) => {
+      const message = await MessageStore.get({ sessionID: session.id, messageID })
+      assert.equal(message.info.role, "user")
+      assert.equal(message.info.author, "user")
+      assert.deepEqual((message.info as Message.User).model, target)
+      assert.equal(
+        message.parts
+          .filter((part) => part.type === "text")
+          .map((part) => part.text)
+          .join("\n"),
+        text,
+      )
+      return message.info as Message.User
+    }
+    if (input.resume) assert.equal(input.rounds, input.resume.round, "Resume only the existing unfinished round")
+    const anchor = input.resume
+      ? await resumeUser(input.resume.anchorID, corpus.anchor)
+      : await authored.user(session.id, corpus.anchor)
+    if (!input.resume) await authored.assistant(session.id, anchor.id, "Initial delivery investigation. ".repeat(300))
+    const update = input.resume
+      ? await resumeUser(input.resume.updateID, corpus.longUpdate)
+      : await authored.user(session.id, corpus.longUpdate)
     const addDocument = async (sessionID: string, parentID: string) => {
       const info = await authored.assistant(sessionID, parentID, "Read the external memo as evidence.", false)
       await Session.updatePart({
@@ -208,14 +241,14 @@ export namespace CompactionPolicyCase {
       })
       await Session.updateMessage({ ...info, time: { ...info.time, completed: Date.now() } })
     }
-    await addDocument(session.id, update.id)
+    if (!input.resume) await addDocument(session.id, update.id)
 
-    for (let round = 1; round <= input.rounds; round++) {
+    for (let round = input.resume?.round ?? 1; round <= input.rounds; round++) {
       if (input.exhausted()) break
-      const source = await authored.user(
-        session.id,
-        `Continue the unfinished delivery. Routine observation round ${round}.`,
-      )
+      const sourceText = `Continue the unfinished delivery. Routine observation round ${round}.`
+      const source = input.resume
+        ? await resumeUser(input.resume.sourceID, sourceText)
+        : await authored.user(session.id, sourceText)
       const originalBefore = await Session.messages({ sessionID: session.id })
       const originalUserIDs = originalBefore
         .filter((message) => message.info.role === "user")

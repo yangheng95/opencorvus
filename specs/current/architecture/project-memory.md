@@ -36,12 +36,18 @@ Project memory has three explicitly scoped authorities:
    leaves the previous checkpoint authoritative; the recovered Session loop
    retries under the existing control lease. A committed, completed checkpoint
    can be reused while consuming the pending control. Automatic compaction then
-   continues the normal user turn. Interrupted assistants retain their persisted
+   continues the normal user turn. Every freshly consumed automatic control
+   publishes its exact durable summary to matching summary waiters, including
+   those attached to an ordinary reply owner. Matching uses Session, result
+   kind and control identity; publication does not terminate the reply owner.
+   Reused checkpoints and cross-process joins resolve that same durable result.
+   Interrupted assistants retain their persisted
    text and typed failure evidence. Live text deltas are transport events; the
    processor checkpoints accumulated Parts on its existing 200 ms cadence, so
    fragments not yet persisted can be lost on abrupt process exit. The physical
-   crash checker covers owned child-process exits and fresh Session reopening,
-   not operating-system power loss or every Task/Mission recovery layer.
+   crash checkers cover owned child-process exits, fresh Session reopening and
+   two concurrent Task projects recovering through formal backend bootstrap.
+   They do not establish operating-system power-loss or Mission recovery behavior.
 
    Ordinary model replay and the compaction transcript use the same attributed
    assistant diagnostics from canonical Message fields: Message/Session/parent

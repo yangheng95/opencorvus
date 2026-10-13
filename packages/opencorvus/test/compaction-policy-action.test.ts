@@ -4,6 +4,8 @@ import { CompactionPolicyCase } from "../script/compaction-policy-case"
 import { Instance } from "@/project/instance"
 import { Config } from "@/config/config"
 import { Provider } from "@/provider/provider"
+import { Database } from "@/storage/db"
+import { MessageStore } from "@/session/message-store"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -34,7 +36,11 @@ test("a real wrong-target action receipt is graded as failed without substitutin
   await exercise("policy-revoke", 1, true)
 }, 60_000)
 
-async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: boolean) {
+test("an interrupted policy round resumes its exact original source after reopening", async () => {
+  await exercise("policy-grant", 2, false, true)
+})
+
+async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: boolean, interrupted = false) {
   const corpus = CompactionPolicyCase.definition(name, `local-${name}`)
   const requests: any[] = []
   const entries: any[] = []
@@ -115,7 +121,8 @@ async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: 
             },
           },
         })
-        await CompactionPolicyCase.run({
+        let operations = 0
+        const common = {
           name,
           nonce: `local-${name}`,
           rounds,
@@ -124,18 +131,66 @@ async function exercise(name: CompactionPolicyCase.Name, rounds: number, wrong: 
           requestCount: () => requests.length,
           exhausted: () => false,
           redact: (value) => value,
-          inactive: (run) => run(new AbortController().signal),
-          async record(entry) {
+          inactive: <T>(run: (signal: AbortSignal) => Promise<T>) => {
+            operations++
+            return run(
+              interrupted && operations === 4
+                ? AbortSignal.abort(new Error("LOCAL_POLICY_COMPACTION_INTERRUPTION"))
+                : new AbortController().signal,
+            )
+          },
+          async record(entry: Record<string, unknown>) {
             if (!entries.includes(entry)) entries.push(entry)
           },
-        })
+        }
+        await CompactionPolicyCase.run(common)
+        const resumed: any[] = []
+        if (interrupted) {
+          expect(entries.map((entry) => entry.status)).toEqual(["passed", "error"])
+          const cut = entries.at(-1)!
+          const source = await MessageStore.get({ sessionID: cut.sessionID, messageID: cut.sourceID })
+          Database.close()
+          await CompactionPolicyCase.run({
+            ...common,
+            resume: CompactionPolicyCase.Resume.parse({
+              sessionID: cut.sessionID,
+              anchorID: cut.anchorID,
+              updateID: cut.updateID,
+              sourceID: cut.sourceID,
+              round: cut.round,
+            }),
+            inactive: (run) => run(new AbortController().signal),
+            async record(entry) {
+              if (!resumed.includes(entry)) resumed.push(entry)
+            },
+          })
+          expect(resumed).toHaveLength(1)
+          expect(resumed[0]).toMatchObject({
+            sessionID: cut.sessionID,
+            sourceID: cut.sourceID,
+            anchorID: cut.anchorID,
+            updateID: cut.updateID,
+            round: 2,
+            status: "passed",
+          })
+          expect(await MessageStore.get({ sessionID: cut.sessionID, messageID: cut.sourceID })).toEqual(source)
+        }
         console.log(
-          JSON.stringify({ scenario: "policy-action-mechanics", name, wrong, requests: requests.length, entries }),
+          JSON.stringify({
+            scenario: "policy-action-mechanics",
+            name,
+            wrong,
+            interrupted,
+            requests: requests.length,
+            entries,
+            resumed,
+          }),
         )
         expect(entries).toHaveLength(rounds)
-        expect(entries.map((entry) => entry.status)).toEqual(Array(rounds).fill(wrong ? "failed" : "passed"))
+        const graded = interrupted ? [entries[0], resumed[0]] : entries
+        expect(graded.map((entry) => entry.status)).toEqual(Array(rounds).fill(wrong ? "failed" : "passed"))
         expect(requests).toHaveLength(rounds * 3)
-        for (const entry of entries) {
+        for (const entry of graded) {
           expect(entry.checkpoint).toMatchObject({ status: "valid_checkpoint", processExitCode: 0 })
           expect(entry.reopen).toBe("exact projection identities")
           expect(entry.lanes.map((lane: any) => lane.lane)).toEqual(["full", "compacted"])

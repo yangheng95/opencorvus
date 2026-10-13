@@ -84,7 +84,7 @@
 
 - [Venice 用量与共享后台停机](2026-10-13-venice-stream-usage.md)：协议、取消根因与横向验收。
 
-- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：159 次真实请求、开放消息压缩边界修复、53 项检查与真实 Task 流式链路。
+- [上下文压缩压力测试](2026-10-13-compaction-stress.md)：251 次真实请求、五轮双历史 20 次动作全通过、两项目 Task 中断恢复及摘要通知修复。
 
 - [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
 

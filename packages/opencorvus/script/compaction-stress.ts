@@ -1,6 +1,7 @@
 /** Real streamed compaction/continuation integration benchmark. See the October 13 spec.
  * COMPACTION_STRESS_ALLOW_REAL_PROVIDER=1, AUTH_SOURCE, MODEL, RESULT, MAX_REQUESTS
  * (all prefixed COMPACTION_STRESS_) are required. CASES and ROUNDS are optional.
+ * RESUME_REPORT reopens the exact unfinished policy round in a retained isolated runtime.
  * Auth and model catalog are copied together into an isolated disposable runtime.
  */
 import assert from "node:assert/strict"
@@ -25,6 +26,7 @@ const exactModel = env("MODEL")
 const resultPath = env("RESULT")
 const maxRequests = Number(env("MAX_REQUESTS"))
 const rounds = Number(env("ROUNDS") ?? "1")
+const hostTemporaryRoot = os.tmpdir()
 const caseNames = [
   "text-start",
   "text-middle",
@@ -38,11 +40,71 @@ const caseNames = [
 assert(authSource && exactModel && resultPath, "AUTH_SOURCE, MODEL and RESULT are required")
 assert(Number.isSafeInteger(maxRequests) && maxRequests > 0 && maxRequests <= 100)
 assert(Number.isSafeInteger(rounds) && rounds > 0 && rounds <= 10)
+assert.equal(
+  await fs.stat(resultPath).then(
+    () => true,
+    () => false,
+  ),
+  false,
+  "Use a new result path",
+)
+const resume = await (async () => {
+  const reportPath = env("RESUME_REPORT")
+  if (!reportPath) return
+  const previous = JSON.parse(await fs.readFile(reportPath, "utf8"))
+  assert.equal(previous.model, exactModel, "Resume the same exact model")
+  assert.equal(previous.status, "failed", "Resume an unfinished run")
+  const last = previous.cases.at(-1)
+  assert(
+    last && last.status === "error" && last.lanes === undefined && last.checkpoint === undefined,
+    "Resume only a compaction interrupted before its paired probes",
+  )
+  assert(CompactionPolicyCase.names.includes(last.name), "Resume a policy-action case")
+  const descriptor = CompactionPolicyCase.Resume.parse({
+    sessionID: last.sessionID,
+    anchorID: last.anchorID,
+    updateID: last.updateID,
+    sourceID: last.sourceID,
+    round: last.round,
+  })
+  assert.equal(descriptor.round, rounds, "Retain the original last-round number")
+  const expected = CompactionPolicyCase.Action.parse(last.expected)
+  const nonce = expected.policy_revision.slice("POLICY-".length)
+  assert.deepEqual(
+    CompactionPolicyCase.definition(last.name, nonce).expected,
+    expected,
+    "Exact original corpus identity",
+  )
+  assert(path.isAbsolute(previous.runtime), "Resume an exact isolated runtime")
+  const root = await fs.realpath(previous.runtime)
+  const relative = path.relative(hostTemporaryRoot, root)
+  assert(
+    relative &&
+      !relative.startsWith("..") &&
+      !path.isAbsolute(relative) &&
+      path.basename(root).startsWith("opencorvus-compaction-stress-"),
+    "Resume only the original temporary benchmark scope",
+  )
+  for (const name of ["auth.json", "models.json"])
+    assert.equal(
+      await fs.stat(path.join(root, "runtime/data", name)).then(
+        () => true,
+        () => false,
+      ),
+      false,
+      "Previous credential/catalog copies must already be removed",
+    )
+  assert((await fs.stat(path.join(root, "runtime/data/opencorvus.db"))).isFile(), "Keep the original persisted history")
+  return { reportPath: path.resolve(reportPath), root, name: last.name as CompactionPolicyCase.Name, nonce, descriptor }
+})()
+const selectedCases = (env("CASES") ?? resume?.name ?? "text-start,text-middle,text-end,tool-evidence").split(",")
+if (resume) assert.deepEqual(selectedCases, [resume.name], "Resume only the original unfinished case")
+await fs.mkdir(path.dirname(path.resolve(resultPath)), { recursive: true })
 const supervisor = prepareTestProcessSupervisor()
 const isolated = await bootstrapIsolatedTestRuntime("runner")
 applyIsolatedTestUserEnvironment(isolated)
 if (supervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
-const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-compaction-stress-"))
+const root = resume?.root ?? (await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-compaction-stress-")))
 const runtimeRoot = path.join(root, "runtime")
 const project = path.join(root, "project")
 const redactor = new CredentialRedactor()
@@ -67,12 +129,14 @@ process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({
 })
 await fs.mkdir(project, { recursive: true })
 await fs.mkdir(path.join(runtimeRoot, "data"), { recursive: true })
-for (const args of [
-  ["init"],
-  ["config", "user.name", "Compaction Benchmark"],
-  ["config", "user.email", "benchmark@example.invalid"],
-  ["commit", "--allow-empty", "-m", "test: isolated compaction project"],
-])
+for (const args of resume
+  ? []
+  : [
+      ["init"],
+      ["config", "user.name", "Compaction Benchmark"],
+      ["config", "user.email", "benchmark@example.invalid"],
+      ["commit", "--allow-empty", "-m", "test: isolated compaction project"],
+    ])
   execFileSync("git", args, { cwd: project, stdio: "ignore" })
 const [providerID, ...modelParts] = exactModel.split("/")
 const modelID = modelParts.join("/")
@@ -112,7 +176,6 @@ const authority = await (async () => {
 })()
 let activity = Date.now()
 const nonceSeed = randomBytes(6).toString("hex")
-await fs.mkdir(path.dirname(path.resolve(resultPath)), { recursive: true })
 using audit = new RealProviderAudit(
   modelID,
   maxRequests,
@@ -125,7 +188,10 @@ using audit = new RealProviderAudit(
   authority,
   {
     redactor,
-    probes: caseNames.map((name) => ({ id: name, text: `REGION-${nonceSeed}-${name}` })),
+    probes: caseNames.map((name) => ({
+      id: name,
+      text: name === resume?.name ? `REGION-${resume.nonce}` : `REGION-${nonceSeed}-${name}`,
+    })),
   },
 )
 const [
@@ -165,6 +231,7 @@ const report = {
   model: exactModel,
   scope: "real-provider production-compactor integration; seeded history",
   rounds,
+  ...(resume ? { resumedFrom: resume.reportPath, resume: resume.descriptor } : {}),
   credential: "available",
   modelProjection: "pending",
   cases: reports,
@@ -190,7 +257,6 @@ async function inactive<T>(run: (signal: AbortSignal) => Promise<T>) {
     clearInterval(timer)
   }
 }
-const selectedCases = (env("CASES") ?? "text-start,text-middle,text-end,tool-evidence").split(",")
 try {
   await Instance.provide({
     directory: project,
@@ -201,12 +267,13 @@ try {
       for (const name of selectedCases) {
         assert(caseNames.includes(name), "Unknown case")
         if (audit.exhausted) break
-        const nonce = `${nonceSeed}-${name}`
+        const nonce = resume?.nonce ?? `${nonceSeed}-${name}`
         if (CompactionPolicyCase.names.includes(name as CompactionPolicyCase.Name)) {
           await CompactionPolicyCase.run({
             name: name as CompactionPolicyCase.Name,
             nonce,
             rounds,
+            resume: resume?.descriptor,
             project,
             model,
             inactive,
@@ -560,7 +627,7 @@ try {
     },
   })
   report.status =
-    reports.length === selectedCases.length * rounds && reports.every((r) => r.status === "passed")
+    reports.length === (resume ? 1 : selectedCases.length * rounds) && reports.every((r) => r.status === "passed")
       ? "passed"
       : "failed"
 } catch (error) {

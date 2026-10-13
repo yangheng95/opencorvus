@@ -43,7 +43,7 @@ export function readGoalCrashSnapshot(databasePath: string, owner: Owner) {
     const taskScopes = tasks.map((task) => ({ taskID: task.id, sessionIDs: scope([task.session_id]) }))
     const ids = scope(roots)
     const placeholders = ids.map(() => "?").join(",")
-    const decoded = (rows: Row[]) =>
+    const decoded = (rows: Row[]): Row[] =>
       rows.map((row) => ({
         ...row,
         ...(row.data ? { data: JSON.parse(row.data) } : {}),
@@ -216,7 +216,8 @@ export function crashCandidate(
         (ingress
           ? message.data.extra?.orchestrator_control_ingress?.ingress_id === ingress.id
           : message.id === inputID ||
-            (message.id === recoveredInput?.inputID &&
+            (recoveredInput !== undefined &&
+              message.id === recoveredInput.inputID &&
               isDeepStrictEqual(message.data.extra?.wake_reason, recoveredInput.reason))),
     )
     if (!physicalInput) continue
@@ -834,7 +835,7 @@ async function main() {
       assert.equal(task.executionLifecycle.epoch, cut!.ingress!.execution_epoch, "Public current Task epoch")
       result.publicOwnerOutcome = task
     }
-    const transcripts = []
+    const transcripts: { sessionID: string; messages: Row[] }[] = []
     for (const id of final.ids) {
       const transcript = (await json(second, `/session/${id}/message`)) as unknown as Row[]
       transcripts.push({

@@ -1,0 +1,443 @@
+{
+  "status": "passed",
+  "scope": "Two authored authority changes, five consecutive rounds, paired actual local file-writing Tool actions through one real model; final round resumed from exact earlier history.",
+  "model": "openai/gpt-6.1-sol",
+  "requests": [
+    {
+      "name": "policy-actions-real",
+      "requests": 80,
+      "streamedRequests": 80,
+      "settledReaders": 80
+    },
+    {
+      "name": "policy-actions-real-resume",
+      "requests": 12,
+      "streamedRequests": 12,
+      "settledReaders": 12
+    }
+  ],
+  "completedRounds": 10,
+  "passedActions": 20,
+  "passedFields": 100,
+  "resume": {
+    "sessionID": "ses_-zUS2ukzezzuTBMwlike",
+    "anchorID": "msg_g0VXx5F0P00dTHmQ1Qk6",
+    "updateID": "msg_g0VXx5F0b00Gil3MkB0Q",
+    "sourceID": "msg_g0VXx67Ps00Wm26rWJgj",
+    "round": 5
+  },
+  "credentialCleanup": {
+    "runtimePresent": true,
+    "dataPresent": true,
+    "authPresent": false,
+    "catalogPresent": false
+  },
+  "probeInputTokens": {
+    "full": 246460,
+    "compacted": 71945,
+    "reductionFraction": 0.7080865049095189,
+    "note": "Actual Provider input tokens across paired probes. Includes common system context; excludes the cost of compaction and evidence reads. Not a total cost saving claim."
+  },
+  "actions": [
+    {
+      "case": "policy-revoke",
+      "round": 1,
+      "lane": "full",
+      "sessionID": "ses_-zUS2vjazzzVDQcbXVYW",
+      "assistantMessageID": "msg_g0VXx4Pky00IhNcnRhzy",
+      "toolPartID": "prt_g0VXx4Qb600QGPmkztva",
+      "callID": "call_51bb117054f04168b78064cb7aee89e1",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2vjazzzVDQcbXVYW\\prt_g0VXx4R3F00dJek69tLq.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 20129,
+      "inputEstimate": 22231
+    },
+    {
+      "case": "policy-revoke",
+      "round": 1,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2vaIrzzF895d8pF9",
+      "assistantMessageID": "msg_g0VXx4R5000vzJ90ryRL",
+      "toolPartID": "prt_g0VXx4RjG00fjeaNrMwE",
+      "callID": "call_60dc3546d9c44287810c158c3a313e33",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2vaIrzzF895d8pF9\\prt_g0VXx4S4h00XnNsrqqSV.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 6960,
+      "inputEstimate": 955
+    },
+    {
+      "case": "policy-revoke",
+      "round": 2,
+      "lane": "full",
+      "sessionID": "ses_-zUS2vXtAzz6Be6PR8v5",
+      "assistantMessageID": "msg_g0VXx4bKs00EG70Op5xR",
+      "toolPartID": "prt_g0VXx4c0T00RQEYq7hSK",
+      "callID": "call_177548d199c74120adc5e44c31f52acd",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2vXtAzz6Be6PR8v5\\prt_g0VXx4cM100nHAIYmPjS.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 22387,
+      "inputEstimate": 26145
+    },
+    {
+      "case": "policy-revoke",
+      "round": 2,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2vOkOzz3yfbAUgj7",
+      "assistantMessageID": "msg_g0VXx4cN600sQ40ztN7D",
+      "toolPartID": "prt_g0VXx4d1C00MFtKp3ZaL",
+      "callID": "call_acb19603b375421c92525189e673e3f5",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2vOkOzz3yfbAUgj7\\prt_g0VXx4dNF00d7W8Cluyl.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 7119,
+      "inputEstimate": 1072
+    },
+    {
+      "case": "policy-revoke",
+      "round": 3,
+      "lane": "full",
+      "sessionID": "ses_-zUS2vMaUzzVywsX3lTh",
+      "assistantMessageID": "msg_g0VXx4mZu00lzw71Ot9Q",
+      "toolPartID": "prt_g0VXx4nSl00Jh542tCdS",
+      "callID": "call_9fadd0b7e4584a13af32475e966bb6df",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2vMaUzzVywsX3lTh\\prt_g0VXx4npp00tVssz8boR.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 24645,
+      "inputEstimate": 30060
+    },
+    {
+      "case": "policy-revoke",
+      "round": 3,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2vDVnzzWFV3obqBm",
+      "assistantMessageID": "msg_g0VXx4nr400r0uIXcahx",
+      "toolPartID": "prt_g0VXx4ohg00vuJQwzzf7",
+      "callID": "call_9FQ0Xu3JTr3e3qSrr3WK7T9g",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2vDVnzzWFV3obqBm\\prt_g0VXx4pC200T7Pu8g7dn.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 7120,
+      "inputEstimate": 1095
+    },
+    {
+      "case": "policy-revoke",
+      "round": 4,
+      "lane": "full",
+      "sessionID": "ses_-zUS2vAm2zzs3u7dDx4I",
+      "assistantMessageID": "msg_g0VXx4zeu00mMdUF78Y9",
+      "toolPartID": "prt_g0VXx50P0004JnpNFd20",
+      "callID": "call_858adc8ee1b4449bbe2ad555e33bb206",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2vAm2zzs3u7dDx4I\\prt_g0VXx50la000MfyaJsbd.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 26903,
+      "inputEstimate": 33974
+    },
+    {
+      "case": "policy-revoke",
+      "round": 4,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2v0Tjzzh9Ss6hUQR",
+      "assistantMessageID": "msg_g0VXx50n700iMOKPJEbF",
+      "toolPartID": "prt_g0VXx523t00ZLlTpyi3S",
+      "callID": "call_8b58aba825ec45169ac3b96481660f68",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2v0Tjzzh9Ss6hUQR\\prt_g0VXx52Sl00Ua02E01hW.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 7142,
+      "inputEstimate": 1118
+    },
+    {
+      "case": "policy-revoke",
+      "round": 5,
+      "lane": "full",
+      "sessionID": "ses_-zUS2uxVMzzzvCcqKgUp",
+      "assistantMessageID": "msg_g0VXx5CqP00q5dRJWyWb",
+      "toolPartID": "prt_g0VXx5DYT00sysm4BLLb",
+      "callID": "call_acb725536a1e4cb4a559c7de7c31c978",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2uxVMzzzvCcqKgUp\\prt_g0VXx5DqW00SfwlsNKaw.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 29161,
+      "inputEstimate": 37889
+    },
+    {
+      "case": "policy-revoke",
+      "round": 5,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2unJqzzD0koTrI1I",
+      "assistantMessageID": "msg_g0VXx5Drx00BERcW43r9",
+      "toolPartID": "prt_g0VXx5EVa00xpKr2G6J8",
+      "callID": "call_shi9fHbvqCWxwZAsPayYOlVC",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2unJqzzD0koTrI1I\\prt_g0VXx5Eyx00pVoD5bNpO.json",
+      "action": {
+        "kind": "draft",
+        "channel": "CHANNEL-ff2b476cd271-policy-revoke",
+        "region": "REGION-ff2b476cd271-policy-revoke",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-revoke",
+        "policy_revision": "POLICY-ff2b476cd271-policy-revoke"
+      },
+      "passedFields": 5,
+      "inputTokens": 7153,
+      "inputEstimate": 1142
+    },
+    {
+      "case": "policy-grant",
+      "round": 1,
+      "lane": "full",
+      "sessionID": "ses_-zUS2ukz1zzIS3PrLHRH",
+      "assistantMessageID": "msg_g0VXx5Nb100E3wOyat1v",
+      "toolPartID": "prt_g0VXx5OIo00GuZ9WUq3K",
+      "callID": "call_yI5PgcpXRTbnQ5fyRNPHyWdi",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2ukz1zzIS3PrLHRH\\prt_g0VXx5OpK00irnJNB084.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 20131,
+      "inputEstimate": 22230
+    },
+    {
+      "case": "policy-grant",
+      "round": 1,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2ucSczz2KuinZaN6",
+      "assistantMessageID": "msg_g0VXx5Oru00y0zDhHQCY",
+      "toolPartID": "prt_g0VXx5PW200pg7OGVFqk",
+      "callID": "call_a76936acca3a479fbb71ea2cd107bb43",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2ucSczz2KuinZaN6\\prt_g0VXx5PrB00w1V6l7O77.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 6975,
+      "inputEstimate": 949
+    },
+    {
+      "case": "policy-grant",
+      "round": 2,
+      "lane": "full",
+      "sessionID": "ses_-zUS2ua6zzz5mUPqvxxP",
+      "assistantMessageID": "msg_g0VXx5asu007Ne7OkC6W",
+      "toolPartID": "prt_g0VXx5bn900hHzvk2Ubo",
+      "callID": "call_fJrGou3c9xjYVaVo6Pu0czjo",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2ua6zzz5mUPqvxxP\\prt_g0VXx5cIY00NI1dFnDpU.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 22389,
+      "inputEstimate": 26143
+    },
+    {
+      "case": "policy-grant",
+      "round": 2,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2uPD4zznastvxdSN",
+      "assistantMessageID": "msg_g0VXx5cJt00tGc3Ooez8",
+      "toolPartID": "prt_g0VXx5dAq00wlZskZB84",
+      "callID": "call_78ae2cd61cd240fda315a6cc05b177d3",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2uPD4zznastvxdSN\\prt_g0VXx5dXt00PVG67mdeA.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 7146,
+      "inputEstimate": 1099
+    },
+    {
+      "case": "policy-grant",
+      "round": 3,
+      "lane": "full",
+      "sessionID": "ses_-zUS2uMQIzzTo2f5m8cw",
+      "assistantMessageID": "msg_g0VXx5pmN003DuvaQuLY",
+      "toolPartID": "prt_g0VXx5qlT00yZStWJwM7",
+      "callID": "call_ab5d462ed9394d0e86f6da8f59a2529c",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2uMQIzzTo2f5m8cw\\prt_g0VXx5rNR00VEq11Wtdz.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 24647,
+      "inputEstimate": 30057
+    },
+    {
+      "case": "policy-grant",
+      "round": 3,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2uAK0zzaRMxNHslN",
+      "assistantMessageID": "msg_g0VXx5rPV00FgUC5109y",
+      "toolPartID": "prt_g0VXx5s0B006lQPeFZ2r",
+      "callID": "call_R9KiQKpzsMjDbpIXEAt3SLkF",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2uAK0zzaRMxNHslN\\prt_g0VXx5sUa0062L5VKbsv.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 7336,
+      "inputEstimate": 1220
+    },
+    {
+      "case": "policy-grant",
+      "round": 4,
+      "lane": "full",
+      "sessionID": "ses_-zUS2u7TuzzT1WyqObNp",
+      "assistantMessageID": "msg_g0VXx65Lq00qn8hzrLy4",
+      "toolPartID": "prt_g0VXx666f00EUp35sp4R",
+      "callID": "call_8a2fc947b371447d8d0be44835fae14b",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2u7TuzzT1WyqObNp\\prt_g0VXx66Se00uxSebyQd7.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 26905,
+      "inputEstimate": 33970
+    },
+    {
+      "case": "policy-grant",
+      "round": 4,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2tunezzQ2ryFlScz",
+      "assistantMessageID": "msg_g0VXx66Tw00rhN1RvJpu",
+      "toolPartID": "prt_g0VXx673D00JjctQuj6C",
+      "callID": "call_24be6fc3e6ea475eae8d327a31f08931",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2tunezzQ2ryFlScz\\prt_g0VXx67OU00DSJIZfCl5.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 7429,
+      "inputEstimate": 1292
+    },
+    {
+      "case": "policy-grant",
+      "round": 5,
+      "lane": "full",
+      "sessionID": "ses_-zUS2iv0ZzzrM5blWKi7",
+      "assistantMessageID": "msg_g0VXxHMQo00jgoMjGPOR",
+      "toolPartID": "prt_g0VXxHN3v00VylpHTjmV",
+      "callID": "call_115dc81e8c994fc09522c5f65f764e95",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2iv0ZzzrM5blWKi7\\prt_g0VXxHNXR00JEsjxAL7v.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 29163,
+      "inputEstimate": 37884
+    },
+    {
+      "case": "policy-grant",
+      "round": 5,
+      "lane": "compacted",
+      "sessionID": "ses_-zUS2idqAzzS63SH0CGd",
+      "assistantMessageID": "msg_g0VXxHNYz00q6mZ4aTJn",
+      "toolPartID": "prt_g0VXxHOWh007iyf1cSYc",
+      "callID": "call_db4abd420d7e430aa002f176d6eb4cd6",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ELTYGY\\runner-86964-vSXlTT\\runtime-root\\tmp\\opencorvus-compaction-stress-xXP6R0\\project\\policy-actions\\ses_-zUS2idqAzzS63SH0CGd\\prt_g0VXxHOsA00u28rTZ5JX.json",
+      "action": {
+        "kind": "release",
+        "channel": "CHANNEL-ff2b476cd271-policy-grant",
+        "region": "REGION-ff2b476cd271-policy-grant",
+        "artifact_id": "ARTIFACT-ff2b476cd271-policy-grant",
+        "policy_revision": "POLICY-ff2b476cd271-policy-grant"
+      },
+      "passedFields": 5,
+      "inputTokens": 7565,
+      "inputEstimate": 1444
+    }
+  ]
+}

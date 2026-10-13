@@ -1,0 +1,67 @@
+{
+  "scope": "Both durable summary controls consumed while HTTP callers waited for the unrelated continuing Task",
+  "evidence": [
+    {
+      "project": "alpha",
+      "sourceAssistant": "msg_h3tcbT8SEWiRuHRsWld4",
+      "sessionID": "ses_-zUS2rCuMzzRpLI4jwos",
+      "controls": [
+        {
+          "id": "sctl_g0VXx8nq8003pztvcwD",
+          "session_id": "ses_-zUS2rCuMzzRpLI4jwos",
+          "kind": "compaction_request",
+          "source": null,
+          "payload": "{\"source_user_message_id\":\"msg_task-root-control_art_hojsXoZialkeLzdu6v1t_art_hojsXoZialkeLzdu6v1t\",\"model\":{\"providerID\":\"opencorvus-compaction-crash\",\"modelID\":\"checkpoint\"},\"overflow\":false}",
+          "time_created": 1791913588596
+        }
+      ],
+      "events": [
+        {
+          "id": "sctl_g0VXx8nyC00ZDFi86kr",
+          "control_id": "sctl_g0VXx8nq8003pztvcwD",
+          "kind": "amended",
+          "payload": "{\"source_user_message_id\":\"msg_task-root-control_art_hojsXoZialkeLzdu6v1t_art_hojsXoZialkeLzdu6v1t\",\"model\":{\"providerID\":\"opencorvus-compaction-crash\",\"modelID\":\"checkpoint\"},\"overflow\":false,\"result_summary_message_id\":\"msg_g0VXx8ntJ00bIdA49f1h\"}",
+          "time_created": 1791913589096
+        },
+        {
+          "id": "sctl_hnh3nX75yJCVnxkvuAN",
+          "control_id": "sctl_g0VXx8nq8003pztvcwD",
+          "kind": "consumed",
+          "payload": null,
+          "time_created": 1791913589096
+        }
+      ]
+    },
+    {
+      "project": "beta",
+      "sourceAssistant": "msg_h4n09kgJbruQu9xUTGJc",
+      "sessionID": "ses_-zUS2rBcNzzJrTclaXA1",
+      "controls": [
+        {
+          "id": "sctl_g0VXx8orv00cdu0JtwA",
+          "session_id": "ses_-zUS2rBcNzzJrTclaXA1",
+          "kind": "compaction_request",
+          "source": null,
+          "payload": "{\"source_user_message_id\":\"msg_task-root-control_art_hWKtmRb9D7NXyQehNj9H_art_hWKtmRb9D7NXyQehNj9H\",\"model\":{\"providerID\":\"opencorvus-compaction-crash\",\"modelID\":\"checkpoint\"},\"overflow\":false}",
+          "time_created": 1791913592551
+        }
+      ],
+      "events": [
+        {
+          "id": "sctl_g0VXx8oyU003tz1wgOa",
+          "control_id": "sctl_g0VXx8orv00cdu0JtwA",
+          "kind": "amended",
+          "payload": "{\"source_user_message_id\":\"msg_task-root-control_art_hWKtmRb9D7NXyQehNj9H_art_hWKtmRb9D7NXyQehNj9H\",\"model\":{\"providerID\":\"opencorvus-compaction-crash\",\"modelID\":\"checkpoint\"},\"overflow\":false,\"result_summary_message_id\":\"msg_g0VXx8ouq00cyDSMknG8\"}",
+          "time_created": 1791913592958
+        },
+        {
+          "id": "sctl_hseStnqoATGOc8HW0wl",
+          "control_id": "sctl_g0VXx8orv00cdu0JtwA",
+          "kind": "consumed",
+          "payload": null,
+          "time_created": 1791913592958
+        }
+      ]
+    }
+  ]
+}

@@ -19,8 +19,11 @@ full browser, Task/Mission scheduling, or native Codex comparison benchmark.
 | [file-failure-final](file-failure-final.json) | 13 | Full-file case passes 10/10. Failed-Tool checkpoint is valid, but continuation receives Provider overload; that case remains an error. |
 | [failure-retry](failure-retry.json) | 5 | Fresh failed-Tool case passes 11/11, including original failure name, trace and cursor. |
 | [message-diagnostics-real](message-diagnostics-real.json) | 5 | Model reads all 78,303 diagnostic characters in three pages; 12/12 continuation fields pass with production Tool preparation. |
+| [policy-actions-real](policy-actions-real.json) | 80 | Nine paired rounds pass; the final grant compactor reaches the former request ceiling. Original failure retained. |
+| [policy-actions-real-resume](policy-actions-real-resume.json) | 12 | Reopens that exact fifth-round history; checkpoint and both actual Tool actions pass. |
 
-Total: **159/160** authorized real requests, with **1 remaining**. The final
+Total: **251** real requests. The user authorized increasing limits as needed;
+the last batch retained a 20-request hard cap and used 12. The final
 accepted text/Tool/file/failure/diagnostic cases score **78/78** fields over nine completed
 rounds; this finite, single-model corpus is not a general reliability estimate.
 [Final request accounting](final-request-ledger.json) reconciles all new sidecars
@@ -393,3 +396,58 @@ records rejection of a fabricated activation and is excluded from runtime claims
 and [documentation checks](open-message-docs.log) record the public contract
 validation. Paid use remains 159/160. Full concurrent Task/Mission recovery,
 provider-native comparison and real five-round policy behavior remain open.
+
+
+## Real five-round policy actions and exact resume
+
+[Combined verification](policy-actions-real-summary.json) covers two authority
+changes, five rounds each and full/compacted probe histories. All **20 actual
+Tool/file actions and 100 fields pass**. Every effect file was reopened and
+matched directly with its completed Tool receipt and original expected scope.
+The original [80-request report](policy-actions-real.json) retains its final
+budget failure; the [12-request resume](policy-actions-real-resume.json) preserves
+the exact Session/anchor/update/source identities of that unfinished round.
+Both request sidecars reconcile with their reports. All 92 requests are streamed,
+use the exact target model and reach source-reader EOF. Cumulative paid use is
+**251**; copied auth/catalog cleanup was observed after exit.
+
+Paired probe inputs total 246,460 versus 71,945 actual Provider tokens. This
+70.81% reduction excludes compactor/read cost; it is not a total cost-saving
+estimate. These are authored histories using one real model, not a general
+policy reliability guarantee. Earlier 159-request statements describe earlier
+milestones; the ledger and this section are current.
+
+[Local resume tests](policy-action-resume-local.log.gz) pass seven cases, including
+an interrupted original round reopened through the same runner. The
+[summary/replay regression](summary-waiter-regression.log.gz) passes 24 tests in
+four files. These are **31 distinct tests**, excluding repeat runs.
+
+## Formal backend interruption in two Task projects
+
+[Compact verification](native-task-crash-summary.json) records two actual Task
+admissions, one checkpoint and four original scheduler requests each. Both
+summary HTTP waiters return true before the owned backend is forcibly cut.
+Normal bootstrap then recovers the same logical Tasks with new physical
+assistants; their real requests carry the original late Tool traces. All 32
+original Parts, six Tool requests and six outcomes retain exact payloads.
+Logical Tasks remain active; no_action settles their recovered ingress.
+
+[Successful raw report](native-task-crash-fourth.json.gz) and
+[execution log](native-task-crash-fourth.log.gz) contain 16 scripted local
+streamed requests and two physically joined backend children. Detailed before,
+crashed and after facts, startup receipts and child logs are listed in the
+[archive manifest](policy-native-artifact-manifest.json). This proves formal
+backend/Task recovery mechanics; Mission, OS power loss and native OpenAI
+compaction remain outside this sample.
+
+The [shared waiter reproduction](native-task-summary-waiter-repro.json) and
+[second raw report](native-task-crash-second.json.gz) retain consumed controls
+whose HTTP waiters remained pending before the fix. The initial and third
+samples preserve checker calibration and a repaired startup parse error.
+The [pre-run typecheck](policy-native-typecheck-final.log) and
+[delivery typecheck](policy-native-typecheck-delivery.log) exit 0.
+[Documentation checks](policy-native-docs.log) pass for the current indexes.
+All gzip files preserve original bytes; no digest stands in for behavioral
+acceptance. Run the backend checker with a new absolute
+COMPACTION_TASK_CRASH_RESULT and
+bun run --cwd packages/opencorvus script/compaction-task-crash-check.ts.

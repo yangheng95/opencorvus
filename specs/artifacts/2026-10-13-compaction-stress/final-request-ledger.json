@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 159,
-  "authorizedTotal": 160,
+  "total": 251,
+  "authorizedTotal": 260,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -121,6 +121,130 @@
           "fields": 12
         }
       ]
+    },
+    {
+      "name": "policy-actions-real",
+      "status": "budget_incomplete",
+      "requests": 80,
+      "credentialsRemoved": true,
+      "completedRounds": 9,
+      "plannedRounds": 10,
+      "passedActions": 18,
+      "passedFields": 90,
+      "remainingCase": {
+        "name": "policy-grant",
+        "round": 5,
+        "stage": "compaction"
+      },
+      "cases": [
+        {
+          "name": "policy-revoke",
+          "round": 1,
+          "status": "passed",
+          "requestStart": 0,
+          "requestEnd": 8
+        },
+        {
+          "name": "policy-revoke",
+          "round": 2,
+          "status": "passed",
+          "requestStart": 8,
+          "requestEnd": 16
+        },
+        {
+          "name": "policy-revoke",
+          "round": 3,
+          "status": "passed",
+          "requestStart": 16,
+          "requestEnd": 25
+        },
+        {
+          "name": "policy-revoke",
+          "round": 4,
+          "status": "passed",
+          "requestStart": 25,
+          "requestEnd": 34
+        },
+        {
+          "name": "policy-revoke",
+          "round": 5,
+          "status": "passed",
+          "requestStart": 34,
+          "requestEnd": 43
+        },
+        {
+          "name": "policy-grant",
+          "round": 1,
+          "status": "passed",
+          "requestStart": 43,
+          "requestEnd": 51
+        },
+        {
+          "name": "policy-grant",
+          "round": 2,
+          "status": "passed",
+          "requestStart": 51,
+          "requestEnd": 60
+        },
+        {
+          "name": "policy-grant",
+          "round": 3,
+          "status": "passed",
+          "requestStart": 60,
+          "requestEnd": 69
+        },
+        {
+          "name": "policy-grant",
+          "round": 4,
+          "status": "passed",
+          "requestStart": 69,
+          "requestEnd": 78
+        },
+        {
+          "name": "policy-grant",
+          "round": 5,
+          "status": "error",
+          "requestStart": 78,
+          "requestEnd": 80
+        }
+      ]
+    },
+    {
+      "name": "policy-actions-real-resume",
+      "requests": 12,
+      "streamedRequests": 12,
+      "settledReaders": 12,
+      "status": "passed",
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedRounds": 1,
+      "passedActions": 2,
+      "passedFields": 10,
+      "resumedFrom": "policy-actions-real",
+      "cases": [
+        {
+          "name": "policy-grant",
+          "round": 5,
+          "status": "passed",
+          "requestStart": 0,
+          "requestEnd": 12
+        }
+      ]
     }
-  ]
+  ],
+  "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",
+  "latestPolicyMatrix": {
+    "status": "passed",
+    "completedRounds": 10,
+    "plannedRounds": 10,
+    "passedActions": 20,
+    "passedFields": 100,
+    "requests": 92,
+    "summary": "policy-actions-real-summary.json"
+  }
 }

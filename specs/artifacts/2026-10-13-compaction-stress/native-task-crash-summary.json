@@ -1,0 +1,66 @@
+{
+  "status": "passed",
+  "scope": "formal backend interruption and two-project Task recovery with scripted streaming transport",
+  "remoteModelRequests": 0,
+  "localStreamedRequests": 16,
+  "summaryWaiters": "Both actual HTTP calls returned true before the owned backend was cut, while the original Task assistants were incomplete.",
+  "cases": [
+    {
+      "project": "alpha",
+      "taskID": "tsk_g00VXxC8dP00aes8DaN4",
+      "rootSessionID": "ses_-zUS2nrAIzzZe07MNYpX",
+      "originalAssistantID": "msg_hOQpyNOeaIxpUXQEk7E1",
+      "recoveredAssistantID": "msg_haGosrahhotGCstEYWBj",
+      "typedFailure": "ProcessExecutionInterruptedError",
+      "trace": "TRACE-NATIVE-alpha-17031",
+      "originalSteps": 4,
+      "checkpoints": 1,
+      "recoveredRequests": 1,
+      "preserved": {
+        "parts": 16,
+        "toolRequests": 3,
+        "toolOutcomes": 3
+      },
+      "recoveryToolPartID": "prt_g0VXxCeQL006nh0rHBnU",
+      "recoveryOutcomeID": "prt_hN8lalHCpso92nqyV3pc"
+    },
+    {
+      "project": "beta",
+      "taskID": "tsk_g00VXxC9Qm00cLzK3YVj",
+      "rootSessionID": "ses_-zUS2nqRizz84H4muAXQ",
+      "originalAssistantID": "msg_h2L1w3JnphLLWeq1Wufe",
+      "recoveredAssistantID": "msg_h7sCD3ve3e9O2m9LmY4I",
+      "typedFailure": "ProcessExecutionInterruptedError",
+      "trace": "TRACE-NATIVE-beta-17031",
+      "originalSteps": 4,
+      "checkpoints": 1,
+      "recoveredRequests": 1,
+      "preserved": {
+        "parts": 16,
+        "toolRequests": 3,
+        "toolOutcomes": 3
+      },
+      "recoveryToolPartID": "prt_g0VXxCf6U00kXC1NFS8w",
+      "recoveryOutcomeID": "prt_hFzdkNzf7eCPp4nwf1kr"
+    }
+  ],
+  "settlement": [
+    {
+      "pid": 82800,
+      "exitCode": null,
+      "signalCode": "SIGKILL",
+      "forcedCleanup": false
+    },
+    {
+      "pid": 89776,
+      "exitCode": null,
+      "signalCode": "SIGTERM",
+      "forcedCleanup": false
+    }
+  ],
+  "limitations": [
+    "Scripted Provider validates runtime mechanics, not semantic model quality.",
+    "Logical Tasks remain active; no_action settles the recovered ingress, not Task completion.",
+    "Two Task projects and backend process interruption; no Mission, whole OS/power loss or native OpenAI compaction claim."
+  ]
+}

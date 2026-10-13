@@ -3277,19 +3277,19 @@ export namespace SessionLoop {
                   finalizedTerminalTurn = true
                   break
                 }
-                if (resultMode === "summary" && input.summary_source_message_id && input.summary_control_id) {
-                  const completedSummary = await settledSummaryForControl({
-                    sessionID,
-                    sourceMessageID: input.summary_source_message_id,
-                    controlID: input.summary_control_id,
-                  })
-                  if (!completedSummary) {
-                    throw new Error(
-                      `Session ${sessionID} completed compaction without a durable summary for ${input.summary_source_message_id}`,
-                    )
-                  }
-                  flushCallbacks(sessionID, completedSummary, directory, "summary", compactionControl.id)
+                // A summary waiter can join an ordinary reply owner. Publish
+                // the control just consumed without ending that owner's turn.
+                const publishedSummary = await settledSummaryForControl({
+                  sessionID,
+                  sourceMessageID: sourceUserMessageID,
+                  controlID: compactionControl.id,
+                })
+                if (!publishedSummary) {
+                  throw new Error(
+                    `Session ${sessionID} completed compaction without a durable summary for ${sourceUserMessageID}`,
+                  )
                 }
+                flushCallbacks(sessionID, publishedSummary, directory, "summary", compactionControl.id)
                 continue
               }
 
