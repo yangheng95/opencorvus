@@ -2,6 +2,12 @@
 
 ## Recall
 
+2026-10-14 02:18后本轮诊断已结束：selected run38443967530最终failure。verify、dependency audit、service tests及Windows七文件全部success；Linux job115459585595、macOS job115459585885都只有file-git-alias-contract的字面反斜杠文件名失败，其余六文件全部exit0。两平台新断点都在test第85行原生fs.realpath(full)，在直接File.read与HTTP之前即ENOENT/lstat。原始日志保存为.scratch/dependabot-upgrades/selected-{linux,macos}-38443967530.log。因此四文件契约修复已获三平台聚焦证据，整个任务仍不满足完整成功/main合入条件，未再次启动必失败的整套测试。
+
+上游根因已核对实际源码和正式问题，而非凭错误名猜测：[Bun #33403](https://github.com/oven-sh/bun/issues/33403)给出同一合法POSIX反斜杠被改为斜杠的syscall证据。项目实际Bun1.4.0 revision34cbb9a40的[src/runtime/node/node_fs.rs](https://github.com/oven-sh/bun/blob/bun-v1.4.0/src/runtime/node/node_fs.rs) realpath_inner POSIX分支经FileSystem.abs_buf_checked，再由[src/resolver/lib.rs](https://github.com/oven-sh/bun/blob/bun-v1.4.0/src/resolver/lib.rs)以platform::Loose拼路径；该模式把反斜杠作为分隔符。async/sync/native都落到同一POSIX实现，切换.native不是修复。最新正式release为2026-10-10发布的1.4.3，已读取该tag上述两文件，错误调用和Loose实现仍在；不能盲升版本声称已修。[#33410](https://github.com/oven-sh/bun/pull/33410)已关闭但merged=false，[#42374](https://github.com/oven-sh/bun/pull/42374)和[#42965](https://github.com/oven-sh/bun/pull/42965)仍open/未合并。当前没有经验证的已发布上游修复。
+
+影响/后续边界：这是运行时规范路径解析缺陷，不是Git差异/HTTP解码或权限恢复错误。全仓realpath调用包括File读写/listing、Project/Task workspace、artifact边界、Permission scope等，不应只把File.read的ENOENT改为词法路径继续运行，否则实体权限与symlink合同会变弱。也不复制旧Node路径walk、引入fs.realpath兼容fallback或Bun专用FFI旁路来隐藏上游问题；其完整跨平台路径/链接/错误/打包契约均未经本任务验证。工具链修复需要可核验的上游修复版本（或单独确定定制运行时交付方案），之后仍须原七文件和最终空test_files三平台完整CI。现阶段保留合法文件测试及所有失败证据，不删/跳过，不合main。自动跟进改为核对上游修复/正式版本变化：未改变时安静且不重复重跑同一已知失败CI；有实际可用修复后在原分支恢复实施、验收及main收敛。Rust既有告警范围不变。
+
 当前远端诊断为[三平台selected run38443967530](https://github.com/yangheng95/opencorvus/actions/runs/38443967530)，workflow_dispatch，分支codex/dependabot-upgrades，实际head=f7b1625b0d378e14862b7e3c88e3af7d254cd436，test_files明确为上述七个文件。本轮实现提交0a9bfb448，已普通合入当时origin/main的04fcd0115为f7b1625b0；04fcd是已独立实页/构建验收的共享Dialog本地化补丁，不改变后端测试源码。fresh fetch/merge后审查完整推送集合：仅0a9bfb448和merge不属于已发布origin/main祖先；冻结安装与全部正式push hooks通过，已推送同名upstream。main本轮仍未由本任务修改，后续并行提交及未提交内容须重新核对。
 
 依赖审计边界：20261014-audit.log的Bun审计1735包零漏洞。推送的4条GitHub警报已通过真实alert API核对：#5/#6为现用Overlay Cargo.lock的glib0.18.5/rand0.7.3，#13/#14为2026-10-05历史Cargo.lock快照中的同两个依赖；不是4个新升级PR，也不能由Bun审计排除Rust问题。它们属于2026-10-05-dependency-remediation已记载的GTK/PHF父依赖及Linux原生验收未完成项。本轮没有忽略、关闭安全告警或篡改历史锁图，没有宣称全Rust依赖安全修复完成。自动跟进恢复后应先处理selected真实日志并解决POSIX文件问题，再为最终代码启动空test_files的独立完整三平台CI；未获完整成功不得合main。
