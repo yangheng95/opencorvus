@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [404 Task Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404.md)：真实长目录与同 Request 断流，先补证再修复。
+
 - [长正文与来源阅读](2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
 
 - [Provider Test 的结果事实](2026-10-14-provider-test-observation.md)：目录选择、真实回执与轮次。
