@@ -4,15 +4,15 @@
 
 2026-10-14 Root审读增强方案：接受完整19语言资源及既有ConfigContext/ConfigProvider的单一默认投影，明确无locale独立使用时旧默认footer大小写也随既有en-US资源。公开ConfigProvider仍接受可选locale，内部Content仅消费投影结果；绕过该入口而直接手造缺失locale的原始Context.Provider对象不是本批支持的配置输入，不把它声明为已验证。实施仅限既有Design patch所述81个发布文件，保留389改动。先完成Root真实前态，再授权audit_ui落地；禁止UI自动化、新增Host语言源、共享文档编辑、模型/凭据、额外agent、提交或推送。Root负责索引、前后截图、独立复核、构建和范围交付。
 
-用户持续目标是逐批并行体验UI/UX（User Interface/User Experience，用户界面与体验），先完成根因/影响分析并落盘spec，再实施有证据的改进、真实桌面页面交互与截图人工复核，范围提交、同步上游并正常推送后继续。当前Root授权单层只读调查401；audit_ui仅可写本spec及`.tmp-design-dialog-close-locale-401`，不改生产、依赖、共享索引或测试，不启动服务/浏览器/模型，不读凭据、不提交、不再次委托。Root审读完整方案后决定实施并负责实际前后态、物理收尾和Git交付。
+用户持续目标是逐批并行体验UI/UX（User Interface/User Experience，用户界面与体验），先完成根因/影响分析并落盘spec，再实施有证据的改进、真实桌面页面交互与截图人工复核，范围提交、同步上游并正常推送后继续。最初Root授权单层只读调查401；audit_ui仅可写本spec及`.tmp-design-dialog-close-locale-401`，不改生产、依赖、共享索引或测试，不启动服务/浏览器/模型，不读凭据、不提交、不再次委托。Root审读完整方案后决定实施并负责实际前后态、物理收尾和Git交付。
 
 当前根AGENTS要求已重读：修改公共定义前横查定义/调用/同义实现/历史；所有界面含无障碍名称跟随当前语言；优先成熟primitive和单一事实来源；禁止UI自动化，真实截图与人工复核不可被源码/typecheck/build替代；工作区有并行修改，只操作本批允许文件。没有发现本任务新的调度/队列/终态异常，不扩大执行控制审计。
 
-已知真实事实来自[397最终人工记录](../../artifacts/2026-10-13-spreadsheet-button-focus-397/observations/final-review.json)：中文Range/Delete Dialog的关闭按钮在AX（Accessibility Tree，可访问性树）中仍名为英文Close。397原生按钮焦点、398深色hover修复均未涉及此名称。401目前尚未启动独立页面，不冒称新前态已取得。
+已知真实事实来自[397最终人工记录](../../artifacts/2026-10-13-spreadsheet-button-focus-397/observations/final-review.json)：中文Range/Delete Dialog的关闭按钮在AX（Accessibility Tree，可访问性树）中仍名为英文Close。397原生按钮焦点、398深色hover修复均未涉及此名称。这是调查开始的历史事实；本批Root真实前后态与物理收尾见下文。
 
 已读[398独立候选](2026-10-13-spreadsheet-permission-hover-398.md)、[389弹层宿主/生命周期](2026-10-13-spreadsheet-fullscreen-popups-389.md)、[392同实例语言](2026-10-13-spreadsheet-accessibility-locale-392.md)、[397焦点范围](2026-10-13-spreadsheet-button-focus-397.md)与[07-panel当前契约](../../current/architecture/07-panel.md)。已核对安装0.25.1的Design Dialog/Confirm、ConfigContext、语言包/types/四分发、实际preset合并和直接/服务生产消费者。399 More Colors触发/返回焦点、400 Escape层级不计入401改动。
 
-调查开始已检查工作区，存在其他已授权并行变更，本轮没有改动这些文件。当前状态为**Root否决13文件缺名称边界后的增强方案待审，尚未实施和验收**。下列安装代码行号均为本次读取的ESM（ECMAScript Modules）文件定位，实施后允许随依赖patch（补丁）变动；函数名、发布路径与调用链才是长期定位。
+调查开始已检查工作区，存在其他已授权并行变更，本轮没有改动这些文件。当前最新状态为**81文件已实施、正常依赖安装、Root独立代码复核与类型/构建通过，真实中英普通/全屏页面及16张截图人工复核完成，两个自有服务正常退出；交付按本批范围提交与正常上游推送**。下列安装代码行号均为本次读取的ESM（ECMAScript Modules）文件定位，实施后允许随依赖patch（补丁）变动；函数名、发布路径与调用链才是长期定位。
 
 ## 可观察现象与根因
 
@@ -169,4 +169,39 @@ root正常Bun patch prepare/commit与frozen install后做当前声明的typechec
 
 Root审读后负责最小生产修改、真实前后态、共享索引/07-panel/双语CHANGELOG更新、当前文档检查、范围提交和正常上游合并推送。自有scratch`index-ops.json`只提供根索引与月索引精确建议，不由本agent改共享文件。当前不创建401artifact空目录占位，待实际证据产生后按根规范登记。
 
-剩余风险/边界明确如下：撤回13文件草案，81文件完整资源/默认投影方案尚待Root批准；公开省略locale的其他组件默认文字影响须审读；UMD children绑定和默认资源内联必须正确；所有发布格式和语言资源必须沿实际preset安装消费；同已打开Dialog切语言须真实自然入口证明；只读调用覆盖不等于各service场景实页。移动端、独立Docs、未注册插件、其他Dialog正文快照、399返回焦点、400Escape层级均未实页验证或不在本批。至此无产品修改、无服务/页面/模型调用、无测试运行，增强方案交Root审读。
+剩余风险/边界明确如下：撤回13文件草案，Root已批准81文件完整资源/默认投影方案及公开省略locale的旧文字影响；UMD children绑定和默认资源内联必须正确；所有发布格式和语言资源必须沿实际preset安装消费；同已打开Dialog切语言须真实自然入口证明；只读调用覆盖不等于各service场景实页。移动端、独立Docs、未注册插件、其他Dialog正文快照、399返回焦点、400Escape层级均未实页验证或不在本批。至此无产品修改、无服务/页面/模型调用、无测试运行。
+
+## 实施前有界准备（仅scratch，等待Root消息）
+
+`prepare-vendor.mjs`已离线完成81文件的AST（Abstract Syntax Tree，抽象语法树）定位预览：4 runtime、76语言资源、1资源类型。它只写自有`vendor-before/`、`vendor-planned/`及有界`vendor-files.json`，不写依赖或tracked patch。原完整Design patch、原工作区diff与暂存diff分别保存在`design.patch-before`、`design.patch-worktree-before.diff`、`design.patch-index-before.diff`；本次两个原diff均为空，没有覆盖既有未提交Design改动。
+
+首次预览使用未规范化preset软链接路径建立createRequire上下文，读到了root patch工作副本；已保存该次元数据为`vendor-files.initial-root-resolution.json`，随后改为先`fs.realpathSync(preset package.json)`，从真实`.bun` preset文件解析实际Design包。规范化后再次逐字节核对81个已保存原文件：真实preset安装与root工作副本均等于原快照，所有生产文件和原patch仍未改变。该检查是防覆盖并行修改/确认实际物理消费者，不是哈希门或UI功能验收。
+
+`preparation-review.json`记录四runtime的精确声明和绑定：ESM/root使用相邻en-US import；CJS使用现有直接`module.exports`对象；UMD只内联一次由同一更新英文资源生成的完整默认对象，外层factory依赖未增加。UMD `va`只把`children:t`及其数组使用改为`dialogChildren`；`t.forwardRef`/`t.useContext`均引用外层React，`Rt`原`useMemo`保持三项依赖，`G`默认配置增加完整locale。`projectDesignLocale`只在配置层执行，Content顶层hook读取`dialogLocale.Dialog.close`；portal、回调和原children表达式保持原合同。
+
+81份预览均通过TypeScript parser语法读取；这仅为编辑工具的有界结构/绑定检查，没有运行组件、DOM或UI测试，也不替代Root的截图验收。`apply-vendor.mjs`已准备但**尚未执行**；它将在Root明确实施消息后先核对所有原文件与原patch，再只写这81份已审预览。Bun patch commit/frozen install、build/typecheck、前后态真实操作及物理收尾由Root安排。
+
+## Root前态事实及授权后的实施结果
+
+Root已完成独立401-before真实桌面验收：中文Range/Delete在普通与全屏下关闭AX名称均为`Close`，有目标JPEG截图；实际click/Enter/Space关闭，临时工作表1真实清理，English/System/100%恢复，0模型。tab42在17:17:31.408Z关闭，原native82420 normal exit0、launcher38715 join0，早于原deadline17:33:15。以上是Root操作与反馈，不是本agent静态检查推导；原截图/观察由Root后续按允许清单归档。
+
+Root随后明确授权本agent按已提交`179797065`方案实施既有Design patch的81发布文件，并允许normal Bun patch/commit/frozen install。先前“apply尚未执行”是前态完成前的准备状态；以下为当前真实执行状态。
+
+- 正常准备/实施：`apply-vendor.mjs`执行前核对所有原文件及原patch后，仅写原work副本的81个发布文件。4 runtime使用同一配置层投影；19×4语言资源及英文资源类型补齐；UMD只内联一次生成的完整英文资源，children局部绑定重命名，保留389原改动。
+- 工具链事实：第一次未显式设置PATH时，系统Bun1.3.14执行prepare并exit0（session19465 / chunk a7fc25，30.54s）；`package.json`声明1.4.0。原日志`patch-prepare.log/exit`完整保留。复核表明package.json、bun.lock、81原文件与原patch逐字节均未改变（`toolchain-before-apply.json`及当时`preparation-review.json`），无需restore。随后按Root确认的仓库工具`.tmp-product-iteration/sse-compression-305/bun140/bun-windows-x64/bun.exe`重新执行1.4.0 prepare，正常exit0；之后apply、patch commit与frozen install全使用正确工具，未绕过husky。
+- 日志与结果：`patch-prepare-1.4.log/exit`、`apply-vendor.log/exit`、`patch-commit.log/exit`、`install-final.log/exit`均保留，所有exit为0。prepare约976ms，patch commit约2.95s，frozen install约2.40s。没有把初次版本偏差隐藏成始终正确的命令。
+- patch缓存：Bun生成了首部3行空`.bun-tag`diff；先保存完整`design.patch-with-empty-cache`，再只移除已读到的该3行，保留全部runtime/resource/type差异；随后正常frozen install再次应用成功。最终Design patch恰为81个file header，无缓存段。
+- 实际消费：按规范化preset真实路径重新解析后，实际Design仍为`.bun/@univerjs+design@0.25.1+7492c01c6988791b/node_modules/@univerjs/design`。`installed-review.json`记录所有81份安装文件与已审预览逐字节一致，CJS语言资源直接导出完整对象，英文Close与中文关闭可从安装资源读取。该核对证明交付文件身份和安装链，不是UI自动化或名称实际可见性验收。
+- 范围：只有既有`patches/@univerjs%2Fdesign@0.25.1.patch`生产tracked文件改变；package.json与bun.lock和实施前保存原字节一致，没有改变其他patch、共享文档或并行tracked内容。Design补丁当前增量为1018行增加、35行删除（其中原UMD长行是发布格式），不能把行数当功能覆盖。
+
+此阶段没有启动服务/浏览器/模型、没有读凭据、没有新增或运行UI自动化、没有归档或提交。Root仍需独立阅读实际patch和安装、运行typecheck/build、进行中英普通/全屏真实后态和截图人工复核；尚不得宣称401 UI已通过，更不得扩展为所有库消费者、移动端或399/400均完成。
+
+## Root最终人工复核与物理收尾
+
+[独立401证据](../../artifacts/2026-10-14-design-dialog-close-locale-401/README.md)保存37个原始观察（16个原JPEG）、明确安装/构建日志及两自有scope。原始[人工复核](../../artifacts/2026-10-14-design-dialog-close-locale-401/observations/final-review.json)在2026-10-13T17:35:16.249Z落盘，后续不重跑改写时间。
+
+前态tab42/native82420于17:17:31.408Z关页，原started17:13:15.142Z、deadline17:33:15.142Z；launcher38715实际join0，服务elapsed263288ms。中文Range/Delete普通/全屏均名Close。后态tab43/native88800于17:30:39.897Z关页，原started17:24:41.003Z、deadline17:44:41.003Z；launcher50144实际join0，服务elapsed367468ms。均满足原deadline前60秒关页，不延长预算，原18505端口释放。ready的fresh文字不准确：本次复用387已闭合且凭据已清理的canonical runtime，不是新数据库，也没有模型请求。
+
+后态Range的Close/关闭在英文/中文普通及全屏可见于AX；同一已打开radix-_r_8_、标题_r_9_经真实Settings EN→ZH保持A1:B2草稿并更新标题、控件及关闭名称。中文Enter关闭，权限表单Cancel弃草稿。Delete的中英普通/全屏名称正确，中文全屏mouse及普通Space、英文普通Enter及全屏mouse关闭，实际工作表1仍保留；随后只对该自建空表执行Delete+OK清理。原清单选中、7/5/12可见；English/System/100%恢复、作品回普通视图后关页。
+
+Root独立读取四runtime配置/Content及UMD绑定，完整默认引用已发布en-US单源，CJS直接exports，UMD children局部与React分离。Root overlay typecheck0、private build0（保留既有chunk-size warning），未新增/运行UI自动化。原fs/promises误用writeFileSync和只读AST辅助路径错误已经修正后完成原动作；失败事实保留。截图不编辑，AX可能为diff；未宣称其他17语言/格式、独立无locale/raw Context、移动端、Docs、未注册插件及所有service实页，也未扩为399/400或单元格编辑/公式重算/模型新发布。

@@ -1,0 +1,276 @@
+{
+  "iteration": 401,
+  "reviewedAt": "2026-10-13T17:35:16.249Z",
+  "kind": "Root manual CUA desktop interaction and original JPEG review, not UI automation",
+  "runtime": "Original 387 canonical workbook runtime reused after paired credential cleanup; no fresh DB or new model publication",
+  "identity": {
+    "sessionID": "ses_h0VKkCl7hbz3BKHVW2Xp",
+    "artifactID": "art_g0VXv65e1004ErsrwSJs",
+    "title": "Desk budget",
+    "originalSheet": "清单"
+  },
+  "before": {
+    "tab": "42",
+    "nativePID": 82420,
+    "launcher": 38715,
+    "exitCode": 0,
+    "closeAt": "2026-10-13T17:17:31.408Z",
+    "startedAt": 1791911595142,
+    "deadlineAt": 1791912795142,
+    "closeBy": 1791912735142,
+    "observed": "Chinese normal and fullscreen Range/Delete dialogs named Close; mouse, Enter and Space closed; own empty 工作表1 actually deleted; original English/System/100% restored"
+  },
+  "after": {
+    "tab": "43",
+    "nativePID": 88800,
+    "launcher": 50144,
+    "exitCode": 0,
+    "closeAt": "2026-10-13T17:30:39.897Z",
+    "startedAt": 1791912281003,
+    "deadlineAt": 1791913481003,
+    "closeBy": 1791913421003,
+    "range": "English/Chinese normal and fullscreen names Close/关闭; one open radix-_r_8_ dialog and title _r_9_ retained A1:B2 through actual EN→ZH settings and fullscreen transitions; Chinese Enter closed; form Cancel discarded the unconfirmed draft",
+    "deletion": "English/Chinese normal and fullscreen names Close/关闭; Chinese fullscreen mouse and normal Space, English normal Enter and fullscreen mouse closed while preserving own 工作表1; actual Delete+OK cleaned it afterwards",
+    "restored": "Original 清单 selected, visible 7/5/12; English/System/100%; artifact returned to ordinary view before tab close"
+  },
+  "independentDeliveryReview": "Root read four runtime ConfigContext/ConfigProvider/DialogContent implementations and UMD React/children binding; complete default comes from published en-US resource; no new Host locale source. Typecheck and private build exited 0.",
+  "failures": [
+    {
+      "kind": "Capture file helper",
+      "fact": "First writeFileSync call on fs/promises failed after capture; original retained JPEG was then saved with writeFile and manually viewed"
+    },
+    {
+      "kind": "Read-only source review helper",
+      "fact": "Initial TypeScript require had an incorrect two-level relative path; corrected to the actual one-level path and original read completed"
+    },
+    {
+      "kind": "Dependency preparation",
+      "fact": "First PATH-selected Bun1.3.14 prepare exited0 without changing source/package/lock; repeated approved prepare/commit/frozen install with Bun1.4.0, original log retained"
+    }
+  ],
+  "limits": [
+    "Actual product languages en-US/zh-CN; other17 resources and CJS/root/UMD are delivery/code review, not all-format browser qualification",
+    "No independent consumer without locale, raw manually-created Context.Provider, Mobile, Docs or unregistered plugin page was presented",
+    "Only representative Range/Delete dialogs; no claim for every installed service consumer, 399 focus return or 400 Escape hierarchy",
+    "Original cell values were visible; no cell edit, formula recalculation, CSV export or model republishing in this batch",
+    "AX files may be diff snippets; screenshots are original JPEG without editing; no UI automated tests or screenshot baseline assertions"
+  ],
+  "observations": [
+    {
+      "file": "after-en-delete-enter-closed.ax.txt",
+      "bytes": 11700,
+      "savedAt": "2026-10-13T17:29:17.299Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-en-delete-fullscreen.ax.txt",
+      "bytes": 574,
+      "savedAt": "2026-10-13T17:29:28.185Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-en-delete-fullscreen.jpg",
+      "bytes": 31712,
+      "savedAt": "2026-10-13T17:29:28.231Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-en-delete-mouse-closed.ax.txt",
+      "bytes": 1727,
+      "savedAt": "2026-10-13T17:29:38.866Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-en-delete-normal.ax.txt",
+      "bytes": 1163,
+      "savedAt": "2026-10-13T17:29:06.469Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-en-delete-normal.jpg",
+      "bytes": 32453,
+      "savedAt": "2026-10-13T17:29:06.523Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-en-range-fullscreen.ax.txt",
+      "bytes": 776,
+      "savedAt": "2026-10-13T17:25:56.739Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-en-range-fullscreen.jpg",
+      "bytes": 65587,
+      "savedAt": "2026-10-13T17:25:56.793Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-en-range-normal-draft.ax.txt",
+      "bytes": 13384,
+      "savedAt": "2026-10-13T17:26:10.543Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-en-range-normal-draft.jpg",
+      "bytes": 78447,
+      "savedAt": "2026-10-13T17:26:10.595Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-final-normal.ax.txt",
+      "bytes": 11977,
+      "savedAt": "2026-10-13T17:30:39.890Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-original-workbook-restored.jpg",
+      "bytes": 43360,
+      "savedAt": "2026-10-13T17:30:12.290Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-own-sheet-cleaned.ax.txt",
+      "bytes": 1641,
+      "savedAt": "2026-10-13T17:30:12.247Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-page-closed.json",
+      "bytes": 538,
+      "savedAt": "2026-10-13T17:30:39.898Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-zh-delete-fullscreen.ax.txt",
+      "bytes": 557,
+      "savedAt": "2026-10-13T17:27:41.373Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-zh-delete-fullscreen.jpg",
+      "bytes": 30140,
+      "savedAt": "2026-10-13T17:27:41.426Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-zh-delete-normal.ax.txt",
+      "bytes": 1107,
+      "savedAt": "2026-10-13T17:28:23.261Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-zh-delete-normal.jpg",
+      "bytes": 30222,
+      "savedAt": "2026-10-13T17:28:23.304Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-zh-range-fullscreen-draft.ax.txt",
+      "bytes": 2863,
+      "savedAt": "2026-10-13T17:26:52.781Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-zh-range-fullscreen-draft.jpg",
+      "bytes": 54361,
+      "savedAt": "2026-10-13T17:26:52.829Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-zh-range-normal-draft.ax.txt",
+      "bytes": 13125,
+      "savedAt": "2026-10-13T17:26:42.777Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-zh-range-normal-draft.jpg",
+      "bytes": 75922,
+      "savedAt": "2026-10-13T17:26:42.822Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "after-zh-same-open-range-settings.ax.txt",
+      "bytes": 4718,
+      "savedAt": "2026-10-13T17:26:31.436Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "after-zh-same-open-range-settings.jpg",
+      "bytes": 38664,
+      "savedAt": "2026-10-13T17:26:31.478Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "before-page-closed.json",
+      "bytes": 395,
+      "savedAt": "2026-10-13T17:17:31.409Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "before-settings-restored.ax.txt",
+      "bytes": 4309,
+      "savedAt": "2026-10-13T17:17:31.400Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "before-zh-delete-fullscreen.ax.txt",
+      "bytes": 555,
+      "savedAt": "2026-10-13T17:15:36.114Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "before-zh-delete-fullscreen.jpg",
+      "bytes": 30140,
+      "savedAt": "2026-10-13T17:15:36.162Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "before-zh-delete-normal.ax.txt",
+      "bytes": 1105,
+      "savedAt": "2026-10-13T17:15:58.735Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "before-zh-delete-normal.jpg",
+      "bytes": 30200,
+      "savedAt": "2026-10-13T17:15:58.788Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "before-zh-permission-detail.jpg",
+      "bytes": 53879,
+      "savedAt": "2026-10-13T17:14:47.287Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "before-zh-range-fullscreen.ax.txt",
+      "bytes": 798,
+      "savedAt": "2026-10-13T17:14:54.263Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "before-zh-range-fullscreen.jpg",
+      "bytes": 60336,
+      "savedAt": "2026-10-13T17:14:54.320Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "before-zh-range-normal.ax.txt",
+      "bytes": 783,
+      "savedAt": "2026-10-13T17:16:57.541Z",
+      "kind": "Original AX output or scope observation"
+    },
+    {
+      "file": "before-zh-range-normal.jpg",
+      "bytes": 75436,
+      "savedAt": "2026-10-13T17:16:57.591Z",
+      "kind": "Root manually viewed original JPEG"
+    },
+    {
+      "file": "before-zh-workbook.jpg",
+      "bytes": 73125,
+      "savedAt": "2026-10-13T17:14:20.105Z",
+      "kind": "Root manually viewed original JPEG"
+    }
+  ]
+}

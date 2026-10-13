@@ -4,7 +4,7 @@
 
 - [Capsule 准备与部署权属](2026-10-14-capsule-preparation-authority.md)：descriptor生产资格、不可变Task绑定和原结算权属。
 
-- [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401.md)：公共可选locale合同、完整19语言分发与桌面验收方案。
+- [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401.md)：完整19语言分发、同一已打开Dialog语言更新与两个自有scope正常收尾。
 
 - [393 ACP提示结果](2026-10-14-acp-prompt-terminal-393.md)：真实错误、取消收尾、结束原因和协议集成验收。
 

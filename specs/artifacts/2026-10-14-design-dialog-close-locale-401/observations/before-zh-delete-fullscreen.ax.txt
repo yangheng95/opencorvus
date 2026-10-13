@@ -1,0 +1,18 @@
+Browser tab: 42, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/
+	1 container Desk budget
+		10 container Desk budget
+			45 container 通知 alt+T
+			46 container 通知 alt+T
+		47 container 删除工作表, ID: radix-_r_b_
+			48 heading 删除工作表, Value: 2, ID: radix-_r_c_
+				49 text 删除工作表
+			50 text 确认删除此工作表？
+			51 container
+				52 button 取消
+				53 button 确定
+			54 button Close
+				55 image
+				56 text Close
+
+The focused UI element is 52 button 取消

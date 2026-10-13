@@ -1,0 +1,199 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-158-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-160-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-120-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: Collapse Anonymous c846f4, Secondary Actions: Collapse
+										37 container
+											38 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											39 button 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+											40 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-187-trigger, Secondary Actions: Expand
+										41 button (expanded) Description: Collapse Anonymous bb5ca9, Secondary Actions: Collapse
+										42 container
+											43 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											44 button Reply with OK.
+											45 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-200-trigger, Secondary Actions: Expand
+										46 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									47 container Recents
+										48 text Recents
+										49 container
+											50 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											51 button 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+											52 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+										53 container
+											54 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											55 button Reply with OK.
+											56 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-219-trigger, Secondary Actions: Expand
+							57 container Connection Diagnostics
+								58 container Description: Connection Diagnostics · Online · Port 18505, ID: connBadge
+									59 text Online
+					60 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					61 container chatSection
+						62 container Description: Loading task, ID: taskSwitchProgress
+						63 container
+							64 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为I...
+							65 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-233-trigger, Secondary Actions: Expand
+							66 container Description: Not running, ID: taskStatus
+								67 text Not running
+							68 button Side chat
+							69 container solidChatHeaderRuntimeActions
+								70 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								71 checkbox Description: Open right dock, Value: 0
+						72 container
+							73 container Description: Conversation, ID: chatScroll
+								74 container
+									75 container
+										76 text User
+										77 text 请直接发布一个可编辑的 spreadsheet@1 产物，标题为 Desk budget。只需一张工作表，原始表名为 清单，20行6列，冻结首行；A1为Item，B1为Quantity，A2为Notebook，B2为7，A3为Pen，B3为5，A4为Total，B4公式为=SUM(B2:B3)，计算值为12。请用真实产物发布工具完成，保留这些原始标题和数据，成功后简短说明即可。
+									78 container
+										79 text chat
+										80 text 33s
+										81 button (collapsed) Secondary Actions: Expand, Description: publish_interactive_artifact · AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
+											82 text publish_interactive_artifact
+											83 text AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {"artifact":{"schemaVersion":"1","title":"Desk budget","content":{"renderer":"spreadsheet@1","editable":true,"sheets":[{"id":"list","name":"清单","rowCount":20,"columnCount":6,"frozenRows":1,"cells":[{"address":"A1","value":"Item"},{"address":"B1","value":"Quantity"},{"address":"A2","value":"Notebook"},{"address":"B2","value":7},{"address":"A3","value":"Pen"},{"address":"B3","value":5},{"address":"A4","value":"Total"},{"address":"B4","value":null,"formula":"=SUM(B2:B3)","computed":12}]}]}}}. Error message: [ { "code": "custom", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ], "message": "spreadsheet cell must contain exactly one value or formula" }, { "code": "custom", "message": "spreadsheet cell must contain exactly one value or formula", "path": [ "artifact", "content", "sheets", 0, "cells", 7, "value" ] } ]
+											84 text 1 failed
+										85 container
+											86 button (collapsed) Description: publish_interactive_artifact · Desk budget, Secondary Actions: Expand
+												87 text publish_interactive_artifact
+												88 text Desk budget
+												89 image
+											90 container Desk budget
+												91 container
+													92 text Spreadsheet
+													93 heading Desk budget, Value: 3
+														94 text Desk budget
+													95 button Copy text
+													96 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-254-trigger, Secondary Actions: Expand
+													97 button Open Desk budget in artifact workspace
+												98 text Edits stay in this view. Before leaving or collapsing it, download the edited sheets as CSV. CSV keeps cell values, not formulas or formatting.
+												99 container Desk budget
+													100 container
+														101 container
+															102 container
+																103 text field (settable) A1
+																104 link (collapsed) Secondary Actions: Expand
+																	105 image
+															106 image univer-doc-main-canvas
+															107 button
+																108 image
+															109 image univer-doc-main-canvas
+															110 image univer-sheet-main-canvas_interactive-artifact-Desk budget
+														111 container Sidebar panel
+															112 splitter Description: Resize sidebar, Value: 50
+															113 container
+																114 text Protect Rows and Columns
+																115 button Close sidebar
+																	116 image
+																117 text Protected Range
+																118 container
+																	119 image univer-doc-main-canvas
+																	120 image
+																121 text Permission Description
+																122 text field (settable)
+																123 text Edit Permissions
+																124 container
+																	125 radio button (settable, integer) Description: Only I can edit, Value: 1
+																	126 text Only I can edit
+																127 container
+																	128 radio button (settable, integer) Description: Specified users can edit, Value: 0
+																	129 text Specified users can edit
+																130 text View Permissions
+																131 container
+																	132 radio button (settable, integer) Description: Others can view, Value: 1
+																	133 text Others can view
+																134 container
+																	135 radio button (settable, integer) Description: No one else can view, Value: 0
+																	136 text No one else can view
+																137 button Confirm
+																138 button Cancel
+														139 container
+															140 button
+																141 image
+															142 button
+																143 image
+															144 tab group Sheet tabs
+																145 tab (selected, settable, boolean) 清单, Value: 1
+															146 button
+																147 image
+															148 button
+																149 image
+															150 container
+																151 button
+															152 button
+																153 image
+															154 pop up button (collapsed) 100%, ID: radix-_r_3_, Secondary Actions: Expand
+													155 container Notifications alt+T
+													156 container Notifications alt+T
+										157 container
+											158 text 已发布可编辑的  Desk budget ：仅含“清单”工作表，20行6列，首行冻结；原始数据及 B4 公式均已保留，计算值为12。可直接在表格中编辑。
+										159 button Copy message
+										160 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+										161 pop up button (collapsed) Description: View model usage for this turn: 94K Token, Secondary Actions: Expand
+										162 text Oct 13, 05:22 PM
+							163 container chatHomeComposition
+								164 container solidChatComposer
+									165 container
+										166 text Model configuration unavailable
+										167 text You can still read this conversation. Review the details or choose a model before sending a message.
+										168 button (collapsed) Details, Secondary Actions: Expand
+											169 text Details
+										170 button Retry
+										171 container chatForm
+											172 splitter Description: Drag to resize the message input, Value: 42
+											173 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											174 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											175 text Code
+											176 text Chat
+											177 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											178 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											179 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												180 text Choose model
+											181 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									182 button Scroll to bottom
+		183 container Select a data range, ID: radix-_r_8_
+			184 heading Select a data range, Value: 2, ID: radix-_r_9_
+				185 text Select a data range
+			186 text field (settable) A1:B2
+			187 button Add range
+				188 image
+				189 text Add range
+			190 container
+				191 button Cancel
+				192 button Confirm
+			193 button Close
+				194 image
+				195 text Close
+
+The focused UI element is 97 button Open Desk budget in artifact workspace

@@ -1,0 +1,31 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://127.0.0.1:18505/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18505/ui/
+	1 container
+		2 container workspacePageStack
+			3 container 连接诊断
+				4 container Description: 连接诊断 · 在线 · 端口 18505, ID: connBadge
+					5 text 在线
+			6 container chatSection
+				7 container
+					8 container Description: 对话, ID: chatScroll
+						9 container Desk budget
+							10 container Desk budget
+								11 container 通知 alt+T
+								12 container 通知 alt+T
+					13 container
+						14 text 模型配置暂不可用 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+						15 button (collapsed) 详细信息, Secondary Actions: Expand
+							16 text 详细信息
+						17 button 重试
+		18 container 删除工作表, ID: radix-_r_e_
+			19 heading 删除工作表, Value: 2, ID: radix-_r_f_
+				20 text 删除工作表
+			21 text 确认删除此工作表？
+			22 container
+				23 button 取消
+				24 button 确定
+			25 button 关闭
+				26 image
+				27 text 关闭
+
+The focused UI element is 23 button 取消
