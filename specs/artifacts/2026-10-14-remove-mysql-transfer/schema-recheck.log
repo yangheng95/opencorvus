@@ -1,0 +1,21 @@
+$ bun script/run-tests.ts test/storage/schema-contract.test.ts
+[1/1] START test/storage/schema-contract.test.ts
+(pass) creates the complete pre-0.1.0 schema directly from the canonical DDL [204.05ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [103.64ms]
+(pass) uses one explicit application table registry for the canonical SQLite schema [116.79ms]
+(pass) reports invalid and duplicate application schema declarations [0.62ms]
+(pass) requires an explicit reset when any canonical fact table is missing [923.53ms]
+(pass) requires an explicit reset instead of adding a missing Project fence [730.31ms]
+(pass) returns the reset-required contract for an unexpected legacy application table [700.49ms]
+(pass) rejects cross-owned creation and unrelated schema drift before any mutation [816.39ms]
+(pass) reports the canonical reset-required error for a stale WAL-backed schema [706.89ms]
+(pass) reopens a freshly reset database with the exact current schema [1008.44ms]
+(pass) reopens production Native and Capsule v2 bindings through the indexed current epoch [6982.47ms]
+(pass) requires a reset for a v1 Task process binding [5552.07ms]
+(pass) requires a stable reset for structurally invalid recognized v2 Native and Capsule bindings [11629.73ms]
+(pass) gracefully retires a settled connection with a retained completed prepared query [1079.75ms]
+ 14 pass
+ 0 fail
+ 53 expect() calls
+Ran 14 tests across 1 file. [35.36s]
+[1/1] DONE test/storage/schema-contract.test.ts exit=0 duration=38.17s

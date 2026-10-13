@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [删除 MySQL 转换能力](2026-10-14-remove-mysql-transfer/README.md)：公开接口、生成产物及剩余 SQLite/运行时合同验收。
+
+- [394 原Research Studio历史](2026-10-05-connection-workspace-authority/original-research-history-394/README.md)：原始数据库只读事实及后续视觉资格。
+
 - [403 Native关闭与重启收敛](2026-10-13-native-shutdown-pending-permission-403/README.md)：208个明确公开源、原红态与Native正常/失败终态，未复制运行数据或凭据。
 
 - [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401/README.md)：37个原观察、16个JPEG和中英同实例Dialog及正常物理收尾。

@@ -9,10 +9,7 @@ import { ensureMissionSession } from "../src/mission/session"
 import { Instance } from "../src/project/instance"
 import { InstanceBootstrap } from "../src/project/bootstrap"
 import { EngineService, TaskCreationCommitTestHooks } from "../src/task-api"
-import {
-  MissionTaskCreationClosureError,
-  TaskCreatorAuthorityError,
-} from "../src/task-api/task-creator"
+import { MissionTaskCreationClosureError, TaskCreatorAuthorityError } from "../src/task-api/task-creator"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { openMissionThroughRealWake } from "./fixture/mission-opened"
 import { Session } from "../src/session"
@@ -23,12 +20,6 @@ import { Identifier } from "../src/id/id"
 import { MissionClosingEffectsTestHooks } from "../src/mission/execution-close-effects"
 import { ProtocolStore } from "../src/protocol/store"
 import { Database, eq } from "../src/storage/db"
-import {
-  exportMysqlTransferSnapshot,
-  MysqlTransferValidationError,
-  preflightMysqlTransferSnapshot,
-} from "../src/storage/mysql-transfer"
-import { taskCreationContractFingerprint } from "../src/engine/task-creation-contract"
 import { buildPanelCreationFact, panelCreationTargetID } from "../src/engine/panel-creation-fact"
 import { createRightSidebarConversationSession } from "../src/chat/session"
 import { AttachmentStore } from "../src/storage/attachment-store"
@@ -303,8 +294,6 @@ describe("Mission Task creation exact opened occurrence", () => {
         })).toEqual(result)
         expect(listMissionTasks({ projectID: mission.projectID, missionID: mission.missionID, sessionID: mission.id })
           .map((task) => ({ id: task.id, request: task.request }))).toEqual([{ id: taskID, request: taskRequest }])
-        const snapshot = exportMysqlTransferSnapshot()
-        expect(preflightMysqlTransferSnapshot(snapshot)).toMatchObject({ schemaFingerprint: snapshot.schemaFingerprint })
       },
     })
   }, 120_000)
@@ -393,8 +382,6 @@ describe("Mission Task creation exact opened occurrence", () => {
         const taskID = JSON.parse(result.output).task_id as string
         await Database.awaitEffectIdle(10_000)
         expect(requireTask(taskID).request).toBe(request)
-        const snapshot = exportMysqlTransferSnapshot()
-        expect(preflightMysqlTransferSnapshot(snapshot)).toMatchObject({ schemaFingerprint: snapshot.schemaFingerprint })
       },
     })
   })
@@ -410,44 +397,6 @@ describe("Mission Task creation exact opened occurrence", () => {
         const first = await executeMissionPanelCreateTask(mission, "tool-replay")
         const taskID = JSON.parse(first.output).task_id as string
         await Database.awaitEffectIdle(10_000)
-        const snapshot = exportMysqlTransferSnapshot()
-        expect(preflightMysqlTransferSnapshot(snapshot)).toMatchObject({
-          schemaFingerprint: snapshot.schemaFingerprint,
-        })
-        const staleOpened = structuredClone(snapshot)
-        const staleContractRow = staleOpened.tables.find((table) => table.name === "engine_task_creation_contract")
-          ?.rows.find((row) => row.task_id === taskID)
-        if (!staleContractRow) throw new Error("Mission transfer omitted its Task creation contract")
-        const staleContract = JSON.parse(String(staleContractRow.contract)) as Record<string, any>
-        staleContract.request.input.creator.opened_occurrence.event_id = "pev_missing_opened"
-        staleContract.resolved.creator.opened_occurrence.event_id = "pev_missing_opened"
-        staleContractRow.contract = JSON.stringify(staleContract)
-        staleContractRow.fingerprint = taskCreationContractFingerprint(staleContract.request)
-        expect(() => preflightMysqlTransferSnapshot(staleOpened)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({
-              message: expect.stringContaining("invalid panel Tool creator lineage"),
-            }),
-          }),
-        )
-        const changedPanelCaller = structuredClone(snapshot)
-        const changedPanelContractRow = changedPanelCaller.tables
-          .find((table) => table.name === "engine_task_creation_contract")
-          ?.rows.find((row) => row.task_id === taskID)
-        if (!changedPanelContractRow) throw new Error("Mission transfer omitted its Task creation contract")
-        const changedPanelContract = JSON.parse(String(changedPanelContractRow.contract)) as Record<string, any>
-        changedPanelContract.request.input.request = "divergent transferred panel request"
-        changedPanelContractRow.contract = JSON.stringify(changedPanelContract)
-        changedPanelContractRow.fingerprint = taskCreationContractFingerprint(changedPanelContract.request)
-        expect(() => preflightMysqlTransferSnapshot(changedPanelCaller)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({
-              message: expect.stringContaining("invalid panel Tool creator lineage"),
-            }),
-          }),
-        )
         const transcript = await Session.messages({ sessionID: mission.id })
         const owner = transcript
           .flatMap((message) =>

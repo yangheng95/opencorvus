@@ -1,0 +1,55 @@
+{
+  "observedAt": "2026-10-13T17:29:25.395Z",
+  "sessionID": "ses_hbLhVnvjgyxCro475ne2",
+  "parentSessionID": "ses_-zUSdLF94zzJawyj4Zuy",
+  "projectID": "prj_h5qbWiFVHxI6qXpzkg8E",
+  "task": null,
+  "rows": {
+    "messages": 719,
+    "parts": 2062,
+    "toolRequests": 708
+  },
+  "tools": {
+    "webfetch": 146,
+    "artifact_search": 18,
+    "websearch": 11,
+    "artifact_read": 41,
+    "artifact_select": 9,
+    "capability_search": 5,
+    "read_agent_message": 9,
+    "update_research_scope": 8,
+    "update_research_evidence": 84,
+    "update_research_evidence_note": 67,
+    "update_research_fact": 78,
+    "update_research_inference": 9,
+    "update_research_problem": 8,
+    "update_research_need": 8,
+    "update_research_constraint": 8,
+    "update_research_open_question": 19,
+    "update_research_document_section": 12,
+    "update_research_bundle_section": 17,
+    "update_research_citation": 78,
+    "update_research_summary": 10,
+    "inspect_research_result_status": 12,
+    "artifact_publish": 28,
+    "request_orchestrator_decision": 7,
+    "search_code": 1,
+    "read": 1,
+    "update_subpage_research_task": 4,
+    "send_mailbox_message": 3,
+    "todo": 4,
+    "external_code_search": 1,
+    "memory": 2
+  },
+  "sources": {
+    "count": 209,
+    "withToolPartID": 0,
+    "distinctURLs": 200,
+    "providers": [
+      "opencorvus-webfetch",
+      "open-websearch"
+    ]
+  },
+  "currentSchemaIssues": {},
+  "boundary": "Read-only private exact snapshot, current public Session/Message/Part schema validation only. No import, message mutation, Task synthesis, UI or model execution. Tool outcomes are not reconstructed here. Raw authored content remains private."
+}

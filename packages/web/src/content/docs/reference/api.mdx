@@ -34,9 +34,6 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/global/composer-references` | List global Composer references Errors: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration Errors: `NonCanonicalConfigFileError`. | `global.config.get` |
 | PATCH | `/global/config` | Update global configuration Errors: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
-| GET | `/global/db/mysql/export` | Export MySQL transfer snapshot | `global.db.mysql.export` |
-| POST | `/global/db/mysql/import` | Import MySQL transfer snapshot Body: `snapshot`; Errors: `BadRequestError`, `OwnedPromptControllersError`. | `global.db.mysql.import` |
-| GET | `/global/db/mysql/schema` | Export MySQL staging schema | `global.db.mysql.schema` |
 | POST | `/global/dispose` | Dispose instance Errors: `OwnedPromptControllersError`. | `global.dispose` |
 | GET | `/global/event` | Get global events | `global.event` |
 | GET | `/global/health` | Get health | `global.health` |

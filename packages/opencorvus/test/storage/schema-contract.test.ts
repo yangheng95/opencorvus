@@ -1,7 +1,6 @@
 import { expect, test } from "bun:test"
 import { Database as BunDatabase } from "bun:sqlite"
 import fs from "node:fs"
-import { eq } from "drizzle-orm"
 import { ApplicationSchemaRegistryError, collectTables, SCHEMA_DDL, tableName } from "../../src/storage/ddl"
 import { ApplicationSchema, ProjectTable } from "../../src/storage/schema"
 import {
@@ -11,18 +10,10 @@ import {
 import { engineArtifactCatalogLabelIndex } from "../../src/engine/artifact-catalog-constants"
 import {
   currentSchemaFingerprint,
-  findSchemaDrift,
   hasApplicationSchema,
   schemaObjectFingerprint,
 } from "../../src/storage/schema-contract"
-import { rebuildTestDatabase } from "../fixture/db"
-import {
-  exportMysqlTransferSnapshot,
-  importMysqlTransferSnapshot,
-  MysqlTransferValidationError,
-  mysqlSchemaFingerprint,
-  preflightMysqlTransferSnapshot,
-} from "../../src/storage/mysql-transfer"
+import { createTestDatabase, editTestDatabase } from "../fixture/db"
 import { canonicalTaskCreationContract, taskCreationContractFingerprint } from "../../src/engine/task-creation-contract"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
@@ -38,10 +29,6 @@ import {
 } from "../../src/engine/task-process-binding-contract"
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { memoryProject } from "../fixture/memory"
-import { MemoryChunkTable, MemoryEmbeddingTable, MemoryFileTable } from "../../src/memory/memory.sql"
-import { Server } from "../../src/server/server"
-import { TestHooks as TaskControlTestHooks } from "../../src/engine/task-root-ingress-delivery"
-import { restartTaskControlProjectFrontier } from "../../src/engine/task-root-ingress-disposition"
 
 test("creates the complete pre-0.1.0 schema directly from the canonical DDL", () => {
   const sqlite = new BunDatabase(":memory:")
@@ -232,7 +219,7 @@ test("accepted Task request, channel, and creation-contract claims are immutable
   }
 })
 
-test("uses one explicit application table registry for SQLite and transfer shapes", () => {
+test("uses one explicit application table registry for the canonical SQLite schema", () => {
   const registeredNames = Object.entries(ApplicationSchema)
     .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
     .map(([key, table]) => ({ key, name: tableName(table) }))
@@ -254,22 +241,6 @@ test("uses one explicit application table registry for SQLite and transfer shape
     sqlite.close(true)
   }
 
-  try {
-    rebuildTestDatabase()
-    const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe(currentSchemaFingerprint())
-    expect(snapshot.tables.map((table) => table.name)).toEqual(
-      registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
-    )
-    expect(snapshot.tables.map((table) => table.name).sort()).toEqual(
-      registeredNames
-        .map((entry) => entry.name)
-        .filter((name) => name !== "database_authority")
-        .sort(),
-    )
-  } finally {
-    rebuildTestDatabase()
-  }
 })
 
 test("reports invalid and duplicate application schema declarations", () => {
@@ -293,8 +264,8 @@ test("reports invalid and duplicate application schema declarations", () => {
 test("requires an explicit reset when any canonical fact table is missing", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
-    rebuildTestDatabase()
-    Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "permission_execution_result"'))
+    await createTestDatabase()
+    editTestDatabase((sqlite) => sqlite.run('DROP TABLE "permission_execution_result"'))
     expect(() => Database.Client()).toThrow(
       expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
         name: "DatabaseUnavailableError",
@@ -302,15 +273,15 @@ test("requires an explicit reset when any canonical fact table is missing", asyn
       }),
     )
   } finally {
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
 test("requires an explicit reset instead of adding a missing Project fence", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
-    rebuildTestDatabase()
-    Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "project_maintenance_fence"'))
+    await createTestDatabase()
+    editTestDatabase((sqlite) => sqlite.run('DROP TABLE "project_maintenance_fence"'))
     expect(() => Database.Client()).toThrow(
       expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
         name: "DatabaseUnavailableError",
@@ -318,15 +289,15 @@ test("requires an explicit reset instead of adding a missing Project fence", asy
       }),
     )
   } finally {
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
 test("returns the reset-required contract for an unexpected legacy application table", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
-    rebuildTestDatabase()
-    Database.rebuildSqlite((sqlite) => sqlite.run('CREATE TABLE "a2a_task_queue" ("id" text PRIMARY KEY NOT NULL)'))
+    await createTestDatabase()
+    editTestDatabase((sqlite) => sqlite.run('CREATE TABLE "a2a_task_queue" ("id" text PRIMARY KEY NOT NULL)'))
     let captured: unknown
     try {
       Database.Client()
@@ -341,15 +312,15 @@ test("returns the reset-required contract for an unexpected legacy application t
     })
     expect(captured.data.message).toContain("unexpected schema object table:a2a_task_queue")
   } finally {
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
 test("rejects cross-owned creation and unrelated schema drift before any mutation", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
-    rebuildTestDatabase()
-    Database.rebuildSqlite((sqlite) => {
+    await createTestDatabase()
+    editTestDatabase((sqlite) => {
       sqlite.run(
         `INSERT INTO project(id,worktree,sandboxes,generation,time_created,time_updated)
          VALUES('reset-boundary-project','C:/reset-boundary','[]','33333333-3333-4333-8333-333333333333',1,1)`,
@@ -402,7 +373,7 @@ test("rejects cross-owned creation and unrelated schema drift before any mutatio
       after.close(true)
     }
   } finally {
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
@@ -410,7 +381,7 @@ test("reports the canonical reset-required error for a stale WAL-backed schema",
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   let writer: BunDatabase | undefined
   try {
-    rebuildTestDatabase()
+    await createTestDatabase()
     Database.close()
     writer = new BunDatabase(Database.Path())
     writer.run("PRAGMA journal_mode=WAL")
@@ -427,15 +398,15 @@ test("reports the canonical reset-required error for a stale WAL-backed schema",
     )
   } finally {
     writer?.close(false)
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
 test("reopens a freshly reset database with the exact current schema", async () => {
   const { Database } = await import("../../src/storage/db")
   try {
-    rebuildTestDatabase()
-    Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "permission_execution_result"'))
+    await createTestDatabase()
+    editTestDatabase((sqlite) => sqlite.run('DROP TABLE "permission_execution_result"'))
     await Database.resetFiles(Database.Path())
     Database.Client()
     Database.close()
@@ -447,7 +418,7 @@ test("reopens a freshly reset database with the exact current schema", async () 
       sqlite.close(true)
     }
   } finally {
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
@@ -599,7 +570,7 @@ function rewriteProcessBindingPayload(input: {
 test("reopens production Native and Capsule v2 bindings through the indexed current epoch", async () => {
   const { Database } = await import("../../src/storage/db")
   try {
-    rebuildTestDatabase()
+    await createTestDatabase()
     await using project = await memoryProject("task-process-binding-current-epoch")
     await Instance.provide({
       directory: project.path,
@@ -642,14 +613,14 @@ test("reopens production Native and Capsule v2 bindings through the indexed curr
       },
     })
   } finally {
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
 test("requires a reset for a v1 Task process binding", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   try {
-    rebuildTestDatabase()
+    await createTestDatabase()
     await using project = await memoryProject("task-process-binding-epoch")
     await Instance.provide({
       directory: project.path,
@@ -680,7 +651,7 @@ test("requires a reset for a v1 Task process binding", async () => {
       },
     })
   } finally {
-    rebuildTestDatabase()
+    await createTestDatabase()
   }
 })
 
@@ -691,7 +662,7 @@ test(
     const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
     for (const mode of ["native", "capsule"] as const) {
       try {
-        rebuildTestDatabase()
+        await createTestDatabase()
         await using project = await memoryProject(`invalid-${mode}-process-binding`)
         await Instance.provide({
           directory: project.path,
@@ -724,421 +695,23 @@ test(
           },
         })
       } finally {
-        rebuildTestDatabase()
+        await createTestDatabase()
       }
     }
   },
 )
 
-test("round-trips one production-written current Task through the strict transfer contract", async () => {
-  const { Database } = await import("../../src/storage/db")
-  try {
-    rebuildTestDatabase()
-    await using project = await memoryProject("current-transfer-contract")
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const taskID = Identifier.ascending("task")
-        const now = Date.now()
-        const packageRevision = {
-          scope: "built_in" as const,
-          projectID: null,
-          namespace: "builtin",
-          id: "base",
-          version: "2026.08.31.1",
-          packageDigest: "a".repeat(64),
-        }
-        const rootSession = Session.prepareRootNext({
-          kind: "root",
-          directory: Instance.directory,
-          title: "Current transfer contract",
-        })
-        persistEstablishedTask({
-          taskID,
-          rootSession,
-          now,
-          title: "Current transfer contract",
-          request: "Transfer one complete current Task aggregate",
-          productPillar: "code",
-          source: "test",
-          metadata: { actor: "user" },
-          projectID: Instance.project.id,
-          packageRevision,
-          executionCapsuleBinding: await prepareTaskProcessBinding({
-            mode: "native",
-            taskID,
-            projectID: Instance.project.id,
-            rootDirectory: Instance.directory,
-            packageRevisionSHA256: packageRevision.packageDigest,
-            timeCreated: now,
-          }),
-        })
-        await Database.awaitEffectIdle(10_000)
-        Database.use((db) => {
-          db.insert(MemoryFileTable)
-            .values({
-              id: "memfile_transfer_blob",
-              project_id: Instance.project.id,
-              title: "Transfer blob",
-              source: "agent",
-              kind: "note",
-              importance: 60,
-              confidence: 75,
-              time_created: now,
-              time_updated: now,
-            })
-            .run()
-          db.insert(MemoryChunkTable)
-            .values({
-              id: "memchunk_transfer_blob",
-              file_id: "memfile_transfer_blob",
-              project_id: Instance.project.id,
-              content: "canonical base64",
-              token_count: 2,
-              time_created: now,
-              time_updated: now,
-            })
-            .run()
-          db.insert(MemoryEmbeddingTable)
-            .values({
-              chunk_id: "memchunk_transfer_blob",
-              embedding: Buffer.from([0, 1, 2, 253, 254, 255]),
-              model: "test-embedding",
-              time_created: now,
-              time_updated: now,
-            })
-            .run()
-          db.insert(MemoryChunkTable)
-            .values({
-              id: "memchunk_transfer_empty_blob",
-              file_id: "memfile_transfer_blob",
-              project_id: Instance.project.id,
-              content: "empty canonical base64",
-              token_count: 3,
-              time_created: now,
-              time_updated: now,
-            })
-            .run()
-          db.insert(MemoryEmbeddingTable)
-            .values({
-              chunk_id: "memchunk_transfer_empty_blob",
-              embedding: Buffer.alloc(0),
-              model: "test-embedding",
-              time_created: now,
-              time_updated: now,
-            })
-            .run()
-        })
-
-        const frontierBeforeImport = TaskControlTestHooks.currentProjectFrontierSlice()
-        expect(frontierBeforeImport.taskIDs).toContain(taskID)
-        const preImportCursor = restartTaskControlProjectFrontier(frontierBeforeImport.checkpoint)
-        const snapshot = exportMysqlTransferSnapshot()
-        const plan = preflightMysqlTransferSnapshot(snapshot)
-        expect(plan.schemaFingerprint).toBe(snapshot.schemaFingerprint)
-        const rejectedOuterEnvelope = await Server.App().request("/global/db/mysql/import", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ snapshot, alternateRequestContract: true }),
-        })
-        expect({ status: rejectedOuterEnvelope.status, body: await rejectedOuterEnvelope.json() }).toMatchObject({
-          status: 400,
-          body: {
-            success: false,
-            data: { message: "Request validation failed" },
-            error: [{ code: "unrecognized_keys", message: 'Unrecognized key: "alternateRequestContract"', path: [] }],
-          },
-        })
-        expect(exportMysqlTransferSnapshot()).toEqual(snapshot)
-        const emptyEmbedding = snapshot.tables
-          .find((table) => table.name === "memory_embedding")
-          ?.rows.find((row) => row.chunk_id === "memchunk_transfer_empty_blob")
-        expect(emptyEmbedding?.embedding).toEqual({ opencorvusType: "blobBase64", base64: "" })
-
-        const staleEpoch = structuredClone(snapshot)
-        const staleSchema = new BunDatabase(":memory:")
-        try {
-          staleSchema.exec(SCHEMA_DDL)
-          staleSchema.run('DROP TRIGGER "global_creation_allocation_acceptance_write_once"')
-          staleEpoch.schemaFingerprint = schemaObjectFingerprint(staleSchema)
-        } finally {
-          staleSchema.close(false)
-        }
-        expect(() => preflightMysqlTransferSnapshot(staleEpoch)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining("schema fingerprint mismatch") }),
-          }),
-        )
-
-        const duplicateTable = structuredClone(snapshot)
-        duplicateTable.tables.push(structuredClone(duplicateTable.tables[0]!))
-        expect(() => preflightMysqlTransferSnapshot(duplicateTable)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: "Duplicate table in MySQL transfer snapshot" }),
-          }),
-        )
-
-        const unknownTopLevel = structuredClone(snapshot)
-        ;(unknownTopLevel as unknown as Record<string, unknown>).alternateContract = true
-        expect(() => preflightMysqlTransferSnapshot(unknownTopLevel)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining("alternateContract") }),
-          }),
-        )
-
-        const unknownTableField = structuredClone(snapshot)
-        ;(unknownTableField.tables[0] as unknown as Record<string, unknown>).alternateTableContract = true
-        expect(() => preflightMysqlTransferSnapshot(unknownTableField)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining("alternateTableContract") }),
-          }),
-        )
-
-        const malformedBlobValues = ["!!!=", "AAE", "AAECA/3+/w===", "AAECA_3-_w=="]
-        for (const malformed of malformedBlobValues) {
-          const malformedBlob = structuredClone(snapshot)
-          const embedding = malformedBlob.tables
-            .find((table) => table.name === "memory_embedding")
-            ?.rows.find((row) => row.chunk_id === "memchunk_transfer_blob")
-          if (!embedding) throw new Error("Transfer snapshot omitted the canonical BLOB fixture")
-          embedding.embedding = { opencorvusType: "blobBase64", base64: malformed }
-          expect(() => preflightMysqlTransferSnapshot(malformedBlob)).toThrow(
-            expect.objectContaining<MysqlTransferValidationError>({
-              name: "MysqlTransferValidationError",
-              data: expect.objectContaining({
-                message: expect.stringContaining("expected canonical padded base64 payload"),
-              }),
-            }),
-          )
-        }
-
-        const unknownBlobField = structuredClone(snapshot)
-        const unknownBlob = unknownBlobField.tables
-          .find((table) => table.name === "memory_embedding")
-          ?.rows.find((row) => row.chunk_id === "memchunk_transfer_blob")
-        if (!unknownBlob) throw new Error("Transfer snapshot omitted the canonical BLOB fixture")
-        unknownBlob.embedding = {
-          ...(unknownBlob.embedding as Record<string, unknown>),
-          alternateBlobContract: true,
-        }
-        expect(() => preflightMysqlTransferSnapshot(unknownBlobField)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining("alternateBlobContract") }),
-          }),
-        )
-
-        const incomplete = structuredClone(snapshot)
-        const incompleteContracts = incomplete.tables.find((table) => table.name === "engine_task_creation_contract")
-        if (!incompleteContracts) throw new Error("Transfer snapshot omitted the Task creation contract table")
-        incompleteContracts.rows = []
-        expect(() => preflightMysqlTransferSnapshot(incomplete)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({
-              message: `Task ${taskID} is missing its current creation contract`,
-            }),
-          }),
-        )
-
-        const divergent = structuredClone(snapshot)
-        const divergentContract = divergent.tables
-          .find((table) => table.name === "engine_task_creation_contract")
-          ?.rows.find((row) => row.task_id === taskID)
-        if (!divergentContract) throw new Error("Transfer snapshot omitted the exact Task creation contract row")
-        divergentContract.time_created = now + 1
-        expect(() => preflightMysqlTransferSnapshot(divergent)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({
-              message: `Task ${taskID} creation contract has a divergent acceptance time`,
-            }),
-          }),
-        )
-
-        const malformedProcess = structuredClone(snapshot)
-        const processArtifact = malformedProcess.tables
-          .find((table) => table.name === "engine_artifact")
-          ?.rows.find((row) => row.task_id === taskID && row.kind === "task_execution_capsule_binding")
-        if (!processArtifact) throw new Error("Transfer snapshot omitted the exact Task process binding")
-        const processPayload = JSON.parse(String(processArtifact.payload)) as Record<string, unknown>
-        processPayload.project_id = "prj_wrong_transfer_owner"
-        const serializedProcess = JSON.stringify(processPayload)
-        const derived = deriveEngineArtifactCatalogMetadata({
-          kind: "task_execution_capsule_binding",
-          payloadText: serializedProcess,
-        })
-        Object.assign(processArtifact, {
-          payload: serializedProcess,
-          payload_sha256: derived.payload_sha256,
-          payload_bytes: derived.payload_bytes,
-          payload_block_sha256s: JSON.stringify(derived.payload_block_sha256s),
-          payload_block_index_sha256: derived.payload_block_index_sha256,
-          catalog_artifact_type: derived.catalog_artifact_type,
-          catalog_schema_diagnostic: derived.catalog_schema_diagnostic,
-          catalog_resource_count: derived.catalog_resource_count,
-          catalog_resource_media_types: JSON.stringify(derived.catalog_resource_media_types),
-          catalog_search_text: derived.catalog_search_text,
-          catalog_search_text_truncated: Number(derived.catalog_search_text_truncated),
-          catalog_producer: derived.catalog_producer ? JSON.stringify(derived.catalog_producer) : null,
-          catalog_import_source_task_id: derived.catalog_import_source_task_id,
-        })
-        processArtifact.catalog_metadata_sha256 = engineArtifactCatalogMetadataSHA256({
-          artifact_id: String(processArtifact.id),
-          task_id: String(processArtifact.task_id),
-          kind: "task_execution_capsule_binding",
-          label_index: engineArtifactCatalogLabelIndex(String(processArtifact.label)),
-          time_created: Number(processArtifact.time_created),
-          time_updated: Number(processArtifact.time_updated),
-          ...derived,
-        })
-        expect(() => preflightMysqlTransferSnapshot(malformedProcess)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({
-              message: expect.stringContaining(
-                `Task ${taskID} package/process binding diverges from its accepted aggregate`,
-              ),
-            }),
-          }),
-        )
-
-        const partialCreator = structuredClone(snapshot)
-        const partialContractRow = partialCreator.tables
-          .find((table) => table.name === "engine_task_creation_contract")
-          ?.rows.find((row) => row.task_id === taskID)
-        if (!partialContractRow) throw new Error("Transfer snapshot omitted the exact Task creation contract row")
-        const partialContract = JSON.parse(String(partialContractRow.contract)) as Record<string, any>
-        const partialAuthority = {
-          actor: "control_agent",
-          session_id: "ses_missing_creator",
-          message_id: "msg_partial_creator",
-        }
-        partialContract.request.input.creator = partialAuthority
-        partialContract.resolved.creator = partialAuthority
-        partialContractRow.contract = JSON.stringify(partialContract)
-        partialContractRow.fingerprint = taskCreationContractFingerprint(partialContract.request)
-        expect(() => preflightMysqlTransferSnapshot(partialCreator)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({
-              message: expect.stringContaining("Persisted Task creator Tool authority requires"),
-            }),
-          }),
-        )
-
-        const missingCreatorSession = structuredClone(snapshot)
-        const missingCreatorContractRow = missingCreatorSession.tables
-          .find((table) => table.name === "engine_task_creation_contract")
-          ?.rows.find((row) => row.task_id === taskID)
-        const missingCreatorTaskRow = missingCreatorSession.tables
-          .find((table) => table.name === "engine_task")
-          ?.rows.find((row) => row.id === taskID)
-        if (!missingCreatorContractRow || !missingCreatorTaskRow) {
-          throw new Error("Transfer snapshot omitted the Task creator aggregate")
-        }
-        const missingCreatorContract = JSON.parse(String(missingCreatorContractRow.contract)) as Record<string, any>
-        const missingAuthority = { actor: "control_agent", session_id: "ses_missing_creator" }
-        missingCreatorContract.request.input.creator = missingAuthority
-        missingCreatorContract.resolved.creator = missingAuthority
-        missingCreatorContractRow.contract = JSON.stringify(missingCreatorContract)
-        missingCreatorContractRow.fingerprint = taskCreationContractFingerprint(missingCreatorContract.request)
-        missingCreatorTaskRow.metadata = JSON.stringify({
-          actor: "control_agent",
-          actor_session_id: "ses_missing_creator",
-        })
-        expect(() => preflightMysqlTransferSnapshot(missingCreatorSession)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: `Task ${taskID} creator Session authority is not current` }),
-          }),
-        )
-
-        const changedIngress = structuredClone(snapshot)
-        const initialIngress = changedIngress.tables
-          .find((table) => table.name === "engine_task_root_ingress")
-          ?.rows.find((row) => row.task_id === taskID && row.execution_epoch === 1 && row.sequence === 1)
-        if (!initialIngress) throw new Error("Transfer snapshot omitted the initial Task ingress")
-        initialIngress.inline_payload = JSON.stringify({ changed: true })
-        expect(() => preflightMysqlTransferSnapshot(changedIngress)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: `Task ${taskID} has no exact initial root ingress` }),
-          }),
-        )
-
-        const changedIngressPolicy = structuredClone(snapshot)
-        const policyID = changedIngressPolicy.tables
-          .find((table) => table.name === "engine_task_root_ingress")
-          ?.rows.find((row) => row.task_id === taskID && row.execution_epoch === 1 && row.sequence === 1)?.policy_id
-        const policy = changedIngressPolicy.tables
-          .find((table) => table.name === "engine_task_root_ingress_policy")
-          ?.rows.find((row) => row.id === policyID)
-        if (!policy) throw new Error("Transfer snapshot omitted the initial Task ingress policy")
-        policy.activation_limit = 5
-        expect(() => preflightMysqlTransferSnapshot(changedIngressPolicy)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: `Task ${taskID} has no exact initial root ingress` }),
-          }),
-        )
-
-        const missingAllocation = structuredClone(snapshot)
-        const markedTask = missingAllocation.tables
-          .find((table) => table.name === "engine_task")
-          ?.rows.find((row) => row.id === taskID)
-        if (!markedTask) throw new Error("Transfer snapshot omitted the exact Task row")
-        markedTask.global_creation_allocation_id = "gca_missing_current_allocation"
-        expect(() => preflightMysqlTransferSnapshot(missingAllocation)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({
-              message: `Global Task ${taskID} is missing its accepted allocation`,
-            }),
-          }),
-        )
-
-        const result = importMysqlTransferSnapshot(snapshot)
-        expect(result).toMatchObject({
-          ok: true,
-          schemaFingerprint: snapshot.schemaFingerprint,
-          tables: expect.arrayContaining([
-            { name: "engine_task_creation_contract", rows: 1 },
-            { name: "engine_task_root_ingress", rows: 1 },
-          ]),
-        })
-        expect(TaskControlTestHooks.currentProjectFrontierSlice(preImportCursor).taskIDs).toContain(taskID)
-        expect(
-          Database.use(
-            (db) =>
-              db
-                .select({ embedding: MemoryEmbeddingTable.embedding })
-                .from(MemoryEmbeddingTable)
-                .where(eq(MemoryEmbeddingTable.chunk_id, "memchunk_transfer_empty_blob"))
-                .get()?.embedding,
-          ),
-        ).toEqual(Buffer.alloc(0))
-      },
-    })
-  } finally {
-    rebuildTestDatabase()
-  }
-}, 30_000)
-
 test("gracefully retires a settled connection with a retained completed prepared query", async () => {
   const { Database } = await import("../../src/storage/db")
+  await createTestDatabase()
+  const retainedQuery = Database.Client().select().from(ProjectTable).prepare()
   try {
-    rebuildTestDatabase()
-    const retainedQuery = Database.Client().select().from(ProjectTable).prepare()
     expect(retainedQuery.all()).toEqual([])
     Database.close()
     expect(Database.use((db) => db.select().from(ProjectTable).all())).toEqual([])
     Database.close()
   } finally {
-    rebuildTestDatabase()
+    retainedQuery.finalize()
+    await createTestDatabase()
   }
 })

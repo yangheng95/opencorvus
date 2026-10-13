@@ -13,7 +13,6 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { GlobalCreationAllocationTable, ProjectTable } from "@/project/project.sql"
 import { Database, eq } from "@/storage/db"
 import { EngineService } from "@/task-api"
-import { exportMysqlTransferSnapshot, preflightMysqlTransferSnapshot } from "@/storage/mysql-transfer"
 
 const model = { providerID: "global-chat-start-test", modelID: "stream-model" }
 const laterModelID = "later-session-model"
@@ -329,102 +328,6 @@ describe("global Chat start API", () => {
             patch: { model: `${model.providerID}/${laterModelID}` },
           }),
       })
-      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot())).toMatchObject({
-        schemaFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
-      })
-
-      const deterministicMessageID = Identifier.deterministic(
-        "message",
-        `global.chat.start.v1\0${body.requestID}\0message`,
-      )
-      const deterministicTextPartID = Identifier.deterministic("part", `global.chat.start.v1\0${body.requestID}\0text`)
-      const deterministicAttachmentPartID = Identifier.deterministic(
-        "part",
-        `global.chat.start.v1\0${body.requestID}\0attachment\0${0}`,
-      )
-      const deterministicControlID = Identifier.deterministic(
-        "session_control",
-        `global.chat.start.v1\0${body.requestID}\0control`,
-      )
-      const transferMutations: Array<{
-        expected: string
-        mutate: (snapshot: ReturnType<typeof exportMysqlTransferSnapshot>) => void
-      }> = [
-        {
-          expected: "input Message diverges",
-          mutate(snapshot) {
-            const row = snapshot.tables
-              .find((table) => table.name === "message")
-              ?.rows.find((candidate) => candidate.id === deterministicMessageID)
-            if (!row) throw new Error("Global Chat transfer omitted its deterministic Message")
-            const data = JSON.parse(String(row.data)) as Record<string, any>
-            data.extra.wake_reason.requestFingerprint = "0".repeat(64)
-            row.data = JSON.stringify(data)
-          },
-        },
-        {
-          expected: "input text Part diverges",
-          mutate(snapshot) {
-            const row = snapshot.tables
-              .find((table) => table.name === "part")
-              ?.rows.find((candidate) => candidate.id === deterministicTextPartID)
-            if (!row) throw new Error("Global Chat transfer omitted its deterministic text Part")
-            const data = JSON.parse(String(row.data)) as Record<string, any>
-            data.text = "divergent transferred text"
-            row.data = JSON.stringify(data)
-          },
-        },
-        {
-          expected: "attachment Part 1 diverges",
-          mutate(snapshot) {
-            const row = snapshot.tables
-              .find((table) => table.name === "part")
-              ?.rows.find((candidate) => candidate.id === deterministicAttachmentPartID)
-            if (!row) throw new Error("Global Chat transfer omitted its deterministic attachment Part")
-            const data = JSON.parse(String(row.data)) as Record<string, any>
-            data.url = "/attachment/foreign/sha.txt"
-            row.data = JSON.stringify(data)
-          },
-        },
-        {
-          expected: "wake control diverges",
-          mutate(snapshot) {
-            const row = snapshot.tables
-              .find((table) => table.name === "session_control_record")
-              ?.rows.find((candidate) => candidate.id === deterministicControlID)
-            if (!row) throw new Error("Global Chat transfer omitted its deterministic wake control")
-            const payload = JSON.parse(String(row.payload)) as Record<string, any>
-            payload.messageID = Identifier.ascending("message")
-            row.payload = JSON.stringify(payload)
-          },
-        },
-      ]
-      for (const mutation of transferMutations) {
-        const changed = structuredClone(exportMysqlTransferSnapshot())
-        mutation.mutate(changed)
-        expect(() => preflightMysqlTransferSnapshot(changed)).toThrow(
-          expect.objectContaining({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining(mutation.expected) }),
-          }),
-        )
-      }
-      const malformedTransfer = structuredClone(exportMysqlTransferSnapshot())
-      const acceptedSession = malformedTransfer.tables
-        .find((table) => table.name === "session")
-        ?.rows.find((row) => row.id === first.session.id)
-      if (!acceptedSession) throw new Error("Global Chat transfer omitted its accepted Session")
-      const acceptedMetadata = JSON.parse(String(acceptedSession.metadata)) as Record<string, any>
-      acceptedMetadata.globalChatStart.messageID = Identifier.ascending("message")
-      acceptedSession.metadata = JSON.stringify(acceptedMetadata)
-      expect(() => preflightMysqlTransferSnapshot(malformedTransfer)).toThrow(
-        expect.objectContaining({
-          name: "MysqlTransferValidationError",
-          data: expect.objectContaining({
-            message: expect.stringContaining("deterministic request identity"),
-          }),
-        }),
-      )
       expect(await EngineService.deleteSession(first.session.id, { projectID: first.session.projectID })).toEqual({
         ok: true,
         status: "tombstoned",
@@ -443,9 +346,6 @@ describe("global Chat start API", () => {
       })
       await Instance.disposeAll()
       Database.transaction((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, first.session.projectID)).run())
-      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot())).toMatchObject({
-        schemaFingerprint: expect.any(String),
-      })
     } finally {
       processor.mockRestore()
       provider.mockRestore()

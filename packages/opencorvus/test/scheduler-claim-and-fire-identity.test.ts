@@ -1,10 +1,7 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { randomUUID } from "node:crypto"
 import { acquireControlLease, currentControlLeaseInTransaction } from "../src/engine/control-lease"
-import {
-  EngineControlActivationLeaseGrantTable,
-  EngineControlActivationLeaseTable,
-} from "../src/engine/engine.sql"
+import { EngineControlActivationLeaseGrantTable, EngineControlActivationLeaseTable } from "../src/engine/engine.sql"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Project } from "../src/project/project"
@@ -44,15 +41,6 @@ import { ensureMissionSession } from "@/mission/session"
 import { SessionPromptOwner } from "@/session/prompt/owner"
 import { SessionStatus } from "@/session/status"
 import { MessageTable } from "@/session/session.sql"
-import {
-  applyMysqlTransferPlan,
-  exportMysqlTransferSnapshot,
-  importMysqlTransferSnapshot,
-  MysqlTransferApplyError,
-  MysqlTransferValidationError,
-  preflightMysqlTransferSnapshot,
-} from "@/storage/mysql-transfer"
-import { ProtocolEventTable } from "@/protocol/protocol.sql"
 
 afterEach(resetMemoryDatabase)
 
@@ -269,118 +257,6 @@ describe("scheduler immutable definition and fire identity", () => {
     } })
   }, 30_000)
 
-  test("strict transfer preserves the active Automation Fire delivery authority", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      const stamp = new Date(Date.now() + 2_000).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z")
-      const automation = await AutomationService.create({
-        name: "strict Automation frontier transfer",
-        target: { scope: "project", projectIds: [Instance.project.id] },
-        recurrence: `DTSTART:${stamp}\nRRULE:FREQ=SECONDLY;INTERVAL=120`,
-        prompt: "preserve the exact due authority",
-      })
-      using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
-        sessionID: input.sessionID!,
-        messageID: input.messageID!,
-        activation: Promise.resolve({ owner: new AbortController().signal }),
-        completion: Promise.resolve({ ok: true as const }),
-      }))
-      while (Date.now() <= automation.nextRun) await Bun.sleep(10)
-      const owner = `strict-transfer:${automation.nextRun}`
-      const claimedAt = Date.now()
-      const claimed = AutomationService.TestHooks.claim(automation.id, owner, claimedAt, false)!
-      await AutomationService.TestHooks.executeClaimedOccurrence({ job: claimed, owner, now: claimedAt })
-      const snapshot = exportMysqlTransferSnapshot()
-      expect(preflightMysqlTransferSnapshot(snapshot).schemaFingerprint).toBe(snapshot.schemaFingerprint)
-
-      const invalidAttemptAuthority = structuredClone(snapshot)
-      const attemptTable = invalidAttemptAuthority.tables.find((table) => table.name === "automation_fire_attempt")
-      const leaseTable = invalidAttemptAuthority.tables.find(
-        (table) => table.name === "engine_control_activation_lease",
-      )
-      const definitionTable = invalidAttemptAuthority.tables.find((table) => table.name === "automation")
-      const fireAuthorityTable = invalidAttemptAuthority.tables.find((table) => table.name === "automation_fire")
-      if (!attemptTable || !leaseTable || !definitionTable || !fireAuthorityTable) {
-        throw new Error("Automation transfer fixture omitted attempt authority")
-      }
-      const revisionIDs = new Set(
-        definitionTable.rows.filter((row) => row.definition_id === automation.id).map((row) => row.id),
-      )
-      const fireIDs = new Set(
-        fireAuthorityTable.rows
-          .filter((row) => revisionIDs.has(row.automation_revision_id))
-          .map((row) => row.id),
-      )
-      const attempt = attemptTable.rows.find((row) => fireIDs.has(row.fire_id))
-      const ownerLease = leaseTable.rows.find(
-        (row) =>
-          row.target === "automation" &&
-          row.target_id === automation.id &&
-          row.owner_occurrence_id === attempt?.owner_occurrence_id,
-      )
-      if (!attempt || !ownerLease) throw new Error("Automation transfer fixture omitted its exact attempt lease")
-      attempt.lease_expires_at = attempt.time_created
-      expect(() => preflightMysqlTransferSnapshot(invalidAttemptAuthority)).toThrow(
-        expect.objectContaining<MysqlTransferValidationError>({
-          name: "MysqlTransferValidationError",
-          data: expect.objectContaining({ message: expect.stringContaining("invalid admission authority") }),
-        }),
-      )
-
-      for (const forgedExpiry of [Number(attempt.time_created) + 1, Number(ownerLease.expires_at) + 1_000]) {
-        const forged = structuredClone(snapshot)
-        const forgedAttempt = forged.tables
-          .find((table) => table.name === "automation_fire_attempt")
-          ?.rows.find((row) => row.id === attempt.id)
-        if (!forgedAttempt) throw new Error("Automation transfer fixture omitted its exact attempt")
-        forgedAttempt.lease_expires_at = forgedExpiry
-        expect(() => preflightMysqlTransferSnapshot(forged)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining("invalid admission authority") }),
-          }),
-        )
-      }
-
-      const terminalAuthority = structuredClone(snapshot)
-      const terminalFrontierTable = terminalAuthority.tables.find(
-        (table) => table.name === "automation_fire_frontier",
-      )
-      const terminalFireTable = terminalAuthority.tables.find((table) => table.name === "automation_fire")
-      const terminalRunTable = terminalAuthority.tables.find((table) => table.name === "automation_run")
-      if (!terminalFrontierTable || !terminalFireTable || !terminalRunTable) {
-        throw new Error("Automation transfer fixture omitted execution tables")
-      }
-      const terminalFrontier = terminalFrontierTable.rows.find((row) => row.definition_id === automation.id)
-      const terminalRun = terminalRunTable.rows.find((row) => row.automation_revision_id === terminalFrontier?.automation_revision_id)
-      const terminalFire = terminalFireTable.rows.find((row) => row.id === terminalRun?.fire_id)
-      if (!terminalFrontier || !terminalFire) throw new Error("Automation transfer fixture omitted its terminal Fire")
-      terminalFrontier.fire_id = terminalFire.id
-      terminalFrontier.available_at = terminalFire.scheduled_due_at
-      expect(() => preflightMysqlTransferSnapshot(terminalAuthority)).toThrow(
-        expect.objectContaining<MysqlTransferValidationError>({
-          name: "MysqlTransferValidationError",
-          data: expect.objectContaining({ message: expect.stringContaining("invalid Fire delivery frontier") }),
-        }),
-      )
-
-      const missingAuthority = structuredClone(snapshot)
-      const frontierTable = missingAuthority.tables.find((table) => table.name === "automation_fire_frontier")
-      const fireTable = missingAuthority.tables.find((table) => table.name === "automation_fire")
-      if (!frontierTable || !fireTable) throw new Error("Automation transfer fixture omitted frontier tables")
-      const frontier = frontierTable.rows.find((row) => row.definition_id === automation.id)
-      if (!frontier) throw new Error("Automation transfer fixture omitted its current frontier")
-      frontierTable.rows = frontierTable.rows.filter((row) => row.definition_id !== automation.id)
-      fireTable.rows = fireTable.rows.filter((row) => row.id !== frontier.fire_id)
-      expect(() => preflightMysqlTransferSnapshot(missingAuthority)).toThrow(
-        expect.objectContaining<MysqlTransferValidationError>({
-          name: "MysqlTransferValidationError",
-          data: expect.objectContaining({ message: expect.stringContaining("invalid Fire frontier presence") }),
-        }),
-      )
-    } })
-  }, 60_000)
-
   test("same-millisecond lease ordering admits only the current owner while retaining an earlier valid attempt", async () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
@@ -493,21 +369,6 @@ describe("scheduler immutable definition and fire identity", () => {
         }).run()
       })
 
-      const snapshot = exportMysqlTransferSnapshot()
-      expect(preflightMysqlTransferSnapshot(snapshot).schemaFingerprint).toBe(snapshot.schemaFingerprint)
-      const staleGrantSnapshot = structuredClone(snapshot)
-      const staleGrantAttempt = staleGrantSnapshot.tables
-        .find((table) => table.name === "automation_fire_attempt")
-        ?.rows.find((row) => row.id === "afa_same_ms_current")
-      if (!staleGrantAttempt) throw new Error("Automation transfer fixture omitted the renewed attempt")
-      staleGrantAttempt.lease_grant_ordinal = 1
-      staleGrantAttempt.lease_expires_at = expiresAt
-      expect(() => preflightMysqlTransferSnapshot(staleGrantSnapshot)).toThrow(
-        expect.objectContaining<MysqlTransferValidationError>({
-          name: "MysqlTransferValidationError",
-          data: expect.objectContaining({ message: expect.stringContaining("invalid admission authority") }),
-        }),
-      )
       expect(() => Database.use((db) => db.delete(EngineControlActivationLeaseTable)
         .where(eq(EngineControlActivationLeaseTable.id, "call_same_ms_history_a")).run()))
         .toThrow()
@@ -1404,158 +1265,6 @@ describe("scheduler immutable definition and fire identity", () => {
     } })
   }, 60_000)
 
-  test("active Mission transfer preserves only the exact opened occurrence authority", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      await Config.updateProjectPatch({
-        model: "scheduler-automation-mission/wake-model",
-        provider: {
-          "scheduler-automation-mission": {
-            name: "Scheduler Automation Mission test",
-            npm: "@ai-sdk/openai-compatible",
-            api: "http://127.0.0.1:1/v1",
-            models: {
-              "wake-model": {
-                name: "Scheduler Automation Mission model",
-                tool_call: true,
-                modalities: { input: ["text"], output: ["text"] },
-                limit: { context: 32_000, output: 4_096 },
-              },
-            },
-          },
-        },
-      })
-      const mission = await ensureMissionSession({
-        missionID: `automation-active-transfer-${Date.now()}`,
-        defaultCwd: project.path,
-        productPillar: "work",
-        heldExpertSquadIDs: ["base"],
-      })
-      const sibling = await ensureMissionSession({
-        missionID: `automation-active-transfer-sibling-${Date.now()}`,
-        defaultCwd: project.path,
-        productPillar: "work",
-        heldExpertSquadIDs: ["base"],
-      })
-      const ordinary = await Session.create({ kind: "assistant", title: "Non-Mission transfer target" })
-      using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
-      await openMissionOccurrence(mission, "automation-active-transfer-open")
-      await openMissionOccurrence(sibling, "automation-active-transfer-sibling-open")
-      const automation = await AutomationService.create({
-        name: "Active Mission transfer",
-        target: { scope: "session", sessionId: mission.id },
-        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
-        prompt: "retain this exact opened occurrence",
-      })
-      const runID = Identifier.ascending("automation")
-      const authority = Database.immediateTransaction((db) => {
-        const revision = db.select().from(AutomationTable)
-          .where(eq(AutomationTable.definition_id, automation.id)).get()!
-        const frontier = db.select().from(AutomationFireFrontierTable)
-          .where(eq(AutomationFireFrontierTable.definition_id, automation.id)).get()!
-        const opened = db.select().from(ProtocolEventTable)
-          .where(and(
-            eq(ProtocolEventTable.aggregate_type, "session"),
-            eq(ProtocolEventTable.aggregate_id, mission.id),
-            eq(ProtocolEventTable.type, "mission.execution.opened"),
-          )).get()!
-        const siblingOpened = db.select().from(ProtocolEventTable)
-          .where(and(
-            eq(ProtocolEventTable.aggregate_type, "session"),
-            eq(ProtocolEventTable.aggregate_id, sibling.id),
-            eq(ProtocolEventTable.type, "mission.execution.opened"),
-          )).get()!
-        const unrelatedEventID = Identifier.ascending("protocol_event")
-        db.insert(ProtocolEventTable).values({
-          id: unrelatedEventID,
-          kind: "event",
-          type: "unrelated.event",
-          aggregate_type: "bus",
-          aggregate_id: `bus_active_transfer_${Date.now()}`,
-          project_id: null,
-          task_id: null,
-          session_id: null,
-          interaction_id: null,
-          stream_id: null,
-          source: "test.scheduler-automation",
-          target: null,
-          causation_id: null,
-          correlation_id: null,
-          reply_to: null,
-          seq: 1,
-          deadline_ms: null,
-          emitted_at: Date.now(),
-          payload: {},
-        }).run()
-        for (const [invalidID, invalidEventID] of [
-          ["atr_active_wrong_session", siblingOpened.id],
-          ["atr_active_wrong_type", unrelatedEventID],
-        ] as const) {
-          expect(() => db.insert(AutomationRunTable).values({
-            id: invalidID,
-            automation_revision_id: revision.id,
-            fire_id: frontier.fire_id,
-            target_project_id: null,
-            mission_opened_event_id: invalidEventID,
-            mission_disposition: null,
-            mission_closure_event_id: null,
-            started_at: Date.now(),
-          }).run()).toThrow("automation_run: Mission target requires one exact active or terminal reservation")
-        }
-        db.insert(AutomationRunTable).values({
-          id: runID,
-          automation_revision_id: revision.id,
-          fire_id: frontier.fire_id,
-          target_project_id: null,
-          mission_opened_event_id: opened.id,
-          mission_disposition: null,
-          mission_closure_event_id: null,
-          started_at: Date.now(),
-        }).run()
-        return { revisionID: revision.id, openedEventID: opened.id, siblingOpenedEventID: siblingOpened.id }
-      })
-      const snapshot = exportMysqlTransferSnapshot()
-      const expectInvalidAuthority = (mutate: (copy: typeof snapshot) => void) => {
-        const copy = structuredClone(snapshot)
-        mutate(copy)
-        expect(() => preflightMysqlTransferSnapshot(copy)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining("invalid Mission reservation authority") }),
-          }),
-        )
-      }
-      expectInvalidAuthority((copy) => {
-        const opened = copy.tables.find((table) => table.name === "protocol_event")
-          ?.rows.find((row) => row.id === authority.openedEventID)
-        if (!opened) throw new Error("Active Mission transfer omitted its opened event")
-        opened.type = "unrelated.event"
-      })
-      expectInvalidAuthority((copy) => {
-        const run = copy.tables.find((table) => table.name === "automation_run")
-          ?.rows.find((row) => row.id === runID)
-        if (!run) throw new Error("Active Mission transfer omitted its run")
-        run.mission_opened_event_id = authority.siblingOpenedEventID
-      })
-      expectInvalidAuthority((copy) => {
-        const revision = copy.tables.find((table) => table.name === "automation")
-          ?.rows.find((row) => row.id === authority.revisionID)
-        if (!revision) throw new Error("Active Mission transfer omitted its definition revision")
-        revision.session_id = ordinary.id
-      })
-      expect(importMysqlTransferSnapshot(snapshot)).toMatchObject({
-        ok: true,
-        schemaFingerprint: snapshot.schemaFingerprint,
-      })
-      expect(Database.use((db) => db.select().from(AutomationRunTable)
-        .where(eq(AutomationRunTable.id, runID)).get())).toMatchObject({
-        mission_opened_event_id: authority.openedEventID,
-        mission_disposition: null,
-        mission_closure_event_id: null,
-      })
-    } })
-  }, 60_000)
-
   test("a closed Mission reservation atomically survives a post-commit crash and a later reopen", async () => {
     await using project = await memoryProject()
     const missionID = `automation-closed-reservation-${Date.now()}`
@@ -1640,76 +1349,6 @@ describe("scheduler immutable definition and fire identity", () => {
       expect({ finalLeaseExpiry: lease.expires_at, attemptCreatedAt: attempt.time_created })
         .toEqual({ finalLeaseExpiry: attempt.time_created, attemptCreatedAt: attempt.time_created })
       expect(attempt.lease_expires_at).toBeGreaterThan(attempt.time_created)
-      const snapshot = exportMysqlTransferSnapshot()
-      const attemptRows = snapshot.tables.find((table) => table.name === "automation_fire_attempt")?.rows ?? []
-      const leaseRows = snapshot.tables.find((table) => table.name === "engine_control_activation_lease")?.rows ?? []
-      for (const candidate of attemptRows) {
-        const exactLease = leaseRows.find((row) => row.id === candidate.lease_id)
-        expect(exactLease).toMatchObject({ owner_occurrence_id: candidate.owner_occurrence_id })
-        expect(exactLease!.expires_at).toBeGreaterThanOrEqual(candidate.time_created)
-        expect(candidate.lease_expires_at).toBeGreaterThan(candidate.time_created)
-      }
-      const validPlan = preflightMysqlTransferSnapshot(snapshot)
-      expect(validPlan.schemaFingerprint).toBe(snapshot.schemaFingerprint)
-      for (const mutateReceipt of [
-        (copy: typeof snapshot) => {
-          const table = copy.tables.find((candidate) => candidate.name === "automation_run_receipt")
-          if (!table) throw new Error("Closed Mission transfer omitted its receipt table")
-          table.rows = table.rows.filter((row) => row.run_id !== run.id)
-        },
-        (copy: typeof snapshot) => {
-          const receipt = copy.tables.find((table) => table.name === "automation_run_receipt")
-            ?.rows.find((row) => row.run_id === run.id)
-          if (!receipt) throw new Error("Closed Mission transfer omitted its receipt")
-          const opened = copy.tables.find((table) => table.name === "protocol_event")
-            ?.rows.find((row) =>
-              row.aggregate_type === "session" &&
-              row.aggregate_id === mission.id &&
-              row.type === "mission.execution.opened"
-            )
-          if (!opened) throw new Error("Closed Mission transfer omitted its opened event")
-          receipt.closure_event_id = opened.id
-        },
-      ]) {
-        const invalidReceipt = structuredClone(snapshot)
-        mutateReceipt(invalidReceipt)
-        expect(() => preflightMysqlTransferSnapshot(invalidReceipt)).toThrow(
-          expect.objectContaining<MysqlTransferValidationError>({
-            name: "MysqlTransferValidationError",
-            data: expect.objectContaining({ message: expect.stringContaining("invalid terminal Mission receipt authority") }),
-          }),
-        )
-      }
-      const failedApplyPlan = structuredClone(validPlan)
-      const failedRun = failedApplyPlan.snapshot.tables
-        .find((table) => table.name === "automation_run")
-        ?.rows.find((row) => row.id === run.id)
-      const failedReceipt = failedApplyPlan.snapshot.tables
-        .find((table) => table.name === "automation_run_receipt")
-        ?.rows.find((row) => row.run_id === run.id)
-      const openedEvent = failedApplyPlan.snapshot.tables
-        .find((table) => table.name === "protocol_event")
-        ?.rows.find((row) =>
-          row.aggregate_type === "session" &&
-          row.aggregate_id === mission.id &&
-          row.type === "mission.execution.opened"
-        )
-      if (!failedRun || !failedReceipt || !openedEvent) {
-        throw new Error("Closed Mission transfer fixture omitted its exact causal facts")
-      }
-      failedRun.mission_closure_event_id = openedEvent.id
-      failedReceipt.closure_event_id = openedEvent.id
-      expect(() => applyMysqlTransferPlan(failedApplyPlan)).toThrow(MysqlTransferApplyError)
-      expect(Database.use((db) => db.select().from(AutomationRunTable)
-        .where(eq(AutomationRunTable.id, run.id)).get()?.mission_closure_event_id)).toBe(closed.eventID)
-      expect(Database.use((db) => db.all<{ name: string }>(sql`
-        SELECT name FROM sqlite_master
-        WHERE type='trigger' AND name='automation_run_mission_reservation_insert'
-      `))).toEqual([{ name: "automation_run_mission_reservation_insert" }])
-      expect(importMysqlTransferSnapshot(snapshot)).toMatchObject({
-        ok: true,
-        schemaFingerprint: snapshot.schemaFingerprint,
-      })
       expect(fires).toHaveLength(2)
       expect(frontier.fire_id).toBe(fires[1]!.id)
       expect(frontier.available_at).toBe(fires[1]!.scheduled_due_at)

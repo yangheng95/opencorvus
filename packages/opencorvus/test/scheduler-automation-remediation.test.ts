@@ -7,7 +7,6 @@ import {
   projectAutomationInTransaction,
 } from "../src/scheduler/automation-projection"
 import { Database, eq } from "../src/storage/db"
-import { exportMysqlTransferSnapshot, preflightMysqlTransferSnapshot } from "../src/storage/mysql-transfer"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(resetMemoryDatabase)
@@ -53,9 +52,6 @@ test("the final finite scheduled Fire commits success and exposes an exhausted s
       expect(
         AutomationService.listFireHistory(automation.id).map((entry) => ({ state: entry.state, origin: entry.origin })),
       ).toEqual([{ state: "succeeded", origin: "scheduled" }])
-      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot()).snapshot.format).toBe(
-        "opencorvus.mysql-transfer.v2",
-      )
       const manual = await AutomationService.runNow(automation.id)
       expect(manual.map((entry) => entry.outcome)).toEqual(["succeeded"])
       expect(AutomationService.list().find((entry) => entry.id === automation.id)).toMatchObject({
@@ -86,9 +82,6 @@ test("paused manual API execution settles while preserving the paused definition
           .filter((entry) => entry.origin === "manual_api")
           .map((entry) => entry.state),
       ).toEqual(["succeeded"])
-      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot()).snapshot.format).toBe(
-        "opencorvus.mysql-transfer.v2",
-      )
     },
   })
 }, 30_000)
@@ -117,9 +110,6 @@ test("an exhausted new revision projects from its own creation boundary after ol
         }),
       ).toMatchObject({ nextRun: null })
       expect(AutomationService.list().find((entry) => entry.id === automation.id)).toMatchObject({ nextRun: null })
-      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot()).snapshot.format).toBe(
-        "opencorvus.mysql-transfer.v2",
-      )
     },
   })
 }, 30_000)
@@ -153,9 +143,6 @@ test.each(["active", "paused"] as const)(
         }
         const retry = AutomationService.listFireHistory(automation.id).find((entry) => entry.origin === "manual_api")!
         expect(retry).toMatchObject({ state: "retry_wait", attemptCount: 1 })
-        expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot()).snapshot.format).toBe(
-          "opencorvus.mysql-transfer.v2",
-        )
         using _wake = completedWake()
         using _clock = spyOn(Date, "now").mockImplementation(() => retry.retryAt!)
         const owner = `retry:${retry.fireId}`
@@ -177,9 +164,6 @@ test.each(["active", "paused"] as const)(
         )
         if (prior) expect(frontiers).toEqual([prior])
         expect(AutomationService.list().find((entry) => entry.id === automation.id)).toMatchObject({ status })
-        expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot()).snapshot.format).toBe(
-          "opencorvus.mysql-transfer.v2",
-        )
       },
     })
   },
@@ -219,9 +203,6 @@ test("the final finite Fire records its fifth pre-reservation failure as termina
         nextRun: null,
         status: "active",
       })
-      expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot()).snapshot.format).toBe(
-        "opencorvus.mysql-transfer.v2",
-      )
     },
   })
 }, 30_000)

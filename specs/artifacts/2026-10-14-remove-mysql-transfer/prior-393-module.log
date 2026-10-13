@@ -1,0 +1,2 @@
+$ bun run ./packages/opencorvus/script/check/module-topology.ts --treeish "7f11e61908bce4556c33f591a249034157e0eb13"
+module-topology ok (treeish:7f11e61908bc) — 1154 modules, 5912 runtime edges, retained SCC sizes ; 4 clean imports passed

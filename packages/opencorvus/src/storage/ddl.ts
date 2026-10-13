@@ -349,7 +349,7 @@ export class ApplicationSchemaRegistryError extends Error {
 
 /**
  * Module namespace exports were historically enumerated in code-unit key order.
- * Keep that stable order as part of the MySQL transfer fingerprint contract.
+ * Keep that stable order for deterministic canonical SQLite DDL generation.
  */
 export function collectTables(
   registry: Readonly<Record<string, AnySQLiteTable>> = ApplicationSchema,

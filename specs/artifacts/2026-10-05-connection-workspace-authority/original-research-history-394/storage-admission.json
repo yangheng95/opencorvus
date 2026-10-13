@@ -1,0 +1,6 @@
+{
+  "status": "rejected",
+  "errorType": "OpenCorvusTestRuntimeIsolationError",
+  "message": "OPENCORVUS_TEST_HOME requires an absolute OPENCORVUS_TEST_PROCESS_ROOT from the test-runtime preload",
+  "boundary": "Original database untouched; current production Database.Client against a private exact snapshot only"
+}

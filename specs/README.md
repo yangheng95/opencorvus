@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [删除 MySQL 转换能力](records/2026-10/2026-10-14-remove-mysql-transfer.md)：删除转换实现、三个公开接口及专用测试，保留 SQLite 当前契约。
+
+- [394 原Research Studio历史](artifacts/2026-10-05-connection-workspace-authority/original-research-history-plan-394.md)：原始209来源、真实历史装载和成员侧栏。
+
 - [Explorer 根目录展示](records/2026-10/2026-10-14-explorer-directory-label.md)：规范空目录的当前语言显示、原路径事实和真实页面验收。
 
 - [Capsule 准备与部署权属](records/2026-10/2026-10-14-capsule-preparation-authority.md)：唯一描述输入、原准备能力、终态资源与恢复缺口。

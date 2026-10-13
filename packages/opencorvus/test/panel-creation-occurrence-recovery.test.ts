@@ -11,7 +11,6 @@ import { SessionWake } from "@/session/wake"
 import { Tool } from "@/tool/tool"
 import { PanelTool, recoverPanelCreationToolPart } from "@/tool/panel"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
-import { exportMysqlTransferSnapshot, importMysqlTransferSnapshot } from "@/storage/mysql-transfer"
 import { Database } from "@/storage/db"
 import { EngineService } from "@/task-api"
 
@@ -123,18 +122,6 @@ describe("persisted Panel creation occurrence recovery", () => {
           const occurrence = await persistedPanelWake(action, "recovery")
           await Database.awaitEffectIdle(10_000)
           const targetID = JSON.parse(occurrence.first.output).session_id as string
-          const snapshot = exportMysqlTransferSnapshot()
-          const targetRow = snapshot.tables
-            .find((table) => table.name === "session")
-            ?.rows.find((row) => row.id === targetID)
-          if (!targetRow) throw new Error("Panel recovery transfer omitted its accepted target Session")
-          const targetMetadata = JSON.parse(String(targetRow.metadata)) as Record<string, unknown>
-          const panelCreation = targetMetadata.panelCreation as Record<string, unknown>
-          const reorderedPanelCreation = Object.fromEntries(Object.entries(panelCreation).reverse())
-          expect(JSON.stringify(reorderedPanelCreation)).not.toBe(JSON.stringify(panelCreation))
-          targetMetadata.panelCreation = reorderedPanelCreation
-          targetRow.metadata = JSON.stringify(targetMetadata)
-          expect(importMysqlTransferSnapshot(snapshot)).toMatchObject({ ok: true })
           if (action === "wake_mission") {
             await Session.mergeConfigOverlay({
               sessionID: occurrence.caller.id,

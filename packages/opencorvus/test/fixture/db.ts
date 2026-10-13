@@ -1,4 +1,5 @@
 import path from "path"
+import { Database as BunDatabase } from "bun:sqlite"
 import { Instance } from "../../src/project/instance"
 import { Database } from "../../src/storage/db"
 
@@ -23,8 +24,21 @@ export async function resetDatabase() {
   await Database.resetFiles(dbPath)
 }
 
-export function rebuildTestDatabase() {
+export async function createTestDatabase() {
+  await resetDatabase()
+  Database.Client()
+  Database.close()
+}
+
+/** Introduce schema drift only in the isolated test database. */
+export function editTestDatabase(edit: (sqlite: BunDatabase) => unknown) {
   const dbPath = Database.Path()
   assertTestDatabasePath(dbPath)
-  Database.rebuildSqlite(() => {})
+  Database.close()
+  const sqlite = new BunDatabase(dbPath)
+  try {
+    edit(sqlite)
+  } finally {
+    sqlite.close(true)
+  }
 }

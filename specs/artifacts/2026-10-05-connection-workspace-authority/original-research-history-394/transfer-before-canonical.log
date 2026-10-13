@@ -1,0 +1,11 @@
+$ bun script/run-tests.ts test/storage/mysql-transfer-evidence-order.test.ts
+[1/1] START test/storage/mysql-transfer-evidence-order.test.ts
+(fail) current Task operator input survives canonical transfer and reopen [3819.71ms]
+(fail) an actual read Source retains its completed Tool binding through transfer [1957.48ms]
+ 0 pass
+ 2 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [10.65s]
+[1/1] DONE test/storage/mysql-transfer-evidence-order.test.ts exit=1 duration=11.38s
+OpenCorvus failed test files (1):
+error: script "test" exited with code 1

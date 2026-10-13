@@ -1,5 +1,7 @@
 # 算法框架层结构反模式整改方案
 
+> 2026-10-14：MySQL 转换及其全文索引重建路径已按用户要求删除；下文相关条目仅保留历史调查事实，当前范围见 [删除记录](../specs/records/2026-10/2026-10-14-remove-mysql-transfer.md)。
+
 > 承接 [algorithm-layer-architecture-antipatterns.md](algorithm-layer-architecture-antipatterns.md)（诊断，ARCH-A/B/C/D/E 共 63 条）。
 > 生成：2026-08-18。本文件是**执行文档**，随修随记状态。
 >

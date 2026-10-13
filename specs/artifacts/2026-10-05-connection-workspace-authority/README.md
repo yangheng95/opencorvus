@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [394 原Research Studio历史](original-research-history-plan-394.md)：[209条真实来源与当前页面调查](original-research-history-394/README.md)。
+
 - [393 ACP提示结果](acp-prompt-terminal-plan-393.md)：[流式错误、取消与准确结束原因](acp-prompt-terminal-393/README.md)。
 
 - [392 委派失败与终态](delegate-terminal-plan-392.md)：[原始错误、准确执行轮次与验收](delegate-terminal-392/README.md)。

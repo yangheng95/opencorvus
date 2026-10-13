@@ -13,7 +13,6 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { Database } from "@/storage/db"
-import { exportMysqlTransferSnapshot, importMysqlTransferSnapshot } from "@/storage/mysql-transfer"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -44,12 +43,12 @@ test("publishes attachments after rebuilding the database for an existing projec
   )
 })
 
-test("reads a persisted attachment after restoring the database at the same path", async () => {
-  await using project = await memoryProject("attachment-transfer-restore")
+test("reads a persisted attachment after reopening the database at the same path", async () => {
+  await using project = await memoryProject("attachment-reopen")
   const prepared = await Instance.provide({
     directory: project.path,
     fn: async () => {
-      const session = await Session.create({ kind: "assistant", title: "Attachment transfer restore" })
+      const session = await Session.create({ kind: "assistant", title: "Attachment reopen" })
       const message = await Session.updateMessage({
         id: Identifier.ascending("message"),
         sessionID: session.id,
@@ -57,13 +56,13 @@ test("reads a persisted attachment after restoring the database at the same path
         author: "user",
         time: { created: Date.now() },
         agent: "work",
-        model: { providerID: "test", modelID: "attachment-transfer" },
+        model: { providerID: "test", modelID: "attachment-reopen" },
       })
       const reference = await AttachmentStore.write(
         Instance.project.id,
-        Buffer.from("transfer attachment"),
+        Buffer.from("persisted attachment"),
         "text/plain",
-        "transfer.txt",
+        "persisted.txt",
       )
       await Session.updatePart({
         id: Identifier.ascending("part"),
@@ -75,18 +74,18 @@ test("reads a persisted attachment after restoring the database at the same path
         url: reference.url,
         presentation: "attachment-index",
       })
-      return { reference, snapshot: exportMysqlTransferSnapshot() }
+      return { reference }
     },
   })
 
   await Instance.disposeAll()
-  expect(importMysqlTransferSnapshot(prepared.snapshot)).toMatchObject({ ok: true })
+  Database.close()
 
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       const location = AttachmentStore.nameFromUrl(prepared.reference.url)!
-      expect(await AttachmentStore.read(location.projectID, location.name)).toEqual(Buffer.from("transfer attachment"))
+      expect(await AttachmentStore.read(location.projectID, location.name)).toEqual(Buffer.from("persisted attachment"))
     },
   })
 })

@@ -1,0 +1,9 @@
+$ bun script/run-tests.ts test/storage/mysql-transfer-evidence-order.test.ts
+[1/1] START test/storage/mysql-transfer-evidence-order.test.ts
+(pass) current Task operator input survives canonical transfer and reopen [4465.93ms]
+(pass) an actual read Source retains its completed Tool binding through transfer [3153.44ms]
+ 2 pass
+ 0 fail
+ 9 expect() calls
+Ran 2 tests across 1 file. [12.81s]
+[1/1] DONE test/storage/mysql-transfer-evidence-order.test.ts exit=0 duration=13.48s

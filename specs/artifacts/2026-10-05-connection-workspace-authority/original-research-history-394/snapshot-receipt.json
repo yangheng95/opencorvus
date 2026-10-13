@@ -1,0 +1,283 @@
+{
+  "observedAt": "2026-10-13T17:19:38.300Z",
+  "origin": "C:/Users/hengu/AppData/Local/opencorvus/data/opencorvus.db",
+  "target": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\original-research-history-394-snapshot\\runtime\\data\\opencorvus.db",
+  "sessionID": "ses_hbLhVnvjgyxCro475ne2",
+  "mechanism": "Read-only SQLite transaction and official sqlite3_serialize; restored canonical rows compared by exact identity and complete JSON value",
+  "messageRows": 719,
+  "partRows": 2062,
+  "integrity": "ok",
+  "schema": [
+    {
+      "name": "automation"
+    },
+    {
+      "name": "automation_definition_tombstone"
+    },
+    {
+      "name": "automation_delay_settlement"
+    },
+    {
+      "name": "automation_fire"
+    },
+    {
+      "name": "automation_fire_attempt"
+    },
+    {
+      "name": "automation_fire_attempt_receipt"
+    },
+    {
+      "name": "automation_fire_frontier"
+    },
+    {
+      "name": "automation_project_target"
+    },
+    {
+      "name": "automation_run"
+    },
+    {
+      "name": "automation_run_receipt"
+    },
+    {
+      "name": "bus_publication_attempt_receipt"
+    },
+    {
+      "name": "bus_publication_delivery"
+    },
+    {
+      "name": "bus_publication_delivery_receipt"
+    },
+    {
+      "name": "bus_publication_outbox"
+    },
+    {
+      "name": "bus_publication_phase_receipt"
+    },
+    {
+      "name": "channel_ingress_accepted"
+    },
+    {
+      "name": "channel_ingress_outcome"
+    },
+    {
+      "name": "control_account"
+    },
+    {
+      "name": "database_authority"
+    },
+    {
+      "name": "decision_log"
+    },
+    {
+      "name": "engine_artifact"
+    },
+    {
+      "name": "engine_artifact_catalog_revision"
+    },
+    {
+      "name": "engine_artifact_version"
+    },
+    {
+      "name": "engine_browser_preview_target_identity"
+    },
+    {
+      "name": "engine_build_observation_cleanup"
+    },
+    {
+      "name": "engine_build_observation_cleanup_receipt"
+    },
+    {
+      "name": "engine_channel_binding"
+    },
+    {
+      "name": "engine_control_activation_lease"
+    },
+    {
+      "name": "engine_control_activation_lease_grant"
+    },
+    {
+      "name": "engine_git_checkpoint_outcome"
+    },
+    {
+      "name": "engine_git_checkpoint_request"
+    },
+    {
+      "name": "engine_goal"
+    },
+    {
+      "name": "engine_interaction_outcome"
+    },
+    {
+      "name": "engine_interaction_request"
+    },
+    {
+      "name": "engine_metric_result"
+    },
+    {
+      "name": "engine_metric_spec"
+    },
+    {
+      "name": "engine_progress_snapshot"
+    },
+    {
+      "name": "engine_task"
+    },
+    {
+      "name": "engine_task_creation_contract"
+    },
+    {
+      "name": "engine_task_root_ingress"
+    },
+    {
+      "name": "engine_task_root_ingress_policy"
+    },
+    {
+      "name": "engine_task_wait_registration"
+    },
+    {
+      "name": "engine_task_wait_settlement"
+    },
+    {
+      "name": "event_job"
+    },
+    {
+      "name": "event_job_definition_tombstone"
+    },
+    {
+      "name": "event_job_fire"
+    },
+    {
+      "name": "event_job_fire_receipt"
+    },
+    {
+      "name": "event_occurrence"
+    },
+    {
+      "name": "global_creation_allocation"
+    },
+    {
+      "name": "interactive_artifact"
+    },
+    {
+      "name": "memory_chunk"
+    },
+    {
+      "name": "memory_embedding"
+    },
+    {
+      "name": "memory_file"
+    },
+    {
+      "name": "memory_fts"
+    },
+    {
+      "name": "memory_fts_config"
+    },
+    {
+      "name": "memory_fts_content"
+    },
+    {
+      "name": "memory_fts_data"
+    },
+    {
+      "name": "memory_fts_docsize"
+    },
+    {
+      "name": "memory_fts_idx"
+    },
+    {
+      "name": "message"
+    },
+    {
+      "name": "part"
+    },
+    {
+      "name": "permission_execution_result"
+    },
+    {
+      "name": "permission_ledger"
+    },
+    {
+      "name": "permission_policy"
+    },
+    {
+      "name": "project"
+    },
+    {
+      "name": "project_directory_admission"
+    },
+    {
+      "name": "project_maintenance_fence"
+    },
+    {
+      "name": "protocol_delivery_receipt"
+    },
+    {
+      "name": "protocol_event"
+    },
+    {
+      "name": "protocol_inbox"
+    },
+    {
+      "name": "provider_activity_outcome"
+    },
+    {
+      "name": "provider_activity_request"
+    },
+    {
+      "name": "provider_usage_event"
+    },
+    {
+      "name": "quick_note"
+    },
+    {
+      "name": "runtime_execution_capacity_lease"
+    },
+    {
+      "name": "session"
+    },
+    {
+      "name": "session_control_event"
+    },
+    {
+      "name": "session_control_record"
+    },
+    {
+      "name": "session_prompt_owner"
+    },
+    {
+      "name": "session_share"
+    },
+    {
+      "name": "task_plan"
+    },
+    {
+      "name": "todo"
+    },
+    {
+      "name": "todo_snapshot"
+    },
+    {
+      "name": "tool_part_outcome"
+    },
+    {
+      "name": "tool_part_progress"
+    },
+    {
+      "name": "tool_part_request"
+    },
+    {
+      "name": "workbench_brief_snapshot"
+    },
+    {
+      "name": "worker_turn_descriptor"
+    },
+    {
+      "name": "workspace"
+    },
+    {
+      "name": "workspace_lifecycle_admission"
+    }
+  ],
+  "privateData": "Full database remains only in the private runtime; no prompt/message corpus is written into this evidence directory"
+}

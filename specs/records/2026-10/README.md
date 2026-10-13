@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [删除 MySQL 转换能力](2026-10-14-remove-mysql-transfer.md)：删除转换实现、三个公开接口及专用测试，保留 SQLite 当前契约。
+
 - [Explorer 根目录展示](2026-10-14-explorer-directory-label.md)：五处目录提示、稳定目录错误和当前语言唯一投影。
 
 - [Capsule 准备与部署权属](2026-10-14-capsule-preparation-authority.md)：descriptor生产资格、不可变Task绑定和原结算权属。

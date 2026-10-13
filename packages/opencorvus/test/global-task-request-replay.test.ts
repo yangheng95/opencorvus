@@ -19,11 +19,6 @@ import { ImplicitProject } from "@/project/implicit-project"
 import { Project } from "@/project/project"
 import { Server } from "@/server/server"
 import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
-import {
-  exportMysqlTransferSnapshot,
-  importMysqlTransferSnapshot,
-  preflightMysqlTransferSnapshot,
-} from "@/storage/mysql-transfer"
 import { TaskChannelBindingProjectConflictError } from "@/engine/task-project-error"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import {
@@ -188,52 +183,6 @@ describe("global Task request occurrence", () => {
           patch: { model: "global-replay-provider/global-replay-model-2" },
         }),
     })
-    expect(preflightMysqlTransferSnapshot(exportMysqlTransferSnapshot())).toMatchObject({
-      schemaFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/),
-    })
-    const divergentTransfer = structuredClone(exportMysqlTransferSnapshot())
-    const allocationRow = divergentTransfer.tables
-      .find((table) => table.name === "global_creation_allocation")
-      ?.rows.find((row) => row.request_id === requestID)
-    if (!allocationRow) throw new Error("Global Task transfer omitted its accepted allocation")
-    const resolution = JSON.parse(String(allocationRow.task_resolution)) as Record<string, unknown>
-    resolution.selected_profile_id = "base-researcher"
-    allocationRow.task_resolution = JSON.stringify(resolution)
-    expect(() => preflightMysqlTransferSnapshot(divergentTransfer)).toThrow(
-      expect.objectContaining({
-        name: "MysqlTransferValidationError",
-        data: expect.objectContaining({ message: expect.stringContaining("prompt profile diverges") }),
-      }),
-    )
-    const divergentRoot = structuredClone(exportMysqlTransferSnapshot())
-    const rootRow = divergentRoot.tables
-      .find((table) => table.name === "session")
-      ?.rows.find((row) => row.id === rootSessionID)
-    if (!rootRow) throw new Error("Global Task transfer omitted its root Session")
-    const rootMetadata = JSON.parse(String(rootRow.metadata)) as Record<string, any>
-    rootMetadata.taskConfigSnapshot.permission_mode =
-      rootMetadata.taskConfigSnapshot.permission_mode === "ask" ? "full_access" : "ask"
-    rootRow.metadata = JSON.stringify(rootMetadata)
-    expect(() => preflightMysqlTransferSnapshot(divergentRoot)).toThrow(
-      expect.objectContaining({
-        name: "MysqlTransferValidationError",
-        data: expect.objectContaining({ message: expect.stringContaining("immutable root configuration snapshot") }),
-      }),
-    )
-    const divergentDirectory = structuredClone(exportMysqlTransferSnapshot())
-    const contractRow = divergentDirectory.tables
-      .find((table) => table.name === "engine_task_creation_contract")
-      ?.rows.find((row) => row.task_id === first.task_id)
-    if (!contractRow) throw new Error("Global Task transfer omitted its creation contract")
-    const contract = JSON.parse(String(contractRow.contract)) as Record<string, any>
-    contract.resolved.directory = path.join(first.directory, "divergent")
-    contractRow.contract = JSON.stringify(contract)
-    expect(() => preflightMysqlTransferSnapshot(divergentDirectory)).toThrow(
-      expect.objectContaining({
-        name: "MysqlTransferValidationError",
-        data: expect.objectContaining({ message: expect.stringContaining("resolved creation snapshot") }),
-      }),
-    )
   }, 120_000)
 
   test("equivalent padded and unpadded attachment bytes share one Global Task request", async () => {
@@ -583,11 +532,6 @@ describe("global Task request occurrence", () => {
       ).map((row) => row.terminal),
     ).toEqual(expect.arrayContaining(["accepted", "rejected"]))
     await Database.awaitEffectIdle(10_000)
-    const retainedSnapshot = exportMysqlTransferSnapshot()
-    expect(preflightMysqlTransferSnapshot(retainedSnapshot)).toMatchObject({
-      schemaFingerprint: retainedSnapshot.schemaFingerprint,
-    })
-    expect(importMysqlTransferSnapshot(retainedSnapshot)).toMatchObject({ ok: true })
     expect(
       Database.use((db) =>
         db

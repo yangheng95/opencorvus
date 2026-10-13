@@ -171,11 +171,6 @@ function unavailableDataFromSqlite(
   return data
 }
 
-function quoteIdentifier(name: string) {
-  return `"${name.replaceAll('"', '""')}"`
-}
-
-
 type PersistedCancellationEventRow = {
   id: string
   kind: string
@@ -774,24 +769,6 @@ function configureSqlite(sqlite: BunDatabase) {
   sqlite.run("PRAGMA wal_checkpoint(PASSIVE)")
 }
 
-function dropCurrentSchema(sqlite: BunDatabase) {
-  const triggers = queryAllFinalized<{ name: string }>(
-    sqlite,
-    "SELECT name FROM sqlite_schema WHERE type = 'trigger' AND name NOT LIKE 'sqlite_%'",
-  )
-  for (const trigger of triggers) {
-    sqlite.run(`DROP TRIGGER IF EXISTS ${quoteIdentifier(trigger.name)}`)
-  }
-
-  const tables = queryAllFinalized<{ name: string }>(
-    sqlite,
-    "SELECT name FROM sqlite_schema WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY CASE WHEN name = 'memory_fts' THEN 0 ELSE 1 END, name",
-  )
-  for (const table of tables) {
-    sqlite.run(`DROP TABLE IF EXISTS ${quoteIdentifier(table.name)}`)
-  }
-}
-
 function createCurrentSchema(sqlite: BunDatabase, dbPath: string): BunDatabase {
   let transactionActive = false
   try {
@@ -1306,103 +1283,6 @@ export namespace Database {
         throw recordUnavailable(error, "Database.reset.close") ?? error
       }
       return removeTargets(targets)
-    })
-  }
-
-  export function rebuildSqlite<T>(
-    callback: (sqlite: BunDatabase) => T,
-    ..._synchronousOnly: T extends PromiseLike<unknown> ? [never] : []
-  ): void {
-    return runSynchronousLifecycle("rebuildSqlite", () => {
-      try {
-        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true, closeMode: "strict" })
-      } catch (error) {
-        throw recordUnavailable(error, "Database.rebuildSqlite.closeExisting") ?? error
-      }
-      const dbPath = Path()
-      fsSync.mkdirSync(path.dirname(dbPath), { recursive: true })
-      let sqlite: BunDatabase
-      try {
-        sqlite = openOwnedSqlite(dbPath)
-      } catch (error) {
-        throwOwnedInitializationFailure(error, "Database.rebuildSqlite")
-      }
-
-      let operationFailure: unknown
-      let rollbackFailure: unknown
-      let operationFailed = false
-      let rollbackFailed = false
-      let transactionOpen = false
-      try {
-        sqlite.run("PRAGMA foreign_keys = OFF")
-        sqlite.run("BEGIN")
-        transactionOpen = true
-        dropCurrentSchema(sqlite)
-        sqlite.exec(SCHEMA_DDL)
-        assertSynchronousResult(callback(sqlite), "Database.rebuildSqlite")
-        const foreignKeyViolations = queryAllFinalized<{
-          table: string
-          rowid: number | null
-          parent: string
-          fkid: number
-        }>(sqlite, "PRAGMA foreign_key_check")
-        if (foreignKeyViolations.length > 0) {
-          const sample = foreignKeyViolations
-            .slice(0, 8)
-            .map(
-              (violation) =>
-                `${violation.table}[rowid=${violation.rowid ?? "without-rowid"}] -> ` +
-                `${violation.parent}[constraint=${violation.fkid}]`,
-            )
-            .join(", ")
-          throw new Error(
-            `Database.rebuildSqlite foreign key check found ${foreignKeyViolations.length} violation(s): ${sample}`,
-          )
-        }
-        sqlite.run("COMMIT")
-        transactionOpen = false
-        sqlite.run("PRAGMA foreign_keys = ON")
-      } catch (error) {
-        operationFailed = true
-        const failures = [error]
-        if (transactionOpen) {
-          try {
-            sqlite.run("ROLLBACK")
-            transactionOpen = false
-          } catch (error) {
-            rollbackFailed = true
-            rollbackFailure = error
-            state.rollbackRequired = true
-            failures.push(error)
-          }
-        }
-        operationFailure =
-          failures.length === 1
-            ? error
-            : new AggregateError(failures, "Database rebuild failed and its transaction could not be rolled back", {
-                cause: error,
-              })
-      }
-
-      if (operationFailed) {
-        const normalized = recordUnavailable(operationFailure, "Database.rebuildSqlite") ?? operationFailure
-        if (rollbackFailed) throw normalized
-        try {
-          releaseOwnedSqlite({ clearUnavailable: false, checkpoint: false, closeMode: "strict" })
-        } catch (closeError) {
-          const cleanupFailure = recordUnavailable(closeError, "Database.rebuildSqlite.cleanup") ?? closeError
-          throw new AggregateError([normalized, cleanupFailure], "Database rebuild and SQLite close both failed", {
-            cause: normalized,
-          })
-        }
-        throw normalized
-      }
-
-      try {
-        releaseOwnedSqlite({ clearUnavailable: true, checkpoint: true, closeMode: "strict" })
-      } catch (error) {
-        throw recordUnavailable(error, "Database.rebuildSqlite.close") ?? error
-      }
     })
   }
 

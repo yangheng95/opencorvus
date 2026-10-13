@@ -1,0 +1,12 @@
+{
+  "status": "rejected",
+  "errorType": "DatabaseUnavailableError",
+  "message": "DatabaseUnavailableError: OpenCorvus database schema does not match the pre-0.1.0 canonical DDL at C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\original-research-history-394-snapshot\\runtime\\data\\opencorvus.db: unexpected schema object index:engine_dispatch_lineage_initial_workflow_node_idx. Received schema fingerprint 428c2a964ea2f105fed1e9f5c6ee8d9d10416a200d757c3d9b957dd5c316afca. The database was not modified; reset it because pre-release builds do not patch older schemas.",
+  "data": {
+    "message": "OpenCorvus database schema does not match the pre-0.1.0 canonical DDL at C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\original-research-history-394-snapshot\\runtime\\data\\opencorvus.db: unexpected schema object index:engine_dispatch_lineage_initial_workflow_node_idx. Received schema fingerprint 428c2a964ea2f105fed1e9f5c6ee8d9d10416a200d757c3d9b957dd5c316afca. The database was not modified; reset it because pre-release builds do not patch older schemas.",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\original-research-history-394-snapshot\\runtime\\data\\opencorvus.db",
+    "operation": "Database.Client.schemaValidation",
+    "code": "SCHEMA_RESET_REQUIRED"
+  },
+  "boundary": "Production Database.Client against the same private exact snapshot only; original source remains read-only"
+}

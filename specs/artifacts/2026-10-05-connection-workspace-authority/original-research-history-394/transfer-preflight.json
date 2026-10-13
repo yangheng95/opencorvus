@@ -1,0 +1,27 @@
+{
+  "status": "rejected",
+  "errorType": "MysqlTransferValidationError",
+  "message": "MysqlTransferValidationError: part: accepted Task-root input bundle is immutable",
+  "data": {
+    "message": "part: accepted Task-root input bundle is immutable"
+  },
+  "targetTables": 83,
+  "rows": 279407,
+  "lineage": {
+    "columns": [
+      "id",
+      "task_id",
+      "project_id",
+      "session_id",
+      "hash",
+      "agent",
+      "payload",
+      "time_created",
+      "time_updated"
+    ],
+    "sessionID": "ses_hbLhVnvjgyxCro475ne2",
+    "taskID": "tsk_g00VXMejke00KwIb9xRv"
+  },
+  "observedAt": "2026-10-13T17:38:15.372Z",
+  "boundary": "Private proposed transfer of all original logical rows into the current declared target format. Official preflight only; no import applied, source row changed, authority synthesized or original physical schema admitted. No UI qualification."
+}

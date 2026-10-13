@@ -10,7 +10,6 @@ import {
   EngineControlActivationLeaseTable,
   EngineTaskRootIngressTable,
   EngineTaskTable,
-  type EngineArtifactKind,
 } from "../src/engine/engine.sql"
 import { insertEngineArtifact } from "../src/engine/artifact"
 import {
@@ -35,11 +34,6 @@ import { resolveDispatchOccurrenceAuthority } from "../src/engine/dispatch-linea
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
 import { writeDispatchCollectionProgress } from "../src/engine/dispatch-collection-contract"
 import { exactEngineArtifactLocator } from "../src/artifact-catalog"
-import {
-  deriveEngineArtifactCatalogMetadata,
-  engineArtifactCatalogMetadataSHA256,
-} from "../src/engine/artifact-catalog-metadata"
-import { engineArtifactCatalogLabelIndex } from "../src/engine/artifact-catalog-constants"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
@@ -60,11 +54,6 @@ import { restartTaskControlProjectFrontier } from "../src/engine/task-root-ingre
 import { TaskControlDriver } from "../src/engine/task-control-driver"
 import { joinProcessLiveness } from "../src/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "../src/runtime/process-occurrence"
-import {
-  exportMysqlTransferSnapshot,
-  importMysqlTransferSnapshot,
-  preflightMysqlTransferSnapshot,
-} from "../src/storage/mysql-transfer"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -72,38 +61,6 @@ afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
-
-function replaceTransferArtifactPayload(row: Record<string, unknown>, payload: Record<string, unknown>): void {
-  const payloadText = JSON.stringify(payload)
-  const derived = deriveEngineArtifactCatalogMetadata({
-    kind: String(row.kind) as EngineArtifactKind,
-    payloadText,
-  })
-  Object.assign(row, {
-    payload: payloadText,
-    payload_sha256: derived.payload_sha256,
-    payload_bytes: derived.payload_bytes,
-    payload_block_sha256s: JSON.stringify(derived.payload_block_sha256s),
-    payload_block_index_sha256: derived.payload_block_index_sha256,
-    catalog_artifact_type: derived.catalog_artifact_type,
-    catalog_schema_diagnostic: derived.catalog_schema_diagnostic,
-    catalog_producer: derived.catalog_producer === null ? null : JSON.stringify(derived.catalog_producer),
-    catalog_import_source_task_id: derived.catalog_import_source_task_id,
-    catalog_resource_count: derived.catalog_resource_count,
-    catalog_resource_media_types: JSON.stringify(derived.catalog_resource_media_types),
-    catalog_search_text: derived.catalog_search_text,
-    catalog_search_text_truncated: derived.catalog_search_text_truncated ? 1 : 0,
-    catalog_metadata_sha256: engineArtifactCatalogMetadataSHA256({
-      artifact_id: String(row.id),
-      task_id: String(row.task_id),
-      kind: String(row.kind) as EngineArtifactKind,
-      label_index: engineArtifactCatalogLabelIndex(String(row.label)),
-      time_created: Number(row.time_created),
-      time_updated: Number(row.time_updated),
-      ...derived,
-    }),
-  })
-}
 
 async function commitAcceptedDispatchDescriptor(input: {
   taskID: string
@@ -375,75 +332,6 @@ describe("abandoned dispatch recovery", () => {
         )
         expect(afterDescriptor.taskIDs).toContain(taskID)
 
-        const unrelatedChild = await Session.create({
-          kind: "delegated-worker",
-          parentID: root.id,
-          title: "Unrelated transfer child",
-        })
-        const transferSnapshot = exportMysqlTransferSnapshot()
-        expect(preflightMysqlTransferSnapshot(transferSnapshot).schemaFingerprint).toBe(
-          transferSnapshot.schemaFingerprint,
-        )
-        const descriptorTable = transferSnapshot.tables.find((table) => table.name === "worker_turn_descriptor")
-        const artifactTable = transferSnapshot.tables.find((table) => table.name === "engine_artifact")
-        const descriptorSnapshot = descriptorTable?.rows.find((row) => row.id === descriptor.id)
-        if (!descriptorTable || !artifactTable || !descriptorSnapshot) {
-          throw new Error("Transfer snapshot omitted the exact Worker Turn descriptor aggregate")
-        }
-        const expectInvalidTransferDescriptor = (snapshot: typeof transferSnapshot) => {
-          expect(() => preflightMysqlTransferSnapshot(snapshot)).toThrow(
-            `worker_turn_descriptor ${descriptor.id} has invalid Task Project or dispatch lineage authority`,
-          )
-        }
-        const wrongDispatch = structuredClone(transferSnapshot)
-        const wrongDispatchDescriptor = wrongDispatch.tables
-          .find((table) => table.name === "worker_turn_descriptor")!
-          .rows.find((row) => row.id === descriptor.id)!
-        const wrongDispatchPayload = JSON.parse(String(wrongDispatchDescriptor.payload)) as Record<string, any>
-        wrongDispatchPayload.dispatchTurn.current_dispatch_id = Identifier.ascending("artifact")
-        wrongDispatchDescriptor.payload = JSON.stringify(wrongDispatchPayload)
-        expectInvalidTransferDescriptor(wrongDispatch)
-
-        const wrongSession = structuredClone(transferSnapshot)
-        wrongSession.tables
-          .find((table) => table.name === "worker_turn_descriptor")!
-          .rows.find((row) => row.id === descriptor.id)!.session_id = unrelatedChild.id
-        expectInvalidTransferDescriptor(wrongSession)
-
-        const missingLineage = structuredClone(transferSnapshot)
-        const missingLineageArtifacts = missingLineage.tables.find((table) => table.name === "engine_artifact")!
-        missingLineageArtifacts.rows = missingLineageArtifacts.rows.filter((row) => row.id !== lineage.artifactID)
-        expectInvalidTransferDescriptor(missingLineage)
-
-        const malformedLineageShape = structuredClone(transferSnapshot)
-        const malformedShapeRow = malformedLineageShape.tables
-          .find((table) => table.name === "engine_artifact")!
-          .rows.find((row) => row.id === lineage.artifactID)!
-        const malformedShapePayload = JSON.parse(String(malformedShapeRow.payload)) as Record<string, unknown>
-        malformedShapePayload.alternate_delivery_authority = true
-        replaceTransferArtifactPayload(malformedShapeRow, malformedShapePayload)
-        expect(() => preflightMysqlTransferSnapshot(malformedLineageShape)).toThrow(
-          "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects",
-        )
-
-        const malformedLineageSemantics = structuredClone(transferSnapshot)
-        const malformedSemanticsRow = malformedLineageSemantics.tables
-          .find((table) => table.name === "engine_artifact")!
-          .rows.find((row) => row.id === lineage.artifactID)!
-        const malformedSemanticsPayload = JSON.parse(String(malformedSemanticsRow.payload)) as Record<string, any>
-        malformedSemanticsPayload.projected_worker_identity.baseRole = "unknown-runtime-template"
-        replaceTransferArtifactPayload(malformedSemanticsRow, malformedSemanticsPayload)
-        expect(() => preflightMysqlTransferSnapshot(malformedLineageSemantics)).toThrow(
-          "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects",
-        )
-        expect(() => importMysqlTransferSnapshot(wrongDispatch)).toThrow(
-          `worker_turn_descriptor ${descriptor.id} has invalid Task Project or dispatch lineage authority`,
-        )
-        expect(() => importMysqlTransferSnapshot(malformedLineageSemantics)).toThrow(
-          "engine_artifact: dispatch_lineage requires exact Tool occurrence, workflow lineage, adapter_input and delivery_owner objects",
-        )
-        expect(exportMysqlTransferSnapshot()).toEqual(transferSnapshot)
-        expect(importMysqlTransferSnapshot(transferSnapshot)).toMatchObject({ ok: true })
         expect(
           Database.use((db) =>
             db

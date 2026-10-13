@@ -1,0 +1,53 @@
+{
+  "observedAt": "2026-10-13T17:34:42.413Z",
+  "sourceTables": 90,
+  "currentTransferTables": 83,
+  "currentDerivedTables": [
+    "memory_fts"
+  ],
+  "changes": [
+    {
+      "table": "database_authority",
+      "kind": "extra-table",
+      "rows": {
+        "n": 1
+      }
+    },
+    {
+      "table": "memory_fts_config",
+      "kind": "extra-table",
+      "rows": {
+        "n": 1
+      }
+    },
+    {
+      "table": "memory_fts_content",
+      "kind": "extra-table",
+      "rows": {
+        "n": 0
+      }
+    },
+    {
+      "table": "memory_fts_data",
+      "kind": "extra-table",
+      "rows": {
+        "n": 2
+      }
+    },
+    {
+      "table": "memory_fts_docsize",
+      "kind": "extra-table",
+      "rows": {
+        "n": 0
+      }
+    },
+    {
+      "table": "memory_fts_idx",
+      "kind": "extra-table",
+      "rows": {
+        "n": 0
+      }
+    }
+  ],
+  "boundary": "Read-only table/column comparison against mysqlSchemaExport. No transfer snapshot created, fingerprint changed, rows transformed or import applied; physical-schema admission remains rejected."
+}

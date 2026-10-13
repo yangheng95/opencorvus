@@ -1,0 +1,158 @@
+$ bun script/run-tests.ts test/storage/schema-contract.test.ts test/task-file-reference-owner.test.ts test/global-task-request-replay.test.ts test/mission-task-creation-opened-fence.test.ts test/panel-creation-occurrence-recovery.test.ts test/scheduler-automation-remediation.test.ts test/scheduler-event-durable-fire.test.ts test/scheduler-claim-and-fire-identity.test.ts test/server/global-chat-start.test.ts test/task-control-abandoned-dispatch.test.ts
+[1/10] START test/storage/schema-contract.test.ts
+(pass) creates the complete pre-0.1.0 schema directly from the canonical DDL [242.61ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [108.01ms]
+(pass) uses one explicit application table registry for the canonical SQLite schema [93.82ms]
+(pass) reports invalid and duplicate application schema declarations [2.17ms]
+(pass) requires an explicit reset when any canonical fact table is missing [724.87ms]
+(pass) requires an explicit reset instead of adding a missing Project fence [618.18ms]
+(pass) returns the reset-required contract for an unexpected legacy application table [811.55ms]
+(pass) rejects cross-owned creation and unrelated schema drift before any mutation [865.64ms]
+(pass) reports the canonical reset-required error for a stale WAL-backed schema [906.01ms]
+(pass) reopens a freshly reset database with the exact current schema [1073.63ms]
+(pass) reopens production Native and Capsule v2 bindings through the indexed current epoch [6195.36ms]
+(pass) requires a reset for a v1 Task process binding [3385.98ms]
+(pass) requires a stable reset for structurally invalid recognized v2 Native and Capsule bindings [6263.54ms]
+EBUSY: resource busy or locked, rm 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-3vAQLJ\test-88032-emsmvB\runtime-root\data\opencorvus.db'
+(fail) gracefully retires a settled connection with a retained completed prepared query [609.59ms]
+ 13 pass
+ 1 fail
+ 53 expect() calls
+Ran 14 tests across 1 file. [25.78s]
+[1/10] DONE test/storage/schema-contract.test.ts exit=1 duration=27.24s
+[2/10] START test/task-file-reference-owner.test.ts
+(pass) publishes attachments after rebuilding the database for an existing project runtime [4574.90ms]
+(pass) reads a persisted attachment after reopening the database at the same path [4246.39ms]
+(pass) persists canonical Task file references through their Engine owner [2787.72ms]
+ 3 pass
+ 0 fail
+ 9 expect() calls
+Ran 3 tests across 1 file. [17.33s]
+[2/10] DONE test/task-file-reference-owner.test.ts exit=0 duration=17.52s
+[3/10] START test/global-task-request-replay.test.ts
+(pass) global Task request occurrence > the public Global Task boundary requires identity and rejects caller-owned Project fields [847.70ms]
+(pass) global Task request occurrence > same explicit request returns the accepted Task after mutable global defaults change [5924.39ms]
+(pass) global Task request occurrence > equivalent padded and unpadded attachment bytes share one Global Task request [4374.25ms]
+(pass) global Task request occurrence > shared Global Task semantic preflight rejects before allocation or Project publication [3121.94ms]
+(pass) global Task request occurrence > an exact Task winner from another production entry appends Global acceptance before return [4266.68ms]
+(pass) global Task request occurrence > an external Task with another immutable root snapshot settles a typed Global allocation conflict [4393.31ms]
+(pass) global Task request occurrence > a post-reserve channel race settles one typed terminal rejection [8943.40ms]
+(pass) global Task request occurrence > accepted replay follows the retained Project after anonymous promotion [15820.16ms]
+(pass) global Task request occurrence > an accepted allocation remains terminal after its Task and carrying Project are retained away [7826.83ms]
+(pass) global Task request occurrence > an accepted Task tombstone replays as one stable unavailable terminal [5531.46ms]
+(pass) global Task request occurrence > every caller semantic family conflicts against the pre-Task allocation contract [476.05ms]
+(pass) global Task request occurrence > a peer continues the exact allocation after the owner process dies before Task commit [79768.37ms]
+ 12 pass
+ 0 fail
+ 75 expect() calls
+Ran 12 tests across 1 file. [144.45s]
+[3/10] DONE test/global-task-request-replay.test.ts exit=0 duration=144.78s
+[4/10] START test/mission-task-creation-opened-fence.test.ts
+(pass) Mission Task creation exact opened occurrence > returns a creator-authority error for a foreign assistant claiming Mission creation [8332.49ms]
+(pass) Mission Task creation exact opened occurrence > persists and replays a Mission-authored wording request with its original attachment [8170.41ms]
+(pass) Mission Task creation exact opened occurrence > persists and replays a Mission-authored structured-assignment request with its original attachment [4747.20ms]
+(pass) Mission Task creation exact opened occurrence > creates through the immutable Work-to-Mission caller occurrence [17260.59ms]
+(pass) Mission Task creation exact opened occurrence > replays a committed panel.create_task target from the exact persisted Tool occurrence [5359.87ms]
+(pass) Mission Task creation exact opened occurrence > keeps inherited Mission runtime values out of the immutable caller request [17786.11ms]
+(pass) Mission Task creation exact opened occurrence > commits the Mission child first, then the durable close cancels that stable child and closes [5373.87ms]
+(pass) Mission Task creation exact opened occurrence > cancels active Mission children in fixed batches across a large terminal history [9923.23ms]
+(pass) Mission Task creation exact opened occurrence > returns a typed closure result when closing commits before the stale opened Task insert [4176.32ms]
+ 9 pass
+ 0 fail
+ 30 expect() calls
+Ran 9 tests across 1 file. [86.24s]
+[4/10] DONE test/mission-task-creation-opened-fence.test.ts exit=0 duration=87.08s
+[5/10] START test/panel-creation-occurrence-recovery.test.ts
+(pass) persisted Panel creation occurrence recovery > panel.wake_mission replays the exact accepted target from its persisted Tool Part [3861.83ms]
+(pass) persisted Panel creation occurrence recovery > panel.wake_work replays the exact accepted target from its persisted Tool Part [3534.42ms]
+ 2 pass
+ 0 fail
+ 10 expect() calls
+Ran 2 tests across 1 file. [9.64s]
+[5/10] DONE test/panel-creation-occurrence-recovery.test.ts exit=0 duration=9.89s
+[6/10] START test/scheduler-automation-remediation.test.ts
+(pass) the final finite scheduled Fire commits success and exposes an exhausted schedule [2056.52ms]
+(pass) paused manual API execution settles while preserving the paused definition [1860.77ms]
+(pass) an exhausted new revision projects from its own creation boundary after older manual history [1912.09ms]
+(pass) a active manual retry keeps its exact Fire and restores its prior timer eligibility [2126.32ms]
+(pass) a paused manual retry keeps its exact Fire and restores its prior timer eligibility [2933.58ms]
+(pass) the final finite Fire records its fifth pre-reservation failure as terminal [2838.58ms]
+(pass) the Automation poll fills a free slot from the next page while the first Fire is still running [3308.09ms]
+(pass) the active poll admits a newly due Fire into its idle slot [1619.05ms]
+(pass) exact-Fire admission errors release a handed-off physical permit for the next command [1802.48ms]
+ 9 pass
+ 0 fail
+ 104 expect() calls
+Ran 9 tests across 1 file. [22.53s]
+[6/10] DONE test/scheduler-automation-remediation.test.ts exit=0 duration=22.75s
+[7/10] START test/scheduler-event-durable-fire.test.ts
+(pass) Event Job durable fact authority > settles an old Mission fire against its first opened occurrence after close and reopen [3186.31ms]
+(pass) Event Job durable fact authority > a closed Mission fire survives acceptance crash and terminalizes in FIFO recovery after reopen [2912.43ms]
+(pass) Event Job durable fact authority > a closed-Mission causal-cycle successor settles by its frozen Mission reservation at the FIFO head [2638.40ms]
+(pass) Event Job durable fact authority > the configured production wake owner persists and activates the exact Event fire Message [2948.28ms]
+(pass) Event Job durable fact authority > persists a transient Bus input once and binds one successful fire to the exact definition revision [1717.10ms]
+(pass) Event Job durable fact authority > runs distinct Event Job heads across Projects through one physical capacity frontier [3306.67ms]
+(pass) Event Job durable fact authority > keeps an accepted Event fire pending when its owner is cancelled after permit grant [1785.17ms]
+(pass) Event Job durable fact authority > definition removal appends a tombstone without erasing an already accepted fire [1527.78ms]
+(pass) Event Job durable fact authority > a retry keeps the same fire identity and appends ordered receipts [2774.36ms]
+(pass) Event Job durable fact authority > duplicate acceptance is idempotent and preserves one fire [1778.86ms]
+(pass) Event Job durable fact authority > same occurrence identity rejects a different immutable input [1694.56ms]
+ 11 pass
+ 0 fail
+ 24 expect() calls
+Ran 11 tests across 1 file. [28.76s]
+[7/10] DONE test/scheduler-event-durable-fire.test.ts exit=0 duration=28.99s
+[8/10] START test/scheduler-claim-and-fire-identity.test.ts
+(pass) scheduler immutable definition and fire identity > does not claim a due Automation after its execution permit is granted to an aborted owner [1690.85ms]
+(pass) scheduler immutable definition and fire identity > scheduled settlement publishes the next immutable Fire in the terminal transaction [2048.13ms]
+(pass) scheduler immutable definition and fire identity > a retrying manual Fire is the sole due candidate before its scheduled sibling [1604.43ms]
+(pass) scheduler immutable definition and fire identity > same-millisecond lease ordering admits only the current owner while retaining an earlier valid attempt [1625.71ms]
+(pass) scheduler immutable definition and fire identity > uses the unfinished-assistant frontier index across long idle and busy Session histories [1811.36ms]
+(pass) scheduler immutable definition and fire identity > a busy Session retains its exact due occurrence behind one timed control lease [4951.17ms]
+(pass) scheduler immutable definition and fire identity > manual execution ignores stale local lifecycle when durable Session execution is idle [1715.99ms]
+(pass) scheduler immutable definition and fire identity > a live standby Prompt owner without an unfinished assistant allows one manual claim [1862.02ms]
+(pass) scheduler immutable definition and fire identity > a dead Prompt owner with an unfinished assistant permits one manual takeover claim [1788.46ms]
+(pass) scheduler immutable definition and fire identity > an unknown-live Prompt owner with an unfinished assistant keeps manual execution fenced [1921.63ms]
+(pass) scheduler immutable definition and fire identity > manual execution returns only runs bound to its exact definition revision and fire [1904.40ms]
+(pass) scheduler immutable definition and fire identity > updates and removal append revisions while historical runs retain their exact definition [1933.18ms]
+(pass) scheduler immutable definition and fire identity > a claim publishes the lease it took and a refused claim leaves the first owner in place [1788.55ms]
+(pass) scheduler immutable definition and fire identity > terminal scheduled Fire history advances recurrence without replaying an old due occurrence [1624.51ms]
+(pass) scheduler immutable definition and fire identity > indexed frontier pages use fixed set queries and agree with public reduction across definitions and targets [2801.99ms]
+(pass) scheduler immutable definition and fire identity > global due discovery reads one indexed Fire page without materializing future definitions [2242.48ms]
+(pass) scheduler immutable definition and fire identity > manual API and scheduled Fires at the same due millisecond retain distinct occurrence identities [3405.35ms]
+(pass) scheduler immutable definition and fire identity > a completed fire ends its execution lease with its terminal receipt, so the definition is immediately mutable [1623.87ms]
+(pass) scheduler immutable definition and fire identity > a Mission run stays bound to its first opened occurrence when the Mission closes and reopens [4225.14ms]
+(pass) scheduler immutable definition and fire identity > a closed Mission reservation atomically survives a post-commit crash and a later reopen [3062.98ms]
+(pass) scheduler immutable definition and fire identity > a target retry receipt releases ownership while retaining one pending logical fire [1508.45ms]
+(pass) scheduler immutable definition and fire identity > a pre-reservation failure settles only its physical attempt and retains the logical fire [1694.72ms]
+(pass) scheduler immutable definition and fire identity > a multi-project retry keeps one logical fire and executes only the unsettled target [3443.26ms]
+(pass) scheduler immutable definition and fire identity > a live execution lease atomically rejects definition mutation [2115.52ms]
+(pass) scheduler immutable definition and fire identity > a global fire uses the process runtime creator and wakes its exact canonical Session [4745.49ms]
+ 25 pass
+ 0 fail
+ 86 expect() calls
+Ran 25 tests across 1 file. [60.93s]
+[8/10] DONE test/scheduler-claim-and-fire-identity.test.ts exit=0 duration=61.12s
+[9/10] START test/server/global-chat-start.test.ts
+(pass) global Chat start API > accepts one visible streamed Chat turn and converges an exact retry [9032.44ms]
+(pass) global Chat start API > maps a request-derived Message occurrence already owned by another Session to a typed conflict [1943.55ms]
+(pass) global Chat start API > maps an empty inline attachment MIME to the declared request validation error [1.83ms]
+(pass) global Chat start API > rejects an unavailable explicit model before reserving a Global Chat allocation or Project [206.60ms]
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [14.23s]
+[9/10] DONE test/server/global-chat-start.test.ts exit=0 duration=14.46s
+[10/10] START test/task-control-abandoned-dispatch.test.ts
+(pass) abandoned dispatch recovery > settles a committed dispatch whose delivery owner vanished and wakes the Task [38128.69ms]
+(pass) abandoned dispatch recovery > restarts a partially admitted collection without false abandonment and emits one failure-aware wake [2295.79ms]
+(pass) abandoned dispatch recovery > keeps an epoch-one settlement out after terminalization and reopen [4595.55ms]
+(pass) abandoned dispatch recovery > preserves physical-owner rechecks across later descriptor pages [15287.35ms]
+(pass) abandoned dispatch recovery > one spent-budget disposition silences every member of the recovered collection [3902.96ms]
+ 5 pass
+ 0 fail
+ 102 expect() calls
+Ran 5 tests across 1 file. [66.18s]
+[10/10] DONE test/task-control-abandoned-dispatch.test.ts exit=0 duration=66.43s
+OpenCorvus failed test files (1):
+error: script "test" exited with code 1

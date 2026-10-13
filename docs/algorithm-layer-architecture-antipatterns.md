@@ -1,5 +1,7 @@
 # 算法框架层结构反模式审计
 
+> 2026-10-14：MySQL 转换及其全文索引重建路径已按用户要求删除；下文相关条目仅保留历史调查事实，当前范围见 [删除记录](../specs/records/2026-10/2026-10-14-remove-mysql-transfer.md)。
+
 > 系列第六份。前五份：[code-smell-report.md](code-smell-report.md)（全仓坏味道）、[code-smell-remediation-plan.md](code-smell-remediation-plan.md)（整改）、[host-design-critique.md](host-design-critique.md)（Host 过度工程）、[state-audit.md](state-audit.md)（状态面）、[algorithm-layer-antipatterns.md](algorithm-layer-antipatterns.md)（算法层判定数值）。
 > 生成：2026-08-18。
 >

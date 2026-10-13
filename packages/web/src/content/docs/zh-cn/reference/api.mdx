@@ -34,9 +34,6 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/composer-references` | List global Composer references 错误: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration 错误: `NonCanonicalConfigFileError`. | `global.config.get` |
 | PATCH | `/global/config` | Update global configuration 错误: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
-| GET | `/global/db/mysql/export` | Export MySQL transfer snapshot | `global.db.mysql.export` |
-| POST | `/global/db/mysql/import` | Import MySQL transfer snapshot 请求体: `snapshot`; 错误: `BadRequestError`, `OwnedPromptControllersError`. | `global.db.mysql.import` |
-| GET | `/global/db/mysql/schema` | Export MySQL staging schema | `global.db.mysql.schema` |
 | POST | `/global/dispose` | Dispose instance 错误: `OwnedPromptControllersError`. | `global.dispose` |
 | GET | `/global/event` | Get global events | `global.event` |
 | GET | `/global/health` | Get health | `global.health` |

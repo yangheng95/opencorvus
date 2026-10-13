@@ -1,0 +1,185 @@
+{
+  "scope": "Removal of MySQL transfer, its public API and generated clients; retained SQLite, Task/Mission, Scheduler and attachment contracts.",
+  "initialRunner": {
+    "exitCode": 1,
+    "files": [
+      {
+        "file": "test/storage/schema-contract.test.ts",
+        "exitCode": 1,
+        "seconds": 27.24,
+        "passed": 13,
+        "failed": 1
+      },
+      {
+        "file": "test/task-file-reference-owner.test.ts",
+        "exitCode": 0,
+        "seconds": 17.52,
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "file": "test/global-task-request-replay.test.ts",
+        "exitCode": 0,
+        "seconds": 144.78,
+        "passed": 12,
+        "failed": 0
+      },
+      {
+        "file": "test/mission-task-creation-opened-fence.test.ts",
+        "exitCode": 0,
+        "seconds": 87.08,
+        "passed": 9,
+        "failed": 0
+      },
+      {
+        "file": "test/panel-creation-occurrence-recovery.test.ts",
+        "exitCode": 0,
+        "seconds": 9.89,
+        "passed": 2,
+        "failed": 0
+      },
+      {
+        "file": "test/scheduler-automation-remediation.test.ts",
+        "exitCode": 0,
+        "seconds": 22.75,
+        "passed": 9,
+        "failed": 0
+      },
+      {
+        "file": "test/scheduler-event-durable-fire.test.ts",
+        "exitCode": 0,
+        "seconds": 28.99,
+        "passed": 11,
+        "failed": 0
+      },
+      {
+        "file": "test/scheduler-claim-and-fire-identity.test.ts",
+        "exitCode": 0,
+        "seconds": 61.12,
+        "passed": 25,
+        "failed": 0
+      },
+      {
+        "file": "test/server/global-chat-start.test.ts",
+        "exitCode": 0,
+        "seconds": 14.46,
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "file": "test/task-control-abandoned-dispatch.test.ts",
+        "exitCode": 0,
+        "seconds": 66.43,
+        "passed": 5,
+        "failed": 0
+      }
+    ]
+  },
+  "schemaRerun": {
+    "file": "test/storage/schema-contract.test.ts",
+    "exitCode": 0,
+    "passed": 14,
+    "failed": 0
+  },
+  "finalUniqueTests": 94,
+  "finalFiles": [
+    {
+      "file": "test/storage/schema-contract.test.ts",
+      "exitCode": 0,
+      "passed": 14,
+      "failed": 0
+    },
+    {
+      "file": "test/task-file-reference-owner.test.ts",
+      "exitCode": 0,
+      "seconds": 17.52,
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "file": "test/global-task-request-replay.test.ts",
+      "exitCode": 0,
+      "seconds": 144.78,
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "file": "test/mission-task-creation-opened-fence.test.ts",
+      "exitCode": 0,
+      "seconds": 87.08,
+      "passed": 9,
+      "failed": 0
+    },
+    {
+      "file": "test/panel-creation-occurrence-recovery.test.ts",
+      "exitCode": 0,
+      "seconds": 9.89,
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "file": "test/scheduler-automation-remediation.test.ts",
+      "exitCode": 0,
+      "seconds": 22.75,
+      "passed": 9,
+      "failed": 0
+    },
+    {
+      "file": "test/scheduler-event-durable-fire.test.ts",
+      "exitCode": 0,
+      "seconds": 28.99,
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "file": "test/scheduler-claim-and-fire-identity.test.ts",
+      "exitCode": 0,
+      "seconds": 61.12,
+      "passed": 25,
+      "failed": 0
+    },
+    {
+      "file": "test/server/global-chat-start.test.ts",
+      "exitCode": 0,
+      "seconds": 14.46,
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "file": "test/task-control-abandoned-dispatch.test.ts",
+      "exitCode": 0,
+      "seconds": 66.43,
+      "passed": 5,
+      "failed": 0
+    }
+  ],
+  "initialFailure": {
+    "case": "gracefully retires a settled connection with a retained completed prepared query",
+    "error": "Database reset EBUSY on Windows",
+    "cause": "The test retained its prepared query after graceful close. The new fixture correctly uses normal file reset, which needs the statement owner to release its handle.",
+    "resolution": "Finalize the retained prepared query in finally after testing graceful retirement, then run the normal isolated reset."
+  },
+  "checks": [
+    {
+      "command": "bun packages/sdk/js/script/build.ts",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run --cwd packages/opencorvus typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run api:routes-check",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run docs:check",
+      "exitCode": 0
+    },
+    {
+      "command": "bun run check:architecture-index",
+      "exitCode": 0
+    }
+  ],
+  "qualification": "Backend runtime and schema checks only. No UI automation, visual acceptance, external Provider calls, historical database import or alteration."
+}

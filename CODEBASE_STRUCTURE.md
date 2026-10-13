@@ -76,7 +76,7 @@ OpenCorvus 是一个面向 AI 编码代理的开发编排工具。它把用户�
 | --- | --- |
 | `src/engine/*` | 任务、目标、run、artifact、interaction、event log、queue、pipeline、状态投影、取消、工作区导出、跨 task artifact import 等核心业务模型。 |
 | `src/engine/engine.sql.ts` | 引擎 SQL 定义或 SQL 片段。 |
-| `src/storage/*` | SQLite 存储封装、DDL、schema、attachment store、MySQL transfer。 |
+| `src/storage/*` | SQLite 存储封装、DDL、schema、attachment store。 |
 | `src/bus/*` | 运行时事件总线。 |
 | `src/decision-log/*` | 编排决策日志。 |
 | `src/timeline/*` | 时间线/事件呈现相关模型。 |
