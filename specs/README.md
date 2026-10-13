@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [386 Sources多文件与刷新实页](artifacts/2026-10-05-connection-workspace-authority/source-reopen-plan-386.md)：当前Sources显示、点击与刷新重开的独立真实模型旅程。
+
 - [385 权限续行消息结算](records/2026-10/2026-10-13-permission-message-settlement-385.md)：物理所有权、完整消息收尾与72项后台合同。
 
 - [文件规则坐标与操作提示](records/2026-10/2026-10-13-file-metadata-feedback.md)：父工作树回执与当前语言事实投影。

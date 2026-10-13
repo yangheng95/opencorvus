@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [386 Sources多文件与刷新实页](2026-10-13-source-reopen-386.md)：真实读取、刷新定位通过；原Provider请求失败与尺寸通知问题保留。
+
 - [385 权限续行消息结算](2026-10-13-permission-message-settlement-385.md)：所有权交接、请求身份与Task/Mission恢复。
 
 - [文件规则坐标与操作提示](2026-10-13-file-metadata-feedback.md)：单一忽略规则、真实回执和桌面反馈。

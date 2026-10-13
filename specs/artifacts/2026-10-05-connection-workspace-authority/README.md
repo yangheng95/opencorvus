@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [386 Sources多文件刷新](source-reopen-plan-386.md)：[真实模型与实页证据](source-reopen-386/README.md)。
+
 - [385 权限续行消息结算](permission-message-settlement-plan-385.md)：[72项后台合同与真实进程证据](permission-message-settlement-385/README.md)。
 
 - [384 权限续行消息恢复调查](permission-message-recovery-plan-384.md)：[两个真实失败合同与完整证据](permission-message-recovery-384/README.md)。

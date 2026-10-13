@@ -1,0 +1,654 @@
+{
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\after-refresh.json",
+      "archive": "checks/local/after-refresh.json.gz",
+      "redactedBytes": 21393,
+      "compressedBytes": 3796
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\architecture-index.log",
+      "archive": "checks/local/architecture-index.log.gz",
+      "redactedBytes": 141,
+      "compressedBytes": 131
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\archive.ts",
+      "archive": "checks/local/archive.ts.gz",
+      "redactedBytes": 3348,
+      "compressedBytes": 1363
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\before-refresh.json",
+      "archive": "checks/local/before-refresh.json.gz",
+      "redactedBytes": 21394,
+      "compressedBytes": 3797
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\builtin.json",
+      "archive": "checks/local/builtin.json.gz",
+      "redactedBytes": 52,
+      "compressedBytes": 58
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\check-runtime.mjs",
+      "archive": "checks/local/check-runtime.mjs.gz",
+      "redactedBytes": 5757,
+      "compressedBytes": 2442
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\docs-check.log",
+      "archive": "checks/local/docs-check.log.gz",
+      "redactedBytes": 106,
+      "compressedBytes": 115
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\final.json",
+      "archive": "checks/local/final.json.gz",
+      "redactedBytes": 21385,
+      "compressedBytes": 3787
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\inspect-errors.ts",
+      "archive": "checks/local/inspect-errors.ts.gz",
+      "redactedBytes": 955,
+      "compressedBytes": 531
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\launch.log",
+      "archive": "checks/local/launch.log.gz",
+      "redactedBytes": 1497,
+      "compressedBytes": 676
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\prepare.mjs",
+      "archive": "checks/local/prepare.mjs.gz",
+      "redactedBytes": 1064,
+      "compressedBytes": 513
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\read-facts.ts",
+      "archive": "checks/local/read-facts.ts.gz",
+      "redactedBytes": 2645,
+      "compressedBytes": 1117
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\runtime-errors.json",
+      "archive": "checks/local/runtime-errors.json.gz",
+      "redactedBytes": 11396,
+      "compressedBytes": 1231
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\shutdown.log",
+      "archive": "checks/local/shutdown.log.gz",
+      "redactedBytes": 82,
+      "compressedBytes": 90
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\ui-build.log",
+      "archive": "checks/local/ui-build.log.gz",
+      "redactedBytes": 87369,
+      "compressedBytes": 11140
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-1.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-1.json.gz",
+      "redactedBytes": 698,
+      "compressedBytes": 383
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-10.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-10.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-11.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-11.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-12.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-12.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-13.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-13.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-14.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-14.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-15.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-15.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-16.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-16.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-17.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-17.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-18.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-18.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-19.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-19.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-2.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-2.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-20.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-20.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-21.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-21.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-22.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-22.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-23.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-23.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-24.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-24.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-25.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-25.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-26.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-26.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-27.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-27.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-28.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-28.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-29.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-29.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-3.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-3.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-30.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-30.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-31.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-31.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-32.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-32.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-33.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-33.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-34.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-34.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-35.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-35.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-36.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-36.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-37.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-37.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-38.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-38.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-39.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-39.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-4.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-4.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-40.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-40.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-41.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-41.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-42.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-42.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 427
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-43.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-43.json.gz",
+      "redactedBytes": 810,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-5.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-5.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-6.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-6.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-7.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-7.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 426
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-8.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-8.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-chain-supervision-79680-9.json",
+      "archive": "checks/local/live/source-reopen-386-live-chain-supervision-79680-9.json.gz",
+      "redactedBytes": 809,
+      "compressedBytes": 425
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-final-provider-audit.json",
+      "archive": "checks/local/live/source-reopen-386-live-final-provider-audit.json.gz",
+      "redactedBytes": 159708,
+      "compressedBytes": 3127
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-physical-terminal-and-pair-cleanup.json",
+      "archive": "checks/local/live/source-reopen-386-live-physical-terminal-and-pair-cleanup.json.gz",
+      "redactedBytes": 2437,
+      "compressedBytes": 850
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-settlement-owner.json",
+      "archive": "checks/local/live/source-reopen-386-live-settlement-owner.json.gz",
+      "redactedBytes": 462,
+      "compressedBytes": 286
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-reopen-386\\live\\source-reopen-386-live-shutdown-admission.json",
+      "archive": "checks/local/live/source-reopen-386-live-shutdown-admission.json.gz",
+      "redactedBytes": 538,
+      "compressedBytes": 370
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\stdout.log",
+      "archive": "checks/runtime/stdout.log.gz",
+      "redactedBytes": 541,
+      "compressedBytes": 361
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\stderr.log",
+      "archive": "checks/runtime/stderr.log.gz",
+      "redactedBytes": 7714,
+      "compressedBytes": 747
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\startup.json",
+      "archive": "checks/runtime/startup.json.gz",
+      "redactedBytes": 161,
+      "compressedBytes": 153
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\launch-owner.json",
+      "archive": "checks/runtime/launch-owner.json.gz",
+      "redactedBytes": 3338,
+      "compressedBytes": 1286
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\runtime\\log\\dev.log",
+      "archive": "checks/runtime/runtime/log/dev.log.gz",
+      "redactedBytes": 2736566,
+      "compressedBytes": 84807
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\authority-ready.json",
+      "archive": "checks/runtime/evidence/authority-ready.json.gz",
+      "redactedBytes": 15915,
+      "compressedBytes": 2771
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\managed-parent-ready.json",
+      "archive": "checks/runtime/evidence/managed-parent-ready.json.gz",
+      "redactedBytes": 511,
+      "compressedBytes": 308
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\native-host-ready.json",
+      "archive": "checks/runtime/evidence/native-host-ready.json.gz",
+      "redactedBytes": 1825,
+      "compressedBytes": 695
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\native-host-settled.json",
+      "archive": "checks/runtime/evidence/native-host-settled.json.gz",
+      "redactedBytes": 921,
+      "compressedBytes": 484
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\owned-config-hierarchy.json",
+      "archive": "checks/runtime/evidence/owned-config-hierarchy.json.gz",
+      "redactedBytes": 742,
+      "compressedBytes": 329
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\preflight-ready.json",
+      "archive": "checks/runtime/evidence/preflight-ready.json.gz",
+      "redactedBytes": 700,
+      "compressedBytes": 439
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\profile-selection-admitted.json",
+      "archive": "checks/runtime/evidence/profile-selection-admitted.json.gz",
+      "redactedBytes": 257,
+      "compressedBytes": 175
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\project-baseline.json",
+      "archive": "checks/runtime/evidence/project-baseline.json.gz",
+      "redactedBytes": 457,
+      "compressedBytes": 324
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-1.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-1.json.gz",
+      "redactedBytes": 246,
+      "compressedBytes": 209
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-10.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-10.json.gz",
+      "redactedBytes": 14397,
+      "compressedBytes": 1391
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-11.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-11.json.gz",
+      "redactedBytes": 28374,
+      "compressedBytes": 1588
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-12.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-12.json.gz",
+      "redactedBytes": 28413,
+      "compressedBytes": 1600
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-13.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-13.json.gz",
+      "redactedBytes": 28869,
+      "compressedBytes": 1701
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-14.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-14.json.gz",
+      "redactedBytes": 29380,
+      "compressedBytes": 1765
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-15.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-15.json.gz",
+      "redactedBytes": 43359,
+      "compressedBytes": 1903
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-16.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-16.json.gz",
+      "redactedBytes": 43398,
+      "compressedBytes": 1912
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-17.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-17.json.gz",
+      "redactedBytes": 43910,
+      "compressedBytes": 1970
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-18.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-18.json.gz",
+      "redactedBytes": 57887,
+      "compressedBytes": 2104
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-19.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-19.json.gz",
+      "redactedBytes": 57926,
+      "compressedBytes": 2110
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-2.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-2.json.gz",
+      "redactedBytes": 422,
+      "compressedBytes": 292
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-20.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-20.json.gz",
+      "redactedBytes": 58437,
+      "compressedBytes": 2164
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-21.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-21.json.gz",
+      "redactedBytes": 58482,
+      "compressedBytes": 2161
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-22.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-22.json.gz",
+      "redactedBytes": 72459,
+      "compressedBytes": 2282
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-23.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-23.json.gz",
+      "redactedBytes": 72498,
+      "compressedBytes": 2289
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-24.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-24.json.gz",
+      "redactedBytes": 73009,
+      "compressedBytes": 2338
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-3.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-3.json.gz",
+      "redactedBytes": 417,
+      "compressedBytes": 293
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-4.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-4.json.gz",
+      "redactedBytes": 13022,
+      "compressedBytes": 1027
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-5.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-5.json.gz",
+      "redactedBytes": 13199,
+      "compressedBytes": 1032
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-6.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-6.json.gz",
+      "redactedBytes": 13238,
+      "compressedBytes": 1062
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-7.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-7.json.gz",
+      "redactedBytes": 13678,
+      "compressedBytes": 1272
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-8.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-8.json.gz",
+      "redactedBytes": 14173,
+      "compressedBytes": 1374
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-9.json",
+      "archive": "checks/runtime/evidence/provider-67052-424ba0ed-e112-4be6-ac16-373a2e85a7c6-9.json.gz",
+      "redactedBytes": 14220,
+      "compressedBytes": 1378
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\evidence\\provider-pair-staging.json",
+      "archive": "checks/runtime/evidence/provider-pair-staging.json.gz",
+      "redactedBytes": 1681,
+      "compressedBytes": 468
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-sources-386.ts",
+      "archive": "checks/launcher/live-sol-sources-386.ts.gz",
+      "redactedBytes": 33465,
+      "compressedBytes": 9569
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-sources-386-launch.ps1",
+      "archive": "checks/launcher/live-sol-sources-386-launch.ps1.gz",
+      "redactedBytes": 32992,
+      "compressedBytes": 8222
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\live-sol-sources-386-shutdown.ps1",
+      "archive": "checks/launcher/live-sol-sources-386-shutdown.ps1.gz",
+      "redactedBytes": 9046,
+      "compressedBytes": 2919
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-settlement-385\\push.log",
+      "archive": "checks/previous-385/push.log.gz",
+      "redactedBytes": 3423,
+      "compressedBytes": 1271
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-settlement-385\\push-after-sync.log",
+      "archive": "checks/previous-385/push-after-sync.log.gz",
+      "redactedBytes": 2721,
+      "compressedBytes": 992
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\project\\来源材料\\方案乙.txt",
+      "archive": "checks/inputs/方案乙.txt.gz",
+      "redactedBytes": 59,
+      "compressedBytes": 82
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\project\\来源材料\\方案甲.txt",
+      "archive": "checks/inputs/方案甲.txt.gz",
+      "redactedBytes": 59,
+      "compressedBytes": 82
+    },
+    {
+      "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\source-reopen-386-live\\project\\来源材料\\来源显示与刷新后定位验证——较长的中文补充说明文件.txt",
+      "archive": "checks/inputs/来源显示与刷新后定位验证——较长的中文补充说明文件.txt.gz",
+      "redactedBytes": 148,
+      "compressedBytes": 150
+    }
+  ],
+  "integrity": "Every full redacted input equals its full decompressed archive; originals retained",
+  "qualification": "Archive completeness is separate from page review; original all-request qualification remains failed"
+}

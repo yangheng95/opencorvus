@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [386 Sources多文件与刷新实页](2026-10-05-connection-workspace-authority/source-reopen-386/README.md)：独立当前页面、原始来源身份与真实模型证据。
+
 - [385 权限续行消息结算](2026-10-05-connection-workspace-authority/permission-message-settlement-385/README.md)：受控流式新工具、实际进程恢复与完整失败/成功证据。
 
 - [文件规则坐标与操作提示](2026-10-13-file-metadata-feedback/README.md)：真实API、前后截图与运行资格。
