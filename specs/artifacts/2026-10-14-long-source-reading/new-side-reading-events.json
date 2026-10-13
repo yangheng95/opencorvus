@@ -1,0 +1,126 @@
+[
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:58:08.976Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 192,
+      "height": 635,
+      "total": 827,
+      "epoch": 3,
+      "cause": "connection-rebind",
+      "intent": "preserve"
+    },
+    "message": "main tree replacement"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:58:08.977Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 192,
+      "height": 635,
+      "total": 827,
+      "following": false,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 0,
+        "following": false,
+        "viewportWidth": 546,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-file\",\"ses_-zUS2EY0ezzjFidQwBy1\",\"msg_g0VXxlSYg00SrLEGmq3w\",\"7dbcaf2f0fdbf9ee93ca116321d2578d977f890e26a7e214276245c2cb4e228c\"]",
+          "messageID": "msg_g0VXxlSYg00SrLEGmq3w",
+          "offset": 222.65626525878906
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:58:08.977Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 192,
+      "height": 635,
+      "total": 827,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 502,
+          "height": 640
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:58:08.977Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 5827,
+      "following": false,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 0,
+        "following": false,
+        "viewportWidth": 546,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-file\",\"ses_-zUS2EY0ezzjFidQwBy1\",\"msg_g0VXxlSYg00SrLEGmq3w\",\"7dbcaf2f0fdbf9ee93ca116321d2578d977f890e26a7e214276245c2cb4e228c\"]",
+          "messageID": "msg_g0VXxlSYg00SrLEGmq3w",
+          "offset": 222.65626525878906
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:58:08.977Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 5827,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 502,
+          "height": 5639.5
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:58:08.977Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 6319,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 502,
+          "height": 6131.28125
+        }
+      ]
+    },
+    "message": "main resize observation"
+  }
+]

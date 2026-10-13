@@ -1,0 +1,13 @@
+15 |     const home = os.homedir()
+16 |     if (home) return home
+17 |   } catch {}
+18 |   const home = process.env.HOME || process.env.USERPROFILE
+19 |   if (home) return home
+20 |   throw new Error("OpenCorvus cannot resolve an absolute user home directory")
+                 ^
+error: OpenCorvus cannot resolve an absolute user home directory
+      at resolveHome (D:\myhexin-local\opencorvus\packages\opencorvus\src\global\index.ts:20:13)
+      at runtimePaths (D:\myhexin-local\opencorvus\packages\opencorvus\src\global\index.ts:35:11)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\global\index.ts:89:46
+
+Bun v1.4.0 (Windows x64)

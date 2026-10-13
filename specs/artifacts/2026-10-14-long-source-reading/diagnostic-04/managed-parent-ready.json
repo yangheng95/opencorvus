@@ -1,0 +1,15 @@
+{
+  "pid": 79556,
+  "occurrence": "long-source-reader-84b57b5a-3e4d-4f01-a1ab-66339c366eea",
+  "owner": {
+    "pid": 79556,
+    "processInstanceID": "win32:639275218152204097",
+    "occurrenceID": "3c6ccdbf-b288-4787-bf5c-25db43726a43"
+  },
+  "parent": {
+    "pid": 84812,
+    "processInstanceID": "win32:639275218151765039",
+    "occurrenceID": "a09342d7-96d8-492d-a055-89c95044dc68"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

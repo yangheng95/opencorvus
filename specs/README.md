@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [长正文与来源阅读](records/2026-10/2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
+
 - [Provider Test 的结果事实](records/2026-10/2026-10-14-provider-test-observation.md)：有效模型、当前语言与明确变更归属。
 
 - [当前基线 Sources 阅读](records/2026-10/2026-10-14-source-reading-current-baseline.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。

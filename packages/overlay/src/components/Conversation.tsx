@@ -833,10 +833,9 @@ export function Conversation(props: {
     on(
       () => cardTreeStore.treeEpoch,
       () => {
-        if (cardTreeStore.treeReplacementScrollIntent === "preserve") {
-          scrollController?.contentChanged()
-          return
-        }
+        // Every replacement remounts Virtua, which can clamp the old scrollport.
+        // Restore the saved reader against the new message/source geometry even
+        // when the replacement explicitly preserves the current conversation.
         bindReader()
       },
       { defer: true },

@@ -1,0 +1,85 @@
+{
+  "databaseVersion": 1,
+  "mainSessionID": "ses_-zUS2EY0ezzjFidQwBy1",
+  "main": {
+    "messages": 38,
+    "completedAssistantBodies": 37,
+    "distinctBodies": 37,
+    "completedReadTools": 36,
+    "sources": 36
+  },
+  "sides": [
+    {
+      "sessionID": "ses_-zUS2E8Z9zzV803ehiiw",
+      "inheritedMessages": 0,
+      "creationBoundary": "Source had no completed reply yet"
+    },
+    {
+      "sessionID": "ses_-zUS2D0OTzz6DReA7jYC",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "exact canonical equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS250DzzzAkXuwQ0h8",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "exact canonical equality with message/tool identity remap"
+    },
+    {
+      "sessionID": "ses_-zUS23bjwzzk60qsn78D",
+      "inheritedMessages": 38,
+      "messages": 38,
+      "completedAssistantBodies": 37,
+      "distinctBodies": 37,
+      "completedReadTools": 36,
+      "sources": 36,
+      "sourcePayloads": "exact canonical equality with message/tool identity remap"
+    }
+  ],
+  "audits": [
+    {
+      "name": "original-406",
+      "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\long-source-reading-406\\long-source-reading-406-final-provider-audit.json",
+      "requests": 41,
+      "budget": 56,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF",
+      "physicalExit": 0,
+      "pairCleanup": true
+    },
+    {
+      "name": "long-source-reading-406-diagnostic-04",
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-diagnostic-04\\evidence\\provider-79556-65ec6091-adfe-4411-8214-8cc2cea49fce-10.json",
+      "requests": 3,
+      "budget": 20,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF",
+      "physicalExit": 0,
+      "pairCleanup": true
+    },
+    {
+      "name": "long-source-reading-406-after-05",
+      "file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-14\\long-source-reading-406-after-05\\evidence\\provider-81664-b2169cf3-10e7-4349-a4a0-36807ecd0c84-10.json",
+      "requests": 3,
+      "budget": 20,
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "response": "200/EOF",
+      "physicalExit": 0,
+      "pairCleanup": true
+    }
+  ],
+  "totalModelRequests": 47,
+  "boundary": "Backend identity/output/source/provider/physical evidence only. Manual screenshots own visual acceptance. The 36 ranges are from one document; side copies add no executed tools or new research sources."
+}

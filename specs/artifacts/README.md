@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [长正文与来源阅读](2026-10-14-long-source-reading/README.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
+
 - [Provider Test 的结果事实](2026-10-14-provider-test-observation/README.md)：前态、正向合同与实际模型/页面资格。
 
 - [当前基线 Sources 阅读](2026-10-14-source-reading-current-baseline/README.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。

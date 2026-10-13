@@ -15,8 +15,6 @@ validation保存完整原功能日志与退出、两次source类型检查（均0
 
 screenshots的11张原JPEG均Root实际查看，1280×720，01初始、02 Files、03–05 junction400 Details、06 indirect400、07 junction成功英语、08 symbolic400中文、09 symbolic成功中文、10 data展开、11完整marker Editor中文。04/05为滚动Details片段，底部闭括号没有完整入图，不能称完整body视觉证明。11的原AX另保存；AX只作原交互上下文，不替图。浏览器原warn/error数组为空。只关闭自己的tab2，没有用户窗口/进程操作。
 
-原归档器对所有大于8192B的原件统一gzip，第一提交中的JPEG因而也是完整gzip。Root随后将11张图改为直接可打开的原JPEG，逐张解压并与实际scratch原件直接字节比较相同；没有编辑、重拍或改变图像。manifest保留每图previousGzipStorage与当前准确target，旧压缩表示由提交历史保存，当前仅一份原图。
-
 runtime/evidence保同原occurrence=directory-target-guard-after-c94af314-1bea-42a9-8e4c-5af4c59ddbce，900000ms绝对cap/120000ms真实输出无活动输入、原Host71960/Target26924/Parent51828及各birth、stdout554B/stderr209058B。全文stderr仅3条对应预期400诊断。普通shutdown实际200，Native与launcher自然0，所有joins/writes、physical/output/request settled及birth退休/port释放收齐。tools/shutdown-root-exit.json原exitCode=null是PowerShell `$LASTEXITCODE`未赋值，保原不伪造；实际tool0、原HTTP200、Native/parent0与物理回执分别证明各对象。外层tool返回在chat，未另存binary日志。observer仅透明原Git调用输入/输出/birth/退出，不改Native执行或活动计时。
 
 tools/full-changes.json与history是子agent准备时版本，早于Root透明日志/state-reader修改；tools其余当前文件和source-head/source-diff/file-entry-before-launch保存真正页面启动所用源。source是开发模式与已存不变UI资源，当前Files UI源码未改；不声称其它owner同时修改的Provider界面或安装包已验收。无模型调用、凭据或UI自动化新增/运行。

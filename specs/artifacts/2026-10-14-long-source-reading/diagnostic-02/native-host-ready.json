@@ -1,0 +1,40 @@
+{
+  "occurrence": "long-source-reader-4e68f40c-1b86-4317-8372-648f362b405a",
+  "outcome": "ready",
+  "host": {
+    "pid": 89928,
+    "processInstanceID": "win32:639275211507757418",
+    "occurrenceID": "415397a4-8efd-4711-9ff8-523cdd3de271"
+  },
+  "parent": {
+    "pid": 87116,
+    "processInstanceID": "win32:639275211489964336",
+    "occurrenceID": "7e31a4d3-cf9a-43c2-ae2a-25d882f813da"
+  },
+  "target": {
+    "pid": 65424,
+    "processInstanceID": "win32:639275211515749980",
+    "occurrenceID": "08916e48-1f35-4ade-abc6-00734982574c"
+  },
+  "targetBirthAtMs": 1791924351574,
+  "deadlineAt": 1791925250730,
+  "observedAtUtc": "2026-10-13T20:45:51.606Z",
+  "executable": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-diagnostic-bundle/bin/bun.exe",
+  "args": [
+    "--cwd",
+    "D:/myhexin-local/opencorvus/packages/opencorvus",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18521",
+    "--project-dir",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-live/project",
+    "--startup-receipt",
+    "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-14/long-source-reading-406-diagnostic-02/startup.json",
+    "--startup-occurrence",
+    "long-source-reader-4e68f40c-1b86-4317-8372-648f362b405a"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

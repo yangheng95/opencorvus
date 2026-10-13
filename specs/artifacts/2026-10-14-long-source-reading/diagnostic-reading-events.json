@@ -1,0 +1,902 @@
+[
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:36.102Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 683,
+      "total": 683,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 759.625,
+          "height": 528
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:36.102Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 683,
+      "total": 683,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 759.65625,
+          "height": 528
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:53.828Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 635,
+      "epoch": 1,
+      "cause": "conversation-session-switch",
+      "intent": "bottom"
+    },
+    "message": "main tree replacement"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:53.828Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 635,
+      "epoch": 1,
+      "cause": "conversation-session-switch",
+      "intent": "bottom"
+    },
+    "message": "main bind reader"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:53.828Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 635,
+      "epoch": 1,
+      "cause": "conversation-session-switch",
+      "intent": "bottom"
+    },
+    "message": "main bind reader"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:53.828Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 635,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 759.65625,
+          "height": 480
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:53.828Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 635,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 759.65625,
+          "height": 448
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 827,
+      "epoch": 2,
+      "cause": "conversation-session-hydrate",
+      "intent": "bottom"
+    },
+    "message": "main tree replacement"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 827,
+      "epoch": 2,
+      "cause": "conversation-session-hydrate",
+      "intent": "bottom"
+    },
+    "message": "main bind reader"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 192,
+      "height": 635,
+      "total": 827,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 759.65625,
+          "height": 640
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 192,
+      "height": 635,
+      "total": 4063,
+      "following": true,
+      "input": false,
+      "pending": false
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 3428,
+      "height": 635,
+      "total": 4063,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 759.65625,
+          "height": 3875.96875
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 3428,
+      "height": 635,
+      "total": 4063,
+      "following": true,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 3785.333251953125,
+        "following": true,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-file\",\"ses_-zUS2EY0ezzjFidQwBy1\",\"msg_g0VXxmGH500x3ePnFNVX\",\"c79fa5c4f31e60aa140365b24a7352a42e2d7b3f4ee93ae2ea87ea9da964140f\"]",
+          "messageID": "msg_g0VXxmGH500x3ePnFNVX",
+          "offset": 64.51042175292969
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 3524,
+      "height": 635,
+      "total": 4159,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 759.65625,
+          "height": 352
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 3524,
+      "height": 635,
+      "total": 4159,
+      "following": true,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 3785.333251953125,
+        "following": true,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-file\",\"ses_-zUS2EY0ezzjFidQwBy1\",\"msg_g0VXxmGH500x3ePnFNVX\",\"c79fa5c4f31e60aa140365b24a7352a42e2d7b3f4ee93ae2ea87ea9da964140f\"]",
+          "messageID": "msg_g0VXxmGH500x3ePnFNVX",
+          "offset": 64.51042175292969
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 3785.333251953125,
+      "height": 635,
+      "total": 4421,
+      "following": true,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 3785.333251953125,
+        "following": true,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "source",
+          "sourceIdentity": "[\"source-file\",\"ses_-zUS2EY0ezzjFidQwBy1\",\"msg_g0VXxmGH500x3ePnFNVX\",\"c79fa5c4f31e60aa140365b24a7352a42e2d7b3f4ee93ae2ea87ea9da964140f\"]",
+          "messageID": "msg_g0VXxmGH500x3ePnFNVX",
+          "offset": 64.51042175292969
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:54.928Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 3785.333251953125,
+      "height": 635,
+      "total": 4517,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 759.65625,
+          "height": 4137.15625
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:55.450Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 4133.33349609375,
+      "height": 635,
+      "total": 4769,
+      "following": true,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 4610,
+        "following": true,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxmHcf00QRcjMwVjd",
+          "offset": -21.656253814697266,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:55.450Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 4133.33349609375,
+      "height": 635,
+      "total": 4769,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 759.65625,
+          "height": 4485.40625
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:55.450Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 4365.33349609375,
+      "height": 635,
+      "total": 5001,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 759.65625,
+          "height": 4717.59375
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:55.450Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 4365.33349609375,
+      "height": 635,
+      "total": 5245,
+      "following": true,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 4610,
+        "following": true,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxmHcf00QRcjMwVjd",
+          "offset": -21.656253814697266,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:55.450Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 4610,
+      "height": 635,
+      "total": 5245,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 759.65625,
+          "height": 4961.75
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:46:55.450Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 4610,
+      "height": 635,
+      "total": 5245,
+      "following": true,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 4610,
+        "following": true,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxmHcf00QRcjMwVjd",
+          "offset": -21.656253814697266,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:20.737Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 5245,
+      "following": false,
+      "input": true,
+      "pending": false,
+      "remembered": {
+        "top": 720,
+        "following": false,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxlWey00pdK26unG0",
+          "offset": -34.72917175292969,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:20.737Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 0,
+      "height": 635,
+      "total": 5404,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 759.65625,
+          "height": 5120.3125
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:20.737Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 720,
+      "height": 635,
+      "total": 5404,
+      "following": false,
+      "input": true,
+      "pending": false,
+      "remembered": {
+        "top": 720,
+        "following": false,
+        "viewportWidth": 927,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxlWey00pdK26unG0",
+          "offset": -34.72917175292969,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 720,
+      "height": 635,
+      "total": 5717,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 727.359375,
+          "height": 352
+        },
+        {
+          "owner": "conversation-virtual-window",
+          "width": 727.359375,
+          "height": 5120.3125
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 720,
+      "height": 635,
+      "total": 5968,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 727.359375,
+          "height": 5684.5625
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 767.3333129882812,
+      "height": 635,
+      "total": 5999,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 663.15625,
+          "height": 331
+        },
+        {
+          "owner": "conversation-virtual-window",
+          "width": 663.15625,
+          "height": 5684.5625
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 743.3333129882812,
+      "height": 635,
+      "total": 6295,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 663.15625,
+          "height": 5990.21875
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 743.3333129882812,
+      "height": 635,
+      "total": 6295,
+      "following": false,
+      "input": false,
+      "pending": true,
+      "remembered": {
+        "top": 837.3333129882812,
+        "following": false,
+        "viewportWidth": 546,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxlWey00pdK26unG0",
+          "offset": -34.51042175292969,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 790.6666870117188,
+      "height": 635,
+      "total": 6295,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 550.28125,
+          "height": 331
+        },
+        {
+          "owner": "conversation-virtual-window",
+          "width": 550.28125,
+          "height": 5990.21875
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 790.6666870117188,
+      "height": 635,
+      "total": 6342,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 550.28125,
+          "height": 6037.21875
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 790.6666870117188,
+      "height": 635,
+      "total": 6342,
+      "following": false,
+      "input": false,
+      "pending": true,
+      "remembered": {
+        "top": 837.3333129882812,
+        "following": false,
+        "viewportWidth": 546,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxlWey00pdK26unG0",
+          "offset": -34.51042175292969,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 837.3333129882812,
+      "height": 635,
+      "total": 6342,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 517.0625,
+          "height": 331
+        },
+        {
+          "owner": "conversation-virtual-window",
+          "width": 517.0625,
+          "height": 6037.21875
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 837.3333129882812,
+      "height": 635,
+      "total": 6342,
+      "following": false,
+      "input": false,
+      "pending": true,
+      "remembered": {
+        "top": 837.3333129882812,
+        "following": false,
+        "viewportWidth": 546,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxlWey00pdK26unG0",
+          "offset": -34.51042175292969,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 837.3333129882812,
+      "height": 635,
+      "total": 6342,
+      "entries": [
+        {
+          "owner": "chat-scroll session-content",
+          "width": 502,
+          "height": 331
+        },
+        {
+          "owner": "conversation-virtual-window",
+          "width": 502,
+          "height": 6037.21875
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 837.3333129882812,
+      "height": 635,
+      "total": 6436,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 502,
+          "height": 6131.28125
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 608,
+      "height": 635,
+      "total": 6207,
+      "following": false,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 837.3333129882812,
+        "following": false,
+        "viewportWidth": 546,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxlWey00pdK26unG0",
+          "offset": -34.51042175292969,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 608,
+      "height": 635,
+      "total": 6207,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 502,
+          "height": 5902.15625
+        }
+      ]
+    },
+    "message": "main resize observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 837.3333129882812,
+      "height": 635,
+      "total": 6436,
+      "following": false,
+      "input": false,
+      "pending": false,
+      "remembered": {
+        "top": 837.3333129882812,
+        "following": false,
+        "viewportWidth": 546,
+        "anchor": {
+          "kind": "text",
+          "messageID": "msg_g0VXxlWey00pdK26unG0",
+          "offset": -34.51042175292969,
+          "textIndex": 0,
+          "blockIndex": 0
+        }
+      }
+    },
+    "message": "main scroll observation"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-13T20:47:44.597Z",
+    "service": "overlay:reading-diag",
+    "logDomain": "non-session",
+    "data": {
+      "top": 837.3333129882812,
+      "height": 635,
+      "total": 6436,
+      "entries": [
+        {
+          "owner": "conversation-virtual-window",
+          "width": 502,
+          "height": 6131.28125
+        }
+      ]
+    },
+    "message": "main resize observation"
+  }
+]

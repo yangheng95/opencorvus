@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [长正文与来源阅读](2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
+
 - [Provider Test 的结果事实](2026-10-14-provider-test-observation.md)：目录选择、真实回执与轮次。
 
 - [当前基线 Sources 阅读](2026-10-14-source-reading-current-baseline.md)：新隔离运行、真实模型来源、当前页面及逐视图验收边界。
