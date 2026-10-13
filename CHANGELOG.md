@@ -13,6 +13,12 @@
 
 #### 修复
 
+- 独立 Chat 与侧聊显示真实待批准权限，冷加载和重连恢复同一请求；实时事件保留原请求说明和时间，取消或失效按真实账本清理卡片。回复后仅刷新仍被选中的原 Task。
+
+- 拒绝工具操作后，将真实工具错误交给下一次流式模型请求形成正常回复，修复会话停止在 tool-calls 并报缺持久回复的问题；删除旧 continue_loop_on_deny 停止选项，现有权限和取消契约保持。
+
+- Task 看板的 HTTP 条件校验使用完整响应投影，修复状态、身份、项目名称或任务标题变化仍返回旧 304 的问题；响应正文与 ETag 使用同一份快照。
+
 - 服务商保存配置后立即重读当前目录，即使没有填写密钥；已提交但协调失败的配置保留保存事实，密钥、清理和目录问题分阶段显示。原操作完成不会覆盖取消重开或跨作用域后的新表单。已提交配置回执的完整快照不再进入错误详情或持久诊断，业务读取仍保留原配置。
 
 - 服务商允许保存空模型声明，并可稍后添加或发现模型；名称、地址和环境变量编辑保留当前声明及并行新增模型。项目覆盖删除可恢复全局模型，仍被引用的自定义模型保持明确错误。配置合并正确持久化空对象并归一化嵌套删除标记。
@@ -85,6 +91,12 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Standalone Chat and Side Chat show real pending permissions and restore the same requests after cold loading or reconnection. Live events preserve the original request summary and time; ledger-backed cancellation or staleness retires the card. Replies refresh a Task only while its original selection remains current.
+
+- A denied Tool action passes its real error to the next streamed model request for a normal reply, fixing Sessions that stopped at tool-calls and reported a missing durable reply. The former continue_loop_on_deny stop option is removed; permission and cancellation contracts remain intact.
+
+- Task Board HTTP validators identify the complete response projection, fixing stale 304 responses after state, identity, project-name or Task-title changes. The body and ETag use the same materialized snapshot.
 
 - Provider configuration saves immediately reread the current catalog, including saves without a key. Committed configurations retain their saved outcome when reconciliation fails, with credential, cleanup and read issues reported separately. Older completions preserve reopened forms and returning scopes. Full committed-configuration snapshots stay out of error details and retained diagnostics while business consumers keep the original configuration.
 

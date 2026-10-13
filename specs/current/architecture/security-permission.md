@@ -43,6 +43,9 @@ interrupted state remains truthful. See [Tool result persistence](02-data.md).
 Request-owner admission uses one immediate transaction for identity validation and the first
 `requested` fact, including replay after a decision. Readers count distinct request identities;
 repeated observations in the retained ledger do not imply additional successful executions.
+The same transaction returns the canonical Request to authorization and execution. Its
+`timeCreated` is the immutable requested-row timestamp; live Asked events, pending snapshots,
+execution contexts and same-request replays use that time and one interaction order key.
 
 Permission reply, startup scanning and asynchronous Tool completion share physical Prompt
 admission. A live local or peer owner keeps its authority. The admitted recovery drains the
@@ -62,6 +65,23 @@ evidence. This adds no permission queue, schema migration or second Mission reco
 ## Transport contract
 
 The Overlay, Application Client Protocol (ACP), command-line interface, channel runtime, protocol mirror, server routes, and generated Software Development Kit share the same request identity and decisions. Presentation adapters may translate labels, but they cannot invent approval scopes or settle outside the canonical reply/revoke APIs.
+
+Standalone Session hydration and ordered connection snapshots carry mandatory
+`pendingPermissions` arrays from that ledger. Exact durable Project and Session lineage admit
+non-Task children; Task requests retain their existing Board interaction owner. Asked payloads
+keep the original Request fields, including its summary, before entering the same adapter.
+A real cancelled or stale decision winner publishes `permission.terminated` with its Project,
+Session, request and ledger-event identity in the same transaction and owned outbox. It is
+not an operator reply. Task invalidation validates that fact and its Interaction projection
+before using the existing ephemeral protocol event; it creates no second terminal authority.
+
+Denying an invocation persists the denied decision and real Tool error. That error enters the
+next streamed model request through the existing Tool-result projection, so the model chooses
+a permissible next action or a final reply. The former `continue_loop_on_deny` configuration
+and host stop branch are removed. This does not approve or replay the denied effect. Prompt
+cancellation retains its exact owner and AbortSignal; real control results, failure, compaction
+and completed-reply admission keep their existing contracts. Already completed historical
+denial-only turns are not automatically rewritten or repaired by startup recovery.
 
 ## Adjacent security boundaries
 

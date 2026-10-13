@@ -22,7 +22,7 @@
 
 - [403 Native关闭收敛](2026-10-13-native-shutdown-pending-permission-403.md)：真实待权限关闭、13项重启/25owner和自然5s失败退出，保留旧失败与未验收边界。
 
-- [402 独立会话权限批准投影](2026-10-13-standalone-permission-projection-402.md)：Main Chat的hydrate/live/reconnect、真实排序与完整控制入口横审。
+- [402 独立会话权限批准投影](2026-10-13-standalone-permission-projection-402.md)：单源pending、canonical时间/正文、完整Board实体标签与拒绝后自然流式答复；真实Main/Side/child/Task审批及Sol允许/拒绝，未验收边界明确。
 
 - [398 表格权限卡片悬停](2026-10-13-spreadsheet-permission-hover-398.md)：真实深色卡片/操作悬停、同实例语言/主题与19张人工复核截图。
 

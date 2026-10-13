@@ -24,7 +24,7 @@
 
 - [403 Native关闭收敛](records/2026-10/2026-10-13-native-shutdown-pending-permission-403.md)：统一取消/监听器握手、真实Native正常关闭/重启与5s失败边界，58项正向后台检查。
 
-- [402 独立会话权限批准投影](records/2026-10/2026-10-13-standalone-permission-projection-402.md)：Main Chat的hydrate/live/reconnect、真实排序与完整控制入口横审。
+- [402 独立会话权限批准投影](records/2026-10/2026-10-13-standalone-permission-projection-402.md)：单源pending、canonical时间/正文、完整Board实体标签与拒绝后自然流式答复；真实Main/Side/child/Task审批及Sol允许/拒绝，未验收边界明确。
 
 - [398 表格权限卡片悬停](records/2026-10/2026-10-13-spreadsheet-permission-hover-398.md)：四分发主题修复、真实普通/全屏悬停、中英与浅色对照、明确资格边界。
 

@@ -208,3 +208,112 @@ Main默认afterReply在点击前捕获source/directory/API authority/selection e
 正式后台正向先红后绿，涵盖真实Authority→hydrate/connected/warm事件、request/time/orderKey、两Project与合法child、Task唯一卡、原allow_once/deny、真实cancelled/stale赢家及outbox、Task事件→条件GET200/current terminal。新增完整Board公开HTTP检查证明首200/body/ETag一致、未变304、列表/星号/强写法弱比较、不同标签200、HEAD、正确Project准入、真实同毫秒状态与等数量身份变化、合法Project/Task/其它响应变化、重复brief时间稳定、CORS/Vary/request-id。不可重算同函数摘要冒充业务正确性或以“不调用/不存在”断言为核心。全SDK六目标生成事务、核心/SDK/Overlay类型及docs:check按实际最终变化执行。
 
 Root真实桌面需前后截图和人工复核：Main inline/Dialog自然待批准、Allow once/deny、切源返回/回复期间切源、cold/reconnect、多个pending、Question草稿、Task与SideChat现有入口、中英文。必要GPT-6.1 Sol用全新配对auth/models目录、分别验证凭据/模型目录/实际stream:true请求；保留原模型600秒/20请求/180秒无活动和页面关闭预留，不覆盖395失败。不能把受控Provider、局部测试、构建或静态审查宣称真实模型/UI通过。任何scope都join原物理/输出/请求清理并删除配对资料；共享控制异常立即再横审。Root完成证据、当前架构/双语日志/索引、范围提交、fresh upstream merge与正常push后继续下一批，整体goal active。
+
+## 实施跟踪与Root修复前页面证据
+
+402最终实施方案独立提交`c9403b328ab59a6325937c3c498c49f35a428e08`并正常push；403交付`c71da54e53e769938d97edae37b987c7b4628547`也已push。Root分配11后台文件及聚焦正向测试给audit_functionality、六前端行为文件/两个正向协议fixture给audit_ui；额外批准InteractionDialogHost仅三行旧loadBoard说明更新，不改组件行为。subagent transcript parser不扩大pendingPermissions合同，真正交互消费者为Main hydrate/connected与SideChat connected。
+
+Root真实修复前范围为`.tmp-standalone-permission-projection-402/manual-before-05`：Bun1.4、成熟owned_tree进程、独立运行目录/公开CSV/受控流式Provider，无用户凭据或真实模型。真实POST /global/config写唯一自有配置，再POST /global/chat/start自然产生Session `ses_hheDo7cTz3Pf6OWon5vq`、Project `prj_hKbuQucjy1aOUqNKtwOT`与read Permission `per_hrMDFckzk27ucXLuOdPX`（timeCreated1791916032681）；公开GET /permission确认待授权，Message/Tool原事实在messages-before-close.json。Root通过真实桌面选择该会话并展开read工具，实际显示Ask me、Running/waiting for result，Main没有决定控件。两张原JPEG和展开后AX已保存并人工查看，非UI自动测试或DOM断言；Tool展开排除了仅折叠隐藏入口的解释。使用401私有bundle，其Main该路径与本次修改前源相同，未将静态差异或过去395截图冒称本次页面。
+
+新浏览器连接的原IAB2已不存在，实际inventory为同线程IAB4，Root按故障文档重新连接该IAB，未操作用户Chrome。自有tab1于2026-10-13T18:30:26.574Z关闭，早于原closeBy18:35:59.971Z；server/provider实际stop完成。原owned83312在18:31:08后自然exit1：工具脚本在自身SQLite进程尚未退出时删运行目录，db-shm EBUSY。外层原handle已join settled/outputSettled、输出drain并在物理退出后删除原parent runtime；closure-review.json确认。此为修复前UI复现证据，不能称正常Native exit0或真实Sol验收。Root修复脚本仅将目录清理收敛到原外层controller物理退出后，已保留05实际两脚本，下一fresh原页面流程必须重跑验证；不改产品/SQLite政策或放宽600s/closeBy。
+
+更早准备失败保留：01路径分隔/监督器定位错误没有application；02误用不存在的handle.wait导致controller失败，没有application ready/页面，原target88348/helper87184/controller88196均独立查证已不在，ready/helper与closure.json保留，原精确临时根已清理（output join未确认，不能写完整成功）；03测试运行目录准入错误、04仅配置project inline而Global Chat未得到同一全局fixture模型，两原owner自然exit1并由外层清理。后者没有用户auth/models，不属于真实Provider凭据缺失；05改用正式global配置后得到正确模型/stream与自然pending。首次01没有保存准确bootstrap临时根，残留目录清理状态未知，不扫描/删除其它任务临时目录。这些本地启动器错误不覆盖原395失败，也不代替402产品修复后验收。
+
+前端静态首版范围9文件：六行为、一个限定注释、两个既有纯transport/state正向协议fixture；标准Bun1.4隔离runner27测试/66断言与renderer-surface通过，SDK/typecheck/私有构建和所有修复后视觉仍待完成。后台首轮Session缺数组/Terminated及Project更改返回旧304得到红证据；另新HTTP夹具把server.stop放在自身Instance.provide尚未返回的租约中，造成60s自锁，必须保留原输入/失败并修夹具后重跑，同时横查生产同结构，不能算Board产品缺陷或增加deadline。此节为当前状态，不预写后续成功。
+
+## 新增根因与实施前补充：Permission Request时间的唯一权威
+
+Root独立读authority authorize注册事务、appendEvent、requestFromRow、唯一authorizeAndExecute调用、assertAttemptIdentity/exactContinuation及外层执行context；完整委托审查在implementation/request-time-authority-review.md、request-consumers.txt/request-full-search.txt。真实初绿同ID Asked.timeCreated1791916977247/hydrate1791916977250和child1791916977260/1791916977262，证实不是仅格式或个别UI：Request draft先Date.now，append requested再Date.now，Asked发布draft而list/快照读取ledger，旧路径没有把已持久化原请求回绑所有消费者。
+
+影响覆盖Session/Task/Mission、CLI/ACP实时与冷恢复、Main/SideChat的interaction时间及所有后续executionContext、outcome/completeExecution/replay hook。身份ID只取project/session/message/call/fingerprint，时间不参与；原policy/decision_slot/attempt/outcome/effect lease不改。同ID复用原requested时间，不更新不可变ledger行。所有生产都经过authorizeAndExecute且private authorize只有该一个调用者；多Project原owner校验、exactContinuation变更StaleContinuationError、attempt准入顺序全部保持。Question没有此本批新变动，公共schema/HTTP/SDK方法不因时间绑定新增协议。
+
+Root最终批准最小方案：将原唯一Request注册事务从private authorize开头移到唯一caller原assertAttemptIdentity后/await authorize前。局部request const改let；事务先原assertRequestIdentity，existing pendingOrRequestedRequest已是canonical Request，直接返回；首个请求append原requested行后只对这条新LedgerRow用现成requestFromRow，返回canonical Request。之后authorize/Asked/所有执行context与结果共享该变量。原注册块删除，不新增primitive、缓存、并行注册或第二读取来源。内部未发布draft不是当前事实；公开Request始终来自唯一requested。Root否决只改authorize局部变量，因为外层仍draft；也不采用在caller事后重读decision owner的额外一读。早期试验3例通过但existing分支误把Request当LedgerRow，已按精确hunk撤回，其原输入/差异/输出保留，不能恢复该试验代码。
+
+补正式正向：首Asked/list/hydrate/connected/requestOrderKey一致；同message/call/input在pending时重复执行自然Asked保持同ID/time，各waiter经真实决定收尾；完成后same-ID恢复真实原结果/owner；两个Project各自身份，Task child仍原source-backed卡。原permission-two-mode/continuation/message-settlement相关合同重跑；不用冻钟把两次取时偶然相等，也不用UI重写/修改ledger时间掩盖分叉。上述方案实施前已落盘，仍必须真实测试后记录结果。
+
+TCP夹具60s自锁的横查另已完成：全src stop/Instance.provide调用证据在production-stop-callers.txt。生产ACP在provide退出后finally.stop，CLI/server-runtime不在同一个await stop的Project回调里；HTTP shutdown独立control route，Task/Mission无直接Server.stop调用。原403真实Native/Task/Mission/串并行证据为既有支持，不称本次重跑；修后同一真实TCP checker在lease外listen/fetch/stop，原红9.76s正常join/0 uncaught、初绿2项11断言且约3s正常stop。可以排除这个具体fixture self-await结构，不能据此排除整个产品所有关闭异常或豁免今后横审。
+
+## Board公开读取的项目契约澄清（修改验收前）
+
+Root先按helper局部Instance.current为空推测准入遗漏；随后独立补读transport-protocol TASK_RECORD_READ_ROUTE/routeRequiresProjectDirectory、Server最外层895–897直接next，以及requireRouteTaskInCurrentProject明确允许没有current。该GET是已有真实Task记录定位的全局读取，不进入PersistedProjectContext；目录头不是此请求的项目授权scope。历史65d0bfc98已有该分类，ea8ec4fa1抽取helper即保留current存在时才限制的合同。此前“另一目录头应该公开404”的推断撤回，不能以helper命名或中途链条当根因，也不能扩成改变45调用和所有Task公开读取。
+
+同一个自有两Project scope已实际确认：Task tsk_g00VXxQ8g100DNEFYJR0，在other目录头下正常200仍返回原Project prj_hqT21tgOoMZFHQHUpC0q和同Task；If-None-Match:*返回304。事实在canonical-and-project-boundary.log，不涉及用户实际项目或数据外泄证明。402验收按当前合同修正为公开已存在Task200/对应Project，星号304；不存在的有效Task身份404；真正Instance项目上下文里的内部getBoard错项目404。资源先getBoard才能条件返回仍成立，不能对未找到资源因星号直接304。命令/Session投影的真实Project准入不变，45调用分组继续只读核对，不改公共权限策略或header解释。错误测试预期和原失败记录保留，此澄清实施前已落盘。
+
+## 后台实施冻结与页面验收前边界
+
+后台17个自有文件（11生产、4聚焦测试、2真实生成文件）已冻结，精确清单为implementation/handoff.json。正式去重9个测试文件71用例/301断言通过，SDK生成后真实公开HTTP再验13用例/64断言通过；核心及SDK类型、diff检查均exit0。唯一完整SDK build发布六目标并清理staging/backup，tracked仅types.gen.ts新增83行、openapi.json新增311行，其余四目标无变化。没有手工复制生成内容或绕过stream必需请求体；所有原exec已join，当前没有自有后台服务或Provider。以上均非真实Sol或桌面验收。
+
+Root独立审查了11生产差异与生成合同：新Request单源仍只来自原requested账本；取消/失效通知只由真实decision_slot赢家同事务owned Bus发布；Task终态通知校验原账本及已落盘Interaction后使用现成ephemeral失效事件；完整JSON Board一次物化、规范digest、同对象body/tag和成熟Hono条件请求保持一致。生产停机、目录头及类型循环的既有纠正不扩成新政策。
+
+发现两个后续候选，不能写成本批已修复：其一，合法Task标题变更使完整Board标签更新、HTTP返回新title，但既有Brief cache signature没有标题输入，Brief可能仍旧标题；失败输入和原观察保留，当前测试以实际200/new title及当前完整投影为合同，不增加错误的Brief刷新要求。其二，pending Permission集合替换自身保留Question原对象；但完整重连仍发送Question Asked并创建新对象，可能使keyed Dialog重建而丢草稿，恢复更早Permission也可能切换当前Dialog。audit_ui已只读核对原对象/Solid代理/组件生命周期，未改Question行为；必须实际页面分别核验集合更新、完整重连与Dialog切换，不能笼统声称Question草稿在重连后保留。
+
+## 真实后态与新增问题（修复前分析）
+
+英文Main后态01正式private build/typecheck均0后启动：实际cold Dialog/inline可见，reload后重新选择原Session恢复原待Request，Root点击inline Allow Once→真实read完整公开CSV→助手finish stop，五张原JPEG人工查看。修复后的原runner exec4961 join/exited0/outputSettled，物理退出后唯一parent清理runtime，CIM确认原PID67224不在；原before05 EBUSY/exit1保留。此受控Provider不算真实Sol。
+
+全新sol-after-01真实Native Bun1.3.14/402 UI/配对完整auth与models/精确GPT-6.1 Sol预检及业务通过：公开53B CSV自然Asked→中文Dialog本次允许→原账本四阶段→read成功→助手正确CEDAR402/Maple3/Iris4/合计7/原文件引用。Root原图人工复核及实际checker0，5实际200/stream true/reader settled EOF（含预检/helper，非5业务turn）。Root先关tab3，成熟shutdown0，原launch exec32239 join0；原Target1852/Host47908自然exit0、全部output/request完成/端口释放，原auth/models副本均removed，原600s/20请求/180s无活动/closeBy不变。说明和精确输入/输出在sol-after-01，公开归档不得带原Provider payload或凭据。
+
+实时Main后态02在原tab4已选择/连接后才释放公开流式回复，自然Asked出现；实际Dialog Reject使原ledger denied、Tool error/operator denied，但Session随后报completed without a durable reply，最终Not running。原HTTP messages/conversation/history、前后JPEG和原进程日志保存；原exec52772 join0/目标68348自然exit0/parent运行目录清理，未把终态错误当验收通过。立即按共享控制共性进行全生产入口/Task/Mission/Session occurrence/正常终态/重试重启/串并行多Project横审，当前实现禁止在分析完成前修改。初始直接链：processor默认continue_loop_on_deny不是true→真实RejectedError设置blocked→提前返回stop；loop.finalizePrompt遇到仅有completed tool-calls、无真实control结果的assistant，严格completed-reply拒绝并抛缺持久回复。现成toModelMessages已有真实Tool error→模型output-error，不应假造assistant或放松durable reply；完整影响和取消/恢复合同待审。
+
+### 实时权限正文覆盖：完整分析与批准方案
+
+同02原图warm正文Permission requested: read，而cold/ledger原Request为read (read_local)。Root独立读mirror两dispatch与propsOf，audit_ui全链核对证明propsOf仅取payload/补真实身份，SideChat直接读payload，二者未改summary。原invocation生成业务summary→authority不可变ledger；Task Interaction、CLI、ACP和Settings直接读原事实不受影响。Session mirror Asked mapper先保留原Request，再返回诊断summary；dispatch payload先spread mapped.payload后写诊断summary，覆盖原业务字段，ProtocolStore又以已覆盖字段产生envelope.summary。Main独立GlobalChat/Chat/Work/Mission及SideChat暖流均受同因；两个pendingPermissions快照仍spread原Request，所以冷/重连正确。Request身份/时间/决定未变，不是模型语言或前端缺翻译。
+
+已核当前10类mapped事件，仅Permission Asked的公开payload拥有顶层业务summary；其余无此字段，第二Task dispatch仅root config.changed。Root批准原session-mirror.ts两个已有payload组装处先写现有诊断summary、后spread canonical mapped.payload；Task分支仍最后赋canonical taskID。修共享组装优先级，真实业务payload不可被诊断默认值覆盖；不新增字段、前端特判、fallback或第二summary事实，SDK公共形状不变。扩既有session-permission-projection.test.ts的实际Authority→mirror→Session SSE正向，核Asked完整Request/summary和实际cold/connected摘要一致，先红后绿；既有transport mapper-only检查未经过覆盖点，不冒称这条链通过。使用原技术read (read_local)说明，不在UI改写事实。实施后重新采集Main/SideChat冷暖真实原图，旧02错误截图保留。
+
+### 拒绝工具后的共享续步：完成分析与实施方案
+
+Recall补充：本批真实桌面Reject发现跨入口终态合同冲突，按用户共享机制横审硬约束纳入本批根因修复，不能只交付批准卡而留下拒绝后的错误。原用户目标、流式/自然参与者/单源/正向测试/原deadline/范围提交同步不变。Root已独立读processor唯一flag读点/所有blocked影响、Config声明、completed-reply谓词、finalizePrompt及真实output-error转换；委托完整证据/入口矩阵在denied-tool-continuation-review.md，Task/child正常入口在task-child-public-entry-review.md。全仓与历史搜索发现源仅Config声明、processor消费、生成SDK及当前05-config文档；该gate在8/7保留基线65d0bfc98已存在，8c23dd0e3加入严格durable reply、fc8d498582抽取当前谓词时仍遗留，来源更早未知，不重建旧记录。权威AI SDK文档[Tool Calling](https://ai-sdk.dev/docs/ai-sdk-core/tools-and-tool-calling)明确真实execute错误成为tool-error并可进入下一模型step；仓库现成toModelMessages的output-error是本次实现事实，不另接库或非流式请求。
+
+可观察真实事实：02 requested per_hLx9HLMTNmA8CrBdDeDd→denied赢家per_g0VXxY1XE00xYDXHhQLd，Tool error已落盘，assistant time.completed1791919599555/finish tool-calls/无assistant.error或真实control结果；SessionWake实际failed，cold board terminal/pending[]，后续截图Not running、原runnerexit0。因此这是错误终态/缺持久回复，不是已经证明的永不退出、UI决定失败或Provider传输失败。原精确user/assistant/call/Project及日志保留。
+
+直接触发/控制根因：EffectiveConfig absent或false的experimental.continue_loop_on_deny使shouldBreak true；真实PermissionAuthority.RejectedError写Tool错误同时设置processor局部blocked；该flag禁用普通/Task-root retention continuation，完成assistant后返回stop；loop.finalizePrompt要求接受原输入的真实settled reply，正确排除无完成control结果的tool-calls，因而报错。terminalizeIncompleteAssistant正确跳过已completed消息，无法补出模型回复。旧UI补投影、成功工具存储、approved恢复、最终文本守卫均未删除这个共享gate，故不根治。不能改finish、伪造assistant、弱化completed-reply或把合法Tool拒绝硬提升整个Prompt错误。
+
+影响面横审已覆盖公开Session同步/async/command、GlobalChat真实SessionWake接纳与同输入重试、Main/SideChat/合法非Task child、CLI/ACP/GitHub/control-message、delegate_agent child、Task根Orchestrator、所有投影worker/专家团、Mission dispatch/wake/recovery、scheduler与continuous goal。均共享Prompt/processTurn；GlobalChat没有另一个GlobalChatOwner，202只是持久接纳，不证明回答完成。compaction的第三processor入口只准备只读证据reader，未证明权限拒绝可达，显式summary/stop合同保持。approved恢复直接工具执行路径有独立已批准合同，denied本来被排除，禁止恢复成批准。静态入口可达矩阵不是每个入口都已运行。
+
+正常/终态/恢复/隔离：普通成功/Tool错误本来进入下一真实模型步；typed park/handoff仅真实完成control tool，保持。真实Prompt取消由同occurrence AbortSignal/ExecutionCancellationError控制，先abort再删除Session/settle取消/等待原producer，删除Tool gate不得越过信号。cancelled/stale给仍live且未abort的Prompt同一Tool error，可自然解释；已abort仍真实取消。旧denied消息已completed，Mission启动恢复只扫未completed，不能声称重启自动修复；显式同message重试可使用唯一原user/真实Tool-error历史取得真实回答，保留旧账本/消息，不回写历史。blocked原本是每processor局部状态、不是全局跨Project状态；任何并行Tool拒绝会结束整Prompt并可能拒绝同Session已接纳的后续callbacks，需正向串行/并行及两Project验证。身份准入、policy、decision/outcome slots、lease、真实效果授权、Provider budget与Task/Mission occurrence均不改。
+
+批准最小生产范围：processor.ts删除唯一blocked/shouldBreak/特定RejectedError停止分支及由此无消费者的EffectiveConfig/PermissionAuthority imports；其余真实failure、abort、compaction、park、handoff、stopAfterAssistantCompletion/retention合同保留。config.ts删除唯一continue_loop_on_deny字段；不只改default true、不加兼容读/平行策略。旧experimental对象已有通用非strict未知key处理，沿用这一现成配置primitive，不加迁移、影子配置或第二reader；当前公开生成/文档同步删除旧字段。新增聚焦真实TCP streaming正向测试（可复用成熟fixture）：实际read→HTTP deny→真实下一请求携带同call错误→模型真实final→canonical reply；含同输入重试、后续已接纳输入/串行、两Project并行denial/allow、真实abort关闭；必要Task-root retention primitive与现成控制结果/取消/approved恢复回归。输入、输出和红绿失败原始证据保留；不新增UI自动化或核心负向断言。
+
+实现后唯一完整SDK六目标生成，核心/SDK/Overlay类型与必要私有build按最终差异执行；05-config/current reply契约、双语Unreleased、索引及docs由Root更新。Root新服务重验Main真实warm Reject→Tool error→模型回答与无错误终态，SideChat/child/Task批准/拒绝入口及切源在真实页面按实际可达完成；必要新Sol仍原完整配对/精确模型/流式/600s预算。未测入口、已completed历史自动恢复、Question重连草稿及大Board性能明确不宣称。所有本批自有生产/测试/生成/docs最终合为同一范围清晰提交并正常上游同步推送，随后进入下一批。
+
+
+## Root最终真实验收与交付边界（2026-10-14）
+
+### 完整实现与聚焦正向检查
+
+唯一Permission Request schema、canonical requested时间、必有pendingPermissions快照、真实Terminated通知、Task不可变ledger校验后现成invalidate、Main/Side共享adapter、提交前捕获原source/目录/selection authority已实施；Question公开合同不扩围。Board完整可见JSON一次物化并计算真实HTTP弱实体标签，同一物化返回200或由当前Hono中间件处理304。移除旧Board聚合计数签名。原Tool拒绝host停止gate和continue_loop_on_deny配置删除，真实Tool错误进入下一流式模型请求；保留真实abort、typed control和完整reply准入，不修写旧completed历史。
+
+正式后台原组9文件71测试/301断言；deny组含9文件89测试/297断言，其中7相关文件79/247（Task-root多步3/7、精确取消4/9、approved恢复8/25、Tool settlement10/22及控制/producer/activity）。两组含重复，不相加为总覆盖。warm canonical summary组Permission8/39＋transport1/4，共9/43；SDK后原公开合同重复10/50；Bun matcher原错误已保留，clonefix后TCP3/30重新通过。前端两个纯transport/state文件27/66及renderer-surface检查通过；没有源码文案、DOM、组件、snapshot、Playwright或像素测试。最后当前共享工作树重复结果另见归档final-root-recheck，不将重复次数当新增覆盖。
+
+最后四个正式文件重跑22测试/113断言、runner16987 join0。当前共享树core首轮56306 join2：另一任务正在编辑的compaction.ts:97重写NamedError.data尚缺override，llm.ts把可空maxOutputTokens传入要求number的准备合同。原日志/退出/失败后观察输入保存；观察时llm已经补回实际maxOutputTokens默认，compaction override仍待其owner收敛。Root不覆盖peer文件，不把此前通过伪称当前类型已通过。SDK工作树后来出现同一peer新Provider schema生成差异；Root提交只应用已保存的402完整生成事务两文件patch，保留后来其它SDK差异，不整文件纳入本批。
+
+完整SDK生成六目标事务已join0，所有stage/build/backup与generator owner关闭。唯一tracked SDK变化为types+83/-4与OpenAPI+311/-4；旧Config字段删除由唯一生成器产生。核心/SDK source/实际published declarations类型通过；最终Overlay types与Node私有构建通过，全部owner已join。实际使用ui-after-final；真实Sol02把它复制到自己Native exe相邻ui，原Sol01旧UI移到自有ui-first-allow-01保留。未覆盖共享dist、未新建branch/worktree、未启用用户Browser。
+
+### 实际桌面与消息证据（原JPEG人工查看）
+
+| Scope | 真实路径和结果 | 明确限制 |
+| --- | --- | --- |
+| manual-before-05 | 原Main Ask只有Running/无决定控件，展开read同样如此。 | 父owner最终清理；原child自删SQLite-shm发生EBUSY/natural1，保留。不是正常Native成功。 |
+| manual-after-01 | 英文Dialog/inline、重载后重新选择原Session恢复pending，实际AllowOnce，read三行与真实流式provider reply2/stop。 | 受控Provider；首次Escape重载时重开原因未知，稳定后Escape正常；未称真实Question重连。 |
+| sol-after-01 | Native Bun1.3.14，配对preflight usable/projected/exact gpt-6.1-sol/stream；中文Dialog本次允许，requested→allowed_once→execution_started→execution_succeeded，模型正确读取CEDAR402/Maple3/Iris4/合计7并引用文件。 | 本次允许，旧第一次UI。5个累计200/EOF请求含preflight/helper，不是5业务turn。原Target1852/Host47908 natural0，全部drain/请求/配对复制清理。 |
+| manual-after-02 | warm正文被transport诊断summary覆盖，实际Reject后真实Tool denied、assistant tool-calls completed，SessionWake MissingDurableReply，最终Notrunning/error。 | 两个本批根因的原失败，不称成功或永久Running。 |
+| manual-after-03 | 真实Question自定义输入Public 402 draft Cedar并提交，真实question答复/模型stop；独立SideChat root正常用户消息/模型stop。 | 只验证草稿输入/回答，未真正重连Question或草稿保留；Side普通消息不是Side权限。 |
+| manual-after-04 | 旧缓存warm Side正文错误，关闭/reopen读取mandatory快照正确read(read_local)，实际Side AllowOnce、read/自然reply2。 | pre-summaryfix缓存，不称最终warm成功；完整三行当时部分在composer下方，HTTP/AX可核但图片未全呈现。 |
+| manual-after-05 | 最终UI、隔离语言切换与Settings实际500；原服务在closeBy20:15:08.331Z正常停止，页面20:15:55.344Z才关闭。 | Root未完成批准且违反自己页面关闭预留；保留未完成/时序失败，未延deadline、未真实Sol。outer10QXEp/PID88776均已移除。 |
+| manual-after-06 | 新页列表/work-ledger等500，SyntaxError运行时Provider导出缺失；保存错误截图，页面20:17:19.096Z关闭，原PID89100 natural0/outerNEHfNu删除。 | 三个Provider文件正在另一任务未提交修改；HEAD三者自洽，此进程先载旧operations后惰性载新route。当前磁盘补齐后fresh07通过；不改peer导入、伪称HEAD缺件或热修旧owner。 |
+| manual-after-07 | 最终Main连接后release真实warm read，Dialog及inline均canonical read(read_local)，实际Reject→真实Tool failure→provider reply2/assistant stop→Notrunning，截图与原HTTP事实保存。 | Root两次checker错猜history camelCase/Tool.state.error；真实字段为snake_case/request_id绑定及Tool.state.failure.message。原输入/输出保留，显式saved-facts checker修复并通过，离线核对不是新E2E。PID86152自然0/parent清理。 |
+| manual-after-08 | 公开API真实parent child-one/child-two并行stream；父会话连续Dialog先Reject再AllowOnce，两个child各自真实reply2/stop。UI创建独立Side root，公开可见用户输入显式side模型，warm权限canonical summary/AllowOnce→实际read三行，滚动后原图完整可见＋Sources/自然reply2。Task research-studio公开202，唯一board Permission answered/allow_once，现成Task Dialog含AllowforTask。 | 非实际delegate_agent调用；Side独立根parentID为空且sourceSessionID精确，未称child权限属于Side。Task外部D文件被C进程根TaskProcessBoundaryError拒绝，随后fixture普通文本缺真实调度control，active epoch1/idle/exhausted semantic_limit，未Task completed。早期Git基线错误和Memory空正文仍未知。 |
+| sol-after-02 | 当前final source/final UI，Native真Sol精确preflight，实际英文Dialog Reject，per_h756VGiw2YWYJ5RFN9NT requested→denied，Tool明确拒绝；真实assistant msg_g0VXxnMDQ00HptnHsJ0T中文尊重决定/finish stop，Root人工查看原图。canonical checker0，累计5请求均实际gpt-6.1-sol/stream/200/EOF。 | 英文产品UI＋原用户/模型中文原文；不据模型自述推执行事实。原Target43048/Host43800 natural0，output/request settled、端口释放、auth2194B/models9155406B复制均removed/presentAfterfalse；原exec24600 join0在deadline1791923770626前。PowerShell脚本不保证设置LASTEXITCODE，原空exit文件保留，实际exec0与production physical receipt单独存证。 |
+
+所有成功/失败Scope互不替代，只有自有隔离页面和服务；manual与真实Sol区别明确。截图保持FF D8原JPEG，不重新编码/裁切。原启动工具链修复、首SDK/末SDK、温热正文红绿与deny红绿均保留原输入/输出，不用源码摘要、换行或自算期望当功能门槛。
+
+### 横审、风险与下一批
+
+Settings /expert-squad/catalog与skill/mounts两个500为active Base完整投影要求其manifest Browser，而受控global配置明确禁用Browser。NativeChat的disabled空MCP投影合同不同；目录不是遍历inactive包，resolver/manifest/routes/mounts均无402差异。历史702e030d4禁用时拒provider替换合同保留。研究工作Task明确选已内置ResearchStudio，能力只有普通tool/platform sets，无需启Browser或虚假fallback；真实202已证明接纳，但不能证明所有Task完成。
+
+Task边界、typed-control与文件guards横审覆盖全生产调用、Task/Session/Mission/worker、epoch/正常/终态/取消/恢复/串并行/多Project；实际Task AllowOnce不改变Task root authority，因此外部文件错误合法。其受控模型没有真实orchestrator调度决策，exhausted/semantic_limit是正常边界结果，不伪造completed。早于权限的Git HEAD '$GIT_DIR' too big与受控Memory空markdown独立记录未知根因，下一批先调查，不用本批permission修复解释。
+
+未满足的扩展验收：Work/Mission各自桌面入口、真正Question reconnect/draft、真实Task全链完成、queued输入与全入口排列、大Board性能及cached Brief标题失效、已completed历史自动修复均未证明。已验证的是上述明确入口和同源数据契约，不能宣称全部模式/恢复/性能无缺陷。公开完整Board tag忠实已有可见Brief缓存；Task title变更200真实新title已验证，旧Brief缓存另列候选。
+
+公开产物及准确输入/输出见[402归档](../../artifacts/2026-10-14-standalone-permission-projection-402/README.md)。仅明确allowlist公开日志/夹具/差异/报告和原JPEG，排除运行目录、数据库、auth/models内容、二进制/UIbundle、peer全仓diff与真实Provider raw payload；Native只保存已审计公开身份/reader/预算投影。当前Git交付完成后另补精确提交与push事实；Goal仍active，持续下一批。

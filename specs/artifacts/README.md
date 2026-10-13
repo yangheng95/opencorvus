@@ -13,6 +13,7 @@
 - [394 原Research Studio历史](2026-10-05-connection-workspace-authority/original-research-history-394/README.md)：原始数据库只读事实及后续视觉资格。
 
 - [403 Native关闭与重启收敛](2026-10-13-native-shutdown-pending-permission-403/README.md)：208个明确公开源、原红态与Native正常/失败终态，未复制运行数据或凭据。
+- [402 会话权限与拒绝收敛](2026-10-14-standalone-permission-projection-402/README.md)：明确红绿、原桌面JPEG、两次真实Sol公开事实及正常配对清理；未覆盖入口和Task边界独立保留。
 
 - [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401/README.md)：37个原观察、16个JPEG和中英同实例Dialog及正常物理收尾。
 

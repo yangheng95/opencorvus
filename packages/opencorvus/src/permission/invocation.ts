@@ -9,19 +9,8 @@ import { Shell } from "@/shell/shell"
 import { canonicalShellScope } from "./shell-scope"
 import { PANEL_MUTATION_TOOL_IDS, PANEL_QUERY_TOOL_IDS } from "@/panel/action-ids"
 
-export const PermissionProviderKind = z.enum([
-  "builtin",
-  "plugin",
-  "skill",
-  "mcp",
-  "mcp_app",
-  "browser",
-  "computer",
-  "projected",
-  "schedule",
-  "external",
-])
-export type PermissionProviderKind = z.infer<typeof PermissionProviderKind>
+import { PermissionProviderKind } from "./types"
+export { PermissionProviderKind } from "./types"
 export const ToolInvocationProviderKind = z.union([z.literal("internal"), PermissionProviderKind])
 export type ToolInvocationProviderKind = z.infer<typeof ToolInvocationProviderKind>
 

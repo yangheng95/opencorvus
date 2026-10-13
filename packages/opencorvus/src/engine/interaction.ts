@@ -25,6 +25,8 @@ import { ProjectMemory } from "@/memory/project-memory"
 import type { InteractionUserInput } from "@/memory/interaction-user-input"
 import { PermissionLedgerTable } from "@/permission/permission.sql"
 import { Log } from "@/util/log"
+import { ProtocolStore } from "@/protocol/store"
+import { timelineInteractionResponseOrderKey } from "@/timeline/order"
 
 const log = Log.create({ service: "engine.interaction" })
 
@@ -35,6 +37,9 @@ export namespace EngineInteraction {
     })
     Bus.subscribe(PermissionAuthority.Event.Replied, ({ properties }) => resolvePermission(properties), {
       durableID: "engine.interaction.permission-replied", effect: "idempotent_by_occurrence",
+    })
+    Bus.subscribe(PermissionAuthority.Event.Terminated, ({ properties }) => projectPermissionTermination(properties), {
+      durableID: "engine.interaction.permission-terminated", effect: "idempotent_by_occurrence",
     })
     Bus.subscribe(Question.Event.Asked, ({ properties, occurrenceID }) => upsertQuestion(properties, occurrenceID), {
       durableID: "engine.interaction.question-asked", effect: "idempotent_by_occurrence",
@@ -346,6 +351,34 @@ async function upsertPermission(request: PermissionAuthority.Request, _sourceOcc
       timeCreated: request.timeCreated,
       source: { kind: "permission_request", id: source.id },
     })
+  })
+}
+
+async function projectPermissionTermination(input: z.infer<typeof PermissionAuthority.Event.Terminated.properties>) {
+  const fact = Database.use((db) => {
+    const terminal = db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.id, input.ledgerEventID)).get()
+    const requested = db.select().from(PermissionLedgerTable).where(and(
+      eq(PermissionLedgerTable.request_id, input.requestID), eq(PermissionLedgerTable.event_type, "requested"),
+    )).get()
+    if (!terminal || !requested || terminal.request_id !== input.requestID || terminal.decision_slot !== input.requestID
+      || terminal.event_type !== input.status || requested.project_id !== input.projectID || requested.session_id !== input.sessionID) {
+      throw new Error("Permission " + input.requestID + " terminal notification differs from its immutable ledger authority")
+    }
+    return { terminal, requested }
+  })
+  const interaction = findInteractionByExternal(input.requestID)
+  if (!interaction) return
+  const task = Database.use(db => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, interaction.task_id)).get())
+  if (interaction.request_type !== "permission" || interaction.session_id !== input.sessionID || task?.project_id !== input.projectID
+    || interaction.task_id !== fact.requested.task_id || interaction.status !== "rejected" || interaction.time_resolved !== fact.terminal.time_created) {
+    throw new Error("Permission " + input.requestID + " terminal notification differs from its Task interaction owner")
+  }
+  ProtocolStore.dispatchEphemeral({
+    type: "interaction.resolved", aggregate: "task", taskID: interaction.task_id, sessionID: input.sessionID,
+    source: "interaction.permission.terminated",
+    orderKey: timelineInteractionResponseOrderKey({ id: interaction.id, timeResolved: fact.terminal.time_created }),
+    payload: { taskID: interaction.task_id, interactionID: interaction.id, requestType: "permission", status: interaction.status,
+      requestID: input.requestID, ledgerEventID: input.ledgerEventID, summary: "Permission " + input.status },
   })
 }
 

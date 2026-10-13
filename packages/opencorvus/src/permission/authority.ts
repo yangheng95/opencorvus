@@ -32,6 +32,7 @@ import {
   renewControlLease,
 } from "@/engine/control-lease"
 import { PermissionDecision } from "./decision"
+import { PermissionIdentity, PermissionMode, PermissionRequest } from "./types"
 import { permissionRequestOwnerBelongsToProject } from "./project-authority"
 // Type-only: the value import stays dynamic so the runtime module cycle with
 // SessionLoop is never created.
@@ -51,42 +52,14 @@ export namespace PermissionAuthority {
   let afterAuthorizationBeforeExecutionStartForTest:
     | ((request: Request) => void | Promise<void>)
     | undefined
-  export const Identity = z
-    .string()
-    .max(Identifier.MAX_LENGTH)
-    .regex(Identifier.canonicalPattern("permission"), { message: "Invalid canonical permission identifier" })
-    .meta({ ref: "PermissionIdentity" })
-
-  export const Mode = z.enum(["full_access", "ask"]).meta({ ref: "PermissionMode" })
+  export const Identity = PermissionIdentity
+  export const Mode = PermissionMode
   export type Mode = z.infer<typeof Mode>
 
   export const Decision = PermissionDecision
   export type Decision = z.infer<typeof Decision>
 
-  export const Request = z
-    .object({
-      id: Identity,
-      projectID: z.string().min(1),
-      taskID: z.string().min(1).optional(),
-      sessionID: z.string().min(1),
-      messageID: z.string().min(1),
-      toolCallID: z.string().min(1),
-      mode: Mode,
-      policyRevision: z.string().min(1),
-      providerKind: PermissionProviderKind,
-      providerID: z.string().min(1),
-      providerDigest: z.string().min(1),
-      toolName: z.string().min(1),
-      effectClass: z.string().min(1),
-      scopeVersion: z.string().min(1),
-      scope: z.record(z.string(), z.unknown()),
-      fingerprint: z.string().min(1),
-      summary: z.string().min(1),
-      projectGrantEligible: z.boolean(),
-      choices: Decision.array(),
-      timeCreated: z.number().int().positive(),
-    })
-    .meta({ ref: "PermissionRequest" })
+  export const Request = PermissionRequest
   export type Request = z.infer<typeof Request>
 
   export const LedgerEvent = z
@@ -154,6 +127,13 @@ export namespace PermissionAuthority {
 
   export const Event = {
     Asked: BusEvent.define("permission.asked", Request),
+    Terminated: BusEvent.define("permission.terminated", z.object({
+      projectID: z.string().min(1),
+      sessionID: z.string().min(1),
+      requestID: Identity,
+      ledgerEventID: Identity,
+      status: z.enum(["cancelled", "stale"]),
+    })),
     Replied: BusEvent.define(
       "permission.replied",
       z.object({
@@ -665,6 +645,29 @@ export namespace PermissionAuthority {
     }
   }
 
+  async function settlePendingTermination(
+    request: Request,
+    status: "cancelled" | "stale",
+    extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
+  ): Promise<{ settled: LedgerRow; won: boolean }> {
+    let publication: Bus.Publication | undefined
+    const result = Database.transaction((db) => {
+      const decision = settleDecisionInTransaction(db, request, status, extra)
+      if (decision.won) {
+        publication = Bus.publishOwnedInTransaction(Event.Terminated, {
+          projectID: request.projectID,
+          sessionID: request.sessionID,
+          requestID: request.id,
+          ledgerEventID: decision.settled.id,
+          status,
+        })
+      }
+      return decision
+    })
+    if (publication) await publication.retry()
+    return result
+  }
+
   async function releaseDecisionWaiters(request: Request, settled: LedgerRow): Promise<number> {
     const current = await state()
     const waiters = current.waiters.get(request.id) ?? []
@@ -796,14 +799,6 @@ export namespace PermissionAuthority {
   }
 
   async function authorize(request: Request): Promise<LedgerRow> {
-    Database.immediateTransaction(() => {
-      assertRequestIdentity(request)
-      if (!pendingOrRequestedRequest(request.id)) {
-        appendEvent(request, "requested", {
-          metadata: { choices: request.choices, projectGrantEligible: request.projectGrantEligible },
-        })
-      }
-    })
     if (request.mode === "full_access") {
       const existing = decisionFor(request.id)
       if (existing) return existing
@@ -927,7 +922,7 @@ export namespace PermissionAuthority {
     }
     const policy = await policyForSession(input)
     const taskID = taskIDForSession(input.sessionID)
-    const request = Request.parse({
+    let request = Request.parse({
       id: requestID(input, descriptor),
       projectID: input.projectID,
       taskID,
@@ -964,6 +959,14 @@ export namespace PermissionAuthority {
     }
     const attempt = attemptID(request.id)
     assertAttemptIdentity(request, attempt)
+    request = Database.immediateTransaction(() => {
+      assertRequestIdentity(request)
+      const existing = pendingOrRequestedRequest(request.id)
+      if (existing) return existing
+      return requestFromRow(appendEvent(request, "requested", {
+        metadata: { choices: request.choices, projectGrantEligible: request.projectGrantEligible },
+      }))
+    })
     const authority = await authorize(request)
     await afterAuthorizationBeforeExecutionStartForTest?.(request)
     const existingStart = Database.use((db) =>
@@ -1459,7 +1462,7 @@ export namespace PermissionAuthority {
       })
     }
     const request = requestFromRow(requested)
-    const { settled } = settleDecision(request, "stale", {
+    const { settled } = await settlePendingTermination(request, "stale", {
       decision_scope: "invocation",
       actor_id: actorID,
       reason,
@@ -1612,7 +1615,7 @@ export namespace PermissionAuthority {
         for (const row of pending) {
           assertSessionDeletionDeadline(options.deadline, `settling Permission request ${row.request_id}`)
           const request = requestFromRow(row)
-          const { settled, won } = settleDecision(request, "cancelled", {
+          const { settled, won } = await settlePendingTermination(request, "cancelled", {
             decision_scope: "invocation",
             actor_id: actorID,
             reason,

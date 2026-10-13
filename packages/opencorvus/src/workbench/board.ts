@@ -1,5 +1,6 @@
 import { deriveTaskStatus, isTaskActive, taskTerminalReason } from "@/engine/task-status"
 import { Log } from "@/util/log"
+import { canonicalDigestSource } from "@/util/canonical-digest"
 
 const log = Log.create({ service: "workbench.board" })
 import {
@@ -19,7 +20,6 @@ import {
   EngineChannelBindingTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
-  EngineInteractionOutcomeTable,
   EngineProgressSnapshotTable,
   EngineTaskTable,
 } from "@/engine"
@@ -56,20 +56,14 @@ function artifactPayloadRecord(payload: unknown): Record<string, unknown> {
 export function compileBoard(input: { taskID: string }) {
   const task = findTask(input.taskID)
   if (!task) throw new Error(`Task not found: ${input.taskID}`)
-  const tag = boardTagForTask(task)
   const lastSequence = latestTaskProtocolSequence(task.id)
-  return buildBoard(task, tag, taskDirectory(task), lastSequence)
-}
-
-export function boardTag(input: { taskID: string }) {
-  const task = findTask(input.taskID)
-  if (!task) throw new Error(`Task not found: ${input.taskID}`)
-  return boardTagForTask(task)
+  const board: ReturnType<typeof buildBoard> = JSON.parse(JSON.stringify(buildBoard(task, taskDirectory(task), lastSequence)))
+  const digest = canonicalDigestSource("opencorvus.task-board-json.v1", board).sha256
+  return { ...board, snapshotVersion: `W/"task-board-v1:${digest}"` }
 }
 
 function buildBoard(
   task: TaskRow,
-  snapshotVersion: string,
   directory: string,
   lastSequence = latestTaskProtocolSequence(task.id),
 ) {
@@ -115,7 +109,6 @@ function buildBoard(
   const goalFields = buildGoalFields(task, goals, artifacts, executionProjection)
   const project = Project.get(task.project_id)
   return {
-    snapshotVersion,
     lastSequence,
     ...goalFields,
     project: project
@@ -342,109 +335,6 @@ function taskProcessIncidents(taskID: string, executionProjection: ReturnType<ty
   return [...independentStreamIncidents, ...infrastructureIncidents, ...lifecycleIncidents].sort(
     (left, right) => left.emittedAt - right.emittedAt || left.id.localeCompare(right.id),
   )
-}
-
-function taskSessionTreeVersion(taskID: string) {
-  return (
-    Database.use((db) =>
-      db.get<{
-        count: number
-        updated: number
-        statusSeq: number
-        statusUpdated: number
-        incidentSeq: number
-        incidentUpdated: number
-      }>(sql`
-        WITH RECURSIVE session_tree(id) AS (
-          SELECT session_id FROM engine_task WHERE id = ${taskID} AND session_id IS NOT NULL
-          UNION ALL
-          SELECT s.id FROM session s JOIN session_tree st ON s.parent_id = st.id
-        )
-        SELECT
-          count(distinct s.id) AS count,
-          coalesce(max(s.time_updated), 0) AS updated,
-          coalesce(max(pe.seq), 0) AS statusSeq,
-          coalesce(max(pe.emitted_at), 0) AS statusUpdated,
-          coalesce(max(incident.seq), 0) AS incidentSeq,
-          coalesce(max(incident.emitted_at), 0) AS incidentUpdated
-        FROM session_tree st
-        JOIN session s ON s.id = st.id
-        LEFT JOIN protocol_event pe ON pe.session_id = s.id AND pe.type = 'agent.execution.lifecycle'
-        LEFT JOIN protocol_event incident ON incident.session_id = s.id AND incident.type = 'session.error'
-      `),
-    ) ?? { count: 0, updated: 0, statusSeq: 0, statusUpdated: 0, incidentSeq: 0, incidentUpdated: 0 }
-  )
-}
-
-function boardTagForTask(task: TaskRow) {
-  const sessionTree = taskSessionTreeVersion(task.id)
-  const goals = Database.use((db) =>
-    db
-      .select({
-        count: sql<number>`count(*)`,
-        updated: sql<number>`coalesce(max(${EngineGoalTable.time_updated}), 0)`,
-      })
-      .from(EngineGoalTable)
-      .where(eq(EngineGoalTable.task_id, task.id))
-      .get(),
-  )
-  const taskInteractions = listInteractions(task.id)
-  const interactions = {
-    count: taskInteractions.length,
-    updated: Math.max(0, ...taskInteractions.map((interaction) => interaction.time_updated)),
-  }
-  const artifacts = Database.use((db) =>
-    db
-      .select({
-        count: sql<number>`count(*)`,
-        updated: sql<number>`coalesce(max(${EngineArtifactTable.time_updated}), 0)`,
-      })
-      .from(EngineArtifactTable)
-      .where(eq(EngineArtifactTable.task_id, task.id))
-      .get(),
-  )
-  const bindings = Database.use((db) =>
-    db
-      .select({
-        count: sql<number>`count(*)`,
-        updated: sql<number>`coalesce(max(${EngineChannelBindingTable.time_updated}), 0)`,
-      })
-      .from(EngineChannelBindingTable)
-      .where(eq(EngineChannelBindingTable.task_id, task.id))
-      .get(),
-  )
-  const snapshots = Database.use((db) =>
-    db
-      .select({
-        count: sql<number>`count(*)`,
-        updated: sql<number>`coalesce(max(${EngineProgressSnapshotTable.time_created}), 0)`,
-      })
-      .from(EngineProgressSnapshotTable)
-      .where(eq(EngineProgressSnapshotTable.task_id, task.id))
-      .get(),
-  )
-  return [
-    task.id,
-    task.time_created,
-    task.time_updated,
-    task.budget?.max_executor_groups ?? "",
-    sessionTree.count,
-    sessionTree.updated,
-    sessionTree.statusSeq,
-    sessionTree.statusUpdated,
-    sessionTree.incidentSeq,
-    sessionTree.incidentUpdated,
-    goals?.count ?? 0,
-    goals?.updated ?? 0,
-    interactions?.count ?? 0,
-    interactions?.updated ?? 0,
-    artifacts?.count ?? 0,
-    artifacts?.updated ?? 0,
-    bindings?.count ?? 0,
-    bindings?.updated ?? 0,
-    snapshots?.count ?? 0,
-    snapshots?.updated ?? 0,
-  ].join("|")
 }
 
 function clipBoard(input: string) {

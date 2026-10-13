@@ -106,6 +106,7 @@ const TREE_WRITER_PROJECTED_EXACT_TYPES = new Set([
   "input.request",
   "permission.asked",
   "permission.replied",
+  "permission.terminated",
   "diff.delta",
 ])
 

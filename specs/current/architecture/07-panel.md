@@ -2645,6 +2645,17 @@ Every board response has a non-empty `snapshotVersion`. `lastSequence` is the
 latest protocol sequence included in that snapshot and lets the Overlay reject
 superseded deltas without maintaining a second board.
 
+The Board is materialized once as its complete JSON-visible response. Its
+opaque weak entity tag, `W/"task-board-v1:<digest>"`, identifies that projection
+using the canonical resource digest before adding `snapshotVersion`; the same
+object supplies the response body and ETag. Project names, Task titles, exact
+interaction identities and states, topology, execution, incidents and Brief
+therefore participate, rather than a count/max-time approximation. The installed
+Hono ETag middleware owns conditional GET/HEAD, tag lists, wildcard and weak
+comparison after the actual Task record lookup. A Board read does not advance
+Task execution, but may fill its existing derived Brief cache; this validator
+does not change that cache policy or claim large-Board performance.
+
 The current board contains:
 
 ```text
