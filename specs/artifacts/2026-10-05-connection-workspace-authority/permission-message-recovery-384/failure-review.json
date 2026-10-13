@@ -1,0 +1,121 @@
+{
+  "qualification": "failed",
+  "correctBehaviorContracts": {
+    "passed": 0,
+    "failed": 2
+  },
+  "observations": [
+    {
+      "scenario": "remaining-tool",
+      "sessionID": "ses_-zUS51NDBzzrvr2XqJ0J",
+      "messageID": "msg_g0VXuycnD00fvo1fPcdL",
+      "beforeTime": {
+        "created": 1791881610179
+      },
+      "afterTime": {
+        "created": 1791881610179,
+        "completed": 1791881610293
+      },
+      "afterFinish": "tool-calls",
+      "outcome": {
+        "error": "ProviderModelNotFoundError: ProviderModelNotFoundError: {\"providerID\":\"local-contract\",\"modelID\":\"result-recovery-contract\",\"suggestions\":[]}"
+      },
+      "toolStates": [
+        {
+          "id": "prt_g0VXuycnS00W9Ay7FxDA",
+          "status": "completed"
+        },
+        {
+          "id": "prt_g0VXuycoh00SWUkR3ATy",
+          "status": "running"
+        }
+      ],
+      "sourceParts": [
+        {
+          "id": "prt_g0VXuyco600cxcQ2eGoy",
+          "sessionID": "ses_-zUS51NDBzzrvr2XqJ0J",
+          "messageID": "msg_g0VXuycnD00fvo1fPcdL",
+          "orderKey": "v1:0001791881610234:0000000000000031:0000000000000000:part:prt_g0VXuyco600cxcQ2eGoy",
+          "type": "source-file",
+          "sourceId": "010e31886cdc7bee140efed4bf20981eb7f4580a6e177fcefa233ca794f5b7d8",
+          "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-942tOI\\test-78020-gXunFO\\permission-message-25mkg8\\source.txt",
+          "title": "..\\..\\permission-message-25mkg8\\source.txt",
+          "provider": "opencorvus-read",
+          "toolPartID": "prt_g0VXuycnS00W9Ay7FxDA"
+        }
+      ]
+    },
+    {
+      "scenario": "live-peer",
+      "sessionID": "ses_-zUS51LFizzppe7jiYZi",
+      "messageID": "msg_g0VXuyeke009YJ2vIovK",
+      "beforeTime": {
+        "created": 1791881617708
+      },
+      "afterTime": {
+        "created": 1791881617708,
+        "completed": 1791881621354
+      },
+      "afterFinish": "tool-calls",
+      "outcome": {
+        "observation": "continuation-still-pending"
+      },
+      "toolStates": [
+        {
+          "id": "prt_g0VXuyeku00RdODfUYPo",
+          "status": "completed"
+        }
+      ],
+      "sourceParts": [
+        {
+          "id": "prt_g0VXuyelj00mbR3pSZfc",
+          "sessionID": "ses_-zUS51LFizzppe7jiYZi",
+          "messageID": "msg_g0VXuyeke009YJ2vIovK",
+          "orderKey": "v1:0001791881617775:0000000000000031:0000000000000000:part:prt_g0VXuyelj00mbR3pSZfc",
+          "type": "source-file",
+          "sourceId": "cc79a050513d3bbf0b328c0057bdc7783f6adfd42b7cb1f7f0e5432c0bc620a7",
+          "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-942tOI\\test-78020-gXunFO\\permission-message-HOIObL\\source.txt",
+          "title": "..\\..\\permission-message-HOIObL\\source.txt",
+          "provider": "opencorvus-read",
+          "toolPartID": "prt_g0VXuyeku00RdODfUYPo"
+        }
+      ],
+      "owner": {
+        "authority": {
+          "session_id": "ses_-zUS51LFizzppe7jiYZi",
+          "project_id": "prj_hE7UuIOYg4uh1bH0OZmk",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-942tOI\\test-78020-gXunFO\\fixtures\\memory-fopdMG",
+          "generation": "cal_g0VXuyelu00Cje8p4g2A",
+          "owner_pid": 75928,
+          "owner_process_instance_id": "win32:639274784112040297",
+          "owner_occurrence_id": "14152bac-307e-439c-9e11-5f95f248e7f6",
+          "time_acquired": 1791881617786
+        },
+        "observation": "exact_live"
+      },
+      "ownerAfter": {
+        "session_id": "ses_-zUS51LFizzppe7jiYZi",
+        "project_id": "prj_hE7UuIOYg4uh1bH0OZmk",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-942tOI\\test-78020-gXunFO\\fixtures\\memory-fopdMG",
+        "generation": "cal_g0VXuyelu00Cje8p4g2A",
+        "owner_pid": 75928,
+        "owner_process_instance_id": "win32:639274784112040297",
+        "owner_occurrence_id": "14152bac-307e-439c-9e11-5f95f248e7f6",
+        "time_acquired": 1791881617786
+      }
+    }
+  ],
+  "originalRunner": {
+    "execSession": 18798,
+    "exitCode": 1,
+    "observationToolFailure": "Peer inspector joined the held owner; 120000ms test deadline; runner terminated its two owned child processes"
+  },
+  "boundedRunner": {
+    "execSession": 34448,
+    "exitCode": 1,
+    "seconds": 23.64,
+    "peerObservationMilliseconds": 5000,
+    "childClosure": "Inspector exits after snapshot; holder released by stdin and joined in finally"
+  },
+  "boundary": "Actual read, Permission receipt, canonical SQLite and physical peer owner. This checker validates evidence identity only; the two expected-correct-behavior tests failed. No real Provider or UI qualification."
+}

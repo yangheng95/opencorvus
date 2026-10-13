@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [384 权限续行消息恢复调查](records/2026-10/2026-10-13-permission-message-recovery-384.md)：同消息过早完成与真实活跃peer消息被改写的两个失败合同。
+
 - [Explorer批量文件操作](records/2026-10/2026-10-13-explorer-copy-convergence.md)：成功回执、根目标准入与真实API根保护。
 
 - [383 完整工具结果与来源恢复](records/2026-10/2026-10-13-source-result-commit-383.md)：原子结果提交、成功回执恢复、真实OS断点与实页未完成边界。

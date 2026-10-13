@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [384 权限续行消息恢复调查](2026-10-13-permission-message-recovery-384.md)：过早收尾、跨进程所有权与尚未修复范围。
+
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence.md)：部分成功收敛与真实桌面/API根保护。
 
 - [383 完整工具结果与来源恢复](2026-10-13-source-result-commit-383.md)：完整事务、共享恢复入口与实际页面边界。
