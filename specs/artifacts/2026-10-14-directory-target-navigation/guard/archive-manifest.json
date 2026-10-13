@@ -772,83 +772,133 @@
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\01-initial.jpg",
-      "target": "guard/screenshots/01-initial.jpg.gz",
+      "target": "guard/screenshots/01-initial.jpg",
       "originalBytes": 32960,
-      "storedBytes": 23379,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 32960,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/01-initial.jpg.gz",
+        "storedBytes": 23379,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\02-file-tree.jpg",
-      "target": "guard/screenshots/02-file-tree.jpg.gz",
+      "target": "guard/screenshots/02-file-tree.jpg",
       "originalBytes": 36592,
-      "storedBytes": 24758,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 36592,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/02-file-tree.jpg.gz",
+        "storedBytes": 24758,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\03-dependent-error-details.jpg",
-      "target": "guard/screenshots/03-dependent-error-details.jpg.gz",
+      "target": "guard/screenshots/03-dependent-error-details.jpg",
       "originalBytes": 55262,
-      "storedBytes": 43331,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 55262,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/03-dependent-error-details.jpg.gz",
+        "storedBytes": 43331,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\04-dependent-response-body.jpg",
-      "target": "guard/screenshots/04-dependent-response-body.jpg.gz",
+      "target": "guard/screenshots/04-dependent-response-body.jpg",
       "originalBytes": 50381,
-      "storedBytes": 38585,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 50381,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/04-dependent-response-body.jpg.gz",
+        "storedBytes": 38585,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\05-dependent-body-bottom.jpg",
-      "target": "guard/screenshots/05-dependent-body-bottom.jpg.gz",
+      "target": "guard/screenshots/05-dependent-body-bottom.jpg",
       "originalBytes": 50381,
-      "storedBytes": 38585,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 50381,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/05-dependent-body-bottom.jpg.gz",
+        "storedBytes": 38585,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\06-indirect-error.jpg",
-      "target": "guard/screenshots/06-indirect-error.jpg.gz",
+      "target": "guard/screenshots/06-indirect-error.jpg",
       "originalBytes": 43749,
-      "storedBytes": 31688,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 43749,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/06-indirect-error.jpg.gz",
+        "storedBytes": 31688,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\07-junction-move-success.jpg",
-      "target": "guard/screenshots/07-junction-move-success.jpg.gz",
+      "target": "guard/screenshots/07-junction-move-success.jpg",
       "originalBytes": 37953,
-      "storedBytes": 26835,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 37953,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/07-junction-move-success.jpg.gz",
+        "storedBytes": 26835,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\08-symbolic-error-zh.jpg",
-      "target": "guard/screenshots/08-symbolic-error-zh.jpg.gz",
+      "target": "guard/screenshots/08-symbolic-error-zh.jpg",
       "originalBytes": 43228,
-      "storedBytes": 31473,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 43228,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/08-symbolic-error-zh.jpg.gz",
+        "storedBytes": 31473,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\09-symbolic-move-success-zh.jpg",
-      "target": "guard/screenshots/09-symbolic-move-success-zh.jpg.gz",
+      "target": "guard/screenshots/09-symbolic-move-success-zh.jpg",
       "originalBytes": 37320,
-      "storedBytes": 26272,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 37320,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/09-symbolic-move-success-zh.jpg.gz",
+        "storedBytes": 26272,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\10-published-directory-zh.jpg",
-      "target": "guard/screenshots/10-published-directory-zh.jpg.gz",
+      "target": "guard/screenshots/10-published-directory-zh.jpg",
       "originalBytes": 39744,
-      "storedBytes": 27793,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 39744,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/10-published-directory-zh.jpg.gz",
+        "storedBytes": 27793,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\11-marker-editor-zh.ax.txt",
@@ -860,11 +910,16 @@
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\11-marker-editor-zh.jpg",
-      "target": "guard/screenshots/11-marker-editor-zh.jpg.gz",
+      "target": "guard/screenshots/11-marker-editor-zh.jpg",
       "originalBytes": 33243,
-      "storedBytes": 22267,
-      "gzip": true,
-      "originalBytesPreserved": true
+      "storedBytes": 33243,
+      "gzip": false,
+      "originalBytesPreserved": true,
+      "previousGzipStorage": {
+        "target": "guard/screenshots/11-marker-editor-zh.jpg.gz",
+        "storedBytes": 22267,
+        "gzip": true
+      }
     },
     {
       "source": "D:\\myhexin-local\\opencorvus\\.tmp-codex-directory-target-01a133\\guard-after-tools\\screenshots\\browser-warnings-errors.json",
@@ -1586,5 +1641,66 @@
       "gzip": false,
       "originalBytesPreserved": true
     }
-  ]
+  ],
+  "screenshotPresentation": {
+    "atUtc": "2026-10-13T21:10:31.122Z",
+    "qualification": "Expose the same immutable original JPEG bytes for direct visual review; no image editing or regeneration",
+    "changes": [
+      {
+        "target": "guard/screenshots/01-initial.jpg",
+        "originalBytes": 32960,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/02-file-tree.jpg",
+        "originalBytes": 36592,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/03-dependent-error-details.jpg",
+        "originalBytes": 55262,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/04-dependent-response-body.jpg",
+        "originalBytes": 50381,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/05-dependent-body-bottom.jpg",
+        "originalBytes": 50381,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/06-indirect-error.jpg",
+        "originalBytes": 43749,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/07-junction-move-success.jpg",
+        "originalBytes": 37953,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/08-symbolic-error-zh.jpg",
+        "originalBytes": 43228,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/09-symbolic-move-success-zh.jpg",
+        "originalBytes": 37320,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/10-published-directory-zh.jpg",
+        "originalBytes": 39744,
+        "exactOriginalBytes": true
+      },
+      {
+        "target": "guard/screenshots/11-marker-editor-zh.jpg",
+        "originalBytes": 33243,
+        "exactOriginalBytes": true
+      }
+    ]
+  }
 }
