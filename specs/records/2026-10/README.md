@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [386 全屏产物菜单调查](2026-10-13-artifact-fullscreen-menu-386.md)：原版与改后页面同触发超时，根因待查。
+
+- [384 产物工具栏忙碌焦点](2026-10-13-artifact-action-focus-384.md)：共享动作根因分析和真实桌面验收。
+
 - [项目文件点段身份](2026-10-13-file-alias-identity.md)：全入口影响、真实服务与桌面验收。
 
 - [Chat、Task、Mission 持续目标模式](2026-10-13-continuous-goal-mode.md)：现状调查、统一持久化策略与三模式验收。

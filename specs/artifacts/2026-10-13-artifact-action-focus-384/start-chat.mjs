@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';import path from 'node:path';import assert from 'node:assert/strict';import{createHash,randomUUID}from'node:crypto';
+const root=path.resolve('.tmp-artifact-action-focus-384');
+const pf=JSON.parse(await fs.readFile(path.join(root,'provider-before-02/evidence/preflight-ready.json'),'utf8'));
+assert.equal(pf.preflight.credential,'usable');assert.equal(pf.preflight.catalog,'projected');assert.equal(pf.preflight.actualModel,'gpt-6.1-sol');assert.equal(pf.preflight.streaming,true);
+const bytes=await fs.readFile(path.join(root,'notes.txt'));
+const metadata={filename:'reading-notes.txt',mime:'text/plain',size:bytes.length,sha:createHash('sha256').update(bytes).digest('hex')};
+const input={requestID:randomUUID(),model:'openai/gpt-6.1-sol',attachments:[{filename:metadata.filename,mime:metadata.mime,data:bytes.toString('base64')}],text:'请把随附的 reading-notes.txt 发布为可直接阅读、复制和下载的 file-preview@1 产物，标题为 Reading notes。另发布一个简短 document@1 便签产物，标题为 Desk note，正文使用中文说明：原始资料可以先阅读，再复制或下载；加一条简短英文备注即可。两份产物发布成功后只简短说明。附件的实际原始元数据是 '+JSON.stringify(metadata)+'；规范附件URL使用消息附带的文件索引原值，不要创建另一份文件。'};
+await fs.writeFile(path.join(root,'chat-input.json'),JSON.stringify(input,null,2),{flag:'wx'});
+await fs.writeFile(path.join(root,'input-metadata.json'),JSON.stringify(metadata,null,2),{flag:'wx'});
+const response=await fetch('http://127.0.0.1:18498/global/chat/start',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(input),signal:AbortSignal.timeout(15000)});
+const accepted=await response.json();await fs.writeFile(path.join(root,'chat-accepted.json'),JSON.stringify({status:response.status,...accepted},null,2),{flag:'wx'});assert.equal(response.status,202);console.log(JSON.stringify({status:response.status,sessionID:accepted.session.id,messageID:accepted.messageID,directory:accepted.session.directory}));

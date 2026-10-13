@@ -13,6 +13,7 @@
 
 #### 修复
 
+- 产物复制与下载的忙碌状态保留键盘焦点，完成后可继续操作；类型徽标跟随界面语言，原始标题、文件名和内容保持不变。
 - 网页读取保留 Markdown 硬换行、代码缩进、空行和原生文本的换行符，避免通用空白清理改变正文含义；输出预算按实际保留内容计量。
 - PDF 阅读器支持网页引用与文档内部链接，键盘可聚焦和打开；跳转遵循文档目的地并显示本地化失败提示，缩放、旋转和文字选择共用原页面几何。
 - 用量统计正确覆盖半小时夏令时和午夜切换的自然周期，修复部分调用漏入时间桶、错分到上一周期或周期终点越界的问题。
@@ -35,6 +36,7 @@
 
 #### Fixed
 
+- Artifact copy and download controls retain keyboard focus while busy for continued operation. Type badges follow the interface language while original titles, filenames and content retain their identity.
 - Web fetching preserves Markdown hard breaks, code indentation, blank lines and native text line endings. Generic whitespace cleanup no longer changes content meaning, and output budgets count the retained content.
 - PDF previews support web references and internal document links with keyboard focus and activation. Navigation follows the document destination, reports failures in the interface language, and shares page geometry with zoom, rotation and text selection.
 - Usage covers natural periods across half-hour daylight-saving and midnight transitions, fixing calls missing from time buckets, assigned to the previous period, or counted beyond the period end.

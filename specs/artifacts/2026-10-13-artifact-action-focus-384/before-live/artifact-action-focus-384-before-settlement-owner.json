@@ -1,0 +1,20 @@
+{
+  "reason": "immutable-wrapper-failure",
+  "evidenceRoot": "D:\\myhexin-local\\opencorvus\\.tmp-artifact-action-focus-384\\before-live",
+  "runRoot": "D:\\myhexin-local\\opencorvus\\.tmp-artifact-action-focus-384\\provider-before",
+  "admittedAt": "2026-10-13T07:07:16.5894278Z",
+  "supervision": {
+    "totalDeadlineMs": null,
+    "pinned": null,
+    "pid": 50548,
+    "preparationDeadlineMs": 1791875819411,
+    "observedAtUtc": "2026-10-13T07:07:16.5422564Z",
+    "reason": "immutable-wrapper-failure",
+    "firstFailedPath": "D:\\myhexin-local\\opencorvus\\.tmp-artifact-action-focus-384\\provider-before\\evidence\\failed.json",
+    "occurrence": "artifact-action-focus-384-before-d1a3f862-f9df-4a6c-9d2c-1018b45b81cc",
+    "boundary": "Winning immutable settlement owner publishes this stop request; actual physical settlement remains distinct"
+  },
+  "ownerPID": 63484,
+  "occurrence": "artifact-action-focus-384-before-d1a3f862-f9df-4a6c-9d2c-1018b45b81cc",
+  "evidencePrefix": "artifact-action-focus-384-before"
+}

@@ -1,0 +1,10 @@
+{
+  "pid": 50548,
+  "occurrence": "artifact-action-focus-384-before-d1a3f862-f9df-4a6c-9d2c-1018b45b81cc",
+  "error": {
+    "name": "Error",
+    "message": "PROVIDER_PREFLIGHT: {\"name\":\"UnknownError\",\"data\":{\"message\":\"AI_StreamProviderError: Our servers are currently overloaded. Please try again later.\"}}"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

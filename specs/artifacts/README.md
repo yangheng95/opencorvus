@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [产物工具栏焦点与语言](2026-10-13-artifact-action-focus-384/README.md)：真实模型产物、前后截图、原始下载与全屏菜单未达成证据。
+
 - [文件点段身份](2026-10-13-file-alias-identity/README.md)：真实 Git/API 和桌面引用前后证据。
 
 - [持续目标模式验收](2026-10-13-continuous-goal-mode/README.md)：三种真实模型执行、Task 跨轮次重开、计量与最终桌面截图。

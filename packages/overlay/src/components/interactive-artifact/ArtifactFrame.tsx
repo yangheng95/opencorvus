@@ -66,7 +66,7 @@ export function ArtifactFrame(props: {
     >
       <header class="msg-artifact__header">
         <div class="msg-artifact__identity">
-          <span class="msg-artifact__kind">{props.kind}</span>
+          <span class="msg-artifact__kind">{props.payload ? t(`artifact.kind.${props.payload.renderer}`) : props.kind}</span>
           <h3 class="msg-artifact__title oc-section-heading">{props.title}</h3>
         </div>
         <div class="msg-artifact__header-trailing">
