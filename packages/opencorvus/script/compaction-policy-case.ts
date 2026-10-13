@@ -5,6 +5,7 @@ import z from "zod"
 import { isStepCount, tool } from "ai"
 import type { Message } from "@/session/message"
 import type { Provider } from "@/provider/provider"
+import { CompactionNativeReference } from "./compaction-native-reference"
 
 /** Benchmark-only corpus and mechanics. Importing this file does not initialize a runtime. */
 export namespace CompactionPolicyCase {
@@ -155,6 +156,7 @@ export namespace CompactionPolicyCase {
     nonce: string
     rounds: number
     resume?: Resume
+    compareNative?: boolean
     project: string
     model: Provider.Model
     inactive: <T>(run: (signal: AbortSignal) => Promise<T>) => Promise<T>
@@ -193,6 +195,10 @@ export namespace CompactionPolicyCase {
       import("@/config/effective"),
     ])
     const target = { providerID: input.model.providerID, modelID: input.model.id }
+    if (input.compareNative) {
+      assert.equal(input.rounds, 1, "Native reference comparison currently measures one checkpoint")
+      assert.equal(input.resume, undefined, "Native comparison starts from the same original corpus")
+    }
     const authored = await history({ target, project: input.project })
     const corpus = definition(input.name, input.nonce)
     const session = input.resume
@@ -267,6 +273,25 @@ export namespace CompactionPolicyCase {
       await input.record(entry)
       try {
         const fullCopy = await Session.fork({ sessionID: session.id })
+        const nativeCopy = input.compareNative ? await Session.fork({ sessionID: session.id }) : undefined
+        const native = nativeCopy
+          ? await input.inactive(async (abort) =>
+              CompactionNativeReference.compact({
+                artifactPath: path.join(input.project, `native-context-${nativeCopy.id}.json`),
+                stream: {
+                  user: source,
+                  sessionID: session.id,
+                  model: input.model,
+                  agentID: "chat",
+                  agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("chat")),
+                  system: [],
+                  messages: await Message.toModelMessages(originalBefore, input.model),
+                  abort,
+                },
+              }),
+            )
+          : undefined
+        if (native) entry.nativeReference = native.report
         const control = await SessionCompaction.create({ sessionID: session.id, source, auto: true, model: target })
         entry.outcome = await input.inactive((abort) =>
           SessionLoop.TestHooks.executeCompactionControl({
@@ -307,11 +332,14 @@ export namespace CompactionPolicyCase {
         const compactCopy = await Session.fork({ sessionID: session.id })
         const lanes: Record<string, unknown>[] = []
         entry.lanes = lanes
-        for (const [lane, copy] of [
+        const copies = [
           ["full", fullCopy],
           ["compacted", compactCopy],
-        ] as const) {
+          ...(nativeCopy ? [["native", nativeCopy] as const] : []),
+        ] as const
+        for (const [lane, copy] of copies) {
           const prior = await Session.messages({ sessionID: copy.id })
+          const priorIDs = new Set(prior.map((message) => message.info.id))
           const lastUser = prior.findLast((message) => message.info.role === "user")!.info as Message.User
           await addDocument(copy.id, lastUser.id)
           const probe = await authored.user(
@@ -324,7 +352,16 @@ export namespace CompactionPolicyCase {
                   (message) => message.info.author !== "compaction",
                 )
               : await Message.filterCompacted(MessageStore.stream(copy.id))
-          const messages = await Message.toModelMessages(visible, input.model)
+          const messages =
+            lane === "native"
+              ? [
+                  ...native!.messages,
+                  ...(await Message.toModelMessages(
+                    visible.filter((message) => !priorIDs.has(message.info.id)),
+                    input.model,
+                  )),
+                ]
+              : await Message.toModelMessages(visible, input.model)
           const effects: Array<{ file: string; callID: string; action: Action }> = []
           const directory = path.join(input.project, "policy-actions", copy.id)
           await fs.mkdir(directory, { recursive: true })
@@ -350,7 +387,10 @@ export namespace CompactionPolicyCase {
             lane,
             sessionID: copy.id,
             requestStart: input.requestCount(),
-            visibleMessageIDs: visible.map((message) => message.info.id),
+            visibleMessageIDs: visible
+              .filter((message) => lane !== "native" || !priorIDs.has(message.info.id))
+              .map((message) => message.info.id),
+            ...(lane === "native" ? { nativeReference: native!.report.artifactPath } : {}),
             inputEstimate: RequestBudget.estimate({ messages, tools: { [toolName]: executionTool } }),
             contextCapacity: ContextBudget.capacity({ config, model: input.model }),
             effects,

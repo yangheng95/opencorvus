@@ -1,0 +1,16 @@
+{
+  "scope": "Original local transport/calibration and real streamed comparison evidence",
+  "archives": [
+    "native-reference-initial.log.gz",
+    "native-reference-baseline.log.gz",
+    "native-reference-repair.log.gz",
+    "native-reference-matrix-local.log.gz",
+    "native-reference-matrix-final.log.gz",
+    "native-reference-final-contracts.log.gz",
+    "native-reference-final-transport.log.gz",
+    "native-reference-delivery.log.gz",
+    "native-policy-real.log.gz",
+    "native-policy-revoke-context.json.gz",
+    "native-policy-grant-context.json.gz"
+  ]
+}

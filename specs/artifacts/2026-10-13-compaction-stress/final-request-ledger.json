@@ -1,7 +1,7 @@
 {
   "priorRequests": 99,
-  "total": 251,
-  "authorizedTotal": 260,
+  "total": 271,
+  "authorizedTotal": 300,
   "runs": [
     {
       "name": "text-three-rounds",
@@ -235,6 +235,24 @@
           "requestEnd": 12
         }
       ]
+    },
+    {
+      "name": "native-policy-real",
+      "status": "passed",
+      "requests": 20,
+      "streamedRequests": 20,
+      "settledReaders": 20,
+      "credentialsRemoved": true,
+      "cleanupObservation": {
+        "runtimePresent": true,
+        "dataPresent": true,
+        "authPresent": false,
+        "catalogPresent": false
+      },
+      "completedRounds": 2,
+      "passedActions": 6,
+      "passedFields": 30,
+      "summary": "native-policy-real-summary.json"
     }
   ],
   "authorizationPolicy": "User explicitly allows increasing request limits as needed; retain bounded per-run budgets and exact accounting.",

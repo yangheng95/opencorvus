@@ -773,9 +773,9 @@ export namespace SessionCompaction {
     }))
   }
 
-  // goes backwards through parts until there are 40_000 tokens worth of tool
-  // calls. then erases output of previous tool calls. idea is to throw away old
-  // tool calls that are no longer relevant.
+  // Measure disposable Tool-output projections inside an accepted checkpoint's
+  // exact coverage. Original Tool facts remain intact; this is not pre-summary
+  // deletion of history that the compactor has yet to read.
   export async function prune(input: { sessionID: string }) {
     const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
     if (config.compaction?.prune === false) return

@@ -21,9 +21,10 @@ full browser, Task/Mission scheduling, or native Codex comparison benchmark.
 | [message-diagnostics-real](message-diagnostics-real.json) | 5 | Model reads all 78,303 diagnostic characters in three pages; 12/12 continuation fields pass with production Tool preparation. |
 | [policy-actions-real](policy-actions-real.json) | 80 | Nine paired rounds pass; the final grant compactor reaches the former request ceiling. Original failure retained. |
 | [policy-actions-real-resume](policy-actions-real-resume.json) | 12 | Reopens that exact fifth-round history; checkpoint and both actual Tool actions pass. |
+| [native-policy-real](native-policy-real.json) | 20 | Two one-checkpoint native/full/portable comparisons pass six actual actions and 30 fields. |
 
-Total: **251** real requests. The user authorized increasing limits as needed;
-the last batch retained a 20-request hard cap and used 12. The final
+Total: **271** real requests. The user authorized increasing limits as needed;
+the latest native comparison retained a 40-request hard cap and used 20. The final
 accepted text/Tool/file/failure/diagnostic cases score **78/78** fields over nine completed
 rounds; this finite, single-model corpus is not a general reliability estimate.
 [Final request accounting](final-request-ledger.json) reconciles all new sidecars
@@ -451,3 +452,41 @@ All gzip files preserve original bytes; no digest stands in for behavioral
 acceptance. Run the backend checker with a new absolute
 COMPACTION_TASK_CRASH_RESULT and
 bun run --cwd packages/opencorvus script/compaction-task-crash-check.ts.
+
+
+## Native streamed reference comparison
+
+[Verified results and canonical usage receipts](native-policy-real-summary.json)
+record two one-checkpoint full/portable/native comparisons using the same exact
+real model and authority changes. Six actual file-writing Tool actions and all
+30 fields pass. The [raw report](native-policy-real.json) matches its
+[20-request sidecar](native-policy-real.json.requests.json). Cumulative usage is
+**271**, and both copied credential/catalog files were observed removed.
+
+The native endpoint returns a completed opaque state in one request per case;
+the portable helper uses six requests including evidence pagination. Native
+preparation logical input is 19,769 / 19,771 tokens; portable preparation is
+81,563 / 81,450 including 62,592 / 44,800 cached tokens. Probe input is about
+7k for both compressed lanes and 20k for full history. These are actual usage
+fields, not ciphertext-length estimates or a general cost/quality ranking.
+
+Native output is saved and reopened as an experimental artifact. Its exact
+opaque states and every calibration log are listed in the
+[archive manifest](native-reference-artifact-manifest.json). This is not a
+product Session-native checkpoint, native five-round acceptance, Azure native
+integration or Codex parity.
+
+[Baseline wire evidence](native-reference-baseline.log.gz) shows the old Provider
+transform deleting both compaction and item_reference IDs. The single transform
+now normalizes only its defined ordinary replay item kinds and preserves native
+context/reference identities. [Final local validation](native-reference-delivery.log.gz)
+passes six native/protocol/action tests; the existing seven policy tests also
+pass in [combined regression](native-reference-matrix-local.log.gz), whose two
+initial matrix failures are retained and fixed in the later native suite. Total
+coverage is **13 distinct tests**, not the sum of repeated runs. Incomplete and
+progress-only native state returns an explicit failure without a text substitute.
+
+[Final TypeScript check](native-reference-typecheck-complete.log) and
+[documentation/index checks](native-reference-docs.log) pass. Earlier typing
+receipts retain the transient concurrent Permission edit failure and its
+successful recheck; this task changed no Permission source.

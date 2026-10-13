@@ -75,6 +75,19 @@ MCP OAuth uses the extension credential owner, not Provider account OAuth. Its p
 
 ## Provider.Model — 统一模型抽象
 
+### OpenAI continuation item identity
+
+OpenAI Responses 的普通重放项只对既有六种类型（message、reasoning、function_call、
+local_shell_call、custom_tool_call、web_search_call）归一化可选上游 ID；Azure 的
+store=true 保留行为不变。compaction 的原始 ID 与 encrypted_content、item_reference
+的必需 ID，以及其他协议项的身份字段必须原样传递，不能被“删除所有 input.id”的
+通用处理破坏。模型配置和流式 SDK 仍通过同一个 Provider fetch 边界。
+
+原生压缩的专用输出尚未进入产品 Session checkpoint 契约。实验 checker 可以通过
+LLM.stream 请求 compaction_trigger，将真实返回的 native context 写入隔离产物并重读后
+续行；该产物是对照实验记录，不是另一份产品 MEMORY.MD。正式产品集成仍需定义消息
+持久化、可见性、复制、模型绑定与恢复边界，不能以 SDK 已支持或单次实验通过代替。
+
 ### Final route budget authority
 
 每次真实流式请求只有一个 final resolved route/model record。它同时绑定 Provider ID、请求模型

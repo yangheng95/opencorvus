@@ -1008,17 +1008,25 @@ export namespace Provider {
         }
 
         try {
-          // Strip openai itemId metadata following what codex does
-          // Codex uses #[serde(skip_serializing)] on id fields for all item types:
-          // Message, Reasoning, FunctionCall, LocalShellCall, CustomToolCall, WebSearchCall
-          // IDs are only re-attached for Azure with store=true
+          // Ordinary replay items carry optional upstream IDs. Native context
+          // and reference items use IDs as part of their continuation contract.
           if (model.api.npm === "@ai-sdk/openai" && opts.body && opts.method === "POST") {
             const body = JSON.parse(opts.body as string)
             const isAzure = model.providerID.includes("azure")
             const keepIds = isAzure && body.store === true
             if (!keepIds && Array.isArray(body.input)) {
               for (const item of body.input) {
-                if ("id" in item) {
+                if (
+                  [
+                    "message",
+                    "reasoning",
+                    "function_call",
+                    "local_shell_call",
+                    "custom_tool_call",
+                    "web_search_call",
+                  ].includes(item.type) &&
+                  "id" in item
+                ) {
                   delete item.id
                 }
               }

@@ -2,6 +2,7 @@
  * COMPACTION_STRESS_ALLOW_REAL_PROVIDER=1, AUTH_SOURCE, MODEL, RESULT, MAX_REQUESTS
  * (all prefixed COMPACTION_STRESS_) are required. CASES and ROUNDS are optional.
  * RESUME_REPORT reopens the exact unfinished policy round in a retained isolated runtime.
+ * COMPARE_NATIVE=1 adds a one-checkpoint experimental native reference lane to policy cases.
  * Auth and model catalog are copied together into an isolated disposable runtime.
  */
 import assert from "node:assert/strict"
@@ -26,6 +27,7 @@ const exactModel = env("MODEL")
 const resultPath = env("RESULT")
 const maxRequests = Number(env("MAX_REQUESTS"))
 const rounds = Number(env("ROUNDS") ?? "1")
+const compareNative = env("COMPARE_NATIVE") === "1"
 const hostTemporaryRoot = os.tmpdir()
 const caseNames = [
   "text-start",
@@ -99,6 +101,11 @@ const resume = await (async () => {
 })()
 const selectedCases = (env("CASES") ?? resume?.name ?? "text-start,text-middle,text-end,tool-evidence").split(",")
 if (resume) assert.deepEqual(selectedCases, [resume.name], "Resume only the original unfinished case")
+if (compareNative) {
+  assert.equal(rounds, 1, "Native comparison measures one checkpoint per case")
+  assert.equal(resume, undefined, "Native comparison starts from original histories")
+  assert(selectedCases.every((name) => CompactionPolicyCase.names.includes(name as CompactionPolicyCase.Name)))
+}
 await fs.mkdir(path.dirname(path.resolve(resultPath)), { recursive: true })
 const supervisor = prepareTestProcessSupervisor()
 const isolated = await bootstrapIsolatedTestRuntime("runner")
@@ -231,6 +238,7 @@ const report = {
   model: exactModel,
   scope: "real-provider production-compactor integration; seeded history",
   rounds,
+  compareNative,
   ...(resume ? { resumedFrom: resume.reportPath, resume: resume.descriptor } : {}),
   credential: "available",
   modelProjection: "pending",
@@ -273,6 +281,7 @@ try {
             name: name as CompactionPolicyCase.Name,
             nonce,
             rounds,
+            compareNative,
             resume: resume?.descriptor,
             project,
             model,

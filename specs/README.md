@@ -88,7 +88,7 @@
 
 - [Venice 用量与共享后台停机](records/2026-10/2026-10-13-venice-stream-usage.md)：唯一适配器计量、共享取消顺序与真实视觉/进程证据。
 
-- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：251 次真实请求、五轮双历史 20 次动作全通过、两项目 Task 中断恢复及摘要通知修复。
+- [上下文压缩压力测试](records/2026-10/2026-10-13-compaction-stress.md)：271 次真实请求、原生/可见摘要/完整历史动作对照通过，修复原生状态 ID 丢失。
 
 - [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
 
