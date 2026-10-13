@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [389 成员刷新失败可读性](child-refresh-retention-plan-389.md)：[真实读取中断与错误恢复](child-refresh-retention-389/README.md)。
+
 - [388 参考历史重连身份](history-render-identity-plan-388.md)：[真实侧聊与正文生命周期](history-render-identity-388/README.md)。
 
 - [387 尺寸通知与布局调查](resize-delivery-plan-387.md)：[真实页面与诊断证据](resize-delivery-387/README.md)。

@@ -1,0 +1,257 @@
+{
+  "phases": [
+    {
+      "phase": "before",
+      "childSessionID": "ses_-zUS42uvQzza6rhz5qae",
+      "parentSessionID": "ses_-zUS42xuUzzhZ4PU0Jdf",
+      "childMessages": [
+        "msg_g0VXvx56b00F7n2i5Hm5",
+        "msg_g0VXvx59h00A0y6Yuv7n",
+        "msg_g0VXvx7JI00IxLj0X9RQ"
+      ],
+      "source": {
+        "id": "prt_g0VXvx7Ge00NutMyu3sA",
+        "messageID": "msg_g0VXvx59h00A0y6Yuv7n",
+        "toolPartID": "prt_g0VXvx7CC00XQxZI53DO",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\child-refresh-retention-389-before\\project\\来源材料\\方案甲.txt",
+        "range": {
+          "startLine": 2,
+          "endLine": 3
+        }
+      },
+      "preflight": {
+        "sessionID": "ses_hyFl1MGLiTOrm356vu0l",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 7,
+      "providerTransport": "all gpt-6.1-sol streaming / HTTP 200 / EOF; separate Message outcomes retained",
+      "native": {
+        "terminal": {
+          "occurrenceID": "child-refresh-retention-389-before-5033dd6a-9420-4cd4-aa64-bba25aad2649",
+          "pid": 83024,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "durationMilliseconds": 271706,
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true
+      },
+      "transport": {
+        "cuts": [
+          {
+            "time": "2026-10-13T12:54:40.773Z",
+            "pid": 17108,
+            "kind": "physical-transcript-disconnect",
+            "id": 102,
+            "sessionID": "ses_-zUS42uvQzza6rhz5qae",
+            "path": "/session/ses_-zUS42uvQzza6rhz5qae/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-before%5Cproject&tail_limit=2000"
+          }
+        ],
+        "recovery": {
+          "time": "2026-10-13T12:55:58.687Z",
+          "pid": 17108,
+          "kind": "transcript-response",
+          "id": 112,
+          "sessionID": "ses_-zUS42uvQzza6rhz5qae",
+          "path": "/session/ses_-zUS42uvQzza6rhz5qae/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-before%5Cproject&tail_limit=2000",
+          "status": 200
+        },
+        "terminal": {
+          "time": "2026-10-13T12:56:43.498Z",
+          "pid": 17108,
+          "kind": "stopped",
+          "reason": "operator-stop",
+          "activeStreams": 0,
+          "sockets": 0
+        }
+      },
+      "qualification": "NativeService"
+    },
+    {
+      "phase": "after",
+      "childSessionID": "ses_-zUS3zC9pzzy5IHqpHZ6",
+      "parentSessionID": "ses_-zUS3zEjezz11wH4wUIf",
+      "childMessages": [
+        "msg_g0VXw0nrZ001EWPy1N54",
+        "msg_g0VXw0ntk00cIZCP7qzp",
+        "msg_g0VXw0pnZ00VV9i0ZJ9F"
+      ],
+      "source": {
+        "id": "prt_g0VXw0pld00ZXAes4k1A",
+        "messageID": "msg_g0VXw0ntk00cIZCP7qzp",
+        "toolPartID": "prt_g0VXw0pbZ00ftk1Y2tzQ",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\child-refresh-retention-389-after\\project\\来源材料\\方案甲.txt",
+        "range": {
+          "startLine": 2,
+          "endLine": 3
+        }
+      },
+      "preflight": {
+        "sessionID": "ses_hiP2dJODngkODGMWOPil",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 7,
+      "providerTransport": "all gpt-6.1-sol streaming / HTTP 200 / EOF; separate Message outcomes retained",
+      "native": {
+        "terminal": {
+          "occurrenceID": "child-refresh-retention-389-after-91af0542-9901-4360-8be4-f6074107b30a",
+          "pid": 77104,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "durationMilliseconds": 503658,
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true
+      },
+      "transport": {
+        "cuts": [
+          {
+            "time": "2026-10-13T13:10:14.261Z",
+            "pid": 85220,
+            "kind": "physical-transcript-disconnect",
+            "id": 106,
+            "sessionID": "ses_-zUS3zC9pzzy5IHqpHZ6",
+            "path": "/session/ses_-zUS3zC9pzzy5IHqpHZ6/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-after%5Cproject&tail_limit=2000"
+          },
+          {
+            "time": "2026-10-13T13:10:14.263Z",
+            "pid": 85220,
+            "kind": "physical-transcript-disconnect",
+            "id": 107,
+            "sessionID": "ses_-zUS3zC9pzzy5IHqpHZ6",
+            "path": "/session/ses_-zUS3zC9pzzy5IHqpHZ6/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-after%5Cproject&tail_limit=2000"
+          },
+          {
+            "time": "2026-10-13T13:14:27.053Z",
+            "pid": 85220,
+            "kind": "physical-transcript-disconnect",
+            "id": 195,
+            "sessionID": "ses_-zUS3zC9pzzy5IHqpHZ6",
+            "path": "/session/ses_-zUS3zC9pzzy5IHqpHZ6/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-after%5Cproject&tail_limit=2000"
+          },
+          {
+            "time": "2026-10-13T13:14:27.057Z",
+            "pid": 85220,
+            "kind": "physical-transcript-disconnect",
+            "id": 196,
+            "sessionID": "ses_-zUS3zC9pzzy5IHqpHZ6",
+            "path": "/session/ses_-zUS3zC9pzzy5IHqpHZ6/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-after%5Cproject&tail_limit=2000"
+          }
+        ],
+        "recovery": {
+          "time": "2026-10-13T13:15:22.047Z",
+          "pid": 85220,
+          "kind": "transcript-response",
+          "id": 202,
+          "sessionID": "ses_-zUS3zC9pzzy5IHqpHZ6",
+          "path": "/session/ses_-zUS3zC9pzzy5IHqpHZ6/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-after%5Cproject&tail_limit=2000",
+          "status": 200
+        },
+        "terminal": {
+          "time": "2026-10-13T13:15:35.791Z",
+          "pid": 85220,
+          "kind": "stopped",
+          "reason": "operator-stop",
+          "activeStreams": 0,
+          "sockets": 0
+        }
+      },
+      "qualification": "NativeService"
+    },
+    {
+      "phase": "final",
+      "originalFailure": {
+        "messageID": "msg_g0VXw5bQC00gEr0LP7Tc",
+        "error": {
+          "name": "UnknownError",
+          "data": {
+            "message": "AI_StreamProviderError: Our servers are currently overloaded. Please try again later."
+          }
+        },
+        "finish": "error",
+        "boundary": "Original model request failed; the later explicit UI user continuation has a separate outcome. HTTP 200 / EOF is only transport completion."
+      },
+      "childSessionID": "ses_-zUS3tMp1zzuxk7cRBs0",
+      "parentSessionID": "ses_-zUS3uP0SzzBcYSxHhty",
+      "childMessages": [
+        "msg_g0VXw6dCN00wyTMOHzZI",
+        "msg_g0VXw6dFG00nhxPks7Kv",
+        "msg_g0VXw6fD400MGiIFl4Yt"
+      ],
+      "source": {
+        "id": "prt_g0VXw6fAv00QteQeVDGP",
+        "messageID": "msg_g0VXw6dFG00nhxPks7Kv",
+        "toolPartID": "prt_g0VXw6f1x00k1jwUwzCf",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-13\\child-refresh-retention-389-final\\project\\来源材料\\方案甲.txt",
+        "range": {
+          "startLine": 2,
+          "endLine": 3
+        }
+      },
+      "preflight": {
+        "sessionID": "ses_hf1CA5H1guDMelI58eGd",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 9,
+      "providerTransport": "all gpt-6.1-sol streaming / HTTP 200 / EOF; separate Message outcomes retained",
+      "native": {
+        "terminal": {
+          "occurrenceID": "child-refresh-retention-389-final-3920c8d2-4042-455e-8ba8-2d7a6c3af458",
+          "pid": 84648,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "durationMilliseconds": 549016,
+        "physicalCompletion": true,
+        "pairedCleanupComplete": true
+      },
+      "transport": {
+        "cuts": [
+          {
+            "time": "2026-10-13T13:33:01.010Z",
+            "pid": 87420,
+            "kind": "physical-transcript-disconnect",
+            "id": 137,
+            "sessionID": "ses_-zUS3tMp1zzuxk7cRBs0",
+            "path": "/session/ses_-zUS3tMp1zzuxk7cRBs0/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-final%5Cproject&tail_limit=2000"
+          }
+        ],
+        "recovery": {
+          "time": "2026-10-13T13:34:21.743Z",
+          "pid": 87420,
+          "kind": "transcript-response",
+          "id": 146,
+          "sessionID": "ses_-zUS3tMp1zzuxk7cRBs0",
+          "path": "/session/ses_-zUS3tMp1zzuxk7cRBs0/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-13%5Cchild-refresh-retention-389-final%5Cproject&tail_limit=2000",
+          "status": 200
+        },
+        "terminal": {
+          "time": "2026-10-13T13:34:55.441Z",
+          "pid": 87420,
+          "kind": "stopped",
+          "reason": "operator-stop",
+          "activeStreams": 0,
+          "sockets": 0
+        }
+      },
+      "qualification": "NativeService"
+    }
+  ],
+  "boundary": "Canonical backend, actual Provider and physical transport/native facts only; no UI automatic assertions. Root manually reviewed actual screenshots.",
+  "remaining": [
+    "The separately observed session-local lifecycle actor mismatch still requires a shared identity repair; NativeService qualification does not certify frontend streaming correctness.",
+    "Original Research Studio data and all Task/Mission failure scenarios are not covered by these Session-local runs."
+  ]
+}

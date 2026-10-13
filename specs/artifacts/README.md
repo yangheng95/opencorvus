@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [389 成员刷新失败可读性](2026-10-05-connection-workspace-authority/child-refresh-retention-389/README.md)：隔离实页、读取中断与生命周期证据。
+
 - [Native外输出证据](2026-10-13-native-output-sink-audit/README.md)：各原Promise、双层drain及实际OS身份。
 
 - [Explorer标签与搜索证据](2026-10-13-explorer-tab-owner-search/README.md)：真实批成员、当前搜索、截图和原实例收尾。

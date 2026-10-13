@@ -1437,6 +1437,16 @@ condition. A new selected-child transcript projection updates the mounted
 renderer through reactive props; object replacement is not a reason to
 recreate the entire bubble and its streaming Markdown controllers.
 
+The selected-child resource and its presentation share the resource's single
+storage signal. A failed refresh keeps an accepted transcript readable only
+while its complete target key still matches. The resource's actual error is
+shown beside that content with an explicit retry action; initial load failures
+show the same error without an indefinite loading placeholder. Reading the
+stored value does not rethrow a fetch failure into unrelated reactive work.
+Target changes retain the existing keyed retirement and request ownership.
+Full fetch diagnostics remain in a bounded, keyboard-focusable reading region,
+so expanding an error preserves space for the loaded transcript and Sources.
+
 The selected Agent transcript uses the existing transcript-run gap token at
 the medium spacing tier. That scoped token controls adjacent message margins
 and quotation-to-tool spacing; the message border and padding still preserve

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [389 成员刷新失败可读性](artifacts/2026-10-05-connection-workspace-authority/child-refresh-retention-plan-389.md)：已有Sources、真实读取错误和重试。
+
 - [Native外输出接收端调查](records/2026-10/2026-10-13-native-output-sink-audit.md)：真实管道、逐分支结算和共享生产矩阵。
 
 - [Explorer标签所有者与上传搜索](records/2026-10/2026-10-13-explorer-tab-owner-search.md)：批次完成、跨工具状态和唯一搜索收敛。

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [389 成员刷新失败可读性](2026-10-13-child-refresh-retention-389.md)：错误、已有来源、键盘详情及真实恢复。
+
 - [Native外输出调查](2026-10-13-native-output-sink-audit.md)：原未知错误、同句柄观测和完整横审计划。
 
 - [Explorer标签所有者与搜索](2026-10-13-explorer-tab-owner-search.md)：共享生命周期根因、真实批次与上传查询。

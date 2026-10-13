@@ -2045,6 +2045,16 @@
   flex-direction: column;
 }
 
+.subagent-conversation-panel__feedback {
+  flex: 0 0 auto;
+}
+
+.subagent-conversation-panel__error-details {
+  max-height: min(30vh, calc(200px * var(--ui-scale)));
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
 .subagent-conversation-panel__agent-selector {
   display: flex;
   flex-wrap: wrap;
