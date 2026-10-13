@@ -768,6 +768,15 @@ literal HTML metadata as encoding instructions. Undeclared text retains the
 product's UTF-8 default. The same decoded document supplies both Source metadata
 and Tool output; persisted historical Messages are not rewritten.
 
+HTML/XHTML conversion to Markdown resolves link and image destinations against
+the final fetched document URL, using the first `base[href]` element when its
+URL is valid and allowed by the document-base rules. The converted document enters
+the existing Turndown renderer, preserving its formatting and embedded-image
+attachment extraction. This gives relative links their original web target when
+quoted outside the source page. It neither fetches those destinations nor emits
+Sources for unread pages. Original HTML, plain-text extraction and native
+Markdown responses retain their existing format contracts.
+
 Webfetch publishes the document's own title from HTML/XHTML metadata or default
 YAML frontmatter in native Markdown responses, using the shared frontmatter
 parser. Remote script-language metadata is literal resource content. Optional

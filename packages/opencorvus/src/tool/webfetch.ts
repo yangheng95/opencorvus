@@ -175,7 +175,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
     switch (params.format) {
       case "markdown":
         if (isHtmlMime(mime)) {
-          const markdown = formatFetchedText(convertHTMLToMarkdown(content))
+          const markdown = formatFetchedText(convertHTMLToMarkdown(content, source.url))
           return {
             ...markdown,
             title,
@@ -332,7 +332,25 @@ function formatFetchedText(text: string) {
   }
 }
 
-function convertHTMLToMarkdown(html: string): string {
+function convertHTMLToMarkdown(html: string, responseUrl: string): string {
+  const document = createDocument(html)
+  const baseHref = document.querySelector("base[href]")?.getAttribute("href")
+  const declaredBase = typeof baseHref === "string" ? URL.parse(baseHref, responseUrl) : null
+  // HTML uses the document address when its first base URL is invalid or uses
+  // a scheme excluded by the document-base algorithm.
+  const baseUrl =
+    declaredBase && declaredBase.protocol !== "data:" && declaredBase.protocol !== "javascript:"
+      ? declaredBase.href
+      : responseUrl
+  for (const [selector, attribute] of [
+    ["a[href]", "href"],
+    ["img[src]", "src"],
+  ] as const) {
+    for (const element of Array.from(document.querySelectorAll(selector))) {
+      const target = URL.parse(element.getAttribute(attribute)!, baseUrl)
+      if (target) element.setAttribute(attribute, target.href)
+    }
+  }
   const turndownService = new TurndownService({
     headingStyle: "atx",
     hr: "---",
@@ -341,5 +359,5 @@ function convertHTMLToMarkdown(html: string): string {
     emDelimiter: "*",
   })
   turndownService.remove(["script", "style", "meta", "link"])
-  return turndownService.turndown(html)
+  return turndownService.turndown(document.documentElement)
 }

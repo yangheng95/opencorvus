@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [379 网页转换链接目标](source-link-base-plan-379.md)：[真实引用与点击证据](source-link-base-379/README.md)。
+
 - [378 网页来源字符编码](source-charset-plan-378.md)：[真实官网来源与完整运行证据](source-charset-378/README.md)。
 
 - [377 语言资源与启动失败](locale-bootstrap-plan-377.md)：[真实页面与运行证据](locale-bootstrap-377/README.md)。

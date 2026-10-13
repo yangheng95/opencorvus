@@ -1,0 +1,217 @@
+{
+  "scopes": [
+    {
+      "scope": "before",
+      "sources": [
+        {
+          "id": "prt_g0VXu0gx300IjYPLmFs5",
+          "messageID": "msg_g0VXu0fFB00lRie03uBr",
+          "type": "source-url",
+          "sourceId": "09c8e90f5873e42ac0c4498eac9570486bc9f0db86ecc7e43e078cf53217bd8b",
+          "url": "https://www.w3.org/Provider/Style/URI.html",
+          "title": "Hypertext Style: Cool URIs don't change.",
+          "provider": "opencorvus-webfetch"
+        }
+      ],
+      "links": [
+        {
+          "text": "![W3C](../../Icons/WWW/w3c_home.gif)",
+          "href": "../../"
+        },
+        {
+          "text": "![Style Guide](style_48x48.gif)",
+          "href": "./"
+        },
+        {
+          "text": "http://www.nsf.gov/cgi-bin/pubsys/browser/odbrowse.pl",
+          "href": "http://www.nsf.gov/cgi-bin/pubsys/browser/odbrowse.pl"
+        },
+        {
+          "text": "http://www.nsf.gov/cgi-bin/getpub?nsf9814",
+          "href": "http://www.nsf.gov/cgi-bin/getpub?nsf9814"
+        },
+        {
+          "text": "http://www.nsf.gov/pubs/1998/nsf9814/nsf9814.htm",
+          "href": "http://www.nsf.gov/pubs/1998/nsf9814/nsf9814.htm"
+        },
+        {
+          "text": "http://www.pathfinder.com/money/moneydaily/latest/",
+          "href": "http://www.pathfinder.com/money/moneydaily/latest/"
+        },
+        {
+          "text": "http://www.pathfinder.com/money/moneydaily/1998/981212.moneyonline.html",
+          "href": "http://www.pathfinder.com/money/moneydaily/1998/981212.moneyonline.html"
+        },
+        {
+          "text": "how?",
+          "href": "#remove"
+        },
+        {
+          "text": "http://www.w3.org/1998/12/01/chairs",
+          "href": "http://www.w3.org/1998/12/01/chairs"
+        },
+        {
+          "text": "Jacob Nielsen's \"Alertbox\" rant on the same topic",
+          "href": "http://www.useit.com/alertbox/990321.html"
+        },
+        {
+          "text": "Etiquette for server administrators",
+          "href": "Etiquette.html"
+        },
+        {
+          "text": "Structure of your work",
+          "href": "Structure.html"
+        },
+        {
+          "text": "Tim BL",
+          "href": "../../People/Berners-Lee/"
+        }
+      ],
+      "reply": "[Etiquette for server administrators](Etiquette.html)",
+      "requests": 5,
+      "elapsedMs": 131707,
+      "settled": {
+        "occurrence": "source-link-base-379-before-b2fa5f69-8902-40ad-8ec0-dd81d468a68a",
+        "outcome": "settled",
+        "host": {
+          "pid": 79368,
+          "processInstanceID": "win32:639274640691806073",
+          "occurrenceID": "bcb73d39-be9d-41d3-b4f6-1cd647058218"
+        },
+        "target": {
+          "pid": 79540,
+          "processInstanceID": "win32:639274640700566736",
+          "occurrenceID": "15829658-80fb-4263-a1a3-6b92a8df126c"
+        },
+        "observedAtUtc": "2026-10-13T04:56:41.763Z",
+        "deadlineAt": 1791867869161,
+        "terminal": {
+          "occurrenceID": "source-link-base-379-before-b2fa5f69-8902-40ad-8ec0-dd81d468a68a",
+          "pid": 79540,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "qualification": "NativeService",
+        "providerUserCancelledRequests": 0,
+        "physicalCompletion": true,
+        "providerEOFRequests": 5,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "cancellation": null
+      }
+    },
+    {
+      "scope": "after",
+      "sources": [
+        {
+          "id": "prt_g0VXu2mfI00nCynAkYDW",
+          "messageID": "msg_g0VXu2l7M00uFBgSQPhh",
+          "type": "source-url",
+          "sourceId": "09c8e90f5873e42ac0c4498eac9570486bc9f0db86ecc7e43e078cf53217bd8b",
+          "url": "https://www.w3.org/Provider/Style/URI.html",
+          "title": "Hypertext Style: Cool URIs don't change.",
+          "provider": "opencorvus-webfetch"
+        }
+      ],
+      "links": [
+        {
+          "text": "![W3C](https://www.w3.org/Icons/WWW/w3c_home.gif)",
+          "href": "https://www.w3.org/"
+        },
+        {
+          "text": "![Style Guide](https://www.w3.org/Provider/Style/style_48x48.gif)",
+          "href": "https://www.w3.org/Provider/Style/"
+        },
+        {
+          "text": "http://www.nsf.gov/cgi-bin/pubsys/browser/odbrowse.pl",
+          "href": "http://www.nsf.gov/cgi-bin/pubsys/browser/odbrowse.pl"
+        },
+        {
+          "text": "http://www.nsf.gov/cgi-bin/getpub?nsf9814",
+          "href": "http://www.nsf.gov/cgi-bin/getpub?nsf9814"
+        },
+        {
+          "text": "http://www.nsf.gov/pubs/1998/nsf9814/nsf9814.htm",
+          "href": "http://www.nsf.gov/pubs/1998/nsf9814/nsf9814.htm"
+        },
+        {
+          "text": "http://www.pathfinder.com/money/moneydaily/latest/",
+          "href": "http://www.pathfinder.com/money/moneydaily/latest/"
+        },
+        {
+          "text": "http://www.pathfinder.com/money/moneydaily/1998/981212.moneyonline.html",
+          "href": "http://www.pathfinder.com/money/moneydaily/1998/981212.moneyonline.html"
+        },
+        {
+          "text": "how?",
+          "href": "https://www.w3.org/Provider/Style/URI.html#remove"
+        },
+        {
+          "text": "http://www.w3.org/1998/12/01/chairs",
+          "href": "http://www.w3.org/1998/12/01/chairs"
+        },
+        {
+          "text": "Jacob Nielsen's \"Alertbox\" rant on the same topic",
+          "href": "http://www.useit.com/alertbox/990321.html"
+        },
+        {
+          "text": "Etiquette for server administrators",
+          "href": "https://www.w3.org/Provider/Style/Etiquette.html"
+        },
+        {
+          "text": "Structure of your work",
+          "href": "https://www.w3.org/Provider/Style/Structure.html"
+        },
+        {
+          "text": "Tim BL",
+          "href": "https://www.w3.org/People/Berners-Lee/"
+        }
+      ],
+      "reply": "[Etiquette for server administrators](https://www.w3.org/Provider/Style/Etiquette.html)",
+      "requests": 5,
+      "elapsedMs": 171362,
+      "settled": {
+        "occurrence": "source-link-base-379-after-2c378f2f-7526-4981-ba3b-5394da97d1a1",
+        "outcome": "settled",
+        "host": {
+          "pid": 23788,
+          "processInstanceID": "win32:639274645768012188",
+          "occurrenceID": "36bedf5b-b1a2-47f9-ba50-9d45b1626a7f"
+        },
+        "target": {
+          "pid": 79652,
+          "processInstanceID": "win32:639274645775698188",
+          "occurrenceID": "cbb360ee-422b-4af0-8370-5be867cd179f"
+        },
+        "observedAtUtc": "2026-10-13T05:05:48.931Z",
+        "deadlineAt": 1791868376786,
+        "terminal": {
+          "occurrenceID": "source-link-base-379-after-2c378f2f-7526-4981-ba3b-5394da97d1a1",
+          "pid": 79652,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "qualified": {
+        "providerUserCancelledRequests": 0,
+        "boundary": "Exact native/provider completion; declared user cancellation requires closed canonical request/outcome/message/input and subsequent completion; visual semantics remain Root-owned",
+        "cancellation": null,
+        "physicalCompletion": true,
+        "qualification": "NativeService",
+        "providerEOFRequests": 5
+      }
+    }
+  ],
+  "boundary": "Real canonical Source/ToolRequest/ToolOutcome and model reply link data, parsed by the existing Markdown library, plus Provider/Native settlement. Four screenshots and click results reviewed manually. No DOM/render/screenshot UI assertions."
+}
