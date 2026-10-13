@@ -2,6 +2,12 @@
 
 - [持续目标真实崩溃恢复](2026-10-13-continuous-goal-crash-recovery/README.md)：Task/Mission正式启动恢复、真实Provider与计量证据。
 
+- [Provider 地址编辑](2026-10-13-provider-address-intent/README.md)：真实表单、实际配置和运行收尾。
+
+- [384 权限续行恢复断点](2026-10-05-connection-workspace-authority/permission-message-recovery-384/README.md)：真实工具、双进程owner、规范状态与完整失败日志。
+
+- [386 全屏菜单键盘循环](2026-10-13-artifact-fullscreen-menu-386/README.md)：真实祖先样式、双语菜单、下载字节及服务退出证据。
+
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence/README.md)：前后真实桌面、物理文件与根保护合同。
 
 - [用量时间桶键盘详情](2026-10-13-usage-keyboard-details/README.md)：真实双语桌面、快速刷新焦点、单一集合与提示层复核。
@@ -10,9 +16,9 @@
 
 - [持续目标独立复核](2026-10-13-continuous-goal-review/README.md)：归档/删除缺陷与受控流式跨进程恢复。
 
-- [385 能力搜索请求元数据](2026-10-13-capability-request-metadata-385/README.md)：后台正向合同与真实模型未达成事实分开保存。
+- [385 能力搜索请求元数据](2026-10-13-capability-request-metadata-385/README.md)：后台正向合同、真实Sol搜索成功与前三轮失败分别保留。
 
-- [383 投影工具大结果授权](2026-10-13-projected-output-authority-383/README.md)：后台正向合同与真实模型未达成事实分开保存。
+- [383 投影工具大结果授权](2026-10-13-projected-output-authority-383/README.md)：真实Sol完成大结果保存、首尾补读、桌面复核与正常物理收尾。
 
 - [产物工具栏焦点与语言](2026-10-13-artifact-action-focus-384/README.md)：真实模型产物、前后截图、原始下载与全屏菜单未达成证据。
 

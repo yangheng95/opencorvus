@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [384 权限续行消息恢复调查](permission-message-recovery-plan-384.md)：[两个真实失败合同与完整证据](permission-message-recovery-384/README.md)。
+
 - [383 完整工具结果与来源恢复](source-result-commit-plan-383.md)：[后台合同、真实页面及未完成边界](source-result-commit-383/README.md)。
 
 - [382 工具结果恢复断点](source-result-recovery-plan-382.md)：[真实持久状态与失败合同](source-result-recovery-382/README.md)。

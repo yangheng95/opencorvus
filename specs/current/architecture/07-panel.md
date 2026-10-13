@@ -2372,6 +2372,12 @@ abort ownership still decide whether a completed export belongs to the current
 view. Visible type badges use the current payload renderer and the product
 locale catalog; technical kind attributes retain their stable styling identity.
 
+Menu keyboard activation uses the shared Kobalte scroll primitive. When root
+overflow is locked, each completed scroll step continues from the current scroll
+ancestor’s parent, so traversal advances toward the root. The dependency patch
+keeps the existing inclusive getScrollParent contract and normal native scrolling;
+fullscreen uses the same trigger, portal and mounted artifact renderer.
+
 The nineteen model-publishable renderers have one canonical payload validator.
 The search-native Provider Tool projection factors their shared
 `schemaVersion`, `title`, and `presentation` fields once and keeps only the
@@ -2625,6 +2631,15 @@ skills, Model Context Protocol providers, channels, permissions, and expert
 squads. `prompt_profile.active` remains the only active expert-squad selection
 source. Settings does not define agent-team order, a package workflow, or a
 second active profile.
+
+Provider authoring uses one pure endpoint-edit validator for localized field
+feedback, save/discovery actions and the canonical form writer. New or explicit
+API edits require a parseable absolute HTTP(S) address without URL userinfo;
+untouched addresses remain owned by the latest provider definition, including
+model-only declarations and runtime templates. Discovery validates its current
+input without the edit exemption. This does not prove connectivity or alter
+the backend provider schema or its single template-expansion owner.
+
 Channel edits require the currently selected project and show the existing
 workspace selection hint in the directory-free launcher. Shared Skill/MCP
 resource pages use the same loading lifecycle on first entry and manual reload;

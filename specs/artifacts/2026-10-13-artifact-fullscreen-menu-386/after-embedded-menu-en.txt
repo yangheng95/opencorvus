@@ -1,0 +1,336 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18499/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18499/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-158-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-160-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-120-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: Collapse Anonymous f8a383, Secondary Actions: Collapse
+										37 container
+											38 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											39 button 请把随附的 reading-notes.txt 发布为可直接阅读、复制和下载的 file-preview@1 产物，标题为 Reading notes。另...
+											40 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-187-trigger, Secondary Actions: Expand
+										41 button (expanded) Description: Collapse Anonymous 40b84f, Secondary Actions: Collapse
+										42 container
+											43 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											44 button Reply with OK.
+											45 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-200-trigger, Secondary Actions: Expand
+										46 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									47 container Recents
+										48 text Recents
+										49 container
+											50 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											51 button 请把随附的 reading-notes.txt 发布为可直接阅读、复制和下载的 file-preview@1 产物，标题为 Reading notes。另...
+											52 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+										53 container
+											54 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											55 button Reply with OK.
+											56 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-219-trigger, Secondary Actions: Expand
+							57 container Connection Diagnostics
+								58 container Description: Connection Diagnostics · Online · Port 18499, ID: connBadge
+									59 text Online
+					60 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					61 container chatSection
+						62 container Description: Loading task, ID: taskSwitchProgress
+						63 container
+							64 text 请把随附的 reading-notes.txt 发布为可直接阅读、复制和下载的 file-preview@1 产物，标题为 Reading notes。另...
+							65 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-233-trigger, Secondary Actions: Expand
+							66 container Description: Not running, ID: taskStatus
+								67 text Not running
+							68 button Side chat
+							69 container solidChatHeaderRuntimeActions
+								70 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								71 checkbox Description: Open right dock, Value: 0
+						72 container
+							73 container Description: Conversation, ID: chatScroll
+								74 container
+									75 container
+										76 text User
+										77 text 请把随附的 reading-notes.txt 发布为可直接阅读、复制和下载的 file-preview@1 产物，标题为 Reading notes。另发布一个简短 document@1 便签产物，标题为 Desk note，正文使用中文说明：原始资料可以先阅读，再复制或下载；加一条简短英文备注即可。两份产物发布成功后只简短说明。附件的实际原始元数据是 {"filename":"reading-notes.txt","mime":"text/plain","size":14687,"sha":"0403d95cbd6ca875ba8f938843cb659bb5a3a04ceca96316316c7d018a2c5e6f"}；规范附件URL使用消息附带的文件索引原值，不要创建另一份文件。
+										78 container
+											79 text reading-notes.txt
+											80 text TXT
+											81 link Description: Download, Value: blob:http://localhost:18499/c5bd370e-e602-4809-b627-56ab9fa4406a
+									82 container
+										83 text chat
+										84 text 27s
+										85 button (collapsed) Description: publish_interactive_artifact · Reading notes, Secondary Actions: Expand
+											86 text publish_interactive_artifact
+											87 text Reading notes
+											88 image
+										89 container Reading notes
+											90 container
+												91 text File
+												92 heading Reading notes, Value: 3
+													93 text Reading notes
+												94 button Copy text
+												95 pop up button (expanded) Description: Download, ID: dropdownmenu-cl-262-trigger, Secondary Actions: Collapse
+												96 button Open Reading notes in artifact workspace
+											97 container
+												98 text entry area Description: Reading notes, Value: OpenCorvus artifact reading notes
+Note 46: Keep the original file identity while reading, copying and downloading.
+Note 47: Keep the original file identity while reading, copying and downloading.
+Note 48: Keep the original file identity while reading, copying and downloading.
+Note 49: Keep the original file identity while reading, copying and downloading.
+Note 50: Keep the original file identity while reading, copying and downloading.
+Note 51: Keep the original file identity while reading, copying and downloading.
+Note 52: Keep the original file identity while reading, copying and downloading.
+Note 53: Keep the original file identity while reading, copying and downloading.
+Note 54: Keep the original file identity while reading, copying and downloading.
+Note 55: Keep the original file identity while reading, copying and downloading.
+Note 56: Keep the original file identity while reading, copying and downloading.
+Note 57: Keep the original file identity while reading, copying and downloading.
+Note 58: Keep the original file identity while reading, copying and downloading.
+Note 59: Keep the original file identity while reading, copying and downloading.
+Note 60: Keep the original file identity while reading, copying and downloading.
+Note 61: Keep the original file identity while reading, copying and downloading.
+Note 62: Keep the original file identity while reading, copying and downloading.
+Note 63: Keep the original file identity while reading, copying and downloading.
+Note 64: Keep the original file identity while reading, copying and downloading.
+Note 65: Keep the original file identity while reading, copying and downloading.
+Note 66: Keep the original file identity while reading, copying and downloading.
+Note 67: Keep the original file identity while reading, copying and downloading.
+Note 68: Keep the original file identity while reading, copying and downloading.
+Note 69: Keep the original file identity while reading, copying and downloading.
+Note 70: Keep the original file identity while reading, copying and downloading.
+Note 71: Keep the original file identity while reading, copying and downloading.
+Note 72: Keep the original file identity while reading, copying and downloading.
+Note 73: Keep the original file identity while reading, copying and downloading.
+Note 74: Keep the original file identity while reading, copying and downloading.
+Note 75: Keep the original file identity while reading, copying and downloading.
+Note 76: Keep the original file identity while reading, copying and downloading.
+Note 77: Keep the original file identity while reading, copying and downloading.
+Note 78: Keep the original file identity while reading, copying and downloading.
+Note 79: Keep the original file identity while reading, copying and downloading.
+Note 80: Keep the original file identity while reading, copying and downloading.
+Note 81: Keep the original file identity while reading, copying and downloading.
+Note 82: Keep the original file identity while reading, copying and downloading.
+Note 83: Keep the original file identity while reading, copying and downloading.
+Note 84: Keep the original file identity while reading, copying and downloading.
+Note 85: Keep the original file identity while reading, copying and downloading.
+Note 86: Keep the original file identity while reading, copying and downloading.
+Note 87: Keep the original file identity while reading, copying and downloading.
+Note 88: Keep the original file identity while reading, copying and downloading.
+Note 89: Keep the original file identity while reading, copying and downloading.
+Note 90: Keep the original file identity while reading, copying and downloading.
+Note 91: Keep the original file identity while reading, copying and downloading.
+Note 92: Keep the original file identity while reading, copying and downloading.
+Note 93: Keep the original file identity while reading, copying and downloading.
+Note 94: Keep the original file identity while reading, copying and downloading.
+Note 95: Keep the original file identity while reading, copying and downloading.
+Note 96: Keep the original file identity while reading, copying and downloading.
+Note 97: Keep the original file identity while reading, copying and downloading.
+Note 98: Keep the original file identity while reading, copying and downloading.
+Note 99: Keep the original file identity while reading, copying and downloading.
+Note 100: Keep the original file identity while reading, copying and downloading.
+Note 101: Keep the original file identity while reading, copying and downloading.
+Note 102: Keep the original file identity while reading, copying and downloading.
+Note 103: Keep the original file identity while reading, copying and downloading.
+Note 104: Keep the original file identity while reading, copying and downloading.
+Note 105: Keep the original file identity while reading, copying and downloading.
+Note 106: Keep the original file identity while reading, copying and downloading.
+Note 107: Keep the original file identity while reading, copying and downloading.
+Note 108: Keep the original file identity while reading, copying and downloading.
+Note 109: Keep the original file identity while reading, copying and downloading.
+Note 110: Keep the original file identity while reading, copying and downloading.
+Note 111: Keep the original file identity while reading, copying and downloading.
+Note 112: Keep the original file identity while reading, copying and downloading.
+Note 113: Keep the original file identity while reading, copying and downloading.
+Note 114: Keep the original file identity while reading, copying and downloading.
+Note 115: Keep the original file identity while reading, copying and downloading.
+Note 116: Keep the original file identity while reading, copying and downloading.
+Note 117: Keep the original file identity while reading, copying and downloading.
+Note 118: Keep the original file identity while reading, copying and downloading.
+Note 119: Keep the original file identity while reading, copying and downloading.
+Note 120: Keep the original file identity while reading, copying and downloading.
+Note 121: Keep the original file identity while reading, copying and downloading.
+Note 122: Keep the original file identity while reading, copying and downloading.
+Note 123: Keep the original file identity while reading, copying and downloading.
+Note 124: Keep the original file identity while reading, copying and downloading.
+Note 125: Keep the original file identity while reading, copying and downloading.
+Note 126: Keep the original file identity while reading, copying and downloading.
+Note 127: Keep the original file identity while reading, copying and downloading.
+Note 128: Keep the original file identity while reading, copying and downloading.
+Note 129: Keep the original file identity while reading, copying and downloading.
+Note 130: Keep the original file identity while reading, copying and downloading.
+Note 131: Keep the original file identity while reading, copying and downloading.
+Note 132: Keep the original file identity while reading, copying and downloading.
+Note 133: Keep the original file identity while reading, copying and downloading.
+Note 134: Keep the original file identity while reading, copying and downloading.
+Note 135: Keep the original file identity while reading, copying and downloading.
+Note 136: Keep the original file identity while reading, copying and downloading.
+Note 137: Keep the original file identity while reading, copying and downloading.
+Note 138: Keep the original file identity while reading, copying and downloading.
+Note 139: Keep the original file identity while reading, copying and downloading.
+Note 140: Keep the original file identity while reading, copying and downloading.
+Note 141: Keep the original file identity while reading, copying and downloading.
+Note 142: Keep the original file identity while reading, copying and downloading.
+													99 text OpenCorvus artifact reading notes
+													100 text Note 46: Keep the original file identity while reading, copying and downloading.
+													101 text Note 47: Keep the original file identity while reading, copying and downloading.
+													102 text Note 48: Keep the original file identity while reading, copying and downloading.
+													103 text Note 49: Keep the original file identity while reading, copying and downloading.
+													104 text Note 50: Keep the original file identity while reading, copying and downloading.
+													105 text Note 51: Keep the original file identity while reading, copying and downloading.
+													106 text Note 52: Keep the original file identity while reading, copying and downloading.
+													107 text Note 53: Keep the original file identity while reading, copying and downloading.
+													108 text Note 54: Keep the original file identity while reading, copying and downloading.
+													109 text Note 55: Keep the original file identity while reading, copying and downloading.
+													110 text Note 56: Keep the original file identity while reading, copying and downloading.
+													111 text Note 57: Keep the original file identity while reading, copying and downloading.
+													112 text Note 58: Keep the original file identity while reading, copying and downloading.
+													113 text Note 59: Keep the original file identity while reading, copying and downloading.
+													114 text Note 60: Keep the original file identity while reading, copying and downloading.
+													115 text Note 61: Keep the original file identity while reading, copying and downloading.
+													116 text Note 62: Keep the original file identity while reading, copying and downloading.
+													117 text Note 63: Keep the original file identity while reading, copying and downloading.
+													118 text Note 64: Keep the original file identity while reading, copying and downloading.
+													119 text Note 65: Keep the original file identity while reading, copying and downloading.
+													120 text Note 66: Keep the original file identity while reading, copying and downloading.
+													121 text Note 67: Keep the original file identity while reading, copying and downloading.
+													122 text Note 68: Keep the original file identity while reading, copying and downloading.
+													123 text Note 69: Keep the original file identity while reading, copying and downloading.
+													124 text Note 70: Keep the original file identity while reading, copying and downloading.
+													125 text Note 71: Keep the original file identity while reading, copying and downloading.
+													126 text Note 72: Keep the original file identity while reading, copying and downloading.
+													127 text Note 73: Keep the original file identity while reading, copying and downloading.
+													128 text Note 74: Keep the original file identity while reading, copying and downloading.
+													129 text Note 75: Keep the original file identity while reading, copying and downloading.
+													130 text Note 76: Keep the original file identity while reading, copying and downloading.
+													131 text Note 77: Keep the original file identity while reading, copying and downloading.
+													132 text Note 78: Keep the original file identity while reading, copying and downloading.
+													133 text Note 79: Keep the original file identity while reading, copying and downloading.
+													134 text Note 80: Keep the original file identity while reading, copying and downloading.
+													135 text Note 81: Keep the original file identity while reading, copying and downloading.
+													136 text Note 82: Keep the original file identity while reading, copying and downloading.
+													137 text Note 83: Keep the original file identity while reading, copying and downloading.
+													138 text Note 84: Keep the original file identity while reading, copying and downloading.
+													139 text Note 85: Keep the original file identity while reading, copying and downloading.
+													140 text Note 86: Keep the original file identity while reading, copying and downloading.
+													141 text Note 87: Keep the original file identity while reading, copying and downloading.
+													142 text Note 88: Keep the original file identity while reading, copying and downloading.
+													143 text Note 89: Keep the original file identity while reading, copying and downloading.
+													144 text Note 90: Keep the original file identity while reading, copying and downloading.
+													145 text Note 91: Keep the original file identity while reading, copying and downloading.
+													146 text Note 92: Keep the original file identity while reading, copying and downloading.
+													147 text Note 93: Keep the original file identity while reading, copying and downloading.
+													148 text Note 94: Keep the original file identity while reading, copying and downloading.
+													149 text Note 95: Keep the original file identity while reading, copying and downloading.
+													150 text Note 96: Keep the original file identity while reading, copying and downloading.
+													151 text Note 97: Keep the original file identity while reading, copying and downloading.
+													152 text Note 98: Keep the original file identity while reading, copying and downloading.
+													153 text Note 99: Keep the original file identity while reading, copying and downloading.
+													154 text Note 100: Keep the original file identity while reading, copying and downloading.
+													155 text Note 101: Keep the original file identity while reading, copying and downloading.
+													156 text Note 102: Keep the original file identity while reading, copying and downloading.
+													157 text Note 103: Keep the original file identity while reading, copying and downloading.
+													158 text Note 104: Keep the original file identity while reading, copying and downloading.
+													159 text Note 105: Keep the original file identity while reading, copying and downloading.
+													160 text Note 106: Keep the original file identity while reading, copying and downloading.
+													161 text Note 107: Keep the original file identity while reading, copying and downloading.
+													162 text Note 108: Keep the original file identity while reading, copying and downloading.
+													163 text Note 109: Keep the original file identity while reading, copying and downloading.
+													164 text Note 110: Keep the original file identity while reading, copying and downloading.
+													165 text Note 111: Keep the original file identity while reading, copying and downloading.
+													166 text Note 112: Keep the original file identity while reading, copying and downloading.
+													167 text Note 113: Keep the original file identity while reading, copying and downloading.
+													168 text Note 114: Keep the original file identity while reading, copying and downloading.
+													169 text Note 115: Keep the original file identity while reading, copying and downloading.
+													170 text Note 116: Keep the original file identity while reading, copying and downloading.
+													171 text Note 117: Keep the original file identity while reading, copying and downloading.
+													172 text Note 118: Keep the original file identity while reading, copying and downloading.
+													173 text Note 119: Keep the original file identity while reading, copying and downloading.
+													174 text Note 120: Keep the original file identity while reading, copying and downloading.
+													175 text Note 121: Keep the original file identity while reading, copying and downloading.
+													176 text Note 122: Keep the original file identity while reading, copying and downloading.
+													177 text Note 123: Keep the original file identity while reading, copying and downloading.
+													178 text Note 124: Keep the original file identity while reading, copying and downloading.
+													179 text Note 125: Keep the original file identity while reading, copying and downloading.
+													180 text Note 126: Keep the original file identity while reading, copying and downloading.
+													181 text Note 127: Keep the original file identity while reading, copying and downloading.
+													182 text Note 128: Keep the original file identity while reading, copying and downloading.
+													183 text Note 129: Keep the original file identity while reading, copying and downloading.
+													184 text Note 130: Keep the original file identity while reading, copying and downloading.
+													185 text Note 131: Keep the original file identity while reading, copying and downloading.
+													186 text Note 132: Keep the original file identity while reading, copying and downloading.
+													187 text Note 133: Keep the original file identity while reading, copying and downloading.
+													188 text Note 134: Keep the original file identity while reading, copying and downloading.
+													189 text Note 135: Keep the original file identity while reading, copying and downloading.
+													190 text Note 136: Keep the original file identity while reading, copying and downloading.
+													191 text Note 137: Keep the original file identity while reading, copying and downloading.
+													192 text Note 138: Keep the original file identity while reading, copying and downloading.
+													193 text Note 139: Keep the original file identity while reading, copying and downloading.
+													194 text Note 140: Keep the original file identity while reading, copying and downloading.
+													195 text Note 141: Keep the original file identity while reading, copying and downloading.
+													196 text Note 142: Keep the original file identity while reading, copying and downloading.
+											197 text Plain text
+										198 button (collapsed) Description: publish_interactive_artifact · Desk note, Secondary Actions: Expand
+											199 text publish_interactive_artifact
+											200 text Desk note
+											201 image
+										202 container Desk note
+											203 container
+												204 text Document
+												205 heading Desk note, Value: 3
+													206 text Desk note
+												207 button Copy text
+												208 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-255-trigger, Secondary Actions: Expand
+												209 button Open Desk note in artifact workspace
+											210 text 原始资料可以先阅读，再复制或下载。
+											211 text English note: Read first, then copy or download.
+										212 container
+											213 text 已发布  Reading notes  和  Desk note 。原始附件可直接阅读、复制和下载。
+							214 container chatHomeComposition
+								215 container solidChatComposer
+									216 container
+										217 text Model configuration unavailable
+										218 text You can still read this conversation. Review the details or choose a model before sending a message.
+										219 button (collapsed) Details, Secondary Actions: Expand
+											220 text Details
+										221 button Retry
+										222 container chatForm
+											223 splitter Description: Drag to resize the message input, Value: 42
+											224 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											225 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											226 text Code
+											227 text Chat
+											228 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											229 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											230 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												231 text Choose model
+											232 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									233 button Scroll to bottom
+		234 menu Download, ID: dropdownmenu-cl-262-content-cl-300
+			235 reading-notes.txt, ID: dropdownmenu-cl-262-item-cl-301
+
+The focused UI element is 235 reading-notes.txt, ID: dropdownmenu-cl-262-item-cl-301

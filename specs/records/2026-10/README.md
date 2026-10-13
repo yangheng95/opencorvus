@@ -2,6 +2,10 @@
 
 - [Task/Mission 持续目标崩溃恢复](2026-10-13-continuous-goal-crash-recovery.md)：实际进程终止、正式启动恢复与用量身份。
 
+- [Provider 地址编辑合同](2026-10-13-provider-address-intent.md)：新建/显式修改与未编辑配置保真。
+
+- [384 权限续行消息恢复调查](2026-10-13-permission-message-recovery-384.md)：过早收尾、跨进程所有权与尚未修复范围。
+
 - [Explorer批量文件操作](2026-10-13-explorer-copy-convergence.md)：部分成功收敛与真实桌面/API根保护。
 
 - [383 完整工具结果与来源恢复](2026-10-13-source-result-commit-383.md)：完整事务、共享恢复入口与实际页面边界。
@@ -14,7 +18,7 @@
 
 - [383 投影工具大结果授权](2026-10-13-projected-output-authority-383.md)：包工具和MCP输出阈值的根因与正向合同。
 
-- [386 全屏产物菜单调查](2026-10-13-artifact-fullscreen-menu-386.md)：原版与改后页面同触发超时，根因待查。
+- [386 全屏产物菜单键盘循环](2026-10-13-artifact-fullscreen-menu-386.md)：严格向上遍历、真实键盘下载与阅读位置验收。
 
 - [384 产物工具栏忙碌焦点](2026-10-13-artifact-action-focus-384.md)：共享动作根因分析和真实桌面验收。
 

@@ -1,5 +1,9 @@
 # 385 能力搜索完成时保留不可变请求 metadata
 
+## 当前验收状态
+
+后台10项/74断言与核心类型检查通过；后续Attempt04真实Task scheduler的两次OpenAI metadata-bearing能力搜索、package工具大结果/read接续及Task completed通过，页面截图人工复核和正常物理收尾已完成。此前失败独立保留，不外推Mission/worker/MCP的新增真实模型覆盖。成功证据见[Attempt04档案](../../artifacts/2026-10-13-projected-output-authority-383/live-attempt-04/README.md)。
+
 ## Recall
 
 用户持续goal要求每批先完成根因/影响分析落spec，再实施真实修复、聚焦正向测试及必要真实GPT-6.1 Sol/页面验收。383的真实Task暴露共享metadata错误后，主agent委托本子任务完整横审并创建385方案，分析完成后可独立修 `src/capability/reveal-owner.ts`、新增聚焦后台测试；禁止放宽immutable合同、修改并行permission/session文件、再次委托、共享索引或提交。383原修复及其证据独立交付并冻结，385后续真实Sol沿383流程重新使用新scope，不能覆盖首轮失败。
@@ -77,3 +81,9 @@ Attempt03通过原真实preflight，精确credential usable/catalog projected/ac
 原scope Host76344/Target82164，原截止16:08:56.207。收到PageClosed后经既有shutdown正常退出，Target16:04:14.182 exited0，16:04:18.334完整outputDrain/requestCleanup及auth/models配对副本清理；launcher14588实际join exit0，shutdown实际exit0。NativeService回执7个目标模型流HTTP200/EOF只是传输与物理收尾资格；canonical assistant错误和Task failed保留，不将SSE（Server-Sent Events，服务器推送事件）流正常结束等同于模型成功。Attempt02 launcher91783实际exit1、native正常清理已独立保留。三次独立运行均无残留自有服务或复制凭据。
 
 [385证据档案](../../artifacts/2026-10-13-capability-request-metadata-385/README.md)保存正式红绿、关联CAS/重放、核心类型、范围diff与凭据扫描；[383档案](../../artifacts/2026-10-13-projected-output-authority-383/README.md)保存三轮真实失败、实际公开输入、规范checker、Provider审计和owner收尾，跨scope的失败事实不覆盖。源代码仅一行；新增测试只有后台用例。未完成项是成功真实Sol搜索→投影大结果→read接续→Task完成以及其对应成功页面验收；本批后续索引、文档检查、独立复核、提交推送由主agent执行。
+
+## 后续goal轮次Attempt04
+
+383/385独立提交已推送，当前HEAD为3d4adff49；2026-10-13 16:27主agent再次授权fresh attempt04（前三scope均已核对正常物理收尾和配对副本删除），原预算仍600000ms/16请求，默认Base不变、CLI显式选同一报告包。16:32:56独立checker exit0，真实Task `tsk_g00VXusvo400gWdUSw6w` completed。Sol的两次capability_search均携带实际OpenAI itemId并completed，随后真实package大结果保存96717字节、按实际outputPath读取首尾、自然完成Task。11个实际请求全部目标模型流式HTTP200/EOF；本轮直接补齐385曾失败的真实Task搜索边界。详情、原始身份及完整checker见[383记录Attempt04](2026-10-13-projected-output-authority-383.md#attempt04真实后台结果)。主agent真实页面与原owner物理收尾待分别记录，前三轮失败保持原样，未外推新的真实Mission/worker模型验收。
+
+主agent已完成独立tab19的真实Completed答案、截断恢复头部、首尾read交互截图与人工复核并关闭；子任务也逐张查看4张关键截图。16:37:27.512原Target exited0，16:37:31.771 exact Host/Target/output/request/端口及配对auth/models清理闭合，shutdown和原launcher33430均实际exit0，早于16:39:15.173原截止。Attempt04成功归档包含30项明确文本证据、4张关键截图、原文/规范checker/流式审计/实际owner句柄和凭据扫描，当前383/385 README均区分成功新事实与历史失败。代码未再修改，范围交付待主agent统一提交。

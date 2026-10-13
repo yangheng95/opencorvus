@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-13T08:38:22.7092321Z",
+  "boundary": "Actual execution tool completion; empty LASTEXITCODE files are not exit evidence",
+  "handles": [
+    {
+      "chunkID": "e3492f",
+      "sessionID": 33430,
+      "name": "native-launcher",
+      "exitCode": 0
+    },
+    {
+      "chunkID": "a4f9af",
+      "name": "normal-shutdown",
+      "exitCode": 0
+    }
+  ],
+  "occurrence": "projected-output-authority-383-live-04-a634545e-e131-4fc6-a019-57b5ae7b67d8"
+}

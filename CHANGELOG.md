@@ -13,6 +13,10 @@
 
 #### 修复
 
+- Provider 表单的地址错误、保存和发现入口使用同一校验，修复已标为无效的地址仍可添加的问题；仅编辑其他字段时保留当前声明的地址与模型配置。
+
+- 修复全屏产物中按 Enter、空格或向下键打开下载菜单时页面卡死的问题；关闭菜单后可继续键盘操作，保留文件阅读位置。
+
 - 用量热力图可用键盘逐桶查看完整时间区间、时区偏移和 Token 数值；加载时保留检查入口，修复快速刷新后按 Tab 丢失焦点的问题。
 - 能力搜索完成事务保留模型工具请求的原始元数据，修复 OpenAI 等带注释请求在成功搜索后被误判为不可变事实冲突的问题。
 - 投影包工具和 MCP 工具保留已验证的执行授权，超限结果可按原有合同保存到所属 Task/Session 的完整输出文件。
@@ -38,6 +42,10 @@
 - Todo statuses and priorities, squad-evolution statistics, commit labels and usage units use the existing translation catalogs. Dates and numbers follow the interface language.
 
 #### Fixed
+
+- Provider address feedback, saving and discovery use the same validation, fixing invalid addresses being added despite a visible error. Editing other fields preserves the current endpoint and model definition.
+
+- Fixed page freezes when opening fullscreen artifact download menus with Enter, Space or Arrow Down. Keyboard interaction continues after closing the menu, and file reading position is preserved.
 
 - Usage heatmap intervals are accessible by keyboard with complete event times, time-zone offsets and Token counts. The inspection entry stays available while loading, fixing focus loss when pressing Tab immediately after refresh.
 - Capability-search completion preserves the original tool-request metadata, fixing immutable-fact conflicts after successful searches for annotated requests such as OpenAI tool calls.

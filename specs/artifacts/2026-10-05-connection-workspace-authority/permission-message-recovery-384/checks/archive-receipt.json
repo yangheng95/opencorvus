@@ -1,0 +1,78 @@
+{
+  "files": [
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\architecture-check.log",
+      "archive": "checks\\architecture-check.log.gz",
+      "bytes": 141,
+      "compressedBytes": 131
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\archive.ts",
+      "archive": "checks\\archive.ts.gz",
+      "bytes": 2623,
+      "compressedBytes": 1151
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\canonical-observations.json",
+      "archive": "checks\\canonical-observations.json.gz",
+      "bytes": 18351,
+      "compressedBytes": 2290
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\check-evidence.mjs",
+      "archive": "checks\\check-evidence.mjs.gz",
+      "bytes": 2749,
+      "compressedBytes": 1219
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\contracts-before-bounded.log",
+      "archive": "checks\\contracts-before-bounded.log.gz",
+      "bytes": 16124,
+      "compressedBytes": 2964
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\contracts-before.log",
+      "archive": "checks\\contracts-before.log.gz",
+      "bytes": 7795,
+      "compressedBytes": 1789
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\docs-check.log",
+      "archive": "checks\\docs-check.log.gz",
+      "bytes": 106,
+      "compressedBytes": 115
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\probes\\permission-message-owner-worker.ts",
+      "archive": "checks\\probes\\permission-message-owner-worker.ts.gz",
+      "bytes": 2744,
+      "compressedBytes": 1127
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\probes\\permission-message-recovery.test.ts",
+      "archive": "checks\\probes\\permission-message-recovery.test.ts.gz",
+      "bytes": 5323,
+      "compressedBytes": 1973
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\permission-message-recovery-384\\probes\\permission-message-result.ts",
+      "archive": "checks\\probes\\permission-message-result.ts.gz",
+      "bytes": 777,
+      "compressedBytes": 411
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-result-commit-383\\push.log",
+      "archive": "checks/previous-383-push.log.gz",
+      "bytes": 3423,
+      "compressedBytes": 1297
+    },
+    {
+      "source": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-result-commit-383\\push-after-merge.log",
+      "archive": "checks/previous-383-push-after-merge.log.gz",
+      "bytes": 3465,
+      "compressedBytes": 1279
+    }
+  ],
+  "integrity": "Every complete redacted log/probe retains exactly its decompressed bytes; private originals preserved",
+  "qualification": "Two correct-behavior contracts failed; archive integrity is not product acceptance"
+}

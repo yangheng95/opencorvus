@@ -14,8 +14,10 @@ import { loadProviderInfo } from "../../services/config-load"
 import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
 import {
   applyProviderForm,
+  ProviderFormApiError,
   providerFormValues,
   providerModelIDs,
+  validateProviderFormApi,
   type ProviderFormValues,
 } from "../../services/provider-form"
 import { matchesSearchParts } from "../../services/text-search"
@@ -126,8 +128,11 @@ export default function ProvidersPanel() {
     return {
       authority,
       directory,
-      isCurrentDirectory: (candidate: string) => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch &&
-        scopeGeneration === providerTestScopeGeneration && activeDirectory().trim() === candidate,
+      isCurrentDirectory: (candidate: string) =>
+        isApiAuthorityCurrent(authority) &&
+        boardStore.selectEpoch === selectionEpoch &&
+        scopeGeneration === providerTestScopeGeneration &&
+        activeDirectory().trim() === candidate,
     }
   }
 
@@ -160,7 +165,10 @@ export default function ProvidersPanel() {
   let providerTestScopeGeneration = 0
   const providerTestGenerations = new Map<string, number>()
 
-  async function refreshProviderCatalog(directory: string, options: ReturnType<typeof providerLoadOptions>): Promise<void> {
+  async function refreshProviderCatalog(
+    directory: string,
+    options: ReturnType<typeof providerLoadOptions>,
+  ): Promise<void> {
     const sequence = ++providerRefreshSequence
     setProviderRefreshError(null)
     setRefreshingProviders(true)
@@ -188,7 +196,10 @@ export default function ProvidersPanel() {
     }
   }
 
-  async function refreshProviderModels(directory: string, options: ReturnType<typeof providerLoadOptions>): Promise<void> {
+  async function refreshProviderModels(
+    directory: string,
+    options: ReturnType<typeof providerLoadOptions>,
+  ): Promise<void> {
     const sequence = ++modelRefreshSequence
     setModelRefreshError(null)
     setRefreshingModels(true)
@@ -331,7 +342,9 @@ export default function ProvidersPanel() {
         if (owns()) setFormError(t("provider.auth.failed", { reason: describeFailure(error) }))
       })
     },
-    onAuthCancelled: (providerID) => { if (owns()) dismissProviderAuth(providerID) },
+    onAuthCancelled: (providerID) => {
+      if (owns()) dismissProviderAuth(providerID)
+    },
   })
 
   async function refreshAuthState(options: ReturnType<typeof providerLoadOptions>) {
@@ -381,12 +394,13 @@ export default function ProvidersPanel() {
   const [formId, setFormId] = createSignal("")
   const [formName, setFormName] = createSignal("")
   const [formApi, setFormApi] = createSignal("")
-  const apiInvalid = () => Boolean(formApi().trim()) && !/^https?:\/\/.+/i.test(formApi().trim())
   const [formEnvKey, setFormEnvKey] = createSignal("")
   const [formApiKey, setFormApiKey] = createSignal("")
   const [formModels, setFormModels] = createSignal("")
   const [formDirectory, setFormDirectory] = createSignal<string | null>(null)
   const [formInitialValues, setFormInitialValues] = createSignal<ProviderFormValues | null>(null)
+  const formApiValidation = createMemo(() => validateProviderFormApi(formApi(), formInitialValues()?.api))
+  const apiInvalid = () => Boolean(formApi().trim()) && !formApiValidation().ok
   let formOccurrence = 0
   let discoveryRevision = 0
 
@@ -537,14 +551,22 @@ export default function ProvidersPanel() {
       return
     }
     const api = formApi().trim()
-    if (!api) {
-      setFormError(t("provider.form.error.api_required"))
+    const validation = validateProviderFormApi(api)
+    if (validation.ok === false) {
+      setFormError(
+        t(
+          validation.code === "PROVIDER_API_REQUIRED"
+            ? "provider.form.error.api_required"
+            : "provider.form.api_invalid",
+        ),
+      )
       return
     }
     const occurrence = formOccurrence
     const revision = ++discoveryRevision
     const options = providerLoadOptions(directory)
-    const ownsResponse = () => occurrence === formOccurrence && revision === discoveryRevision && options.isCurrentDirectory(directory)
+    const ownsResponse = () =>
+      occurrence === formOccurrence && revision === discoveryRevision && options.isCurrentDirectory(directory)
     setDiscoveringModels(true)
     try {
       const path = directory
@@ -589,8 +611,15 @@ export default function ProvidersPanel() {
       setFormError(t("provider.form.error.id_required"))
       return
     }
-    if (!formApi().trim()) {
-      setFormError(t("provider.form.error.api_required"))
+    const apiValidation = formApiValidation()
+    if (apiValidation.ok === false) {
+      setFormError(
+        t(
+          apiValidation.code === "PROVIDER_API_REQUIRED"
+            ? "provider.form.error.api_required"
+            : "provider.form.api_invalid",
+        ),
+      )
       return
     }
     const values = currentFormValues()
@@ -608,11 +637,15 @@ export default function ProvidersPanel() {
     let configCommitted = false
     let credentialIssues: AuthMutationResult["issues"] = []
     try {
-      await updateActiveProviderConfig(directory, (cfg) => {
-        removeDisabledProvider(cfg, id)
-        cfg.provider = cfg.provider || {}
-        cfg.provider[id] = applyProviderForm({ id, current: cfg.provider[id], initial, values })
-      }, options)
+      await updateActiveProviderConfig(
+        directory,
+        (cfg) => {
+          removeDisabledProvider(cfg, id)
+          cfg.provider = cfg.provider || {}
+          cfg.provider[id] = applyProviderForm({ id, current: cfg.provider[id], initial, values })
+        },
+        options,
+      )
       configCommitted = true
       if (apiKey) {
         const authResult = (await apiJson(`auth/${id}`, {
@@ -646,7 +679,11 @@ export default function ProvidersPanel() {
         setEditing(null)
         setFormError(t("provider.form.saved_with_issues", { reason: describeFailure(e) }))
       } else {
-        setFormError(t("provider.form.error.save_failed", { reason: describeFailure(e) }))
+        setFormError(
+          e instanceof ProviderFormApiError
+            ? t(e.code === "PROVIDER_API_REQUIRED" ? "provider.form.error.api_required" : "provider.form.api_invalid")
+            : t("provider.form.error.save_failed", { reason: describeFailure(e) }),
+        )
       }
     } finally {
       if (ownsForm()) setSaving(false)
@@ -731,9 +768,13 @@ export default function ProvidersPanel() {
         {
           phase: "config.credential-cleanup",
           run: () =>
-            updateActiveProviderConfig(directory, (cfg) => {
-              removeProjectApiKeyOverride(cfg, providerId)
-            }, options),
+            updateActiveProviderConfig(
+              directory,
+              (cfg) => {
+                removeProjectApiKeyOverride(cfg, providerId)
+              },
+              options,
+            ),
         },
         {
           phase: "provider.reload",
@@ -830,12 +871,13 @@ export default function ProvidersPanel() {
         residue: Array<{ owner: string; message: string }>
       }
       if (!owns()) return
-      const residueNotice = receipt.status === "committed_with_residue"
-        ? t("provider.form.error.delete_residue", {
-            id,
-            reason: receipt.residue.map((item) => `${item.owner}: ${item.message}`).join("; "),
-          })
-        : ""
+      const residueNotice =
+        receipt.status === "committed_with_residue"
+          ? t("provider.form.error.delete_residue", {
+              id,
+              reason: receipt.residue.map((item) => `${item.owner}: ${item.message}`).join("; "),
+            })
+          : ""
       if (residueNotice) setFormError(residueNotice)
       clearApiKeyInput(id)
       setTestResults((prev) => {
@@ -1238,7 +1280,7 @@ export default function ProvidersPanel() {
               <TextField.Label>{t("provider.form.api_label")}</TextField.Label>
               <TextField.Input
                 type="url"
-                required
+                required={formApiValidation().changed}
                 placeholder={t("provider.form.api_placeholder", { value: "https://my-gateway.com/v1" })}
                 value={formApi()}
                 onInput={(e) => {
@@ -1331,7 +1373,7 @@ export default function ProvidersPanel() {
                   size="md"
                   tone="neutral"
                   onClick={() => void handleDiscoverModels()}
-                  disabled={discoveringModels() || !formApi().trim()}
+                  disabled={discoveringModels() || !validateProviderFormApi(formApi()).ok}
                   data-testid="provider-discover-models"
                 >
                   <Icon name="refresh" />
@@ -1365,7 +1407,7 @@ export default function ProvidersPanel() {
                 size="md"
                 tone="neutral"
                 onClick={handleSave}
-                disabled={saving() || !formProviderId() || !formApi().trim()}
+                disabled={saving() || !formProviderId() || !formApiValidation().ok}
               >
                 {saving() ? t("common.saving") : editing() ? t("provider.form.update") : t("provider.form.add")}
               </Button>

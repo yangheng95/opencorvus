@@ -2,6 +2,10 @@
 
 - [Task/Mission 持续目标崩溃恢复](records/2026-10/2026-10-13-continuous-goal-crash-recovery.md)：独立真实 Provider 故障、恢复与修复验收。
 
+- [Provider 地址编辑合同](records/2026-10/2026-10-13-provider-address-intent.md)：真实无效保存根因、显式地址意图与双语验收。
+
+- [384 权限续行消息恢复调查](records/2026-10/2026-10-13-permission-message-recovery-384.md)：同消息过早完成与真实活跃peer消息被改写的两个失败合同。
+
 - [Explorer批量文件操作](records/2026-10/2026-10-13-explorer-copy-convergence.md)：成功回执、根目标准入与真实API根保护。
 
 - [383 完整工具结果与来源恢复](records/2026-10/2026-10-13-source-result-commit-383.md)：原子结果提交、成功回执恢复、真实OS断点与实页未完成边界。
@@ -14,7 +18,7 @@
 
 - [383 投影工具大结果授权](records/2026-10/2026-10-13-projected-output-authority-383.md)：三个结果适配器的真实授权传递与完整输出保存。
 
-- [386 全屏产物菜单调查](records/2026-10/2026-10-13-artifact-fullscreen-menu-386.md)：前后态操作超时、已排除解释与未完成范围。
+- [386 全屏产物菜单键盘循环](records/2026-10/2026-10-13-artifact-fullscreen-menu-386.md)：依赖祖先遍历根因、单一补丁与双语真实桌面验证。
 
 - [384 产物工具栏忙碌焦点](records/2026-10/2026-10-13-artifact-action-focus-384.md)：真实产物复制与下载的键盘连续操作。
 
