@@ -13,6 +13,7 @@
 
 #### 修复
 
+- 网络代理设置保留用户名和密码的首尾空格及字面百分号，修复保存或发起请求时认证信息被改写的问题。此前已被裁剪并保存的内容需要重新输入。
 - 修复英文版本搜索结果的单复数，以及更新日志固定使用中文语言属性和官网入口的问题。
 - 修复官网文档切换语言后返回首页又恢复旧语言偏好的问题；文档与其他官网页面共用同一语言偏好。
 - 补齐中文文档代码框的终端标题、复制提示和反馈；源文件 URL 使用对应文档集合的语言。
@@ -27,6 +28,7 @@
 
 #### Fixed
 
+- Network proxy settings preserve leading and trailing spaces and literal percent signs in usernames and passwords, fixing credentials being changed when saved or used. Values already trimmed and saved must be entered again.
 - Fixed singular and plural English release-search counts and Chinese-only language attributes and website links in release notes.
 - Fixed documentation language changes reverting to an earlier preference on return to the homepage. Documentation and other website pages share one language preference.
 - Added Chinese terminal titles, copy hints and feedback for documentation code frames. Source-file URLs use the language of their document collection.

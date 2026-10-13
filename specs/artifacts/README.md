@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [代理认证原值验收](2026-10-13-proxy-credentials/README.md)：修复前后功能测试、真实页面保存、双语截图与本地认证请求。
+
 - [Dependabot升级验收](2026-10-13-dependabot-upgrades/README.md)：实际Provider/ACP流式测试、逐文件回归结果、编辑保存与时间线截图。
 
 - [Issue 40：Parallel Search MCP](2026-10-12-parallel-search-issue-40/README.md)：真实匿名搜索、公开双语指南、0.1.25发布、完整公开日志修订及Issue回复回执。

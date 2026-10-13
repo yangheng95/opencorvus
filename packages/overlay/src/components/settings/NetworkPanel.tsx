@@ -161,8 +161,8 @@ export default function NetworkPanel() {
 
   function readProxyInput(): ProxyInput {
     const proxyUrl = url().trim()
-    const proxyUsername = username().trim()
-    const proxyPassword = password().trim()
+    const proxyUsername = username()
+    const proxyPassword = password()
     const proxyEnabled = llmProvider() || webResearch()
     return { proxyUrl, proxyUsername, proxyPassword, proxyEnabled }
   }

@@ -1,0 +1,333 @@
+[1/1] START test/network-proxy-credentials.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+22 |   })
+23 |   expect({
+24 |     accepted: result.success,
+25 |     usernameMatches: result.success && result.data.username === identity.username,
+26 |     passwordMatches: result.success && result.data.password === identity.password,
+27 |   }).toEqual({ accepted: true, usernameMatches: true, passwordMatches: true })
+          ^
+error: expect(received).toEqual(expected)
+
+  {
+    "accepted": true,
+-   "passwordMatches": true,
+-   "usernameMatches": true,
++   "passwordMatches": false,
++   "usernameMatches": false,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:27:6)
+(fail) proxy schema preserves outer spaces in both identity fields [1.01ms]
+22 |   })
+23 |   expect({
+24 |     accepted: result.success,
+25 |     usernameMatches: result.success && result.data.username === identity.username,
+26 |     passwordMatches: result.success && result.data.password === identity.password,
+27 |   }).toEqual({ accepted: true, usernameMatches: true, passwordMatches: true })
+          ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "accepted": true,
+-   "passwordMatches": true,
+-   "usernameMatches": true,
++   "accepted": false,
++   "passwordMatches": false,
++   "usernameMatches": false,
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:27:6)
+(fail) proxy schema preserves nonempty spaces in both identity fields [0.78ms]
+(pass) proxy schema preserves literal percent in both identity fields [0.08ms]
+(pass) proxy schema preserves escape-looking text in both identity fields [0.02ms]
+(pass) proxy schema preserves reserved characters in both identity fields [0.02ms]
+34 |   })
+35 |   expect({
+36 |     serverMatches: proxy?.server === "http://127.0.0.1:23456",
+37 |     usernameMatches: proxy?.username === identity.username,
+38 |     passwordMatches: proxy?.password === identity.password,
+39 |   }).toEqual({ serverMatches: true, usernameMatches: true, passwordMatches: true })
+          ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "passwordMatches": true,
++   "passwordMatches": false,
+    "serverMatches": true,
+-   "usernameMatches": true,
++   "usernameMatches": false,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:39:6)
+(fail) the browser proxy parser restores outer spaces from the canonical URL [0.61ms]
+34 |   })
+35 |   expect({
+36 |     serverMatches: proxy?.server === "http://127.0.0.1:23456",
+37 |     usernameMatches: proxy?.username === identity.username,
+38 |     passwordMatches: proxy?.password === identity.password,
+39 |   }).toEqual({ serverMatches: true, usernameMatches: true, passwordMatches: true })
+          ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "passwordMatches": true,
++   "passwordMatches": false,
+    "serverMatches": true,
+-   "usernameMatches": true,
++   "usernameMatches": false,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:39:6)
+(fail) the browser proxy parser restores nonempty spaces from the canonical URL [0.15ms]
+(pass) the browser proxy parser restores literal percent from the canonical URL [0.06ms]
+34 |   })
+35 |   expect({
+36 |     serverMatches: proxy?.server === "http://127.0.0.1:23456",
+37 |     usernameMatches: proxy?.username === identity.username,
+38 |     passwordMatches: proxy?.password === identity.password,
+39 |   }).toEqual({ serverMatches: true, usernameMatches: true, passwordMatches: true })
+          ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "passwordMatches": true,
++   "passwordMatches": false,
+    "serverMatches": true,
+-   "usernameMatches": true,
++   "usernameMatches": false,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:39:6)
+(fail) the browser proxy parser restores escape-looking text from the canonical URL [0.17ms]
+(pass) the browser proxy parser restores reserved characters from the canonical URL [0.03ms]
+71 |     expect({
+72 |       status: response.status,
+73 |       bodyMatches: (await response.text()) === body,
+74 |       authenticationMatches,
+75 |       targetMatches,
+76 |     }).toEqual({ status: 201, bodyMatches: true, authenticationMatches: true, targetMatches: true })
+            ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "authenticationMatches": true,
+-   "bodyMatches": true,
+-   "status": 201,
++   "authenticationMatches": false,
++   "bodyMatches": false,
++   "status": 407,
+    "targetMatches": true,
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:76:8)
+(fail) Bun transmits outer spaces through the configured authenticated proxy [9.52ms]
+ZodError: [
+  {
+    "origin": "string",
+    "code": "too_small",
+    "minimum": 1,
+    "inclusive": true,
+    "path": [
+      "network",
+      "proxy",
+      "username"
+    ],
+    "message": "Too small: expected string to have >=1 characters"
+  },
+  {
+    "origin": "string",
+    "code": "too_small",
+    "minimum": 1,
+    "inclusive": true,
+    "path": [
+      "network",
+      "proxy",
+      "password"
+    ],
+    "message": "Too small: expected string to have >=1 characters"
+  }
+]
+(fail) Bun transmits nonempty spaces through the configured authenticated proxy [10.95ms]
+71 |     expect({
+72 |       status: response.status,
+73 |       bodyMatches: (await response.text()) === body,
+74 |       authenticationMatches,
+75 |       targetMatches,
+76 |     }).toEqual({ status: 201, bodyMatches: true, authenticationMatches: true, targetMatches: true })
+            ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "authenticationMatches": true,
+-   "bodyMatches": true,
+-   "status": 201,
++   "authenticationMatches": false,
++   "bodyMatches": false,
++   "status": 407,
+    "targetMatches": true,
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:76:8)
+(fail) Bun transmits literal percent through the configured authenticated proxy [6.32ms]
+71 |     expect({
+72 |       status: response.status,
+73 |       bodyMatches: (await response.text()) === body,
+74 |       authenticationMatches,
+75 |       targetMatches,
+76 |     }).toEqual({ status: 201, bodyMatches: true, authenticationMatches: true, targetMatches: true })
+            ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "authenticationMatches": true,
+-   "bodyMatches": true,
+-   "status": 201,
++   "authenticationMatches": false,
++   "bodyMatches": false,
++   "status": 407,
+    "targetMatches": true,
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:76:8)
+(fail) Bun transmits escape-looking text through the configured authenticated proxy [8.47ms]
+(pass) Bun transmits reserved characters through the configured authenticated proxy [7.39ms]
+102 |         username: identity.username,
+103 |         password: identity.password,
+104 |       }),
+105 |     )
+106 |   })
+107 |   expect(JSON.parse(result)).toEqual({
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "authenticationMatches": true,
+-   "bodyMatches": true,
++   "authenticationMatches": false,
+    "disposed": true,
+-   "status": 201,
++   "errorType": "TypeError",
++   "status": "transport-error",
+    "targetMatches": true,
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:107:30)
+(fail) Node transmits outer spaces through the configured authenticated CONNECT proxy [459.42ms]
+ZodError: [
+  {
+    "origin": "string",
+    "code": "too_small",
+    "minimum": 1,
+    "inclusive": true,
+    "path": [
+      "network",
+      "proxy",
+      "username"
+    ],
+    "message": "Too small: expected string to have >=1 characters"
+  },
+  {
+    "origin": "string",
+    "code": "too_small",
+    "minimum": 1,
+    "inclusive": true,
+    "path": [
+      "network",
+      "proxy",
+      "password"
+    ],
+    "message": "Too small: expected string to have >=1 characters"
+  }
+]
+(fail) Node transmits nonempty spaces through the configured authenticated CONNECT proxy [0.57ms]
+102 |         username: identity.username,
+103 |         password: identity.password,
+104 |       }),
+105 |     )
+106 |   })
+107 |   expect(JSON.parse(result)).toEqual({
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "authenticationMatches": true,
+-   "bodyMatches": true,
++   "authenticationMatches": false,
+    "disposed": true,
+-   "status": 201,
+-   "targetMatches": true,
++   "errorType": "URIError",
++   "status": "transport-error",
++   "targetMatches": false,
+  }
+
+- Expected  - 4
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:107:30)
+(fail) Node transmits literal percent through the configured authenticated CONNECT proxy [422.71ms]
+102 |         username: identity.username,
+103 |         password: identity.password,
+104 |       }),
+105 |     )
+106 |   })
+107 |   expect(JSON.parse(result)).toEqual({
+                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "authenticationMatches": true,
+-   "bodyMatches": true,
++   "authenticationMatches": false,
+    "disposed": true,
+-   "status": 201,
++   "errorType": "TypeError",
++   "status": "transport-error",
+    "targetMatches": true,
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts:107:30)
+(fail) Node transmits escape-looking text through the configured authenticated CONNECT proxy [383.57ms]
+(pass) Node transmits reserved characters through the configured authenticated CONNECT proxy [353.04ms]
+
+ 7 pass
+ 13 fail
+ 18 expect() calls
+Ran 20 tests across 1 file. [4.50s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts
+[1/1] DONE test/network-proxy-credentials.test.ts exit=1 duration=5.70s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\network-proxy-credentials.test.ts

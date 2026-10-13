@@ -1,0 +1,18 @@
+[
+  {
+    "exitCode": "unknown",
+    "currentBirth": "2026-10-13T05:29:43.9413389Z",
+    "originalProcess": "physically ended; after service PID reused, tool handles missing at continuation",
+    "currentName": "conhost",
+    "pid": 72688,
+    "expectedBirth": "2026-10-13T05:27:43.1829109Z"
+  },
+  {
+    "exitCode": "unknown",
+    "currentBirth": null,
+    "originalProcess": "physically ended; after service PID reused, tool handles missing at continuation",
+    "currentName": null,
+    "pid": 79740,
+    "expectedBirth": null
+  }
+]

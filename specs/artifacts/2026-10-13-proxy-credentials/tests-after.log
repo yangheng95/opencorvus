@@ -1,0 +1,41 @@
+[1/2] START test/network-proxy-credentials.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) proxy schema preserves outer spaces in both identity fields [1.11ms]
+(pass) proxy schema preserves nonempty spaces in both identity fields [0.10ms]
+(pass) proxy schema preserves literal percent in both identity fields [0.04ms]
+(pass) proxy schema preserves escape-looking text in both identity fields [0.03ms]
+(pass) proxy schema preserves reserved characters in both identity fields [0.02ms]
+(pass) the browser proxy parser restores outer spaces from the canonical URL [0.57ms]
+(pass) the browser proxy parser restores nonempty spaces from the canonical URL [0.04ms]
+(pass) the browser proxy parser restores literal percent from the canonical URL [0.02ms]
+(pass) the browser proxy parser restores escape-looking text from the canonical URL [0.02ms]
+(pass) the browser proxy parser restores reserved characters from the canonical URL [0.02ms]
+(pass) Bun transmits outer spaces through the configured authenticated proxy [13.36ms]
+(pass) Bun transmits nonempty spaces through the configured authenticated proxy [8.29ms]
+(pass) Bun transmits literal percent through the configured authenticated proxy [7.89ms]
+(pass) Bun transmits escape-looking text through the configured authenticated proxy [7.36ms]
+(pass) Bun transmits reserved characters through the configured authenticated proxy [6.06ms]
+(pass) Node transmits outer spaces through the configured authenticated CONNECT proxy [432.02ms]
+(pass) Node transmits nonempty spaces through the configured authenticated CONNECT proxy [494.63ms]
+(pass) Node transmits literal percent through the configured authenticated CONNECT proxy [330.53ms]
+(pass) Node transmits escape-looking text through the configured authenticated CONNECT proxy [327.63ms]
+(pass) Node transmits reserved characters through the configured authenticated CONNECT proxy [320.66ms]
+
+ 20 pass
+ 0 fail
+ 20 expect() calls
+Ran 20 tests across 1 file. [4.48s]
+[1/2] DONE test/network-proxy-credentials.test.ts exit=0 duration=5.08s
+[2/2] START test/network-proxy-fetch-init.test.ts
+bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) fetch initialization preserves a caller's standard URL proxy and request fields [0.21ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [1039.00ms]
+[2/2] DONE test/network-proxy-fetch-init.test.ts exit=0 duration=1.23s
