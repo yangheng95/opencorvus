@@ -192,9 +192,11 @@ export async function settleRecoveringServerRuntime(input: {
   reason: string
   recovery: Promise<void>
   disposeInstances(): Promise<void>
+  onRuntimeCancellationRequested?: () => void
 }) {
   const terminated = await Server.settleCurrentProcessExecution(input.reason, {
     disposeInstances: input.disposeInstances,
+    onRuntimeCancellationRequested: input.onRuntimeCancellationRequested,
   })
   await input.recovery.catch(() => undefined)
   return terminated

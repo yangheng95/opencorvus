@@ -1,0 +1,1068 @@
+{
+  "kind": "Preservation of exact captured artifacts and links; no source hash gate or UI/functionality acceptance",
+  "sourceFiles": 208,
+  "archiveFiles": 211,
+  "jpeg": 0,
+  "gzip": 208,
+  "bytes": 412467,
+  "restored": [
+    {
+      "path": "listener-phase-a.ts.gz",
+      "sourceBytes": 5728,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "listener-phase-a-child.mjs.gz",
+      "sourceBytes": 2864,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "launch-phase-b.ts.gz",
+      "sourceBytes": 2225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "serve-phase-b.ts.gz",
+      "sourceBytes": 17803,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-input.ts.gz",
+      "sourceBytes": 1292,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "preflight-phase-b.ts.gz",
+      "sourceBytes": 5197,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "check-native-green.mjs.gz",
+      "sourceBytes": 3283,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "launch-restart-standalone.ps1.gz",
+      "sourceBytes": 9910,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "probe-checker-exit.ps1.gz",
+      "sourceBytes": 1171,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "launch-native-timeout.ts.gz",
+      "sourceBytes": 1894,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-probe.ts.gz",
+      "sourceBytes": 8552,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-preload.ts.gz",
+      "sourceBytes": 926,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "prepare-handoff.mjs.gz",
+      "sourceBytes": 9754,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red.log.gz",
+      "sourceBytes": 8473,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-unit.log.gz",
+      "sourceBytes": 1423,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-unit.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red-timeout-callback.log.gz",
+      "sourceBytes": 3312,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/red-timeout-callback.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-timeout-callback.log.gz",
+      "sourceBytes": 1579,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/green-timeout-callback.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/related.log.gz",
+      "sourceBytes": 5859,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/related.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/ownership-matrix.log.gz",
+      "sourceBytes": 2833,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/ownership-matrix.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-focused.log.gz",
+      "sourceBytes": 3301,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-focused.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-positive-review.log.gz",
+      "sourceBytes": 1749,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-positive-review.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-final.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-final.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-positive-review.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/typecheck-positive-review.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-green-check.log.gz",
+      "sourceBytes": 1439,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-green-check.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-restart-01.log.gz",
+      "sourceBytes": 134,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-restart-01.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-timeout-01.log.gz",
+      "sourceBytes": 1287,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-timeout-01.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-timeout-02.log.gz",
+      "sourceBytes": 155,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-timeout-02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/head-before.txt.gz",
+      "sourceBytes": 42,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/final-scope.patch.gz",
+      "sourceBytes": 70685,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/server-runtime-quiesce.final.test.ts.gz",
+      "sourceBytes": 6823,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/runtime-startup-recovery.before-positive-review.test.ts.gz",
+      "sourceBytes": 15044,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/checker-exit-probe.json.gz",
+      "sourceBytes": 358,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/checker-exit-probe.json.False.stderr.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/checker-exit-probe.json.False.stdout.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/checker-exit-probe.json.True.stderr.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/checker-exit-probe.json.True.stdout.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/native-restart-01.json.gz",
+      "sourceBytes": 1136,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/preimage/packages/opencorvus/src/server/stop.ts.gz",
+      "sourceBytes": 749,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/preimage/packages/opencorvus/src/server/server.ts.gz",
+      "sourceBytes": 45043,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/preimage/packages/opencorvus/src/cli/server-runtime.ts.gz",
+      "sourceBytes": 8651,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/preimage/packages/opencorvus/src/cli/cmd/serve.ts.gz",
+      "sourceBytes": 17811,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/preimage/packages/opencorvus/src/server/restart-handoff.ts.gz",
+      "sourceBytes": 11426,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "implementation/preimage/packages/opencorvus/script/server-restart-e2e.ts.gz",
+      "sourceBytes": 41740,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01.log.gz",
+      "sourceBytes": 4006,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/driver.json.gz",
+      "sourceBytes": 10802,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/idle/phases.jsonl.gz",
+      "sourceBytes": 493,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/idle/ready.json.gz",
+      "sourceBytes": 98,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/idle/result.json.gz",
+      "sourceBytes": 889,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/pending/phases.jsonl.gz",
+      "sourceBytes": 1035,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/pending/ready.json.gz",
+      "sourceBytes": 98,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/pending/result.json.gz",
+      "sourceBytes": 1660,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/disconnected/phases.jsonl.gz",
+      "sourceBytes": 1114,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/disconnected/ready.json.gz",
+      "sourceBytes": 98,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-a-01/disconnected/result.json.gz",
+      "sourceBytes": 1828,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01.log.gz",
+      "sourceBytes": 1298,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01.launch.json.gz",
+      "sourceBytes": 23874,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/driver.json.gz",
+      "sourceBytes": 3350,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/launch-phase-b.actual.ts.gz",
+      "sourceBytes": 2074,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/serve-phase-b.actual.ts.gz",
+      "sourceBytes": 18296,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/post-close-observation.json.gz",
+      "sourceBytes": 629,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/pending/case.json.gz",
+      "sourceBytes": 2275,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/pending/public-config.json.gz",
+      "sourceBytes": 1640,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/pending/shutdown-admission.json.gz",
+      "sourceBytes": 167,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/pending/startup.json.gz",
+      "sourceBytes": 154,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/pending/stderr.log.gz",
+      "sourceBytes": 12639,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-01/pending/stdout.log.gz",
+      "sourceBytes": 609,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02.log.gz",
+      "sourceBytes": 2714,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02.launch.json.gz",
+      "sourceBytes": 3112,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/driver.json.gz",
+      "sourceBytes": 7435,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/launch-phase-b.actual.ts.gz",
+      "sourceBytes": 2225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/serve-phase-b.actual.ts.gz",
+      "sourceBytes": 18306,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/post-close-observation.json.gz",
+      "sourceBytes": 629,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/pending/case.json.gz",
+      "sourceBytes": 5416,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/pending/public-config.json.gz",
+      "sourceBytes": 1640,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/pending/shutdown-admission.json.gz",
+      "sourceBytes": 167,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/pending/startup.json.gz",
+      "sourceBytes": 154,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/pending/stderr.log.gz",
+      "sourceBytes": 7159,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-02/pending/stdout.log.gz",
+      "sourceBytes": 609,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03.log.gz",
+      "sourceBytes": 2292,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03.launch.json.gz",
+      "sourceBytes": 2684,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/driver.json.gz",
+      "sourceBytes": 6697,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/launch-phase-b.actual.ts.gz",
+      "sourceBytes": 2225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/serve-phase-b.actual.ts.gz",
+      "sourceBytes": 18286,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/post-close-observation.json.gz",
+      "sourceBytes": 629,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/pending/case.json.gz",
+      "sourceBytes": 5047,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/pending/public-config.json.gz",
+      "sourceBytes": 1640,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/pending/shutdown-admission.json.gz",
+      "sourceBytes": 167,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/pending/startup.json.gz",
+      "sourceBytes": 154,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/pending/stderr.log.gz",
+      "sourceBytes": 14720,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-03/pending/stdout.log.gz",
+      "sourceBytes": 609,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04.log.gz",
+      "sourceBytes": 6633,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04.launch.json.gz",
+      "sourceBytes": 7643,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/driver.json.gz",
+      "sourceBytes": 26668,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/launch-phase-b.actual.ts.gz",
+      "sourceBytes": 2225,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/serve-phase-b.actual.ts.gz",
+      "sourceBytes": 17803,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/summary.json.gz",
+      "sourceBytes": 7083,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/phase-b-input.actual.ts.gz",
+      "sourceBytes": 1292,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/case.json.gz",
+      "sourceBytes": 11522,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/public-config.json.gz",
+      "sourceBytes": 1025,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/shutdown-admission.json.gz",
+      "sourceBytes": 167,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/startup.json.gz",
+      "sourceBytes": 154,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/stderr.log.gz",
+      "sourceBytes": 252165,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/stdout.log.gz",
+      "sourceBytes": 548,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/pending-observation.json.gz",
+      "sourceBytes": 6151,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/prompt-input.json.gz",
+      "sourceBytes": 479,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/sender-terminal.json.gz",
+      "sourceBytes": 190,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/pending/terminal-observation.json.gz",
+      "sourceBytes": 6151,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/case.json.gz",
+      "sourceBytes": 11570,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/public-config.json.gz",
+      "sourceBytes": 1025,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/shutdown-admission.json.gz",
+      "sourceBytes": 167,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/startup.json.gz",
+      "sourceBytes": 159,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/stderr.log.gz",
+      "sourceBytes": 257524,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/stdout.log.gz",
+      "sourceBytes": 553,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/pending-observation.json.gz",
+      "sourceBytes": 6197,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/prompt-input.json.gz",
+      "sourceBytes": 484,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/sender-terminal.json.gz",
+      "sourceBytes": 108,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-04/disconnected/terminal-observation.json.gz",
+      "sourceBytes": 6197,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05.log.gz",
+      "sourceBytes": 6547,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05.launch.json.gz",
+      "sourceBytes": 7547,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/driver.json.gz",
+      "sourceBytes": 26666,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/green-check.json.gz",
+      "sourceBytes": 1816,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/case.json.gz",
+      "sourceBytes": 11523,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/public-config.json.gz",
+      "sourceBytes": 1025,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/shutdown-admission.json.gz",
+      "sourceBytes": 167,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/startup.json.gz",
+      "sourceBytes": 154,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/stderr.log.gz",
+      "sourceBytes": 252780,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/stdout.log.gz",
+      "sourceBytes": 609,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/pending-observation.json.gz",
+      "sourceBytes": 6152,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/prompt-input.json.gz",
+      "sourceBytes": 479,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/sender-terminal.json.gz",
+      "sourceBytes": 190,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/pending/terminal-observation.json.gz",
+      "sourceBytes": 6834,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/case.json.gz",
+      "sourceBytes": 11568,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/public-config.json.gz",
+      "sourceBytes": 1025,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/shutdown-admission.json.gz",
+      "sourceBytes": 167,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/startup.json.gz",
+      "sourceBytes": 159,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/stderr.log.gz",
+      "sourceBytes": 255496,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/stdout.log.gz",
+      "sourceBytes": 614,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/pending-observation.json.gz",
+      "sourceBytes": 6197,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/prompt-input.json.gz",
+      "sourceBytes": 484,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/sender-terminal.json.gz",
+      "sourceBytes": 108,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-05/disconnected/terminal-observation.json.gz",
+      "sourceBytes": 6874,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-preflight-01.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-preflight-01.log.gz",
+      "sourceBytes": 2393,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-preflight-02.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-preflight-02.log.gz",
+      "sourceBytes": 2488,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-preflight-03.exit.gz",
+      "sourceBytes": 3,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-preflight-03.log.gz",
+      "sourceBytes": 1895,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "phase-b-preflight-03.json.gz",
+      "sourceBytes": 2327,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02-wmi.json.gz",
+      "sourceBytes": 119,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/launch-restart-standalone.actual.ps1.gz",
+      "sourceBytes": 9879,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/observed-owners.json.gz",
+      "sourceBytes": 11047,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/owner.json.gz",
+      "sourceBytes": 889,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/result.json.gz",
+      "sourceBytes": 80527,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/server-restart-e2e.actual.ts.gz",
+      "sourceBytes": 42951,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/stderr.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/stdout.log.gz",
+      "sourceBytes": 125,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-02/terminal.json.gz",
+      "sourceBytes": 25486,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03-wmi.json.gz",
+      "sourceBytes": 119,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/launch-restart-standalone.actual.ps1.gz",
+      "sourceBytes": 9910,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/observed-owners.json.gz",
+      "sourceBytes": 9714,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/owner.json.gz",
+      "sourceBytes": 889,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/result.json.gz",
+      "sourceBytes": 80527,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/server-restart-e2e.actual.ts.gz",
+      "sourceBytes": 42951,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/stderr.log.gz",
+      "sourceBytes": 0,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/stdout.log.gz",
+      "sourceBytes": 125,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/terminal.json.gz",
+      "sourceBytes": 22822,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-restart-03/final-observation.json.gz",
+      "sourceBytes": 367,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01.launch.json.gz",
+      "sourceBytes": 1514,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/native-timeout-preload.actual.ts.gz",
+      "sourceBytes": 850,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/native-timeout-probe.actual.ts.gz",
+      "sourceBytes": 8552,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/launch-native-timeout.actual.ts.gz",
+      "sourceBytes": 1894,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/result.json.gz",
+      "sourceBytes": 2586,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/phases.jsonl.gz",
+      "sourceBytes": 200,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/startup.json.gz",
+      "sourceBytes": 119,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/stderr.log.gz",
+      "sourceBytes": 3022,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-01/stdout.log.gz",
+      "sourceBytes": 599,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02.launch.json.gz",
+      "sourceBytes": 363,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/native-timeout-preload.actual.ts.gz",
+      "sourceBytes": 926,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/native-timeout-probe.actual.ts.gz",
+      "sourceBytes": 8552,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/launch-native-timeout.actual.ts.gz",
+      "sourceBytes": 1894,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/result.json.gz",
+      "sourceBytes": 2638,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/phases.jsonl.gz",
+      "sourceBytes": 200,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/startup.json.gz",
+      "sourceBytes": 119,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/stderr.log.gz",
+      "sourceBytes": 7389,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "native-timeout-02/stdout.log.gz",
+      "sourceBytes": 599,
+      "decodedMatchesOriginal": true
+    },
+    {
+      "path": "handoff-403.json.gz",
+      "sourceBytes": 41745,
+      "decodedMatchesOriginal": true
+    }
+  ],
+  "images": [],
+  "credentialScan": {
+    "inspected": 211,
+    "patternFamilies": [
+      "provider-key",
+      "bearer-value",
+      "credential-assignment",
+      "private-key"
+    ],
+    "hits": 0,
+    "publicFixtureAssignments": 14,
+    "publicFixtureException": "Exact literal local-controlled-provider only; all other matching assignments fail",
+    "limitation": "Bounded patterns only; no credential/model authority file read"
+  },
+  "localLinks": {
+    "count": 213,
+    "broken": 0
+  }
+}

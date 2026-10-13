@@ -138,6 +138,23 @@ stored body supplies its message, summary and details; empty bytes supply empty
 text. Nonbinary bodies retain their value and reference. The transport's binary
 response contract and successful resource bytes remain unchanged.
 
+## Runtime cancellation and listener quiescence
+
+Direct Server.stop, CLI shutdown and standalone restart share one cancellation
+handshake. Runtime settlement starts first and its actual cancellation boundary
+starts listener quiescence; both original promises join before publishing the
+canonical handoff. A failed drain joins settlement and rolls back that exact
+receipt once. CLI shutdown/restart share the same operation and successful
+release, and listener restoration retires the previous listener’s caches.
+Only the actual quiescence start authorizes restart listener restoration.
+
+The CLI retains its original 5000ms failed-process boundary: an uncooperative
+listener causes the same process to synchronously record failure and exit 1.
+That physical failure does not claim unfinished listener drain completed.
+Direct Server.stop retains its caller-owned join contract. Client disconnection
+is not user cancellation, and shutdown does not fabricate Permission decisions
+or execution outcomes.
+
 ## Standalone restart
 
 Standalone restart first observes the exact current launch boundary. The public

@@ -46,6 +46,8 @@
 - Venice 流式请求使用正确的用量参数，并保留每次调用的显式选择；修复 Token 总量重复计入输出、缓存输入重复计费和推理分量丢失的问题。历史账本保留原记录，不重算。
 - 关闭或重启服务时先取消所有项目的后台工作，再等待其物理清理完成，修复 Memory 整理等后台任务反向等待停机取消而卡住的问题。
 
+- 修复原生服务在工具等待批准时关闭超时的问题；关闭与重启共用真实取消和监听器排空流程，失败回滚保留原归属，并维持5秒超时失败退出的边界。
+
 - 通用 MCP 工具保留结构化结果正文，超限时可保存完整文件并继续读取；合法空文本资源不会再使整个结果失败。
 
 - 用户附加的 MCP 资源保留合法空文本和零字节文件，混合内容按原顺序呈现；普通 Chat 续聊正确绑定所属项目的附件，保留原始引用、文件名与严格字节校验。
@@ -114,6 +116,8 @@
 
 - Venice streaming requests use the correct usage parameter and preserve explicit per-call choices. Fixed output counted twice in Token totals, cache input charged twice, and missing reasoning components. Historical ledger records are retained without recalculation.
 - Service shutdown and restart cancel background work across all Projects before joining its physical cleanup, fixing background work such as Memory organization waiting for cancellation from a later shutdown stage.
+
+- Fixed native server shutdown timing out while tools await approval. Shutdown and restart share actual cancellation and listener drainage, preserve ownership during rollback, and retain the five-second failed-exit boundary.
 
 - Generic MCP tools preserve structured result content, including full-file recovery for oversized output. Valid empty text resources no longer fail the whole result.
 

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [403 Native关闭与重启收敛](2026-10-13-native-shutdown-pending-permission-403/README.md)：208个明确公开源、原红态与Native正常/失败终态，未复制运行数据或凭据。
+
 - [401 Dialog关闭名称语言](2026-10-14-design-dialog-close-locale-401/README.md)：37个原观察、16个JPEG和中英同实例Dialog及正常物理收尾。
 
 - [Explorer 根目录展示](2026-10-14-explorer-directory-label/README.md)：原前态与独立调查、真实目录回执和人工页面证据。

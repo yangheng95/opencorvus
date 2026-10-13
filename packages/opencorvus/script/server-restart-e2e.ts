@@ -1,6 +1,6 @@
 /** Credential-free Windows restart qualification. SERVER_RESTART_RESULT selects evidence.
  * SERVER_RESTART_BINARY explicitly selects a compiled backend and its adjacent helper;
- * omitted input runs the twelve-case source profile. Packaged mode runs six HTTP/SDK cases.
+ * omitted input runs the thirteen-case source profile. Packaged mode runs six HTTP/SDK cases.
  */
 import assert from "node:assert/strict"
 import fs from "node:fs/promises"
@@ -439,6 +439,26 @@ try {
   const { beginRestartHandoff } = await import("@/server/restart-handoff")
   const handoffModule = JSON.stringify(path.resolve(import.meta.dir, "../src/server/restart-handoff.ts").replaceAll("\\", "/"))
   const failureParticipant = `const h=await import(${handoffModule});const c=h.childRestartHandoff();await h.waitForRestartBind(c);await h.sendRestartHandoffMessage({type:'failed',error:'actual child startup failure'},c);`
+  {
+    const owner = currentRuntimeProcessOccurrence()
+    const listener = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: () => new Response("original listener remains available") })
+    const failure = new Error("runtime settlement failed before cancellation readiness")
+    const record: any = { mode: "pre-cancellation-settlement-failure", owner, port: listener.port }
+    results.push(record)
+    try {
+      const result = await beginRestartHandoff({ hostname: "127.0.0.1", port: listener.port!,
+        settleAndQuiesce: async () => { throw failure }, releaseRuntimeState: async () => {},
+        restoreListener: async () => { throw new Error("The original listener has not entered quiescence") },
+      }).catch(error => error)
+      assert.equal(result, failure)
+      record.error = { name: result.name, message: result.message }
+      record.response = await (await fetch(listener.url)).text()
+      record.currentOwner = currentRuntimeProcessOccurrence()
+      assert.equal(record.response, "original listener remains available")
+      assert.deepEqual(record.currentOwner, owner)
+      record.status = "passed"
+    } finally { await listener.stop(true) }
+  }
   for (const scenario of [
     { command: [process.execPath, "-e", "process.exit(23)"] },
     { command: [path.join(root, "missing-executable.exe")] },
@@ -454,7 +474,7 @@ try {
     try {
       try {
         await beginRestartHandoff({ hostname: "127.0.0.1", port, command,
-          quiesceListener: async () => { await listener.stop(true) }, settleExecution: async () => {}, releaseRuntimeState: async () => {},
+          settleAndQuiesce: async (started) => { const drained = listener.stop(true); started(); await drained }, releaseRuntimeState: async () => {},
           restoreListener: async () => { listener = Bun.serve({ hostname: "127.0.0.1", port, fetch: () => new Response(responseText) }); fault.restored = true } })
         throw new Error("Fault command unexpectedly transferred")
       } catch (error) { fault.error = { name: (error as Error).name, message: (error as Error).message } }
@@ -541,7 +561,7 @@ try {
   assert.equal(crash.targetDisposition, "dead_or_reused")
   crash.status = "passed"
   }
-  assert.equal(results.length, binary ? 6 : 12, "The selected qualification profile ran all of its cases")
+  assert.equal(results.length, binary ? 6 : 13, "The selected qualification profile ran all of its cases")
 } catch (error) { failure = error; process.exitCode = 1 }
 finally {
   await fs.mkdir(path.dirname(resultPath), { recursive: true })

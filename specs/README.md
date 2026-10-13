@@ -10,7 +10,7 @@
 
 - [Provider 空模型声明保存](records/2026-10/2026-10-13-provider-empty-declarations.md)：字段意图、目录继承与真实保存资格。
 
-- [403 Native关闭收敛](records/2026-10/2026-10-13-native-shutdown-pending-permission-403.md)：待授权下的实际关闭失败、全部入口与阶段根因调查。
+- [403 Native关闭收敛](records/2026-10/2026-10-13-native-shutdown-pending-permission-403.md)：统一取消/监听器握手、真实Native正常关闭/重启与5s失败边界，58项正向后台检查。
 
 - [402 独立会话权限批准投影](records/2026-10/2026-10-13-standalone-permission-projection-402.md)：Main Chat的hydrate/live/reconnect、真实排序与完整控制入口横审。
 

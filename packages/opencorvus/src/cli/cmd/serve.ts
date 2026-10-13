@@ -1,5 +1,6 @@
 import { Server } from "../../server/server"
 import * as fsp from "node:fs/promises"
+import { writeSync } from "node:fs"
 import path from "node:path"
 import { cmd } from "./cmd"
 import { withNetworkOptions, resolveNetworkOptions, type NetworkOptions } from "../network"
@@ -19,7 +20,7 @@ import {
   waitForRestartBind,
 } from "../../server/restart-handoff"
 import { clearServerRestartHandler, registerServerRestartHandler, type RestartHandler } from "../../server/restart"
-import { stopServerWithTimeout } from "../../server/stop"
+import { settleRuntimeAndQuiesceListener, stopServerWithTimeout } from "../../server/stop"
 import { ManagedServerLifecycle } from "../../server/managed-server-lifecycle"
 import {
   assertStartedTaskProjectRecoverySucceeded,
@@ -230,12 +231,14 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
   console.log(`overlay UI available at ${serverUrl}/ui/`)
 
   let shutdownPromise: Promise<void> | null = null
-  let processExecutionSettlement: Promise<void> | undefined
-  let releaseProcessExecutionHandoff: ((commit?: boolean) => void | Promise<void>) | undefined
-  let runtimeTransfer: Server.RuntimeTransferHandle | undefined
+  let restartAttempt: Promise<void> | undefined
+  type RuntimeSettlement = Awaited<ReturnType<typeof settleRecoveringServerRuntime>>
+  let processExecutionSettlement: Promise<RuntimeSettlement> | undefined
+  let listenerSettlement: Promise<RuntimeSettlement> | undefined
+  let completedSettlement: RuntimeSettlement | undefined
+  let handoffRelease: Promise<void> | undefined
   let managedLifecycle: ManagedServerLifecycle.Handle | undefined
-  let listenerTransferred = false
-  const settleCurrentProcessExecution = (request: ServerShutdownRequest) => {
+  const settleCurrentProcessExecution = (request: ServerShutdownRequest, onRuntimeCancellationRequested: () => void) => {
     if (processExecutionSettlement) return processExecutionSettlement
     const reason = `Server shutdown source=${request.source} reason=${request.reason}`
     const settlement = (async () => {
@@ -245,43 +248,89 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
         reason,
         recovery: startedTaskRecovery,
         disposeInstances: () => Instance.disposeAll(),
+        onRuntimeCancellationRequested,
       })
-      releaseProcessExecutionHandoff = terminated.releaseHandoff
       console.log(
         `[serve] settled process-owned prompts sessions=${terminated.sessions} toolParts=${terminated.toolParts}`,
       )
+      return terminated
     })()
     processExecutionSettlement = settlement
-    void settlement.catch(() => {
-      if (processExecutionSettlement === settlement) processExecutionSettlement = undefined
-    })
+    void settlement.catch(() => undefined)
     return settlement
+  }
+  const settleAndQuiesce = (request: ServerShutdownRequest, onListenerQuiesceStarted?: () => void) => {
+    if (listenerSettlement) return listenerSettlement
+    let transfer: Server.RuntimeTransferHandle | undefined
+    const operation = settleRuntimeAndQuiesceListener({
+      settle: (ready) => settleCurrentProcessExecution(request, ready),
+      quiesce: () => stopServerWithTimeout({
+        stop: () => {
+          transfer = Server.beginRuntimeTransfer(server)
+          onListenerQuiesceStarted?.()
+          return transfer.quiesced
+        },
+        timeoutMilliseconds: SERVE_STOP_TIMEOUT_MILLISECONDS,
+        onStopError: (error) => {
+          console.error("[serve] listener quiesce failed during shutdown:", error)
+        },
+        onTimeout: (error) => {
+          // Standalone serve has no mandatory external physical deadline.
+          // Preserve its original five-second failed-process boundary while
+          // the incomplete listener/runtime promises retain this exact owner.
+          try {
+            writeSync(2, `[serve] listener quiesce timeout, escalating: ${SERVE_STOP_TIMEOUT_MILLISECONDS}\n[serve] shutdown failed: ${error.message}\n`)
+            recordCurrentProcessShutdownRequest(request)
+          } finally {
+            process.exit(1)
+          }
+        },
+      }),
+    }).then((terminated) => {
+      // Publish a releasable receipt only after both owners joined. On a
+      // quiesce failure the shared operation already rolled it back.
+      completedSettlement = terminated
+      return terminated
+    })
+    listenerSettlement = operation
+    void operation.catch(() => {
+      // Before a real transfer starts, the same listener is still available.
+      // A completed failed settlement has no releasable handoff to retain.
+      if (!transfer && listenerSettlement === operation) {
+        listenerSettlement = undefined
+        processExecutionSettlement = undefined
+      }
+    })
+    return operation
+  }
+  const releaseRuntimeState = () => {
+    if (handoffRelease) return handoffRelease
+    const terminated = completedSettlement
+    if (!terminated) throw new Error("Server runtime handoff is unavailable before settlement and listener drain")
+    const operation = Server.releaseRuntimeHandoff(terminated.releaseHandoff).then(() => {
+      completedSettlement = undefined
+      managedLifecycle?.release()
+      managedLifecycle = undefined
+    })
+    handoffRelease = operation
+    void operation.catch(() => undefined)
+    return operation
   }
   const requestShutdown = (request: ServerShutdownRequest) => {
     if (shutdownPromise) return shutdownPromise
     const shutdown = (async () => {
       recordCurrentProcessShutdownRequest(request)
       console.log(`[serve] shutdown requested via ${request.source}: ${request.reason}`)
-      if (!listenerTransferred) {
-        await stopServerWithTimeout({
-          stop: async () => {
-            runtimeTransfer = Server.beginRuntimeTransfer(server)
-            await runtimeTransfer.quiesced
-          },
-          timeoutMilliseconds: SERVE_STOP_TIMEOUT_MILLISECONDS,
-          onStopError: (error) => {
-            console.error("[serve] listener quiesce failed during shutdown:", error)
-          },
-          onTimeout: () => {
-            console.error("[serve] listener quiesce timeout, escalating:", SERVE_STOP_TIMEOUT_MILLISECONDS)
-          },
-        })
-        listenerTransferred = true
+      let restartFailure: unknown
+      if (restartAttempt && request.source !== "internal-restart") {
+        // Signals/managed shutdown join the already-admitted restart owner.
+        // A restored listener then has its own freshly reset settlement.
+        try { await restartAttempt }
+        catch (error) { restartFailure = error }
       }
-      await settleCurrentProcessExecution(request)
-      if (releaseProcessExecutionHandoff) await Server.releaseRuntimeHandoff(releaseProcessExecutionHandoff)
-      releaseProcessExecutionHandoff = undefined
-      managedLifecycle?.release()
+      await settleAndQuiesce(request)
+      await releaseRuntimeState()
+      if (restartFailure !== undefined) throw restartFailure
     })()
     shutdownPromise = shutdown
     void shutdown.then(
@@ -317,30 +366,17 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
 
   const actualPort = server.port!
   const actualHostname = server.hostname ?? opts.hostname
-  let restartAttempt: Promise<void> | undefined
   const requestRestart = (reason: string) => {
     if (restartAttempt) return restartAttempt
+    if (shutdownPromise) return Promise.reject(new Error("Server shutdown already owns the current listener"))
     const operation = beginRestartHandoff({
       hostname: actualHostname,
       port: actualPort,
-      quiesceListener: async () => {
-        console.log("[serve] restart quiescing current listener")
-        runtimeTransfer = Server.beginRuntimeTransfer(server)
-        await runtimeTransfer.quiesced
-        listenerTransferred = true
-        console.log("[serve] restart current listener quiesced")
+      settleAndQuiesce: async (onListenerQuiesceStarted) => {
+        console.log("[serve] restart settling execution and quiescing current listener")
+        await settleAndQuiesce({ source: "http-client", reason }, onListenerQuiesceStarted)
       },
-      settleExecution: async () => {
-        console.log("[serve] restart settling process-owned execution")
-        await settleCurrentProcessExecution({ source: "http-client", reason })
-      },
-      releaseRuntimeState: async () => {
-        const release = releaseProcessExecutionHandoff
-        if (release) await Server.releaseRuntimeHandoff(release)
-        releaseProcessExecutionHandoff = undefined
-        managedLifecycle?.release()
-        managedLifecycle = undefined
-      },
+      releaseRuntimeState,
       restoreListener: async () => {
         await waitForReleasedListener(actualHostname, actualPort)
         const listenOptions = { ...opts, hostname: actualHostname, port: actualPort, randomPort: false }
@@ -367,9 +403,10 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
           throw error
         }
         server = restoredServer
-        listenerTransferred = false
-        runtimeTransfer = undefined
         processExecutionSettlement = undefined
+        listenerSettlement = undefined
+        completedSettlement = undefined
+        handoffRelease = undefined
       },
     }).then(({ drained }) => {
       clearServerRestartHandler(restartHandler)

@@ -32,6 +32,23 @@ describe("runtime startup recovery", () => {
     }
   }
 
+  async function expectReleasedListenerToRebind(url: URL) {
+    const replacement = Bun.serve({
+      hostname: url.hostname,
+      port: Number(url.port),
+      fetch: () => new Response("replacement owns released listener"),
+    })
+    try {
+      const response = await within(fetch(url), "replacement listener response")
+      expect({ status: response.status, body: await response.text() }).toEqual({
+        status: 200,
+        body: "replacement owns released listener",
+      })
+    } finally {
+      await replacement.stop(true)
+    }
+  }
+
   test("projects application environment into a fresh restart process occurrence", () => {
     expect(
       restartReplacementEnvironment(
@@ -297,7 +314,7 @@ describe("runtime startup recovery", () => {
     const listenerURL = new URL("/global/health", prepared.server.url)
 
     await expect(requireRecoveredServerRuntime(prepared)).rejects.toThrow("required application recovery failed")
-    await expect(within(fetch(listenerURL), "stopped listener connection")).rejects.toThrow()
+    await expectReleasedListenerToRebind(listenerURL)
   }, 60_000)
 
   test("stops a published listener when post-bind poller initialization fails", async () => {
@@ -322,7 +339,7 @@ describe("runtime startup recovery", () => {
         }),
       ).rejects.toThrow("scheduler poller initialization failed")
       if (!listenerURL) throw new Error("listener was not bound before injected poller failure")
-      await expect(within(fetch(listenerURL), "stopped listener connection")).rejects.toThrow()
+      await expectReleasedListenerToRebind(listenerURL)
     } finally {
       scheduler.mockRestore()
       listen.mockRestore()
@@ -349,12 +366,13 @@ describe("runtime startup recovery", () => {
         reason: "held startup recovery settlement contract",
         recovery,
         disposeInstances: async () => events.push("instances:disposed"),
+        onRuntimeCancellationRequested: () => events.push("cancellation:requested"),
       }),
       "held application recovery settlement",
     )
     await terminated.releaseHandoff(false)
 
-    expect(events).toEqual(["recovery:cancelled", "instances:disposed"])
+    expect(events).toEqual(["recovery:cancelled", "cancellation:requested", "instances:disposed"])
   }, 60_000)
 
   test("completes one graceful listener stop through a transient settlement cleanup failure", async () => {

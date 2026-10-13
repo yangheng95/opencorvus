@@ -1,0 +1,1466 @@
+{
+  "iteration": 403,
+  "selection": "Explicit public handoff allowlist; original bytes compressed. No runtime, owned-temporary, database, credentials, models directory, executables, peer workspace diff or real Provider payload. Preserved source preimages are historical evidence, not current implementations.",
+  "generatedDocuments": [
+    "README.md",
+    "archive-check.json"
+  ],
+  "files": [
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/listener-phase-a.ts",
+      "path": "listener-phase-a.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 5728,
+      "archivedBytes": 2187
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/listener-phase-a-child.mjs",
+      "path": "listener-phase-a-child.mjs.gz",
+      "compression": "gzip",
+      "sourceBytes": 2864,
+      "archivedBytes": 1194
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/launch-phase-b.ts",
+      "path": "launch-phase-b.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 2225,
+      "archivedBytes": 1032
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/serve-phase-b.ts",
+      "path": "serve-phase-b.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 17803,
+      "archivedBytes": 5924
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-input.ts",
+      "path": "phase-b-input.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 1292,
+      "archivedBytes": 635
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/preflight-phase-b.ts",
+      "path": "preflight-phase-b.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 5197,
+      "archivedBytes": 1945
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/check-native-green.mjs",
+      "path": "check-native-green.mjs.gz",
+      "compression": "gzip",
+      "sourceBytes": 3283,
+      "archivedBytes": 1270
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/launch-restart-standalone.ps1",
+      "path": "launch-restart-standalone.ps1.gz",
+      "compression": "gzip",
+      "sourceBytes": 9910,
+      "archivedBytes": 2909
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/probe-checker-exit.ps1",
+      "path": "probe-checker-exit.ps1.gz",
+      "compression": "gzip",
+      "sourceBytes": 1171,
+      "archivedBytes": 592
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/launch-native-timeout.ts",
+      "path": "launch-native-timeout.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 1894,
+      "archivedBytes": 860
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-probe.ts",
+      "path": "native-timeout-probe.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 8552,
+      "archivedBytes": 3239
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-preload.ts",
+      "path": "native-timeout-preload.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 926,
+      "archivedBytes": 573
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/prepare-handoff.mjs",
+      "path": "prepare-handoff.mjs.gz",
+      "compression": "gzip",
+      "sourceBytes": 9754,
+      "archivedBytes": 3259
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/red.log",
+      "path": "implementation/red.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 8473,
+      "archivedBytes": 1716
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/red.exit",
+      "path": "implementation/red.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/green-unit.log",
+      "path": "implementation/green-unit.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 1423,
+      "archivedBytes": 513
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/green-unit.exit",
+      "path": "implementation/green-unit.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/red-timeout-callback.log",
+      "path": "implementation/red-timeout-callback.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 3312,
+      "archivedBytes": 1062
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/red-timeout-callback.exit",
+      "path": "implementation/red-timeout-callback.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/green-timeout-callback.log",
+      "path": "implementation/green-timeout-callback.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 1579,
+      "archivedBytes": 544
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/green-timeout-callback.exit",
+      "path": "implementation/green-timeout-callback.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/related.log",
+      "path": "implementation/related.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 5859,
+      "archivedBytes": 1781
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/related.exit",
+      "path": "implementation/related.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/ownership-matrix.log",
+      "path": "implementation/ownership-matrix.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 2833,
+      "archivedBytes": 961
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/ownership-matrix.exit",
+      "path": "implementation/ownership-matrix.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/final-focused.log",
+      "path": "implementation/final-focused.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 3301,
+      "archivedBytes": 1030
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/final-focused.exit",
+      "path": "implementation/final-focused.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/final-positive-review.log",
+      "path": "implementation/final-positive-review.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 1749,
+      "archivedBytes": 711
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/final-positive-review.exit",
+      "path": "implementation/final-positive-review.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/typecheck.log",
+      "path": "implementation/typecheck.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/typecheck.exit",
+      "path": "implementation/typecheck.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/typecheck-final.log",
+      "path": "implementation/typecheck-final.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/typecheck-final.exit",
+      "path": "implementation/typecheck-final.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/typecheck-positive-review.log",
+      "path": "implementation/typecheck-positive-review.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/typecheck-positive-review.exit",
+      "path": "implementation/typecheck-positive-review.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-green-check.log",
+      "path": "implementation/native-green-check.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 1439,
+      "archivedBytes": 717
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-green-check.exit",
+      "path": "implementation/native-green-check.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-restart-01.log",
+      "path": "implementation/native-restart-01.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 134,
+      "archivedBytes": 130
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-restart-01.exit",
+      "path": "implementation/native-restart-01.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-timeout-01.log",
+      "path": "implementation/native-timeout-01.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 1287,
+      "archivedBytes": 748
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-timeout-01.exit",
+      "path": "implementation/native-timeout-01.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-timeout-02.log",
+      "path": "implementation/native-timeout-02.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 155,
+      "archivedBytes": 146
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-timeout-02.exit",
+      "path": "implementation/native-timeout-02.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/head-before.txt",
+      "path": "implementation/head-before.txt.gz",
+      "compression": "gzip",
+      "sourceBytes": 42,
+      "archivedBytes": 61
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/final-scope.patch",
+      "path": "implementation/final-scope.patch.gz",
+      "compression": "gzip",
+      "sourceBytes": 70685,
+      "archivedBytes": 27170
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/server-runtime-quiesce.final.test.ts",
+      "path": "implementation/server-runtime-quiesce.final.test.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 6823,
+      "archivedBytes": 1424
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/runtime-startup-recovery.before-positive-review.test.ts",
+      "path": "implementation/runtime-startup-recovery.before-positive-review.test.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 15044,
+      "archivedBytes": 3426
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/checker-exit-probe.json",
+      "path": "implementation/checker-exit-probe.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 358,
+      "archivedBytes": 170
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/checker-exit-probe.json.False.stderr",
+      "path": "implementation/checker-exit-probe.json.False.stderr.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/checker-exit-probe.json.False.stdout",
+      "path": "implementation/checker-exit-probe.json.False.stdout.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/checker-exit-probe.json.True.stderr",
+      "path": "implementation/checker-exit-probe.json.True.stderr.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/checker-exit-probe.json.True.stdout",
+      "path": "implementation/checker-exit-probe.json.True.stdout.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/native-restart-01.json",
+      "path": "implementation/native-restart-01.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1136,
+      "archivedBytes": 628
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/preimage/packages/opencorvus/src/server/stop.ts",
+      "path": "implementation/preimage/packages/opencorvus/src/server/stop.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 749,
+      "archivedBytes": 362
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/preimage/packages/opencorvus/src/server/server.ts",
+      "path": "implementation/preimage/packages/opencorvus/src/server/server.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 45043,
+      "archivedBytes": 10397
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/preimage/packages/opencorvus/src/cli/server-runtime.ts",
+      "path": "implementation/preimage/packages/opencorvus/src/cli/server-runtime.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 8651,
+      "archivedBytes": 2507
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/preimage/packages/opencorvus/src/cli/cmd/serve.ts",
+      "path": "implementation/preimage/packages/opencorvus/src/cli/cmd/serve.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 17811,
+      "archivedBytes": 5021
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/preimage/packages/opencorvus/src/server/restart-handoff.ts",
+      "path": "implementation/preimage/packages/opencorvus/src/server/restart-handoff.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 11426,
+      "archivedBytes": 3398
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/implementation/preimage/packages/opencorvus/script/server-restart-e2e.ts",
+      "path": "implementation/preimage/packages/opencorvus/script/server-restart-e2e.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 41740,
+      "archivedBytes": 10779
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01.exit",
+      "path": "phase-a-01.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01.log",
+      "path": "phase-a-01.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 4006,
+      "archivedBytes": 993
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/driver.json",
+      "path": "phase-a-01/driver.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 10802,
+      "archivedBytes": 1632
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/idle/phases.jsonl",
+      "path": "phase-a-01/idle/phases.jsonl.gz",
+      "compression": "gzip",
+      "sourceBytes": 493,
+      "archivedBytes": 226
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/idle/ready.json",
+      "path": "phase-a-01/idle/ready.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 98,
+      "archivedBytes": 102
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/idle/result.json",
+      "path": "phase-a-01/idle/result.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 889,
+      "archivedBytes": 280
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/pending/phases.jsonl",
+      "path": "phase-a-01/pending/phases.jsonl.gz",
+      "compression": "gzip",
+      "sourceBytes": 1035,
+      "archivedBytes": 421
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/pending/ready.json",
+      "path": "phase-a-01/pending/ready.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 98,
+      "archivedBytes": 102
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/pending/result.json",
+      "path": "phase-a-01/pending/result.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1660,
+      "archivedBytes": 475
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/disconnected/phases.jsonl",
+      "path": "phase-a-01/disconnected/phases.jsonl.gz",
+      "compression": "gzip",
+      "sourceBytes": 1114,
+      "archivedBytes": 371
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/disconnected/ready.json",
+      "path": "phase-a-01/disconnected/ready.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 98,
+      "archivedBytes": 102
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-a-01/disconnected/result.json",
+      "path": "phase-a-01/disconnected/result.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1828,
+      "archivedBytes": 430
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01.exit",
+      "path": "phase-b-01.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01.log",
+      "path": "phase-b-01.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 1298,
+      "archivedBytes": 652
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01.launch.json",
+      "path": "phase-b-01.launch.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 23874,
+      "archivedBytes": 5114
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/driver.json",
+      "path": "phase-b-01/driver.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 3350,
+      "archivedBytes": 1139
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/launch-phase-b.actual.ts",
+      "path": "phase-b-01/launch-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 2074,
+      "archivedBytes": 991
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/serve-phase-b.actual.ts",
+      "path": "phase-b-01/serve-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 18296,
+      "archivedBytes": 6227
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/post-close-observation.json",
+      "path": "phase-b-01/post-close-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 629,
+      "archivedBytes": 387
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/pending/case.json",
+      "path": "phase-b-01/pending/case.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 2275,
+      "archivedBytes": 838
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/pending/public-config.json",
+      "path": "phase-b-01/pending/public-config.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1640,
+      "archivedBytes": 442
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/pending/shutdown-admission.json",
+      "path": "phase-b-01/pending/shutdown-admission.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 167,
+      "archivedBytes": 157
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/pending/startup.json",
+      "path": "phase-b-01/pending/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 154,
+      "archivedBytes": 148
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/pending/stderr.log",
+      "path": "phase-b-01/pending/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 12639,
+      "archivedBytes": 1470
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-01/pending/stdout.log",
+      "path": "phase-b-01/pending/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 609,
+      "archivedBytes": 394
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02.exit",
+      "path": "phase-b-02.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02.log",
+      "path": "phase-b-02.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 2714,
+      "archivedBytes": 1364
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02.launch.json",
+      "path": "phase-b-02.launch.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 3112,
+      "archivedBytes": 1476
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/driver.json",
+      "path": "phase-b-02/driver.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 7435,
+      "archivedBytes": 1822
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/launch-phase-b.actual.ts",
+      "path": "phase-b-02/launch-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 2225,
+      "archivedBytes": 1032
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/serve-phase-b.actual.ts",
+      "path": "phase-b-02/serve-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 18306,
+      "archivedBytes": 6229
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/post-close-observation.json",
+      "path": "phase-b-02/post-close-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 629,
+      "archivedBytes": 392
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/pending/case.json",
+      "path": "phase-b-02/pending/case.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 5416,
+      "archivedBytes": 1519
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/pending/public-config.json",
+      "path": "phase-b-02/pending/public-config.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1640,
+      "archivedBytes": 443
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/pending/shutdown-admission.json",
+      "path": "phase-b-02/pending/shutdown-admission.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 167,
+      "archivedBytes": 157
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/pending/startup.json",
+      "path": "phase-b-02/pending/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 154,
+      "archivedBytes": 147
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/pending/stderr.log",
+      "path": "phase-b-02/pending/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 7159,
+      "archivedBytes": 1557
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-02/pending/stdout.log",
+      "path": "phase-b-02/pending/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 609,
+      "archivedBytes": 395
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03.exit",
+      "path": "phase-b-03.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03.log",
+      "path": "phase-b-03.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 2292,
+      "archivedBytes": 1259
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03.launch.json",
+      "path": "phase-b-03.launch.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 2684,
+      "archivedBytes": 1380
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/driver.json",
+      "path": "phase-b-03/driver.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6697,
+      "archivedBytes": 1789
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/launch-phase-b.actual.ts",
+      "path": "phase-b-03/launch-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 2225,
+      "archivedBytes": 1032
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/serve-phase-b.actual.ts",
+      "path": "phase-b-03/serve-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 18286,
+      "archivedBytes": 6216
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/post-close-observation.json",
+      "path": "phase-b-03/post-close-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 629,
+      "archivedBytes": 388
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/pending/case.json",
+      "path": "phase-b-03/pending/case.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 5047,
+      "archivedBytes": 1476
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/pending/public-config.json",
+      "path": "phase-b-03/pending/public-config.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1640,
+      "archivedBytes": 443
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/pending/shutdown-admission.json",
+      "path": "phase-b-03/pending/shutdown-admission.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 167,
+      "archivedBytes": 158
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/pending/startup.json",
+      "path": "phase-b-03/pending/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 154,
+      "archivedBytes": 147
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/pending/stderr.log",
+      "path": "phase-b-03/pending/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 14720,
+      "archivedBytes": 2115
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-03/pending/stdout.log",
+      "path": "phase-b-03/pending/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 609,
+      "archivedBytes": 397
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04.exit",
+      "path": "phase-b-04.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04.log",
+      "path": "phase-b-04.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 6633,
+      "archivedBytes": 2119
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04.launch.json",
+      "path": "phase-b-04.launch.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 7643,
+      "archivedBytes": 2257
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/driver.json",
+      "path": "phase-b-04/driver.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 26668,
+      "archivedBytes": 3958
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/launch-phase-b.actual.ts",
+      "path": "phase-b-04/launch-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 2225,
+      "archivedBytes": 1032
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/serve-phase-b.actual.ts",
+      "path": "phase-b-04/serve-phase-b.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 17803,
+      "archivedBytes": 5924
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/summary.json",
+      "path": "phase-b-04/summary.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 7083,
+      "archivedBytes": 1556
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/phase-b-input.actual.ts",
+      "path": "phase-b-04/phase-b-input.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 1292,
+      "archivedBytes": 635
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/case.json",
+      "path": "phase-b-04/pending/case.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 11522,
+      "archivedBytes": 2781
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/public-config.json",
+      "path": "phase-b-04/pending/public-config.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1025,
+      "archivedBytes": 389
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/shutdown-admission.json",
+      "path": "phase-b-04/pending/shutdown-admission.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 167,
+      "archivedBytes": 156
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/startup.json",
+      "path": "phase-b-04/pending/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 154,
+      "archivedBytes": 148
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/stderr.log",
+      "path": "phase-b-04/pending/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 252165,
+      "archivedBytes": 12512
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/stdout.log",
+      "path": "phase-b-04/pending/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 548,
+      "archivedBytes": 367
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/pending-observation.json",
+      "path": "phase-b-04/pending/pending-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6151,
+      "archivedBytes": 1823
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/prompt-input.json",
+      "path": "phase-b-04/pending/prompt-input.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 479,
+      "archivedBytes": 337
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/sender-terminal.json",
+      "path": "phase-b-04/pending/sender-terminal.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 190,
+      "archivedBytes": 169
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/pending/terminal-observation.json",
+      "path": "phase-b-04/pending/terminal-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6151,
+      "archivedBytes": 1823
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/case.json",
+      "path": "phase-b-04/disconnected/case.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 11570,
+      "archivedBytes": 2737
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/public-config.json",
+      "path": "phase-b-04/disconnected/public-config.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1025,
+      "archivedBytes": 389
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/shutdown-admission.json",
+      "path": "phase-b-04/disconnected/shutdown-admission.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 167,
+      "archivedBytes": 156
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/startup.json",
+      "path": "phase-b-04/disconnected/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 159,
+      "archivedBytes": 151
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/stderr.log",
+      "path": "phase-b-04/disconnected/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 257524,
+      "archivedBytes": 12886
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/stdout.log",
+      "path": "phase-b-04/disconnected/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 553,
+      "archivedBytes": 371
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/pending-observation.json",
+      "path": "phase-b-04/disconnected/pending-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6197,
+      "archivedBytes": 1832
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/prompt-input.json",
+      "path": "phase-b-04/disconnected/prompt-input.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 484,
+      "archivedBytes": 342
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/sender-terminal.json",
+      "path": "phase-b-04/disconnected/sender-terminal.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 108,
+      "archivedBytes": 117
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-04/disconnected/terminal-observation.json",
+      "path": "phase-b-04/disconnected/terminal-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6197,
+      "archivedBytes": 1833
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05.exit",
+      "path": "phase-b-05.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05.log",
+      "path": "phase-b-05.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 6547,
+      "archivedBytes": 2104
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05.launch.json",
+      "path": "phase-b-05.launch.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 7547,
+      "archivedBytes": 2242
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/driver.json",
+      "path": "phase-b-05/driver.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 26666,
+      "archivedBytes": 3945
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/green-check.json",
+      "path": "phase-b-05/green-check.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1816,
+      "archivedBytes": 753
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/case.json",
+      "path": "phase-b-05/pending/case.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 11523,
+      "archivedBytes": 2781
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/public-config.json",
+      "path": "phase-b-05/pending/public-config.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1025,
+      "archivedBytes": 389
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/shutdown-admission.json",
+      "path": "phase-b-05/pending/shutdown-admission.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 167,
+      "archivedBytes": 156
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/startup.json",
+      "path": "phase-b-05/pending/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 154,
+      "archivedBytes": 147
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/stderr.log",
+      "path": "phase-b-05/pending/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 252780,
+      "archivedBytes": 12795
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/stdout.log",
+      "path": "phase-b-05/pending/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 609,
+      "archivedBytes": 399
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/pending-observation.json",
+      "path": "phase-b-05/pending/pending-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6152,
+      "archivedBytes": 1825
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/prompt-input.json",
+      "path": "phase-b-05/pending/prompt-input.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 479,
+      "archivedBytes": 338
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/sender-terminal.json",
+      "path": "phase-b-05/pending/sender-terminal.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 190,
+      "archivedBytes": 169
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/pending/terminal-observation.json",
+      "path": "phase-b-05/pending/terminal-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6834,
+      "archivedBytes": 2066
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/case.json",
+      "path": "phase-b-05/disconnected/case.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 11568,
+      "archivedBytes": 2735
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/public-config.json",
+      "path": "phase-b-05/disconnected/public-config.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1025,
+      "archivedBytes": 388
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/shutdown-admission.json",
+      "path": "phase-b-05/disconnected/shutdown-admission.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 167,
+      "archivedBytes": 159
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/startup.json",
+      "path": "phase-b-05/disconnected/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 159,
+      "archivedBytes": 151
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/stderr.log",
+      "path": "phase-b-05/disconnected/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 255496,
+      "archivedBytes": 13170
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/stdout.log",
+      "path": "phase-b-05/disconnected/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 614,
+      "archivedBytes": 401
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/pending-observation.json",
+      "path": "phase-b-05/disconnected/pending-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6197,
+      "archivedBytes": 1832
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/prompt-input.json",
+      "path": "phase-b-05/disconnected/prompt-input.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 484,
+      "archivedBytes": 341
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/sender-terminal.json",
+      "path": "phase-b-05/disconnected/sender-terminal.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 108,
+      "archivedBytes": 117
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-05/disconnected/terminal-observation.json",
+      "path": "phase-b-05/disconnected/terminal-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 6874,
+      "archivedBytes": 2074
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-preflight-01.exit",
+      "path": "phase-b-preflight-01.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-preflight-01.log",
+      "path": "phase-b-preflight-01.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 2393,
+      "archivedBytes": 662
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-preflight-02.exit",
+      "path": "phase-b-preflight-02.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-preflight-02.log",
+      "path": "phase-b-preflight-02.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 2488,
+      "archivedBytes": 670
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-preflight-03.exit",
+      "path": "phase-b-preflight-03.exit.gz",
+      "compression": "gzip",
+      "sourceBytes": 3,
+      "archivedBytes": 23
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-preflight-03.log",
+      "path": "phase-b-preflight-03.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 1895,
+      "archivedBytes": 903
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/phase-b-preflight-03.json",
+      "path": "phase-b-preflight-03.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 2327,
+      "archivedBytes": 898
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02-wmi.json",
+      "path": "native-restart-02-wmi.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 119,
+      "archivedBytes": 125
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/launch-restart-standalone.actual.ps1",
+      "path": "native-restart-02/launch-restart-standalone.actual.ps1.gz",
+      "compression": "gzip",
+      "sourceBytes": 9879,
+      "archivedBytes": 2897
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/observed-owners.json",
+      "path": "native-restart-02/observed-owners.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 11047,
+      "archivedBytes": 1375
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/owner.json",
+      "path": "native-restart-02/owner.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 889,
+      "archivedBytes": 408
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/result.json",
+      "path": "native-restart-02/result.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 80527,
+      "archivedBytes": 6562
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/server-restart-e2e.actual.ts",
+      "path": "native-restart-02/server-restart-e2e.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 42951,
+      "archivedBytes": 10996
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/stderr.log",
+      "path": "native-restart-02/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/stdout.log",
+      "path": "native-restart-02/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 125,
+      "archivedBytes": 123
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-02/terminal.json",
+      "path": "native-restart-02/terminal.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 25486,
+      "archivedBytes": 2047
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03-wmi.json",
+      "path": "native-restart-03-wmi.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 119,
+      "archivedBytes": 124
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/launch-restart-standalone.actual.ps1",
+      "path": "native-restart-03/launch-restart-standalone.actual.ps1.gz",
+      "compression": "gzip",
+      "sourceBytes": 9910,
+      "archivedBytes": 2909
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/observed-owners.json",
+      "path": "native-restart-03/observed-owners.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 9714,
+      "archivedBytes": 1260
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/owner.json",
+      "path": "native-restart-03/owner.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 889,
+      "archivedBytes": 407
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/result.json",
+      "path": "native-restart-03/result.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 80527,
+      "archivedBytes": 6576
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/server-restart-e2e.actual.ts",
+      "path": "native-restart-03/server-restart-e2e.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 42951,
+      "archivedBytes": 10996
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/stderr.log",
+      "path": "native-restart-03/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 0,
+      "archivedBytes": 20
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/stdout.log",
+      "path": "native-restart-03/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 125,
+      "archivedBytes": 123
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/terminal.json",
+      "path": "native-restart-03/terminal.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 22822,
+      "archivedBytes": 1877
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-restart-03/final-observation.json",
+      "path": "native-restart-03/final-observation.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 367,
+      "archivedBytes": 221
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01.launch.json",
+      "path": "native-timeout-01.launch.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 1514,
+      "archivedBytes": 847
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/native-timeout-preload.actual.ts",
+      "path": "native-timeout-01/native-timeout-preload.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 850,
+      "archivedBytes": 530
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/native-timeout-probe.actual.ts",
+      "path": "native-timeout-01/native-timeout-probe.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 8552,
+      "archivedBytes": 3239
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/launch-native-timeout.actual.ts",
+      "path": "native-timeout-01/launch-native-timeout.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 1894,
+      "archivedBytes": 860
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/result.json",
+      "path": "native-timeout-01/result.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 2586,
+      "archivedBytes": 1016
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/phases.jsonl",
+      "path": "native-timeout-01/phases.jsonl.gz",
+      "compression": "gzip",
+      "sourceBytes": 200,
+      "archivedBytes": 129
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/startup.json",
+      "path": "native-timeout-01/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 119,
+      "archivedBytes": 124
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/stderr.log",
+      "path": "native-timeout-01/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 3022,
+      "archivedBytes": 1047
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-01/stdout.log",
+      "path": "native-timeout-01/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 599,
+      "archivedBytes": 390
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02.launch.json",
+      "path": "native-timeout-02.launch.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 363,
+      "archivedBytes": 254
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/native-timeout-preload.actual.ts",
+      "path": "native-timeout-02/native-timeout-preload.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 926,
+      "archivedBytes": 573
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/native-timeout-probe.actual.ts",
+      "path": "native-timeout-02/native-timeout-probe.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 8552,
+      "archivedBytes": 3239
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/launch-native-timeout.actual.ts",
+      "path": "native-timeout-02/launch-native-timeout.actual.ts.gz",
+      "compression": "gzip",
+      "sourceBytes": 1894,
+      "archivedBytes": 860
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/result.json",
+      "path": "native-timeout-02/result.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 2638,
+      "archivedBytes": 1017
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/phases.jsonl",
+      "path": "native-timeout-02/phases.jsonl.gz",
+      "compression": "gzip",
+      "sourceBytes": 200,
+      "archivedBytes": 128
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/startup.json",
+      "path": "native-timeout-02/startup.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 119,
+      "archivedBytes": 124
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/stderr.log",
+      "path": "native-timeout-02/stderr.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 7389,
+      "archivedBytes": 1283
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/native-timeout-02/stdout.log",
+      "path": "native-timeout-02/stdout.log.gz",
+      "compression": "gzip",
+      "sourceBytes": 599,
+      "archivedBytes": 390
+    },
+    {
+      "source": ".tmp-native-shutdown-pending-permission-403/handoff-403.json",
+      "path": "handoff-403.json.gz",
+      "compression": "gzip",
+      "sourceBytes": 41745,
+      "archivedBytes": 4853
+    }
+  ]
+}

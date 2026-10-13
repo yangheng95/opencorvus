@@ -96,7 +96,7 @@ export class RestartHandoffEvidenceError extends Error {
 }
 
 export async function beginRestartHandoff(input: {
-  hostname: string; port: number; quiesceListener: () => Promise<void>; settleExecution: () => Promise<void>
+  hostname: string; port: number; settleAndQuiesce: (onListenerQuiesceStarted: () => void) => Promise<void>
   releaseRuntimeState: () => Promise<void> | void; restoreListener: () => Promise<void>
   command?: string[]; environment?: Record<string, string>
 }): Promise<{ childPid: number; drained: Promise<void> }> {
@@ -116,10 +116,8 @@ export async function beginRestartHandoff(input: {
   }
   try {
     if (!executable) throw new Error("Restart process executable is unavailable")
-    listenerQuiesceStarted = true
-    drained = input.quiesceListener()
+    drained = input.settleAndQuiesce(() => { listenerQuiesceStarted = true })
     await drained
-    await input.settleExecution()
     await input.releaseRuntimeState()
     await waitForReleasedListener(input.hostname, input.port)
     spawnAttempted = true

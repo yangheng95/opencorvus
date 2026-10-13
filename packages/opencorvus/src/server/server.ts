@@ -28,6 +28,7 @@ import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 import { Database } from "@/storage/db"
 import { configureCorsOrigins, isAllowedCorsOrigin, isAllowedRequestOrigin } from "./cors"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
+import { settleRuntimeAndQuiesceListener } from "./stop"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { selectProjectDirectory } from "./directory"
 import { Filesystem } from "@/util/filesystem"
@@ -1081,33 +1082,13 @@ export namespace Server {
       server.stop = (closeActiveConnections?: boolean) => {
         if (stopOperation) return stopOperation
         const operation = (async () => {
-          let confirmRuntimeCancellation!: () => void
-          let failRuntimeCancellation!: (error: unknown) => void
-          const runtimeCancellationRequested = new Promise<void>((resolve, reject) => {
-            confirmRuntimeCancellation = resolve
-            failRuntimeCancellation = reject
+          const terminated = await settleRuntimeAndQuiesceListener({
+            settle: (onRuntimeCancellationRequested) => settleCurrentProcessExecution("Server.stop graceful runtime shutdown", {
+              disposeInstances: () => Instance.disposeAll(),
+              onRuntimeCancellationRequested,
+            }),
+            quiesce: () => quiesce(closeActiveConnections),
           })
-          const termination = settleCurrentProcessExecution("Server.stop graceful runtime shutdown", {
-            disposeInstances: () => Instance.disposeAll(),
-            onRuntimeCancellationRequested: confirmRuntimeCancellation,
-          })
-          void termination.catch(failRuntimeCancellation)
-          await runtimeCancellationRequested
-          try {
-            await quiesce(closeActiveConnections)
-          } catch (quiesceError) {
-            const failures: unknown[] = [quiesceError]
-            try {
-              const terminated = await termination
-              await terminated.releaseHandoff(false)
-            } catch (settlementError) {
-              failures.push(settlementError)
-            }
-            throw failures.length === 1
-              ? failures[0]
-              : new AggregateError(failures, "Server listener quiesce and runtime settlement rollback failed")
-          }
-          const terminated = await termination
           await releaseRuntimeHandoff(terminated.releaseHandoff)
           if (cleanupFailures.length === 1) throw cleanupFailures[0]
           if (cleanupFailures.length > 1) {
