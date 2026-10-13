@@ -51,8 +51,8 @@ import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { appendConversationLiveEvent } from "@/protocol/conversation-live-buffer"
 import {
   enrichStandaloneSessionTranscript,
-  mapSessionBusEvent,
   standalonePendingPermission,
+  standalonePendingQuestion,
 } from "@/protocol/session-mirror"
 import { PermissionAuthority } from "@/permission/authority"
 import { listConversationAgentSessionsForSessionTree, taskExecutionProjectionForTask } from "@/orchestrator/task-event"
@@ -677,32 +677,15 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
   })
 }
 
-function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof SessionProtocolEvent> {
-  const orderKey = timelineOrderKey({
-    domain: "interaction",
-    time: request.timeCreated,
-    id: request.id,
-  })
-  const mapped = mapSessionBusEvent(
-    {
-      type: Question.Event.Asked.type,
-      properties: request,
-    },
-    { sessionID: request.sessionID },
-  )
-  if (!mapped?.summary || !mapped.payload) {
-    throw new Error(`pendingQuestionSessionEvent: failed to map pending question ${request.id}`)
-  }
-  return SessionProtocolEvent.parse({
-    event_id: `pending-question-${request.id}`,
-    session_id: request.sessionID,
-    orderKey,
-    type: mapped.type,
-    emittedAt: request.timeCreated,
-    timestamp: request.timeCreated,
-    sequence: 0,
-    summary: mapped.summary,
-    payload: mapped.payload,
+function pendingQuestionsForConversation(
+  requests: Question.Request[],
+  projectID: string,
+  sessionIDs: ReadonlySet<string>,
+) {
+  return requests.flatMap((request) => {
+    if (!sessionIDs.has(request.sessionID)) return []
+    const projected = standalonePendingQuestion(request, projectID)
+    return projected ? [projected] : []
   })
 }
 
@@ -1090,16 +1073,7 @@ export const SessionRoutes = lazy(() =>
         const { sessionIDs, transcript, history, view, hydratedAgentSessions, executionEvents } = conversation
         const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
-        const pendingQuestions = (await Question.list())
-          .filter((request) => sessionIDSet.has(request.sessionID))
-          .map((request) => ({
-            ...request,
-            orderKey: timelineOrderKey({
-              domain: "interaction",
-              time: request.timeCreated,
-              id: request.id,
-            }),
-          }))
+        const pendingQuestions = pendingQuestionsForConversation(await Question.list(), session.projectID, sessionIDSet)
         const board = {
           kind: "session" as const,
           sessionID,
@@ -1318,15 +1292,12 @@ export const SessionRoutes = lazy(() =>
             view: connectionConversation.view,
             history: connectionConversation.history,
             pendingPermissions: await pendingPermissionsForConversation(session.projectID, sessionTreeIDs),
+            pendingQuestions: pendingQuestionsForConversation(
+              readPendingQuestions(),
+              session.projectID,
+              sessionTreeIDs,
+            ),
           }
-          // Subscribe before reading the canonical pending-question state. A
-          // question created before the subscription is present in this
-          // snapshot; one created afterwards arrives through ProtocolStore.
-          // The overlap can repeat the same request ID, which the overlay
-          // interaction projection intentionally upserts idempotently.
-          const pendingQuestionEvents = readPendingQuestions()
-            .filter((item) => sessionTreeIDs.has(item.sessionID))
-            .map(pendingQuestionSessionEvent)
           await Promise.all([stopSessionProtocol.drain(), stopTaskLifecycleProtocol.drain()])
           const connectedAt = Date.now()
           await writeData(
@@ -1356,7 +1327,6 @@ export const SessionRoutes = lazy(() =>
             }),
           ].sort((left, right) => left.time.emitted - right.time.emitted || left.id.localeCompare(right.id))
           for (const event of reconnectEvents) receiveProtocolEvent(event)
-          for (const event of pendingQuestionEvents) await writeData(JSON.stringify(event))
           bufferingProtocolEvents = false
           const releaseWrites = bufferedProtocolEvents
             .splice(0)

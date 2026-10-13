@@ -41,21 +41,67 @@ export namespace EngineInteraction {
     Bus.subscribe(PermissionAuthority.Event.Terminated, ({ properties }) => projectPermissionTermination(properties), {
       durableID: "engine.interaction.permission-terminated", effect: "idempotent_by_occurrence",
     })
-    Bus.subscribe(Question.Event.Asked, ({ properties, occurrenceID }) => upsertQuestion(properties, occurrenceID), {
-      durableID: "engine.interaction.question-asked", effect: "idempotent_by_occurrence",
-    })
-    Bus.subscribe(Question.Event.Replied, ({ properties, occurrenceID }) => resolveQuestion(properties, occurrenceID), {
-      durableID: "engine.interaction.question-replied", effect: "idempotent_by_occurrence",
-    })
-    Bus.subscribe(Question.Event.Rejected, ({ properties, occurrenceID }) => rejectQuestion(properties, occurrenceID), {
-      durableID: "engine.interaction.question-rejected", effect: "idempotent_by_occurrence",
-    })
-    Bus.subscribe(Question.Event.Expired, ({ properties, occurrenceID }) => expireQuestion(properties, occurrenceID), {
-      durableID: "engine.interaction.question-expired", effect: "idempotent_by_occurrence",
-    })
-    Bus.subscribe(Question.Event.Abandoned, ({ properties, occurrenceID }) => abandonQuestion(properties, occurrenceID), {
-      durableID: "engine.interaction.question-abandoned", effect: "idempotent_by_occurrence",
-    })
+    Bus.subscribe(
+      Question.Event.Asked,
+      ({ properties, occurrenceID }) =>
+        projectQuestion({ sessionID: properties.sessionID, requestID: properties.id, askedOccurrenceID: occurrenceID }),
+      {
+        durableID: "engine.interaction.question-asked",
+        effect: "idempotent_by_occurrence",
+      },
+    )
+    Bus.subscribe(
+      Question.Event.Replied,
+      ({ properties, occurrenceID }) =>
+        projectQuestion({
+          sessionID: properties.sessionID,
+          requestID: properties.requestID,
+          terminalOccurrenceID: occurrenceID,
+        }),
+      {
+        durableID: "engine.interaction.question-replied",
+        effect: "idempotent_by_occurrence",
+      },
+    )
+    Bus.subscribe(
+      Question.Event.Rejected,
+      ({ properties, occurrenceID }) =>
+        projectQuestion({
+          sessionID: properties.sessionID,
+          requestID: properties.requestID,
+          terminalOccurrenceID: occurrenceID,
+        }),
+      {
+        durableID: "engine.interaction.question-rejected",
+        effect: "idempotent_by_occurrence",
+      },
+    )
+    Bus.subscribe(
+      Question.Event.Expired,
+      ({ properties, occurrenceID }) =>
+        projectQuestion({
+          sessionID: properties.sessionID,
+          requestID: properties.requestID,
+          terminalOccurrenceID: occurrenceID,
+        }),
+      {
+        durableID: "engine.interaction.question-expired",
+        effect: "idempotent_by_occurrence",
+      },
+    )
+    Bus.subscribe(
+      Question.Event.Abandoned,
+      ({ properties, occurrenceID }) =>
+        projectQuestion({
+          sessionID: properties.sessionID,
+          requestID: properties.requestID,
+          terminalOccurrenceID: occurrenceID,
+        }),
+      {
+        durableID: "engine.interaction.question-abandoned",
+        effect: "idempotent_by_occurrence",
+      },
+    )
   }
 
   /** Interactions inserted directly by the Task-root control plane rather than
@@ -134,72 +180,62 @@ export namespace EngineInteraction {
       )
 
       for (const interaction of pending) {
-      try {
-        if (!interaction.session_id) {
-          throw new Error(`Pending interaction ${interaction.id} has no Session identity during project recovery`)
-        }
-        if (isDirectControlPlaneGate(interaction)) {
-          retainedControlPlaneGates.push({
-            interactionID: interaction.id,
-            externalID: interaction.external_id,
-          })
-          continue
-        }
-        if (interaction.request_type === "question") {
-          const payload = interaction.payload as {
-            questions?: unknown
-            tool?: unknown
-            automatic?: unknown
-            expiry?: unknown
+        try {
+          if (!interaction.session_id) {
+            throw new Error(`Pending interaction ${interaction.id} has no Session identity during project recovery`)
           }
-          await Question.restore(Question.Request.parse({
-            id: interaction.external_id,
-            sessionID: interaction.session_id,
-            timeCreated: interaction.time_created,
-            questions: payload.questions,
-            ...(payload.tool ? { tool: payload.tool } : {}),
-            ...(payload.automatic ? { automatic: payload.automatic } : {}),
-            ...(payload.expiry ? { expiry: payload.expiry } : {}),
-          }))
-          const recoverableAction = await recoverableAgentCoordinationQuestion(interaction, actionsByID)
-          if (recoverableAction) {
-            retainedRecoverableQuestions.push({
+          if (isDirectControlPlaneGate(interaction)) {
+            retainedControlPlaneGates.push({
               interactionID: interaction.id,
               externalID: interaction.external_id,
-              actionID: recoverableAction,
             })
             continue
           }
-          retainedRecoverableQuestions.push({
+          if (interaction.request_type === "question") {
+            const projected = projectQuestion({ sessionID: interaction.session_id, requestID: interaction.external_id })
+            if (!projected || projected.interaction.id !== interaction.id)
+              throw new Error(`Question ${interaction.external_id} recovery changed its Task interaction owner`)
+            if (projected.facts.terminal) continue
+            await Question.restore(projected.facts.request)
+            const recoverableAction = await recoverableAgentCoordinationQuestion(interaction, actionsByID)
+            if (recoverableAction) {
+              retainedRecoverableQuestions.push({
+                interactionID: interaction.id,
+                externalID: interaction.external_id,
+                actionID: recoverableAction,
+              })
+              continue
+            }
+            retainedRecoverableQuestions.push({
+              interactionID: interaction.id,
+              externalID: interaction.external_id,
+            })
+            continue
+          }
+          if (interaction.request_type === "permission") {
+            retainedRecoverablePermissions.push({ interactionID: interaction.id, externalID: interaction.external_id })
+            continue
+          }
+          throw new Error(`Pending interaction ${interaction.id} has unsupported type ${interaction.request_type}`)
+        } catch (error) {
+          // The row keeps its pending fact: this pass has no proof of any
+          // terminal outcome, and inventing one would discard a real waiter.
+          // It is reported instead, so a single unreconcilable row degrades one
+          // Task rather than making the project permanently unopenable.
+          const message = error instanceof Error ? error.message : String(error)
+          unreconciled.push({
             interactionID: interaction.id,
             externalID: interaction.external_id,
+            error: message,
           })
-          continue
+          log.error("pending interaction could not be reconciled during project recovery", {
+            interactionID: interaction.id,
+            externalID: interaction.external_id,
+            requestType: interaction.request_type ?? "unknown",
+            taskID: interaction.task_id,
+            error: message,
+          })
         }
-        if (interaction.request_type === "permission") {
-          retainedRecoverablePermissions.push({ interactionID: interaction.id, externalID: interaction.external_id })
-          continue
-        }
-        throw new Error(`Pending interaction ${interaction.id} has unsupported type ${interaction.request_type}`)
-      } catch (error) {
-        // The row keeps its pending fact: this pass has no proof of any
-        // terminal outcome, and inventing one would discard a real waiter.
-        // It is reported instead, so a single unreconcilable row degrades one
-        // Task rather than making the project permanently unopenable.
-        const message = error instanceof Error ? error.message : String(error)
-        unreconciled.push({
-          interactionID: interaction.id,
-          externalID: interaction.external_id,
-          error: message,
-        })
-        log.error("pending interaction could not be reconciled during project recovery", {
-          interactionID: interaction.id,
-          externalID: interaction.external_id,
-          requestType: interaction.request_type ?? "unknown",
-          taskID: interaction.task_id,
-          error: message,
-        })
-      }
       }
       if (rawPage.length < 64) break
     }
@@ -210,48 +246,6 @@ export namespace EngineInteraction {
       retainedControlPlaneGates,
       unreconciled,
     }
-  }
-}
-
-type RecoveredAbandonment = {
-  sessionID: string
-  requestID: string
-  origin: "infrastructure"
-  timeResolved: number
-}
-
-async function abandonQuestion(input: RecoveredAbandonment, sourceOccurrenceID: string) {
-  await abandonPendingInteraction(input, "question", sourceOccurrenceID)
-}
-
-async function abandonPendingInteraction(input: RecoveredAbandonment, requestType: "question" | "permission", sourceOccurrenceID: string) {
-  const interaction = findInteractionByExternal(input.requestID)
-  if (!interaction) return
-  requireInteractionSession(interaction, input.sessionID, requestType, "abandonment")
-  Database.immediateTransaction((db) => resolveEngineInteractionRequest(db, {
-    row: interaction,
-    status: "expired",
-    response: { origin: "infrastructure" },
-    eventSource: `interaction.${requestType}.abandoned`,
-    timeResolved: input.timeResolved,
-    sourceOccurrenceID,
-  }))
-  requestTaskControlScanInBackground(interaction.task_id, `interaction.${requestType}.abandoned`)
-}
-
-function requireInteractionSession(
-  interaction: InteractionRow,
-  sessionID: string,
-  requestType: "question" | "permission",
-  terminal: "answer" | "rejection" | "expiry" | "abandonment",
-) {
-  if (interaction.request_type !== requestType) {
-    throw new Error(
-      `${requestType} ${terminal} type mismatch for interaction ${interaction.id}: ${interaction.request_type}`,
-    )
-  }
-  if (interaction.session_id !== sessionID) {
-    throw new Error(`${requestType} ${terminal} session mismatch for interaction ${interaction.id}: ${sessionID}`)
   }
 }
 
@@ -397,135 +391,108 @@ async function resolvePermission(input: {
   assertResolvedReplay(interaction, input.userInput)
 }
 
-async function upsertQuestion(request: Question.Request, sourceOccurrenceID: string) {
-  const owner = resolveOwner(request.sessionID)
-  if (!owner) return
-  if (findInteractionByExternal(request.id)) return
-  const title = request.questions.map((item) => item.header).join(" / ") || "Question"
-  const body = request.questions.map((item) => item.question).join("\n\n")
-  Database.transaction((db) => {
-    // Always emit — overlay only filters by taskID, and a Task-Agent clarification
-    // before any run has started still needs to surface in the InteractionPanel.
-    insertEngineInteractionRequest(db, {
-      taskID: owner.taskID,
-      sessionID: request.sessionID,
-      externalID: request.id,
-      requestType: "question",
-      title,
-      body,
-      payload: {
-        questions: request.questions,
-        tool: request.tool,
-        ...(request.automatic ? { automatic: request.automatic } : {}),
-        ...(request.expiry ? { expiry: request.expiry } : {}),
-      },
-      eventSource: "interaction.question",
-      eventSummary: title,
-      timeCreated: request.timeCreated,
-      source: { kind: "bus_question", id: sourceOccurrenceID },
-    })
-  })
-}
-
 function resolveOwner(sessionID: string) {
   const taskID = taskIDForSession(sessionID)
   if (!taskID) return undefined
   return { taskID }
 }
 
-async function resolveQuestion(input: {
+function projectQuestion(input: {
   sessionID: string
   requestID: string
-  answers: Question.Answer[]
-  timeResolved: number
-  automatic?: boolean
-  userInput?: InteractionUserInput
-}, sourceOccurrenceID: string) {
-  const interaction = findInteractionByExternal(input.requestID)
-  if (!interaction) return
-  requireInteractionSession(interaction, input.sessionID, "question", "answer")
-  if (interaction.status !== "pending") return assertResolvedReplay(interaction, input.userInput)
-  await resolveInteraction(
-    interaction,
-    "answered",
-    { answers: input.answers, ...(input.automatic ? { auto_reply: true } : {}) },
-    input.timeResolved,
-    input.userInput,
-    sourceOccurrenceID,
-  )
-}
-
-async function rejectQuestion(input: {
-  sessionID: string
-  requestID: string
-  origin: "operator"
-  timeResolved: number
-  userInput?: InteractionUserInput
-}, sourceOccurrenceID: string) {
-  const interaction = findInteractionByExternal(input.requestID)
-  if (!interaction) return
-  requireInteractionSession(interaction, input.sessionID, "question", "rejection")
-  if (interaction.status !== "pending") return assertResolvedReplay(interaction, input.userInput)
-  await resolveInteraction(interaction, "rejected", { origin: input.origin }, input.timeResolved, input.userInput, sourceOccurrenceID)
-}
-
-async function expireQuestion(input: {
-  sessionID: string
-  requestID: string
-  origin: "deadline"
-  timeExpires: number
-  timeResolved: number
-}, sourceOccurrenceID: string) {
-  const interaction = findInteractionByExternal(input.requestID)
-  if (!interaction) return
-  requireInteractionSession(interaction, input.sessionID, "question", "expiry")
-  await resolveInteraction(
-    interaction,
-    "expired",
-    { origin: input.origin, time_expires: input.timeExpires },
-    input.timeResolved,
-    undefined,
-    sourceOccurrenceID,
-  )
-}
-
-async function resolveInteraction(
-  interaction: InteractionRow,
-  status: Exclude<EngineInteractionStatus, "pending">,
-  response: EngineMetadata,
-  timeResolved: number,
-  userInput?: InteractionUserInput,
-  sourceOccurrenceID?: string,
-) {
-  Database.immediateTransaction((db) => {
-    resolveEngineInteractionRequest(db, {
-      row: interaction,
-      status,
-      response,
-      eventSource: "interaction.resolve",
-      timeResolved,
-      sourceOccurrenceID,
-    })
-    if (userInput) {
-      const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, interaction.task_id)).get()
-      if (!task) throw new Error(`Interaction ${interaction.id} Task owner not found`)
-      ProjectMemory.captureOccurrenceInTransaction(db, {
-        occurrenceKind: status === "rejected" ? "interaction_reject" : "interaction_reply",
-        occurrenceID: interaction.id,
-        projectID: task.project_id,
-        sessionID: interaction.session_id ?? undefined,
-        taskID: interaction.task_id,
-        surface: userInput.surface,
-        timeCreated: timeResolved,
-        text: userInput.text,
-        structured: userInput.structured,
+  askedOccurrenceID?: string
+  terminalOccurrenceID?: string
+}) {
+  const owner = resolveOwner(input.sessionID)
+  if (!owner) return
+  const projectID = Instance.project.id
+  const projected = Database.immediateTransaction((db) => {
+    const facts = Question.publicationFacts({ ...input, projectID })
+    const request = facts.request
+    const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, owner.taskID)).get()
+    if (!task || task.project_id !== projectID)
+      throw new Error(`Question ${request.id} has a different Task Project owner`)
+    let interaction = findInteractionByExternal(request.id)
+    if (!interaction) {
+      const title = request.questions.map((item) => item.header).join(" / ") || "Question"
+      insertEngineInteractionRequest(db, {
+        taskID: owner.taskID,
+        sessionID: request.sessionID,
+        externalID: request.id,
+        requestType: "question",
+        title,
+        body: request.questions.map((item) => item.question).join("\n\n"),
+        payload: {
+          questions: request.questions,
+          tool: request.tool,
+          ...(request.automatic ? { automatic: request.automatic } : {}),
+          ...(request.expiry ? { expiry: request.expiry } : {}),
+        },
+        eventSource: "interaction.question",
+        eventSummary: title,
+        timeCreated: request.timeCreated,
+        source: { kind: "bus_question", id: facts.askedOccurrenceID },
       })
+      interaction = findInteractionByExternal(request.id)
     }
+    if (
+      !interaction ||
+      interaction.task_id !== owner.taskID ||
+      interaction.session_id !== request.sessionID ||
+      interaction.request_type !== "question"
+    ) {
+      throw new Error(`Question ${request.id} has a different immutable Task interaction owner`)
+    }
+    const row = db
+      .select()
+      .from(EngineInteractionRequestTable)
+      .where(eq(EngineInteractionRequestTable.id, interaction.id))
+      .get()
+    if (row?.source_kind !== "bus_question" || row.source_id !== facts.askedOccurrenceID) {
+      throw new Error(`Question ${request.id} interaction refers to a different original Asked publication`)
+    }
+    const terminal = facts.terminal
+    if (terminal) {
+      const status: Exclude<EngineInteractionStatus, "pending"> =
+        terminal.type === "question.replied"
+          ? "answered"
+          : terminal.type === "question.rejected"
+            ? "rejected"
+            : "expired"
+      const response: EngineMetadata =
+        terminal.type === "question.replied"
+          ? { answers: terminal.properties.answers, ...(terminal.properties.automatic ? { auto_reply: true } : {}) }
+          : terminal.type === "question.expired"
+            ? { origin: terminal.properties.origin, time_expires: terminal.properties.timeExpires }
+            : { origin: terminal.properties.origin }
+      resolveEngineInteractionRequest(db, {
+        row: interaction,
+        status,
+        response,
+        eventSource: "interaction.resolve",
+        timeResolved: terminal.properties.timeResolved,
+        sourceOccurrenceID: terminal.occurrenceID,
+      })
+      const userInput = "userInput" in terminal.properties ? terminal.properties.userInput : undefined
+      if (userInput) {
+        ProjectMemory.captureOccurrenceInTransaction(db, {
+          occurrenceKind: status === "rejected" ? "interaction_reject" : "interaction_reply",
+          occurrenceID: interaction.id,
+          projectID: task.project_id,
+          sessionID: request.sessionID,
+          taskID: task.id,
+          surface: userInput.surface,
+          timeCreated: terminal.properties.timeResolved,
+          text: userInput.text,
+          structured: userInput.structured,
+        })
+      }
+    }
+    return { facts, interaction: projectInteractionRowInTransaction(db, row) }
   })
-  // A resolved Interaction turns its ingress from `waiting` into `ready`, but
-  // the reducer only observes that inside a scan. Without this edge the Task
-  // waits for the heartbeat — or, before the heartbeat existed, forever.
-  requestTaskControlScanInBackground(interaction.task_id, `interaction.${status}`)
+  if (projected.facts.terminal)
+    requestTaskControlScanInBackground(projected.interaction.task_id, `interaction.${projected.interaction.status}`)
+  return projected
 }
 
 function assertResolvedReplay(interaction: InteractionRow, userInput?: InteractionUserInput) {

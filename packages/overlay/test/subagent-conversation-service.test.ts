@@ -822,7 +822,7 @@ test("Side Chat's ordered snapshot parser retains the connection's captured auth
     if (!handlers) throw new Error("Expected actual local stream handlers")
     handlers.onEvent(JSON.stringify({
       type: "session.connected",
-      payload: { conversationSnapshot: { ...payload(), pendingPermissions: [] } },
+      payload: { sessionID: "child-session", conversationSnapshot: { ...payload(), pendingQuestions: [], pendingPermissions: [] } },
     }))
     expect(request).toMatchObject({ authority, path: "session/child-session/events", query: { directory: "D:/owned" } })
     expect(values.map((value) => JSON.parse(value))).toEqual([{

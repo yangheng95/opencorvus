@@ -93,6 +93,8 @@ const TREE_WRITER_PROJECTED_EXACT_TYPES = new Set([
   "question.asked",
   "question.replied",
   "question.rejected",
+  "question.expired",
+  "question.abandoned",
   "message.updated",
   "message.part.updated",
   "message.moved",

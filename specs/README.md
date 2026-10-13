@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [404 原始 Git 与 Question 证据](artifacts/2026-10-14-task-git-question-reconnect-404/README.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
+
 - [Provider 模型摘要](records/2026-10/2026-10-14-provider-model-summary.md)：统一目录数量、摘要和完整模型ID搜索；17张原图及真实读取失败恢复。
 
 - [相对链接迁移范围与未来树](records/2026-10/2026-10-14-link-relocation-authority.md)：Root独立调查Copy实际链接类型、current/future统一权限与完整整树迁移。
@@ -10,7 +12,7 @@
 
 - [Provider Test 在途生命周期](records/2026-10/2026-10-14-provider-test-lifecycle.md)：有效响应跨项目退休修复、并行逐项收敛与22张原图；保留超时窗口局限。
 
-- [404 Task Git 与 Question 重连](records/2026-10/2026-10-14-task-git-question-reconnect-404.md)：冻结 Git 目录实证、同页草稿重连与合法 Work/Mission 后续验收。
+- [404 Task Git 与 Question 重连](records/2026-10/2026-10-14-task-git-question-reconnect-404.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
 
 - [长正文与来源阅读](records/2026-10/2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
 

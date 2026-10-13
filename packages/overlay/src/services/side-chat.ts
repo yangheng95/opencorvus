@@ -1,9 +1,9 @@
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
-import { prepareStandaloneQuestionInteractions } from "./tree-writer"
 import type { InteractionData } from "../components/InteractionCard"
 import { permissionInteraction, preparePermissionInteractions } from "../utils/permission-interaction"
+import { prepareQuestionInteractions, questionInteraction, resolveQuestionInteraction, reuseQuestionInteraction } from "../utils/question-interaction"
 import {
   createSubagentConversationLiveProjection,
   observeSubagentConversationLiveEvent,
@@ -80,6 +80,7 @@ export function connectSideChat(
           try {
             const event = JSON.parse(data)
             if (event.type === "session.connected") {
+              if (event.payload.sessionID !== target.sessionID) throw new Error("Side chat connection snapshot Session identity conflict")
               const snapshot = event.payload.conversationSnapshot
               const preparedConversation = parseSubagentConversation(
                 { ...target, authority, source: { kind: "session", id: target.sessionID } },
@@ -87,10 +88,18 @@ export function connectSideChat(
               )
               const preparedPermissions = preparePermissionInteractions(snapshot.pendingPermissions, target.directory)
                 .filter((interaction) => interaction.sessionID === target.sessionID)
+              const preparedQuestions = prepareQuestionInteractions(snapshot.pendingQuestions, target.directory)
+                .filter((interaction) => interaction.sessionID === target.sessionID)
+                .map((question) => reuseQuestionInteraction(pending.get(question.id), question))
+              const next = new Map<string, InteractionData>(preparedQuestions.map((question) => [question.id, question]))
+              for (const permission of preparedPermissions) {
+                if (next.has(permission.id)) throw new Error(`permission ${permission.id} conflicts with a Question interaction`)
+                next.set(permission.id, permission)
+              }
               base = preparedConversation
               live = createSubagentConversationLiveProjection(target.sessionID)
               pending.clear()
-              for (const interaction of preparedPermissions) pending.set(interaction.id, interaction)
+              for (const [id, interaction] of next) pending.set(id, interaction)
               handlers.interactions([...pending.values()])
               handlers.connection(true)
               void refreshActivity()
@@ -113,8 +122,9 @@ export function connectSideChat(
               const payload = event.payload
               const id = payload?.id ?? payload?.requestID
               if (event.type === "question.asked") {
-                const [question] = prepareStandaloneQuestionInteractions([{ ...payload, orderKey: event.orderKey }])
-                pending.set(id, { ...question, directory: target.directory })
+                const question = questionInteraction({ ...payload, orderKey: event.orderKey }, target.directory)
+                if (question.sessionID !== target.sessionID) throw new Error(`question ${question.id} session identity conflict`)
+                pending.set(question.id, reuseQuestionInteraction(pending.get(question.id), question))
                 handlers.interactions([...pending.values()])
               } else if (event.type === "permission.asked") {
                 const interaction = permissionInteraction({ ...payload, orderKey: event.orderKey }, target.directory)
@@ -123,7 +133,9 @@ export function connectSideChat(
                 }
                 pending.set(interaction.id, interaction)
                 handlers.interactions([...pending.values()])
-              } else if (["question.replied", "question.rejected"].includes(event.type)) {
+              } else if (["question.replied", "question.rejected", "question.expired", "question.abandoned"].includes(event.type)) {
+                if (payload.sessionID !== target.sessionID) throw new Error(`${event.type} ${id} session identity conflict`)
+                resolveQuestionInteraction(pending.get(id), event.type, payload, event.orderKey)
                 pending.delete(id)
                 handlers.interactions([...pending.values()])
               } else if (event.type === "permission.replied" || event.type === "permission.terminated") {

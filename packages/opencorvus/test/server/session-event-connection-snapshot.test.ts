@@ -119,7 +119,7 @@ test("cold Session stream reads durable history and interactions with an unavail
         reason: "completed",
       })
       expect((await events.next("session.error")).payload.summary).toBe("Error: Recorded history incident")
-      expect((await events.next("question.asked")).payload.id).toBe(questionID)
+      expect(snapshot?.pendingQuestions.map((request) => request.id)).toEqual([questionID])
       const config = await Server.App().request(`/session/${sessionID}/config`, {
         headers: { "x-opencorvus-directory": project.path },
       })
@@ -281,6 +281,7 @@ test("Session stream schema classifies connection snapshots and ordinary protoco
       sessionID: "session-1",
       conversationSnapshot: {
         pendingPermissions: [],
+        pendingQuestions: [],
         transcript: [],
         view: { topLevelSessionIDs: [], sessions: [], messages: [] },
         history: {
@@ -1088,12 +1089,14 @@ test("two project streams receive their own non-Task child Message and Part even
     rootID: ownerB.root.id,
     text: "project B child",
   })
-  const [messageA, partA, messageB, partB] = await Promise.all([
-    eventsA.next("message.updated"),
-    eventsA.next("message.part.updated"),
-    eventsB.next("message.updated"),
-    eventsB.next("message.part.updated"),
-  ])
+  // Each reader has one stream cursor. Read each cursor sequentially while
+  // retaining genuine concurrency between the two Project streams.
+  const [[messageA, partA], [messageB, partB]] = await Promise.all(
+    [eventsA, eventsB].map(async (events) => [
+      await events.next("message.updated"),
+      await events.next("message.part.updated"),
+    ]),
+  )
   await Promise.all([eventsA.cancel(), eventsB.cancel()])
   abortA.abort()
   abortB.abort()

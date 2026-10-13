@@ -1,5 +1,6 @@
 import fs from "node:fs/promises"
 import path from "node:path"
+import { eq } from "drizzle-orm"
 import { EngineGitCheckpointOutcomeTable, EngineGitCheckpointRequestTable } from "@/engine/engine.sql"
 import { EngineGit } from "@/engine/git"
 import { requireTask } from "@/engine/store"
@@ -43,7 +44,7 @@ describe("Engine Git immutable checkpoint facts", () => {
 
         EngineGit.reconcileCheckpoint(interrupted!)
         const recovered = await EngineGit.prepare(requireTask(taskID))
-        expect(recovered.error).toBeUndefined()
+        expect((recovered.task.metadata as any).git.baseline.checkpoint_receipt.outcome).toBe("success")
         expect((recovered.task.metadata as any).git.baseline.commit).toBe(publishedHead)
 
         expect(Database.use((db) => ({
@@ -124,7 +125,12 @@ describe("Engine Git immutable checkpoint facts", () => {
 
         const replay = await EngineGit.prepare(requireTask(taskID))
         expect(replay.error).toBe("baseline checkpoint failed")
-        expect((replay.task.metadata as any).git.baseline).toBeUndefined()
+        expect(Database.use((db) => db.select().from(EngineGitCheckpointOutcomeTable)
+          .where(eq(EngineGitCheckpointOutcomeTable.request_id, requestID)).get())).toEqual({
+          request_id: requestID,
+          result: { error: "baseline checkpoint failed" },
+          time_created: 2,
+        })
       },
     })
   }, 60_000)

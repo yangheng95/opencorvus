@@ -16431,6 +16431,93 @@
             },
             "type": "array"
           },
+          "pendingQuestions": {
+            "items": {
+              "properties": {
+                "automatic": {
+                  "description": "Explicit automatic answer contract for this question request",
+                  "properties": {
+                    "answers": {
+                      "description": "Default answers submitted when the deadline expires",
+                      "items": {
+                        "$ref": "#/components/schemas/QuestionAnswer"
+                      },
+                      "type": "array"
+                    },
+                    "timeExpires": {
+                      "description": "Absolute automatic-answer deadline in Unix milliseconds",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991,
+                      "type": "integer"
+                    },
+                    "timeoutMs": {
+                      "description": "Configured automatic-answer delay in milliseconds",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "answers",
+                    "timeoutMs",
+                    "timeExpires"
+                  ],
+                  "type": "object"
+                },
+                "expiry": {
+                  "$ref": "#/components/schemas/QuestionExpiry"
+                },
+                "id": {
+                  "pattern": "^que.*",
+                  "type": "string"
+                },
+                "orderKey": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "questions": {
+                  "description": "Questions to ask",
+                  "items": {
+                    "$ref": "#/components/schemas/QuestionInfo"
+                  },
+                  "type": "array"
+                },
+                "sessionID": {
+                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                  "type": "string"
+                },
+                "timeCreated": {
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991,
+                  "type": "integer"
+                },
+                "tool": {
+                  "properties": {
+                    "callID": {
+                      "type": "string"
+                    },
+                    "messageID": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "messageID",
+                    "callID"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "id",
+                "sessionID",
+                "timeCreated",
+                "questions",
+                "orderKey"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "transcript": {
             "items": {
               "properties": {
@@ -17161,6 +17248,7 @@
         },
         "required": [
           "pendingPermissions",
+          "pendingQuestions",
           "transcript",
           "view",
           "history"

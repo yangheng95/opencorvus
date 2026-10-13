@@ -9,8 +9,7 @@ import {
   commitStandaloneQuestionInteractions,
   deferConversationTreeProjection,
   prepareConversationView,
-  prepareStandaloneQuestionInteractions,
-  replaceStandalonePermissionInteractions,
+  replaceStandalonePendingInteractions,
   resetWriter,
   validateConversationBoardInteractions,
 } from "./tree-writer"
@@ -46,6 +45,7 @@ import { conversationEventOwner } from "./event-policy"
 import { conversationHistoryPath } from "./conversation-history-path"
 import { captureMainReadingPosition } from "../store/conversation-ui"
 import { preparePermissionInteractions } from "../utils/permission-interaction"
+import { prepareQuestionInteractions } from "../utils/question-interaction"
 
 type EventReplay = {
   cursor: number
@@ -461,6 +461,10 @@ export function mergeSessionConnectionSnapshot(
   const view = requireObject(snapshot.view, "session.connected conversationSnapshot.view")
   const history = parseHistoryState(snapshot.history)
   const preparedConversation = prepareConversationView(view, transcript)
+  const preparedQuestions = prepareQuestionInteractions(
+    requireArray(snapshot.pendingQuestions, "session.connected conversationSnapshot.pendingQuestions"),
+    conversationSourceDirectory(source),
+  )
   const preparedPermissions = preparePermissionInteractions(
     requireArray(snapshot.pendingPermissions, "session.connected conversationSnapshot.pendingPermissions"),
     conversationSourceDirectory(source),
@@ -471,7 +475,7 @@ export function mergeSessionConnectionSnapshot(
   historyLoading = false
   batch(() => {
     deferConversationTreeProjection(() => {
-      replaceStandalonePermissionInteractions(preparedPermissions)
+      replaceStandalonePendingInteractions(preparedQuestions, preparedPermissions)
       commitPreparedConversationView(preparedConversation)
     })
   })
@@ -705,7 +709,7 @@ export async function hydrateConversation(
     const history = parseHistoryState(data?.history)
     const rewindCursor = parseRewindCursor((board as any).rewindCursor)
     const lastSequence = source.kind === "task" ? requireNonnegativeInteger(data?.lastSequence, "lastSequence") : 0
-    const preparedQuestions = prepareStandaloneQuestionInteractions(pendingQuestions)
+    const preparedQuestions = prepareQuestionInteractions(pendingQuestions, responseDirectory)
     const preparedPermissions = preparePermissionInteractions(pendingPermissions, responseDirectory)
     const preparedConversation = prepareConversationView(view, transcript)
     validateConversationBoardInteractions(board, [...preparedQuestions, ...preparedPermissions])

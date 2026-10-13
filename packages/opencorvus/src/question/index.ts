@@ -1,10 +1,12 @@
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
-import { Database, NotFoundError } from "@/storage/db"
+import { Database, NotFoundError, and, eq, sql } from "@/storage/db"
+import { inArray } from "drizzle-orm"
 import { Log } from "@/util/log"
 import z from "zod"
 import { values as objectValues } from "@/util/object"
@@ -107,6 +109,110 @@ export namespace Question {
     ),
   }
 
+  export type TerminalPublication =
+    | { type: "question.replied"; occurrenceID: string; properties: z.output<typeof Event.Replied.properties> }
+    | { type: "question.rejected"; occurrenceID: string; properties: z.output<typeof Event.Rejected.properties> }
+    | { type: "question.expired"; occurrenceID: string; properties: z.output<typeof Event.Expired.properties> }
+    | { type: "question.abandoned"; occurrenceID: string; properties: z.output<typeof Event.Abandoned.properties> }
+
+  /** Read the original publication facts, including terminal-first delivery.
+   * The physical waiter map is not an independent terminal authority. */
+  export function publicationFacts(input: {
+    projectID: string
+    sessionID: string
+    requestID: string
+    askedOccurrenceID?: string
+    terminalOccurrenceID?: string
+  }): { request: Request; askedOccurrenceID: string; terminal?: TerminalPublication } {
+    return Database.use((db) => {
+      const asked = db
+        .select()
+        .from(BusPublicationOutboxTable)
+        .where(
+          input.askedOccurrenceID
+            ? eq(BusPublicationOutboxTable.occurrence_id, input.askedOccurrenceID)
+            : and(
+                eq(BusPublicationOutboxTable.project_id, input.projectID),
+                eq(BusPublicationOutboxTable.event_type, Event.Asked.type),
+                sql`json_extract(${BusPublicationOutboxTable.properties}, '$.id') = ${input.requestID}`,
+                sql`json_extract(${BusPublicationOutboxTable.properties}, '$.sessionID') = ${input.sessionID}`,
+              ),
+        )
+        .limit(2)
+        .all()
+      if (asked.length !== 1)
+        throw new Error(`Question ${input.requestID} requires one original Asked publication; found ${asked.length}`)
+      const source = asked[0]!
+      if (source.project_id !== input.projectID || source.event_type !== Event.Asked.type) {
+        throw new Error(`Question ${input.requestID} Asked publication has a different Project or event owner`)
+      }
+      const request = Request.parse(source.properties)
+      if (request.id !== input.requestID || request.sessionID !== input.sessionID) {
+        throw new Error(`Question ${input.requestID} Asked publication has a different Request or Session owner`)
+      }
+      const terminals = db
+        .select()
+        .from(BusPublicationOutboxTable)
+        .where(
+          and(
+            eq(BusPublicationOutboxTable.project_id, input.projectID),
+            inArray(BusPublicationOutboxTable.event_type, [
+              Event.Replied.type,
+              Event.Rejected.type,
+              Event.Expired.type,
+              Event.Abandoned.type,
+            ]),
+            sql`json_extract(${BusPublicationOutboxTable.properties}, '$.requestID') = ${input.requestID}`,
+            sql`json_extract(${BusPublicationOutboxTable.properties}, '$.sessionID') = ${input.sessionID}`,
+          ),
+        )
+        .limit(2)
+        .all()
+      if (terminals.length > 1)
+        throw new Error(`Question ${input.requestID} has conflicting terminal publication identities`)
+      const row = terminals[0]
+      if (!row) {
+        if (input.terminalOccurrenceID)
+          throw new Error(`Question ${input.requestID} terminal publication ${input.terminalOccurrenceID} is missing`)
+        return { request, askedOccurrenceID: source.occurrence_id }
+      }
+      if (input.terminalOccurrenceID && row.occurrence_id !== input.terminalOccurrenceID) {
+        throw new Error(`Question ${input.requestID} terminal publication differs from its actual occurrence`)
+      }
+      const terminal = (() => {
+        switch (row.event_type) {
+          case Event.Replied.type:
+            return {
+              type: Event.Replied.type,
+              occurrenceID: row.occurrence_id,
+              properties: Event.Replied.properties.parse(row.properties),
+            }
+          case Event.Rejected.type:
+            return {
+              type: Event.Rejected.type,
+              occurrenceID: row.occurrence_id,
+              properties: Event.Rejected.properties.parse(row.properties),
+            }
+          case Event.Expired.type:
+            return {
+              type: Event.Expired.type,
+              occurrenceID: row.occurrence_id,
+              properties: Event.Expired.properties.parse(row.properties),
+            }
+          case Event.Abandoned.type:
+            return {
+              type: Event.Abandoned.type,
+              occurrenceID: row.occurrence_id,
+              properties: Event.Abandoned.properties.parse(row.properties),
+            }
+          default:
+            throw new Error(`Question ${input.requestID} has an unsupported terminal event ${row.event_type}`)
+        }
+      })()
+      return { request, askedOccurrenceID: source.occurrence_id, terminal }
+    })
+  }
+
   type PendingQuestion = {
     info: Request
     durableContinuation: boolean
@@ -131,19 +237,24 @@ export namespace Question {
     return entry
   }
 
-  function finalizePending(
-    pending: Record<string, PendingQuestion>,
-    requestID: string,
-    terminal: (entry: PendingQuestion) => void,
-  ): boolean {
-    const entry = takePending(pending, requestID)
-    if (!entry) return false
-    terminal(entry)
-    return true
-  }
-
   function rejectWaiters(entry: PendingQuestion, error: unknown) {
     for (const waiter of entry.waiters) waiter.reject(error)
+  }
+
+  function settlePublishedTerminal(entry: PendingQuestion, terminal: TerminalPublication) {
+    switch (terminal.type) {
+      case "question.replied":
+        for (const waiter of entry.waiters) waiter.resolve(terminal.properties.answers)
+        return
+      case "question.rejected":
+        rejectWaiters(entry, new RejectedError(terminal.properties))
+        return
+      case "question.expired":
+        rejectWaiters(entry, new ExpiredError(terminal.properties))
+        return
+      case "question.abandoned":
+        rejectWaiters(entry, new Error(`Question ${entry.info.id} was abandoned by infrastructure`))
+    }
   }
 
   const state = createInstanceState(
@@ -157,17 +268,33 @@ export namespace Question {
     async (s) => {
       // Cancel any pending question timers when the instance is disposed so that
       // late-firing automatic-expiry timers cannot bleed into the next test/run.
-      // We deliberately do NOT call entry.reject — by the time dispose runs, callers
-      // have abandoned their await, and rejecting would surface as an unhandled rejection.
+      // Preserve an already committed terminal for its physical waiters. A newly
+      // abandoned request keeps the existing shutdown policy: its caller has
+      // abandoned the await, so disposal does not create another rejection.
       for (const id of Object.keys(s.pending)) {
         const entry = takePending(s.pending, id)
-        if (!entry || entry.durableContinuation) continue
-        await Bus.publish(Event.Abandoned, {
+        if (!entry) continue
+        const facts = publicationFacts({
+          projectID: Instance.project.id,
           sessionID: entry.info.sessionID,
           requestID: entry.info.id,
-          origin: "infrastructure",
-          timeResolved: Date.now(),
         })
+        if (facts.terminal) {
+          settlePublishedTerminal(entry, facts.terminal)
+          continue
+        }
+        if (entry.durableContinuation) continue
+        const publication = Bus.publishOwnedExact(
+          Event.Abandoned,
+          {
+            sessionID: entry.info.sessionID,
+            requestID: entry.info.id,
+            origin: "infrastructure",
+            timeResolved: Date.now(),
+          },
+          terminalOccurrenceID(entry.info.id),
+        )
+        await publication.retry()
       }
     },
     "question",
@@ -288,6 +415,15 @@ export namespace Question {
   export async function restore(request: Request): Promise<void> {
     const exact = Request.parse(request)
     const s = await state()
+    const facts = publicationFacts({ projectID: Instance.project.id, sessionID: exact.sessionID, requestID: exact.id })
+    assertSameQuestionRequest(facts.request, exact)
+    if (facts.request.timeCreated !== exact.timeCreated)
+      throw new Error(`Question ${exact.id} restore changed its original creation time`)
+    if (facts.terminal) {
+      const entry = takePending(s.pending, exact.id)
+      if (entry) settlePublishedTerminal(entry, facts.terminal)
+      return
+    }
     const existing = s.pending[exact.id]
     if (existing) {
       assertSameQuestionRequest(existing.info, exact)
@@ -380,24 +516,26 @@ export namespace Question {
         return
       }
       try {
-        if (input.acceptanceEffects || input.acceptanceOccurrenceID) {
-          if (!input.acceptanceEffects || !input.acceptanceOccurrenceID) {
-            throw new Error(`Question ${id} owner admission requires both effect and exact occurrence identity`)
-          }
-          Database.immediateTransaction((db) => {
-            input.acceptanceEffects!(db)
-            Bus.publishOwnedExactInTransaction(Event.Asked, info, input.acceptanceOccurrenceID!)
+        if (Boolean(input.acceptanceEffects) !== Boolean(input.acceptanceOccurrenceID)) {
+          throw new Error(`Question ${id} owner admission requires both effect and exact occurrence identity`)
+        }
+        Database.immediateTransaction((db) => {
+          input.acceptanceEffects?.(db)
+          Database.effect(() => {
+            s.pending[id] = {
+              info,
+              durableContinuation: input.requestID !== undefined,
+              waiters: [{ resolve, reject }],
+              timer: undefined,
+            }
+            // The timer outlives this synchronous post-commit effect. Keep its
+            // Instance owner, but do not inherit the completed DB effect lease.
+            Database.runOutsideContext(() => armPendingTimer(s.pending, id))
           })
-        } else {
-          Bus.publishOwned(Event.Asked, info)
-        }
-        s.pending[id] = {
-          info,
-          durableContinuation: input.requestID !== undefined,
-          waiters: [{ resolve, reject }],
-          timer: undefined,
-        }
-        armPendingTimer(s.pending, id)
+          if (input.acceptanceOccurrenceID)
+            Bus.publishOwnedExactInTransaction(Event.Asked, info, input.acceptanceOccurrenceID)
+          else Bus.publishOwnedInTransaction(Event.Asked, info)
+        })
       } catch (error) {
         reject(error)
       }
@@ -560,18 +698,22 @@ export namespace Question {
   }
 
   export async function list() {
-    return state().then((x) => objectValues(x.pending).map((item) => item.info))
+    return (await pendingSnapshotReader())()
   }
 
   /**
-   * Capture the project-scoped pending-question store while its instance
-   * context is available, then read its current contents later from a
-   * long-lived transport callback. The returned reader observes the same
-   * canonical mutable store; it does not copy or mirror question state.
+   * Capture the Project-scoped physical waiter set for a transport callback.
+   * Each read projects its original durable Request and accepted terminal;
+   * the waiter set is not a second terminal authority or a copied snapshot.
    */
   export async function pendingSnapshotReader(): Promise<() => Request[]> {
     const current = await state()
-    return () => objectValues(current.pending).map((item) => item.info)
+    const projectID = Instance.project.id
+    return () =>
+      objectValues(current.pending).flatMap((item) => {
+        const facts = publicationFacts({ projectID, sessionID: item.info.sessionID, requestID: item.info.id })
+        return facts.terminal ? [] : [facts.request]
+      })
   }
 
   /**

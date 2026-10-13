@@ -10,7 +10,7 @@
 
 - [Provider Test 在途生命周期](2026-10-14-provider-test-lifecycle.md)：真实12秒窗口前后对照、全局Auth接受传播修复及未资格范围。
 
-- [404 Task Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404.md)：真实长目录与同 Request 断流，先补证再修复。
+- [404 Task Git 与 Question 重连](2026-10-14-task-git-question-reconnect-404.md)：Git基线/read/取消、Question同页草稿与Sol自然问答；24原图和正式回执，保留Task崩溃恢复未满足。
 
 - [长正文与来源阅读](2026-10-14-long-source-reading.md)：36段真实工具/正文、阅读锚点、侧栏和缓存边界验收。
 

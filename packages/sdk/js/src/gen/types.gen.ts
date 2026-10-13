@@ -4803,6 +4803,38 @@ export type SessionConversationConnectionSnapshot = {
     toolCallID: string
     toolName: string
   }>
+  pendingQuestions: Array<{
+    /**
+     * Explicit automatic answer contract for this question request
+     */
+    automatic?: {
+      /**
+       * Default answers submitted when the deadline expires
+       */
+      answers: Array<QuestionAnswer>
+      /**
+       * Absolute automatic-answer deadline in Unix milliseconds
+       */
+      timeExpires: number
+      /**
+       * Configured automatic-answer delay in milliseconds
+       */
+      timeoutMs: number
+    }
+    expiry?: QuestionExpiry
+    id: string
+    orderKey: string
+    /**
+     * Questions to ask
+     */
+    questions: Array<QuestionInfo>
+    sessionID: string
+    timeCreated: number
+    tool?: {
+      callID: string
+      messageID: string
+    }
+  }>
   transcript: Array<{
     info: VisibleMessage & {
       agentID: string

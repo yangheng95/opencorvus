@@ -1,0 +1,1043 @@
+{
+  "capturedAt": "2026-10-13T21:52:53.540Z",
+  "headAtCapture": "461d9856a2d08045f00353212eae81d28b3a1c26",
+  "scope": "404 original before evidence; public controlled provider and owned Git only; no real Provider qualification",
+  "entries": [
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-01\\facts.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-01/facts.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-01/facts.json.gz",
+      "bytes": 182498,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-01\\owner.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-01/owner.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-01/owner.json.gz",
+      "bytes": 1294,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-01\\runner-actual.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-01/runner-actual.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-01/runner-actual.ts.gz",
+      "bytes": 3441,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-01\\worker-actual.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-01/worker-actual.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-01/worker-actual.ts.gz",
+      "bytes": 10446,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-01\\worker.stderr.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-01/worker.stderr.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-01/worker.stderr.log.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-01\\worker.stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-01/worker.stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-01/worker.stdout.log.gz",
+      "bytes": 753,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-02\\facts.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-02/facts.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-02/facts.json.gz",
+      "bytes": 217295,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-02\\owner.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-02/owner.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-02/owner.json.gz",
+      "bytes": 1294,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-02\\runner-actual.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-02/runner-actual.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-02/runner-actual.ts.gz",
+      "bytes": 3441,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-02\\worker-actual.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-02/worker-actual.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-02/worker-actual.ts.gz",
+      "bytes": 11263,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-02\\worker.stderr.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-02/worker.stderr.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-02/worker.stderr.log.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-02\\worker.stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-02/worker.stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-02/worker.stdout.log.gz",
+      "bytes": 649,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\check.exit",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/check.exit",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/check.exit.gz",
+      "bytes": 3,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\check.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/check.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/check.log.gz",
+      "bytes": 2140,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\checker-result.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/checker-result.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/checker-result.json.gz",
+      "bytes": 2072,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\facts.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/facts.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/facts.json.gz",
+      "bytes": 621207,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\owner.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/owner.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/owner.json.gz",
+      "bytes": 1294,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\runner-actual.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/runner-actual.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/runner-actual.ts.gz",
+      "bytes": 3441,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\source-observation\\git-process.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/source-observation/git-process.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/source-observation/git-process.ts.gz",
+      "bytes": 17136,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\source-observation\\git.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/source-observation/git.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/source-observation/git.ts.gz",
+      "bytes": 3696,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\source-observation\\head.txt",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/source-observation/head.txt",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/source-observation/head.txt.gz",
+      "bytes": 42,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\source-observation\\observed-at.txt",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/source-observation/observed-at.txt",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/source-observation/observed-at.txt.gz",
+      "bytes": 35,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\source-observation\\process.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/source-observation/process.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/source-observation/process.ts.gz",
+      "bytes": 7520,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\worker-actual.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/worker-actual.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/worker-actual.ts.gz",
+      "bytes": 17006,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\worker.stderr.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/worker.stderr.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/worker.stderr.log.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\git-probe-03\\worker.stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-03/worker.stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-03/worker.stdout.log.gz",
+      "bytes": 648,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\actual-http-relay.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/actual-http-relay.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/actual-http-relay.mjs.gz",
+      "bytes": 5945,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\actual-manual-permission-driver.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/actual-manual-permission-driver.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/actual-manual-permission-driver.ts.gz",
+      "bytes": 4937,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\actual-manual-permission-server.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/actual-manual-permission-server.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/actual-manual-permission-server.ts.gz",
+      "bytes": 8121,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\actual-question-facts.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/actual-question-facts.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/actual-question-facts.mjs.gz",
+      "bytes": 3020,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\actual-relay-control.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/actual-relay-control.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/actual-relay-control.mjs.gz",
+      "bytes": 1564,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\actual-relay-driver.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/actual-relay-driver.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/actual-relay-driver.mjs.gz",
+      "bytes": 4857,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\close-review.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/close-review.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/close-review.json.gz",
+      "bytes": 542,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\dialog-after-meta.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/dialog-after-meta.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/dialog-after-meta.json.gz",
+      "bytes": 164,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\dialog-before-meta.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/dialog-before-meta.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/dialog-before-meta.json.gz",
+      "bytes": 191,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\dialog-draft-after-reconnect.jpg",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/dialog-draft-after-reconnect.jpg",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/dialog-draft-after-reconnect.jpg",
+      "bytes": 49843,
+      "format": "original JPEG"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\dialog-draft-before.jpg",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/dialog-draft-before.jpg",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/dialog-draft-before.jpg",
+      "bytes": 49784,
+      "format": "original JPEG"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\global-chat-start.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/global-chat-start.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/global-chat-start.json.gz",
+      "bytes": 4398,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\page-closed.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/page-closed.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/page-closed.json.gz",
+      "bytes": 135,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\public-external.csv",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/public-external.csv",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/public-external.csv.gz",
+      "bytes": 35,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\public-global-config.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/public-global-config.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/public-global-config.json.gz",
+      "bytes": 1266,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\public-model-catalog.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/public-model-catalog.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/public-model-catalog.json.gz",
+      "bytes": 3,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\question-facts-1791927038019.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/question-facts-1791927038019.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/question-facts-1791927038019.json.gz",
+      "bytes": 25817,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\question-facts-1791927074141.answered-check.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/question-facts-1791927074141.answered-check.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/question-facts-1791927074141.answered-check.json.gz",
+      "bytes": 445,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\question-facts-1791927074141.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/question-facts-1791927074141.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/question-facts-1791927074141.json.gz",
+      "bytes": 34266,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\ready.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/ready.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/ready.json.gz",
+      "bytes": 4661,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\reentered-answer-natural-final.jpg",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/reentered-answer-natural-final.jpg",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/reentered-answer-natural-final.jpg",
+      "bytes": 54389,
+      "format": "original JPEG"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\release-public-prompt",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/release-public-prompt",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/release-public-prompt.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\stop-requested",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/stop-requested",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/stop-requested.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01\\terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01/terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01/terminal.json.gz",
+      "bytes": 826,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-inbox\\a20215c2-a163-47a0-b034-f81842f89e95.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-inbox/a20215c2-a163-47a0-b034-f81842f89e95.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-inbox/a20215c2-a163-47a0-b034-f81842f89e95.json.gz",
+      "bytes": 115,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-inbox\\a206fa52-dbc4-42db-b39b-2c2557ed5283.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-inbox/a206fa52-dbc4-42db-b39b-2c2557ed5283.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-inbox/a206fa52-dbc4-42db-b39b-2c2557ed5283.json.gz",
+      "bytes": 117,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-inbox\\c4498909-2c66-449f-9367-0b18a9a01ae2.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-inbox/c4498909-2c66-449f-9367-0b18a9a01ae2.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-inbox/c4498909-2c66-449f-9367-0b18a9a01ae2.json.gz",
+      "bytes": 115,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-inbox\\d131dcb5-01d4-4542-9d91-175ca50c999e.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-inbox/d131dcb5-01d4-4542-9d91-175ca50c999e.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-inbox/d131dcb5-01d4-4542-9d91-175ca50c999e.json.gz",
+      "bytes": 151,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-receipts\\a20215c2-a163-47a0-b034-f81842f89e95.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-receipts/a20215c2-a163-47a0-b034-f81842f89e95.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-receipts/a20215c2-a163-47a0-b034-f81842f89e95.json.gz",
+      "bytes": 500,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-receipts\\a206fa52-dbc4-42db-b39b-2c2557ed5283.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-receipts/a206fa52-dbc4-42db-b39b-2c2557ed5283.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-receipts/a206fa52-dbc4-42db-b39b-2c2557ed5283.json.gz",
+      "bytes": 195,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-receipts\\c4498909-2c66-449f-9367-0b18a9a01ae2.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-receipts/c4498909-2c66-449f-9367-0b18a9a01ae2.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-receipts/c4498909-2c66-449f-9367-0b18a9a01ae2.json.gz",
+      "bytes": 500,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\control-receipts\\d131dcb5-01d4-4542-9d91-175ca50c999e.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/control-receipts/d131dcb5-01d4-4542-9d91-175ca50c999e.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/control-receipts/d131dcb5-01d4-4542-9d91-175ca50c999e.json.gz",
+      "bytes": 299,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\events.jsonl",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/events.jsonl",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/events.jsonl.gz",
+      "bytes": 958,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\owner.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/owner.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/owner.json.gz",
+      "bytes": 408,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\ready.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/ready.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/ready.json.gz",
+      "bytes": 666,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\question-before-01-relay\\terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01-relay/terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01-relay/terminal.json.gz",
+      "bytes": 828,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\actual-http-relay.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/actual-http-relay.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/actual-http-relay.mjs.gz",
+      "bytes": 5945,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\actual-manual-permission-driver.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/actual-manual-permission-driver.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/actual-manual-permission-driver.ts.gz",
+      "bytes": 4953,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\actual-manual-permission-server.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/actual-manual-permission-server.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/actual-manual-permission-server.ts.gz",
+      "bytes": 8229,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\actual-relay-control.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/actual-relay-control.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/actual-relay-control.mjs.gz",
+      "bytes": 1564,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\actual-relay-driver.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/actual-relay-driver.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/actual-relay-driver.mjs.gz",
+      "bytes": 4857,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\actual-side-question-entry.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/actual-side-question-entry.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/actual-side-question-entry.mjs.gz",
+      "bytes": 3628,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\global-chat-start.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/global-chat-start.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/global-chat-start.json.gz",
+      "bytes": 4427,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\page-closed.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/page-closed.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/page-closed.json.gz",
+      "bytes": 126,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\public-external.csv",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/public-external.csv",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/public-external.csv.gz",
+      "bytes": 35,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\public-global-config.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/public-global-config.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/public-global-config.json.gz",
+      "bytes": 2032,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\public-model-catalog.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/public-model-catalog.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/public-model-catalog.json.gz",
+      "bytes": 3,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\ready.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/ready.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/ready.json.gz",
+      "bytes": 4680,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\release-public-prompt",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/release-public-prompt",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/release-public-prompt.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\same-page-after.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/same-page-after.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/same-page-after.json.gz",
+      "bytes": 154,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-draft-after-reconnect.jpg",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-draft-after-reconnect.jpg",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-draft-after-reconnect.jpg",
+      "bytes": 61972,
+      "format": "original JPEG"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-draft-before.jpg",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-draft-before.jpg",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-draft-before.jpg",
+      "bytes": 61774,
+      "format": "original JPEG"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-question-facts-1791927603182.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-question-facts-1791927603182.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-question-facts-1791927603182.json.gz",
+      "bytes": 45096,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-question-facts-1791927652530.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-question-facts-1791927652530.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-question-facts-1791927652530.json.gz",
+      "bytes": 45096,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-question-facts-1791927679674.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-question-facts-1791927679674.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-question-facts-1791927679674.json.gz",
+      "bytes": 45096,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-question-facts-1791927715420.answered-check.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-question-facts-1791927715420.answered-check.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-question-facts-1791927715420.answered-check.json.gz",
+      "bytes": 389,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-question-facts-1791927715420.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-question-facts-1791927715420.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-question-facts-1791927715420.json.gz",
+      "bytes": 53653,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-question-prompt-response.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-question-prompt-response.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-question-prompt-response.json.gz",
+      "bytes": 2752,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-question-prompt.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-question-prompt.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-question-prompt.json.gz",
+      "bytes": 3992,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\side-reentered-answer-natural-final.jpg",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/side-reentered-answer-natural-final.jpg",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/side-reentered-answer-natural-final.jpg",
+      "bytes": 55176,
+      "format": "original JPEG"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\stop-requested",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/stop-requested",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/stop-requested.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01\\terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01/terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01/terminal.json.gz",
+      "bytes": 1267,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\control-inbox\\1bcc02ca-dd6f-482e-83db-262993c5b003.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/control-inbox/1bcc02ca-dd6f-482e-83db-262993c5b003.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/control-inbox/1bcc02ca-dd6f-482e-83db-262993c5b003.json.gz",
+      "bytes": 115,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\control-inbox\\4f857b74-49fe-4dee-b4ee-ab2be2002ae2.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/control-inbox/4f857b74-49fe-4dee-b4ee-ab2be2002ae2.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/control-inbox/4f857b74-49fe-4dee-b4ee-ab2be2002ae2.json.gz",
+      "bytes": 151,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\control-inbox\\b26c5bb7-2d18-472f-af4a-9cc9a4b9fc44.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/control-inbox/b26c5bb7-2d18-472f-af4a-9cc9a4b9fc44.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/control-inbox/b26c5bb7-2d18-472f-af4a-9cc9a4b9fc44.json.gz",
+      "bytes": 117,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\control-receipts\\1bcc02ca-dd6f-482e-83db-262993c5b003.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/control-receipts/1bcc02ca-dd6f-482e-83db-262993c5b003.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/control-receipts/1bcc02ca-dd6f-482e-83db-262993c5b003.json.gz",
+      "bytes": 623,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\control-receipts\\4f857b74-49fe-4dee-b4ee-ab2be2002ae2.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/control-receipts/4f857b74-49fe-4dee-b4ee-ab2be2002ae2.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/control-receipts/4f857b74-49fe-4dee-b4ee-ab2be2002ae2.json.gz",
+      "bytes": 299,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\control-receipts\\b26c5bb7-2d18-472f-af4a-9cc9a4b9fc44.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/control-receipts/b26c5bb7-2d18-472f-af4a-9cc9a4b9fc44.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/control-receipts/b26c5bb7-2d18-472f-af4a-9cc9a4b9fc44.json.gz",
+      "bytes": 195,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\events.jsonl",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/events.jsonl",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/events.jsonl.gz",
+      "bytes": 1236,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\owner.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/owner.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/owner.json.gz",
+      "bytes": 408,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\ready.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/ready.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/ready.json.gz",
+      "bytes": 666,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\side-question-before-01-relay\\terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01-relay/terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01-relay/terminal.json.gz",
+      "bytes": 828,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\relay-check-1791926908114\\command.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-check-1791926908114/command.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-check-1791926908114/command.json.gz",
+      "bytes": 717,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\relay-check-1791926908114\\relay-config.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-check-1791926908114/relay-config.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-check-1791926908114/relay-config.json.gz",
+      "bytes": 298,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\relay-check-1791926908114\\result.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-check-1791926908114/result.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-check-1791926908114/result.json.gz",
+      "bytes": 4802,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\relay-check-1791926908114\\stderr.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-check-1791926908114/stderr.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-check-1791926908114/stderr.log.gz",
+      "bytes": 0,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404\\relay-check-1791926908114\\stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-check-1791926908114/stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-check-1791926908114/stdout.log.gz",
+      "bytes": 336,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/task-git-readonly-investigation.md",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/task-git-readonly-investigation.md",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/task-git-readonly-investigation.md.gz",
+      "bytes": 17858,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/ui-readonly-investigation.md",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/ui-readonly-investigation.md",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/ui-readonly-investigation.md.gz",
+      "bytes": 22219,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-terminal-snapshot-review.md",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-terminal-snapshot-review.md",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-terminal-snapshot-review.md.gz",
+      "bytes": 16625,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-contract.red01-input.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-contract.red01-input.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-contract.red01-input.ts.gz",
+      "bytes": 4597,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-contract.red.test.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-contract.red.test.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-contract.red.test.ts.gz",
+      "bytes": 8054,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-red01-command.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-red01-command.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-red01-command.json.gz",
+      "bytes": 500,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-red01.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-red01.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-red01.log.gz",
+      "bytes": 5103,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-red01.exit",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-red01.exit",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-red01.exit.gz",
+      "bytes": 1,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-red02-command.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-red02-command.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-red02-command.json.gz",
+      "bytes": 500,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-red02.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-red02.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-red02.log.gz",
+      "bytes": 8493,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-publication-red02.exit",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-publication-red02.exit",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-publication-red02.exit.gz",
+      "bytes": 1,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/native-cwd-boundary-readonly.md",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/native-cwd-boundary-readonly.md",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/native-cwd-boundary-readonly.md.gz",
+      "bytes": 7170,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/relay-handoff.md",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-handoff.md",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-handoff.md.gz",
+      "bytes": 5606,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/http-relay.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/http-relay.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/http-relay.mjs.gz",
+      "bytes": 5945,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/relay-driver.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-driver.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-driver.mjs.gz",
+      "bytes": 4857,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/relay-control.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-control.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-control.mjs.gz",
+      "bytes": 1564,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/relay-transport-checker.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/relay-transport-checker.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/relay-transport-checker.mjs.gz",
+      "bytes": 10725,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/git-probe-runner.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-runner.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-runner.ts.gz",
+      "bytes": 3441,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/git-probe-worker.ts",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/git-probe-worker.ts",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/git-probe-worker.ts.gz",
+      "bytes": 17006,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/check-git-probe.mjs",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/check-git-probe.mjs",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/check-git-probe.mjs.gz",
+      "bytes": 4958,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/plan-commit.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/plan-commit.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/plan-commit.json.gz",
+      "bytes": 294,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/plan-scoped.patch",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/plan-scoped.patch",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/plan-scoped.patch.gz",
+      "bytes": 14023,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/plan-push.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/plan-push.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/plan-push.log.gz",
+      "bytes": 3669,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/plan-push.exit",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/plan-push.exit",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/plan-push.exit.gz",
+      "bytes": 3,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/plan-upstream-merge.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/plan-upstream-merge.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/plan-upstream-merge.log.gz",
+      "bytes": 21,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/build-before.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/build-before.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/build-before.log.gz",
+      "bytes": 70600,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/build-before.exit",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/build-before.exit",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/build-before.exit.gz",
+      "bytes": 3,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.launch.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.launch.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.launch.json.gz",
+      "bytes": 262,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.physical-terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.physical-terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.physical-terminal.json.gz",
+      "bytes": 133,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.relay-config.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.relay-config.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.relay-config.json.gz",
+      "bytes": 287,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.relay-launch.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.relay-launch.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.relay-launch.json.gz",
+      "bytes": 219,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.relay-physical-terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.relay-physical-terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.relay-physical-terminal.json.gz",
+      "bytes": 133,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.relay-stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.relay-stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.relay-stdout.log.gz",
+      "bytes": 329,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.runtime-owner.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.runtime-owner.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.runtime-owner.json.gz",
+      "bytes": 471,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.stderr.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.stderr.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.stderr.log.gz",
+      "bytes": 143729,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/question-before-01.stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/question-before-01.stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/question-before-01.stdout.log.gz",
+      "bytes": 139,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.launch.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.launch.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.launch.json.gz",
+      "bytes": 262,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.physical-terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.physical-terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.physical-terminal.json.gz",
+      "bytes": 133,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.relay-config.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.relay-config.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.relay-config.json.gz",
+      "bytes": 292,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.relay-launch.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.relay-launch.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.relay-launch.json.gz",
+      "bytes": 219,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.relay-physical-terminal.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.relay-physical-terminal.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.relay-physical-terminal.json.gz",
+      "bytes": 133,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.relay-stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.relay-stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.relay-stdout.log.gz",
+      "bytes": 334,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.runtime-owner.json",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.runtime-owner.json",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.runtime-owner.json.gz",
+      "bytes": 471,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.stderr.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.stderr.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.stderr.log.gz",
+      "bytes": 165886,
+      "format": "gzip of original bytes"
+    },
+    {
+      "originalSource": ".tmp-task-git-question-reconnect-404/side-question-before-01.stdout.log",
+      "capturedSource": ".tmp-task-git-question-reconnect-404/public-before-capture03/side-question-before-01.stdout.log",
+      "archive": "specs/artifacts/2026-10-14-task-git-question-reconnect-404/before/side-question-before-01.stdout.log.gz",
+      "bytes": 139,
+      "format": "gzip of original bytes"
+    }
+  ]
+}

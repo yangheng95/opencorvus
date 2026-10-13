@@ -61,6 +61,16 @@ Project are preservation conflicts, never rewritten in place.
 
 ## Lifecycle consequences
 
+Engine Git checkpoint commands retain one frozen repository authority. Their
+single explicit argument encoding uses `-C <dirname(git_dir)>`,
+`--git-dir=<basename(git_dir)>` and `--work-tree=<workspace>`. The host process
+working directory remains the original workspace, as do pathspec, index and
+locking contracts. This addresses Git for Windows' explicit-directory string
+limit without repository rediscovery, a retry path or a shorter workspace.
+It does not remove the native Windows process-current-directory boundary;
+the 404 record preserves the separate ASCII long-directory CreateProcessW 267
+failure and the wider-platform limits still requiring acceptance.
+
 - Ordinary Project deletion owns only the `.opencorvus/.r` runtime root below every exact registered directory in its fenced `[worktree, ...sandboxes]` snapshot. It never quarantines or recursively deletes the user-authored `.opencorvus` configuration root. An anonymous carrying Project is the sole case whose dedicated Project root is deleted as one target. The durable Project-deletion manifest freezes the complete generation, kind, registered logical/physical directory identities, ordered runtime targets, and each target's device/inode/birth occurrence before the first rename; duplicate or overlapping physical authorities fail before quarantine, and rollback restores staged targets in reverse order.
 - The same operation acquires one durable directory-mutation admission for every target before its first namespace mutation. A rename or durability-sync error is reconciled by rereading the exact source/quarantine occurrence, never by treating `ENOENT` alone as success. If rollback cannot restore the exact occurrence, the active manifest, directory admissions and Project maintenance fence remain together; startup validates the complete registered-directory snapshot and releases them only after exact recovery. A committed cleanup retains the same admissions until every quarantine and credential residue settles.
 - Cleanup manifest v6 records device, inode and birthtimeNs as exact decimal strings from bigint filesystem metadata. A previous numeric active manifest yields ProjectDeletionCleanupFormatError; recovery retains its operation ID, original manifest and maintenance authority. The admission projection reads only Project ownership and never grants mutation authority. A completed v5 receipt is retained as inert history after validating its immutable database/operation/Project envelope and exact completed path; its targets are never interpreted or mutated. Unknown formats and invalid envelopes remain explicit errors. Lost identity bits cannot be reconstructed from the current path. Upgrading unfinished parent Project deletion or Workspace operations remains unsupported, including a terminal child whose parent Project is still present; completing that child alone is insufficient. Reconcile the entire old parent operation before upgrading, or retain the explicit recovery barrier for operator handling. This change provides no automatic active-record migration.

@@ -4,6 +4,7 @@ import type { HostTransport, StreamHandlers, TransportRequest } from "../src/ser
 import { replyInteraction, rejectInteraction } from "../src/services/interaction-reply"
 import { connectSideChat } from "../src/services/side-chat"
 import type { InteractionData } from "../src/components/InteractionCard"
+import { questionInteraction, resolveQuestionInteraction, reuseQuestionInteraction } from "../src/utils/question-interaction"
 
 afterEach(() => __setHostTransportForTest(undefined))
 
@@ -98,7 +99,7 @@ test("the side stream projects actionable questions and permission requests into
             {
               header: "Focus",
               question: "Which part should I explain?",
-              options: [{ value: "history", label: "History" }],
+              options: [{ value: "history", label: "History", description: "Explain the history" }],
             },
           ],
         },
@@ -121,4 +122,126 @@ test("the side stream projects actionable questions and permission requests into
   } finally {
     close()
   }
+})
+
+function publicQuestion(id = "que_side") {
+  return {
+    id, sessionID: "ses_side", timeCreated: 1,
+    orderKey: `v1:0000000000001:0:0:interaction:${id}`,
+    questions: [{ header: "Focus", question: "Which public example?", options: [{ value: "cedar", label: "Cedar", description: "Use Cedar" }], multiple: true, custom: true }],
+    tool: { messageID: "msg_side", callID: "call_side" },
+    expiry: { origin: "deadline", timeoutMs: 300000, timeExpires: 300001 },
+  }
+}
+
+function connectionSnapshot(pendingQuestions: unknown[], pendingPermissions: unknown[] = []) {
+  return { type: "session.connected", payload: { sessionID: "ses_side", conversationSnapshot: {
+    transcript: [], view: { topLevelSessionIDs: [], messages: [], sessions: [] },
+    history: { oldestTimestamp: null, oldestOrderKey: null, oldestMessageID: null, hasMore: false, limit: 80 }, pendingQuestions, pendingPermissions,
+  } } }
+}
+
+function sideStream() {
+  let stream!: StreamHandlers
+  const updates: InteractionData[][] = []
+  const errors: unknown[] = []
+  __setHostTransportForTest({
+    request: async () => ({ status: 200, ok: true, headers: {}, body: {} }),
+    openStream: (_request: unknown, handlers: StreamHandlers) => { stream = handlers; return { close() {} } },
+  } as unknown as HostTransport)
+  const close = connectSideChat({ sessionID: "ses_side", directory: "D:/project-side" }, {
+    transcript() {}, connection() {}, activity() {}, error(error) { errors.push(error) },
+    interactions(value) { updates.push(value) },
+  })
+  return { updates, errors, close, send(event: unknown) { stream.onEvent(JSON.stringify(event)) } }
+}
+
+test("a side connection snapshot retains the same full Question owner and converges the canonical pending set", () => {
+  const connection = sideStream()
+  const question = publicQuestion()
+  const retired = publicQuestion("que_retired")
+  const added = publicQuestion("que_added")
+  try {
+    connection.send(connectionSnapshot([question, retired]))
+    const original = connection.updates[0]![0]!
+    connection.send({ type: "question.asked", session_id: question.sessionID, orderKey: question.orderKey, payload: question })
+    expect(connection.updates[1]![0]).toBe(original)
+    connection.send(connectionSnapshot([JSON.parse(JSON.stringify(question)), added]))
+    expect(connection.updates.map((value) => value.map((item) => item.id))).toEqual([
+      [question.id, retired.id], [question.id, retired.id], [question.id, added.id],
+    ])
+    expect(connection.updates[2]![0]).toBe(original)
+    expect(original).toMatchObject({ sessionID: question.sessionID, directory: "D:/project-side", payload: { expiry: question.expiry, tool: question.tool, questions: question.questions } })
+    connection.send(connectionSnapshot([]))
+    expect(connection.updates.at(-1)).toEqual([])
+  } finally { connection.close() }
+})
+
+test("the side snapshot selects its exact Session from the canonical legal conversation tree", () => {
+  const connection = sideStream()
+  const own = publicQuestion()
+  try {
+    connection.send(connectionSnapshot([own, { ...publicQuestion("que_child"), sessionID: "ses_child" }]))
+    expect(connection.updates.at(-1)?.map((question) => ({ id: question.id, directory: question.directory }))).toEqual([
+      { id: own.id, directory: "D:/project-side" },
+    ])
+  } finally { connection.close() }
+})
+
+for (const [type, properties, status, response] of [
+  ["question.replied", { answers: [["cedar"]], automatic: true }, "answered", { answers: [["cedar"]], auto_reply: true }],
+  ["question.rejected", { origin: "operator" }, "rejected", { origin: "operator" }],
+  ["question.expired", { origin: "deadline", timeExpires: 2 }, "expired", { origin: "deadline", time_expires: 2 }],
+  ["question.abandoned", { origin: "infrastructure" }, "expired", { origin: "infrastructure" }],
+] as const) {
+  test(`${type} preserves its actual terminal provenance and leaves the other side Question pending`, () => {
+    const connection = sideStream()
+    const question = publicQuestion()
+    const remaining = publicQuestion("que_remaining")
+    const payload = { requestID: question.id, sessionID: question.sessionID, timeResolved: 2, ...properties }
+    const orderKey = `v1:0000000000002:0:0:interaction:${question.id}_response`
+    try {
+      connection.send(connectionSnapshot([question, remaining]))
+      const original = connection.updates[0]![0]
+      const resolved = resolveQuestionInteraction(original, type, payload, orderKey)
+      expect(resolved).toMatchObject({ id: question.id, status, response, time: { created: 1, resolved: 2 }, responseOrderKey: orderKey })
+      expect(resolveQuestionInteraction(resolved, type, payload, orderKey)).toBe(resolved)
+      connection.send({ type, session_id: question.sessionID, orderKey, payload })
+      expect(connection.updates.at(-1)?.map((item) => item.id)).toEqual([remaining.id])
+    } finally { connection.close() }
+  })
+}
+
+test("a changed immutable Question expiry reports an explicit contract error with its original owner intact", () => {
+  const connection = sideStream()
+  const question = publicQuestion()
+  try {
+    connection.send(connectionSnapshot([question]))
+    const original = connection.updates[0]![0]
+    connection.send(connectionSnapshot([{ ...question, expiry: { ...question.expiry, timeExpires: 300002 } }]))
+    expect(connection.errors[0]).toBeInstanceOf(Error)
+    expect((connection.errors[0] as Error).message).toBe(`question ${question.id} immutable Request changed`)
+    expect(connection.updates.at(-1)?.[0]).toBe(original)
+  } finally { connection.close() }
+})
+
+test("a connection response missing mandatory pendingQuestions produces the current protocol error", () => {
+  const connection = sideStream()
+  try {
+    connection.send({ type: "session.connected", payload: { sessionID: "ses_side", conversationSnapshot: {
+      transcript: [], view: { topLevelSessionIDs: [], messages: [], sessions: [] },
+      history: { oldestTimestamp: null, oldestOrderKey: null, oldestMessageID: null, hasMore: false, limit: 80 }, pendingPermissions: [],
+    } } })
+    expect(connection.errors[0]).toBeInstanceOf(Error)
+    expect((connection.errors[0] as Error).message).toBe("pendingQuestions must be an array")
+  } finally { connection.close() }
+})
+
+test("a pending replay against a real terminal reports identity corruption instead of rewriting its status", () => {
+  const question = publicQuestion()
+  const original = questionInteraction(question, "D:/project-side")
+  const resolved = resolveQuestionInteraction(original, "question.replied", {
+    requestID: question.id, sessionID: question.sessionID, timeResolved: 2, answers: [["cedar"]],
+  }, `v1:0000000000002:0:0:interaction:${question.id}_response`)
+  expect(() => reuseQuestionInteraction(resolved, original)).toThrow(`question ${question.id} pending Request conflicts with its answered terminal`)
 })

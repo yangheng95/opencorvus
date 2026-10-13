@@ -182,7 +182,12 @@ async function execute(
   const fixed = [
     ...ENGINE_GIT_CONFIG,
     ...(target.repository
-      ? [`--git-dir=${target.repository.gitDir}`, `--work-tree=${target.repository.workTree}`]
+      ? [
+          "-C",
+          path.dirname(target.repository.gitDir),
+          `--git-dir=${path.basename(target.repository.gitDir)}`,
+          `--work-tree=${target.repository.workTree}`,
+        ]
       : []),
     "-c",
     `core.hooksPath=${activeRuntime.hooksPath}`,

@@ -1648,7 +1648,7 @@ describe("recovered pending interaction ownership", () => {
           retainedControlPlaneGates: [{ interactionID: created.interactionID, externalID: created.externalID }],
           unreconciled: [],
         })
-        expect((await Question.list()).map((item) => item.id)).not.toContain(created.externalID)
+        expect(await Question.list()).toEqual([])
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         expect(
           await EngineService.replyInteraction(created.interactionID, {

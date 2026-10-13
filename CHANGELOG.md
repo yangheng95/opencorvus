@@ -19,6 +19,10 @@
 
 - 服务商连接测试从有效目录选择默认模型，空模型声明继续可测试；零有效模型与配置不可用保持明确原因。结果使用当前语言摘要、实际模型身份和可展开的原始模型回复或完整诊断；保存配置、Key、删除及目录刷新后退休对应旧结果和在途回写。
 
+- 同页重连保留待答问题的自定义草稿，主会话与侧聊使用完整待答快照和同一请求身份。回答、拒绝、超时及基础设施结束按原始事实收敛；延迟问题事件和 Task 恢复不会重新打开已结束请求。
+
+- Git 检查点保持原工作目录和冻结仓库身份，修复 Windows 长目录显式 Git 参数导致的基线失败；操作系统原生进程目录限制仍需单独处理。
+
 - 独立 Chat 与侧聊显示真实待批准权限，冷加载和重连恢复同一请求；实时事件保留原请求说明和时间，取消或失效按真实账本清理卡片。回复后仅刷新仍被选中的原 Task。
 
 - 拒绝工具操作后，将真实工具错误交给下一次流式模型请求形成正常回复，修复会话停止在 tool-calls 并报缺持久回复的问题；删除旧 continue_loop_on_deny 停止选项，现有权限和取消契约保持。
@@ -103,6 +107,10 @@
 - Accepted global provider credential saves retire the affected connection test across project navigation. Project configuration retains its directory scope, and parallel provider tests settle independently. This covers accepted responses received by the current frontend.
 
 - Provider connection tests select the default model from the effective catalog, including inherited models with an empty declaration, and distinguish unavailable configurations from zero models. Results show localized summaries, actual model identity and expandable original model output or complete diagnostics; accepted configuration, key, deletion and catalog changes retire the corresponding observations and late completions.
+
+- Reconnecting the same page preserves custom drafts for pending questions in the main conversation and Side Chat. Complete pending snapshots retain request identity; original answers, rejection, expiry and infrastructure termination converge without delayed events or Task recovery reopening a resolved request.
+
+- Git checkpoints preserve the original workspace and frozen repository identity while fixing baseline failures from explicit Git directory arguments on Windows long paths. The native operating-system process-directory limit remains a separate limitation.
 
 - Standalone Chat and Side Chat show real pending permissions and restore the same requests after cold loading or reconnection. Live events preserve the original request summary and time; ledger-backed cancellation or staleness retires the card. Replies refresh a Task only while its original selection remains current.
 

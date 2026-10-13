@@ -63,6 +63,7 @@ function roleTitleKey(name: string): string {
 }
 import { interactionToCardSeeds, partitionInteractions } from "../utils/interaction"
 import { permissionInteraction, type PermissionInteraction } from "../utils/permission-interaction"
+import { questionInteraction, resolveQuestionInteraction, reuseQuestionInteraction, type QuestionInteraction } from "../utils/question-interaction"
 import { isTreeWriterNoopEventType, isTreeWriterPassThroughEventType } from "./event-policy"
 
 // ── Internal indices ──
@@ -890,7 +891,7 @@ export function applyEvent(event: any): void {
     flushBufferedPartDeltas()
     return handleInteraction(event)
   }
-  if (type === "question.asked" || type === "question.replied" || type === "question.rejected") {
+  if (type === "question.asked" || type === "question.replied" || type === "question.rejected" || type === "question.expired" || type === "question.abandoned") {
     flushBufferedPartDeltas()
     return applyVisibleCardTreeEvent(() => handleStandaloneQuestion(event))
   }
@@ -2080,74 +2081,7 @@ function handleInteraction(event: any): void {
   rebuildBoardDerivedCards()
 }
 
-function isSelectedStandaloneSession(sessionID: string): boolean {
-  const selected = boardStore.selectedSource
-  if (selected?.kind === "session") return selected.id === sessionID
-  const board = boardStore.board
-  if (board?.kind === "session") return String(board?.sessionID || "") === sessionID
-  return false
-}
-
-function questionTitle(questions: any[]): string {
-  const headers = questions.map((item) => (typeof item?.header === "string" ? item.header.trim() : "")).filter(Boolean)
-  return headers.join(" / ") || "Question"
-}
-
-function questionBody(questions: any[]): string {
-  return questions
-    .map((item) => (typeof item?.question === "string" ? item.question.trim() : ""))
-    .filter(Boolean)
-    .join("\n\n")
-}
-
-function standaloneQuestionInteraction(request: any): any {
-  const requestID = String(request?.id || "")
-  const sessionID = String(request?.sessionID || "")
-  if (!requestID || !sessionID) {
-    throw new Error("standalone question hydration missing requestID/sessionID")
-  }
-  const questions = Array.isArray(request?.questions) ? request.questions : []
-  if (questions.length === 0) throw new Error(`standalone question ${requestID} missing questions`)
-  const orderKey = requireTimelineOrderKeyDomain(request?.orderKey, `standalone question ${requestID}`, "interaction")
-  const created = requirePositiveNumber(request?.timeCreated, `standalone question ${requestID} timeCreated`)
-  const orderTime = timelineOrderKeyTime(orderKey, `standalone question ${requestID}`)
-  if (orderTime !== created) {
-    throw new Error(`standalone question ${requestID} orderKey time ${orderTime} does not match timeCreated ${created}`)
-  }
-  return {
-    id: requestID,
-    orderKey,
-    sessionID,
-    type: "question",
-    status: "pending",
-    title: questionTitle(questions),
-    body: questionBody(questions),
-    payload: {
-      questions,
-      ...(request?.tool ? { tool: request.tool } : {}),
-      ...(request?.automatic ? { automatic: request.automatic } : {}),
-    },
-    replyEndpoint: "question",
-    time: { created },
-  }
-}
-
-export function prepareStandaloneQuestionInteractions(requests: any[]): any[] {
-  if (!Array.isArray(requests)) throw new Error("standalone question hydration requires an array")
-  const prepared: any[] = []
-  const requestIDs = new Set<string>()
-  for (const request of requests) {
-    const interaction = standaloneQuestionInteraction(request)
-    if (requestIDs.has(interaction.id)) {
-      throw new Error(`standalone question hydration contains duplicate request ${interaction.id}`)
-    }
-    requestIDs.add(interaction.id)
-    prepared.push(interaction)
-  }
-  return prepared
-}
-
-export function commitStandaloneQuestionInteractions(interactions: any[]): void {
+export function commitStandaloneQuestionInteractions(interactions: QuestionInteraction[]): void {
   for (const interaction of interactions) {
     standaloneInteractions.set(interaction.id, interaction)
   }
@@ -2157,14 +2091,19 @@ export function commitStandalonePermissionInteractions(interactions: PermissionI
   for (const interaction of interactions) standaloneInteractions.set(interaction.id, interaction)
 }
 
-/** Reconnect replaces only pending permissions; Question facts and drafts keep their owners. */
-export function replaceStandalonePermissionInteractions(interactions: PermissionInteraction[]): void {
-  const questions = [...standaloneInteractions.values()].filter((interaction) => interaction.type !== "permission")
-  validateConversationBoardInteractions(boardStore.board, [...questions, ...interactions])
-  for (const [id, interaction] of standaloneInteractions) {
-    if (interaction.type === "permission") standaloneInteractions.delete(id)
+/** Commit one canonical pending snapshot, retaining the owners of unchanged Questions. */
+export function replaceStandalonePendingInteractions(questions: QuestionInteraction[], permissions: PermissionInteraction[]): void {
+  const next = new Map([...standaloneInteractions].filter(([, interaction]) => interaction.type === "question" && interaction.status !== "pending"))
+  for (const question of questions) {
+    next.set(question.id, reuseQuestionInteraction(standaloneInteractions.get(question.id), question))
   }
-  commitStandalonePermissionInteractions(interactions)
+  for (const permission of permissions) {
+    if (next.has(permission.id)) throw new Error(`permission ${permission.id} conflicts with a Question interaction`)
+    next.set(permission.id, permission)
+  }
+  validateConversationBoardInteractions(boardStore.board, [...next.values()])
+  standaloneInteractions.clear()
+  for (const [id, interaction] of next) standaloneInteractions.set(id, interaction)
   regroupTimelineSegments({ deferHierarchy: true })
   rebuildCardHierarchy()
 }
@@ -2193,11 +2132,9 @@ function handleStandalonePermission(event: any): void {
   rebuildCardHierarchy()
 }
 
-export function hydrateStandaloneQuestionInteractions(requests: any[]): void {
-  commitStandaloneQuestionInteractions(prepareStandaloneQuestionInteractions(requests))
-}
-
 function handleStandaloneQuestion(event: any): void {
+  const source = boardStore.selectedSource
+  if (source?.kind !== "session") return
   const type = String(event?.type || "")
   const props = propsOf(event)
   const requestID = String(props.id || props.requestID || "")
@@ -2205,50 +2142,20 @@ function handleStandaloneQuestion(event: any): void {
   if (!requestID || !sessionID) {
     throw new Error(`${type} missing requestID/sessionID`)
   }
-  const session = sessions.get(sessionID)
-  const isKnownMissionSession = session?.stage === "mission"
-  if (
-    !isSelectedStandaloneSession(sessionID) &&
-    !isKnownMissionSession &&
-    standaloneInteractions.get(requestID)?.type !== "question"
-  ) {
-    return
-  }
-
   if (type === "question.asked") {
+    const question = questionInteraction({ ...props, orderKey: event.orderKey }, source.directory || "")
     standaloneInteractions.set(
       requestID,
-      standaloneQuestionInteraction({ ...props, orderKey: event?.orderKey }),
+      reuseQuestionInteraction(standaloneInteractions.get(requestID), question),
     )
     regroupTimelineSegments({ deferHierarchy: true })
     rebuildCardHierarchy()
     return
   }
 
-  const existing = standaloneInteractions.get(requestID)
-  if (!existing || existing.type !== "question") return
-  const responseOrderKey = requireTimelineOrderKeyDomain(
-    event?.orderKey,
-    `${type} ${requestID} response`,
-    "interaction",
-  )
-  const resolved = requirePositiveNumber(props.timeResolved, `${type} ${requestID} timeResolved`)
-  const responseOrderTime = timelineOrderKeyTime(responseOrderKey, `${type} ${requestID} response`)
-  if (responseOrderTime !== resolved) {
-    throw new Error(
-      `${type} ${requestID} response orderKey time ${responseOrderTime} does not match timeResolved ${resolved}`,
-    )
-  }
-  standaloneInteractions.set(requestID, {
-    ...existing,
-    status: type === "question.rejected" ? "rejected" : "answered",
-    responseOrderKey,
-    response: type === "question.replied" ? { answers: Array.isArray(props.answers) ? props.answers : [] } : {},
-    time: {
-      ...(existing.time || {}),
-      resolved,
-    },
-  })
+  const resolved = resolveQuestionInteraction(standaloneInteractions.get(requestID), type, props, event.orderKey)
+  if (!resolved) return
+  standaloneInteractions.set(requestID, resolved)
   regroupTimelineSegments({ deferHierarchy: true })
   rebuildCardHierarchy()
 }

@@ -140,17 +140,21 @@ Tool Part with its canonical admission ordering. Cancellation, retry and an
 unfinished stream remove the draft; they do not fabricate a Tool execution fact.
 The existing conversation writer and pending Tool renderer consume these events.
 
-Standalone session hydration also carries the current `Question` pending
-snapshot for the selected session tree. The backend stamps each request with
-the same interaction `orderKey` used by the live `question.asked` bridge, and
-the writer seeds its single standalone-question projection after reset. A
-question emitted before stream attachment or reconnect therefore renders from
-the authoritative pending state instead of depending on an unreplayable event.
-The session event route subscribes before rereading that same pending store,
-closing the hydrate-to-stream race; reconnect reopens the current session
-stream without clearing the hydrated tree, and its connection snapshot restores
-requests missed while the transport was down.
-Task-owned questions remain sourced only from `board.interactions`.
+Standalone session hydration and connection snapshots carry the complete current
+`pendingQuestions` array for the selected durable Project/Session tree. The
+backend projects each original Request and its interaction `orderKey` through
+one reader. Non-Task children use the same durable lineage admission as the
+selected Session; Task-owned questions remain sourced only from
+`board.interactions`. Live Asked and terminal deliveries read the original
+publication facts, so a delayed Asked cannot reopen an accepted terminal.
+For standalone live Asked delivery, the prepared canonical pending reader and
+publication facts are read synchronously; only a complete current Request owned
+by this server's reply API becomes a pending projection. A dead ordinary Tool's
+original Asked and Tool facts remain intact, with the explicit reply error.
+Task recovery reconciles already materialized interaction sources before
+restoring a physical waiter. Source-only Task Asked recovery and cross-process
+physical waiter authority remain an unresolved boundary recorded in batch 404.
+There is no fabricated pending-Asked replay during connection setup.
 
 ## Session Stream Cutover
 
@@ -160,8 +164,8 @@ are buffered. After reading the transcript and pending interactions, the route
 drains deliveries already accepted by its subscriptions. This barrier waits for
 that accepted prefix, not future events. The route first emits the typed
 `session.connected` envelope, whose required payload contains the exact Session
-ID and projected connection snapshot, then emits pending interaction snapshots,
-and finally releases the compacted original events in their retained order.
+ID and projected connection snapshot, including both complete pending interaction
+arrays, then releases the compacted original events in their retained order.
 
 Session bootstrap and Task live replay use the same conversation buffer rule:
 the latest complete Message metadata or Part snapshot supersedes earlier values
@@ -214,17 +218,21 @@ admission authority, and global subscriptions cannot cross Project boundaries.
 `SessionStreamEvent` are the production Zod schemas and the generated
 OpenAPI/Software Development Kit contract for this handshake.
 
-Session HTTP hydration and the ordered connection snapshot also require
-`pendingPermissions`. This is the complete current pending permission set for
-the admitted conversation tree, distinct from the bounded additive transcript
-tail. The existing standalone interaction Map owns both Questions and
-Permissions. A shared strict adapter preserves Request identity, summary,
-directory, time and interaction order key for cold, connection and live input.
-Connection replacement changes only Permissions; existing Question objects
-retain their owner, while Question replay keeps its separate current behavior.
-Replied or ledger-backed Terminated events retire the matching pending card.
+Session HTTP hydration and the ordered connection snapshot require both
+`pendingPermissions` and `pendingQuestions`. Each is a complete current pending
+set for the admitted conversation tree, distinct from the bounded additive
+transcript tail. The existing standalone interaction Map owns both. Strict
+adapters preserve Request identity, summary, directory, time and interaction
+order key for cold, connection and live input. A repeated identical pending
+Question retains its original object and component owner, including its local
+draft; conflicting immutable payloads produce an explicit contract error.
+Connection replacement applies both arrays once. Absence removes a pending
+projection without inventing a terminal status or time. Actual Question replied,
+rejected, expired and abandoned facts preserve their original outcome/provenance;
+Permission Replied or ledger-backed Terminated retires its matching card.
 Task cards continue to come from Board interactions. Side Chat uses the same
-adapter but admits only its exact independent Session.
+Question adapter, admits only its exact independent Session and replaces its
+pending set without an intermediate empty callback.
 
 Interaction actions capture the request target, directory, endpoint, API
 authority and main selection epoch before awaiting transport. A default Task

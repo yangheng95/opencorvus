@@ -3,7 +3,7 @@ import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
 import { Message, Session } from "@/session"
-import { isStandalonePermissionSession, sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
+import { isStandaloneInteractionSession, sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import { originSourceFromMessageExtra, overlayMeta } from "@/orchestrator/protocol/message-bridge"
 import { Database, eq } from "@/storage/db"
 import { SessionTable } from "@/session/session.sql"
@@ -12,8 +12,10 @@ import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Instance } from "@/project/instance"
 import { currentProjectDirectory } from "@/project/instance-context"
+import { isDeepStrictEqual } from "node:util"
 
 export type SessionBusEvent = {
+  occurrenceID?: string
   type: string
   properties: Record<string, unknown>
 }
@@ -31,9 +33,15 @@ export function permissionRequestOrderKey(request: Pick<PermissionAuthority.Requ
 export function standalonePendingPermission(request: PermissionAuthority.Request, projectID: string) {
   if (request.projectID !== projectID) return
   const owner = taskIDForSession(request.sessionID)
-  if (owner !== request.taskID) throw new Error("Permission " + request.id + " Task ownership differs from durable Session lineage")
-  if (!isStandalonePermissionSession(request.sessionID, projectID)) return
+  if (owner !== request.taskID)
+    throw new Error("Permission " + request.id + " Task ownership differs from durable Session lineage")
+  if (!isStandaloneInteractionSession(request.sessionID, projectID)) return
   return { ...request, orderKey: permissionRequestOrderKey(request) }
+}
+
+export function standalonePendingQuestion(request: Question.Request, projectID: string) {
+  if (!isStandaloneInteractionSession(request.sessionID, projectID)) return
+  return { ...request, orderKey: questionRequestOrderKey(request) }
 }
 
 export function pendingPermissionSessionEvent(request: PermissionAuthority.Request): SessionMirrorEvent {
@@ -281,11 +289,48 @@ function shouldMirrorSessionScopedStream(sessionID: string): boolean {
 
 export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: string): Promise<void> {
   if (sessionBusEventSessionID(event) !== sessionID) return
+  const question =
+    event.type === Question.Event.Asked.type ||
+    event.type === Question.Event.Replied.type ||
+    event.type === Question.Event.Rejected.type ||
+    event.type === Question.Event.Expired.type ||
+    event.type === Question.Event.Abandoned.type
+  if (question) {
+    if (!isStandaloneInteractionSession(sessionID, Instance.project.id)) return
+    const asked = event.type === Question.Event.Asked.type
+    const requestID = asked ? Question.Request.parse(event.properties).id : String(event.properties.requestID)
+    const publicationOwner = {
+      projectID: Instance.project.id,
+      sessionID,
+      requestID,
+      ...(asked ? { askedOccurrenceID: event.occurrenceID } : { terminalOccurrenceID: event.occurrenceID }),
+    }
+    // Prepare the physical reader before the final synchronous fact read.
+    // Terminals can be delivered while Question state itself is disposing.
+    const readPending = asked ? await Question.pendingSnapshotReader() : undefined
+    const facts = Question.publicationFacts(publicationOwner)
+    if (facts.terminal) {
+      event = { type: facts.terminal.type, properties: facts.terminal.properties, occurrenceID: facts.terminal.occurrenceID }
+    } else {
+      // Session pending projections use the same physical reply owner as the
+      // canonical snapshot. A historical Asked is not a local continuation.
+      const current = readPending?.().find((request) => request.id === requestID)
+      if (!current) return
+      if (current.sessionID !== sessionID || !isDeepStrictEqual(current, facts.request)) {
+        throw new Error(`Question ${requestID} pending projection differs from its original Request`)
+      }
+      event = { type: Question.Event.Asked.type, properties: current, occurrenceID: facts.askedOccurrenceID }
+    }
+  }
   if (event.type === PermissionAuthority.Event.Asked.type) {
     if (!standalonePendingPermission(PermissionAuthority.Request.parse(event.properties), Instance.project.id)) return
-  } else if (event.type === PermissionAuthority.Event.Replied.type || event.type === PermissionAuthority.Event.Terminated.type) {
-    if (!isStandalonePermissionSession(sessionID, Instance.project.id)) return
-    if (event.type === PermissionAuthority.Event.Terminated.type && event.properties.projectID !== Instance.project.id) return
+  } else if (
+    event.type === PermissionAuthority.Event.Replied.type ||
+    event.type === PermissionAuthority.Event.Terminated.type
+  ) {
+    if (!isStandaloneInteractionSession(sessionID, Instance.project.id)) return
+    if (event.type === PermissionAuthority.Event.Terminated.type && event.properties.projectID !== Instance.project.id)
+      return
   }
   const mapped = mapSessionBusEvent(event, { sessionID })
   if (!mapped) return
@@ -311,7 +356,7 @@ export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: s
     })
     return
   }
-  if (!shouldMirrorSessionScopedStream(sessionID)) return
+  if (!question && !shouldMirrorSessionScopedStream(sessionID)) return
   ProtocolStore.dispatchEphemeral({
     type: mapped.type,
     aggregate: "session",

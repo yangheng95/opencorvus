@@ -1054,6 +1054,7 @@ export const SessionEvent = SessionEventEnvelope.extend({
 export const SessionConversationConnectionSnapshot = z
   .object({
     pendingPermissions: SessionPendingPermission.array(),
+    pendingQuestions: SessionPendingQuestion.array(),
     transcript: z.array(
       z.object({
         info: z.intersection(

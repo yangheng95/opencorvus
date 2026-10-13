@@ -222,13 +222,13 @@ describe("Engine Git batched repository transaction", () => {
             packageDigestCharacter: "d",
           })
           const retryBaseline = await EngineGit.prepare(requireTask(retryTaskID))
-          expect("error" in retryBaseline ? retryBaseline.error : undefined).toBeUndefined()
+          expect((retryBaseline.task.metadata as any).git.baseline.checkpoint_receipt.outcome).toBe("success")
           await fs.rm(path.join(project.path, "uninitialized-deleted"), { recursive: true })
           await fs.writeFile(path.join(child, "child.txt"), "child reopened result\n")
           await fs.writeFile(path.join(project.path, "root.txt"), "root reopened result\n")
 
           const completed = await EngineGit.complete(requireTask(retryTaskID))
-          expect("error" in completed ? completed.error : undefined).toBeUndefined()
+          expect((completed.task.metadata as any).git.result.checkpoint_receipt.outcome).toBe("success")
           const resultMetadata = (completed.task.metadata as any).git.result
           expect(resultMetadata.checkpoint_receipt).toMatchObject({
             repository_count: 3,
@@ -301,7 +301,7 @@ describe("Engine Git batched repository transaction", () => {
             packageDigestCharacter: "f",
           })
           const prepared = await EngineGit.prepare(requireTask(taskID))
-          expect("error" in prepared ? prepared.error : undefined).toBeUndefined()
+          expect((prepared.task.metadata as any).git.baseline.checkpoint_receipt.outcome).toBe("success")
           const rootAuthority = (prepared.task.metadata as any).git.baseline.repositories.find(
             (repository: any) => repository.path === ".",
           ).authority
@@ -380,7 +380,7 @@ describe("Engine Git batched repository transaction", () => {
             packageDigestCharacter: "d",
           })
           const prepared = await EngineGit.prepare(requireTask(taskID))
-          expect("error" in prepared ? prepared.error : undefined).toBeUndefined()
+          expect((prepared.task.metadata as any).git.baseline.checkpoint_receipt.outcome).toBe("success")
           const rootAuthority = (prepared.task.metadata as any).git.baseline.repositories.find(
             (repository: any) => repository.path === ".",
           ).authority
@@ -527,7 +527,7 @@ describe("Engine Git batched repository transaction", () => {
             packageDigestCharacter: "e",
           })
           const prepared = await EngineGit.prepare(requireTask(taskID))
-          expect("error" in prepared ? prepared.error : undefined).toBeUndefined()
+          expect((prepared.task.metadata as any).git.baseline.checkpoint_receipt.outcome).toBe("success")
           const rootAuthority = (prepared.task.metadata as any).git.baseline.repositories.find(
             (repository: any) => repository.path === ".",
           ).authority
